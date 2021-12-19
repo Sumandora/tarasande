@@ -1,9 +1,35 @@
-# Fabric Example Mod
+# Tarasande
 
-## Setup
+## Goals
+- Provide easy usable interaces
+- Be powerful and allow the user to change everything he wants to
+- Improve gameplay compared to vanilla
+- Bypass various anticheats
+- Be able to use the modification without being caught
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+## Features
+### High Priority
+- Combat modules, which look legit
+- Movement modules
+- Somewhat good-looking render modules
+### Middle Priority
+- Combat modules, which look obvious
+- Anarchy modules
+### Low Priority
+- Minor enhancements to minecraft
+### Special Priority
+- Compatibility with various other modifications
 
-## License
+## Roadmap
+1. Base
+2. Account Management (with encrypted files)
+3. ClickGUI
+4. Basic combat modules
+5. Basic movement modules
+6. Basic render modules
+7. Interactive Mid-Click-Wheel (similar to CSGO's radial menu)
+8. More advanced modules
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+## TODO-List
+- Empty right now
+
