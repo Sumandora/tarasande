@@ -1,38 +1,36 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "tarasande",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "tarasande",
+  "description": "Tarasande is a fabric mod designed to enhance and improve gameplay",
   "authors": [
-    "Me!"
+    "Sumandora/Johannes"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/Sumandora/tarasande"
   },
+  "license": "All rights reserved",
+  "icon": "assets/tarasande/icon.png",
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
-
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      {
+        "adapter": "kotlin",
+        "value": "su.mandora.tarasande.Entrypoint"
+      }
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "tarasande.mixins.json"
   ],
-
   "depends": {
     "fabricloader": ">=0.11.3",
     "fabric": "*",
-    "minecraft": "1.18.x",
-    "java": ">=17"
-  },
-  "suggests": {
-    "another-mod": "*"
+    "minecraft": "1.18.1",
+    "java": ">=17",
+    "fabric-language-kotlin": ">=1.7.0+kotlin.1.6.0"
   }
 }

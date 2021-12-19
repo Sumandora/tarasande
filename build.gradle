@@ -1,6 +1,7 @@
 plugins {
-	id 'fabric-loom' version '0.10-SNAPSHOT'
+	id 'fabric-loom'
 	id 'maven-publish'
+	id "org.jetbrains.kotlin.jvm"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -24,8 +25,7 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 }
 
 processResources {
@@ -70,3 +70,5 @@ publishing {
 		// retrieving dependencies.
 	}
 }
+
+compileKotlin.kotlinOptions.jvmTarget = "17"
