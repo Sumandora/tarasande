@@ -19,7 +19,7 @@
     "main": [
       {
         "adapter": "kotlin",
-        "value": "su.mandora.tarasande.Entrypoint"
+        "value": "su.mandora.tarasande.Entrypoint::onInitialize"
       }
     ]
   },
@@ -28,7 +28,6 @@
   ],
   "depends": {
     "fabricloader": ">=0.11.3",
-    "fabric": "*",
     "minecraft": "1.18.1",
     "java": ">=17",
     "fabric-language-kotlin": ">=1.7.0+kotlin.1.6.0"
