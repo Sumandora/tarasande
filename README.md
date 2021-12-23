@@ -31,5 +31,5 @@
 8. More advanced modules
 
 ## TODO-List
-- Empty right now
+- Readd Bezier Points in Graph
 
