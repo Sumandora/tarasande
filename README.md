@@ -33,3 +33,6 @@
 ## TODO-List
 - Readd Bezier Points in Graph
 
+## Notes
+- https://github.com/jonaburg/picom/blob/a8445684fe18946604848efb73ace9457b29bf80/src/backend/backend_common.c#L372
+
