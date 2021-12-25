@@ -24,7 +24,7 @@ class ManagerFile : Manager<File>() {
 			val fileObj = java.io.File(System.getProperty("user.home") + java.io.File.separator + TarasandeMain.get().name + java.io.File.separator + file.name)
 			if (!fileObj.parentFile.exists()) fileObj.parentFile.mkdirs()
 			val fileWriter = FileWriter(fileObj)
-			fileWriter.write(file.encrypt(TarasandeMain.get().gson.toJson(file.save())))
+			fileWriter.write(file.encrypt(TarasandeMain.get().gson.toJson(file.save()))!!)
 			fileWriter.close()
 		}
 	}
@@ -34,8 +34,13 @@ class ManagerFile : Manager<File>() {
 			val fileObj = java.io.File(System.getProperty("user.home") + java.io.File.separator + TarasandeMain.get().name + java.io.File.separator + file.name)
 			if (fileObj.exists()) {
 				val content = file.decrypt(String(Files.readAllBytes(fileObj.toPath())))
-				if(content != null)
-					file.load(TarasandeMain.get().gson.fromJson(content, JsonElement::class.java))
+				if(content != null) {
+					val jsonElement = TarasandeMain.get().gson.fromJson(content, JsonElement::class.java)
+					if(jsonElement != null)
+						file.load(jsonElement)
+					else
+						System.err.println(file.name + " didn't load correctly!")
+				}
 			}
 		}
 	}

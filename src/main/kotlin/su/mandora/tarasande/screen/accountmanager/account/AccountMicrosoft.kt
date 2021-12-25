@@ -37,9 +37,9 @@ class AccountMicrosoft(
     private var loginCookie: String? = null
     private var loginPPFT: String? = null
 
-    constructor() : this("", "")
-
     var service: MinecraftSessionService? = null
+
+    constructor() : this("", "")
 
     override fun logIn() {
         val microsoftToken = generateTokenPair(generateLoginCode(email, password))
@@ -283,19 +283,15 @@ class AccountMicrosoft(
 
     override fun getSessionService(): MinecraftSessionService? = service
 
-    override fun save(): JsonElement {
+    override fun save(): JsonArray {
         val jsonArray = JsonArray()
         jsonArray.add(email)
         jsonArray.add(password)
-        jsonArray.add(TarasandeMain.get().gson.toJsonTree(session))
         return jsonArray
     }
 
-    override fun load(jsonElement: JsonElement): Account {
-        val jsonArray = jsonElement.asJsonArray
-        val account = AccountMicrosoft(jsonArray[0].asString, jsonArray[1].asString)
-        account.session = TarasandeMain.get().gson.fromJson(jsonArray[2], Session::class.java)
-        return account
+    override fun load(jsonArray: JsonArray): Account {
+        return AccountMicrosoft(jsonArray[0].asString, jsonArray[1].asString)
     }
 
     override fun create(credentials: List<String>) = AccountMicrosoft(credentials[0], credentials[1])

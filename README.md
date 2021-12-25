@@ -32,4 +32,17 @@
 
 ## TODO-List
 - Readd Bezier Points in Graph
+- Vehicle Speed
+- Elytra Flight
+- Baritone Sprint Jump
+- KillAura Noise Function Rotations
+- Notification System
+- Speed - Timer Settings maybe
+- Balance Timer
+- Friends
+- Tick Base Manipulation
+- Scaffold only right click with block
+
+## Notes
+- Matrix Bots never sneak (might be applicable to other bots)
 

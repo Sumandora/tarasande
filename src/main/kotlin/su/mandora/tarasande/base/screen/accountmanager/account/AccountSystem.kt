@@ -1,5 +1,6 @@
 package su.mandora.tarasande.base.screen.accountmanager.account
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.mojang.authlib.Environment
 import com.mojang.authlib.minecraft.MinecraftSessionService
@@ -27,8 +28,8 @@ abstract class Account {
 	abstract fun getDisplayName(): String
 	abstract fun getSessionService(): MinecraftSessionService?
 
-	abstract fun save(): JsonElement
-	abstract fun load(jsonElement: JsonElement): Account
+	abstract fun save(): JsonArray
+	abstract fun load(jsonArray: JsonArray): Account
 
 	abstract fun create(credentials: List<String>): Account
 

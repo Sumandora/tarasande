@@ -16,16 +16,6 @@ import su.mandora.tarasande.util.spotify.Spotify
 import java.io.PrintWriter
 import java.io.StringWriter
 
-/**
- * TODO Modules:	Vehicle Speed
- * 					Elytra Flight
- * 		Baritone Sprint Jump
- * 		KillAura Noise Function Rotations
- * 		Notification System
- * 		Speed - Timer Settings maybe
- * 		Balance Timer
- * 		Friends
- */
 class TarasandeMain {
 
 	val name = "tarasande" // "lowercase gang" ~kennytv

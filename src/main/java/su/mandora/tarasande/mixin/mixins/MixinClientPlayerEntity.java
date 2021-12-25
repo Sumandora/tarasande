@@ -4,6 +4,8 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.player.PlayerAbilities;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
@@ -14,10 +16,12 @@ import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity;
 import su.mandora.tarasande.util.math.rotation.Rotation;
 import su.mandora.tarasande.util.math.rotation.RotationUtil;
 
-@Mixin(value = ClientPlayerEntity.class)
+@Mixin(ClientPlayerEntity.class)
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IClientPlayerEntity {
 
     Rotation cachedRotation;
+    EventVanillaFlight cachedEventVanillaFlight = null;
+
     @Shadow
     private float lastYaw;
     @Shadow
@@ -78,6 +82,35 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         EventSlowdownAmount eventSlowdownAmount = new EventSlowdownAmount(original);
         TarasandeMain.Companion.get().getManagerEvent().call(eventSlowdownAmount);
         return eventSlowdownAmount.getSlowdownAmount();
+    }
+
+    @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;flying:Z", ordinal = 6))
+    public boolean flying(PlayerAbilities instance) {
+        EventVanillaFlight eventVanillaFlight = new EventVanillaFlight(instance.flying, instance.getFlySpeed());
+        TarasandeMain.Companion.get().getManagerEvent().call(eventVanillaFlight);
+        cachedEventVanillaFlight = eventVanillaFlight;
+        return eventVanillaFlight.getFlying();
+    }
+
+    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerAbilities;getFlySpeed()F"))
+    public float hookedGetFlySpeed(PlayerAbilities instance) {
+        return cachedEventVanillaFlight.getDirty() ? cachedEventVanillaFlight.getFlightSpeed() : instance.getFlySpeed();
+    }
+
+    @Override
+    public void travel(Vec3d movementInput) {
+        boolean flying = getAbilities().flying;
+        float flySpeed = getAbilities().getFlySpeed();
+
+        if(cachedEventVanillaFlight.getDirty()) {
+            getAbilities().flying = cachedEventVanillaFlight.getFlying();
+            getAbilities().setFlySpeed(cachedEventVanillaFlight.getFlightSpeed());
+        }
+
+        super.travel(movementInput);
+
+        getAbilities().flying = flying;
+        getAbilities().setFlySpeed(flySpeed);
     }
 
     @Override

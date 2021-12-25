@@ -9,7 +9,7 @@ import su.mandora.tarasande.TarasandeMain;
 import su.mandora.tarasande.module.movement.ModuleSafeWalk;
 
 @Mixin(PlayerEntity.class)
-public abstract class MixinPlayerEntity {
+public class MixinPlayerEntity {
 
     @Inject(method = "clipAtLedge", at = @At("HEAD"), cancellable = true)
     public void injectClipAtLedge(CallbackInfoReturnable<Boolean> cir) {

@@ -74,3 +74,18 @@ class EventMovement(val entity: Entity, var velocity: Vec3d) : Event(false)
 class EventSlowdown(var usingItem: Boolean) : Event(false)
 class EventSlowdownAmount(var slowdownAmount: Float) : Event(false)
 class EventIsEntityAttackable(val entity: Entity?, var attackable: Boolean) : Event(false)
+class EventVanillaFlight : Event {
+	var dirty: Boolean = false
+	var flying: Boolean
+		set(value) {
+			dirty = true
+			field = value
+		}
+	var flightSpeed: Float
+
+	constructor(flying: Boolean, flightSpeed: Float) : super(false) {
+		this.flying = flying
+		this.flightSpeed = flightSpeed
+	}
+
+}

@@ -182,9 +182,9 @@ object RenderUtil {
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR)
         bufferBuilder.vertex(matrix, x1.toFloat(), y1.toFloat(), 0.0f).color(g, h, i, f).next()
-        bufferBuilder.vertex(matrix, x1.toFloat(), y2.toFloat(), 0.0f).color(g, h, i, f).next()
+        bufferBuilder.vertex(matrix, x1.toFloat(), y2.toFloat(), 0.0f).color(k, l, m, j).next()
         bufferBuilder.vertex(matrix, x2.toFloat(), y2.toFloat(), 0.0f).color(k, l, m, j).next()
-        bufferBuilder.vertex(matrix, x2.toFloat(), y1.toFloat(), 0.0f).color(k, l, m, j).next()
+        bufferBuilder.vertex(matrix, x2.toFloat(), y1.toFloat(), 0.0f).color(g, h, i, f).next()
         bufferBuilder.end()
         BufferRenderer.draw(bufferBuilder)
         RenderSystem.enableTexture()

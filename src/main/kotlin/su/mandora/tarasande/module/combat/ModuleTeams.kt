@@ -7,7 +7,7 @@ import su.mandora.tarasande.event.EventIsEntityAttackable
 import su.mandora.tarasande.value.ValueMode
 import java.util.function.Consumer
 
-class ModuleTeams : Module("Teams", "Prevents combat modules from targeting teammates", ModuleCategory.COMBAT) {
+class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCategory.COMBAT) {
 
 	val mode = ValueMode(this, "Mode", true, "Vanilla team", "Display name")
 

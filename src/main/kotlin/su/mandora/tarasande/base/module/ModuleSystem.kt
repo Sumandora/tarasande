@@ -40,7 +40,8 @@ class ManagerModule : Manager<Module>() {
 			ModuleNoSlowdown(),
 			ModuleTeams(),
 			ModuleInventoryMove(),
-			ModuleBlink()
+			ModuleBlink(),
+			ModuleFlight()
 		)
 		TarasandeMain.get().managerEvent?.add { event ->
 			if (event is EventKey)

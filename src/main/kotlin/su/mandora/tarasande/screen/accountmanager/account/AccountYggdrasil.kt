@@ -1,13 +1,11 @@
 package su.mandora.tarasande.screen.accountmanager.account
 
 import com.google.gson.JsonArray
-import com.google.gson.JsonElement
 import com.mojang.authlib.Agent
 import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication
 import net.minecraft.client.util.Session
-import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.screen.accountmanager.account.Account
 import su.mandora.tarasande.base.screen.accountmanager.account.AccountInfo
 import su.mandora.tarasande.base.screen.accountmanager.account.TextFieldInfo
@@ -41,19 +39,15 @@ class AccountYggdrasil(
 
     override fun getSessionService() = this.service
 
-    override fun save(): JsonElement {
+    override fun save(): JsonArray {
         val jsonArray = JsonArray()
         jsonArray.add(username)
         jsonArray.add(password)
-        jsonArray.add(TarasandeMain.get().gson.toJsonTree(session as Any?))
         return jsonArray
     }
 
-    override fun load(jsonElement: JsonElement): Account {
-        val jsonArray = jsonElement.asJsonArray
-        val account = AccountYggdrasil(jsonArray[0].asString, jsonArray[1].asString)
-        account.session = TarasandeMain.get().gson.fromJson(jsonArray[2], Session::class.java) as Session
-        return account
+    override fun load(jsonArray: JsonArray): Account {
+        return AccountYggdrasil(jsonArray[0].asString, jsonArray[1].asString)
     }
 
     override fun create(credentials: List<String>) = AccountYggdrasil(credentials[0], credentials[1])
