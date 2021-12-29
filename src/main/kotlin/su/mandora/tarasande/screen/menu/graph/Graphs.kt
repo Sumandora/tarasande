@@ -9,10 +9,11 @@ import su.mandora.tarasande.base.screen.menu.graph.Graph
 import su.mandora.tarasande.event.EventPacket
 import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
+import su.mandora.tarasande.util.render.RenderUtil
 import kotlin.math.round
 
 class GraphFPS : Graph("FPS", 200) {
-	override fun supplyData() = (MinecraftClient.getInstance() as IMinecraftClient).currentFps
+	override fun supplyData() = round(1000.0 / RenderUtil.deltaTime * 10.0) / 10.0
 }
 
 class GraphTPS : Graph("TPS", 200) {

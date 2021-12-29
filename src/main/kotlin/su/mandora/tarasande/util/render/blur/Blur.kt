@@ -16,8 +16,6 @@ import su.mandora.tarasande.event.EventScreenRender
 import su.mandora.tarasande.screen.menu.ScreenMenu
 import su.mandora.tarasande.util.render.shader.Shader
 import kotlin.math.ceil
-import kotlin.math.min
-import kotlin.math.round
 
 class Blur {
 	private val blurShader = Shader("blur", "default")
@@ -44,8 +42,7 @@ class Blur {
 				if (MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenMenu)
 					blurScene()
 			} else if (event is EventRender2D) {
-				if(MinecraftClient.getInstance().currentScreen !is ScreenMenu)
-					blurScene()
+				blurScene()
 			}
 		}
 	}
@@ -153,6 +150,7 @@ class Blur {
 		GlStateManager._bindTexture(texture0)
 		return write
 	}
+
 
 	private fun calculateKawasePasses(strength: Int): ArrayList<Pair<Float, Float>> {
 		val passes = ArrayList<Pair<Float, Float>>()

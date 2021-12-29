@@ -65,9 +65,11 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
 					receivedKnockback = false
 				}
 			}
+			if(!mc.player?.isOnGround!!) {
+				isJumping = false
+			}
 		} else if(event is EventKeyBindingIsPressed && event.keyBinding == mc.options.keyJump && isJumping) {
 			event.pressed = true
-			isJumping = false
 		}
 	}
 

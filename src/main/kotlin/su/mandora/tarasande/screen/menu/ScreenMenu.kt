@@ -118,7 +118,12 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 			if (it.scissor) {
 				GlStateManager._enableScissorTest()
 				val animation = if (it !is PanelFixed || !(it.opened && it.isVisible())) animation else 1.0
-				GlStateManager._scissorBox(((it.x + it.panelWidth * (1 - animation) / 2) * client?.window?.scaleFactor!!).toInt(), (client?.window?.height!! - (it.y + it.panelHeight - it.panelHeight * (1 - animation) / 2) * client?.window?.scaleFactor!!).toInt(), ((it.panelWidth - it.panelWidth * (1 - animation)) * client?.window?.scaleFactor!!).toInt(), ((it.panelHeight - it.panelHeight * (1 - animation)) * client?.window?.scaleFactor!!).toInt())
+				GlStateManager._scissorBox(
+					((it.x + it.panelWidth * (1 - animation) / 2) * client?.window?.scaleFactor!!).toInt(),
+					(client?.window?.height!! - (it.y + it.panelHeight - it.panelHeight * (1 - animation) / 2) * client?.window?.scaleFactor!!).toInt(),
+					((it.panelWidth - it.panelWidth * (1 - animation)) * client?.window?.scaleFactor!!).toInt(),
+					((it.panelHeight - it.panelHeight * (1 - animation)) * client?.window?.scaleFactor!!).toInt()
+				)
 			}
 			it.render(matrices, mouseX, mouseY, delta)
 			if (it.scissor) {

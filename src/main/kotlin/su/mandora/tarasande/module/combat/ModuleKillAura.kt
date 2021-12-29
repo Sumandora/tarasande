@@ -6,6 +6,7 @@ import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.EntityHitResult
+import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
@@ -165,13 +166,18 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
 				var target = targets[0]
 
-				if(mc.player?.eyePos?.squaredDistanceTo(target.second)!! > reach.minValue * reach.minValue) {
-					for(newTarget in targets) {
+				var hitResult: HitResult?
+				while (targets.isNotEmpty()) {
+					hitResult = PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.getRotations(mc.player?.eyePos!!, target.second))
+					if(hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null) {
+						targets.remove(target)
+					} else {
+						break
+					}
+					for(newTarget in ArrayList(targets) /* concurrent modification exception */) {
 						if(target != newTarget) {
-							if(mc.player?.eyePos?.squaredDistanceTo(newTarget.second)!! <= reach.minValue * reach.minValue) {
-								target = newTarget
-								break
-							}
+							target = newTarget
+							break
 						}
 					}
 				}
@@ -210,7 +216,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 				}
 				if (!flex.value || !canFlex) {
 					val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, smoothedRot)
-					if (guaranteeHit.value && target.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue && (hitResult == null || hitResult !is EntityHitResult || hitResult.entity != target.first))
+					if (guaranteeHit.value && target.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue && (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null))
 						finalRot = targetRot
 				} else {
 					finalRot.yaw += ThreadLocalRandom.current().nextDouble(-flexTurn.value, flexTurn.value).toFloat()
