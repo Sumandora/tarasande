@@ -12,7 +12,7 @@ class ClientValues {
 	val accentColor = ValueColor(this, "Accent color", 0.6f, 1.0f, 1.0f, -1.0f)
 	val targets = ValueMode(this, "Targets", true, "Players", "Animals", "Mobs", "Other")
 	val correctMovement = ValueMode(this, "Correct movement", false, "Off", "Prevent Backwards Sprinting", "Direct", "Silent")
-	val blurStrength = object : ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0) {
+	val blurStrength = object : ValueNumber(this, "Blur strength", 1.0, 1.0, 10.0, 1.0) {
 		override fun onChange() {
 			TarasandeMain.get().blur?.kawasePasses = null
 		}

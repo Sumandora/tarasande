@@ -43,6 +43,7 @@
 - Tick Base Manipulation
 - Scaffold only right click with block
 - Scissor Box in Menu is one pixel off (GUI-Scale = 4, Sodium)
+- Opening Animation for Wheel Menu
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

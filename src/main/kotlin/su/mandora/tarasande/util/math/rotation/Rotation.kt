@@ -9,6 +9,28 @@ class Rotation(var yaw: Float, var pitch: Float) {
 
 	constructor(other: Rotation) : this(other.yaw, other.pitch)
 
+	companion object {
+		fun getGcd(): Double {
+			val sensitivity = MinecraftClient.getInstance().options.mouseSensitivity * 0.6f.toDouble() + 0.2f.toDouble()
+			val sensitivityPow3 = sensitivity * sensitivity * sensitivity
+			val sensitivityPow3Mult8 = sensitivityPow3 * 8.0
+
+			return if(MinecraftClient.getInstance().options.perspective.isFirstPerson && MinecraftClient.getInstance().player?.isUsingSpyglass!!) sensitivityPow3 else sensitivityPow3Mult8
+		}
+
+		fun calculateRotationChange(cursorDeltaX: Double, cursorDeltaY: Double): Rotation {
+			val gcd = getGcd()
+
+			val yawLookDirectionChange = cursorDeltaX * gcd
+			val pitchLookDirectionChange = cursorDeltaY * gcd
+
+			val yawChange = yawLookDirectionChange.toFloat() * 0.15f
+			val pitchChange = pitchLookDirectionChange.toFloat() * 0.15f
+
+			return Rotation(yawChange, pitchChange)
+		}
+	}
+
 	// I can't define prevRotation in the arguments because java wants to call it too
 
 	fun correctSensitivity(): Rotation {
@@ -16,21 +38,19 @@ class Rotation(var yaw: Float, var pitch: Float) {
 	}
 
 	fun correctSensitivity(prevRotation: Rotation): Rotation {
-		val sensitivity = MinecraftClient.getInstance().options.mouseSensitivity * 0.6000000238418579 + 0.20000000298023224
-		val sensitivityPow3 = sensitivity * sensitivity * sensitivity
-		val gcd = sensitivityPow3 * 8.0
+		val gcd = getGcd()
 
 		val deltaRotation = calcDelta(prevRotation)
 
-		val cursorDeltaX = round(deltaRotation.yaw / 0.15 / gcd).toInt() * gcd
-		val cursorDeltaY = round(deltaRotation.pitch / 0.15 / gcd).toInt() * gcd
+		val cursorDeltaX = round(deltaRotation.yaw / 0.15 / gcd)
+		val cursorDeltaY = round(deltaRotation.pitch / 0.15 / gcd)
 
-		val g = cursorDeltaX.toFloat() * 0.15f
-		val f = cursorDeltaY.toFloat() * 0.15f
+		val rotationChange = calculateRotationChange(cursorDeltaX, cursorDeltaY)
 
-		yaw = prevRotation.yaw - g
-		pitch = prevRotation.pitch - f
+		yaw = prevRotation.yaw - rotationChange.yaw
+		pitch = prevRotation.pitch - rotationChange.pitch
 		pitch = MathHelper.clamp(pitch, -90.0f, 90.0f)
+
 		return this
 	}
 

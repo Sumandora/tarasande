@@ -13,7 +13,7 @@ import kotlin.math.round
 
 object PathFinder {
 
-	fun findPath(start: Vec3d, target: Vec3d, movement: Movement): List<Vec3d>? {
+	fun findPath(start: Vec3d, target: Vec3d, movement: Movement): ArrayList<Vec3d>? {
 		val mappedPath = ArrayList<Vec3d>()
 		val path = findPath(Node(round(start.x).toInt(), round(start.y).toInt(), round(start.z).toInt()), Node(round(target.x).toInt(), round(target.y).toInt(), round(target.z).toInt()), movement) ?: return null
 		for (vec in path)
@@ -21,7 +21,7 @@ object PathFinder {
 		return mappedPath
 	}
 
-	private fun findPath(start: Node, target: Node, movement: Movement): List<Node>? {
+	private fun findPath(start: Node, target: Node, movement: Movement): ArrayList<Node>? {
 		val open = ArrayList<Node>()
 		val closed = ArrayList<Node>()
 		open.add(start)
@@ -89,7 +89,7 @@ object PathFinder {
 		return (abs(delta.x) + abs(delta.y) + abs(delta.z)).toDouble()
 	}
 
-	private fun reconstructPath(current: Node): List<Node> {
+	private fun reconstructPath(current: Node): ArrayList<Node> {
 		var current: Node? = current
 		val path = ArrayList<Node>()
 		path.clear()
@@ -97,7 +97,7 @@ object PathFinder {
 			path.add(current)
 			current = current.parent
 		}
-		return path.reversed()
+		return ArrayList(path.reversed())
 	}
 
 	private fun generateMovementPossibilities(position: Node, world: ClientWorld?, movement: Movement): List<Node> {

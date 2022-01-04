@@ -16,6 +16,7 @@
     "MixinLivingEntity",
     "MixinLivingEntityRenderer",
     "MixinMinecraftClient",
+    "MixinMouse",
     "MixinPlayerEntity",
     "MixinRenderSystem",
     "MixinRenderTickCounter",

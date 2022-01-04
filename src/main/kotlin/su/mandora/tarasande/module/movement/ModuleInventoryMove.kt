@@ -12,6 +12,7 @@ import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
+import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.EventPacket
 import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IKeyBinding
@@ -33,10 +34,6 @@ class ModuleInventoryMove : Module("Inventory Move", "Allows you to move while i
 	)
 
 	val eventConsumer = Consumer<Event> { event ->
-		if(event is EventUpdate && event.state == EventUpdate.State.PRE) {
-			if(isPassingEvents())
-				keybinding.forEach { it.isPressed = InputUtil.isKeyPressed(mc.window?.handle!!, (it as IKeyBinding).boundKey.code) }
-		}
 		if(event is EventPacket) {
 			if(event.type == EventPacket.Type.SEND) {
 				when {
@@ -45,7 +42,12 @@ class ModuleInventoryMove : Module("Inventory Move", "Allows you to move while i
 				}
 			}
 		}
+		if(event is EventKeyBindingIsPressed) {
+			if(isPassingEvents())
+				if(keybinding.contains(event.keyBinding))
+					event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, (event.keyBinding as IKeyBinding).boundKey.code)
+		}
 	}
 
-	fun isPassingEvents() = enabled && (mc.currentScreen is HandledScreen<*> || mc.currentScreen is ScreenMenu) || mc.currentScreen == null || mc.currentScreen?.passEvents!!
+	fun isPassingEvents() = (enabled && (mc.currentScreen is HandledScreen<*> || mc.currentScreen is ScreenMenu)) || (mc.currentScreen == null || mc.currentScreen?.passEvents!!)
 }
