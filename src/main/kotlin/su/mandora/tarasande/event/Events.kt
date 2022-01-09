@@ -66,7 +66,6 @@ class EventVelocity(var velocityX: Double, var velocityY: Double, var velocityZ:
 	}
 }
 
-class EventTimer(var lastFrameDuration: Float) : Event(false)
 class EventInput(var movementForward: Float, var movementSideways: Float) : Event(false)
 class EventJump(var yaw: Float) : Event(false)
 class EventGamma(var gamma: Double) : Event(false)
@@ -93,3 +92,4 @@ class EventVanillaFlight : Event {
 
 class EventMouse(val button: Int) : Event(true)
 class EventMouseDelta(var deltaX: Double, var deltaY: Double) : Event(false)
+class EventTimeTravel(var time: Long) : Event(false)

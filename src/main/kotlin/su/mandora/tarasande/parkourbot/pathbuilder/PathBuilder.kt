@@ -30,7 +30,7 @@ class PathBuilder(begin: BlockPos, private val goal: Goal) {
                     for(z in -4..4) {
                         if(x == 0 && y == 0 && z == 0) continue
                         val pos = BlockPos(last.x + x, last.y + y, last.z + z)
-                        if(PathFinder.findPath(Vec3d.ofCenter(last).add(0.0, 0.5, 0.0), Vec3d.ofCenter(pos).add(0.0, 0.5, 0.0), Movement.WALKABLE) != null && last.y == pos.y) continue
+                        if(path.any { PathFinder.findPath(Vec3d.ofCenter(it).add(0.0, 0.5, 0.0), Vec3d.ofCenter(pos).add(0.0, 0.5, 0.0), Movement.WALKABLE) != null }) continue
                         if(path.contains(pos)) continue
                         val blockState = MinecraftClient.getInstance().world?.getBlockState(pos)
                         val collision = blockState?.getCollisionShape(MinecraftClient.getInstance().world, pos)

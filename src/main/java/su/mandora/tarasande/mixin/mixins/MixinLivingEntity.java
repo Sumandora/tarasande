@@ -104,4 +104,9 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     public int getBodyTrackingIncrements() {
         return bodyTrackingIncrements;
     }
+
+    @Override
+    public void setBodyTrackingIncrements(int bodyTrackingIncrements) {
+        this.bodyTrackingIncrements = bodyTrackingIncrements;
+    }
 }

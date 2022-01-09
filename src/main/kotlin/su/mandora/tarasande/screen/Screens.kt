@@ -22,8 +22,9 @@ class Screens {
 					MinecraftClient.getInstance().setScreen(screenMenu)
 			} else if(event is EventMouse) {
 				if(MinecraftClient.getInstance().currentScreen == null)
-					if(event.button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE)
+					if(!wheelMenu.active && event.button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
 						wheelMenu.active = true
+					}
 			}
 		}
 	}

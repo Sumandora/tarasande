@@ -11,6 +11,7 @@ import su.mandora.tarasande.module.combat.ModuleTeams
 import su.mandora.tarasande.module.misc.ModuleBlink
 import su.mandora.tarasande.module.misc.ModuleDeadByDaylightEscape
 import su.mandora.tarasande.module.misc.ModuleSpammer
+import su.mandora.tarasande.module.misc.ModuleTickBaseManipulation
 import su.mandora.tarasande.module.movement.*
 import su.mandora.tarasande.module.player.ModuleScaffoldWalk
 import su.mandora.tarasande.module.player.ModuleTimer
@@ -41,7 +42,8 @@ class ManagerModule : Manager<Module>() {
 			ModuleTeams(),
 			ModuleInventoryMove(),
 			ModuleBlink(),
-			ModuleFlight()
+			ModuleFlight(),
+			ModuleTickBaseManipulation()
 		)
 		TarasandeMain.get().managerEvent?.add { event ->
 			if (event is EventKey)

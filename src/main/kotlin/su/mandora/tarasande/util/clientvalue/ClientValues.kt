@@ -17,6 +17,7 @@ class ClientValues {
 			TarasandeMain.get().blur?.kawasePasses = null
 		}
 	}
+	val unlockTicksPerFrame = ValueBoolean(this, "Unlock ticks per frame", false)
 
 	override fun toString(): String {
 		return "ClientValues"

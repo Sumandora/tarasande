@@ -31,4 +31,14 @@ object MathUtil {
 		return if (value < goal) (value + increment).coerceAtMost(goal) else (value - increment).coerceAtLeast(goal)
 	}
 
+	fun getRotationVector(pitch: Float, yaw: Float): Vec3d {
+		val f = pitch * (Math.PI.toFloat() / 180)
+		val g = -yaw * (Math.PI.toFloat() / 180)
+		val h = MathHelper.cos(g)
+		val i = MathHelper.sin(g)
+		val j = MathHelper.cos(f)
+		val k = MathHelper.sin(f)
+		return Vec3d((i * j).toDouble(), (-k).toDouble(), (h * j).toDouble())
+	}
+
 }

@@ -24,7 +24,7 @@ class ModuleVehicleFlight : Module("Vehicle Flight", "Makes you fly with vehicle
 					var sign = 0.0
 					if (mc.options.keyJump.isPressed)
 						sign += 1.0
-					if (downwardsKeybind.keyBind != GLFW.GLFW_KEY_UNKNOWN && downwardsKeybind.isPressed())
+					if (downwardsKeybind.isPressed())
 						sign -= 1.0
 					(event.velocity as IVec3d).setY(verticalSpeed.value * sign)
 				}

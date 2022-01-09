@@ -10,6 +10,7 @@ import su.mandora.tarasande.base.screen.wheel.wheeltree.WheelTreeEntry
 import su.mandora.tarasande.base.screen.wheel.wheeltree.WheelTreeRunnable
 import su.mandora.tarasande.base.screen.wheel.wheeltree.WheelTreeSubMenu
 import su.mandora.tarasande.event.*
+import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.render.RenderUtil
 import java.util.function.Consumer
@@ -19,7 +20,12 @@ import kotlin.math.sin
 
 class WheelMenu {
 
+    private var activationChange = 0L
     var active: Boolean = false
+        set(value) {
+            activationChange = System.currentTimeMillis()
+            field = value
+        }
     private var ticksOpen = 0
     private var cursorX = 0.0
     private var cursorY = 0.0
@@ -31,10 +37,10 @@ class WheelMenu {
     init {
         TarasandeMain.get().managerEvent?.add(Pair(1001, Consumer<Event> { event ->
             if(event is EventMouse) {
-                if(ticksOpen > 0) {
+                if(active && ticksOpen > 0 && System.currentTimeMillis() - activationChange > 250) {
                     event.setCancelled()
                     if(event.button != GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
-                        onClose()
+                        active = false
                     } else {
                         val radius = min(MinecraftClient.getInstance().window.scaledWidth, MinecraftClient.getInstance().window.scaledHeight) * 0.25
 
@@ -51,7 +57,7 @@ class WheelMenu {
                             val deltaX = x - cursorX
                             val deltaY = y - cursorY
 
-                            val dist = deltaX * deltaX * deltaY * deltaY
+                            val dist = deltaX * deltaX + deltaY * deltaY
 
                             if(closest == null || closestDist > dist) {
                                 closest = wheelTreeEntry
@@ -62,7 +68,7 @@ class WheelMenu {
                         if(closest != null) {
                             if(closest is WheelTreeRunnable) {
                                 closest.runnable.run()
-                                onClose()
+                                active = false
                             } else if(closest is WheelTreeSubMenu) {
                                 wheelTreeEntry = closest
                                 wheelTreeEntries = managerWheelTree.getEntries(wheelTreeEntry)!!
@@ -71,8 +77,9 @@ class WheelMenu {
                     }
                 }
             } else if(event is EventKey) {
-                if(event.key == GLFW.GLFW_KEY_ESCAPE) {
-                    onClose()
+                if(active && event.key == GLFW.GLFW_KEY_ESCAPE && System.currentTimeMillis() - activationChange > 250) {
+                    active = false
+                    event.setCancelled()
                 }
             } else if(event is EventMouseDelta) {
                 if(active && MinecraftClient.getInstance().currentScreen == null) {
@@ -81,8 +88,18 @@ class WheelMenu {
                     cursorY += rotationChange.pitch * 4
                 }
             } else if(event is EventRender2D) {
-                if(!active)
+                if(!active && System.currentTimeMillis() - activationChange > 250) {
+                    reset()
                     return@Consumer
+                }
+                var animation = ((System.currentTimeMillis() - activationChange) / 250.0).coerceAtMost(1.0)
+                animation = MathUtil.getBias(animation, 0.8)
+                if(!active)
+                    animation = 1.0 - animation
+                event.matrices.push()
+                event.matrices.translate(MinecraftClient.getInstance().window.scaledWidth / 2.0, MinecraftClient.getInstance().window.scaledHeight / 2.0, 0.0)
+                event.matrices.scale(animation.toFloat(), animation.toFloat(), 1.0f)
+                event.matrices.translate(-MinecraftClient.getInstance().window.scaledWidth / 2.0, -MinecraftClient.getInstance().window.scaledHeight / 2.0, 0.0)
                 val radius = min(MinecraftClient.getInstance().window.scaledWidth, MinecraftClient.getInstance().window.scaledHeight) * 0.25
                 val vec2f = Vec2f(cursorX.toFloat(), cursorY.toFloat()) // I want to use Minecraft vector math functions here, probably slower than needed but easier to understand
                 if(vec2f.lengthSquared() > radius * radius) {
@@ -109,7 +126,7 @@ class WheelMenu {
                     val deltaX = x - cursorX
                     val deltaY = y - cursorY
 
-                    val dist = deltaX * deltaX * deltaY * deltaY
+                    val dist = deltaX * deltaX + deltaY * deltaY
 
                     if(closest == null || closestDist > dist) {
                         closest = wheelTreeEntry
@@ -125,20 +142,22 @@ class WheelMenu {
                     val x = MinecraftClient.getInstance().window.scaledWidth / 2.0 + sin(dir) * (radius - stringWidth)
                     val y = MinecraftClient.getInstance().window.scaledHeight / 2.0 + cos(dir) * (radius - stringWidth)
 
-                    MinecraftClient.getInstance().textRenderer.drawWithShadow(event.matrices, wheelTreeEntry.name, x.toFloat() - stringWidth / 2.0f, y.toFloat(), if(closest == wheelTreeEntry) TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!! else -1)
+                    MinecraftClient.getInstance().textRenderer.drawWithShadow(event.matrices, wheelTreeEntry.name, x.toFloat() - stringWidth / 2.0f, y.toFloat() - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f, if(closest == wheelTreeEntry) TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!! else -1)
                 }
+                event.matrices.pop()
+                if(active && MinecraftClient.getInstance().currentScreen != null)
+                    active = false
             } else if(event is EventUpdate && event.state == EventUpdate.State.PRE) {
                 if(active) {
                     ticksOpen++
-                    if(MinecraftClient.getInstance().currentScreen != null)
-                        onClose()
                 }
             }
         }))
     }
 
-    private fun onClose() {
-        active = false
+    private fun reset() {
+        if(active)
+            active = false
         cursorX = 0.0
         cursorY = 0.0
         ticksOpen = 0

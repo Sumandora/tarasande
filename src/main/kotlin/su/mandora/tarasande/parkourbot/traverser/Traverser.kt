@@ -6,8 +6,10 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.TarasandeMain
+import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -44,7 +46,7 @@ class Traverser(private val path: CopyOnWriteArrayList<BlockPos>) {
             }
             State.TRAVERSING -> {
                 if(MinecraftClient.getInstance().player?.isOnGround!!) {
-                    if(traversingDidJump && abs(yawDelta) > 45.0) {
+                    if(traversingDidJump && (abs(yawDelta) > 15.0 || MinecraftClient.getInstance().player?.horizontalSpeed!! <= 0.24)) {
                         TarasandeMain.get().log.println("Traversing -> Preparing")
                         state = State.PREPARING
                     }
@@ -54,6 +56,7 @@ class Traverser(private val path: CopyOnWriteArrayList<BlockPos>) {
                 traversingTicks++
             }
         }
+
         val input = object : Input() {
             init {
                 when(state) {

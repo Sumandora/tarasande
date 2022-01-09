@@ -52,7 +52,8 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 			PanelFixedRadar::class.java,
 			PanelFixedEffects::class.java,
 			PanelFixedInventory::class.java,
-			PanelFixedLog::class.java
+			PanelFixedLog::class.java,
+			PanelFixedWatermark::class.java
 		)) {
 			panels.add(panel.declaredConstructors[0].newInstance(0.0, 0.0) as Panel)
 		}

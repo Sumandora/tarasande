@@ -1,5 +1,7 @@
 package su.mandora.tarasande.screen.menu.panel.impl.fixed.impl
 
+import com.mojang.blaze3d.platform.GlStateManager
+import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
@@ -28,10 +30,11 @@ class PanelFixedArrayList(x: Double, y: Double) : PanelFixed("Array List", x, y,
 			val animation = animations[it]!!
 			val accent = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
 			val color = Color(accent.red, accent.green, accent.blue, (animation * 255).toInt())
+			RenderSystem.enableBlend()
 			when (alignment) {
-				Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it.name, (x - (MinecraftClient.getInstance().textRenderer.getWidth(it.name) * (1.0 - animation))).toFloat(), y.toFloat() + MinecraftClient.getInstance().textRenderer.fontHeight * (index + 1), color.rgb)
+				Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it.name, (x - (MinecraftClient.getInstance().textRenderer.getWidth(it.name) * (1.0 - animation))).toFloat(), y.toFloat() + (MinecraftClient.getInstance().textRenderer.fontHeight * (index + animation)).toFloat(), color.rgb)
 				Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it.name, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it.name).toFloat() / 2.0f, y.toFloat() + MinecraftClient.getInstance().textRenderer.fontHeight * (index + (1 * animation).toFloat()), color.rgb)
-				Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, it.name, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(it.name) * animation).toFloat(), y.toFloat() + MinecraftClient.getInstance().textRenderer.fontHeight * (index + 1), color.rgb)
+				Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, it.name, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(it.name) * animation).toFloat(), y.toFloat() + (MinecraftClient.getInstance().textRenderer.fontHeight * (index + animation)).toFloat(), color.rgb)
 			}
 		}
 	}
@@ -41,9 +44,9 @@ class PanelFixedArrayList(x: Double, y: Double) : PanelFixed("Array List", x, y,
 			var animation = animations.putIfAbsent(module, 0.0)
 			if (animation == null || animation.isNaN()) animation = 0.0 else {
 				if (module.enabled) {
-					animation += 0.01 * RenderUtil.deltaTime
+					animation += 0.005 * RenderUtil.deltaTime
 				} else {
-					animation -= 0.01 * RenderUtil.deltaTime
+					animation -= 0.005 * RenderUtil.deltaTime
 				}
 			}
 			animations[module] = MathHelper.clamp(animation, 0.0, 1.0)

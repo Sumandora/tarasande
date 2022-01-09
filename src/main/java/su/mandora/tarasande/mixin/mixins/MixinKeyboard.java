@@ -11,9 +11,12 @@ import su.mandora.tarasande.event.EventKey;
 @Mixin(Keyboard.class)
 public class MixinKeyboard {
 
-    @Inject(method = "onKey", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;currentScreen:Lnet/minecraft/client/gui/screen/Screen;", shift = At.Shift.BEFORE, ordinal = 4))
+    @Inject(method = "onKey", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;currentScreen:Lnet/minecraft/client/gui/screen/Screen;", shift = At.Shift.BEFORE, ordinal = 4), cancellable = true)
     public void injectOnKeyPress(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventKey(key));
+        EventKey eventKey = new EventKey(key);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventKey);
+        if(eventKey.getCancelled())
+            ci.cancel();
     }
 
 }
