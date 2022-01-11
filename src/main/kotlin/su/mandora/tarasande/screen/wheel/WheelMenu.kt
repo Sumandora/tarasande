@@ -77,8 +77,9 @@ class WheelMenu {
                     }
                 }
             } else if(event is EventKey) {
-                if(active && event.key == GLFW.GLFW_KEY_ESCAPE && System.currentTimeMillis() - activationChange > 250) {
-                    active = false
+                if(active && event.key == GLFW.GLFW_KEY_ESCAPE) {
+                    if(System.currentTimeMillis() - activationChange > 250)
+                        active = false
                     event.setCancelled()
                 }
             } else if(event is EventMouseDelta) {

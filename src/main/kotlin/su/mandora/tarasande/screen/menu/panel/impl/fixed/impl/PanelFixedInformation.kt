@@ -19,7 +19,10 @@ class PanelFixedInformation(x: Double, y: Double) : PanelFixed("Information", x,
 					if (message.contains("\n")) {
 						val parts = message.split("\n")
 						if (parts.isNotEmpty()) {
-							cache.add("[" + information.information + "] " + parts[0])
+							if(parts[0].isNotEmpty())
+								cache.add("[" + information.information + "] " + parts[0])
+							else
+								cache.add("[" + information.information + "]")
 							if (parts.size > 1) {
 								cache.addAll(parts.subList(1, parts.size))
 							}
