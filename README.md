@@ -45,6 +45,7 @@
 - Scissor Box in Menu is one pixel off (GUI-Scale = 4, Sodium)
 - Adding Parkour-Bot Forward Option
 - Color Picker Use Normalization instead of bruteforce
+- Set Fake Rotation to Rotation which was set using S08Packet (smoothness)
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)
