@@ -247,45 +247,50 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
 						val hitResult = PlayerUtil.raycast(mc.player?.eyePos!!, mc.player?.eyePos!!.add(rotationVector.multiply(mc.interactionManager?.reachDistance!!.toDouble())))
 						val clicks = clickSpeedUtil.getClicks()
 						val prevSlot = mc.player?.inventory?.selectedSlot
-						if (silent.value) {
-							var hasBlock = false
-							for (hand in Hand.values().reversed()) {
-								val stack = mc.player?.getStackInHand(hand)
-								if (stack != null) {
-									if (stack.item is BlockItem && isBlockItemValid(stack.item as BlockItem)) {
-										hasBlock = true
-									} else if(stack.item.getUseAction(stack) != UseAction.NONE) {
-										break
-									}
-								}
-							}
-							if (!hasBlock) {
-								var blockSlot: Int? = null
-								for (slot in 0..8) {
-									val stack = mc.player?.inventory?.main?.get(slot)
-									if (stack != null && stack.item is BlockItem && isBlockItemValid(stack.item as BlockItem)) {
-										blockSlot = slot
-										break
-									}
-								}
-								if (blockSlot != null) {
-									mc.player?.inventory?.selectedSlot = blockSlot
+						var hasBlock = false
+						for (hand in Hand.values()) {
+							val stack = mc.player?.getStackInHand(hand)
+							if (stack != null) {
+								if (stack.item is BlockItem && isBlockItemValid(stack.item as BlockItem)) {
+									hasBlock = true
+								} else if(stack.item.getUseAction(stack) != UseAction.NONE) {
+									break
 								}
 							}
 						}
+						if (silent.value && !hasBlock) {
+							var blockAmount = 0
+							var blockSlot: Int? = null
+							for (slot in 0..8) {
+								val stack = mc.player?.inventory?.main?.get(slot)
+								if (stack != null && stack.item is BlockItem && isBlockItemValid(stack.item as BlockItem)) {
+									if(blockSlot == null || blockAmount > stack.count) {
+										blockSlot = slot
+										blockAmount = stack.count
+									}
+								}
+							}
+							if (blockSlot != null) {
+								mc.player?.inventory?.selectedSlot = blockSlot
+							} else return@Consumer
+						} else if(!hasBlock) return@Consumer
 						if (airBelow && (round(Vec3d.ofCenter(target!!.first).subtract(mc.player?.pos!!).multiply(Vec3d.of(target!!.second.vector)).horizontalLengthSquared() * 100) / 100.0 in (newEdgeDist * newEdgeDist)..1.0 || target!!.second.vector.y != 0)) {
 							for (hand in Hand.values()) {
 								val stack = mc.player?.getStackInHand(hand)
-								if (stack != null && stack.item is BlockItem) {
-									if (hitResult != null && hitResult.type == HitResult.Type.BLOCK) {
-										placeBlock(hitResult)
-										timeUtil.reset()
+								if(stack != null) {
+									if (stack.item is BlockItem) {
+										if (hitResult != null && hitResult.type == HitResult.Type.BLOCK) {
+											placeBlock(hitResult)
+											timeUtil.reset()
 
-										if(target!!.second.vector.y == 0) {
-											if (edgeIncrement.value && preventImpossibleEdge.value && prevEdgeDistance > newEdgeDist && mc.player?.isOnGround!!)
-												mc.player?.jump()
-											prevEdgeDistance = newEdgeDist
+											if(target!!.second.vector.y == 0) {
+												if (edgeIncrement.value && preventImpossibleEdge.value && prevEdgeDistance > newEdgeDist && mc.player?.isOnGround!!)
+													mc.player?.jump()
+												prevEdgeDistance = newEdgeDist
+											}
 										}
+									} else if(stack.item.getUseAction(stack) != UseAction.NONE) {
+										break
 									}
 								}
 							}

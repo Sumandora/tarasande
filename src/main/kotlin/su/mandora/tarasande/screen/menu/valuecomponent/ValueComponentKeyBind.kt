@@ -94,7 +94,7 @@ class ValueComponentKeyBind(value: Value) : ValueComponent(value) {
 		else if (keyName == null)
 			keyName = GLFW.glfwGetKeyName(GLFW.GLFW_KEY_UNKNOWN, GLFW.glfwGetKeyScancode(keyBind))
 
-		if (keyName == null || keyName.isEmpty() || escapeCharacters.contains(keyName)) {
+		if (keyName == null || keyName.trim().isEmpty() || escapeCharacters.contains(keyName)) {
 			for (field in GLFW::class.java.declaredFields) {
 				if (field.name.startsWith("GLFW_KEY_")) {
 					val content = field.get(GLFW::class.java)

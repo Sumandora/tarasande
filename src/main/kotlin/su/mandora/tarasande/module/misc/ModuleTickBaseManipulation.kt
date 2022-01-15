@@ -12,13 +12,19 @@ import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueKeyBind
+import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
+import kotlin.math.max
 
 class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts minecraft's tick base", ModuleCategory.MISC) {
 
     private val chargeKey = ValueKeyBind(this, "Charge key", GLFW.GLFW_KEY_UNKNOWN)
     private val unchargeKey = ValueKeyBind(this, "Uncharge key", GLFW.GLFW_KEY_UNKNOWN)
     private val resyncPositions = ValueBoolean(this, "Resync positions", true)
+    private val instantUncharge = ValueBoolean(this, "Instant uncharge", true)
+    private val unchargeSpeed = object : ValueNumber(this, "Uncharge speed", 0.0, 1000.0, 1000.0, 1.0) {
+        override fun isVisible() = !instantUncharge.value
+    }
 
     private var prevTime = 0L
     private var lastUpdate = 0L
@@ -49,9 +55,8 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
                     }
                 }
                 prevTime = event.time
-                if (unchargeKey.isPressed()) {
-                    shifted = 0L
-                }
+                if (unchargeKey.isPressed())
+                    shifted = if(instantUncharge.value) 0L else max(0L, (shifted - unchargeSpeed.value).toLong())
             } else {
                 shifted = 0L
             }

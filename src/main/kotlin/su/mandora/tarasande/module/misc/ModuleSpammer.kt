@@ -8,6 +8,8 @@ import org.apache.commons.lang3.RandomStringUtils
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
+import su.mandora.tarasande.event.EventChat
+import su.mandora.tarasande.event.EventPacket
 import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.value.ValueBoolean
@@ -37,52 +39,69 @@ class ModuleSpammer : Module("Spammer", "Spams something in chat", ModuleCategor
 	}
 
 	private val timeUtil = TimeUtil()
+	private val userMessages = ArrayList<String>()
+
+	override fun onDisable() {
+		userMessages.clear()
+	}
 
 	val eventConsumer = Consumer<Event> { event ->
-		if (event is EventPollEvents) {
-			if (timeUtil.hasReached(delay.value.toLong())) {
-				var text = when {
-					mode.isSelected(0) -> message.value
-					mode.isSelected(1) -> {
-						var target: Entity? = null
-						for (entity in mc.world?.entities!!) {
-							if (entity is PlayerEntity && entity.gameProfile.name.equals(this.target.value, true)) {
-								target = entity
-								break
-							}
-						}
-
-						if (target != null) {
-							var closest: PlayerEntity? = null
-							var dist = 0.0
+		when (event) {
+			is EventPollEvents -> {
+				if (timeUtil.hasReached(delay.value.toLong())) {
+					if(userMessages.isNotEmpty()) {
+						mc.networkHandler?.sendPacket(ChatMessageC2SPacket(SharedConstants.stripInvalidChars(userMessages[0])))
+						userMessages.removeAt(0)
+						timeUtil.reset()
+						return@Consumer
+					}
+					var text = when {
+						mode.isSelected(0) -> message.value
+						mode.isSelected(1) -> {
+							var target: Entity? = null
 							for (entity in mc.world?.entities!!) {
-								if (entity is PlayerEntity && target != entity) {
-									val dist2 = target.squaredDistanceTo(entity)
-									if(closest == null || dist2 < dist) {
-										closest = entity
-										dist = dist2
-									}
+								if (entity is PlayerEntity && entity.gameProfile.name.equals(this.target.value, true)) {
+									target = entity
+									break
 								}
 							}
 
-							var string = "X: " + (round(target.x * 10) / 10.0) + " Y: " + (round(target.y * 10) / 10.0) + " Z: " + (round(target.z * 10) / 10.0)
-							if(closest != null) {
-								string += " " + closest.gameProfile.name + " (" + (round(sqrt(dist) *  10) / 10) + "m)"
+							if (target != null) {
+								var closest: PlayerEntity? = null
+								var dist = 0.0
+								for (entity in mc.world?.entities!!) {
+									if (entity is PlayerEntity && target != entity) {
+										val dist2 = target.squaredDistanceTo(entity)
+										if(closest == null || dist2 < dist) {
+											closest = entity
+											dist = dist2
+										}
+									}
+								}
+
+								var string = "X: " + (round(target.x * 10) / 10.0) + " Y: " + (round(target.y * 10) / 10.0) + " Z: " + (round(target.z * 10) / 10.0)
+								if(closest != null) {
+									string += " " + closest.gameProfile.name + " (" + (round(sqrt(dist) *  10) / 10) + "m)"
+								}
+								string
+							} else {
+								"Target is not in render distance"
 							}
-							string
-						} else {
-							"Target is not in render distance"
 						}
+						else -> null
 					}
-					else -> null
-				}
-				if (text != null) {
-					if (garbage.value) {
-						text = formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt())) + " " + text + " " + formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt()))
+					if (text != null) {
+						if (garbage.value) {
+							text = formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt())) + " " + text + " " + formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt()))
+						}
+						mc.networkHandler?.sendPacket(ChatMessageC2SPacket(SharedConstants.stripInvalidChars(text)))
 					}
-					mc.networkHandler?.sendPacket(ChatMessageC2SPacket(SharedConstants.stripInvalidChars(text)))
+					timeUtil.reset()
 				}
-				timeUtil.reset()
+			}
+			is EventChat -> {
+				userMessages.add(event.chatMessage)
+				event.setCancelled()
 			}
 		}
 	}

@@ -19,7 +19,12 @@ open class PanelFixed(title: String, x: Double, y: Double, width: Double, height
 					if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screens?.screenMenu) {
 						if (this.scissor) {
 							GlStateManager._enableScissorTest()
-							GlStateManager._scissorBox(((this.x + panelWidth * (1 - 1) / 2) * MinecraftClient.getInstance().window?.scaleFactor!!).toInt(), (MinecraftClient.getInstance().window?.height!! - (this.y + panelHeight - panelHeight * (1 - 1) / 2) * MinecraftClient.getInstance().window?.scaleFactor!!).toInt(), ((panelWidth - panelWidth * (1 - 1)) * MinecraftClient.getInstance().window?.scaleFactor!!).toInt(), ((panelHeight - panelHeight * (1 - 1)) * MinecraftClient.getInstance().window?.scaleFactor!!).toInt())
+							GlStateManager._scissorBox(
+								(x * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt(),
+								(MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight - 1) * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt(),
+								(panelWidth * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt(),
+								((panelHeight - 1) * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt()
+							)
 						}
 						render(event.matrices, -1, -1, MinecraftClient.getInstance().tickDelta)
 						if (this.scissor) {

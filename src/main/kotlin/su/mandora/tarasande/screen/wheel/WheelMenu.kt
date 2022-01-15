@@ -21,7 +21,7 @@ import kotlin.math.sin
 class WheelMenu {
 
     private var activationChange = 0L
-    var active: Boolean = false
+    var active = false
         set(value) {
             activationChange = System.currentTimeMillis()
             field = value

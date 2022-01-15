@@ -17,6 +17,7 @@ import su.mandora.tarasande.util.render.RenderUtil.outlinedFill
 import su.mandora.tarasande.value.ValueColor
 import java.awt.Color
 import kotlin.math.PI
+import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -58,11 +59,11 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
             while (s <= 1.0) {
                 var b = 0.0
                 while (b <= 1.0) {
-                    val hsb: Color = Color.getHSBColor(colorValue.hue, s.toFloat(), b.toFloat())
-                    val f: Float = (hsb.rgb shr 24 and 0xFF) / 255.0f
-                    val g: Float = (hsb.rgb shr 16 and 0xFF) / 255.0f
-                    val h: Float = (hsb.rgb shr 8 and 0xFF) / 255.0f
-                    val k: Float = (hsb.rgb and 0xFF) / 255.0f
+                    val hsb = Color.getHSBColor(colorValue.hue, s.toFloat(), b.toFloat())
+                    val f = (hsb.rgb shr 24 and 0xFF) / 255.0f
+                    val g = (hsb.rgb shr 16 and 0xFF) / 255.0f
+                    val h = (hsb.rgb shr 8 and 0xFF) / 255.0f
+                    val k = (hsb.rgb and 0xFF) / 255.0f
                     val tileX1 = x1 + (x2 - x1) * s
                     val tileY1 = y1 + (y2 - y1) * (1.0 - b) - tileHeight
                     val tileX2 = x1 + (x2 - x1) * s + tileWidth
@@ -99,11 +100,11 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         run {
             var circle = 0.0
             while (circle <= 1.1) {
-                val hsb2: Color = Color.getHSBColor((circle.toFloat() + 0.5f) % 1.0f, 1.0f, 1.0f)
-                val f2: Float = (hsb2.rgb shr 24 and 0xFF) / 255.0f
-                val g2: Float = (hsb2.rgb shr 16 and 0xFF) / 255.0f
-                val h2: Float = (hsb2.rgb shr 8 and 0xFF) / 255.0f
-                val i: Float = (hsb2.rgb and 0xFF) / 255.0f
+                val hsb2 = Color.getHSBColor((circle.toFloat() + 0.5f) % 1.0f, 1.0f, 1.0f)
+                val f2 = (hsb2.rgb shr 24 and 0xFF) / 255.0f
+                val g2 = (hsb2.rgb shr 16 and 0xFF) / 255.0f
+                val h2 = (hsb2.rgb shr 8 and 0xFF) / 255.0f
+                val i = (hsb2.rgb and 0xFF) / 255.0f
                 bufferBuilder.vertex(matrix4f, (this.width - (getHeight() - 5) / 2.0 - sin(circle * PI * 2) * innerRadius).toFloat(), ((getHeight() - 5) / 2.0 + cos(circle * PI * 2) * innerRadius).toFloat(), 0.0f).color(g2, h2, i, f2).next()
                 bufferBuilder.vertex(matrix4f, (this.width - (getHeight() - 5) / 2.0 - sin(circle * PI * 2) * outerRadius).toFloat(), ((getHeight() - 5) / 2.0 + cos(circle * PI * 2) * outerRadius).toFloat(), 0.0f).color(g2, h2, i, f2).next()
                 circle += 0.01
@@ -131,20 +132,10 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
             colorValue.onChange()
         }
         if (wheelDragInfo.dragging) {
-            var circle2 = 0.0
-            var closestHue = 0.0f
-            var closestDistance = Float.MAX_VALUE
             val mousePos = Vec2f(mouseX.toFloat(), mouseY.toFloat())
-            while (circle2 <= 1.1) {
-                val position = Vec2f((this.width - (getHeight() - 5) / 2.0 - sin(circle2 * PI * 2) * middleRadius).toFloat(), ((getHeight() - 5) / 2.0 + cos(circle2 * PI * 2) * middleRadius).toFloat())
-                val distance = position.distanceSquared(mousePos)
-                if (distance < closestDistance) {
-                    closestDistance = distance
-                    closestHue = (circle2.toFloat() + 0.5f) % 1.0f
-                }
-                circle2 += 0.01
-            }
-            colorValue.hue = closestHue
+            val middle = Vec2f((x1 + (x2 - x1) * 0.5).toFloat(), (y1 + (y2 - y1) * 0.5).toFloat())
+            val mouseDir = mousePos.add(middle.multiply(-1.0f)).normalize() // large subtraction
+            colorValue.hue = ((atan2(mouseDir.y, mouseDir.x) + PI - PI / 2) / (2 * PI)).toFloat()
             colorValue.onChange()
         }
     }
@@ -164,23 +155,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         }
         val innerRadius = (getHeight() - 5) / 2.0 - 5
         val outerRadius = (getHeight() - 5) / 2.0
-        val width = outerRadius - innerRadius
-        val middleRadius = innerRadius + width * 0.5
-        var circle = 0.0
-        var closestDistance = Float.MAX_VALUE
-        val mousePos = Vec2f(mouseX.toFloat(), mouseY.toFloat())
-        while (circle <= 1.1) {
-            val position = Vec2f(
-                (this.width - (getHeight() - 5) / 2.0 - sin(circle * PI * 2) * middleRadius).toFloat(),
-                ((getHeight() - 5) / 2.0 + cos(circle * PI * 2) * middleRadius).toFloat()
-            )
-            val distance = position.distanceSquared(mousePos)
-            if (distance < closestDistance) {
-                closestDistance = distance
-            }
-            circle += 0.01
-        }
-        if (closestDistance <= width * width) {
+        if (Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(Vec2f((x1 + (x2 - x1) * 0.5).toFloat(), (y1 + (y2 - y1) * 0.5).toFloat())) in (innerRadius * innerRadius)..(outerRadius * outerRadius)) {
             val valueColor = value
             if (System.currentTimeMillis() - lastWheelClick < 250L) {
                 valueColor.rainbow = !valueColor.rainbow

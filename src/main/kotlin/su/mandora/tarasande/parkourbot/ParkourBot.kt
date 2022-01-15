@@ -19,6 +19,7 @@ import su.mandora.tarasande.parkourbot.pathbuilder.Goal
 import su.mandora.tarasande.parkourbot.pathbuilder.PathBuilder
 import su.mandora.tarasande.parkourbot.traverser.Movement
 import su.mandora.tarasande.parkourbot.traverser.Traverser
+import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.jvm.internal.Intrinsics
@@ -32,6 +33,8 @@ class ParkourBot {
     private var active = false
     private var traverser: Traverser? = null
     private var movement: Movement? = null
+
+    var startRotation: Rotation? = null
 
     init {
         TarasandeMain.get().managerEvent?.add { event ->
@@ -80,6 +83,7 @@ class ParkourBot {
         if(active) {
             stop()
         }
+        startRotation = Rotation(MinecraftClient.getInstance().player!!.yaw, MinecraftClient.getInstance().player!!.pitch)
         active = true
         var currentPos = MinecraftClient.getInstance().player?.blockPos!!.add(0, -1, 0)
         var found = true

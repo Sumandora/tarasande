@@ -31,21 +31,13 @@
 8. More advanced modules
 
 ## TODO-List
-- Readd Bezier Points in Graph
 - Vehicle Speed
 - Elytra Flight
 - Baritone Sprint Jump
 - KillAura Noise Function Rotations
-- Notification System
-- Speed - Timer Settings maybe
-- Balance Timer
 - Friends
-- Scaffold only right click with block
-- Scaffold check if off hand item is blocking block in main hand
-- Scissor Box in Menu is one pixel off (GUI-Scale = 4, Sodium)
-- Adding Parkour-Bot Forward Option
-- Color Picker Use Normalization instead of bruteforce
 - Set Fake Rotation to Rotation which was set using S08Packet (smoothness)
+- WTap
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

@@ -2,15 +2,15 @@ package su.mandora.tarasande.parkourbot.pathbuilder
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.Vec3i
+import su.mandora.tarasande.TarasandeMain
+import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.pathfinder.Movement
 import su.mandora.tarasande.util.pathfinder.PathFinder
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.Comparator
-import kotlin.math.max
-import kotlin.math.min
 
 class PathBuilder(begin: BlockPos, private val goal: Goal) {
 
@@ -90,7 +90,7 @@ class PathBuilder(begin: BlockPos, private val goal: Goal) {
 }
 
 enum class Goal(val comparator: Comparator<BlockPos>) {
-    FORWARDS(Comparator.comparing { 0.0 }), // TODO
+    FORWARDS(Comparator.comparing { MathHelper.wrapDegrees( RotationUtil.getRotations(MinecraftClient.getInstance().player?.eyePos!!, Vec3d.ofCenter(it)).yaw - TarasandeMain.get().parkourBot?.startRotation?.yaw!!) }),
     UPWARDS(Comparator.comparing<BlockPos?, Int?> { it.y }.reversed()),
     DOWNWARDS(Comparator.comparing { it.y })
 }
