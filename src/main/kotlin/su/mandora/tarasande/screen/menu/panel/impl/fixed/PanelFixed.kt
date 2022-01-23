@@ -17,19 +17,21 @@ open class PanelFixed(title: String, x: Double, y: Double, width: Double, height
 			if (event is EventRender2D) {
 				if (opened && isVisible()) {
 					if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screens?.screenMenu) {
+						event.matrices.push()
 						if (this.scissor) {
 							GlStateManager._enableScissorTest()
 							GlStateManager._scissorBox(
-								(x * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt(),
-								(MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight - 1) * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt(),
-								(panelWidth * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt(),
-								((panelHeight - 1) * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt()
+								((x + panelWidth) * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt(),
+								(MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight) * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt(),
+								((panelWidth) * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt(),
+								((panelHeight) * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt()
 							)
 						}
 						render(event.matrices, -1, -1, MinecraftClient.getInstance().tickDelta)
 						if (this.scissor) {
 							GlStateManager._disableScissorTest()
 						}
+						event.matrices.pop()
 					}
 				}
 			} else if (event is EventTick) {

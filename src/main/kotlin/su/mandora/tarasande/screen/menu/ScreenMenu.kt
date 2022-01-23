@@ -110,10 +110,11 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 
 		panels.reversed().forEach {
 			matrices?.push()
+			val panelHeight = (if(it.opened) it.panelHeight else client?.textRenderer?.fontHeight)?.toDouble()!!
 			if (it !is PanelFixed || !(it.opened && it.isVisible())) {
-				matrices?.translate(it.x + it.panelWidth / 2.0, it.y + it.panelHeight / 2.0, 0.0)
+				matrices?.translate(it.x + it.panelWidth / 2.0, it.y + panelHeight / 2.0, 0.0)
 				matrices?.scale(animation.toFloat(), animation.toFloat(), 1.0F)
-				matrices?.translate(-(it.x + it.panelWidth / 2.0), -(it.y + it.panelHeight / 2.0), 0.0)
+				matrices?.translate(-(it.x + it.panelWidth / 2.0), -(it.y + panelHeight / 2.0), 0.0)
 			}
 
 			if (it.scissor) {
@@ -121,9 +122,9 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 				val animation = if (it !is PanelFixed || !(it.opened && it.isVisible())) animation else 1.0
 				GlStateManager._scissorBox(
 					((it.x + it.panelWidth * (1 - animation) / 2) * client?.window?.scaleFactor!!).toInt(),
-					(client?.window?.height!! - (it.y + it.panelHeight - it.panelHeight * (1 - animation) / 2 - 1) * client?.window?.scaleFactor!!).toInt(),
+					(client?.window?.height!! - (it.y + panelHeight - panelHeight * (1 - animation) / 2 - 1) * client?.window?.scaleFactor!!).toInt(),
 					((it.panelWidth - it.panelWidth * (1 - animation)) * client?.window?.scaleFactor!!).toInt(),
-					((it.panelHeight - it.panelHeight * (1 - animation) - 1) * client?.window?.scaleFactor!!).toInt()
+					((panelHeight - panelHeight * (1 - animation) - 1) * client?.window?.scaleFactor!!).toInt()
 				)
 			}
 			it.render(matrices, mouseX, mouseY, delta)

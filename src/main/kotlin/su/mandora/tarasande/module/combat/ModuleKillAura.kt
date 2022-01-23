@@ -1,15 +1,18 @@
 package su.mandora.tarasande.module.combat
 
+import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
 import net.minecraft.util.Hand
+import net.minecraft.util.UseAction
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
+import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
@@ -163,24 +166,12 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 				}
 
 				targets.sortWith(comparator)
-
-				var target = targets[0]
-
-				var hitResult: HitResult?
-				while (targets.isNotEmpty()) {
-					hitResult = PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.getRotations(mc.player?.eyePos!!, target.second))
-					if(hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null) {
-						targets.remove(target)
-					} else {
-						break
-					}
-					for(newTarget in ArrayList(targets) /* concurrent modification exception */) {
-						if(target != newTarget) {
-							target = newTarget
-							break
-						}
-					}
+				targets.sortBy {
+					val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.getRotations(mc.player?.eyePos!!, it.second))
+					hitResult != null && hitResult is EntityHitResult && hitResult.entity != null
 				}
+
+				val target = targets[0]
 
 				val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player?.yaw!!, mc.player?.pitch!!)
 				val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, target.second)
@@ -246,6 +237,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 				if (attackCooldown.value && (mc as IMinecraftClient).attackCooldown > 0)
 					return@Consumer
 
+				TarasandeMain.get().log.println(MinecraftClient.getInstance().player?.getAttackCooldownProgress(0.5F)!!)
 				val clicks = clickSpeedUtil.getClicks()
 
 				if (mc.player?.isUsingItem!! && clicks > 0 && !blockMode.isSelected(0)) {
@@ -310,9 +302,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 				}
 				if (targets.isNotEmpty() && (!waitForHit) && !mc.player?.isUsingItem!! && !blockMode.isSelected(0)) {
 					var canBlock = true
-					if (blockCheckMode.isSelected(0) && mc.player?.getStackInHand(Hand.OFF_HAND)?.item !is ShieldItem)
+					if (blockCheckMode.isSelected(0) && (mc.player?.getStackInHand(Hand.OFF_HAND)?.item !is ShieldItem || mc.player?.getStackInHand(Hand.MAIN_HAND)?.useAction != UseAction.NONE))
 						canBlock = false
-					if (blockCheckMode.isSelected(1) && mc.player?.getStackInHand(Hand.MAIN_HAND)?.item !is SwordItem)
+					if (blockCheckMode.isSelected(1) && (mc.player?.getStackInHand(Hand.MAIN_HAND)?.item !is SwordItem || mc.player?.getStackInHand(Hand.OFF_HAND)?.useAction != UseAction.NONE))
 						canBlock = false
 
 					if (canBlock) {

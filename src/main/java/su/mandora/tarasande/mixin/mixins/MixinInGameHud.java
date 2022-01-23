@@ -19,7 +19,7 @@ public abstract class MixinInGameHud implements IInGameHud {
     @Shadow
     protected abstract void renderHotbarItem(int x, int y, float tickDelta, PlayerEntity player, ItemStack stack, int seed);
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;enableBlend()V", shift = At.Shift.BEFORE, ordinal = 0))
+    @Inject(method = "render", at = @At("TAIL"))
     public void injectRender(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         TarasandeMain.Companion.get().getManagerEvent().call(new EventRender2D(matrices));
     }

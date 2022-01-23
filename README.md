@@ -38,6 +38,9 @@
 - Friends
 - Set Fake Rotation to Rotation which was set using S08Packet (smoothness)
 - WTap
+- KillAura Blocking in 1.9 PvP sometimes doesn't work (that's actually the shield being on cooldown, make a check, that if the shield is on cooldown it is either paused or try reequipping it, maybe it will work)
+- Scissor Boxes are broken in PanelFixed (not sure why, maybe Sodium)
+- Add new targetting option: 'Dont attack tamed entities'
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)
