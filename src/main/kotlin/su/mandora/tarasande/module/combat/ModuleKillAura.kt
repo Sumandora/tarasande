@@ -301,9 +301,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 				}
 				if (targets.isNotEmpty() && (!waitForHit) && !mc.player?.isUsingItem!! && !blockMode.isSelected(0)) {
 					var canBlock = true
-					if (blockCheckMode.isSelected(0) && mc.player?.getStackInHand(Hand.MAIN_HAND)?.useAction != UseAction.NONE) {
+					if (blockCheckMode.isSelected(0)) {
 						val stack = mc.player?.getStackInHand(Hand.OFF_HAND)
-						if(stack?.item !is ShieldItem || mc.player?.itemCooldownManager?.isCoolingDown(stack.item)!!)
+						if(stack?.item !is ShieldItem || mc.player?.itemCooldownManager?.isCoolingDown(stack.item)!! || mc.player?.getStackInHand(Hand.MAIN_HAND)?.useAction != UseAction.NONE)
 							canBlock = false
 					}
 					if (blockCheckMode.isSelected(1) && (mc.player?.getStackInHand(Hand.MAIN_HAND)?.item !is SwordItem || mc.player?.getStackInHand(Hand.OFF_HAND)?.useAction != UseAction.NONE))
