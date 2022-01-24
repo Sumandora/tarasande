@@ -122,10 +122,10 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 			if(it !is PanelFixed) {
 				GlStateManager._enableScissorTest()
 				GlStateManager._scissorBox(
-					((it.x) * client?.window?.scaleFactor!!).toInt(),
-					(client?.window?.height!! - (it.y + panelHeight) * client?.window?.scaleFactor!!).toInt(),
-					((it.panelWidth) * client?.window?.scaleFactor!!).toInt(),
-					((panelHeight) * client?.window?.scaleFactor!!).toInt()
+					((it.x + it.panelWidth * (1 - animation) / 2) * client?.window?.scaleFactor!!).toInt(),
+					(client?.window?.height!! - (it.y + panelHeight - panelHeight * (1 - animation) / 2 - 1) * client?.window?.scaleFactor!!).toInt(),
+					((it.panelWidth - it.panelWidth * (1 - animation)) * client?.window?.scaleFactor!!).toInt(),
+					((panelHeight - panelHeight * (1 - animation) - 1) * client?.window?.scaleFactor!!).toInt()
 				)
 			}
 			it.render(matrices, mouseX, mouseY, delta)
