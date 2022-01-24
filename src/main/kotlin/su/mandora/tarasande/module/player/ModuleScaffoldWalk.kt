@@ -243,7 +243,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
 
                 if (target != null && RotationUtil.fakeRotation != null) {
                     val airBelow = mc.world?.isAir(BlockPos(mc.player?.pos!!.add(0.0, -1.0, 0.0)))!!
-                    if (sneak.value)
+                    if (sneak.value && target?.second?.vector?.y!! == 0)
                         mc.options?.keySneak?.isPressed = airBelow
                     else
                         mc.options?.keySneak?.isPressed = false
