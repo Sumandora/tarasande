@@ -2,6 +2,7 @@ package su.mandora.tarasande.screen.menu
 
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.render.GameRenderer
@@ -45,16 +46,18 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 		for (moduleCategory in ModuleCategory.values()) {
 			panels.add(PanelCategory(moduleCategory, 0.0, 0.0))
 		}
-		for (panel in listOf(
+		val fixedPanels = mutableListOf(
 			PanelClientValues::class.java,
 			PanelFixedArrayList::class.java,
 			PanelFixedInformation::class.java,
-			PanelFixedRadar::class.java,
 			PanelFixedEffects::class.java,
 			PanelFixedInventory::class.java,
-			PanelFixedLog::class.java,
 			PanelFixedWatermark::class.java
-		)) {
+		)
+		if (System.getProperty("os.name").contains("windows", true)) {
+			fixedPanels.add(PanelFixedSpotify::class.java)
+		}
+		for (panel in fixedPanels) {
 			panels.add(panel.declaredConstructors[0].newInstance(0.0, 0.0) as Panel)
 		}
 		for (graph in managerGraph.list) {
@@ -116,21 +119,17 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 				matrices?.scale(animation.toFloat(), animation.toFloat(), 1.0F)
 				matrices?.translate(-(it.x + it.panelWidth / 2.0), -(it.y + panelHeight / 2.0), 0.0)
 			}
-
-			if (it.scissor) {
+			if(it !is PanelFixed) {
 				GlStateManager._enableScissorTest()
-				val animation = if (it !is PanelFixed || !(it.opened && it.isVisible())) animation else 1.0
 				GlStateManager._scissorBox(
-					((it.x + it.panelWidth * (1 - animation) / 2) * client?.window?.scaleFactor!!).toInt(),
-					(client?.window?.height!! - (it.y + panelHeight - panelHeight * (1 - animation) / 2 - 1) * client?.window?.scaleFactor!!).toInt(),
-					((it.panelWidth - it.panelWidth * (1 - animation)) * client?.window?.scaleFactor!!).toInt(),
-					((panelHeight - panelHeight * (1 - animation) - 1) * client?.window?.scaleFactor!!).toInt()
+					((it.x) * client?.window?.scaleFactor!!).toInt(),
+					(client?.window?.height!! - (it.y + panelHeight) * client?.window?.scaleFactor!!).toInt(),
+					((it.panelWidth) * client?.window?.scaleFactor!!).toInt(),
+					((panelHeight) * client?.window?.scaleFactor!!).toInt()
 				)
 			}
 			it.render(matrices, mouseX, mouseY, delta)
-			if (it.scissor) {
-				GlStateManager._disableScissorTest()
-			}
+			GlStateManager._disableScissorTest()
 			matrices?.pop()
 		}
 

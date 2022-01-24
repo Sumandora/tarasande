@@ -1,5 +1,6 @@
 package su.mandora.tarasande.screen.menu.panel.impl.fixed.impl
 
+import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.resource.language.I18n
 import net.minecraft.client.util.math.MatrixStack
@@ -20,18 +21,6 @@ class PanelFixedEffects(x: Double, y: Double) : PanelFixed("Effects", x, y, 75.0
 	private val prevInstances = HashMap<StatusEffect, StatusEffectInstance>()
 
 	override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-		Registry.STATUS_EFFECT.forEach { statusEffect ->
-			var animation = animations.putIfAbsent(statusEffect, 0.0)
-			if (animation == null || animation.isNaN()) animation = 0.0 else {
-				if (MinecraftClient.getInstance().player?.hasStatusEffect(statusEffect)!!) {
-					animation += 0.01 * RenderUtil.deltaTime
-				} else {
-					animation -= 0.01 * RenderUtil.deltaTime
-				}
-			}
-			animations[statusEffect] = MathHelper.clamp(animation, 0.0, 1.0)
-		}
-
 		val activeStatusEffects = ArrayList<Triple<StatusEffect, String, Int>>()
 
 		for (statusEffect in Registry.STATUS_EFFECT) {
@@ -54,6 +43,7 @@ class PanelFixedEffects(x: Double, y: Double) : PanelFixed("Effects", x, y, 75.0
 		for ((index, it) in activeStatusEffects.sortedBy { MinecraftClient.getInstance().textRenderer.getWidth(it.second) }.reversed().withIndex()) {
 			val animation = animations[it.first]!!
 			val color = Color((it.third shr 16) and 0xFF, (it.third shr 8) and 0xFF, (it.third shr 0) and 0xFF, (animation * 255).toInt())
+			RenderSystem.enableBlend()
 			when (alignment) {
 				Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it.second, (x - (MinecraftClient.getInstance().textRenderer.getWidth(it.second) * (1.0 - animation))).toFloat(), y.toFloat() + MinecraftClient.getInstance().textRenderer.fontHeight * (index + 1), color.rgb)
 				Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it.second, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it.second).toFloat() / 2.0f, y.toFloat() + MinecraftClient.getInstance().textRenderer.fontHeight * (index + (1 * animation).toFloat()), color.rgb)
@@ -62,6 +52,20 @@ class PanelFixedEffects(x: Double, y: Double) : PanelFixed("Effects", x, y, 75.0
 		}
 	}
 
-	override fun isVisible() = MinecraftClient.getInstance().player?.statusEffects?.isNotEmpty()!!
+	override fun isVisible(): Boolean {
+		Registry.STATUS_EFFECT.forEach { statusEffect ->
+			var animation = animations.putIfAbsent(statusEffect, 0.0)
+			if (animation == null || animation.isNaN()) animation = 0.0 else {
+				if (MinecraftClient.getInstance().player?.hasStatusEffect(statusEffect)!!) {
+					animation += 0.01 * RenderUtil.deltaTime
+				} else {
+					animation -= 0.01 * RenderUtil.deltaTime
+				}
+			}
+			animations[statusEffect] = MathHelper.clamp(animation, 0.0, 1.0)
+		}
+
+		return animations.any { it.value > 0.01 }
+	}
 
 }

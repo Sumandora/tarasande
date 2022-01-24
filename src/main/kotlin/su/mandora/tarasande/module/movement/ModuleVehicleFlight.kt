@@ -11,7 +11,7 @@ import su.mandora.tarasande.value.ValueKeyBind
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
 
-class ModuleVehicleFlight : Module("Vehicle Flight", "Makes you fly with vehicles (e.g. boat, horses)", ModuleCategory.MOVEMENT) {
+class ModuleVehicleFlight : Module("Vehicle flight", "Makes you fly with vehicles (e.g. boat, horses)", ModuleCategory.MOVEMENT) {
 
 	private val verticalSpeed = ValueNumber(this, "Vertical speed", 0.0, 0.1, 1.0, 0.1)
 	private val downwardsKeybind = ValueKeyBind(this, "Downwards Keybind", GLFW.GLFW_KEY_UNKNOWN)

@@ -168,7 +168,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 				targets.sortWith(comparator)
 				targets.sortBy {
 					val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.getRotations(mc.player?.eyePos!!, it.second))
-					hitResult != null && hitResult is EntityHitResult && hitResult.entity != null
+					hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null
 				}
 
 				val target = targets[0]
@@ -237,7 +237,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 				if (attackCooldown.value && (mc as IMinecraftClient).attackCooldown > 0)
 					return@Consumer
 
-				TarasandeMain.get().log.println(MinecraftClient.getInstance().player?.getAttackCooldownProgress(0.5F)!!)
 				val clicks = clickSpeedUtil.getClicks()
 
 				if (mc.player?.isUsingItem!! && clicks > 0 && !blockMode.isSelected(0)) {
@@ -302,8 +301,11 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 				}
 				if (targets.isNotEmpty() && (!waitForHit) && !mc.player?.isUsingItem!! && !blockMode.isSelected(0)) {
 					var canBlock = true
-					if (blockCheckMode.isSelected(0) && (mc.player?.getStackInHand(Hand.OFF_HAND)?.item !is ShieldItem || mc.player?.getStackInHand(Hand.MAIN_HAND)?.useAction != UseAction.NONE))
-						canBlock = false
+					if (blockCheckMode.isSelected(0) && mc.player?.getStackInHand(Hand.MAIN_HAND)?.useAction != UseAction.NONE) {
+						val stack = mc.player?.getStackInHand(Hand.OFF_HAND)
+						if(stack?.item is ShieldItem && !mc.player?.itemCooldownManager?.isCoolingDown(stack.item)!!)
+							canBlock = false
+					}
 					if (blockCheckMode.isSelected(1) && (mc.player?.getStackInHand(Hand.MAIN_HAND)?.item !is SwordItem || mc.player?.getStackInHand(Hand.OFF_HAND)?.useAction != UseAction.NONE))
 						canBlock = false
 

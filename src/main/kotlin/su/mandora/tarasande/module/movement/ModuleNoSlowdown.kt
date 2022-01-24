@@ -17,7 +17,7 @@ import su.mandora.tarasande.value.ValueNumber
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 
-class ModuleNoSlowdown : Module("No Slowdown", "Removes blocking/eating/drinking etc... slowdowns", ModuleCategory.MOVEMENT) {
+class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking etc... slowdowns", ModuleCategory.MOVEMENT) {
 
 	private val slowdown = ValueNumber(this, "Slowdown", 0.0, 1.0, 1.0, 0.1)
 	private val bypass = ValueMode(this, "Bypass", true, "Reuse", "Rehold")

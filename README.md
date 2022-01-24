@@ -37,12 +37,13 @@
 - KillAura Noise Function Rotations
 - Friends
 - Set Fake Rotation to Rotation which was set using S08Packet (smoothness)
-- WTap
-- KillAura Blocking in 1.9 PvP sometimes doesn't work (that's actually the shield being on cooldown, make a check, that if the shield is on cooldown it is either paused or try reequipping it, maybe it will work)
-- Scissor Boxes are broken in PanelFixed (not sure why, maybe Sodium)
-- Add new targetting option: 'Dont attack tamed entities'
+- KillAura: Wait for critical for 1.9+ pvp
+- Fix Trajectories
+- BowAimbot
+- More Anti Bots
+- Inventory management
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)
 - https://github.com/jonaburg/picom/blob/a8445684fe18946604848efb73ace9457b29bf80/src/backend/backend_common.c#L372
-
+- AutoTool: Axes can set shields on cooldown. Maybe implement that if possible axes are being used to set shields on cooldown before actually attacking with sword

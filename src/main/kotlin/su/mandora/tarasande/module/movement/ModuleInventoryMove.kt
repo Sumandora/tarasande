@@ -21,7 +21,7 @@ import su.mandora.tarasande.screen.menu.ScreenMenu
 import su.mandora.tarasande.value.ValueMode
 import java.util.function.Consumer
 
-class ModuleInventoryMove : Module("Inventory Move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
+class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
 
 	private val canceledPackets = ValueMode(this, "Canceled packets", true, "Open", "Close")
 

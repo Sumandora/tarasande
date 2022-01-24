@@ -9,6 +9,7 @@
     "MixinEntity",
     "MixinGameRenderer",
     "MixinInGameHud",
+    "MixinItemCooldownManager",
     "MixinKeyBinding",
     "MixinKeyboard",
     "MixinKeyboardInput",

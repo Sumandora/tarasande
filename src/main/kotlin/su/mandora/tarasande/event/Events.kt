@@ -3,6 +3,7 @@ package su.mandora.tarasande.event
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
+import net.minecraft.item.Item
 import net.minecraft.network.Packet
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
@@ -93,3 +94,5 @@ class EventVanillaFlight : Event {
 class EventMouse(val button: Int) : Event(true)
 class EventMouseDelta(var deltaX: Double, var deltaY: Double) : Event(false)
 class EventTimeTravel(var time: Long) : Event(false)
+class EventItemCooldown(val item: Item, var cooldown: Float) : Event(false)
+class EventAttackEntity(val entity: Entity) : Event(false)

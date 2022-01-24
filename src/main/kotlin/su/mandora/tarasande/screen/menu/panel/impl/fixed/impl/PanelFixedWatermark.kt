@@ -7,7 +7,7 @@ import su.mandora.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 
 private const val text = "タラサンデ"
 
-class PanelFixedWatermark(x: Double, y: Double) : PanelFixed("Watermark", x, y, MinecraftClient.getInstance().textRenderer.getWidth(text) * 5.0, MinecraftClient.getInstance().textRenderer.fontHeight * 5.0, background = true, scissor = true) {
+class PanelFixedWatermark(x: Double, y: Double) : PanelFixed("Watermark", x, y, MinecraftClient.getInstance().textRenderer.getWidth(text) * 5.0, MinecraftClient.getInstance().textRenderer.fontHeight * 5.0, true, true) {
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val xScale = panelWidth / MinecraftClient.getInstance().textRenderer.getWidth(text)

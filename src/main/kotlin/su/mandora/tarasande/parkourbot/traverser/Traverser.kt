@@ -38,7 +38,6 @@ class Traverser(private val path: CopyOnWriteArrayList<BlockPos>) {
         when (state) {
             State.PREPARING -> {
                 if((isOnEdge() || MinecraftClient.getInstance().player?.horizontalCollision!!)) {
-                    TarasandeMain.get().log.println("Preparing -> Traversing")
                     state = State.TRAVERSING
                 }
                 traversingTicks = 0
@@ -47,7 +46,6 @@ class Traverser(private val path: CopyOnWriteArrayList<BlockPos>) {
             State.TRAVERSING -> {
                 if(MinecraftClient.getInstance().player?.isOnGround!!) {
                     if(traversingDidJump && (abs(yawDelta) > 15.0 || MinecraftClient.getInstance().player?.horizontalSpeed!! <= 0.24)) {
-                        TarasandeMain.get().log.println("Traversing -> Preparing")
                         state = State.PREPARING
                     }
                 } else {

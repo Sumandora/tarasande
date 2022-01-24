@@ -7,7 +7,7 @@ import su.mandora.tarasande.mixin.accessor.IInGameHud
 import su.mandora.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import kotlin.math.floor
 
-class PanelFixedInventory(x: Double, y: Double) : PanelFixed("Inventory", x, y, 150.0, 66.0, resizable = false, background = true, scissor = true) {
+class PanelFixedInventory(x: Double, y: Double) : PanelFixed("Inventory", x, y, 150.0, 66.0, false, true) {
 
 	override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
 		var m = 1

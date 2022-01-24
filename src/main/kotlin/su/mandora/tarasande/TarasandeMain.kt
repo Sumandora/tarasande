@@ -34,9 +34,6 @@ class TarasandeMain {
 
 	val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
 
-	val logString = StringWriter()
-	val log = PrintWriter(logString)
-
 	companion object {
 		private val instance: TarasandeMain = TarasandeMain()
 
@@ -59,12 +56,6 @@ class TarasandeMain {
 		blur = Blur()
 		screens = Screens() // Initializes ClickGUI (Make sure that modules and values are initialized before)
 		parkourBot = ParkourBot()
-
-		if (System.getProperty("os.name").lowercase().contains("windows")) {
-			Spotify.addCallback {
-				log.println("Now playing: $it")
-			}
-		}
 
 		managerFile?.load()
 

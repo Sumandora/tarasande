@@ -6,17 +6,17 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.Manager
 import su.mandora.tarasande.event.EventKey
 import su.mandora.tarasande.event.EventTick
+import su.mandora.tarasande.module.combat.ModuleAntiBot
 import su.mandora.tarasande.module.combat.ModuleKillAura
 import su.mandora.tarasande.module.combat.ModuleTeams
-import su.mandora.tarasande.module.misc.ModuleBlink
-import su.mandora.tarasande.module.misc.ModuleDeadByDaylightEscape
-import su.mandora.tarasande.module.misc.ModuleSpammer
-import su.mandora.tarasande.module.misc.ModuleTickBaseManipulation
+import su.mandora.tarasande.module.combat.ModuleWTap
+import su.mandora.tarasande.module.misc.*
 import su.mandora.tarasande.module.movement.*
 import su.mandora.tarasande.module.player.ModuleScaffoldWalk
 import su.mandora.tarasande.module.player.ModuleTimer
 import su.mandora.tarasande.module.render.ModuleESP
 import su.mandora.tarasande.module.render.ModuleFullBright
+import su.mandora.tarasande.module.render.ModuleTrajectories
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueKeyBind
 
@@ -43,7 +43,11 @@ class ManagerModule : Manager<Module>() {
 			ModuleInventoryMove(),
 			ModuleBlink(),
 			ModuleFlight(),
-			ModuleTickBaseManipulation()
+			ModuleTickBaseManipulation(),
+			ModuleNoCooldown(),
+			ModuleWTap(),
+			ModuleTrajectories(),
+			ModuleAntiBot()
 		)
 		TarasandeMain.get().managerEvent?.add { event ->
 			if (event is EventKey)

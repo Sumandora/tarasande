@@ -9,10 +9,10 @@ import su.mandora.tarasande.screen.menu.utils.IElement
 import su.mandora.tarasande.util.render.RenderUtil
 import kotlin.math.min
 
-open class Panel(val title: String, var x: Double, var y: Double, val minWidth: Double, val minHeight: Double, val maxWidth: Double? = null, val maxHeight: Double? = null, private val background: Boolean = true, val scissor: Boolean = true) : IElement {
+open class Panel(val title: String, var x: Double, var y: Double, val minWidth: Double, val minHeight: Double, val maxWidth: Double? = null, val maxHeight: Double? = null, private val background: Boolean = true) : IElement {
 
-	private val dragInfo = DragInfo()
-	private val resizeInfo = DragInfo()
+	internal val dragInfo = DragInfo()
+	internal val resizeInfo = DragInfo()
 	var panelWidth = minWidth
 	var panelHeight = minHeight
 

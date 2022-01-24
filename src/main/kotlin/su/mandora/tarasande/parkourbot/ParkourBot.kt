@@ -101,7 +101,6 @@ class ParkourBot {
             }
         }
         if(!found) {
-            TarasandeMain.get().log.println("Please be on the ground")
             return
         }
         pathBuilder = PathBuilder(currentPos, goal)
@@ -110,7 +109,6 @@ class ParkourBot {
             while (!pathBuilder?.computePath(1)!!) {
                 Thread.sleep(10) // Slow down a bit
             }
-            TarasandeMain.get().log.println("Computed path")
         })
         asynchronousTaskCompleter = Thread( {
             while(true) {
@@ -123,7 +121,6 @@ class ParkourBot {
             }
         }, "Parkour-Bot-AsynchronousTaskCompleter")
         asynchronousTaskCompleter!!.start()
-        TarasandeMain.get().log.println("Parkour bot finished initialization")
     }
 
     fun stop() {

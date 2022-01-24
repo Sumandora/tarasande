@@ -9,6 +9,7 @@ import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.mob.MobEntity
 import net.minecraft.entity.mob.Monster
 import net.minecraft.entity.passive.AnimalEntity
+import net.minecraft.entity.passive.TameableEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.Vec3d
@@ -30,6 +31,8 @@ object PlayerUtil {
 		else if (entity !is LivingEntity)
 			attackable = false
 		else if (!TarasandeMain.get().clientValues?.targets?.isSelected(0)!! && entity is PlayerEntity)
+			attackable = false
+		else if(TarasandeMain.get().clientValues?.dontAttackTamedEntities?.value!! && entity is TameableEntity && entity.ownerUuid == MinecraftClient.getInstance().player?.uuid)
 			attackable = false
 		else if (!TarasandeMain.get().clientValues?.targets?.isSelected(1)!! && entity is AnimalEntity)
 			attackable = false

@@ -10,7 +10,7 @@ import su.mandora.tarasande.screen.menu.panel.Alignment
 import su.mandora.tarasande.screen.menu.panel.Panel
 import su.mandora.tarasande.util.render.RenderUtil
 
-open class PanelFixed(title: String, x: Double, y: Double, width: Double, height: Double = MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), resizable: Boolean = true, background: Boolean = false, scissor: Boolean = false) : Panel(title, x, y, width, height, if (resizable) null else width, if (resizable) null else height, background, scissor) {
+open class PanelFixed(title: String, x: Double, y: Double, width: Double, height: Double = MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), resizable: Boolean = true, background: Boolean = false) : Panel(title, x, y, width, height, if (resizable) null else width, if (resizable) null else height, background) {
 
 	init {
 		TarasandeMain.get().managerEvent?.add { event ->
@@ -18,19 +18,7 @@ open class PanelFixed(title: String, x: Double, y: Double, width: Double, height
 				if (opened && isVisible()) {
 					if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screens?.screenMenu) {
 						event.matrices.push()
-						if (this.scissor) {
-							GlStateManager._enableScissorTest()
-							GlStateManager._scissorBox(
-								((x + panelWidth) * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt(),
-								(MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight) * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt(),
-								((panelWidth) * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt(),
-								((panelHeight) * MinecraftClient.getInstance()?.window?.scaleFactor!!).toInt()
-							)
-						}
 						render(event.matrices, -1, -1, MinecraftClient.getInstance().tickDelta)
-						if (this.scissor) {
-							GlStateManager._disableScissorTest()
-						}
 						event.matrices.pop()
 					}
 				}
