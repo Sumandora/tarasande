@@ -1,7 +1,7 @@
 # Tarasande
 
 ## Goals
-- Provide easy usable interaces
+- Provide easy usable interfaces
 - Be powerful and allow the user to change everything he wants to
 - Improve gameplay compared to vanilla
 - Bypass various anticheats
