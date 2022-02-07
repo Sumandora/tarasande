@@ -155,20 +155,28 @@ class Blur {
 	private fun calculateKawasePasses(strength: Int): ArrayList<Pair<Float, Float>> {
 		val passes = ArrayList<Pair<Float, Float>>()
 		var remaining = strength.toFloat()
+		val strength = strength + 1
 		while(remaining > 0) {
-			val offset = strength - remaining + 0.5f
+			var offset = strength - remaining
+			if(offset > 3.0f)
+				offset = 3.0f
 			passes.add(Pair(offset, 1.0f))
 			remaining -= offset
 		}
 		for((index, pass) in passes.withIndex()) {
-			if(index < passes.size / 2)
-				passes[index] = Pair(pass.first, 0.5f)
-			else
-				passes[index] = Pair(pass.first, 2.0f)
+			if(index % 2 == 0)
+				if(index < passes.size / 2)
+					passes[index] = Pair(pass.first, 0.5f)
+				else
+					passes[index] = Pair(pass.first, 2.0f)
 		}
-		if(passes.size % 2 != 0) {
+		var scale = 1.0f;
+		for(pass in passes)
+			scale *= pass.second;
+		if(scale != 1.0f) {
+			scale /= passes[passes.size - 1].second
 			val pass = passes[passes.size - 1]
-			passes[passes.size - 1] = Pair(pass.first, 1.0f)
+			passes[passes.size - 1] = Pair(pass.first, 1 / scale)
 		}
 		return passes
 	}

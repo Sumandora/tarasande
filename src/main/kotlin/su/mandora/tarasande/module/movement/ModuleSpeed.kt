@@ -30,10 +30,10 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 	private val pulseDelay = object : ValueNumber(this, "Pulse delay", 0.0, 200.0, 1000.0, 1.0) {
 		override fun isVisible() = gainMethod.isSelected(1)
 	}
-	private val speedValue = object : ValueNumber(this, "Speed", 0.0, 0.26, 1.0, 0.01) {
+	private val speedValue = object : ValueNumber(this, "Speed", 0.0, 0.28, 1.0, 0.01) {
 		override fun isVisible() = gainMethod.anySelected()
 	}
-	private val speedDivider = ValueNumber(this, "Speed divider", 1.0, 160.0, 200.0, 1.0)
+	private val speedDivider = ValueNumber(this, "Speed divider", 1.0, 60.0, 200.0, 1.0)
 
 	private val timeUtil = TimeUtil()
 	private var speed = 0.0

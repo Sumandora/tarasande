@@ -13,7 +13,7 @@ import java.util.function.Consumer
 class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCategory.COMBAT) {
 
     private val mode = ValueMode(this, "Mode", false, "W-Tap", "S-Tap", "Packet")
-    private val packets = object : ValueNumber(this, "Packets", 0.0, 0.0, 10.0, 2.0) {
+    private val packets = object : ValueNumber(this, "Packets", 2.0, 2.0, 10.0, 2.0) {
         override fun isVisible() = mode.isSelected(2)
     }
 
@@ -33,7 +33,7 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
                 if(mc.player?.isSprinting!!)
                     mc.networkHandler?.sendPacket(ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SPRINTING))
 
-                for(i in 0..packets.value.toInt()) {
+                for(i in 0..(packets.value - 2.0).toInt()) {
                     if(i % 2 == 0)
                         mc.networkHandler?.sendPacket(ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING))
                     else
