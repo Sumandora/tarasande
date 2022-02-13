@@ -36,14 +36,13 @@
 - Baritone Sprint Jump
 - KillAura Noise Function Rotations
 - Friends
-- Set Fake Rotation to Rotation which was set using S08Packet (smoothness)
 - KillAura: Wait for critical for 1.9+ pvp
 - Fix Trajectories
 - BowAimbot
 - More Anti Bots
 - Inventory management
-- KillAura: wait for crit when in air
 - KillAura: Simulate Damage in case cooldown isn't gone but full dmg isn't needed to kill somebody
+- PvP-Bot for Practice Game Modes
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)
