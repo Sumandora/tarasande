@@ -42,6 +42,8 @@
 - BowAimbot
 - More Anti Bots
 - Inventory management
+- KillAura: wait for crit when in air
+- KillAura: Simulate Damage in case cooldown isn't gone but full dmg isn't needed to kill somebody
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)
