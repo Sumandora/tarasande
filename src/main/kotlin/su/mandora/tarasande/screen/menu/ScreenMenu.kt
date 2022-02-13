@@ -114,7 +114,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 		panels.reversed().forEach {
 			matrices?.push()
 			val panelHeight = (if(it.opened) it.panelHeight else client?.textRenderer?.fontHeight)?.toDouble()!!
-			if (it !is PanelFixed || !(it.opened && it.isVisible())) {
+			if (it !is PanelFixed || !(it.isVisible() && it.opened)) {
 				matrices?.translate(it.x + it.panelWidth / 2.0, it.y + panelHeight / 2.0, 0.0)
 				matrices?.scale(animation.toFloat(), animation.toFloat(), 1.0F)
 				matrices?.translate(-(it.x + it.panelWidth / 2.0), -(it.y + panelHeight / 2.0), 0.0)

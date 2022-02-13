@@ -6,15 +6,18 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande.TarasandeMain;
+import su.mandora.tarasande.event.EventMovementFovMultiplier;
 import su.mandora.tarasande.event.EventRender3D;
 import su.mandora.tarasande.mixin.accessor.IGameRenderer;
 
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer implements IGameRenderer {
 
+    @Shadow private float movementFovMultiplier;
     boolean allowThroughWalls = false;
     double reach = 3.0;
 
@@ -36,6 +39,13 @@ public class MixinGameRenderer implements IGameRenderer {
         if (reach > actualBlockReach)
             return (float) reach;
         return actualBlockReach;
+    }
+
+    @Inject(method = "updateMovementFovMultiplier", at = @At("RETURN"))
+    public void injectUpdateMovementFovMultiplier(CallbackInfo ci) {
+        EventMovementFovMultiplier eventMovementFovMultiplier = new EventMovementFovMultiplier(movementFovMultiplier);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventMovementFovMultiplier);
+        movementFovMultiplier = eventMovementFovMultiplier.getMovementFovMultiplier();
     }
 
     @ModifyConstant(method = "updateTargetedEntity", constant = @Constant(doubleValue = 9.0))

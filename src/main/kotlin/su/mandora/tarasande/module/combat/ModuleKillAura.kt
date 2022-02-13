@@ -3,6 +3,7 @@ package su.mandora.tarasande.module.combat
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.damage.DamageSource
 import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
 import net.minecraft.util.Hand
@@ -38,6 +39,9 @@ import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import kotlin.Comparator
 import kotlin.collections.ArrayList
+import kotlin.math.cos
+import kotlin.math.min
+import kotlin.math.sin
 import kotlin.math.sqrt
 
 
@@ -55,6 +59,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 	private val swingInAir = ValueBoolean(this, "Swing in air", true)
 	private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.0, 1.0, 1.0, 1.0, 0.1)
 	private val dontAttackWhenBlocking = ValueBoolean(this, "Don't attack when blocking", false)
+    private val simulateShieldBlock = object : ValueBoolean(this, "Simulate shield block", false) {
+        override fun isVisible() = dontAttackWhenBlocking.value
+    }
 	private val throughWalls = ValueBoolean(this, "Through walls", false)
 	private val attackCooldown = ValueBoolean(this, "Attack cooldown", false)
 	private val blockMode = object : ValueMode(this, "Auto block", false, "Disabled", "Permanent", "Legit") {
@@ -267,7 +274,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 							var target = entry.first
 							val aimPoint = entry.second
 							if (dontAttackWhenBlocking.value && target is LivingEntity && target.isBlocking)
-								continue
+                                if(!simulateShieldBlock.value || target.blockedByShield(DamageSource.player(mc.player)))
+								    continue
 
 							if (rayTrace.value) {
 								if (RotationUtil.fakeRotation == null) {
@@ -386,30 +394,29 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 		if (rotations.isSelected(1)) {
 			var aimPoint = best!!.add(0.0, 0.0, 0.0) /* copy */
 
+			// TODO Don't turn inside enemies
+
 			// Humans always try to get to the middle
+			val center = box.center
 			val dist = MathUtil.getBias(mc.player?.eyePos!!.squaredDistanceTo(aimPoint) / (reach.maxValue * reach.maxValue) * (reach.minValue / reach.maxValue), 0.45) // I have no idea why this works and looks like it does, but it's good and why remove it then
 			aimPoint = aimPoint.add(
-				(box.center.x - aimPoint.x) * (1 - dist),
-				(box.center.y - aimPoint.y) * (1 - dist) * 0.3 /* Humans dislike aiming up and down */,
-				(box.center.z - aimPoint.z) * (1 - dist)
+				(center.x - aimPoint.x) * min((1 - dist) * 1.2, 1.0),
+				(center.y - aimPoint.y) * (1 - dist) * 0.65 /* Humans dislike aiming up and down */,
+				(center.z - aimPoint.z) * min((1 - dist) * 1.2, 1.0)
 			)
 
 			// Humans can't hold their hands still
+			val diff = mc.player?.velocity?.subtract(entity.prevX - entity.x, entity.prevY - entity.y, entity.prevZ - entity.z)?.multiply(-1.0)!!
 			if (mc.player?.velocity?.lengthSquared()!! > 0.0 || (entity.prevX != entity.x || entity.prevY != entity.y || entity.prevZ != entity.z)) { // either the target or the player has to move otherwise changing the rotation doesn't make sense
-//				aimPoint = aimPoint.add(
-//					sin(System.currentTimeMillis() / 150.0) * 0.1,
-//					cos(System.currentTimeMillis() / 150.0) * 0.1,
-//					sin(System.currentTimeMillis() / 150.0) * 0.1
-//				)
-				// TODO Add Noise
+				aimPoint = aimPoint.add(
+					if(diff.x != 0.0) sin(System.currentTimeMillis() / (150.0 / diff.x)) * ThreadLocalRandom.current().nextFloat() * 0.15 else 0.0,
+					if(diff.y != 0.0) cos(System.currentTimeMillis() / (150.0 / diff.y)) * ThreadLocalRandom.current().nextFloat() * 0.15 else 0.0,
+					if(diff.z != 0.0) sin(System.currentTimeMillis() / (150.0 / diff.z)) * ThreadLocalRandom.current().nextFloat() * 0.15 else 0.0
+				)
 			}
 
 			// Human aim is slow
-			aimPoint = aimPoint.subtract(
-				(entity.prevX - entity.x) + mc.player?.velocity!!.x,
-				(entity.prevY - entity.y) + mc.player?.velocity!!.y,
-				(entity.prevZ - entity.z) + mc.player?.velocity!!.z
-			)
+			aimPoint = aimPoint.subtract(diff.multiply(0.5))
 
 			// Don't aim through walls
 			while (!PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint) && rotations.isSelected(0)) {

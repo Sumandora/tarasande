@@ -15,7 +15,7 @@ open class PanelFixed(title: String, x: Double, y: Double, width: Double, height
 	init {
 		TarasandeMain.get().managerEvent?.add { event ->
 			if (event is EventRender2D) {
-				if (opened && isVisible()) {
+				if (isVisible() && opened) {
 					if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screens?.screenMenu) {
 						event.matrices.push()
 						render(event.matrices, -1, -1, MinecraftClient.getInstance().tickDelta)

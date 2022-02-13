@@ -6,6 +6,7 @@ import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
+import su.mandora.tarasande.event.EventAttackEntity
 import su.mandora.tarasande.event.EventTimeTravel
 import su.mandora.tarasande.mixin.accessor.ILivingEntity
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
@@ -15,6 +16,7 @@ import su.mandora.tarasande.value.ValueKeyBind
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
 import kotlin.math.max
+import kotlin.math.min
 
 class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts minecraft's tick base", ModuleCategory.MISC) {
 
@@ -25,6 +27,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
     private val unchargeSpeed = object : ValueNumber(this, "Uncharge speed", 0.0, 1000.0, 1000.0, 1.0) {
         override fun isVisible() = !instantUncharge.value
     }
+    private val rapidFire = ValueBoolean(this, "Rapid fire", false)
 
     private var prevTime = 0L
     private var lastUpdate = 0L
@@ -32,35 +35,46 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
     var shifted = 0L
 
     val eventConsumer = Consumer<Event> { event ->
-        if (event is EventTimeTravel) {
-            if (mc.player != null) {
-                if (chargeKey.isPressed()) {
-                    shifted += event.time - prevTime
+        when (event) {
+            is EventAttackEntity -> {
+                if(event.entity is LivingEntity && rapidFire.value) {
+                    shifted = if(instantUncharge.value)
+                        0L
+                    else
+                        max(0L, (shifted - (event.entity.hurtTime * ((mc as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime)).toLong())
+                }
+            }
+            is EventTimeTravel -> {
+                if (mc.player != null) {
+                    if (chargeKey.isPressed()) {
+                        shifted += event.time - prevTime
 
-                    if (resyncPositions.value) {
-                        if (event.time - lastUpdate > ((mc as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime) {
-                            for(i in 0..((event.time - lastUpdate) / ((mc as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime).toInt()) {
-                                for (entity in mc.world?.entities!!) {
-                                    if (entity is LivingEntity && entity != mc.player) {
-//                                        entity as ILivingEntity
-//                                        entity.setPosition(entity.serverX, entity.serverY, entity.serverZ)
-//                                        entity.yaw += MathHelper.wrapDegrees(entity.serverYaw.toFloat() - entity.getYaw())
-//                                        entity.pitch = entity.serverPitch.toFloat()
-                                        entity.tickMovement()
+                        if (resyncPositions.value) {
+                            val iRenderTickCounter = (mc as IMinecraftClient).renderTickCounter as IRenderTickCounter
+                            if (event.time - lastUpdate > iRenderTickCounter.tickTime) {
+                                for(i in 0..((event.time - lastUpdate) / iRenderTickCounter.tickTime).toInt()) {
+                                    for (entity in mc.world?.entities!!) {
+                                        if (entity is LivingEntity && entity != mc.player) {
+    //                                        entity as ILivingEntity
+    //                                        entity.setPosition(entity.serverX, entity.serverY, entity.serverZ)
+    //                                        entity.yaw += MathHelper.wrapDegrees(entity.serverYaw.toFloat() - entity.getYaw())
+    //                                        entity.pitch = entity.serverPitch.toFloat()
+                                            entity.tickMovement()
+                                        }
                                     }
                                 }
+                                lastUpdate = event.time
                             }
-                            lastUpdate = event.time
                         }
                     }
+                    prevTime = event.time
+                    if (unchargeKey.isPressed())
+                        shifted = if(instantUncharge.value) 0L else max(0L, (shifted - unchargeSpeed.value).toLong())
+                } else {
+                    shifted = 0L
                 }
-                prevTime = event.time
-                if (unchargeKey.isPressed())
-                    shifted = if(instantUncharge.value) 0L else max(0L, (shifted - unchargeSpeed.value).toLong())
-            } else {
-                shifted = 0L
+                event.time -= shifted
             }
-            event.time -= shifted
         }
     }
 
