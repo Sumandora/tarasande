@@ -50,6 +50,8 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     @Shadow
     public abstract float getYaw(float tickDelta);
 
+    @Shadow protected int lastAttackedTicks;
+
     @Inject(method = "jump", at = @At("HEAD"))
     public void injectPreJump(CallbackInfo ci) {
         if ((Object) this == MinecraftClient.getInstance().player) {
@@ -108,5 +110,15 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     @Override
     public void setBodyTrackingIncrements(int bodyTrackingIncrements) {
         this.bodyTrackingIncrements = bodyTrackingIncrements;
+    }
+
+    @Override
+    public int getLastAttackedTicks() {
+        return lastAttackedTicks;
+    }
+
+    @Override
+    public void setLastAttackedTicks(int lastAttackedTicks) {
+        this.lastAttackedTicks = lastAttackedTicks;
     }
 }

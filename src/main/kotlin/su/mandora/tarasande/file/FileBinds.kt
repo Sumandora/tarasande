@@ -9,7 +9,8 @@ class FileBinds : File("Binds") {
 
 	override fun save(): JsonElement {
 		val jsonObject = JsonObject()
-		for (module in TarasandeMain.get().managerModule?.list!!) jsonObject.addProperty(module.name, module.keyBind.keyBind)
+		for (module in TarasandeMain.get().managerModule?.list!!)
+			jsonObject.addProperty(module.name, module.keyBind.keyBind)
 		return jsonObject
 	}
 

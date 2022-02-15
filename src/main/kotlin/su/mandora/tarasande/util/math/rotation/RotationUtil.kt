@@ -1,14 +1,16 @@
 package su.mandora.tarasande.util.math.rotation
 
 import net.minecraft.client.MinecraftClient
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.PositionAndOnGround
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.event.*
-import su.mandora.tarasande.module.movement.ModuleSprint
+import su.mandora.tarasande.mixin.accessor.ILivingEntity
+import su.mandora.tarasande.util.player.PlayerUtil
+import su.mandora.tarasande.util.render.RenderUtil
+import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import kotlin.math.*
 
@@ -16,20 +18,23 @@ object RotationUtil {
 
 	var fakeRotation: Rotation? = null
 
+	private var lastMinRotateToOriginSpeed = 1.0
+	private var lastMaxRotateToOriginSpeed = 1.0
+
 	init {
 		TarasandeMain.get().managerEvent?.add(Pair(1001, Consumer<Event> { event ->
-			when {
-				event is EventJump -> {
+			when (event) {
+				is EventJump -> {
 					if (fakeRotation != null)
 						if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(2)!! || TarasandeMain.get().clientValues?.correctMovement?.isSelected(3)!!)
 							event.yaw = fakeRotation!!.yaw
 				}
-				event is EventVelocityYaw -> {
+				is EventVelocityYaw -> {
 					if (fakeRotation != null)
 						if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(2)!! || TarasandeMain.get().clientValues?.correctMovement?.isSelected(3)!!)
 							event.yaw = fakeRotation!!.yaw
 				}
-				event is EventInput -> {
+				is EventInput -> {
 					if (fakeRotation != null)
 						if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(3)!!) {
 							if (event.movementForward == 0.0f && event.movementSideways == 0.0f)
@@ -64,26 +69,67 @@ object RotationUtil {
 							}
 						}
 				}
-				event is EventUpdate && event.state == EventUpdate.State.PRE -> {
-					if (TarasandeMain.get().clientValues!!.correctMovement.isSelected(1) && fakeRotation != null) {
-						val allowed = abs(MathHelper.wrapDegrees(MinecraftClient.getInstance().player?.yaw!! - fakeRotation!!.yaw)) <= 45
-						TarasandeMain.get().managerModule?.get(ModuleSprint::class.java)?.allowSprint = allowed
-						if(MinecraftClient.getInstance().player?.isSprinting!! != allowed) {
-							MinecraftClient.getInstance().player?.isSprinting = allowed
-							MinecraftClient.getInstance().options.keySprint.isPressed = allowed
+				is EventUpdate -> {
+					if(event.state == EventUpdate.State.PRE) {
+						if (TarasandeMain.get().clientValues!!.correctMovement.isSelected(1) && fakeRotation != null) {
+							val allowed = abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - fakeRotation!!.yaw)) <= 45
+							if(MinecraftClient.getInstance().player?.isSprinting!! != allowed) {
+								MinecraftClient.getInstance().player?.isSprinting = allowed
+							}
 						}
-					} else {
-						TarasandeMain.get().managerModule?.get(ModuleSprint::class.java)?.allowSprint = true
 					}
 				}
-				event is EventPacket -> {
-					if(event.type == EventPacket.Type.RECEIVE && event.packet is PlayerPositionLookS2CPacket)
-						if(fakeRotation != null)
+				is EventPacket -> {
+                    if(fakeRotation != null)
+                        if(event.type == EventPacket.Type.RECEIVE && event.packet is PlayerPositionLookS2CPacket)
 							fakeRotation = Rotation(event.packet.yaw, event.packet.pitch)
 				}
 			}
 		}))
 	}
+
+    fun updateFakeRotation() {
+        if (MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().interactionManager != null) {
+            val eventPollEvents = EventPollEvents(Rotation(MinecraftClient.getInstance().player!!.yaw, MinecraftClient.getInstance().player!!.pitch))
+            TarasandeMain.get().managerEvent!!.call(eventPollEvents)
+            if (eventPollEvents.dirty) {
+                fakeRotation = eventPollEvents.rotation
+                lastMinRotateToOriginSpeed = eventPollEvents.minRotateToOriginSpeed
+                lastMaxRotateToOriginSpeed = eventPollEvents.maxRotateToOriginSpeed
+            } else if (fakeRotation != null) {
+                val realRotation = Rotation(MinecraftClient.getInstance().player!!.yaw, MinecraftClient.getInstance().player!!.pitch)
+                val rotation = Rotation(fakeRotation!!)
+                    .smoothedTurn(realRotation,
+                        if ((MinecraftClient.getInstance().player as ILivingEntity?)!!.bodyTrackingIncrements > 0) 1.0 else
+                        if (lastMinRotateToOriginSpeed == 1.0 && lastMaxRotateToOriginSpeed == 1.0) 1.0 else
+                        MathHelper.clamp(
+                            (if (lastMinRotateToOriginSpeed == lastMaxRotateToOriginSpeed) lastMinRotateToOriginSpeed else ThreadLocalRandom.current()
+                                .nextDouble(
+                                    lastMinRotateToOriginSpeed.coerceAtMost(lastMaxRotateToOriginSpeed),
+                                    lastMinRotateToOriginSpeed.coerceAtLeast(lastMaxRotateToOriginSpeed)
+                                )) * RenderUtil.deltaTime * 0.05,
+                            0.0,1.0
+						)
+                    )
+                rotation.correctSensitivity()
+                val actualDist = fakeRotation!!.fov(rotation)
+                val gcd = Rotation.getGcd()
+                if (actualDist <= gcd / 2 + 0.1 /* little more */) {
+                    val actualRotation = Rotation(MinecraftClient.getInstance().player!!.yaw, MinecraftClient.getInstance().player!!.pitch)
+					actualRotation.correctSensitivity()
+                    fakeRotation = null
+                    MinecraftClient.getInstance().player!!.yaw = actualRotation.yaw.also {
+                        MinecraftClient.getInstance().player!!.renderYaw = it
+						MinecraftClient.getInstance().player!!.lastRenderYaw = it
+						MinecraftClient.getInstance().player!!.prevYaw = it
+                    }
+                    MinecraftClient.getInstance().player!!.pitch = actualRotation.pitch
+                } else {
+                    fakeRotation = rotation
+                }
+            }
+        }
+    }
 
 	fun getRotations(from: Vec3d, to: Vec3d): Rotation {
 		val delta = to.subtract(from)

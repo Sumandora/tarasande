@@ -7,7 +7,7 @@ import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
-import su.mandora.tarasande.event.EventUpdate
+import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.value.*
 import java.util.function.Consumer
 
@@ -30,16 +30,10 @@ class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MO
 	val numberRange = ValueNumberRange(this, "Number Range Value", 0.0, 0.25, 0.75, 1.0, 0.15)
 	val text = ValueText(this, "Text Value", "Yoooo!")
 
-	var allowSprint = true
-
 	val eventConsumer = Consumer<Event> { event ->
-		if (event is EventUpdate && event.state == EventUpdate.State.PRE && allowSprint) {
-			mc.options?.keySprint?.isPressed = true
+		if (event is EventKeyBindingIsPressed && event.keyBinding == mc.options?.keySprint) {
+			event.pressed = true
 		}
-	}
-
-	override fun onDisable() {
-		mc.options?.keySprint?.isPressed = false
 	}
 
 }

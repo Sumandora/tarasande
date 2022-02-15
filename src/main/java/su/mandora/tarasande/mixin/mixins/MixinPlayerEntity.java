@@ -16,5 +16,4 @@ public class MixinPlayerEntity {
         if (TarasandeMain.Companion.get().getManagerModule().get(ModuleSafeWalk.class).getEnabled())
             cir.setReturnValue(true);
     }
-
 }

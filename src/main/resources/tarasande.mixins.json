@@ -26,6 +26,7 @@
     "MixinTitleScreen",
     "MixinVec3d",
     "MixinWindow",
+    "MixinWorld",
     "MixinWorldRenderer",
     "backport.MixinGameRenderer",
     "backport.MixinWindow",

@@ -13,7 +13,6 @@ import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
-import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import kotlin.math.cos
 import kotlin.math.max
@@ -39,16 +38,12 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 	private var speed = 0.0
 
 	val eventConsumer = Consumer<Event> { event ->
-		when {
-			event is EventMovement && event.entity == mc.player && mc.player?.input?.movementInput?.lengthSquared()!! > 0.0 -> {
+		when (event) {
+			is EventMovement -> {
+				if(event.entity != mc.player || mc.player?.input?.movementInput?.lengthSquared()!! == 0.0f)
+					return@Consumer
+
 				val accessor = event.velocity as IVec3d
-				val baseSpeed = event.velocity.horizontalLength()
-
-				val movementDirection = PlayerUtil.getMoveDirection()
-
-				val moveSpeed = max(speed, baseSpeed)
-				accessor.setX(cos(movementDirection) * moveSpeed)
-				accessor.setZ(sin(movementDirection) * moveSpeed)
 
 				val prevVelocity = Vec3d(mc.player?.velocity?.x!!, mc.player?.velocity?.y!!, mc.player?.velocity?.z!!)
 				val newSpeed = speedValue.value + 0.03 * if (mc.player?.hasStatusEffect(StatusEffects.SPEED)!!) mc.player?.getStatusEffect(StatusEffects.SPEED)?.amplifier!! else 0
@@ -75,10 +70,17 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 					accessor.setY(event.velocity.y * gravity.value)
 				}
 
+				val baseSpeed = event.velocity.horizontalLength()
+				val movementDirection = PlayerUtil.getMoveDirection()
+				val moveSpeed = max(speed, baseSpeed)
+				accessor.setX(cos(movementDirection) * moveSpeed)
+				accessor.setZ(sin(movementDirection) * moveSpeed)
+
 				speed -= speed / speedDivider.value
 			}
-			event is EventKeyBindingIsPressed && event.keyBinding == mc.options.keyJump && mc.player?.input?.movementInput?.lengthSquared()!! > 0.0 -> {
-				event.pressed = event.pressed || (mc.player?.isOnGround!! && jumpHeight.value > 0.0)
+			is EventKeyBindingIsPressed -> {
+				if(event.keyBinding == mc.options.keyJump && mc.player?.input?.movementInput?.lengthSquared()!! > 0.0)
+					event.pressed = true
 			}
 		}
 	}

@@ -1,19 +1,17 @@
 package su.mandora.tarasande.module.combat
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.EntityHitResult
-import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
-import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
@@ -34,11 +32,8 @@ import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
 import su.mandora.tarasande.value.ValueNumberRange
-import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
-import kotlin.Comparator
-import kotlin.collections.ArrayList
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
@@ -48,7 +43,7 @@ import kotlin.math.sqrt
 class ModuleKillAura : Module("Kill aura", "Automatically attacks near players", ModuleCategory.COMBAT) {
 
 	private val mode = ValueMode(this, "Mode", false, "Single", "Multi")
-	private val priority = ValueMode(this, "Priority", false, "Distance", "Health", "Hurt Time", "Damage", "FOV")
+	private val priority = ValueMode(this, "Priority", false, "Distance", "Health", "Hurt Time", "FOV")
 	private val fov = ValueNumber(this, "FOV", 0.0, 255.0, 255.0, 1.0)
 	private val reach = ValueNumberRange(this, "Reach", 0.1, 3.0, 4.0, 6.0, 0.1)
 	private val clickSpeedUtil = ClickSpeedUtil(this, { true }) // for setting order
@@ -92,8 +87,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 		override fun isVisible() = flex.value
 	}
 	private val syncPosition = ValueBoolean(this, "Sync position", false)
+	private val preferPlayers = ValueBoolean(this, "Prefer players", true)
 
-	private val targets = ArrayList<Pair<Entity, Vec3d>>()
+	internal val targets = ArrayList<Pair<Entity, Vec3d>>()
 	private val comparator: Comparator<Pair<Entity, Vec3d>> = Comparator.comparing {
 		when {
 			priority.isSelected(0) -> {
@@ -115,12 +111,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 					0
 			}
 			priority.isSelected(3) -> {
-				if (it.first is LivingEntity)
-					PlayerUtil.simulateAttack(it.first as LivingEntity, false)
-				else
-					0
-			}
-			priority.isSelected(4) -> {
 				RotationUtil.getRotations(mc.player?.eyePos!!, getBestAimPoint(it.first.boundingBox)).fov(Rotation(mc.player?.yaw!!, mc.player?.pitch!!))
 			}
 			else -> 0.0
@@ -136,6 +126,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
 	override fun onDisable() {
 		blocking = false
+		targets.clear()
 	}
 
 	val eventConsumer = Consumer<Event> { event ->
@@ -177,6 +168,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 					val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.getRotations(mc.player?.eyePos!!, it.second))
 					hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null
 				}
+				if(preferPlayers.value)
+					targets.sortBy { it.first is PlayerEntity }
 
 				val target = targets[0]
 

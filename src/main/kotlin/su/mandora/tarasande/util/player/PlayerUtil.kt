@@ -1,11 +1,8 @@
 package su.mandora.tarasande.util.player
 
 import net.minecraft.client.MinecraftClient
-import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.attribute.EntityAttributes
-import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.mob.MobEntity
 import net.minecraft.entity.mob.Monster
 import net.minecraft.entity.passive.AnimalEntity
@@ -19,6 +16,8 @@ import net.minecraft.world.RaycastContext.ShapeType
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.event.EventIsEntityAttackable
 import su.mandora.tarasande.mixin.accessor.IGameRenderer
+import su.mandora.tarasande.mixin.accessor.ILivingEntity
+import su.mandora.tarasande.mixin.accessor.IWorld
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 
@@ -94,37 +93,61 @@ object PlayerUtil {
 		return hitResult
 	}
 
-	fun simulateAttack(target: LivingEntity, respectBlocking: Boolean): Float {
+	fun simulateAttack(target: LivingEntity): Float {
 		val player = MinecraftClient.getInstance().player!!
-		if (target.isAttackable) {
-			if ((!target.isBlocking || !respectBlocking) && target.timeUntilRegen.toFloat() <= 10.0F) {
-				var f = player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE).toFloat()
-				var h = EnchantmentHelper.getAttackDamage(player.mainHandStack, target.group)
-				val i = player.getAttackCooldownProgress(0.5f)
-				f *= 0.2f + i * i * 0.8f
-				h *= i
-				if (f > 0.0f || h > 0.0f) {
-					val bl = i > 0.9f
-					var j = EnchantmentHelper.getKnockback(player)
-					if (player.isSprinting && bl) {
-						++j
-					}
-					val bl3 = bl && player.fallDistance > 0.0f && !player.isOnGround && !player.isClimbing && !player.isTouchingWater && !player.hasStatusEffect(StatusEffects.BLINDNESS) && !player.hasVehicle() && !player.isSprinting
-					if (bl3) {
-						f *= 1.5f
-					}
-					f += h
-					return f
-				}
-			}
-		}
-		return 0f
+		val iLivingEntity = player as ILivingEntity
+
+		val prevIsClient = MinecraftClient.getInstance().world?.isClient()!!
+		(MinecraftClient.getInstance().world as IWorld).setIsClient(false)
+
+		val prevVelocity = player.velocity
+
+		val prevSprinting = player.isSprinting
+
+		val prevTicksSinceSprintingChanged = player.ticksSinceSprintingChanged
+
+		val prevOnFire = target.isOnFire
+
+		val prevExhaustion = player.hungerManager.exhaustion
+
+		val prevHurtTime = target.hurtTime
+
+		val prevLastAttackedTicks = iLivingEntity.lastAttackedTicks
+
+		val prevSelfHealth = player.health
+
+		val prevHealth = target.health
+
+		player.attack(target)
+		val healthLoss = prevHealth - target.health
+
+		target.health = prevHealth
+
+		player.health = prevSelfHealth
+
+		iLivingEntity.lastAttackedTicks = prevLastAttackedTicks
+
+		target.hurtTime = prevHurtTime
+
+		player.hungerManager.exhaustion = prevExhaustion
+
+		target.isOnFire = prevOnFire
+
+		player.ticksSinceSprintingChanged = prevTicksSinceSprintingChanged
+
+		player.isSprinting = prevSprinting
+
+		player.velocity = prevVelocity
+
+		(MinecraftClient.getInstance().world as IWorld).setIsClient(prevIsClient)
+
+		return healthLoss
 	}
 
-	fun raycast(start: Vec3d, end: Vec3d) = MinecraftClient.getInstance().world?.raycast(RaycastContext(start, end, ShapeType.OUTLINE, FluidHandling.NONE, MinecraftClient.getInstance().player!!))
+	fun rayCast(start: Vec3d, end: Vec3d) = MinecraftClient.getInstance().world?.raycast(RaycastContext(start, end, ShapeType.OUTLINE, FluidHandling.NONE, MinecraftClient.getInstance().player!!))
 
 	fun canVectorBeSeen(start: Vec3d, end: Vec3d): Boolean {
-		val hitResult = raycast(start, end)
+		val hitResult = rayCast(start, end)
 		return hitResult != null && hitResult.type != HitResult.Type.BLOCK
 	}
 

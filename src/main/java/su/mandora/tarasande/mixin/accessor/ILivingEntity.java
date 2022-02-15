@@ -13,4 +13,7 @@ public interface ILivingEntity {
 
     int getBodyTrackingIncrements();
     void setBodyTrackingIncrements(int value);
+
+    int getLastAttackedTicks();
+    void setLastAttackedTicks(int lastAttackedTicks);
 }

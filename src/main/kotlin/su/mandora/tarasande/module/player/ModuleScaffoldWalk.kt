@@ -13,6 +13,7 @@ import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventJump
+import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IEntity
@@ -56,7 +57,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val lockView = ValueBoolean(this, "Lock view", false)
     private val sneak = ValueBoolean(this, "Sneak", false)
     private val headRoll = ValueMode(this, "Head roll", false, "Disabled", "Advantage", "Autism")
-    private val aimHeight = ValueNumber(this, "Aim height", 0.0, 0.5, 1.0, 0.01);
+    private val aimHeight = ValueNumber(this, "Aim height", 0.0, 0.5, 1.0, 0.01)
 
     private val targets = ArrayList<Pair<BlockPos, Direction>>()
     private val timeUtil = TimeUtil()
@@ -100,7 +101,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     override fun onDisable() {
         target = null
         lastRotation = null
-        mc.options?.keySneak?.isPressed = false
     }
 
     private fun getAdjacentBlock(blockPos: BlockPos): Pair<BlockPos, Direction>? {
@@ -162,7 +162,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                     val rot = RotationUtil.getRotations(mc.player?.eyePos!!, newPoint)
                                     val rotationVector =
                                         (mc.player as IEntity).invokeGetRotationVector(rot.pitch, rot.yaw)
-                                    val hitResult = PlayerUtil.raycast(
+                                    val hitResult = PlayerUtil.rayCast(
                                         mc.player?.eyePos!!,
                                         mc.player?.eyePos!!.add(rotationVector.multiply(mc.interactionManager?.reachDistance!!.toDouble()))
                                     )
@@ -258,17 +258,13 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
 
                 if (target != null && RotationUtil.fakeRotation != null) {
                     val airBelow = mc.world?.isAir(BlockPos(mc.player?.pos!!.add(0.0, -1.0, 0.0)))!!
-                    if (sneak.value && target?.second?.vector?.y!! == 0)
-                        mc.options?.keySneak?.isPressed = airBelow
-                    else
-                        mc.options?.keySneak?.isPressed = false
                     if (airBelow || alwaysClick.value) {
                         val newEdgeDist = getNewEdgeDist()
                         val rotationVector = (mc.player as IEntity).invokeGetRotationVector(
                             RotationUtil.fakeRotation!!.pitch,
                             RotationUtil.fakeRotation!!.yaw
                         )
-                        val hitResult = PlayerUtil.raycast(
+                        val hitResult = PlayerUtil.rayCast(
                             mc.player?.eyePos!!,
                             mc.player?.eyePos!!.add(rotationVector.multiply(mc.interactionManager?.reachDistance!!.toDouble()))
                         )
@@ -339,6 +335,10 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             }
             is EventJump -> {
                 prevEdgeDistance = 0.5
+            }
+            is EventKeyBindingIsPressed -> {
+                if (sneak.value && target != null && target?.second?.vector?.y!! == 0)
+                    event.pressed = mc.world?.isAir(BlockPos(mc.player?.pos!!.add(0.0, -1.0, 0.0)))!!
             }
         }
     }

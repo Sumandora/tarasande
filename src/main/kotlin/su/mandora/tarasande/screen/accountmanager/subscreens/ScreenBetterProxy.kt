@@ -100,8 +100,7 @@ class ScreenBetterProxy(
 							status = when {
 								timeDelta < 200 -> Formatting.GREEN.toString()
 								timeDelta in 200..500 -> Formatting.YELLOW.toString()
-								timeDelta > 500 -> Formatting.RED.toString()
-								else -> Formatting.BLUE.toString()
+								else -> Formatting.RED.toString()
 							} + "Reached proxy in ${timeDelta}ms"
 						} catch (ioException: IOException) {
 							status = Formatting.RED.toString() + "Failed to reach proxy"

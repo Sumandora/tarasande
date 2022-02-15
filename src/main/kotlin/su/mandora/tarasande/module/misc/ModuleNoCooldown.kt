@@ -10,7 +10,7 @@ class ModuleNoCooldown : Module("No cooldown", "Removes any cooldown from items"
 
     val eventConsumer = Consumer<Event> { event ->
         if(event is EventItemCooldown) {
-            event.cooldown = 0.0f;
+            event.cooldown = 0.0f
         }
     }
 }

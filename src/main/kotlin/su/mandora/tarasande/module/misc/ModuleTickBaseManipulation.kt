@@ -1,22 +1,21 @@
 package su.mandora.tarasande.module.misc
 
 import net.minecraft.entity.LivingEntity
-import net.minecraft.util.math.MathHelper
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventAttackEntity
 import su.mandora.tarasande.event.EventTimeTravel
-import su.mandora.tarasande.mixin.accessor.ILivingEntity
+import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
+import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueKeyBind
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
 import kotlin.math.max
-import kotlin.math.min
 
 class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts minecraft's tick base", ModuleCategory.MISC) {
 
@@ -32,7 +31,13 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
     private var prevTime = 0L
     private var lastUpdate = 0L
 
+    var prevShifted = 0L
     var shifted = 0L
+
+    override fun onEnable() {
+        shifted = 0L
+        prevShifted = 0L
+    }
 
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
@@ -42,6 +47,13 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
                         0L
                     else
                         max(0L, (shifted - (event.entity.hurtTime * ((mc as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime)).toLong())
+                }
+            }
+            is EventUpdate -> {
+                if(event.state == EventUpdate.State.PRE) {
+                    if(shifted < prevShifted)
+                        RotationUtil.updateFakeRotation()
+                    prevShifted = shifted
                 }
             }
             is EventTimeTravel -> {
@@ -59,7 +71,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
     //                                        entity.setPosition(entity.serverX, entity.serverY, entity.serverZ)
     //                                        entity.yaw += MathHelper.wrapDegrees(entity.serverYaw.toFloat() - entity.getYaw())
     //                                        entity.pitch = entity.serverPitch.toFloat()
-                                            entity.tickMovement()
+                                            entity.tick()
                                         }
                                     }
                                 }

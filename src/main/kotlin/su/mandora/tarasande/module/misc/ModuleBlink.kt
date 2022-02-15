@@ -35,36 +35,39 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
 
     @Priority(9999) // always be the last module messing with packets because otherwise we might run into problems, where some packet is going to be cancelled later
     val eventConsumer = Consumer<Event> { event ->
-        if (event is EventPacket) {
-            if (event.cancelled) return@Consumer
-            if (event.packet != null) {
-                if (NetworkState.getPacketHandlerState(event.packet) != NetworkState.PLAY) return@Consumer
-                when (event.type) {
-                    EventPacket.Type.SEND -> {
-                        if (event.packet is HandshakeC2SPacket) {
-                            // We are reconnecting
-                            packets.clear()
-                        } else if (cancelledPackets.isSelected(0)) {
-                            packets.add(Pair(event.packet, event.type))
-                            event.setCancelled()
+        when (event) {
+            is EventPacket -> {
+                if (event.cancelled) return@Consumer
+                if (event.packet != null) {
+                    if (NetworkState.getPacketHandlerState(event.packet) != NetworkState.PLAY) return@Consumer
+                    when (event.type) {
+                        EventPacket.Type.SEND -> {
+                            if (event.packet is HandshakeC2SPacket) {
+                                // We are reconnecting
+                                packets.clear()
+                            } else if (cancelledPackets.isSelected(0)) {
+                                packets.add(Pair(event.packet, event.type))
+                                event.setCancelled()
+                            }
                         }
-                    }
-                    EventPacket.Type.RECEIVE -> {
-                        if (event.packet is DisconnectS2CPacket) {
-                            // We fucked up
-                            packets.clear()
-                        } else if (cancelledPackets.isSelected(1)) {
-                            packets.add(Pair(event.packet, event.type))
-                            event.setCancelled()
+                        EventPacket.Type.RECEIVE -> {
+                            if (event.packet is DisconnectS2CPacket) {
+                                // We fucked up
+                                packets.clear()
+                            } else if (cancelledPackets.isSelected(1)) {
+                                packets.add(Pair(event.packet, event.type))
+                                event.setCancelled()
+                            }
                         }
                     }
                 }
             }
-        }
-        if (event is EventUpdate && event.state == EventUpdate.State.PRE) {
-            if (timeUtil.hasReached(pulseDelay.value.toLong())) {
-                onDisable()
-                timeUtil.reset()
+            is EventUpdate -> {
+                if(event.state == EventUpdate.State.PRE)
+                    if (timeUtil.hasReached(pulseDelay.value.toLong())) {
+                        onDisable()
+                        timeUtil.reset()
+                    }
             }
         }
     }

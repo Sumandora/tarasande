@@ -31,45 +31,52 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
 	private var isJumping = false
 
 	val eventConsumer = Consumer<Event> { event ->
-		if (event is EventVelocity) {
-			when (event.packet) {
-				EventVelocity.Packet.VELOCITY -> if (!packets.isSelected(0)) return@Consumer
-				EventVelocity.Packet.EXPLOSION -> if (!packets.isSelected(1)) return@Consumer
-			}
+		when (event) {
+			is EventVelocity -> {
+				when (event.packet) {
+					EventVelocity.Packet.VELOCITY -> if (!packets.isSelected(0)) return@Consumer
+					EventVelocity.Packet.EXPLOSION -> if (!packets.isSelected(1)) return@Consumer
+				}
 
-			when {
-				mode.isSelected(0) -> {
-					event.setCancelled()
-				}
-				mode.isSelected(1) -> {
-					event.velocityX *= horizontal.value
-					event.velocityY *= vertical.value
-					event.velocityZ *= horizontal.value
-				}
-				else -> {
-					lastVelocity = Vec3d(event.velocityX, event.velocityY, event.velocityZ)
-					receivedKnockback = true
-				}
-			}
-		} else if (event is EventUpdate && event.state == EventUpdate.State.PRE) {
-			when {
-				mode.isSelected(2) -> {
-					if (receivedKnockback) {
-						if (lastVelocity!!.horizontalLengthSquared() > 0.01 && mc.player?.isOnGround!! && ThreadLocalRandom.current().nextInt(100) <= chance.value)
-							isJumping = true
-
-						receivedKnockback = false
+				when {
+					mode.isSelected(0) -> {
+						event.setCancelled()
+					}
+					mode.isSelected(1) -> {
+						event.velocityX *= horizontal.value
+						event.velocityY *= vertical.value
+						event.velocityZ *= horizontal.value
+					}
+					else -> {
+						lastVelocity = Vec3d(event.velocityX, event.velocityY, event.velocityZ)
+						receivedKnockback = true
 					}
 				}
-				else -> {
-					receivedKnockback = false
+			}
+			is EventUpdate -> {
+				if(event.state == EventUpdate.State.PRE) {
+					when {
+						mode.isSelected(2) -> {
+							if (receivedKnockback) {
+								if (lastVelocity!!.horizontalLengthSquared() > 0.01 && mc.player?.isOnGround!! && ThreadLocalRandom.current().nextInt(100) <= chance.value)
+									isJumping = true
+
+								receivedKnockback = false
+							}
+						}
+						else -> {
+							receivedKnockback = false
+						}
+					}
+					if(!mc.player?.isOnGround!!) {
+						isJumping = false
+					}
 				}
 			}
-			if(!mc.player?.isOnGround!!) {
-				isJumping = false
+			is EventKeyBindingIsPressed -> {
+				if(event.keyBinding == mc.options.keyJump && isJumping)
+					event.pressed = true
 			}
-		} else if(event is EventKeyBindingIsPressed && event.keyBinding == mc.options.keyJump && isJumping) {
-			event.pressed = true
 		}
 	}
 
