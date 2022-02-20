@@ -80,7 +80,8 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 			}
 			is EventKeyBindingIsPressed -> {
 				if(event.keyBinding == mc.options.keyJump && mc.player?.input?.movementInput?.lengthSquared()!! > 0.0)
-					event.pressed = true
+                    if(mc.player?.isOnGround!! && jumpHeight.value > 0.0)
+                        event.pressed = true
 			}
 		}
 	}

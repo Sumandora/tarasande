@@ -37,6 +37,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 
 	private val managerGraph = ManagerGraph()
 
+	private val image = Identifier("tarasande", "azusa.png")
 	private val particles = ArrayList<Particle>()
 
 	val managerValueComponent = ManagerValueComponent()
@@ -80,6 +81,13 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 		if (isClosing)
 			animation = 1.0 - animation
 
+		if (isClosing && animation <= 0.0) {
+			panels.forEach { it.onClose() }
+			RenderSystem.recordRenderCall {
+				super.onClose()
+			}
+		}
+
 		val color = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
 
 		val strength = round(animation * TarasandeMain.get().clientValues?.blurStrength?.value!!).toInt()
@@ -97,11 +105,29 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 
 		matrices?.push()
 
+		run {
+			matrices?.push()
+			RenderSystem.setShader { GameRenderer.getPositionTexShader() }
+			RenderSystem.setShaderTexture(0, image)
+			val color = color.brighter().brighter()
+			RenderSystem.setShaderColor(color.red / 255f, color.green / 255f, color.blue / 255f, animation.toFloat())
+			RenderSystem.enableBlend()
+			RenderSystem.defaultBlendFunc()
+			RenderSystem.enableDepthTest()
+			val aspect = 698.0 / 1496.0
+			val width = height * aspect
+			val height = client?.window?.scaledHeight!! * 0.85
+			DrawableHelper.drawTexture(matrices, (client?.window?.scaledWidth!! - animation * width).toInt(), (client?.window?.scaledHeight!! - height).toInt(), 0, 0.0f, 0.0f, width.toInt(), height.toInt(), width.toInt(), height.toInt())
+			matrices?.pop()
+		}
+
+		matrices?.push()
 		val numPoints = 100
 		for (i in 0..numPoints) {
 			if (particles.size == i && animation * numPoints >= i)
 				particles.add(Particle(width / 2.0, height / 2.0))
 		}
+		matrices?.pop()
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
 
@@ -119,7 +145,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 				matrices?.scale(animation.toFloat(), animation.toFloat(), 1.0F)
 				matrices?.translate(-(it.x + it.panelWidth / 2.0), -(it.y + panelHeight / 2.0), 0.0)
 			}
-			if(it !is PanelFixed) {
+			if(it !is PanelFixed && animation > 0.0) {
 				GlStateManager._enableScissorTest()
 				GlStateManager._scissorBox(
 					((it.x + it.panelWidth * (1 - animation) / 2) * client?.window?.scaleFactor!!).toInt(),
@@ -128,16 +154,11 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 					((panelHeight - panelHeight * (1 - animation) - 1) * client?.window?.scaleFactor!!).toInt()
 				)
 			}
-			it.render(matrices, mouseX, mouseY, delta)
+			if(it is PanelFixed || animation > 0.0) {
+				it.render(matrices, mouseX, mouseY, delta)
+			}
 			GlStateManager._disableScissorTest()
 			matrices?.pop()
-		}
-
-		if (isClosing && animation <= 0.0) {
-			panels.forEach { it.onClose() }
-			RenderSystem.recordRenderCall {
-				super.onClose()
-			}
 		}
 
 		matrices?.pop()

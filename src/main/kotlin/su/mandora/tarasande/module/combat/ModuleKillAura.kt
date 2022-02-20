@@ -8,7 +8,9 @@ import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
+import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.hit.EntityHitResult
+import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
@@ -119,12 +121,14 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
 	private var blocking = false
 	private var waitForHit = false
+	private var clicked = false
 
 	override fun onEnable() {
 		clickSpeedUtil.reset()
 	}
 
 	override fun onDisable() {
+		clicked = false
 		blocking = false
 		targets.clear()
 	}
@@ -228,14 +232,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 				if (event.state != EventUpdate.State.PRE)
 					return@Consumer
 
+				clicked = false
+
 				if (targets.isEmpty()) {
 					clickSpeedUtil.reset()
 					waitForHit = false
 					return@Consumer
 				}
-
-				if (attackCooldown.value && (mc as IMinecraftClient).attackCooldown > 0)
-					return@Consumer
 
 				val clicks = clickSpeedUtil.getClicks()
 
@@ -293,10 +296,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 						}
 						if (!attacked)
 							if (swingInAir.value) {
-								mc.player?.swingHand(Hand.MAIN_HAND)
-								if (mc.interactionManager?.hasLimitedAttackSpeed()!!) {
-									(mc as IMinecraftClient).attackCooldown = 10
-								}
+								attack(null)
 							}
 					}
 				}
@@ -326,18 +326,29 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 				}
 			}
 			is EventKeyBindingIsPressed -> {
-				if (event.keyBinding == mc.options.keyUse)
-					if (blocking && targets.isNotEmpty())
-						event.pressed = true
+				when (event.keyBinding) {
+					mc.options.keyUse -> {
+						if (blocking && targets.isNotEmpty()) {
+							event.pressed = true
+						}
+					}
+					mc.options.keyAttack -> {
+						if(clicked)
+							event.pressed = true
+					}
+				}
 			}
 		}
 	}
 
-	private fun attack(entity: Entity) {
+	private fun attack(entity: Entity?) {
+		clicked = true
 		val original = mc.crosshairTarget
-		mc.crosshairTarget = EntityHitResult(entity)
-		if (!attackCooldown.value) {
-			(mc as IMinecraftClient).attackCooldown = 0
+		if(entity != null) { // otherwise we just use the rotation as hitresult
+			mc.crosshairTarget = EntityHitResult(entity)
+			if (!attackCooldown.value) {
+				(mc as IMinecraftClient).attackCooldown = 0
+			}
 		}
 		(mc as IMinecraftClient).invokeDoAttack()
 		mc.crosshairTarget = original

@@ -41,14 +41,12 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Shadow
     @Final
     private MinecraftSessionService sessionService;
-    private long startTime;
+    private long startTime = 0L;
     @Shadow
     @Final
     private RenderTickCounter renderTickCounter;
 
-    public MixinMinecraftClient() {
-        this.startTime = 0L;
-    }
+    private int prevAttackCooldown;
 
     @Shadow
     protected abstract void doItemUse();
@@ -69,6 +67,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Inject(method = "tick", at = @At("HEAD"))
     public void injectPreTick(final CallbackInfo ci) {
         TarasandeMain.Companion.get().getManagerEvent().call(new EventTick(EventTick.State.PRE));
+        prevAttackCooldown = attackCooldown;
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -76,9 +75,9 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
         TarasandeMain.Companion.get().getManagerEvent().call(new EventTick(EventTick.State.POST));
     }
 
-    @ModifyConstant(method = "tick", constant = @Constant(intValue = 10000))
-    public int screenAttackCooldown(final int original) {
-        return this.attackCooldown;
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;wrapScreenError(Ljava/lang/Runnable;Ljava/lang/String;Ljava/lang/String;)V"))
+    public void injectMidTick(CallbackInfo ci) {
+        attackCooldown = prevAttackCooldown;
     }
 
     @Inject(method = "stop", at = @At("HEAD"))

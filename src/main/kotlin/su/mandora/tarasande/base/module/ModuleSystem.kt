@@ -49,7 +49,8 @@ class ManagerModule : Manager<Module>() {
 			ModuleWTap(),
 			ModuleTrajectories(),
 			ModuleAntiBot(),
-			ModuleNoFov()
+			ModuleNoFov(),
+			ModuleLatency()
 		)
 		TarasandeMain.get().managerEvent?.add { event ->
 			if (event is EventKey)

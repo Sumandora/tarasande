@@ -22,7 +22,7 @@ public class MixinWindow {
         GLFW.glfwSetWindowTitle(window, TarasandeMain.Companion.get().getName() + " | " + title);
     }
 
-    @Inject(method = "logGlError", at = @At("TAIL"))
+    @Inject(method = "logGlError", at = @At("HEAD"))
     public void injectLogGlError(int error, long description, CallbackInfo ci) {
         new IllegalStateException().printStackTrace();
     }

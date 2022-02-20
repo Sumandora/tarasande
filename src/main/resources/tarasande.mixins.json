@@ -8,6 +8,7 @@
     "MixinClientPlayerInteractionManager",
     "MixinEntity",
     "MixinGameRenderer",
+    "MixinGlDebug",
     "MixinInGameHud",
     "MixinItemCooldownManager",
     "MixinKeyBinding",

@@ -44,6 +44,8 @@
 - KillAura: Simulate Damage in case cooldown isn't gone but full dmg isn't needed to kill somebody
 - PvP-Bot for Practice Game Modes
 - Fix PlayerUtil#simulateAttack
+- Clear buffers immediately in Blink/Latency
+- Fix Screen attackCooldown
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

@@ -11,29 +11,29 @@ import su.mandora.tarasande.base.event.Priority
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventPacket
+import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IClientConnection
-import su.mandora.tarasande.util.math.TimeUtil
-import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.function.Consumer
 
-class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
+class ModuleLatency : Module("Latency", "Controls network latency", ModuleCategory.MISC) {
 
     private val affectedPackets = ValueMode(this, "Affected packets", true, "Serverbound", "Clientbound")
-    private val pulse = ValueBoolean(this, "Pulse", false)
-    private val pulseDelay = object : ValueNumber(this, "Pulse delay", 0.0, 500.0, 1000.0, 1.0) {
-        override fun isVisible(): Boolean {
-            return pulse.value
+    private val latency = object : ValueNumber(this, "Latency", 0.0, 100.0, 1000.0, 1.0) {
+        var prev = 0.0
+        override fun onChange() {
+            if(value < prev)
+                onDisable()
+            prev = value
         }
     }
 
-    private val packets = CopyOnWriteArrayList<Pair<Packet<*>, EventPacket.Type>>()
-    private val timeUtil = TimeUtil()
+    private val packets = CopyOnWriteArrayList<Triple<Long, Packet<*>, EventPacket.Type>>()
 
-    @Priority(9999)
+    @Priority(10000)
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventPacket -> {
@@ -45,17 +45,22 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                         return@Consumer
                     }
                     if (affectedPackets.isSelected(event.type.ordinal)) {
-                        packets.add(Pair(event.packet, event.type))
+                        packets.add(Triple(System.currentTimeMillis() + latency.value.toLong(), event.packet, event.type))
                         event.setCancelled()
                     }
                 }
             }
-            is EventUpdate -> {
-                if(event.state == EventUpdate.State.PRE) {
-                    if(pulse.value) {
-                        if (timeUtil.hasReached(pulseDelay.value.toLong())) {
-                            onDisable()
-                            timeUtil.reset()
+            is EventPollEvents -> { // runs more often than tick
+                val copy = ArrayList(packets) // sync
+                packets.removeIf { it.first < System.currentTimeMillis() }
+                for (triple in copy) {
+                    if (triple.first < System.currentTimeMillis()) {
+                        when (triple.third) {
+                            EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).forceSend(triple.second)
+                            EventPacket.Type.RECEIVE -> {
+                                if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener)
+                                    (triple.second as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
+                            }
                         }
                     }
                 }
@@ -64,17 +69,17 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     }
 
     override fun onDisable() {
-        val copy = ArrayList(packets) // sync
-        packets.clear()
         if(mc.networkHandler?.connection?.isOpen!!) {
-            for (pair in copy) {
-                when (pair.second) {
-                    EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).forceSend(pair.first)
+            for (triple in packets) {
+                when (triple.third) {
+                    EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).forceSend(triple.second)
                     EventPacket.Type.RECEIVE ->
                         if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener)
-                            (pair.first as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
+                            (triple.second as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
                 }
             }
         }
+        packets.clear()
     }
+
 }

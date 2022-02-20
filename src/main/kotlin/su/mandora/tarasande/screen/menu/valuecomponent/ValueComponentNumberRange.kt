@@ -42,6 +42,7 @@ class ValueComponentNumberRange(value: Value) : ValueComponent(value) {
 			// even more hacky
 			valueNumber.minValue = MathHelper.clamp(java.lang.Double.parseDouble(string.substring(0..min(string.length - 1, 7))), valueNumber.min, valueNumber.maxValue)
 			if (valueNumber.minValue == -0.0) valueNumber.minValue = 0.0 // bruh
+			valueNumber.onChange()
 		}
 
 		if (maxDragInfo.dragging) {

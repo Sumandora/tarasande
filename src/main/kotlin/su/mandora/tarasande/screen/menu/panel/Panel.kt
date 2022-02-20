@@ -11,8 +11,8 @@ import kotlin.math.min
 
 open class Panel(val title: String, var x: Double, var y: Double, val minWidth: Double, val minHeight: Double, val maxWidth: Double? = null, val maxHeight: Double? = null, private val background: Boolean = true) : IElement {
 
-	internal val dragInfo = DragInfo()
-	internal val resizeInfo = DragInfo()
+	private val dragInfo = DragInfo()
+	private val resizeInfo = DragInfo()
 	var panelWidth = minWidth
 	var panelHeight = minHeight
 
@@ -119,6 +119,7 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
 
 	override fun onClose() {
 		dragInfo.setDragInfo(false, 0.0, 0.0)
+		resizeInfo.setDragInfo(false, 0.0, 0.0)
 	}
 
 	override fun getHeight() = 0.0 // never used
