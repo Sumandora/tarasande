@@ -15,7 +15,6 @@ import su.mandora.tarasande.event.EventResolutionUpdate
 import su.mandora.tarasande.event.EventScreenRender
 import su.mandora.tarasande.screen.menu.ScreenMenu
 import su.mandora.tarasande.util.render.shader.Shader
-import kotlin.math.ceil
 
 class Blur {
 	private val blurShader = Shader("blur", "default")

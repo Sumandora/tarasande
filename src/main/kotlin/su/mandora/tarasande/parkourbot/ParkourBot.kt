@@ -3,16 +3,13 @@ package su.mandora.tarasande.parkourbot
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.input.KeyboardInput
-import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.client.render.BufferRenderer
 import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexFormat
 import net.minecraft.client.render.VertexFormats
-import net.minecraft.util.math.Matrix4f
 import org.lwjgl.opengl.GL11
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.event.EventPollEvents
-import su.mandora.tarasande.event.EventRender2D
 import su.mandora.tarasande.event.EventRender3D
 import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.parkourbot.pathbuilder.Goal
@@ -22,7 +19,6 @@ import su.mandora.tarasande.parkourbot.traverser.Traverser
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.jvm.internal.Intrinsics
 
 
 class ParkourBot {

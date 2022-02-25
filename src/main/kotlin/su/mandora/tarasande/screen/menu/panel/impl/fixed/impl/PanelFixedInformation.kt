@@ -28,7 +28,7 @@ class PanelFixedInformation(x: Double, y: Double) : PanelFixed("Information", x,
 							}
 						}
 					} else {
-						cache.add("[" + information.information + "] " + message)
+						cache.add("[" + information.information + "] $message")
 					}
 				}
 			}

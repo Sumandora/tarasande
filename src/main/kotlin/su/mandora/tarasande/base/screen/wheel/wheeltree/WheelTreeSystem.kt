@@ -3,12 +3,8 @@ package su.mandora.tarasande.base.screen.wheel.wheeltree
 import net.minecraft.client.MinecraftClient
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.Manager
-import su.mandora.tarasande.base.value.Value
 import su.mandora.tarasande.mixin.accessor.IVec3d
 import su.mandora.tarasande.parkourbot.pathbuilder.Goal
-import su.mandora.tarasande.screen.menu.utils.IElement
-import su.mandora.tarasande.screen.menu.valuecomponent.*
-import su.mandora.tarasande.value.*
 
 class ManagerWheelTree : Manager<WheelTreeEntry>() {
 

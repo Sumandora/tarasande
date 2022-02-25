@@ -2,11 +2,12 @@ package su.mandora.tarasande.util.connection
 
 import java.net.InetSocketAddress
 
-class Proxy(val socketAddress: InetSocketAddress, val type: ProxyType, val ping: Long) {
+class Proxy(val socketAddress: InetSocketAddress, val type: ProxyType) {
 
 	var proxyAuthentication: ProxyAuthentication? = null
+	var ping: Long? = null
 
-	constructor(socketAddress: InetSocketAddress, type: ProxyType, ping: Long, proxyAuthentication: ProxyAuthentication) : this(socketAddress, type, ping) {
+	constructor(socketAddress: InetSocketAddress, type: ProxyType, proxyAuthentication: ProxyAuthentication) : this(socketAddress, type) {
 		this.proxyAuthentication = proxyAuthentication
 	}
 }

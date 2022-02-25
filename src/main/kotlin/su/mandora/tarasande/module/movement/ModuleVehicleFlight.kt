@@ -1,6 +1,5 @@
 package su.mandora.tarasande.module.movement
 
-import net.minecraft.client.util.InputUtil
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module

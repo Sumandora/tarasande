@@ -8,11 +8,14 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import org.lwjgl.glfw.GLFW
+import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.screen.accountmanager.elements.TextFieldWidgetPlaceholder
 import su.mandora.tarasande.util.connection.Proxy
 import su.mandora.tarasande.util.connection.ProxyAuthentication
 import su.mandora.tarasande.util.connection.ProxyType
+import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.screen.ScreenBetter
+import java.awt.Color
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -84,49 +87,41 @@ class ScreenBetterProxy(
 				else null
 			} else {
 				try {
+					val port = portTextField?.text?.toInt()!!
+					val inetSocketAddress = InetSocketAddress(ipTextField?.text!!, port)
+					val proxy =
+						if (usernameTextField?.text?.isNotEmpty()!! && (proxyType == ProxyType.SOCKS4 || passwordTextField?.text?.isNotEmpty()!!))
+							Proxy(inetSocketAddress, proxyType!!, ProxyAuthentication(usernameTextField?.text!!, if (proxyType == ProxyType.SOCKS4) null else passwordTextField?.text))
+						else
+							Proxy(inetSocketAddress, proxyType!!)
+					proxyConsumer.accept(proxy)
 					if (pingThread != null && pingThread?.isAlive!!)
 						pingThread?.stop() // even more hacky
 					Thread {
-						val port = portTextField?.text?.toInt()!!
-						val inetSocketAddress = InetSocketAddress(ipTextField?.text!!, port) // hacky
-						var reached = true
 						val socket = Socket()
-						var timeDelta = 0L
 						try {
 							status = Formatting.YELLOW.toString() + "Pinging..."
 							val beginTime = System.currentTimeMillis()
 							socket.connect(inetSocketAddress, 5000)
-							timeDelta = System.currentTimeMillis() - beginTime
-							status = when {
-								timeDelta < 200 -> Formatting.GREEN.toString()
-								timeDelta in 200..500 -> Formatting.YELLOW.toString()
-								else -> Formatting.RED.toString()
-							} + "Reached proxy in ${timeDelta}ms"
-						} catch (ioException: IOException) {
-							status = Formatting.RED.toString() + "Failed to reach proxy"
-							reached = false
-						} catch (socketTimeoutException: SocketTimeoutException) {
-							status = Formatting.RED.toString() + "Timeout reached, unreachable"
-							reached = false
-						} catch (illegalBlockingMethodException: IllegalBlockingModeException) {
-							status = Formatting.RED.toString() + "Illegal blocking method"
-							reached = false
-						} catch (illegalArgumentException: IllegalArgumentException) {
-							status = Formatting.RED.toString() + "Invalid IP or port"
-							reached = false
+							val timeDelta = System.currentTimeMillis() - beginTime
+							if(TarasandeMain.get().screens?.betterScreenAccountManager?.proxy == proxy) {
+								status = RenderUtil.formattingByHex(RenderUtil.colorInterpolate(Color.green, Color.red.darker(), (timeDelta / 1000.0).coerceAtMost(1.0)).rgb).toString() + "Reached proxy in ${timeDelta}ms"
+								proxy.ping = timeDelta
+							}
 						} catch (throwable: Throwable) {
-							reached = false
+							if(TarasandeMain.get().screens?.betterScreenAccountManager?.proxy == proxy) {
+								status = when(throwable) {
+									is SocketTimeoutException -> Formatting.RED.toString() + "Timeout reached, unreachable"
+									is IOException -> Formatting.RED.toString() + "Failed to reach proxy"
+									is IllegalBlockingModeException -> Formatting.RED.toString() + "Illegal blocking method"
+									is IllegalArgumentException -> Formatting.RED.toString() + "Invalid IP or port"
+									else -> Formatting.RED.toString() + (if(throwable.message != null && throwable.message?.isNotEmpty()!!) throwable.message else "Unknown error")
+								}
+							}
+							throwable.printStackTrace()
 						} finally {
 							socket.close()
 						}
-						if (!reached)
-							return@Thread
-						proxyConsumer.accept(
-							if (usernameTextField?.text?.isNotEmpty()!! && (proxyType == ProxyType.SOCKS4 || passwordTextField?.text?.isNotEmpty()!!))
-								Proxy(inetSocketAddress, proxyType!!, timeDelta, ProxyAuthentication(usernameTextField?.text!!, if (proxyType == ProxyType.SOCKS4) null else passwordTextField?.text))
-							else
-								Proxy(inetSocketAddress, proxyType!!, timeDelta)
-						)
 					}.also { pingThread = it }.start()
 				} catch (numberFormatException: NumberFormatException) {
 					status = Formatting.RED.toString() + "Port is not numeric"

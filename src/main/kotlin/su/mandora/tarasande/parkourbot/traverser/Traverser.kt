@@ -5,13 +5,9 @@ import net.minecraft.client.input.Input
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
-import su.mandora.tarasande.TarasandeMain
-import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
-import kotlin.math.max
 
 class Traverser(private val path: CopyOnWriteArrayList<BlockPos>) {
 

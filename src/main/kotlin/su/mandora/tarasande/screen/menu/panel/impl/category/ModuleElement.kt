@@ -14,7 +14,7 @@ import su.mandora.tarasande.screen.menu.utils.IElement
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.RenderUtil.isHovered
 import java.awt.Color
-import kotlin.math.*
+import kotlin.math.min
 
 class ModuleElement(private val module: Module, var width: Double) : IElement {
 
@@ -52,7 +52,7 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
         val toggleAnimation = min((System.currentTimeMillis() - toggleTime) / 100.0, 1.0)
         val radius = if (module.enabled) toggleAnimation else 1.0 - toggleAnimation
         RenderUtil.fillCircle(matrices, width - 7, defaultHeight / 2, radius * 4.0, TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
-        RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0f, RenderUtil.colorInterpolate(TarasandeMain.get().clientValues?.accentColor?.getColor()!!, Color.white, radius.toFloat()).rgb)
+        RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0f, RenderUtil.colorInterpolate(TarasandeMain.get().clientValues?.accentColor?.getColor()!!, Color.white, radius).rgb)
 
         if(components.isNotEmpty()) {
             val expansionAnimation = min((System.currentTimeMillis() - expansionTime) / 100.0, 1.0)

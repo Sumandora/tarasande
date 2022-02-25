@@ -9,7 +9,6 @@ import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventChat
-import su.mandora.tarasande.event.EventPacket
 import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.value.ValueBoolean
@@ -92,7 +91,7 @@ class ModuleSpammer : Module("Spammer", "Spams something in chat", ModuleCategor
 					}
 					if (text != null) {
 						if (garbage.value) {
-							text = formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt())) + " " + text + " " + formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt()))
+							text = formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt())) + " $text " + formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt()))
 						}
 						mc.networkHandler?.sendPacket(ChatMessageC2SPacket(SharedConstants.stripInvalidChars(text)))
 					}

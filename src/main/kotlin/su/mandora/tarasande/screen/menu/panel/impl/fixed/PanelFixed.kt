@@ -1,6 +1,5 @@
 package su.mandora.tarasande.screen.menu.panel.impl.fixed
 
-import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import su.mandora.tarasande.TarasandeMain

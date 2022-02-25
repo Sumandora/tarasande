@@ -4,7 +4,6 @@ import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.network.ClientConnection;
-import net.minecraft.network.NetworkState;
 import net.minecraft.network.Packet;
 import net.minecraft.network.listener.PacketListener;
 import org.jetbrains.annotations.Nullable;

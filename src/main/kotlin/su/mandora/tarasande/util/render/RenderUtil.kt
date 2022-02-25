@@ -245,12 +245,41 @@ object RenderUtil {
         RenderSystem.disableBlend()
     }
 
-    fun colorInterpolate(a: Color, b: Color, t: Float): Color {
+    fun colorInterpolate(a: Color, b: Color, t: Double): Color {
+        val t = t.toFloat() // damn
         return Color((a.red + (b.red - a.red) * t) / 255.0f, (a.green + (b.green - a.green) * t) / 255.0f, (a.blue + (b.blue - a.blue) * t) / 255.0f, (a.alpha + (b.alpha - a.alpha) * t) / 255.0f)
     }
 
     fun drawWithSmallShadow(matrices: MatrixStack?, text: String, x: Float, y: Float, color: Int) {
         MinecraftClient.getInstance().textRenderer.draw(matrices, Formatting.strip(text), x + 0.5f, y + 0.5f, Color(0, 0, 0, color shr 24 and 0xFF).rgb)
         MinecraftClient.getInstance().textRenderer.draw(matrices, text, x, y, color)
+    }
+
+    fun formattingByHex(hex: Int): Formatting {
+        var bestFormatting: Formatting? = null
+        var bestDiff = 0.0
+        val red = (hex shr 16 and 0xFF) / 255.0f
+        val green = (hex shr 8 and 0xFF) / 255.0f
+        val blue = (hex shr 0 and 0xFF) / 255.0f
+
+        for(formatting in Formatting.values()) {
+            if(formatting.colorValue == null) continue
+
+            val otherRed = (formatting.colorValue!! shr 16 and 0xFF) / 255.0f
+            val otherGreen = (formatting.colorValue!! shr 8 and 0xFF) / 255.0f
+            val otherBlue = (formatting.colorValue!! shr 0 and 0xFF) / 255.0f
+
+            val diff = sqrt(
+                (otherRed - red).toDouble().pow(2.0) * 0.2126 +
+                (otherGreen - green).toDouble().pow(2.0) * 0.7152 +
+                (otherBlue - blue).toDouble().pow(2.0) * 0.0722
+            )
+
+            if(bestFormatting == null || bestDiff > diff) {
+                bestFormatting = formatting
+                bestDiff = diff
+            }
+        }
+        return bestFormatting!!
     }
 }

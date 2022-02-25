@@ -4,7 +4,6 @@ import net.minecraft.network.ClientConnection
 import net.minecraft.network.NetworkState
 import net.minecraft.network.Packet
 import net.minecraft.network.listener.ClientPlayPacketListener
-import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.event.Priority
@@ -12,7 +11,6 @@ import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventPacket
 import su.mandora.tarasande.event.EventPollEvents
-import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IClientConnection
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber

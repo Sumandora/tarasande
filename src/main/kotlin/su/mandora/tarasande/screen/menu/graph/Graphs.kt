@@ -8,7 +8,6 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.screen.menu.graph.Graph
 import su.mandora.tarasande.event.EventPacket
 import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity
-import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.util.render.RenderUtil
 import kotlin.math.round
 

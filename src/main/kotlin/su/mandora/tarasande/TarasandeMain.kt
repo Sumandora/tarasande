@@ -13,9 +13,6 @@ import su.mandora.tarasande.screen.Screens
 import su.mandora.tarasande.util.clientvalue.ClientValues
 import su.mandora.tarasande.util.entitycolor.EntityColor
 import su.mandora.tarasande.util.render.blur.Blur
-import su.mandora.tarasande.util.spotify.Spotify
-import java.io.PrintWriter
-import java.io.StringWriter
 
 class TarasandeMain {
 

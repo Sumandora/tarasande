@@ -1,7 +1,6 @@
 package su.mandora.tarasande.module.misc
 
 import net.minecraft.network.packet.c2s.play.PlayerInputC2SPacket
-import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory

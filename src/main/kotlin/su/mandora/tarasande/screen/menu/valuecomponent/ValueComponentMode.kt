@@ -33,7 +33,7 @@ class ValueComponentMode(value: Value) : ValueComponent(value) {
 		for ((index, setting) in valueMode.settings.withIndex()) {
 			val animation = min((System.currentTimeMillis() - animations.getOrPut(setting) { 0L }) / 100.0, 1.0)
 			val fade = (if (valueMode.selected.contains(setting)) animation else 1.0 - animation)
-			MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, setting, (width - MinecraftClient.getInstance().textRenderer.getWidth(setting)).toFloat(), (getHeight() / 2.0F + (index - valueMode.settings.size / 2.0) * MinecraftClient.getInstance().textRenderer.fontHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), RenderUtil.colorInterpolate(Color.white, TarasandeMain.get().clientValues?.accentColor?.getColor()!!, fade.toFloat()).rgb)
+			MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, setting, (width - MinecraftClient.getInstance().textRenderer.getWidth(setting)).toFloat(), (getHeight() / 2.0F + (index - valueMode.settings.size / 2.0) * MinecraftClient.getInstance().textRenderer.fontHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), RenderUtil.colorInterpolate(Color.white, TarasandeMain.get().clientValues?.accentColor?.getColor()!!, fade).rgb)
 		}
 		matrices?.pop()
 	}

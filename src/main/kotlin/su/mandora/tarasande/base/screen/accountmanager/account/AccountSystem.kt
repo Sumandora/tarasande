@@ -1,7 +1,6 @@
 package su.mandora.tarasande.base.screen.accountmanager.account
 
 import com.google.gson.JsonArray
-import com.google.gson.JsonElement
 import com.mojang.authlib.Environment
 import com.mojang.authlib.minecraft.MinecraftSessionService
 import net.minecraft.client.util.Session

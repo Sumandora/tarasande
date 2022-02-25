@@ -1,6 +1,5 @@
 package su.mandora.tarasande.module.combat
 
-import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket
 import net.minecraft.util.math.Vec3d

@@ -2,16 +2,12 @@ package su.mandora.tarasande.screen.menu
 
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import net.minecraft.util.math.MathHelper
-import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL13
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.base.screen.menu.graph.ManagerGraph

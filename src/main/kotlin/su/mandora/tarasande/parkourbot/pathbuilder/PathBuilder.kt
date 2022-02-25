@@ -9,7 +9,6 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.pathfinder.Movement
 import su.mandora.tarasande.util.pathfinder.PathFinder
-import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 
 class PathBuilder(begin: BlockPos, private val goal: Goal) {
