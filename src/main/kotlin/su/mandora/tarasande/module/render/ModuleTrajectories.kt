@@ -43,7 +43,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
                 GL11.glDepthMask(true)
                 event.matrices.push()
                 val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
-                event.matrices.translate(-vec3d!!.x, -vec3d.y, -vec3d.z)
+                event.matrices.translate(-vec3d.x, -vec3d.y, -vec3d.z)
                 val bufferBuilder = Tessellator.getInstance().buffer
                 RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
                 bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)

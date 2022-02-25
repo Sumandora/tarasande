@@ -34,7 +34,6 @@
 - Vehicle Speed
 - Elytra Flight
 - Baritone Sprint Jump
-- KillAura Noise Function Rotations
 - Friends
 - KillAura: Wait for critical for 1.9+ pvp
 - Fix Trajectories
@@ -46,6 +45,7 @@
 - Fix PlayerUtil#simulateAttack
 - Clear buffers immediately in Blink/Latency
 - Fix Screen attackCooldown
+- Stop using Thread.stop
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

@@ -66,7 +66,7 @@ class ValueComponentNumberRange(value: Value) : ValueComponent(value) {
 		} else {
 			RenderUtil.fillHorizontalGradient(matrices, width - (1.0 - minSliderPos) * 50, getHeight() * 0.25, width - (1.0 - maxSliderPos) * 50, getHeight() * 0.75, Color(255, 255, 255, 255 / 4).rgb, Color(accentColor.red, accentColor.green, accentColor.blue, 255 / 4).rgb)
 		}
-		RenderUtil.outlinedHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2.0F, Color.white.rgb, TarasandeMain.get().clientValues?.accentColor?.getColor()!!.rgb)
+		RenderUtil.outlinedHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2.0F, Color.white.rgb, TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
 
 		matrices?.push()
 		matrices?.translate(width - 50 / 2, getHeight() / 2.0, 0.0)

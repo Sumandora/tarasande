@@ -44,12 +44,12 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
 	override fun init() {
 		addDrawableChild(AlwaysSelectedEntryListWidgetAccount(client, width, height, 16, height - 46).also { accountList = it })
 
-		addDrawableChild(ButtonWidget(width / 2 - 203, height - 46 + 2, 100, 20, Text.of("Login")) { logIn(accountList?.selectedOrNull!!.account) }.also { loginButton = it })
+		addDrawableChild(ButtonWidget(width / 2 - 203, height - 46 + 2, 100, 20, Text.of("Login")) { logIn(accountList?.selectedOrNull?.account!!) }.also { loginButton = it })
 		addDrawableChild(ButtonWidget(width / 2 - 101, height - 46 + 2, 100, 20, Text.of("Remove")) {
-			if (accounts.indexOf(accountList?.selectedOrNull!!.account) == mainAccount) mainAccount = -1
-			accounts.remove(accountList?.selectedOrNull!!.account)
-			accountList!!.reload()
-			accountList!!.setSelected(null)
+			if (accounts.indexOf(accountList?.selectedOrNull?.account) == mainAccount) mainAccount = -1
+			accounts.remove(accountList?.selectedOrNull?.account)
+			accountList?.reload()
+			accountList?.setSelected(null)
 		}.also { removeButton = it })
 		addDrawableChild(ButtonWidget(width / 2 + 1, height - 46 + 2, 100, 20, Text.of("Direct Login")) {
 			client?.setScreen(ScreenBetterAccount(this, "Direct Login") {
@@ -57,7 +57,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
 			})
 		}.also { addButton = it })
 		addDrawableChild(ButtonWidget(width / 2 + 103, height - 46 + 2, 100, 20, Text.of("Set Main")) {
-			val account = accountList?.selectedOrNull!!.account
+			val account = accountList?.selectedOrNull?.account!!
 			if (account.session == null) {
 				status = Formatting.RED.toString() + "Account hasn't been logged into yet"
 			} else {
@@ -77,7 +77,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
 		addDrawableChild(ButtonWidget(width / 2 + 1, height - 46 + 2 + 20 + 2, 100, 20, Text.of("Add")) {
 			client?.setScreen(ScreenBetterAccount(this, "Add Account") { account ->
 				accounts.add(account)
-				accountList!!.reload()
+				accountList?.reload()
 			})
 		}.also { addButton = it })
 		addDrawableChild(ButtonWidget(width / 2 + 103, height - 46 + 2 + 20 + 2, 100, 20, Text.of("Back")) {
@@ -111,7 +111,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
 		drawCenteredText(matrices, textRenderer, if (status == null) "Account Manager" else status, width / 2, 8 - textRenderer.fontHeight / 2, -1)
 		if (proxy != null)
 			textRenderer.drawWithShadow(matrices, "Proxy", 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight * 2 - 2, -1)
-		textRenderer.drawWithShadow(matrices, if (proxy == null) "No Proxy" else proxy!!.socketAddress.address.hostAddress + ":" + proxy!!.socketAddress.port + " (" + proxy!!.ping + "ms)", 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight, -1)
+		textRenderer.drawWithShadow(matrices, if (proxy == null) "No Proxy" else proxy?.socketAddress?.address?.hostAddress!! + ":" + proxy?.socketAddress?.port!! + " (" + proxy?.ping!! + "ms)", 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight, -1)
 	}
 
 	override fun onClose() {
@@ -159,8 +159,8 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
 	}
 
 	fun logIn(account: Account) {
-		if (loginThread != null && loginThread!!.isAlive) {
-			loginThread!!.stop()
+		if (loginThread != null && loginThread?.isAlive!!) {
+			loginThread?.stop()
 		}
 		Thread(RunnableLogin(account)).also { loginThread = it }.start()
 	}
@@ -176,7 +176,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
 				status = Formatting.GREEN.toString() + "Logged in as \"" + account.getDisplayName() + "\""
 			} catch (e: Throwable) {
 				e.printStackTrace()
-				status = if (e.message!!.isEmpty()) Formatting.RED.toString() + "Login failed!" else Formatting.RED.toString() + e.message
+				status = if (e.message?.isEmpty()!!) Formatting.RED.toString() + "Login failed!" else Formatting.RED.toString() + e.message
 				currentAccount = prevAccount
 			}
 		}

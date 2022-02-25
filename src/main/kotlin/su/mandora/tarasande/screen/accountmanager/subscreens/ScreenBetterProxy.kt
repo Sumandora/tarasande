@@ -57,38 +57,38 @@ class ScreenBetterProxy(
 			usernameTextField = it
 			it.setMaxLength(Int.MAX_VALUE)
 			if (proxy?.proxyAuthentication != null) {
-				it.text = proxy.proxyAuthentication!!.username
+				it.text = proxy.proxyAuthentication?.username!!
 			}
 		})
 		addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 - 100, height / 2 + 10, 200, 20, Text.of("Password")).also {
 			passwordTextField = it
 			it.setMaxLength(Int.MAX_VALUE)
 			if (proxy?.proxyAuthentication != null) {
-				it.text = proxy.proxyAuthentication!!.password
+				it.text = proxy.proxyAuthentication?.password!!
 			}
 		})
 		addDrawableChild(ButtonWidget(width / 2 - 75, height / 2 - 40, 150, 20, Text.of("Proxy Type: ")) {
-			proxyType = ProxyType.values()[(proxyType!!.ordinal + 1) % ProxyType.values().size]
-			it.message = Text.of("Proxy Type: " + proxyType!!.printable)
+			proxyType = ProxyType.values()[(proxyType?.ordinal!! + 1) % ProxyType.values().size]
+			it.message = Text.of("Proxy Type: " + proxyType?.printable!!)
 		}.also {
 			proxyTypeButtonWidget = it
 			proxyType = proxy?.type ?: ProxyType.values()[0]
-			it.message = Text.of("Proxy Type: " + proxyType!!.printable)
+			it.message = Text.of("Proxy Type: " + proxyType?.printable!!)
 		})
 
 		addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50, 100, 20, Text.of("Done")) {
-			if (ipTextField!!.text.isEmpty() || portTextField!!.text.isEmpty()) {
-				status = Formatting.RED.toString() + if (ipTextField!!.text.isEmpty() && portTextField!!.text.isEmpty()) "IP and port are empty"
-				else if (ipTextField!!.text.isEmpty()) "IP is empty"
-				else if (portTextField!!.text.isEmpty()) "Port is empty"
+			if (ipTextField?.text?.isEmpty()!! || portTextField?.text?.isEmpty()!!) {
+				status = Formatting.RED.toString() + if (ipTextField?.text?.isEmpty()!! && portTextField?.text?.isEmpty()!!) "IP and port are empty"
+				else if (ipTextField?.text?.isEmpty()!!) "IP is empty"
+				else if (portTextField?.text?.isEmpty()!!) "Port is empty"
 				else null
 			} else {
 				try {
-					if (pingThread != null && pingThread!!.isAlive)
-						pingThread!!.stop() // even more hacky
+					if (pingThread != null && pingThread?.isAlive!!)
+						pingThread?.stop() // even more hacky
 					Thread {
-						val port = portTextField!!.text.toInt()
-						val inetSocketAddress = InetSocketAddress(ipTextField!!.text, port) // hacky
+						val port = portTextField?.text?.toInt()!!
+						val inetSocketAddress = InetSocketAddress(ipTextField?.text!!, port) // hacky
 						var reached = true
 						val socket = Socket()
 						var timeDelta = 0L
@@ -122,8 +122,8 @@ class ScreenBetterProxy(
 						if (!reached)
 							return@Thread
 						proxyConsumer.accept(
-							if (usernameTextField!!.text.isNotEmpty() && (proxyType == ProxyType.SOCKS4 || passwordTextField!!.text.isNotEmpty()))
-								Proxy(inetSocketAddress, proxyType!!, timeDelta, ProxyAuthentication(usernameTextField!!.text, if (proxyType == ProxyType.SOCKS4) null else passwordTextField!!.text))
+							if (usernameTextField?.text?.isNotEmpty()!! && (proxyType == ProxyType.SOCKS4 || passwordTextField?.text?.isNotEmpty()!!))
+								Proxy(inetSocketAddress, proxyType!!, timeDelta, ProxyAuthentication(usernameTextField?.text!!, if (proxyType == ProxyType.SOCKS4) null else passwordTextField?.text))
 							else
 								Proxy(inetSocketAddress, proxyType!!, timeDelta)
 						)
@@ -172,15 +172,15 @@ class ScreenBetterProxy(
 	override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
 		var focused = false
 		for (textField in listOf(ipTextField, portTextField, usernameTextField, passwordTextField))
-			if (textField!!.isFocused)
+			if (textField?.isFocused!!)
 				focused = true
 		if (hasControlDown() && keyCode == GLFW.GLFW_KEY_V && !focused) {
 			val clipboardContent = GLFW.glfwGetClipboardString(client?.window?.handle!!)
 			if (clipboardContent != null) {
 				val parts = clipboardContent.split(":")
 				if (parts.size == 2) {
-					ipTextField!!.text = parts[0]
-					portTextField!!.text = parts[1]
+					ipTextField?.text = parts[0]
+					portTextField?.text = parts[1]
 				}
 			}
 		}

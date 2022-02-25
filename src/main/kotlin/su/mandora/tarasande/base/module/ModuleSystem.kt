@@ -50,7 +50,8 @@ class ManagerModule : Manager<Module>() {
 			ModuleTrajectories(),
 			ModuleAntiBot(),
 			ModuleNoFov(),
-			ModuleLatency()
+			ModuleLatency(),
+			ModuleKeepSprint()
 		)
 		TarasandeMain.get().managerEvent?.add { event ->
 			if (event is EventKey)

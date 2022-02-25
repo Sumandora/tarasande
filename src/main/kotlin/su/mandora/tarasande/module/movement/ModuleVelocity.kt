@@ -58,7 +58,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
 					when {
 						mode.isSelected(2) -> {
 							if (receivedKnockback) {
-								if (lastVelocity!!.horizontalLengthSquared() > 0.01 && mc.player?.isOnGround!! && ThreadLocalRandom.current().nextInt(100) <= chance.value)
+								if (lastVelocity?.horizontalLengthSquared()!! > 0.01 && mc.player?.isOnGround!! && ThreadLocalRandom.current().nextInt(100) <= chance.value)
 									isJumping = true
 
 								receivedKnockback = false

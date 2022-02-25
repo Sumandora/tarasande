@@ -8,7 +8,7 @@ class InformationEntities : Information("World", "Entities") {
 	override fun getMessage(): String? {
 		if (MinecraftClient.getInstance().world == null)
 			return null
-		return Iterables.size(MinecraftClient.getInstance().world!!.entities).toString()
+		return Iterables.size(MinecraftClient.getInstance().world?.entities!!).toString()
 	}
 }
 
@@ -16,6 +16,6 @@ class InformationWorldTime : Information("World", "World Time") {
 	override fun getMessage(): String? {
 		if (MinecraftClient.getInstance().world == null)
 			return null
-		return MinecraftClient.getInstance().world!!.timeOfDay.toString() + "/" + MinecraftClient.getInstance().world!!.time
+		return MinecraftClient.getInstance().world?.timeOfDay.toString() + "/" + MinecraftClient.getInstance().world?.time
 	}
 }

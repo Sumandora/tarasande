@@ -1,6 +1,8 @@
 package su.mandora.tarasande.mixin.mixins;
 
 import com.mojang.authlib.minecraft.MinecraftSessionService;
+import com.mojang.authlib.minecraft.UserApiService;
+import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.option.GameOptions;
@@ -12,6 +14,7 @@ import net.minecraft.util.Util;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.TarasandeMain;
 import su.mandora.tarasande.base.screen.accountmanager.account.Account;
 import su.mandora.tarasande.event.EventResolutionUpdate;
@@ -22,6 +25,8 @@ import su.mandora.tarasande.module.misc.ModuleTickBaseManipulation;
 import su.mandora.tarasande.module.player.ModuleTimer;
 import su.mandora.tarasande.module.render.ModuleESP;
 import su.mandora.tarasande.screen.Screens;
+import su.mandora.tarasande.util.reflection.ReflectionUtil;
+import su.mandora.tarasande.util.reflection.ReflectorClass;
 import su.mandora.tarasande.util.render.RenderUtil;
 
 @Mixin(MinecraftClient.class)
@@ -118,6 +123,14 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Redirect(method = "hasOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isGlowing()Z"))
     public boolean hookedIsGlowing(final Entity entity) {
         return TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class).getEnabled() || entity.isGlowing();
+    }
+
+    @Inject(method = "createUserApiService", at = @At("HEAD"), cancellable = true)
+    public void injectCreateUserApiService(YggdrasilAuthenticationService authService, RunArgs runArgs, CallbackInfoReturnable<UserApiService> cir) {
+        ReflectorClass reflectorClass = ReflectionUtil.INSTANCE.createReflectorClass("net.fabricmc.loader.launch.common.FabricLauncherBase");
+        if (reflectorClass != null && reflectorClass.invokeMethod("getLauncher").asReflectorClass().invokeMethod("isDevelopment").interpretAs(Boolean.class)) {
+            cir.setReturnValue(UserApiService.OFFLINE);
+        }
     }
 
     @Overwrite

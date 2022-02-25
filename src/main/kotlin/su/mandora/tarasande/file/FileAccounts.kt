@@ -105,7 +105,7 @@ class FileAccounts : File("Accounts") {
     override fun encrypt(input: String) = String(Base64.getEncoder().encode(encryptCipher?.doFinal(input.toByteArray())))
 
     override fun decrypt(input: String) = try {
-        String(decryptCipher!!.doFinal(Base64.getDecoder().decode(input.toByteArray())))
+        String(decryptCipher?.doFinal(Base64.getDecoder().decode(input.toByteArray()))!!)
     } catch (e: BadPaddingException) {
         e.printStackTrace()
         null

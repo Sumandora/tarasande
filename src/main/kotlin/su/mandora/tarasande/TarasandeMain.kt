@@ -61,7 +61,7 @@ class TarasandeMain {
 
 		if(MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && screens?.betterScreenAccountManager?.mainAccount != -1) {
 			screens?.betterScreenAccountManager?.logIn(screens?.betterScreenAccountManager?.accounts!![screens?.betterScreenAccountManager?.mainAccount!!])
-			while(screens?.betterScreenAccountManager?.loginThread != null && screens?.betterScreenAccountManager?.loginThread!!.isAlive)
+			while(screens?.betterScreenAccountManager?.loginThread != null && screens?.betterScreenAccountManager?.loginThread?.isAlive!!)
 				Thread.sleep(50L) // synchronize
 			screens?.betterScreenAccountManager?.status = null
 		}

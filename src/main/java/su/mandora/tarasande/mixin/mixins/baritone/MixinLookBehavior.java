@@ -18,13 +18,13 @@ public class MixinLookBehavior {
     @SuppressWarnings({"UnresolvedMixinReference", "InvalidInjectorMethodSignature"})
     @Inject(method = "onPlayerUpdate", at = @At("HEAD"), remap = false)
     public void injectPreOnPlayerUpdate(@Coerce Object event, CallbackInfo ci) {
-        prevRotation = new Rotation(MinecraftClient.getInstance().player.getYaw(), MinecraftClient.getInstance().player.getPitch());
+        prevRotation = new Rotation(MinecraftClient.getInstance().player);
     }
 
     @SuppressWarnings({"UnresolvedMixinReference", "InvalidInjectorMethodSignature"})
     @Inject(method = "onPlayerUpdate", at = @At("TAIL"), remap = false)
     public void injectPostOnPlayerUpdate(@Coerce Object event, CallbackInfo ci) {
-        Rotation rotation = new Rotation(MinecraftClient.getInstance().player.getYaw(), MinecraftClient.getInstance().player.getPitch());
+        Rotation rotation = new Rotation(MinecraftClient.getInstance().player);
         rotation.correctSensitivity(prevRotation);
         MinecraftClient.getInstance().player.setYaw(rotation.getYaw());
         MinecraftClient.getInstance().player.setPitch(rotation.getPitch());

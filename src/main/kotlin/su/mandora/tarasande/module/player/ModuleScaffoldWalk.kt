@@ -128,15 +128,15 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 if (lastRotation != null) {
                     when {
                         headRoll.isSelected(1) -> {
-                            lastRotation = Rotation(mc.player?.yaw!!, lastRotation!!.pitch)
+                            lastRotation = Rotation(mc.player?.yaw!!, lastRotation?.pitch!!)
                         }
                         headRoll.isSelected(2) -> {
-                            lastRotation = Rotation(mc.player?.yaw!! * mc.player?.age!! * 45, lastRotation!!.pitch)
+                            lastRotation = Rotation(mc.player?.yaw!! * mc.player?.age!! * 45, lastRotation?.pitch!!)
                         }
                     }
                 }
 
-                val below = mc.player?.blockPos!!.add(0, -1, 0)
+                val below = mc.player?.blockPos?.add(0, -1, 0)!!
                 if (mc.world?.isAir(below)!!) {
                     target = getAdjacentBlock(below)
                     if (target != null) {
@@ -147,11 +147,11 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                             )
                         val newEdgeDist = getNewEdgeDist()
                         if (!rotateAtEdge.value || (round(
-                                Vec3d.ofCenter(target!!.first).subtract(mc.player?.pos!!)
-                                    .multiply(Vec3d.of(target!!.second.vector)).horizontalLengthSquared() * 100
-                            ) / 100.0 in (newEdgeDist * newEdgeDist)..1.0 || target!!.second.vector.y != 0)
+                                Vec3d.ofCenter(target?.first).subtract(mc.player?.pos!!)
+                                    .multiply(Vec3d.of(target?.second?.vector)).horizontalLengthSquared() * 100
+                            ) / 100.0 in (newEdgeDist * newEdgeDist)..1.0 || target?.second?.vector?.y != 0)
                         ) {
-                            var point = Vec3d.of(target!!.first)
+                            var point = Vec3d.of(target?.first)
                             var bestPoint: Vec3d? = null
                             var rotDelta = 0.0
                             var x = 0.0
@@ -164,16 +164,16 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                         (mc.player as IEntity).invokeGetRotationVector(rot.pitch, rot.yaw)
                                     val hitResult = PlayerUtil.rayCast(
                                         mc.player?.eyePos!!,
-                                        mc.player?.eyePos!!.add(rotationVector.multiply(mc.interactionManager?.reachDistance!!.toDouble()))
+                                        mc.player?.eyePos?.add(rotationVector.multiply(mc.interactionManager?.reachDistance?.toDouble()!!))!!
                                     )
-                                    if (hitResult != null && hitResult.type == HitResult.Type.BLOCK && (target == null || (hitResult.side == (if (target!!.second.vector.y != 0) target!!.second else target!!.second.opposite) && hitResult.blockPos == target!!.first))) {
-                                        val dir = target!!.second.opposite
+                                    if (hitResult != null && hitResult.type == HitResult.Type.BLOCK && (target == null || (hitResult.side == (if (target?.second?.vector?.y != 0) target?.second else target?.second?.opposite) && hitResult.blockPos == target?.first))) {
+                                        val dir = target?.second?.opposite!!
                                         val delta = abs(
                                             MathHelper.wrapDegrees
                                                 (
                                                 (
                                                         if ((dir.vector.y != 0 && mc.player?.velocity?.horizontalLengthSquared()!! <= 0.01))
-                                                            mc.player?.yaw!!.toDouble()
+                                                            mc.player?.yaw?.toDouble()!!
                                                         else
                                                             RotationUtil.getYaw(
                                                                 if (offsetGoalYaw.value || dir.vector.y != 0)
@@ -228,7 +228,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     }
                 }
                 if (lastRotation != null) {
-                    event.rotation = lastRotation!!.correctSensitivity()
+                    event.rotation = lastRotation?.correctSensitivity()!!
                 } else {
                     val rad =
                         Math.toRadians(mc.player?.yaw?.toDouble()!! + 90.0 + if (offsetGoalYaw.value) goalYaw.value else 0.0)
@@ -257,16 +257,16 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     return@Consumer
 
                 if (target != null && RotationUtil.fakeRotation != null) {
-                    val airBelow = mc.world?.isAir(BlockPos(mc.player?.pos!!.add(0.0, -1.0, 0.0)))!!
+                    val airBelow = mc.world?.isAir(BlockPos(mc.player?.pos?.add(0.0, -1.0, 0.0)))!!
                     if (airBelow || alwaysClick.value) {
                         val newEdgeDist = getNewEdgeDist()
                         val rotationVector = (mc.player as IEntity).invokeGetRotationVector(
-                            RotationUtil.fakeRotation!!.pitch,
-                            RotationUtil.fakeRotation!!.yaw
+                            RotationUtil.fakeRotation?.pitch!!,
+                            RotationUtil.fakeRotation?.yaw!!
                         )
                         val hitResult = PlayerUtil.rayCast(
                             mc.player?.eyePos!!,
-                            mc.player?.eyePos!!.add(rotationVector.multiply(mc.interactionManager?.reachDistance!!.toDouble()))
+                            mc.player?.eyePos?.add(rotationVector.multiply(mc.interactionManager?.reachDistance?.toDouble()!!))!!
                         )
                         val clicks = clickSpeedUtil.getClicks()
                         val prevSlot = mc.player?.inventory?.selectedSlot
@@ -298,9 +298,9 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                             } else return@Consumer
                         } else if (!hasBlock) return@Consumer
                         if (airBelow && (round(
-                                Vec3d.ofCenter(target!!.first).subtract(mc.player?.pos!!)
-                                    .multiply(Vec3d.of(target!!.second.vector)).horizontalLengthSquared() * 100
-                            ) / 100.0 in (newEdgeDist * newEdgeDist)..1.0 || target!!.second.vector.y != 0)
+                                Vec3d.ofCenter(target?.first).subtract(mc.player?.pos!!)
+                                    .multiply(Vec3d.of(target?.second?.vector)).horizontalLengthSquared() * 100
+                            ) / 100.0 in (newEdgeDist * newEdgeDist)..1.0 || target?.second?.vector?.y != 0)
                         ) {
                             for (hand in Hand.values()) {
                                 val stack = mc.player?.getStackInHand(hand)
@@ -310,7 +310,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                             placeBlock(hitResult)
                                             timeUtil.reset()
 
-                                            if (target!!.second.vector.y == 0) {
+                                            if (target?.second?.vector?.y == 0) {
                                                 if (edgeIncrement.value && preventImpossibleEdge.value && prevEdgeDistance > newEdgeDist && mc.player?.isOnGround!!)
                                                     mc.player?.jump()
                                                 prevEdgeDistance = newEdgeDist
@@ -322,7 +322,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                 }
                             }
                         } else if (alwaysClick.value) {
-                            if (hitResult != null && (hitResult.side != target!!.second || hitResult.type != HitResult.Type.BLOCK)) {
+                            if (hitResult != null && (hitResult.side != target?.second || hitResult.type != HitResult.Type.BLOCK)) {
                                 for (i in 1..clicks)
                                     placeBlock(hitResult)
                             }
@@ -338,7 +338,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             }
             is EventKeyBindingIsPressed -> {
                 if (event.keyBinding == mc.options.keySneak && sneak.value && target != null && target?.second?.vector?.y!! == 0)
-                    event.pressed = mc.world?.isAir(BlockPos(mc.player?.pos!!.add(0.0, -1.0, 0.0)))!!
+                    event.pressed = mc.world?.isAir(BlockPos(mc.player?.pos?.add(0.0, -1.0, 0.0)))!!
             }
         }
     }

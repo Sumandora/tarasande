@@ -30,7 +30,7 @@ class PanelFixedEffects(x: Double, y: Double) : PanelFixed("Effects", x, y, 75.0
 				if (statusEffectInstance != null)
 					prevInstances[statusEffect] = statusEffectInstance
 				if (statusEffect != null) {
-					var string = I18n.translate(statusEffectInstance!!.effectType.translationKey)
+					var string = I18n.translate(statusEffectInstance?.effectType?.translationKey!!)
 					if (statusEffectInstance.amplifier in 1..9) {
 						string += " " + I18n.translate("enchantment.level." + (statusEffectInstance.amplifier + 1))
 					}

@@ -95,10 +95,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 	private val comparator: Comparator<Pair<Entity, Vec3d>> = Comparator.comparing {
 		when {
 			priority.isSelected(0) -> {
-				if (it.first is LivingEntity)
-					mc.player?.eyePos!!.squaredDistanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, it.first.boundingBox.expand(it.first.targetingMargin.toDouble())))
-				else
-					mc.player?.eyePos!!.squaredDistanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, it.first.boundingBox.expand(it.first.targetingMargin.toDouble())))
+				mc.player?.eyePos?.squaredDistanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, it.first.boundingBox.expand(it.first.targetingMargin.toDouble())))!!
 			}
 			priority.isSelected(1) -> {
 				if (it.first is LivingEntity)
@@ -113,7 +110,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 					0
 			}
 			priority.isSelected(3) -> {
-				RotationUtil.getRotations(mc.player?.eyePos!!, getBestAimPoint(it.first.boundingBox)).fov(Rotation(mc.player?.yaw!!, mc.player?.pitch!!))
+				RotationUtil.getRotations(mc.player?.eyePos!!, getBestAimPoint(it.first.boundingBox)).fov(Rotation(mc.player!!))
 			}
 			else -> 0.0
 		}.toDouble()
@@ -150,7 +147,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 					val bestAimPoint = getBestAimPoint(boundingBox)
 					if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue)
 						continue
-					if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(Rotation(mc.player?.yaw!!, mc.player?.pitch!!)) > fov.value)
+					if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(Rotation(mc.player!!)) > fov.value)
 						continue
 					// aim point calculation maybe slower, only run it if the range check is actually able to succeed under best conditions
 					val aimPoint = getAimPoint(boundingBox, entity) ?: continue
@@ -177,7 +174,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
 				val target = targets[0]
 
-				val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player?.yaw!!, mc.player?.pitch!!)
+				val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
 				val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, target.second)
 				val smoothedRot = currentRot.smoothedTurn(
 					targetRot,
@@ -377,7 +374,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 								box.minZ + (box.maxZ - box.minZ) * z
 							)
 							if (PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, vector)) {
-								val distSquared = mc.player?.eyePos!!.squaredDistanceTo(vector)
+								val distSquared = mc.player?.eyePos?.squaredDistanceTo(vector)!!
 								if (distSquared < distanceToVec) {
 									best = vector
 									distanceToVec = distSquared
@@ -396,13 +393,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 		}
 
 		if (rotations.isSelected(1)) {
-			var aimPoint = best!!.add(0.0, 0.0, 0.0) /* copy */
+			var aimPoint = best?.add(0.0, 0.0, 0.0)!! /* copy */
 
 			// TODO Don't turn inside enemies
 
 			// Humans always try to get to the middle
 			val center = box.center
-			val dist = MathUtil.getBias(mc.player?.eyePos!!.squaredDistanceTo(aimPoint) / (reach.maxValue * reach.maxValue) * (reach.minValue / reach.maxValue), 0.45) // I have no idea why this works and looks like it does, but it's good and why remove it then
+			val dist = MathUtil.getBias(mc.player?.eyePos?.squaredDistanceTo(aimPoint)!! / (reach.maxValue * reach.maxValue) * (reach.minValue / reach.maxValue), 0.45) // I have no idea why this works and looks like it does, but it's good and why remove it then
 			aimPoint = aimPoint.add(
 				(center.x - aimPoint.x) * min((1 - dist) * 1.2, 1.0),
 				(center.y - aimPoint.y) * (1 - dist) * 0.65 /* Humans dislike aiming up and down */,
@@ -431,9 +428,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 				)
 			}
 
-			var distToBest = mc.player?.eyePos!!.squaredDistanceTo(best)
+			var distToBest = mc.player?.eyePos?.squaredDistanceTo(best)!!
 			if (distToBest <= reach.minValue * reach.minValue) {
-				while (mc.player?.eyePos!!.squaredDistanceTo(aimPoint) > reach.minValue * reach.minValue)
+				while (mc.player?.eyePos?.squaredDistanceTo(aimPoint)!! > reach.minValue * reach.minValue)
 					aimPoint = Vec3d(
 						MathUtil.bringCloser(aimPoint.x, best.x, precision.value),
 						MathUtil.bringCloser(aimPoint.y, best.y, precision.value),

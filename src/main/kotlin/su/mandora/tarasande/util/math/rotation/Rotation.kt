@@ -1,6 +1,7 @@
 package su.mandora.tarasande.util.math.rotation
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.entity.Entity
 import net.minecraft.util.math.MathHelper
 import kotlin.math.round
 import kotlin.math.sqrt
@@ -8,6 +9,7 @@ import kotlin.math.sqrt
 class Rotation(var yaw: Float, var pitch: Float) {
 
 	constructor(other: Rotation) : this(other.yaw, other.pitch)
+	constructor(entity: Entity) : this(entity.yaw, entity.pitch)
 
 	companion object {
 		fun getGcd(): Double {
@@ -31,7 +33,7 @@ class Rotation(var yaw: Float, var pitch: Float) {
 	// I can't define prevRotation in the arguments because java wants to call it too
 
 	fun correctSensitivity(): Rotation {
-		return correctSensitivity(RotationUtil.fakeRotation ?: Rotation(MinecraftClient.getInstance().player?.yaw!!, MinecraftClient.getInstance().player?.pitch!!))
+		return correctSensitivity(RotationUtil.fakeRotation ?: Rotation(MinecraftClient.getInstance().player!!))
 	}
 
 	fun correctSensitivity(prevRotation: Rotation): Rotation {

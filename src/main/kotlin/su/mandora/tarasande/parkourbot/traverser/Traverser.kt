@@ -26,14 +26,14 @@ class Traverser(private val path: CopyOnWriteArrayList<BlockPos>) {
             return stop
         }
         val currentObstacle = path[0]
-        if(Vec3d.ofCenter(currentObstacle).subtract(MinecraftClient.getInstance().player!!.pos).horizontalLengthSquared() < 1.0) {
+        if(Vec3d.ofCenter(currentObstacle).subtract(MinecraftClient.getInstance().player?.pos).horizontalLengthSquared() < 1.0) {
             path.removeAt(0)
         }
 
         val collisionShape = MinecraftClient.getInstance().world?.getBlockState(currentObstacle)?.getCollisionShape(MinecraftClient.getInstance().world, currentObstacle)
         val aimPoint = Vec3d.of(currentObstacle).add(collisionShape?.getClosestPointTo(MinecraftClient.getInstance().player?.eyePos?.subtract(currentObstacle.x.toDouble(), currentObstacle.y.toDouble(), currentObstacle.z.toDouble()))?.get())
-        val rotations = RotationUtil.getRotations(MinecraftClient.getInstance().player!!.pos, aimPoint)
-        val yawDelta = MathHelper.wrapDegrees(rotations.yaw - MinecraftClient.getInstance().player!!.yaw)
+        val rotations = RotationUtil.getRotations(MinecraftClient.getInstance().player?.pos!!, aimPoint)
+        val yawDelta = MathHelper.wrapDegrees(rotations.yaw - MinecraftClient.getInstance().player?.yaw!!)
 
         when (state) {
             State.PREPARING -> {

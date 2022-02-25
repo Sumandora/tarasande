@@ -1,6 +1,7 @@
 package su.mandora.tarasande.screen.wheel
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.entity.Entity
 import net.minecraft.util.math.Vec2f
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
@@ -33,6 +34,7 @@ class WheelMenu {
     private val managerWheelTree = ManagerWheelTree()
     private var wheelTreeEntry: WheelTreeEntry? = null
     private var wheelTreeEntries = managerWheelTree.getEntries(wheelTreeEntry)!!
+    var entity: Entity? = null
 
     init {
         TarasandeMain.get().managerEvent?.add(Pair(1001, Consumer<Event> { event ->

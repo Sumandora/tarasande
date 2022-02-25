@@ -10,6 +10,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
+import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL13
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.module.ModuleCategory
@@ -93,7 +94,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 		val strength = round(animation * TarasandeMain.get().clientValues?.blurStrength?.value!!).toInt()
 		if(strength > 0) {
 			TarasandeMain.get().blur?.bind(true)
-			RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth!!.toDouble(), client?.window?.scaledHeight!!.toDouble(), -1)
+			RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
 			client?.framebuffer?.beginWrite(true)
 
 			if(animation != 1.0) { // Prevent it from recalculating every frame

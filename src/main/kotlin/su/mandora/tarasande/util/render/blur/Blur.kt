@@ -103,7 +103,7 @@ class Blur {
 		GL20.glUniform1i(cutoutShader.getUniformLocation("tex"), 1)
 		GL13.glActiveTexture(GL13.GL_TEXTURE1)
 		val texture1 = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D)
-		GlStateManager._bindTexture(last!!.colorAttachment)
+		GlStateManager._bindTexture(last?.colorAttachment!!)
 
 		GL20.glUniform2f(cutoutShader.getUniformLocation("resolution"), blurredFramebuffer.textureWidth.toFloat(), blurredFramebuffer.textureHeight.toFloat())
 

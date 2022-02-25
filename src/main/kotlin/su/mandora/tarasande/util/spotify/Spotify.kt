@@ -34,7 +34,7 @@ object Spotify {
 					}
 				}
 			}
-			lookupThread!!.start()
+			lookupThread?.start()
 		}
 
 		callbacks.add(spotifyCallback)

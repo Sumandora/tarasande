@@ -40,7 +40,7 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
 		}
 
 		matrices?.push()
-		RenderUtil.fill(matrices, x, y, x + panelWidth, y + MinecraftClient.getInstance().textRenderer.fontHeight, TarasandeMain.get().clientValues?.accentColor?.getColor()!!.rgb)
+		RenderUtil.fill(matrices, x, y, x + panelWidth, y + MinecraftClient.getInstance().textRenderer.fontHeight, TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
 		when (alignment) {
 			Alignment.LEFT -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + 1, y.toFloat() + 0.5F, -1)
 			Alignment.MIDDLE -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(title).toFloat() / 2.0F, y.toFloat() + 0.5F, -1)

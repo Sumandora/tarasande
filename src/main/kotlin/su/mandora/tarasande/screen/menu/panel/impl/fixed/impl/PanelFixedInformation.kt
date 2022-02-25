@@ -41,9 +41,9 @@ class PanelFixedInformation(x: Double, y: Double) : PanelFixed("Information", x,
 
 		for ((index, it) in text.withIndex()) {
 			when (alignment) {
-				Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat(), y.toFloat() + MinecraftClient.getInstance().textRenderer.fontHeight * (index + 1), TarasandeMain.get().clientValues?.accentColor?.getColor()!!.rgb)
-				Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat() / 2.0f, y.toFloat() + MinecraftClient.getInstance().textRenderer.fontHeight * (index + 1), TarasandeMain.get().clientValues?.accentColor?.getColor()!!.rgb)
-				Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat(), y.toFloat() + MinecraftClient.getInstance().textRenderer.fontHeight * (index + 1), TarasandeMain.get().clientValues?.accentColor?.getColor()!!.rgb)
+				Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat(), y.toFloat() + MinecraftClient.getInstance().textRenderer.fontHeight * (index + 1), TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
+				Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat() / 2.0f, y.toFloat() + MinecraftClient.getInstance().textRenderer.fontHeight * (index + 1), TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
+				Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat(), y.toFloat() + MinecraftClient.getInstance().textRenderer.fontHeight * (index + 1), TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
 			}
 		}
 	}

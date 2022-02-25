@@ -44,7 +44,7 @@ class ScreenBetterEnvironment(prevScreen: Screen?, private val environment: Envi
             addDrawableChild(it)
         }
 
-        for((index, environmentPreset) in TarasandeMain.get().screens?.betterScreenAccountManager?.managerEnvironment?.list!!.withIndex()) {
+        for((index, environmentPreset) in TarasandeMain.get().screens?.betterScreenAccountManager?.managerEnvironment?.list?.withIndex()!!) {
             this.addDrawableChild(ButtonWidget(this.width - 100 * (index + 1), 0, 100, 20, Text.of(environmentPreset.name)) {
                 authHostTextField?.text = environmentPreset.authHost
                 accountsHostTextField?.text = environmentPreset.accountsHost

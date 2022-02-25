@@ -42,7 +42,7 @@ class ScreenBetterAccount(
 		addDrawableChild(ButtonWidget(width - 200, 0, 100, 20, Text.of("Environment")) { client?.setScreen(ScreenBetterEnvironment(this, environment) { environment = it }) })
 
 		addDrawableChild(ButtonWidget(width - 100, 0, 100, 20, Text.of((implementationClass.annotations[0] as AccountInfo).name)) { button ->
-			implementationClass = TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list!![(TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list!!.indexOf(implementationClass) + 1) % TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list!!.size]
+			implementationClass = TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list!![(TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list?.indexOf(implementationClass)!! + 1) % TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list?.size!!]
 			init()
 			button.message = Text.of(implementationClass.name)
 		})
@@ -53,7 +53,7 @@ class ScreenBetterAccount(
 				constructor = c
 			}
 		}
-		val parameters = constructor!!.parameters
+		val parameters = constructor?.parameters!!
 		for (i in parameters.indices) {
 			val parameterType = parameters[i]
 			if (parameterType.isAnnotationPresent(TextFieldInfo::class.java)) {

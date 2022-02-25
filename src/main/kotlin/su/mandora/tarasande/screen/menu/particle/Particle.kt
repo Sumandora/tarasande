@@ -16,8 +16,8 @@ class Particle(private var x: Double, private var y: Double) {
 	private var yMotion: Double = 0.0
 
 	private var point = Vec2f(
-		ThreadLocalRandom.current().nextDouble(MinecraftClient.getInstance().window?.scaledWidth!!.toDouble()).toFloat(),
-		ThreadLocalRandom.current().nextDouble(MinecraftClient.getInstance().window?.scaledHeight!!.toDouble()).toFloat()
+		ThreadLocalRandom.current().nextDouble(MinecraftClient.getInstance().window?.scaledWidth?.toDouble()!!).toFloat(),
+		ThreadLocalRandom.current().nextDouble(MinecraftClient.getInstance().window?.scaledHeight?.toDouble()!!).toFloat()
 	)
 
 	fun render(matrices: MatrixStack?, mouseX: Double, mouseY: Double, animation: Double) {

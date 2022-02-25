@@ -18,7 +18,7 @@ class ReflectorClass(private val clazz: Class<*>) {
 	}
 
 	fun newInstance(vararg arguments: Any?): ReflectorAny? {
-		val constructor = clazz.getConstructor(*arguments.map { it!!.javaClass }.toTypedArray()) ?: return null
+		val constructor = clazz.getConstructor(*arguments.map { it?.javaClass }.toTypedArray()) ?: return null
 		return ReflectorAny(constructor.newInstance(*arguments))
 	}
 

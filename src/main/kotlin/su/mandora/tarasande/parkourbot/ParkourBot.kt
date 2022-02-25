@@ -48,7 +48,7 @@ class ParkourBot {
                     GL11.glDepthMask(false)
                     event.matrices.push()
                     val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
-                    event.matrices.translate(-vec3d!!.x, -vec3d.y, -vec3d.z)
+                    event.matrices.translate(-vec3d.x, -vec3d.y, -vec3d.z)
                     val bufferBuilder = Tessellator.getInstance().buffer
                     RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
                     bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
@@ -83,9 +83,9 @@ class ParkourBot {
         if(active) {
             stop()
         }
-        startRotation = Rotation(MinecraftClient.getInstance().player!!.yaw, MinecraftClient.getInstance().player!!.pitch)
+        startRotation = Rotation(MinecraftClient.getInstance().player!!)
         active = true
-        var currentPos = MinecraftClient.getInstance().player?.blockPos!!.add(0, -1, 0)
+        var currentPos = MinecraftClient.getInstance().player?.blockPos?.add(0, -1, 0)!!
         var found = true
         if(MinecraftClient.getInstance().world?.isAir(currentPos)!!) {
             found = false
@@ -120,7 +120,7 @@ class ParkourBot {
                 }
             }
         }, "Parkour-Bot-AsynchronousTaskCompleter")
-        asynchronousTaskCompleter!!.start()
+        asynchronousTaskCompleter?.start()
     }
 
     fun stop() {
@@ -128,7 +128,7 @@ class ParkourBot {
             active = false
             tasks.clear()
             if(asynchronousTaskCompleter != null)
-                asynchronousTaskCompleter!!.stop()
+                asynchronousTaskCompleter?.stop()
             MinecraftClient.getInstance().player?.input = KeyboardInput(MinecraftClient.getInstance().options)
         }
     }

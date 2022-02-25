@@ -14,7 +14,7 @@ public class MixinWindow {
     public void hookedGlfwWindowHint(int hint, int value) {
         if (hint == 139265 && value == 196609)
             GLFW.glfwWindowHint(139265, 196609);
-        if (hint == 139275 && value == 221185)
+        if (hint == 139275 && value == 221185) // the same actually lol
             GLFW.glfwWindowHint(139275, 221185);
         if (hint == 139266 && value == 3)
             GLFW.glfwWindowHint(139266, 2);
