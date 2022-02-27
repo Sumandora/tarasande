@@ -73,6 +73,8 @@ class PanelFixedUkraineWar(x: Double, y: Double) : PanelFixed("Ukraine war", x, 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         var index = 1.0
         for (it in news) {
+            if(!animations.containsKey(it))
+                continue
             val animation = animations[it]!!
             val accent = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
             val alpha = (animation * 255 - (index-1) * 10).toInt()
