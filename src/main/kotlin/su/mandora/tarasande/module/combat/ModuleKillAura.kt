@@ -3,6 +3,7 @@ package su.mandora.tarasande.module.combat
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.passive.PassiveEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
@@ -15,9 +16,7 @@ import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
-import su.mandora.tarasande.event.EventKeyBindingIsPressed
-import su.mandora.tarasande.event.EventPollEvents
-import su.mandora.tarasande.event.EventUpdate
+import su.mandora.tarasande.event.*
 import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity
 import su.mandora.tarasande.mixin.accessor.IKeyBinding
 import su.mandora.tarasande.mixin.accessor.ILivingEntity
@@ -223,10 +222,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 				event.minRotateToOriginSpeed = aimSpeed.minValue
 				event.maxRotateToOriginSpeed = aimSpeed.maxValue
 			}
-			is EventUpdate -> {
-				if (event.state != EventUpdate.State.PRE)
-					return@Consumer
-
+			is EventAttack -> {
 				clicked = false
 
 				if (targets.isEmpty()) {
@@ -295,7 +291,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 							}
 					}
 				}
-				if (targets.isNotEmpty() && (!waitForHit) && !mc.player?.isUsingItem!! && !blockMode.isSelected(0)) {
+				if (targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && (!waitForHit) && !mc.player?.isUsingItem!! && !blockMode.isSelected(0)) {
 					var canBlock = true
 					if (blockCheckMode.isSelected(0)) {
 						val stack = mc.player?.getStackInHand(Hand.OFF_HAND)
@@ -327,11 +323,10 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 							event.pressed = true
 						}
 					}
-					mc.options.keyAttack -> {
-						if(clicked)
-							event.pressed = true
-					}
 				}
+			}
+			is EventHandleBlockBreaking -> {
+				event.parameter = event.parameter || clicked
 			}
 		}
 	}

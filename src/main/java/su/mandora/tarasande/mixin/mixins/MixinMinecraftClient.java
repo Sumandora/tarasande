@@ -19,9 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.TarasandeMain;
 import su.mandora.tarasande.base.screen.accountmanager.account.Account;
-import su.mandora.tarasande.event.EventResolutionUpdate;
-import su.mandora.tarasande.event.EventTick;
-import su.mandora.tarasande.event.EventTimeTravel;
+import su.mandora.tarasande.event.*;
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient;
 import su.mandora.tarasande.module.render.ModuleESP;
 import su.mandora.tarasande.screen.Screens;
@@ -58,6 +56,8 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
 
     @Shadow
     protected abstract void doAttack();
+
+    @Shadow protected abstract void handleBlockBreaking(boolean bl);
 
     @Inject(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;profiler:Lnet/minecraft/util/profiler/Profiler;", ordinal = 0, shift = At.Shift.BEFORE))
     public void injectPreInit(final RunArgs args, final CallbackInfo ci) {
@@ -133,6 +133,18 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
         }
     }
 
+    @Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z", shift = At.Shift.BEFORE, ordinal = 0))
+    public void injectHandleInputEvents(CallbackInfo ci) {
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventAttack());
+    }
+
+    @Redirect(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;handleBlockBreaking(Z)V"))
+    public void hookedHandleBlockBreaking(MinecraftClient instance, boolean bl) {
+        EventHandleBlockBreaking eventHandleBlockBreaking = new EventHandleBlockBreaking(bl);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventHandleBlockBreaking);
+        ((IMinecraftClient) instance).invokeHandleBlockBreaking(eventHandleBlockBreaking.getParameter());
+    }
+
     @Overwrite
     public MinecraftSessionService getSessionService() {
         final Screens screens = TarasandeMain.Companion.get().getScreens();
@@ -173,5 +185,10 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Override
     public RenderTickCounter getRenderTickCounter() {
         return renderTickCounter;
+    }
+
+    @Override
+    public void invokeHandleBlockBreaking(boolean bl) {
+        handleBlockBreaking(bl);
     }
 }

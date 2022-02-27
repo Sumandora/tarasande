@@ -13,7 +13,6 @@ import java.util.function.Consumer
 class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attacking", ModuleCategory.MOVEMENT) {
 
     private val horizontalSlowdown = ValueNumber(this, "Horizontal slowdown", 0.0, 1.0, 1.0, 0.1)
-    private val verticalSlowdown = ValueNumber(this, "Vertical slowdown", 0.0, 1.0, 1.0, 0.1)
     private val unsprint = ValueBoolean(this, "Unsprint", false)
 
     private var prevVelocity: Vec3d? = null
@@ -24,8 +23,9 @@ class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attackin
                 prevVelocity = mc.player?.velocity
             }
             is EventKeepSprint -> {
-                event.sprinting = event.sprinting && unsprint.value
-                mc.player?.velocity = prevVelocity?.multiply(horizontalSlowdown.value, verticalSlowdown.value, horizontalSlowdown.value)
+                if(!unsprint.value)
+                    event.sprinting = true
+                mc.player?.velocity = prevVelocity?.multiply(horizontalSlowdown.value, 1.0, horizontalSlowdown.value)
             }
         }
     }

@@ -5,17 +5,21 @@ import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
+import su.mandora.tarasande.event.EventAttack
 import su.mandora.tarasande.event.EventAttackEntity
 import su.mandora.tarasande.event.EventTimeTravel
 import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
 import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueKeyBind
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
 import kotlin.math.max
+import kotlin.math.round
+import kotlin.math.roundToInt
 
 class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts minecraft's tick base", ModuleCategory.MISC) {
 
@@ -49,12 +53,11 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
                         max(0L, (shifted - (event.entity.hurtTime * ((mc as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime)).toLong())
                 }
             }
-            is EventUpdate -> {
-                if(event.state == EventUpdate.State.PRE) {
-                    if(shifted < prevShifted)
+            is EventAttack -> { // Aura sync
+                if(shifted < prevShifted)
+                    for(i in 0..(1000.0 / RenderUtil.deltaTime).roundToInt())
                         RotationUtil.updateFakeRotation()
-                    prevShifted = shifted
-                }
+                prevShifted = shifted
             }
             is EventTimeTravel -> {
                 if (mc.player != null) {

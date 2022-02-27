@@ -23,7 +23,8 @@ public class MixinPlayerEntity {
     public void hookedSetSprinting(PlayerEntity instance, boolean b) {
         EventKeepSprint eventKeepSprint = new EventKeepSprint(b);
         TarasandeMain.Companion.get().getManagerEvent().call(eventKeepSprint);
-        instance.setSprinting(eventKeepSprint.getSprinting());
+        if(!eventKeepSprint.getSprinting())
+            instance.setSprinting(b);
     }
 
 }

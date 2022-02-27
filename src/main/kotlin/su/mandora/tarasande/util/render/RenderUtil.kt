@@ -11,7 +11,7 @@ import kotlin.math.*
 
 object RenderUtil {
 
-    var deltaTime: Double = 0.0
+    var deltaTime = 0.0
 
     fun isHovered(mouseX: Double, mouseY: Double, left: Double, up: Double, right: Double, bottom: Double): Boolean {
         return mouseX > left && mouseY > up && mouseX < right && mouseY < bottom

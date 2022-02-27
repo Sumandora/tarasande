@@ -46,7 +46,6 @@
 - Clear buffers immediately in Blink/Latency
 - Fix Screen attackCooldown
 - Stop using Thread.stop
-- PanelFixedSpotify: cut off when width is hit
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

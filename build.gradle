@@ -27,6 +27,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+
 	implementation 'net.sourceforge.htmlunit:htmlunit:2.59.0-SNAPSHOT'
 }
 

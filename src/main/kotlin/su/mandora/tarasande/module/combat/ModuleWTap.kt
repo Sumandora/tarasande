@@ -2,10 +2,12 @@ package su.mandora.tarasande.module.combat
 
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket
 import su.mandora.tarasande.base.event.Event
+import su.mandora.tarasande.base.event.Priority
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventAttackEntity
 import su.mandora.tarasande.event.EventKeyBindingIsPressed
+import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
@@ -24,12 +26,18 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
         mc.options.keyRight
     )
 
-    var lastAttack = -1
+    var changeBinds = false
 
+    @Priority(1001) // KillAura
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
+            is EventUpdate -> {
+                if(event.state == EventUpdate.State.POST) {
+                    changeBinds = false
+                }
+            }
             is EventAttackEntity -> {
-                lastAttack = mc.player?.age!!
+                changeBinds = true
                 if (mode.isSelected(2)) {
                     if(mc.player?.isSprinting!!)
                         mc.networkHandler?.sendPacket(ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SPRINTING))
@@ -46,17 +54,15 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
                 }
             }
             is EventKeyBindingIsPressed -> {
-                if(lastAttack > mc.player?.age!!)
-                    lastAttack = -1
-                if(mc.player?.age!! == lastAttack) {
-                    when {
-                        mode.isSelected(0) -> {
-                            if(movementKeys.contains(event.keyBinding))
+                if(movementKeys.contains(event.keyBinding)) {
+                    if(changeBinds) {
+                        when {
+                            mode.isSelected(0) -> {
                                 event.pressed = false
-                        }
-                        mode.isSelected(1) -> {
-                            if(movementKeys.contains(event.keyBinding))
+                            }
+                            mode.isSelected(1) -> {
                                 event.pressed = !event.pressed
+                            }
                         }
                     }
                 }

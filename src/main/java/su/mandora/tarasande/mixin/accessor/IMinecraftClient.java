@@ -13,4 +13,6 @@ public interface IMinecraftClient {
     void invokeDoAttack();
 
     RenderTickCounter getRenderTickCounter();
+
+    void invokeHandleBlockBreaking(boolean bl);
 }
