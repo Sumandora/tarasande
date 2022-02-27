@@ -17,6 +17,7 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots"}
 }
 
 dependencies {
@@ -26,6 +27,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+	implementation 'net.sourceforge.htmlunit:htmlunit:2.59.0-SNAPSHOT'
 }
 
 processResources {
