@@ -54,7 +54,7 @@ object RenderUtil {
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR)
         var quarterCircle = 0.5f
-        while(quarterCircle <= 0.75f) {
+        while (quarterCircle <= 0.75f) {
             bufferBuilder.vertex(matrix, (x1 + round + round * cos(quarterCircle * PI * 2)).toFloat(), (y1 + round + round * sin(quarterCircle * PI * 2)).toFloat(), 0.0f).color(g, h, k, f).next()
             quarterCircle += 0.025f
         }
@@ -208,7 +208,7 @@ object RenderUtil {
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
         var circle = 0.0
-        while(circle <= 1.01) {
+        while (circle <= 1.01) {
             bufferBuilder.vertex(matrix, (x - sin(circle * PI * 2) * radius).toFloat(), (y + cos(circle * PI * 2) * radius).toFloat(), 0.0f).color(g, h, k, f).next()
             circle += 0.01
         }
@@ -235,7 +235,7 @@ object RenderUtil {
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR)
         var circle = 0.0
-        while(circle <= 1.01) {
+        while (circle <= 1.01) {
             bufferBuilder.vertex(matrix, (x - sin(circle * PI * 2) * radius).toFloat(), (y + cos(circle * PI * 2) * radius).toFloat(), 0.0f).color(g, h, k, f).next()
             circle += 0.01
         }
@@ -262,20 +262,18 @@ object RenderUtil {
         val green = (hex shr 8 and 0xFF) / 255.0f
         val blue = (hex shr 0 and 0xFF) / 255.0f
 
-        for(formatting in Formatting.values()) {
-            if(formatting.colorValue == null) continue
+        for (formatting in Formatting.values()) {
+            if (formatting.colorValue == null) continue
 
             val otherRed = (formatting.colorValue!! shr 16 and 0xFF) / 255.0f
             val otherGreen = (formatting.colorValue!! shr 8 and 0xFF) / 255.0f
             val otherBlue = (formatting.colorValue!! shr 0 and 0xFF) / 255.0f
 
-            val diff = sqrt(
-                (otherRed - red).toDouble().pow(2.0) * 0.2126 +
-                (otherGreen - green).toDouble().pow(2.0) * 0.7152 +
-                (otherBlue - blue).toDouble().pow(2.0) * 0.0722
-            )
+            val diff = (otherRed - red).toDouble().pow(2.0) * 0.2126 +
+                    (otherGreen - green).toDouble().pow(2.0) * 0.7152 +
+                    (otherBlue - blue).toDouble().pow(2.0) * 0.0722
 
-            if(bestFormatting == null || bestDiff > diff) {
+            if (bestFormatting == null || bestDiff > diff) {
                 bestFormatting = formatting
                 bestDiff = diff
             }

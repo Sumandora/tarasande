@@ -34,8 +34,8 @@ class ParkourBot {
 
     init {
         TarasandeMain.get().managerEvent?.add { event ->
-            if(event is EventRender3D) {
-                if(active && pathBuilder != null) {
+            if (event is EventRender3D) {
+                if (active && pathBuilder != null) {
                     GL11.glEnable(GL11.GL_BLEND)
                     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
                     GL11.glDisable(GL11.GL_CULL_FACE)
@@ -50,7 +50,7 @@ class ParkourBot {
                     bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
                     val matrix = event.matrices.peek()?.positionMatrix!!
                     for (vec in pathBuilder?.path!!) {
-                        bufferBuilder.vertex(matrix, vec.x.toFloat() + 0.5f, vec.y.toFloat() + 1.0f, vec.z.toFloat() + 0.5f).color(1f,1f,1f,1f).next()
+                        bufferBuilder.vertex(matrix, vec.x.toFloat() + 0.5f, vec.y.toFloat() + 1.0f, vec.z.toFloat() + 0.5f).color(1f, 1f, 1f, 1f).next()
                     }
                     bufferBuilder.end()
                     BufferRenderer.draw(bufferBuilder)
@@ -60,13 +60,13 @@ class ParkourBot {
                     GL11.glEnable(GL11.GL_DEPTH_TEST)
                     GL11.glDepthMask(true)
                 }
-            } else if(event is EventUpdate && event.state == EventUpdate.State.PRE) {
-                if(active) {
+            } else if (event is EventUpdate && event.state == EventUpdate.State.PRE) {
+                if (active) {
                     movement = traverser?.updateMovement()
                     MinecraftClient.getInstance().player?.input = movement?.input
                 }
-            } else if(event is EventPollEvents) {
-                if(active && movement != null && movement?.aimPoint != null) {
+            } else if (event is EventPollEvents) {
+                if (active && movement != null && movement?.aimPoint != null) {
                     event.rotation = RotationUtil.getRotations(MinecraftClient.getInstance().player?.eyePos!!, movement?.aimPoint!!).correctSensitivity()
                     MinecraftClient.getInstance().player?.yaw = event.rotation.yaw
                     MinecraftClient.getInstance().player?.pitch = event.rotation.pitch
@@ -76,19 +76,19 @@ class ParkourBot {
     }
 
     fun start(goal: Goal) {
-        if(active) {
+        if (active) {
             stop()
         }
         startRotation = Rotation(MinecraftClient.getInstance().player!!)
         active = true
         var currentPos = MinecraftClient.getInstance().player?.blockPos?.add(0, -1, 0)!!
         var found = true
-        if(MinecraftClient.getInstance().world?.isAir(currentPos)!!) {
+        if (MinecraftClient.getInstance().world?.isAir(currentPos)!!) {
             found = false
-            for(x in -1..1) {
-                for(y in -1..1) {
-                    for(z in -1..1) {
-                        if(!found && !MinecraftClient.getInstance().world?.isAir(currentPos.add(x, y, z))!!) {
+            for (x in -1..1) {
+                for (y in -1..1) {
+                    for (z in -1..1) {
+                        if (!found && !MinecraftClient.getInstance().world?.isAir(currentPos.add(x, y, z))!!) {
                             currentPos = currentPos.add(x, y, z)
                             found = true
                         }
@@ -96,7 +96,7 @@ class ParkourBot {
                 }
             }
         }
-        if(!found) {
+        if (!found) {
             return
         }
         pathBuilder = PathBuilder(currentPos, goal)
@@ -106,9 +106,9 @@ class ParkourBot {
                 Thread.sleep(10) // Slow down a bit
             }
         })
-        asynchronousTaskCompleter = Thread( {
-            while(true) {
-                if(tasks.isNotEmpty()) {
+        asynchronousTaskCompleter = Thread({
+            while (true) {
+                if (tasks.isNotEmpty()) {
                     tasks.forEach {
                         it.run()
                     }
@@ -120,10 +120,10 @@ class ParkourBot {
     }
 
     fun stop() {
-        if(active) {
+        if (active) {
             active = false
             tasks.clear()
-            if(asynchronousTaskCompleter != null)
+            if (asynchronousTaskCompleter != null)
                 asynchronousTaskCompleter?.stop()
             MinecraftClient.getInstance().player?.input = KeyboardInput(MinecraftClient.getInstance().options)
         }

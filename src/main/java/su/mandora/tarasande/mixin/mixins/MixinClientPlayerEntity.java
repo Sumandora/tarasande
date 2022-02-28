@@ -102,7 +102,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         boolean flying = getAbilities().flying;
         float flySpeed = getAbilities().getFlySpeed();
 
-        if(cachedEventVanillaFlight.getDirty()) {
+        if (cachedEventVanillaFlight.getDirty()) {
             getAbilities().flying = cachedEventVanillaFlight.getFlying();
             getAbilities().setFlySpeed(cachedEventVanillaFlight.getFlightSpeed());
         }

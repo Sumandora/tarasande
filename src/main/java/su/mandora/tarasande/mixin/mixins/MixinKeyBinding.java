@@ -16,9 +16,11 @@ public class MixinKeyBinding implements IKeyBinding {
     @Shadow
     private int timesPressed;
 
-    @Shadow private InputUtil.Key boundKey;
+    @Shadow
+    private InputUtil.Key boundKey;
 
-    @Shadow private boolean pressed;
+    @Shadow
+    private boolean pressed;
 
     @Inject(method = "isPressed", at = @At("RETURN"), cancellable = true)
     public void injectIsPressed(CallbackInfoReturnable<Boolean> cir) {

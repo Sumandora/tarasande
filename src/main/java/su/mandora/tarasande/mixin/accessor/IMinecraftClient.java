@@ -7,9 +7,11 @@ public interface IMinecraftClient {
     void setSession(Session session);
 
     int getAttackCooldown();
+
     void setAttackCooldown(int attackCooldown);
 
     void invokeDoItemUse();
+
     void invokeDoAttack();
 
     RenderTickCounter getRenderTickCounter();

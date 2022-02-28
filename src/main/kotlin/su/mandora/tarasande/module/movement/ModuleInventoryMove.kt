@@ -16,33 +16,33 @@ import java.util.function.Consumer
 
 class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
 
-	private val canceledPackets = ValueMode(this, "Canceled packets", true, "Open", "Close")
+    private val canceledPackets = ValueMode(this, "Canceled packets", true, "Open", "Close")
 
-	private val keybinding = listOf(
-		mc.options.keyForward,
-		mc.options.keyLeft,
-		mc.options.keyBack,
-		mc.options.keyRight,
-		mc.options.keyJump
-	)
+    private val keybinding = listOf(
+        mc.options.keyForward,
+        mc.options.keyLeft,
+        mc.options.keyBack,
+        mc.options.keyRight,
+        mc.options.keyJump
+    )
 
-	val eventConsumer = Consumer<Event> { event ->
-		when (event) {
-			is EventPacket -> {
-				if(event.type == EventPacket.Type.SEND) {
-					when {
-						canceledPackets.isSelected(0) && event.packet is ClientCommandC2SPacket && event.packet.mode == ClientCommandC2SPacket.Mode.OPEN_INVENTORY -> event.setCancelled()
-						canceledPackets.isSelected(1) && event.packet is CloseHandledScreenC2SPacket && event.packet.syncId == 0 /* PlayerScreenHandler hardcoded in parent constructor call */ -> event.setCancelled()
-					}
-				}
-			}
-			is EventKeyBindingIsPressed -> {
-				if(isPassingEvents())
-					if(keybinding.contains(event.keyBinding))
-						event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, (event.keyBinding as IKeyBinding).boundKey.code)
-			}
-		}
-	}
+    val eventConsumer = Consumer<Event> { event ->
+        when (event) {
+            is EventPacket -> {
+                if (event.type == EventPacket.Type.SEND) {
+                    when {
+                        canceledPackets.isSelected(0) && event.packet is ClientCommandC2SPacket && event.packet.mode == ClientCommandC2SPacket.Mode.OPEN_INVENTORY -> event.setCancelled()
+                        canceledPackets.isSelected(1) && event.packet is CloseHandledScreenC2SPacket && event.packet.syncId == 0 /* PlayerScreenHandler hardcoded in parent constructor call */ -> event.setCancelled()
+                    }
+                }
+            }
+            is EventKeyBindingIsPressed -> {
+                if (isPassingEvents())
+                    if (keybinding.contains(event.keyBinding))
+                        event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, (event.keyBinding as IKeyBinding).boundKey.code)
+            }
+        }
+    }
 
-	fun isPassingEvents() = (enabled && (mc.currentScreen is HandledScreen<*> || mc.currentScreen is ScreenMenu)) || (mc.currentScreen == null || mc.currentScreen?.passEvents!!)
+    fun isPassingEvents() = (enabled && (mc.currentScreen is HandledScreen<*> || mc.currentScreen is ScreenMenu)) || (mc.currentScreen == null || mc.currentScreen?.passEvents!!)
 }

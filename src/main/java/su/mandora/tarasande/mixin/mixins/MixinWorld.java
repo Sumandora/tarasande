@@ -10,7 +10,9 @@ import su.mandora.tarasande.mixin.accessor.IWorld;
 @Mixin(World.class)
 public abstract class MixinWorld implements IWorld {
     @Mutable
-    @Shadow @Final public boolean isClient;
+    @Shadow
+    @Final
+    public boolean isClient;
 
     @Override
     public void setIsClient(boolean isClient) {

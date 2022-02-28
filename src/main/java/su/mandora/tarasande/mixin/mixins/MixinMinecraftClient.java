@@ -57,26 +57,27 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Shadow
     protected abstract void doAttack();
 
-    @Shadow protected abstract void handleBlockBreaking(boolean bl);
+    @Shadow
+    protected abstract void handleBlockBreaking(boolean bl);
 
     @Inject(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;profiler:Lnet/minecraft/util/profiler/Profiler;", ordinal = 0, shift = At.Shift.BEFORE))
-    public void injectPreInit(final RunArgs args, final CallbackInfo ci) {
+    public void injectPreInit(RunArgs args, CallbackInfo ci) {
         TarasandeMain.Companion.get().onPreLoad();
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    public void injectPostInit(final RunArgs args, final CallbackInfo ci) {
+    public void injectPostInit(RunArgs args, CallbackInfo ci) {
         TarasandeMain.Companion.get().onLateLoad();
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
-    public void injectPreTick(final CallbackInfo ci) {
+    public void injectPreTick(CallbackInfo ci) {
         TarasandeMain.Companion.get().getManagerEvent().call(new EventTick(EventTick.State.PRE));
         prevAttackCooldown = attackCooldown;
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    public void injectPostTick(final CallbackInfo ci) {
+    public void injectPostTick(CallbackInfo ci) {
         TarasandeMain.Companion.get().getManagerEvent().call(new EventTick(EventTick.State.POST));
     }
 
@@ -86,27 +87,27 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     }
 
     @Inject(method = "stop", at = @At("HEAD"))
-    public void injectStop(final CallbackInfo ci) {
+    public void injectStop(CallbackInfo ci) {
         TarasandeMain.Companion.get().onUnload();
     }
 
     @Inject(method = "onResolutionChanged", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;resize(IIZ)V", shift = At.Shift.AFTER))
-    public void injectOnResolutionChanged(final CallbackInfo ci) {
+    public void injectOnResolutionChanged(CallbackInfo ci) {
         TarasandeMain.Companion.get().getManagerEvent().call(new EventResolutionUpdate((float) this.window.getFramebufferWidth(), (float) this.window.getFramebufferHeight()));
     }
 
     @Inject(method = "render", at = @At("HEAD"))
-    public void injectPreRender(final boolean tick, final CallbackInfo ci) {
+    public void injectPreRender(boolean tick, CallbackInfo ci) {
         this.startTime = System.nanoTime();
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    public void injectPostRender(final boolean tick, final CallbackInfo ci) {
+    public void injectPostRender(boolean tick, CallbackInfo ci) {
         RenderUtil.INSTANCE.setDeltaTime((System.nanoTime() - this.startTime) / 1000000.0);
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
-    public int hookedMin(final int a, final int b) {
+    public int hookedMin(int a, int b) {
         if (TarasandeMain.Companion.get().getClientValues().getUnlockTicksPerFrame().getValue()) {
             return b;
         }
@@ -121,8 +122,9 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     }
 
     @Redirect(method = "hasOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isGlowing()Z"))
-    public boolean hookedIsGlowing(final Entity entity) {
-        return TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class).getEnabled() || entity.isGlowing();
+    public boolean hookedIsGlowing(Entity entity) {
+        ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class);
+        return (moduleESP.getEnabled() && moduleESP.filter(entity)) || entity.isGlowing();
     }
 
     @Inject(method = "createUserApiService", at = @At("HEAD"), cancellable = true)
@@ -158,7 +160,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     }
 
     @Override
-    public void setSession(final Session session) {
+    public void setSession(Session session) {
         this.session = session;
     }
 
@@ -168,7 +170,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     }
 
     @Override
-    public void setAttackCooldown(final int attackCooldown) {
+    public void setAttackCooldown(int attackCooldown) {
         this.attackCooldown = attackCooldown;
     }
 

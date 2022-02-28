@@ -46,6 +46,8 @@
 - Clear buffers immediately in Blink/Latency
 - Fix Screen attackCooldown
 - Stop using Thread.stop
+- KillAura: Don't turn inside enemies
+- Configure ESP
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

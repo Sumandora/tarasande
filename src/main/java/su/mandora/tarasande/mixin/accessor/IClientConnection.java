@@ -5,5 +5,6 @@ import net.minecraft.network.Packet;
 
 public interface IClientConnection {
     Channel getChannel();
+
     void forceSend(Packet<?> packet);
 }

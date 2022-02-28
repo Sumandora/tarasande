@@ -21,7 +21,7 @@ class AccountYggdrasil(
 
     private var service: MinecraftSessionService? = null
 
-    constructor(): this("", "")
+    constructor() : this("", "")
 
     override fun logIn() {
         val authenticationService = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment)
@@ -35,7 +35,7 @@ class AccountYggdrasil(
         }
     }
 
-    override fun getDisplayName() = if(session != null) session?.username!! else username
+    override fun getDisplayName() = if (session != null) session?.username!! else username
 
     override fun getSessionService() = this.service
 

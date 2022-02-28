@@ -12,7 +12,6 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
 import su.mandora.tarasande.TarasandeMain
-import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.screen.menu.panel.Alignment
 import su.mandora.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import su.mandora.tarasande.util.render.RenderUtil
@@ -42,14 +41,14 @@ class PanelFixedUkraineWar(x: Double, y: Double) : PanelFixed("Ukraine war", x, 
             webClient.cssErrorHandler = SilentCssErrorHandler()
             webClient.javaScriptErrorListener = SilentJavaScriptErrorListener()
 
-            while(true) {
-                if(!opened) {
+            while (true) {
+                if (!opened) {
                     Thread.sleep(1000)
                     continue
                 }
 
                 val p = webClient.getPage<HtmlPage>("https://liveuamap.com/")
-                if(p.asNormalizedText().contains("Your IP")) {
+                if (p.asNormalizedText().contains("Your IP")) {
                     // cloudflare
                     Thread.sleep(1000)
                     continue
@@ -57,7 +56,7 @@ class PanelFixedUkraineWar(x: Double, y: Double) : PanelFixed("Ukraine war", x, 
                 try {
                     val feedler = p.getByXPath<HtmlElement>("//*[@id=\"feedler\"]")[0]
                     news.clear()
-                    for(child in feedler.childNodes)
+                    for (child in feedler.childNodes)
                         news.add(child.asNormalizedText())
                 } catch (t: Throwable) {
                     t.printStackTrace()
@@ -73,26 +72,26 @@ class PanelFixedUkraineWar(x: Double, y: Double) : PanelFixed("Ukraine war", x, 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         var index = 1.0
         for (it in news) {
-            if(!animations.containsKey(it))
+            if (!animations.containsKey(it))
                 continue
             val animation = animations[it]!!
             val accent = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
-            val alpha = (animation * 255 - (index-1) * 10).toInt()
-            if(alpha <= 0) break
+            val alpha = (animation * 255 - (index - 1) * 10).toInt()
+            if (alpha <= 0) break
 
             val color = Color(accent.red, accent.green, accent.blue, alpha)
             RenderSystem.enableBlend()
             it.split("\n").forEach {
                 var it = it
                 val parts = ArrayList<String>()
-                while(MinecraftClient.getInstance().textRenderer.getWidth(it) > 300) {
+                while (MinecraftClient.getInstance().textRenderer.getWidth(it) > 300) {
                     val str = MinecraftClient.getInstance().textRenderer.trimToWidth(it, 300)
                     parts.add(str)
                     it = it.substring(str.length)
                 }
-                if(it.isNotEmpty())
+                if (it.isNotEmpty())
                     parts.add(it)
-                for(it in parts) {
+                for (it in parts) {
                     when (alignment) {
                         Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it, (x - (MinecraftClient.getInstance().textRenderer.getWidth(it) * (1.0 - animation))).toFloat(), (y + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
                         Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat() / 2.0f, (y + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)

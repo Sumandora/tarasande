@@ -11,7 +11,9 @@ import su.mandora.tarasande.mixin.accessor.IRenderTickCounter;
 public class MixinRenderTickCounter implements IRenderTickCounter {
 
     @Mutable
-    @Shadow @Final private float tickTime;
+    @Shadow
+    @Final
+    private float tickTime;
 
     @Override
     public float getTickTime() {

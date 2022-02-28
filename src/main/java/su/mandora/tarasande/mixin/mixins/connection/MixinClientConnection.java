@@ -22,7 +22,8 @@ public abstract class MixinClientConnection implements IClientConnection {
     @Shadow
     private Channel channel;
 
-    @Shadow public abstract void send(Packet<?> packet);
+    @Shadow
+    public abstract void send(Packet<?> packet);
 
     private static boolean interceptSend = true;
 
@@ -36,7 +37,7 @@ public abstract class MixinClientConnection implements IClientConnection {
 
     @Inject(method = "send(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V", at = @At("HEAD"), cancellable = true)
     public void injectSend(Packet<?> packet, @Nullable GenericFutureListener<? extends Future<? super Void>> callback, CallbackInfo ci) {
-        if(interceptSend) {
+        if (interceptSend) {
             EventPacket eventPacket = new EventPacket(EventPacket.Type.SEND, packet);
             TarasandeMain.Companion.get().getManagerEvent().call(eventPacket);
             if (eventPacket.getCancelled())

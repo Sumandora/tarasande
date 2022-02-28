@@ -4,5 +4,6 @@ import net.minecraft.client.util.InputUtil;
 
 public interface IKeyBinding {
     void setTimesPressed(int timesPressed);
+
     InputUtil.Key getBoundKey();
 }

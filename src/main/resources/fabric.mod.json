@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "tarasande",
   "version": "${version}",
-
   "name": "tarasande",
   "description": "Tarasande is a fabric mod designed to enhance and improve gameplay",
   "authors": [
@@ -13,7 +12,6 @@
   },
   "license": "All rights reserved",
   "icon": "assets/tarasande/icon.png",
-
   "environment": "client",
   "entrypoints": {
     "main": [

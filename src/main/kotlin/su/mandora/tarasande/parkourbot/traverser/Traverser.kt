@@ -18,11 +18,11 @@ class Traverser(private val path: CopyOnWriteArrayList<BlockPos>) {
     private var traversingDidJump = false
 
     fun updateMovement(): Movement {
-        if(path.size < 5 /* Little buffer */) {
+        if (path.size < 5 /* Little buffer */) {
             return stop
         }
         val currentObstacle = path[0]
-        if(Vec3d.ofCenter(currentObstacle).subtract(MinecraftClient.getInstance().player?.pos).horizontalLengthSquared() < 1.0) {
+        if (Vec3d.ofCenter(currentObstacle).subtract(MinecraftClient.getInstance().player?.pos).horizontalLengthSquared() < 1.0) {
             path.removeAt(0)
         }
 
@@ -33,15 +33,15 @@ class Traverser(private val path: CopyOnWriteArrayList<BlockPos>) {
 
         when (state) {
             State.PREPARING -> {
-                if((isOnEdge() || MinecraftClient.getInstance().player?.horizontalCollision!!)) {
+                if ((isOnEdge() || MinecraftClient.getInstance().player?.horizontalCollision!!)) {
                     state = State.TRAVERSING
                 }
                 traversingTicks = 0
                 traversingDidJump = false
             }
             State.TRAVERSING -> {
-                if(MinecraftClient.getInstance().player?.isOnGround!!) {
-                    if(traversingDidJump && (abs(yawDelta) > 15.0 || MinecraftClient.getInstance().player?.horizontalSpeed!! <= 0.24)) {
+                if (MinecraftClient.getInstance().player?.isOnGround!!) {
+                    if (traversingDidJump && (abs(yawDelta) > 15.0 || MinecraftClient.getInstance().player?.horizontalSpeed!! <= 0.24)) {
                         state = State.PREPARING
                     }
                 } else {
@@ -53,7 +53,7 @@ class Traverser(private val path: CopyOnWriteArrayList<BlockPos>) {
 
         val input = object : Input() {
             init {
-                when(state) {
+                when (state) {
                     State.PREPARING -> {
                         this.pressingBack = true
                         this.movementForward = -0.3f
@@ -72,9 +72,9 @@ class Traverser(private val path: CopyOnWriteArrayList<BlockPos>) {
     }
 
     fun isOnEdge() =
-        MinecraftClient.getInstance().world?.isSpaceEmpty(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.boundingBox?.offset(MinecraftClient.getInstance().player?.velocity?.x!!,  -MinecraftClient.getInstance().player?.stepHeight?.toDouble()!!, MinecraftClient.getInstance().player?.velocity?.z!!))!! ||
-        MinecraftClient.getInstance().world?.isSpaceEmpty(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.boundingBox?.offset(0.0, -MinecraftClient.getInstance().player?.stepHeight?.toDouble()!!, MinecraftClient.getInstance().player?.velocity?.z!!))!! ||
-        MinecraftClient.getInstance().world?.isSpaceEmpty(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.boundingBox?.offset(MinecraftClient.getInstance().player?.velocity?.x!!,  -MinecraftClient.getInstance().player?.stepHeight?.toDouble()!!, 0.0))!!
+        MinecraftClient.getInstance().world?.isSpaceEmpty(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.boundingBox?.offset(MinecraftClient.getInstance().player?.velocity?.x!!, -MinecraftClient.getInstance().player?.stepHeight?.toDouble()!!, MinecraftClient.getInstance().player?.velocity?.z!!))!! ||
+                MinecraftClient.getInstance().world?.isSpaceEmpty(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.boundingBox?.offset(0.0, -MinecraftClient.getInstance().player?.stepHeight?.toDouble()!!, MinecraftClient.getInstance().player?.velocity?.z!!))!! ||
+                MinecraftClient.getInstance().world?.isSpaceEmpty(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.boundingBox?.offset(MinecraftClient.getInstance().player?.velocity?.x!!, -MinecraftClient.getInstance().player?.stepHeight?.toDouble()!!, 0.0))!!
 
     enum class State {
         PREPARING, TRAVERSING

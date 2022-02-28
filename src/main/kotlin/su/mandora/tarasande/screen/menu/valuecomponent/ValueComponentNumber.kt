@@ -16,71 +16,71 @@ import kotlin.math.min
 
 class ValueComponentNumber(value: Value) : ValueComponent(value) {
 
-	private val dragInfo = DragInfo()
+    private val dragInfo = DragInfo()
 
-	override fun init() {
-	}
+    override fun init() {
+    }
 
-	override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-		matrices?.push()
-		matrices?.translate(0.0, getHeight() / 2.0, 0.0)
-		matrices?.scale(0.5F, 0.5F, 1.0F)
-		matrices?.translate(0.0, -getHeight() / 2.0, 0.0)
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), -1)
-		matrices?.pop()
+    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        matrices?.push()
+        matrices?.translate(0.0, getHeight() / 2.0, 0.0)
+        matrices?.scale(0.5F, 0.5F, 1.0F)
+        matrices?.translate(0.0, -getHeight() / 2.0, 0.0)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), -1)
+        matrices?.pop()
 
-		val valueNumber = value as ValueNumber
+        val valueNumber = value as ValueNumber
 
-		if (dragInfo.dragging) {
-			val mousePos = mouseX - (width - 50)
-			val increment = BigDecimal(valueNumber.increment)
-			// hacky
-			val string = BigDecimal(valueNumber.min).add(((BigDecimal(mousePos).divide(BigDecimal(50.0))).multiply(BigDecimal(valueNumber.max).subtract(BigDecimal(valueNumber.min))))).divide(increment, 0, RoundingMode.HALF_UP).multiply(increment).toPlainString()
-			// even more hacky
-			valueNumber.value = MathHelper.clamp(java.lang.Double.parseDouble(string.substring(0..min(string.length - 1, 7))), valueNumber.min, valueNumber.max)
-			if (valueNumber.value == -0.0) valueNumber.value = 0.0 // bruh
-			valueNumber.onChange()
-		}
+        if (dragInfo.dragging) {
+            val mousePos = mouseX - (width - 50)
+            val increment = BigDecimal(valueNumber.increment)
+            // hacky
+            val string = BigDecimal(valueNumber.min).add(((BigDecimal(mousePos).divide(BigDecimal(50.0))).multiply(BigDecimal(valueNumber.max).subtract(BigDecimal(valueNumber.min))))).divide(increment, 0, RoundingMode.HALF_UP).multiply(increment).toPlainString()
+            // even more hacky
+            valueNumber.value = MathHelper.clamp(java.lang.Double.parseDouble(string.substring(0..min(string.length - 1, 7))), valueNumber.min, valueNumber.max)
+            if (valueNumber.value == -0.0) valueNumber.value = 0.0 // bruh
+            valueNumber.onChange()
+        }
 
-		val sliderPos = (valueNumber.value - valueNumber.min) / (valueNumber.max - valueNumber.min)
-		val accentColor = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
+        val sliderPos = (valueNumber.value - valueNumber.min) / (valueNumber.max - valueNumber.min)
+        val accentColor = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
 
-		RenderUtil.fillHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width - (1.0 - sliderPos) * 50, getHeight() * 0.75, Color(255, 255, 255, 255 / 4).rgb, Color(accentColor.red, accentColor.green, accentColor.blue, 255 / 4).rgb)
-		RenderUtil.outlinedHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2.0F, Color.white.rgb, TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
+        RenderUtil.fillHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width - (1.0 - sliderPos) * 50, getHeight() * 0.75, Color(255, 255, 255, 255 / 4).rgb, Color(accentColor.red, accentColor.green, accentColor.blue, 255 / 4).rgb)
+        RenderUtil.outlinedHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2.0F, Color.white.rgb, TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
 
-		matrices?.push()
-		matrices?.translate(width - 50 / 2, getHeight() / 2.0, 0.0)
-		matrices?.scale(0.5F, 0.5F, 1.0F)
-		matrices?.translate(-(width - 50 / 2), -getHeight() / 2.0, 0.0)
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.value.toString(), (width - 50 / 2.0F - MinecraftClient.getInstance().textRenderer.getWidth(value.value.toString()) / 2.0F).toFloat(), (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), -1)
-		matrices?.pop()
-	}
+        matrices?.push()
+        matrices?.translate(width - 50 / 2, getHeight() / 2.0, 0.0)
+        matrices?.scale(0.5F, 0.5F, 1.0F)
+        matrices?.translate(-(width - 50 / 2), -getHeight() / 2.0, 0.0)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.value.toString(), (width - 50 / 2.0F - MinecraftClient.getInstance().textRenderer.getWidth(value.value.toString()) / 2.0F).toFloat(), (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), -1)
+        matrices?.pop()
+    }
 
-	override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-		if (RenderUtil.isHovered(mouseX, mouseY, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {
-			dragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
-			return true
-		}
-		return false
-	}
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (RenderUtil.isHovered(mouseX, mouseY, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {
+            dragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
+            return true
+        }
+        return false
+    }
 
-	override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int) {
-		dragInfo.setDragInfo(false, 0.0, 0.0)
-	}
+    override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int) {
+        dragInfo.setDragInfo(false, 0.0, 0.0)
+    }
 
-	override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double) = false
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double) = false
 
-	override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int) = false
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int) = false
 
-	override fun charTyped(chr: Char, modifiers: Int) {
-	}
+    override fun charTyped(chr: Char, modifiers: Int) {
+    }
 
-	override fun tick() {
-	}
+    override fun tick() {
+    }
 
-	override fun onClose() {
-		dragInfo.setDragInfo(false, 0.0, 0.0)
-	}
+    override fun onClose() {
+        dragInfo.setDragInfo(false, 0.0, 0.0)
+    }
 
-	override fun getHeight() = MinecraftClient.getInstance().textRenderer.fontHeight * 2.0
+    override fun getHeight() = MinecraftClient.getInstance().textRenderer.fontHeight * 2.0
 }

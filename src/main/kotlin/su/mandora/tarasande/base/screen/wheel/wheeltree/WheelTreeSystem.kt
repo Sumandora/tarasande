@@ -41,16 +41,16 @@ class ManagerWheelTree : Manager<WheelTreeEntry>() {
     }
 
     fun getEntries(wheelTreeEntry: WheelTreeEntry?): Array<WheelTreeEntry>? {
-        if(wheelTreeEntry == null) return list.toTypedArray()
+        if (wheelTreeEntry == null) return list.toTypedArray()
         return iterateEntries(list.toTypedArray(), wheelTreeEntry)
     }
 
     private fun iterateEntries(wheelTreeEntries: Array<WheelTreeEntry>, searchedItem: WheelTreeEntry): Array<WheelTreeEntry>? {
-        for(wheelTreeEntry in wheelTreeEntries) {
-            if(searchedItem == wheelTreeEntry) return (wheelTreeEntry as WheelTreeSubMenu).subMenus
-            if(wheelTreeEntry is WheelTreeSubMenu) {
+        for (wheelTreeEntry in wheelTreeEntries) {
+            if (searchedItem == wheelTreeEntry) return (wheelTreeEntry as WheelTreeSubMenu).subMenus
+            if (wheelTreeEntry is WheelTreeSubMenu) {
                 val subMenuEntries = iterateEntries(wheelTreeEntry.subMenus, searchedItem)
-                if(subMenuEntries != null) return subMenuEntries
+                if (subMenuEntries != null) return subMenuEntries
             }
         }
         return null

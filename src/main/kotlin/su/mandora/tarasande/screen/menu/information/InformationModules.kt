@@ -15,9 +15,9 @@ class InformationTimeShifted : Information("Tick base manipulation", "Time shift
     private val moduleTickBaseManipulation = TarasandeMain.get().managerModule?.get(ModuleTickBaseManipulation::class.java)!!
 
     override fun getMessage(): String? {
-        if(!moduleTickBaseManipulation.enabled)
+        if (!moduleTickBaseManipulation.enabled)
             return null
-        if(moduleTickBaseManipulation.shifted == 0L)
+        if (moduleTickBaseManipulation.shifted == 0L)
             return null
         return moduleTickBaseManipulation.shifted.toString() + " (" + floor(moduleTickBaseManipulation.shifted / ((MinecraftClient.getInstance() as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime).toInt() + ")"
     }
@@ -27,15 +27,15 @@ class InformationSimulatedDamage : Information("Kill aura", "Simulated Damage") 
     override fun getMessage(): String? {
         val killAura = TarasandeMain.get().managerModule?.get(ModuleKillAura::class.java)!!
         val targets = killAura.targets
-        if(!killAura.enabled || targets.isEmpty())
+        if (!killAura.enabled || targets.isEmpty())
             return null
         val list = ArrayList<String>()
-        for(target in targets)
-            if(target.first is LivingEntity) {
+        for (target in targets)
+            if (target.first is LivingEntity) {
                 val entName = target.first.name.asString()
-                list.add((if(entName.trim().isEmpty()) target.first.javaClass.simpleName else entName) + " " + PlayerUtil.simulateAttack(target.first as LivingEntity))
+                list.add((if (entName.trim().isEmpty()) target.first.javaClass.simpleName else entName) + " " + PlayerUtil.simulateAttack(target.first as LivingEntity))
             }
-        if(list.isEmpty())
+        if (list.isEmpty())
             return null
         return "\n" + list.joinToString("\n")
     }

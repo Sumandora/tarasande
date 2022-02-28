@@ -14,16 +14,18 @@ import su.mandora.tarasande.event.EventMouseDelta;
 @Mixin(Mouse.class)
 public class MixinMouse {
 
-    @Shadow private double cursorDeltaX;
+    @Shadow
+    private double cursorDeltaX;
 
-    @Shadow private double cursorDeltaY;
+    @Shadow
+    private double cursorDeltaY;
 
     @Inject(method = "onMouseButton", at = @At("HEAD"), cancellable = true)
     public void injectOnMouseButton(long window, int button, int action, int mods, CallbackInfo ci) {
-        if(action == GLFW.GLFW_PRESS) {
+        if (action == GLFW.GLFW_PRESS) {
             EventMouse eventMouse = new EventMouse(button);
             TarasandeMain.Companion.get().getManagerEvent().call(eventMouse);
-            if(eventMouse.getCancelled())
+            if (eventMouse.getCancelled())
                 ci.cancel();
         }
     }

@@ -8,19 +8,20 @@ import net.minecraft.network.Packet
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.util.math.rotation.Rotation
+import java.awt.Color
 
 class EventChat(val chatMessage: String) : Event(true)
 class EventKey(val key: Int) : Event(true)
 class EventUpdate(val state: State) : Event(false) {
-	enum class State {
-		PRE, PRE_PACKET, POST
-	}
+    enum class State {
+        PRE, PRE_PACKET, POST
+    }
 }
 
 class EventTick(val state: State) : Event(false) {
-	enum class State {
-		PRE, POST
-	}
+    enum class State {
+        PRE, POST
+    }
 }
 
 class EventResolutionUpdate(val width: Float, val height: Float) : Event(false)
@@ -29,42 +30,42 @@ class EventScreenRender(val matrices: MatrixStack) : Event(false)
 class EventRender3D(val matrices: MatrixStack) : Event(false)
 
 class EventRenderEntity(val entity: Entity, val state: State) : Event(false) {
-	enum class State {
-		PRE, POST
-	}
+    enum class State {
+        PRE, POST
+    }
 }
 
 class EventPacket(val type: Type, val packet: Packet<*>?) : Event(true) {
-	enum class Type {
-		SEND, RECEIVE
-	}
+    enum class Type {
+        SEND, RECEIVE
+    }
 }
 
 class EventPollEvents : Event {
-	var rotation: Rotation
-		set(value) {
-			dirty = true
-			field = value
-		}
-	var dirty: Boolean
-	var minRotateToOriginSpeed: Double
-	var maxRotateToOriginSpeed: Double
+    var rotation: Rotation
+        set(value) {
+            dirty = true
+            field = value
+        }
+    var dirty: Boolean
+    var minRotateToOriginSpeed: Double
+    var maxRotateToOriginSpeed: Double
 
-	constructor(rotation: Rotation) : super(false) {
-		this.rotation = rotation
-		this.dirty = false
-		this.minRotateToOriginSpeed = 1.0
-		this.maxRotateToOriginSpeed = 1.0
-	}
+    constructor(rotation: Rotation) : super(false) {
+        this.rotation = rotation
+        this.dirty = false
+        this.minRotateToOriginSpeed = 1.0
+        this.maxRotateToOriginSpeed = 1.0
+    }
 }
 
 class EventVelocityYaw(var yaw: Float) : Event(false)
 class EventKeyBindingIsPressed(val keyBinding: KeyBinding, var pressed: Boolean) : Event(false)
 
 class EventVelocity(var velocityX: Double, var velocityY: Double, var velocityZ: Double, val packet: Packet) : Event(true) {
-	enum class Packet {
-		VELOCITY, EXPLOSION
-	}
+    enum class Packet {
+        VELOCITY, EXPLOSION
+    }
 }
 
 class EventInput(var movementForward: Float, var movementSideways: Float) : Event(false)
@@ -76,18 +77,18 @@ class EventSlowdownAmount(var slowdownAmount: Float) : Event(false)
 class EventIsEntityAttackable(val entity: Entity?, var attackable: Boolean) : Event(false)
 
 class EventVanillaFlight : Event {
-	var dirty: Boolean = false
-	var flying: Boolean
-		set(value) {
-			dirty = true
-			field = value
-		}
-	var flightSpeed: Float
+    var dirty: Boolean = false
+    var flying: Boolean
+        set(value) {
+            dirty = true
+            field = value
+        }
+    var flightSpeed: Float
 
-	constructor(flying: Boolean, flightSpeed: Float) : super(false) {
-		this.flying = flying
-		this.flightSpeed = flightSpeed
-	}
+    constructor(flying: Boolean, flightSpeed: Float) : super(false) {
+        this.flying = flying
+        this.flightSpeed = flightSpeed
+    }
 
 }
 
@@ -100,3 +101,4 @@ class EventMovementFovMultiplier(var movementFovMultiplier: Float) : Event(false
 class EventKeepSprint(var sprinting: Boolean) : Event(false)
 class EventAttack : Event(false)
 class EventHandleBlockBreaking(var parameter: Boolean) : Event(false)
+class EventEntityColor(val entity: Entity, var color: Color) : Event(false)

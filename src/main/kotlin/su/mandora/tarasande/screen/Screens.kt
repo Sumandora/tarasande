@@ -15,30 +15,30 @@ import su.mandora.tarasande.util.player.PlayerUtil
 
 class Screens {
 
-	val betterScreenAccountManager = ScreenBetterAccountManager()
-	val screenMenu = ScreenMenu()
-	private val wheelMenu = WheelMenu()
+    val betterScreenAccountManager = ScreenBetterAccountManager()
+    val screenMenu = ScreenMenu()
+    private val wheelMenu = WheelMenu()
 
-	init {
-		TarasandeMain.get().managerEvent?.add { event ->
-			if (event is EventKey) {
-				if (event.key == TarasandeMain.get().clientValues?.menuHotkey?.keyBind)
-					MinecraftClient.getInstance().setScreen(screenMenu)
-			} else if(event is EventMouse) {
-				if(MinecraftClient.getInstance().currentScreen == null)
-					if(event.button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
-						if(!wheelMenu.active) {
-							val hitResult = PlayerUtil.getTargetedEntity(100.0, Rotation(MinecraftClient.getInstance().player!!))
-							if(hitResult == null || hitResult.type != HitResult.Type.ENTITY || hitResult !is EntityHitResult)
-								wheelMenu.entity = null
-							else
-								wheelMenu.entity = hitResult.entity
-							wheelMenu.active = true
-						}
-						event.setCancelled()
-					}
-			}
-		}
-	}
+    init {
+        TarasandeMain.get().managerEvent?.add { event ->
+            if (event is EventKey) {
+                if (event.key == TarasandeMain.get().clientValues?.menuHotkey?.keyBind)
+                    MinecraftClient.getInstance().setScreen(screenMenu)
+            } else if (event is EventMouse) {
+                if (MinecraftClient.getInstance().currentScreen == null)
+                    if (event.button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
+                        if (!wheelMenu.active) {
+                            val hitResult = PlayerUtil.getTargetedEntity(100.0, Rotation(MinecraftClient.getInstance().player!!))
+                            if (hitResult == null || hitResult.type != HitResult.Type.ENTITY || hitResult !is EntityHitResult)
+                                wheelMenu.entity = null
+                            else
+                                wheelMenu.entity = hitResult.entity
+                            wheelMenu.active = true
+                        }
+                        event.setCancelled()
+                    }
+            }
+        }
+    }
 
 }

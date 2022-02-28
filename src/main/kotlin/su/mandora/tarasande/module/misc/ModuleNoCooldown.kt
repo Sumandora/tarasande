@@ -9,7 +9,7 @@ import java.util.function.Consumer
 class ModuleNoCooldown : Module("No cooldown", "Removes any cooldown from items", ModuleCategory.MISC) {
 
     val eventConsumer = Consumer<Event> { event ->
-        if(event is EventItemCooldown) {
+        if (event is EventItemCooldown) {
             event.cooldown = 0.0f
         }
     }

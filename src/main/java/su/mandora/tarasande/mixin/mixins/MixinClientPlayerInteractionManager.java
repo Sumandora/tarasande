@@ -26,7 +26,7 @@ public class MixinClientPlayerInteractionManager implements IClientPlayerInterac
 
     @Redirect(method = "interactItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;isCoolingDown(Lnet/minecraft/item/Item;)Z"))
     public boolean hookedIsCoolingDown(ItemCooldownManager itemCooldownManager, Item item) {
-        if(onlyPackets)
+        if (onlyPackets)
             return true;
         return itemCooldownManager.isCoolingDown(item);
     }

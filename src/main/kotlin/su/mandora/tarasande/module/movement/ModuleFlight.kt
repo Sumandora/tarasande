@@ -16,7 +16,7 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
     }
 
     val eventConsumer = Consumer<Event> { event ->
-        if(event is EventVanillaFlight && mode.isSelected(0)) {
+        if (event is EventVanillaFlight && mode.isSelected(0)) {
             event.flying = true
             event.flightSpeed *= flightSpeed.value.toFloat()
         }

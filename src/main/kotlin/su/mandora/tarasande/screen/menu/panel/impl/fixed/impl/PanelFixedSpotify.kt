@@ -21,7 +21,7 @@ class PanelFixedSpotify(x: Double, y: Double) : PanelFixed("Spotify", x, y, 75.0
 
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        if(currTrack == null) return
+        if (currTrack == null) return
 
         val accent = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
         RenderSystem.enableBlend()

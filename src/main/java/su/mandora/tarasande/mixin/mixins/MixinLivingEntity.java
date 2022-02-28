@@ -50,7 +50,8 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     @Shadow
     public abstract float getYaw(float tickDelta);
 
-    @Shadow protected int lastAttackedTicks;
+    @Shadow
+    protected int lastAttackedTicks;
 
     @Inject(method = "jump", at = @At("HEAD"))
     public void injectPreJump(CallbackInfo ci) {

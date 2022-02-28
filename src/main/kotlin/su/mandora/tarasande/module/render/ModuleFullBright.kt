@@ -8,9 +8,9 @@ import java.util.function.Consumer
 
 class ModuleFullBright : Module("Full bright", "Makes everything bright", ModuleCategory.RENDER) {
 
-	val eventConsumer = Consumer<Event> { event ->
-		if (event is EventGamma) {
-			event.gamma = Short.MAX_VALUE.toDouble()
-		}
-	}
+    val eventConsumer = Consumer<Event> { event ->
+        if (event is EventGamma) {
+            event.gamma = Short.MAX_VALUE.toDouble()
+        }
+    }
 }

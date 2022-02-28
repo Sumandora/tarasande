@@ -5,22 +5,22 @@ import su.mandora.tarasande.screen.menu.graph.*
 
 class ManagerGraph : Manager<Graph>() {
 
-	init {
-		add(
-			GraphFPS(),
-			GraphTPS(),
-			GraphCPS(),
-			GraphYawDelta(),
-			GraphPitchDelta(),
-			GraphMotion(),
-			GraphPing(),
-			GraphOnlinePlayers(),
-			GraphMemory()
-		)
-	}
+    init {
+        add(
+            GraphFPS(),
+            GraphTPS(),
+            GraphCPS(),
+            GraphYawDelta(),
+            GraphPitchDelta(),
+            GraphMotion(),
+            GraphPing(),
+            GraphOnlinePlayers(),
+            GraphMemory()
+        )
+    }
 }
 
 abstract class Graph(val name: String, val bufferLength: Int) {
-	fun isVisible() = true
-	abstract fun supplyData(): Number?
+    fun isVisible() = true
+    abstract fun supplyData(): Number?
 }

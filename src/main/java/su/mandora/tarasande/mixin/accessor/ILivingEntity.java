@@ -12,8 +12,10 @@ public interface ILivingEntity {
     double getServerPitch();
 
     int getBodyTrackingIncrements();
+
     void setBodyTrackingIncrements(int value);
 
     int getLastAttackedTicks();
+
     void setLastAttackedTicks(int lastAttackedTicks);
 }

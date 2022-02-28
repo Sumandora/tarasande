@@ -18,12 +18,12 @@ class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attackin
     private var prevVelocity: Vec3d? = null
 
     val eventConsumer = Consumer<Event> { event ->
-        when(event) {
+        when (event) {
             is EventAttackEntity -> {
                 prevVelocity = mc.player?.velocity
             }
             is EventKeepSprint -> {
-                if(!unsprint.value)
+                if (!unsprint.value)
                     event.sprinting = true
                 mc.player?.velocity = prevVelocity?.multiply(horizontalSlowdown.value, 1.0, horizontalSlowdown.value)
             }

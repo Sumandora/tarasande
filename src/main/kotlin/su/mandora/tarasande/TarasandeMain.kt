@@ -16,56 +16,56 @@ import su.mandora.tarasande.util.render.blur.Blur
 
 class TarasandeMain {
 
-	val name = "tarasande" // "lowercase gang" ~kennytv
+    val name = "tarasande" // "lowercase gang" ~kennytv
 
-	var managerEvent: ManagerEvent? = null
-	var managerFile: ManagerFile? = null
-	var managerValue: ManagerValue? = null
-	var clientValues: ClientValues? = null
-	var entityColor: EntityColor? = null
-	var managerClickMethod: ManagerClickMethod? = null
-	var managerModule: ManagerModule? = null
-	var blur: Blur? = null
-	var screens: Screens? = null
-	var parkourBot: ParkourBot? = null
+    var managerEvent: ManagerEvent? = null
+    var managerFile: ManagerFile? = null
+    var managerValue: ManagerValue? = null
+    var clientValues: ClientValues? = null
+    var entityColor: EntityColor? = null
+    var managerClickMethod: ManagerClickMethod? = null
+    var managerModule: ManagerModule? = null
+    var blur: Blur? = null
+    var screens: Screens? = null
+    var parkourBot: ParkourBot? = null
 
-	val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
+    val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
 
-	companion object {
-		private val instance: TarasandeMain = TarasandeMain()
+    companion object {
+        private val instance: TarasandeMain = TarasandeMain()
 
-		fun get(): TarasandeMain {
-			return instance
-		}
-	}
+        fun get(): TarasandeMain {
+            return instance
+        }
+    }
 
-	fun onPreLoad() {
-		managerEvent = ManagerEvent()
-	}
+    fun onPreLoad() {
+        managerEvent = ManagerEvent()
+    }
 
-	fun onLateLoad() {
-		managerFile = ManagerFile()
-		managerValue = ManagerValue()
-		clientValues = ClientValues()
-		entityColor = EntityColor()
-		managerClickMethod = ManagerClickMethod()
-		managerModule = ManagerModule()
-		blur = Blur()
-		screens = Screens() // Initializes ClickGUI (Make sure that modules and values are initialized before)
-		parkourBot = ParkourBot()
+    fun onLateLoad() {
+        managerFile = ManagerFile()
+        managerValue = ManagerValue()
+        clientValues = ClientValues()
+        entityColor = EntityColor()
+        managerClickMethod = ManagerClickMethod()
+        managerModule = ManagerModule()
+        blur = Blur()
+        screens = Screens() // Initializes ClickGUI (Make sure that modules and values are initialized before)
+        parkourBot = ParkourBot()
 
-		managerFile?.load()
+        managerFile?.load()
 
-		if(MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && screens?.betterScreenAccountManager?.mainAccount != -1) {
-			screens?.betterScreenAccountManager?.logIn(screens?.betterScreenAccountManager?.accounts!![screens?.betterScreenAccountManager?.mainAccount!!])
-			while(screens?.betterScreenAccountManager?.loginThread != null && screens?.betterScreenAccountManager?.loginThread?.isAlive!!)
-				Thread.sleep(50L) // synchronize
-			screens?.betterScreenAccountManager?.status = null
-		}
-	}
+        if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && screens?.betterScreenAccountManager?.mainAccount != -1) {
+            screens?.betterScreenAccountManager?.logIn(screens?.betterScreenAccountManager?.accounts!![screens?.betterScreenAccountManager?.mainAccount!!])
+            while (screens?.betterScreenAccountManager?.loginThread != null && screens?.betterScreenAccountManager?.loginThread?.isAlive!!)
+                Thread.sleep(50L) // synchronize
+            screens?.betterScreenAccountManager?.status = null
+        }
+    }
 
-	fun onUnload() {
-		managerFile?.save()
-	}
+    fun onUnload() {
+        managerFile?.save()
+    }
 
 }

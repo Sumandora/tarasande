@@ -23,139 +23,139 @@ import su.mandora.tarasande.util.math.rotation.RotationUtil
 
 object PlayerUtil {
 
-	fun isAttackable(entity: Entity?): Boolean {
-		var attackable = true
-		if (entity == null)
-			attackable = false
-		else if (entity !is LivingEntity)
-			attackable = false
-		else if (!TarasandeMain.get().clientValues?.targets?.isSelected(0)!! && entity is PlayerEntity)
-			attackable = false
-		else if(TarasandeMain.get().clientValues?.dontAttackTamedEntities?.value!! && entity is TameableEntity && entity.ownerUuid == MinecraftClient.getInstance().player?.uuid)
-			attackable = false
-		else if (!TarasandeMain.get().clientValues?.targets?.isSelected(1)!! && entity is AnimalEntity)
-			attackable = false
-		else if (!TarasandeMain.get().clientValues?.targets?.isSelected(2)!! && ((entity is MobEntity || entity is Monster) && entity !is AnimalEntity))
-			attackable = false
-		else if (!TarasandeMain.get().clientValues?.targets?.isSelected(3)!! && (entity !is PlayerEntity && entity !is AnimalEntity && entity !is MobEntity))
-			attackable = false
-		else if (entity == MinecraftClient.getInstance().player)
-			attackable = false
-		else if (entity.isDead)
-			attackable = false
+    fun isAttackable(entity: Entity?): Boolean {
+        var attackable = true
+        if (entity == null)
+            attackable = false
+        else if (entity !is LivingEntity)
+            attackable = false
+        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(0)!! && entity is PlayerEntity)
+            attackable = false
+        else if (TarasandeMain.get().clientValues?.dontAttackTamedEntities?.value!! && entity is TameableEntity && entity.ownerUuid == MinecraftClient.getInstance().player?.uuid)
+            attackable = false
+        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(1)!! && entity is AnimalEntity)
+            attackable = false
+        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(2)!! && ((entity is MobEntity || entity is Monster) && entity !is AnimalEntity))
+            attackable = false
+        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(3)!! && (entity !is PlayerEntity && entity !is AnimalEntity && entity !is MobEntity))
+            attackable = false
+        else if (entity == MinecraftClient.getInstance().player)
+            attackable = false
+        else if (entity.isDead)
+            attackable = false
 
-		val eventIsEntityAttackable = EventIsEntityAttackable(entity, attackable)
-		TarasandeMain.get().managerEvent?.call(eventIsEntityAttackable)
-		return eventIsEntityAttackable.attackable
-	}
+        val eventIsEntityAttackable = EventIsEntityAttackable(entity, attackable)
+        TarasandeMain.get().managerEvent?.call(eventIsEntityAttackable)
+        return eventIsEntityAttackable.attackable
+    }
 
-	fun getTargetedEntity(reach: Double, rotation: Rotation): HitResult? {
-		val gameRenderer = MinecraftClient.getInstance().gameRenderer
-		val accessor = (gameRenderer as IGameRenderer)
+    fun getTargetedEntity(reach: Double, rotation: Rotation): HitResult? {
+        val gameRenderer = MinecraftClient.getInstance().gameRenderer
+        val accessor = (gameRenderer as IGameRenderer)
 
-		val prevAllowThroughWalls = accessor.isAllowThroughWalls
-		val prevReach = accessor.reach
+        val prevAllowThroughWalls = accessor.isAllowThroughWalls
+        val prevReach = accessor.reach
 
-		accessor.isAllowThroughWalls = true
-		accessor.reach = reach
+        accessor.isAllowThroughWalls = true
+        accessor.reach = reach
 
-		val prevCrosshairTarget = MinecraftClient.getInstance().crosshairTarget
-		val prevTargetedEntity = MinecraftClient.getInstance().targetedEntity
+        val prevCrosshairTarget = MinecraftClient.getInstance().crosshairTarget
+        val prevTargetedEntity = MinecraftClient.getInstance().targetedEntity
 
-		val prevCameraEntity = MinecraftClient.getInstance().cameraEntity
-		MinecraftClient.getInstance().cameraEntity = MinecraftClient.getInstance().player // not using setter to avoid shader unloading, this is purely math, no rendering
+        val prevCameraEntity = MinecraftClient.getInstance().cameraEntity
+        MinecraftClient.getInstance().cameraEntity = MinecraftClient.getInstance().player // not using setter to avoid shader unloading, this is purely math, no rendering
 
-		val prevYaw = MinecraftClient.getInstance().player?.yaw!!
-		val prevPitch = MinecraftClient.getInstance().player?.pitch!!
+        val prevYaw = MinecraftClient.getInstance().player?.yaw!!
+        val prevPitch = MinecraftClient.getInstance().player?.pitch!!
 
-		MinecraftClient.getInstance().player?.yaw = rotation.yaw
-		MinecraftClient.getInstance().player?.pitch = rotation.pitch
+        MinecraftClient.getInstance().player?.yaw = rotation.yaw
+        MinecraftClient.getInstance().player?.pitch = rotation.pitch
 
-		val prevFakeRotation = RotationUtil.fakeRotation
-		RotationUtil.fakeRotation = null // prevent rotationvec override by mixin
+        val prevFakeRotation = RotationUtil.fakeRotation
+        RotationUtil.fakeRotation = null // prevent rotationvec override by mixin
 
-		gameRenderer.updateTargetedEntity(1.0f)
-		val hitResult = MinecraftClient.getInstance().crosshairTarget
+        gameRenderer.updateTargetedEntity(1.0f)
+        val hitResult = MinecraftClient.getInstance().crosshairTarget
 
-		RotationUtil.fakeRotation = prevFakeRotation
+        RotationUtil.fakeRotation = prevFakeRotation
 
-		MinecraftClient.getInstance().player?.yaw = prevYaw
-		MinecraftClient.getInstance().player?.pitch = prevPitch
+        MinecraftClient.getInstance().player?.yaw = prevYaw
+        MinecraftClient.getInstance().player?.pitch = prevPitch
 
-		MinecraftClient.getInstance().cameraEntity = prevCameraEntity
+        MinecraftClient.getInstance().cameraEntity = prevCameraEntity
 
-		MinecraftClient.getInstance().crosshairTarget = prevCrosshairTarget
-		MinecraftClient.getInstance().targetedEntity = prevTargetedEntity
+        MinecraftClient.getInstance().crosshairTarget = prevCrosshairTarget
+        MinecraftClient.getInstance().targetedEntity = prevTargetedEntity
 
-		accessor.reach = prevReach
-		accessor.isAllowThroughWalls = prevAllowThroughWalls
+        accessor.reach = prevReach
+        accessor.isAllowThroughWalls = prevAllowThroughWalls
 
-		return hitResult
-	}
+        return hitResult
+    }
 
-	fun simulateAttack(target: LivingEntity): Float {
-		val player = MinecraftClient.getInstance().player!!
-		val iLivingEntity = player as ILivingEntity
+    fun simulateAttack(target: LivingEntity): Float {
+        val player = MinecraftClient.getInstance().player!!
+        val iLivingEntity = player as ILivingEntity
 
-		val prevIsClient = MinecraftClient.getInstance().world?.isClient()!!
-		(MinecraftClient.getInstance().world as IWorld).setIsClient(false)
+        val prevIsClient = MinecraftClient.getInstance().world?.isClient()!!
+        (MinecraftClient.getInstance().world as IWorld).setIsClient(false)
 
-		val prevVelocity = player.velocity
+        val prevVelocity = player.velocity
 
-		val prevSprinting = player.isSprinting
+        val prevSprinting = player.isSprinting
 
-		val prevTicksSinceSprintingChanged = player.ticksSinceSprintingChanged
+        val prevTicksSinceSprintingChanged = player.ticksSinceSprintingChanged
 
-		val prevOnFire = target.isOnFire
+        val prevOnFire = target.isOnFire
 
-		val prevExhaustion = player.hungerManager.exhaustion
+        val prevExhaustion = player.hungerManager.exhaustion
 
-		val prevHurtTime = target.hurtTime
+        val prevHurtTime = target.hurtTime
 
-		val prevLastAttackedTicks = iLivingEntity.lastAttackedTicks
+        val prevLastAttackedTicks = iLivingEntity.lastAttackedTicks
 
-		val prevSelfHealth = player.health
+        val prevSelfHealth = player.health
 
-		val prevHealth = target.health
+        val prevHealth = target.health
 
-		player.attack(target)
-		val healthLoss = prevHealth - target.health
+        player.attack(target)
+        val healthLoss = prevHealth - target.health
 
-		target.health = prevHealth
+        target.health = prevHealth
 
-		player.health = prevSelfHealth
+        player.health = prevSelfHealth
 
-		iLivingEntity.lastAttackedTicks = prevLastAttackedTicks
+        iLivingEntity.lastAttackedTicks = prevLastAttackedTicks
 
-		target.hurtTime = prevHurtTime
+        target.hurtTime = prevHurtTime
 
-		player.hungerManager.exhaustion = prevExhaustion
+        player.hungerManager.exhaustion = prevExhaustion
 
-		target.isOnFire = prevOnFire
+        target.isOnFire = prevOnFire
 
-		player.ticksSinceSprintingChanged = prevTicksSinceSprintingChanged
+        player.ticksSinceSprintingChanged = prevTicksSinceSprintingChanged
 
-		player.isSprinting = prevSprinting
+        player.isSprinting = prevSprinting
 
-		player.velocity = prevVelocity
+        player.velocity = prevVelocity
 
-		(MinecraftClient.getInstance().world as IWorld).setIsClient(prevIsClient)
+        (MinecraftClient.getInstance().world as IWorld).setIsClient(prevIsClient)
 
-		return healthLoss
-	}
+        return healthLoss
+    }
 
-	fun rayCast(start: Vec3d, end: Vec3d) = MinecraftClient.getInstance().world?.raycast(RaycastContext(start, end, ShapeType.OUTLINE, FluidHandling.NONE, MinecraftClient.getInstance().player!!))
+    fun rayCast(start: Vec3d, end: Vec3d) = MinecraftClient.getInstance().world?.raycast(RaycastContext(start, end, ShapeType.OUTLINE, FluidHandling.NONE, MinecraftClient.getInstance().player!!))
 
-	fun canVectorBeSeen(start: Vec3d, end: Vec3d): Boolean {
-		val hitResult = rayCast(start, end)
-		return hitResult != null && hitResult.type != HitResult.Type.BLOCK
-	}
+    fun canVectorBeSeen(start: Vec3d, end: Vec3d): Boolean {
+        val hitResult = rayCast(start, end)
+        return hitResult != null && hitResult.type != HitResult.Type.BLOCK
+    }
 
-	fun getMoveDirection() =
-		Math.toRadians(
-			RotationUtil.getYaw(
-				if (MinecraftClient.getInstance().options.keyLeft.isPressed && MinecraftClient.getInstance().options.keyRight.isPressed) 0.0 else if (MinecraftClient.getInstance().options.keyLeft.isPressed) 1.0 else if (MinecraftClient.getInstance().options.keyRight.isPressed) -1.0 else 0.0,
-				if (MinecraftClient.getInstance().options.keyForward.isPressed && MinecraftClient.getInstance().options.keyBack.isPressed) 0.0 else if (MinecraftClient.getInstance().options.keyForward.isPressed) 1.0 else if (MinecraftClient.getInstance().options.keyBack.isPressed) -1.0 else 0.0
-			) + 90 + MinecraftClient.getInstance().player?.yaw!!
-		)
+    fun getMoveDirection() =
+        Math.toRadians(
+            RotationUtil.getYaw(
+                if (MinecraftClient.getInstance().options.keyLeft.isPressed && MinecraftClient.getInstance().options.keyRight.isPressed) 0.0 else if (MinecraftClient.getInstance().options.keyLeft.isPressed) 1.0 else if (MinecraftClient.getInstance().options.keyRight.isPressed) -1.0 else 0.0,
+                if (MinecraftClient.getInstance().options.keyForward.isPressed && MinecraftClient.getInstance().options.keyBack.isPressed) 0.0 else if (MinecraftClient.getInstance().options.keyForward.isPressed) 1.0 else if (MinecraftClient.getInstance().options.keyBack.isPressed) -1.0 else 0.0
+            ) + 90 + MinecraftClient.getInstance().player?.yaw!!
+        )
 }

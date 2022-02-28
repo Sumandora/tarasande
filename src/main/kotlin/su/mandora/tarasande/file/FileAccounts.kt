@@ -24,7 +24,7 @@ class FileAccounts : File("Accounts") {
 
     init {
         var hwid = SystemInfo().hardware.computerSystem.hardwareUUID
-        if(hwid.equals("unknown")) {
+        if (hwid.equals("unknown")) {
             // can't get hwid, use pre-specified one (worst security ever)
             hwid = fallbackKey
         }

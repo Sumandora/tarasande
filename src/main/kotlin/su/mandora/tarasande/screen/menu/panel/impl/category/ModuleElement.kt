@@ -54,7 +54,7 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
         RenderUtil.fillCircle(matrices, width - 7, defaultHeight / 2, radius * 4.0, TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
         RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0f, RenderUtil.colorInterpolate(TarasandeMain.get().clientValues?.accentColor?.getColor()!!, Color.white, radius).rgb)
 
-        if(components.isNotEmpty()) {
+        if (components.isNotEmpty()) {
             val expansionAnimation = min((System.currentTimeMillis() - expansionTime) / 100.0, 1.0)
             val expansion = if (expanded) expansionAnimation else 1.0 - expansionAnimation
 
@@ -85,10 +85,10 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
             GL11.glDisable(GL11.GL_LINE_SMOOTH)
             matrices.pop()
         }
-        if(expanded) {
+        if (expanded) {
             var yOffset = 0.0
-            for(component in components) {
-                if(component.value.isVisible()) {
+            for (component in components) {
+                if (component.value.isVisible()) {
                     matrices?.push()
                     matrices?.translate(5.0, this.defaultHeight + yOffset, 0.0)
                     component.width = width - 10.0
@@ -161,16 +161,16 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
     }
 
     override fun tick() {
-        for(component in components) {
-            if(component.value.isVisible()) {
+        for (component in components) {
+            if (component.value.isVisible()) {
                 component.tick()
             }
         }
     }
 
     override fun onClose() {
-        for(component in components) {
-            if(component.value.isVisible()) {
+        for (component in components) {
+            if (component.value.isVisible()) {
                 component.onClose()
             }
         }
@@ -178,8 +178,8 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
 
     override fun getHeight(): Double {
         var maxHeight = 0.0
-        for(component in components) {
-            if(component.value.isVisible()) {
+        for (component in components) {
+            if (component.value.isVisible()) {
                 maxHeight += component.getHeight()
             }
         }

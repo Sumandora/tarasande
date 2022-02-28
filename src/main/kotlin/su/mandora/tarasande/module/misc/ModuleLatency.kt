@@ -23,7 +23,7 @@ class ModuleLatency : Module("Latency", "Controls network latency", ModuleCatego
     private val latency = object : ValueNumber(this, "Latency", 0.0, 100.0, 1000.0, 1.0) {
         var prev = 0.0
         override fun onChange() {
-            if(value < prev)
+            if (value < prev)
                 onDisable()
             prev = value
         }
@@ -67,7 +67,7 @@ class ModuleLatency : Module("Latency", "Controls network latency", ModuleCatego
     }
 
     override fun onDisable() {
-        if(mc.networkHandler?.connection?.isOpen!!) {
+        if (mc.networkHandler?.connection?.isOpen!!) {
             for (triple in packets) {
                 when (triple.third) {
                     EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).forceSend(triple.second)

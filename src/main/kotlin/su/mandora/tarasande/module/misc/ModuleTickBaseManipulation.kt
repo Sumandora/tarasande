@@ -8,7 +8,6 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventAttack
 import su.mandora.tarasande.event.EventAttackEntity
 import su.mandora.tarasande.event.EventTimeTravel
-import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
 import su.mandora.tarasande.util.math.rotation.RotationUtil
@@ -18,7 +17,6 @@ import su.mandora.tarasande.value.ValueKeyBind
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
 import kotlin.math.max
-import kotlin.math.round
 import kotlin.math.roundToInt
 
 class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts minecraft's tick base", ModuleCategory.MISC) {
@@ -46,16 +44,16 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventAttackEntity -> {
-                if(event.entity is LivingEntity && rapidFire.value) {
-                    shifted = if(instantUncharge.value)
+                if (event.entity is LivingEntity && rapidFire.value) {
+                    shifted = if (instantUncharge.value)
                         0L
                     else
                         max(0L, (shifted - (event.entity.hurtTime * ((mc as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime)).toLong())
                 }
             }
             is EventAttack -> { // Aura sync
-                if(shifted < prevShifted)
-                    for(i in 0..(1000.0 / RenderUtil.deltaTime).roundToInt())
+                if (shifted < prevShifted)
+                    for (i in 0..(1000.0 / RenderUtil.deltaTime).roundToInt())
                         RotationUtil.updateFakeRotation()
                 prevShifted = shifted
             }
@@ -67,13 +65,13 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
                         if (resyncPositions.value) {
                             val iRenderTickCounter = (mc as IMinecraftClient).renderTickCounter as IRenderTickCounter
                             if (event.time - lastUpdate > iRenderTickCounter.tickTime) {
-                                for(i in 0..((event.time - lastUpdate) / iRenderTickCounter.tickTime).toInt()) {
+                                for (i in 0..((event.time - lastUpdate) / iRenderTickCounter.tickTime).toInt()) {
                                     for (entity in mc.world?.entities!!) {
                                         if (entity is LivingEntity && entity != mc.player) {
-    //                                        entity as ILivingEntity
-    //                                        entity.setPosition(entity.serverX, entity.serverY, entity.serverZ)
-    //                                        entity.yaw += MathHelper.wrapDegrees(entity.serverYaw.toFloat() - entity.getYaw())
-    //                                        entity.pitch = entity.serverPitch.toFloat()
+                                            //                                        entity as ILivingEntity
+                                            //                                        entity.setPosition(entity.serverX, entity.serverY, entity.serverZ)
+                                            //                                        entity.yaw += MathHelper.wrapDegrees(entity.serverYaw.toFloat() - entity.getYaw())
+                                            //                                        entity.pitch = entity.serverPitch.toFloat()
                                             entity.tick()
                                         }
                                     }
@@ -84,7 +82,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
                     }
                     prevTime = event.time
                     if (unchargeKey.isPressed())
-                        shifted = if(instantUncharge.value) 0L else max(0L, (shifted - unchargeSpeed.value).toLong())
+                        shifted = if (instantUncharge.value) 0L else max(0L, (shifted - unchargeSpeed.value).toLong())
                 } else {
                     shifted = 0L
                 }

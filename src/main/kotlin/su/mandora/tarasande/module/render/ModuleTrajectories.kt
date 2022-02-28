@@ -24,14 +24,14 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
     private fun formula(angle: Double, x: Double, v: Double, g: Double) = v * x * sin(angle) - 1 / 2 * g * (x * x)
 
     val eventConsumer = Consumer<Event> { event ->
-        if(event is EventRender3D) {
+        if (event is EventRender3D) {
             var bowItem: ItemStack? = null
-            if(mc.player?.getStackInHand(Hand.MAIN_HAND)?.item is BowItem)
+            if (mc.player?.getStackInHand(Hand.MAIN_HAND)?.item is BowItem)
                 bowItem = mc.player?.getStackInHand(Hand.MAIN_HAND)
             else if (mc.player?.getStackInHand(Hand.OFF_HAND)?.item is BowItem)
                 bowItem = mc.player?.getStackInHand(Hand.OFF_HAND)
-            if(bowItem != null) {
-                val velocity = BowItem.getPullProgress(if(mc.player?.isUsingItem!!) mc.player?.itemUseTime!! else bowItem.maxUseTime).toDouble()
+            if (bowItem != null) {
+                val velocity = BowItem.getPullProgress(if (mc.player?.isUsingItem!!) mc.player?.itemUseTime!! else bowItem.maxUseTime).toDouble()
                 val gravity = 0.006
                 GL11.glEnable(GL11.GL_BLEND)
                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
@@ -52,7 +52,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
 //                    val height = formula(45.0, distance.toDouble(), velocity, gravity)
                     val height = formula(45.0, distance.toDouble(), velocity, gravity)
                     val pos = mc.player?.eyePos?.add(0.0, -0.1, 0.0)?.add(forward.x, height, forward.z)
-                    bufferBuilder.vertex(matrix, pos?.x?.toFloat()!!, pos.y.toFloat(), pos.z.toFloat()).color(1f,1f,1f,1f).next()
+                    bufferBuilder.vertex(matrix, pos?.x?.toFloat()!!, pos.y.toFloat(), pos.z.toFloat()).color(1f, 1f, 1f, 1f).next()
                 }
                 bufferBuilder.end()
                 BufferRenderer.draw(bufferBuilder)

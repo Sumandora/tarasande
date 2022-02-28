@@ -5,18 +5,18 @@ import su.mandora.tarasande.screen.accountmanager.environment.EnvironmentPresetM
 import su.mandora.tarasande.screen.accountmanager.environment.EnvironmentPresetTheAltening
 
 class ManagerEnvironment : Manager<EnvironmentPreset>() {
-	init {
-		add(
-			EnvironmentPresetMojang(),
-			EnvironmentPresetTheAltening()
-		)
-	}
+    init {
+        add(
+            EnvironmentPresetMojang(),
+            EnvironmentPresetTheAltening()
+        )
+    }
 }
 
 abstract class EnvironmentPreset(
-	val name: String,
-	val authHost: String,
-	val accountsHost: String,
-	val sessionHost: String,
-	val servicesHost: String,
+    val name: String,
+    val authHost: String,
+    val accountsHost: String,
+    val sessionHost: String,
+    val servicesHost: String,
 )

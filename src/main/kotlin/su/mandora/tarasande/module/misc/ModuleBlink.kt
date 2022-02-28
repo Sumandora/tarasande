@@ -50,8 +50,8 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                 }
             }
             is EventUpdate -> {
-                if(event.state == EventUpdate.State.PRE) {
-                    if(pulse.value) {
+                if (event.state == EventUpdate.State.PRE) {
+                    if (pulse.value) {
                         if (timeUtil.hasReached(pulseDelay.value.toLong())) {
                             onDisable()
                             timeUtil.reset()
@@ -65,7 +65,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     override fun onDisable() {
         val copy = ArrayList(packets) // sync
         packets.clear()
-        if(mc.networkHandler?.connection?.isOpen!!) {
+        if (mc.networkHandler?.connection?.isOpen!!) {
             for (pair in copy) {
                 when (pair.second) {
                     EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).forceSend(pair.first)
