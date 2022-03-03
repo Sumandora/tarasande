@@ -96,7 +96,13 @@ class EventMouse(val button: Int) : Event(true)
 class EventMouseDelta(var deltaX: Double, var deltaY: Double) : Event(false)
 class EventTimeTravel(var time: Long) : Event(false)
 class EventItemCooldown(val item: Item, var cooldown: Float) : Event(false)
-class EventAttackEntity(val entity: Entity) : Event(false)
+
+class EventAttackEntity(val entity: Entity, val state: State) : Event(false) {
+    enum class State {
+        PRE, POST
+    }
+}
+
 class EventMovementFovMultiplier(var movementFovMultiplier: Float) : Event(false)
 class EventKeepSprint(var sprinting: Boolean) : Event(false)
 class EventAttack : Event(false)

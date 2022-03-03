@@ -20,8 +20,13 @@ public class MixinClientPlayerInteractionManager implements IClientPlayerInterac
     boolean onlyPackets = false;
 
     @Inject(method = "attackEntity", at = @At("HEAD"))
-    public void injectAttackEntity(PlayerEntity player, Entity target, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventAttackEntity(target));
+    public void injectPreAttackEntity(PlayerEntity player, Entity target, CallbackInfo ci) {
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventAttackEntity(target, EventAttackEntity.State.PRE));
+    }
+
+    @Inject(method = "attackEntity", at = @At("TAIL"))
+    public void injectPostAttackEntity(PlayerEntity player, Entity target, CallbackInfo ci) {
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventAttackEntity(target,  EventAttackEntity.State.POST));
     }
 
     @Redirect(method = "interactItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;isCoolingDown(Lnet/minecraft/item/Item;)Z"))

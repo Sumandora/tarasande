@@ -16,7 +16,8 @@ class ManagerInformation : Manager<Information>() {
             InformationHandlers(),
             InformationEntities(),
             InformationWorldTime(),
-            InformationTimeShifted()
+            InformationTimeShifted(),
+            InformationMurderer()
         )
     }
 

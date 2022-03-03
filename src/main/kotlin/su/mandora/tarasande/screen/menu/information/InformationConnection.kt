@@ -11,7 +11,6 @@ class InformationHandlers : Information("Connection", "Handlers") {
         val names = ((MinecraftClient.getInstance().networkHandler?.connection as IClientConnection).channel ?: return null).pipeline().names()
         if (names.isEmpty())
             return null
-        val asString = names.subList(0, names.size - 1).toTypedArray().contentToString()
-        return "\n" + asString.substring(1, asString.length - 1).replace(", ", "\n")
+        return "\n" + names.subList(0, names.size - 1).joinToString("\n")
     }
 }

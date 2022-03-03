@@ -44,6 +44,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventAttackEntity -> {
+                if(event.state != EventAttackEntity.State.PRE) return@Consumer
                 if (event.entity is LivingEntity && rapidFire.value) {
                     shifted = if (instantUncharge.value)
                         0L

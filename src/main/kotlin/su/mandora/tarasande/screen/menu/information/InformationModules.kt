@@ -2,11 +2,13 @@ package su.mandora.tarasande.screen.menu.information
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.LivingEntity
+import net.minecraft.text.TranslatableText
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.screen.menu.information.Information
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
 import su.mandora.tarasande.module.combat.ModuleKillAura
+import su.mandora.tarasande.module.misc.ModuleMurderMystery
 import su.mandora.tarasande.module.misc.ModuleTickBaseManipulation
 import su.mandora.tarasande.util.player.PlayerUtil
 import kotlin.math.floor
@@ -38,5 +40,17 @@ class InformationSimulatedDamage : Information("Kill aura", "Simulated Damage") 
         if (list.isEmpty())
             return null
         return "\n" + list.joinToString("\n")
+    }
+}
+
+class InformationMurderer : Information("Murder Mystery", "Suspected murderers") {
+    override fun getMessage(): String? {
+        val murderMystery = TarasandeMain.get().managerModule?.get(ModuleMurderMystery::class.java)!!
+        if(murderMystery.enabled)
+            if(murderMystery.suspects.isNotEmpty()) {
+                return "\n" + murderMystery.suspects.entries.joinToString("\n") { it.key.name + " (" + it.value.joinToString(" and ") { (it.name as TranslatableText).string } + ")" }
+            }
+
+        return null
     }
 }

@@ -37,6 +37,7 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
                 }
             }
             is EventAttackEntity -> {
+                if(event.state != EventAttackEntity.State.PRE) return@Consumer
                 changeBinds = true
                 if (mode.isSelected(2)) {
                     if (mc.player?.isSprinting!!)
