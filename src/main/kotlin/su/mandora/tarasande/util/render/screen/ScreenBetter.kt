@@ -6,7 +6,7 @@ import net.minecraft.text.Text
 
 open class ScreenBetter(private val prevScreen: Screen?) : Screen(Text.of("")) {
 
-    override fun onClose() {
+    override fun close() {
         client?.setScreen(prevScreen)
     }
 

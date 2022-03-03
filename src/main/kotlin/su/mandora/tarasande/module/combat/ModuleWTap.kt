@@ -20,10 +20,10 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
     }
 
     private val movementKeys = arrayListOf(
-        mc.options.keyForward,
-        mc.options.keyLeft,
-        mc.options.keyBack,
-        mc.options.keyRight
+        mc.options.forwardKey,
+        mc.options.leftKey,
+        mc.options.backKey,
+        mc.options.rightKey
     )
 
     var changeBinds = false

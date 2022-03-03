@@ -69,14 +69,9 @@ object RotationUtil {
                             }
                         }
                 }
-                is EventUpdate -> {
-                    if (event.state == EventUpdate.State.PRE) {
-                        if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!! && fakeRotation != null) {
-                            val allowed = abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - fakeRotation?.yaw!!)) <= 45
-                            if (MinecraftClient.getInstance().player?.isSprinting!! != allowed) {
-                                MinecraftClient.getInstance().player?.isSprinting = allowed
-                            }
-                        }
+                is EventHasForwardMovement -> {
+                    if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!! && fakeRotation != null) {
+                        event.hasForwardMovement = abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - fakeRotation?.yaw!!)) <= 45
                     }
                 }
                 is EventPacket -> {

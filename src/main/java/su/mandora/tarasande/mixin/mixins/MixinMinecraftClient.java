@@ -55,10 +55,10 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     protected abstract void doItemUse();
 
     @Shadow
-    protected abstract void doAttack();
+    protected abstract void handleBlockBreaking(boolean bl);
 
     @Shadow
-    protected abstract void handleBlockBreaking(boolean bl);
+    protected abstract boolean doAttack();
 
     @Inject(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;profiler:Lnet/minecraft/util/profiler/Profiler;", ordinal = 0, shift = At.Shift.BEFORE))
     public void injectPreInit(RunArgs args, CallbackInfo ci) {

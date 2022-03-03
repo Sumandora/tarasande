@@ -154,8 +154,8 @@ object PlayerUtil {
     fun getMoveDirection() =
         Math.toRadians(
             RotationUtil.getYaw(
-                if (MinecraftClient.getInstance().options.keyLeft.isPressed && MinecraftClient.getInstance().options.keyRight.isPressed) 0.0 else if (MinecraftClient.getInstance().options.keyLeft.isPressed) 1.0 else if (MinecraftClient.getInstance().options.keyRight.isPressed) -1.0 else 0.0,
-                if (MinecraftClient.getInstance().options.keyForward.isPressed && MinecraftClient.getInstance().options.keyBack.isPressed) 0.0 else if (MinecraftClient.getInstance().options.keyForward.isPressed) 1.0 else if (MinecraftClient.getInstance().options.keyBack.isPressed) -1.0 else 0.0
+                if (MinecraftClient.getInstance().options.leftKey.isPressed && MinecraftClient.getInstance().options.rightKey.isPressed) 0.0 else if (MinecraftClient.getInstance().options.leftKey.isPressed) 1.0 else if (MinecraftClient.getInstance().options.rightKey.isPressed) -1.0 else 0.0,
+                if (MinecraftClient.getInstance().options.forwardKey.isPressed && MinecraftClient.getInstance().options.backKey.isPressed) 0.0 else if (MinecraftClient.getInstance().options.forwardKey.isPressed) 1.0 else if (MinecraftClient.getInstance().options.backKey.isPressed) -1.0 else 0.0
             ) + 90 + MinecraftClient.getInstance().player?.yaw!!
         )
 }

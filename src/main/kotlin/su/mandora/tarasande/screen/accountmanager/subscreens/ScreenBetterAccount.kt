@@ -70,10 +70,10 @@ class ScreenBetterAccount(
             val account = (implementationClass.newInstance() as Account).create(textFields.map { it.text })
             account.environment = environment ?: YggdrasilEnvironment.PROD.environment
             accountConsumer.accept(account)
-            onClose()
+            close()
         }.also { submitButton = it })
 
-        addDrawableChild(ButtonWidget(width / 2 - 50, (height * 0.75f).toInt(), 100, 20, Text.of("Back")) { onClose() })
+        addDrawableChild(ButtonWidget(width / 2 - 50, (height * 0.75f).toInt(), 100, 20, Text.of("Back")) { close() })
 
         super.init()
     }

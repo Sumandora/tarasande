@@ -21,7 +21,7 @@ class ModuleVehicleFlight : Module("Vehicle flight", "Makes you fly with vehicle
             if (vehicle != null) {
                 if (event.entity == vehicle) {
                     var sign = 0.0
-                    if (mc.options.keyJump.isPressed)
+                    if (mc.options.jumpKey.isPressed)
                         sign += 1.0
                     if (downwardsKeybind.isPressed())
                         sign -= 1.0

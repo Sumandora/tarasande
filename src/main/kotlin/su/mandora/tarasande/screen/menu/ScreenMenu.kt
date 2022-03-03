@@ -82,7 +82,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         if (isClosing && animation <= 0.0) {
             panels.forEach { it.onClose() }
             RenderSystem.recordRenderCall {
-                super.onClose()
+                super.close()
             }
         }
 
@@ -217,14 +217,12 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         super.tick()
     }
 
-    override fun onClose() {
+    override fun close() {
         if (!isClosing) {
             screenChangeTime = System.currentTimeMillis()
             isClosing = true
         }
     }
 
-    override fun isPauseScreen(): Boolean {
-        return false
-    }
+    override fun shouldPause() = false
 }

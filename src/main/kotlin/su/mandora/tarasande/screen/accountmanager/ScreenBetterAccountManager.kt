@@ -82,7 +82,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
         }.also { addButton = it })
         addDrawableChild(ButtonWidget(width / 2 + 103, height - 46 + 2 + 20 + 2, 100, 20, Text.of("Back")) {
             RenderSystem.recordRenderCall {
-                onClose()
+                close()
             }
         })
 
@@ -101,7 +101,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
         removeButton?.active = accountList?.selectedOrNull != null
         setMainButton?.active = accountList?.selectedOrNull != null
         if (accountList?.selectedOrNull != null)
-            setMainButton?.active = accountList?.selectedOrNull?.account?.isSuitableAsMain()
+            setMainButton?.active = accountList?.selectedOrNull?.account?.isSuitableAsMain()!!
         randomButton?.active = accounts.isNotEmpty()
         super.tick()
     }
@@ -114,9 +114,9 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
         textRenderer.drawWithShadow(matrices, if (proxy == null) "No Proxy" else proxy?.socketAddress?.address?.hostAddress!! + ":" + proxy?.socketAddress?.port!! + " (" + proxy?.ping!! + "ms)", 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight, -1)
     }
 
-    override fun onClose() {
+    override fun close() {
         status = null
-        super.onClose()
+        super.close()
     }
 
     inner class AlwaysSelectedEntryListWidgetAccount(mcIn: MinecraftClient?, widthIn: Int, heightIn: Int, topIn: Int, bottomIn: Int) : AlwaysSelectedEntryListWidget<AlwaysSelectedEntryListWidgetAccount.EntryAccount>(mcIn, widthIn, heightIn, topIn, bottomIn, MinecraftClient.getInstance().textRenderer.fontHeight * 2) {

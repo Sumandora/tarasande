@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande.TarasandeMain;
+import su.mandora.tarasande.event.EventHasForwardMovement;
 import su.mandora.tarasande.event.EventInput;
 
 @Mixin(KeyboardInput.class)
@@ -32,4 +33,10 @@ public class MixinKeyboardInput extends Input {
         this.movementSideways = eventInput.getMovementSideways();
     }
 
+    @Override
+    public boolean hasForwardMovement() {
+        EventHasForwardMovement eventHasForwardMovement = new EventHasForwardMovement(super.hasForwardMovement());
+        TarasandeMain.Companion.get().getManagerEvent().call(eventHasForwardMovement);
+        return eventHasForwardMovement.getHasForwardMovement();
+    }
 }

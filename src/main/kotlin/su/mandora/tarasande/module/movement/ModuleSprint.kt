@@ -38,7 +38,7 @@ class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MO
     }
 
     val eventConsumer = Consumer<Event> { event ->
-        if (event is EventKeyBindingIsPressed && event.keyBinding == mc.options?.keySprint) {
+        if (event is EventKeyBindingIsPressed && event.keyBinding == mc.options?.sprintKey) {
             event.pressed = true
         }
     }

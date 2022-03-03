@@ -137,14 +137,14 @@ class ScreenBetterProxy(
 
         addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50 + 25, 100, 20, Text.of("Back")) {
             RenderSystem.recordRenderCall {
-                onClose()
+                close()
             }
         })
 
         addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50 + 25 * 2, 100, 20, Text.of("Disable")) {
             proxyConsumer.accept(null)
             RenderSystem.recordRenderCall {
-                onClose()
+                close()
             }
         })
 

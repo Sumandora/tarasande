@@ -17,8 +17,7 @@ import su.mandora.tarasande.mixin.accessor.IGameRenderer;
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer implements IGameRenderer {
 
-    @Shadow
-    private float movementFovMultiplier;
+    @Shadow private float fovMultiplier;
     boolean allowThroughWalls = false;
     double reach = 3.0;
 
@@ -42,11 +41,11 @@ public class MixinGameRenderer implements IGameRenderer {
         return actualBlockReach;
     }
 
-    @Inject(method = "updateMovementFovMultiplier", at = @At("RETURN"))
+    @Inject(method = "updateFovMultiplier", at = @At("RETURN"))
     public void injectUpdateMovementFovMultiplier(CallbackInfo ci) {
-        EventMovementFovMultiplier eventMovementFovMultiplier = new EventMovementFovMultiplier(movementFovMultiplier);
+        EventMovementFovMultiplier eventMovementFovMultiplier = new EventMovementFovMultiplier(fovMultiplier);
         TarasandeMain.Companion.get().getManagerEvent().call(eventMovementFovMultiplier);
-        movementFovMultiplier = eventMovementFovMultiplier.getMovementFovMultiplier();
+        fovMultiplier = eventMovementFovMultiplier.getMovementFovMultiplier();
     }
 
     @ModifyConstant(method = "updateTargetedEntity", constant = @Constant(doubleValue = 9.0))

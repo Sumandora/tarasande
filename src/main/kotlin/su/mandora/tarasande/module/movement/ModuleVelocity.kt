@@ -74,7 +74,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
                 }
             }
             is EventKeyBindingIsPressed -> {
-                if (event.keyBinding == mc.options.keyJump && isJumping)
+                if (event.keyBinding == mc.options.jumpKey && isJumping)
                     event.pressed = true
             }
         }

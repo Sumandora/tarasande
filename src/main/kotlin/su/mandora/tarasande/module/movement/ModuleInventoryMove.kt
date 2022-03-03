@@ -19,11 +19,11 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
     private val canceledPackets = ValueMode(this, "Canceled packets", true, "Open", "Close")
 
     private val keybinding = listOf(
-        mc.options.keyForward,
-        mc.options.keyLeft,
-        mc.options.keyBack,
-        mc.options.keyRight,
-        mc.options.keyJump
+        mc.options.forwardKey,
+        mc.options.leftKey,
+        mc.options.backKey,
+        mc.options.rightKey,
+        mc.options.jumpKey
     )
 
     val eventConsumer = Consumer<Event> { event ->
