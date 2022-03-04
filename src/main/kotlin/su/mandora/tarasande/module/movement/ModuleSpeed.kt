@@ -48,8 +48,13 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventMovement -> {
-                if (event.entity != mc.player || mc.player?.input?.movementInput?.lengthSquared()!! == 0.0f)
+                if (event.entity != mc.player)
                     return@Consumer
+
+                if(mc.player?.input?.movementInput?.lengthSquared()!! == 0.0f) {
+                    moveDir = PlayerUtil.getMoveDirection()
+                    return@Consumer
+                }
 
                 val accessor = event.velocity as IVec3d
 
