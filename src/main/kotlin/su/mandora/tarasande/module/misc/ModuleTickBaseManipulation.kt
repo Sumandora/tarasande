@@ -11,13 +11,11 @@ import su.mandora.tarasande.event.EventTimeTravel
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
 import su.mandora.tarasande.util.math.rotation.RotationUtil
-import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueKeyBind
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
 import kotlin.math.max
-import kotlin.math.roundToInt
 
 class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts minecraft's tick base", ModuleCategory.MISC) {
 

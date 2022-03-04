@@ -5,7 +5,7 @@ import com.google.gson.JsonElement
 import su.mandora.tarasande.base.value.Value
 import java.awt.Color
 
-open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var bri: Float, var alpha: Float = -1.0F) : Value(owner, name) {
+open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var bri: Float, var alpha: Float? = null) : Value(owner, name) {
     var hue: Float = hue
         get() {
             return if (rainbow) {
@@ -24,7 +24,7 @@ open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var 
 
     fun getColor(): Color {
         val hsb = Color.getHSBColor(hue, sat, bri)
-        return Color(hsb.red, hsb.green, hsb.blue, if (alpha == -1.0f) 255 else (alpha * 255).toInt())
+        return Color(hsb.red, hsb.green, hsb.blue, if (alpha == null) 255 else (alpha!! * 255).toInt())
     }
 
     override fun save(): JsonElement {
@@ -32,7 +32,7 @@ open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var 
         jsonArray.add(hue)
         jsonArray.add(sat)
         jsonArray.add(bri)
-        if (alpha != -1.0f) {
+        if (alpha != null) {
             jsonArray.add(alpha)
         }
         jsonArray.add(rainbow)
@@ -44,7 +44,7 @@ open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var 
         hue = jsonArray[0].asFloat
         sat = jsonArray[1].asFloat
         bri = jsonArray[2].asFloat
-        if (alpha != -1.0f) {
+        if (alpha != null) {
             alpha = jsonArray[3].asFloat
             rainbow = jsonArray[4].asBoolean
         } else {

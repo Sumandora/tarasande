@@ -87,9 +87,9 @@ object RotationUtil {
                     didRotate = true
                 }
                 is EventTick -> {
-                    if(event.state != EventTick.State.PRE) return@Consumer
+                    if (event.state != EventTick.State.PRE) return@Consumer
 
-                    if(!didRotate) {
+                    if (!didRotate) {
                         simulateFakeRotationUpdate()
                     }
 
@@ -100,9 +100,9 @@ object RotationUtil {
     }
 
     fun simulateFakeRotationUpdate() {
-        if(TarasandeMain.get().clientValues?.updateRotationsWhenTickSkipping?.value!!)
-        for (i in 0..(1000.0 / RenderUtil.deltaTime).roundToInt()) // could use repeat here, but doesn't fit the code style
-            updateFakeRotation()
+        if (TarasandeMain.get().clientValues?.updateRotationsWhenTickSkipping?.value!!)
+            for (i in 0..(1000.0 / RenderUtil.deltaTime).roundToInt()) // could use repeat here, but doesn't fit the code style
+                updateFakeRotation()
     }
 
     fun updateFakeRotation() {

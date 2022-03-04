@@ -4,12 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.util.math.Vec2f
 import su.mandora.tarasande.base.screen.menu.graph.Graph
 import su.mandora.tarasande.screen.menu.panel.impl.fixed.PanelFixed
-import su.mandora.tarasande.util.math.MathUtil
-import kotlin.math.abs
-import kotlin.math.ceil
 import kotlin.math.max
 
 class PanelFixedGraph(private val graph: Graph, x: Double, y: Double) : PanelFixed(graph.name, x, y, max(100.0, MinecraftClient.getInstance().textRenderer.getWidth(graph.name) + 10.0), 50.0, background = true) {

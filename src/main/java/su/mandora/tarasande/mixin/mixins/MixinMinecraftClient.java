@@ -136,9 +136,9 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
         ReflectorClass reflectorClass = ReflectionUtil.INSTANCE.createReflectorClass("net.fabricmc.loader.launch.common.FabricLauncherBase");
         if (reflectorClass != null) {
             ReflectorAny getLauncher = reflectorClass.invokeMethod("getLauncher");
-            if(getLauncher != null) {
+            if (getLauncher != null) {
                 ReflectorAny isDevelopment = getLauncher.asReflectorClass().invokeMethod("isDevelopment");
-                if(isDevelopment != null && isDevelopment.interpretAs(Boolean.class)) {
+                if (isDevelopment != null && isDevelopment.interpretAs(Boolean.class)) {
                     cir.setReturnValue(UserApiService.OFFLINE);
                 }
             }

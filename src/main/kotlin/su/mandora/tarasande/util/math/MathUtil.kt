@@ -43,21 +43,21 @@ object MathUtil {
     }
 
     fun calculateBezierCurve(accuracy: Int, points: ArrayList<Vec2f>): ArrayList<Vec2f> {
-        if(points.size < 2) return points
+        if (points.size < 2) return points
         val list = ArrayList<Vec2f>()
         val origLines = ArrayList<Pair<Vec2f, Vec2f>>()
         var prev = points[0]
-        for(point in points.subList(1, points.size)) {
+        for (point in points.subList(1, points.size)) {
             origLines.add(Pair(prev, point))
             prev = point
         }
         var t = 0.0f
-        while(t <= 1.0f) {
+        while (t <= 1.0f) {
             var lines = ArrayList(origLines)
-            while(lines.size > 1) {
+            while (lines.size > 1) {
                 val newLines = ArrayList<Pair<Vec2f, Vec2f>>()
                 var prev = lines[0].first.add(lines[0].second.add(lines[0].first.negate()).multiply(t))
-                for(line in lines.subList(1, lines.size)) {
+                for (line in lines.subList(1, lines.size)) {
                     val new = line.first.add(line.second.add(line.first.negate()).multiply(t))
                     newLines.add(Pair(prev, new))
                     prev = new

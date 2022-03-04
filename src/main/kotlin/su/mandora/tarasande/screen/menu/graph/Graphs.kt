@@ -2,7 +2,6 @@ package su.mandora.tarasande.screen.menu.graph
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.PlayerListEntry
-import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.screen.menu.graph.Graph

@@ -12,7 +12,7 @@ class ModuleColorCorrection : Module("Color correction", "Corrects colors on the
     private val color = ValueColor(this, "Color", 0.0f, 1.0f, 1.0f)
 
     val eventConsumer = Consumer<Event> { event ->
-        if(event is EventColorCorrection) {
+        if (event is EventColorCorrection) {
             val color = color.getColor()
             event.red = color.red
             event.green = color.green

@@ -1,7 +1,6 @@
 package su.mandora.tarasande.mixin.mixins;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -12,7 +11,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande.TarasandeMain;
@@ -85,10 +83,10 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Inject(method = "swingHand(Lnet/minecraft/util/Hand;)V", at = @At("HEAD"), cancellable = true)
     public void injectSwingHand(Hand hand, CallbackInfo ci) {
-        if((Object) this == MinecraftClient.getInstance().player) {
+        if ((Object) this == MinecraftClient.getInstance().player) {
             EventSwing eventSwing = new EventSwing(hand);
             TarasandeMain.Companion.get().getManagerEvent().call(eventSwing);
-            if(eventSwing.getCancelled())
+            if (eventSwing.getCancelled())
                 ci.cancel();
         }
     }

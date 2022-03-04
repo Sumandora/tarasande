@@ -178,7 +178,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                             return@Consumer
                         if (suspects.contains(player.gameProfile))
                             return@Consumer
-                        if(TarasandeMain.get().managerModule?.get(ModuleAntiBot::class.java)?.isBot(player)!!)
+                        if (TarasandeMain.get().managerModule?.get(ModuleAntiBot::class.java)?.isBot(player)!!)
                             return@Consumer
 
                         var mainHand: Item? = null
