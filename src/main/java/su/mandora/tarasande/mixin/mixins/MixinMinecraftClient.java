@@ -150,7 +150,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
         ((IMinecraftClient) instance).invokeHandleBlockBreaking(eventHandleBlockBreaking.getParameter());
     }
 
-    @Inject(method = "getSessionService", at = @At("RETURN"))
+    @Inject(method = "getSessionService", at = @At("RETURN"), cancellable = true)
     public void injectGetSessionService(CallbackInfoReturnable<MinecraftSessionService> cir) {
         Account account = TarasandeMain.Companion.get().getScreens().getBetterScreenAccountManager().getCurrentAccount();
         if (account != null && account.getSessionService() != null) {
