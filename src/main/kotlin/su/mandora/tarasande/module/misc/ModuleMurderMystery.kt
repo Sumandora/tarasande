@@ -88,14 +88,6 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                 TarasandeMain.get().name + " suspects " + player.gameProfile.name + (if (itemMessage != null) " because he held $itemMessage" else "")
             }
             broadcast.isSelected(2) -> {
-
-                val itemMessage = when {
-                    illegalMainHand && illegalOffHand -> StringUtil.uncoverTranslation(mainHand.translationKey) + " and " + StringUtil.uncoverTranslation(offHand.translationKey)
-                    illegalMainHand -> StringUtil.uncoverTranslation(mainHand.translationKey)
-                    illegalOffHand -> StringUtil.uncoverTranslation(offHand.translationKey)
-                    else -> null // why dafuq are we here
-                }
-                println(itemMessage)
                 generateLegitSentence(player.gameProfile.name)
             }
             else -> null
