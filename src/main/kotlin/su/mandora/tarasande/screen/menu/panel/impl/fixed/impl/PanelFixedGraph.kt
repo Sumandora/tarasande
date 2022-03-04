@@ -4,27 +4,32 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.util.math.Vec2f
 import su.mandora.tarasande.base.screen.menu.graph.Graph
 import su.mandora.tarasande.screen.menu.panel.impl.fixed.PanelFixed
+import su.mandora.tarasande.util.math.MathUtil
+import kotlin.math.abs
+import kotlin.math.ceil
 import kotlin.math.max
 
 class PanelFixedGraph(private val graph: Graph, x: Double, y: Double) : PanelFixed(graph.name, x, y, max(100.0, MinecraftClient.getInstance().textRenderer.getWidth(graph.name) + 10.0), 50.0, background = true) {
 
     private val values = ArrayList<Number>()
 
+    private var current: Double = 0.0
+    private var min: Double = 0.0
+    private var max: Double = 0.0
+
+    private var graphMinWidth: Double = 0.0
+    private var graphMaxWidth: Double = 0.0
+    private var currentWidth: Double = 0.0
+    private var finalWidth: Double = 0.0
+
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         if (values.isEmpty()) {
             return
         }
 
-        val current = values[values.size - 1].toDouble()
-        val min = getMin()?.toDouble()!!
-        val max = getMax()?.toDouble()!!
-
-        val minWidth = MinecraftClient.getInstance().textRenderer.getWidth(min.toString()) / 2.0
-        val maxWidth = MinecraftClient.getInstance().textRenderer.getWidth(max.toString()) / 2.0
-        val currentWidth = MinecraftClient.getInstance().textRenderer.getWidth(current.toString()) / 2.0
-        val finalWidth = panelWidth - max(minWidth, max(maxWidth, currentWidth))
         val matrix = matrices?.peek()?.positionMatrix!!
 
         val bufferBuilder = Tessellator.getInstance().buffer
@@ -54,18 +59,18 @@ class PanelFixedGraph(private val graph: Graph, x: Double, y: Double) : PanelFix
         matrices.pop()
         if (currentY < y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight) {
             matrices.push()
-            matrices.translate(x + panelWidth - minWidth, y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0, 0.0)
+            matrices.translate(x + panelWidth - graphMinWidth, y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0, 0.0)
             matrices.scale(0.5f, 0.5f, 1.0f)
-            matrices.translate(-(x + panelWidth - minWidth), -(y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0), 0.0)
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, min.toString(), (x + panelWidth - minWidth).toFloat(), (y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2).toFloat(), -1)
+            matrices.translate(-(x + panelWidth - graphMinWidth), -(y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0), 0.0)
+            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, min.toString(), (x + panelWidth - graphMinWidth).toFloat(), (y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2).toFloat(), -1)
             matrices.pop()
         }
         if (currentY >= y + MinecraftClient.getInstance().textRenderer.fontHeight * 1.5) {
             matrices.push()
-            matrices.translate(x + panelWidth - maxWidth, y + MinecraftClient.getInstance().textRenderer.fontHeight, 0.0)
+            matrices.translate(x + panelWidth - graphMaxWidth, y + MinecraftClient.getInstance().textRenderer.fontHeight, 0.0)
             matrices.scale(0.5f, 0.5f, 1.0f)
-            matrices.translate(-(x + panelWidth - maxWidth), -(y + MinecraftClient.getInstance().textRenderer.fontHeight), 0.0)
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, max.toString(), (x + panelWidth - maxWidth).toFloat(), (y + MinecraftClient.getInstance().textRenderer.fontHeight).toFloat(), -1)
+            matrices.translate(-(x + panelWidth - graphMaxWidth), -(y + MinecraftClient.getInstance().textRenderer.fontHeight), 0.0)
+            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, max.toString(), (x + panelWidth - graphMaxWidth).toFloat(), (y + MinecraftClient.getInstance().textRenderer.fontHeight).toFloat(), -1)
             matrices.pop()
         }
     }
@@ -98,9 +103,18 @@ class PanelFixedGraph(private val graph: Graph, x: Double, y: Double) : PanelFix
         val data: Number? = graph.supplyData()
         if (data != null) {
             this.values.add(data)
-        }
-        while (this.values.size > this.graph.bufferLength) {
-            this.values.removeAt(0)
+            while (this.values.size > this.graph.bufferLength) {
+                this.values.removeAt(0)
+            }
+
+            current = values[values.size - 1].toDouble()
+            min = getMin()?.toDouble()!!
+            max = getMax()?.toDouble()!!
+
+            graphMinWidth = MinecraftClient.getInstance().textRenderer.getWidth(min.toString()) / 2.0
+            graphMaxWidth = MinecraftClient.getInstance().textRenderer.getWidth(max.toString()) / 2.0
+            currentWidth = MinecraftClient.getInstance().textRenderer.getWidth(current.toString()) / 2.0
+            finalWidth = panelWidth - max(graphMinWidth, max(graphMaxWidth, currentWidth))
         }
     }
 

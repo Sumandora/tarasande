@@ -15,6 +15,7 @@ import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.*
+import su.mandora.tarasande.module.combat.ModuleAntiBot
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.string.StringUtil
 import su.mandora.tarasande.value.ValueBoolean
@@ -176,6 +177,8 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                         if (player !is PlayerEntity)
                             return@Consumer
                         if (suspects.contains(player.gameProfile))
+                            return@Consumer
+                        if(TarasandeMain.get().managerModule?.get(ModuleAntiBot::class.java)?.isBot(player)!!)
                             return@Consumer
 
                         var mainHand: Item? = null

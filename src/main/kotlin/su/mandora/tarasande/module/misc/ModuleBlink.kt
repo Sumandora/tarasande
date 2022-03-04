@@ -24,9 +24,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     private val affectedPackets = ValueMode(this, "Affected packets", true, "Serverbound", "Clientbound")
     private val pulse = ValueBoolean(this, "Pulse", false)
     private val pulseDelay = object : ValueNumber(this, "Pulse delay", 0.0, 500.0, 1000.0, 1.0) {
-        override fun isVisible(): Boolean {
-            return pulse.value
-        }
+        override fun isVisible() = pulse.value
     }
 
     private val packets = CopyOnWriteArrayList<Pair<Packet<*>, EventPacket.Type>>()
