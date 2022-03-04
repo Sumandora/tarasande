@@ -44,7 +44,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventAttackEntity -> {
-                if(event.state != EventAttackEntity.State.PRE) return@Consumer
+                if (event.state != EventAttackEntity.State.PRE) return@Consumer
                 if (event.entity is LivingEntity && rapidFire.value) {
                     shifted = if (instantUncharge.value)
                         0L
@@ -54,8 +54,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
             }
             is EventAttack -> { // Aura sync
                 if (shifted < prevShifted)
-                    for (i in 0..(1000.0 / RenderUtil.deltaTime).roundToInt())
-                        RotationUtil.updateFakeRotation()
+                    RotationUtil.simulateFakeRotationUpdate()
                 prevShifted = shifted
             }
             is EventTimeTravel -> {

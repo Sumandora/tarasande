@@ -147,8 +147,8 @@ class ScreenMenu : Screen(Text.of("Menu")) {
                 GlStateManager._enableScissorTest()
                 var width = ((it.panelWidth - it.panelWidth * (1 - animation)) * client?.window?.scaleFactor!!).toInt()
                 var height = ((panelHeight - panelHeight * (1 - animation) - 1) * client?.window?.scaleFactor!!).toInt()
-                if(width <= 0) width = 1
-                if(height <= 0) height = 1
+                if (width <= 0) width = 1
+                if (height <= 0) height = 1
                 GlStateManager._scissorBox(
                     ((it.x + it.panelWidth * (1 - animation) / 2) * client?.window?.scaleFactor!!).toInt(),
                     (client?.window?.height!! - (it.y + panelHeight - panelHeight * (1 - animation) / 2 - 1) * client?.window?.scaleFactor!!).toInt(),

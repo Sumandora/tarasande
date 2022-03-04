@@ -84,7 +84,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         return eventSlowdownAmount.getSlowdownAmount();
     }
 
-    @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;flying:Z", ordinal = 6))
+    @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;flying:Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;knockDownwards()V"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;hasJumpingMount()Z")))
     public boolean flying(PlayerAbilities instance) {
         EventVanillaFlight eventVanillaFlight = new EventVanillaFlight(instance.flying, instance.getFlySpeed());
         TarasandeMain.Companion.get().getManagerEvent().call(eventVanillaFlight);

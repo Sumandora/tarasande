@@ -46,8 +46,8 @@ class InformationSimulatedDamage : Information("Kill aura", "Simulated Damage") 
 class InformationMurderer : Information("Murder Mystery", "Suspected murderers") {
     override fun getMessage(): String? {
         val murderMystery = TarasandeMain.get().managerModule?.get(ModuleMurderMystery::class.java)!!
-        if(murderMystery.enabled)
-            if(murderMystery.suspects.isNotEmpty()) {
+        if (murderMystery.enabled)
+            if (murderMystery.suspects.isNotEmpty()) {
                 return "\n" + murderMystery.suspects.entries.joinToString("\n") { it.key.name + " (" + it.value.joinToString(" and ") { (it.name as TranslatableText).string } + ")" }
             }
 

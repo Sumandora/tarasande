@@ -21,6 +21,8 @@ object RotationUtil {
     private var lastMinRotateToOriginSpeed = 1.0
     private var lastMaxRotateToOriginSpeed = 1.0
 
+    private var didRotate = false
+
     init {
         TarasandeMain.get().managerEvent?.add(Pair(1001, Consumer<Event> { event ->
             when (event) {
@@ -79,8 +81,28 @@ object RotationUtil {
                         if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerPositionLookS2CPacket)
                             fakeRotation = Rotation(event.packet.yaw, event.packet.pitch)
                 }
+
+                // premium code following
+                is EventPollEvents -> {
+                    didRotate = true
+                }
+                is EventTick -> {
+                    if(event.state != EventTick.State.PRE) return@Consumer
+
+                    if(!didRotate) {
+                        simulateFakeRotationUpdate()
+                    }
+
+                    didRotate = false
+                }
             }
         }))
+    }
+
+    fun simulateFakeRotationUpdate() {
+        if(TarasandeMain.get().clientValues?.updateRotationsWhenTickSkipping?.value!!)
+        for (i in 0..(1000.0 / RenderUtil.deltaTime).roundToInt()) // could use repeat here, but doesn't fit the code style
+            updateFakeRotation()
     }
 
     fun updateFakeRotation() {

@@ -20,7 +20,7 @@ class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attackin
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventAttackEntity -> {
-                if(event.state != EventAttackEntity.State.PRE) return@Consumer
+                if (event.state != EventAttackEntity.State.PRE) return@Consumer
                 prevVelocity = mc.player?.velocity
             }
             is EventKeepSprint -> {

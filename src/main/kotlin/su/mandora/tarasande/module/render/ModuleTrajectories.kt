@@ -30,6 +30,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
                 bowItem = mc.player?.getStackInHand(Hand.MAIN_HAND)
             else if (mc.player?.getStackInHand(Hand.OFF_HAND)?.item is BowItem)
                 bowItem = mc.player?.getStackInHand(Hand.OFF_HAND)
+
             if (bowItem != null) {
                 val velocity = BowItem.getPullProgress(if (mc.player?.isUsingItem!!) mc.player?.itemUseTime!! else bowItem.maxUseTime).toDouble()
                 val gravity = 0.006

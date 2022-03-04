@@ -73,11 +73,13 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 targets.add(Pair(BlockPos(0, -1, 0), Direction.UP))
                 targets.add(Pair(BlockPos(0, 1, 0), Direction.DOWN))
             }
+
             // straight
             targets.add(Pair(BlockPos(0, y, 1), Direction.SOUTH))
             targets.add(Pair(BlockPos(1, y, 0), Direction.EAST))
             targets.add(Pair(BlockPos(-1, y, 0), Direction.WEST))
             targets.add(Pair(BlockPos(0, y, -1), Direction.NORTH))
+
             // diagonals
             targets.add(Pair(BlockPos(-1, y, 1), Direction.WEST))
             targets.add(Pair(BlockPos(-1, y, -1), Direction.NORTH))
@@ -297,10 +299,10 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                 mc.player?.inventory?.selectedSlot = blockSlot
                             } else return@Consumer
                         } else if (!hasBlock) return@Consumer
-                        if (airBelow && (round(
+                        if ((airBelow && (round(
                                 Vec3d.ofCenter(target?.first).subtract(mc.player?.pos!!)
                                     .multiply(Vec3d.of(target?.second?.vector)).horizontalLengthSquared() * 100
-                            ) / 100.0 in (newEdgeDist * newEdgeDist)..1.0 || target?.second?.vector?.y != 0)
+                            ) / 100.0 in (newEdgeDist * newEdgeDist)..1.0 || target?.first?.y!! < mc.player?.y!!))
                         ) {
                             for (hand in Hand.values()) {
                                 val stack = mc.player?.getStackInHand(hand)

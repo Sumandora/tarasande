@@ -17,7 +17,8 @@ import su.mandora.tarasande.mixin.accessor.IGameRenderer;
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer implements IGameRenderer {
 
-    @Shadow private float fovMultiplier;
+    @Shadow
+    private float fovMultiplier;
     boolean allowThroughWalls = false;
     double reach = 3.0;
 

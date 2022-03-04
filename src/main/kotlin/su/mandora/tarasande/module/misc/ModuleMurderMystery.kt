@@ -1,7 +1,6 @@
 package su.mandora.tarasande.module.misc
 
 import com.mojang.authlib.GameProfile
-import net.minecraft.entity.Entity
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
@@ -127,7 +126,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         when (event) {
             is EventUpdate -> {
                 if (event.state == EventUpdate.State.PRE)
-                    if(mc.interactionManager?.currentGameMode != GameMode.SPECTATOR) {
+                    if (mc.interactionManager?.currentGameMode != GameMode.SPECTATOR) {
                         if (isMurderer() && murdererAssistance.value) {
                             if (fakeNewsTimer.hasReached(fakeNewsTime)) {
                                 var player: PlayerEntity? = null
@@ -170,26 +169,26 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                 if (event.type == EventPacket.Type.RECEIVE)
                     if (event.packet is PlayerRespawnS2CPacket) {
                         suspects.clear()
-                    } else if(event.packet is EntityEquipmentUpdateS2CPacket) {
+                    } else if (event.packet is EntityEquipmentUpdateS2CPacket) {
                         val player = mc.world?.getEntityById(event.packet.id)
                         if (player == mc.player) // i swear i almost played a round without this
                             return@Consumer
-                        if(player !is PlayerEntity)
+                        if (player !is PlayerEntity)
                             return@Consumer
                         if (suspects.contains(player.gameProfile))
                             return@Consumer
 
                         var mainHand: Item? = null
                         var offHand: Item? = null
-                        for(pair in event.packet.equipmentList) {
-                            if(pair.first == EquipmentSlot.MAINHAND)
+                        for (pair in event.packet.equipmentList) {
+                            if (pair.first == EquipmentSlot.MAINHAND)
                                 mainHand = pair.second.item
-                            else if(pair.first == EquipmentSlot.OFFHAND)
+                            else if (pair.first == EquipmentSlot.OFFHAND)
                                 offHand = pair.second.item
                         }
 
-                        val illegalMainHand = if(mainHand != null) isIllegalItem(mainHand) else false
-                        val illegalOffHand = if(offHand != null) isIllegalItem(offHand) else false
+                        val illegalMainHand = if (mainHand != null) isIllegalItem(mainHand) else false
+                        val illegalOffHand = if (offHand != null) isIllegalItem(offHand) else false
 
                         if (illegalMainHand || illegalOffHand) {
                             suspects[player.gameProfile] = when {

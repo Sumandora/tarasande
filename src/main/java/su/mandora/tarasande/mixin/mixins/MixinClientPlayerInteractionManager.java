@@ -26,7 +26,7 @@ public class MixinClientPlayerInteractionManager implements IClientPlayerInterac
 
     @Inject(method = "attackEntity", at = @At("TAIL"))
     public void injectPostAttackEntity(PlayerEntity player, Entity target, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventAttackEntity(target,  EventAttackEntity.State.POST));
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventAttackEntity(target, EventAttackEntity.State.POST));
     }
 
     @Redirect(method = "interactItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;isCoolingDown(Lnet/minecraft/item/Item;)Z"))

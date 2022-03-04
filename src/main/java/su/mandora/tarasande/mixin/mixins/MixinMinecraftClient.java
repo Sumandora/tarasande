@@ -11,10 +11,14 @@ import net.minecraft.client.util.Session;
 import net.minecraft.client.util.Window;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Util;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.TarasandeMain;
@@ -22,7 +26,6 @@ import su.mandora.tarasande.base.screen.accountmanager.account.Account;
 import su.mandora.tarasande.event.*;
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient;
 import su.mandora.tarasande.module.render.ModuleESP;
-import su.mandora.tarasande.screen.Screens;
 import su.mandora.tarasande.util.reflection.ReflectionUtil;
 import su.mandora.tarasande.util.reflection.ReflectorClass;
 import su.mandora.tarasande.util.render.RenderUtil;
@@ -60,7 +63,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Shadow
     protected abstract boolean doAttack();
 
-    @Inject(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;profiler:Lnet/minecraft/util/profiler/Profiler;", ordinal = 0, shift = At.Shift.BEFORE))
+    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;createUserApiService(Lcom/mojang/authlib/yggdrasil/YggdrasilAuthenticationService;Lnet/minecraft/client/RunArgs;)Lcom/mojang/authlib/minecraft/UserApiService;"))
     public void injectPreInit(RunArgs args, CallbackInfo ci) {
         TarasandeMain.Companion.get().onPreLoad();
     }
@@ -114,7 +117,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
         return Math.min(a, b);
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Util;getMeasuringTimeMs()J", ordinal = 0))
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Util;getMeasuringTimeMs()J"), slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;tick()V")))
     public long hookedGetMeasuringTimeMs() {
         EventTimeTravel eventTimeTravel = new EventTimeTravel(Util.getMeasuringTimeMs());
         TarasandeMain.Companion.get().getManagerEvent().call(eventTimeTravel);
@@ -135,7 +138,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
         }
     }
 
-    @Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z", shift = At.Shift.BEFORE, ordinal = 0))
+    @Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z", shift = At.Shift.BEFORE), slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doAttack()Z")))
     public void injectHandleInputEvents(CallbackInfo ci) {
         TarasandeMain.Companion.get().getManagerEvent().call(new EventAttack());
     }
@@ -147,16 +150,12 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
         ((IMinecraftClient) instance).invokeHandleBlockBreaking(eventHandleBlockBreaking.getParameter());
     }
 
-    @Overwrite
-    public MinecraftSessionService getSessionService() {
-        final Screens screens = TarasandeMain.Companion.get().getScreens();
-        if (screens != null) {
-            final Account account = screens.getBetterScreenAccountManager().getCurrentAccount();
-            if (account != null && account.getSessionService() != null) {
-                return account.getSessionService();
-            }
+    @Inject(method = "getSessionService", at = @At("RETURN"))
+    public void injectGetSessionService(CallbackInfoReturnable<MinecraftSessionService> cir) {
+        Account account = TarasandeMain.Companion.get().getScreens().getBetterScreenAccountManager().getCurrentAccount();
+        if (account != null && account.getSessionService() != null) {
+            cir.setReturnValue(account.getSessionService());
         }
-        return this.sessionService;
     }
 
     @Override

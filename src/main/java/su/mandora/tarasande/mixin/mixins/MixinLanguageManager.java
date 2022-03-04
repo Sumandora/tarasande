@@ -9,7 +9,9 @@ import su.mandora.tarasande.mixin.accessor.ILanguageManager;
 
 @Mixin(LanguageManager.class)
 public class MixinLanguageManager implements ILanguageManager {
-    @Shadow @Final private static LanguageDefinition ENGLISH_US;
+    @Shadow
+    @Final
+    private static LanguageDefinition ENGLISH_US;
 
     @Override
     public LanguageDefinition getEnglishUS() {
