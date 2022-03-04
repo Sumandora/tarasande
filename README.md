@@ -48,6 +48,7 @@
 - Stop using Thread.stop
 - KillAura: Don't turn inside enemies
 - Configure ESP
+- Implement Tower into Scaffold walk
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)
