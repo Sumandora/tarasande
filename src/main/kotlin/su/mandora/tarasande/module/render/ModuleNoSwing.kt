@@ -5,7 +5,9 @@ import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventPacket
+import su.mandora.tarasande.event.EventResetEquipProgress
 import su.mandora.tarasande.event.EventSwing
+import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueMode
 import java.util.function.Consumer
 
@@ -13,6 +15,7 @@ class ModuleNoSwing : Module("No swing", "Hides the hand swing animation", Modul
 
     private val mode = ValueMode(this, "Mode", true, "Clientside", "Serverside")
     private val hand = ValueMode(this, "Hand", true, "Main hand", "Off hand")
+    private val fixAnimations = ValueBoolean(this, "Fix animations", true)
 
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
@@ -25,6 +28,10 @@ class ModuleNoSwing : Module("No swing", "Hides the hand swing animation", Modul
                 if (mode.isSelected(0))
                     if (hand.isSelected(event.hand.ordinal))
                         event.cancelled = true
+            }
+            is EventResetEquipProgress -> {
+                if (fixAnimations.value)
+                    event.cancelled = true
             }
         }
     }

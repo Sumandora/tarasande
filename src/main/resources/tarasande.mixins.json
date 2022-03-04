@@ -10,6 +10,7 @@
     "MixinFramebuffer",
     "MixinGameRenderer",
     "MixinGlDebug",
+    "MixinHeldItemRenderer",
     "MixinInGameHud",
     "MixinItemCooldownManager",
     "MixinKeyBinding",

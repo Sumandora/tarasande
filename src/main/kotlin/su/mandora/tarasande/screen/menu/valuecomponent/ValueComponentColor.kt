@@ -116,11 +116,12 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         RenderSystem.disableBlend()
         outlinedCircle(matrices, this.width - (getHeight() - 5) / 2.0 - sin((colorValue.hue + 0.5f) * PI * 2) * middleRadius, (getHeight() - 5) / 2.0 + cos((colorValue.hue + 0.5f) * PI * 2) * middleRadius, width / 2.0, 3.0f, -1)
         fillCircle(matrices, this.width - (getHeight() - 5) / 2.0 - sin((colorValue.hue + 0.5f) * PI * 2) * middleRadius, (getHeight() - 5) / 2.0 + cos((colorValue.hue + 0.5f) * PI * 2) * middleRadius, width / 2.0, Color.getHSBColor(colorValue.hue, 1.0f, 1.0f).rgb)
-        if (colorValue.alpha != -1.0f) {
+        if (colorValue.alpha != null) {
+            val alpha = colorValue.alpha!!
             fillVerticalGradient(matrices, this.width - (getHeight() - 5) - 10, 0.0, this.width - (getHeight() - 5) - 5, getHeight() - 5, -1, Color.black.rgb)
             outlinedFill(matrices, this.width - (getHeight() - 5) - 10, 0.0, this.width - (getHeight() - 5) - 5, getHeight() - 5, 2.0f, -1)
-            fillCircle(matrices, this.width - (getHeight() - 5) - 7.5, (getHeight() - 5) * (1.0 - colorValue.alpha) + (colorValue.alpha * 2 - 1) * 2.5, 2.5, Color(colorValue.alpha, colorValue.alpha, colorValue.alpha).rgb)
-            outlinedCircle(matrices, this.width - (getHeight() - 5) - 7.5, (getHeight() - 5) * (1.0 - colorValue.alpha) + (colorValue.alpha * 2 - 1) * 2.5, 2.5, 2.0f, -1)
+            fillCircle(matrices, this.width - (getHeight() - 5) - 7.5, (getHeight() - 5) * (1.0 - alpha) + (alpha * 2 - 1) * 2.5, 2.5, Color(alpha, alpha, alpha).rgb)
+            outlinedCircle(matrices, this.width - (getHeight() - 5) - 7.5, (getHeight() - 5) * (1.0 - alpha) + (alpha * 2 - 1) * 2.5, 2.5, 2.0f, -1)
         }
         if (alphaDragInfo.dragging) {
             colorValue.alpha = 1.0f - MathHelper.clamp((mouseY + (mouseY / (getHeight() - 5) * 2 - 1) * 5) / (getHeight() - 5), 0.0, 1.0).toFloat()
