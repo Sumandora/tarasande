@@ -14,4 +14,5 @@ public class MixinRenderSystem {
     private static void injectFlipFrame(long window, CallbackInfo ci) {
         RotationUtil.INSTANCE.updateFakeRotation();
     }
+
 }

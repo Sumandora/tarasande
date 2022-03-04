@@ -51,7 +51,8 @@ class ManagerModule : Manager<Module>() {
             ModuleKeepSprint(),
             ModuleMurderMystery(),
             ModuleNoSwing(),
-            ModuleColorCorrection()
+            ModuleColorCorrection(),
+            ModuleWorldTime()
         )
         TarasandeMain.get().managerEvent?.add { event ->
             if (event is EventKey)

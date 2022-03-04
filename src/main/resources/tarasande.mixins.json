@@ -32,6 +32,7 @@
     "MixinWindow",
     "MixinWorld",
     "MixinWorldRenderer",
+    "MixinWorldTimeUpdateS2CPacket",
     "backport.MixinGameRenderer",
     "backport.MixinWindow",
     "baritone.MixinLookBehavior",

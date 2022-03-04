@@ -73,7 +73,7 @@ object RotationUtil {
                 }
                 is EventHasForwardMovement -> {
                     if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!! && fakeRotation != null) {
-                        event.hasForwardMovement = abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - fakeRotation?.yaw!!)) <= 45
+                        event.hasForwardMovement = MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.0f && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - fakeRotation?.yaw!!)) <= 45
                     }
                 }
                 is EventPacket -> {
