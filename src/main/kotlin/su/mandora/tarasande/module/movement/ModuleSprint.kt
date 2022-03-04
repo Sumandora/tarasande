@@ -21,7 +21,7 @@ class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MO
         }
     }
     val boolean = ValueBoolean(this, "Boolean Value", false)
-    val color = ValueColor(this, "Color Value", 0.0F, 1.0F, 1.0F, -1.0F)
+    val color = ValueColor(this, "Color Value", 0.0F, 1.0F, 1.0F)
     val keyBindValue = ValueKeyBind(this, "KeyBind Value", GLFW.GLFW_KEY_G)
     val mode = ValueMode(this, "Mode Value", true, "Setting 1", "Setting 2", "Setting 3")
     val number = object : ValueNumber(this, "Number Value", 0.0, 1.0, 5.0, 0.3) {

@@ -53,14 +53,11 @@ class ManagerEvent : Manager<Pair<Int, Consumer<Event>>>() {
 
 open class Event(private val cancellable: Boolean) {
     var cancelled = false
-
-    fun setCancelled() {
-        if (cancellable) {
-            cancelled = true
+        set(value) = if (cancellable || !value) {
+            field = value
         } else {
             throw IllegalStateException("Event is not cancellable")
         }
-    }
 }
 
 annotation class Priority(val value: Int)

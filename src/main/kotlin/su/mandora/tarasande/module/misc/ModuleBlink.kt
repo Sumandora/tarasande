@@ -43,7 +43,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                     }
                     if (affectedPackets.isSelected(event.type.ordinal)) {
                         packets.add(Pair(event.packet, event.type))
-                        event.setCancelled()
+                        event.cancelled = true
                     }
                 }
             }

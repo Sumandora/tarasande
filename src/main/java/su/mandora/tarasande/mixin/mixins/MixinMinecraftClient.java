@@ -27,6 +27,7 @@ import su.mandora.tarasande.event.*;
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient;
 import su.mandora.tarasande.module.render.ModuleESP;
 import su.mandora.tarasande.util.reflection.ReflectionUtil;
+import su.mandora.tarasande.util.reflection.ReflectorAny;
 import su.mandora.tarasande.util.reflection.ReflectorClass;
 import su.mandora.tarasande.util.render.RenderUtil;
 
@@ -133,8 +134,14 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Inject(method = "createUserApiService", at = @At("HEAD"), cancellable = true)
     public void injectCreateUserApiService(YggdrasilAuthenticationService authService, RunArgs runArgs, CallbackInfoReturnable<UserApiService> cir) {
         ReflectorClass reflectorClass = ReflectionUtil.INSTANCE.createReflectorClass("net.fabricmc.loader.launch.common.FabricLauncherBase");
-        if (reflectorClass != null && reflectorClass.invokeMethod("getLauncher").asReflectorClass().invokeMethod("isDevelopment").interpretAs(Boolean.class)) {
-            cir.setReturnValue(UserApiService.OFFLINE);
+        if (reflectorClass != null) {
+            ReflectorAny getLauncher = reflectorClass.invokeMethod("getLauncher");
+            if(getLauncher != null) {
+                ReflectorAny isDevelopment = getLauncher.asReflectorClass().invokeMethod("isDevelopment");
+                if(isDevelopment != null && isDevelopment.interpretAs(Boolean.class)) {
+                    cir.setReturnValue(UserApiService.OFFLINE);
+                }
+            }
         }
     }
 

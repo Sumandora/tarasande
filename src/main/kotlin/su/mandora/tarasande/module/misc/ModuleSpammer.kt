@@ -100,7 +100,7 @@ class ModuleSpammer : Module("Spammer", "Spams something in chat", ModuleCategor
             }
             is EventChat -> {
                 priorityMessages.add(event.chatMessage)
-                event.setCancelled()
+                event.cancelled = true
             }
         }
     }

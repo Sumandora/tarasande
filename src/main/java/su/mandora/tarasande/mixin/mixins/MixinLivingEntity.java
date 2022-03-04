@@ -1,19 +1,23 @@
 package su.mandora.tarasande.mixin.mixins;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande.TarasandeMain;
 import su.mandora.tarasande.event.EventJump;
+import su.mandora.tarasande.event.EventSwing;
 import su.mandora.tarasande.mixin.accessor.ILivingEntity;
 import su.mandora.tarasande.util.math.rotation.Rotation;
 import su.mandora.tarasande.util.math.rotation.RotationUtil;
@@ -76,6 +80,16 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
             Rotation rotation = RotationUtil.INSTANCE.getFakeRotation();
             rotation.setYaw((rotation.getYaw() + (float) MathHelper.wrapDegrees(this.serverYaw - (double) rotation.getYaw()) / (float) this.bodyTrackingIncrements) % 360.0F);
             rotation.setPitch((rotation.getPitch() + (float) (this.serverPitch - (double) rotation.getPitch()) / (float) this.bodyTrackingIncrements) % 360.0F);
+        }
+    }
+
+    @Inject(method = "swingHand(Lnet/minecraft/util/Hand;)V", at = @At("HEAD"), cancellable = true)
+    public void injectSwingHand(Hand hand, CallbackInfo ci) {
+        if((Object) this == MinecraftClient.getInstance().player) {
+            EventSwing eventSwing = new EventSwing(hand);
+            TarasandeMain.Companion.get().getManagerEvent().call(eventSwing);
+            if(eventSwing.getCancelled())
+                ci.cancel();
         }
     }
 

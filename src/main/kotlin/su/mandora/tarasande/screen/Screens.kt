@@ -35,7 +35,7 @@ class Screens {
                                 wheelMenu.entity = hitResult.entity
                             wheelMenu.active = true
                         }
-                        event.setCancelled()
+                        event.cancelled = true
                     }
             }
         }

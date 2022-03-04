@@ -5,7 +5,7 @@ import com.google.gson.JsonElement
 import su.mandora.tarasande.base.value.Value
 import java.awt.Color
 
-open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var bri: Float, var alpha: Float) : Value(owner, name) {
+open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var bri: Float, var alpha: Float = -1.0F) : Value(owner, name) {
     var hue: Float = hue
         get() {
             return if (rainbow) {

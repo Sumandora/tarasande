@@ -40,7 +40,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
 
                 when {
                     mode.isSelected(0) -> {
-                        event.setCancelled()
+                        event.cancelled = true
                     }
                     mode.isSelected(1) -> {
                         event.velocityX *= horizontal.value

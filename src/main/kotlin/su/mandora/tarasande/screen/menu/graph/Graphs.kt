@@ -7,6 +7,7 @@ import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.screen.menu.graph.Graph
 import su.mandora.tarasande.event.EventPacket
+import su.mandora.tarasande.event.EventSwing
 import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity
 import su.mandora.tarasande.util.render.RenderUtil
 import kotlin.math.round
@@ -55,7 +56,7 @@ class GraphCPS : Graph("CPS", 200) {
 
     init {
         TarasandeMain.get().managerEvent?.add { event ->
-            if (event is EventPacket && event.type == EventPacket.Type.SEND && event.packet is HandSwingC2SPacket) {
+            if (event is EventSwing) {
                 clicks.add(System.currentTimeMillis())
             }
         }

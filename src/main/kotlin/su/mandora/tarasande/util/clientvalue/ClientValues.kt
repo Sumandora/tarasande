@@ -9,7 +9,7 @@ class ClientValues {
     val menuHotkey = object : ValueKeyBind(this, "Menu hotkey", GLFW.GLFW_KEY_RIGHT_SHIFT) {
         override fun filter(keyBind: Int) = keyBind != GLFW.GLFW_KEY_UNKNOWN
     }
-    val accentColor = ValueColor(this, "Accent color", 0.6f, 1.0f, 1.0f, -1.0f)
+    val accentColor = ValueColor(this, "Accent color", 0.6f, 1.0f, 1.0f)
     val targets = ValueMode(this, "Targets", true, "Players", "Animals", "Mobs", "Other")
     val dontAttackTamedEntities = object : ValueBoolean(this, "Don't attack tamed entities", false) {
         override fun isVisible() = targets.isSelected(1)

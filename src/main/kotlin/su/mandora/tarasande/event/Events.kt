@@ -5,6 +5,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
 import net.minecraft.item.Item
 import net.minecraft.network.Packet
+import net.minecraft.util.Hand
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.util.math.rotation.Rotation
@@ -109,3 +110,5 @@ class EventAttack : Event(false)
 class EventHandleBlockBreaking(var parameter: Boolean) : Event(false)
 class EventEntityColor(val entity: Entity, var color: Color) : Event(false)
 class EventHasForwardMovement(var hasForwardMovement: Boolean) : Event(false)
+class EventSwing(var hand: Hand) : Event(true)
+class EventColorCorrection(var red: Int, var green: Int, var blue: Int) : Event(false)

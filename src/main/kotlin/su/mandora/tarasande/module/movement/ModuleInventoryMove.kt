@@ -31,8 +31,8 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
             is EventPacket -> {
                 if (event.type == EventPacket.Type.SEND) {
                     when {
-                        canceledPackets.isSelected(0) && event.packet is ClientCommandC2SPacket && event.packet.mode == ClientCommandC2SPacket.Mode.OPEN_INVENTORY -> event.setCancelled()
-                        canceledPackets.isSelected(1) && event.packet is CloseHandledScreenC2SPacket && event.packet.syncId == 0 /* PlayerScreenHandler hardcoded in parent constructor call */ -> event.setCancelled()
+                        canceledPackets.isSelected(0) && event.packet is ClientCommandC2SPacket && event.packet.mode == ClientCommandC2SPacket.Mode.OPEN_INVENTORY -> event.cancelled = true
+                        canceledPackets.isSelected(1) && event.packet is CloseHandledScreenC2SPacket && event.packet.syncId == 0 /* PlayerScreenHandler hardcoded in parent constructor call */ -> event.cancelled = true
                     }
                 }
             }

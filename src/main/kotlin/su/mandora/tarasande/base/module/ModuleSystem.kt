@@ -14,10 +14,7 @@ import su.mandora.tarasande.module.misc.*
 import su.mandora.tarasande.module.movement.*
 import su.mandora.tarasande.module.player.ModuleScaffoldWalk
 import su.mandora.tarasande.module.player.ModuleTimer
-import su.mandora.tarasande.module.render.ModuleESP
-import su.mandora.tarasande.module.render.ModuleFullBright
-import su.mandora.tarasande.module.render.ModuleNoFov
-import su.mandora.tarasande.module.render.ModuleTrajectories
+import su.mandora.tarasande.module.render.*
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueKeyBind
 
@@ -52,7 +49,9 @@ class ManagerModule : Manager<Module>() {
             ModuleNoFov(),
             ModuleLatency(),
             ModuleKeepSprint(),
-            ModuleMurderMystery()
+            ModuleMurderMystery(),
+            ModuleNoSwing(),
+            ModuleColorCorrection()
         )
         TarasandeMain.get().managerEvent?.add { event ->
             if (event is EventKey)

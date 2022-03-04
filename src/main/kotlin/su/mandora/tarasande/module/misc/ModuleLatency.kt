@@ -44,7 +44,7 @@ class ModuleLatency : Module("Latency", "Controls network latency", ModuleCatego
                     }
                     if (affectedPackets.isSelected(event.type.ordinal)) {
                         packets.add(Triple(System.currentTimeMillis() + latency.value.toLong(), event.packet, event.type))
-                        event.setCancelled()
+                        event.cancelled = true
                     }
                 }
             }
