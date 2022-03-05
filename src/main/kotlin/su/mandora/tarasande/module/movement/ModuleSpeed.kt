@@ -51,7 +51,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                 if (event.entity != mc.player)
                     return@Consumer
 
-                if(mc.player?.input?.movementInput?.lengthSquared()!! == 0.0f) {
+                if (mc.player?.input?.movementInput?.lengthSquared()!! == 0.0f) {
                     moveDir = PlayerUtil.getMoveDirection()
                     return@Consumer
                 }

@@ -71,9 +71,18 @@ object RotationUtil {
                             }
                         }
                 }
+                is EventIsWalking -> {
+                    if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!! && fakeRotation != null) {
+                        event.walking =
+                            (MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f) &&
+                                    abs(MathHelper.wrapDegrees(Math.toDegrees(PlayerUtil.getMoveDirection()) - 90 - fakeRotation?.yaw!!)) <= 45
+                    }
+                }
                 is EventHasForwardMovement -> {
                     if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!! && fakeRotation != null) {
-                        event.hasForwardMovement = MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.0f && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - fakeRotation?.yaw!!)) <= 45
+                        event.hasForwardMovement =
+                            MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f &&
+                                    abs(MathHelper.wrapDegrees(Math.toDegrees(PlayerUtil.getMoveDirection()) - 90 - fakeRotation?.yaw!!)) <= 45
                     }
                 }
                 is EventPacket -> {

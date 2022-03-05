@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.TarasandeMain;
 import su.mandora.tarasande.event.*;
 import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity;
@@ -95,6 +96,13 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerAbilities;getFlySpeed()F"))
     public float hookedGetFlySpeed(PlayerAbilities instance) {
         return cachedEventVanillaFlight.getDirty() ? cachedEventVanillaFlight.getFlightSpeed() : instance.getFlySpeed();
+    }
+
+    @Inject(method = "isWalking", at = @At("RETURN"), cancellable = true)
+    public void injectIsWalking(CallbackInfoReturnable<Boolean> cir) {
+        EventIsWalking eventIsWalking = new EventIsWalking(cir.getReturnValue());
+        TarasandeMain.Companion.get().getManagerEvent().call(eventIsWalking);
+        cir.setReturnValue(eventIsWalking.getWalking());
     }
 
     @Override

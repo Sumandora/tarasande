@@ -57,7 +57,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val lockView = ValueBoolean(this, "Lock view", false)
     private val sneak = ValueBoolean(this, "Sneak", false)
     private val headRoll = ValueMode(this, "Head roll", false, "Disabled", "Advantage", "Autism")
-    private val aimHeight = ValueNumber(this, "Aim height", 0.0, 0.5, 1.0, 0.01)
 
     private val targets = ArrayList<Pair<BlockPos, Direction>>()
     private val timeUtil = TimeUtil()
@@ -78,7 +77,14 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             targets.add(Pair(BlockPos(1, y, 0), Direction.EAST))
             targets.add(Pair(BlockPos(-1, y, 0), Direction.WEST))
             targets.add(Pair(BlockPos(0, y, -1), Direction.NORTH))
-            // diagonals
+
+            // diagonals clockwise
+            targets.add(Pair(BlockPos(-1, y, 1), Direction.SOUTH))
+            targets.add(Pair(BlockPos(-1, y, -1), Direction.WEST))
+            targets.add(Pair(BlockPos(1, y, 1), Direction.EAST))
+            targets.add(Pair(BlockPos(1, y, -1), Direction.NORTH))
+
+            // diagonals counter-clockwise
             targets.add(Pair(BlockPos(-1, y, 1), Direction.WEST))
             targets.add(Pair(BlockPos(-1, y, -1), Direction.NORTH))
             targets.add(Pair(BlockPos(1, y, 1), Direction.SOUTH))
@@ -104,18 +110,18 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     }
 
     private fun getAdjacentBlock(blockPos: BlockPos): Pair<BlockPos, Direction>? {
-        val arrayList = ArrayList<Pair<BlockPos, Direction>>()
+        val arrayList = ArrayList<Triple<BlockPos, BlockPos, Direction>>()
         for (target in targets) {
             val adjacent = blockPos.add(target.first.x, target.first.y, target.first.z)
             if (!mc.world?.isAir(adjacent)!!)
-                arrayList.add(Pair(adjacent, target.second))
+                arrayList.add(Triple(target.first, adjacent, target.second))
         }
         var best: Pair<BlockPos, Direction>? = null
         var dist = 0.0
         for (target in arrayList) {
-            val dist2 = Vec3d.ofCenter(target.first).add(Vec3d.of(target.second.vector).multiply(0.5)).squaredDistanceTo(mc.player?.pos)
+            val dist2 = Vec3d.ofCenter(target.second).add(Vec3d.of(target.third.opposite.vector).multiply(0.5)).subtract(mc.player?.pos!!).horizontalLengthSquared()
             if (best == null || dist2 < dist) {
-                best = target
+                best = Pair(target.second, target.third)
                 dist = dist2
             }
         }
@@ -156,46 +162,50 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                             var rotDelta = 0.0
                             var x = 0.0
                             while (x <= 1.0) {
-                                var z = 0.0
-                                while (z <= 1.0) {
-                                    val newPoint = point.add(Vec3d(x, aimHeight.value, z))
-                                    val rot = RotationUtil.getRotations(mc.player?.eyePos!!, newPoint)
-                                    val rotationVector =
-                                        (mc.player as IEntity).invokeGetRotationVector(rot.pitch, rot.yaw)
-                                    val hitResult = PlayerUtil.rayCast(
-                                        mc.player?.eyePos!!,
-                                        mc.player?.eyePos?.add(rotationVector.multiply(mc.interactionManager?.reachDistance?.toDouble()!!))!!
-                                    )
-                                    if (hitResult != null && hitResult.type == HitResult.Type.BLOCK && (target == null || (hitResult.side == (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) && hitResult.blockPos == target?.first))) {
-                                        val dir = target?.second?.opposite!!
-                                        val delta = abs(
-                                            MathHelper.wrapDegrees
-                                                (
-                                                (
-                                                        if ((dir.offsetY != 0 && mc.player?.velocity?.horizontalLengthSquared()!! <= 0.01))
-                                                            mc.player?.yaw?.toDouble()!!
-                                                        else
-                                                            RotationUtil.getYaw(
-                                                                if (offsetGoalYaw.value || dir.offsetY != 0)
-                                                                    Vec3d(
-                                                                        mc.player?.velocity?.x!!,
-                                                                        0.0,
-                                                                        mc.player?.velocity?.z!!
-                                                                    )
-                                                                else
-                                                                    Vec3d.of(dir.vector)
-                                                            )
-                                                        )
-                                                        -
-                                                        (rot.yaw + goalYaw.value)
-                                            )
+                                var y = 0.0
+                                while (y <= 1.0) {
+                                    var z = 0.0
+                                    while (z <= 1.0) {
+                                        val newPoint = point.add(Vec3d(x, y, z))
+                                        val rot = RotationUtil.getRotations(mc.player?.eyePos!!, newPoint)
+                                        val rotationVector =
+                                            (mc.player as IEntity).invokeGetRotationVector(rot.pitch, rot.yaw)
+                                        val hitResult = PlayerUtil.rayCast(
+                                            mc.player?.eyePos!!,
+                                            mc.player?.eyePos?.add(rotationVector.multiply(mc.interactionManager?.reachDistance?.toDouble()!!))!!
                                         )
-                                        if (bestPoint == null || rotDelta > delta) {
-                                            bestPoint = newPoint
-                                            rotDelta = delta
+                                        if (hitResult != null && hitResult.type == HitResult.Type.BLOCK && (target == null || (hitResult.side == (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) && hitResult.blockPos == target?.first))) {
+                                            val dir = target?.second?.opposite!!
+                                            val delta = abs(
+                                                MathHelper.wrapDegrees
+                                                    (
+                                                    (
+                                                            if ((dir.offsetY != 0 && mc.player?.velocity?.horizontalLengthSquared()!! <= 0.01))
+                                                                mc.player?.yaw?.toDouble()!!
+                                                            else
+                                                                RotationUtil.getYaw(
+                                                                    if (offsetGoalYaw.value || dir.offsetY != 0)
+                                                                        Vec3d(
+                                                                            mc.player?.velocity?.x!!,
+                                                                            0.0,
+                                                                            mc.player?.velocity?.z!!
+                                                                        )
+                                                                    else
+                                                                        Vec3d.of(dir.vector)
+                                                                )
+                                                            )
+                                                            -
+                                                            (rot.yaw + goalYaw.value)
+                                                )
+                                            )
+                                            if (bestPoint == null || rotDelta > delta) {
+                                                bestPoint = newPoint
+                                                rotDelta = delta
+                                            }
                                         }
+                                        z += 0.05
                                     }
-                                    z += 0.05
+                                    y += 0.05
                                 }
                                 x += 0.05
                             }
