@@ -20,6 +20,7 @@ public class MixinGameRenderer implements IGameRenderer {
     @Shadow
     private float fovMultiplier;
     boolean allowThroughWalls = false;
+    boolean disableReachExtension = false;
     double reach = 3.0;
 
     @Inject(method = "renderWorld", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z"))
@@ -54,6 +55,14 @@ public class MixinGameRenderer implements IGameRenderer {
         return reach * reach;
     }
 
+    @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;hasExtendedReach()Z"))
+    public boolean hookedHasExtendedReach(ClientPlayerInteractionManager instance) {
+        if(!disableReachExtension)
+            return instance.hasExtendedReach();
+        else
+            return false;
+    }
+
     @Override
     public void setAllowThroughWalls(boolean allowThroughWalls) {
         this.allowThroughWalls = allowThroughWalls;
@@ -62,6 +71,16 @@ public class MixinGameRenderer implements IGameRenderer {
     @Override
     public boolean isAllowThroughWalls() {
         return allowThroughWalls;
+    }
+
+    @Override
+    public void setDisableReachExtension(boolean disableReachExtension) {
+        this.disableReachExtension = disableReachExtension;
+    }
+
+    @Override
+    public boolean isDisableReachExtension() {
+        return disableReachExtension;
     }
 
     @Override

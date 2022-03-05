@@ -10,6 +10,7 @@ import net.minecraft.item.SwordItem
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.EntityHitResult
+import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
@@ -337,10 +338,14 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private fun attack(entity: Entity?) {
         clicked = true
         val original = mc.crosshairTarget
-        if (entity != null) { // otherwise we just use the rotation as hitresult
+        if (entity != null) {
             mc.crosshairTarget = EntityHitResult(entity)
             if (!attackCooldown.value) {
                 (mc as IMinecraftClient).attackCooldown = 0
+            }
+        } else {
+            mc.crosshairTarget = object : HitResult(null) {
+                override fun getType() = Type.MISS
             }
         }
         (mc as IMinecraftClient).invokeDoAttack()
@@ -396,22 +401,23 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             val dist = MathUtil.getBias(mc.player?.eyePos?.squaredDistanceTo(aimPoint)!! / (reach.maxValue * reach.maxValue) * (reach.minValue / reach.maxValue), 0.45) // I have no idea why this works and looks like it does, but it's good and why remove it then
             aimPoint = aimPoint.add(
                 (center.x - aimPoint.x) * min((1 - dist) * 1.2, 1.0),
-                (center.y - aimPoint.y) * (1 - dist) * 0.65 /* Humans dislike aiming up and down */,
+                (center.y - aimPoint.y) * (1 - dist) * 0.25 /* Humans dislike aiming up and down */,
                 (center.z - aimPoint.z) * min((1 - dist) * 1.2, 1.0)
             )
 
             // Humans can't hold their hands still
-            val diff = mc.player?.velocity?.subtract(entity.prevX - entity.x, entity.prevY - entity.y, entity.prevZ - entity.z)?.multiply(-1.0)!!
-            if (mc.player?.velocity?.lengthSquared()!! > 0.0 || (entity.prevX != entity.x || entity.prevY != entity.y || entity.prevZ != entity.z)) { // either the target or the player has to move otherwise changing the rotation doesn't make sense
-                aimPoint = aimPoint.add(
-                    if (diff.x != 0.0) sin(System.currentTimeMillis() / (150.0 / diff.x)) * ThreadLocalRandom.current().nextFloat() * 0.15 else 0.0,
-                    if (diff.y != 0.0) cos(System.currentTimeMillis() / (150.0 / diff.y)) * ThreadLocalRandom.current().nextFloat() * 0.15 else 0.0,
-                    if (diff.z != 0.0) sin(System.currentTimeMillis() / (150.0 / diff.z)) * ThreadLocalRandom.current().nextFloat() * 0.15 else 0.0
-                )
-            }
+            val actualVelocity = Vec3d(mc.player?.prevX!! - mc.player?.x!!, mc.player?.prevY!! - mc.player?.y!!, mc.player?.prevZ!! - mc.player?.z!!)
+            val diff = actualVelocity.subtract(entity.prevX - entity.x, entity.prevY - entity.y, entity.prevZ - entity.z)?.multiply(-1.0)!!
+//            if (diff.lengthSquared() > 0.0) { // either the target or the player has to move otherwise changing the rotation doesn't make sense
+//                aimPoint = aimPoint.add(
+//                    if (diff.x != 0.0) sin(System.currentTimeMillis() * 0.001) * 0.15 else 0.0,
+//                    if (diff.y != 0.0) cos(System.currentTimeMillis() * 0.001) * 0.15 else 0.0,
+//                    if (diff.z != 0.0) sin(System.currentTimeMillis() * 0.001) * 0.15 else 0.0
+//                )
+//            }
 
             // Human aim is slow
-            aimPoint = aimPoint.subtract(diff.multiply(0.5))
+            aimPoint = aimPoint.subtract(diff)
 
             // Don't aim through walls
             while (!PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint) && rotations.isSelected(0)) {

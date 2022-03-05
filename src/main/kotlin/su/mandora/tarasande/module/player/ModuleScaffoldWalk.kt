@@ -55,7 +55,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val rotateAtEdge = ValueBoolean(this, "Rotate at edge", false)
     private val silent = ValueBoolean(this, "Silent", false)
     private val lockView = ValueBoolean(this, "Lock view", false)
-    private val sneak = ValueBoolean(this, "Sneak", false)
     private val headRoll = ValueMode(this, "Head roll", false, "Disabled", "Advantage", "Autism")
 
     private val targets = ArrayList<Pair<BlockPos, Direction>>()
@@ -345,10 +344,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             }
             is EventJump -> {
                 prevEdgeDistance = 0.5
-            }
-            is EventKeyBindingIsPressed -> {
-                if (event.keyBinding == mc.options.sneakKey && sneak.value && target != null && target?.second?.offsetY == 0)
-                    event.pressed = mc.world?.isAir(BlockPos(mc.player?.pos?.add(0.0, -1.0, 0.0)))!!
             }
         }
     }

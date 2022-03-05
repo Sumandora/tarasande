@@ -55,9 +55,11 @@ object PlayerUtil {
 
         val prevAllowThroughWalls = accessor.isAllowThroughWalls
         val prevReach = accessor.reach
+        val prevReachExtension = accessor.isDisableReachExtension
 
         accessor.isAllowThroughWalls = true
         accessor.reach = reach
+        accessor.isDisableReachExtension = true
 
         val prevCrosshairTarget = MinecraftClient.getInstance().crosshairTarget
         val prevTargetedEntity = MinecraftClient.getInstance().targetedEntity
@@ -89,6 +91,7 @@ object PlayerUtil {
 
         accessor.reach = prevReach
         accessor.isAllowThroughWalls = prevAllowThroughWalls
+        accessor.isDisableReachExtension = prevReachExtension
 
         return hitResult
     }

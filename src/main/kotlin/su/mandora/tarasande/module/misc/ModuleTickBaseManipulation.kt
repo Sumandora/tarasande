@@ -2,14 +2,14 @@ package su.mandora.tarasande.module.misc
 
 import net.minecraft.entity.LivingEntity
 import org.lwjgl.glfw.GLFW
+import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
-import su.mandora.tarasande.event.EventAttack
-import su.mandora.tarasande.event.EventAttackEntity
-import su.mandora.tarasande.event.EventTimeTravel
+import su.mandora.tarasande.event.*
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
+import su.mandora.tarasande.module.combat.ModuleKillAura
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueKeyBind
@@ -27,12 +27,22 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
         override fun isVisible() = !instantUncharge.value
     }
     private val rapidFire = ValueBoolean(this, "Rapid fire", false)
+    private val defensive = ValueBoolean(this, "Defensive", false)
 
     private var prevTime = 0L
     private var lastUpdate = 0L
 
-    var prevShifted = 0L
+    private var prevShifted = 0L
     var shifted = 0L
+
+    private var didHit = false
+
+    private val movementKeys = arrayListOf(
+        mc.options.forwardKey,
+        mc.options.leftKey,
+        mc.options.backKey,
+        mc.options.rightKey
+    )
 
     override fun onEnable() {
         shifted = 0L
@@ -43,20 +53,33 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
         when (event) {
             is EventAttackEntity -> {
                 if (event.state != EventAttackEntity.State.PRE) return@Consumer
-                if (event.entity is LivingEntity && rapidFire.value) {
-                    shifted = if (instantUncharge.value)
-                        0L
-                    else
-                        max(0L, (shifted - (event.entity.hurtTime * ((mc as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime)).toLong())
+                if (event.entity is LivingEntity) {
+                    didHit = true
+                    if (rapidFire.value) {
+                        shifted = if (instantUncharge.value)
+                            0L
+                        else
+                            max(0L, (shifted - (event.entity.hurtTime * ((mc as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime)).toLong())
+                    }
                 }
             }
-            is EventAttack -> { // Aura sync
-                if (shifted < prevShifted)
+            is EventKeyBindingIsPressed -> {
+                if(shifted < prevShifted && didHit) {
+                    if(movementKeys.contains(event.keyBinding)) {
+                        event.pressed = !event.pressed
+                    }
+                }
+            }
+            is EventTick -> { // Aura sync
+                if (event.state == EventTick.State.PRE && shifted < prevShifted) {
                     RotationUtil.simulateFakeRotationUpdate()
-                prevShifted = shifted
+                    println(mc.player?.age)
+                }
             }
             is EventTimeTravel -> {
                 if (mc.player != null) {
+                    didHit = false
+                    prevShifted = shifted
                     if (chargeKey.isPressed()) {
                         shifted += event.time - prevTime
 
@@ -65,7 +88,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
                             if (event.time - lastUpdate > iRenderTickCounter.tickTime) {
                                 for (i in 0..((event.time - lastUpdate) / iRenderTickCounter.tickTime).toInt()) {
                                     for (entity in mc.world?.entities!!) {
-                                        if (entity is LivingEntity && entity != mc.player) {
+                                        if (entity != mc.player) {
                                             //                                        entity as ILivingEntity
                                             //                                        entity.setPosition(entity.serverX, entity.serverY, entity.serverZ)
                                             //                                        entity.yaw += MathHelper.wrapDegrees(entity.serverYaw.toFloat() - entity.getYaw())

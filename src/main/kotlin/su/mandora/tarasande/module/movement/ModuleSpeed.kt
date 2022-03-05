@@ -40,9 +40,10 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
     private val timeUtil = TimeUtil()
     private var speed = 0.0
     private var moveDir = 0.0
+    private var firstMove = true
 
     override fun onEnable() {
-        moveDir = PlayerUtil.getMoveDirection()
+        firstMove = true
     }
 
     val eventConsumer = Consumer<Event> { event ->
@@ -51,10 +52,11 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                 if (event.entity != mc.player)
                     return@Consumer
 
-                if (mc.player?.input?.movementInput?.lengthSquared()!! == 0.0f) {
-                    moveDir = PlayerUtil.getMoveDirection()
+                if(mc.player?.velocity?.lengthSquared()!! <= 0.01)
+                    firstMove = true
+
+                if (mc.player?.input?.movementInput?.lengthSquared() == 0.0f)
                     return@Consumer
-                }
 
                 val accessor = event.velocity as IVec3d
 
@@ -91,7 +93,9 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
                 val maxRotate = Math.toRadians(turnRate.value)
 
-                moveDir += MathHelper.clamp(delta, -maxRotate, maxRotate)
+                moveDir += if(firstMove) delta else MathHelper.clamp(delta, -maxRotate, maxRotate)
+
+                firstMove = false
 
                 val moveSpeed = max(speed, baseSpeed)
                 accessor.setX(cos(moveDir) * moveSpeed)
