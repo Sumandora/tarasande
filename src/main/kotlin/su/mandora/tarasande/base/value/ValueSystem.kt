@@ -17,7 +17,7 @@ class ManagerValue : Manager<Value>() {
 }
 
 abstract class Value(var owner: Any, var name: String) {
-    open fun isVisible() = true
+    open fun isEnabled() = true
     open fun onChange() {}
 
     abstract fun save(): JsonElement?

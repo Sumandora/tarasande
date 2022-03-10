@@ -4,7 +4,6 @@ import net.minecraft.client.MinecraftClient
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.Manager
-import su.mandora.tarasande.event.EventKey
 import su.mandora.tarasande.event.EventTick
 import su.mandora.tarasande.module.combat.ModuleAntiBot
 import su.mandora.tarasande.module.combat.ModuleKillAura
@@ -12,15 +11,14 @@ import su.mandora.tarasande.module.combat.ModuleTeams
 import su.mandora.tarasande.module.combat.ModuleWTap
 import su.mandora.tarasande.module.misc.*
 import su.mandora.tarasande.module.movement.*
+import su.mandora.tarasande.module.player.ModuleNuker
 import su.mandora.tarasande.module.player.ModuleScaffoldWalk
 import su.mandora.tarasande.module.player.ModuleTimer
 import su.mandora.tarasande.module.render.*
+import su.mandora.tarasande.value.ValueBind
 import su.mandora.tarasande.value.ValueBoolean
-import su.mandora.tarasande.value.ValueKeyBind
 
 class ManagerModule : Manager<Module>() {
-
-    private val toggledModules = ArrayList<Module>()
 
     init {
         add(
@@ -52,17 +50,15 @@ class ManagerModule : Manager<Module>() {
             ModuleMurderMystery(),
             ModuleNoSwing(),
             ModuleColorCorrection(),
-            ModuleWorldTime()
+            ModuleWorldTime(),
+            ModuleNuker()
         )
         TarasandeMain.get().managerEvent?.add { event ->
-            if (event is EventKey)
-                for (module in list)
-                    if (module.keyBind.keyBind == event.key)
-                        toggledModules.add(module)
             if (event is EventTick)
                 if (event.state == EventTick.State.POST) {
-                    toggledModules.forEach(Module::switchState)
-                    toggledModules.clear()
+                    for (module in list)
+                        for (i in 0 until module.bind.wasPressed())
+                            module.switchState()
                 }
         }
     }
@@ -84,7 +80,7 @@ open class Module(val name: String, val description: String, val category: Modul
 
             field = value
         }
-    val keyBind = ValueKeyBind(this, "Key Bind", GLFW.GLFW_KEY_UNKNOWN)
+    val bind = ValueBind(this, "Bind", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN)
 
     val mc: MinecraftClient = MinecraftClient.getInstance()
 

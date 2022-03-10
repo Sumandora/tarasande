@@ -24,15 +24,15 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
     private val jumpHeight = ValueNumber(this, "Jump height", 0.0, 1.0, 2.0, 0.1)
     private val lowHop = object : ValueBoolean(this, "Low hop", false) {
-        override fun isVisible() = jumpHeight.value > 0.0
+        override fun isEnabled() = jumpHeight.value > 0.0
     }
     private val gravity = ValueNumber(this, "Gravity", 0.0, 1.0, 2.0, 0.1)
     private val gainMethod = ValueMode(this, "Gain method", true, "Jump", "Pulse")
     private val pulseDelay = object : ValueNumber(this, "Pulse delay", 0.0, 200.0, 1000.0, 1.0) {
-        override fun isVisible() = gainMethod.isSelected(1)
+        override fun isEnabled() = gainMethod.isSelected(1)
     }
     private val speedValue = object : ValueNumber(this, "Speed", 0.0, 0.28, 1.0, 0.01) {
-        override fun isVisible() = gainMethod.anySelected()
+        override fun isEnabled() = gainMethod.anySelected()
     }
     private val speedDivider = ValueNumber(this, "Speed divider", 1.0, 60.0, 200.0, 1.0)
     private val turnRate = ValueNumber(this, "Turn rate", 0.0, 180.0, 180.0, 1.0)
@@ -52,7 +52,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                 if (event.entity != mc.player)
                     return@Consumer
 
-                if(mc.player?.velocity?.lengthSquared()!! <= 0.01)
+                if (mc.player?.velocity?.lengthSquared()!! <= 0.01)
                     firstMove = true
 
                 if (mc.player?.input?.movementInput?.lengthSquared() == 0.0f)
@@ -93,7 +93,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
                 val maxRotate = Math.toRadians(turnRate.value)
 
-                moveDir += if(firstMove) delta else MathHelper.clamp(delta, -maxRotate, maxRotate)
+                moveDir += if (firstMove) delta else MathHelper.clamp(delta, -maxRotate, maxRotate)
 
                 firstMove = false
 

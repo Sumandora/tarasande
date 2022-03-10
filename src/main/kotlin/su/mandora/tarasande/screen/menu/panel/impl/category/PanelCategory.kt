@@ -41,13 +41,11 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (!RenderUtil.isHovered(mouseX, mouseY, x, y + MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), x + panelWidth, y + panelHeight))
-            return super.mouseClicked(mouseX, mouseY, button)
-
+        val hovered = RenderUtil.isHovered(mouseX, mouseY, x, y + MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), x + panelWidth, y + panelHeight)
         val x = x + 2
         var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
         moduleElementList.forEach {
-            it.mouseClicked(mouseX - x, mouseY - y - scrollOffset, button)
+            it.mouseClicked(if (hovered) mouseX - x else -1.0, if (hovered) mouseY - y - scrollOffset else -1.0, button)
             y += it.getHeight() + 2
         }
         return super.mouseClicked(mouseX, mouseY, button)

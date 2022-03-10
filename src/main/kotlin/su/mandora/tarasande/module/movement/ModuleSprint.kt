@@ -14,7 +14,7 @@ import java.util.function.Consumer
 class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MOVEMENT) {
 
     private val allowBackwards = object : ValueBoolean(this, "Allow backwards", false) {
-        override fun isVisible() = !TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!!
+        override fun isEnabled() = !TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!!
     }
 
     val eventConsumer = Consumer<Event> { event ->
@@ -24,11 +24,11 @@ class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MO
                     event.pressed = true
             }
             is EventIsWalking -> {
-                if (allowBackwards.isVisible() && allowBackwards.value)
+                if (allowBackwards.isEnabled() && allowBackwards.value)
                     event.walking = MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f
             }
             is EventHasForwardMovement -> {
-                if (allowBackwards.isVisible() && allowBackwards.value)
+                if (allowBackwards.isEnabled() && allowBackwards.value)
                     event.hasForwardMovement = MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f
             }
         }

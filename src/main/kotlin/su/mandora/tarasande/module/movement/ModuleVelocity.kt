@@ -17,13 +17,13 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
     private val packets = ValueMode(this, "Packets", true, "Velocity", "Explosion")
     private val mode = ValueMode(this, "Mode", false, "Cancel", "Custom", "Jump")
     private val horizontal = object : ValueNumber(this, "Horizontal", -1.0, 0.0, 1.0, 0.01) {
-        override fun isVisible() = mode.isSelected(1)
+        override fun isEnabled() = mode.isSelected(1)
     }
     private val vertical = object : ValueNumber(this, "Vertical", 0.0, 0.0, 1.0, 0.01) {
-        override fun isVisible() = mode.isSelected(1)
+        override fun isEnabled() = mode.isSelected(1)
     }
     private val chance = object : ValueNumber(this, "Chance", 0.0, 75.0, 100.0, 1.0) {
-        override fun isVisible() = mode.isSelected(2)
+        override fun isEnabled() = mode.isSelected(2)
     }
 
     private var receivedKnockback = false

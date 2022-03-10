@@ -37,9 +37,7 @@ import su.mandora.tarasande.value.ValueNumber
 import su.mandora.tarasande.value.ValueNumberRange
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
-import kotlin.math.cos
 import kotlin.math.min
-import kotlin.math.sin
 import kotlin.math.sqrt
 
 
@@ -52,13 +50,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val clickSpeedUtil = ClickSpeedUtil(this, { true }) // for setting order
     private val rayTrace = ValueBoolean(this, "Ray trace", false)
     private val simulateMouseDelay = object : ValueBoolean(this, "Simulate mouse delay", false) {
-        override fun isVisible() = rayTrace.value && !mode.isSelected(1)
+        override fun isEnabled() = rayTrace.value && !mode.isSelected(1)
     }
     private val swingInAir = ValueBoolean(this, "Swing in air", true)
     private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.0, 1.0, 1.0, 1.0, 0.1)
     private val dontAttackWhenBlocking = ValueBoolean(this, "Don't attack when blocking", false)
     private val simulateShieldBlock = object : ValueBoolean(this, "Simulate shield block", false) {
-        override fun isVisible() = dontAttackWhenBlocking.value
+        override fun isEnabled() = dontAttackWhenBlocking.value
     }
     private val throughWalls = ValueBoolean(this, "Through walls", false)
     private val attackCooldown = ValueBoolean(this, "Attack cooldown", false)
@@ -68,26 +66,26 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         }
     }
     private val needUnblock = object : ValueBoolean(this, "Need unblock", true) {
-        override fun isVisible() = blockMode.isSelected(1)
+        override fun isEnabled() = blockMode.isSelected(1)
     }
     private val blockCheckMode = object : ValueMode(this, "Auto block check", false, "Shield", "Sword") {
-        override fun isVisible() = !blockMode.isSelected(0)
+        override fun isEnabled() = !blockMode.isSelected(0)
     }
     private val blockOutOfReach = object : ValueBoolean(this, "Block out of reach", true) {
-        override fun isVisible() = !blockMode.isSelected(0)
+        override fun isEnabled() = !blockMode.isSelected(0)
     }
     private val guaranteeHit = ValueBoolean(this, "Guarantee hit", false)
     private val rotations = ValueMode(this, "Rotations", true, "Around walls", "Randomized")
     private val precision = object : ValueNumber(this, "Precision", 0.0, 0.01, 1.0, 0.01) {
-        override fun isVisible() = rotations.anySelected()
+        override fun isEnabled() = rotations.anySelected()
     }
-    private val silent = ValueBoolean(this, "Silent", true)
+    private val lockView = ValueBoolean(this, "Lock view", true)
     private val flex = ValueBoolean(this, "Flex", false)
     private val flexTurn = object : ValueNumber(this, "Flex turn", 0.0, 90.0, 180.0, 1.0) {
-        override fun isVisible() = flex.value
+        override fun isEnabled() = flex.value
     }
     private val flexHurtTime = object : ValueNumber(this, "Flex hurt time", 0.0, 0.5, 1.0, 0.1) {
-        override fun isVisible() = flex.value
+        override fun isEnabled() = flex.value
     }
     private val syncPosition = ValueBoolean(this, "Sync position", false)
     private val preferPlayers = ValueBoolean(this, "Prefer players", true)
@@ -218,7 +216,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
                 event.rotation = finalRot.correctSensitivity()
 
-                if (!silent.value) {
+                if (!lockView.value) {
                     mc.player?.yaw = finalRot.yaw
                     mc.player?.pitch = finalRot.pitch
                 }

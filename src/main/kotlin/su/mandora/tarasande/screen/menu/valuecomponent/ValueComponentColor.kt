@@ -142,6 +142,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (button != 0) return false
         if ((value as ValueColor).alpha != -1.0f && isHovered(mouseX, mouseY, width - (getHeight() - 5) - 10, 0.0, width - (getHeight() - 5) - 5, getHeight() - 5)) {
             alphaDragInfo.setDragInfo(true, mouseX, mouseY)
             return true

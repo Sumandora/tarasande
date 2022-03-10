@@ -29,11 +29,11 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
 
     private val detectionMethod = ValueMode(this, "Detection method", false, "Disallow", "Allow")
     private val allowedItems = object : ValueItem(this, "Allowed items", Items.FILLED_MAP, Items.BOW, Items.ARROW, Items.ARMOR_STAND, Items.RED_BED, Items.GOLD_INGOT, Items.PAPER, Items.WOODEN_SHOVEL, Items.LIGHT_BLUE_STAINED_GLASS, Items.SNOWBALL, Items.PLAYER_HEAD, Items.COMPASS, Items.RED_BED, Items.TNT) {
-        override fun isVisible() = detectionMethod.isSelected(0)
+        override fun isEnabled() = detectionMethod.isSelected(0)
         override fun filter(item: Item) = item != Items.AIR
     }
     private val disallowedItems = object : ValueItem(this, "Disallowed items", Items.IRON_SWORD) {
-        override fun isVisible() = detectionMethod.isSelected(1)
+        override fun isEnabled() = detectionMethod.isSelected(1)
         override fun filter(item: Item) = item != Items.AIR
     }
     private val murdererColorOverride = ValueColor(this, "Murderer color override", 0.0f, 1.0f, 1.0f, 1.0f)

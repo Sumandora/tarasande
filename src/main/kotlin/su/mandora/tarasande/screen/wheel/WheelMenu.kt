@@ -38,7 +38,7 @@ class WheelMenu {
 
     init {
         TarasandeMain.get().managerEvent?.add(Pair(1001, Consumer<Event> { event ->
-            if (event is EventMouse) {
+            if (event is EventMouse && event.action == GLFW.GLFW_PRESS && MinecraftClient.getInstance().currentScreen != null) {
                 if (active && ticksOpen > 0 && System.currentTimeMillis() - activationChange > 250) {
                     event.cancelled = true
                     if (event.button != GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
@@ -78,7 +78,7 @@ class WheelMenu {
                         }
                     }
                 }
-            } else if (event is EventKey) {
+            } else if (event is EventKey && MinecraftClient.getInstance().currentScreen != null && event.action == GLFW.GLFW_PRESS) {
                 if (active && event.key == GLFW.GLFW_KEY_ESCAPE) {
                     if (System.currentTimeMillis() - activationChange > 250)
                         active = false

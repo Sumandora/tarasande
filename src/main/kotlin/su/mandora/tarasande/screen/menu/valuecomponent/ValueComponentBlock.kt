@@ -66,6 +66,7 @@ class ValueComponentBlock(value: Value) : ValueComponent(value) {
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (button != 0) return false
         val valueBlock = value as ValueBlock
 
         if (RenderUtil.isHovered(mouseX, mouseY, width - 40, MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (valueBlock.list.size + 0.25) + 2.0, width, (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * valueBlock.list.size + MinecraftClient.getInstance().textRenderer.fontHeight).toDouble())) { // hacky fix for size hacks

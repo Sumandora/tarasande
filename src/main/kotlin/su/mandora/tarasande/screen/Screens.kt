@@ -5,8 +5,8 @@ import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.hit.HitResult
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
-import su.mandora.tarasande.event.EventKey
 import su.mandora.tarasande.event.EventMouse
+import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.screen.accountmanager.ScreenBetterAccountManager
 import su.mandora.tarasande.screen.menu.ScreenMenu
 import su.mandora.tarasande.screen.wheel.WheelMenu
@@ -21,10 +21,11 @@ class Screens {
 
     init {
         TarasandeMain.get().managerEvent?.add { event ->
-            if (event is EventKey) {
-                if (event.key == TarasandeMain.get().clientValues?.menuHotkey?.keyBind)
-                    MinecraftClient.getInstance().setScreen(screenMenu)
-            } else if (event is EventMouse) {
+            if (event is EventUpdate) {
+                if (event.state == EventUpdate.State.PRE)
+                    if (TarasandeMain.get().clientValues?.menuHotkey?.wasPressed()!! > 0)
+                        MinecraftClient.getInstance().setScreen(screenMenu)
+            } else if (event is EventMouse && event.action == GLFW.GLFW_PRESS) {
                 if (MinecraftClient.getInstance().currentScreen == null)
                     if (event.button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
                         if (!wheelMenu.active) {

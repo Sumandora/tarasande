@@ -1,6 +1,7 @@
 package su.mandora.tarasande.module.player
 
 import net.minecraft.item.BlockItem
+import net.minecraft.item.Item
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.BlockHitResult
@@ -13,11 +14,11 @@ import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventJump
-import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IEntity
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
+import su.mandora.tarasande.mixin.accessor.IVec3d
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
@@ -25,10 +26,7 @@ import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.clickspeed.ClickMethodCooldown
 import su.mandora.tarasande.util.player.clickspeed.ClickSpeedUtil
 import su.mandora.tarasande.util.render.RenderUtil
-import su.mandora.tarasande.value.ValueBoolean
-import su.mandora.tarasande.value.ValueMode
-import su.mandora.tarasande.value.ValueNumber
-import su.mandora.tarasande.value.ValueNumberRange
+import su.mandora.tarasande.value.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import kotlin.math.abs
@@ -47,15 +45,19 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val edgeDistance = ValueNumber(this, "Edge distance", 0.0, 0.5, 1.0, 0.05)
     private val edgeIncrement = ValueBoolean(this, "Edge increment", true)
     private val edgeIncrementValue = object : ValueNumber(this, "Edge increment value", 0.0, 0.15, 0.5, 0.05) {
-        override fun isVisible() = edgeIncrement.value
+        override fun isEnabled() = edgeIncrement.value
     }
     private val preventImpossibleEdge = object : ValueBoolean(this, "Prevent impossible edge", true) {
-        override fun isVisible() = edgeIncrement.value
+        override fun isEnabled() = edgeIncrement.value
     }
     private val rotateAtEdge = ValueBoolean(this, "Rotate at edge", false)
     private val silent = ValueBoolean(this, "Silent", false)
     private val lockView = ValueBoolean(this, "Lock view", false)
     private val headRoll = ValueMode(this, "Head roll", false, "Disabled", "Advantage", "Autism")
+    private val forbiddenItems = object : ValueItem(this, "Forbidden items") {
+        override fun filter(item: Item) = item is BlockItem
+    }
+    private val tower = ValueMode(this, "Tower", false, "Vanilla", "Motion", "Teleport")
 
     private val targets = ArrayList<Pair<BlockPos, Direction>>()
     private val timeUtil = TimeUtil()
@@ -141,7 +143,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     }
                 }
 
-                val below = mc.player?.blockPos?.add(0, -1, 0)!!
+                var below = mc.player?.blockPos?.add(0, -1, 0)!!
                 if (mc.world?.isAir(below)!!) {
                     target = getAdjacentBlock(below)
                     if (target != null) {
@@ -267,6 +269,13 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
 
                 if (target != null && RotationUtil.fakeRotation != null) {
                     val airBelow = mc.world?.isAir(BlockPos(mc.player?.pos?.add(0.0, -1.0, 0.0)))!!
+
+                    if (tower.isSelected(1) && mc.player?.input?.jumping!!) {
+                        val velocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)
+                        mc.player?.jump()
+                        mc.player?.velocity = velocity?.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!!)
+                    }
+
                     if (airBelow || alwaysClick.value) {
                         val newEdgeDist = getNewEdgeDist()
                         val rotationVector = (mc.player as IEntity).invokeGetRotationVector(
@@ -317,6 +326,10 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                     if (stack.item is BlockItem) {
                                         if (hitResult != null && hitResult.type == HitResult.Type.BLOCK) {
                                             placeBlock(hitResult)
+
+                                            if (tower.isSelected(2) && mc.player?.input?.jumping!!)
+                                                (mc.player?.velocity as IVec3d).setY(1.0)
+
                                             timeUtil.reset()
 
                                             if (target?.second?.offsetY == 0) {
@@ -349,6 +362,8 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     }
 
     private fun isBlockItemValid(blockItem: BlockItem): Boolean {
+        if (forbiddenItems.list.contains(blockItem)) return false
+
         val block = blockItem.block
         val shape = block.defaultState.getCollisionShape(mc.world, BlockPos.ORIGIN)
         return !shape.isEmpty && shape.boundingBox.xLength == 1.0 && shape.boundingBox.yLength == 1.0 && shape.boundingBox.zLength == 1.0 && block.defaultState.material.isSolid

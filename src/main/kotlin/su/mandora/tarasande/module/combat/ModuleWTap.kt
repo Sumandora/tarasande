@@ -16,7 +16,7 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
 
     private val mode = ValueMode(this, "Mode", false, "W-Tap", "S-Tap", "Packet")
     private val packets = object : ValueNumber(this, "Packets", 2.0, 2.0, 10.0, 2.0) {
-        override fun isVisible() = mode.isSelected(2)
+        override fun isEnabled() = mode.isSelected(2)
     }
 
     private val movementKeys = arrayListOf(

@@ -63,7 +63,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         }
     }
 
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/List;iterator()Ljava/util/Iterator;", shift = At.Shift.BEFORE))
+    @Inject(method = "tick", at = @At("TAIL"))
     public void postTick(CallbackInfo ci) {
         setYaw(cachedRotation.getYaw());
         setPitch(cachedRotation.getPitch());

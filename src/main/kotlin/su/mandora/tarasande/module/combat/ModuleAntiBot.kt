@@ -19,11 +19,11 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
         override fun onChange() = onDisable()
     }
     private val soundDistance = object : ValueNumber(this, "Sound distance", 0.0, 1.0, 1.0, 0.1) {
-        override fun isVisible() = checks.isSelected(0)
+        override fun isEnabled() = checks.isSelected(0)
         override fun onChange() = passedSound.clear()
     }
     private val groundMode = object : ValueMode(this, "Ground mode", false, "On ground", "Off ground") {
-        override fun isVisible() = checks.isSelected(1)
+        override fun isEnabled() = checks.isSelected(1)
         override fun onChange() = passedGround.clear()
     }
 

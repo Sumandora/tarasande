@@ -12,7 +12,7 @@ import su.mandora.tarasande.util.math.rotation.Rotation
 import java.awt.Color
 
 class EventChat(val chatMessage: String) : Event(true)
-class EventKey(val key: Int) : Event(true)
+class EventKey(val key: Int, val action: Int) : Event(true)
 class EventUpdate(val state: State) : Event(false) {
     enum class State {
         PRE, PRE_PACKET, POST
@@ -93,7 +93,7 @@ class EventVanillaFlight : Event {
 
 }
 
-class EventMouse(val button: Int) : Event(true)
+class EventMouse(val button: Int, val action: Int) : Event(true)
 class EventMouseDelta(var deltaX: Double, var deltaY: Double) : Event(false)
 class EventTimeTravel(var time: Long) : Event(false)
 class EventItemCooldown(val item: Item, var cooldown: Float) : Event(false)

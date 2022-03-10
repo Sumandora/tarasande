@@ -14,11 +14,11 @@ class ClickSpeedUtil(private val owner: Any, isVisible: Supplier<Boolean>, varar
     private val clickMethods = TarasandeMain.get().managerClickMethod?.getAllExcept(*excluded)!!
 
     private val cpsMode = object : ValueMode(owner, "CPS mode", false, *clickMethods.map { it.name }.toTypedArray()) {
-        override fun isVisible() = isVisible.get()
+        override fun isEnabled() = isVisible.get()
     }
     private val cps = object : ValueNumberRange(owner, "CPS", 1.0, 8.0, 12.0, 20.0, 1.0) {
         override fun onChange() = reset()
-        override fun isVisible() = clickMethods[cpsMode.settings.indexOf(cpsMode.selected[0])].cpsBased && isVisible.get()
+        override fun isEnabled() = clickMethods[cpsMode.settings.indexOf(cpsMode.selected[0])].cpsBased && isVisible.get()
     }
 
     private val timeUtil = TimeUtil()

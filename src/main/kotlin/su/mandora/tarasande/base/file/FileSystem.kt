@@ -3,7 +3,10 @@ package su.mandora.tarasande.base.file
 import com.google.gson.JsonElement
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.Manager
-import su.mandora.tarasande.file.*
+import su.mandora.tarasande.file.FileAccounts
+import su.mandora.tarasande.file.FileMenu
+import su.mandora.tarasande.file.FileModules
+import su.mandora.tarasande.file.FileValues
 import java.io.FileWriter
 import java.nio.file.Files
 
@@ -13,7 +16,6 @@ class ManagerFile : Manager<File>() {
         add(
             FileModules(),
             FileValues(),
-            FileBinds(),
             FileAccounts(),
             FileMenu()
         )

@@ -16,13 +16,13 @@ class EntityColor {
     private val selfColor = ValueColor(TarasandeMain.get().clientValues!!, "Self Color", 0.0f, 1.0f, 1.0f, 1.0f)
     private val useTeamColor = ValueBoolean(TarasandeMain.get().clientValues!!, "Use Team Color", true)
     private val playerColor = object : ValueColor(TarasandeMain.get().clientValues!!, "Player Color", 0.0f, 1.0f, 1.0f, 1.0f) {
-        override fun isVisible() = !useTeamColor.value
+        override fun isEnabled() = !useTeamColor.value
     }
     private val animalColor = object : ValueColor(TarasandeMain.get().clientValues!!, "Animal Color", 0.0f, 1.0f, 1.0f, 1.0f) {
-        override fun isVisible() = !useTeamColor.value
+        override fun isEnabled() = !useTeamColor.value
     }
     private val mobColor = object : ValueColor(TarasandeMain.get().clientValues!!, "Mob Color", 0.0f, 1.0f, 1.0f, 1.0f) {
-        override fun isVisible() = !useTeamColor.value
+        override fun isEnabled() = !useTeamColor.value
     }
 
     fun getColor(entity: Entity): Color {

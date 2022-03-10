@@ -31,7 +31,8 @@ class FileValues : File("Values") {
                     try {
                         value.load(jsonObject2[value.name])
                         value.onChange()
-                    } catch (ignored: Throwable) {
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
                 }
             }

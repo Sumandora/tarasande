@@ -12,7 +12,7 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
 
     private val mode = ValueMode(this, "Mode", false, "Vanilla")
     private val flightSpeed = object : ValueNumber(this, "Flight speed", 0.0, 1.0, 5.0, 0.1) {
-        override fun isVisible() = mode.isSelected(0)
+        override fun isEnabled() = mode.isSelected(0)
     }
 
     val eventConsumer = Consumer<Event> { event ->

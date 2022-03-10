@@ -39,6 +39,7 @@ class ValueComponentMode(value: Value) : ValueComponent(value) {
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (button != 0) return false
         val valueMode = value as ValueMode
         for ((index, setting) in valueMode.settings.withIndex()) {
             val x = width - MinecraftClient.getInstance().textRenderer.getWidth(setting) / 2

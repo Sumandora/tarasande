@@ -88,7 +88,7 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
         if (expanded) {
             var yOffset = 0.0
             for (component in components) {
-                if (component.value.isVisible()) {
+                if (component.value.isEnabled()) {
                     matrices?.push()
                     matrices?.translate(5.0, this.defaultHeight + yOffset, 0.0)
                     component.width = width - 10.0
@@ -101,22 +101,22 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (button == 0) {
-            if (expanded) {
-                var yOffset = 0.0
-                for (component in components) {
-                    if (component.value.isVisible()) {
-                        component.mouseClicked(mouseX - 5.0, mouseY - defaultHeight - yOffset, button)
-                        yOffset += component.getHeight()
-                    }
+        if (expanded) {
+            var yOffset = 0.0
+            for (component in components) {
+                if (component.value.isEnabled()) {
+                    component.mouseClicked(mouseX - 5.0, mouseY - defaultHeight - yOffset, button)
+                    yOffset += component.getHeight()
                 }
             }
+        }
+        if (button == 0) {
             if (isHovered(mouseX, mouseY, 0.0, 0.0, width, getHeight())) {
                 if (Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(Vec2f((width - 7).toFloat(), (defaultHeight / 2).toFloat())) < 16.0f) {
                     module.switchState()
                     toggleTime = System.currentTimeMillis()
                 }
-                if (components.isNotEmpty() && isHovered(mouseX, mouseY, width - 16 - 2, defaultHeight / 2 - 4, width - 16 + 2, defaultHeight / 2 + 2)) {
+                if (components.isNotEmpty() && isHovered(mouseX, mouseY, width - 16 - 4, defaultHeight / 2 - 4, width - 16 + 4, defaultHeight / 2 + 4)) {
                     expanded = !expanded
                     expansionTime = System.currentTimeMillis()
                 }
@@ -128,7 +128,7 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int) {
         for (component in components) {
-            if (component.value.isVisible()) {
+            if (component.value.isEnabled()) {
                 component.mouseReleased(mouseX, mouseY, button)
             }
         }
@@ -136,7 +136,7 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
         for (component in components) {
-            if (component.value.isVisible() && component.mouseScrolled(mouseX, mouseY, amount)) {
+            if (component.value.isEnabled() && component.mouseScrolled(mouseX, mouseY, amount)) {
                 return true
             }
         }
@@ -145,7 +145,7 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         for (component in components) {
-            if (component.value.isVisible() && component.keyPressed(keyCode, scanCode, modifiers)) {
+            if (component.value.isEnabled() && component.keyPressed(keyCode, scanCode, modifiers)) {
                 return true
             }
         }
@@ -154,7 +154,7 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
 
     override fun charTyped(chr: Char, modifiers: Int) {
         for (component in components) {
-            if (component.value.isVisible()) {
+            if (component.value.isEnabled()) {
                 component.charTyped(chr, modifiers)
             }
         }
@@ -162,7 +162,7 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
 
     override fun tick() {
         for (component in components) {
-            if (component.value.isVisible()) {
+            if (component.value.isEnabled()) {
                 component.tick()
             }
         }
@@ -170,7 +170,7 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
 
     override fun onClose() {
         for (component in components) {
-            if (component.value.isVisible()) {
+            if (component.value.isEnabled()) {
                 component.onClose()
             }
         }
@@ -179,7 +179,7 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
     override fun getHeight(): Double {
         var maxHeight = 0.0
         for (component in components) {
-            if (component.value.isVisible()) {
+            if (component.value.isEnabled()) {
                 maxHeight += component.getHeight()
             }
         }

@@ -26,6 +26,9 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        scrollOffset = MathHelper.clamp(scrollOffset + scrollSpeed, min(-(getMaxScrollOffset() - (panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight - 5)), 0.0), 0.0)
+        scrollSpeed -= scrollSpeed * 0.2
+
         if (opened) {
             if (background) {
                 matrices?.push()
@@ -64,9 +67,6 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
 
         panelWidth = MathHelper.clamp(panelWidth, minWidth, maxWidth ?: MinecraftClient.getInstance().window.scaledWidth.toDouble())
         panelHeight = MathHelper.clamp(panelHeight, minHeight, maxHeight ?: MinecraftClient.getInstance().window.scaledHeight.toDouble())
-
-        scrollOffset = MathHelper.clamp(scrollOffset + scrollSpeed, min(-(getMaxScrollOffset() - (panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight - 5)), 0.0), 0.0)
-        scrollSpeed -= scrollSpeed * 0.2
     }
 
     open fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {

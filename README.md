@@ -44,14 +44,13 @@
 - KillAura: Simulate Damage in case cooldown isn't gone but full dmg isn't needed to kill somebody
 - PvP-Bot for Practice Game Modes
 - Fix PlayerUtil#simulateAttack
-- Clear buffers immediately in Blink/Latency
+- Clear buffers on world change in Blink/Latency
 - Fix Screen attackCooldown
 - Stop using Thread.stop
 - KillAura: Don't turn inside enemies
 - Configure ESP
-- Implement Tower into Scaffold walk
+- Don't hide disabled settings, grey them out (looks sick prob)
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)
-- https://github.com/jonaburg/picom/blob/a8445684fe18946604848efb73ace9457b29bf80/src/backend/backend_common.c#L372
 - AutoTool: Axes can set shields on cooldown. Maybe implement that if possible axes are being used to set shields on cooldown before actually attacking with sword

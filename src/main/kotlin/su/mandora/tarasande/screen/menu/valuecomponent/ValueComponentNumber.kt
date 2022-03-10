@@ -57,7 +57,7 @@ class ValueComponentNumber(value: Value) : ValueComponent(value) {
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (RenderUtil.isHovered(mouseX, mouseY, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {
+        if (button == 0 && RenderUtil.isHovered(mouseX, mouseY, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {
             dragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
             return true
         }

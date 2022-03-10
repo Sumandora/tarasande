@@ -23,7 +23,7 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
         val x = x + 2
         var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
         for (it in elements) {
-            if (it.value.isVisible()) {
+            if (it.value.isEnabled()) {
                 it.width = panelWidth - 4
                 if (y + it.getHeight() >= this.y - scrollOffset)
                     it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
@@ -45,7 +45,7 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
         val x = x + 2
         var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
         elements.forEach {
-            if (it.value.isVisible()) {
+            if (it.value.isEnabled()) {
                 it.mouseClicked(mouseX - x, mouseY - y - scrollOffset, button)
                 y += it.getHeight()
             }
@@ -57,7 +57,7 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
         val x = x + 2
         var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
         elements.forEach {
-            if (it.value.isVisible()) {
+            if (it.value.isEnabled()) {
                 it.mouseReleased(mouseX - x, mouseY - y - scrollOffset, button)
                 y += it.getHeight()
             }
@@ -69,7 +69,7 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
         val x = x + 2
         var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
         elements.forEach {
-            if (it.value.isVisible()) {
+            if (it.value.isEnabled()) {
                 if (it.mouseScrolled(mouseX - x, mouseY - y - scrollOffset, amount))
                     return true
                 y += it.getHeight()
@@ -80,7 +80,7 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         elements.forEach {
-            if (it.value.isVisible()) {
+            if (it.value.isEnabled()) {
                 if (it.keyPressed(keyCode, scanCode, modifiers))
                     return true
             }
@@ -90,7 +90,7 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
 
     override fun charTyped(chr: Char, modifiers: Int) {
         elements.forEach {
-            if (it.value.isVisible()) {
+            if (it.value.isEnabled()) {
                 it.charTyped(chr, modifiers)
             }
         }
@@ -99,7 +99,7 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
 
     override fun tick() {
         elements.forEach {
-            if (it.value.isVisible()) {
+            if (it.value.isEnabled()) {
                 it.tick()
             }
         }
@@ -108,7 +108,7 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
 
     override fun onClose() {
         elements.forEach {
-            if (it.value.isVisible()) {
+            if (it.value.isEnabled()) {
                 it.onClose()
             }
         }
@@ -118,7 +118,7 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
     override fun getMaxScrollOffset(): Double {
         var height = 0.0
         elements.forEach {
-            if (it.value.isVisible()) {
+            if (it.value.isEnabled()) {
                 height += it.getHeight()
             }
         }

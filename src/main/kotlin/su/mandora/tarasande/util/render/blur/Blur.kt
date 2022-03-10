@@ -17,7 +17,8 @@ import su.mandora.tarasande.screen.menu.ScreenMenu
 import su.mandora.tarasande.util.render.shader.Shader
 
 class Blur {
-    private val blurShader = Shader("blur", "default")
+    private val upsample = Shader("blur/upsample", "default")
+    private val downsample = Shader("blur/downsample", "default")
 
     private val shapesFramebuffer = SimpleFramebuffer(MinecraftClient.getInstance().window.framebufferWidth, MinecraftClient.getInstance().window.framebufferHeight, true, MinecraftClient.IS_SYSTEM_MAC)
     private val alternativeFramebuffer = SimpleFramebuffer(MinecraftClient.getInstance().window.framebufferWidth, MinecraftClient.getInstance().window.framebufferHeight, true, MinecraftClient.IS_SYSTEM_MAC)
@@ -27,7 +28,31 @@ class Blur {
 
     var kawasePasses: ArrayList<Pair<Float, Float>>? = null
 
+    private val strengthLevels = ArrayList<Pair<Int, Float>>()
+
     init {
+        // https://github.com/jonaburg/picom/blob/a8445684fe18946604848efb73ace9457b29bf80/src/backend/backend_common.c#L372
+        strengthLevels.add(Pair(1, 1.25f))
+        strengthLevels.add(Pair(1, 2.25f))
+        strengthLevels.add(Pair(2, 2.00f))
+        strengthLevels.add(Pair(2, 3.00f))
+        strengthLevels.add(Pair(2, 4.25f))
+        strengthLevels.add(Pair(3, 2.50f))
+        strengthLevels.add(Pair(3, 3.25f))
+        strengthLevels.add(Pair(3, 4.25f))
+        strengthLevels.add(Pair(3, 5.50f))
+        strengthLevels.add(Pair(4, 3.25f))
+        strengthLevels.add(Pair(4, 4.00f))
+        strengthLevels.add(Pair(4, 5.00f))
+        strengthLevels.add(Pair(4, 6.00f))
+        strengthLevels.add(Pair(4, 7.25f))
+        strengthLevels.add(Pair(4, 8.25f))
+        strengthLevels.add(Pair(5, 4.50f))
+        strengthLevels.add(Pair(5, 5.25f))
+        strengthLevels.add(Pair(5, 6.25f))
+        strengthLevels.add(Pair(5, 7.25f))
+        strengthLevels.add(Pair(5, 8.50f))
+
         shapesFramebuffer.setClearColor(0.0f, 0.0f, 0.0f, 0.0f)
         alternativeFramebuffer.setClearColor(0.0f, 0.0f, 0.0f, 0.0f)
         blurredFramebuffer.setClearColor(0.0f, 0.0f, 0.0f, 0.0f)
@@ -129,14 +154,15 @@ class Blur {
     }
 
     private fun sample(read: Framebuffer, write: Framebuffer, offset: Float, scale: Float, deltaScale: Float): Framebuffer {
+        val shader = if (deltaScale > 1.0) upsample else downsample
         write.beginWrite(true)
-        val prevProgram = blurShader.bindProgram()
-        GL20.glUniform1f(blurShader.getUniformLocation("offset"), offset)
-        GL20.glUniform1i(blurShader.getUniformLocation("tex"), 0)
+        val prevProgram = shader.bindProgram()
+        GL20.glUniform1f(shader.getUniformLocation("offset"), offset)
+        GL20.glUniform1i(shader.getUniformLocation("tex"), 0)
         GL13.glActiveTexture(GL13.GL_TEXTURE0)
         val texture0 = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D)
         GlStateManager._bindTexture(read.colorAttachment)
-        GL20.glUniform2f(blurShader.getUniformLocation("resolution"), read.textureWidth * deltaScale, read.textureHeight * deltaScale)
+        GL20.glUniform2f(shader.getUniformLocation("resolution"), read.textureWidth * deltaScale, read.textureHeight * deltaScale)
         GL11.glBegin(GL11.GL_QUADS)
         val invertedHeight = if (scale == 1.0f) read.textureHeight.toFloat() else read.textureHeight - read.textureHeight * scale
         GL11.glVertex2f(0f, 0f)
@@ -150,15 +176,11 @@ class Blur {
         return write
     }
 
-
     private fun calculateKawasePasses(strength: Int): ArrayList<Pair<Float, Float>> {
         val passes = ArrayList<Pair<Float, Float>>()
-        var remaining = strength.toFloat()
-        while (remaining > 0) {
-            val offset = strength - remaining + 0.5f
-            passes.add(Pair(offset, 1.0f))
-            remaining -= offset
-        }
+        val pair = strengthLevels[strength - 1]
+        for (i in 0 until pair.first * 2)
+            passes.add(Pair(pair.second, 1.0f))
         for ((index, pass) in passes.withIndex()) {
             if (index < passes.size / 2)
                 passes[index] = Pair(pass.first, 0.5f)

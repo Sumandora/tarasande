@@ -11,7 +11,7 @@ class ManagerValueComponent : Manager<Pair<Class<out Value>, Class<out ValueComp
     init {
         add(
             Pair(ValueBoolean::class.java, ValueComponentBoolean::class.java),
-            Pair(ValueKeyBind::class.java, ValueComponentKeyBind::class.java),
+            Pair(ValueBind::class.java, ValueComponentBind::class.java),
             Pair(ValueMode::class.java, ValueComponentMode::class.java),
             Pair(ValueNumber::class.java, ValueComponentNumber::class.java),
             Pair(ValueNumberRange::class.java, ValueComponentNumberRange::class.java),
