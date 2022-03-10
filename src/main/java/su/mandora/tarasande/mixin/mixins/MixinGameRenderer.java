@@ -57,7 +57,7 @@ public class MixinGameRenderer implements IGameRenderer {
 
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;hasExtendedReach()Z"))
     public boolean hookedHasExtendedReach(ClientPlayerInteractionManager instance) {
-        if(!disableReachExtension)
+        if (!disableReachExtension)
             return instance.hasExtendedReach();
         else
             return false;

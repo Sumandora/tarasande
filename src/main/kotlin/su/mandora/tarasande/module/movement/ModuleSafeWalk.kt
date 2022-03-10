@@ -12,7 +12,7 @@ class ModuleSafeWalk : Module("Safe walk", "Prevents falling off blocks", Module
     private val sneak = ValueBoolean(this, "Sneak", false)
 
     val eventConsumer = Consumer<Event> { event ->
-        when(event) {
+        when (event) {
             is EventKeyBindingIsPressed -> {
                 if (event.keyBinding == mc.options.sneakKey && sneak.value)
                     if (mc.world?.isAir(mc.player?.blockPos?.add(0, -1, 0)!!)!!)
