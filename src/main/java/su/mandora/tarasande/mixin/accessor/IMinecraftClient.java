@@ -17,4 +17,6 @@ public interface IMinecraftClient {
     RenderTickCounter getRenderTickCounter();
 
     void invokeHandleBlockBreaking(boolean bl);
+
+    int getCurrentFPS();
 }

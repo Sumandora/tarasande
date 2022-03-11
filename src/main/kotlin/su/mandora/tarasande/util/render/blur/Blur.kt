@@ -5,24 +5,23 @@ import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
-import net.minecraft.client.gl.SimpleFramebuffer
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL13
 import org.lwjgl.opengl.GL20
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.event.EventRender2D
-import su.mandora.tarasande.event.EventResolutionUpdate
 import su.mandora.tarasande.event.EventScreenRender
 import su.mandora.tarasande.screen.menu.ScreenMenu
+import su.mandora.tarasande.util.render.framebuffer.WrappedFramebuffer
 import su.mandora.tarasande.util.render.shader.Shader
 
 class Blur {
     private val upsample = Shader("blur/upsample", "default")
     private val downsample = Shader("blur/downsample", "default")
 
-    private val shapesFramebuffer = SimpleFramebuffer(MinecraftClient.getInstance().window.framebufferWidth, MinecraftClient.getInstance().window.framebufferHeight, true, MinecraftClient.IS_SYSTEM_MAC)
-    private val alternativeFramebuffer = SimpleFramebuffer(MinecraftClient.getInstance().window.framebufferWidth, MinecraftClient.getInstance().window.framebufferHeight, true, MinecraftClient.IS_SYSTEM_MAC)
-    private val blurredFramebuffer = SimpleFramebuffer(MinecraftClient.getInstance().window.framebufferWidth, MinecraftClient.getInstance().window.framebufferHeight, true, MinecraftClient.IS_SYSTEM_MAC)
+    private val shapesFramebuffer = WrappedFramebuffer()
+    private val alternativeFramebuffer = WrappedFramebuffer()
+    private val blurredFramebuffer = WrappedFramebuffer()
 
     private val cutoutShader = Shader("cutout", "default")
 
@@ -53,16 +52,8 @@ class Blur {
         strengthLevels.add(Pair(5, 7.25f))
         strengthLevels.add(Pair(5, 8.50f))
 
-        shapesFramebuffer.setClearColor(0.0f, 0.0f, 0.0f, 0.0f)
-        alternativeFramebuffer.setClearColor(0.0f, 0.0f, 0.0f, 0.0f)
-        blurredFramebuffer.setClearColor(0.0f, 0.0f, 0.0f, 0.0f)
-
         TarasandeMain.get().managerEvent?.add { event ->
-            if (event is EventResolutionUpdate) {
-                shapesFramebuffer.resize(event.width.toInt(), event.height.toInt(), MinecraftClient.IS_SYSTEM_MAC)
-                alternativeFramebuffer.resize(event.width.toInt(), event.height.toInt(), MinecraftClient.IS_SYSTEM_MAC)
-                blurredFramebuffer.resize(event.width.toInt(), event.height.toInt(), MinecraftClient.IS_SYSTEM_MAC)
-            } else if (event is EventScreenRender) {
+            if (event is EventScreenRender) {
                 if (MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenMenu)
                     blurScene()
             } else if (event is EventRender2D) {

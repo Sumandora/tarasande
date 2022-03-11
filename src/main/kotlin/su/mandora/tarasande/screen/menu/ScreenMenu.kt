@@ -143,17 +143,17 @@ class ScreenMenu : Screen(Text.of("Menu")) {
                 matrices?.scale(animation.toFloat(), animation.toFloat(), 1.0F)
                 matrices?.translate(-(it.x + it.panelWidth / 2.0), -(it.y + panelHeight / 2.0), 0.0)
             }
+            val x = it.x + it.panelWidth * (1 - animation) / 2.0
+            val y = it.y + panelHeight - panelHeight * (1 - animation) / 2.0 - 1
+            val width = it.panelWidth - it.panelWidth * (1 - animation)
+            val height = (panelHeight - panelHeight * (1 - animation) - 1)
             if (it !is PanelFixed && animation > 0.0) {
                 GlStateManager._enableScissorTest()
-                var width = ((it.panelWidth - it.panelWidth * (1 - animation)) * client?.window?.scaleFactor!!).toInt()
-                var height = ((panelHeight - panelHeight * (1 - animation) - 1) * client?.window?.scaleFactor!!).toInt()
-                if (width <= 0) width = 1
-                if (height <= 0) height = 1
                 GlStateManager._scissorBox(
-                    ((it.x + it.panelWidth * (1 - animation) / 2) * client?.window?.scaleFactor!!).toInt(),
-                    (client?.window?.height!! - (it.y + panelHeight - panelHeight * (1 - animation) / 2 - 1) * client?.window?.scaleFactor!!).toInt(),
-                    width,
-                    height
+                    round(x * client?.window?.scaleFactor!!).toInt(),
+                    round(client?.window?.height!! - y * client?.window?.scaleFactor!!).toInt(),
+                    round(width * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1),
+                    round(height * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1)
                 )
             }
             if (it is PanelFixed || animation > 0.0) {

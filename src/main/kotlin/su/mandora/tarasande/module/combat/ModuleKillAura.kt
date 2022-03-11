@@ -3,6 +3,7 @@ package su.mandora.tarasande.module.combat
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.passive.PassiveEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ShieldItem
@@ -89,6 +90,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
     private val syncPosition = ValueBoolean(this, "Sync position", false)
     private val preferPlayers = ValueBoolean(this, "Prefer players", true)
+    private val waitForCritical = ValueBoolean(this, "Wait for critical", false)
 
     internal val targets = ArrayList<Pair<Entity, Vec3d>>()
     private val comparator: Comparator<Pair<Entity, Vec3d>> = Comparator.comparing {
@@ -232,6 +234,18 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     waitForHit = false
                     return@Consumer
                 }
+
+                if (waitForCritical.value)
+                // This is pasted from mojang code...
+                    if (!(mc.player?.isOnGround!! ||
+                                (mc.player?.fallDistance!! > 0.0f &&
+                                        !mc.player?.isClimbing!! &&
+                                        !mc.player?.isTouchingWater!! &&
+                                        !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! &&
+                                        !mc.player?.hasVehicle()!! && !mc.player?.isSprinting!!
+                                        )
+                                ))
+                        return@Consumer
 
                 val clicks = clickSpeedUtil.getClicks()
 

@@ -12,6 +12,7 @@ class PanelFixedGraph(private val graph: Graph, x: Double, y: Double) : PanelFix
 
     private val values = ArrayList<Number>()
 
+    private var ints: Boolean = false
     private var current: Double = 0.0
     private var min: Double = 0.0
     private var max: Double = 0.0
@@ -51,14 +52,14 @@ class PanelFixedGraph(private val graph: Graph, x: Double, y: Double) : PanelFix
         matrices.translate(x + panelWidth - currentWidth, currentY, 0.0)
         matrices.scale(0.5f, 0.5f, 1.0f)
         matrices.translate(-(x + panelWidth - currentWidth), -currentY, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, current.toString(), (x + panelWidth - currentWidth).toFloat(), currentY.toFloat(), -1)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, (if (ints) current.toInt() else current).toString(), (x + panelWidth - currentWidth).toFloat(), currentY.toFloat(), -1)
         matrices.pop()
         if (currentY < y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight) {
             matrices.push()
             matrices.translate(x + panelWidth - graphMinWidth, y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0, 0.0)
             matrices.scale(0.5f, 0.5f, 1.0f)
             matrices.translate(-(x + panelWidth - graphMinWidth), -(y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0), 0.0)
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, min.toString(), (x + panelWidth - graphMinWidth).toFloat(), (y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2).toFloat(), -1)
+            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, (if (ints) min.toInt() else min).toString(), (x + panelWidth - graphMinWidth).toFloat(), (y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2).toFloat(), -1)
             matrices.pop()
         }
         if (currentY >= y + MinecraftClient.getInstance().textRenderer.fontHeight * 1.5) {
@@ -66,7 +67,7 @@ class PanelFixedGraph(private val graph: Graph, x: Double, y: Double) : PanelFix
             matrices.translate(x + panelWidth - graphMaxWidth, y + MinecraftClient.getInstance().textRenderer.fontHeight, 0.0)
             matrices.scale(0.5f, 0.5f, 1.0f)
             matrices.translate(-(x + panelWidth - graphMaxWidth), -(y + MinecraftClient.getInstance().textRenderer.fontHeight), 0.0)
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, max.toString(), (x + panelWidth - graphMaxWidth).toFloat(), (y + MinecraftClient.getInstance().textRenderer.fontHeight).toFloat(), -1)
+            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, (if (ints) max.toInt() else max).toString(), (x + panelWidth - graphMaxWidth).toFloat(), (y + MinecraftClient.getInstance().textRenderer.fontHeight).toFloat(), -1)
             matrices.pop()
         }
     }
@@ -107,9 +108,11 @@ class PanelFixedGraph(private val graph: Graph, x: Double, y: Double) : PanelFix
             min = getMin()?.toDouble()!!
             max = getMax()?.toDouble()!!
 
-            graphMinWidth = MinecraftClient.getInstance().textRenderer.getWidth(min.toString()) / 2.0
-            graphMaxWidth = MinecraftClient.getInstance().textRenderer.getWidth(max.toString()) / 2.0
-            currentWidth = MinecraftClient.getInstance().textRenderer.getWidth(current.toString()) / 2.0
+            ints = values.all { it is Int }
+
+            graphMinWidth = MinecraftClient.getInstance().textRenderer.getWidth((if (ints) min.toInt() else min).toString()) / 2.0
+            graphMaxWidth = MinecraftClient.getInstance().textRenderer.getWidth((if (ints) max.toInt() else max).toString()) / 2.0
+            currentWidth = MinecraftClient.getInstance().textRenderer.getWidth((if (ints) current.toInt() else current).toString()) / 2.0
             finalWidth = panelWidth - max(graphMinWidth, max(graphMaxWidth, currentWidth))
         }
     }

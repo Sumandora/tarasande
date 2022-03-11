@@ -53,8 +53,6 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Final
     private RenderTickCounter renderTickCounter;
 
-    private int prevAttackCooldown;
-
     @Shadow
     protected abstract void doItemUse();
 
@@ -63,6 +61,9 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
 
     @Shadow
     protected abstract boolean doAttack();
+
+    @Shadow
+    private static int currentFps;
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;createUserApiService(Lcom/mojang/authlib/yggdrasil/YggdrasilAuthenticationService;Lnet/minecraft/client/RunArgs;)Lcom/mojang/authlib/minecraft/UserApiService;"))
     public void injectPreInit(RunArgs args, CallbackInfo ci) {
@@ -77,17 +78,11 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Inject(method = "tick", at = @At("HEAD"))
     public void injectPreTick(CallbackInfo ci) {
         TarasandeMain.Companion.get().getManagerEvent().call(new EventTick(EventTick.State.PRE));
-        prevAttackCooldown = attackCooldown;
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void injectPostTick(CallbackInfo ci) {
         TarasandeMain.Companion.get().getManagerEvent().call(new EventTick(EventTick.State.POST));
-    }
-
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;wrapScreenError(Ljava/lang/Runnable;Ljava/lang/String;Ljava/lang/String;)V"))
-    public void injectMidTick(CallbackInfo ci) {
-        attackCooldown = prevAttackCooldown;
     }
 
     @Inject(method = "stop", at = @At("HEAD"))
@@ -198,5 +193,10 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Override
     public void invokeHandleBlockBreaking(boolean bl) {
         handleBlockBreaking(bl);
+    }
+
+    @Override
+    public int getCurrentFPS() {
+        return currentFps;
     }
 }

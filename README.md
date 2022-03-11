@@ -36,7 +36,6 @@
 - Elytra Flight
 - Baritone Sprint Jump
 - Friends
-- KillAura: Wait for critical for 1.9+ pvp
 - Fix Trajectories
 - BowAimbot
 - More Anti Bots
@@ -45,11 +44,11 @@
 - PvP-Bot for Practice Game Modes
 - Fix PlayerUtil#simulateAttack
 - Clear buffers on world change in Blink/Latency
-- Fix Screen attackCooldown
 - Stop using Thread.stop
 - KillAura: Don't turn inside enemies
 - Configure ESP
 - Don't hide disabled settings, grey them out (looks sick prob)
+- Nuker do a include/exclude setting like in murder mystery
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)
