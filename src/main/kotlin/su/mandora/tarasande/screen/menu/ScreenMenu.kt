@@ -18,6 +18,7 @@ import su.mandora.tarasande.screen.menu.panel.impl.PanelClientValues
 import su.mandora.tarasande.screen.menu.panel.impl.category.PanelCategory
 import su.mandora.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import su.mandora.tarasande.screen.menu.panel.impl.fixed.impl.*
+import su.mandora.tarasande.screen.menu.panel.impl.friends.PanelFriends
 import su.mandora.tarasande.screen.menu.particle.Particle
 import su.mandora.tarasande.util.render.RenderUtil
 import java.awt.Color
@@ -46,6 +47,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         }
         val fixedPanels = mutableListOf(
             PanelClientValues::class.java,
+            PanelFriends::class.java,
             PanelFixedArrayList::class.java,
             PanelFixedInformation::class.java,
             PanelFixedEffects::class.java,
@@ -175,8 +177,10 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 
         for (it in panels) {
             if (it.mouseClicked(mouseX, mouseY, button)) {
-                panels.remove(it)
-                panels.add(0, it)
+                if (panels.contains(it)) { // in case of self removal
+                    panels.remove(it)
+                    panels.add(0, it)
+                }
                 break
             }
         }

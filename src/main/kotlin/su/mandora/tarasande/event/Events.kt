@@ -5,6 +5,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
 import net.minecraft.item.Item
 import net.minecraft.network.Packet
+import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
@@ -114,3 +115,4 @@ class EventSwing(var hand: Hand) : Event(true)
 class EventColorCorrection(var red: Int, var green: Int, var blue: Int) : Event(false)
 class EventResetEquipProgress : Event(true)
 class EventIsWalking(var walking: Boolean) : Event(false)
+class EventTagName(var entity: Entity, var displayName: Text) : Event(false)

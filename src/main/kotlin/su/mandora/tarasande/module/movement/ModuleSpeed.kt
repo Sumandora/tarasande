@@ -22,7 +22,7 @@ import kotlin.math.sin
 
 class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVEMENT) {
 
-    private val jumpHeight = ValueNumber(this, "Jump height", 0.0, 1.0, 2.0, 0.1)
+    private val jumpHeight = ValueNumber(this, "Jump height", 0.0, 1.0, 2.0, 0.01)
     private val lowHop = object : ValueBoolean(this, "Low hop", false) {
         override fun isEnabled() = jumpHeight.value > 0.0
     }

@@ -29,6 +29,8 @@ object PlayerUtil {
             attackable = false
         else if (entity !is LivingEntity)
             attackable = false
+        else if (entity == MinecraftClient.getInstance().player)
+            attackable = false
         else if (!TarasandeMain.get().clientValues?.targets?.isSelected(0)!! && entity is PlayerEntity)
             attackable = false
         else if (TarasandeMain.get().clientValues?.dontAttackTamedEntities?.value!! && entity is TameableEntity && entity.ownerUuid == MinecraftClient.getInstance().player?.uuid)
@@ -38,10 +40,6 @@ object PlayerUtil {
         else if (!TarasandeMain.get().clientValues?.targets?.isSelected(2)!! && ((entity is MobEntity || entity is Monster) && entity !is AnimalEntity))
             attackable = false
         else if (!TarasandeMain.get().clientValues?.targets?.isSelected(3)!! && (entity !is PlayerEntity && entity !is AnimalEntity && entity !is MobEntity))
-            attackable = false
-        else if (entity == MinecraftClient.getInstance().player)
-            attackable = false
-        else if (entity.isDead)
             attackable = false
 
         val eventIsEntityAttackable = EventIsEntityAttackable(entity, attackable)

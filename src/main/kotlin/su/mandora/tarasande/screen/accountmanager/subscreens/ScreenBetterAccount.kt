@@ -59,9 +59,9 @@ class ScreenBetterAccount(
             if (parameterType.isAnnotationPresent(TextFieldInfo::class.java)) {
                 val textFieldInfo: TextFieldInfo = parameterType.getAnnotation(TextFieldInfo::class.java)
                 if (textFieldInfo.hidden) {
-                    textFields.add(addDrawableChild(TextFieldWidgetPassword(textRenderer, width / 2 - 75, (height * 0.25f + i * 25).toInt(), 150, 20, Text.of(textFieldInfo.name)).also { it.setMaxLength(Integer.MAX_VALUE) }))
+                    textFields.add(addDrawableChild(TextFieldWidgetPassword(textRenderer, width / 2 - 75, (height * 0.25f + i * 25).toInt(), 150, 20, Text.of(textFieldInfo.name)).also { it.setMaxLength(Int.MAX_VALUE) }))
                 } else {
-                    textFields.add(addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 - 75, (height * 0.25f + i * 25).toInt(), 150, 20, Text.of(textFieldInfo.name)).also { it.setMaxLength(Integer.MAX_VALUE) }))
+                    textFields.add(addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 - 75, (height * 0.25f + i * 25).toInt(), 150, 20, Text.of(textFieldInfo.name)).also { it.setMaxLength(Int.MAX_VALUE) }))
                 }
             }
         }

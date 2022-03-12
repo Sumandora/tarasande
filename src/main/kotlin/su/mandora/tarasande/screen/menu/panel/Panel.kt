@@ -7,6 +7,7 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.screen.menu.utils.DragInfo
 import su.mandora.tarasande.screen.menu.utils.IElement
 import su.mandora.tarasande.util.render.RenderUtil
+import kotlin.math.floor
 import kotlin.math.min
 
 open class Panel(val title: String, var x: Double, var y: Double, val minWidth: Double, val minHeight: Double, val maxWidth: Double? = null, val maxHeight: Double? = null, private val background: Boolean = true) : IElement {
@@ -42,15 +43,7 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
             matrices?.pop()
         }
 
-        matrices?.push()
-        RenderUtil.fill(matrices, x, y, x + panelWidth, y + MinecraftClient.getInstance().textRenderer.fontHeight, TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
-        when (alignment) {
-            Alignment.LEFT -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + 1, y.toFloat() + 0.5F, -1)
-            Alignment.MIDDLE -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(title).toFloat() / 2.0F, y.toFloat() + 0.5F, -1)
-            Alignment.RIGHT -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(title).toFloat(), y.toFloat() + 0.5F, -1)
-        }
-
-        matrices?.pop()
+        renderTitleBar(matrices, mouseX, mouseY, delta)
 
         if (dragInfo.dragging) {
             x = mouseX - dragInfo.xOffset
@@ -69,16 +62,29 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
         panelHeight = MathHelper.clamp(panelHeight, minHeight, maxHeight ?: MinecraftClient.getInstance().window.scaledHeight.toDouble())
     }
 
+    open fun renderTitleBar(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        matrices?.push()
+        RenderUtil.fill(matrices, x, y, x + panelWidth, y + MinecraftClient.getInstance().textRenderer.fontHeight, TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
+        when (alignment) {
+            Alignment.LEFT -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + 1, y.toFloat() + 0.5F, -1)
+            Alignment.MIDDLE -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(title).toFloat() / 2.0F, y.toFloat() + 0.5F, -1)
+            Alignment.RIGHT -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(title).toFloat(), y.toFloat() + 0.5F, -1)
+        }
+        matrices?.pop()
+    }
+
     open fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        val mouseX = floor(mouseX)
+        val mouseY = floor(mouseY)
         if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + (if (opened) panelHeight else MinecraftClient.getInstance().textRenderer.fontHeight.toDouble()))) {
             if (button == 0) {
                 if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + MinecraftClient.getInstance().textRenderer.fontHeight)) {
                     dragInfo.setDragInfo(true, mouseX - x, mouseY - y)
                 }
-                if (RenderUtil.isHovered(mouseX, mouseY, x + panelWidth - 2, y + panelHeight - 2, x + panelWidth + 2, y + panelHeight + 2)) {
+                if (RenderUtil.isHovered(mouseX, mouseY, x + panelWidth - 5, y + panelHeight - 5, x + panelWidth + 5, y + panelHeight + 5)) {
                     resizeInfo.setDragInfo(true, mouseX - (x + panelWidth - 2), mouseY - (y + panelHeight - 2))
                 }
             } else if (button == 1) {

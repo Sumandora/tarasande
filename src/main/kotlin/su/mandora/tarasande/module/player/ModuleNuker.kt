@@ -18,7 +18,6 @@ import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueBlock
-import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
@@ -29,10 +28,9 @@ import kotlin.math.pow
 
 class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius", ModuleCategory.PLAYER) {
 
-    private val allBlocks = ValueBoolean(this, "All blocks", false)
+    private val selectionMode = ValueMode(this, "Selection mode", false, "Include", "Exclude")
     private val blocks = object : ValueBlock(this, "Blocks") {
         override fun filter(block: Block) = block != Blocks.AIR
-        override fun isEnabled() = !allBlocks.value
     }
     private val radius = ValueNumber(this, "Radius", 0.1, 4.5, 6.0, 0.1)
     private val throughWalls = ValueMode(this, "Through walls", false, "Off", "On", "Free")
@@ -56,7 +54,10 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                         for (z in -rad..rad) {
                             var blockPos = BlockPos(mc.player?.eyePos).add(x, y, z)
                             val blockState = mc.world?.getBlockState(blockPos)
-                            if (allBlocks.value || blocks.list.contains(blockState?.block)) {
+                            if (
+                                (selectionMode.isSelected(0) && blocks.list.contains(blockState?.block)) ||
+                                (selectionMode.isSelected(1) && !blocks.list.contains(blockState?.block))
+                            ) {
                                 val collisionShape = blockState?.block?.defaultState?.getCollisionShape(mc.world, blockPos)
                                 if (collisionShape != null && !collisionShape.isEmpty) {
                                     val pos = collisionShape.boundingBox.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble()).center

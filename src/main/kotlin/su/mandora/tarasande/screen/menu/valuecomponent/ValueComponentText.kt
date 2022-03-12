@@ -19,8 +19,8 @@ class ValueComponentText(value: Value) : ValueComponent(value) {
     init {
         textFieldWidget.setMaxLength(Int.MAX_VALUE)
         textFieldWidget.setDrawsBackground(false)
-        val valueText = value as ValueText
         textFieldWidget.text = null
+        val valueText = value as ValueText
         textFieldWidget.setChangedListener {
             valueText.value = it
             valueText.onChange()

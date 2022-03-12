@@ -172,6 +172,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 }
                 if (preferPlayers.value)
                     targets.sortBy { it.first is PlayerEntity }
+                targets.sortBy { it.first is PlayerEntity && (it.first as PlayerEntity).isDead }
 
                 val target = targets[0]
 

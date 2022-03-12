@@ -8,10 +8,10 @@ import su.mandora.tarasande.base.file.ManagerFile
 import su.mandora.tarasande.base.module.ManagerModule
 import su.mandora.tarasande.base.util.player.clickspeed.ManagerClickMethod
 import su.mandora.tarasande.base.value.ManagerValue
-import su.mandora.tarasande.parkourbot.ParkourBot
 import su.mandora.tarasande.screen.Screens
 import su.mandora.tarasande.util.clientvalue.ClientValues
-import su.mandora.tarasande.util.entitycolor.EntityColor
+import su.mandora.tarasande.util.player.entitycolor.EntityColor
+import su.mandora.tarasande.util.player.friends.Friends
 import su.mandora.tarasande.util.render.blur.Blur
 
 class TarasandeMain {
@@ -27,7 +27,7 @@ class TarasandeMain {
     var managerModule: ManagerModule? = null
     var blur: Blur? = null
     var screens: Screens? = null
-    var parkourBot: ParkourBot? = null
+    var friends: Friends? = null
 
     val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
 
@@ -52,7 +52,7 @@ class TarasandeMain {
         managerModule = ManagerModule()
         blur = Blur()
         screens = Screens() // Initializes ClickGUI (Make sure that modules and values are initialized before)
-        parkourBot = ParkourBot()
+        friends = Friends()
 
         managerFile?.load()
 

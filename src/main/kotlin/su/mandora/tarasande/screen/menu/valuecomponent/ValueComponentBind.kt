@@ -39,13 +39,6 @@ class ValueComponentBind(value: Value) : ValueComponent(value) {
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         val valueBind = value as ValueBind
-        if (waitsForInput && button >= 3 && valueBind.mouse) {
-            valueBind.type = ValueBind.Type.MOUSE
-            valueBind.button = button
-            valueBind.onChange()
-            waitsForInput = false
-            return false
-        }
 
         val name = getName(valueBind.type, valueBind.button)
         val textWidth = MinecraftClient.getInstance().textRenderer.getWidth(name)
@@ -53,6 +46,13 @@ class ValueComponentBind(value: Value) : ValueComponent(value) {
         waitsForInput = if (RenderUtil.isHovered(mouseX, mouseY, width - textWidth / 2, getHeight() * 0.25, width, getHeight() * 0.75)) {
             !waitsForInput
         } else {
+            if (waitsForInput && valueBind.mouse) {
+                valueBind.type = ValueBind.Type.MOUSE
+                valueBind.button = button
+                valueBind.onChange()
+                waitsForInput = false
+                return false
+            }
             false
         }
         return false

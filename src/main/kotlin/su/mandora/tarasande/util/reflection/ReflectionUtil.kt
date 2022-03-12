@@ -24,6 +24,7 @@ class ReflectorClass(private val clazz: Class<*>) {
 
     fun invokeMethod(methodName: String, vararg arguments: Any?): ReflectorAny? {
         val method = clazz.getMethod(methodName) ?: return null
+        method.trySetAccessible()
         val static = Modifier.isStatic(method.modifiers)
         if (!static && instance == null)
             error("instance is null")
@@ -32,12 +33,12 @@ class ReflectorClass(private val clazz: Class<*>) {
 
     fun getField(fieldName: String): ReflectorAny? {
         val field = clazz.getField(fieldName) ?: return null
+        field.trySetAccessible()
         val static = Modifier.isStatic(field.modifiers)
         if (!static && instance == null)
             error("instance is null")
         return ReflectorAny(field.get(if (static) null else instance))
     }
-
 }
 
 class ReflectorAny(private val any: Any) {

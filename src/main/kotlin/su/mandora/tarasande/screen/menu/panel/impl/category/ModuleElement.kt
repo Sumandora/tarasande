@@ -34,7 +34,7 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        RenderUtil.fill(matrices, 0.0, 0.0, this.width, this.getHeight(), Integer.MIN_VALUE)
+        RenderUtil.fill(matrices, 0.0, 0.0, this.width, this.getHeight(), Int.MIN_VALUE)
         matrices?.push()
         matrices?.translate(2.0, this.defaultHeight / 4.0 + 1.0, 0.0)
         matrices?.scale(0.75f, 0.75f, 1.0f)

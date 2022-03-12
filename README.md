@@ -35,7 +35,6 @@
 - Vehicle Speed
 - Elytra Flight
 - Baritone Sprint Jump
-- Friends
 - Fix Trajectories
 - BowAimbot
 - More Anti Bots
@@ -48,7 +47,9 @@
 - KillAura: Don't turn inside enemies
 - Configure ESP
 - Don't hide disabled settings, grey them out (looks sick prob)
-- Nuker do a include/exclude setting like in murder mystery
+- Don't be able to friend localplayer/self
+- Make the friend alias feature accessable to the user (frontend is missing)
+- MidClick (alias prompt with screen and callback?)
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)
