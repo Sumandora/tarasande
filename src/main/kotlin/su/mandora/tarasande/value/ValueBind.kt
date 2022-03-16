@@ -73,7 +73,7 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
 
     fun isPressed(): Boolean {
         if (button == GLFW.GLFW_KEY_UNKNOWN) return false
-        if (MinecraftClient.getInstance().currentScreen == null) return false
+        if (MinecraftClient.getInstance().currentScreen != null) return false
 
         return when (type) {
             Type.KEY -> {

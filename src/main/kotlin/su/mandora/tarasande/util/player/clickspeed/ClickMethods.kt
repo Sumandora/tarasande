@@ -1,7 +1,9 @@
 package su.mandora.tarasande.util.player.clickspeed
 
 import net.minecraft.client.MinecraftClient
+import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.util.player.clickspeed.ClickMethod
+import su.mandora.tarasande.module.misc.ModuleTickBaseManipulation
 import su.mandora.tarasande.util.math.TimeUtil
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.round
@@ -44,6 +46,6 @@ class ClickMethodDynamic : ClickMethod("Dynamic", true) {
 }
 
 class ClickMethodCooldown : ClickMethod("Cooldown", false) {
-    override fun getClicks(targetedCPS: Double): Int = if (MinecraftClient.getInstance().player?.getAttackCooldownProgress(0.5F)!! >= 1.0F) 1 else 0
+    override fun getClicks(targetedCPS: Double): Int = if (MinecraftClient.getInstance().player?.getAttackCooldownProgress(0.5F)!! <= 0.9F) 0 else 1
     override fun reset(targetedCPS: Double) = Unit // nothing there
 }

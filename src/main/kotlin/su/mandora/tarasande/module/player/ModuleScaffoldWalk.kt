@@ -13,6 +13,7 @@ import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
+import su.mandora.tarasande.event.EventAttack
 import su.mandora.tarasande.event.EventJump
 import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.event.EventUpdate
@@ -276,10 +277,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 event.minRotateToOriginSpeed = aimSpeed.minValue
                 event.maxRotateToOriginSpeed = aimSpeed.maxValue
             }
-            is EventUpdate -> {
-                if (event.state != EventUpdate.State.PRE)
-                    return@Consumer
-
+            is EventAttack -> {
                 if (!timeUtil.hasReached(delay.value.toLong()))
                     return@Consumer
 
