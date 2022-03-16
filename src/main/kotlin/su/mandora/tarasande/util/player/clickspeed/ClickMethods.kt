@@ -44,6 +44,6 @@ class ClickMethodDynamic : ClickMethod("Dynamic", true) {
 }
 
 class ClickMethodCooldown : ClickMethod("Cooldown", false) {
-    override fun getClicks(targetedCPS: Double): Int = if (MinecraftClient.getInstance().player?.getAttackCooldownProgress(0.0F)!! >= 1.0F) 1 else 0
+    override fun getClicks(targetedCPS: Double): Int = if (MinecraftClient.getInstance().player?.getAttackCooldownProgress(0.5F)!! >= 1.0F) 1 else 0
     override fun reset(targetedCPS: Double) = Unit // nothing there
 }

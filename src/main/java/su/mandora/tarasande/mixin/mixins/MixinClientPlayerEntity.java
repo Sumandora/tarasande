@@ -55,7 +55,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     public void prePacketTick(CallbackInfo ci) {
         TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdate(EventUpdate.State.PRE_PACKET));
 
-        cachedRotation = new Rotation(getYaw(), getPitch());
+        cachedRotation = new Rotation(this);
         if (RotationUtil.INSTANCE.getFakeRotation() != null) {
             Rotation rotation = RotationUtil.INSTANCE.getFakeRotation();
             setYaw(rotation.getYaw());

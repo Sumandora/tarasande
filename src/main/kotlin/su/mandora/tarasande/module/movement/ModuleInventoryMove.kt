@@ -11,6 +11,7 @@ import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.EventPacket
 import su.mandora.tarasande.mixin.accessor.IKeyBinding
 import su.mandora.tarasande.screen.menu.ScreenMenu
+import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueMode
 import java.util.function.Consumer
 
@@ -18,13 +19,11 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
 
     private val canceledPackets = ValueMode(this, "Canceled packets", true, "Open", "Close")
 
-    private val keybinding = listOf(
-        mc.options.forwardKey,
-        mc.options.leftKey,
-        mc.options.backKey,
-        mc.options.rightKey,
-        mc.options.jumpKey
-    )
+    private val keybinding = ArrayList(PlayerUtil.movementKeys)
+
+    init {
+        keybinding.add(mc.options.jumpKey)
+    }
 
     val eventConsumer = Consumer<Event> { event ->
         when (event) {

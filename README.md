@@ -50,6 +50,8 @@
 - Don't be able to friend localplayer/self
 - Make the friend alias feature accessable to the user (frontend is missing)
 - MidClick (alias prompt with screen and callback?)
+- KillAura: Calculate attack cycle from enemies
+- Scaffold aims at wrong blocks?
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

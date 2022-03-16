@@ -8,6 +8,7 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventAttackEntity
 import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.EventUpdate
+import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
@@ -18,13 +19,6 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
     private val packets = object : ValueNumber(this, "Packets", 2.0, 2.0, 10.0, 2.0) {
         override fun isEnabled() = mode.isSelected(2)
     }
-
-    private val movementKeys = arrayListOf(
-        mc.options.forwardKey,
-        mc.options.leftKey,
-        mc.options.backKey,
-        mc.options.rightKey
-    )
 
     var changeBinds = false
 
@@ -55,7 +49,7 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
                 }
             }
             is EventKeyBindingIsPressed -> {
-                if (movementKeys.contains(event.keyBinding)) {
+                if (PlayerUtil.movementKeys.contains(event.keyBinding)) {
                     if (changeBinds) {
                         when {
                             mode.isSelected(0) -> {

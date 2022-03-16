@@ -1,13 +1,16 @@
 package su.mandora.tarasande.module.combat
 
+import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.passive.PassiveEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Items
 import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
+import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.EntityHitResult
@@ -38,6 +41,8 @@ import su.mandora.tarasande.value.ValueNumber
 import su.mandora.tarasande.value.ValueNumberRange
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.math.min
 import kotlin.math.sqrt
 
@@ -80,7 +85,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val precision = object : ValueNumber(this, "Precision", 0.0, 0.01, 1.0, 0.01) {
         override fun isEnabled() = rotations.anySelected()
     }
-    private val lockView = ValueBoolean(this, "Lock view", true)
+    private val lockView = ValueBoolean(this, "Lock view", false)
     private val flex = ValueBoolean(this, "Flex", false)
     private val flexTurn = object : ValueNumber(this, "Flex turn", 0.0, 90.0, 180.0, 1.0) {
         override fun isEnabled() = flex.value
@@ -91,6 +96,12 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val syncPosition = ValueBoolean(this, "Sync position", false)
     private val preferPlayers = ValueBoolean(this, "Prefer players", true)
     private val waitForCritical = ValueBoolean(this, "Wait for critical", false)
+    private val dontWaitWhenEnemyHasShield = object : ValueBoolean(this, "Don't wait when enemy has shield", true) {
+        override fun isEnabled() = waitForCritical.value
+    }
+    private val forceCritical = object : ValueBoolean(this, "Force critical", true) {
+        override fun isEnabled() = waitForCritical.value
+    }
 
     internal val targets = ArrayList<Pair<Entity, Vec3d>>()
     private val comparator: Comparator<Pair<Entity, Vec3d>> = Comparator.comparing {
@@ -129,6 +140,17 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         clicked = false
         blocking = false
         targets.clear()
+    }
+
+    private fun hasShield(entity: Entity): Boolean {
+        if(entity is PlayerEntity) {
+            return entity.inventory.mainHandStack.item == Items.SHIELD || entity.inventory.offHand[0].item == Items.SHIELD
+        }
+        return false
+    }
+
+    private fun allAttacked(block: (LivingEntity) -> Boolean): Boolean {
+        return (mode.isSelected(0) && targets.first().first.let { it is LivingEntity && block(it) }) || (mode.isSelected(1) && targets.all { it.first is LivingEntity && block((it.first as LivingEntity)) })
     }
 
     val eventConsumer = Consumer<Event> { event ->
@@ -170,9 +192,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.getRotations(mc.player?.eyePos!!, it.second))
                     hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null
                 }
+                targets.sortBy { it.first is PlayerEntity && !(it.first as PlayerEntity).isDead }
                 if (preferPlayers.value)
                     targets.sortBy { it.first is PlayerEntity }
-                targets.sortBy { it.first is PlayerEntity && (it.first as PlayerEntity).isDead }
 
                 val target = targets[0]
 
@@ -219,7 +241,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
                 event.rotation = finalRot.correctSensitivity()
 
-                if (!lockView.value) {
+                if (lockView.value) {
                     mc.player?.yaw = finalRot.yaw
                     mc.player?.pitch = finalRot.pitch
                 }
@@ -236,19 +258,17 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     return@Consumer
                 }
 
-                if (waitForCritical.value)
-                // This is pasted from mojang code...
-                    if (!(mc.player?.isOnGround!! ||
-                                (mc.player?.fallDistance!! > 0.0f &&
-                                        !mc.player?.isClimbing!! &&
-                                        !mc.player?.isTouchingWater!! &&
-                                        !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! &&
-                                        !mc.player?.hasVehicle()!! && !mc.player?.isSprinting!!
-                                        )
-                                ))
-                        return@Consumer
+                var clicks = clickSpeedUtil.getClicks()
 
-                val clicks = clickSpeedUtil.getClicks()
+                if (waitForCritical.value)
+                    if(!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) })
+                        if(!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
+                            if (!mc.player?.isOnGround!! && (mc.player?.fallDistance!! == 0.0f || !mc.player?.isSprinting!!))
+                                clicks = 0
+
+                if (dontAttackWhenBlocking.value && allAttacked { it.isBlocking })
+                    if (!simulateShieldBlock.value || allAttacked { it.blockedByShield(DamageSource.player(mc.player)) })
+                        clicks = 0
 
                 if (mc.player?.isUsingItem!! && clicks > 0 && !blockMode.isSelected(0)) {
                     var hasTarget = false
@@ -277,6 +297,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                         for (entry in targets) {
                             var target = entry.first
                             val aimPoint = entry.second
+
                             if (dontAttackWhenBlocking.value && target is LivingEntity && target.isBlocking)
                                 if (!simulateShieldBlock.value || target.blockedByShield(DamageSource.player(mc.player)))
                                     continue
@@ -334,12 +355,19 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 }
             }
             is EventKeyBindingIsPressed -> {
-                when (event.keyBinding) {
-                    mc.options.useKey -> {
-                        if (blocking && targets.isNotEmpty()) {
-                            event.pressed = true
-                        }
+                if (event.keyBinding == mc.options.useKey) {
+                    if (blocking && targets.isNotEmpty()) {
+                        event.pressed = true
                     }
+                }
+                if(PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {
+                    if (waitForCritical.value)
+                        if(!dontWaitWhenEnemyHasShield.value || ((mode.isSelected(0) && !hasShield(targets.first().first) || (mode.isSelected(1) && targets.none { hasShield(it.first) }))))
+                            if(!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
+                                if (!mc.player?.isOnGround!! && mc.player?.fallDistance!! >= 0.0f)
+                                    if(forceCritical.value)
+                                        if(mc.player?.isSprinting!!)
+                                            event.pressed = false
                 }
             }
             is EventHandleBlockBreaking -> {

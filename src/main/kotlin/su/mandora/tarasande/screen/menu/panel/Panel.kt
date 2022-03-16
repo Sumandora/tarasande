@@ -7,6 +7,7 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.screen.menu.utils.DragInfo
 import su.mandora.tarasande.screen.menu.utils.IElement
 import su.mandora.tarasande.util.render.RenderUtil
+import java.awt.Color
 import kotlin.math.floor
 import kotlin.math.min
 
@@ -33,7 +34,9 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
         if (opened) {
             if (background) {
                 matrices?.push()
-                RenderUtil.fill(matrices, x, y + MinecraftClient.getInstance().textRenderer.fontHeight, x + panelWidth, y + panelHeight, Int.MIN_VALUE)
+                val accent = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
+                RenderUtil.fill(matrices, x, y + MinecraftClient.getInstance().textRenderer.fontHeight, x + panelWidth, y + panelHeight,
+                    RenderUtil.colorInterpolate(accent, Color(0,0,0,0), 0.4).rgb)
                 matrices?.pop()
             }
 

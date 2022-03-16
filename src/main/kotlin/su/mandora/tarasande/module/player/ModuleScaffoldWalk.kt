@@ -51,6 +51,15 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         override fun isEnabled() = edgeIncrement.value
     }
     private val rotateAtEdge = ValueBoolean(this, "Rotate at edge", false)
+    private val rotateAtEdgeMode = object : ValueMode(this, "Rotate at edge mode", false, "Distance", "Extrapolated position") {
+        override fun isEnabled() = rotateAtEdge.value
+    }
+    private val rotateAtEdgeDistance = object : ValueNumber(this, "Rotate at edge distance", 0.0, 0.5, 1.0, 0.05) {
+        override fun isEnabled() = rotateAtEdgeMode.isEnabled() && rotateAtEdgeMode.isSelected(0)
+    }
+    private val rotateAtEdgeExtrapolation = object : ValueNumber(this, "Rotate at edge extrapolation", 0.0, 1.0, 10.0, 1.0) {
+        override fun isEnabled() = rotateAtEdgeMode.isEnabled() && rotateAtEdgeMode.isSelected(1)
+    }
     private val silent = ValueBoolean(this, "Silent", false)
     private val lockView = ValueBoolean(this, "Lock view", false)
     private val headRoll = ValueMode(this, "Head roll", false, "Disabled", "Advantage", "Autism")
@@ -143,28 +152,24 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     }
                 }
 
-                var below = mc.player?.blockPos?.add(0, -1, 0)!!
+                val below = mc.player?.blockPos?.add(0, -1, 0)!!
+                val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
                 if (mc.world?.isAir(below)!!) {
                     target = getAdjacentBlock(below)
                     if (target != null) {
-                        val currentRot =
-                            if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(
-                                mc.player?.yaw!!,
-                                mc.player?.pitch!!
+                        if (!rotateAtEdge.value ||
+                            (
+                                    (rotateAtEdgeMode.isSelected(0) && round(Vec3d.ofCenter(target?.first).subtract(mc.player?.pos!!).multiply(Vec3d.of(target?.second?.vector)).horizontalLengthSquared() * 100) / 100.0 in (rotateAtEdgeDistance.value * rotateAtEdgeDistance.value)..1.0 || target?.second?.offsetY != 0) ||
+                                    (rotateAtEdgeMode.isSelected(1) && PlayerUtil.isOnEdge(rotateAtEdgeExtrapolation.value))
                             )
-                        val newEdgeDist = getNewEdgeDist()
-                        if (!rotateAtEdge.value || (round(
-                                Vec3d.ofCenter(target?.first).subtract(mc.player?.pos!!)
-                                    .multiply(Vec3d.of(target?.second?.vector)).horizontalLengthSquared() * 100
-                            ) / 100.0 in (newEdgeDist * newEdgeDist)..1.0 || target?.second?.offsetY != 0)
                         ) {
                             var point = Vec3d.of(target?.first)
                             var bestPoint: Vec3d? = null
                             var rotDelta = 0.0
                             var x = 0.0
                             while (x <= 1.0) {
-                                var y = 0.0
-                                while (y <= 1.0) {
+                                var y = 1.0
+                                while (y >= 0.0) {
                                     var z = 0.0
                                     while (z <= 1.0) {
                                         val newPoint = point.add(Vec3d(x, y, z))
@@ -175,25 +180,19 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                             mc.player?.eyePos!!,
                                             mc.player?.eyePos?.add(rotationVector.multiply(mc.interactionManager?.reachDistance?.toDouble()!!))!!
                                         )
+//                                        println(hitResult)
                                         if (hitResult != null && hitResult.type == HitResult.Type.BLOCK && (target == null || (hitResult.side == (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) && hitResult.blockPos == target?.first))) {
                                             val dir = target?.second?.opposite!!
-                                            val delta = abs(
+                                            val delta = if(lastRotation != null) lastRotation?.fov(rot)?.toDouble()!! else abs(
                                                 MathHelper.wrapDegrees
                                                     (
                                                     (
-                                                            if ((dir.offsetY != 0 && mc.player?.velocity?.horizontalLengthSquared()!! <= 0.01))
+                                                            if (dir.offsetY != 0 && mc.player?.velocity?.horizontalLengthSquared()!! <= 0.01)
                                                                 mc.player?.yaw?.toDouble()!!
+                                                            else if (dir.offsetY != 0 || offsetGoalYaw.value)
+                                                                Math.toDegrees(PlayerUtil.getMoveDirection())
                                                             else
-                                                                RotationUtil.getYaw(
-                                                                    if (offsetGoalYaw.value || dir.offsetY != 0)
-                                                                        Vec3d(
-                                                                            mc.player?.velocity?.x!!,
-                                                                            0.0,
-                                                                            mc.player?.velocity?.z!!
-                                                                        )
-                                                                    else
-                                                                        Vec3d.of(dir.vector)
-                                                                )
+                                                                RotationUtil.getYaw(Vec3d.of(dir.vector))
                                                             )
                                                             -
                                                             (rot.yaw + goalYaw.value)
@@ -206,7 +205,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                         }
                                         z += 0.05
                                     }
-                                    y += 0.05
+                                    y -= 0.05
                                 }
                                 x += 0.05
                             }
@@ -218,14 +217,11 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                 if (aimSpeed.minValue == 1.0 && aimSpeed.maxValue == 1.0)
                                     1.0
                                 else
-                                    MathHelper.clamp(
-                                        (
+                                    MathHelper.clamp((
                                                 if (aimSpeed.minValue == aimSpeed.maxValue)
                                                     aimSpeed.minValue
                                                 else
-                                                    ThreadLocalRandom.current()
-                                                        .nextDouble(aimSpeed.minValue, aimSpeed.maxValue)
-                                                ) * RenderUtil.deltaTime * 0.05,
+                                                    ThreadLocalRandom.current().nextDouble(aimSpeed.minValue, aimSpeed.maxValue)) * RenderUtil.deltaTime * 0.05,
                                         0.0,
                                         1.0
                                     )
@@ -241,9 +237,10 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 if (lastRotation != null) {
                     event.rotation = lastRotation?.correctSensitivity()!!
                 } else {
-                    val rad =
-                        Math.toRadians(mc.player?.yaw?.toDouble()!! + 90.0 + if (offsetGoalYaw.value) goalYaw.value else 0.0)
-                    event.rotation = RotationUtil.getRotations(
+                    var rad = (if(mc.player?.input?.movementInput?.lengthSquared()!! > 0.0) PlayerUtil.getMoveDirection() + Math.PI else Math.toRadians(mc.player?.yaw!! - 90.0))
+                    if(!offsetGoalYaw.value)
+                        rad -= Math.toRadians(goalYaw.value - 180.0)
+                    val targetRot = RotationUtil.getRotations(
                         mc.player?.eyePos!!,
                         mc.player?.pos?.add(cos(rad), 0.0, sin(rad))?.add(
                             0.0,
@@ -251,6 +248,25 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                             0.0
                         )!!
                     )
+                    val smoothedRot = currentRot.smoothedTurn(
+                        targetRot,
+                        if (aimSpeed.minValue == 1.0 && aimSpeed.maxValue == 1.0)
+                            1.0
+                        else
+                            MathHelper.clamp(
+                                (
+                                        if (aimSpeed.minValue == aimSpeed.maxValue)
+                                            aimSpeed.minValue
+                                        else
+                                            ThreadLocalRandom.current()
+                                                .nextDouble(aimSpeed.minValue, aimSpeed.maxValue)
+                                        ) * RenderUtil.deltaTime * 0.05,
+                                0.0,
+                                1.0
+                            )
+                    )
+
+                    event.rotation = smoothedRot.correctSensitivity()
                 }
 
                 if (lockView.value) {

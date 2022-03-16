@@ -10,6 +10,7 @@ import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.EventTimeTravel
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
+import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueBind
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueNumber
@@ -36,13 +37,6 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
 
     private var didHit = false
 
-    private val movementKeys = arrayListOf(
-        mc.options.forwardKey,
-        mc.options.leftKey,
-        mc.options.backKey,
-        mc.options.rightKey
-    )
-
     override fun onEnable() {
         shifted = 0L
         prevShifted = 0L
@@ -64,7 +58,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
             }
             is EventKeyBindingIsPressed -> {
                 if (shifted < prevShifted && didHit) {
-                    if (movementKeys.contains(event.keyBinding)) {
+                    if (PlayerUtil.movementKeys.contains(event.keyBinding)) {
                         event.pressed = !event.pressed
                     }
                 }
