@@ -28,8 +28,9 @@
 4. Basic combat modules
 5. Basic movement modules
 6. Basic render modules
-7. Interactive Mid-Click-Wheel (similar to CSGO's radial menu)
-8. More advanced modules
+7. More advanced modules
+8. Anarchy modules
+9. Multi-version support
 
 ## TODO-List
 - Vehicle Speed
