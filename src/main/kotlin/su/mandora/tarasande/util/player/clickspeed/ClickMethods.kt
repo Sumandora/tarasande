@@ -1,9 +1,7 @@
 package su.mandora.tarasande.util.player.clickspeed
 
 import net.minecraft.client.MinecraftClient
-import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.util.player.clickspeed.ClickMethod
-import su.mandora.tarasande.module.misc.ModuleTickBaseManipulation
 import su.mandora.tarasande.util.math.TimeUtil
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.round

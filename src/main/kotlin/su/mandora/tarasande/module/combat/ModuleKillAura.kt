@@ -1,6 +1,5 @@
 package su.mandora.tarasande.module.combat
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
@@ -10,7 +9,6 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Items
 import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
-import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.EntityHitResult
@@ -41,8 +39,6 @@ import su.mandora.tarasande.value.ValueNumber
 import su.mandora.tarasande.value.ValueNumberRange
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 import kotlin.math.min
 import kotlin.math.sqrt
 
@@ -143,7 +139,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
 
     private fun hasShield(entity: Entity): Boolean {
-        if(entity is PlayerEntity) {
+        if (entity is PlayerEntity) {
             return entity.inventory.mainHandStack.item == Items.SHIELD || entity.inventory.offHand[0].item == Items.SHIELD
         }
         return false
@@ -261,8 +257,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 var clicks = clickSpeedUtil.getClicks()
 
                 if (waitForCritical.value)
-                    if(!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) })
-                        if(!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
+                    if (!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) })
+                        if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
                             if (!mc.player?.isOnGround!! && (mc.player?.fallDistance!! == 0.0f || !mc.player?.isSprinting!!))
                                 clicks = 0
 
@@ -360,13 +356,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                         event.pressed = true
                     }
                 }
-                if(PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {
+                if (PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {
                     if (waitForCritical.value)
-                        if(!dontWaitWhenEnemyHasShield.value || ((mode.isSelected(0) && !hasShield(targets.first().first) || (mode.isSelected(1) && targets.none { hasShield(it.first) }))))
-                            if(!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
+                        if (!dontWaitWhenEnemyHasShield.value || ((mode.isSelected(0) && !hasShield(targets.first().first) || (mode.isSelected(1) && targets.none { hasShield(it.first) }))))
+                            if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
                                 if (!mc.player?.isOnGround!! && mc.player?.fallDistance!! >= 0.0f)
-                                    if(forceCritical.value)
-                                        if(mc.player?.isSprinting!!)
+                                    if (forceCritical.value)
+                                        if (mc.player?.isSprinting!!)
                                             event.pressed = false
                 }
             }

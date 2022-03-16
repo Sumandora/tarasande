@@ -9,6 +9,9 @@ import net.minecraft.entity.mob.Monster
 import net.minecraft.entity.passive.AnimalEntity
 import net.minecraft.entity.passive.TameableEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Items
+import net.minecraft.util.Hand
+import net.minecraft.util.UseAction
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.RaycastContext
@@ -168,11 +171,23 @@ object PlayerUtil {
         val right = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.rightKey as IKeyBinding).boundKey.code)
         return Math.toRadians(
             RotationUtil.getYaw(
-                if (left    && right)   0.0 else if (left)      1.0 else if (right) -1.0 else 0.0,
-                if (forward && back)    0.0 else if (forward)   1.0 else if (back)  -1.0 else 0.0
+                if (left && right) 0.0 else if (left) 1.0 else if (right) -1.0 else 0.0,
+                if (forward && back) 0.0 else if (forward) 1.0 else if (back) -1.0 else 0.0
             ) + 90 + MinecraftClient.getInstance().player?.yaw!!
         )
     }
 
     fun isOnEdge(extrapolation: Double) = MinecraftClient.getInstance().world?.isSpaceEmpty(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.boundingBox?.offset(MinecraftClient.getInstance().player?.velocity?.x!! * extrapolation, -MinecraftClient.getInstance().player?.stepHeight?.toDouble()!!, MinecraftClient.getInstance().player?.velocity?.z!! * extrapolation))!!
+
+    fun getUsedHand(): Hand? {
+        for (hand in Hand.values()) {
+            val stack = MinecraftClient.getInstance().player?.getStackInHand(hand)
+            if (stack != null && stack.item != Items.AIR) {
+                if (stack.useAction == UseAction.NONE) continue
+
+                return hand
+            }
+        }
+        return null
+    }
 }

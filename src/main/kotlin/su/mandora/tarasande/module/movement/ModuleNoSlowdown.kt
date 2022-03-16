@@ -1,9 +1,7 @@
 package su.mandora.tarasande.module.movement
 
-import net.minecraft.item.Items
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket
 import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket
-import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -14,6 +12,7 @@ import su.mandora.tarasande.event.EventSlowdown
 import su.mandora.tarasande.event.EventSlowdownAmount
 import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IClientPlayerInteractionManager
+import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
 import java.util.concurrent.ThreadLocalRandom
@@ -36,20 +35,8 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
         override fun isEnabled() = bypass.isSelected(1)
     }
 
-    private fun getUsedHand(): Hand? {
-        for (hand in Hand.values()) {
-            val stack = mc.player?.getStackInHand(hand)
-            if (stack != null && stack.item != Items.AIR) {
-                if (stack.useAction == UseAction.NONE) continue
-
-                return hand
-            }
-        }
-        return null
-    }
-
     private fun isActionEnabled(): Boolean {
-        val usedStack = mc.player?.getStackInHand(getUsedHand() ?: return false)
+        val usedStack = mc.player?.getStackInHand(PlayerUtil.getUsedHand() ?: return false)
         return usedStack != null && actions.selected.contains(formatEnumTypes(usedStack.useAction!!))
     }
 
@@ -66,7 +53,7 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
                                     mc.networkHandler?.sendPacket(PlayerActionC2SPacket(PlayerActionC2SPacket.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, Direction.DOWN))
                                 }
                                 EventUpdate.State.POST -> {
-                                    val hand = getUsedHand()
+                                    val hand = PlayerUtil.getUsedHand()
                                     if (hand != null) {
                                         (mc.interactionManager as IClientPlayerInteractionManager).setOnlyPackets(true)
                                         mc.interactionManager?.interactItem(mc.player, mc.world, hand)

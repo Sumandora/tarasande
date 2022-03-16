@@ -52,7 +52,7 @@
 - Make the friend alias feature accessable to the user (frontend is missing)
 - MidClick (alias prompt with screen and callback?)
 - KillAura: Calculate attack cycle from enemies
-- Scaffold aims at wrong blocks?
+- NoSlowdown seperate allowed actions and bypassed actions
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

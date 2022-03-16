@@ -1,17 +1,18 @@
 package su.mandora.tarasande.module.misc
 
 import net.minecraft.client.MinecraftClient
-import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
-import su.mandora.tarasande.event.*
+import su.mandora.tarasande.event.EventAttackEntity
+import su.mandora.tarasande.event.EventKeyBindingIsPressed
+import su.mandora.tarasande.event.EventTimeTravel
+import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
 import su.mandora.tarasande.util.player.PlayerUtil
-import su.mandora.tarasande.util.player.clickspeed.ClickMethodCooldown
 import su.mandora.tarasande.value.ValueBind
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueNumber
@@ -51,8 +52,8 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventUpdate -> {
-                if(event.state == EventUpdate.State.POST) // doing it in post means, that we skip as soon as we get it, otherwise we get a one tick delay
-                    if(shifted >= prevShifted && skipCooldown.value)
+                if (event.state == EventUpdate.State.POST) // doing it in post means, that we skip as soon as we get it, otherwise we get a one tick delay
+                    if (shifted >= prevShifted && skipCooldown.value)
                         shifted = max(0L, shifted - ceil((0.9 - MinecraftClient.getInstance().player?.getAttackCooldownProgress(0.5F)!!).coerceAtLeast(0.0) * MinecraftClient.getInstance().player?.attackCooldownProgressPerTick!! * ((mc as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime).toLong())
             }
             is EventAttackEntity -> {
@@ -60,12 +61,12 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
                 if (event.entity is LivingEntity) {
                     didHit = true
                     if (rapidFire.value) {
-                        shifted = max(0L, shifted - (if(rapidInstantUncharge.value) shifted else (event.entity.hurtTime * ((mc as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime)).toLong())
+                        shifted = max(0L, shifted - (if (rapidInstantUncharge.value) shifted else (event.entity.hurtTime * ((mc as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime)).toLong())
                     }
                 }
             }
             is EventKeyBindingIsPressed -> {
-                if(defensive.value) {
+                if (defensive.value) {
                     if (shifted < prevShifted && didHit) {
                         if (PlayerUtil.movementKeys.contains(event.keyBinding)) {
                             event.pressed = !event.pressed
