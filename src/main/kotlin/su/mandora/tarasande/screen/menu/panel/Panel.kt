@@ -36,7 +36,7 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
                 matrices?.push()
                 val accent = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
                 RenderUtil.fill(matrices, x, y + MinecraftClient.getInstance().textRenderer.fontHeight, x + panelWidth, y + panelHeight,
-                    RenderUtil.colorInterpolate(accent, Color(0, 0, 0, 0), 0.4).rgb)
+                    RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).let { Color(it.red, it.green, it.blue, 0) }, 0.3, 0.3, 0.3, 0.7).rgb)
                 matrices?.pop()
             }
 

@@ -48,11 +48,9 @@
 - KillAura: Don't turn inside enemies
 - Configure ESP
 - Don't hide disabled settings, grey them out (looks sick prob)
-- Don't be able to friend localplayer/self
 - Make the friend alias feature accessable to the user (frontend is missing)
 - MidClick (alias prompt with screen and callback?)
 - KillAura: Calculate attack cycle from enemies
-- NoSlowdown seperate allowed actions and bypassed actions
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

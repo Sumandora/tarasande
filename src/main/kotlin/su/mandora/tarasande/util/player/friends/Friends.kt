@@ -23,7 +23,7 @@ class Friends {
                     if (event.entity is PlayerEntity)
                         for (friend in friends)
                             if (friend.first == (event.entity as PlayerEntity).gameProfile)
-                                event.displayName = event.displayName.copy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
+                                event.displayName = event.displayName.shallowCopy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
                 }
             }
         }
@@ -32,7 +32,7 @@ class Friends {
     fun addFriend(gameProfile: GameProfile, alias: String? = null) {
         if (friends.any { it.first == gameProfile })
             return
-        friends.add(Pair(gameProfile, alias))
+        friends.add(Pair(gameProfile, alias ?: gameProfile.name))
     }
 
     fun remFriend(gameProfile: GameProfile) {
@@ -43,11 +43,11 @@ class Friends {
 
     fun isFriend(gameProfile: GameProfile) = friends.any { it.first == gameProfile }
 
-    fun changeFriendState(gameProfile: GameProfile) {
+    fun changeFriendState(gameProfile: GameProfile, alias: String? = null) {
         if (isFriend(gameProfile))
             remFriend(gameProfile)
         else
-            addFriend(gameProfile)
+            addFriend(gameProfile, alias)
     }
 
 }

@@ -13,12 +13,10 @@ import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
-import su.mandora.tarasande.event.EventAttack
-import su.mandora.tarasande.event.EventJump
-import su.mandora.tarasande.event.EventPollEvents
+import su.mandora.tarasande.event.*
 import su.mandora.tarasande.mixin.accessor.IEntity
+import su.mandora.tarasande.mixin.accessor.IKeyBinding
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
-import su.mandora.tarasande.mixin.accessor.IVec3d
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
@@ -159,7 +157,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 if (mc.world?.isAir(below)!!) {
                     target = getAdjacentBlock(below)
                     if (target != null) {
-                        println(target)
                         if (!rotateAtEdge.value ||
                             (
                                     (rotateAtEdgeMode.isSelected(0) && round(Vec3d.ofCenter(target?.first).subtract(mc.player?.pos!!).multiply(Vec3d.of(target?.second?.vector)).horizontalLengthSquared() * 100) / 100.0 in (rotateAtEdgeDistance.value * rotateAtEdgeDistance.value)..1.0 || target?.second?.offsetY != 0) ||
@@ -183,7 +180,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                             mc.player?.eyePos!!,
                                             mc.player?.eyePos?.add(rotationVector.multiply(mc.interactionManager?.reachDistance?.toDouble()!!))!!
                                         )
-//                                        println(hitResult)
                                         if (hitResult != null && hitResult.type == HitResult.Type.BLOCK && hitResult.side == (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) && hitResult.blockPos == target?.first) {
                                             val dir = target?.second?.opposite!!
                                             val delta = /*if (lastRotation != null) lastRotation?.fov(rot)?.toDouble()!! else */abs(
@@ -288,12 +284,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
 
                 val airBelow = mc.world?.isAir(BlockPos(mc.player?.pos?.add(0.0, -1.0, 0.0)))!!
 
-                if (tower.isSelected(1) && mc.player?.input?.jumping!!) {
-                    val velocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)
-                    mc.player?.jump()
-                    mc.player?.velocity = velocity?.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!!)
-                }
-
                 if (airBelow || alwaysClick.value) {
                     val newEdgeDist = getNewEdgeDist()
                     val rotationVector = (mc.player as IEntity).invokeGetRotationVector(
@@ -332,12 +322,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                             }
                             if (blockSlot != null) {
                                 mc.player?.inventory?.selectedSlot = blockSlot
-                                val hand = PlayerUtil.getUsedHand()
-                                if (hand == null || mc.player?.getStackInHand(hand).let { it == null || it.item !is BlockItem }) {
-                                    // hand isnt used anyways fuck
-                                    mc.player?.inventory?.selectedSlot = prevSlot
-                                    return@Consumer
-                                }
                             } else return@Consumer
                         } else return@Consumer
                     }
@@ -351,16 +335,13 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                 if (timeUtil.hasReached(delay.value.toLong())) {
                                     placeBlock(hitResult)
 
+                                    if (target?.second?.offsetY == 0) {
+                                        if (edgeIncrement.value && preventImpossibleEdge.value && prevEdgeDistance > newEdgeDist && mc.player?.isOnGround!!)
+                                            mc.player?.jump()
+                                        prevEdgeDistance = newEdgeDist
+                                    }
+
                                     timeUtil.reset()
-                                }
-
-                                if (tower.isSelected(2) && mc.player?.input?.jumping!!)
-                                    (mc.player?.velocity as IVec3d).setY(1.0)
-
-                                if (target?.second?.offsetY == 0) {
-                                    if (edgeIncrement.value && preventImpossibleEdge.value && prevEdgeDistance > newEdgeDist && mc.player?.isOnGround!!)
-                                        mc.player?.jump()
-                                    prevEdgeDistance = newEdgeDist
                                 }
                             }
                         } else if (alwaysClick.value) {
@@ -370,6 +351,26 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     }
                     if (silent.value) {
                         mc.player?.inventory?.selectedSlot = prevSlot
+                    }
+                }
+            }
+            is EventMovement -> {
+                if (event.entity != mc.player)
+                    return@Consumer
+                if(target != null) {
+                    if (mc.player?.input?.jumping!!) {
+                        when {
+                            tower.isSelected(1) -> {
+                                val velocity = event.velocity.add(0.0, 0.0, 0.0)
+                                val playerVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)
+                                mc.player?.jump()
+                                event.velocity = velocity?.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!!)!!
+                                mc.player?.velocity = playerVelocity
+                            }
+                            tower.isSelected(2) -> {
+                                event.velocity = event.velocity.withAxis(Direction.Axis.Y, 1.0)
+                            }
+                        }
                     }
                 }
             }

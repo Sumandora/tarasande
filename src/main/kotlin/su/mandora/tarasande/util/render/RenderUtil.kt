@@ -245,9 +245,10 @@ object RenderUtil {
         RenderSystem.disableBlend()
     }
 
-    fun colorInterpolate(a: Color, b: Color, t: Double): Color {
-        val t = t.toFloat() // damn
-        return Color((a.red + (b.red - a.red) * t) / 255.0f, (a.green + (b.green - a.green) * t) / 255.0f, (a.blue + (b.blue - a.blue) * t) / 255.0f, (a.alpha + (b.alpha - a.alpha) * t) / 255.0f)
+    fun colorInterpolate(a: Color, b: Color, t: Double) = colorInterpolate(a, b, t, t, t, t)
+
+    fun colorInterpolate(a: Color, b: Color, tR: Double, tG: Double, tB: Double, tA: Double): Color {
+        return Color((a.red + (b.red - a.red) * tR.toFloat()) / 255.0f, (a.green + (b.green - a.green) * tG.toFloat()) / 255.0f, (a.blue + (b.blue - a.blue) * tB.toFloat()) / 255.0f, (a.alpha + (b.alpha - a.alpha) * tA.toFloat()) / 255.0f)
     }
 
     fun drawWithSmallShadow(matrices: MatrixStack?, text: String, x: Float, y: Float, color: Int) {

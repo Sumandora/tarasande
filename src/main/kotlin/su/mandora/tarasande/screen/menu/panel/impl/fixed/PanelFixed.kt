@@ -40,7 +40,7 @@ open class PanelFixed(title: String, x: Double, y: Double, width: Double, height
             alignment = Alignment.RIGHT
 
         TarasandeMain.get().blur?.bind(true)
-        RenderUtil.fill(matrices, x, y, x + panelWidth, y + panelHeight, -1)
+        RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else MinecraftClient.getInstance().textRenderer?.fontHeight)?.toDouble()!!, -1)
         MinecraftClient.getInstance().framebuffer.beginWrite(true)
 
         super.render(matrices, mouseX, mouseY, delta)

@@ -37,7 +37,7 @@ class PanelFixedGraph(private val graph: Graph, x: Double, y: Double) : PanelFix
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
         for ((index, value) in values.withIndex()) {
-            bufferBuilder.vertex(matrix, (x + finalWidth * (index / values.size.toFloat())).toFloat(), (y + panelHeight - (panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight) * normalize(value.toDouble(), min, max)).toFloat(), 0.0f).color(1.0f, 1.0f, 1.0f, 1.0f).next()
+            bufferBuilder.vertex(matrix, (x + finalWidth * (index / values.size.toFloat())).toFloat(), (y + panelHeight - (1 / MinecraftClient.getInstance().window.scaleFactor) - (panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight - (1 / MinecraftClient.getInstance().window.scaleFactor)) * normalize(value.toDouble(), min, max)).toFloat(), 0.0f).color(1.0f, 1.0f, 1.0f, 1.0f).next()
         }
         bufferBuilder.end()
         BufferRenderer.draw(bufferBuilder)

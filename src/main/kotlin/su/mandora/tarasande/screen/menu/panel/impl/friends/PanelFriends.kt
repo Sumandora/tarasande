@@ -88,7 +88,7 @@ class PanelFriends(x: Double, y: Double) : Panel("Friends", x, y, 150.0, 100.0) 
             false
         }
         for (player in MinecraftClient.getInstance().world?.players!!) {
-            if (player.gameProfile != null && playerElementList.none { it.player == player }) {
+            if (player.gameProfile != null && player != MinecraftClient.getInstance().player && playerElementList.none { it.player == player }) {
                 val playerElement = PlayerElement(player, 0.0)
                 playerElement.init()
                 playerElementList.add(playerElement)

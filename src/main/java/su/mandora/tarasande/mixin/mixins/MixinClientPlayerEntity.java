@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
@@ -107,6 +108,8 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Override
     public void travel(Vec3d movementInput) {
+        boolean fallFlying = this.getFlag(Entity.FALL_FLYING_FLAG_INDEX);
+
         boolean flying = getAbilities().flying;
         float flySpeed = getAbilities().getFlySpeed();
 
@@ -119,6 +122,8 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
         getAbilities().flying = flying;
         getAbilities().setFlySpeed(flySpeed);
+
+        this.setFlag(Entity.FALL_FLYING_FLAG_INDEX, fallFlying);
     }
 
     @Override

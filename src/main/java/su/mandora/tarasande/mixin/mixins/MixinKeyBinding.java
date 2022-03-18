@@ -35,6 +35,11 @@ public class MixinKeyBinding implements IKeyBinding {
     }
 
     @Override
+    public boolean forceIsPressed() {
+        return pressed;
+    }
+
+    @Override
     public InputUtil.Key getBoundKey() {
         return boundKey;
     }

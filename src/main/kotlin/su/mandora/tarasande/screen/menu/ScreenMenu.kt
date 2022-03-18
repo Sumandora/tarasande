@@ -110,7 +110,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
             RenderSystem.setShader { GameRenderer.getPositionTexShader() }
             RenderSystem.setShaderTexture(0, image)
             val color = color.brighter().brighter()
-            RenderSystem.setShaderColor(color.red / 255f, color.green / 255f, color.blue / 255f, animation.toFloat())
+            RenderSystem.setShaderColor(color.red / 255f, color.green / 255f, color.blue / 255f, (animation * animation * animation).toFloat())
             RenderSystem.enableBlend()
             RenderSystem.defaultBlendFunc()
             RenderSystem.enableDepthTest()

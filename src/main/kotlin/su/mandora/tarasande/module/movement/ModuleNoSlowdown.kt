@@ -34,19 +34,22 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
     private val reuseMode = object : ValueMode(this, "Reuse mode", false, "Same slot", "Different slot") {
         override fun isEnabled() = bypass.isSelected(1)
     }
+    private val bypassedActions = object : ValueMode(this, "Bypassed actions", true, *useActions.map { formatEnumTypes(it) }.toTypedArray()) {
+        override fun isEnabled() = bypass.selected.isNotEmpty()
+    }
 
-    private fun isActionEnabled(): Boolean {
+    private fun isActionEnabled(setting: ValueMode): Boolean {
         val usedStack = mc.player?.getStackInHand(PlayerUtil.getUsedHand() ?: return false)
-        return usedStack != null && actions.selected.contains(formatEnumTypes(usedStack.useAction!!))
+        return usedStack != null && setting.selected.contains(formatEnumTypes(usedStack.useAction!!))
     }
 
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
-            is EventSlowdownAmount -> if (isActionEnabled()) event.slowdownAmount = slowdown.value.toFloat()
-            is EventSlowdown -> if (isActionEnabled()) event.usingItem = false
+            is EventSlowdownAmount -> if (isActionEnabled(actions)) event.slowdownAmount = slowdown.value.toFloat()
+            is EventSlowdown -> if (isActionEnabled(actions)) event.usingItem = false
             is EventUpdate -> {
                 if (mc.player?.isUsingItem!!) {
-                    if (isActionEnabled()) {
+                    if (isActionEnabled(bypassedActions)) {
                         if (bypass.isSelected(0)) {
                             when (event.state) {
                                 EventUpdate.State.PRE_PACKET -> {
