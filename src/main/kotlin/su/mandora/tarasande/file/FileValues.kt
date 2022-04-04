@@ -17,7 +17,9 @@ class FileValues : File("Values") {
                 jsonObject = JsonObject()
                 values.add(value.owner.toString(), jsonObject)
             }
-            jsonObject.add(value.name, value.save())
+            val jsonElement = value.save()
+            if (jsonElement != null)
+                jsonObject.add(value.name, jsonElement)
         }
         return values
     }

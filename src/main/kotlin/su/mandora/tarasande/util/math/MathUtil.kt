@@ -4,6 +4,9 @@ import net.minecraft.util.math.Box
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
 
 object MathUtil {
 
@@ -30,16 +33,6 @@ object MathUtil {
 
     fun bringCloser(value: Double, goal: Double, increment: Double): Double {
         return if (value < goal) (value + increment).coerceAtMost(goal) else (value - increment).coerceAtLeast(goal)
-    }
-
-    fun getRotationVector(pitch: Float, yaw: Float): Vec3d {
-        val f = pitch * (Math.PI.toFloat() / 180)
-        val g = -yaw * (Math.PI.toFloat() / 180)
-        val h = MathHelper.cos(g)
-        val i = MathHelper.sin(g)
-        val j = MathHelper.cos(f)
-        val k = MathHelper.sin(f)
-        return Vec3d((i * j).toDouble(), (-k).toDouble(), (h * j).toDouble())
     }
 
     fun calculateBezierCurve(accuracy: Int, points: ArrayList<Vec2f>): ArrayList<Vec2f> {

@@ -11,6 +11,7 @@ import su.mandora.tarasande.mixin.accessor.ITextFieldWidget
 import su.mandora.tarasande.screen.accountmanager.elements.TextFieldWidgetPlaceholder
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.ValueText
+import java.awt.Color
 
 class ValueComponentText(value: Value) : ValueComponent(value) {
 
@@ -39,6 +40,8 @@ class ValueComponentText(value: Value) : ValueComponent(value) {
         matrices?.scale(0.5F, 0.5F, 1.0F)
         if (textFieldWidget.isFocused)
             (textFieldWidget as ITextFieldWidget).setColor(TarasandeMain.get().clientValues?.accentColor?.getColor()!!)
+        if(!value.isEnabled())
+            (textFieldWidget as ITextFieldWidget).setColor(Color.white.darker().darker())
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
         (textFieldWidget as ITextFieldWidget).setColor(null)
         matrices?.pop()
@@ -81,6 +84,8 @@ class ValueComponentText(value: Value) : ValueComponent(value) {
         textFieldWidget.setTextFieldFocused(false)
         textFieldWidget.setCursorToEnd()
     }
+
+    fun isFocused() = textFieldWidget.isFocused
 
     override fun getHeight() = MinecraftClient.getInstance().textRenderer.fontHeight.toDouble()
 }

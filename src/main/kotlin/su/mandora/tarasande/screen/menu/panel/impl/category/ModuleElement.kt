@@ -23,7 +23,7 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
     private var expansionTime = 0L
     private var expanded = false
 
-    private val components = ArrayList<ValueComponent>()
+    val components = ArrayList<ValueComponent>()
 
     override fun init() {
         if (components.isEmpty()) {
@@ -39,7 +39,7 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
         matrices?.translate(2.0, this.defaultHeight / 4.0 + 1.0, 0.0)
         matrices?.scale(0.75f, 0.75f, 1.0f)
         matrices?.translate(-2.0, -(this.defaultHeight / 4.0 + 1.0f), 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, module.name, 2.0f, ((this.defaultHeight / 4.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f) + 1.0f).toFloat(), -1)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, module.name, 2.0f, ((this.defaultHeight / 4.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f) + 1.0f).toFloat(), Color.white.rgb)
         matrices?.pop()
 
         matrices?.push()
@@ -88,14 +88,12 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
         if (expanded) {
             var yOffset = 0.0
             for (component in components) {
-                if (component.value.isEnabled()) {
-                    matrices?.push()
-                    matrices?.translate(5.0, this.defaultHeight + yOffset, 0.0)
-                    component.width = width - 10.0
-                    component.render(matrices, mouseX - 5, (mouseY - defaultHeight - yOffset).toInt(), delta)
-                    matrices?.pop()
-                    yOffset += component.getHeight()
-                }
+                matrices?.push()
+                matrices?.translate(5.0, this.defaultHeight + yOffset, 0.0)
+                component.width = width - 10.0
+                component.render(matrices, mouseX - 5, (mouseY - defaultHeight - yOffset).toInt(), delta)
+                matrices?.pop()
+                yOffset += component.getHeight()
             }
         }
     }
@@ -106,8 +104,8 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
             for (component in components) {
                 if (component.value.isEnabled()) {
                     component.mouseClicked(mouseX - 5.0, mouseY - defaultHeight - yOffset, button)
-                    yOffset += component.getHeight()
                 }
+                yOffset += component.getHeight()
             }
         }
         if (button == 0) {
@@ -127,9 +125,13 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
     }
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int) {
-        for (component in components) {
-            if (component.value.isEnabled()) {
-                component.mouseReleased(mouseX, mouseY, button)
+        if (expanded) {
+            var yOffset = 0.0
+            for (component in components) {
+                if (component.value.isEnabled()) {
+                    component.mouseReleased(mouseX - 5.0, mouseY - defaultHeight - yOffset, button)
+                }
+                yOffset += component.getHeight()
             }
         }
     }
@@ -179,9 +181,7 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
     override fun getHeight(): Double {
         var maxHeight = 0.0
         for (component in components) {
-            if (component.value.isEnabled()) {
-                maxHeight += component.getHeight()
-            }
+            maxHeight += component.getHeight()
         }
         return defaultHeight + if (expanded) maxHeight else 0.0
     }

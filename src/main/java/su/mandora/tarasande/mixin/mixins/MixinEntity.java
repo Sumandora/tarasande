@@ -16,7 +16,10 @@ import su.mandora.tarasande.event.EventMovement;
 import su.mandora.tarasande.event.EventVelocityYaw;
 import su.mandora.tarasande.mixin.accessor.IEntity;
 import su.mandora.tarasande.mixin.accessor.IVec3d;
+import su.mandora.tarasande.module.render.ModuleESP;
 import su.mandora.tarasande.util.math.rotation.RotationUtil;
+
+import java.awt.*;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity implements IEntity {
@@ -52,6 +55,16 @@ public abstract class MixinEntity implements IEntity {
         EventMovement eventMovement = new EventMovement((Entity) (Object) this, movement);
         TarasandeMain.Companion.get().getManagerEvent().call(eventMovement);
         ((IVec3d) movement).copy(eventMovement.getVelocity());
+    }
+
+    @Inject(method = "getTeamColorValue", at = @At("RETURN"), cancellable = true)
+    public void injectGetTeamColorValue(CallbackInfoReturnable<Integer> cir) {
+        ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class);
+        if (moduleESP.getEnabled() && moduleESP.filter((Entity) (Object) this)) {
+            Color c = TarasandeMain.Companion.get().getEntityColor().getColor((Entity) (Object) this);
+            if (c != null)
+                cir.setReturnValue(c.getRGB());
+        }
     }
 
     @Override

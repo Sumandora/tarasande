@@ -81,15 +81,15 @@ class PanelFriends(x: Double, y: Double) : Panel("Friends", x, y, 150.0, 100.0) 
 
     override fun tick() {
         playerElementList.removeIf {
-            if (!MinecraftClient.getInstance().world?.players?.contains(it.player)!!) {
+            if (MinecraftClient.getInstance().networkHandler?.playerList?.none { p -> p.profile == it.gameProfile }!!) {
                 it.onClose()
                 return@removeIf true
             }
             false
         }
-        for (player in MinecraftClient.getInstance().world?.players!!) {
-            if (player.gameProfile != null && player != MinecraftClient.getInstance().player && playerElementList.none { it.player == player }) {
-                val playerElement = PlayerElement(player, 0.0)
+        for (player in MinecraftClient.getInstance().networkHandler?.playerList!!) {
+            if (player != null && player != MinecraftClient.getInstance().player && playerElementList.none { it.gameProfile == player.profile }) {
+                val playerElement = PlayerElement(player.profile, 0.0)
                 playerElement.init()
                 playerElementList.add(playerElement)
             }

@@ -159,9 +159,9 @@ class ScreenBetterProxy(
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
-        drawCenteredText(matrices, textRenderer, "Proxy", width / 2, 8 - textRenderer.fontHeight / 2, -1)
+        drawCenteredText(matrices, textRenderer, "Proxy", width / 2, 8 - textRenderer.fontHeight / 2, Color.white.rgb)
         if (status != null)
-            textRenderer.drawWithShadow(matrices, status!!, width / 2 - textRenderer.getWidth(status!!) / 2.0F, height / 2F - 50 - 15 - textRenderer.fontHeight - 2, -1)
+            textRenderer.drawWithShadow(matrices, status!!, width / 2 - textRenderer.getWidth(status!!) / 2.0F, height / 2F - 50 - 15 - textRenderer.fontHeight - 2, Color.white.rgb)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {

@@ -129,7 +129,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Redirect(method = "hasOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isGlowing()Z"))
     public boolean hookedIsGlowing(Entity entity) {
         ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class);
-        return (moduleESP.getEnabled() && moduleESP.filter(entity)) || entity.isGlowing();
+        return (moduleESP.getEnabled() && moduleESP.getMode().isSelected(0) && moduleESP.filter(entity)) || entity.isGlowing();
     }
 
     @Inject(method = "createUserApiService", at = @At("HEAD"), cancellable = true)

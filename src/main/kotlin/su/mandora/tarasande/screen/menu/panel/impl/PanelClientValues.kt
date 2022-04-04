@@ -9,7 +9,7 @@ import su.mandora.tarasande.util.render.RenderUtil
 
 class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150.0, 100.0) {
 
-    private val elements = ArrayList<ValueComponent>()
+    val elements = ArrayList<ValueComponent>()
 
     override fun init() {
         if (elements.isEmpty()) {
@@ -23,17 +23,15 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
         val x = x + 2
         var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
         for (it in elements) {
-            if (it.value.isEnabled()) {
-                it.width = panelWidth - 4
-                if (y + it.getHeight() >= this.y - scrollOffset)
-                    it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
+            it.width = panelWidth - 4
+            if (y + it.getHeight() >= this.y - scrollOffset)
+                it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
 
-                matrices?.translate(0.0, it.getHeight(), 0.0)
-                y += it.getHeight()
+            matrices?.translate(0.0, it.getHeight(), 0.0)
+            y += it.getHeight()
 
-                if (y > this.y - scrollOffset + panelHeight)
-                    break
-            }
+            if (y > this.y - scrollOffset + panelHeight)
+                break
         }
         matrices?.pop()
     }
@@ -47,8 +45,8 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
         elements.forEach {
             if (it.value.isEnabled()) {
                 it.mouseClicked(mouseX - x, mouseY - y - scrollOffset, button)
-                y += it.getHeight()
             }
+            y += it.getHeight()
         }
         return super.mouseClicked(mouseX, mouseY, button)
     }
@@ -59,8 +57,8 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
         elements.forEach {
             if (it.value.isEnabled()) {
                 it.mouseReleased(mouseX - x, mouseY - y - scrollOffset, button)
-                y += it.getHeight()
             }
+            y += it.getHeight()
         }
         super.mouseReleased(mouseX, mouseY, button)
     }
@@ -72,8 +70,8 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
             if (it.value.isEnabled()) {
                 if (it.mouseScrolled(mouseX - x, mouseY - y - scrollOffset, amount))
                     return true
-                y += it.getHeight()
             }
+            y += it.getHeight()
         }
         return super.mouseScrolled(mouseX, mouseY, amount)
     }
@@ -118,9 +116,7 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
     override fun getMaxScrollOffset(): Double {
         var height = 0.0
         elements.forEach {
-            if (it.value.isEnabled()) {
-                height += it.getHeight()
-            }
+            height += it.getHeight()
         }
         return height
     }

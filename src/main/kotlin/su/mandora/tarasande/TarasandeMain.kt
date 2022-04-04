@@ -3,6 +3,7 @@ package su.mandora.tarasande
 import com.google.gson.GsonBuilder
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
+import su.mandora.tarasande.base.esp.ManagerESP
 import su.mandora.tarasande.base.event.ManagerEvent
 import su.mandora.tarasande.base.file.ManagerFile
 import su.mandora.tarasande.base.module.ManagerModule
@@ -28,6 +29,7 @@ class TarasandeMain {
     var blur: Blur? = null
     var screens: Screens? = null
     var friends: Friends? = null
+    var managerESP: ManagerESP? = null
 
     val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
 
@@ -53,10 +55,11 @@ class TarasandeMain {
         blur = Blur()
         screens = Screens() // Initializes ClickGUI (Make sure that modules and values are initialized before)
         friends = Friends()
+        managerESP = ManagerESP()
 
         managerFile?.load()
 
-        if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && screens?.betterScreenAccountManager?.mainAccount != -1) {
+        if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && screens?.betterScreenAccountManager?.mainAccount != null) {
             screens?.betterScreenAccountManager?.logIn(screens?.betterScreenAccountManager?.accounts!![screens?.betterScreenAccountManager?.mainAccount!!])
             while (screens?.betterScreenAccountManager?.loginThread != null && screens?.betterScreenAccountManager?.loginThread?.isAlive!!)
                 Thread.sleep(50L) // synchronize
@@ -67,5 +70,4 @@ class TarasandeMain {
     fun onUnload() {
         managerFile?.save()
     }
-
 }

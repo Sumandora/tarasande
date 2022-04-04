@@ -60,4 +60,6 @@ open class Event(private val cancellable: Boolean) {
         }
 }
 
+@Target(AnnotationTarget.FIELD)
+@Retention
 annotation class Priority(val value: Int)

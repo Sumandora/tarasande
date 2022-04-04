@@ -9,7 +9,7 @@ import su.mandora.tarasande.util.render.RenderUtil
 
 class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Double) : Panel(moduleCategory.name.first() + moduleCategory.name.substring(1).lowercase(), x, y, 150.0, 100.0) {
 
-    private val moduleElementList = ArrayList<ModuleElement>()
+    val moduleElementList = ArrayList<ModuleElement>()
 
     init {
         TarasandeMain.get().managerModule?.list?.forEach { if (it.category == moduleCategory) moduleElementList.add(ModuleElement(it, 100.0)) }

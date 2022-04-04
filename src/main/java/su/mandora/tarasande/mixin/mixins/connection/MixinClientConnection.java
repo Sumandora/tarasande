@@ -16,6 +16,8 @@ import su.mandora.tarasande.TarasandeMain;
 import su.mandora.tarasande.event.EventPacket;
 import su.mandora.tarasande.mixin.accessor.IClientConnection;
 
+import java.util.ArrayList;
+
 @Mixin(ClientConnection.class)
 public abstract class MixinClientConnection implements IClientConnection {
 
@@ -25,7 +27,7 @@ public abstract class MixinClientConnection implements IClientConnection {
     @Shadow
     public abstract void send(Packet<?> packet);
 
-    private static boolean interceptSend = true;
+    private static final ArrayList<Packet<?>> forced = new ArrayList<>();
 
     @Inject(method = "handlePacket", at = @At("HEAD"), cancellable = true)
     private static <T extends PacketListener> void injectHandlePacket(Packet<T> packet, PacketListener listener, CallbackInfo ci) {
@@ -37,12 +39,13 @@ public abstract class MixinClientConnection implements IClientConnection {
 
     @Inject(method = "send(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V", at = @At("HEAD"), cancellable = true)
     public void injectSend(Packet<?> packet, @Nullable GenericFutureListener<? extends Future<? super Void>> callback, CallbackInfo ci) {
-        if (interceptSend) {
+        if (!forced.contains(packet)) {
             EventPacket eventPacket = new EventPacket(EventPacket.Type.SEND, packet);
             TarasandeMain.Companion.get().getManagerEvent().call(eventPacket);
             if (eventPacket.getCancelled())
                 ci.cancel();
-        }
+        } else
+            forced.remove(packet);
     }
 
     @Override
@@ -53,8 +56,7 @@ public abstract class MixinClientConnection implements IClientConnection {
     // might cause race conditions :c
     @Override
     public void forceSend(Packet<?> packet) {
-        interceptSend = false;
+        forced.add(packet);
         send(packet);
-        interceptSend = true;
     }
 }

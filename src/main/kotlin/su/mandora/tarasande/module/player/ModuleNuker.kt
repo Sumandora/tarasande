@@ -8,6 +8,7 @@ import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.minecraft.util.registry.Registry
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
@@ -17,9 +18,9 @@ import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
-import su.mandora.tarasande.value.ValueBlock
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
+import su.mandora.tarasande.value.ValueRegistry
 import java.util.function.Consumer
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -29,8 +30,9 @@ import kotlin.math.pow
 class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius", ModuleCategory.PLAYER) {
 
     private val selectionMode = ValueMode(this, "Selection mode", false, "Include", "Exclude")
-    private val blocks = object : ValueBlock(this, "Blocks") {
+    private val blocks = object : ValueRegistry<Block>(this, "Blocks", Registry.BLOCK) {
         override fun filter(block: Block) = block != Blocks.AIR
+        override fun keyToString(key: Any?) = (key as Block).name.string
     }
     private val radius = ValueNumber(this, "Radius", 0.1, 4.5, 6.0, 0.1)
     private val throughWalls = ValueMode(this, "Through walls", false, "Off", "On", "Free")

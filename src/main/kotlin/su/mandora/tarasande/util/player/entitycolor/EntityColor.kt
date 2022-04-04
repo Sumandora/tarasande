@@ -25,10 +25,8 @@ class EntityColor {
         override fun isEnabled() = !useTeamColor.value
     }
 
-    fun getColor(entity: Entity): Color {
-        var color: Color
-        if (entity == MinecraftClient.getInstance().player)
-            color = selfColor.getColor()
+    fun getColor(entity: Entity): Color? {
+        var color: Color? = null
 
         if (!useTeamColor.value) {
             if (entity is PlayerEntity)
@@ -41,9 +39,8 @@ class EntityColor {
                 color = mobColor.getColor()
         }
 
-        // can't call method because it's overwritten in mixin -> infinite recursion
-        val abstractTeam = entity.scoreboardTeam
-        color = if (abstractTeam != null && abstractTeam.color.colorValue != null) Color(abstractTeam.color.colorValue!!) else Color(16777215)
+        if (entity == MinecraftClient.getInstance().player)
+            color = selfColor.getColor()
 
         val eventEntityColor = EventEntityColor(entity, color)
         TarasandeMain.get().managerEvent?.call(eventEntityColor)

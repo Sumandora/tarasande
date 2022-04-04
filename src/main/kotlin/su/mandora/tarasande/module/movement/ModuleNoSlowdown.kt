@@ -35,7 +35,7 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
         override fun isEnabled() = bypass.isSelected(1)
     }
     private val bypassedActions = object : ValueMode(this, "Bypassed actions", true, *useActions.map { formatEnumTypes(it) }.toTypedArray()) {
-        override fun isEnabled() = bypass.selected.isNotEmpty()
+        override fun isEnabled() = bypass.anySelected()
     }
 
     private fun isActionEnabled(setting: ValueMode): Boolean {

@@ -17,8 +17,8 @@ class ManagerValueComponent : Manager<Pair<Class<out Value>, Class<out ValueComp
             Pair(ValueNumberRange::class.java, ValueComponentNumberRange::class.java),
             Pair(ValueText::class.java, ValueComponentText::class.java),
             Pair(ValueColor::class.java, ValueComponentColor::class.java),
-            Pair(ValueBlock::class.java, ValueComponentBlock::class.java),
-            Pair(ValueItem::class.java, ValueComponentItem::class.java)
+            Pair(ValueRegistry::class.java, ValueComponentRegistry::class.java),
+            Pair(ValueButton::class.java, ValueComponentButton::class.java)
         )
     }
 

@@ -9,6 +9,7 @@ import net.minecraft.item.Items
 import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket
 import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
+import net.minecraft.util.registry.Registry
 import net.minecraft.world.GameMode
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
@@ -20,21 +21,23 @@ import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.string.StringUtil
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueColor
-import su.mandora.tarasande.value.ValueItem
 import su.mandora.tarasande.value.ValueMode
+import su.mandora.tarasande.value.ValueRegistry
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 
 class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on held items", ModuleCategory.MISC) {
 
     private val detectionMethod = ValueMode(this, "Detection method", false, "Disallow", "Allow")
-    private val allowedItems = object : ValueItem(this, "Allowed items", Items.FILLED_MAP, Items.BOW, Items.ARROW, Items.ARMOR_STAND, Items.RED_BED, Items.GOLD_INGOT, Items.PAPER, Items.WOODEN_SHOVEL, Items.LIGHT_BLUE_STAINED_GLASS, Items.SNOWBALL, Items.PLAYER_HEAD, Items.COMPASS, Items.RED_BED, Items.TNT) {
+    private val allowedItems = object : ValueRegistry<Item>(this, "Allowed items", Registry.ITEM, Items.FILLED_MAP, Items.BOW, Items.ARROW, Items.ARMOR_STAND, Items.RED_BED, Items.GOLD_INGOT, Items.PAPER, Items.WOODEN_SHOVEL, Items.LIGHT_BLUE_STAINED_GLASS, Items.SNOWBALL, Items.PLAYER_HEAD, Items.COMPASS, Items.RED_BED, Items.TNT) {
         override fun isEnabled() = detectionMethod.isSelected(0)
         override fun filter(item: Item) = item != Items.AIR
+        override fun keyToString(key: Any?) = (key as Item).name.string
     }
-    private val disallowedItems = object : ValueItem(this, "Disallowed items", Items.IRON_SWORD) {
+    private val disallowedItems = object : ValueRegistry<Item>(this, "Disallowed items", Registry.ITEM, Items.IRON_SWORD) {
         override fun isEnabled() = detectionMethod.isSelected(1)
         override fun filter(item: Item) = item != Items.AIR
+        override fun keyToString(key: Any?) = (key as Item).name.string
     }
     private val murdererColorOverride = ValueColor(this, "Murderer color override", 0.0f, 1.0f, 1.0f, 1.0f)
     private val bowColorOverride = ValueColor(this, "Bow color override", 0.66f, 1.0f, 1.0f, 1.0f)

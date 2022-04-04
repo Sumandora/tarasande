@@ -38,6 +38,9 @@ class ScreenMenu : Screen(Text.of("Menu")) {
     private val image = Identifier("tarasande", "azusa.png")
     private val particles = ArrayList<Particle>()
 
+    // unused rn
+    var hoveringText: String? = null
+
     val managerValueComponent = ManagerValueComponent()
     val managerInformation = ManagerInformation()
 
@@ -93,7 +96,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         val strength = round(animation * TarasandeMain.get().clientValues?.blurStrength?.value!!).toInt()
         if (strength > 0) {
             TarasandeMain.get().blur?.bind(true)
-            RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
+            RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, Color.white.rgb)
             client?.framebuffer?.beginWrite(true)
 
             if (animation != 1.0) { // Prevent it from recalculating every frame
@@ -139,7 +142,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 
         panels.reversed().forEach {
             matrices?.push()
-            val panelHeight = (if (it.opened) it.panelHeight else client?.textRenderer?.fontHeight)?.toDouble()!!
+            val panelHeight = (if (it.opened) it.panelHeight else textRenderer?.fontHeight)?.toDouble()!!
             if (it !is PanelFixed || !(it.isVisible() && it.opened)) {
                 matrices?.translate(it.x + it.panelWidth / 2.0, it.y + panelHeight / 2.0, 0.0)
                 matrices?.scale(animation.toFloat(), animation.toFloat(), 1.0F)
@@ -166,6 +169,16 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         }
 
         matrices?.pop()
+
+        if (hoveringText != null) {
+            matrices?.push()
+            val strWidth = textRenderer.getWidth(hoveringText)
+            matrices?.translate((mouseX + strWidth / 2).toDouble(), (mouseY + textRenderer.fontHeight / 2).toDouble(), 0.0)
+            matrices?.scale(0.5f, 0.5f, 1.0f)
+            matrices?.translate(-(mouseX + strWidth / 2).toDouble(), -(mouseY + textRenderer.fontHeight / 2).toDouble(), 0.0)
+            textRenderer.drawWithShadow(matrices, hoveringText, mouseX.toFloat(), mouseY.toFloat(), Color.white.rgb)
+            matrices?.pop()
+        }
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

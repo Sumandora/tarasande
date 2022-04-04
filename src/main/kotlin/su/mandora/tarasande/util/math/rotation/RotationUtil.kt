@@ -23,15 +23,22 @@ object RotationUtil {
 
     private var didRotate = false
 
+    private var goalMovementYaw: Float? = null
+
     init {
         TarasandeMain.get().managerEvent?.add(Pair(1001, Consumer<Event> { event ->
             when (event) {
                 is EventJump -> {
+                    if(event.state != EventJump.State.PRE) return@Consumer
+                    if (goalMovementYaw != null)
+                        event.yaw = goalMovementYaw!!
                     if (fakeRotation != null)
                         if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(2)!! || TarasandeMain.get().clientValues?.correctMovement?.isSelected(3)!!)
                             event.yaw = fakeRotation?.yaw!!
                 }
                 is EventVelocityYaw -> {
+                    if (goalMovementYaw != null)
+                        event.yaw = goalMovementYaw!!
                     if (fakeRotation != null)
                         if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(2)!! || TarasandeMain.get().clientValues?.correctMovement?.isSelected(3)!!)
                             event.yaw = fakeRotation?.yaw!!
@@ -42,7 +49,7 @@ object RotationUtil {
                             if (event.movementForward == 0.0f && event.movementSideways == 0.0f)
                                 return@Consumer
 
-                            val realYaw = MinecraftClient.getInstance().player?.yaw!!
+                            val realYaw = goalMovementYaw ?: MinecraftClient.getInstance().player?.yaw!!
                             val fakeYaw = fakeRotation?.yaw!!
 
                             val moveX = event.movementSideways * cos(Math.toRadians(realYaw.toDouble())) - event.movementForward * sin(Math.toRadians(realYaw.toDouble()))
@@ -72,26 +79,36 @@ object RotationUtil {
                         }
                 }
                 is EventIsWalking -> {
-                    if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!! && fakeRotation != null) {
+                    if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!! && (fakeRotation != null || goalMovementYaw != null)) {
                         event.walking =
                             (MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f) &&
-                                    abs(MathHelper.wrapDegrees(Math.toDegrees(PlayerUtil.getMoveDirection()) - 90 - fakeRotation?.yaw!!)) <= 45
+                                    abs(MathHelper.wrapDegrees(Math.toDegrees(PlayerUtil.getMoveDirection()) - 90 - (fakeRotation?.yaw ?: (goalMovementYaw ?: 0.0f)))) <= 45
                     }
                 }
                 is EventHasForwardMovement -> {
-                    if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!! && fakeRotation != null) {
+                    if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!! && (fakeRotation != null || goalMovementYaw != null)) {
                         event.hasForwardMovement =
                             MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f &&
-                                    abs(MathHelper.wrapDegrees(Math.toDegrees(PlayerUtil.getMoveDirection()) - 90 - fakeRotation?.yaw!!)) <= 45
+                                    abs(MathHelper.wrapDegrees(Math.toDegrees(PlayerUtil.getMoveDirection()) - 90 - (fakeRotation?.yaw ?: (goalMovementYaw ?: 0.0f)))) <= 45
                     }
                 }
                 is EventPacket -> {
                     if (fakeRotation != null)
-                        if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerPositionLookS2CPacket)
-                            fakeRotation = Rotation(event.packet.yaw, event.packet.pitch)
+                        if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerPositionLookS2CPacket) {
+                            var j = event.packet.yaw
+                            var k = event.packet.pitch
+                            if (event.packet.flags.contains(PlayerPositionLookS2CPacket.Flag.X_ROT as Any)) {
+                                k += MinecraftClient.getInstance().player?.pitch!!
+                            }
+                            if (event.packet.flags.contains(PlayerPositionLookS2CPacket.Flag.Y_ROT as Any)) {
+                                j += MinecraftClient.getInstance().player?.yaw!!
+                            }
+                            // The pitch calculation is literally mojang dev iq overload, kept for historic reasons
+                            fakeRotation = Rotation(j % 360.0f, MathHelper.clamp(k, -90.0f, 90.0f) % 360.0f)
+                        }
                 }
 
-                // premium code following
+                // premium code ahead
                 is EventPollEvents -> {
                     didRotate = true
                 }
@@ -108,7 +125,7 @@ object RotationUtil {
         }))
     }
 
-    fun simulateFakeRotationUpdate() {
+    private fun simulateFakeRotationUpdate() {
         if (TarasandeMain.get().clientValues?.updateRotationsWhenTickSkipping?.value!!)
             for (i in 0..(1000.0 / RenderUtil.deltaTime).roundToInt()) // could use repeat here, but doesn't fit the code style
                 updateFakeRotation()
@@ -154,6 +171,13 @@ object RotationUtil {
                     fakeRotation = rotation
                 }
             }
+
+            val eventGoalMovement = EventGoalMovement(fakeRotation?.yaw ?: MinecraftClient.getInstance().player?.yaw!!)
+            TarasandeMain.get().managerEvent?.call(eventGoalMovement)
+            goalMovementYaw = if (eventGoalMovement.dirty)
+                eventGoalMovement.yaw
+            else
+                null
         }
     }
 

@@ -3,6 +3,7 @@ package su.mandora.tarasande.util.math.rotation
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.MathHelper
+import net.minecraft.util.math.Vec3d
 import kotlin.math.round
 import kotlin.math.sqrt
 
@@ -92,6 +93,16 @@ class Rotation(var yaw: Float, var pitch: Float) {
         var result = yaw.hashCode()
         result = 31 * result + pitch.hashCode()
         return result
+    }
+
+    fun forwardVector(dist: Double): Vec3d {
+        val f = pitch * (Math.PI.toFloat() / 180)
+        val g = -yaw * (Math.PI.toFloat() / 180)
+        val h = MathHelper.cos(g)
+        val i = MathHelper.sin(g)
+        val j = MathHelper.cos(f)
+        val k = MathHelper.sin(f)
+        return Vec3d(i * j * dist, -k * dist, h * j * dist)
     }
 
 

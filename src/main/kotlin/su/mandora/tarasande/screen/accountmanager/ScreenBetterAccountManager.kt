@@ -15,6 +15,7 @@ import su.mandora.tarasande.screen.accountmanager.subscreens.ScreenBetterAccount
 import su.mandora.tarasande.screen.accountmanager.subscreens.ScreenBetterProxy
 import su.mandora.tarasande.util.connection.Proxy
 import su.mandora.tarasande.util.render.screen.ScreenBetter
+import java.awt.Color
 import java.util.concurrent.ThreadLocalRandom
 
 
@@ -23,7 +24,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
     val accounts = ArrayList<Account>()
     var currentAccount: Account? = null
 
-    var mainAccount = -1
+    var mainAccount: Int? = null
 
     var loginThread: Thread? = null
     var status: String? = null
@@ -46,7 +47,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
 
         addDrawableChild(ButtonWidget(width / 2 - 203, height - 46 + 2, 100, 20, Text.of("Login")) { logIn(accountList?.selectedOrNull?.account!!) }.also { loginButton = it })
         addDrawableChild(ButtonWidget(width / 2 - 101, height - 46 + 2, 100, 20, Text.of("Remove")) {
-            if (accounts.indexOf(accountList?.selectedOrNull?.account) == mainAccount) mainAccount = -1
+            if (accounts.indexOf(accountList?.selectedOrNull?.account) == mainAccount) mainAccount = null
             accounts.remove(accountList?.selectedOrNull?.account)
             accountList?.reload()
             accountList?.setSelected(null)
@@ -66,7 +67,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
                     mainAccount = index
                     status = Formatting.YELLOW.toString() + account.getDisplayName() + " is now the Main-Account"
                 } else {
-                    mainAccount = -1
+                    mainAccount = null
                     status = Formatting.YELLOW.toString() + account.getDisplayName() + " is no longer a Main-Account"
                 }
             }
@@ -111,7 +112,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
         drawCenteredText(matrices, textRenderer, if (status == null) "Account Manager" else status, width / 2, 8 - textRenderer.fontHeight / 2, -1)
         if (proxy != null)
             textRenderer.drawWithShadow(matrices, "Proxy", 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight * 2 - 2, -1)
-        textRenderer.drawWithShadow(matrices, if (proxy == null) "No Proxy" else proxy?.socketAddress?.address?.hostAddress!! + ":" + proxy?.socketAddress?.port!! + " (" + proxy?.ping!! + "ms)", 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight, -1)
+        textRenderer.drawWithShadow(matrices, if (proxy == null) "No Proxy" else proxy?.socketAddress?.address?.hostAddress!! + ":" + proxy?.socketAddress?.port!! + " (" + proxy?.ping!! + "ms)", 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight, Color.white.rgb)
     }
 
     override fun close() {
@@ -148,9 +149,9 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
             override fun render(matrices: MatrixStack?, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {
                 matrices?.push()
                 matrices?.translate((width / 2f).toDouble(), (y + textRenderer.fontHeight - textRenderer.fontHeight / 2f).toDouble(), 0.0)
-                matrices?.scale(2.0f, 2.0f, 2.0f)
+                matrices?.scale(2.0f, 2.0f, 1.0f)
                 matrices?.translate(-(width / 2f).toDouble(), (-(y + textRenderer.fontHeight - textRenderer.fontHeight / 2f)).toDouble(), 0.0)
-                drawCenteredText(matrices, textRenderer, Text.of((if (mainAccount == accounts.indexOf(account)) Formatting.YELLOW.toString() else "") + account.getDisplayName()), width / 2, y + 2, -1)
+                drawCenteredText(matrices, textRenderer, Text.of((if (mainAccount == accounts.indexOf(account)) Formatting.YELLOW.toString() else "") + account.getDisplayName()), width / 2, y + 2, Color.white.rgb)
                 matrices?.pop()
             }
 

@@ -12,7 +12,7 @@ open class Manager<T : Any> {
         }
     }
 
-    fun rem(vararg objects: T) = list.removeAll(objects)
+    fun rem(vararg objects: T) = list.removeAll(objects.toSet())
 
     fun <T> get(clazz: Class<T>): T? {
         for (t in list) {

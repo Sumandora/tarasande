@@ -10,12 +10,15 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
+import net.minecraft.util.registry.Registry
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
-import su.mandora.tarasande.event.*
+import su.mandora.tarasande.event.EventAttack
+import su.mandora.tarasande.event.EventJump
+import su.mandora.tarasande.event.EventMovement
+import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.mixin.accessor.IEntity
-import su.mandora.tarasande.mixin.accessor.IKeyBinding
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
@@ -61,8 +64,9 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val silent = ValueBoolean(this, "Silent", false)
     private val lockView = ValueBoolean(this, "Lock view", false)
     private val headRoll = ValueMode(this, "Head roll", false, "Disabled", "Advantage", "Autism")
-    private val forbiddenItems = object : ValueItem(this, "Forbidden items") {
+    private val forbiddenItems = object : ValueRegistry<Item>(this, "Forbidden items", Registry.ITEM) {
         override fun filter(item: Item) = item is BlockItem
+        override fun keyToString(key: Any?) = (key as Item).name.string
     }
     private val tower = ValueMode(this, "Tower", false, "Vanilla", "Motion", "Teleport")
 
@@ -357,7 +361,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             is EventMovement -> {
                 if (event.entity != mc.player)
                     return@Consumer
-                if(target != null) {
+                if (target != null) {
                     if (mc.player?.input?.jumping!!) {
                         when {
                             tower.isSelected(1) -> {
@@ -375,6 +379,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 }
             }
             is EventJump -> {
+                if(event.state != EventJump.State.PRE) return@Consumer
                 prevEdgeDistance = 0.5
             }
         }

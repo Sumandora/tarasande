@@ -6,17 +6,15 @@ import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.EventTagName;
+import su.mandora.tarasande.util.player.tagname.TagName;
 
 @Mixin(EntityRenderer.class)
 public class MixinEntityRenderer {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getDisplayName()Lnet/minecraft/text/Text;"))
     public Text hookedGetDisplayName(Entity instance) {
-        EventTagName eventTagName = new EventTagName(instance, instance.getDisplayName());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventTagName);
-        return eventTagName.getDisplayName();
+        Text tagName = TagName.INSTANCE.getTagName(instance);
+        return tagName == null ? instance.getDisplayName() : tagName;
     }
 
 }

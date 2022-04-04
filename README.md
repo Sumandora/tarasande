@@ -46,11 +46,13 @@
 - Clear buffers on world change in Blink/Latency
 - Stop using Thread.stop
 - KillAura: Don't turn inside enemies
-- Configure ESP
 - Don't hide disabled settings, grey them out (looks sick prob)
 - Make the friend alias feature accessable to the user (frontend is missing)
 - MidClick (alias prompt with screen and callback?)
 - KillAura: Calculate attack cycle from enemies
+- Configure ESP / "ESP Studio" - Fully customizable 2D esp setting like spirthack
+  - Items are classes with getSpace, draw(orientation, axis start, axis end)
+  - Right click for values in classes
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

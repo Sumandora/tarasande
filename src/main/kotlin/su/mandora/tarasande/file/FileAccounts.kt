@@ -69,7 +69,8 @@ class FileAccounts : File("Accounts") {
             jsonArray.add(accountObject)
         }
         jsonObject.add("Accounts", jsonArray)
-        jsonObject.addProperty("Main-Account", TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount)
+        if(TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount != null)
+            jsonObject.addProperty("Main-Account", TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount)
         return jsonObject
     }
 
@@ -99,7 +100,8 @@ class FileAccounts : File("Accounts") {
                 }
             }
         }
-        TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount = jsonObject.get("Main-Account").asInt
+        if(jsonObject.has("Main-Account"))
+            TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount = jsonObject.get("Main-Account").asInt
     }
 
     override fun encrypt(input: String) = String(Base64.getEncoder().encode(encryptCipher?.doFinal(input.toByteArray())))

@@ -19,10 +19,7 @@ import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
-import su.mandora.tarasande.event.EventAttack
-import su.mandora.tarasande.event.EventHandleBlockBreaking
-import su.mandora.tarasande.event.EventKeyBindingIsPressed
-import su.mandora.tarasande.event.EventPollEvents
+import su.mandora.tarasande.event.*
 import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity
 import su.mandora.tarasande.mixin.accessor.IKeyBinding
 import su.mandora.tarasande.mixin.accessor.ILivingEntity
@@ -90,13 +87,15 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         override fun isEnabled() = flex.value
     }
     private val syncPosition = ValueBoolean(this, "Sync position", false)
-    private val preferPlayers = ValueBoolean(this, "Prefer players", true)
     private val waitForCritical = ValueBoolean(this, "Wait for critical", false)
     private val dontWaitWhenEnemyHasShield = object : ValueBoolean(this, "Don't wait when enemy has shield", true) {
         override fun isEnabled() = waitForCritical.value
     }
-    private val forceCritical = object : ValueBoolean(this, "Force critical", true) {
+    private val criticalSprint = object : ValueBoolean(this, "Critical sprint", false) {
         override fun isEnabled() = waitForCritical.value
+    }
+    private val forceCritical = object : ValueBoolean(this, "Force critical", true) {
+        override fun isEnabled() = waitForCritical.value && criticalSprint.value
     }
 
     internal val targets = ArrayList<Pair<Entity, Vec3d>>()
@@ -127,6 +126,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private var blocking = false
     private var waitForHit = false
     private var clicked = false
+    private var performedTick = false
 
     override fun onEnable() {
         clickSpeedUtil.reset()
@@ -153,6 +153,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         when (event) {
             is EventPollEvents -> {
                 targets.clear()
+                val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
                 for (entity in mc.world?.entities!!) {
                     if (!PlayerUtil.isAttackable(entity))
                         continue
@@ -166,10 +167,15 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     val bestAimPoint = getBestAimPoint(boundingBox)
                     if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue)
                         continue
-                    if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(Rotation(mc.player!!)) > fov.value)
+                    if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(currentRot) > fov.value)
                         continue
-                    // aim point calculation maybe slower, only run it if the range check is actually able to succeed under best conditions
-                    val aimPoint = getAimPoint(boundingBox, entity) ?: continue
+                    val aimPoint = if(boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() == 1.0f) {
+                        mc.player?.eyePos?.add(currentRot.forwardVector(0.01))!!
+                    } else {
+                        // aim point calculation maybe slower, only run it if the range check is actually able to succeed under best conditions
+                        getAimPoint(boundingBox, entity) ?: continue
+                    }
+                    // in case the eyepos is inside the boundingbox the next 2 checks will always succeed, but keeping them might prevent some retarded situation which is going to be added with an update
                     if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue)
                         continue
                     if (!throughWalls.value && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint))
@@ -184,17 +190,12 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 }
 
                 targets.sortWith(comparator)
-                targets.sortBy {
-                    val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.getRotations(mc.player?.eyePos!!, it.second))
-                    hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null
-                }
-                targets.sortBy { it.first is PlayerEntity && !(it.first as PlayerEntity).isDead }
-                if (preferPlayers.value)
-                    targets.sortBy { it.first is PlayerEntity }
+
+                targets.sortBy { it.first is LivingEntity && (it.first as LivingEntity).isDead }
+                targets.sortBy { it.second.squaredDistanceTo(mc.player?.eyePos!!) > reach.minValue * reach.minValue }
 
                 val target = targets[0]
 
-                val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
                 val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, target.second)
                 val smoothedRot = currentRot.smoothedTurn(
                     targetRot,
@@ -245,7 +246,15 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 event.minRotateToOriginSpeed = aimSpeed.minValue
                 event.maxRotateToOriginSpeed = aimSpeed.maxValue
             }
+            is EventTick -> {
+                if(event.state == EventTick.State.PRE) {
+                    if(performedTick)
+                        clickSpeedUtil.reset()
+                    performedTick = true
+                }
+            }
             is EventAttack -> {
+                performedTick = false
                 clicked = false
 
                 if (targets.isEmpty()) {
@@ -259,7 +268,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 if (waitForCritical.value)
                     if (!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) })
                         if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
-                            if (!mc.player?.isOnGround!! && (mc.player?.fallDistance!! == 0.0f || !mc.player?.isSprinting!!))
+                            if (!mc.player?.isOnGround!! && (mc.player?.fallDistance == 0.0f || (criticalSprint.value && !mc.player?.isSprinting!!)))
                                 clicks = 0
 
                 if (dontAttackWhenBlocking.value && allAttacked { it.isBlocking })
@@ -357,13 +366,12 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     }
                 }
                 if (PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {
-                    if (waitForCritical.value)
+                    if (waitForCritical.value && criticalSprint.value && forceCritical.value)
                         if (!dontWaitWhenEnemyHasShield.value || ((mode.isSelected(0) && !hasShield(targets.first().first) || (mode.isSelected(1) && targets.none { hasShield(it.first) }))))
                             if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
                                 if (!mc.player?.isOnGround!! && mc.player?.fallDistance!! >= 0.0f)
-                                    if (forceCritical.value)
-                                        if (mc.player?.isSprinting!!)
-                                            event.pressed = false
+                                    if (mc.player?.isSprinting!!)
+                                        event.pressed = false
                 }
             }
             is EventHandleBlockBreaking -> {

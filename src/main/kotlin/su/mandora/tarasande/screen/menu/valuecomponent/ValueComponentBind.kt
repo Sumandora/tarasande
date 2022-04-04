@@ -7,6 +7,7 @@ import su.mandora.tarasande.base.screen.menu.valuecomponent.ValueComponent
 import su.mandora.tarasande.base.value.Value
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.ValueBind
+import java.awt.Color
 
 class ValueComponentBind(value: Value) : ValueComponent(value) {
 
@@ -17,14 +18,15 @@ class ValueComponentBind(value: Value) : ValueComponent(value) {
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        val valueBind = value as ValueBind
+
         matrices?.push()
         matrices?.translate(0.0, getHeight() / 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
         matrices?.translate(0.0, -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), -1)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if(valueBind.isEnabled()) it else it.darker().darker() }.rgb)
         matrices?.pop()
 
-        val valueBind = value as ValueBind
         val name = getName(valueBind.type, valueBind.button)
         val textWidth = MinecraftClient.getInstance().textRenderer.getWidth(name)
 
@@ -33,7 +35,7 @@ class ValueComponentBind(value: Value) : ValueComponent(value) {
         matrices?.translate(width, getHeight() / 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
         matrices?.translate(-width, -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, name, (width - textWidth).toFloat(), (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), -1)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, name, (width - textWidth).toFloat(), (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if(valueBind.isEnabled()) it else it.darker().darker() }.rgb)
         matrices?.pop()
     }
 
@@ -43,17 +45,18 @@ class ValueComponentBind(value: Value) : ValueComponent(value) {
         val name = getName(valueBind.type, valueBind.button)
         val textWidth = MinecraftClient.getInstance().textRenderer.getWidth(name)
 
-        waitsForInput = if (RenderUtil.isHovered(mouseX, mouseY, width - textWidth / 2, getHeight() * 0.25, width, getHeight() * 0.75)) {
-            !waitsForInput
+        if (button == 0 && RenderUtil.isHovered(mouseX, mouseY, width - textWidth / 2, getHeight() * 0.25, width, getHeight() * 0.75)) {
+            waitsForInput = !waitsForInput
+            return true
         } else {
             if (waitsForInput && valueBind.mouse) {
                 valueBind.type = ValueBind.Type.MOUSE
                 valueBind.button = button
                 valueBind.onChange()
                 waitsForInput = false
-                return false
+                return true
             }
-            false
+            waitsForInput = false
         }
         return false
     }

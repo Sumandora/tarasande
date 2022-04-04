@@ -12,28 +12,28 @@ import kotlin.math.min
 
 class ValueComponentMode(value: Value) : ValueComponent(value) {
 
-    private val animations = hashMapOf<String, Long>()
-
     override fun init() {
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        val valueMode = value as ValueMode
+
         matrices?.push()
         matrices?.translate(0.0, getHeight() / 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
         matrices?.translate(0.0, -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), -1)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if(valueMode.isEnabled()) it else it.darker().darker() }.rgb)
         matrices?.pop()
 
         matrices?.push()
         matrices?.translate(width, getHeight() / 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
         matrices?.translate(-width, -getHeight() / 2.0, 0.0)
-        val valueMode = value as ValueMode
         for ((index, setting) in valueMode.settings.withIndex()) {
-            val animation = min((System.currentTimeMillis() - animations.getOrPut(setting) { 0L }) / 100.0, 1.0)
-            val fade = (if (valueMode.selected.contains(setting)) animation else 1.0 - animation)
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, setting, (width - MinecraftClient.getInstance().textRenderer.getWidth(setting)).toFloat(), (getHeight() / 2.0F + (index - valueMode.settings.size / 2.0) * MinecraftClient.getInstance().textRenderer.fontHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), RenderUtil.colorInterpolate(Color.white, TarasandeMain.get().clientValues?.accentColor?.getColor()!!, fade).rgb)
+            var color = if (valueMode.selected.contains(setting)) TarasandeMain.get().clientValues?.accentColor?.getColor()!! else Color.white
+            if(!valueMode.isEnabled())
+                color = color.darker().darker()
+            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, setting, (width - MinecraftClient.getInstance().textRenderer.getWidth(setting)).toFloat(), (getHeight() / 2.0F + (index - valueMode.settings.size / 2.0) * MinecraftClient.getInstance().textRenderer.fontHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), color.rgb)
         }
         matrices?.pop()
     }

@@ -8,6 +8,9 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.value.Value
 import su.mandora.tarasande.event.EventKey
 import su.mandora.tarasande.event.EventMouse
+import su.mandora.tarasande.screen.menu.panel.impl.PanelClientValues
+import su.mandora.tarasande.screen.menu.panel.impl.category.PanelCategory
+import su.mandora.tarasande.screen.menu.valuecomponent.ValueComponentText
 
 open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, var mouse: Boolean = true) : Value(owner, name) {
 
@@ -20,29 +23,27 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
             when (event) {
                 is EventMouse -> {
                     if (type == Type.MOUSE)
-                        if (button == event.button) {
-                            when (event.action) {
-                                GLFW.GLFW_PRESS -> {
-                                    mousePressed = true
-                                    if (MinecraftClient.getInstance().currentScreen == null)
+                        if (MinecraftClient.getInstance().currentScreen == null)
+                            if (button == event.button)
+                                when (event.action) {
+                                    GLFW.GLFW_PRESS -> {
+                                        mousePressed = true
                                         presses++
+                                    }
+                                    GLFW.GLFW_RELEASE -> mousePressed = false
                                 }
-                                GLFW.GLFW_RELEASE -> mousePressed = false
-                            }
-                        }
                 }
                 is EventKey -> {
                     if (type == Type.KEY)
-                        if (event.key == button) {
-                            when (event.action) {
-                                GLFW.GLFW_PRESS -> {
-                                    keyPressed = true
-                                    if (MinecraftClient.getInstance().currentScreen == null)
-                                        presses++
+                        if (MinecraftClient.getInstance().currentScreen == null)
+                            if (event.key == button)
+                                when (event.action) {
+                                    GLFW.GLFW_PRESS -> {
+                                        keyPressed = true
+                                            presses++
+                                    }
+                                    GLFW.GLFW_RELEASE -> keyPressed = false
                                 }
-                                GLFW.GLFW_RELEASE -> keyPressed = false
-                            }
-                        }
                 }
             }
         }

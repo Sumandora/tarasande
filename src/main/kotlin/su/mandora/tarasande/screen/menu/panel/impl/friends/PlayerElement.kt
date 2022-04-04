@@ -1,5 +1,6 @@
 package su.mandora.tarasande.screen.menu.panel.impl.friends
 
+import com.mojang.authlib.GameProfile
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerEntity
@@ -10,7 +11,7 @@ import su.mandora.tarasande.util.render.RenderUtil
 import java.awt.Color
 import kotlin.math.min
 
-class PlayerElement(val player: PlayerEntity, var width: Double) : IElement {
+class PlayerElement(val gameProfile: GameProfile, var width: Double) : IElement {
 
     private val defaultHeight = MinecraftClient.getInstance().textRenderer.fontHeight * 1.5 + 2.0
 
@@ -21,10 +22,10 @@ class PlayerElement(val player: PlayerEntity, var width: Double) : IElement {
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         RenderUtil.fill(matrices, 0.0, 0.0, this.width, this.getHeight(), Int.MIN_VALUE)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, player.name, 4.0f, (this.defaultHeight / 2.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f + 1.0f).toFloat(), -1)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, gameProfile.name, 4.0f, (this.defaultHeight / 2.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f + 1.0f).toFloat(), Color.white.rgb)
 
         val toggleAnimation = min((System.currentTimeMillis() - friendTime) / 100.0, 1.0)
-        val radius = if (TarasandeMain.get().friends?.isFriend(player.gameProfile)!!) toggleAnimation else 1.0 - toggleAnimation
+        val radius = if (TarasandeMain.get().friends?.isFriend(gameProfile)!!) toggleAnimation else 1.0 - toggleAnimation
         RenderUtil.fillCircle(matrices, width - 7, defaultHeight / 2, radius * 4.0, TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
         RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0f, RenderUtil.colorInterpolate(TarasandeMain.get().clientValues?.accentColor?.getColor()!!, Color.white, radius).rgb)
     }
@@ -33,7 +34,7 @@ class PlayerElement(val player: PlayerEntity, var width: Double) : IElement {
         if (button == 0) {
             if (RenderUtil.isHovered(mouseX, mouseY, 0.0, 0.0, width, getHeight())) {
                 if (Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(Vec2f((width - 7).toFloat(), (defaultHeight / 2).toFloat())) < 16.0f) {
-                    TarasandeMain.get().friends?.changeFriendState(player.gameProfile)!!
+                    TarasandeMain.get().friends?.changeFriendState(gameProfile)!!
                     friendTime = System.currentTimeMillis()
                 }
                 return true

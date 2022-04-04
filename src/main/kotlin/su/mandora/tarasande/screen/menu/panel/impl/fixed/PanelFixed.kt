@@ -8,6 +8,7 @@ import su.mandora.tarasande.event.EventTick
 import su.mandora.tarasande.screen.menu.panel.Alignment
 import su.mandora.tarasande.screen.menu.panel.Panel
 import su.mandora.tarasande.util.render.RenderUtil
+import java.awt.Color
 
 open class PanelFixed(title: String, x: Double, y: Double, width: Double, height: Double = MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), resizable: Boolean = true, background: Boolean = false) : Panel(title, x, y, width, height, if (resizable) null else width, if (resizable) null else height, background) {
 
@@ -40,7 +41,7 @@ open class PanelFixed(title: String, x: Double, y: Double, width: Double, height
             alignment = Alignment.RIGHT
 
         TarasandeMain.get().blur?.bind(true)
-        RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else MinecraftClient.getInstance().textRenderer?.fontHeight)?.toDouble()!!, -1)
+        RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else MinecraftClient.getInstance().textRenderer?.fontHeight)?.toDouble()!!, Color.white.rgb)
         MinecraftClient.getInstance().framebuffer.beginWrite(true)
 
         super.render(matrices, mouseX, mouseY, delta)

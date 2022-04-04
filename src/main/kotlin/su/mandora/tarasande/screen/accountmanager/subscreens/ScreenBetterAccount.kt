@@ -16,6 +16,7 @@ import su.mandora.tarasande.mixin.accessor.IScreen
 import su.mandora.tarasande.screen.accountmanager.elements.TextFieldWidgetPassword
 import su.mandora.tarasande.screen.accountmanager.elements.TextFieldWidgetPlaceholder
 import su.mandora.tarasande.util.render.screen.ScreenBetter
+import java.awt.Color
 import java.lang.reflect.Constructor
 import java.util.function.Consumer
 
@@ -80,7 +81,7 @@ class ScreenBetterAccount(
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
-        drawCenteredText(matrices, textRenderer, name, width / 2, 8 - textRenderer.fontHeight / 2, -1)
+        drawCenteredText(matrices, textRenderer, name, width / 2, 8 - textRenderer.fontHeight / 2, Color.white.rgb)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {

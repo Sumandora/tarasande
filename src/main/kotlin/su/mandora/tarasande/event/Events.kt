@@ -1,12 +1,14 @@
 package su.mandora.tarasande.event
 
 import net.minecraft.client.option.KeyBinding
+import net.minecraft.client.render.Camera
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
 import net.minecraft.item.Item
 import net.minecraft.network.Packet
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
+import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.util.math.rotation.Rotation
@@ -29,7 +31,7 @@ class EventTick(val state: State) : Event(false) {
 class EventResolutionUpdate(val width: Float, val height: Float) : Event(false)
 class EventRender2D(val matrices: MatrixStack) : Event(false)
 class EventScreenRender(val matrices: MatrixStack) : Event(false)
-class EventRender3D(val matrices: MatrixStack) : Event(false)
+class EventRender3D(val matrices: MatrixStack, val positionMatrix: Matrix4f) : Event(false)
 
 class EventRenderEntity(val entity: Entity, val state: State) : Event(false) {
     enum class State {
@@ -49,15 +51,13 @@ class EventPollEvents : Event {
             dirty = true
             field = value
         }
-    var dirty: Boolean
-    var minRotateToOriginSpeed: Double
-    var maxRotateToOriginSpeed: Double
+    var dirty = false
+    var minRotateToOriginSpeed = 1.0
+    var maxRotateToOriginSpeed = 1.0
 
     constructor(rotation: Rotation) : super(false) {
         this.rotation = rotation
         this.dirty = false
-        this.minRotateToOriginSpeed = 1.0
-        this.maxRotateToOriginSpeed = 1.0
     }
 }
 
@@ -71,7 +71,11 @@ class EventVelocity(var velocityX: Double, var velocityY: Double, var velocityZ:
 }
 
 class EventInput(var movementForward: Float, var movementSideways: Float) : Event(false)
-class EventJump(var yaw: Float) : Event(false)
+class EventJump(var yaw: Float, val state: State) : Event(false) {
+    enum class State {
+        PRE, POST
+    }
+}
 class EventGamma(var gamma: Double) : Event(false)
 class EventMovement(val entity: Entity, var velocity: Vec3d) : Event(false)
 class EventSlowdown(var usingItem: Boolean) : Event(false)
@@ -79,7 +83,7 @@ class EventSlowdownAmount(var slowdownAmount: Float) : Event(false)
 class EventIsEntityAttackable(val entity: Entity?, var attackable: Boolean) : Event(false)
 
 class EventVanillaFlight : Event {
-    var dirty: Boolean = false
+    var dirty = false
     var flying: Boolean
         set(value) {
             dirty = true
@@ -90,6 +94,7 @@ class EventVanillaFlight : Event {
     constructor(flying: Boolean, flightSpeed: Float) : super(false) {
         this.flying = flying
         this.flightSpeed = flightSpeed
+        this.dirty = false
     }
 
 }
@@ -109,10 +114,26 @@ class EventMovementFovMultiplier(var movementFovMultiplier: Float) : Event(false
 class EventKeepSprint(var sprinting: Boolean) : Event(false)
 class EventAttack : Event(false)
 class EventHandleBlockBreaking(var parameter: Boolean) : Event(false)
-class EventEntityColor(val entity: Entity, var color: Color) : Event(false)
+class EventEntityColor(val entity: Entity, var color: Color?) : Event(false)
 class EventHasForwardMovement(var hasForwardMovement: Boolean) : Event(false)
 class EventSwing(var hand: Hand) : Event(true)
 class EventColorCorrection(var red: Int, var green: Int, var blue: Int) : Event(false)
 class EventResetEquipProgress : Event(true)
 class EventIsWalking(var walking: Boolean) : Event(false)
 class EventTagName(var entity: Entity, var displayName: Text) : Event(false)
+
+class EventGoalMovement : Event {
+    var dirty = false
+    var yaw: Float
+        set(value) {
+            dirty = true
+            field = value
+        }
+
+    constructor(yaw: Float) : super(false) {
+        this.yaw = yaw
+        this.dirty = false
+    }
+}
+
+class EventCameraOverride(val camera: Camera) : Event(false)

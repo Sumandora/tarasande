@@ -3,6 +3,7 @@ package su.mandora.tarasande.screen.menu.graph
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.PlayerListEntry
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
+import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.screen.menu.graph.Graph
 import su.mandora.tarasande.event.EventPacket
@@ -92,7 +93,7 @@ class GraphPitchDelta : Graph("Pitch Delta", 200) {
 class GraphMotion : Graph("Motion", 200) {
     override fun supplyData(): Number? {
         if (MinecraftClient.getInstance().player == null) return null
-        return round(MinecraftClient.getInstance().player?.velocity?.horizontalLength()!! * 100) / 100.0
+        return round(MinecraftClient.getInstance().player?.pos?.subtract(Vec3d(MinecraftClient.getInstance().player?.prevX!!, MinecraftClient.getInstance().player?.prevY!!, MinecraftClient.getInstance().player?.prevZ!!))?.horizontalLength()!! * 100) / 100.0
     }
 }
 
