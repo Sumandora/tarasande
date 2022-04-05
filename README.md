@@ -45,8 +45,6 @@
 - Fix PlayerUtil#simulateAttack
 - Clear buffers on world change in Blink/Latency
 - Stop using Thread.stop
-- KillAura: Don't turn inside enemies
-- Don't hide disabled settings, grey them out (looks sick prob)
 - Make the friend alias feature accessable to the user (frontend is missing)
 - MidClick (alias prompt with screen and callback?)
 - KillAura: Calculate attack cycle from enemies
