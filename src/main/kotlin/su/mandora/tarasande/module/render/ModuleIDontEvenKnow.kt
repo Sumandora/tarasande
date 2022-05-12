@@ -211,16 +211,21 @@ object Breaker {
     }
 
     fun getBreakSpeed(blockPos: BlockPos): Double {
-        val orig = MinecraftClient.getInstance().player?.inventory?.selectedSlot ?: return 1.0
-        var bestMult = 0.0
+        if(MinecraftClient.getInstance().world?.isAir(blockPos) == true) return 1.0
+        val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot ?: return 1.0
+        var bestMult = 0.0f
+        val state = MinecraftClient.getInstance().world?.getBlockState(blockPos)
         for (i in 0..8) {
             MinecraftClient.getInstance().player?.inventory?.selectedSlot = i
-            val mult = MinecraftClient.getInstance().world?.getBlockState(blockPos)?.calcBlockBreakingDelta(MinecraftClient.getInstance().player, MinecraftClient.getInstance().world, blockPos)?.toDouble()!!
+            var mult = MinecraftClient.getInstance().player?.getBlockBreakingSpeed(state)!!
+            if(MinecraftClient.getInstance().player?.isOnGround == false) {
+                mult *= 5.0f // bruh
+            }
             if (bestMult < mult) {
                 bestMult = mult
             }
         }
-        MinecraftClient.getInstance().player?.inventory?.selectedSlot = orig
-        return bestMult
+        MinecraftClient.getInstance().player?.inventory?.selectedSlot = origSlot
+        return 1.0 - bestMult / state?.getHardness(MinecraftClient.getInstance().world, blockPos)!! / 30.0
     }
 }
