@@ -5,6 +5,7 @@ import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import kotlin.math.abs
+import kotlin.math.cos
 import kotlin.math.round
 
 /**
@@ -12,16 +13,38 @@ import kotlin.math.round
  */
 
 object PathFinder {
+    
+    private val manhattan = object : Function2<Node, Node, Double> {
+        override fun invoke(current: Node, target: Node): Double {
+            val delta = target.subtract(current)
+            return (abs(delta.x) + abs(delta.y) + abs(delta.z)).toDouble()
+        }
+    }
 
-    fun findPath(start: Vec3d, target: Vec3d, movement: Movement): ArrayList<Vec3d>? {
+    private val oneCost = object : Function2<Node, Node, Double> {
+        override fun invoke(current: Node, movement: Node): Double {
+            return 1.0
+        }
+    }
+
+    private val allowedBlock = object : Function2<ClientWorld?, Node, Boolean> {
+        override fun invoke(world: ClientWorld?, node: Node): Boolean {
+            return world?.isAir(BlockPos(node.x, node.y, node.z)) == true && !world.isAir(BlockPos(node.x, node.y - 1, node.z))
+        }
+    }
+
+    fun findPath(start: Vec3d, target: Vec3d, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost): ArrayList<Vec3d>? {
         val mappedPath = ArrayList<Vec3d>()
-        val path = findPath(Node(round(start.x).toInt(), round(start.y).toInt(), round(start.z).toInt()), Node(round(target.x).toInt(), round(target.y).toInt(), round(target.z).toInt()), movement) ?: return null
+        val path = findPath(Node(round(start.x).toInt(), round(start.y).toInt(), round(start.z).toInt()), Node(round(target.x).toInt(), round(target.y).toInt(), round(target.z).toInt()), allowedBlock, heuristic, cost) ?: return null
         for (vec in path)
             mappedPath.add(Vec3d(vec.x + 0.5, vec.y + 0.5, vec.z + 0.5))
         return mappedPath
     }
 
-    private fun findPath(start: Node, target: Node, movement: Movement): ArrayList<Node>? {
+    fun findPath(start: Node, target: Node, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost): ArrayList<Node>? {
+        start.g = cost(start, start)
+        start.h = heuristic(start, start)
+        start.f = start.g + start.h
         val open = ArrayList<Node>()
         val closed = ArrayList<Node>()
         open.add(start)
@@ -31,8 +54,7 @@ object PathFinder {
         }
 
         var current: Node? = null
-        val startTime = System.currentTimeMillis()
-        while (System.currentTimeMillis() - startTime <= 20 && open.isNotEmpty()) {
+        while (open.isNotEmpty()) {
             var best = Double.POSITIVE_INFINITY // hacky but works
             current = null
             for (move in open) {
@@ -49,7 +71,7 @@ object PathFinder {
             open.remove(current)
             closed.add(current)
 
-            for (movementPossibility in generateMovementPossibilities(current, MinecraftClient.getInstance().world, movement)) {
+            for (movementPossibility in generateMovementPossibilities(current, MinecraftClient.getInstance().world, allowedBlock)) {
                 if (closed.contains(movementPossibility)) {
                     continue
                 }
@@ -60,7 +82,7 @@ object PathFinder {
                         movementPossibility = movementPossibility2
                 }
 
-                val tempG = current.g + 1
+                val tempG = current.g + cost.invoke(current, movementPossibility)
 
                 var newPath = false
                 if (open.contains(movementPossibility)) {
@@ -74,7 +96,7 @@ object PathFinder {
 
                 if (newPath) {
                     movementPossibility.g = tempG
-                    movementPossibility.h = manhattanDistance(movementPossibility, target)
+                    movementPossibility.h = heuristic.invoke(movementPossibility, target)
                     movementPossibility.f = movementPossibility.g + movementPossibility.h
                     movementPossibility.parent = current
                 }
@@ -84,57 +106,26 @@ object PathFinder {
         return if (current != target) null else reconstructPath(current)
     }
 
-    private fun manhattanDistance(start: Node, target: Node): Double {
-        val delta = target.subtract(start)
-        return (abs(delta.x) + abs(delta.y) + abs(delta.z)).toDouble()
-    }
-
     private fun reconstructPath(current: Node): ArrayList<Node> {
         var current: Node? = current
         val path = ArrayList<Node>()
         path.clear()
-        while (current?.parent != null) {
+        while (current != null) {
             path.add(current)
             current = current.parent
         }
         return ArrayList(path.reversed())
     }
 
-    private fun generateMovementPossibilities(position: Node, world: ClientWorld?, movement: Movement): List<Node> {
+    private fun generateMovementPossibilities(position: Node, world: ClientWorld?, allowedBlock: Function2<ClientWorld?, Node, Boolean>): List<Node> {
         val list = ArrayList<Node>()
-        when (movement) {
-            Movement.NEIGHBORS -> {
-                for (x in -1..1)
-                    for (y in -1..1)
-                        for (z in -1..1) {
-                            val pos = position.add(x, y, z)
-                            var valid = true
-                            for (yOffset in 0..1)
-                                if (!world?.isAir(BlockPos(pos.x, pos.y + yOffset, pos.z))!!)
-                                    valid = false
-
-                            if (valid)
-                                list.add(pos)
-                        }
-            }
-            Movement.WALKABLE -> {
-                for (x in -1..1)
-                    for (y in -1..1)
-                        for (z in -1..1) {
-                            val pos = position.add(x, y, z)
-                            var valid = true
-                            for (yOffset in 0..1)
-                                if (!world?.isAir(BlockPos(pos.x, pos.y + yOffset, pos.z))!!)
-                                    valid = false
-
-                            if (world?.isAir(BlockPos(pos.x, pos.y - 1, pos.z))!!)
-                                valid = false
-
-                            if (valid)
-                                list.add(pos)
-                        }
-            }
-        }
+        for(x in -1..1 step 2)
+            list.add(position.add(x, 0, 0))
+        for(y in -1..1 step 2)
+            list.add(position.add(0, y, 0))
+        for(z in -1..1 step 2)
+            list.add(position.add(0, 0, z))
+        list.removeIf { !allowedBlock.invoke(world, it) }
         return list
     }
 }
@@ -168,8 +159,4 @@ class Node(var x: Int, var y: Int, var z: Int) {
         result = 31 * result + z.hashCode()
         return result
     }
-}
-
-enum class Movement {
-    NEIGHBORS, WALKABLE
 }

@@ -23,7 +23,4 @@ class ClientValues {
     val unlockTicksPerFrame = ValueBoolean(this, "Unlock ticks per frame", false)
     val updateRotationsWhenTickSkipping = ValueBoolean(this, "Update rotations when tick skipping", false)
 
-    override fun toString(): String {
-        return "ClientValues"
-    }
 }

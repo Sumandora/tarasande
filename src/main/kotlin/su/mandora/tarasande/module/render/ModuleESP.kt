@@ -10,6 +10,7 @@ import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.Vector4f
 import net.minecraft.util.registry.Registry
+import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.event.Priority
 import su.mandora.tarasande.base.module.Module
@@ -43,7 +44,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 
     private val hashMap = HashMap<Entity, Rectangle>()
 
-    private fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Vec3d? {
+    fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Vec3d? {
         val camPos = mc.gameRenderer.camera.pos.negate().add(vector)
         val vec1 = matrixVectorMultiply(modelView, Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1.0f))
         val screenPos = matrixVectorMultiply(projection, vec1)
@@ -131,19 +132,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
             }
             is EventRender2D -> {
                 for (entry in hashMap.entries) {
-                    val col = Color(entry.key.teamColorValue).let { Color(it.red, it.green, it.blue, 255) }.rgb
-                    RenderUtil.outlinedFill(event.matrices, entry.value.x, entry.value.y, entry.value.z, entry.value.w, 4.0f, Color.black.rgb)
-                    RenderUtil.outlinedFill(event.matrices, entry.value.x, entry.value.y, entry.value.z, entry.value.w, 2.0f, col)
-
-                    val immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().buffer)
-                    val tagName = TagName.getTagName(entry.key)?.asOrderedText() ?: continue
-                    event.matrices.push()
-                    event.matrices.translate(entry.value.x + (entry.value.z - entry.value.x) * 0.5f, entry.value.y - mc.textRenderer.fontHeight / 2.0f, 0.0)
-                    event.matrices.scale(2.0f / mc.window?.scaleFactor?.toFloat()!!, 2.0f / mc.window?.scaleFactor?.toFloat()!!, 1.0f)
-                    event.matrices.translate(-(entry.value.x + (entry.value.z - entry.value.x) * 0.5f), -(entry.value.y - mc.textRenderer.fontHeight / 2.0f), 0.0)
-                    mc.textRenderer?.drawWithOutline(tagName, (entry.value.x + (entry.value.z - entry.value.x) * 0.5f - mc.textRenderer?.getWidth(tagName)!! / 2f).toFloat(), (entry.value.y - mc.textRenderer.fontHeight).toFloat(), col, Color.black.rgb, event.matrices.peek().positionMatrix, immediate, LightmapTextureManager.MAX_LIGHT_COORDINATE)
-                    event.matrices.pop()
-                    immediate.draw()
+                    TarasandeMain.get().managerESP?.renderBox(event.matrices, entry.key, entry.value)
                 }
             }
         }

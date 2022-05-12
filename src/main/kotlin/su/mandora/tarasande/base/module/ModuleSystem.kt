@@ -52,7 +52,8 @@ class ManagerModule : Manager<Module>() {
             ModuleColorCorrection(),
             ModuleWorldTime(),
             ModuleNuker(),
-            ModuleMovementRecorder()
+            ModuleMovementRecorder(),
+            ModuleIDontEvenKnow()
         )
         TarasandeMain.get().managerEvent?.add { event ->
             if (event is EventTick)
@@ -92,9 +93,6 @@ open class Module(val name: String, val description: String, val category: Modul
     open fun onEnable() {}
     open fun onDisable() {}
 
-    override fun toString(): String {
-        return name
-    }
 }
 
 enum class ModuleCategory {

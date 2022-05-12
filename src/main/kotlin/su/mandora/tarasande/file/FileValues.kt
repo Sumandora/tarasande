@@ -11,11 +11,11 @@ class FileValues : File("Values") {
         val values = JsonObject()
         for (value in TarasandeMain.get().managerValue?.list!!) {
             var jsonObject: JsonObject
-            if (values.has(value.owner.toString())) {
-                jsonObject = values.getAsJsonObject(value.owner.toString())
+            if (values.has(value.owner.javaClass.name)) {
+                jsonObject = values.getAsJsonObject(value.owner.javaClass.name)
             } else {
                 jsonObject = JsonObject()
-                values.add(value.owner.toString(), jsonObject)
+                values.add(value.owner.javaClass.name, jsonObject)
             }
             val jsonElement = value.save()
             if (jsonElement != null)
@@ -27,8 +27,8 @@ class FileValues : File("Values") {
     override fun load(jsonElement: JsonElement) {
         val jsonObject = jsonElement as JsonObject
         for (value in TarasandeMain.get().managerValue?.list!!) {
-            if (jsonObject.has(value.owner.toString())) {
-                val jsonObject2 = jsonObject.getAsJsonObject(value.owner.toString())
+            if (jsonObject.has(value.owner.javaClass.name)) {
+                val jsonObject2 = jsonObject.getAsJsonObject(value.owner.javaClass.name)
                 if (jsonObject2.has(value.name)) {
                     try {
                         value.load(jsonObject2[value.name])
