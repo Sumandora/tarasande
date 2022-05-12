@@ -55,8 +55,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
             PanelFixedInformation::class.java,
             PanelFixedEffects::class.java,
             PanelFixedInventory::class.java,
-            PanelFixedWatermark::class.java,
-            PanelFixedUkraineWar::class.java
+            PanelFixedWatermark::class.java
         )
         if (System.getProperty("os.name").contains("windows", true)) {
             fixedPanels.add(PanelFixedSpotify::class.java)
