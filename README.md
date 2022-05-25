@@ -52,7 +52,8 @@
   - Items are classes with getSpace, draw(orientation, axis start, axis end)
   - Right click for values in classes
 - SafeWalk: Onground only sneak
-- Rename all accessor methods to have a "tarasande_" prefix
+- ScaffoldWalk: make shape check optional
+- KillAura and ScaffoldWalk use both EventAttack -> wrong packet order. Add EventAttack#dirty
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)
