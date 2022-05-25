@@ -43,20 +43,20 @@ class TextFieldWidgetPassword(textRenderer: TextRenderer?, x: Int, y: Int, width
                 MinecraftClient.getInstance().keyboard.clipboard = this.selectedText
                 true
             } else if (Screen.isPaste(keyCode)) {
-                if ((this as ITextFieldWidget).isEditable) {
+                if ((this as ITextFieldWidget).invokeIsEditable()) {
                     write(MinecraftClient.getInstance().keyboard.clipboard)
                 }
                 true
             } else if (Screen.isCut(keyCode)) {
                 MinecraftClient.getInstance().keyboard.clipboard = this.selectedText
-                if ((this as ITextFieldWidget).isEditable) {
+                if ((this as ITextFieldWidget).invokeIsEditable()) {
                     write("")
                 }
                 true
             } else {
                 when (keyCode) {
                     259 -> {
-                        if ((this as ITextFieldWidget).isEditable) {
+                        if ((this as ITextFieldWidget).invokeIsEditable()) {
                             (this as ITextFieldWidget).setSelecting(false)
                             (this as ITextFieldWidget).eraseOffset(-1)
                             (this as ITextFieldWidget).setSelecting(Screen.hasShiftDown())
@@ -65,7 +65,7 @@ class TextFieldWidgetPassword(textRenderer: TextRenderer?, x: Int, y: Int, width
                     }
                     260, 264, 265, 266, 267 -> false
                     261 -> {
-                        if ((this as ITextFieldWidget).isEditable) {
+                        if ((this as ITextFieldWidget).invokeIsEditable()) {
                             (this as ITextFieldWidget).setSelecting(false)
                             (this as ITextFieldWidget).eraseOffset(1)
                             (this as ITextFieldWidget).setSelecting(Screen.hasShiftDown())

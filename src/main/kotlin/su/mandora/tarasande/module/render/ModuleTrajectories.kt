@@ -6,8 +6,10 @@ import net.minecraft.client.render.BufferRenderer
 import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexFormat
 import net.minecraft.client.render.VertexFormats
+import net.minecraft.item.ArrowItem
 import net.minecraft.item.BowItem
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.util.Hand
 import net.minecraft.util.math.Vec3d
 import org.lwjgl.opengl.GL11
@@ -15,13 +17,35 @@ import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventRender3D
+import su.mandora.tarasande.mixin.accessor.IEntity
+import su.mandora.tarasande.mixin.accessor.IWorld
+import java.util.*
 import java.util.function.Consumer
-import kotlin.math.cos
-import kotlin.math.sin
 
 class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories", ModuleCategory.RENDER) {
 
-    private fun formula(angle: Double, x: Double, v: Double, g: Double) = v * x * sin(angle) - 1 / 2 * g * (x * x)
+    private fun predict(v: Double): ArrayList<Vec3d> {
+        (mc.world as IWorld).setIsClient(false)
+        val path = ArrayList<Vec3d>()
+        val persistentProjectileEntity = (Items.ARROW as ArrowItem).createArrow(mc.world, ItemStack(Items.ARROW), mc.player)
+        (persistentProjectileEntity as IEntity).setRandom(object : Random() {
+            override fun next(bits: Int): Int {
+                return 0
+            }
+
+            override fun nextGaussian(): Double {
+                return 0.0
+            }
+        })
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, (v * 3.0).toFloat(), 1.0f)
+        while (true) {
+            persistentProjectileEntity.tick()
+            if (persistentProjectileEntity.pos.let { it.y < mc.world?.bottomY!! || it == path.lastOrNull() }) break
+            path.add(persistentProjectileEntity.pos)
+        }
+        (mc.world as IWorld).setIsClient(true)
+        return path
+    }
 
     val eventConsumer = Consumer<Event> { event ->
         if (event is EventRender3D) {
@@ -33,7 +57,6 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
 
             if (bowItem != null) {
                 val velocity = BowItem.getPullProgress(if (mc.player?.isUsingItem!!) mc.player?.itemUseTime!! else bowItem.maxUseTime).toDouble()
-                val gravity = 0.006
                 GL11.glEnable(GL11.GL_BLEND)
                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
                 GL11.glDisable(GL11.GL_CULL_FACE)
@@ -43,17 +66,13 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
                 event.matrices.push()
                 val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
                 event.matrices.translate(-vec3d.x, -vec3d.y, -vec3d.z)
-                val bufferBuilder = Tessellator.getInstance().buffer
                 RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
+                val bufferBuilder = Tessellator.getInstance().buffer
                 bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
                 val matrix = event.matrices.peek()?.positionMatrix!!
-                for (distance in 0..150) {
-                    val rad = Math.toRadians(mc.player?.yaw?.toDouble()!! + 95)
-                    val forward = Vec3d(cos(rad) * distance, 0.0, sin(rad) * distance)
-//                    val height = formula(45.0, distance.toDouble(), velocity, gravity)
-                    val height = formula(45.0, distance.toDouble(), velocity, gravity)
-                    val pos = mc.player?.eyePos?.add(0.0, -0.1, 0.0)?.add(forward.x, height, forward.z)
-                    bufferBuilder.vertex(matrix, pos?.x?.toFloat()!!, pos.y.toFloat(), pos.z.toFloat()).color(1f, 1f, 1f, 1f).next()
+                val path = predict(velocity)
+                for (vec in path) {
+                    bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).color(1f, 1f, 1f, 1f).next()
                 }
                 bufferBuilder.end()
                 BufferRenderer.draw(bufferBuilder)

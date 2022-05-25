@@ -4,9 +4,6 @@ import net.minecraft.util.math.Box
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
 
 object MathUtil {
 

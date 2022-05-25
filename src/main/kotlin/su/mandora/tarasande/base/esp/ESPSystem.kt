@@ -44,13 +44,13 @@ abstract class ESPElementRotatable(name: String, val forbiddenOrientations: Arra
     abstract fun draw(matrices: MatrixStack, entity: Entity, sideBegin: Double, sideEnd: Double)
 
     override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
-        val sideBegin = when(orientation) {
+        val sideBegin = when (orientation) {
             Orientation.TOP -> rectangle.x
             Orientation.LEFT -> rectangle.y
             Orientation.BOTTOM -> rectangle.z
             Orientation.RIGHT -> rectangle.w
         }
-        val sideEnd = when(orientation) {
+        val sideEnd = when (orientation) {
             Orientation.TOP -> rectangle.z
             Orientation.LEFT -> rectangle.w
             Orientation.BOTTOM -> rectangle.x
@@ -58,8 +58,8 @@ abstract class ESPElementRotatable(name: String, val forbiddenOrientations: Arra
         }
         matrices.push()
         var padding = 0.0
-        for(espElement in TarasandeMain.get().managerESP?.list!!) {
-            if(espElement.enabled && espElement is ESPElementRotatable && espElement.orientation == orientation)
+        for (espElement in TarasandeMain.get().managerESP?.list!!) {
+            if (espElement.enabled && espElement is ESPElementRotatable && espElement.orientation == orientation)
                 padding += espElement.height
         }
         matrices.translate(0.0, -padding, 0.0)

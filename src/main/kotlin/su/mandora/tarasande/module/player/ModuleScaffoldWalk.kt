@@ -379,7 +379,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 }
             }
             is EventJump -> {
-                if(event.state != EventJump.State.PRE) return@Consumer
+                if (event.state != EventJump.State.PRE) return@Consumer
                 prevEdgeDistance = 0.5
             }
         }

@@ -36,8 +36,13 @@ import su.mandora.tarasande.util.render.RenderUtil;
 @Mixin(MinecraftClient.class)
 public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Shadow
+    private static int currentFps;
+    @Shadow
     @Final
     public GameOptions options;
+    @Shadow
+    @Nullable
+    public ClientPlayerEntity player;
     @Shadow
     protected int attackCooldown;
     @Shadow
@@ -63,13 +68,6 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
 
     @Shadow
     protected abstract boolean doAttack();
-
-    @Shadow
-    private static int currentFps;
-
-    @Shadow
-    @Nullable
-    public ClientPlayerEntity player;
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;createUserApiService(Lcom/mojang/authlib/yggdrasil/YggdrasilAuthenticationService;Lnet/minecraft/client/RunArgs;)Lcom/mojang/authlib/minecraft/UserApiService;"))
     public void injectPreInit(RunArgs args, CallbackInfo ci) {

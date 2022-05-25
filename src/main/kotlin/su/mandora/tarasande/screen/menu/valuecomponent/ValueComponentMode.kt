@@ -8,7 +8,6 @@ import su.mandora.tarasande.base.value.Value
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.ValueMode
 import java.awt.Color
-import kotlin.math.min
 
 class ValueComponentMode(value: Value) : ValueComponent(value) {
 
@@ -22,7 +21,7 @@ class ValueComponentMode(value: Value) : ValueComponent(value) {
         matrices?.translate(0.0, getHeight() / 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
         matrices?.translate(0.0, -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if(valueMode.isEnabled()) it else it.darker().darker() }.rgb)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if (valueMode.isEnabled()) it else it.darker().darker() }.rgb)
         matrices?.pop()
 
         matrices?.push()
@@ -31,7 +30,7 @@ class ValueComponentMode(value: Value) : ValueComponent(value) {
         matrices?.translate(-width, -getHeight() / 2.0, 0.0)
         for ((index, setting) in valueMode.settings.withIndex()) {
             var color = if (valueMode.selected.contains(setting)) TarasandeMain.get().clientValues?.accentColor?.getColor()!! else Color.white
-            if(!valueMode.isEnabled())
+            if (!valueMode.isEnabled())
                 color = color.darker().darker()
             MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, setting, (width - MinecraftClient.getInstance().textRenderer.getWidth(setting)).toFloat(), (getHeight() / 2.0F + (index - valueMode.settings.size / 2.0) * MinecraftClient.getInstance().textRenderer.fontHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), color.rgb)
         }

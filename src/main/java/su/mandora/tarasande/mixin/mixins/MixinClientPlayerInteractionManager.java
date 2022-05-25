@@ -18,10 +18,10 @@ import su.mandora.tarasande.mixin.accessor.IClientPlayerInteractionManager;
 @Mixin(ClientPlayerInteractionManager.class)
 public abstract class MixinClientPlayerInteractionManager implements IClientPlayerInteractionManager {
 
+    boolean onlyPackets = false;
+
     @Shadow
     protected abstract void syncSelectedSlot();
-
-    boolean onlyPackets = false;
 
     @Inject(method = "attackEntity", at = @At("HEAD"))
     public void injectPreAttackEntity(PlayerEntity player, Entity target, CallbackInfo ci) {

@@ -61,7 +61,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         matrices?.translate(0.0, (getHeight() - 5) / 2.0, 0.0)
         matrices?.scale(0.5f, 0.5f, 1.0f)
         matrices?.translate(0.0, -(getHeight() - 5) / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0f, ((getHeight() - 5) / 2.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f).toFloat(), Color.white.let { if(valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0f, ((getHeight() - 5) / 2.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f).toFloat(), Color.white.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
         matrices?.pop()
         val matrix4f = matrices?.peek()?.positionMatrix!!
         val bufferBuilder = Tessellator.getInstance().buffer
@@ -79,7 +79,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
                 var b = 0.0
                 while (b <= 1.0) {
                     var hsb = Color.getHSBColor(valueColor.hue, s.toFloat(), b.toFloat())
-                    if(!valueColor.isEnabled())
+                    if (!valueColor.isEnabled())
                         hsb = hsb.darker().darker()
                     val f = (hsb.rgb shr 24 and 0xFF) / 255.0f
                     val g = (hsb.rgb shr 16 and 0xFF) / 255.0f
@@ -102,11 +102,11 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         BufferRenderer.draw(bufferBuilder)
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
-        outlinedFill(matrices, x1, y1, x2, y2, 2.0f, Color.white.let { if(valueColor.isEnabled()) it else it.darker().darker() }.rgb)
-        outlinedCircle(matrices, x1 + (x2 - x1) * valueColor.sat, y1 + (y2 - y1) * (1.0 - valueColor.bri), 2.0, 2.0f, Color.white.let { if(valueColor.isEnabled()) it else it.darker().darker() }.rgb)
-        fillCircle(matrices, x1 + (x2 - x1) * valueColor.sat, y1 + (y2 - y1) * (1.0 - valueColor.bri), 2.0, Color.getHSBColor(valueColor.hue, valueColor.sat, valueColor.bri).let { if(valueColor.isEnabled()) it else it.darker().darker() }.rgb)
-        outlinedCircle(matrices, width - (getHeight() - 5) / 2.0, (getHeight() - 5) / 2.0, (getHeight() - 5) / 2.0 - 5, 2.0f, Color.white.let { if(valueColor.isEnabled()) it else it.darker().darker() }.rgb)
-        outlinedCircle(matrices, width - (getHeight() - 5) / 2.0, (getHeight() - 5) / 2.0, (getHeight() - 5) / 2.0, 2.0f, Color.white.let { if(valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+        outlinedFill(matrices, x1, y1, x2, y2, 2.0f, Color.white.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+        outlinedCircle(matrices, x1 + (x2 - x1) * valueColor.sat, y1 + (y2 - y1) * (1.0 - valueColor.bri), 2.0, 2.0f, Color.white.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+        fillCircle(matrices, x1 + (x2 - x1) * valueColor.sat, y1 + (y2 - y1) * (1.0 - valueColor.bri), 2.0, Color.getHSBColor(valueColor.hue, valueColor.sat, valueColor.bri).let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+        outlinedCircle(matrices, width - (getHeight() - 5) / 2.0, (getHeight() - 5) / 2.0, (getHeight() - 5) / 2.0 - 5, 2.0f, Color.white.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+        outlinedCircle(matrices, width - (getHeight() - 5) / 2.0, (getHeight() - 5) / 2.0, (getHeight() - 5) / 2.0, 2.0f, Color.white.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
         val innerRadius = (getHeight() - 5) / 2.0 - 5
         val outerRadius = (getHeight() - 5) / 2.0
         val middleRadius = innerRadius + (outerRadius - innerRadius) * 0.5
@@ -122,7 +122,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
             var circle = 0.0
             while (circle <= 1.1) {
                 var hsb2 = Color.getHSBColor((circle.toFloat() + 0.5f) % 1.0f, 1.0f, 1.0f)
-                if(!valueColor.isEnabled())
+                if (!valueColor.isEnabled())
                     hsb2 = hsb2.darker().darker()
                 val f2 = (hsb2.rgb shr 24 and 0xFF) / 255.0f
                 val g2 = (hsb2.rgb shr 16 and 0xFF) / 255.0f
@@ -137,14 +137,14 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         BufferRenderer.draw(bufferBuilder)
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
-        outlinedCircle(matrices, this.width - (getHeight() - 5) / 2.0 - sin((valueColor.hue + 0.5f) * PI * 2) * middleRadius, (getHeight() - 5) / 2.0 + cos((valueColor.hue + 0.5f) * PI * 2) * middleRadius, width / 2.0, 3.0f, Color.white.let { if(valueColor.isEnabled()) it else it.darker().darker() }.rgb)
-        fillCircle(matrices, this.width - (getHeight() - 5) / 2.0 - sin((valueColor.hue + 0.5f) * PI * 2) * middleRadius, (getHeight() - 5) / 2.0 + cos((valueColor.hue + 0.5f) * PI * 2) * middleRadius, width / 2.0, Color.getHSBColor(valueColor.hue, 1.0f, 1.0f).let { if(valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+        outlinedCircle(matrices, this.width - (getHeight() - 5) / 2.0 - sin((valueColor.hue + 0.5f) * PI * 2) * middleRadius, (getHeight() - 5) / 2.0 + cos((valueColor.hue + 0.5f) * PI * 2) * middleRadius, width / 2.0, 3.0f, Color.white.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+        fillCircle(matrices, this.width - (getHeight() - 5) / 2.0 - sin((valueColor.hue + 0.5f) * PI * 2) * middleRadius, (getHeight() - 5) / 2.0 + cos((valueColor.hue + 0.5f) * PI * 2) * middleRadius, width / 2.0, Color.getHSBColor(valueColor.hue, 1.0f, 1.0f).let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
         if (valueColor.alpha != null) {
             val alpha = valueColor.alpha!!
-            fillVerticalGradient(matrices, this.width - (getHeight() - 5) - 10, 0.0, this.width - (getHeight() - 5) - 5, getHeight() - 5, Color.white.let { if(valueColor.isEnabled()) it else it.darker().darker() }.rgb, Color.black.let { if(valueColor.isEnabled()) it else it.darker().darker() }.rgb)
-            outlinedFill(matrices, this.width - (getHeight() - 5) - 10, 0.0, this.width - (getHeight() - 5) - 5, getHeight() - 5, 2.0f, Color.white.let { if(valueColor.isEnabled()) it else it.darker().darker() }.rgb)
-            fillCircle(matrices, this.width - (getHeight() - 5) - 7.5, (getHeight() - 5) * (1.0 - alpha) + (alpha * 2 - 1) * 2.5, 2.5, Color(alpha, alpha, alpha).let { if(valueColor.isEnabled()) it else it.darker().darker() }.rgb)
-            outlinedCircle(matrices, this.width - (getHeight() - 5) - 7.5, (getHeight() - 5) * (1.0 - alpha) + (alpha * 2 - 1) * 2.5, 2.5, 2.0f, Color.white.let { if(valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+            fillVerticalGradient(matrices, this.width - (getHeight() - 5) - 10, 0.0, this.width - (getHeight() - 5) - 5, getHeight() - 5, Color.white.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb, Color.black.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+            outlinedFill(matrices, this.width - (getHeight() - 5) - 10, 0.0, this.width - (getHeight() - 5) - 5, getHeight() - 5, 2.0f, Color.white.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+            fillCircle(matrices, this.width - (getHeight() - 5) - 7.5, (getHeight() - 5) * (1.0 - alpha) + (alpha * 2 - 1) * 2.5, 2.5, Color(alpha, alpha, alpha).let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+            outlinedCircle(matrices, this.width - (getHeight() - 5) - 7.5, (getHeight() - 5) * (1.0 - alpha) + (alpha * 2 - 1) * 2.5, 2.5, 2.0f, Color.white.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
         }
     }
 

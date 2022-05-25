@@ -169,7 +169,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                         continue
                     if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(currentRot) > fov.value)
                         continue
-                    val aimPoint = if(boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() == 1.0f) {
+                    val aimPoint = if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() == 1.0f) {
                         mc.player?.eyePos?.add(currentRot.forwardVector(0.01))!!
                     } else {
                         // aim point calculation maybe slower, only run it if the range check is actually able to succeed under best conditions
@@ -247,8 +247,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 event.maxRotateToOriginSpeed = aimSpeed.maxValue
             }
             is EventTick -> {
-                if(event.state == EventTick.State.PRE) {
-                    if(performedTick)
+                if (event.state == EventTick.State.PRE) {
+                    if (performedTick)
                         clickSpeedUtil.reset()
                     performedTick = true
                 }
@@ -443,11 +443,11 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             // Humans always try to get to the middle
             val center = box.center
-            val dist = MathUtil.getBias(mc.player?.eyePos?.squaredDistanceTo(aimPoint)!! / (reach.maxValue * reach.maxValue) * (reach.minValue / reach.maxValue), 0.45) // I have no idea why this works and looks like it does, but it's good and why remove it then
+            val dist = MathUtil.getBias(mc.player?.eyePos?.squaredDistanceTo(aimPoint)!! / (reach.maxValue * reach.maxValue), 0.45) // I have no idea why this works and looks like it does, but it's good and why remove it then
             aimPoint = aimPoint.add(
-                (center.x - aimPoint.x) * min((1 - dist) * 1.2, 1.0),
-                (center.y - aimPoint.y) * (1 - dist) * 0.25 /* Humans dislike aiming up and down */,
-                (center.z - aimPoint.z) * min((1 - dist) * 1.2, 1.0)
+                (center.x - aimPoint.x) * min((1 - dist), 1.0),
+                (center.y - aimPoint.y) * (1 - dist) * 0.5 /* Humans dislike aiming up and down */,
+                (center.z - aimPoint.z) * min((1 - dist), 1.0)
             )
 
             // Humans can't hold their hands still
@@ -462,7 +462,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 //            }
 
             // Human aim is slow
-            aimPoint = aimPoint.subtract(diff)
+            aimPoint = aimPoint.subtract(diff.multiply(0.5))
 
             // Don't aim through walls
             while (!PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint) && rotations.isSelected(0)) {

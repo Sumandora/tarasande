@@ -52,20 +52,19 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         return TarasandeMain.get().screens?.screenMenu?.panels?.any {
             when (it) {
                 is PanelCategory -> {
-                    return@any it.moduleElementList.any { it.components.any {
-                        when(it)
-                        {
-                            is ValueComponentText -> it.isFocused()
-                            is ValueComponentRegistry -> it.isFocused()
-                            else -> false
+                    return@any it.moduleElementList.any {
+                        it.components.any {
+                            when (it) {
+                                is ValueComponentText -> it.isFocused()
+                                is ValueComponentRegistry -> it.isFocused()
+                                else -> false
+                            }
                         }
-                    }
                     }
                 }
                 is PanelClientValues -> {
                     return@any it.elements.any {
-                        when(it)
-                        {
+                        when (it) {
                             is ValueComponentText -> it.isFocused()
                             is ValueComponentRegistry -> it.isFocused()
                             else -> false

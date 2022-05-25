@@ -7,15 +7,24 @@ class ManagerInformation : Manager<Information>() {
 
     init {
         add(
+            // Player
             InformationXYZ(),
             InformationNetherXYZ(),
             InformationRotation(),
             InformationFakeRotation(),
+
+            // Time
             InformationDate(),
             InformationTime(),
+
+            // Connection
             InformationHandlers(),
+
+            // World
             InformationEntities(),
             InformationWorldTime(),
+
+            // Modules
             InformationTimeShifted(),
             InformationMurderer()
         )

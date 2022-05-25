@@ -1,11 +1,7 @@
 package su.mandora.tarasande.module.render
 
-import net.minecraft.client.render.LightmapTextureManager
-import net.minecraft.client.render.Tessellator
-import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
-import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.Vector4f
@@ -18,15 +14,9 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventRender2D
 import su.mandora.tarasande.event.EventRender3D
 import su.mandora.tarasande.mixin.accessor.IMatrix4f
-import su.mandora.tarasande.util.math.MathUtil
-import su.mandora.tarasande.util.player.tagname.TagName
-import su.mandora.tarasande.util.render.RenderUtil
-import su.mandora.tarasande.value.ValueButton
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueRegistry
-import java.awt.Color
 import java.util.function.Consumer
-import kotlin.math.sqrt
 
 class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCategory.RENDER) {
 
@@ -34,17 +24,17 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
     private val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
         override fun keyToString(key: Any?) = (key as EntityType<*>).name.string
     }
-    private val espStudio = object : ValueButton(this, "ESP Studio") {
-        override fun onChange() {
-            mc.setScreen(null)
-        }
-    }
+//    private val espStudio = object : ValueButton(this, "ESP Studio") {
+//        override fun onChange() {
+//            mc.setScreen(null)
+//        }
+//    }
 
     fun filter(entity: Entity) = entities.list.contains(entity.type)
 
     private val hashMap = HashMap<Entity, Rectangle>()
 
-    fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Vec3d? {
+    private fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Vec3d? {
         val camPos = mc.gameRenderer.camera.pos.negate().add(vector)
         val vec1 = matrixVectorMultiply(modelView, Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1.0f))
         val screenPos = matrixVectorMultiply(projection, vec1)

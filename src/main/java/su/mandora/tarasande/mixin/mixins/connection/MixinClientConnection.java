@@ -21,13 +21,9 @@ import java.util.ArrayList;
 @Mixin(ClientConnection.class)
 public abstract class MixinClientConnection implements IClientConnection {
 
+    private static final ArrayList<Packet<?>> forced = new ArrayList<>();
     @Shadow
     private Channel channel;
-
-    @Shadow
-    public abstract void send(Packet<?> packet);
-
-    private static final ArrayList<Packet<?>> forced = new ArrayList<>();
 
     @Inject(method = "handlePacket", at = @At("HEAD"), cancellable = true)
     private static <T extends PacketListener> void injectHandlePacket(Packet<T> packet, PacketListener listener, CallbackInfo ci) {
@@ -36,6 +32,9 @@ public abstract class MixinClientConnection implements IClientConnection {
         if (eventPacket.getCancelled())
             ci.cancel();
     }
+
+    @Shadow
+    public abstract void send(Packet<?> packet);
 
     @Inject(method = "send(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V", at = @At("HEAD"), cancellable = true)
     public void injectSend(Packet<?> packet, @Nullable GenericFutureListener<? extends Future<? super Void>> callback, CallbackInfo ci) {

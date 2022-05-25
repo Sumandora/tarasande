@@ -22,7 +22,7 @@ class ValueComponentBoolean(value: Value) : ValueComponent(value) {
         matrices?.translate(0.0, getHeight() / 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
         matrices?.translate(0.0, -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if(value.isEnabled()) it else it.darker().darker() }.rgb)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb)
         matrices?.pop()
 
         val expandedAnimation = min((System.currentTimeMillis() - toggleTime) / 100.0 /* length in ms */, 1.0)
@@ -31,7 +31,7 @@ class ValueComponentBoolean(value: Value) : ValueComponent(value) {
         var color = RenderUtil.colorInterpolate(Color.white, TarasandeMain.get().clientValues?.accentColor?.getColor()!!, fade)
         var colorInverted = RenderUtil.colorInterpolate(TarasandeMain.get().clientValues?.accentColor?.getColor()!!, Color.white, fade)
 
-        if(!value.isEnabled()) {
+        if (!value.isEnabled()) {
             color = color.darker().darker()
             colorInverted = colorInverted.darker().darker()
         }

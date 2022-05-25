@@ -2,7 +2,6 @@ package su.mandora.tarasande.module.movement
 
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.util.math.MathHelper
-import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
@@ -10,10 +9,7 @@ import su.mandora.tarasande.event.EventJump
 import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.EventMovement
 import su.mandora.tarasande.mixin.accessor.IVec3d
-import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.player.PlayerUtil
-import su.mandora.tarasande.value.ValueBoolean
-import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
 import kotlin.math.cos
@@ -53,7 +49,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
                 val accessor = event.velocity as IVec3d
 
-                val prevVelocity = mc.player?.velocity?.add(0.0,0.0,0.0)!!
+                val prevVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)!!
                 val newSpeed = calcSpeed()
                 if (mc.player?.isOnGround!!) {
                     if (jumpHeight.value > 0.0) {

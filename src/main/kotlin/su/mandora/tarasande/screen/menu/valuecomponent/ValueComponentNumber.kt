@@ -28,7 +28,7 @@ class ValueComponentNumber(value: Value) : ValueComponent(value) {
         matrices?.translate(0.0, getHeight() / 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
         matrices?.translate(0.0, -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if(valueNumber.isEnabled()) it else it.darker().darker() }.rgb)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if (valueNumber.isEnabled()) it else it.darker().darker() }.rgb)
         matrices?.pop()
 
         if (dragInfo.dragging) {
@@ -48,20 +48,20 @@ class ValueComponentNumber(value: Value) : ValueComponent(value) {
         var color = Color(accentColor.red, accentColor.green, accentColor.blue, 255 / 4)
         var otherColor = Color(255, 255, 255, 255 / 4)
 
-        if(!value.isEnabled()) {
+        if (!value.isEnabled()) {
             accentColor = accentColor.darker().darker()
             color = color.darker().darker()
             otherColor = otherColor.darker().darker()
         }
 
         RenderUtil.fillHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width - (1.0 - sliderPos) * 50, getHeight() * 0.75, otherColor.rgb, color.rgb)
-        RenderUtil.outlinedHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2.0F, Color.white.let { if(valueNumber.isEnabled()) it else it.darker().darker() }.rgb, accentColor.rgb)
+        RenderUtil.outlinedHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2.0F, Color.white.let { if (valueNumber.isEnabled()) it else it.darker().darker() }.rgb, accentColor.rgb)
 
         matrices?.push()
         matrices?.translate(width - 50 / 2, getHeight() / 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
         matrices?.translate(-(width - 50 / 2), -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.value.toString(), (width - 50 / 2.0F - MinecraftClient.getInstance().textRenderer.getWidth(value.value.toString()) / 2.0F).toFloat(), (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if(valueNumber.isEnabled()) it else it.darker().darker() }.rgb)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.value.toString(), (width - 50 / 2.0F - MinecraftClient.getInstance().textRenderer.getWidth(value.value.toString()) / 2.0F).toFloat(), (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if (valueNumber.isEnabled()) it else it.darker().darker() }.rgb)
         matrices?.pop()
     }
 

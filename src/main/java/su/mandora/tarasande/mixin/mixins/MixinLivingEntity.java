@@ -43,7 +43,8 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Shadow
     protected double serverHeadYaw;
-
+    @Shadow
+    protected int lastAttackedTicks;
     private float originalYaw;
 
     public MixinLivingEntity(EntityType<?> type, World world) {
@@ -52,9 +53,6 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Shadow
     public abstract float getYaw(float tickDelta);
-
-    @Shadow
-    protected int lastAttackedTicks;
 
     @Inject(method = "jump", at = @At("HEAD"))
     public void injectPreJump(CallbackInfo ci) {

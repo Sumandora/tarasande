@@ -18,7 +18,7 @@ public class MixinGameRenderer {
     private MinecraftClient client;
 
     // stolen from 1.8
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;applyModelViewMatrix()V", shift = At.Shift.AFTER))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;applyModelViewMatrix()V", shift = At.Shift.AFTER, remap = false))
     public void injectedRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         glViewport(0, 0, client.getWindow().getWidth(), client.getWindow().getHeight());
         glMatrixMode(GL_PROJECTION);

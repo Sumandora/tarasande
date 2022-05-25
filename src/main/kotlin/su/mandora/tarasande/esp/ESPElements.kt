@@ -25,7 +25,7 @@ class ESPElementBox : ESPElement("Box") {
 
     override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
         val col = Color(entity.teamColorValue).let { Color(it.red, it.green, it.blue, 255) }.rgb
-        if(outlined.value)
+        if (outlined.value)
             RenderUtil.outlinedFill(matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, outlineWidth.value.toFloat(), Color.black.rgb)
         RenderUtil.outlinedFill(matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, width.value.toFloat(), col)
     }
@@ -39,7 +39,7 @@ class ESPElementName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Ori
         val tagName = TagName.getTagName(entity)?.asOrderedText() ?: return
         matrices.push()
         matrices.scale(2.0f / MinecraftClient.getInstance().window?.scaleFactor?.toFloat()!!, 2.0f / MinecraftClient.getInstance().window?.scaleFactor?.toFloat()!!, 1.0f)
-        if(outlined.value) {
+        if (outlined.value) {
             val immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().buffer)
             MinecraftClient.getInstance().textRenderer?.drawWithOutline(tagName, (sideBegin + (sideEnd - sideBegin) * 0.5f - MinecraftClient.getInstance().textRenderer?.getWidth(tagName)!! / 2f).toFloat(), 0.0f, col, Color.black.rgb, matrices.peek().positionMatrix, immediate, LightmapTextureManager.MAX_LIGHT_COORDINATE)
             immediate.draw()

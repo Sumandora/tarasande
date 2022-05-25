@@ -8,9 +8,6 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.value.Value
 import su.mandora.tarasande.event.EventKey
 import su.mandora.tarasande.event.EventMouse
-import su.mandora.tarasande.screen.menu.panel.impl.PanelClientValues
-import su.mandora.tarasande.screen.menu.panel.impl.category.PanelCategory
-import su.mandora.tarasande.screen.menu.valuecomponent.ValueComponentText
 
 open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, var mouse: Boolean = true) : Value(owner, name) {
 
@@ -40,7 +37,7 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
                                 when (event.action) {
                                     GLFW.GLFW_PRESS -> {
                                         keyPressed = true
-                                            presses++
+                                        presses++
                                     }
                                     GLFW.GLFW_RELEASE -> keyPressed = false
                                 }

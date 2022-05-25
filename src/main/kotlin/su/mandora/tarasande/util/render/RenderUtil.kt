@@ -5,9 +5,12 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.Formatting
+import net.minecraft.util.math.Direction
+import net.minecraft.util.shape.VoxelShape
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 import kotlin.math.*
+
 
 object RenderUtil {
 
@@ -243,6 +246,78 @@ object RenderUtil {
         BufferRenderer.draw(bufferBuilder)
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
+    }
+
+    fun blockOutline(matrices: MatrixStack?, voxelShape: VoxelShape, color: Int) {
+        if (voxelShape.isEmpty)
+            return
+
+        val f = (color shr 24 and 0xFF) / 255.0f
+        val g = (color shr 16 and 0xFF) / 255.0f
+        val h = (color shr 8 and 0xFF) / 255.0f
+        val k = (color and 0xFF) / 255.0f
+
+        matrices?.push()
+
+        val matrix = matrices?.peek()?.positionMatrix!!
+
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+        glEnable(GL_LINE_SMOOTH)
+        glDisable(GL_DEPTH_TEST)
+        RenderSystem.setShaderColor(g, h, k, f)
+        val bufferBuilder = Tessellator.getInstance().buffer
+        RenderSystem.setShader { GameRenderer.getPositionShader() }
+
+        val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
+        val shape = voxelShape.offset(-vec3d.x, -vec3d.y, -vec3d.z)
+
+        val minX = shape.getMin(Direction.Axis.X).toFloat()
+        val maxX = shape.getMax(Direction.Axis.X).toFloat()
+
+        val minY = shape.getMin(Direction.Axis.Y).toFloat()
+        val maxY = shape.getMax(Direction.Axis.Y).toFloat()
+
+        val minZ = shape.getMin(Direction.Axis.Z).toFloat()
+        val maxZ = shape.getMax(Direction.Axis.Z).toFloat()
+
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION)
+        bufferBuilder.vertex(matrix, minX, minY, minZ).next()
+        bufferBuilder.vertex(matrix, maxX, minY, minZ).next()
+        bufferBuilder.vertex(matrix, maxX, minY, maxZ).next()
+        bufferBuilder.vertex(matrix, minX, minY, maxZ).next()
+
+        bufferBuilder.vertex(matrix, minX, maxY, minZ).next()
+        bufferBuilder.vertex(matrix, minX, maxY, maxZ).next()
+        bufferBuilder.vertex(matrix, maxX, maxY, maxZ).next()
+        bufferBuilder.vertex(matrix, maxX, maxY, minZ).next()
+
+        bufferBuilder.vertex(matrix, minX, minY, minZ).next()
+        bufferBuilder.vertex(matrix, minX, maxY, minZ).next()
+        bufferBuilder.vertex(matrix, maxX, maxY, minZ).next()
+        bufferBuilder.vertex(matrix, maxX, minY, minZ).next()
+
+        bufferBuilder.vertex(matrix, maxX, minY, minZ).next()
+        bufferBuilder.vertex(matrix, maxX, maxY, minZ).next()
+        bufferBuilder.vertex(matrix, maxX, maxY, maxZ).next()
+        bufferBuilder.vertex(matrix, maxX, minY, maxZ).next()
+
+        bufferBuilder.vertex(matrix, minX, minY, maxZ).next()
+        bufferBuilder.vertex(matrix, maxX, minY, maxZ).next()
+        bufferBuilder.vertex(matrix, maxX, maxY, maxZ).next()
+        bufferBuilder.vertex(matrix, minX, maxY, maxZ).next()
+
+        bufferBuilder.vertex(matrix, minX, minY, minZ).next()
+        bufferBuilder.vertex(matrix, minX, minY, maxZ).next()
+        bufferBuilder.vertex(matrix, minX, maxY, maxZ).next()
+        bufferBuilder.vertex(matrix, minX, maxY, minZ).next()
+        bufferBuilder.end()
+
+        BufferRenderer.draw(bufferBuilder)
+        matrices.pop()
+        glEnable(GL_DEPTH_TEST)
+        glDisable(GL_BLEND)
+        glDisable(GL_LINE_SMOOTH)
     }
 
     fun colorInterpolate(a: Color, b: Color, t: Double) = colorInterpolate(a, b, t, t, t, t)

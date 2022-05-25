@@ -4,7 +4,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.util.math.Vec3d;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,17 +22,23 @@ import su.mandora.tarasande.module.render.ModuleESP;
 import su.mandora.tarasande.util.math.rotation.RotationUtil;
 
 import java.awt.*;
+import java.util.Random;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity implements IEntity {
 
+    @Mutable
     @Shadow
-    protected abstract Vec3d getRotationVector(float pitch, float yaw);
+    @Final
+    protected Random random;
 
     @Shadow
     protected static Vec3d movementInputToVelocity(Vec3d movementInput, float speed, float yaw) {
         return null;
     }
+
+    @Shadow
+    protected abstract Vec3d getRotationVector(float pitch, float yaw);
 
     @Inject(method = "getRotationVec", at = @At("HEAD"), cancellable = true)
     public void injectGetRotationVec(float tickDelta, CallbackInfoReturnable<Vec3d> cir) {
@@ -70,5 +78,10 @@ public abstract class MixinEntity implements IEntity {
     @Override
     public Vec3d invokeGetRotationVector(float pitch, float yaw) {
         return getRotationVector(pitch, yaw);
+    }
+
+    @Override
+    public void setRandom(Random random) {
+        this.random = random;
     }
 }

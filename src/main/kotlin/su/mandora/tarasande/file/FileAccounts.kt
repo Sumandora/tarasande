@@ -69,7 +69,7 @@ class FileAccounts : File("Accounts") {
             jsonArray.add(accountObject)
         }
         jsonObject.add("Accounts", jsonArray)
-        if(TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount != null)
+        if (TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount != null)
             jsonObject.addProperty("Main-Account", TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount)
         return jsonObject
     }
@@ -100,7 +100,7 @@ class FileAccounts : File("Accounts") {
                 }
             }
         }
-        if(jsonObject.has("Main-Account"))
+        if (jsonObject.has("Main-Account"))
             TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount = jsonObject.get("Main-Account").asInt
     }
 

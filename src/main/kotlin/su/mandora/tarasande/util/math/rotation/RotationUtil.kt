@@ -29,7 +29,7 @@ object RotationUtil {
         TarasandeMain.get().managerEvent?.add(Pair(1001, Consumer<Event> { event ->
             when (event) {
                 is EventJump -> {
-                    if(event.state != EventJump.State.PRE) return@Consumer
+                    if (event.state != EventJump.State.PRE) return@Consumer
                     if (goalMovementYaw != null)
                         event.yaw = goalMovementYaw!!
                     if (fakeRotation != null)

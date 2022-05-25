@@ -21,11 +21,11 @@ import su.mandora.tarasande.mixin.accessor.IGameRenderer;
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer implements IGameRenderer {
 
-    @Shadow
-    private float fovMultiplier;
     boolean allowThroughWalls = false;
     boolean disableReachExtension = false;
     double reach = 3.0;
+    @Shadow
+    private float fovMultiplier;
 
     @Redirect(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;render(Lnet/minecraft/client/util/math/MatrixStack;FJZLnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/GameRenderer;Lnet/minecraft/client/render/LightmapTextureManager;Lnet/minecraft/util/math/Matrix4f;)V"))
     private void injectRender(WorldRenderer instance, MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix) {
@@ -69,18 +69,13 @@ public class MixinGameRenderer implements IGameRenderer {
     }
 
     @Override
-    public void setAllowThroughWalls(boolean allowThroughWalls) {
-        this.allowThroughWalls = allowThroughWalls;
-    }
-
-    @Override
     public boolean isAllowThroughWalls() {
         return allowThroughWalls;
     }
 
     @Override
-    public void setDisableReachExtension(boolean disableReachExtension) {
-        this.disableReachExtension = disableReachExtension;
+    public void setAllowThroughWalls(boolean allowThroughWalls) {
+        this.allowThroughWalls = allowThroughWalls;
     }
 
     @Override
@@ -89,12 +84,17 @@ public class MixinGameRenderer implements IGameRenderer {
     }
 
     @Override
-    public void setReach(double reach) {
-        this.reach = reach;
+    public void setDisableReachExtension(boolean disableReachExtension) {
+        this.disableReachExtension = disableReachExtension;
     }
 
     @Override
     public double getReach() {
         return reach;
+    }
+
+    @Override
+    public void setReach(double reach) {
+        this.reach = reach;
     }
 }

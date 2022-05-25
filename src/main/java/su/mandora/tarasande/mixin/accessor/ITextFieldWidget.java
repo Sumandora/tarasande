@@ -3,7 +3,7 @@ package su.mandora.tarasande.mixin.accessor;
 import java.awt.*;
 
 public interface ITextFieldWidget {
-    boolean isEditable();
+    boolean invokeIsEditable();
 
     void setSelecting(boolean selecting);
 

@@ -36,7 +36,7 @@
 - Vehicle Speed
 - Elytra Flight
 - Baritone Sprint Jump
-- Fix Trajectories
+- Use Mixins to remove the hit and particle handlers from trajectory fake arrows
 - BowAimbot
 - More Anti Bots
 - Inventory management
@@ -52,6 +52,7 @@
   - Items are classes with getSpace, draw(orientation, axis start, axis end)
   - Right click for values in classes
 - SafeWalk: Onground only sneak
+- Rename all accessor methods to have a "tarasande_" prefix
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

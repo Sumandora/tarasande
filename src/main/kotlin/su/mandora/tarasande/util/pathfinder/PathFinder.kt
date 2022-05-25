@@ -5,7 +5,6 @@ import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import kotlin.math.abs
-import kotlin.math.cos
 import kotlin.math.round
 
 /**
@@ -13,7 +12,7 @@ import kotlin.math.round
  */
 
 object PathFinder {
-    
+
     private val manhattan = object : Function2<Node, Node, Double> {
         override fun invoke(current: Node, target: Node): Double {
             val delta = target.subtract(current)
@@ -119,11 +118,11 @@ object PathFinder {
 
     private fun generateMovementPossibilities(position: Node, world: ClientWorld?, allowedBlock: Function2<ClientWorld?, Node, Boolean>): List<Node> {
         val list = ArrayList<Node>()
-        for(x in -1..1 step 2)
+        for (x in -1..1 step 2)
             list.add(position.add(x, 0, 0))
-        for(y in -1..1 step 2)
+        for (y in -1..1 step 2)
             list.add(position.add(0, y, 0))
-        for(z in -1..1 step 2)
+        for (z in -1..1 step 2)
             list.add(position.add(0, 0, z))
         list.removeIf { !allowedBlock.invoke(world, it) }
         return list

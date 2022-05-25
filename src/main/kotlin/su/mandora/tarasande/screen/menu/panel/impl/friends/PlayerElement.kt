@@ -3,7 +3,6 @@ package su.mandora.tarasande.screen.menu.panel.impl.friends
 import com.mojang.authlib.GameProfile
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.math.Vec2f
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.screen.menu.utils.IElement

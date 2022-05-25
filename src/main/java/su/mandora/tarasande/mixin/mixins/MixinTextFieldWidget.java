@@ -21,13 +21,14 @@ public abstract class MixinTextFieldWidget implements ITextFieldWidget {
     private boolean selecting;
 
     @Shadow
-    private boolean editable;
-    @Shadow
     private String text;
     private Color color = null;
 
     @Shadow
     protected abstract void erase(int offset);
+
+    @Shadow
+    protected abstract boolean isEditable();
 
     @Inject(method = "mouseClicked", at = @At("HEAD"))
     public void injectMouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
@@ -55,8 +56,8 @@ public abstract class MixinTextFieldWidget implements ITextFieldWidget {
     }
 
     @Override
-    public boolean isEditable() {
-        return editable;
+    public boolean invokeIsEditable() {
+        return isEditable();
     }
 
     @Override
