@@ -61,7 +61,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
                 if (event.entity is LivingEntity) {
                     didHit = true
                     if (rapidFire.value) {
-                        shifted = max(0L, shifted - (if (rapidInstantUncharge.value) shifted else (event.entity.hurtTime * ((mc as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime)).toLong())
+                        shifted = max(0L, shifted - (if (rapidInstantUncharge.value) shifted else (10 * ((mc as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime)).toLong())
                     }
                 }
             }
