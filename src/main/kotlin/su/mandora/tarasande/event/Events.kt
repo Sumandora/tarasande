@@ -16,7 +16,7 @@ import java.awt.Color
 
 class EventChat(val chatMessage: String) : Event(true)
 class EventKey(val key: Int, val action: Int) : Event(true)
-class EventUpdate(val state: State) : Event(false) {
+class EventUpdate(val state: State) : Event(state == State.PRE) {
     enum class State {
         PRE, PRE_PACKET, POST
     }
@@ -113,7 +113,14 @@ class EventAttackEntity(val entity: Entity, val state: State) : Event(false) {
 
 class EventMovementFovMultiplier(var movementFovMultiplier: Float) : Event(false)
 class EventKeepSprint(var sprinting: Boolean) : Event(false)
-class EventAttack : Event(false)
+class EventAttack : Event(false) {
+    var dirty = false
+        set(value) {
+            if (field && !value) throw IllegalStateException(javaClass.name + " is already dirty")
+            field = value
+        }
+}
+
 class EventHandleBlockBreaking(var parameter: Boolean) : Event(false)
 class EventEntityColor(val entity: Entity, var color: Color?) : Event(false)
 class EventHasForwardMovement(var hasForwardMovement: Boolean) : Event(false)

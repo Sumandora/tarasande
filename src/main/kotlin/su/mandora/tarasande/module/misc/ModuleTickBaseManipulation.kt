@@ -18,6 +18,7 @@ import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
 import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.max
 
 class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts minecraft's tick base", ModuleCategory.MISC) {
@@ -37,7 +38,6 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
     private val skipCooldown = ValueBoolean(this, "Skip cooldown", true)
 
     private var prevTime = 0L
-    private var lastUpdate = 0L
 
     private var prevShifted = 0L
     var shifted = 0L
@@ -52,9 +52,17 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventUpdate -> {
-                if (event.state == EventUpdate.State.POST) // doing it in post means, that we skip as soon as we get it, otherwise we get a one tick delay
-                    if (shifted >= prevShifted && skipCooldown.value)
-                        shifted = max(0L, shifted - ceil((0.9 - MinecraftClient.getInstance().player?.getAttackCooldownProgress(0.5F)!!).coerceAtLeast(0.0) * MinecraftClient.getInstance().player?.attackCooldownProgressPerTick!! * ((mc as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime).toLong())
+                when (event.state) {
+                    EventUpdate.State.PRE -> {
+                        if (shifted > prevShifted)
+                            event.cancelled = true
+                    }
+                    EventUpdate.State.POST -> { // doing it in post means, that we skip as soon as we get it, otherwise we get a one tick delay
+                        if (shifted >= prevShifted && skipCooldown.value)
+                            shifted = max(0L, shifted - ceil((0.9 - MinecraftClient.getInstance().player?.getAttackCooldownProgress(0.5F)!!).coerceAtLeast(0.0) * MinecraftClient.getInstance().player?.attackCooldownProgressPerTick!! * ((mc as IMinecraftClient).renderTickCounter as IRenderTickCounter).tickTime).toLong())
+                    }
+                    else -> {}
+                }
             }
             is EventAttackEntity -> {
                 if (event.state != EventAttackEntity.State.PRE) return@Consumer
@@ -83,20 +91,8 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
 
                         if (resyncPositions.value) {
                             val iRenderTickCounter = (mc as IMinecraftClient).renderTickCounter as IRenderTickCounter
-                            if (event.time - lastUpdate > iRenderTickCounter.tickTime) {
-                                for (i in 0..((event.time - lastUpdate) / iRenderTickCounter.tickTime).toInt()) {
-                                    for (entity in mc.world?.entities!!) {
-                                        if (entity != mc.player) {
-                                            //                                        entity as ILivingEntity
-                                            //                                        entity.setPosition(entity.serverX, entity.serverY, entity.serverZ)
-                                            //                                        entity.yaw += MathHelper.wrapDegrees(entity.serverYaw.toFloat() - entity.getYaw())
-                                            //                                        entity.pitch = entity.serverPitch.toFloat()
-                                            entity.tick()
-                                        }
-                                    }
-                                }
-                                lastUpdate = event.time
-                            }
+                            for (i in 0..floor((event.time - iRenderTickCounter.prevTimeMillis) / iRenderTickCounter.tickTime).toInt())
+                                mc.world?.tickEntities()
                         }
                     }
                     prevTime = event.time

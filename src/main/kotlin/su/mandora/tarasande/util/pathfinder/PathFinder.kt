@@ -28,19 +28,19 @@ object PathFinder {
 
     private val allowedBlock = object : Function2<ClientWorld?, Node, Boolean> {
         override fun invoke(world: ClientWorld?, node: Node): Boolean {
-            return world?.isAir(BlockPos(node.x, node.y, node.z)) == true && !world.isAir(BlockPos(node.x, node.y - 1, node.z))
+            return world?.isAir(BlockPos(node.x, node.y, node.z))!! && !world.isAir(BlockPos(node.x, node.y - 1, node.z))
         }
     }
 
-    fun findPath(start: Vec3d, target: Vec3d, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost): ArrayList<Vec3d>? {
+    fun findPath(start: Vec3d, target: Vec3d, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost, maxTime: Long = 0L): ArrayList<Vec3d>? {
         val mappedPath = ArrayList<Vec3d>()
-        val path = findPath(Node(round(start.x).toInt(), round(start.y).toInt(), round(start.z).toInt()), Node(round(target.x).toInt(), round(target.y).toInt(), round(target.z).toInt()), allowedBlock, heuristic, cost) ?: return null
+        val path = findPath(Node(round(start.x).toInt(), round(start.y).toInt(), round(start.z).toInt()), Node(round(target.x).toInt(), round(target.y).toInt(), round(target.z).toInt()), allowedBlock, heuristic, cost, maxTime) ?: return null
         for (vec in path)
             mappedPath.add(Vec3d(vec.x + 0.5, vec.y + 0.5, vec.z + 0.5))
         return mappedPath
     }
 
-    fun findPath(start: Node, target: Node, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost): ArrayList<Node>? {
+    fun findPath(start: Node, target: Node, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost, maxTime: Long = 0L): ArrayList<Node>? {
         start.g = cost(start, start)
         start.h = heuristic(start, start)
         start.f = start.g + start.h
@@ -53,7 +53,8 @@ object PathFinder {
         }
 
         var current: Node? = null
-        while (open.isNotEmpty()) {
+        val begin = System.currentTimeMillis()
+        while ((maxTime == 0L || System.currentTimeMillis() - begin <= maxTime) && open.isNotEmpty()) {
             var best = Double.POSITIVE_INFINITY // hacky but works
             current = null
             for (move in open) {

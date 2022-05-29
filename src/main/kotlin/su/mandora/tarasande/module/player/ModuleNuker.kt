@@ -31,7 +31,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
 
     private val selectionMode = ValueMode(this, "Selection mode", false, "Include", "Exclude")
     private val blocks = object : ValueRegistry<Block>(this, "Blocks", Registry.BLOCK) {
-        override fun filter(block: Block) = block != Blocks.AIR
+        override fun filter(key: Block) = key != Blocks.AIR
         override fun keyToString(key: Any?) = (key as Block).name.string
     }
     private val radius = ValueNumber(this, "Radius", 0.1, 4.5, 6.0, 0.1)

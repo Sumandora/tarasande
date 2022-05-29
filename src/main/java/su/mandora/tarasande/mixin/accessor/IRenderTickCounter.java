@@ -6,4 +6,6 @@ public interface IRenderTickCounter {
 
     void setTickTime(float tickTime);
 
+    float getPrevTimeMillis();
+
 }

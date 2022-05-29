@@ -179,10 +179,12 @@ class ModuleElement(private val module: Module, var width: Double) : IElement {
     }
 
     override fun getHeight(): Double {
-        var maxHeight = 0.0
-        for (component in components) {
-            maxHeight += component.getHeight()
-        }
-        return defaultHeight + if (expanded) maxHeight else 0.0
+        return defaultHeight + if (expanded) {
+            var maxHeight = 0.0
+            for (component in components) {
+                maxHeight += component.getHeight()
+            }
+            maxHeight
+        } else 0.0
     }
 }

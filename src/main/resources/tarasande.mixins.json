@@ -24,6 +24,7 @@
     "MixinMatrix4f",
     "MixinMinecraftClient",
     "MixinMouse",
+    "MixinParticleManager",
     "MixinPlayerEntity",
     "MixinRenderSystem",
     "MixinRenderTickCounter",

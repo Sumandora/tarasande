@@ -102,7 +102,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
         removeButton?.active = accountList?.selectedOrNull != null
         setMainButton?.active = accountList?.selectedOrNull != null
         if (accountList?.selectedOrNull != null)
-            setMainButton?.active = accountList?.selectedOrNull?.account?.isSuitableAsMain()!!
+            setMainButton?.active = accountList?.selectedOrNull?.account?.isSuitableAsMain() == true
         randomButton?.active = accounts.isNotEmpty()
         super.tick()
     }

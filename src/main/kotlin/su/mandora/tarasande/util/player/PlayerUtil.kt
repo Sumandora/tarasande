@@ -21,8 +21,6 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.event.EventIsEntityAttackable
 import su.mandora.tarasande.mixin.accessor.IGameRenderer
 import su.mandora.tarasande.mixin.accessor.IKeyBinding
-import su.mandora.tarasande.mixin.accessor.ILivingEntity
-import su.mandora.tarasande.mixin.accessor.IWorld
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 
@@ -104,57 +102,6 @@ object PlayerUtil {
         accessor.isDisableReachExtension = prevReachExtension
 
         return hitResult
-    }
-
-    fun simulateAttack(target: LivingEntity): Float {
-        val player = MinecraftClient.getInstance().player!!
-        val iLivingEntity = player as ILivingEntity
-
-        val prevIsClient = MinecraftClient.getInstance().world?.isClient()!!
-        (MinecraftClient.getInstance().world as IWorld).setIsClient(false)
-
-        val prevVelocity = player.velocity
-
-        val prevSprinting = player.isSprinting
-
-        val prevTicksSinceSprintingChanged = player.ticksSinceSprintingChanged
-
-        val prevOnFire = target.isOnFire
-
-        val prevExhaustion = player.hungerManager.exhaustion
-
-        val prevHurtTime = target.hurtTime
-
-        val prevLastAttackedTicks = iLivingEntity.lastAttackedTicks
-
-        val prevSelfHealth = player.health
-
-        val prevHealth = target.health
-
-        player.attack(target)
-        val healthLoss = prevHealth - target.health
-
-        target.health = prevHealth
-
-        player.health = prevSelfHealth
-
-        iLivingEntity.lastAttackedTicks = prevLastAttackedTicks
-
-        target.hurtTime = prevHurtTime
-
-        player.hungerManager.exhaustion = prevExhaustion
-
-        target.isOnFire = prevOnFire
-
-        player.ticksSinceSprintingChanged = prevTicksSinceSprintingChanged
-
-        player.isSprinting = prevSprinting
-
-        player.velocity = prevVelocity
-
-        (MinecraftClient.getInstance().world as IWorld).setIsClient(prevIsClient)
-
-        return healthLoss
     }
 
     fun rayCast(start: Vec3d, end: Vec3d) = MinecraftClient.getInstance().world?.raycast(RaycastContext(start, end, ShapeType.OUTLINE, FluidHandling.NONE, MinecraftClient.getInstance().player!!))

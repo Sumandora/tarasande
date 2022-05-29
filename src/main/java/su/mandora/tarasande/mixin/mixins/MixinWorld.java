@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import su.mandora.tarasande.mixin.accessor.IWorld;
 
 @Mixin(World.class)
-public abstract class MixinWorld implements IWorld {
+public class MixinWorld implements IWorld {
     @Mutable
     @Shadow
     @Final

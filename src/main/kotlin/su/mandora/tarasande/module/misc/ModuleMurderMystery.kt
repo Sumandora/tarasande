@@ -28,20 +28,23 @@ import java.util.function.Consumer
 
 class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on held items", ModuleCategory.MISC) {
 
-    private val detectionMethod = ValueMode(this, "Detection method", false, "Disallow", "Allow")
+    private val detectionMethod = ValueMode(this, "Detection method", false, "Allow", "Disallow")
     private val allowedItems = object : ValueRegistry<Item>(this, "Allowed items", Registry.ITEM, Items.FILLED_MAP, Items.BOW, Items.ARROW, Items.ARMOR_STAND, Items.RED_BED, Items.GOLD_INGOT, Items.PAPER, Items.WOODEN_SHOVEL, Items.LIGHT_BLUE_STAINED_GLASS, Items.SNOWBALL, Items.PLAYER_HEAD, Items.COMPASS, Items.RED_BED, Items.TNT) {
         override fun isEnabled() = detectionMethod.isSelected(0)
-        override fun filter(item: Item) = item != Items.AIR
+        override fun filter(key: Item) = key != Items.AIR
         override fun keyToString(key: Any?) = (key as Item).name.string
     }
     private val disallowedItems = object : ValueRegistry<Item>(this, "Disallowed items", Registry.ITEM, Items.IRON_SWORD) {
         override fun isEnabled() = detectionMethod.isSelected(1)
-        override fun filter(item: Item) = item != Items.AIR
+        override fun filter(key: Item) = key != Items.AIR
         override fun keyToString(key: Any?) = (key as Item).name.string
     }
     private val murdererColorOverride = ValueColor(this, "Murderer color override", 0.0f, 1.0f, 1.0f, 1.0f)
     private val bowColorOverride = ValueColor(this, "Bow color override", 0.66f, 1.0f, 1.0f, 1.0f)
     private val murdererAssistance = ValueBoolean(this, "Murderer assistance", true)
+    private val fakeNews = object : ValueBoolean(this, "Fake news", true) {
+        override fun isEnabled() = murdererAssistance.value
+    }
     private val broadcast = ValueMode(this, "Broadcast", false, "Disabled", "Explanatory", "Legit")
 
     val suspects = HashMap<GameProfile, Array<Item>>()
@@ -123,7 +126,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
             is EventUpdate -> {
                 if (event.state == EventUpdate.State.PRE)
                     if (mc.interactionManager?.currentGameMode != GameMode.SPECTATOR) {
-                        if (isMurderer() && murdererAssistance.value) {
+                        if (fakeNews.value && isMurderer() && murdererAssistance.value) {
                             if (fakeNewsTimer.hasReached(fakeNewsTime)) {
                                 var player: PlayerEntity? = null
                                 while (player == null || player == mc.player) {

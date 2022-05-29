@@ -14,26 +14,43 @@ import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.util.pathfinder.Node
 import su.mandora.tarasande.util.pathfinder.PathFinder
 import su.mandora.tarasande.util.render.RenderUtil
+import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueColor
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
 
-class ModuleIDontEvenKnow : Module("I don't even know", "Calculates the best way to break a bed", ModuleCategory.RENDER) {
+class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.RENDER) {
 
     private val searchRadius = ValueNumber(this, "Search radius", 1.0, 10.0, 50.0, 1.0)
-    private val depth = ValueNumber(this, "Depth", 1.0, 512.0, 1024.0, 8.0)
 
-    private val bedColor = ValueColor(this, "Bed color", 0.0f, 1.0f, 1.0f, 1.0f)
-    private val solutionColor = ValueColor(this, "Solution color", 0.0f, 1.0f, 1.0f, 1.0f)
+    private val calculateBestWay = ValueBoolean(this, "Calculate best way", true)
+
+    private val depth = object : ValueNumber(this, "Depth", 1.0, 512.0, 1024.0, 8.0) {
+        override fun isEnabled() = calculateBestWay.value
+    }
+
+    private val bedColor = object : ValueColor(this, "Bed color", 0.0f, 1.0f, 1.0f, 1.0f) {
+        override fun isEnabled() = calculateBestWay.value
+    }
+    private val solutionColor = object : ValueColor(this, "Solution color", 0.0f, 1.0f, 1.0f, 1.0f) {
+        override fun isEnabled() = calculateBestWay.value
+    }
+
+    // Going full polak
+    private val refreshRate = object : ValueNumber(this, "Refresh rate", 1.0, 5.0, 20.0, 1.0) {
+        override fun isEnabled() = calculateBestWay.value
+    }
+    private val maxProcessingTime = object : ValueNumber(this, "Max processing time", 1.0, 10.0, 100.0, 1.0) {
+        override fun isEnabled() = calculateBestWay.value
+    }
 
     private var bedDatas = ArrayList<BedData>()
-    private val beds = ArrayList<Pair<BlockPos, BlockPos>>()
 
     private fun allSurroundings(blockPos: BlockPos): ArrayList<BlockPos> {
         val list = ArrayList<BlockPos>()
         for (x in -1..1 step 2)
             list.add(blockPos.add(x, 0, 0))
-        for (y in 0..1 step 2)
+        for (y in 0..1)
             list.add(blockPos.add(0, y, 0))
         for (z in -1..1 step 2)
             list.add(blockPos.add(0, 0, z))
@@ -68,9 +85,11 @@ class ModuleIDontEvenKnow : Module("I don't even know", "Calculates the best way
         when (event) {
             is EventUpdate -> {
                 if (event.state == EventUpdate.State.PRE) {
+                    if (mc.player?.age?.mod(refreshRate.value.toInt()) != 0)
+                        return@Consumer
+
                     val rad = searchRadius.value.toInt()
 
-                    beds.removeIf { arrayOf(it.first, it.second).any { mc.world?.getBlockState(it)?.block !is BedBlock } }
                     bedDatas.clear()
 
                     val beds = ArrayList<BlockPos>()
@@ -85,9 +104,6 @@ class ModuleIDontEvenKnow : Module("I don't even know", "Calculates the best way
                                     beds.add(blockPos)
                             }
 
-                    if (beds.isEmpty())
-                        return@Consumer
-
                     for (bed in beds) {
                         val state = mc.world?.getBlockState(bed)!!
                         val part = state.get(BedBlock.PART)
@@ -95,11 +111,22 @@ class ModuleIDontEvenKnow : Module("I don't even know", "Calculates the best way
                         val otherPartOfBed = bed.offset(facing)
                         val bedParts = arrayOf(bed, otherPartOfBed)
 
+                        if (bedDatas.any { it.bedParts.any { part1 -> bedParts.any { part2 -> part1 == part2 } } })
+                            continue // we already processed these
+
+                        if (calculateBestWay.value || bedParts.any { allSurroundings(it).any { mc.world?.isAir(it)!! } }) {
+                            bedDatas.add(BedData(bedParts, ArrayList(), null))
+                            continue // this is pointless
+                        }
+
                         val defenders = calculateDefenses(bedParts)?.let { ArrayList(it) } ?: continue
                         val outstanders = defenders.filter { allSurroundings(it).any { mc.world?.getBlockState(it)?.isAir!! } }
                         defenders.removeIf { bedParts.contains(it) }
 
-                        val solution = Breaker.findSolution(outstanders, bedParts)
+                        if (outstanders.any { mc.world?.getBlockState(it)?.block is BedBlock })
+                            continue // not a bedwars bed
+
+                        val solution = Breaker.findSolution(outstanders, bedParts, maxProcessingTime.value.toLong())
                         bedDatas.add(BedData(bedParts, defenders, solution))
                     }
                 }
@@ -111,7 +138,12 @@ class ModuleIDontEvenKnow : Module("I don't even know", "Calculates the best way
                         val blockState = mc.world?.getBlockState(blockPos)
                         RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, bedColor.getColor().rgb)
                     }
-                    for (node in bedData.solution ?: return@Consumer) {
+//                    for (node in bedData.defenders) {
+//                        val blockPos = BlockPos(node.x, node.y, node.z)
+//                        val blockState = mc.world?.getBlockState(blockPos)
+//                        RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, Color(0, 0, 255, 50).rgb)
+//                    }
+                    for (node in bedData.solution ?: continue) {
                         val blockPos = BlockPos(node.x, node.y, node.z)
                         val blockState = mc.world?.getBlockState(blockPos)
                         RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, solutionColor.getColor().rgb)
@@ -133,15 +165,18 @@ object Breaker {
         }
     }
 
-    fun findSolution(outstanders: List<BlockPos>, beds: Array<BlockPos>): List<Node>? {
+    fun findSolution(outstanders: List<BlockPos>, beds: Array<BlockPos>, maxProcessingTime: Long): List<Node>? {
         var bestWay: ArrayList<Node>? = null
+        val begin = System.currentTimeMillis()
         for (outstander in outstanders) {
+            if (System.currentTimeMillis() - begin > maxProcessingTime) return null
+
             val bestBed = beds.minByOrNull { it.getSquaredDistance(outstander) } ?: continue
             val beginNode = Node(outstander.x, outstander.y, outstander.z)
             val endNode = Node(bestBed.x, bestBed.y, bestBed.z)
             val way = PathFinder.findPath(beginNode, endNode, object : Function2<ClientWorld?, Node, Boolean> {
                 override fun invoke(world: ClientWorld?, node: Node) = true
-            }, cost = costCalc) ?: continue
+            }, cost = costCalc, maxTime = maxProcessingTime) ?: break // timeout
             if (bestWay == null)
                 bestWay = way
             else {
@@ -163,14 +198,14 @@ object Breaker {
     }
 
     fun getBreakSpeed(blockPos: BlockPos): Double {
-        if (MinecraftClient.getInstance().world?.isAir(blockPos) == true) return 1.0
+        if (MinecraftClient.getInstance().world?.isAir(blockPos)!!) return 1.0
         val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot ?: return 1.0
         var bestMult = 0.0f
         val state = MinecraftClient.getInstance().world?.getBlockState(blockPos)
         for (i in 0..8) {
             MinecraftClient.getInstance().player?.inventory?.selectedSlot = i
             var mult = MinecraftClient.getInstance().player?.getBlockBreakingSpeed(state)!!
-            if (MinecraftClient.getInstance().player?.isOnGround == false) {
+            if (!MinecraftClient.getInstance().player?.isOnGround!!) {
                 mult *= 5.0f // bruh
             }
             if (bestMult < mult) {

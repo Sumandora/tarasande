@@ -10,6 +10,7 @@ import su.mandora.tarasande.screen.menu.utils.DragInfo
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.ValueNumberRange
 import java.awt.Color
+import java.lang.Double.parseDouble
 import java.math.BigDecimal
 import java.math.RoundingMode
 import kotlin.math.abs
@@ -40,7 +41,7 @@ class ValueComponentNumberRange(value: Value) : ValueComponent(value) {
             // hacky
             val string = BigDecimal(valueNumber.min).add(((BigDecimal(mousePos).divide(BigDecimal(50.0))).multiply(BigDecimal(valueNumber.max).subtract(BigDecimal(valueNumber.min))))).divide(increment, 0, RoundingMode.HALF_UP).multiply(increment).toPlainString()
             // even more hacky
-            valueNumber.minValue = MathHelper.clamp(java.lang.Double.parseDouble(string.substring(0..min(string.length - 1, 7))), valueNumber.min, valueNumber.maxValue)
+            valueNumber.minValue = MathHelper.clamp(parseDouble(string.substring(0..min(string.length - 1, 7))), valueNumber.min, valueNumber.maxValue)
             if (valueNumber.minValue == -0.0) valueNumber.minValue = 0.0 // bruh
             valueNumber.onChange()
         }
@@ -51,7 +52,7 @@ class ValueComponentNumberRange(value: Value) : ValueComponent(value) {
             // hacky
             val string = BigDecimal(valueNumber.min).add(((BigDecimal(mousePos).divide(BigDecimal(50.0))).multiply(BigDecimal(valueNumber.max).subtract(BigDecimal(valueNumber.min))))).divide(increment, 0, RoundingMode.HALF_UP).multiply(increment).toPlainString()
             // even more hacky
-            valueNumber.maxValue = MathHelper.clamp(java.lang.Double.parseDouble(string.substring(0..min(string.length - 1, 7))), valueNumber.minValue, valueNumber.max)
+            valueNumber.maxValue = MathHelper.clamp(parseDouble(string.substring(0..min(string.length - 1, 7))), valueNumber.minValue, valueNumber.max)
             if (valueNumber.maxValue == -0.0) valueNumber.maxValue = 0.0 // bruh
             valueNumber.onChange()
         }
@@ -103,7 +104,7 @@ class ValueComponentNumberRange(value: Value) : ValueComponent(value) {
                     maxDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
             } else if (minDelta < maxDelta)
                 minDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
-            else if (maxDelta < minDelta)
+            else if (maxDelta < minDelta) // left for convenience
                 maxDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
             return true
         }

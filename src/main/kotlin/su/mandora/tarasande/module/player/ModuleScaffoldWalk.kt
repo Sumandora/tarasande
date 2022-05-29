@@ -65,9 +65,10 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val lockView = ValueBoolean(this, "Lock view", false)
     private val headRoll = ValueMode(this, "Head roll", false, "Disabled", "Advantage", "Autism")
     private val forbiddenItems = object : ValueRegistry<Item>(this, "Forbidden items", Registry.ITEM) {
-        override fun filter(item: Item) = item is BlockItem
+        override fun filter(key: Item) = key is BlockItem
         override fun keyToString(key: Any?) = (key as Item).name.string
     }
+    private val cubeShape = ValueBoolean(this, "Cube shape", true)
     private val tower = ValueMode(this, "Tower", false, "Vanilla", "Motion", "Teleport")
 
     private val targets = ArrayList<Pair<BlockPos, Direction>>()
@@ -133,7 +134,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         for (target in arrayList) {
             if (mc.player?.blockPos?.y!! > target.second.y)
                 return Pair(target.second, target.third)
-            val dist2 = Vec3d.ofCenter(target.second).add(Vec3d.of(target.third.opposite.vector).withAxis(Direction.Axis.Y, 0.0).multiply(0.5)).subtract(mc.player?.pos!!).lengthSquared()
+            val dist2 = Vec3d.ofCenter(target.second).add(Vec3d.of(target.third.opposite.vector).multiply(0.5)).subtract(mc.player?.pos!!).horizontalLengthSquared()
             if (best == null || dist2 < dist) {
                 best = Pair(target.second, target.third)
                 dist = dist2
@@ -172,8 +173,8 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                             var rotDelta = 0.0
                             var x = 0.0
                             while (x <= 1.0) {
-                                var y = 1.0
-                                while (y >= 0.0) {
+                                var y = 0.0
+                                while (y <= 1.0) {
                                     var z = 0.0
                                     while (z <= 1.0) {
                                         val newPoint = point.add(Vec3d(x, y, z))
@@ -208,43 +209,20 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                         }
                                         z += 0.05
                                     }
-                                    y -= 0.05
+                                    y += 0.05
                                 }
                                 x += 0.05
                             }
 
                             point = bestPoint ?: point
-                            val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, point)
-                            val smoothedRot = currentRot.smoothedTurn(
-                                targetRot,
-                                if (aimSpeed.minValue == 1.0 && aimSpeed.maxValue == 1.0)
-                                    1.0
-                                else
-                                    MathHelper.clamp((
-                                            if (aimSpeed.minValue == aimSpeed.maxValue)
-                                                aimSpeed.minValue
-                                            else
-                                                ThreadLocalRandom.current().nextDouble(aimSpeed.minValue, aimSpeed.maxValue)) * RenderUtil.deltaTime * 0.05,
-                                        0.0,
-                                        1.0
-                                    )
-                            )
-
-                            lastRotation = smoothedRot
+                            lastRotation = RotationUtil.getRotations(mc.player?.eyePos!!, point)
                         }
                     } else {
                         prevEdgeDistance = 0.5
                         clickSpeedUtil.reset()
                     }
                 }
-                if (lastRotation != null) {
-                    event.rotation = lastRotation?.correctSensitivity()!!
-
-                    if (lockView.value) {
-                        mc.player?.yaw = event.rotation.yaw
-                        mc.player?.pitch = event.rotation.pitch
-                    }
-                } else {
+                if (lastRotation == null) {
                     var rad = (if (mc.player?.input?.movementInput?.lengthSquared()!! > 0.0) PlayerUtil.getMoveDirection() + Math.PI else Math.toRadians(mc.player?.yaw!! - 90.0))
                     if (!offsetGoalYaw.value)
                         rad -= Math.toRadians(goalYaw.value - 180.0)
@@ -256,32 +234,35 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                             0.0
                         )!!
                     )
-                    val smoothedRot = currentRot.smoothedTurn(
-                        targetRot,
-                        if (aimSpeed.minValue == 1.0 && aimSpeed.maxValue == 1.0)
-                            1.0
-                        else
-                            MathHelper.clamp(
-                                (
-                                        if (aimSpeed.minValue == aimSpeed.maxValue)
-                                            aimSpeed.minValue
-                                        else
-                                            ThreadLocalRandom.current()
-                                                .nextDouble(aimSpeed.minValue, aimSpeed.maxValue)
-                                        ) * RenderUtil.deltaTime * 0.05,
-                                0.0,
-                                1.0
-                            )
-                    )
 
-                    event.rotation = smoothedRot.correctSensitivity()
+                    lastRotation = targetRot
+                }
+
+                event.rotation = currentRot.smoothedTurn(
+                    lastRotation!!,
+                    if (aimSpeed.minValue == 1.0 && aimSpeed.maxValue == 1.0)
+                        1.0
+                    else
+                        MathHelper.clamp((
+                                if (aimSpeed.minValue == aimSpeed.maxValue)
+                                    aimSpeed.minValue
+                                else
+                                    ThreadLocalRandom.current().nextDouble(aimSpeed.minValue, aimSpeed.maxValue)) * RenderUtil.deltaTime * 0.05,
+                            0.0,
+                            1.0
+                        )
+                ).correctSensitivity()
+
+                if (lockView.value) {
+                    mc.player?.yaw = event.rotation.yaw
+                    mc.player?.pitch = event.rotation.pitch
                 }
 
                 event.minRotateToOriginSpeed = aimSpeed.minValue
                 event.maxRotateToOriginSpeed = aimSpeed.maxValue
             }
             is EventAttack -> {
-                if (target == null || RotationUtil.fakeRotation == null) {
+                if (target == null || RotationUtil.fakeRotation == null || event.dirty) {
                     clickSpeedUtil.reset()
                     return@Consumer
                 }
@@ -338,6 +319,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                             ) {
                                 if (timeUtil.hasReached(delay.value.toLong())) {
                                     placeBlock(hitResult)
+                                    event.dirty = true
 
                                     if (target?.second?.offsetY == 0) {
                                         if (edgeIncrement.value && preventImpossibleEdge.value && prevEdgeDistance > newEdgeDist && mc.player?.isOnGround!!)
@@ -351,6 +333,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                         } else if (alwaysClick.value) {
                             for (i in 1..clicks)
                                 placeBlock(hitResult)
+                            event.dirty = true
                         }
                     }
                     if (silent.value) {
@@ -388,9 +371,11 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private fun isBlockItemValid(blockItem: BlockItem): Boolean {
         if (forbiddenItems.list.contains(blockItem)) return false
 
-        val block = blockItem.block
-        val shape = block.defaultState.getCollisionShape(mc.world, BlockPos.ORIGIN)
-        return !shape.isEmpty && shape.boundingBox.xLength == 1.0 && shape.boundingBox.yLength == 1.0 && shape.boundingBox.zLength == 1.0 && block.defaultState.material.isSolid
+        return if (cubeShape.value) {
+            val block = blockItem.block
+            val shape = block.defaultState.getCollisionShape(mc.world, BlockPos.ORIGIN)
+            !shape.isEmpty && shape.boundingBox.xLength == 1.0 && shape.boundingBox.yLength == 1.0 && shape.boundingBox.zLength == 1.0 && block.defaultState.material.isSolid
+        } else true
     }
 
     private fun getNewEdgeDist(): Double {

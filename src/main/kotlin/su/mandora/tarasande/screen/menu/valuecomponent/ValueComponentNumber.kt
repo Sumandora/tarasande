@@ -10,6 +10,7 @@ import su.mandora.tarasande.screen.menu.utils.DragInfo
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.ValueNumber
 import java.awt.Color
+import java.lang.Double.parseDouble
 import java.math.BigDecimal
 import java.math.RoundingMode
 import kotlin.math.min
@@ -37,7 +38,7 @@ class ValueComponentNumber(value: Value) : ValueComponent(value) {
             // hacky
             val string = BigDecimal(valueNumber.min).add(((BigDecimal(mousePos).divide(BigDecimal(50.0))).multiply(BigDecimal(valueNumber.max).subtract(BigDecimal(valueNumber.min))))).divide(increment, 0, RoundingMode.HALF_UP).multiply(increment).toPlainString()
             // even more hacky
-            valueNumber.value = MathHelper.clamp(java.lang.Double.parseDouble(string.substring(0..min(string.length - 1, 7))), valueNumber.min, valueNumber.max)
+            valueNumber.value = MathHelper.clamp(parseDouble(string.substring(0..min(string.length - 1, 7))), valueNumber.min, valueNumber.max)
             if (valueNumber.value == -0.0) valueNumber.value = 0.0 // bruh
             valueNumber.onChange()
         }

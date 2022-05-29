@@ -15,6 +15,9 @@ public class MixinRenderTickCounter implements IRenderTickCounter {
     @Final
     private float tickTime;
 
+    @Shadow
+    private long prevTimeMillis;
+
     @Override
     public float getTickTime() {
         return tickTime;
@@ -23,5 +26,10 @@ public class MixinRenderTickCounter implements IRenderTickCounter {
     @Override
     public void setTickTime(float tickTime) {
         this.tickTime = tickTime;
+    }
+
+    @Override
+    public float getPrevTimeMillis() {
+        return prevTimeMillis;
     }
 }

@@ -1,5 +1,6 @@
 package su.mandora.tarasande.module.misc
 
+import net.minecraft.client.gui.screen.DownloadingTerrainScreen
 import net.minecraft.network.ClientConnection
 import net.minecraft.network.NetworkState
 import net.minecraft.network.Packet
@@ -37,8 +38,12 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                 if (event.cancelled) return@Consumer
                 if (event.packet != null) {
                     if ((mc.networkHandler?.connection as IClientConnection).channel.attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY ||
-                        (event.type == EventPacket.Type.RECEIVE && event.packet is DisconnectS2CPacket)) {
+                        ((event.type == EventPacket.Type.RECEIVE && event.packet is DisconnectS2CPacket) || (!pulse.value && mc.currentScreen is DownloadingTerrainScreen))) {
                         this.switchState()
+                        return@Consumer
+                    }
+                    if (pulse.value && mc.currentScreen is DownloadingTerrainScreen) {
+                        onDisable()
                         return@Consumer
                     }
                     if (affectedPackets.isSelected(event.type.ordinal)) {

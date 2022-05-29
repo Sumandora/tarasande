@@ -12,6 +12,7 @@ import java.util.function.Consumer
 class ModuleSafeWalk : Module("Safe walk", "Prevents falling off blocks", ModuleCategory.MOVEMENT) {
 
     private val sneak = ValueBoolean(this, "Sneak", false)
+    private val onlyOnGround = ValueBoolean(this, "Only on ground", true)
     private val extrapolation = object : ValueNumber(this, "Extrapolation", 0.0, 1.0, 10.0, 1.0) {
         override fun isEnabled() = sneak.value
     }
@@ -20,8 +21,9 @@ class ModuleSafeWalk : Module("Safe walk", "Prevents falling off blocks", Module
         when (event) {
             is EventKeyBindingIsPressed -> {
                 if (event.keyBinding == mc.options.sneakKey && sneak.value)
-                    if (PlayerUtil.isOnEdge(extrapolation.value))
-                        event.pressed = true
+                    if (!onlyOnGround.value || mc.player?.isOnGround!!)
+                        if (PlayerUtil.isOnEdge(extrapolation.value))
+                            event.pressed = true
             }
         }
     }

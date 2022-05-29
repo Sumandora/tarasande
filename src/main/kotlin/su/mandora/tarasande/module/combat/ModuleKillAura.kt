@@ -39,7 +39,6 @@ import java.util.function.Consumer
 import kotlin.math.min
 import kotlin.math.sqrt
 
-
 class ModuleKillAura : Module("Kill aura", "Automatically attacks near players", ModuleCategory.COMBAT) {
 
     private val mode = ValueMode(this, "Mode", false, "Single", "Multi")
@@ -257,7 +256,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 performedTick = false
                 clicked = false
 
-                if (targets.isEmpty()) {
+                if (targets.isEmpty() || event.dirty) {
                     clickSpeedUtil.reset()
                     waitForHit = false
                     return@Consumer
@@ -322,6 +321,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                                 continue
                             }
                             attack(target)
+                            event.dirty = true
                             waitForHit = false
                             attacked = true
 
@@ -331,6 +331,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                         if (!attacked)
                             if (swingInAir.value) {
                                 attack(null)
+                                event.dirty = true
                             }
                     }
                 }

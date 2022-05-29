@@ -50,7 +50,6 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                 val accessor = event.velocity as IVec3d
 
                 val prevVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)!!
-                val newSpeed = calcSpeed()
                 if (mc.player?.isOnGround!!) {
                     if (jumpHeight.value > 0.0) {
                         mc.player?.jump()
