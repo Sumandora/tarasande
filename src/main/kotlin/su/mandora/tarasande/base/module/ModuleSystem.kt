@@ -53,7 +53,8 @@ class ManagerModule : Manager<Module>() {
             ModuleWorldTime(),
             ModuleNuker(),
             ModuleMovementRecorder(),
-            ModuleBedESP()
+            ModuleBedESP(),
+            ModuleFog()
         )
         TarasandeMain.get().managerEvent?.add { event ->
             if (event is EventTick)

@@ -36,7 +36,6 @@
 - Vehicle Speed
 - Elytra Flight
 - Baritone Sprint Jump
-- Use Mixins to remove the hit and particle handlers from trajectory fake arrows
 - BowAimbot
 - More Anti Bots (Mode which checks if the entity tries to stay out of the line of sight)
 - Inventory management
@@ -50,6 +49,7 @@
   - Items are classes with getSpace, draw(orientation, axis start, axis end)
   - Right click for values in classes
 - Murder Mystery: Innocent indicator when kill out of range
+- EventVelocity doesn't need mixin, use EventPacket
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

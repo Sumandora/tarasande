@@ -33,10 +33,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventVelocity -> {
-                when (event.packet) {
-                    EventVelocity.Packet.VELOCITY -> if (!packets.isSelected(0)) return@Consumer
-                    EventVelocity.Packet.EXPLOSION -> if (!packets.isSelected(1)) return@Consumer
-                }
+                if (!packets.isSelected(event.packet.ordinal)) return@Consumer
 
                 when {
                     mode.isSelected(0) -> {
