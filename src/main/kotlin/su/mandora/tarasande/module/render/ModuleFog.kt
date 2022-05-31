@@ -11,7 +11,7 @@ import java.util.function.Consumer
 
 class ModuleFog : Module("Fog", "Changes the fog distance and color", ModuleCategory.RENDER) {
 
-    private val distance = ValueNumberRange(this, "Distance", 0.0, 0.1, 1.0, 2.0, 0.1)
+    private val distance = ValueNumberRange(this, "Distance", 0.1, 0.1, 1.0, 2.0, 0.1)
     private val color = ValueColor(this, "Color", 0.0f, 1.0f, 1.0f)
 
     val eventConsumer = Consumer<Event> { event ->

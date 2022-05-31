@@ -33,6 +33,8 @@
 9. Multi-version support
 
 ## TODO-List
+- BLOCK BOT !!!!
+- fix Teams
 - Vehicle Speed
 - Elytra Flight
 - Baritone Sprint Jump
