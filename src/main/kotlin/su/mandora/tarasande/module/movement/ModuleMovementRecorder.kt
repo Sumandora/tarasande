@@ -204,32 +204,32 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
         }
     }
 
-}
+    enum class PlaybackState { PREPARE, EXECUTING }
 
-enum class PlaybackState { PREPARE, EXECUTING }
+    inner class Record() {
+        val ticks = ArrayList<TickMovement>()
 
-class Record() {
-    val ticks = ArrayList<TickMovement>()
-
-    constructor(ticks: ArrayList<TickMovement>) : this() {
-        this.ticks.addAll(ticks)
-    }
-
-    fun toJson(): JsonArray {
-        val jsonArray = JsonArray()
-        for (tick in ticks) {
-            jsonArray.add(TarasandeMain.get().gson.toJson(tick))
+        constructor(ticks: ArrayList<TickMovement>) : this() {
+            this.ticks.addAll(ticks)
         }
-        return jsonArray
-    }
 
-    fun fromJson(jsonArray: JsonArray) {
-        for (jsonElement in jsonArray) {
-            ticks.add(TarasandeMain.get().gson.fromJson(jsonElement, TickMovement::class.java))
+        fun toJson(): JsonArray {
+            val jsonArray = JsonArray()
+            for (tick in ticks) {
+                jsonArray.add(TarasandeMain.get().gson.toJson(tick))
+            }
+            return jsonArray
         }
+
+        fun fromJson(jsonArray: JsonArray) {
+            for (jsonElement in jsonArray) {
+                ticks.add(TarasandeMain.get().gson.fromJson(jsonElement, TickMovement::class.java))
+            }
+        }
+
+        fun copy() = Record(ticks)
     }
 
-    fun copy() = Record(ticks)
-}
+    inner class TickMovement(val rotation: Rotation, val movement: Vec3d, val pos: Vec3d, val sprinting: Boolean, val sneaking: Boolean, val input: Vec2f)
 
-class TickMovement(val rotation: Rotation, val movement: Vec3d, val pos: Vec3d, val sprinting: Boolean, val sneaking: Boolean, val input: Vec2f)
+}

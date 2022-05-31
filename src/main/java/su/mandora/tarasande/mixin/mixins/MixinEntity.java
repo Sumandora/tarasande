@@ -2,6 +2,7 @@ package su.mandora.tarasande.mixin.mixins;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.MovementType;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Final;
@@ -33,12 +34,14 @@ public abstract class MixinEntity implements IEntity {
     protected Random random;
 
     @Shadow
-    protected static Vec3d movementInputToVelocity(Vec3d movementInput, float speed, float yaw) {
+    private static Vec3d movementInputToVelocity(Vec3d movementInput, float speed, float yaw) {
         return null;
     }
 
     @Shadow
     protected abstract Vec3d getRotationVector(float pitch, float yaw);
+
+    @Shadow private EntityDimensions dimensions;
 
     @Inject(method = "getRotationVec", at = @At("HEAD"), cancellable = true)
     public void injectGetRotationVec(float tickDelta, CallbackInfoReturnable<Vec3d> cir) {
@@ -83,5 +86,10 @@ public abstract class MixinEntity implements IEntity {
     @Override
     public void setRandom(Random random) {
         this.random = random;
+    }
+
+    @Override
+    public void setDimensions(EntityDimensions entityDimensions) {
+        dimensions = entityDimensions;
     }
 }

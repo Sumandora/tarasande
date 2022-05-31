@@ -1,5 +1,6 @@
 package su.mandora.tarasande.util.render
 
+import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.*
@@ -261,10 +262,10 @@ object RenderUtil {
 
         val matrix = matrices?.peek()?.positionMatrix!!
 
-        glEnable(GL_BLEND)
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+        RenderSystem.enableBlend()
+        RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
         glEnable(GL_LINE_SMOOTH)
-        glDisable(GL_DEPTH_TEST)
+        RenderSystem.disableDepthTest()
         RenderSystem.setShaderColor(g, h, k, f)
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.setShader { GameRenderer.getPositionShader() }
@@ -315,8 +316,8 @@ object RenderUtil {
 
         BufferRenderer.draw(bufferBuilder)
         matrices.pop()
-        glEnable(GL_DEPTH_TEST)
-        glDisable(GL_BLEND)
+        RenderSystem.enableDepthTest()
+        RenderSystem.enableBlend()
         glDisable(GL_LINE_SMOOTH)
     }
 

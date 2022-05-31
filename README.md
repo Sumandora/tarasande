@@ -50,6 +50,7 @@
   - Right click for values in classes
 - Murder Mystery: Innocent indicator when kill out of range
 - EventVelocity doesn't need mixin, use EventPacket
+- Trajectories: Add Crossbow
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

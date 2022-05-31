@@ -97,7 +97,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         override fun isEnabled() = waitForCritical.value && criticalSprint.value
     }
 
-    internal val targets = ArrayList<Pair<Entity, Vec3d>>()
+    private val targets = ArrayList<Pair<Entity, Vec3d>>()
     private val comparator: Comparator<Pair<Entity, Vec3d>> = Comparator.comparing {
         when {
             priority.isSelected(0) -> {
@@ -116,7 +116,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     0
             }
             priority.isSelected(3) -> {
-                RotationUtil.getRotations(mc.player?.eyePos!!, getBestAimPoint(it.first.boundingBox)).fov(Rotation(mc.player!!))
+                RotationUtil.getRotations(mc.player?.eyePos!!, getBestAimPoint(it.first.boundingBox)).fov(RotationUtil.fakeRotation ?: Rotation(mc.player!!))
             }
             else -> 0.0
         }.toDouble()

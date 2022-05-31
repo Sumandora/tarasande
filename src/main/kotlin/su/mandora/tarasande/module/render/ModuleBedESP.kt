@@ -153,66 +153,66 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         }
     }
 
-}
+    inner class BedData(val bedParts: Array<BlockPos>, val defenders: List<BlockPos>, val solution: List<Node>?)
 
-class BedData(val bedParts: Array<BlockPos>, val defenders: List<BlockPos>, val solution: List<Node>?)
+    object Breaker {
 
-object Breaker {
-
-    private val costCalc = object : Function2<Node, Node, Double> {
-        override fun invoke(current: Node, movement: Node): Double {
-            return getBreakSpeed(BlockPos(movement.x, movement.y, movement.z))
+        private val costCalc = object : Function2<Node, Node, Double> {
+            override fun invoke(current: Node, movement: Node): Double {
+                return getBreakSpeed(BlockPos(movement.x, movement.y, movement.z))
+            }
         }
-    }
 
-    fun findSolution(outstanders: List<BlockPos>, beds: Array<BlockPos>, maxProcessingTime: Long): List<Node>? {
-        var bestWay: ArrayList<Node>? = null
-        val begin = System.currentTimeMillis()
-        for (outstander in outstanders) {
-            if (System.currentTimeMillis() - begin > maxProcessingTime) return null
+        fun findSolution(outstanders: List<BlockPos>, beds: Array<BlockPos>, maxProcessingTime: Long): List<Node>? {
+            var bestWay: ArrayList<Node>? = null
+            val begin = System.currentTimeMillis()
+            for (outstander in outstanders) {
+                if (System.currentTimeMillis() - begin > maxProcessingTime) return null
 
-            val bestBed = beds.minByOrNull { it.getSquaredDistance(outstander) } ?: continue
-            val beginNode = Node(outstander.x, outstander.y, outstander.z)
-            val endNode = Node(bestBed.x, bestBed.y, bestBed.z)
-            val way = PathFinder.findPath(beginNode, endNode, object : Function2<ClientWorld?, Node, Boolean> {
-                override fun invoke(world: ClientWorld?, node: Node) = true
-            }, cost = costCalc, maxTime = maxProcessingTime) ?: break // timeout
-            if (bestWay == null)
-                bestWay = way
-            else {
-                val bestG = bestWay[bestWay.size - 1].g
-                val newG = way[way.size - 1].g
-                when {
-                    bestG > newG -> bestWay = way
-                    bestG == newG -> {
-                        val bestPos = bestWay[0]
-                        val newPos = way[0]
-                        if (MinecraftClient.getInstance().player?.squaredDistanceTo(bestPos.x.toDouble(), bestPos.y.toDouble(), bestPos.z.toDouble())!! >
-                            MinecraftClient.getInstance().player?.squaredDistanceTo(newPos.x.toDouble(), newPos.y.toDouble(), newPos.z.toDouble())!!)
-                            bestWay = way
+                val bestBed = beds.minByOrNull { it.getSquaredDistance(outstander) } ?: continue
+                val beginNode = Node(outstander.x, outstander.y, outstander.z)
+                val endNode = Node(bestBed.x, bestBed.y, bestBed.z)
+                val way = PathFinder.findPath(beginNode, endNode, object : Function2<ClientWorld?, Node, Boolean> {
+                    override fun invoke(world: ClientWorld?, node: Node) = true
+                }, cost = costCalc, maxTime = maxProcessingTime) ?: break // timeout
+                if (bestWay == null)
+                    bestWay = way
+                else {
+                    val bestG = bestWay[bestWay.size - 1].g
+                    val newG = way[way.size - 1].g
+                    when {
+                        bestG > newG -> bestWay = way
+                        bestG == newG -> {
+                            val bestPos = bestWay[0]
+                            val newPos = way[0]
+                            if (MinecraftClient.getInstance().player?.squaredDistanceTo(bestPos.x.toDouble(), bestPos.y.toDouble(), bestPos.z.toDouble())!! >
+                                MinecraftClient.getInstance().player?.squaredDistanceTo(newPos.x.toDouble(), newPos.y.toDouble(), newPos.z.toDouble())!!)
+                                bestWay = way
+                        }
                     }
                 }
             }
+            return bestWay
         }
-        return bestWay
+
+        fun getBreakSpeed(blockPos: BlockPos): Double {
+            if (MinecraftClient.getInstance().world?.isAir(blockPos)!!) return 1.0
+            val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot ?: return 1.0
+            var bestMult = 0.0f
+            val state = MinecraftClient.getInstance().world?.getBlockState(blockPos)
+            for (i in 0..8) {
+                MinecraftClient.getInstance().player?.inventory?.selectedSlot = i
+                var mult = MinecraftClient.getInstance().player?.getBlockBreakingSpeed(state)!!
+                if (!MinecraftClient.getInstance().player?.isOnGround!!) {
+                    mult *= 5.0f // bruh
+                }
+                if (bestMult < mult) {
+                    bestMult = mult
+                }
+            }
+            MinecraftClient.getInstance().player?.inventory?.selectedSlot = origSlot
+            return 1.0 - bestMult / state?.getHardness(MinecraftClient.getInstance().world, blockPos)!! / 30.0
+        }
     }
 
-    fun getBreakSpeed(blockPos: BlockPos): Double {
-        if (MinecraftClient.getInstance().world?.isAir(blockPos)!!) return 1.0
-        val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot ?: return 1.0
-        var bestMult = 0.0f
-        val state = MinecraftClient.getInstance().world?.getBlockState(blockPos)
-        for (i in 0..8) {
-            MinecraftClient.getInstance().player?.inventory?.selectedSlot = i
-            var mult = MinecraftClient.getInstance().player?.getBlockBreakingSpeed(state)!!
-            if (!MinecraftClient.getInstance().player?.isOnGround!!) {
-                mult *= 5.0f // bruh
-            }
-            if (bestMult < mult) {
-                bestMult = mult
-            }
-        }
-        MinecraftClient.getInstance().player?.inventory?.selectedSlot = origSlot
-        return 1.0 - bestMult / state?.getHardness(MinecraftClient.getInstance().world, blockPos)!! / 30.0
-    }
 }
