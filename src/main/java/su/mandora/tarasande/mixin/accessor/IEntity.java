@@ -9,6 +9,5 @@ public interface IEntity {
     Vec3d invokeGetRotationVector(float pitch, float yaw);
 
     void setRandom(Random random);
-    void setDimensions(EntityDimensions entityDimensions);
 
 }

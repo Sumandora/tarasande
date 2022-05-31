@@ -65,7 +65,8 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
         (mc.world as IWorld).setIsClient(false)
         val path = ArrayList<Vec3d>()
         var collided = false
-        val persistentProjectileEntity = object : PersistentProjectileEntity(projectileItem.entityType as EntityType<out PersistentProjectileEntity>? /* This just shows how bad minecrafts code base is */, mc.player, mc.world) {
+        @Suppress("UNCHECKED_CAST")
+        val persistentProjectileEntity = object : PersistentProjectileEntity(projectileItem.entityType as EntityType<PersistentProjectileEntity> /* This just shows how bad minecrafts code base is */, mc.player, mc.world) {
             override fun asItemStack(): ItemStack? = null
             override fun onEntityHit(entityHitResult: EntityHitResult?) {
                 collided = true
@@ -92,7 +93,6 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
                     return 0.0
                 }
             })
-            it.setDimensions(projectileItem.entityType.dimensions)
         }
         projectileItem.setupRoutine.accept(itemStack, persistentProjectileEntity)
         while (!collided) {

@@ -87,9 +87,4 @@ public abstract class MixinEntity implements IEntity {
     public void setRandom(Random random) {
         this.random = random;
     }
-
-    @Override
-    public void setDimensions(EntityDimensions entityDimensions) {
-        dimensions = entityDimensions;
-    }
 }
