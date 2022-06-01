@@ -34,7 +34,6 @@
 
 ## TODO-List
 - BLOCK BOT !!!!
-- fix Teams
 - Vehicle Speed
 - Elytra Flight
 - Baritone Sprint Jump
@@ -44,13 +43,12 @@
 - KillAura: Simulate Damage in case cooldown isn't gone but full dmg isn't needed to kill somebody
 - PvP-Bot for Practice Game Modes
 - Stop using Thread.stop
-- Make the friend alias feature accessable to the user (frontend is missing) (text fields instead of texts and let the user rewrite the name live?)
+- Make the friend alias feature accessible to the user (frontend is missing) (text fields instead of texts and let the user rewrite the name live?)
 - MidClick (alias prompt with screen and callback?)
 - KillAura: Calculate attack cycle from enemies
 - Configure ESP / "ESP Studio" - Fully customizable 2D esp setting like spirthack
   - Items are classes with getSpace, draw(orientation, axis start, axis end)
   - Right click for values in classes
-- Murder Mystery: Innocent indicator when kill out of range
 - EventVelocity doesn't need mixin, use EventPacket
 - Trajectories: Add Crossbow
 

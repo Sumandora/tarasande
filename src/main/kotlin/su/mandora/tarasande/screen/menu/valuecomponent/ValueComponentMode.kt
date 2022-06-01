@@ -42,7 +42,7 @@ class ValueComponentMode(value: Value) : ValueComponent(value) {
         val valueMode = value as ValueMode
         for ((index, setting) in valueMode.settings.withIndex()) {
             val x = width - MinecraftClient.getInstance().textRenderer.getWidth(setting) / 2
-            val y = getHeight() / 2.0F + (index - valueMode.settings.size / 2.0) * (MinecraftClient.getInstance().textRenderer.fontHeight / 2) - MinecraftClient.getInstance().textRenderer.fontHeight / 4.0F
+            val y = getHeight() / 2.0F + (index - (valueMode.settings.size - 1) / 2.0) * (MinecraftClient.getInstance().textRenderer.fontHeight / 2) - MinecraftClient.getInstance().textRenderer.fontHeight / 4.0F
             if (RenderUtil.isHovered(mouseX, mouseY, x, y, width, y + MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F)) {
                 valueMode.select(index)
                 valueMode.onChange()

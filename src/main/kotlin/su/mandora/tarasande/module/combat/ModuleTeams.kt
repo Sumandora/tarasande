@@ -1,5 +1,8 @@
 package su.mandora.tarasande.module.combat
 
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.text.LiteralText
+import net.minecraft.text.Text
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
@@ -15,28 +18,21 @@ class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCatego
         if (event is EventIsEntityAttackable) {
             if (!event.attackable)
                 return@Consumer
+            if(event.entity !is PlayerEntity)
+                return@Consumer
 
             if (mode.isSelected(0)) {
-                if (event.entity?.isTeammate(mc.player)!!) {
+                if (event.entity.isTeammate(mc.player)) {
                     event.attackable = false
                 }
             }
 
             if (mode.isSelected(1)) {
-                val selfName = mc.player?.displayName?.string!!
-                val otherName = event.entity?.displayName?.string!!
+                val selfTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.first { it.profile == mc.player?.gameProfile }).siblings.first { it.style.color != null }.style.color ?: return@Consumer
+                val otherTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.first { it.profile == mc.player?.gameProfile }).siblings.first { it.style.color != null }.style.color ?: return@Consumer
 
-                val selfHasTeam = selfName.startsWith("§")
-                val otherHasTeam = otherName.startsWith("§")
-
-                if (selfHasTeam != otherHasTeam)
+                if (selfTeam == otherTeam) {
                     event.attackable = false
-                else if (selfHasTeam && otherHasTeam) {
-                    val selfTeam = selfName.subSequence(0, 2)
-                    val otherTeam = otherName.subSequence(0, 2)
-
-                    if (selfTeam == otherTeam)
-                        event.attackable = false
                 }
             }
         }

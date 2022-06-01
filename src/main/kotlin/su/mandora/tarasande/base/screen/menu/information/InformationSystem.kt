@@ -26,7 +26,8 @@ class ManagerInformation : Manager<Information>() {
 
             // Modules
             InformationTimeShifted(),
-            InformationMurderer()
+            InformationMurderer(),
+            InformationBeds()
         )
     }
 
