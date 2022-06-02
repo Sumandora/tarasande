@@ -28,8 +28,8 @@ class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCatego
             }
 
             if (mode.isSelected(1)) {
-                val selfTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.first { it.profile == mc.player?.gameProfile }).siblings.first { it.style.color != null }.style.color ?: return@Consumer
-                val otherTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.first { it.profile == mc.player?.gameProfile }).siblings.first { it.style.color != null }.style.color ?: return@Consumer
+                val selfTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == mc.player?.gameProfile } ?: return@Consumer).siblings.firstOrNull { it.style.color != null }?.style?.color ?: return@Consumer
+                val otherTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == event.entity.gameProfile } ?: return@Consumer).siblings.firstOrNull { it.style.color != null }?.style?.color ?: return@Consumer
 
                 if (selfTeam == otherTeam) {
                     event.attackable = false

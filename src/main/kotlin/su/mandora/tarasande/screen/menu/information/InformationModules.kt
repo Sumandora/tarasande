@@ -48,7 +48,7 @@ class InformationBeds : Information("Bed ESP", "Beds") {
                             it.forEach { vec = vec.add(Vec3d.ofCenter(it)) }
                             vec.multiply(1.0 / it.size) // ffs there is no divide
                         })
-                    }.joinToString("\n\n") { it.toString() }
+                    }.joinToString("\n") { it.toString() }
                 }
 
         return null

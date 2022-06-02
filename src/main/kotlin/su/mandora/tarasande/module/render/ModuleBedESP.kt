@@ -167,8 +167,6 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                 stringBuilder.append("Breaking time: " + solution.sumOf {
                     floor(1.0 / (1.0 - Breaker.getBreakSpeed(BlockPos(it.x, it.y, it.z))))
                 }.let { if(!it.isInfinite()) (it  * (((MinecraftClient.getInstance() as IMinecraftClient).renderTickCounter) as IRenderTickCounter).tickTime / 1000.0).toString() + "s" else it } + "\n")
-            } else {
-                stringBuilder.append("No solution\n")
             }
 
             return stringBuilder.toString()

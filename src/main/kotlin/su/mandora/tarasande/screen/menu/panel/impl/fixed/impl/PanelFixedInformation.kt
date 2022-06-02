@@ -13,7 +13,8 @@ class PanelFixedInformation(x: Double, y: Double) : PanelFixed("Information", x,
         val text = ArrayList<String>()
         for (owner in TarasandeMain.get().screens?.screenMenu?.managerInformation?.getAllOwners()!!) {
             val cache = ArrayList<String>()
-            for (information in TarasandeMain.get().screens?.screenMenu?.managerInformation?.getAllInformation(owner)!!) {
+            val informations = TarasandeMain.get().screens?.screenMenu?.managerInformation?.getAllInformation(owner)!!
+            for (information in informations) {
                 val message = information.getMessage()
                 if (message != null) {
                     if (message.contains("\n")) {
@@ -35,8 +36,8 @@ class PanelFixedInformation(x: Double, y: Double) : PanelFixed("Information", x,
             if (cache.isNotEmpty()) {
                 text.add("[$owner]")
                 text.addAll(cache)
+                text.add("")
             }
-            text.add("")
         }
 
         for ((index, it) in text.withIndex()) {

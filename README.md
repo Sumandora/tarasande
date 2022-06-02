@@ -50,7 +50,7 @@
   - Items are classes with getSpace, draw(orientation, axis start, axis end)
   - Right click for values in classes
 - EventVelocity doesn't need mixin, use EventPacket
-- Trajectories: Add Crossbow
+- Trajectories: Add Crossbow / Fix Fishing Rod
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)
