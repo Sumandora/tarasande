@@ -124,8 +124,9 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventUpdate -> {
-                if (event.state == EventUpdate.State.PRE)
-                    if (mc.interactionManager?.currentGameMode != GameMode.SPECTATOR) {
+                if (event.state == EventUpdate.State.PRE) {
+                    if (mc.world?.players?.size!! <= 1) return@Consumer
+                    if (mc.interactionManager?.currentGameMode != GameMode.SPECTATOR)
                         if (fakeNews.value && isMurderer() && murdererAssistance.value) {
                             if (fakeNewsTimer.hasReached(fakeNewsTime)) {
                                 var player: PlayerEntity? = null
@@ -140,7 +141,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                         } else {
                             fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
                         }
-                    }
+                }
             }
             is EventAttackEntity -> {
                 if (murdererAssistance.value && isMurderer()) {

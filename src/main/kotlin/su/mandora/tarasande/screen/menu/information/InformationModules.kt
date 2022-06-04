@@ -40,7 +40,7 @@ class InformationBeds : Information("Bed ESP", "Beds") {
     override fun getMessage(): String? {
         val bedESP = TarasandeMain.get().managerModule?.get(ModuleBedESP::class.java)!!
         if (bedESP.enabled)
-            if(bedESP.calculateBestWay.value)
+            if (bedESP.calculateBestWay.value)
                 if (bedESP.bedDatas.isNotEmpty()) {
                     return "\n" + bedESP.bedDatas.sortedBy {
                         MinecraftClient.getInstance().player?.squaredDistanceTo(it.bedParts.let {

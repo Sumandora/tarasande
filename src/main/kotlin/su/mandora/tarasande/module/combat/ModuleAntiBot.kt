@@ -12,7 +12,6 @@ import su.mandora.tarasande.event.EventIsEntityAttackable
 import su.mandora.tarasande.event.EventPacket
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
-import java.util.concurrent.CopyOnWriteArrayList
 import java.util.function.Consumer
 
 class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with bots", ModuleCategory.COMBAT) {

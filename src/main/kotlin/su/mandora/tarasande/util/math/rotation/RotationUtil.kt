@@ -183,6 +183,10 @@ object RotationUtil {
 
     fun getRotations(from: Vec3d, to: Vec3d): Rotation {
         val delta = to.subtract(from)
+        return getRotations(delta)
+    }
+
+    fun getRotations(delta: Vec3d): Rotation {
         return Rotation(getYaw(delta).toFloat(), getPitch(delta.y, delta.horizontalLength()).toFloat())
     }
 

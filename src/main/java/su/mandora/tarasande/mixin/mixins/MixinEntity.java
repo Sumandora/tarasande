@@ -32,6 +32,8 @@ public abstract class MixinEntity implements IEntity {
     @Shadow
     @Final
     protected Random random;
+    @Shadow
+    private EntityDimensions dimensions;
 
     @Shadow
     private static Vec3d movementInputToVelocity(Vec3d movementInput, float speed, float yaw) {
@@ -40,8 +42,6 @@ public abstract class MixinEntity implements IEntity {
 
     @Shadow
     protected abstract Vec3d getRotationVector(float pitch, float yaw);
-
-    @Shadow private EntityDimensions dimensions;
 
     @Inject(method = "getRotationVec", at = @At("HEAD"), cancellable = true)
     public void injectGetRotationVec(float tickDelta, CallbackInfoReturnable<Vec3d> cir) {
@@ -81,6 +81,11 @@ public abstract class MixinEntity implements IEntity {
     @Override
     public Vec3d invokeGetRotationVector(float pitch, float yaw) {
         return getRotationVector(pitch, yaw);
+    }
+
+    @Override
+    public Random getRandom() {
+        return random;
     }
 
     @Override

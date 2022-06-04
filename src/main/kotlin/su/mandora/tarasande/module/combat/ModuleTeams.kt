@@ -1,8 +1,6 @@
 package su.mandora.tarasande.module.combat
 
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.text.LiteralText
-import net.minecraft.text.Text
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
@@ -18,7 +16,7 @@ class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCatego
         if (event is EventIsEntityAttackable) {
             if (!event.attackable)
                 return@Consumer
-            if(event.entity !is PlayerEntity)
+            if (event.entity !is PlayerEntity)
                 return@Consumer
 
             if (mode.isSelected(0)) {

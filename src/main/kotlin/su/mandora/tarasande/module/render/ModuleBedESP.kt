@@ -21,7 +21,6 @@ import su.mandora.tarasande.value.ValueColor
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
 import kotlin.math.floor
-import kotlin.math.round
 
 class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.RENDER) {
 
@@ -124,7 +123,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                         }
 
                         val defenders = calculateDefenses(bedParts)?.let { ArrayList(it) } ?: continue
-                        val outstanders = defenders.filter { allSurroundings(it).any { mc.world?.getBlockState(it)?.let {state -> state.isAir || state.getCollisionShape(MinecraftClient.getInstance().world, it).isEmpty }!! } }
+                        val outstanders = defenders.filter { allSurroundings(it).any { mc.world?.getBlockState(it)?.let { state -> state.isAir || state.getCollisionShape(MinecraftClient.getInstance().world, it).isEmpty }!! } }
                         defenders.removeIf { bedParts.contains(it) }
 
                         if (outstanders.any { mc.world?.getBlockState(it)?.block is BedBlock })
@@ -166,7 +165,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                 stringBuilder.append("Used blocks: " + solution.map { mc.world?.getBlockState(BlockPos(it.x, it.y, it.z))?.block?.name?.string }.distinct().joinToString() + "\n")
                 stringBuilder.append("Breaking time: " + solution.sumOf {
                     floor(1.0 / (1.0 - Breaker.getBreakSpeed(BlockPos(it.x, it.y, it.z))))
-                }.let { if(!it.isInfinite()) (it  * (((MinecraftClient.getInstance() as IMinecraftClient).renderTickCounter) as IRenderTickCounter).tickTime / 1000.0).toString() + "s" else it } + "\n")
+                }.let { if (!it.isInfinite()) (it * (((MinecraftClient.getInstance() as IMinecraftClient).renderTickCounter) as IRenderTickCounter).tickTime / 1000.0).toString() + "s" else it } + "\n")
             }
 
             return stringBuilder.toString()
@@ -216,10 +215,10 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         fun getBreakSpeed(blockPos: BlockPos): Double {
             val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot ?: return 1.0
             val state = MinecraftClient.getInstance().world?.getBlockState(blockPos)
-            if(state?.isAir!! || state.getCollisionShape(MinecraftClient.getInstance().world, blockPos).isEmpty)
+            if (state?.isAir!! || state.getCollisionShape(MinecraftClient.getInstance().world, blockPos).isEmpty)
                 return 1.0
             val hardness = state.getHardness(MinecraftClient.getInstance().world, blockPos)
-            if(hardness <= 0.0f) return 1.0
+            if (hardness <= 0.0f) return 1.0
             var bestMult = 0.0f
             for (i in 0..8) {
                 MinecraftClient.getInstance().player?.inventory?.selectedSlot = i

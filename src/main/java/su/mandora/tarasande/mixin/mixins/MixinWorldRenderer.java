@@ -16,7 +16,7 @@ public class MixinWorldRenderer {
 
     @Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At("HEAD"), cancellable = true)
     public void injectRenderSky(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean bl, Runnable runnable, CallbackInfo ci) {
-        if(TarasandeMain.Companion.get().getManagerModule().get(ModuleFog.class).getEnabled())
+        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleFog.class).getEnabled())
             ci.cancel();
     }
 
