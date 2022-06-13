@@ -43,7 +43,8 @@ class ESPElementName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Ori
         val tagName = TagName.getTagName(entity)?.asOrderedText() ?: return
         matrices.push()
         val width = MinecraftClient.getInstance().textRenderer?.getWidth(tagName)!!
-        val factor = (sideWidth / width).toFloat()
+        var factor = (sideWidth / width).toFloat()
+        if(factor > 3.0f) factor = 3.0f
         matrices.translate(sideWidth / 2, 0.0, 0.0)
         matrices.scale(factor, factor, 1.0f)
         matrices.translate(-sideWidth / 2, 0.0, 0.0)
@@ -58,7 +59,7 @@ class ESPElementName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Ori
     }
 
     override fun getHeight(entity: Entity, sideWidth: Double): Double {
-        return MinecraftClient.getInstance().textRenderer.fontHeight.toDouble() * (sideWidth / MinecraftClient.getInstance().textRenderer?.getWidth(TagName.getTagName(entity)?.asOrderedText() ?: return 0.0)!!)
+        return MinecraftClient.getInstance().textRenderer.fontHeight.toDouble() * min(sideWidth / MinecraftClient.getInstance().textRenderer?.getWidth(TagName.getTagName(entity)?.asOrderedText() ?: return 0.0)!!, 3.0)
     }
 }
 
@@ -68,12 +69,12 @@ class ESPElementHealthBar : ESPElementRotatable("Health bar", arrayOf(Orientatio
     private val fadeColorEnd = ValueColor(this, "Fade color end", 0.0f /*red*/, 1.0f, 1.0f)
 
     override fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double) {
-        if (entity !is LivingEntity)
-            return
-        matrices.push()
         val height = getHeight(entity, sideWidth)
+        if(height == 0.0) return
+        entity as LivingEntity
+        matrices.push()
         val percentage = MathHelper.clamp(entity.health / entity.maxHealth, 0.0f, 1.0f)
-        RenderUtil.fillHorizontalGradient(matrices, 0.0, 0.0, sideWidth * percentage, height, fadeColorBegin.getColor().rgb, fadeColorEnd.getColor().rgb)
+        RenderUtil.fillHorizontalGradient(matrices, 0.0, 0.0, sideWidth * percentage, height, RenderUtil.colorInterpolate(fadeColorBegin.getColor(), fadeColorEnd.getColor(), 1.0 - percentage).rgb, fadeColorEnd.getColor().rgb)
         if (outlined.value) {
             RenderUtil.outlinedFill(matrices, 0.0, 0.0, sideWidth, height, (height * 0.5).toFloat(), Color.black.rgb)
         }

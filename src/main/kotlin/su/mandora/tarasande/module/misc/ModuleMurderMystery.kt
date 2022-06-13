@@ -48,7 +48,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
 
     val suspects = ConcurrentHashMap<GameProfile, Array<Item>>()
     private val fakeNewsTimer = TimeUtil()
-    private var fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
+    private var fakeNewsTime = ThreadLocalRandom.current().nextInt(45, 60) * 1000L
     private var switchedSlot = false
 
     // This method is a proof for my intellectual abilities
@@ -161,7 +161,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                 }
             }
             is EventIsEntityAttackable -> {
-                if (event.entity is PlayerEntity && !isMurderer() && !suspects.contains(event.entity.gameProfile))
+                if (event.entity is PlayerEntity && !isMurderer() && !suspects.containsKey(event.entity.gameProfile))
                     return@Consumer
             }
             is EventPacket -> {
@@ -174,7 +174,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                             return@Consumer
                         if (player !is PlayerEntity)
                             return@Consumer
-                        if (suspects.contains(player.gameProfile))
+                        if (suspects.containsKey(player.gameProfile))
                             return@Consumer
                         if (TarasandeMain.get().managerModule?.get(ModuleAntiBot::class.java)?.isBot(player)!!)
                             return@Consumer

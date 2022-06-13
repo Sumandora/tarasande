@@ -50,6 +50,14 @@
   - Items are classes with getSpace, draw(orientation, axis start, axis end)
   - Right click for values in classes
 - BedESP: go from inside to outside, instead of outside to inside
+- Friends: Custom Color
+- MurderMystery: Customize Detective Items
+- MurderMystery: Custom Message
+- Auto save config
+- MurderMystery: Chat Packet Order
+- Update Teams
+- MurderMystery: Custom Fake News Item(s)
+- Spammer: Only custom messages
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)
