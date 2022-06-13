@@ -2,9 +2,7 @@ package su.mandora.tarasande.mixin.mixins;
 
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,13 +35,6 @@ public abstract class MixinClientPlayerInteractionManager implements IClientPlay
     public void hookedSyncSelectedSlot(ClientPlayerInteractionManager instance) {
         if (!onlyPackets)
             syncSelectedSlot();
-    }
-
-    @Redirect(method = "interactItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;isCoolingDown(Lnet/minecraft/item/Item;)Z"))
-    public boolean hookedIsCoolingDown(ItemCooldownManager itemCooldownManager, Item item) {
-        if (onlyPackets)
-            return true;
-        return itemCooldownManager.isCoolingDown(item);
     }
 
     @Override

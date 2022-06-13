@@ -18,6 +18,8 @@ import net.minecraft.util.Hand
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
+import net.minecraft.util.math.random.Random
+import net.minecraft.util.math.random.RandomSplitter
 import org.lwjgl.opengl.GL11
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
@@ -28,7 +30,6 @@ import su.mandora.tarasande.mixin.accessor.IEntity
 import su.mandora.tarasande.mixin.accessor.IParticleManager
 import su.mandora.tarasande.mixin.accessor.IWorld
 import su.mandora.tarasande.util.math.rotation.RotationUtil
-import java.util.*
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 
@@ -115,17 +116,59 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
             }
         }
         persistentProjectileEntity.setPosition(mc.player?.getLerpedPos(mc.tickDelta)?.add(0.0, mc.player?.standingEyeHeight!! - 0.1, 0.0))
-        (persistentProjectileEntity as IEntity).also {
-            it.random = object : Random() {
-                override fun next(bits: Int): Int {
-                    return 0
-                }
+        (persistentProjectileEntity as IEntity).random = object : Random {
+            override fun split(): Random {
+                return this
+            }
 
-                override fun nextGaussian(): Double {
-                    return 0.0
+            override fun nextSplitter(): RandomSplitter {
+                val this2 = this // Kotlin is great
+                return object : RandomSplitter {
+                    override fun split(seed: String?): Random {
+                        return this2
+                    }
+
+                    override fun split(x: Int, y: Int, z: Int): Random {
+                        return this2
+                    }
+
+                    override fun addDebugInfo(info: StringBuilder?) {
+                    }
                 }
             }
+
+            override fun setSeed(seed: Long) {
+            }
+
+            override fun nextInt(): Int {
+                return 0
+            }
+
+            override fun nextInt(bound: Int): Int {
+                return 0
+            }
+
+            override fun nextLong(): Long {
+                return 0L
+            }
+
+            override fun nextBoolean(): Boolean {
+                return false
+            }
+
+            override fun nextFloat(): Float {
+                return 0.0F
+            }
+
+            override fun nextDouble(): Double {
+                return 0.0
+            }
+
+            override fun nextGaussian(): Double {
+                return 0.0
+            }
         }
+
         projectileItem.setupRoutine.accept(itemStack, persistentProjectileEntity)
         while (!collided) {
             val prevParticlesEnabled = (mc.particleManager as IParticleManager).areParticlesEnabled() // race conditions :c
@@ -160,8 +203,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
                 for (vec in path) {
                     bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).color(1f, 1f, 1f, 1f).next()
                 }
-                bufferBuilder.end()
-                BufferRenderer.draw(bufferBuilder)
+                BufferRenderer.drawWithShader(bufferBuilder.end())
                 event.matrices.pop()
                 RenderSystem.enableDepthTest()
                 GL11.glEnable(GL11.GL_LINE_SMOOTH)

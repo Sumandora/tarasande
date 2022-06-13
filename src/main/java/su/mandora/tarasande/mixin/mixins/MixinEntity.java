@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.MovementType;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -23,7 +24,6 @@ import su.mandora.tarasande.module.render.ModuleESP;
 import su.mandora.tarasande.util.math.rotation.RotationUtil;
 
 import java.awt.*;
-import java.util.Random;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity implements IEntity {

@@ -38,7 +38,8 @@ class ModuleLatency : Module("Latency", "Controls network latency", ModuleCatego
             is EventPacket -> {
                 if (event.cancelled) return@Consumer
                 if (event.packet != null) {
-                    if ((mc.networkHandler?.connection as IClientConnection).channel.attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY ||
+                    if (mc.networkHandler?.connection == null ||
+                        (mc.networkHandler?.connection as IClientConnection).channel.attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY ||
                         ((event.type == EventPacket.Type.RECEIVE && event.packet is DisconnectS2CPacket) || mc.currentScreen is DownloadingTerrainScreen)) {
                         this.switchState()
                         return@Consumer

@@ -77,7 +77,7 @@ class EventJump(var yaw: Float, val state: State) : Event(false) {
     }
 }
 
-class EventGamma(var gamma: Double) : Event(false)
+class EventGamma(var color: Int) : Event(false)
 class EventMovement(val entity: Entity, var velocity: Vec3d) : Event(false)
 class EventSlowdown(var usingItem: Boolean) : Event(false)
 class EventSlowdownAmount(var slowdownAmount: Float) : Event(false)

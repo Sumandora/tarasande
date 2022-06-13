@@ -14,7 +14,7 @@ import su.mandora.tarasande.event.EventInput;
 public class MixinKeyboardInput extends Input {
 
     @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/KeyboardInput;jumping:Z"))
-    public void injectTick(boolean slowDown, CallbackInfo ci) {
+    public void injectTick(boolean slowDown, float f, CallbackInfo ci) {
         EventInput eventInput = new EventInput(this.movementForward, this.movementSideways);
         TarasandeMain.Companion.get().getManagerEvent().call(eventInput);
 

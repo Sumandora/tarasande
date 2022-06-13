@@ -10,7 +10,7 @@ class ModuleFullBright : Module("Full bright", "Makes everything bright", Module
 
     val eventConsumer = Consumer<Event> { event ->
         if (event is EventGamma) {
-            event.gamma = Short.MAX_VALUE.toDouble()
+            event.color = -0x1
         }
     }
 }

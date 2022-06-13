@@ -37,7 +37,8 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
             is EventPacket -> {
                 if (event.cancelled) return@Consumer
                 if (event.packet != null) {
-                    if ((mc.networkHandler?.connection as IClientConnection).channel.attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY ||
+                    if (mc.networkHandler?.connection == null ||
+                        (mc.networkHandler?.connection as IClientConnection).channel.attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY ||
                         ((event.type == EventPacket.Type.RECEIVE && event.packet is DisconnectS2CPacket) || (!pulse.value && mc.currentScreen is DownloadingTerrainScreen))) {
                         this.switchState()
                         return@Consumer

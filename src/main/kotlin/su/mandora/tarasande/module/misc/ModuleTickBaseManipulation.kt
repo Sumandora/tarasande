@@ -12,6 +12,7 @@ import su.mandora.tarasande.event.EventTimeTravel
 import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
+import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueBind
 import su.mandora.tarasande.value.ValueBoolean
@@ -36,6 +37,13 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
     }
     private val defensive = ValueBoolean(this, "Defensive", false)
     private val skipCooldown = ValueBoolean(this, "Skip cooldown", true)
+    private val autoCharge = ValueBoolean(this, "Auto charge", true)
+    private val minimum = object : ValueNumber(this, "Minimum", 0.0, 500.0, 2000.0, 100.0) {
+        override fun isEnabled() = autoCharge.value
+    }
+    private val delay = object : ValueNumber(this, "Delay", 0.0, 600.0, 2000.0, 100.0) {
+        override fun isEnabled() = autoCharge.value
+    }
 
     private var prevTime = 0L
 
@@ -43,6 +51,9 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
     var shifted = 0L
 
     private var didHit = false
+
+    private val autoChargeDelay = TimeUtil()
+    private var prevUnchargePressed = false
 
     override fun onEnable() {
         shifted = 0L
@@ -86,7 +97,11 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
                 if (mc.player != null) {
                     didHit = false
                     prevShifted = shifted
-                    if (chargeKey.isPressed()) {
+
+                    if (!unchargeKey.isPressed() && prevUnchargePressed)
+                        autoChargeDelay.reset()
+
+                    if (!unchargeKey.isPressed() && (chargeKey.isPressed() || (autoCharge.value && minimum.value > shifted && autoChargeDelay.hasReached(delay.value.toLong())))) {
                         shifted += event.time - prevTime
 
                         if (resyncPositions.value) {
@@ -98,6 +113,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts mine
                     prevTime = event.time
                     if (unchargeKey.isPressed())
                         shifted = if (instantUncharge.value) 0L else max(0L, (shifted - unchargeSpeed.value).toLong())
+                    prevUnchargePressed = unchargeKey.isPressed()
                 } else {
                     shifted = 0L
                 }

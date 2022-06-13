@@ -24,7 +24,7 @@ class Friends {
                         val profile = (event.entity as PlayerEntity).gameProfile
                         for (friend in friends)
                             if (friend.first == profile && friend.second != null && friend.second != profile.name)
-                                event.displayName = event.displayName.shallowCopy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
+                                event.displayName = event.displayName.copy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
                     }
                 }
             }

@@ -8,6 +8,7 @@ import net.minecraft.util.math.Direction
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
+import su.mandora.tarasande.event.EventItemCooldown
 import su.mandora.tarasande.event.EventSlowdown
 import su.mandora.tarasande.event.EventSlowdownAmount
 import su.mandora.tarasande.event.EventUpdate
@@ -58,9 +59,11 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
                                 EventUpdate.State.POST -> {
                                     val hand = PlayerUtil.getUsedHand()
                                     if (hand != null) {
-                                        (mc.interactionManager as IClientPlayerInteractionManager).setOnlyPackets(true)
-                                        mc.interactionManager?.interactItem(mc.player, mc.world, hand)
-                                        (mc.interactionManager as IClientPlayerInteractionManager).setOnlyPackets(false)
+                                        val accessor = mc.interactionManager as IClientPlayerInteractionManager
+                                        val prevOnlyPackets = accessor.onlyPackets
+                                        accessor.onlyPackets = true
+                                        mc.interactionManager?.interactItem(mc.player, hand)
+                                        accessor.onlyPackets = prevOnlyPackets
                                     }
                                 }
                                 else -> {}
@@ -80,6 +83,7 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
                     }
                 }
             }
+            is EventItemCooldown -> if ((mc.interactionManager as IClientPlayerInteractionManager).onlyPackets) event.cooldown = 1.0F
         }
     }
 }

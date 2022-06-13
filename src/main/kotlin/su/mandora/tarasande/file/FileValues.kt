@@ -17,7 +17,11 @@ class FileValues : File("Values") {
                 jsonObject = JsonObject()
                 values.add(value.owner.javaClass.name, jsonObject)
             }
-            val jsonElement = value.save()
+            val jsonElement = try {
+                value.save()
+            } catch (t: Throwable) {
+                t.printStackTrace(); null
+            }
             if (jsonElement != null)
                 jsonObject.add(value.name, jsonElement)
         }

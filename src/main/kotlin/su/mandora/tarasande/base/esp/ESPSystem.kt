@@ -2,70 +2,82 @@ package su.mandora.tarasande.base.esp
 
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
+import net.minecraft.util.math.Vec3f
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.Manager
 import su.mandora.tarasande.esp.ESPElementBox
+import su.mandora.tarasande.esp.ESPElementHealthBar
 import su.mandora.tarasande.esp.ESPElementName
 import su.mandora.tarasande.module.render.ModuleESP
+import kotlin.math.abs
 
 class ManagerESP : Manager<ESPElement>() {
 
     init {
         add(
             ESPElementBox(),
-            ESPElementName()
+            ESPElementName(),
+            ESPElementHealthBar()
         )
     }
 
     fun renderBox(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
-        list.forEach {
-            when (it) {
-                is ESPElementRotatable -> {
-
-                }
-                else -> it.draw(matrices, entity, rectangle)
-            }
-        }
+        list.forEach { it.draw(matrices, entity, rectangle) }
     }
 }
 
 abstract class ESPElement(val name: String) {
     var enabled = true
-    var orientation: Orientation = Orientation.values()[0]
+    var orientation = Orientation.values()[0]
 
     abstract fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle)
 }
 
-abstract class ESPElementRotatable(name: String, val forbiddenOrientations: Array<Orientation>, val rotate: Boolean = true, val height: Double) : ESPElement(name) {
+abstract class ESPElementRotatable(name: String, private val forbiddenOrientations: Array<Orientation> = arrayOf(), private val rotate: Boolean = true) : ESPElement(name) {
     init {
-        Orientation.values().first { !forbiddenOrientations.contains(it) }
+        orientation = Orientation.values().first { !forbiddenOrientations.contains(it) }
     }
 
-    abstract fun draw(matrices: MatrixStack, entity: Entity, sideBegin: Double, sideEnd: Double)
+    abstract fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double)
 
     override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
-        val sideBegin = when (orientation) {
-            Orientation.TOP -> rectangle.x
-            Orientation.LEFT -> rectangle.y
-            Orientation.BOTTOM -> rectangle.z
-            Orientation.RIGHT -> rectangle.w
-        }
-        val sideEnd = when (orientation) {
-            Orientation.TOP -> rectangle.z
-            Orientation.LEFT -> rectangle.w
-            Orientation.BOTTOM -> rectangle.x
-            Orientation.RIGHT -> rectangle.y
+        val sideWidth = when (orientation) {
+            Orientation.TOP, Orientation.BOTTOM -> abs(rectangle.z - rectangle.x)
+            Orientation.LEFT, Orientation.RIGHT -> abs(rectangle.w - rectangle.y)
         }
         matrices.push()
-        var padding = 0.0
+        var padding = 2.0
         for (espElement in TarasandeMain.get().managerESP?.list!!) {
+            if (espElement == this)
+                break
             if (espElement.enabled && espElement is ESPElementRotatable && espElement.orientation == orientation)
-                padding += espElement.height
+                padding += espElement.getHeight(entity, sideWidth)
+        }
+        matrices.translate(rectangle.x, rectangle.y, 0.0)
+        if (rotate) {
+            if (orientation == Orientation.BOTTOM) {
+                matrices.translate((rectangle.z - rectangle.x) * 0.5, -(rectangle.y - rectangle.w) * 0.5, 0.0)
+                matrices.scale(-1.0f, -1.0f, 1.0f)
+                matrices.translate(-(rectangle.z - rectangle.x) * 0.5, (rectangle.y - rectangle.w) * 0.5, 0.0)
+            } else if (orientation == Orientation.LEFT || orientation == Orientation.RIGHT) {
+                matrices.translate(-(rectangle.y - rectangle.w) * 0.5, -(rectangle.y - rectangle.w) * 0.5, 0.0)
+                matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-90.0f))
+                matrices.translate((rectangle.y - rectangle.w) * 0.5, (rectangle.y - rectangle.w) * 0.5, 0.0)
+            }
+
+            if (orientation == Orientation.RIGHT) {
+                matrices.translate(-(rectangle.y - rectangle.w) * 0.5, (rectangle.z - rectangle.x) * 0.5, 0.0)
+                matrices.scale(-1.0f, -1.0f, 1.0f)
+                matrices.translate((rectangle.y - rectangle.w) * 0.5, -(rectangle.z - rectangle.x) * 0.5, 0.0)
+            }
         }
         matrices.translate(0.0, -padding, 0.0)
-        draw(matrices, entity, sideBegin, sideEnd)
+        matrices.translate(0.0, -getHeight(entity, sideWidth), 0.0)
+        draw(matrices, entity, sideWidth)
         matrices.pop()
     }
+
+    abstract fun getHeight(entity: Entity, sideWidth: Double): Double
 }
 
 enum class Orientation {

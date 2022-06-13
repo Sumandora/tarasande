@@ -1,8 +1,7 @@
 package su.mandora.tarasande.mixin.accessor;
 
 import net.minecraft.util.math.Vec3d;
-
-import java.util.Random;
+import net.minecraft.util.math.random.Random;
 
 public interface IEntity {
     Vec3d invokeGetRotationVector(float pitch, float yaw);

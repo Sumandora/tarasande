@@ -3,7 +3,6 @@ package su.mandora.tarasande.module.misc
 import net.minecraft.SharedConstants
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket
 import org.apache.commons.lang3.RandomStringUtils
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
@@ -49,7 +48,7 @@ class ModuleSpammer : Module("Spammer", "Spams something in chat", ModuleCategor
             is EventPollEvents -> {
                 if (timeUtil.hasReached(delay.value.toLong())) {
                     if (priorityMessages.isNotEmpty()) {
-                        mc.networkHandler?.sendPacket(ChatMessageC2SPacket(SharedConstants.stripInvalidChars(priorityMessages[0])))
+                        mc.player?.sendChatMessage(SharedConstants.stripInvalidChars(priorityMessages[0]))
                         priorityMessages.removeAt(0)
                         timeUtil.reset()
                         return@Consumer
@@ -93,7 +92,7 @@ class ModuleSpammer : Module("Spammer", "Spams something in chat", ModuleCategor
                         if (garbage.value) {
                             text = formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt())) + " $text " + formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt()))
                         }
-                        mc.networkHandler?.sendPacket(ChatMessageC2SPacket(SharedConstants.stripInvalidChars(text)))
+                        mc.player?.sendChatMessage(SharedConstants.stripInvalidChars(text))
                     }
                     timeUtil.reset()
                 }

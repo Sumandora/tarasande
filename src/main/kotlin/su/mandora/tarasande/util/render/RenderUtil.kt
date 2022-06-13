@@ -36,8 +36,7 @@ object RenderUtil {
         bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0f).color(g, h, k, f).next()
         bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0f).color(g, h, k, f).next()
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0f).color(g, h, k, f).next()
-        bufferBuilder.end()
-        BufferRenderer.draw(bufferBuilder)
+        BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
     }
@@ -74,8 +73,7 @@ object RenderUtil {
             bufferBuilder.vertex(matrix, (x1 + round + round * cos(quarterCircle * PI * 2)).toFloat(), (y2 - round + round * Math.sin(quarterCircle * PI * 2)).toFloat(), 0.0f).color(g, h, k, f).next()
             quarterCircle += 0.025f
         }
-        bufferBuilder.end()
-        BufferRenderer.draw(bufferBuilder)
+        BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
     }
@@ -101,8 +99,7 @@ object RenderUtil {
         bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0f).color(g, h, k, f).next()
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0f).color(g, h, k, f).next()
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0f).color(g, h, k, f).next()
-        bufferBuilder.end()
-        BufferRenderer.draw(bufferBuilder)
+        BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
         glLineWidth(lineWidth)
@@ -134,8 +131,7 @@ object RenderUtil {
         bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0f).color(g, h, i, f).next()
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0f).color(k, l, m, j).next()
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0f).color(k, l, m, j).next()
-        bufferBuilder.end()
-        BufferRenderer.draw(bufferBuilder)
+        BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
         glLineWidth(lineWidth)
@@ -159,11 +155,10 @@ object RenderUtil {
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR)
         bufferBuilder.vertex(matrix, x1.toFloat(), y1.toFloat(), 0.0f).color(k, l, m, j).next()
-        bufferBuilder.vertex(matrix, x1.toFloat(), y2.toFloat(), 0.0f).color(g, h, i, f).next()
+        bufferBuilder.vertex(matrix, x1.toFloat(), y2.toFloat(), 0.0f).color(k, l, m, j).next()
         bufferBuilder.vertex(matrix, x2.toFloat(), y2.toFloat(), 0.0f).color(g, h, i, f).next()
-        bufferBuilder.vertex(matrix, x2.toFloat(), y1.toFloat(), 0.0f).color(k, l, m, j).next()
-        bufferBuilder.end()
-        BufferRenderer.draw(bufferBuilder)
+        bufferBuilder.vertex(matrix, x2.toFloat(), y1.toFloat(), 0.0f).color(g, h, i, f).next()
+        BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
     }
@@ -188,8 +183,7 @@ object RenderUtil {
         bufferBuilder.vertex(matrix, x1.toFloat(), y2.toFloat(), 0.0f).color(k, l, m, j).next()
         bufferBuilder.vertex(matrix, x2.toFloat(), y2.toFloat(), 0.0f).color(k, l, m, j).next()
         bufferBuilder.vertex(matrix, x2.toFloat(), y1.toFloat(), 0.0f).color(g, h, i, f).next()
-        bufferBuilder.end()
-        BufferRenderer.draw(bufferBuilder)
+        BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
     }
@@ -215,8 +209,7 @@ object RenderUtil {
             bufferBuilder.vertex(matrix, (x - sin(circle * PI * 2) * radius).toFloat(), (y + cos(circle * PI * 2) * radius).toFloat(), 0.0f).color(g, h, k, f).next()
             circle += 0.01
         }
-        bufferBuilder.end()
-        BufferRenderer.draw(bufferBuilder)
+        BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
         glLineWidth(lineWidth)
@@ -242,8 +235,7 @@ object RenderUtil {
             bufferBuilder.vertex(matrix, (x - sin(circle * PI * 2) * radius).toFloat(), (y + cos(circle * PI * 2) * radius).toFloat(), 0.0f).color(g, h, k, f).next()
             circle += 0.01
         }
-        bufferBuilder.end()
-        BufferRenderer.draw(bufferBuilder)
+        BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
     }
@@ -311,9 +303,9 @@ object RenderUtil {
         bufferBuilder.vertex(matrix, minX, minY, maxZ).next()
         bufferBuilder.vertex(matrix, minX, maxY, maxZ).next()
         bufferBuilder.vertex(matrix, minX, maxY, minZ).next()
-        bufferBuilder.end()
 
-        BufferRenderer.draw(bufferBuilder)
+        BufferRenderer.drawWithShader(bufferBuilder.end())
+
         matrices.pop()
         RenderSystem.enableDepthTest()
         RenderSystem.enableBlend()

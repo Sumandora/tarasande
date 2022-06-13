@@ -14,7 +14,7 @@ class Rotation(var yaw: Float, var pitch: Float) {
 
     companion object {
         fun getGcd(): Double {
-            val sensitivity = MinecraftClient.getInstance().options.mouseSensitivity * 0.6f.toDouble() + 0.2f.toDouble()
+            val sensitivity = MinecraftClient.getInstance().options.mouseSensitivity.value * 0.6f.toDouble() + 0.2f.toDouble()
             val sensitivityPow3 = sensitivity * sensitivity * sensitivity
             val sensitivityPow3Mult8 = sensitivityPow3 * 8.0
 

@@ -7,7 +7,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -41,7 +41,7 @@ public class MixinTitleScreen extends Screen {
     @Redirect(method = "initWidgetsNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;"))
     public <T extends Element & Drawable & Selectable> T hookedAddDrawableChild(TitleScreen titleScreen, T drawableElement) {
         if (drawableElement instanceof ButtonWidget buttonWidget) {
-            if ((buttonWidget.getMessage() instanceof TranslatableText && ((TranslatableText) buttonWidget.getMessage()).getKey().equals("menu.online")) || buttonWidget.getMessage().asString().contains("Realms")) {
+            if ((buttonWidget.getMessage().getContent() instanceof TranslatableTextContent && ((TranslatableTextContent) buttonWidget.getMessage().getContent()).getKey().equals("menu.online")) || buttonWidget.getMessage().getString().contains("Realms")) {
                 buttonWidget.setWidth(buttonWidget.getWidth() / 2 - 2);
                 addDrawableChild(new ButtonWidget(buttonWidget.x + buttonWidget.getWidth() + 4, buttonWidget.y, buttonWidget.getWidth(), buttonWidget.getHeight(), Text.of("Account Manager"), button -> client.setScreen(TarasandeMain.Companion.get().getScreens().getBetterScreenAccountManager())));
 

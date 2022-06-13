@@ -42,8 +42,7 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
             val vec = tick.pos
             bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).color(1f, 1f, 1f, alpha).next()
         }
-        bufferBuilder.end()
-        BufferRenderer.draw(bufferBuilder)
+        BufferRenderer.drawWithShader(bufferBuilder.end())
     }
 
     override fun onDisable() {

@@ -23,6 +23,7 @@ import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueColor
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueRegistry
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 
@@ -41,13 +42,11 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     }
     private val murdererColorOverride = ValueColor(this, "Murderer color override", 0.0f, 1.0f, 1.0f, 1.0f)
     private val bowColorOverride = ValueColor(this, "Bow color override", 0.66f, 1.0f, 1.0f, 1.0f)
-    private val murdererAssistance = ValueBoolean(this, "Murderer assistance", true)
-    private val fakeNews = object : ValueBoolean(this, "Fake news", true) {
-        override fun isEnabled() = murdererAssistance.value
-    }
     private val broadcast = ValueMode(this, "Broadcast", false, "Disabled", "Explanatory", "Legit")
+    private val murdererAssistance = ValueBoolean(this, "Murderer assistance", true)
+    private val fakeNews = ValueMode(this, "Broadcast", false, "Disabled", "Explanatory", "Legit")
 
-    val suspects = HashMap<GameProfile, Array<Item>>()
+    val suspects = ConcurrentHashMap<GameProfile, Array<Item>>()
     private val fakeNewsTimer = TimeUtil()
     private var fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
     private var switchedSlot = false
@@ -82,9 +81,9 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         return sentence.trim()
     }
 
-    private fun accuse(player: PlayerEntity, illegalMainHand: Boolean, illegalOffHand: Boolean, mainHand: Item, offHand: Item) {
-        val message = when {
-            broadcast.isSelected(1) -> {
+    private fun accuse(player: PlayerEntity, illegalMainHand: Boolean, illegalOffHand: Boolean, mainHand: Item, offHand: Item, broadCastMode: Int) {
+        val message = when (broadCastMode) {
+            1 -> {
                 val itemMessage = when {
                     illegalMainHand && illegalOffHand -> StringUtil.uncoverTranslation(mainHand.translationKey) + " and " + StringUtil.uncoverTranslation(offHand.translationKey)
                     illegalMainHand -> StringUtil.uncoverTranslation(mainHand.translationKey)
@@ -93,7 +92,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                 }
                 TarasandeMain.get().name + " suspects " + player.gameProfile.name + (if (itemMessage != null) " because he held $itemMessage" else "")
             }
-            broadcast.isSelected(2) -> {
+            2 -> {
                 generateLegitSentence(player.gameProfile.name)
             }
             else -> null
@@ -127,14 +126,14 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                 if (event.state == EventUpdate.State.PRE) {
                     if (mc.world?.players?.size!! <= 1) return@Consumer
                     if (mc.interactionManager?.currentGameMode != GameMode.SPECTATOR)
-                        if (fakeNews.value && isMurderer() && murdererAssistance.value) {
+                        if (!fakeNews.isSelected(0) && isMurderer() && murdererAssistance.value) {
                             if (fakeNewsTimer.hasReached(fakeNewsTime)) {
                                 var player: PlayerEntity? = null
                                 while (player == null || player == mc.player) {
                                     player = mc.world?.players?.get(ThreadLocalRandom.current().nextInt(mc.world?.players?.size!!))
                                 }
                                 @Suppress("BooleanLiteralArgument")
-                                accuse(player, true, false, Items.IRON_SWORD, Items.AIR)
+                                accuse(player, true, false, Items.IRON_SWORD, Items.AIR, fakeNews.settings.indexOf(fakeNews.selected[0]))
                                 fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
                                 fakeNewsTimer.reset()
                             }
@@ -200,14 +199,14 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                                 else -> arrayOf()
                             }
                             if (!broadcast.isSelected(0)) {
-                                accuse(player, illegalMainHand, illegalOffHand, mainHand ?: Items.AIR, offHand ?: Items.AIR)
+                                accuse(player, illegalMainHand, illegalOffHand, mainHand ?: Items.AIR, offHand ?: Items.AIR, broadcast.settings.indexOf(broadcast.selected[0]))
                             }
                         }
                     }
             }
             is EventEntityColor -> {
                 if (event.entity is PlayerEntity)
-                    if (suspects.contains(event.entity.gameProfile))
+                    if (suspects.containsKey(event.entity.gameProfile))
                         event.color = murdererColorOverride.getColor()
                     else if (event.entity.inventory.mainHandStack.item == Items.BOW || event.entity.inventory.offHand[0].item == Items.BOW)
                         event.color = bowColorOverride.getColor()

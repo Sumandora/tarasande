@@ -1,7 +1,6 @@
 package su.mandora.tarasande.screen.menu.information
 
 import net.minecraft.client.MinecraftClient
-import net.minecraft.text.TranslatableText
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.screen.menu.information.Information
@@ -29,7 +28,7 @@ class InformationMurderer : Information("Murder Mystery", "Suspected murderers")
         val murderMystery = TarasandeMain.get().managerModule?.get(ModuleMurderMystery::class.java)!!
         if (murderMystery.enabled)
             if (murderMystery.suspects.isNotEmpty()) {
-                return "\n" + murderMystery.suspects.entries.joinToString("\n") { it.key.name + " (" + it.value.joinToString(" and ") { (it.name as TranslatableText).string } + ")" }
+                return "\n" + murderMystery.suspects.entries.joinToString("\n") { it.key.name + " (" + it.value.joinToString(" and ") { it.name.string } + ")" }
             }
 
         return null

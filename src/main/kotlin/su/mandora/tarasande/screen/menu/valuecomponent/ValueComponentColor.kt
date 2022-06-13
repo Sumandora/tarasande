@@ -98,8 +98,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
                 s += precision
             }
         }
-        bufferBuilder.end()
-        BufferRenderer.draw(bufferBuilder)
+        BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
         outlinedFill(matrices, x1, y1, x2, y2, 2.0f, Color.white.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
@@ -133,8 +132,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
                 circle += 0.01
             }
         }
-        bufferBuilder.end()
-        BufferRenderer.draw(bufferBuilder)
+        BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
         outlinedCircle(matrices, this.width - (getHeight() - 5) / 2.0 - sin((valueColor.hue + 0.5f) * PI * 2) * middleRadius, (getHeight() - 5) / 2.0 + cos((valueColor.hue + 0.5f) * PI * 2) * middleRadius, width / 2.0, 3.0f, Color.white.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)

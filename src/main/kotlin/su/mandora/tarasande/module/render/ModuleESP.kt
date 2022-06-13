@@ -2,6 +2,7 @@ package su.mandora.tarasande.module.render
 
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.Vector4f
@@ -14,6 +15,8 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventRender2D
 import su.mandora.tarasande.event.EventRender3D
 import su.mandora.tarasande.mixin.accessor.IMatrix4f
+import su.mandora.tarasande.module.combat.ModuleAntiBot
+import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueRegistry
 import java.util.function.Consumer
@@ -24,13 +27,17 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
     private val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
         override fun keyToString(key: Any?) = (key as EntityType<*>).name.string
     }
+    private val hideBots = object : ValueBoolean(this, "Hide bots", false) {
+        override fun isEnabled() = entities.list.contains(EntityType.PLAYER)
+    }
+
 //    private val espStudio = object : ValueButton(this, "ESP Studio") {
 //        override fun onChange() {
 //            mc.setScreen(null)
 //        }
 //    }
 
-    fun filter(entity: Entity) = entities.list.contains(entity.type)
+    fun filter(entity: Entity) = entities.list.contains(entity.type) && (!hideBots.value || entity !is PlayerEntity || !TarasandeMain.get().managerModule?.get(ModuleAntiBot::class.java)?.isBot(entity)!!)
 
     private val hashMap = HashMap<Entity, Rectangle>()
 

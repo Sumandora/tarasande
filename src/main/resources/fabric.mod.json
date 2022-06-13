@@ -3,7 +3,7 @@
   "id": "tarasande",
   "version": "${version}",
   "name": "tarasande",
-  "description": "Tarasande is a fabric mod designed to enhance and improve gameplay",
+  "description": "Tarasande is a fabric mod designed to enhance, improve and automate gameplay",
   "authors": [
     "Sumandora/Johannes"
   ],
@@ -23,8 +23,5 @@
   },
   "mixins": [
     "tarasande.mixins.json"
-  ],
-  "depends": {
-    "java": ">=17"
-  }
+  ]
 }

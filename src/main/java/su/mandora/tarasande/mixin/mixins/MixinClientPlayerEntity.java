@@ -6,7 +6,9 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerAbilities;
+import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
@@ -29,8 +31,8 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Shadow
     private float lastPitch;
 
-    public MixinClientPlayerEntity(ClientWorld world, GameProfile profile) {
-        super(world, profile);
+    public MixinClientPlayerEntity(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
+        super(world, profile, publicKey);
     }
 
     @Shadow

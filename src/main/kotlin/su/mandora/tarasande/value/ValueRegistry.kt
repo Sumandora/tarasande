@@ -2,6 +2,7 @@ package su.mandora.tarasande.value
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
 import net.minecraft.util.registry.Registry
 import su.mandora.tarasande.base.value.Value
 import java.util.concurrent.CopyOnWriteArrayList
@@ -16,13 +17,14 @@ abstract class ValueRegistry<T>(owner: Any, name: String, val registry: Registry
 
     override fun save(): JsonElement {
         val jsonArray = JsonArray()
-        list.forEach { jsonArray.add(registry.indexOf(it)) }
+        list.forEach { jsonArray.add(keyToString(it)) }
         return jsonArray
     }
 
     override fun load(jsonElement: JsonElement) {
         val jsonArray = jsonElement.asJsonArray
         list.clear()
+        list.addAll(registry.entrySet.filter { jsonArray.contains(JsonPrimitive(keyToString(it))) }.map { it.value })
         jsonArray.forEach { list.add(registry.get(it.asInt)) }
     }
 

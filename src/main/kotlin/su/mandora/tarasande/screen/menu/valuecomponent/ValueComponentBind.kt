@@ -100,11 +100,14 @@ class ValueComponentBind(value: Value) : ValueComponent(value) {
             return "_"
         when (type) {
             ValueBind.Type.KEY -> {
-                var keyName = GLFW.glfwGetKeyName(button, 0)
+                var keyName: String?
                 if (button == GLFW.GLFW_KEY_UNKNOWN)
                     keyName = "none"
-                else if (keyName == null)
-                    keyName = GLFW.glfwGetKeyName(GLFW.GLFW_KEY_UNKNOWN, GLFW.glfwGetKeyScancode(button))
+                else {
+                    keyName = GLFW.glfwGetKeyName(button, -1)
+                    if (keyName == null)
+                        keyName = GLFW.glfwGetKeyName(GLFW.GLFW_KEY_UNKNOWN, GLFW.glfwGetKeyScancode(button))
+                }
 
                 if (keyName == null || keyName.trim().isEmpty() || escapeCharacters.contains(keyName)) {
                     for (field in GLFW::class.java.declaredFields) {
@@ -122,8 +125,8 @@ class ValueComponentBind(value: Value) : ValueComponent(value) {
                 }
                 return keyName
             }
-            ValueBind.Type.MOUSE -> return "Mouse#" + button
-            else -> return "invalid type"
+            ValueBind.Type.MOUSE -> return "Mouse#$button"
+            else -> return "Invalid type"
         }
     }
 }
