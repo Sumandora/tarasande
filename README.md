@@ -49,6 +49,8 @@
 - Configure ESP / "ESP Studio" - Fully customizable 2D esp setting like spirthack
   - Items are classes with getSpace, draw(orientation, axis start, axis end)
   - Right click for values in classes
+- Update to 1.19
+- BedESP: go from inside to outside, instead of outside to inside
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)
