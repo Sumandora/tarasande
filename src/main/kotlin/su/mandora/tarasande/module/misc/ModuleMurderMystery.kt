@@ -1,6 +1,7 @@
 package su.mandora.tarasande.module.misc
 
 import com.mojang.authlib.GameProfile
+import net.minecraft.SharedConstants
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
@@ -10,7 +11,6 @@ import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket
 import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.util.registry.Registry
-import net.minecraft.world.GameMode
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
@@ -19,10 +19,8 @@ import su.mandora.tarasande.event.*
 import su.mandora.tarasande.module.combat.ModuleAntiBot
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.string.StringUtil
-import su.mandora.tarasande.value.ValueBoolean
-import su.mandora.tarasande.value.ValueColor
-import su.mandora.tarasande.value.ValueMode
-import su.mandora.tarasande.value.ValueRegistry
+import su.mandora.tarasande.value.*
+import java.util.IllegalFormatConversionException
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
@@ -30,7 +28,7 @@ import java.util.function.Consumer
 class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on held items", ModuleCategory.MISC) {
 
     private val detectionMethod = ValueMode(this, "Detection method", false, "Allow", "Disallow")
-    private val allowedItems = object : ValueRegistry<Item>(this, "Allowed items", Registry.ITEM, Items.FILLED_MAP, Items.BOW, Items.ARROW, Items.ARMOR_STAND, Items.RED_BED, Items.GOLD_INGOT, Items.PAPER, Items.WOODEN_SHOVEL, Items.LIGHT_BLUE_STAINED_GLASS, Items.SNOWBALL, Items.PLAYER_HEAD, Items.COMPASS, Items.RED_BED, Items.TNT) {
+    private val allowedItems = object : ValueRegistry<Item>(this, "Allowed items", Registry.ITEM, Items.GOLD_INGOT) {
         override fun isEnabled() = detectionMethod.isSelected(0)
         override fun filter(key: Item) = key != Items.AIR
         override fun keyToString(key: Any?) = (key as Item).name.string
@@ -41,15 +39,36 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         override fun keyToString(key: Any?) = (key as Item).name.string
     }
     private val murdererColorOverride = ValueColor(this, "Murderer color override", 0.0f, 1.0f, 1.0f, 1.0f)
-    private val bowColorOverride = ValueColor(this, "Bow color override", 0.66f, 1.0f, 1.0f, 1.0f)
-    private val broadcast = ValueMode(this, "Broadcast", false, "Disabled", "Explanatory", "Legit")
+    private val highlightDetectives = ValueBoolean(this, "Highlight detectives", false)
+    private val detectiveColorOverride = object : ValueColor(this, "Bow color override", 0.66f, 1.0f, 1.0f, 1.0f) {
+        override fun isEnabled() = highlightDetectives.value
+    }
+    private val detectiveItems = object : ValueRegistry<Item>(this, "Detective items", Registry.ITEM, Items.BOW) {
+        override fun isEnabled() = highlightDetectives.value
+        override fun filter(key: Item) = key != Items.AIR
+        override fun keyToString(key: Any?) = (key as Item).name.string
+    }
+    private val broadcast = ValueMode(this, "Broadcast", false, "Disabled", "Explanatory", "Legit", "Custom")
+    private val customBroadcastMessage = object : ValueText(this, "Custom fake news message", "I'm sure it is %s because he held %s") {
+        override fun isEnabled() = broadcast.isSelected(3)
+    }
     private val murdererAssistance = ValueBoolean(this, "Murderer assistance", true)
-    private val fakeNews = ValueMode(this, "Broadcast", false, "Disabled", "Explanatory", "Legit")
+    private val fakeNews = ValueMode(this, "Fake news", false, "Disabled", "Explanatory", "Legit", "Custom")
+    private val customFakeNewsMessage = object : ValueText(this, "Custom fake news message", "I'm sure it is %s because he held %s") {
+        override fun isEnabled() = fakeNews.isSelected(3)
+    }
+    private val fakeNewsItems = object : ValueRegistry<Item>(this, "Fake news items", Registry.ITEM, Items.IRON_SWORD) {
+        override fun isEnabled() = !fakeNews.isSelected(0)
+        override fun filter(key: Item) = key != Items.AIR
+        override fun keyToString(key: Any?) = (key as Item).name.string
+    }
 
     val suspects = ConcurrentHashMap<GameProfile, Array<Item>>()
     private val fakeNewsTimer = TimeUtil()
-    private var fakeNewsTime = ThreadLocalRandom.current().nextInt(45, 60) * 1000L
+    private var fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
     private var switchedSlot = false
+
+    private val messages = ArrayList<String>()
 
     // This method is a proof for my intellectual abilities
     private fun generateLegitSentence(suspect: String): String {
@@ -81,24 +100,32 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         return sentence.trim()
     }
 
-    private fun accuse(player: PlayerEntity, illegalMainHand: Boolean, illegalOffHand: Boolean, mainHand: Item, offHand: Item, broadCastMode: Int) {
+    private fun accuse(player: PlayerEntity, illegalMainHand: Boolean, illegalOffHand: Boolean, mainHand: Item, offHand: Item, broadCastMode: Int, customMessage: String) {
+        val itemMessage = when {
+            illegalMainHand && illegalOffHand -> StringUtil.uncoverTranslation(mainHand.translationKey) + " and " + StringUtil.uncoverTranslation(offHand.translationKey)
+            illegalMainHand -> StringUtil.uncoverTranslation(mainHand.translationKey)
+            illegalOffHand -> StringUtil.uncoverTranslation(offHand.translationKey)
+            else -> "a illegal item" // why dafuq are we here
+        }
         val message = when (broadCastMode) {
             1 -> {
-                val itemMessage = when {
-                    illegalMainHand && illegalOffHand -> StringUtil.uncoverTranslation(mainHand.translationKey) + " and " + StringUtil.uncoverTranslation(offHand.translationKey)
-                    illegalMainHand -> StringUtil.uncoverTranslation(mainHand.translationKey)
-                    illegalOffHand -> StringUtil.uncoverTranslation(offHand.translationKey)
-                    else -> null // why dafuq are we here
-                }
-                TarasandeMain.get().name + " suspects " + player.gameProfile.name + (if (itemMessage != null) " because he held $itemMessage" else "")
+                TarasandeMain.get().name + " suspects " + player.gameProfile.name + (" because he held $itemMessage")
             }
             2 -> {
                 generateLegitSentence(player.gameProfile.name)
             }
+            3 -> {
+                try {
+                    customMessage.format(player.gameProfile.name, itemMessage)
+                } catch (exception: IllegalFormatConversionException) {
+                    exception.printStackTrace()
+                    customMessage // fallback to not doing anything at all
+                }
+            }
             else -> null
         }
         if (message != null && message.isNotEmpty())
-            mc.player?.sendChatMessage(message)
+            messages.add(message)
     }
 
     private fun isIllegalItem(item: Item) = if (item == Items.AIR) false else when {
@@ -122,24 +149,28 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
 
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
+            is EventPollEvents -> {
+                if(messages.isNotEmpty())
+                    mc.player?.sendChatMessage(SharedConstants.stripInvalidChars(messages.removeFirst()))
+            }
             is EventUpdate -> {
                 if (event.state == EventUpdate.State.PRE) {
                     if (mc.world?.players?.size!! <= 1) return@Consumer
-                    if (mc.interactionManager?.currentGameMode != GameMode.SPECTATOR)
-                        if (!fakeNews.isSelected(0) && isMurderer() && murdererAssistance.value) {
-                            if (fakeNewsTimer.hasReached(fakeNewsTime)) {
-                                var player: PlayerEntity? = null
-                                while (player == null || player == mc.player) {
-                                    player = mc.world?.players?.get(ThreadLocalRandom.current().nextInt(mc.world?.players?.size!!))
-                                }
-                                @Suppress("BooleanLiteralArgument")
-                                accuse(player, true, false, Items.IRON_SWORD, Items.AIR, fakeNews.settings.indexOf(fakeNews.selected[0]))
-                                fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
-                                fakeNewsTimer.reset()
+                    if (!fakeNews.isSelected(0) && isMurderer() && murdererAssistance.value) {
+                        if (fakeNewsTimer.hasReached(fakeNewsTime)) {
+                            var player: PlayerEntity? = null
+                            while (player == null || player == mc.player) {
+                                player = mc.world?.players?.get(ThreadLocalRandom.current().nextInt(mc.world?.players?.size!!))
                             }
-                        } else {
+                            @Suppress("BooleanLiteralArgument")
+                            val randomIllegalItem = fakeNewsItems.list.randomOrNull()
+                            accuse(player, randomIllegalItem != null, false, randomIllegalItem ?: Items.AIR, Items.AIR, fakeNews.settings.indexOf(fakeNews.selected[0]), customFakeNewsMessage.value)
                             fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
+                            fakeNewsTimer.reset()
                         }
+                    } else {
+                        fakeNewsTimer.reset()
+                    }
                 }
             }
             is EventAttackEntity -> {
@@ -170,7 +201,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                         suspects.clear()
                     } else if (event.packet is EntityEquipmentUpdateS2CPacket) {
                         val player = mc.world?.getEntityById(event.packet.id)
-                        if (player == mc.player) // i swear i almost played a round without this
+                        if (player == mc.player) // I swear I almost played a round without this
                             return@Consumer
                         if (player !is PlayerEntity)
                             return@Consumer
@@ -199,7 +230,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                                 else -> arrayOf()
                             }
                             if (!broadcast.isSelected(0)) {
-                                accuse(player, illegalMainHand, illegalOffHand, mainHand ?: Items.AIR, offHand ?: Items.AIR, broadcast.settings.indexOf(broadcast.selected[0]))
+                                accuse(player, illegalMainHand, illegalOffHand, mainHand ?: Items.AIR, offHand ?: Items.AIR, broadcast.settings.indexOf(broadcast.selected[0]), customBroadcastMessage.value)
                             }
                         }
                     }
@@ -208,8 +239,8 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                 if (event.entity is PlayerEntity)
                     if (suspects.containsKey(event.entity.gameProfile))
                         event.color = murdererColorOverride.getColor()
-                    else if (event.entity.inventory.mainHandStack.item == Items.BOW || event.entity.inventory.offHand[0].item == Items.BOW)
-                        event.color = bowColorOverride.getColor()
+                    else if (highlightDetectives.value && detectiveItems.list.any { event.entity.inventory.mainHandStack.item == it || event.entity.inventory.offHand[0].item == it })
+                        event.color = detectiveColorOverride.getColor()
             }
         }
     }

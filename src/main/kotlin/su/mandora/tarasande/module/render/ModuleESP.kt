@@ -67,10 +67,10 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
     private fun matrixVectorMultiply(matrix4f: Matrix4f, vector: Vector4f): Vector4f {
         val accessor = matrix4f as IMatrix4f
         return Vector4f(
-            accessor.a00 * vector.x + accessor.a01 * vector.y + accessor.a02 * vector.z + accessor.a03 * vector.w,
-            accessor.a10 * vector.x + accessor.a11 * vector.y + accessor.a12 * vector.z + accessor.a13 * vector.w,
-            accessor.a20 * vector.x + accessor.a21 * vector.y + accessor.a22 * vector.z + accessor.a23 * vector.w,
-            accessor.a30 * vector.x + accessor.a31 * vector.y + accessor.a32 * vector.z + accessor.a33 * vector.w
+            accessor.tarasande_getA00() * vector.x + accessor.tarasande_getA01() * vector.y + accessor.tarasande_getA02() * vector.z + accessor.tarasande_getA03() * vector.w,
+            accessor.tarasande_getA10() * vector.x + accessor.tarasande_getA11() * vector.y + accessor.tarasande_getA12() * vector.z + accessor.tarasande_getA13() * vector.w,
+            accessor.tarasande_getA20() * vector.x + accessor.tarasande_getA21() * vector.y + accessor.tarasande_getA22() * vector.z + accessor.tarasande_getA23() * vector.w,
+            accessor.tarasande_getA30() * vector.x + accessor.tarasande_getA31() * vector.y + accessor.tarasande_getA32() * vector.z + accessor.tarasande_getA33() * vector.w
         )
     }
 

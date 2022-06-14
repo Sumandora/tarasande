@@ -7,7 +7,7 @@ import net.minecraft.util.registry.Registry
 import su.mandora.tarasande.base.value.Value
 import java.util.concurrent.CopyOnWriteArrayList
 
-abstract class ValueRegistry<T>(owner: Any, name: String, val registry: Registry<T>, vararg keys: T) : Value(owner, name) {
+abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: Registry<T>, vararg keys: T) : Value(owner, name) {
 
     var list = CopyOnWriteArrayList<T>()
 
@@ -24,8 +24,7 @@ abstract class ValueRegistry<T>(owner: Any, name: String, val registry: Registry
     override fun load(jsonElement: JsonElement) {
         val jsonArray = jsonElement.asJsonArray
         list.clear()
-        list.addAll(registry.entrySet.filter { jsonArray.contains(JsonPrimitive(keyToString(it))) }.map { it.value })
-        jsonArray.forEach { list.add(registry.get(it.asInt)) }
+        list.addAll(registry.filter { key -> jsonArray.any { it.asString.equals(keyToString(key)) } })
     }
 
     open fun filter(key: T) = true

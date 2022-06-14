@@ -14,7 +14,7 @@ public class MixinLanguageManager implements ILanguageManager {
     private static LanguageDefinition ENGLISH_US;
 
     @Override
-    public LanguageDefinition getEnglishUS() {
+    public LanguageDefinition tarasande_getEnglishUS() {
         return ENGLISH_US;
     }
 }

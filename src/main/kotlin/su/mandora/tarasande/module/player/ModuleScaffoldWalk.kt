@@ -113,7 +113,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private fun placeBlock(blockHitResult: BlockHitResult) {
         val original = mc.crosshairTarget
         mc.crosshairTarget = blockHitResult
-        (mc as IMinecraftClient).invokeDoItemUse()
+        (mc as IMinecraftClient).tarasande_invokeDoItemUse()
         mc.crosshairTarget = original
     }
 
@@ -180,7 +180,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                         val newPoint = point.add(Vec3d(x, y, z))
                                         val rot = RotationUtil.getRotations(mc.player?.eyePos!!, newPoint)
                                         val rotationVector =
-                                            (mc.player as IEntity).invokeGetRotationVector(rot.pitch, rot.yaw)
+                                            (mc.player as IEntity).tarasande_invokeGetRotationVector(rot.pitch, rot.yaw)
                                         val hitResult = PlayerUtil.rayCast(
                                             mc.player?.eyePos!!,
                                             mc.player?.eyePos?.add(rotationVector.multiply(mc.interactionManager?.reachDistance?.toDouble()!!))!!
@@ -271,7 +271,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
 
                 if (airBelow || alwaysClick.value) {
                     val newEdgeDist = getNewEdgeDist()
-                    val rotationVector = (mc.player as IEntity).invokeGetRotationVector(
+                    val rotationVector = (mc.player as IEntity).tarasande_invokeGetRotationVector(
                         RotationUtil.fakeRotation?.pitch!!,
                         RotationUtil.fakeRotation?.yaw!!
                     )

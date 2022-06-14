@@ -130,19 +130,19 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
         return (moduleESP.getEnabled() && moduleESP.getMode().isSelected(0) && moduleESP.filter(entity)) || entity.isGlowing();
     }
 
-    @Inject(method = "createUserApiService", at = @At("HEAD"), cancellable = true)
-    public void injectCreateUserApiService(YggdrasilAuthenticationService authService, RunArgs runArgs, CallbackInfoReturnable<UserApiService> cir) {
-        ReflectorClass reflectorClass = ReflectionUtil.INSTANCE.createReflectorClass("net.fabricmc.loader.launch.common.FabricLauncherBase");
-        if (reflectorClass != null) {
-            ReflectorAny getLauncher = reflectorClass.invokeMethod("getLauncher");
-            if (getLauncher != null) {
-                ReflectorAny isDevelopment = getLauncher.asReflectorClass().invokeMethod("isDevelopment");
-                if (isDevelopment != null && isDevelopment.interpretAs(Boolean.class)) {
-                    cir.setReturnValue(UserApiService.OFFLINE);
-                }
-            }
-        }
-    }
+//    @Inject(method = "createUserApiService", at = @At("HEAD"), cancellable = true)
+//    public void injectCreateUserApiService(YggdrasilAuthenticationService authService, RunArgs runArgs, CallbackInfoReturnable<UserApiService> cir) {
+//        ReflectorClass reflectorClass = ReflectionUtil.INSTANCE.createReflectorClass("net.fabricmc.loader.launch.common.FabricLauncherBase");
+//        if (reflectorClass != null) {
+//            ReflectorAny getLauncher = reflectorClass.invokeMethod("getLauncher");
+//            if (getLauncher != null) {
+//                ReflectorAny isDevelopment = getLauncher.asReflectorClass().invokeMethod("isDevelopment");
+//                if (isDevelopment != null && isDevelopment.interpretAs(Boolean.class)) {
+//                    cir.setReturnValue(UserApiService.OFFLINE);
+//                }
+//            }
+//        }
+//    }
 
     @Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z", shift = At.Shift.BEFORE), slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doAttack()Z")))
     public void injectHandleInputEvents(CallbackInfo ci) {
@@ -153,7 +153,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     public void hookedHandleBlockBreaking(MinecraftClient instance, boolean bl) {
         EventHandleBlockBreaking eventHandleBlockBreaking = new EventHandleBlockBreaking(bl);
         TarasandeMain.Companion.get().getManagerEvent().call(eventHandleBlockBreaking);
-        ((IMinecraftClient) instance).invokeHandleBlockBreaking(eventHandleBlockBreaking.getParameter());
+        ((IMinecraftClient) instance).tarasande_invokeHandleBlockBreaking(eventHandleBlockBreaking.getParameter());
     }
 
     @Inject(method = "getSessionService", at = @At("RETURN"), cancellable = true)
@@ -165,42 +165,42 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     }
 
     @Override
-    public void setSession(Session session) {
+    public void tarasande_setSession(Session session) {
         this.session = session;
     }
 
     @Override
-    public int getAttackCooldown() {
+    public int tarasande_getAttackCooldown() {
         return this.attackCooldown;
     }
 
     @Override
-    public void setAttackCooldown(int attackCooldown) {
+    public void tarasande_setAttackCooldown(int attackCooldown) {
         this.attackCooldown = attackCooldown;
     }
 
     @Override
-    public void invokeDoItemUse() {
+    public void tarasande_invokeDoItemUse() {
         this.doItemUse();
     }
 
     @Override
-    public void invokeDoAttack() {
+    public void tarasande_invokeDoAttack() {
         this.doAttack();
     }
 
     @Override
-    public RenderTickCounter getRenderTickCounter() {
+    public RenderTickCounter tarasande_getRenderTickCounter() {
         return renderTickCounter;
     }
 
     @Override
-    public void invokeHandleBlockBreaking(boolean bl) {
+    public void tarasande_invokeHandleBlockBreaking(boolean bl) {
         handleBlockBreaking(bl);
     }
 
     @Override
-    public int getCurrentFPS() {
+    public int tarasande_getCurrentFPS() {
         return currentFps;
     }
 }

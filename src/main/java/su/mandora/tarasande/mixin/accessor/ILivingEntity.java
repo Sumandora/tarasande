@@ -1,21 +1,21 @@
 package su.mandora.tarasande.mixin.accessor;
 
 public interface ILivingEntity {
-    double getServerX();
+    double tarasande_getServerX();
 
-    double getServerY();
+    double tarasande_getServerY();
 
-    double getServerZ();
+    double tarasande_getServerZ();
 
-    double getServerYaw();
+    double tarasande_getServerYaw();
 
-    double getServerPitch();
+    double tarasande_getServerPitch();
 
-    int getBodyTrackingIncrements();
+    int tarasande_getBodyTrackingIncrements();
 
-    void setBodyTrackingIncrements(int value);
+    void tarasande_setBodyTrackingIncrements(int value);
 
-    int getLastAttackedTicks();
+    int tarasande_getLastAttackedTicks();
 
-    void setLastAttackedTicks(int lastAttackedTicks);
+    void tarasande_setLastAttackedTicks(int lastAttackedTicks);
 }

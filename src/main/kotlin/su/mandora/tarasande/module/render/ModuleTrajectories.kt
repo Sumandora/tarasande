@@ -71,7 +71,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
 
             var vec3d = Vec3d(-i.toDouble(), MathHelper.clamp(-(k / j), -5.0f, 5.0f).toDouble(), -h.toDouble())
             val m = vec3d.length()
-            vec3d = vec3d.multiply(0.6 / m + 0.5 + (persistentProjectileEntity as IEntity).random.nextGaussian() * 0.0045, 0.6 / m + 0.5 + (persistentProjectileEntity as IEntity).random.nextGaussian() * 0.0045, 0.6 / m + 0.5 + (persistentProjectileEntity as IEntity).random.nextGaussian() * 0.0045)
+            vec3d = vec3d.multiply(0.6 / m + 0.5 + (persistentProjectileEntity as IEntity).tarasande_getRandom().nextGaussian() * 0.0045, 0.6 / m + 0.5 + (persistentProjectileEntity as IEntity).tarasande_getRandom().nextGaussian() * 0.0045, 0.6 / m + 0.5 + (persistentProjectileEntity as IEntity).tarasande_getRandom().nextGaussian() * 0.0045)
 
             persistentProjectileEntity.velocity = vec3d
             val rotation = RotationUtil.getRotations(vec3d)
@@ -85,14 +85,14 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
             }
         },
         ProjectileItem(Items.CROSSBOW.javaClass, EntityType.ARROW, true) { stack, persistentProjectileEntity ->
-            persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, (stack.item as ICrossbowItem).invokeGetSpeed(stack), 1.0f)
+            persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, (stack.item as ICrossbowItem).tarasande_invokeGetSpeed(stack), 1.0f)
 
         }
     )
 
     private fun predict(itemStack: ItemStack): ArrayList<Vec3d> {
         val projectileItem = projectileItems.first { it.isSame(itemStack.item) }
-        (mc.world as IWorld).setIsClient(false)
+        (mc.world as IWorld).tarasande_setIsClient(false)
         val path = ArrayList<Vec3d>()
         var collided = false
 
@@ -116,7 +116,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
             }
         }
         persistentProjectileEntity.setPosition(mc.player?.getLerpedPos(mc.tickDelta)?.add(0.0, mc.player?.standingEyeHeight!! - 0.1, 0.0))
-        (persistentProjectileEntity as IEntity).random = object : Random {
+        (persistentProjectileEntity as IEntity).tarasande_setRandom(object : Random {
             override fun split(): Random {
                 return this
             }
@@ -167,18 +167,18 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
             override fun nextGaussian(): Double {
                 return 0.0
             }
-        }
+        })
 
         projectileItem.setupRoutine.accept(itemStack, persistentProjectileEntity)
         while (!collided) {
-            val prevParticlesEnabled = (mc.particleManager as IParticleManager).areParticlesEnabled() // race conditions :c
-            (mc.particleManager as IParticleManager).setParticlesEnabled(false)
+            val prevParticlesEnabled = (mc.particleManager as IParticleManager).tarasande_areParticlesEnabled() // race conditions :c
+            (mc.particleManager as IParticleManager).tarasande_setParticlesEnabled(false)
             persistentProjectileEntity.tick()
-            (mc.particleManager as IParticleManager).setParticlesEnabled(prevParticlesEnabled)
+            (mc.particleManager as IParticleManager).tarasande_setParticlesEnabled(prevParticlesEnabled)
             if (persistentProjectileEntity.pos.let { it.y < mc.world?.bottomY!! || it == path.lastOrNull() }) break
             path.add(persistentProjectileEntity.pos)
         }
-        (mc.world as IWorld).setIsClient(true)
+        (mc.world as IWorld).tarasande_setIsClient(true)
         return path
     }
 

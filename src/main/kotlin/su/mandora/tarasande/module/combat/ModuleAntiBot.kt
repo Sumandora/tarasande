@@ -42,7 +42,7 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
                     when (event.packet) {
                         is PlaySoundS2CPacket -> {
                             for (entity in mc.world?.entities!!) {
-                                if (entity is PlayerEntity && entity.pos?.distanceTo(Vec3d(event.packet.x, event.packet.y, event.packet.z))!! <= soundDistance.value) {
+                                if (entity is PlayerEntity && entity.pos?.squaredDistanceTo(Vec3d(event.packet.x, event.packet.y, event.packet.z))!! <= soundDistance.value * soundDistance.value) {
                                     passedSound.add(entity)
                                 }
                             }

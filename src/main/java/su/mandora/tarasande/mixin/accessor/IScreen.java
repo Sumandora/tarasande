@@ -6,7 +6,7 @@ import net.minecraft.client.gui.Selectable;
 import java.util.List;
 
 public interface IScreen {
-    List<Drawable> getDrawables();
+    List<Drawable> tarasande_getDrawables();
 
-    List<Selectable> getSelectables();
+    List<Selectable> tarasande_getSelectables();
 }

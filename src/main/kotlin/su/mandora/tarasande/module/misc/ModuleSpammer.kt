@@ -18,22 +18,27 @@ import java.util.function.Consumer
 import kotlin.math.round
 import kotlin.math.sqrt
 
-class ModuleSpammer : Module("Spammer", "Spams something in chat", ModuleCategory.MISC) {
+class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleCategory.MISC) {
 
     private val delay = ValueNumber(this, "Delay", 0.0, 2000.0, 10000.0, 500.0)
-    private val garbage = ValueBoolean(this, "Garbage", false)
+    private val noArbitraryTexts = ValueBoolean(this, "Don't spam", false)
+    private val garbage = object : ValueBoolean(this, "Garbage", false) {
+        override fun isEnabled() = noArbitraryTexts.value
+    }
     private val garbageAmount = object : ValueNumber(this, "Garbage amount", 0.0, 5.0, 10.0, 1.0) {
-        override fun isEnabled() = garbage.value
+        override fun isEnabled() = noArbitraryTexts.value && garbage.value
     }
     private val garbageCase = object : ValueMode(this, "Garbage case", false, "Uppercase", "Random", "Lowercase") {
-        override fun isEnabled() = garbage.value
+        override fun isEnabled() = noArbitraryTexts.value && garbage.value
     }
-    private val mode = ValueMode(this, "Mode", false, "Custom message", "Position broadcast")
+    private val mode = object : ValueMode(this, "Mode", false, "Custom message", "Position broadcast") {
+        override fun isEnabled() = noArbitraryTexts.value
+    }
     private val message = object : ValueText(this, "Message", "") {
-        override fun isEnabled() = mode.isSelected(0)
+        override fun isEnabled() = noArbitraryTexts.value && mode.isSelected(0)
     }
     private val target = object : ValueText(this, "Target", "") {
-        override fun isEnabled() = mode.isSelected(1)
+        override fun isEnabled() = noArbitraryTexts.value && mode.isSelected(1)
     }
 
     private val timeUtil = TimeUtil()
@@ -48,11 +53,11 @@ class ModuleSpammer : Module("Spammer", "Spams something in chat", ModuleCategor
             is EventPollEvents -> {
                 if (timeUtil.hasReached(delay.value.toLong())) {
                     if (priorityMessages.isNotEmpty()) {
-                        mc.player?.sendChatMessage(SharedConstants.stripInvalidChars(priorityMessages[0]))
-                        priorityMessages.removeAt(0)
+                        mc.player?.sendChatMessage(SharedConstants.stripInvalidChars(priorityMessages.removeFirst()))
                         timeUtil.reset()
                         return@Consumer
                     }
+                    if(noArbitraryTexts.value) return@Consumer
                     var text = when {
                         mode.isSelected(0) -> message.value
                         mode.isSelected(1) -> {

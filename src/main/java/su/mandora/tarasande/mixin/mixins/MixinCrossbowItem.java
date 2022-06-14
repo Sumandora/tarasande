@@ -15,7 +15,7 @@ public abstract class MixinCrossbowItem implements ICrossbowItem {
     }
 
     @Override
-    public float invokeGetSpeed(ItemStack stack) {
+    public float tarasande_invokeGetSpeed(ItemStack stack) {
         return getSpeed(stack);
     }
 }

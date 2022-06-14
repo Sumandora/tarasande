@@ -13,7 +13,7 @@ import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import kotlin.math.round
 
 class GraphFPS : Graph("FPS", 200) {
-    override fun supplyData() = (MinecraftClient.getInstance() as IMinecraftClient).currentFPS
+    override fun supplyData() = (MinecraftClient.getInstance() as IMinecraftClient).tarasande_getCurrentFPS()
 }
 
 class GraphTPS : Graph("TPS", 200) {
@@ -73,8 +73,8 @@ class GraphYawDelta : Graph("Yaw Delta", 200) {
 
     override fun supplyData(): Number? {
         if (MinecraftClient.getInstance().player == null) return null
-        val yawDelta = round(((MinecraftClient.getInstance().player as IClientPlayerEntity).lastYaw - lastYaw) * 100) / 100.0
-        lastYaw = (MinecraftClient.getInstance().player as IClientPlayerEntity).lastYaw
+        val yawDelta = round(((MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_getLastYaw() - lastYaw) * 100) / 100.0
+        lastYaw = (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_getLastYaw()
         return yawDelta
     }
 }
@@ -84,8 +84,8 @@ class GraphPitchDelta : Graph("Pitch Delta", 200) {
 
     override fun supplyData(): Number? {
         if (MinecraftClient.getInstance().player == null) return null
-        val pitchDelta = round(((MinecraftClient.getInstance().player as IClientPlayerEntity).lastPitch - lastPitch) * 100) / 100.0
-        lastPitch = (MinecraftClient.getInstance().player as IClientPlayerEntity).lastPitch
+        val pitchDelta = round(((MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_getLastPitch() - lastPitch) * 100) / 100.0
+        lastPitch = (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_getLastPitch()
         return pitchDelta
     }
 }

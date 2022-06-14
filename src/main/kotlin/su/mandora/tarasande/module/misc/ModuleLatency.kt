@@ -39,7 +39,7 @@ class ModuleLatency : Module("Latency", "Controls network latency", ModuleCatego
                 if (event.cancelled) return@Consumer
                 if (event.packet != null) {
                     if (mc.networkHandler?.connection == null ||
-                        (mc.networkHandler?.connection as IClientConnection).channel.attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY ||
+                        (mc.networkHandler?.connection as IClientConnection).tarasande_getChannel().attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY ||
                         ((event.type == EventPacket.Type.RECEIVE && event.packet is DisconnectS2CPacket) || mc.currentScreen is DownloadingTerrainScreen)) {
                         this.switchState()
                         return@Consumer
@@ -56,7 +56,7 @@ class ModuleLatency : Module("Latency", "Controls network latency", ModuleCatego
                 for (triple in copy) {
                     if (triple.first < System.currentTimeMillis()) {
                         when (triple.third) {
-                            EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).forceSend(triple.second)
+                            EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).tarasande_forceSend(triple.second)
                             EventPacket.Type.RECEIVE -> {
                                 if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener)
                                     (triple.second as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
@@ -72,7 +72,7 @@ class ModuleLatency : Module("Latency", "Controls network latency", ModuleCatego
         if (mc.networkHandler?.connection?.isOpen!!) {
             for (triple in packets) {
                 when (triple.third) {
-                    EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).forceSend(triple.second)
+                    EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).tarasande_forceSend(triple.second)
                     EventPacket.Type.RECEIVE ->
                         if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener)
                             (triple.second as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)

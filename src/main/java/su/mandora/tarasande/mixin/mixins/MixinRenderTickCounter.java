@@ -19,17 +19,17 @@ public class MixinRenderTickCounter implements IRenderTickCounter {
     private long prevTimeMillis;
 
     @Override
-    public float getTickTime() {
+    public float tarasande_getTickTime() {
         return tickTime;
     }
 
     @Override
-    public void setTickTime(float tickTime) {
+    public void tarasande_setTickTime(float tickTime) {
         this.tickTime = tickTime;
     }
 
     @Override
-    public float getPrevTimeMillis() {
+    public float tarasande_getPrevTimeMillis() {
         return prevTimeMillis;
     }
 }

@@ -2,8 +2,8 @@ package su.mandora.tarasande.mixin.accessor;
 
 public interface IClientPlayerEntity {
 
-    float getLastYaw();
+    float tarasande_getLastYaw();
 
-    float getLastPitch();
+    float tarasande_getLastPitch();
 
 }

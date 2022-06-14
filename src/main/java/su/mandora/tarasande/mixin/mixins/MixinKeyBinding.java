@@ -30,17 +30,17 @@ public class MixinKeyBinding implements IKeyBinding {
     }
 
     @Override
-    public void setTimesPressed(int timesPressed) {
+    public void tarasande_setTimesPressed(int timesPressed) {
         this.timesPressed = timesPressed;
     }
 
     @Override
-    public boolean forceIsPressed() {
+    public boolean tarasande_forceIsPressed() {
         return pressed;
     }
 
     @Override
-    public InputUtil.Key getBoundKey() {
+    public InputUtil.Key tarasande_getBoundKey() {
         return boundKey;
     }
 }

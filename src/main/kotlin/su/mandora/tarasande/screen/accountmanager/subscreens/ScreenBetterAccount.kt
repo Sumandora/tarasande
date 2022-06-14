@@ -37,8 +37,8 @@ class ScreenBetterAccount(
     override fun init() {
         textFields.clear()
         children().clear()
-        (this as IScreen).drawables.clear()
-        (this as IScreen).selectables.clear()
+        (this as IScreen).tarasande_getDrawables().clear()
+        (this as IScreen).tarasande_getSelectables().clear()
 
         addDrawableChild(ButtonWidget(width - 200, 0, 100, 20, Text.of("Environment")) { client?.setScreen(ScreenBetterEnvironment(this, environment) { environment = it }) })
 

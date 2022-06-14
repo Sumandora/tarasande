@@ -43,7 +43,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
             is EventKeyBindingIsPressed -> {
                 if (isPassingEvents())
                     if (keybinding.contains(event.keyBinding))
-                        event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, (event.keyBinding as IKeyBinding).boundKey.code)
+                        event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, (event.keyBinding as IKeyBinding).tarasande_getBoundKey().code)
             }
         }
     }

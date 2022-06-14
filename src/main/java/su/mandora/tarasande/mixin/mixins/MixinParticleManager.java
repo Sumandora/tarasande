@@ -20,12 +20,12 @@ public class MixinParticleManager implements IParticleManager {
     }
 
     @Override
-    public boolean areParticlesEnabled() {
+    public boolean tarasande_areParticlesEnabled() {
         return particlesEnabled;
     }
 
     @Override
-    public void setParticlesEnabled(boolean particlesEnabled) {
+    public void tarasande_setParticlesEnabled(boolean particlesEnabled) {
         this.particlesEnabled = particlesEnabled;
     }
 }

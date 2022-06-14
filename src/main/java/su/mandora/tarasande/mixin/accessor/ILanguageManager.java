@@ -4,6 +4,6 @@ import net.minecraft.client.resource.language.LanguageDefinition;
 
 public interface ILanguageManager {
 
-    LanguageDefinition getEnglishUS();
+    LanguageDefinition tarasande_getEnglishUS();
 
 }

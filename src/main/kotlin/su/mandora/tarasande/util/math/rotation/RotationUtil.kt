@@ -143,7 +143,7 @@ object RotationUtil {
                 val realRotation = Rotation(MinecraftClient.getInstance().player!!)
                 val rotation = Rotation(fakeRotation!!)
                     .smoothedTurn(realRotation,
-                        if ((MinecraftClient.getInstance().player as ILivingEntity?)?.bodyTrackingIncrements!! > 0) 1.0 else
+                        if ((MinecraftClient.getInstance().player as ILivingEntity?)?.tarasande_getBodyTrackingIncrements()!! > 0) 1.0 else
                             if (lastMinRotateToOriginSpeed == 1.0 && lastMaxRotateToOriginSpeed == 1.0) 1.0 else
                                 MathHelper.clamp(
                                     (if (lastMinRotateToOriginSpeed == lastMaxRotateToOriginSpeed) lastMinRotateToOriginSpeed else ThreadLocalRandom.current()

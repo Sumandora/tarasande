@@ -61,13 +61,13 @@ object PlayerUtil {
         val gameRenderer = MinecraftClient.getInstance().gameRenderer
         val accessor = (gameRenderer as IGameRenderer)
 
-        val prevAllowThroughWalls = accessor.isAllowThroughWalls
-        val prevReach = accessor.reach
-        val prevReachExtension = accessor.isDisableReachExtension
+        val prevAllowThroughWalls = accessor.tarasande_isAllowThroughWalls()
+        val prevReach = accessor.tarasande_getReach()
+        val prevReachExtension = accessor.tarasande_isDisableReachExtension()
 
-        accessor.isAllowThroughWalls = true
-        accessor.reach = reach
-        accessor.isDisableReachExtension = true
+        accessor.tarasande_setAllowThroughWalls(true)
+        accessor.tarasande_setReach(reach)
+        accessor.tarasande_setDisableReachExtension(true)
 
         val prevCrosshairTarget = MinecraftClient.getInstance().crosshairTarget
         val prevTargetedEntity = MinecraftClient.getInstance().targetedEntity
@@ -97,9 +97,9 @@ object PlayerUtil {
         MinecraftClient.getInstance().crosshairTarget = prevCrosshairTarget
         MinecraftClient.getInstance().targetedEntity = prevTargetedEntity
 
-        accessor.reach = prevReach
-        accessor.isAllowThroughWalls = prevAllowThroughWalls
-        accessor.isDisableReachExtension = prevReachExtension
+        accessor.tarasande_setReach(prevReach)
+        accessor.tarasande_setAllowThroughWalls(prevAllowThroughWalls)
+        accessor.tarasande_setDisableReachExtension(prevReachExtension)
 
         return hitResult
     }
@@ -112,10 +112,10 @@ object PlayerUtil {
     }
 
     fun getMoveDirection(): Double {
-        val forward = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.forwardKey as IKeyBinding).boundKey.code)
-        val left = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.leftKey as IKeyBinding).boundKey.code)
-        val back = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.backKey as IKeyBinding).boundKey.code)
-        val right = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.rightKey as IKeyBinding).boundKey.code)
+        val forward = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.forwardKey as IKeyBinding).tarasande_getBoundKey().code)
+        val left = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.leftKey as IKeyBinding).tarasande_getBoundKey().code)
+        val back = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.backKey as IKeyBinding).tarasande_getBoundKey().code)
+        val right = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.rightKey as IKeyBinding).tarasande_getBoundKey().code)
         return Math.toRadians(
             RotationUtil.getYaw(
                 if (left && right) 0.0 else if (left) 1.0 else if (right) -1.0 else 0.0,

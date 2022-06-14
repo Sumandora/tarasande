@@ -48,13 +48,13 @@ public abstract class MixinClientConnection implements IClientConnection {
     }
 
     @Override
-    public Channel getChannel() {
+    public Channel tarasande_getChannel() {
         return channel;
     }
 
     // might cause race conditions :c
     @Override
-    public void forceSend(Packet<?> packet) {
+    public void tarasande_forceSend(Packet<?> packet) {
         forced.add(packet);
         send(packet);
     }

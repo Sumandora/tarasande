@@ -3,9 +3,9 @@ package su.mandora.tarasande.mixin.accessor;
 import net.minecraft.client.util.InputUtil;
 
 public interface IKeyBinding {
-    void setTimesPressed(int timesPressed);
+    void tarasande_setTimesPressed(int timesPressed);
 
-    boolean forceIsPressed();
+    boolean tarasande_forceIsPressed();
 
-    InputUtil.Key getBoundKey();
+    InputUtil.Key tarasande_getBoundKey();
 }

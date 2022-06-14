@@ -15,7 +15,7 @@ public class MixinWorld implements IWorld {
     public boolean isClient;
 
     @Override
-    public void setIsClient(boolean isClient) {
+    public void tarasande_setIsClient(boolean isClient) {
         this.isClient = isClient;
     }
 }

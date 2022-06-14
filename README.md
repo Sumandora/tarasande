@@ -47,17 +47,8 @@
 - MidClick (alias prompt with screen and callback?)
 - KillAura: Calculate attack cycle from enemies
 - Configure ESP / "ESP Studio" - Fully customizable 2D esp setting like spirthack
-  - Items are classes with getSpace, draw(orientation, axis start, axis end)
   - Right click for values in classes
-- BedESP: go from inside to outside, instead of outside to inside
-- Friends: Custom Color
-- MurderMystery: Customize Detective Items
-- MurderMystery: Custom Message
-- Auto save config
-- MurderMystery: Chat Packet Order
-- Update Teams
-- MurderMystery: Custom Fake News Item(s)
-- Spammer: Only custom messages
+- AutoTool
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

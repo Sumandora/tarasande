@@ -4,19 +4,19 @@ import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.util.Session;
 
 public interface IMinecraftClient {
-    void setSession(Session session);
+    void tarasande_setSession(Session session);
 
-    int getAttackCooldown();
+    int tarasande_getAttackCooldown();
 
-    void setAttackCooldown(int attackCooldown);
+    void tarasande_setAttackCooldown(int attackCooldown);
 
-    void invokeDoItemUse();
+    void tarasande_invokeDoItemUse();
 
-    void invokeDoAttack();
+    void tarasande_invokeDoAttack();
 
-    RenderTickCounter getRenderTickCounter();
+    RenderTickCounter tarasande_getRenderTickCounter();
 
-    void invokeHandleBlockBreaking(boolean bl);
+    void tarasande_invokeHandleBlockBreaking(boolean bl);
 
-    int getCurrentFPS();
+    int tarasande_getCurrentFPS();
 }

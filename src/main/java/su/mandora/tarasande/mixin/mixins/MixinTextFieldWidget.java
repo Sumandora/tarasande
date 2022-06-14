@@ -56,27 +56,27 @@ public abstract class MixinTextFieldWidget implements ITextFieldWidget {
     }
 
     @Override
-    public boolean invokeIsEditable() {
+    public boolean tarasande_invokeIsEditable() {
         return isEditable();
     }
 
     @Override
-    public void setSelecting(boolean selecting) {
+    public void tarasande_setSelecting(boolean selecting) {
         this.selecting = selecting;
     }
 
     @Override
-    public void eraseOffset(int offset) {
+    public void tarasande_eraseOffset(int offset) {
         this.erase(offset);
     }
 
     @Override
-    public void setForceText(String text) {
+    public void tarasande_setForceText(String text) {
         this.text = text;
     }
 
     @Override
-    public void setColor(Color color) {
+    public void tarasande_setColor(Color color) {
         this.color = color;
     }
 }

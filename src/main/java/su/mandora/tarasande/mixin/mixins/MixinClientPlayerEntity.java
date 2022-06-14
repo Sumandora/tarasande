@@ -132,12 +132,12 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     }
 
     @Override
-    public float getLastYaw() {
+    public float tarasande_getLastYaw() {
         return lastYaw;
     }
 
     @Override
-    public float getLastPitch() {
+    public float tarasande_getLastPitch() {
         return lastPitch;
     }
 }

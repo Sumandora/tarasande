@@ -10,8 +10,8 @@ open class TextFieldWidgetPlaceholder(textRenderer: TextRenderer?, x: Int, y: In
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val prevText = text
         if (text.isEmpty() && !isFocused)
-            (this as ITextFieldWidget).setForceText(message.string)
+            (this as ITextFieldWidget).tarasande_setForceText(message.string)
         super.render(matrices, mouseX, mouseY, delta)
-        (this as ITextFieldWidget).setForceText(prevText)
+        (this as ITextFieldWidget).tarasande_setForceText(prevText)
     }
 }

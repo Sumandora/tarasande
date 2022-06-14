@@ -173,7 +173,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
             try {
                 currentAccount = account
                 account.logIn()
-                (MinecraftClient.getInstance() /* This can't be "client" because it is called from ClientMain means it's null at this point in time */ as IMinecraftClient).setSession(account.session)
+                (MinecraftClient.getInstance() /* This can't be "client" because it is called from ClientMain means it's null at this point in time */ as IMinecraftClient).tarasande_setSession(account.session)
                 status = Formatting.GREEN.toString() + "Logged in as \"" + account.getDisplayName() + "\""
             } catch (e: Throwable) {
                 e.printStackTrace()

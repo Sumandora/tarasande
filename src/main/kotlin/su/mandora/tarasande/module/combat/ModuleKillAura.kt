@@ -161,7 +161,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     var boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())
                     if (syncPosition.value) {
                         val accessor = entity as ILivingEntity
-                        boundingBox = boundingBox.offset(accessor.serverX - entity.x, accessor.serverY - entity.y, accessor.serverZ - entity.z)
+                        boundingBox = boundingBox.offset(accessor.tarasande_getServerX() - entity.x, accessor.tarasande_getServerY() - entity.y, accessor.tarasande_getServerZ() - entity.z)
                     }
                     val bestAimPoint = getBestAimPoint(boundingBox)
                     if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue)
@@ -310,7 +310,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                                 if (RotationUtil.fakeRotation == null) {
                                     continue
                                 } else {
-                                    val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, if (!mode.isSelected(1)) (if (simulateMouseDelay.value) Rotation((mc.player as IClientPlayerEntity).lastYaw, (mc.player as IClientPlayerEntity).lastPitch) else RotationUtil.fakeRotation!!) else RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint))
+                                    val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, if (!mode.isSelected(1)) (if (simulateMouseDelay.value) Rotation((mc.player as IClientPlayerEntity).tarasande_getLastYaw(), (mc.player as IClientPlayerEntity).tarasande_getLastPitch()) else RotationUtil.fakeRotation!!) else RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint))
                                     if (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null) {
                                         continue
                                     } else {
@@ -355,7 +355,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                         }
                         if (hasTarget) {
                             blocking = true
-                            (mc.options.useKey as IKeyBinding).setTimesPressed(1)
+                            (mc.options.useKey as IKeyBinding).tarasande_setTimesPressed(1)
                         }
                     }
                 }
@@ -387,14 +387,14 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         if (entity != null) {
             mc.crosshairTarget = EntityHitResult(entity)
             if (!attackCooldown.value) {
-                (mc as IMinecraftClient).attackCooldown = 0
+                (mc as IMinecraftClient).tarasande_setAttackCooldown(0)
             }
         } else {
             mc.crosshairTarget = object : HitResult(null) {
                 override fun getType() = Type.MISS
             }
         }
-        (mc as IMinecraftClient).invokeDoAttack()
+        (mc as IMinecraftClient).tarasande_invokeDoAttack()
         mc.crosshairTarget = original
     }
 

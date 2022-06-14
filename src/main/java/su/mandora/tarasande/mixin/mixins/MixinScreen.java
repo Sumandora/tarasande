@@ -39,12 +39,12 @@ public class MixinScreen implements IScreen {
     }
 
     @Override
-    public List<Drawable> getDrawables() {
+    public List<Drawable> tarasande_getDrawables() {
         return drawables;
     }
 
     @Override
-    public List<Selectable> getSelectables() {
+    public List<Selectable> tarasande_getSelectables() {
         return selectables;
     }
 }

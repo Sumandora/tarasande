@@ -15,7 +15,7 @@ class PanelFixedInventory(x: Double, y: Double) : PanelFixed("Inventory", x, y, 
         for (q in 9..35) {
             val r = (x + (q % 9) * (panelWidth / 9.0)).toInt()
             val s = (y + MinecraftClient.getInstance().textRenderer.fontHeight.toDouble() + 2.0 + (floor(q / 9.0) - 1) * ((panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight.toDouble()) / 3)).toInt()
-            (MinecraftClient.getInstance().inGameHud as IInGameHud).invokeRenderHotbarItem(r, s, MinecraftClient.getInstance().tickDelta, MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.inventory?.main?.get(q) as ItemStack, m++)
+            (MinecraftClient.getInstance().inGameHud as IInGameHud).tarasande_invokeRenderHotbarItem(r, s, MinecraftClient.getInstance().tickDelta, MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.inventory?.main?.get(q) as ItemStack, m++)
         }
     }
 

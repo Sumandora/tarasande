@@ -65,7 +65,7 @@ public abstract class MixinEntity implements IEntity {
     public void injectMove(MovementType movementType, Vec3d movement, CallbackInfo ci) {
         EventMovement eventMovement = new EventMovement((Entity) (Object) this, movement);
         TarasandeMain.Companion.get().getManagerEvent().call(eventMovement);
-        ((IVec3d) movement).copy(eventMovement.getVelocity());
+        ((IVec3d) movement).tarasande_copy(eventMovement.getVelocity());
     }
 
     @Inject(method = "getTeamColorValue", at = @At("RETURN"), cancellable = true)
@@ -79,17 +79,17 @@ public abstract class MixinEntity implements IEntity {
     }
 
     @Override
-    public Vec3d invokeGetRotationVector(float pitch, float yaw) {
+    public Vec3d tarasande_invokeGetRotationVector(float pitch, float yaw) {
         return getRotationVector(pitch, yaw);
     }
 
     @Override
-    public Random getRandom() {
+    public Random tarasande_getRandom() {
         return random;
     }
 
     @Override
-    public void setRandom(Random random) {
+    public void tarasande_setRandom(Random random) {
         this.random = random;
     }
 }

@@ -35,7 +35,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 
     private val managerGraph = ManagerGraph()
 
-    private val image = Identifier("tarasande", "azusa.png")
+    private val image = Identifier(TarasandeMain.get().name, "azusa.png")
     private val particles = ArrayList<Particle>()
 
     // unused rn

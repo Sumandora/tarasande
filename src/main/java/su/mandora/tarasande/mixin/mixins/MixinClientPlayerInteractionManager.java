@@ -38,7 +38,7 @@ public abstract class MixinClientPlayerInteractionManager implements IClientPlay
     }
 
     @Override
-    public void setOnlyPackets(boolean onlyPackets) {
+    public void tarasande_setOnlyPackets(boolean onlyPackets) {
         this.onlyPackets = onlyPackets;
     }
 }

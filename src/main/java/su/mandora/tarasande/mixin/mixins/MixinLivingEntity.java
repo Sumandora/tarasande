@@ -92,47 +92,47 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     }
 
     @Override
-    public double getServerX() {
+    public double tarasande_getServerX() {
         return serverX;
     }
 
     @Override
-    public double getServerY() {
+    public double tarasande_getServerY() {
         return serverY;
     }
 
     @Override
-    public double getServerZ() {
+    public double tarasande_getServerZ() {
         return serverZ;
     }
 
     @Override
-    public double getServerYaw() {
+    public double tarasande_getServerYaw() {
         return serverYaw;
     }
 
     @Override
-    public double getServerPitch() {
+    public double tarasande_getServerPitch() {
         return serverPitch;
     }
 
     @Override
-    public int getBodyTrackingIncrements() {
+    public int tarasande_getBodyTrackingIncrements() {
         return bodyTrackingIncrements;
     }
 
     @Override
-    public void setBodyTrackingIncrements(int bodyTrackingIncrements) {
+    public void tarasande_setBodyTrackingIncrements(int bodyTrackingIncrements) {
         this.bodyTrackingIncrements = bodyTrackingIncrements;
     }
 
     @Override
-    public int getLastAttackedTicks() {
+    public int tarasande_getLastAttackedTicks() {
         return lastAttackedTicks;
     }
 
     @Override
-    public void setLastAttackedTicks(int lastAttackedTicks) {
+    public void tarasande_setLastAttackedTicks(int lastAttackedTicks) {
         this.lastAttackedTicks = lastAttackedTicks;
     }
 }

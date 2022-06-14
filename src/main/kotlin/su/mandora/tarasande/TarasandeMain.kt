@@ -33,6 +33,16 @@ class TarasandeMain {
 
     val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
 
+    val autoSaveDaemonName = "$name config auto save daemon"
+    val autoSaveDaemon: Thread /* This has to be here because IntelliJ is the best IDE ever built */ = Thread({
+        while(true) {
+            if(clientValues?.autoSaveConfig?.value!!) {
+                managerFile?.save()
+                Thread.sleep(clientValues?.delay?.value?.toLong()!!)
+            }
+        }
+    }, autoSaveDaemonName)
+
     companion object {
         private val instance: TarasandeMain = TarasandeMain()
 
@@ -53,7 +63,7 @@ class TarasandeMain {
         managerClickMethod = ManagerClickMethod()
         managerModule = ManagerModule()
         blur = Blur()
-        screens = Screens() // Initializes ClickGUI (Make sure that modules and values are initialized before)
+        screens = Screens() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
         friends = Friends()
         managerESP = ManagerESP()
 
@@ -65,6 +75,8 @@ class TarasandeMain {
                 Thread.sleep(50L) // synchronize
             screens?.betterScreenAccountManager?.status = null
         }
+
+        autoSaveDaemon.start()
     }
 
     fun onUnload() {

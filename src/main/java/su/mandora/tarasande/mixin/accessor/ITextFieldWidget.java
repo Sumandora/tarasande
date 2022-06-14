@@ -3,13 +3,13 @@ package su.mandora.tarasande.mixin.accessor;
 import java.awt.*;
 
 public interface ITextFieldWidget {
-    boolean invokeIsEditable();
+    boolean tarasande_invokeIsEditable();
 
-    void setSelecting(boolean selecting);
+    void tarasande_setSelecting(boolean selecting);
 
-    void eraseOffset(int offset);
+    void tarasande_eraseOffset(int offset);
 
-    void setForceText(String text);
+    void tarasande_setForceText(String text);
 
-    void setColor(Color color);
+    void tarasande_setColor(Color color);
 }

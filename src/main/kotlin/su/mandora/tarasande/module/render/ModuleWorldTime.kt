@@ -25,7 +25,7 @@ class ModuleWorldTime : Module("World time", "Changes the time of day", ModuleCa
             }
             is EventPacket -> {
                 if (event.type == EventPacket.Type.RECEIVE && event.packet is WorldTimeUpdateS2CPacket) {
-                    (event.packet as IWorldTimeUpdateS2CPacket).setTimeOfDay(time.value.toLong())
+                    (event.packet as IWorldTimeUpdateS2CPacket).tarasande_setTimeOfDay(time.value.toLong())
                 }
             }
         }

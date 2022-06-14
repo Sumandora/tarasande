@@ -69,32 +69,32 @@ public class MixinGameRenderer implements IGameRenderer {
     }
 
     @Override
-    public boolean isAllowThroughWalls() {
+    public boolean tarasande_isAllowThroughWalls() {
         return allowThroughWalls;
     }
 
     @Override
-    public void setAllowThroughWalls(boolean allowThroughWalls) {
+    public void tarasande_setAllowThroughWalls(boolean allowThroughWalls) {
         this.allowThroughWalls = allowThroughWalls;
     }
 
     @Override
-    public boolean isDisableReachExtension() {
+    public boolean tarasande_isDisableReachExtension() {
         return disableReachExtension;
     }
 
     @Override
-    public void setDisableReachExtension(boolean disableReachExtension) {
+    public void tarasande_setDisableReachExtension(boolean disableReachExtension) {
         this.disableReachExtension = disableReachExtension;
     }
 
     @Override
-    public double getReach() {
+    public double tarasande_getReach() {
         return reach;
     }
 
     @Override
-    public void setReach(double reach) {
+    public void tarasande_setReach(double reach) {
         this.reach = reach;
     }
 }

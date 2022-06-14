@@ -25,22 +25,22 @@ public class MixinVec3d implements IVec3d {
     public double z;
 
     @Override
-    public void setX(double x) {
+    public void tarasande_setX(double x) {
         this.x = x;
     }
 
     @Override
-    public void setY(double y) {
+    public void tarasande_setY(double y) {
         this.y = y;
     }
 
     @Override
-    public void setZ(double z) {
+    public void tarasande_setZ(double z) {
         this.z = z;
     }
 
     @Override
-    public void copy(Vec3d other) {
+    public void tarasande_copy(Vec3d other) {
         this.x = other.x;
         this.y = other.y;
         this.z = other.z;

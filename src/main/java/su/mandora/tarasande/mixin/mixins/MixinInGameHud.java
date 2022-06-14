@@ -25,7 +25,7 @@ public abstract class MixinInGameHud implements IInGameHud {
     }
 
     @Override
-    public void invokeRenderHotbarItem(int x, int y, float tickDelta, PlayerEntity player, ItemStack stack, int seed) {
+    public void tarasande_invokeRenderHotbarItem(int x, int y, float tickDelta, PlayerEntity player, ItemStack stack, int seed) {
         renderHotbarItem(x, y, tickDelta, player, stack, seed);
     }
 }

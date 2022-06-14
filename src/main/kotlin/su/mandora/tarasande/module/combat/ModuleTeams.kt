@@ -10,7 +10,10 @@ import java.util.function.Consumer
 
 class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCategory.COMBAT) {
 
-    val mode = ValueMode(this, "Mode", true, "Vanilla team", "Display name")
+    private val mode = ValueMode(this, "Mode", true, "Vanilla team", "Display name")
+    private val displayNameMode = object : ValueMode(this, "Display name mode", true, "Sibling styles", "Paragraph symbols") {
+        override fun isEnabled() = mode.isSelected(1)
+    }
 
     val eventConsumer = Consumer<Event> { event ->
         if (event is EventIsEntityAttackable) {
@@ -26,11 +29,50 @@ class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCatego
             }
 
             if (mode.isSelected(1)) {
-                val selfTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == mc.player?.gameProfile } ?: return@Consumer).siblings.firstOrNull { it.style.color != null }?.style?.color ?: return@Consumer
-                val otherTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == event.entity.gameProfile } ?: return@Consumer).siblings.firstOrNull { it.style.color != null }?.style?.color ?: return@Consumer
+                while(displayNameMode.isSelected(0)) {
+                    val selfTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == mc.player?.gameProfile } ?: break).siblings.firstOrNull { it.style.color != null }?.style?.color ?: break
+                    val otherTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == event.entity.gameProfile } ?: break).siblings.firstOrNull { it.style.color != null }?.style?.color ?: break
 
-                if (selfTeam == otherTeam) {
-                    event.attackable = false
+                    if (selfTeam == otherTeam) {
+                        event.attackable = false
+                    }
+                    break
+                }
+
+                while(displayNameMode.isSelected(1)) {
+                    var selfTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == mc.player?.gameProfile } ?: break).string ?: break
+                    var otherTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == event.entity.gameProfile } ?: break).string ?: break
+
+                    if(selfTeam.length <= 2 || !selfTeam.startsWith("§"))
+                        break
+
+                    if(otherTeam.length <= 2 || !otherTeam.startsWith("§"))
+                        break
+
+                    while(selfTeam.length > 2 && selfTeam.startsWith("§")) {
+                        selfTeam = selfTeam.substring(1, selfTeam.length)
+                        selfTeam = if(selfTeam.first() in 'a'..'f') {
+                            selfTeam.first().toString()
+                        } else {
+                            selfTeam.substring(1, selfTeam.length)
+                        }
+                    }
+
+                    while(otherTeam.length > 2 && otherTeam.startsWith("§")) {
+                        otherTeam = otherTeam.substring(1, otherTeam.length)
+                        otherTeam = if(otherTeam.first() in 'a'..'f') {
+                            otherTeam.first().toString()
+                        } else {
+                            otherTeam.substring(1, otherTeam.length)
+                        }
+                    }
+
+                    println("$selfTeam $otherTeam")
+
+                    if (selfTeam == otherTeam) {
+                        event.attackable = false
+                    }
+                    break
                 }
             }
         }

@@ -2,10 +2,10 @@ package su.mandora.tarasande.mixin.accessor;
 
 public interface IRenderTickCounter {
 
-    float getTickTime();
+    float tarasande_getTickTime();
 
-    void setTickTime(float tickTime);
+    void tarasande_setTickTime(float tickTime);
 
-    float getPrevTimeMillis();
+    float tarasande_getPrevTimeMillis();
 
 }

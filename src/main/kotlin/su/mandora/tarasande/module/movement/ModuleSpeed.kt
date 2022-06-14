@@ -55,13 +55,13 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                         mc.player?.jump()
                         mc.player?.velocity = mc.player?.velocity?.multiply(1.0, jumpHeight.value, 1.0)
                         val playerVelocityAccessor = mc.player?.velocity as IVec3d
-                        playerVelocityAccessor.setX(prevVelocity.x)
-                        accessor.setY(mc.player?.velocity?.y!!)
-                        playerVelocityAccessor.setZ(prevVelocity.z)
+                        playerVelocityAccessor.tarasande_setX(prevVelocity.x)
+                        accessor.tarasande_setY(mc.player?.velocity?.y!!)
+                        playerVelocityAccessor.tarasande_setZ(prevVelocity.z)
                     }
                 }
                 if (event.velocity.y < 0.0) {
-                    accessor.setY(event.velocity.y * gravity.value)
+                    accessor.tarasande_setY(event.velocity.y * gravity.value)
                 }
 
                 val baseSpeed = event.velocity.horizontalLength()
@@ -77,8 +77,8 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                 firstMove = false
 
                 val moveSpeed = max(speed, baseSpeed)
-                accessor.setX(cos(moveDir) * moveSpeed)
-                accessor.setZ(sin(moveDir) * moveSpeed)
+                accessor.tarasande_setX(cos(moveDir) * moveSpeed)
+                accessor.tarasande_setZ(sin(moveDir) * moveSpeed)
 
                 speed -= speed / speedDivider.value
             }

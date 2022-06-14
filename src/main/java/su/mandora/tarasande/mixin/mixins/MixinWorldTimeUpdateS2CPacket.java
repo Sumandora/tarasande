@@ -16,7 +16,7 @@ public class MixinWorldTimeUpdateS2CPacket implements IWorldTimeUpdateS2CPacket 
     private long timeOfDay;
 
     @Override
-    public void setTimeOfDay(long timeOfDay) {
+    public void tarasande_setTimeOfDay(long timeOfDay) {
         this.timeOfDay = timeOfDay;
     }
 }

@@ -1,7 +1,7 @@
 package su.mandora.tarasande.mixin.accessor;
 
 public interface IParticleManager {
-    boolean areParticlesEnabled();
+    boolean tarasande_areParticlesEnabled();
 
-    void setParticlesEnabled(boolean particlesEnabled);
+    void tarasande_setParticlesEnabled(boolean particlesEnabled);
 }

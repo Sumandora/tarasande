@@ -107,7 +107,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                                 if (!mc.interactionManager?.isBreakingBlock!!) {
                                     val original = mc.crosshairTarget
                                     mc.crosshairTarget = pair.second
-                                    (mc as IMinecraftClient).invokeDoAttack()
+                                    (mc as IMinecraftClient).tarasande_invokeDoAttack()
                                     mc.crosshairTarget = original
                                     breaking = true
                                 }

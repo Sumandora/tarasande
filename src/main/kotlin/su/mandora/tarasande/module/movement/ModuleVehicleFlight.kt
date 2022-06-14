@@ -25,7 +25,7 @@ class ModuleVehicleFlight : Module("Vehicle flight", "Makes you fly with vehicle
                         sign += 1.0
                     if (downwardsKeybind.isPressed())
                         sign -= 1.0
-                    (event.velocity as IVec3d).setY(verticalSpeed.value * sign)
+                    (event.velocity as IVec3d).tarasande_setY(verticalSpeed.value * sign)
                 }
             }
         }

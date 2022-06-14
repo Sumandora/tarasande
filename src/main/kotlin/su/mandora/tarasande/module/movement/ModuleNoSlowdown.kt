@@ -60,10 +60,10 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
                                     val hand = PlayerUtil.getUsedHand()
                                     if (hand != null) {
                                         val accessor = mc.interactionManager as IClientPlayerInteractionManager
-                                        val prevOnlyPackets = accessor.onlyPackets
-                                        accessor.onlyPackets = true
+                                        val prevOnlyPackets = accessor.tarasande_getOnlyPackets()
+                                        accessor.tarasande_setOnlyPackets(true)
                                         mc.interactionManager?.interactItem(mc.player, hand)
-                                        accessor.onlyPackets = prevOnlyPackets
+                                        accessor.tarasande_setOnlyPackets(prevOnlyPackets)
                                     }
                                 }
                                 else -> {}
@@ -83,7 +83,7 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
                     }
                 }
             }
-            is EventItemCooldown -> if ((mc.interactionManager as IClientPlayerInteractionManager).onlyPackets) event.cooldown = 1.0F
+            is EventItemCooldown -> if ((mc.interactionManager as IClientPlayerInteractionManager).tarasande_getOnlyPackets()) event.cooldown = 1.0F
         }
     }
 }

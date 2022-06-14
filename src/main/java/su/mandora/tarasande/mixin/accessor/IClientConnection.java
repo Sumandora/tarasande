@@ -4,7 +4,7 @@ import io.netty.channel.Channel;
 import net.minecraft.network.Packet;
 
 public interface IClientConnection {
-    Channel getChannel();
+    Channel tarasande_getChannel();
 
-    void forceSend(Packet<?> packet);
+    void tarasande_forceSend(Packet<?> packet);
 }

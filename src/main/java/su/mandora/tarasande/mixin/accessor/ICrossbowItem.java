@@ -4,6 +4,6 @@ import net.minecraft.item.ItemStack;
 
 public interface ICrossbowItem {
 
-    float invokeGetSpeed(ItemStack stack);
+    float tarasande_invokeGetSpeed(ItemStack stack);
 
 }

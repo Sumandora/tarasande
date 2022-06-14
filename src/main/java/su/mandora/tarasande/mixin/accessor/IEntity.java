@@ -4,10 +4,10 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 
 public interface IEntity {
-    Vec3d invokeGetRotationVector(float pitch, float yaw);
+    Vec3d tarasande_invokeGetRotationVector(float pitch, float yaw);
 
-    Random getRandom();
+    Random tarasande_getRandom();
 
-    void setRandom(Random random);
+    void tarasande_setRandom(Random random);
 
 }

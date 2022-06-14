@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import java.util.function.Function
 import kotlin.math.abs
 import kotlin.math.round
 
@@ -32,15 +33,17 @@ object PathFinder {
         }
     }
 
-    fun findPath(start: Vec3d, target: Vec3d, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost, maxTime: Long = 0L): ArrayList<Vec3d>? {
+    private val never = Function<Node, Boolean> { false }
+
+    fun findPath(start: Vec3d, target: Vec3d, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost, maxTime: Long = 0L, abort: Function<Node, Boolean> = never): ArrayList<Vec3d>? {
         val mappedPath = ArrayList<Vec3d>()
-        val path = findPath(Node(round(start.x).toInt(), round(start.y).toInt(), round(start.z).toInt()), Node(round(target.x).toInt(), round(target.y).toInt(), round(target.z).toInt()), allowedBlock, heuristic, cost, maxTime) ?: return null
+        val path = findPath(Node(round(start.x).toInt(), round(start.y).toInt(), round(start.z).toInt()), Node(round(target.x).toInt(), round(target.y).toInt(), round(target.z).toInt()), allowedBlock, heuristic, cost, maxTime, abort) ?: return null
         for (vec in path)
             mappedPath.add(Vec3d(vec.x + 0.5, vec.y + 0.5, vec.z + 0.5))
         return mappedPath
     }
 
-    fun findPath(start: Node, target: Node, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost, maxTime: Long = 0L): ArrayList<Node>? {
+    fun findPath(start: Node, target: Node, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost, maxTime: Long = 0L, abort: Function<Node, Boolean> = never): ArrayList<Node>? {
         start.g = cost(start, start)
         start.h = heuristic(start, start)
         start.f = start.g + start.h
@@ -48,23 +51,21 @@ object PathFinder {
         val closed = ArrayList<Node>()
         open.add(start)
 
-        if (start == target) {
+        if (start == target || abort.apply(start)) {
             return open
         }
 
         var current: Node? = null
         val begin = System.currentTimeMillis()
         while ((maxTime == 0L || System.currentTimeMillis() - begin <= maxTime) && open.isNotEmpty()) {
-            var best = Double.POSITIVE_INFINITY // hacky but works
             current = null
             for (move in open) {
-                if (current == null || move.f < best) {
-                    best = move.f
+                if (current == null || move.f < current.f) {
                     current = move
                 }
             }
 
-            if (current == null || current == target) {
+            if (current == null || current == target || abort.apply(current)) {
                 break
             }
 
@@ -103,7 +104,7 @@ object PathFinder {
             }
         }
 
-        return if (current != target) null else reconstructPath(current)
+        return /*if (current == null) null else*/ reconstructPath(current ?: return null)
     }
 
     private fun reconstructPath(current: Node): ArrayList<Node> {

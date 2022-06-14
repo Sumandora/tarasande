@@ -2,16 +2,16 @@ package su.mandora.tarasande.mixin.accessor;
 
 public interface IGameRenderer {
 
-    boolean isAllowThroughWalls();
+    boolean tarasande_isAllowThroughWalls();
 
-    void setAllowThroughWalls(boolean allowThroughWalls);
+    void tarasande_setAllowThroughWalls(boolean allowThroughWalls);
 
-    boolean isDisableReachExtension();
+    boolean tarasande_isDisableReachExtension();
 
-    void setDisableReachExtension(boolean disableReachExtension);
+    void tarasande_setDisableReachExtension(boolean disableReachExtension);
 
-    double getReach();
+    double tarasande_getReach();
 
-    void setReach(double reach);
+    void tarasande_setReach(double reach);
 
 }
