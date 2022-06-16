@@ -184,14 +184,15 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         fun findSolution(outstanders: List<BlockPos>, defenders: List<BlockPos>, beds: Array<BlockPos>, maxProcessingTime: Long): List<Node>? {
             var bestWay: ArrayList<Node>? = null
             val begin = System.currentTimeMillis()
-            for (bed in beds) {
+            for (outstander in outstanders) {
                 if (System.currentTimeMillis() - begin > maxProcessingTime) return null
 
-                val beginNode = Node(bed.x, bed.y, bed.z)
-                val endNode = outstanders.minBy { MinecraftClient.getInstance().player?.squaredDistanceTo(Vec3d.ofCenter(it))!! }.let { Node(it.x, it.y, it.z) }
-                val way = PathFinder.findPath(beginNode, endNode, allowedBlock = object : Function2<ClientWorld?, Node, Boolean> {
-                    override fun invoke(world: ClientWorld?, node: Node) = defenders.any { it.x == node.x && it.y == node.y && it.z == node.z }
-                }, cost = costCalc, maxTime = maxProcessingTime, abort = { outstanders.any { outstander -> it.x == outstander.x && it.y == outstander.y && it.z == outstander.z } }) ?: break // timeout
+                val bestBed = beds.minByOrNull { it.getSquaredDistance(outstander) } ?: continue
+                val beginNode = Node(outstander.x, outstander.y, outstander.z)
+                val endNode = Node(bestBed.x, bestBed.y, bestBed.z)
+                val way = PathFinder.findPath(beginNode, endNode, object : Function2<ClientWorld?, Node, Boolean> {
+                    override fun invoke(world: ClientWorld?, node: Node) = true
+                }, cost = costCalc, maxTime = maxProcessingTime) ?: break // timeout
                 if (bestWay == null)
                     bestWay = way
                 else {
