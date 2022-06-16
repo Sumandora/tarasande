@@ -1,17 +1,20 @@
 package su.mandora.tarasande.module.render
 
+import org.lwjgl.opengl.GL11
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventClearColor
 import su.mandora.tarasande.event.EventFogColor
 import su.mandora.tarasande.value.ValueColor
+import su.mandora.tarasande.value.ValueMode
+import su.mandora.tarasande.value.ValueNumber
 import su.mandora.tarasande.value.ValueNumberRange
 import java.util.function.Consumer
 
 class ModuleFog : Module("Fog", "Changes the fog distance and color", ModuleCategory.RENDER) {
 
-    private val distance = ValueNumberRange(this, "Distance", 0.1, 0.1, 1.0, 2.0, 0.1)
+    private val distance = ValueNumberRange(this, "Distance", 0.1, 0.1, 1.0, 5.0, 0.1)
     private val color = ValueColor(this, "Color", 0.0f, 1.0f, 1.0f)
 
     val eventConsumer = Consumer<Event> { event ->

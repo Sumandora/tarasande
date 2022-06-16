@@ -10,6 +10,7 @@ import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
+import kotlin.math.max
 
 class ModuleTimer : Module("Timer", "Changes the clientside ticks per second", ModuleCategory.PLAYER) {
 
@@ -35,7 +36,7 @@ class ModuleTimer : Module("Timer", "Changes the clientside ticks per second", M
         if (event is EventTimeTravel) {
             when {
                 mode.isSelected(0) -> ((mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_setTickTime((1000.0 / ticksPerSecond.value).toFloat())
-                mode.isSelected(1) -> ((mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_setTickTime((1000.0 / (ticksPerSecond.value + (ThreadLocalRandom.current().nextInt(variation.value.toInt()) - variation.value / 2.0))).toFloat())
+                mode.isSelected(1) -> ((mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_setTickTime((1000.0 / max(ticksPerSecond.value + ThreadLocalRandom.current().nextInt(-variation.value.toInt() / 2, variation.value.toInt() / 2),  1.0)).toFloat())
                 mode.isSelected(2) -> ((mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_setTickTime((1000.0 / (if (mc.player?.isOnGround!!) onGroundTicksPerSecond.value else offGroundTicksPerSecond.value)).toFloat())
             }
         }
