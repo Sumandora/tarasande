@@ -7,7 +7,7 @@ import su.mandora.tarasande.value.*
 class ClientValues {
 
     val menuHotkey = object : ValueBind(this, "Menu hotkey", Type.KEY, GLFW.GLFW_KEY_RIGHT_SHIFT) {
-        override fun filter(keyBind: Int) = keyBind != GLFW.GLFW_KEY_UNKNOWN
+        override fun filter(bind: Int) = bind != GLFW.GLFW_KEY_UNKNOWN
     }
     val accentColor = ValueColor(this, "Accent color", 0.6f, 1.0f, 1.0f)
     val targets = ValueMode(this, "Targets", true, "Players", "Animals", "Mobs", "Other")

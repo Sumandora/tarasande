@@ -42,7 +42,7 @@ import kotlin.math.sqrt
 class ModuleKillAura : Module("Kill aura", "Automatically attacks near players", ModuleCategory.COMBAT) {
 
     private val mode = ValueMode(this, "Mode", false, "Single", "Multi")
-    private val priority = ValueMode(this, "Priority", false, "Distance", "Health", "Hurt Time", "FOV")
+    private val priority = ValueMode(this, "Priority", false, "Distance", "Health", "Hurt time", "FOV")
     private val fov = ValueNumber(this, "FOV", 0.0, 255.0, 255.0, 1.0)
     private val reach = ValueNumberRange(this, "Reach", 0.1, 3.0, 4.0, 6.0, 0.1)
     private val clickSpeedUtil = ClickSpeedUtil(this, { true }) // for setting order

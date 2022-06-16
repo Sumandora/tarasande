@@ -30,7 +30,13 @@ import kotlin.math.pow
 class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius", ModuleCategory.PLAYER) {
 
     private val selectionMode = ValueMode(this, "Selection mode", false, "Include", "Exclude")
-    private val blocks = object : ValueRegistry<Block>(this, "Blocks", Registry.BLOCK) {
+    private val includedBlocks = object : ValueRegistry<Block>(this, "Included blocks", Registry.BLOCK) {
+        override fun isEnabled() = selectionMode.isSelected(0)
+        override fun filter(key: Block) = key != Blocks.AIR
+        override fun keyToString(key: Any?) = (key as Block).name.string
+    }
+    private val excludedBlocks = object : ValueRegistry<Block>(this, "Excluded blocks", Registry.BLOCK) {
+        override fun isEnabled() = selectionMode.isSelected(1)
         override fun filter(key: Block) = key != Blocks.AIR
         override fun keyToString(key: Any?) = (key as Block).name.string
     }
@@ -57,8 +63,8 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                             var blockPos = BlockPos(mc.player?.eyePos).add(x, y, z)
                             val blockState = mc.world?.getBlockState(blockPos)
                             if (
-                                (selectionMode.isSelected(0) && blocks.list.contains(blockState?.block)) ||
-                                (selectionMode.isSelected(1) && !blocks.list.contains(blockState?.block))
+                                (selectionMode.isSelected(0) && includedBlocks.list.contains(blockState?.block)) ||
+                                (selectionMode.isSelected(1) && !excludedBlocks.list.contains(blockState?.block))
                             ) {
                                 val collisionShape = blockState?.block?.defaultState?.getCollisionShape(mc.world, blockPos)
                                 if (collisionShape != null && !collisionShape.isEmpty) {

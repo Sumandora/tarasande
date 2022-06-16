@@ -59,7 +59,7 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
         button = jsonArray.get(1).asInt
     }
 
-    open fun filter(keyBind: Int): Boolean {
+    open fun filter(bind: Int): Boolean {
         return true
     }
 
