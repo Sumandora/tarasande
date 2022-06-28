@@ -53,6 +53,7 @@
 - No Rotate
 - MurderMystery: Exclude Detective Items from Disallowed Items
 - ValueComponentRegistry: If only 1 result -> Enter: Add Item and reset text
+- Fix Tickbase Manipulation: Auto Charge
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)
