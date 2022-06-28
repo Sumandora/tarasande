@@ -52,6 +52,7 @@
 - EventPollEvents: Add faked boolean -> Spammer and other interaction modules can use this to check if the Event has been faked or not
 - No Rotate
 - MurderMystery: Exclude Detective Items from Disallowed Items
+- ValueComponentRegistry: If only 1 result -> Enter: Add Item and reset text
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)
