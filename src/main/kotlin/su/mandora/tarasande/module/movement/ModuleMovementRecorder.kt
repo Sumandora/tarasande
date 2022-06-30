@@ -91,16 +91,14 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
                                 currentRecording = if (recording) {
                                     Record()
                                 } else {
-                                    if (!deleteButton.isPressed() && currentRecording != null && currentRecording?.ticks?.isNotEmpty()!! && currentRecording?.ticks?.any { it.movement.horizontalLengthSquared() > 0.0 }!!)
-                                        records.add(currentRecording?.copy()!!)
+                                    if (!deleteButton.isPressed() && currentRecording != null && currentRecording?.ticks?.isNotEmpty()!! && currentRecording?.ticks?.any { it.movement.horizontalLengthSquared() > 0.0 }!!) records.add(currentRecording?.copy()!!)
                                     null
                                 }
                             }
                         }
 
                         if (recording) {
-                            if (lastVelocity != null)
-                                currentRecording?.ticks?.add(TickMovement(Rotation(mc.player!!), lastVelocity!!, mc.player?.pos!!, mc.player?.isSprinting!!, mc.player?.isSneaking!!, mc.player?.input?.movementInput!!))
+                            if (lastVelocity != null) currentRecording?.ticks?.add(TickMovement(Rotation(mc.player!!), lastVelocity!!, mc.player?.pos!!, mc.player?.isSprinting!!, mc.player?.isSneaking!!, mc.player?.input?.movementInput!!))
                         } else if (playbackState != null) {
                             when (playbackState!!) {
                                 PlaybackState.PREPARE -> {
@@ -171,7 +169,9 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
                 }
             }
             is EventRender2D -> {
-                val str = if (recording) "Recording" else if (playbackState != null) playbackState?.name?.let { it.first() + it.substring(1).lowercase() } else ""
+                val str = if (recording) "Recording" else if (playbackState != null) playbackState?.name?.let {
+                    it.first() + it.substring(1).lowercase()
+                } else ""
                 mc.textRenderer?.drawWithShadow(event.matrices, str, mc.window?.scaledWidth!! / 2.0f - mc.textRenderer.getWidth(str) / 2.0f, mc.window?.scaledHeight!! / 2.0f - mc.textRenderer.fontHeight, Color.white.rgb)
             }
             is EventRender3D -> {

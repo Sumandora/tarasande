@@ -34,16 +34,11 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         when (event) {
             is EventPacket -> {
                 if (event.type == EventPacket.Type.SEND) {
-                    if (
-                        (canceledPackets.isSelected(0) && event.packet is ClientCommandC2SPacket && event.packet.mode == ClientCommandC2SPacket.Mode.OPEN_INVENTORY) ||
-                        (canceledPackets.isSelected(1) && event.packet is CloseHandledScreenC2SPacket && event.packet.syncId == 0)
-                    ) event.cancelled = true
+                    if ((canceledPackets.isSelected(0) && event.packet is ClientCommandC2SPacket && event.packet.mode == ClientCommandC2SPacket.Mode.OPEN_INVENTORY) || (canceledPackets.isSelected(1) && event.packet is CloseHandledScreenC2SPacket && event.packet.syncId == 0)) event.cancelled = true
                 }
             }
             is EventKeyBindingIsPressed -> {
-                if (isPassingEvents())
-                    if (keybinding.contains(event.keyBinding))
-                        event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, (event.keyBinding as IKeyBinding).tarasande_getBoundKey().code)
+                if (isPassingEvents()) if (keybinding.contains(event.keyBinding)) event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, (event.keyBinding as IKeyBinding).tarasande_getBoundKey().code)
             }
         }
     }

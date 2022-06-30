@@ -17,12 +17,11 @@ class FileValues : File("Values") {
                 jsonObject = JsonObject()
                 values.add(value.owner.javaClass.name, jsonObject)
             }
-             try {
+            try {
                 val jsonElement = value.save()
-                if (jsonElement != null)
-                    jsonObject.add(value.name, jsonElement)
+                if (jsonElement != null) jsonObject.add(value.name, jsonElement)
             } catch (t: Throwable) {
-                t.printStackTrace();
+                t.printStackTrace()
             }
         }
         return values

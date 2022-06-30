@@ -89,14 +89,10 @@ class ScreenBetterProxy(
                 try {
                     val port = portTextField?.text?.toInt()!!
                     val inetSocketAddress = InetSocketAddress(ipTextField?.text!!, port)
-                    val proxy =
-                        if (usernameTextField?.text?.isNotEmpty()!! && (proxyType == ProxyType.SOCKS4 || passwordTextField?.text?.isNotEmpty()!!))
-                            Proxy(inetSocketAddress, proxyType!!, ProxyAuthentication(usernameTextField?.text!!, if (proxyType == ProxyType.SOCKS4) null else passwordTextField?.text))
-                        else
-                            Proxy(inetSocketAddress, proxyType!!)
+                    val proxy = if (usernameTextField?.text?.isNotEmpty()!! && (proxyType == ProxyType.SOCKS4 || passwordTextField?.text?.isNotEmpty()!!)) Proxy(inetSocketAddress, proxyType!!, ProxyAuthentication(usernameTextField?.text!!, if (proxyType == ProxyType.SOCKS4) null else passwordTextField?.text))
+                    else Proxy(inetSocketAddress, proxyType!!)
                     proxyConsumer.accept(proxy)
-                    if (pingThread != null && pingThread?.isAlive!!)
-                        pingThread?.stop() // even more hacky
+                    if (pingThread != null && pingThread?.isAlive!!) pingThread?.stop() // even more hacky
                     Thread {
                         val socket = Socket()
                         try {
@@ -160,15 +156,12 @@ class ScreenBetterProxy(
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         drawCenteredText(matrices, textRenderer, "Proxy", width / 2, 8 - textRenderer.fontHeight / 2, Color.white.rgb)
-        if (status != null)
-            textRenderer.drawWithShadow(matrices, status!!, width / 2 - textRenderer.getWidth(status!!) / 2.0F, height / 2F - 50 - 15 - textRenderer.fontHeight - 2, Color.white.rgb)
+        if (status != null) textRenderer.drawWithShadow(matrices, status!!, width / 2 - textRenderer.getWidth(status!!) / 2.0F, height / 2F - 50 - 15 - textRenderer.fontHeight - 2, Color.white.rgb)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         var focused = false
-        for (textField in listOf(ipTextField, portTextField, usernameTextField, passwordTextField))
-            if (textField?.isFocused!!)
-                focused = true
+        for (textField in listOf(ipTextField, portTextField, usernameTextField, passwordTextField)) if (textField?.isFocused!!) focused = true
         if (hasControlDown() && keyCode == GLFW.GLFW_KEY_V && !focused) {
             val clipboardContent = GLFW.glfwGetClipboardString(client?.window?.handle!!)
             if (clipboardContent != null) {

@@ -53,10 +53,8 @@ class FileAccounts : File("Accounts") {
                 sessionObject.addProperty("Username", account.session?.username)
                 sessionObject.addProperty("UUID", account.session?.uuid)
                 sessionObject.addProperty("Access-Token", account.session?.accessToken)
-                if (account.session?.xuid?.isPresent!!)
-                    sessionObject.addProperty("X-Uid", account.session?.xuid?.get())
-                if (account.session?.clientId?.isPresent!!)
-                    sessionObject.addProperty("Client-Uid", account.session?.clientId?.get())
+                if (account.session?.xuid?.isPresent!!) sessionObject.addProperty("X-Uid", account.session?.xuid?.get())
+                if (account.session?.clientId?.isPresent!!) sessionObject.addProperty("Client-Uid", account.session?.clientId?.get())
                 sessionObject.addProperty("Account-Type", account.session?.accountType?.name)
                 accountObject.add("Session", sessionObject)
             }
@@ -69,8 +67,7 @@ class FileAccounts : File("Accounts") {
             jsonArray.add(accountObject)
         }
         jsonObject.add("Accounts", jsonArray)
-        if (TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount != null)
-            jsonObject.addProperty("Main-Account", TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount)
+        if (TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount != null) jsonObject.addProperty("Main-Account", TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount)
         return jsonObject
     }
 
@@ -84,14 +81,7 @@ class FileAccounts : File("Accounts") {
 
                     if (jsonObject2.has("Session")) {
                         val sessionObject = jsonObject2.get("Session").asJsonObject
-                        account.session = Session(
-                            sessionObject.get("Username").asString,
-                            sessionObject.get("UUID").asString,
-                            sessionObject.get("Access-Token").asString,
-                            if (sessionObject.has("X-Uid")) Optional.of(sessionObject.get("X-Uid").asString) else Optional.empty(),
-                            if (sessionObject.has("Client-Uid")) Optional.of(sessionObject.get("Client-Uid").asString) else Optional.empty(),
-                            Session.AccountType.valueOf(sessionObject.get("Account-Type").asString)
-                        )
+                        account.session = Session(sessionObject.get("Username").asString, sessionObject.get("UUID").asString, sessionObject.get("Access-Token").asString, if (sessionObject.has("X-Uid")) Optional.of(sessionObject.get("X-Uid").asString) else Optional.empty(), if (sessionObject.has("Client-Uid")) Optional.of(sessionObject.get("Client-Uid").asString) else Optional.empty(), Session.AccountType.valueOf(sessionObject.get("Account-Type").asString))
                     }
 
                     val environment = jsonObject2.getAsJsonObject("Environment")
@@ -100,8 +90,7 @@ class FileAccounts : File("Accounts") {
                 }
             }
         }
-        if (jsonObject.has("Main-Account"))
-            TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount = jsonObject.get("Main-Account").asInt
+        if (jsonObject.has("Main-Account")) TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount = jsonObject.get("Main-Account").asInt
     }
 
     override fun encrypt(input: String) = String(Base64.getEncoder().encode(encryptCipher?.doFinal(input.toByteArray())))

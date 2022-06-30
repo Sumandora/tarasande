@@ -6,7 +6,6 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
 import net.minecraft.item.Item
 import net.minecraft.network.Packet
-import net.minecraft.network.encryption.Signer
 import net.minecraft.network.message.ChatMessageSigner
 import net.minecraft.text.Text
 import net.minecraft.util.Hand

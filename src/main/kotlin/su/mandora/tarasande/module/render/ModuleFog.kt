@@ -1,14 +1,11 @@
 package su.mandora.tarasande.module.render
 
-import org.lwjgl.opengl.GL11
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventClearColor
 import su.mandora.tarasande.event.EventFogColor
 import su.mandora.tarasande.value.ValueColor
-import su.mandora.tarasande.value.ValueMode
-import su.mandora.tarasande.value.ValueNumber
 import su.mandora.tarasande.value.ValueNumberRange
 import java.util.function.Consumer
 

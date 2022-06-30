@@ -28,7 +28,8 @@ class ScreenBetterAccount(
 ) : ScreenBetter(prevScreen) {
 
     private val textFields: ArrayList<TextFieldWidget> = ArrayList()
-    private var implementationClass: Class<out Account> = TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list?.get(0)!!
+    private var implementationClass: Class<out Account> =
+        TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list?.get(0)!!
 
     private var environment: Environment? = null
 
@@ -40,13 +41,26 @@ class ScreenBetterAccount(
         (this as IScreen).tarasande_getDrawables().clear()
         (this as IScreen).tarasande_getSelectables().clear()
 
-        addDrawableChild(ButtonWidget(width - 200, 0, 100, 20, Text.of("Environment")) { client?.setScreen(ScreenBetterEnvironment(this, environment) { environment = it }) })
-
-        addDrawableChild(ButtonWidget(width - 100, 0, 100, 20, Text.of((implementationClass.annotations[0] as AccountInfo).name)) { button ->
-            implementationClass = TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list!![(TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list?.indexOf(implementationClass)!! + 1) % TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list?.size!!]
-            init()
-            button.message = Text.of(implementationClass.name)
+        addDrawableChild(ButtonWidget(width - 200, 0, 100, 20, Text.of("Environment")) {
+            client?.setScreen(
+                ScreenBetterEnvironment(this, environment) { environment = it })
         })
+
+        addDrawableChild(
+            ButtonWidget(
+                width - 100,
+                0,
+                100,
+                20,
+                Text.of((implementationClass.annotations[0] as AccountInfo).name)
+            ) { button ->
+                implementationClass =
+                    TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list!![(TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list?.indexOf(
+                        implementationClass
+                    )!! + 1) % TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list?.size!!]
+                init()
+                button.message = Text.of(implementationClass.name)
+            })
 
         var constructor: Constructor<*>? = null
         for (c in implementationClass.constructors) {
@@ -60,9 +74,29 @@ class ScreenBetterAccount(
             if (parameterType.isAnnotationPresent(TextFieldInfo::class.java)) {
                 val textFieldInfo: TextFieldInfo = parameterType.getAnnotation(TextFieldInfo::class.java)
                 if (textFieldInfo.hidden) {
-                    textFields.add(addDrawableChild(TextFieldWidgetPassword(textRenderer, width / 2 - 75, (height * 0.25f + i * 25).toInt(), 150, 20, Text.of(textFieldInfo.name)).also { it.setMaxLength(Int.MAX_VALUE) }))
+                    textFields.add(
+                        addDrawableChild(
+                            TextFieldWidgetPassword(
+                                textRenderer,
+                                width / 2 - 75,
+                                (height * 0.25f + i * 25).toInt(),
+                                150,
+                                20,
+                                Text.of(textFieldInfo.name)
+                            ).also { it.setMaxLength(Int.MAX_VALUE) })
+                    )
                 } else {
-                    textFields.add(addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 - 75, (height * 0.25f + i * 25).toInt(), 150, 20, Text.of(textFieldInfo.name)).also { it.setMaxLength(Int.MAX_VALUE) }))
+                    textFields.add(
+                        addDrawableChild(
+                            TextFieldWidgetPlaceholder(
+                                textRenderer,
+                                width / 2 - 75,
+                                (height * 0.25f + i * 25).toInt(),
+                                150,
+                                20,
+                                Text.of(textFieldInfo.name)
+                            ).also { it.setMaxLength(Int.MAX_VALUE) })
+                    )
                 }
             }
         }

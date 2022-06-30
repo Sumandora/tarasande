@@ -104,16 +104,12 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 mc.player?.eyePos?.squaredDistanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, it.first.boundingBox.expand(it.first.targetingMargin.toDouble())))!!
             }
             priority.isSelected(1) -> {
-                if (it.first is LivingEntity)
-                    (it.first as LivingEntity).health
-                else
-                    0
+                if (it.first is LivingEntity) (it.first as LivingEntity).health
+                else 0
             }
             priority.isSelected(2) -> {
-                if (it.first is LivingEntity)
-                    (it.first as LivingEntity).hurtTime
-                else
-                    0
+                if (it.first is LivingEntity) (it.first as LivingEntity).hurtTime
+                else 0
             }
             priority.isSelected(3) -> {
                 RotationUtil.getRotations(mc.player?.eyePos!!, getBestAimPoint(it.first.boundingBox)).fov(RotationUtil.fakeRotation ?: Rotation(mc.player!!))
@@ -154,8 +150,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 targets.clear()
                 val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
                 for (entity in mc.world?.entities!!) {
-                    if (!PlayerUtil.isAttackable(entity))
-                        continue
+                    if (!PlayerUtil.isAttackable(entity)) continue
                     val entity = entity as LivingEntity
 
                     var boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())
@@ -164,10 +159,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                         boundingBox = boundingBox.offset(accessor.tarasande_getServerX() - entity.x, accessor.tarasande_getServerY() - entity.y, accessor.tarasande_getServerZ() - entity.z)
                     }
                     val bestAimPoint = getBestAimPoint(boundingBox)
-                    if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue)
-                        continue
-                    if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(currentRot) > fov.value)
-                        continue
+                    if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
+                    if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(currentRot) > fov.value) continue
                     val aimPoint = if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() == 1.0f) {
                         mc.player?.eyePos?.add(currentRot.forwardVector(0.01))!!
                     } else {
@@ -175,16 +168,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                         getAimPoint(boundingBox, entity) ?: continue
                     }
                     // in case the eyepos is inside the boundingbox the next 2 checks will always succeed, but keeping them might prevent some retarded situation which is going to be added with an update
-                    if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue)
-                        continue
-                    if (!throughWalls.value && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint))
-                        continue
+                    if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
+                    if (!throughWalls.value && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint)) continue
 
                     targets.add(Pair(entity, aimPoint))
                 }
                 if (targets.isEmpty()) {
-                    if (blocking)
-                        blocking = false
+                    if (blocking) blocking = false
                     return@Consumer
                 }
 
@@ -196,22 +186,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 val target = targets[0]
 
                 val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, target.second)
-                val smoothedRot = currentRot.smoothedTurn(
-                    targetRot,
-                    if (aimSpeed.minValue == 1.0 && aimSpeed.maxValue == 1.0)
-                        1.0
-                    else
-                        MathHelper.clamp(
-                            (
-                                    if (aimSpeed.minValue == aimSpeed.maxValue)
-                                        aimSpeed.minValue
-                                    else
-                                        ThreadLocalRandom.current().nextDouble(aimSpeed.minValue, aimSpeed.maxValue)
-                                    ) * RenderUtil.deltaTime * 0.05,
-                            0.0,
-                            1.0
-                        )
-                )
+                val smoothedRot = currentRot.smoothedTurn(targetRot, if (aimSpeed.minValue == 1.0 && aimSpeed.maxValue == 1.0) 1.0
+                else MathHelper.clamp((if (aimSpeed.minValue == aimSpeed.maxValue) aimSpeed.minValue
+                else ThreadLocalRandom.current().nextDouble(aimSpeed.minValue, aimSpeed.maxValue)) * RenderUtil.deltaTime * 0.05, 0.0, 1.0))
                 var finalRot = smoothedRot
 
                 var canFlex = true
@@ -228,8 +205,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 }
                 if (!flex.value || !canFlex) {
                     val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, smoothedRot)
-                    if (guaranteeHit.value && target.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue && (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null))
-                        finalRot = targetRot
+                    if (guaranteeHit.value && target.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue && (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null)) finalRot = targetRot
                 } else {
                     finalRot.yaw += ThreadLocalRandom.current().nextDouble(-flexTurn.value, flexTurn.value).toFloat()
                     finalRot.pitch = ThreadLocalRandom.current().nextDouble(-flexTurn.value / 2, flexTurn.value / 2).toFloat()
@@ -247,8 +223,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
             is EventTick -> {
                 if (event.state == EventTick.State.PRE) {
-                    if (performedTick)
-                        clickSpeedUtil.reset()
+                    if (performedTick) clickSpeedUtil.reset()
                     performedTick = true
                 }
             }
@@ -264,15 +239,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
                 var clicks = clickSpeedUtil.getClicks()
 
-                if (waitForCritical.value)
-                    if (!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) })
-                        if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
-                            if (!mc.player?.isOnGround!! && (mc.player?.fallDistance == 0.0f || (criticalSprint.value && !mc.player?.isSprinting!!)))
-                                clicks = 0
+                if (waitForCritical.value) if (!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) }) if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!) if (!mc.player?.isOnGround!! && (mc.player?.fallDistance == 0.0f || (criticalSprint.value && !mc.player?.isSprinting!!))) clicks = 0
 
-                if (dontAttackWhenBlocking.value && allAttacked { it.isBlocking })
-                    if (!simulateShieldBlock.value || allAttacked { it.blockedByShield(DamageSource.player(mc.player)) })
-                        clicks = 0
+                if (dontAttackWhenBlocking.value && allAttacked { it.isBlocking }) if (!simulateShieldBlock.value || allAttacked { it.blockedByShield(DamageSource.player(mc.player)) }) clicks = 0
 
                 if (mc.player?.isUsingItem!! && clicks > 0 && !blockMode.isSelected(0)) {
                     var hasTarget = false
@@ -302,9 +271,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                             var target = entry.first
                             val aimPoint = entry.second
 
-                            if (dontAttackWhenBlocking.value && target is LivingEntity && target.isBlocking)
-                                if (!simulateShieldBlock.value || target.blockedByShield(DamageSource.player(mc.player)))
-                                    continue
+                            if (dontAttackWhenBlocking.value && target is LivingEntity && target.isBlocking) if (!simulateShieldBlock.value || target.blockedByShield(DamageSource.player(mc.player))) continue
 
                             if (rayTrace.value) {
                                 if (RotationUtil.fakeRotation == null) {
@@ -325,25 +292,21 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                             waitForHit = false
                             attacked = true
 
-                            if (!mode.isSelected(1))
-                                break
+                            if (!mode.isSelected(1)) break
                         }
-                        if (!attacked)
-                            if (swingInAir.value) {
-                                attack(null)
-                                event.dirty = true
-                            }
+                        if (!attacked) if (swingInAir.value) {
+                            attack(null)
+                            event.dirty = true
+                        }
                     }
                 }
                 if (targets.isNotEmpty() && (mode.isSelected(1) || targets[0].first !is PassiveEntity) && (!waitForHit) && !mc.player?.isUsingItem!! && !blockMode.isSelected(0)) {
                     var canBlock = true
                     if (blockCheckMode.isSelected(0)) {
                         val stack = mc.player?.getStackInHand(Hand.OFF_HAND)
-                        if (stack?.item !is ShieldItem || mc.player?.itemCooldownManager?.isCoolingDown(stack.item)!! || mc.player?.getStackInHand(Hand.MAIN_HAND)?.useAction != UseAction.NONE)
-                            canBlock = false
+                        if (stack?.item !is ShieldItem || mc.player?.itemCooldownManager?.isCoolingDown(stack.item)!! || mc.player?.getStackInHand(Hand.MAIN_HAND)?.useAction != UseAction.NONE) canBlock = false
                     }
-                    if (blockCheckMode.isSelected(1) && (mc.player?.getStackInHand(Hand.MAIN_HAND)?.item !is SwordItem || mc.player?.getStackInHand(Hand.OFF_HAND)?.useAction != UseAction.NONE))
-                        canBlock = false
+                    if (blockCheckMode.isSelected(1) && (mc.player?.getStackInHand(Hand.MAIN_HAND)?.item !is SwordItem || mc.player?.getStackInHand(Hand.OFF_HAND)?.useAction != UseAction.NONE)) canBlock = false
 
                     if (canBlock) {
                         var hasTarget = false
@@ -367,12 +330,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     }
                 }
                 if (PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {
-                    if (waitForCritical.value && criticalSprint.value && forceCritical.value)
-                        if (!dontWaitWhenEnemyHasShield.value || ((mode.isSelected(0) && !hasShield(targets.first().first) || (mode.isSelected(1) && targets.none { hasShield(it.first) }))))
-                            if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
-                                if (!mc.player?.isOnGround!! && mc.player?.fallDistance!! >= 0.0f)
-                                    if (mc.player?.isSprinting!!)
-                                        event.pressed = false
+                    if (waitForCritical.value && criticalSprint.value && forceCritical.value) if (!dontWaitWhenEnemyHasShield.value || ((mode.isSelected(0) && !hasShield(targets.first().first) || (mode.isSelected(1) && targets.none { hasShield(it.first) })))) if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!) if (!mc.player?.isOnGround!! && mc.player?.fallDistance!! >= 0.0f) if (mc.player?.isSprinting!!) event.pressed = false
                 }
             }
             is EventHandleBlockBreaking -> {
@@ -415,11 +373,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     while (y <= 1.0) {
                         var z = 0.0
                         while (z <= 1.0) {
-                            val vector = Vec3d(
-                                box.minX + (box.maxX - box.minX) * x,
-                                box.minY + (box.maxY - box.minY) * y,
-                                box.minZ + (box.maxZ - box.minZ) * z
-                            )
+                            val vector = Vec3d(box.minX + (box.maxX - box.minX) * x, box.minY + (box.maxY - box.minY) * y, box.minZ + (box.maxZ - box.minZ) * z)
                             if (PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, vector)) {
                                 val distSquared = mc.player?.eyePos?.squaredDistanceTo(vector)!!
                                 if (distSquared < distanceToVec) {
@@ -434,8 +388,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     }
                     x += precision.value
                 }
-                if (best == null || distanceToVec > reach.maxValue * reach.maxValue)
-                    return null
+                if (best == null || distanceToVec > reach.maxValue * reach.maxValue) return null
             }
         }
 
@@ -445,11 +398,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             // Humans always try to get to the middle
             val center = box.center
             val dist = MathUtil.getBias(mc.player?.eyePos?.squaredDistanceTo(aimPoint)!! / (reach.maxValue * reach.maxValue), 0.45) // I have no idea why this works and looks like it does, but it's good and why remove it then
-            aimPoint = aimPoint.add(
-                (center.x - aimPoint.x) * min((1 - dist), 1.0),
-                (center.y - aimPoint.y) * (1 - dist) * 0.5 /* Humans dislike aiming up and down */,
-                (center.z - aimPoint.z) * min((1 - dist), 1.0)
-            )
+            aimPoint = aimPoint.add((center.x - aimPoint.x) * min((1 - dist), 1.0), (center.y - aimPoint.y) * (1 - dist) * 0.5 /* Humans dislike aiming up and down */, (center.z - aimPoint.z) * min((1 - dist), 1.0))
 
             // Humans can't hold their hands still
             val actualVelocity = Vec3d(mc.player?.prevX!! - mc.player?.x!!, mc.player?.prevY!! - mc.player?.y!!, mc.player?.prevZ!! - mc.player?.z!!)
@@ -467,21 +416,12 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             // Don't aim through walls
             while (!PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint) && rotations.isSelected(0)) {
-                aimPoint = Vec3d(
-                    MathUtil.bringCloser(aimPoint.x, best.x, precision.value),
-                    MathUtil.bringCloser(aimPoint.y, best.y, precision.value),
-                    MathUtil.bringCloser(aimPoint.z, best.z, precision.value)
-                )
+                aimPoint = Vec3d(MathUtil.bringCloser(aimPoint.x, best.x, precision.value), MathUtil.bringCloser(aimPoint.y, best.y, precision.value), MathUtil.bringCloser(aimPoint.z, best.z, precision.value))
             }
 
             var distToBest = mc.player?.eyePos?.squaredDistanceTo(best)!!
             if (distToBest <= reach.minValue * reach.minValue) {
-                while (mc.player?.eyePos?.squaredDistanceTo(aimPoint)!! > reach.minValue * reach.minValue)
-                    aimPoint = Vec3d(
-                        MathUtil.bringCloser(aimPoint.x, best.x, precision.value),
-                        MathUtil.bringCloser(aimPoint.y, best.y, precision.value),
-                        MathUtil.bringCloser(aimPoint.z, best.z, precision.value)
-                    )
+                while (mc.player?.eyePos?.squaredDistanceTo(aimPoint)!! > reach.minValue * reach.minValue) aimPoint = Vec3d(MathUtil.bringCloser(aimPoint.x, best.x, precision.value), MathUtil.bringCloser(aimPoint.y, best.y, precision.value), MathUtil.bringCloser(aimPoint.z, best.z, precision.value))
                 val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint))
                 if (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null) {
                     aimPoint = best

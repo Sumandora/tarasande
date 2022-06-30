@@ -38,10 +38,8 @@ class ValueComponentText(value: Value) : ValueComponent(value) {
         textFieldWidget.width = (width * 2).toInt()
         matrices?.push()
         matrices?.scale(0.5F, 0.5F, 1.0F)
-        if (textFieldWidget.isFocused)
-            (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.get().clientValues?.accentColor?.getColor()!!)
-        if (!value.isEnabled())
-            (textFieldWidget as ITextFieldWidget).tarasande_setColor(Color.white.darker().darker())
+        if (textFieldWidget.isFocused) (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.get().clientValues?.accentColor?.getColor()!!)
+        if (!value.isEnabled()) (textFieldWidget as ITextFieldWidget).tarasande_setColor(Color.white.darker().darker())
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
         (textFieldWidget as ITextFieldWidget).tarasande_setColor(null)
         matrices?.pop()
@@ -68,8 +66,7 @@ class ValueComponentText(value: Value) : ValueComponent(value) {
             textFieldWidget.setTextFieldFocused(false)
             textFieldWidget.setCursorToEnd()
             return true
-        } else
-            textFieldWidget.keyPressed(keyCode, scanCode, modifiers)
+        } else textFieldWidget.keyPressed(keyCode, scanCode, modifiers)
         return false
     }
 

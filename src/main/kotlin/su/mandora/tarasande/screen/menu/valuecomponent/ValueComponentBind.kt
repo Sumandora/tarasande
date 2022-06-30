@@ -96,17 +96,14 @@ class ValueComponentBind(value: Value) : ValueComponent(value) {
     override fun getHeight() = MinecraftClient.getInstance().textRenderer.fontHeight.toDouble()
 
     private fun getName(type: ValueBind.Type, button: Int): String {
-        if (waitsForInput)
-            return "_"
+        if (waitsForInput) return "_"
         when (type) {
             ValueBind.Type.KEY -> {
                 var keyName: String?
-                if (button == GLFW.GLFW_KEY_UNKNOWN)
-                    keyName = "none"
+                if (button == GLFW.GLFW_KEY_UNKNOWN) keyName = "none"
                 else {
                     keyName = GLFW.glfwGetKeyName(button, -1)
-                    if (keyName == null)
-                        keyName = GLFW.glfwGetKeyName(GLFW.GLFW_KEY_UNKNOWN, GLFW.glfwGetKeyScancode(button))
+                    if (keyName == null) keyName = GLFW.glfwGetKeyName(GLFW.GLFW_KEY_UNKNOWN, GLFW.glfwGetKeyScancode(button))
                 }
 
                 if (keyName == null || keyName.trim().isEmpty() || escapeCharacters.contains(keyName)) {

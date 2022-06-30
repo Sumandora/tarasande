@@ -47,7 +47,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Inject(method = "sendChatMessagePacket", at = @At("HEAD"), cancellable = true)
     public void injectSendChatMessagePacket(ChatMessageSigner signer, String message, Text preview, CallbackInfo ci) {
-        if(bypassChat)
+        if (bypassChat)
             return;
         EventChat eventChat = new EventChat(signer, message, preview);
         TarasandeMain.Companion.get().getManagerEvent().call(eventChat);

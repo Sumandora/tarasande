@@ -38,8 +38,7 @@ object PathFinder {
     fun findPath(start: Vec3d, target: Vec3d, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost, maxTime: Long = 0L, abort: Function<Node, Boolean> = never): ArrayList<Vec3d>? {
         val mappedPath = ArrayList<Vec3d>()
         val path = findPath(Node(round(start.x).toInt(), round(start.y).toInt(), round(start.z).toInt()), Node(round(target.x).toInt(), round(target.y).toInt(), round(target.z).toInt()), allowedBlock, heuristic, cost, maxTime, abort) ?: return null
-        for (vec in path)
-            mappedPath.add(Vec3d(vec.x + 0.5, vec.y + 0.5, vec.z + 0.5))
+        for (vec in path) mappedPath.add(Vec3d(vec.x + 0.5, vec.y + 0.5, vec.z + 0.5))
         return mappedPath
     }
 
@@ -79,8 +78,7 @@ object PathFinder {
                 var movementPossibility = movementPossibility
                 // hacky fix because we don't have a set grid size
                 for (movementPossibility2 in open) {
-                    if (movementPossibility2 == movementPossibility)
-                        movementPossibility = movementPossibility2
+                    if (movementPossibility2 == movementPossibility) movementPossibility = movementPossibility2
                 }
 
                 val tempG = current.g + cost.invoke(current, movementPossibility)
@@ -120,12 +118,9 @@ object PathFinder {
 
     private fun generateMovementPossibilities(position: Node, world: ClientWorld?, allowedBlock: Function2<ClientWorld?, Node, Boolean>): List<Node> {
         val list = ArrayList<Node>()
-        for (x in -1..1 step 2)
-            list.add(position.add(x, 0, 0))
-        for (y in -1..1 step 2)
-            list.add(position.add(0, y, 0))
-        for (z in -1..1 step 2)
-            list.add(position.add(0, 0, z))
+        for (x in -1..1 step 2) list.add(position.add(x, 0, 0))
+        for (y in -1..1 step 2) list.add(position.add(0, y, 0))
+        for (z in -1..1 step 2) list.add(position.add(0, 0, z))
         list.removeIf { !allowedBlock.invoke(world, it) }
         return list
     }
@@ -143,11 +138,7 @@ class Node(var x: Int, var y: Int, var z: Int) {
     }
 
     fun subtract(other: Node): Node {
-        return Node(
-            other.x - x,
-            other.y - y,
-            other.z - z
-        )
+        return Node(other.x - x, other.y - y, other.z - z)
     }
 
     override fun equals(other: Any?): Boolean {

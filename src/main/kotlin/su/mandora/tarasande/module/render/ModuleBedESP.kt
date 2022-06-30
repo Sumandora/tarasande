@@ -6,7 +6,6 @@ import net.minecraft.block.enums.BedPart
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
@@ -52,12 +51,9 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
     private fun allSurroundings(blockPos: BlockPos): ArrayList<BlockPos> {
         val list = ArrayList<BlockPos>()
-        for (x in -1..1 step 2)
-            list.add(blockPos.add(x, 0, 0))
-        for (y in 0..1)
-            list.add(blockPos.add(0, y, 0))
-        for (z in -1..1 step 2)
-            list.add(blockPos.add(0, 0, z))
+        for (x in -1..1 step 2) list.add(blockPos.add(x, 0, 0))
+        for (y in 0..1) list.add(blockPos.add(0, y, 0))
+        for (z in -1..1 step 2) list.add(blockPos.add(0, 0, z))
         return list
     }
 
@@ -89,8 +85,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         when (event) {
             is EventUpdate -> {
                 if (event.state == EventUpdate.State.PRE) {
-                    if (mc.player?.age?.mod(refreshRate.value.toInt()) != 0)
-                        return@Consumer
+                    if (mc.player?.age?.mod(refreshRate.value.toInt()) != 0) return@Consumer
 
                     val rad = searchRadius.value.toInt()
 
@@ -98,15 +93,12 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
                     val beds = ArrayList<BlockPos>()
 
-                    for (x in -rad..rad)
-                        for (y in -rad..rad)
-                            for (z in -rad..rad) {
-                                val blockPos = BlockPos(mc.player?.eyePos).add(x, y, z)
-                                val blockState = mc.world?.getBlockState(blockPos)
+                    for (x in -rad..rad) for (y in -rad..rad) for (z in -rad..rad) {
+                        val blockPos = BlockPos(mc.player?.eyePos).add(x, y, z)
+                        val blockState = mc.world?.getBlockState(blockPos)
 
-                                if (blockState?.block is BedBlock)
-                                    beds.add(blockPos)
-                            }
+                        if (blockState?.block is BedBlock) beds.add(blockPos)
+                    }
 
                     for (bed in beds) {
                         val state = mc.world?.getBlockState(bed)!!
@@ -115,8 +107,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                         val otherPartOfBed = bed.offset(facing)
                         val bedParts = arrayOf(bed, otherPartOfBed)
 
-                        if (bedDatas.any { it.bedParts.any { part1 -> bedParts.any { part2 -> part1 == part2 } } })
-                            continue // we already processed these
+                        if (bedDatas.any { it.bedParts.any { part1 -> bedParts.any { part2 -> part1 == part2 } } }) continue // we already processed these
 
                         if (!calculateBestWay.value || bedParts.any { allSurroundings(it).any { mc.world?.isAir(it)!! } }) {
                             bedDatas.add(BedData(bedParts, ArrayList(), null))
@@ -124,11 +115,16 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                         }
 
                         val defenders = calculateDefenses(bedParts)?.let { ArrayList(it) } ?: continue
-                        val outstanders = defenders.filter { allSurroundings(it).any { mc.world?.getBlockState(it)?.let { state -> state.isAir || state.getCollisionShape(MinecraftClient.getInstance().world, it).isEmpty }!! } }
+                        val outstanders = defenders.filter {
+                            allSurroundings(it).any {
+                                mc.world?.getBlockState(it)?.let { state ->
+                                    state.isAir || state.getCollisionShape(MinecraftClient.getInstance().world, it).isEmpty
+                                }!!
+                            }
+                        }
                         defenders.removeIf { bedParts.contains(it) }
 
-                        if (outstanders.any { mc.world?.getBlockState(it)?.block is BedBlock })
-                            continue // not a bedwars bed
+                        if (outstanders.any { mc.world?.getBlockState(it)?.block is BedBlock }) continue // not a bedwars bed
 
                         val solution = Breaker.findSolution(outstanders, defenders, bedParts, maxProcessingTime.value.toLong())
                         bedDatas.add(BedData(bedParts, defenders, solution))
@@ -163,7 +159,9 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
             stringBuilder.append("Bed at: " + bedParts.joinToString("; ") { "[" + it.toShortString() + "]" } + "\n")
             if (solution != null) {
-                stringBuilder.append("Used blocks: " + solution.map { mc.world?.getBlockState(BlockPos(it.x, it.y, it.z))?.block?.name?.string }.distinct().joinToString() + "\n")
+                stringBuilder.append("Used blocks: " + solution.map {
+                    mc.world?.getBlockState(BlockPos(it.x, it.y, it.z))?.block?.name?.string
+                }.distinct().joinToString() + "\n")
                 stringBuilder.append("Breaking time: " + solution.sumOf {
                     floor(1.0 / (1.0 - Breaker.getBreakSpeed(BlockPos(it.x, it.y, it.z))))
                 }.let { if (!it.isInfinite()) (it * (((MinecraftClient.getInstance() as IMinecraftClient).tarasande_getRenderTickCounter()) as IRenderTickCounter).tarasande_getTickTime() / 1000.0).toString() + "s" else it } + "\n")
@@ -193,8 +191,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                 val way = PathFinder.findPath(beginNode, endNode, object : Function2<ClientWorld?, Node, Boolean> {
                     override fun invoke(world: ClientWorld?, node: Node) = true
                 }, cost = costCalc, maxTime = maxProcessingTime) ?: break // timeout
-                if (bestWay == null)
-                    bestWay = way
+                if (bestWay == null) bestWay = way
                 else {
                     val bestG = bestWay[bestWay.size - 1].g
                     val newG = way[way.size - 1].g
@@ -203,9 +200,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                         bestG == newG -> {
                             val bestPos = bestWay[0]
                             val newPos = way[0]
-                            if (MinecraftClient.getInstance().player?.squaredDistanceTo(bestPos.x.toDouble(), bestPos.y.toDouble(), bestPos.z.toDouble())!! >
-                                MinecraftClient.getInstance().player?.squaredDistanceTo(newPos.x.toDouble(), newPos.y.toDouble(), newPos.z.toDouble())!!)
-                                bestWay = way
+                            if (MinecraftClient.getInstance().player?.squaredDistanceTo(bestPos.x.toDouble(), bestPos.y.toDouble(), bestPos.z.toDouble())!! > MinecraftClient.getInstance().player?.squaredDistanceTo(newPos.x.toDouble(), newPos.y.toDouble(), newPos.z.toDouble())!!) bestWay = way
                         }
                     }
                 }
@@ -216,8 +211,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         fun getBreakSpeed(blockPos: BlockPos): Double {
             val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot ?: return 1.0
             val state = MinecraftClient.getInstance().world?.getBlockState(blockPos)
-            if (state?.isAir!! || state.getCollisionShape(MinecraftClient.getInstance().world, blockPos).isEmpty)
-                return 0.0
+            if (state?.isAir!! || state.getCollisionShape(MinecraftClient.getInstance().world, blockPos).isEmpty) return 0.0
             val hardness = state.getHardness(MinecraftClient.getInstance().world, blockPos)
             if (hardness <= 0.0f) return 1.0
             var bestMult = 0.0f

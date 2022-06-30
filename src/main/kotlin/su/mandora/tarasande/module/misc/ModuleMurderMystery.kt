@@ -20,7 +20,7 @@ import su.mandora.tarasande.module.combat.ModuleAntiBot
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.string.StringUtil
 import su.mandora.tarasande.value.*
-import java.util.IllegalFormatConversionException
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
@@ -76,25 +76,21 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
 
         when (ThreadLocalRandom.current().nextInt(2)) {
             0 -> { // yes im sure (100% suspect, suspect safe, suspect 100% murderer)
-                sentence +=
-                    when (ThreadLocalRandom.current().nextInt(5)) {
-                        0 -> "100% "
-                        1 -> "i think "
-                        2 -> "murderer "
-                        3 -> if (ThreadLocalRandom.current().nextBoolean()) "safe murderer " else "murderer safe "
-                        4 -> if (ThreadLocalRandom.current().nextBoolean()) "100% murderer " else "murderer 100% "
-                        else -> null
-                    }
+                sentence += when (ThreadLocalRandom.current().nextInt(5)) {
+                    0 -> "100% "
+                    1 -> "i think "
+                    2 -> "murderer "
+                    3 -> if (ThreadLocalRandom.current().nextBoolean()) "safe murderer " else "murderer safe "
+                    4 -> if (ThreadLocalRandom.current().nextBoolean()) "100% murderer " else "murderer 100% "
+                    else -> null
+                }
 
-                if (ThreadLocalRandom.current().nextBoolean())
-                    sentence += suspect
-                else
-                    sentence = "$suspect $sentence"
+                if (ThreadLocalRandom.current().nextBoolean()) sentence += suspect
+                else sentence = "$suspect $sentence"
             }
             1 -> { // i saw suspect kill somebody, this message is super cool when suspect is on the other side of the map and there are 50 walls in between
                 sentence += "i saw $suspect kill "
-                if (ThreadLocalRandom.current().nextBoolean())
-                    sentence += "somebody"
+                if (ThreadLocalRandom.current().nextBoolean()) sentence += "somebody"
             }
         }
         return sentence.trim()
@@ -124,8 +120,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
             }
             else -> null
         }
-        if (message != null && message.isNotEmpty())
-            messages.add(message)
+        if (message != null && message.isNotEmpty()) messages.add(message)
     }
 
     private fun isIllegalItem(item: Item) = if (item == Items.AIR) false else when {
@@ -136,8 +131,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
 
     private fun isMurderer(): Boolean {
         for (slot in 0 until PlayerInventory.getHotbarSize()) {
-            if (isIllegalItem(mc.player?.inventory?.main?.get(slot)?.item!!))
-                return true
+            if (isIllegalItem(mc.player?.inventory?.main?.get(slot)?.item!!)) return true
         }
 
         return isIllegalItem(mc.player?.inventory?.offHand?.get(0)?.item!!)
@@ -150,8 +144,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventPollEvents -> {
-                if(messages.isNotEmpty())
-                    mc.player?.sendChatMessage(SharedConstants.stripInvalidChars(messages.removeFirst()))
+                if (messages.isNotEmpty()) mc.player?.sendChatMessage(SharedConstants.stripInvalidChars(messages.removeFirst()))
             }
             is EventUpdate -> {
                 if (event.state == EventUpdate.State.PRE) {
@@ -184,63 +177,52 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                                     break
                                 }
                             }
-                            if ((mc.player?.inventory?.selectedSlot!! != sword).also { switchedSlot = it })
-                                mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(sword))
+                            if ((mc.player?.inventory?.selectedSlot!! != sword).also { switchedSlot = it }) mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(sword))
                         }
                         EventAttackEntity.State.POST -> if (switchedSlot) mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))
                     }
                 }
             }
             is EventIsEntityAttackable -> {
-                if (event.entity is PlayerEntity && !isMurderer() && !suspects.containsKey(event.entity.gameProfile))
-                    return@Consumer
+                if (event.entity is PlayerEntity && !isMurderer() && !suspects.containsKey(event.entity.gameProfile)) return@Consumer
             }
             is EventPacket -> {
-                if (event.type == EventPacket.Type.RECEIVE)
-                    if (event.packet is PlayerRespawnS2CPacket) {
-                        suspects.clear()
-                    } else if (event.packet is EntityEquipmentUpdateS2CPacket) {
-                        val player = mc.world?.getEntityById(event.packet.id)
-                        if (player == mc.player) // I swear I almost played a round without this
-                            return@Consumer
-                        if (player !is PlayerEntity)
-                            return@Consumer
-                        if (suspects.containsKey(player.gameProfile))
-                            return@Consumer
-                        if (TarasandeMain.get().managerModule?.get(ModuleAntiBot::class.java)?.isBot(player)!!)
-                            return@Consumer
+                if (event.type == EventPacket.Type.RECEIVE) if (event.packet is PlayerRespawnS2CPacket) {
+                    suspects.clear()
+                } else if (event.packet is EntityEquipmentUpdateS2CPacket) {
+                    val player = mc.world?.getEntityById(event.packet.id)
+                    if (player == mc.player) // I swear I almost played a round without this
+                        return@Consumer
+                    if (player !is PlayerEntity) return@Consumer
+                    if (suspects.containsKey(player.gameProfile)) return@Consumer
+                    if (TarasandeMain.get().managerModule?.get(ModuleAntiBot::class.java)?.isBot(player)!!) return@Consumer
 
-                        var mainHand: Item? = null
-                        var offHand: Item? = null
-                        for (pair in event.packet.equipmentList) {
-                            if (pair.first == EquipmentSlot.MAINHAND)
-                                mainHand = pair.second.item
-                            else if (pair.first == EquipmentSlot.OFFHAND)
-                                offHand = pair.second.item
+                    var mainHand: Item? = null
+                    var offHand: Item? = null
+                    for (pair in event.packet.equipmentList) {
+                        if (pair.first == EquipmentSlot.MAINHAND) mainHand = pair.second.item
+                        else if (pair.first == EquipmentSlot.OFFHAND) offHand = pair.second.item
+                    }
+
+                    val illegalMainHand = if (mainHand != null) isIllegalItem(mainHand) else false
+                    val illegalOffHand = if (offHand != null) isIllegalItem(offHand) else false
+
+                    if (illegalMainHand || illegalOffHand) {
+                        suspects[player.gameProfile] = when {
+                            illegalMainHand && mainHand != null && illegalOffHand && offHand != null -> arrayOf(mainHand, offHand)
+                            illegalMainHand && mainHand != null -> arrayOf(mainHand)
+                            illegalOffHand && offHand != null -> arrayOf(offHand)
+                            else -> arrayOf()
                         }
-
-                        val illegalMainHand = if (mainHand != null) isIllegalItem(mainHand) else false
-                        val illegalOffHand = if (offHand != null) isIllegalItem(offHand) else false
-
-                        if (illegalMainHand || illegalOffHand) {
-                            suspects[player.gameProfile] = when {
-                                illegalMainHand && mainHand != null && illegalOffHand && offHand != null -> arrayOf(mainHand, offHand)
-                                illegalMainHand && mainHand != null -> arrayOf(mainHand)
-                                illegalOffHand && offHand != null -> arrayOf(offHand)
-                                else -> arrayOf()
-                            }
-                            if (!broadcast.isSelected(0)) {
-                                accuse(player, illegalMainHand, illegalOffHand, mainHand ?: Items.AIR, offHand ?: Items.AIR, broadcast.settings.indexOf(broadcast.selected[0]), customBroadcastMessage.value)
-                            }
+                        if (!broadcast.isSelected(0)) {
+                            accuse(player, illegalMainHand, illegalOffHand, mainHand ?: Items.AIR, offHand ?: Items.AIR, broadcast.settings.indexOf(broadcast.selected[0]), customBroadcastMessage.value)
                         }
                     }
+                }
             }
             is EventEntityColor -> {
-                if (event.entity is PlayerEntity)
-                    if (suspects.containsKey(event.entity.gameProfile))
-                        event.color = murdererColorOverride.getColor()
-                    else if (highlightDetectives.value && detectiveItems.list.any { event.entity.inventory.mainHandStack.item == it || event.entity.inventory.offHand[0].item == it })
-                        event.color = detectiveColorOverride.getColor()
+                if (event.entity is PlayerEntity) if (suspects.containsKey(event.entity.gameProfile)) event.color = murdererColorOverride.getColor()
+                else if (highlightDetectives.value && detectiveItems.list.any { event.entity.inventory.mainHandStack.item == it || event.entity.inventory.offHand[0].item == it }) event.color = detectiveColorOverride.getColor()
             }
         }
     }

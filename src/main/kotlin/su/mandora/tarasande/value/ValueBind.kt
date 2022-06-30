@@ -19,28 +19,22 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
         TarasandeMain.get().managerEvent?.add { event ->
             when (event) {
                 is EventMouse -> {
-                    if (type == Type.MOUSE)
-                        if (MinecraftClient.getInstance().currentScreen == null)
-                            if (button == event.button)
-                                when (event.action) {
-                                    GLFW.GLFW_PRESS -> {
-                                        mousePressed = true
-                                        presses++
-                                    }
-                                    GLFW.GLFW_RELEASE -> mousePressed = false
-                                }
+                    if (type == Type.MOUSE) if (MinecraftClient.getInstance().currentScreen == null) if (button == event.button) when (event.action) {
+                        GLFW.GLFW_PRESS -> {
+                            mousePressed = true
+                            presses++
+                        }
+                        GLFW.GLFW_RELEASE -> mousePressed = false
+                    }
                 }
                 is EventKey -> {
-                    if (type == Type.KEY)
-                        if (MinecraftClient.getInstance().currentScreen == null)
-                            if (event.key == button)
-                                when (event.action) {
-                                    GLFW.GLFW_PRESS -> {
-                                        keyPressed = true
-                                        presses++
-                                    }
-                                    GLFW.GLFW_RELEASE -> keyPressed = false
-                                }
+                    if (type == Type.KEY) if (MinecraftClient.getInstance().currentScreen == null) if (event.key == button) when (event.action) {
+                        GLFW.GLFW_PRESS -> {
+                            keyPressed = true
+                            presses++
+                        }
+                        GLFW.GLFW_RELEASE -> keyPressed = false
+                    }
                 }
             }
         }

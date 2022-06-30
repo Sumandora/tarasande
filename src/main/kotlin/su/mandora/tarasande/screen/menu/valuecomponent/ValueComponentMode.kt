@@ -30,8 +30,7 @@ class ValueComponentMode(value: Value) : ValueComponent(value) {
         matrices?.translate(-width, -getHeight() / 2.0, 0.0)
         for ((index, setting) in valueMode.settings.withIndex()) {
             var color = if (valueMode.selected.contains(setting)) TarasandeMain.get().clientValues?.accentColor?.getColor()!! else Color.white
-            if (!valueMode.isEnabled())
-                color = color.darker().darker()
+            if (!valueMode.isEnabled()) color = color.darker().darker()
             MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, setting, (width - MinecraftClient.getInstance().textRenderer.getWidth(setting)).toFloat(), (getHeight() / 2.0F + (index - (valueMode.settings.size - 1) / 2.0) * MinecraftClient.getInstance().textRenderer.fontHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), color.rgb)
         }
         matrices?.pop()

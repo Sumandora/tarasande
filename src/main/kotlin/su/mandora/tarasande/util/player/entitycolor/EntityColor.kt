@@ -30,20 +30,15 @@ class EntityColor {
         var color: Color? = null
 
         if (!useTeamColor.value) {
-            if (entity is PlayerEntity)
-                color = playerColor.getColor()
+            if (entity is PlayerEntity) color = playerColor.getColor()
 
-            if (entity is AnimalEntity)
-                color = animalColor.getColor()
+            if (entity is AnimalEntity) color = animalColor.getColor()
 
-            if (entity is Monster)
-                color = mobColor.getColor()
+            if (entity is Monster) color = mobColor.getColor()
         }
 
-        if (entity == MinecraftClient.getInstance().player)
-            color = selfColor.getColor()
-        else if(entity is PlayerEntity && TarasandeMain.get().friends?.isFriend(entity.gameProfile) == true)
-            color = friendsColor.getColor()
+        if (entity == MinecraftClient.getInstance().player) color = selfColor.getColor()
+        else if (entity is PlayerEntity && TarasandeMain.get().friends?.isFriend(entity.gameProfile) == true) color = friendsColor.getColor()
 
         val eventEntityColor = EventEntityColor(entity, color)
         TarasandeMain.get().managerEvent?.call(eventEntityColor)

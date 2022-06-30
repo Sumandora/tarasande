@@ -38,14 +38,11 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventMovement -> {
-                if (event.entity != mc.player)
-                    return@Consumer
+                if (event.entity != mc.player) return@Consumer
 
-                if (mc.player?.velocity?.lengthSquared()!! <= 0.01)
-                    firstMove = true
+                if (mc.player?.velocity?.lengthSquared()!! <= 0.01) firstMove = true
 
-                if (mc.player?.input?.movementInput?.lengthSquared() == 0.0f)
-                    return@Consumer
+                if (mc.player?.input?.movementInput?.lengthSquared() == 0.0f) return@Consumer
 
                 val accessor = event.velocity as IVec3d
 
@@ -86,9 +83,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                 speed = calcSpeed()
             }
             is EventKeyBindingIsPressed -> {
-                if (event.keyBinding == mc.options.jumpKey && mc.player?.input?.movementInput?.lengthSquared()!! > 0.0)
-                    if (mc.player?.isOnGround!! && jumpHeight.value > 0.0)
-                        event.pressed = true
+                if (event.keyBinding == mc.options.jumpKey && mc.player?.input?.movementInput?.lengthSquared()!! > 0.0) if (mc.player?.isOnGround!! && jumpHeight.value > 0.0) event.pressed = true
             }
         }
     }

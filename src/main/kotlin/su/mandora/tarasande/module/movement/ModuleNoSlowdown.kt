@@ -73,8 +73,7 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
                             if (event.state == EventUpdate.State.PRE) {
                                 if (reuseMode.isSelected(1)) {
                                     var slot = mc.player?.inventory?.selectedSlot!!
-                                    while (slot == mc.player?.inventory?.selectedSlot!!)
-                                        slot = ThreadLocalRandom.current().nextInt(0, 8)
+                                    while (slot == mc.player?.inventory?.selectedSlot!!) slot = ThreadLocalRandom.current().nextInt(0, 8)
                                     mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(slot))
                                 }
                                 mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))

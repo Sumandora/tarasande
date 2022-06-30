@@ -21,48 +21,11 @@ import su.mandora.tarasande.value.ValueBoolean
 class ManagerModule : Manager<Module>() {
 
     init {
-        add(
-            ModuleSprint(),
-            ModuleESP(),
-            ModuleKillAura(),
-            ModuleVelocity(),
-            ModuleTimer(),
-            ModuleScaffoldWalk(),
-            ModuleSafeWalk(),
-            ModuleFullBright(),
-            ModuleSpammer(),
-            ModuleDeadByDaylightEscape(),
-            ModuleSpeed(),
-            ModuleVehicleFlight(),
-            ModuleNoSlowdown(),
-            ModuleTeams(),
-            ModuleInventoryMove(),
-            ModuleBlink(),
-            ModuleFlight(),
-            ModuleTickBaseManipulation(),
-            ModuleNoCooldown(),
-            ModuleWTap(),
-            ModuleTrajectories(),
-            ModuleAntiBot(),
-            ModuleNoFov(),
-            ModuleLatency(),
-            ModuleKeepSprint(),
-            ModuleMurderMystery(),
-            ModuleNoSwing(),
-            ModuleColorCorrection(),
-            ModuleWorldTime(),
-            ModuleNuker(),
-            ModuleMovementRecorder(),
-            ModuleBedESP(),
-            ModuleFog()
-        )
+        add(ModuleSprint(), ModuleESP(), ModuleKillAura(), ModuleVelocity(), ModuleTimer(), ModuleScaffoldWalk(), ModuleSafeWalk(), ModuleFullBright(), ModuleSpammer(), ModuleDeadByDaylightEscape(), ModuleSpeed(), ModuleVehicleFlight(), ModuleNoSlowdown(), ModuleTeams(), ModuleInventoryMove(), ModuleBlink(), ModuleFlight(), ModuleTickBaseManipulation(), ModuleNoCooldown(), ModuleWTap(), ModuleTrajectories(), ModuleAntiBot(), ModuleNoFov(), ModuleLatency(), ModuleKeepSprint(), ModuleMurderMystery(), ModuleNoSwing(), ModuleColorCorrection(), ModuleWorldTime(), ModuleNuker(), ModuleMovementRecorder(), ModuleBedESP(), ModuleFog(), ModuleNoSign())
         TarasandeMain.get().managerEvent?.add { event ->
-            if (event is EventTick)
-                if (event.state == EventTick.State.POST) {
-                    for (module in list)
-                        for (i in 0 until module.bind.wasPressed())
-                            module.switchState()
-                }
+            if (event is EventTick) if (event.state == EventTick.State.POST) {
+                for (module in list) for (i in 0 until module.bind.wasPressed()) module.switchState()
+            }
         }
     }
 
@@ -72,14 +35,13 @@ open class Module(val name: String, val description: String, val category: Modul
     val visible = ValueBoolean(this, "Visible in ArrayList", true)
     var enabled = false
         set(value) {
-            if (field != value)
-                if (value) {
-                    onEnable()
-                    TarasandeMain.get().managerEvent?.addObject(this)
-                } else {
-                    TarasandeMain.get().managerEvent?.remObject(this)
-                    onDisable()
-                }
+            if (field != value) if (value) {
+                onEnable()
+                TarasandeMain.get().managerEvent?.addObject(this)
+            } else {
+                TarasandeMain.get().managerEvent?.remObject(this)
+                onDisable()
+            }
 
             field = value
         }

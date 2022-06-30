@@ -13,7 +13,8 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
 
     override fun init() {
         if (elements.isEmpty()) {
-            TarasandeMain.get().managerValue?.getValues(TarasandeMain.get().clientValues!!)?.forEach { elements.add(TarasandeMain.get().screens?.screenMenu?.managerValueComponent?.newInstance(it)!!) }
+            TarasandeMain.get().managerValue?.getValues(TarasandeMain.get().clientValues!!)
+                ?.forEach { elements.add(TarasandeMain.get().screens?.screenMenu?.managerValueComponent?.newInstance(it)!!) }
         }
     }
 

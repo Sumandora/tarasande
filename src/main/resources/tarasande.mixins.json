@@ -47,5 +47,9 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "MixinProfileKeys",
+    "MixinTelemetrySender"
+  ]
 }

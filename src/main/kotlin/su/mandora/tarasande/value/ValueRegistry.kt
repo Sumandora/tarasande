@@ -2,7 +2,6 @@ package su.mandora.tarasande.value
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
 import net.minecraft.util.registry.Registry
 import su.mandora.tarasande.base.value.Value
 import java.util.concurrent.CopyOnWriteArrayList
@@ -34,8 +33,7 @@ abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: 
         var count = 0
         val list = ArrayList<WrappedKey<T>>()
         for (key in registry) {
-            if (count >= max)
-                break
+            if (count >= max) break
             if (filter(key) && keyToString(key).contains(text, true) && this.list.none { it == key }) {
                 list.add(WrappedKey(key, keyToString(key)))
                 count++

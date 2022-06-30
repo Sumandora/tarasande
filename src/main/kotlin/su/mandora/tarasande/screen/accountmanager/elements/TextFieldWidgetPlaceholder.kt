@@ -9,8 +9,7 @@ import su.mandora.tarasande.mixin.accessor.ITextFieldWidget
 open class TextFieldWidgetPlaceholder(textRenderer: TextRenderer?, x: Int, y: Int, width: Int, height: Int, text: Text?) : TextFieldWidget(textRenderer, x, y, width, height, text) {
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val prevText = text
-        if (text.isEmpty() && !isFocused)
-            (this as ITextFieldWidget).tarasande_setForceText(message.string)
+        if (text.isEmpty() && !isFocused) (this as ITextFieldWidget).tarasande_setForceText(message.string)
         super.render(matrices, mouseX, mouseY, delta)
         (this as ITextFieldWidget).tarasande_setForceText(prevText)
     }

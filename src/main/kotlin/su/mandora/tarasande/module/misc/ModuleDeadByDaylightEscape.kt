@@ -11,8 +11,7 @@ class ModuleDeadByDaylightEscape : Module("Dead by daylight escape", "Insta esca
 
     val eventConsumer = Consumer<Event> { event ->
         if (event is EventUpdate && event.state == EventUpdate.State.POST) {
-            for (i in 0..150)
-                mc.networkHandler?.sendPacket(PlayerInputC2SPacket(if (i % 2 == 0) 1.0f else -1.0f, 0.0f, false, false))
+            for (i in 0..150) mc.networkHandler?.sendPacket(PlayerInputC2SPacket(if (i % 2 == 0) 1.0f else -1.0f, 0.0f, false, false))
             this.enabled = false
         }
     }

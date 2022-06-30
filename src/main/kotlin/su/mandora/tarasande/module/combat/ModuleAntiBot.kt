@@ -49,19 +49,15 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
                         }
                         is EntityS2CPacket -> {
                             val entity = event.packet.getEntity(mc.world)
-                            if (entity is PlayerEntity)
-                                if (groundMode.isSelected(0) && event.packet.isOnGround ||
-                                    groundMode.isSelected(1) && !event.packet.isOnGround) {
-                                    passedGround.add(entity)
-                                }
+                            if (entity is PlayerEntity) if (groundMode.isSelected(0) && event.packet.isOnGround || groundMode.isSelected(1) && !event.packet.isOnGround) {
+                                passedGround.add(entity)
+                            }
                         }
                     }
                 }
             }
             is EventIsEntityAttackable -> {
-                if (event.entity != null)
-                    if (isBot(event.entity))
-                        event.attackable = false
+                if (event.entity != null) if (isBot(event.entity)) event.attackable = false
             }
         }
     }
@@ -69,10 +65,8 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
     fun isBot(entity: Entity): Boolean {
         if (!enabled) return false
         if (entity is PlayerEntity) {
-            if (checks.isSelected(0) && !passedSound.contains(entity))
-                return true
-            if (checks.isSelected(1) && !passedGround.contains(entity))
-                return true
+            if (checks.isSelected(0) && !passedSound.contains(entity)) return true
+            if (checks.isSelected(1) && !passedGround.contains(entity)) return true
         }
         return false
     }

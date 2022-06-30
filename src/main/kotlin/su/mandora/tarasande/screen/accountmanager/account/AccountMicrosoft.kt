@@ -24,10 +24,8 @@ import java.util.stream.Collectors
 
 @AccountInfo("Microsoft", true)
 class AccountMicrosoft(
-    @TextFieldInfo("E-Mail", false)
-    val email: String,
-    @TextFieldInfo("Password", true)
-    val password: String,
+    @TextFieldInfo("E-Mail", false) val email: String,
+    @TextFieldInfo("Password", true) val password: String,
 ) : Account() {
     private val clientId = "00000000402b5328"
     private val scopeUrl = "service::user.auth.xboxlive.com::MBI_SSL"

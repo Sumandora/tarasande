@@ -22,14 +22,12 @@ class PanelFriends(x: Double, y: Double) : Panel("Friends", x, y, 150.0, 100.0) 
         var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
         for (it in playerElementList) {
             it.width = panelWidth - 4
-            if (y + it.getHeight() + 2 >= this.y - scrollOffset)
-                it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
+            if (y + it.getHeight() + 2 >= this.y - scrollOffset) it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
 
             matrices?.translate(0.0, it.getHeight() + 2, 0.0)
             y += it.getHeight() + 2
 
-            if (y > this.y - scrollOffset + panelHeight)
-                break
+            if (y > this.y - scrollOffset + panelHeight) break
         }
         matrices?.pop()
     }
@@ -59,8 +57,7 @@ class PanelFriends(x: Double, y: Double) : Panel("Friends", x, y, 150.0, 100.0) 
         val x = x + 2
         var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
         playerElementList.forEach {
-            if (it.mouseScrolled(mouseX - x, mouseY - y - scrollOffset, amount))
-                return true
+            if (it.mouseScrolled(mouseX - x, mouseY - y - scrollOffset, amount)) return true
             y += it.getHeight() + 2
         }
         return super.mouseScrolled(mouseX, mouseY, amount)
@@ -68,8 +65,7 @@ class PanelFriends(x: Double, y: Double) : Panel("Friends", x, y, 150.0, 100.0) 
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         playerElementList.forEach {
-            if (it.keyPressed(keyCode, scanCode, modifiers))
-                return true
+            if (it.keyPressed(keyCode, scanCode, modifiers)) return true
         }
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
@@ -108,9 +104,7 @@ class PanelFriends(x: Double, y: Double) : Panel("Friends", x, y, 150.0, 100.0) 
     override fun getMaxScrollOffset(): Double {
         var height = 0.0
         playerElementList.forEach { height += it.getHeight() + 2 }
-        return if (height > 0.0)
-            height - 2
-        else
-            0.0
+        return if (height > 0.0) height - 2
+        else 0.0
     }
 }

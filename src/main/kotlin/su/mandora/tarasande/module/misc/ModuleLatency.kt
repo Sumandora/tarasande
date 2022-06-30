@@ -24,8 +24,7 @@ class ModuleLatency : Module("Latency", "Controls network latency", ModuleCatego
     private val latency = object : ValueNumber(this, "Latency", 0.0, 100.0, 1000.0, 1.0) {
         var prev = 0.0
         override fun onChange() {
-            if (value < prev)
-                onDisable()
+            if (value < prev) onDisable()
             prev = value
         }
     }
@@ -38,9 +37,7 @@ class ModuleLatency : Module("Latency", "Controls network latency", ModuleCatego
             is EventPacket -> {
                 if (event.cancelled) return@Consumer
                 if (event.packet != null) {
-                    if (mc.networkHandler?.connection == null ||
-                        (mc.networkHandler?.connection as IClientConnection).tarasande_getChannel().attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY ||
-                        ((event.type == EventPacket.Type.RECEIVE && event.packet is DisconnectS2CPacket) || mc.currentScreen is DownloadingTerrainScreen)) {
+                    if (mc.networkHandler?.connection == null || (mc.networkHandler?.connection as IClientConnection).tarasande_getChannel().attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY || ((event.type == EventPacket.Type.RECEIVE && event.packet is DisconnectS2CPacket) || mc.currentScreen is DownloadingTerrainScreen)) {
                         this.switchState()
                         return@Consumer
                     }
@@ -58,8 +55,7 @@ class ModuleLatency : Module("Latency", "Controls network latency", ModuleCatego
                         when (triple.third) {
                             EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).tarasande_forceSend(triple.second)
                             EventPacket.Type.RECEIVE -> {
-                                if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener)
-                                    (triple.second as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
+                                if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener) (triple.second as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
                             }
                         }
                     }
@@ -73,9 +69,7 @@ class ModuleLatency : Module("Latency", "Controls network latency", ModuleCatego
             for (triple in packets) {
                 when (triple.third) {
                     EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).tarasande_forceSend(triple.second)
-                    EventPacket.Type.RECEIVE ->
-                        if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener)
-                            (triple.second as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
+                    EventPacket.Type.RECEIVE -> if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener) (triple.second as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
                 }
             }
         }

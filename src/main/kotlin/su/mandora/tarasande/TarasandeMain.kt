@@ -35,8 +35,8 @@ class TarasandeMain {
 
     val autoSaveDaemonName = "$name config auto save daemon"
     val autoSaveDaemon: Thread /* This has to be here because IntelliJ is the best IDE ever built */ = Thread({
-        while(true) {
-            if(clientValues?.autoSaveConfig?.value!!) {
+        while (true) {
+            if (clientValues?.autoSaveConfig?.value!!) {
                 managerFile?.save()
                 Thread.sleep(clientValues?.delay?.value?.toLong()!!)
             }
@@ -71,8 +71,7 @@ class TarasandeMain {
 
         if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && screens?.betterScreenAccountManager?.mainAccount != null) {
             screens?.betterScreenAccountManager?.logIn(screens?.betterScreenAccountManager?.accounts!![screens?.betterScreenAccountManager?.mainAccount!!])
-            while (screens?.betterScreenAccountManager?.loginThread != null && screens?.betterScreenAccountManager?.loginThread?.isAlive!!)
-                Thread.sleep(50L) // synchronize
+            while (screens?.betterScreenAccountManager?.loginThread != null && screens?.betterScreenAccountManager?.loginThread?.isAlive!!) Thread.sleep(50L) // synchronize
             screens?.betterScreenAccountManager?.status = null
         }
 

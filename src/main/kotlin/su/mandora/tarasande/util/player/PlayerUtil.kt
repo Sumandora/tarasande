@@ -26,31 +26,18 @@ import su.mandora.tarasande.util.math.rotation.RotationUtil
 
 object PlayerUtil {
 
-    val movementKeys = listOf(
-        MinecraftClient.getInstance().options.forwardKey,
-        MinecraftClient.getInstance().options.leftKey,
-        MinecraftClient.getInstance().options.backKey,
-        MinecraftClient.getInstance().options.rightKey
-    )
+    val movementKeys = listOf(MinecraftClient.getInstance().options.forwardKey, MinecraftClient.getInstance().options.leftKey, MinecraftClient.getInstance().options.backKey, MinecraftClient.getInstance().options.rightKey)
 
     fun isAttackable(entity: Entity?): Boolean {
         var attackable = true
-        if (entity == null)
-            attackable = false
-        else if (entity !is LivingEntity)
-            attackable = false
-        else if (entity == MinecraftClient.getInstance().player)
-            attackable = false
-        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(0)!! && entity is PlayerEntity)
-            attackable = false
-        else if (TarasandeMain.get().clientValues?.dontAttackTamedEntities?.value!! && entity is TameableEntity && entity.ownerUuid == MinecraftClient.getInstance().player?.uuid)
-            attackable = false
-        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(1)!! && entity is AnimalEntity)
-            attackable = false
-        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(2)!! && ((entity is MobEntity || entity is Monster) && entity !is AnimalEntity))
-            attackable = false
-        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(3)!! && (entity !is PlayerEntity && entity !is AnimalEntity && entity !is MobEntity))
-            attackable = false
+        if (entity == null) attackable = false
+        else if (entity !is LivingEntity) attackable = false
+        else if (entity == MinecraftClient.getInstance().player) attackable = false
+        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(0)!! && entity is PlayerEntity) attackable = false
+        else if (TarasandeMain.get().clientValues?.dontAttackTamedEntities?.value!! && entity is TameableEntity && entity.ownerUuid == MinecraftClient.getInstance().player?.uuid) attackable = false
+        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(1)!! && entity is AnimalEntity) attackable = false
+        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(2)!! && ((entity is MobEntity || entity is Monster) && entity !is AnimalEntity)) attackable = false
+        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(3)!! && (entity !is PlayerEntity && entity !is AnimalEntity && entity !is MobEntity)) attackable = false
 
         val eventIsEntityAttackable = EventIsEntityAttackable(entity, attackable)
         TarasandeMain.get().managerEvent?.call(eventIsEntityAttackable)
@@ -116,12 +103,7 @@ object PlayerUtil {
         val left = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.leftKey as IKeyBinding).tarasande_getBoundKey().code)
         val back = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.backKey as IKeyBinding).tarasande_getBoundKey().code)
         val right = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.rightKey as IKeyBinding).tarasande_getBoundKey().code)
-        return Math.toRadians(
-            RotationUtil.getYaw(
-                if (left && right) 0.0 else if (left) 1.0 else if (right) -1.0 else 0.0,
-                if (forward && back) 0.0 else if (forward) 1.0 else if (back) -1.0 else 0.0
-            ) + 90 + MinecraftClient.getInstance().player?.yaw!!
-        )
+        return Math.toRadians(RotationUtil.getYaw(if (left && right) 0.0 else if (left) 1.0 else if (right) -1.0 else 0.0, if (forward && back) 0.0 else if (forward) 1.0 else if (back) -1.0 else 0.0) + 90 + MinecraftClient.getInstance().player?.yaw!!)
     }
 
     fun isOnEdge(extrapolation: Double) = MinecraftClient.getInstance().world?.isSpaceEmpty(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.boundingBox?.offset(MinecraftClient.getInstance().player?.velocity?.x!! * extrapolation, -MinecraftClient.getInstance().player?.stepHeight?.toDouble()!!, MinecraftClient.getInstance().player?.velocity?.z!! * extrapolation))!!

@@ -37,9 +37,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
             is EventPacket -> {
                 if (event.cancelled) return@Consumer
                 if (event.packet != null) {
-                    if (mc.networkHandler?.connection == null ||
-                        (mc.networkHandler?.connection as IClientConnection).tarasande_getChannel().attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY ||
-                        ((event.type == EventPacket.Type.RECEIVE && event.packet is DisconnectS2CPacket) || (!pulse.value && mc.currentScreen is DownloadingTerrainScreen))) {
+                    if (mc.networkHandler?.connection == null || (mc.networkHandler?.connection as IClientConnection).tarasande_getChannel().attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY || ((event.type == EventPacket.Type.RECEIVE && event.packet is DisconnectS2CPacket) || (!pulse.value && mc.currentScreen is DownloadingTerrainScreen))) {
                         this.switchState()
                         return@Consumer
                     }
@@ -73,9 +71,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
             for (pair in copy) {
                 when (pair.second) {
                     EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).tarasande_forceSend(pair.first)
-                    EventPacket.Type.RECEIVE ->
-                        if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener)
-                            (pair.first as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
+                    EventPacket.Type.RECEIVE -> if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener) (pair.first as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
                 }
             }
         }

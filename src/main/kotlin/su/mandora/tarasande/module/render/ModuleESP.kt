@@ -24,9 +24,10 @@ import java.util.function.Consumer
 class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCategory.RENDER) {
 
     val mode = ValueMode(this, "Mode", true, "Shader", "2D")
-    private val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
-        override fun keyToString(key: Any?) = (key as EntityType<*>).name.string
-    }
+    private val entities =
+        object : ValueRegistry<EntityType<*>>(this, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
+            override fun keyToString(key: Any?) = (key as EntityType<*>).name.string
+        }
     private val hideBots = object : ValueBoolean(this, "Hide bots", false) {
         override fun isEnabled() = entities.list.contains(EntityType.PLAYER)
     }
@@ -37,13 +38,17 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 //        }
 //    }
 
-    fun filter(entity: Entity) = entities.list.contains(entity.type) && (!hideBots.value || entity !is PlayerEntity || !TarasandeMain.get().managerModule?.get(ModuleAntiBot::class.java)?.isBot(entity)!!)
+    fun filter(entity: Entity) =
+        entities.list.contains(entity.type) && (!hideBots.value || entity !is PlayerEntity || !TarasandeMain.get().managerModule?.get(
+            ModuleAntiBot::class.java
+        )?.isBot(entity)!!)
 
     private val hashMap = HashMap<Entity, Rectangle>()
 
     private fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Vec3d? {
         val camPos = mc.gameRenderer.camera.pos.negate().add(vector)
-        val vec1 = matrixVectorMultiply(modelView, Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1.0f))
+        val vec1 =
+            matrixVectorMultiply(modelView, Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1.0f))
         val screenPos = matrixVectorMultiply(projection, vec1)
 
         if (screenPos.w <= 0.0) return null
@@ -105,7 +110,8 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
                     var rectangle: Rectangle? = null
 
                     for (corner in corners) {
-                        val projected = project(event.matrices.peek().positionMatrix, event.positionMatrix, corner) ?: continue
+                        val projected =
+                            project(event.matrices.peek().positionMatrix, event.positionMatrix, corner) ?: continue
                         if (rectangle == null)
                             rectangle = Rectangle(projected.x, projected.y, projected.x, projected.y)
                         else {

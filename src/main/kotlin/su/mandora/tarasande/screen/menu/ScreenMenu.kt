@@ -48,15 +48,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         for (moduleCategory in ModuleCategory.values()) {
             panels.add(PanelCategory(moduleCategory, 0.0, 0.0))
         }
-        val fixedPanels = mutableListOf(
-            PanelClientValues::class.java,
-            PanelFriends::class.java,
-            PanelFixedArrayList::class.java,
-            PanelFixedInformation::class.java,
-            PanelFixedEffects::class.java,
-            PanelFixedInventory::class.java,
-            PanelFixedWatermark::class.java
-        )
+        val fixedPanels = mutableListOf(PanelClientValues::class.java, PanelFriends::class.java, PanelFixedArrayList::class.java, PanelFixedInformation::class.java, PanelFixedEffects::class.java, PanelFixedInventory::class.java, PanelFixedWatermark::class.java)
         if (System.getProperty("os.name").contains("windows", true)) {
             fixedPanels.add(PanelFixedSpotify::class.java)
         }
@@ -72,16 +64,14 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         screenChangeTime = System.currentTimeMillis()
         isClosing = false
         super.init()
-        for (panel in panels)
-            panel.init()
+        for (panel in panels) panel.init()
 
         particles.clear()
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         var animation = ((System.currentTimeMillis() - screenChangeTime) / openingAnimationLength).coerceAtMost(1.0)
-        if (isClosing)
-            animation = 1.0 - animation
+        if (isClosing) animation = 1.0 - animation
 
         if (isClosing && animation <= 0.0) {
             panels.forEach { it.onClose() }
@@ -126,8 +116,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         matrices?.push()
         val numPoints = 100
         for (i in 0..numPoints) {
-            if (particles.size == i && animation * numPoints >= i)
-                particles.add(Particle(width / 2.0, height / 2.0))
+            if (particles.size == i && animation * numPoints >= i) particles.add(Particle(width / 2.0, height / 2.0))
         }
         matrices?.pop()
 
@@ -153,12 +142,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
             val height = (panelHeight - panelHeight * (1 - animation) - 1)
             if (it !is PanelFixed && animation > 0.0) {
                 GlStateManager._enableScissorTest()
-                GlStateManager._scissorBox(
-                    round(x * client?.window?.scaleFactor!!).toInt(),
-                    round(client?.window?.height!! - y * client?.window?.scaleFactor!!).toInt(),
-                    round(width * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1),
-                    round(height * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1)
-                )
+                GlStateManager._scissorBox(round(x * client?.window?.scaleFactor!!).toInt(), round(client?.window?.height!! - y * client?.window?.scaleFactor!!).toInt(), round(width * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1), round(height * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1))
             }
             if (it is PanelFixed || animation > 0.0) {
                 it.render(matrices, mouseX, mouseY, delta)
@@ -182,8 +166,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         var animation = ((System.currentTimeMillis() - screenChangeTime) / openingAnimationLength).coerceAtMost(1.0)
-        if (isClosing)
-            animation = 1.0 - animation
+        if (isClosing) animation = 1.0 - animation
 
         if (animation != 1.0) return true
 
@@ -206,20 +189,17 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
         for (it in panels) {
-            if (it.mouseScrolled(mouseX, mouseY, amount))
-                break
+            if (it.mouseScrolled(mouseX, mouseY, amount)) break
         }
         return super.mouseScrolled(mouseX, mouseY, amount)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         panels.forEach {
-            if (it.keyPressed(keyCode, scanCode, modifiers))
-                return false
+            if (it.keyPressed(keyCode, scanCode, modifiers)) return false
         }
         val animation = ((System.currentTimeMillis() - screenChangeTime) / openingAnimationLength).coerceAtMost(1.0)
-        if (animation != 1.0)
-            return false
+        if (animation != 1.0) return false
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 

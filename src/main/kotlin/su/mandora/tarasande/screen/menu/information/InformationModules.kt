@@ -15,10 +15,8 @@ class InformationTimeShifted : Information("Tick base manipulation", "Time shift
     private val moduleTickBaseManipulation = TarasandeMain.get().managerModule?.get(ModuleTickBaseManipulation::class.java)!!
 
     override fun getMessage(): String? {
-        if (!moduleTickBaseManipulation.enabled)
-            return null
-        if (moduleTickBaseManipulation.shifted == 0L)
-            return null
+        if (!moduleTickBaseManipulation.enabled) return null
+        if (moduleTickBaseManipulation.shifted == 0L) return null
         return moduleTickBaseManipulation.shifted.toString() + " (" + floor(moduleTickBaseManipulation.shifted / ((MinecraftClient.getInstance() as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_getTickTime()).toInt() + ")"
     }
 }
@@ -26,10 +24,11 @@ class InformationTimeShifted : Information("Tick base manipulation", "Time shift
 class InformationMurderer : Information("Murder Mystery", "Suspected murderers") {
     override fun getMessage(): String? {
         val murderMystery = TarasandeMain.get().managerModule?.get(ModuleMurderMystery::class.java)!!
-        if (murderMystery.enabled)
-            if (murderMystery.suspects.isNotEmpty()) {
-                return "\n" + murderMystery.suspects.entries.joinToString("\n") { it.key.name + " (" + it.value.joinToString(" and ") { it.name.string } + ")" }
+        if (murderMystery.enabled) if (murderMystery.suspects.isNotEmpty()) {
+            return "\n" + murderMystery.suspects.entries.joinToString("\n") {
+                it.key.name + " (" + it.value.joinToString(" and ") { it.name.string } + ")"
             }
+        }
 
         return null
     }
@@ -38,17 +37,15 @@ class InformationMurderer : Information("Murder Mystery", "Suspected murderers")
 class InformationBeds : Information("Bed ESP", "Beds") {
     override fun getMessage(): String? {
         val bedESP = TarasandeMain.get().managerModule?.get(ModuleBedESP::class.java)!!
-        if (bedESP.enabled)
-            if (bedESP.calculateBestWay.value)
-                if (bedESP.bedDatas.isNotEmpty()) {
-                    return "\n" + bedESP.bedDatas.sortedBy {
-                        MinecraftClient.getInstance().player?.squaredDistanceTo(it.bedParts.let {
-                            var vec = Vec3d(0.0, 0.0, 0.0)
-                            it.forEach { vec = vec.add(Vec3d.ofCenter(it)) }
-                            vec.multiply(1.0 / it.size) // ffs there is no divide
-                        })
-                    }.joinToString("\n") { it.toString() }
-                }
+        if (bedESP.enabled) if (bedESP.calculateBestWay.value) if (bedESP.bedDatas.isNotEmpty()) {
+            return "\n" + bedESP.bedDatas.sortedBy {
+                MinecraftClient.getInstance().player?.squaredDistanceTo(it.bedParts.let {
+                    var vec = Vec3d(0.0, 0.0, 0.0)
+                    it.forEach { vec = vec.add(Vec3d.ofCenter(it)) }
+                    vec.multiply(1.0 / it.size) // ffs there is no divide
+                })
+            }.joinToString("\n") { it.toString() }
+        }
 
         return null
     }

@@ -241,8 +241,7 @@ object RenderUtil {
     }
 
     fun blockOutline(matrices: MatrixStack?, voxelShape: VoxelShape, color: Int) {
-        if (voxelShape.isEmpty)
-            return
+        if (voxelShape.isEmpty) return
 
         val f = (color shr 24 and 0xFF) / 255.0f
         val g = (color shr 16 and 0xFF) / 255.0f
@@ -337,9 +336,7 @@ object RenderUtil {
             val otherGreen = (formatting.colorValue!! shr 8 and 0xFF) / 255.0f
             val otherBlue = (formatting.colorValue!! shr 0 and 0xFF) / 255.0f
 
-            val diff = (otherRed - red).toDouble().pow(2.0) * 0.2126 +
-                    (otherGreen - green).toDouble().pow(2.0) * 0.7152 +
-                    (otherBlue - blue).toDouble().pow(2.0) * 0.0722
+            val diff = (otherRed - red).toDouble().pow(2.0) * 0.2126 + (otherGreen - green).toDouble().pow(2.0) * 0.7152 + (otherBlue - blue).toDouble().pow(2.0) * 0.0722
 
             if (bestFormatting == null || bestDiff > diff) {
                 bestFormatting = formatting

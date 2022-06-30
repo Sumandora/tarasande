@@ -18,10 +18,8 @@ class Rotation(var yaw: Float, var pitch: Float) {
             val sensitivityPow3 = sensitivity * sensitivity * sensitivity
             val sensitivityPow3Mult8 = sensitivityPow3 * 8.0
 
-            return (if (MinecraftClient.getInstance().options.perspective.isFirstPerson && MinecraftClient.getInstance().player?.isUsingSpyglass!!)
-                sensitivityPow3
-            else
-                sensitivityPow3Mult8) * 0.15f
+            return (if (MinecraftClient.getInstance().options.perspective.isFirstPerson && MinecraftClient.getInstance().player?.isUsingSpyglass!!) sensitivityPow3
+            else sensitivityPow3Mult8) * 0.15f
         }
 
         fun calculateRotationChange(cursorDeltaX: Double, cursorDeltaY: Double): Rotation {

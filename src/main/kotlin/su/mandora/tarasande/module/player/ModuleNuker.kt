@@ -57,43 +57,35 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
 
                 list.clear()
 
-                for (x in -rad..rad)
-                    for (y in -rad..rad)
-                        for (z in -rad..rad) {
-                            var blockPos = BlockPos(mc.player?.eyePos).add(x, y, z)
-                            val blockState = mc.world?.getBlockState(blockPos)
-                            if (
-                                (selectionMode.isSelected(0) && includedBlocks.list.contains(blockState?.block)) ||
-                                (selectionMode.isSelected(1) && !excludedBlocks.list.contains(blockState?.block))
-                            ) {
-                                val collisionShape = blockState?.block?.defaultState?.getCollisionShape(mc.world, blockPos)
-                                if (collisionShape != null && !collisionShape.isEmpty) {
-                                    val pos = collisionShape.boundingBox.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble()).center
-                                    if (pos.squaredDistanceTo(mc.player?.eyePos) <= radius.value * radius.value) {
-                                        val blockVec = Vec3d.of(blockPos)
-                                        val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, blockVec.add(pos.subtract(blockVec))) ?: continue
-                                        if (hitResult.type != HitResult.Type.BLOCK) continue
-                                        if (!throughWalls.isSelected(1)) {
-                                            when {
-                                                throughWalls.isSelected(0) -> {
-                                                    if (hitResult.blockPos != blockPos)
-                                                        continue
-                                                }
-                                                throughWalls.isSelected(2) -> {
-                                                    blockPos = hitResult.blockPos
-                                                }
-                                            }
+                for (x in -rad..rad) for (y in -rad..rad) for (z in -rad..rad) {
+                    var blockPos = BlockPos(mc.player?.eyePos).add(x, y, z)
+                    val blockState = mc.world?.getBlockState(blockPos)
+                    if ((selectionMode.isSelected(0) && includedBlocks.list.contains(blockState?.block)) || (selectionMode.isSelected(1) && !excludedBlocks.list.contains(blockState?.block))) {
+                        val collisionShape = blockState?.block?.defaultState?.getCollisionShape(mc.world, blockPos)
+                        if (collisionShape != null && !collisionShape.isEmpty) {
+                            val pos = collisionShape.boundingBox.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble()).center
+                            if (pos.squaredDistanceTo(mc.player?.eyePos) <= radius.value * radius.value) {
+                                val blockVec = Vec3d.of(blockPos)
+                                val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, blockVec.add(pos.subtract(blockVec))) ?: continue
+                                if (hitResult.type != HitResult.Type.BLOCK) continue
+                                if (!throughWalls.isSelected(1)) {
+                                    when {
+                                        throughWalls.isSelected(0) -> {
+                                            if (hitResult.blockPos != blockPos) continue
                                         }
-                                        list.add(Pair(blockPos, hitResult))
+                                        throughWalls.isSelected(2) -> {
+                                            blockPos = hitResult.blockPos
+                                        }
                                     }
                                 }
+                                list.add(Pair(blockPos, hitResult))
                             }
                         }
+                    }
+                }
 
                 if (list.isNotEmpty()) {
-                    val newList = ArrayList(list.distinct()
-                        .sortedBy { it.first.getSquaredDistance(mc.player?.eyePos) }
-                        .let { it.subList(0, min(maxDestructions.value.toInt(), it.size)) })
+                    val newList = ArrayList(list.distinct().sortedBy { it.first.getSquaredDistance(mc.player?.eyePos) }.let { it.subList(0, min(maxDestructions.value.toInt(), it.size)) })
                     list.clear()
                     list.addAll(newList)
 
@@ -112,7 +104,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                                 val pair = list[0]
                                 if (!mc.interactionManager?.isBreakingBlock!!) {
                                     val original = mc.crosshairTarget
-                                    mc.crosshairTarget = if(pair.second.blockPos == pair.first) pair.second else pair.second.withBlockPos(pair.first)
+                                    mc.crosshairTarget = if (pair.second.blockPos == pair.first) pair.second else pair.second.withBlockPos(pair.first)
                                     (mc as IMinecraftClient).tarasande_invokeDoAttack()
                                     mc.crosshairTarget = original
                                     breaking = true

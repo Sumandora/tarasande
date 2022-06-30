@@ -1,10 +1,14 @@
 package su.mandora.tarasande.screen.accountmanager
 
+import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget
 import net.minecraft.client.gui.widget.ButtonWidget
+import net.minecraft.client.network.SocialInteractionsManager
+import net.minecraft.client.util.ProfileKeys
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.network.encryption.SignatureVerifier
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import su.mandora.tarasande.base.screen.accountmanager.account.Account
@@ -101,8 +105,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
         loginButton?.active = accountList?.selectedOrNull != null
         removeButton?.active = accountList?.selectedOrNull != null
         setMainButton?.active = accountList?.selectedOrNull != null
-        if (accountList?.selectedOrNull != null)
-            setMainButton?.active = accountList?.selectedOrNull?.account?.isSuitableAsMain() == true
+        if (accountList?.selectedOrNull != null) setMainButton?.active = accountList?.selectedOrNull?.account?.isSuitableAsMain() == true
         randomButton?.active = accounts.isNotEmpty()
         super.tick()
     }
@@ -110,8 +113,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         drawCenteredText(matrices, textRenderer, if (status == null) "Account Manager" else status, width / 2, 8 - textRenderer.fontHeight / 2, -1)
-        if (proxy != null)
-            textRenderer.drawWithShadow(matrices, "Proxy", 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight * 2 - 2, -1)
+        if (proxy != null) textRenderer.drawWithShadow(matrices, "Proxy", 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight * 2 - 2, -1)
         textRenderer.drawWithShadow(matrices, if (proxy == null) "No Proxy" else proxy?.socketAddress?.address?.hostAddress!! + ":" + proxy?.socketAddress?.port!! + " (" + proxy?.ping!! + "ms)", 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight, Color.white.rgb)
     }
 
@@ -173,7 +175,18 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
             try {
                 currentAccount = account
                 account.logIn()
-                (MinecraftClient.getInstance() /* This can't be "client" because it is called from ClientMain means it's null at this point in time */ as IMinecraftClient).tarasande_setSession(account.session)
+                // This can't be "client" because it is called from ClientMain means it's null at this point in time
+                (MinecraftClient.getInstance() as IMinecraftClient).also {
+                    it.tarasande_setSession(account.session)
+                    val authenticationService = YggdrasilAuthenticationService(java.net.Proxy.NO_PROXY, "", account.environment)
+                    it.tarasande_setAuthenticationService(authenticationService)
+                    val userApiService = authenticationService.createUserApiService(account.session?.accessToken)
+                    it.tarasande_setUserApiService(userApiService)
+                    it.tarasande_setSessionService(account.getSessionService())
+                    it.tarasande_setServicesSignatureVerifier(SignatureVerifier.create(authenticationService.servicesKey))
+                    it.tarasande_setSocialInteractionsManager(SocialInteractionsManager(MinecraftClient.getInstance(), userApiService))
+                    it.tarasande_setProfileKeys(ProfileKeys(it.tarasande_getUserApiService(), account.session?.profile?.id, MinecraftClient.getInstance().runDirectory.toPath()))
+                }
                 status = Formatting.GREEN.toString() + "Logged in as \"" + account.getDisplayName() + "\""
             } catch (e: Throwable) {
                 e.printStackTrace()

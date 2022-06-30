@@ -56,8 +56,7 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
         // this method COULD be static, but Mojangs god tier coders didn't think of that
         ChatScreen("").also {
             it.init(mc, mc.window.scaledWidth, mc.window.scaledHeight)
-            for(c in text.toCharArray())
-                it.charTyped(c, 0)
+            for (c in text.toCharArray()) it.charTyped(c, 0)
             it.sendMessage(it.children().first { it is TextFieldWidget }.let { (it as TextFieldWidget).text }, true)
         }
         (mc.player as IClientPlayerEntity).tarasande_setBypassChat(prevBypassChat)
@@ -66,7 +65,7 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventPollEvents -> {
-                if(event.fake) return@Consumer
+                if (event.fake) return@Consumer
 
                 if (timeUtil.hasReached(delay.value.toLong())) {
                     if (priorityMessages.isNotEmpty()) {
@@ -74,7 +73,7 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
                         timeUtil.reset()
                         return@Consumer
                     }
-                    if(noArbitraryTexts.value) return@Consumer
+                    if (noArbitraryTexts.value) return@Consumer
                     var text = when {
                         mode.isSelected(0) -> message.value
                         mode.isSelected(1) -> {

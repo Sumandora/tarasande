@@ -35,60 +35,50 @@ import java.util.function.Consumer
 
 class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories", ModuleCategory.RENDER) {
 
-    private val projectileItems = arrayOf(
-        ProjectileItem(Items.BOW.javaClass, EntityType.ARROW, true) { stack, persistentProjectileEntity ->
-            val velocity = BowItem.getPullProgress(if (mc.player?.isUsingItem!!) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
-            persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, (velocity * 3.0).toFloat(), 1.0f)
-        },
-        ProjectileItem(Items.SNOWBALL.javaClass, EntityType.SNOWBALL, false) { _, persistentProjectileEntity ->
-            persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, 1.5f, 1.0f)
-        },
-        ProjectileItem(Items.EGG.javaClass, EntityType.EGG, false) { _, persistentProjectileEntity ->
-            persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, 1.5f, 1.0f)
-        },
-        ProjectileItem(Items.ENDER_PEARL.javaClass, EntityType.ENDER_PEARL, false) { _, persistentProjectileEntity ->
-            persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, 1.5f, 1.0f)
-        },
-        ProjectileItem(Items.EXPERIENCE_BOTTLE.javaClass, EntityType.EXPERIENCE_BOTTLE, false) { _, persistentProjectileEntity ->
-            persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, -20.0f, 0.7f, 1.0f)
-        },
-        ProjectileItem(Items.SPLASH_POTION.javaClass, EntityType.POTION, false) { _, persistentProjectileEntity ->
-            persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, -20.0f, 0.5f, 1.0f)
-        },
-        ProjectileItem(Items.TRIDENT.javaClass, EntityType.TRIDENT, true) { item, persistentProjectileEntity ->
-            val riptide = EnchantmentHelper.getRiptide(item)
-            persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, 2.5f + riptide.toFloat() * 0.5f, 1.0f)
-        },
-        ProjectileItem(Items.FISHING_ROD.javaClass, EntityType.FISHING_BOBBER, false) { _, persistentProjectileEntity ->
-            val f: Float = mc.player?.pitch!!
-            val g: Float = mc.player?.yaw!!
-            val h = MathHelper.cos(-g * (Math.PI.toFloat() / 180) - Math.PI.toFloat())
-            val i = MathHelper.sin(-g * (Math.PI.toFloat() / 180) - Math.PI.toFloat())
-            val j = -MathHelper.cos(-f * (Math.PI.toFloat() / 180))
-            val k = MathHelper.sin(-f * (Math.PI.toFloat() / 180))
+    private val projectileItems = arrayOf(ProjectileItem(Items.BOW.javaClass, EntityType.ARROW, true) { stack, persistentProjectileEntity ->
+        val velocity = BowItem.getPullProgress(if (mc.player?.isUsingItem!!) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, (velocity * 3.0).toFloat(), 1.0f)
+    }, ProjectileItem(Items.SNOWBALL.javaClass, EntityType.SNOWBALL, false) { _, persistentProjectileEntity ->
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, 1.5f, 1.0f)
+    }, ProjectileItem(Items.EGG.javaClass, EntityType.EGG, false) { _, persistentProjectileEntity ->
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, 1.5f, 1.0f)
+    }, ProjectileItem(Items.ENDER_PEARL.javaClass, EntityType.ENDER_PEARL, false) { _, persistentProjectileEntity ->
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, 1.5f, 1.0f)
+    }, ProjectileItem(Items.EXPERIENCE_BOTTLE.javaClass, EntityType.EXPERIENCE_BOTTLE, false) { _, persistentProjectileEntity ->
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, -20.0f, 0.7f, 1.0f)
+    }, ProjectileItem(Items.SPLASH_POTION.javaClass, EntityType.POTION, false) { _, persistentProjectileEntity ->
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, -20.0f, 0.5f, 1.0f)
+    }, ProjectileItem(Items.TRIDENT.javaClass, EntityType.TRIDENT, true) { item, persistentProjectileEntity ->
+        val riptide = EnchantmentHelper.getRiptide(item)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, 2.5f + riptide.toFloat() * 0.5f, 1.0f)
+    }, ProjectileItem(Items.FISHING_ROD.javaClass, EntityType.FISHING_BOBBER, false) { _, persistentProjectileEntity ->
+        val f: Float = mc.player?.pitch!!
+        val g: Float = mc.player?.yaw!!
+        val h = MathHelper.cos(-g * (Math.PI.toFloat() / 180) - Math.PI.toFloat())
+        val i = MathHelper.sin(-g * (Math.PI.toFloat() / 180) - Math.PI.toFloat())
+        val j = -MathHelper.cos(-f * (Math.PI.toFloat() / 180))
+        val k = MathHelper.sin(-f * (Math.PI.toFloat() / 180))
 
-            persistentProjectileEntity.refreshPositionAndAngles(persistentProjectileEntity.x - i.toDouble() * 0.3, persistentProjectileEntity.y + 0.1, persistentProjectileEntity.z - h.toDouble() * 0.3, f, g)
+        persistentProjectileEntity.refreshPositionAndAngles(persistentProjectileEntity.x - i.toDouble() * 0.3, persistentProjectileEntity.y + 0.1, persistentProjectileEntity.z - h.toDouble() * 0.3, f, g)
 
-            var vec3d = Vec3d(-i.toDouble(), MathHelper.clamp(-(k / j), -5.0f, 5.0f).toDouble(), -h.toDouble())
-            val m = vec3d.length()
-            vec3d = vec3d.multiply(0.6 / m + 0.5 + (persistentProjectileEntity as IEntity).tarasande_getRandom().nextGaussian() * 0.0045, 0.6 / m + 0.5 + (persistentProjectileEntity as IEntity).tarasande_getRandom().nextGaussian() * 0.0045, 0.6 / m + 0.5 + (persistentProjectileEntity as IEntity).tarasande_getRandom().nextGaussian() * 0.0045)
+        var vec3d = Vec3d(-i.toDouble(), MathHelper.clamp(-(k / j), -5.0f, 5.0f).toDouble(), -h.toDouble())
+        val m = vec3d.length()
+        vec3d = vec3d.multiply(0.6 / m + 0.5 + (persistentProjectileEntity as IEntity).tarasande_getRandom().nextGaussian() * 0.0045, 0.6 / m + 0.5 + (persistentProjectileEntity as IEntity).tarasande_getRandom().nextGaussian() * 0.0045, 0.6 / m + 0.5 + (persistentProjectileEntity as IEntity).tarasande_getRandom().nextGaussian() * 0.0045)
 
-            persistentProjectileEntity.velocity = vec3d
-            val rotation = RotationUtil.getRotations(vec3d)
-            persistentProjectileEntity.also {
-                it.yaw = rotation.yaw
-                it.prevYaw = rotation.yaw
-            }
-            persistentProjectileEntity.also {
-                it.pitch = rotation.pitch
-                it.prevPitch = rotation.pitch
-            }
-        },
-        ProjectileItem(Items.CROSSBOW.javaClass, EntityType.ARROW, true) { stack, persistentProjectileEntity ->
-            persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, (stack.item as ICrossbowItem).tarasande_invokeGetSpeed(stack), 1.0f)
-
+        persistentProjectileEntity.velocity = vec3d
+        val rotation = RotationUtil.getRotations(vec3d)
+        persistentProjectileEntity.also {
+            it.yaw = rotation.yaw
+            it.prevYaw = rotation.yaw
         }
-    )
+        persistentProjectileEntity.also {
+            it.pitch = rotation.pitch
+            it.prevPitch = rotation.pitch
+        }
+    }, ProjectileItem(Items.CROSSBOW.javaClass, EntityType.ARROW, true) { stack, persistentProjectileEntity ->
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, (stack.item as ICrossbowItem).tarasande_invokeGetSpeed(stack), 1.0f)
+
+    })
 
     private fun predict(itemStack: ItemStack): ArrayList<Vec3d> {
         val projectileItem = projectileItems.first { it.isSame(itemStack.item) }
@@ -109,10 +99,8 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
 
             override fun tick() {
                 super.tick()
-                if (!projectileItem.persistent)
-                    addVelocity(0.0, 0.02, 0.0)
-                if (projectileItem.entityType == EntityType.FISHING_BOBBER)
-                    velocity = velocity.multiply(0.92)
+                if (!projectileItem.persistent) addVelocity(0.0, 0.02, 0.0)
+                if (projectileItem.entityType == EntityType.FISHING_BOBBER) velocity = velocity.multiply(0.92)
             }
         }
         persistentProjectileEntity.setPosition(mc.player?.getLerpedPos(mc.tickDelta)?.add(0.0, mc.player?.standingEyeHeight!! - 0.1, 0.0))
@@ -184,7 +172,13 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
 
     val eventConsumer = Consumer<Event> { event ->
         if (event is EventRender3D) {
-            var stack: ItemStack? = null; Hand.values().forEach { hand -> if (projectileItems.any { mc.player?.getStackInHand(hand)?.item?.let { item -> it.isSame(item) } == true }) stack = mc.player?.getStackInHand(hand) }
+            var stack: ItemStack? = null; Hand.values().forEach { hand ->
+                if (projectileItems.any {
+                        mc.player?.getStackInHand(hand)?.item?.let { item ->
+                            it.isSame(item)
+                        } == true
+                    }) stack = mc.player?.getStackInHand(hand)
+            }
 
             if (stack != null) {
                 RenderSystem.enableBlend()

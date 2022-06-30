@@ -54,8 +54,7 @@ class Blur {
 
         TarasandeMain.get().managerEvent?.add { event ->
             if (event is EventScreenRender) {
-                if (MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenMenu)
-                    blurScene()
+                if (MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenMenu) blurScene()
             } else if (event is EventRender2D) {
                 blurScene()
             }
@@ -67,8 +66,7 @@ class Blur {
     }
 
     fun blurScene(strength: Int? = null) {
-        if (!RenderSystem.isOnRenderThread())
-            return
+        if (!RenderSystem.isOnRenderThread()) return
 
         val texture2D = GL11.glIsEnabled(GL11.GL_TEXTURE_2D)
         GL11.glEnable(GL11.GL_TEXTURE_2D)
@@ -170,13 +168,10 @@ class Blur {
     private fun calculateKawasePasses(strength: Int): ArrayList<Pair<Float, Float>> {
         val passes = ArrayList<Pair<Float, Float>>()
         val pair = strengthLevels[strength - 1]
-        for (i in 0 until pair.first * 2)
-            passes.add(Pair(pair.second, 1.0f))
+        for (i in 0 until pair.first * 2) passes.add(Pair(pair.second, 1.0f))
         for ((index, pass) in passes.withIndex()) {
-            if (index < passes.size / 2)
-                passes[index] = Pair(pass.first, 0.5f)
-            else
-                passes[index] = Pair(pass.first, 2.0f)
+            if (index < passes.size / 2) passes[index] = Pair(pass.first, 0.5f)
+            else passes[index] = Pair(pass.first, 2.0f)
         }
         if (passes.size % 2 != 0) {
             val pass = passes[passes.size - 1]

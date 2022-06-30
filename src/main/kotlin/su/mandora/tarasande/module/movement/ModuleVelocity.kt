@@ -55,8 +55,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
                     when {
                         mode.isSelected(2) -> {
                             if (receivedKnockback) {
-                                if (lastVelocity?.horizontalLengthSquared()!! > 0.01 && mc.player?.isOnGround!! && ThreadLocalRandom.current().nextInt(100) <= chance.value)
-                                    isJumping = true
+                                if (lastVelocity?.horizontalLengthSquared()!! > 0.01 && mc.player?.isOnGround!! && ThreadLocalRandom.current().nextInt(100) <= chance.value) isJumping = true
 
                                 receivedKnockback = false
                             }
@@ -71,8 +70,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
                 }
             }
             is EventKeyBindingIsPressed -> {
-                if (event.keyBinding == mc.options.jumpKey && isJumping)
-                    event.pressed = true
+                if (event.keyBinding == mc.options.jumpKey && isJumping) event.pressed = true
             }
         }
     }

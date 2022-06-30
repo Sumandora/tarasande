@@ -65,12 +65,10 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
             is EventUpdate -> {
                 when (event.state) {
                     EventUpdate.State.PRE -> {
-                        if (shifted > prevShifted)
-                            event.cancelled = true
+                        if (shifted > prevShifted) event.cancelled = true
                     }
                     EventUpdate.State.POST -> { // doing it in post means, that we skip as soon as we get it, otherwise we get a one tick delay
-                        if (shifted >= prevShifted && skipCooldown.value)
-                            shifted = max(0L, shifted - ceil((0.9 - MinecraftClient.getInstance().player?.getAttackCooldownProgress(0.5F)!!).coerceAtLeast(0.0) * MinecraftClient.getInstance().player?.attackCooldownProgressPerTick!! * ((mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_getTickTime()).toLong())
+                        if (shifted >= prevShifted && skipCooldown.value) shifted = max(0L, shifted - ceil((0.9 - MinecraftClient.getInstance().player?.getAttackCooldownProgress(0.5F)!!).coerceAtLeast(0.0) * MinecraftClient.getInstance().player?.attackCooldownProgressPerTick!! * ((mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_getTickTime()).toLong())
                     }
                     else -> {}
                 }
@@ -98,21 +96,18 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
                     didHit = false
                     prevShifted = shifted
 
-                    if (!unchargeKey.isPressed() && prevUnchargePressed)
-                        autoChargeDelay.reset()
+                    if (!unchargeKey.isPressed() && prevUnchargePressed) autoChargeDelay.reset()
 
                     if (!unchargeKey.isPressed() && (chargeKey.isPressed() || (autoCharge.value && minimum.value > shifted && autoChargeDelay.hasReached(delay.value.toLong())))) {
                         shifted += event.time - prevTime
 
                         if (resyncPositions.value) {
                             val iRenderTickCounter = (mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter
-                            for (i in 0..floor((event.time - iRenderTickCounter.tarasande_getPrevTimeMillis()) / iRenderTickCounter.tarasande_getTickTime()).toInt())
-                                mc.world?.tickEntities()
+                            for (i in 0..floor((event.time - iRenderTickCounter.tarasande_getPrevTimeMillis()) / iRenderTickCounter.tarasande_getTickTime()).toInt()) mc.world?.tickEntities()
                         }
                     }
                     prevTime = event.time
-                    if (unchargeKey.isPressed())
-                        shifted = if (instantUncharge.value) 0L else max(0L, (shifted - unchargeSpeed.value).toLong())
+                    if (unchargeKey.isPressed()) shifted = if (instantUncharge.value) 0L else max(0L, (shifted - unchargeSpeed.value).toLong())
                     prevUnchargePressed = unchargeKey.isPressed()
                 } else {
                     shifted = 0L

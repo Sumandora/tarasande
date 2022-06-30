@@ -14,11 +14,7 @@ import kotlin.math.abs
 class ManagerESP : Manager<ESPElement>() {
 
     init {
-        add(
-            ESPElementBox(),
-            ESPElementName(),
-            ESPElementHealthBar()
-        )
+        add(ESPElementBox(), ESPElementName(), ESPElementHealthBar())
     }
 
     fun renderBox(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
@@ -48,10 +44,8 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
         matrices.push()
         var padding = 2.0
         for (espElement in TarasandeMain.get().managerESP?.list!!) {
-            if (espElement == this)
-                break
-            if (espElement.enabled && espElement is ESPElementRotatable && espElement.orientation == orientation)
-                padding += espElement.getHeight(entity, sideWidth)
+            if (espElement == this) break
+            if (espElement.enabled && espElement is ESPElementRotatable && espElement.orientation == orientation) padding += espElement.getHeight(entity, sideWidth)
         }
         matrices.translate(rectangle.x, rectangle.y, 0.0)
         if (rotate) {

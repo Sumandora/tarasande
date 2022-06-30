@@ -103,8 +103,7 @@ class GraphPing : Graph("Ping", 200) {
             if (MinecraftClient.getInstance().networkHandler?.playerList != null) {
                 var playerListEntry: PlayerListEntry? = null
                 for (entry in MinecraftClient.getInstance().networkHandler?.playerList!!) {
-                    if (entry.profile.name.equals(MinecraftClient.getInstance().session.profile.name))
-                        playerListEntry = entry
+                    if (entry.profile.name.equals(MinecraftClient.getInstance().session.profile.name)) playerListEntry = entry
                 }
                 if (playerListEntry != null) {
                     return playerListEntry.latency

@@ -29,8 +29,7 @@ class ESPElementBox : ESPElement("Box") {
 
     override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
         val col = Color(entity.teamColorValue).let { Color(it.red, it.green, it.blue, 255) }.rgb
-        if (outlined.value)
-            RenderUtil.outlinedFill(matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, outlineWidth.value.toFloat(), Color.black.rgb)
+        if (outlined.value) RenderUtil.outlinedFill(matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, outlineWidth.value.toFloat(), Color.black.rgb)
         RenderUtil.outlinedFill(matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, width.value.toFloat(), col)
     }
 }
@@ -44,7 +43,7 @@ class ESPElementName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Ori
         matrices.push()
         val width = MinecraftClient.getInstance().textRenderer?.getWidth(tagName)!!
         var factor = (sideWidth / width).toFloat()
-        if(factor > 3.0f) factor = 3.0f
+        if (factor > 3.0f) factor = 3.0f
         matrices.translate(sideWidth / 2, 0.0, 0.0)
         matrices.scale(factor, factor, 1.0f)
         matrices.translate(-sideWidth / 2, 0.0, 0.0)
@@ -70,7 +69,7 @@ class ESPElementHealthBar : ESPElementRotatable("Health bar", arrayOf(Orientatio
 
     override fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double) {
         val height = getHeight(entity, sideWidth)
-        if(height == 0.0) return
+        if (height == 0.0) return
         entity as LivingEntity
         matrices.push()
         val percentage = MathHelper.clamp(entity.health / entity.maxHealth, 0.0f, 1.0f)

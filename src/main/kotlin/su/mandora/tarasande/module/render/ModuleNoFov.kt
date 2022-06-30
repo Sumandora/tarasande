@@ -13,8 +13,7 @@ class ModuleNoFov : Module("No Fov", "Limits the dynamic fov", ModuleCategory.RE
     private val limit = ValueNumberRange(this, "Limit", 0.1, 1.0, 1.5, 1.5, 0.1)
 
     val eventConsumer = Consumer<Event> { event ->
-        if (event is EventMovementFovMultiplier)
-            event.movementFovMultiplier = MathHelper.clamp(event.movementFovMultiplier, limit.minValue.toFloat(), limit.maxValue.toFloat())
+        if (event is EventMovementFovMultiplier) event.movementFovMultiplier = MathHelper.clamp(event.movementFovMultiplier, limit.minValue.toFloat(), limit.maxValue.toFloat())
     }
 
 }

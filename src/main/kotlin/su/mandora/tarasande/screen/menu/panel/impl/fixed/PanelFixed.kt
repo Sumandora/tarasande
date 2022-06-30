@@ -33,12 +33,9 @@ open class PanelFixed(title: String, x: Double, y: Double, width: Double, height
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        if (x + panelWidth / 2 <= MinecraftClient.getInstance().window.scaledWidth * 0.33)
-            alignment = Alignment.LEFT
-        else if (x + panelWidth / 2 > MinecraftClient.getInstance().window.scaledWidth * 0.33 && x + panelWidth / 2 < MinecraftClient.getInstance().window.scaledWidth * 0.66)
-            alignment = Alignment.MIDDLE
-        else if (x + panelWidth / 2 > MinecraftClient.getInstance().window.scaledWidth * 0.66)
-            alignment = Alignment.RIGHT
+        if (x + panelWidth / 2 <= MinecraftClient.getInstance().window.scaledWidth * 0.33) alignment = Alignment.LEFT
+        else if (x + panelWidth / 2 > MinecraftClient.getInstance().window.scaledWidth * 0.33 && x + panelWidth / 2 < MinecraftClient.getInstance().window.scaledWidth * 0.66) alignment = Alignment.MIDDLE
+        else if (x + panelWidth / 2 > MinecraftClient.getInstance().window.scaledWidth * 0.66) alignment = Alignment.RIGHT
 
         TarasandeMain.get().blur?.bind(true)
         RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else MinecraftClient.getInstance().textRenderer?.fontHeight)?.toDouble()!!, Color.white.rgb)

@@ -6,11 +6,14 @@ import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.SocialInteractionsManager;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.client.util.ProfileKeys;
 import net.minecraft.client.util.Session;
 import net.minecraft.client.util.Window;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.encryption.SignatureVerifier;
 import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -28,9 +31,6 @@ import su.mandora.tarasande.base.screen.accountmanager.account.Account;
 import su.mandora.tarasande.event.*;
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient;
 import su.mandora.tarasande.module.render.ModuleESP;
-import su.mandora.tarasande.util.reflection.ReflectionUtil;
-import su.mandora.tarasande.util.reflection.ReflectorAny;
-import su.mandora.tarasande.util.reflection.ReflectorClass;
 import su.mandora.tarasande.util.render.RenderUtil;
 
 @Mixin(MinecraftClient.class)
@@ -52,6 +52,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Shadow
     @Final
     private Session session;
+    @Mutable
     @Shadow
     @Final
     private MinecraftSessionService sessionService;
@@ -59,6 +60,26 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Shadow
     @Final
     private RenderTickCounter renderTickCounter;
+    @Mutable
+    @Shadow
+    @Final
+    private UserApiService userApiService;
+    @Mutable
+    @Shadow
+    @Final
+    private ProfileKeys profileKeys;
+    @Mutable
+    @Shadow
+    @Final
+    private YggdrasilAuthenticationService authenticationService;
+    @Mutable
+    @Shadow
+    @Final
+    private SignatureVerifier servicesSignatureVerifier;
+    @Mutable
+    @Shadow
+    @Final
+    private SocialInteractionsManager socialInteractionsManager;
 
     @Shadow
     protected abstract void doItemUse();
@@ -202,5 +223,40 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Override
     public int tarasande_getCurrentFPS() {
         return currentFps;
+    }
+
+    @Override
+    public void tarasande_setAuthenticationService(YggdrasilAuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
+
+    @Override
+    public void tarasande_setSessionService(MinecraftSessionService sessionService) {
+        this.sessionService = sessionService;
+    }
+
+    @Override
+    public void tarasande_setUserApiService(UserApiService userApiService) {
+        this.userApiService = userApiService;
+    }
+
+    @Override
+    public void tarasande_setServicesSignatureVerifier(SignatureVerifier signatureVerifier) {
+        this.servicesSignatureVerifier = signatureVerifier;
+    }
+
+    @Override
+    public void tarasande_setSocialInteractionsManager(SocialInteractionsManager socialInteractionsManager) {
+        this.socialInteractionsManager = socialInteractionsManager;
+    }
+
+    @Override
+    public UserApiService tarasande_getUserApiService() {
+        return userApiService;
+    }
+
+    @Override
+    public void tarasande_setProfileKeys(ProfileKeys profileKeys) {
+        this.profileKeys = profileKeys;
     }
 }

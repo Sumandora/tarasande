@@ -79,8 +79,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
                 var b = 0.0
                 while (b <= 1.0) {
                     var hsb = Color.getHSBColor(valueColor.hue, s.toFloat(), b.toFloat())
-                    if (!valueColor.isEnabled())
-                        hsb = hsb.darker().darker()
+                    if (!valueColor.isEnabled()) hsb = hsb.darker().darker()
                     val f = (hsb.rgb shr 24 and 0xFF) / 255.0f
                     val g = (hsb.rgb shr 16 and 0xFF) / 255.0f
                     val h = (hsb.rgb shr 8 and 0xFF) / 255.0f
@@ -121,8 +120,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
             var circle = 0.0
             while (circle <= 1.1) {
                 var hsb2 = Color.getHSBColor((circle.toFloat() + 0.5f) % 1.0f, 1.0f, 1.0f)
-                if (!valueColor.isEnabled())
-                    hsb2 = hsb2.darker().darker()
+                if (!valueColor.isEnabled()) hsb2 = hsb2.darker().darker()
                 val f2 = (hsb2.rgb shr 24 and 0xFF) / 255.0f
                 val g2 = (hsb2.rgb shr 16 and 0xFF) / 255.0f
                 val h2 = (hsb2.rgb shr 8 and 0xFF) / 255.0f

@@ -36,18 +36,15 @@ class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attackin
             }
             is EventKeepSprint -> {
                 if (!disabled) {
-                    if (!unsprint.value)
-                        event.sprinting = true
+                    if (!unsprint.value) event.sprinting = true
                     mc.player?.velocity = prevVelocity?.multiply(horizontalSlowdown.value, 1.0, horizontalSlowdown.value)
                 }
             }
             is EventVelocity -> {
-                if (knockbackAware.value && packets.isSelected(event.packet.ordinal) && !event.cancelled && event.velocityX * event.velocityX + event.velocityZ * event.velocityZ > 0.01)
-                    disabled = true
+                if (knockbackAware.value && packets.isSelected(event.packet.ordinal) && !event.cancelled && event.velocityX * event.velocityX + event.velocityZ * event.velocityZ > 0.01) disabled = true
             }
             is EventAttack -> {
-                if (mc.player?.isOnGround!!)
-                    disabled = false
+                if (mc.player?.isOnGround!!) disabled = false
             }
         }
     }

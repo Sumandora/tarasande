@@ -17,10 +17,8 @@ class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCatego
 
     val eventConsumer = Consumer<Event> { event ->
         if (event is EventIsEntityAttackable) {
-            if (!event.attackable)
-                return@Consumer
-            if (event.entity !is PlayerEntity)
-                return@Consumer
+            if (!event.attackable) return@Consumer
+            if (event.entity !is PlayerEntity) return@Consumer
 
             if (mode.isSelected(0)) {
                 if (event.entity.isTeammate(mc.player)) {
@@ -29,7 +27,7 @@ class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCatego
             }
 
             if (mode.isSelected(1)) {
-                while(displayNameMode.isSelected(0)) {
+                while (displayNameMode.isSelected(0)) {
                     val selfTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == mc.player?.gameProfile } ?: break).siblings.firstOrNull { it.style.color != null }?.style?.color ?: break
                     val otherTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == event.entity.gameProfile } ?: break).siblings.firstOrNull { it.style.color != null }?.style?.color ?: break
 
@@ -39,28 +37,26 @@ class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCatego
                     break
                 }
 
-                while(displayNameMode.isSelected(1)) {
+                while (displayNameMode.isSelected(1)) {
                     var selfTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == mc.player?.gameProfile } ?: break).string ?: break
                     var otherTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == event.entity.gameProfile } ?: break).string ?: break
 
-                    if(selfTeam.length <= 2 || !selfTeam.startsWith("§"))
-                        break
+                    if (selfTeam.length <= 2 || !selfTeam.startsWith("§")) break
 
-                    if(otherTeam.length <= 2 || !otherTeam.startsWith("§"))
-                        break
+                    if (otherTeam.length <= 2 || !otherTeam.startsWith("§")) break
 
-                    while(selfTeam.length > 2 && selfTeam.startsWith("§")) {
+                    while (selfTeam.length > 2 && selfTeam.startsWith("§")) {
                         selfTeam = selfTeam.substring(1, selfTeam.length)
-                        selfTeam = if(selfTeam.first() in 'a'..'f') {
+                        selfTeam = if (selfTeam.first() in 'a'..'f') {
                             selfTeam.first().toString()
                         } else {
                             selfTeam.substring(1, selfTeam.length)
                         }
                     }
 
-                    while(otherTeam.length > 2 && otherTeam.startsWith("§")) {
+                    while (otherTeam.length > 2 && otherTeam.startsWith("§")) {
                         otherTeam = otherTeam.substring(1, otherTeam.length)
-                        otherTeam = if(otherTeam.first() in 'a'..'f') {
+                        otherTeam = if (otherTeam.first() in 'a'..'f') {
                             otherTeam.first().toString()
                         } else {
                             otherTeam.substring(1, otherTeam.length)

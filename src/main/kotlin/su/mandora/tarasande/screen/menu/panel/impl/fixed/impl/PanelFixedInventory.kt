@@ -22,8 +22,7 @@ class PanelFixedInventory(x: Double, y: Double) : PanelFixed("Inventory", x, y, 
     override fun isVisible(): Boolean {
         for (q in 9..35) {
             val itemStack = MinecraftClient.getInstance().player?.inventory?.main?.get(q)
-            if (itemStack != null && !itemStack.isEmpty)
-                return true
+            if (itemStack != null && !itemStack.isEmpty) return true
         }
         return false
     }

@@ -12,7 +12,9 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
     val moduleElementList = ArrayList<ModuleElement>()
 
     init {
-        TarasandeMain.get().managerModule?.list?.forEach { if (it.category == moduleCategory) moduleElementList.add(ModuleElement(it, 100.0)) }
+        TarasandeMain.get().managerModule?.list?.forEach {
+            if (it.category == moduleCategory) moduleElementList.add(ModuleElement(it, 100.0))
+        }
     }
 
     override fun init() {
@@ -28,14 +30,12 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
         var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
         for (it in moduleElementList) {
             it.width = panelWidth - 4
-            if (y + it.getHeight() + 2 >= this.y - scrollOffset)
-                it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
+            if (y + it.getHeight() + 2 >= this.y - scrollOffset) it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
 
             matrices?.translate(0.0, it.getHeight() + 2, 0.0)
             y += it.getHeight() + 2
 
-            if (y > this.y - scrollOffset + panelHeight)
-                break
+            if (y > this.y - scrollOffset + panelHeight) break
         }
         matrices?.pop()
     }
@@ -65,8 +65,7 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
         val x = x + 2
         var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
         moduleElementList.forEach {
-            if (it.mouseScrolled(mouseX - x, mouseY - y - scrollOffset, amount))
-                return true
+            if (it.mouseScrolled(mouseX - x, mouseY - y - scrollOffset, amount)) return true
             y += it.getHeight() + 2
         }
         return super.mouseScrolled(mouseX, mouseY, amount)
@@ -74,8 +73,7 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         moduleElementList.forEach {
-            if (it.keyPressed(keyCode, scanCode, modifiers))
-                return true
+            if (it.keyPressed(keyCode, scanCode, modifiers)) return true
         }
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
@@ -98,9 +96,7 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
     override fun getMaxScrollOffset(): Double {
         var height = 0.0
         moduleElementList.forEach { height += it.getHeight() + 2 }
-        return if (height > 0.0)
-            height - 2
-        else
-            0.0
+        return if (height > 0.0) height - 2
+        else 0.0
     }
 }

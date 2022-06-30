@@ -13,12 +13,7 @@ import java.nio.file.Files
 class ManagerFile : Manager<File>() {
 
     init {
-        add(
-            FileModules(),
-            FileValues(),
-            FileAccounts(),
-            FileMenu()
-        )
+        add(FileModules(), FileValues(), FileAccounts(), FileMenu())
     }
 
     fun save() {
@@ -38,10 +33,8 @@ class ManagerFile : Manager<File>() {
                 val content = file.decrypt(String(Files.readAllBytes(fileObj.toPath())))
                 if (content != null) {
                     val jsonElement = TarasandeMain.get().gson.fromJson(content, JsonElement::class.java)
-                    if (jsonElement != null)
-                        file.load(jsonElement)
-                    else
-                        System.err.println(file.name + " didn't load correctly!")
+                    if (jsonElement != null) file.load(jsonElement)
+                    else System.err.println(file.name + " didn't load correctly!")
                 }
             }
         }

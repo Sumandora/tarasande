@@ -98,12 +98,9 @@ class ValueComponentNumberRange(value: Value) : ValueComponent(value) {
             val maxDelta = abs(maxSliderPos - mousePos)
 
             if (minDelta == maxDelta) {
-                if (mousePos < minSliderPos)
-                    minDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
-                if (mousePos > maxSliderPos)
-                    maxDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
-            } else if (minDelta < maxDelta)
-                minDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
+                if (mousePos < minSliderPos) minDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
+                if (mousePos > maxSliderPos) maxDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
+            } else if (minDelta < maxDelta) minDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
             else if (maxDelta < minDelta) // left for convenience
                 maxDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
             return true
