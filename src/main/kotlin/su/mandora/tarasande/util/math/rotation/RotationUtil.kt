@@ -128,12 +128,12 @@ object RotationUtil {
     private fun simulateFakeRotationUpdate() {
         if (TarasandeMain.get().clientValues?.updateRotationsWhenTickSkipping?.value!!)
             for (i in 0..(1000.0 / RenderUtil.deltaTime).roundToInt()) // could use repeat here, but doesn't fit the code style
-                updateFakeRotation()
+                updateFakeRotation(true)
     }
 
-    fun updateFakeRotation() {
+    fun updateFakeRotation(fake: Boolean) {
         if (MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().interactionManager != null) {
-            val eventPollEvents = EventPollEvents(Rotation(MinecraftClient.getInstance().player!!))
+            val eventPollEvents = EventPollEvents(Rotation(MinecraftClient.getInstance().player!!), fake)
             TarasandeMain.get().managerEvent?.call(eventPollEvents)
             if (eventPollEvents.dirty) {
                 fakeRotation = eventPollEvents.rotation

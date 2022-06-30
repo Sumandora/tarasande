@@ -28,7 +28,7 @@ public class MixinRenderSystem {
 
     @Inject(method = "flipFrame", at = @At("HEAD"), remap = false)
     private static void injectFlipFrame(long window, CallbackInfo ci) {
-        RotationUtil.INSTANCE.updateFakeRotation();
+        RotationUtil.INSTANCE.updateFakeRotation(false);
     }
 
     @Inject(method = "_setShaderFogStart", at = @At("HEAD"), remap = false, cancellable = true)

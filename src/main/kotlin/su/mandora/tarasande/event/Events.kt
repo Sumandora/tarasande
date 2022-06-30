@@ -6,6 +6,8 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
 import net.minecraft.item.Item
 import net.minecraft.network.Packet
+import net.minecraft.network.encryption.Signer
+import net.minecraft.network.message.ChatMessageSigner
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.math.Matrix4f
@@ -14,7 +16,7 @@ import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.util.math.rotation.Rotation
 import java.awt.Color
 
-class EventChat(val chatMessage: String) : Event(true)
+class EventChat(val signer: ChatMessageSigner, val chatMessage: String, val preview: Text?) : Event(true)
 class EventKey(val key: Int, val action: Int) : Event(true)
 class EventUpdate(val state: State) : Event(state == State.PRE) {
     enum class State {
@@ -54,10 +56,12 @@ class EventPollEvents : Event {
     var dirty = false
     var minRotateToOriginSpeed = 1.0
     var maxRotateToOriginSpeed = 1.0
+    val fake: Boolean
 
-    constructor(rotation: Rotation) : super(false) {
+    constructor(rotation: Rotation, fake: Boolean) : super(false) {
         this.rotation = rotation
         this.dirty = false
+        this.fake = fake
     }
 }
 

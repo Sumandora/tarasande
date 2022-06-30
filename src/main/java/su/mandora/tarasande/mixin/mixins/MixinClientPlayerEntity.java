@@ -7,6 +7,8 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.network.encryption.PlayerPublicKey;
+import net.minecraft.network.message.ChatMessageSigner;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,6 +28,8 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     Rotation cachedRotation;
     EventVanillaFlight cachedEventVanillaFlight = null;
 
+    boolean bypassChat;
+
     @Shadow
     private float lastYaw;
     @Shadow
@@ -41,9 +45,11 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Shadow
     public abstract float getPitch(float tickDelta);
 
-    @Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
-    public void injectSendChatMessage(String message, CallbackInfo ci) {
-        EventChat eventChat = new EventChat(message);
+    @Inject(method = "sendChatMessagePacket", at = @At("HEAD"), cancellable = true)
+    public void injectSendChatMessagePacket(ChatMessageSigner signer, String message, Text preview, CallbackInfo ci) {
+        if(bypassChat)
+            return;
+        EventChat eventChat = new EventChat(signer, message, preview);
         TarasandeMain.Companion.get().getManagerEvent().call(eventChat);
         if (eventChat.getCancelled())
             ci.cancel();
@@ -139,5 +145,15 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Override
     public float tarasande_getLastPitch() {
         return lastPitch;
+    }
+
+    @Override
+    public boolean tarasande_getBypassChat() {
+        return bypassChat;
+    }
+
+    @Override
+    public void tarasande_setBypassChat(boolean bypassChat) {
+        this.bypassChat = bypassChat;
     }
 }
