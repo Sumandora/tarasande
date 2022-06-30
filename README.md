@@ -49,6 +49,11 @@
 - Configure ESP / "ESP Studio" - Fully customizable 2D esp setting like spirthack
   - Right click for values in classes
 - AutoTool
+- No Rotate
+- MurderMystery: Exclude Detective Items from Disallowed Items
+- ValueComponentRegistry: If only 1 result -> Enter: Add Item and reset text
+- Fix Tickbase Manipulation: Auto Charge
+- Dont sign Chat messages for "anti report/ban"
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

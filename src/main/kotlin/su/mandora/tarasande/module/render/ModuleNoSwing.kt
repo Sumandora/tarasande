@@ -14,8 +14,12 @@ import java.util.function.Consumer
 class ModuleNoSwing : Module("No swing", "Hides the hand swing animation", ModuleCategory.RENDER) {
 
     private val mode = ValueMode(this, "Mode", true, "Clientside", "Serverside")
-    private val hand = ValueMode(this, "Hand", true, "Main hand", "Off hand")
-    private val fixAnimations = ValueBoolean(this, "Fix animations", true)
+    private val hand = object : ValueMode(this, "Hand", true, "Main hand", "Off hand") {
+        override fun isEnabled() = mode.anySelected()
+    }
+    private val fixAnimations = object : ValueBoolean(this, "Fix animations", true) {
+        override fun isEnabled() = mode.isSelected(0)
+    }
 
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
