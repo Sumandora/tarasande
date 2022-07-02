@@ -54,6 +54,7 @@
 - ValueComponentRegistry: If only 1 result -> Enter: Add Item and reset text
 - Fix Tickbase Manipulation: Auto Charge
 - Dont sign Chat messages for "anti report/ban"
+- Implement Badlion Timers (Maybe make a Log for all custom payloads for more generic usage)
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

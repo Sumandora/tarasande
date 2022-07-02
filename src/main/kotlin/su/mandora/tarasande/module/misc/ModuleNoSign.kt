@@ -14,9 +14,7 @@ class ModuleNoSign : Module("No sign", "Prevents chat message signing", ModuleCa
 
     val eventConsumer = Consumer<Event> { event ->
         if (event is EventTick) {
-            if (mc.profileKeys != null) {
-                (mc as IMinecraftClient).tarasande_setProfileKeys(ProfileKeys(UserApiService.OFFLINE, UUID.randomUUID(), mc.runDirectory.toPath()))
-            }
+            (mc as IMinecraftClient).tarasande_setProfileKeys(ProfileKeys(UserApiService.OFFLINE, UUID.randomUUID(), mc.runDirectory.toPath()))
         }
     }
 

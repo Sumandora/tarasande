@@ -1,5 +1,6 @@
 package su.mandora.tarasande.screen.accountmanager
 
+import com.mojang.authlib.minecraft.UserApiService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
@@ -21,7 +22,6 @@ import su.mandora.tarasande.util.connection.Proxy
 import su.mandora.tarasande.util.render.screen.ScreenBetter
 import java.awt.Color
 import java.util.concurrent.ThreadLocalRandom
-
 
 class ScreenBetterAccountManager : ScreenBetter(null) {
 
@@ -176,11 +176,12 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
                 currentAccount = account
                 account.logIn()
                 // This can't be "client" because it is called from ClientMain means it's null at this point in time
+                var updatedUserApiService = true
                 (MinecraftClient.getInstance() as IMinecraftClient).also {
                     it.tarasande_setSession(account.session)
                     val authenticationService = YggdrasilAuthenticationService(java.net.Proxy.NO_PROXY, "", account.environment)
                     it.tarasande_setAuthenticationService(authenticationService)
-                    val userApiService = authenticationService.createUserApiService(account.session?.accessToken)
+                    val userApiService = try { authenticationService.createUserApiService(account.session?.accessToken) } catch(ignored: Exception) { updatedUserApiService = false; UserApiService.OFFLINE }
                     it.tarasande_setUserApiService(userApiService)
                     it.tarasande_setSessionService(account.getSessionService())
                     it.tarasande_setServicesSignatureVerifier(SignatureVerifier.create(authenticationService.servicesKey))
@@ -188,6 +189,9 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
                     it.tarasande_setProfileKeys(ProfileKeys(it.tarasande_getUserApiService(), account.session?.profile?.id, MinecraftClient.getInstance().runDirectory.toPath()))
                 }
                 status = Formatting.GREEN.toString() + "Logged in as \"" + account.getDisplayName() + "\""
+
+                if(!updatedUserApiService)
+                    status += Formatting.RED.toString() + " (failed to update UserApiService)"
             } catch (e: Throwable) {
                 e.printStackTrace()
                 status = if (e.message?.isEmpty()!!) Formatting.RED.toString() + "Login failed!" else Formatting.RED.toString() + e.message
