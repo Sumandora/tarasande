@@ -18,6 +18,7 @@ class AccountYggdrasil(@TextFieldInfo(name = "Username/E-Mail", hidden = false) 
 
     private var service: MinecraftSessionService? = null
 
+    @Suppress("unused") // Reflections
     constructor() : this("", "")
 
     override fun logIn() {

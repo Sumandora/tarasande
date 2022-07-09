@@ -21,6 +21,7 @@ import java.util.function.Consumer
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.max
+import kotlin.math.min
 
 class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the tick base", ModuleCategory.MISC) {
 
@@ -96,15 +97,19 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
                     didHit = false
                     prevShifted = shifted
 
-                    if (!unchargeKey.isPressed() && prevUnchargePressed) autoChargeDelay.reset()
+                    if (!unchargeKey.isPressed()) {
+                        if (prevUnchargePressed)
+                            autoChargeDelay.reset()
 
-                    if (!unchargeKey.isPressed() && (chargeKey.isPressed() || (autoCharge.value && minimum.value > shifted && autoChargeDelay.hasReached(delay.value.toLong())))) {
-                        shifted += event.time - prevTime
-
-                        if (resyncPositions.value) {
-                            val iRenderTickCounter = (mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter
-                            for (i in 0..floor((event.time - iRenderTickCounter.tarasande_getPrevTimeMillis()) / iRenderTickCounter.tarasande_getTickTime()).toInt()) mc.world?.tickEntities()
+                        if (chargeKey.isPressed())
+                            shifted += event.time - prevTime
+                        else if (autoCharge.value && minimum.value > shifted && autoChargeDelay.hasReached(delay.value.toLong())) {
+                            shifted += min(event.time - prevTime, (minimum.value - shifted).toLong())
                         }
+                    }
+                    if (resyncPositions.value && prevShifted < shifted) {
+                        val iRenderTickCounter = (mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter
+                        for (i in 0..floor((event.time - iRenderTickCounter.tarasande_getPrevTimeMillis()) / iRenderTickCounter.tarasande_getTickTime()).toInt()) mc.world?.tickEntities()
                     }
                     prevTime = event.time
                     if (unchargeKey.isPressed()) shifted = if (instantUncharge.value) 0L else max(0L, (shifted - unchargeSpeed.value).toLong())

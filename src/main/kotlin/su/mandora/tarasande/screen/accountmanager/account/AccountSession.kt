@@ -11,7 +11,7 @@ import java.net.Proxy
 import java.util.*
 
 
-@AccountInfo(name = "Session", suitableAsMain = false)
+@AccountInfo(name = "Session", suitableAsMain = false) // We shouldn't allow users to use cracked accounts as mains, because if we later use the main to authenticate services, we might run into problems
 class AccountSession(
     @TextFieldInfo(name = "Username", hidden = false) private val username: String,
     @TextFieldInfo(name = "UUID", hidden = false) private val uuid: String,
@@ -20,6 +20,7 @@ class AccountSession(
 
     private var service: MinecraftSessionService? = null
 
+    @Suppress("unused") // Reflections
     constructor() : this("", "", "")
 
     override fun logIn() {

@@ -110,7 +110,7 @@ object PlayerUtil {
         val left = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.leftKey as IKeyBinding).tarasande_getBoundKey().code)
         val back = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.backKey as IKeyBinding).tarasande_getBoundKey().code)
         val right = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.rightKey as IKeyBinding).tarasande_getBoundKey().code)
-        return Math.toRadians(RotationUtil.getYaw(if (left && right) 0.0 else if (left) 1.0 else if (right) -1.0 else 0.0, if (forward && back) 0.0 else if (forward) 1.0 else if (back) -1.0 else 0.0) + 90 + MinecraftClient.getInstance().player?.yaw!!)
+        return Math.toRadians(RotationUtil.getYaw(if (left && right) 0.0 else if (left) 1.0 else if (right) -1.0 else 0.0, if (forward && back) 0.0 else if (forward) 1.0 else if (back) -1.0 else 0.0) + (if (forward || left || back || right) 0.0 else 90.0) + MinecraftClient.getInstance().player?.yaw!!)
     }
 
     fun isOnEdge(extrapolation: Double) = MinecraftClient.getInstance().world?.isSpaceEmpty(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.boundingBox?.offset(MinecraftClient.getInstance().player?.velocity?.x!! * extrapolation, -MinecraftClient.getInstance().player?.stepHeight?.toDouble()!!, MinecraftClient.getInstance().player?.velocity?.z!! * extrapolation))!!

@@ -1,4 +1,4 @@
-package su.mandora.tarasande.mixin.mixins.backport;
+package su.mandora.tarasande.mixin.mixins.opengl;
 
 import net.minecraft.client.util.Window;
 import org.lwjgl.glfw.GLFW;

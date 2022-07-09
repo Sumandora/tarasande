@@ -15,7 +15,7 @@ import java.awt.Color
 
 class ValueComponentText(value: Value) : ValueComponent(value) {
 
-    private val textFieldWidget = TextFieldWidgetPlaceholder(MinecraftClient.getInstance().textRenderer, 1, 1, 1, (getHeight() * 2).toInt() - 1, Text.of((value as ValueText).name))
+    val textFieldWidget = TextFieldWidgetPlaceholder(MinecraftClient.getInstance().textRenderer, 1, 1, 1, (getHeight() * 2).toInt() - 1, Text.of((value as ValueText).name))
 
     init {
         textFieldWidget.setMaxLength(Int.MAX_VALUE)

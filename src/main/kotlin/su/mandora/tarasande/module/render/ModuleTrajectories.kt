@@ -25,16 +25,16 @@ import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventRender3D
-import su.mandora.tarasande.mixin.accessor.ICrossbowItem
-import su.mandora.tarasande.mixin.accessor.IEntity
-import su.mandora.tarasande.mixin.accessor.IParticleManager
-import su.mandora.tarasande.mixin.accessor.IWorld
+import su.mandora.tarasande.mixin.accessor.*
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.value.ValueBoolean
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 
 class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories", ModuleCategory.RENDER) {
+
+    private val predictVelocity = ValueBoolean(this, "Predict velocity", false)
 
     private val projectileItems = arrayOf(ProjectileItem(Items.BOW.javaClass, EntityType.ARROW, true) { stack, persistentProjectileEntity ->
         val velocity = BowItem.getPullProgress(if (mc.player?.isUsingItem!!) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
@@ -159,11 +159,16 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
         })
 
         val prevRotation = Rotation(mc.player!!)
+        val prevVelocity = Vec3d(0.0, 0.0, 0.0).also { (it as IVec3d).tarasande_copy(mc.player?.velocity) }
         if (RotationUtil.fakeRotation != null) {
             mc.player?.yaw = RotationUtil.fakeRotation?.yaw!!
             mc.player?.pitch = RotationUtil.fakeRotation?.pitch!!
         }
+        if (!predictVelocity.value) {
+            mc.player?.velocity = Vec3d.ZERO
+        }
         projectileItem.setupRoutine.accept(itemStack, persistentProjectileEntity)
+        mc.player?.velocity = prevVelocity
         mc.player?.yaw = prevRotation.yaw
         mc.player?.pitch = prevRotation.pitch
         while (!collided) {

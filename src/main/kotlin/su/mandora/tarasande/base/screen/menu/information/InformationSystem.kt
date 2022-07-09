@@ -31,24 +31,12 @@ class ManagerInformation : Manager<Information>() {
         )
     }
 
-    fun getAllOwners(): ArrayList<String> {
-        val list = ArrayList<String>()
-        for (information in this.list) {
-            if (information.isVisible())
-                if (!list.contains(information.owner))
-                    list.add(information.owner)
-        }
-        return list
+    fun getAllOwners(): List<String> {
+        return list.filter { it.isVisible() }.distinctBy { it.owner }.map { it.owner }
     }
 
-    fun getAllInformation(owner: String): ArrayList<Information> {
-        val list = ArrayList<Information>()
-        for (information in this.list) {
-            if (information.isVisible())
-                if (information.owner == owner)
-                    list.add(information)
-        }
-        return list
+    fun getAllInformation(owner: String): List<Information> {
+        return list.filter { it.isVisible() }.filter { it.owner == owner }
     }
 
 }

@@ -37,18 +37,19 @@
     "MixinWorld",
     "MixinWorldRenderer",
     "MixinWorldTimeUpdateS2CPacket",
-    "backport.MixinGameRenderer",
-    "backport.MixinWindow",
     "baritone.MixinLookBehavior",
     "connection.MixinClientConnection",
     "connection.MixinClientConnectionInitChannel",
     "connection.MixinClientPlayNetworkHandler",
-    "multiconnect.MixinConnectionHandler"
+    "multiconnect.MixinConnectionHandler",
+    "opengl.MixinGameRenderer",
+    "opengl.MixinWindow"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
+    "MixinPlayerListHud",
     "MixinProfileKeys",
     "MixinTelemetrySender"
   ]

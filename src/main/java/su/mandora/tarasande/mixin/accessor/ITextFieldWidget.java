@@ -1,5 +1,7 @@
 package su.mandora.tarasande.mixin.accessor;
 
+import java.awt.*;
+
 public interface ITextFieldWidget {
     boolean tarasande_invokeIsEditable();
 

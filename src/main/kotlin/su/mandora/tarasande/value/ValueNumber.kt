@@ -4,7 +4,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import su.mandora.tarasande.base.value.Value
 
-open class ValueNumber(owner: Any, name: String, val min: Double, var value: Double, val max: Double, val increment: Double) : Value(owner, name) {
+open class ValueNumber(owner: Any, name: String, val min: Double, var value: Double, val max: Double, val increment: Double, manage: Boolean = true) : Value(owner, name, manage) {
     override fun save(): JsonElement {
         return JsonPrimitive(value)
     }

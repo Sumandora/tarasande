@@ -20,12 +20,8 @@ class ManagerClickMethod : Manager<Class<out ClickMethod>>() {
         )
     }
 
-    fun getAllExcept(vararg excluded: Class<out ClickMethod>): ArrayList<ClickMethod> {
-        val arrayList = ArrayList<ClickMethod>()
-        for (clickMethod in list)
-            if (!excluded.contains(clickMethod))
-                arrayList.add(clickMethod.getDeclaredConstructor().newInstance())
-        return arrayList
+    fun getAllExcept(vararg excluded: Class<out ClickMethod>): List<ClickMethod> {
+        return list.filter { !excluded.contains(it) }.map { it.getDeclaredConstructor().newInstance() }
     }
 
 }

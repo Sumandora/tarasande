@@ -9,16 +9,16 @@ import su.mandora.tarasande.util.render.RenderUtil
 
 class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Double) : Panel(moduleCategory.name.first() + moduleCategory.name.substring(1).lowercase(), x, y, 150.0, 100.0) {
 
-    val moduleElementList = ArrayList<ModuleElement>()
+    val elementModuleList = ArrayList<ElementModule>()
 
     init {
         TarasandeMain.get().managerModule?.list?.forEach {
-            if (it.category == moduleCategory) moduleElementList.add(ModuleElement(it, 100.0))
+            if (it.category == moduleCategory) elementModuleList.add(ElementModule(it, 100.0))
         }
     }
 
     override fun init() {
-        for (it in moduleElementList) {
+        for (it in elementModuleList) {
             it.init()
         }
     }
@@ -28,7 +28,7 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
         matrices?.translate(x + 2, y + MinecraftClient.getInstance().textRenderer.fontHeight + 2, 0.0)
         val x = x + 2
         var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
-        for (it in moduleElementList) {
+        for (it in elementModuleList) {
             it.width = panelWidth - 4
             if (y + it.getHeight() + 2 >= this.y - scrollOffset) it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
 
@@ -44,7 +44,7 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
         val hovered = RenderUtil.isHovered(mouseX, mouseY, x, y + MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), x + panelWidth, y + panelHeight)
         val x = x + 2
         var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
-        moduleElementList.forEach {
+        elementModuleList.forEach {
             it.mouseClicked(if (hovered) mouseX - x else -1.0, if (hovered) mouseY - y - scrollOffset else -1.0, button)
             y += it.getHeight() + 2
         }
@@ -54,7 +54,7 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int) {
         val x = x + 2
         var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
-        moduleElementList.forEach {
+        elementModuleList.forEach {
             it.mouseReleased(mouseX - x, mouseY - y - scrollOffset, button)
             y += it.getHeight() + 2
         }
@@ -64,7 +64,7 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
         val x = x + 2
         var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
-        moduleElementList.forEach {
+        elementModuleList.forEach {
             if (it.mouseScrolled(mouseX - x, mouseY - y - scrollOffset, amount)) return true
             y += it.getHeight() + 2
         }
@@ -72,30 +72,30 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        moduleElementList.forEach {
+        elementModuleList.forEach {
             if (it.keyPressed(keyCode, scanCode, modifiers)) return true
         }
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
     override fun charTyped(chr: Char, modifiers: Int) {
-        moduleElementList.forEach { it.charTyped(chr, modifiers) }
+        elementModuleList.forEach { it.charTyped(chr, modifiers) }
         super.charTyped(chr, modifiers)
     }
 
     override fun tick() {
-        moduleElementList.forEach { it.tick() }
+        elementModuleList.forEach { it.tick() }
         super.tick()
     }
 
     override fun onClose() {
-        moduleElementList.forEach { it.onClose() }
+        elementModuleList.forEach { it.onClose() }
         super.onClose()
     }
 
     override fun getMaxScrollOffset(): Double {
         var height = 0.0
-        moduleElementList.forEach { height += it.getHeight() + 2 }
+        elementModuleList.forEach { height += it.getHeight() + 2 }
         return if (height > 0.0) height - 2
         else 0.0
     }

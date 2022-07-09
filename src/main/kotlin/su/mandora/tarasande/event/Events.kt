@@ -1,5 +1,6 @@
 package su.mandora.tarasande.event
 
+import net.minecraft.client.network.PlayerListEntry
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.render.Camera
 import net.minecraft.client.util.math.MatrixStack
@@ -150,3 +151,4 @@ class EventGoalMovement : Event {
 class EventCameraOverride(val camera: Camera) : Event(false)
 class EventFogColor(var start: Float, var end: Float, var red: Float, var green: Float, var blue: Float) : Event(false)
 class EventClearColor(var red: Float, var green: Float, var blue: Float) : Event(false)
+class EventPlayerListName(val playerListEntry: PlayerListEntry, var displayName: Text) : Event(false)

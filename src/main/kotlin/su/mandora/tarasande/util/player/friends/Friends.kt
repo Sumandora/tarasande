@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Formatting
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.event.EventIsEntityAttackable
+import su.mandora.tarasande.event.EventPlayerListName
 import su.mandora.tarasande.event.EventTagName
 
 class Friends {
@@ -20,8 +21,15 @@ class Friends {
                 is EventTagName -> {
                     if (event.entity is PlayerEntity) {
                         val profile = (event.entity as PlayerEntity).gameProfile
-                        for (friend in friends) if (friend.first == profile && friend.second != null && friend.second != profile.name) event.displayName = event.displayName.copy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
+                        for (friend in friends)
+                            if (friend.first == profile && friend.second != null && friend.second != profile.name)
+                                event.displayName = event.displayName.copy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
                     }
+                }
+                is EventPlayerListName -> {
+                    for (friend in friends)
+                        if (friend.first == event.playerListEntry.profile && friend.second != null && friend.second != event.playerListEntry.profile.name)
+                            event.displayName = event.displayName.copy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
                 }
             }
         }
@@ -43,6 +51,13 @@ class Friends {
     fun changeFriendState(gameProfile: GameProfile, alias: String? = null) {
         if (isFriend(gameProfile)) remFriend(gameProfile)
         else addFriend(gameProfile, alias)
+    }
+
+    fun setAlias(gameProfile: GameProfile, newAlias: String?) {
+        if (isFriend(gameProfile)) {
+            remFriend(gameProfile)
+            addFriend(gameProfile, newAlias)
+        }
     }
 
 }

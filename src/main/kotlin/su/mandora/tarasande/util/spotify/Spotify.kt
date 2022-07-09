@@ -9,12 +9,22 @@ import com.sun.jna.win32.StdCallLibrary
 import java.util.function.Consumer
 import java.util.regex.Pattern
 
+/**
+ * A Spotify implementation, which does not use the spotify webapi
+ * Windows only as of right now
+ * Reads the title of the spotify client
+ *
+ * The problem is that the spotify client usually opens multiple HWNDs, so we have to filter for the correct one
+ * This is being done with a regex
+ *
+ * Does not work with the Web-version of Spotify
+ */
 object Spotify {
     private val psApi = PSApi.INSTANCE
     private val kernel32 = Kernel32.INSTANCE
     private val user32 = User32.INSTANCE
 
-    private val pattern = Pattern.compile("([\\s\\S]*-[\\s\\S]*)")
+    private val pattern = Pattern.compile("([\\s\\S]* - [\\s\\S]*)")
 
     private val callbacks = ArrayList<Consumer<String>>()
 
@@ -71,13 +81,7 @@ object Spotify {
             }
         }
 
-        var newTrack: String? = null
-        for (name in names) {
-            if (pattern.asPredicate().test(name)) {
-                newTrack = name
-                break
-            }
-        }
+        val newTrack = names.firstOrNull { pattern.asPredicate().test(it) }
 
         if (newTrack != null && newTrack != currentTrack) {
             callbacks.forEach { it.accept(newTrack) }

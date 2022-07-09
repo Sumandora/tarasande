@@ -71,12 +71,12 @@ object RotationUtil {
                 }
                 is EventIsWalking -> {
                     if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!! && (fakeRotation != null || goalMovementYaw != null)) {
-                        event.walking = (MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f) && abs(MathHelper.wrapDegrees(Math.toDegrees(PlayerUtil.getMoveDirection()) - 90 - (fakeRotation?.yaw ?: (goalMovementYaw ?: 0.0f)))) <= 45
+                        event.walking = (MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f) && abs(MathHelper.wrapDegrees(Math.toDegrees(PlayerUtil.getMoveDirection()) - (fakeRotation?.yaw ?: (goalMovementYaw ?: 0.0f)))) <= 45
                     }
                 }
                 is EventHasForwardMovement -> {
                     if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!! && (fakeRotation != null || goalMovementYaw != null)) {
-                        event.hasForwardMovement = MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f && abs(MathHelper.wrapDegrees(Math.toDegrees(PlayerUtil.getMoveDirection()) - 90 - (fakeRotation?.yaw ?: (goalMovementYaw ?: 0.0f)))) <= 45
+                        event.hasForwardMovement = MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f && abs(MathHelper.wrapDegrees(Math.toDegrees(PlayerUtil.getMoveDirection()) - (fakeRotation?.yaw ?: (goalMovementYaw ?: 0.0f)))) <= 45
                     }
                 }
                 is EventPacket -> {

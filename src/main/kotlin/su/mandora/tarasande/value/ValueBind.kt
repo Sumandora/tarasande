@@ -9,7 +9,7 @@ import su.mandora.tarasande.base.value.Value
 import su.mandora.tarasande.event.EventKey
 import su.mandora.tarasande.event.EventMouse
 
-open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, var mouse: Boolean = true) : Value(owner, name) {
+open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, var mouse: Boolean = true, manage: Boolean = true) : Value(owner, name, manage) {
 
     private var presses = 0
     private var mousePressed = false

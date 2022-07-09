@@ -4,7 +4,7 @@ import com.google.gson.JsonElement
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.value.Value
 
-open class ValueMode(owner: Any, name: String, private var multiSelection: Boolean, vararg val settings: String) : Value(owner, name) {
+open class ValueMode(owner: Any, name: String, private var multiSelection: Boolean, vararg val settings: String, manage: Boolean = true) : Value(owner, name, manage) {
     var selected = ArrayList<String>()
 
     init {

@@ -17,7 +17,7 @@ open class Manager<T : Any> {
     fun <T> get(clazz: Class<T>): T? {
         for (t in list) {
             if (t.javaClass == clazz)
-                return t
+                return t as T
         }
         return null
     }

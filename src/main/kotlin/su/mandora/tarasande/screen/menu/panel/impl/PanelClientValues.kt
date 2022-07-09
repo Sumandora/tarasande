@@ -38,7 +38,7 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (!RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + panelHeight))
+        if (!RenderUtil.isHovered(mouseX, mouseY, x, y + MinecraftClient.getInstance().textRenderer.fontHeight, x + panelWidth, y + panelHeight))
             return super.mouseClicked(mouseX, mouseY, button)
 
         val x = x + 2

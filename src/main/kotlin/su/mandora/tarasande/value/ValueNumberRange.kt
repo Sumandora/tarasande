@@ -4,7 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import su.mandora.tarasande.base.value.Value
 
-open class ValueNumberRange(owner: Any, name: String, val min: Double, var minValue: Double, var maxValue: Double, val max: Double, val increment: Double) : Value(owner, name) {
+open class ValueNumberRange(owner: Any, name: String, val min: Double, var minValue: Double, var maxValue: Double, val max: Double, val increment: Double, manage: Boolean = true) : Value(owner, name, manage) {
 
     override fun save(): JsonElement {
         val jsonArray = JsonArray()

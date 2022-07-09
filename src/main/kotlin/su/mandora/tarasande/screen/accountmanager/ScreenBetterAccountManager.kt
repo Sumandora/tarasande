@@ -20,6 +20,7 @@ import su.mandora.tarasande.screen.accountmanager.subscreens.ScreenBetterAccount
 import su.mandora.tarasande.screen.accountmanager.subscreens.ScreenBetterProxy
 import su.mandora.tarasande.util.connection.Proxy
 import su.mandora.tarasande.util.render.screen.ScreenBetter
+import su.mandora.tarasande.util.threading.ThreadRunnableExposed
 import java.awt.Color
 import java.util.concurrent.ThreadLocalRandom
 
@@ -30,7 +31,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
 
     var mainAccount: Int? = null
 
-    var loginThread: Thread? = null
+    var loginThread: ThreadRunnableExposed? = null
     var status: String? = null
 
     private var accountList: AlwaysSelectedEntryListWidgetAccount? = null
@@ -163,18 +164,32 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
 
     fun logIn(account: Account) {
         if (loginThread != null && loginThread?.isAlive!!) {
-            loginThread?.stop()
+            try {
+                (loginThread?.runnable as RunnableLogin).aborted = true
+            } catch (exception: IllegalStateException) { // This is an extremely tight case, which shouldn't happen in 99.9% of the cases
+                status = Formatting.RED.toString() + exception.message
+                return
+            }
         }
-        Thread(RunnableLogin(account)).also { loginThread = it }.start()
+        ThreadRunnableExposed(RunnableLogin(account)).also { loginThread = it }.start()
     }
 
     inner class RunnableLogin(var account: Account) : Runnable {
+        var aborted = false
+            set(value) {
+                if (account.session != null)
+                    throw IllegalStateException("Account has already been logged into")
+                field = value
+            }
+
         override fun run() {
             status = Formatting.YELLOW.toString() + "Logging in..."
             val prevAccount = currentAccount
             try {
                 currentAccount = account
                 account.logIn()
+                if (aborted)
+                    return
                 // This can't be "client" because it is called from ClientMain means it's null at this point in time
                 var updatedUserApiService = true
                 (MinecraftClient.getInstance() as IMinecraftClient).also {
@@ -184,7 +199,8 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
                     val userApiService = try {
                         authenticationService.createUserApiService(account.session?.accessToken)
                     } catch (ignored: Exception) {
-                        updatedUserApiService = false; UserApiService.OFFLINE
+                        updatedUserApiService = false;
+                        UserApiService.OFFLINE
                     }
                     it.tarasande_setUserApiService(userApiService)
                     it.tarasande_setSessionService(account.getSessionService())

@@ -21,6 +21,5 @@ class ManagerGraph : Manager<Graph>() {
 }
 
 abstract class Graph(val name: String, val bufferLength: Int) {
-    fun isVisible() = true
     abstract fun supplyData(): Number?
 }

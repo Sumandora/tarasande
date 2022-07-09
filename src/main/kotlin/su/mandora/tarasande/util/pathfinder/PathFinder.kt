@@ -6,6 +6,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import kotlin.math.abs
 import kotlin.math.round
+import java.util.function.Function as JavaFunction
 
 /**
  * A* Path Finding algorithm
@@ -32,16 +33,16 @@ object PathFinder {
         }
     }
 
-    private val never = Function<Node, Boolean> { false }
+    private val never = JavaFunction<Node, Boolean> { false }
 
-    fun findPath(start: Vec3d, target: Vec3d, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost, maxTime: Long = 0L, abort: Function<Node, Boolean> = never): ArrayList<Vec3d>? {
+    fun findPath(start: Vec3d, target: Vec3d, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost, maxTime: Long = 0L, abort: JavaFunction<Node, Boolean> = never): ArrayList<Vec3d>? {
         val mappedPath = ArrayList<Vec3d>()
         val path = findPath(Node(round(start.x).toInt(), round(start.y).toInt(), round(start.z).toInt()), Node(round(target.x).toInt(), round(target.y).toInt(), round(target.z).toInt()), allowedBlock, heuristic, cost, maxTime, abort) ?: return null
         for (vec in path) mappedPath.add(Vec3d(vec.x + 0.5, vec.y + 0.5, vec.z + 0.5))
         return mappedPath
     }
 
-    fun findPath(start: Node, target: Node, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost, maxTime: Long = 0L, abort: Function<Node, Boolean> = never): ArrayList<Node>? {
+    fun findPath(start: Node, target: Node, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost, maxTime: Long = 0L, abort: JavaFunction<Node, Boolean> = never): ArrayList<Node>? {
         start.g = cost(start, start)
         start.h = heuristic(start, start)
         start.f = start.g + start.h

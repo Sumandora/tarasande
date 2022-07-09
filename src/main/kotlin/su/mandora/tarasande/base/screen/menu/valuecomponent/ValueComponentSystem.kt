@@ -8,6 +8,8 @@ import su.mandora.tarasande.value.*
 
 class ManagerValueComponent : Manager<Pair<Class<out Value>, Class<out ValueComponent>>>() {
 
+    val instances = ArrayList<ValueComponent>()
+
     init {
         add(
             Pair(ValueBoolean::class.java, ValueComponentBoolean::class.java),
@@ -25,7 +27,7 @@ class ManagerValueComponent : Manager<Pair<Class<out Value>, Class<out ValueComp
     fun newInstance(value: Value): ValueComponent? {
         for (pair in list)
             if (pair.first.isInstance(value))
-                return pair.second.declaredConstructors[0].newInstance(value)
+                return (pair.second.declaredConstructors[0].newInstance(value) as ValueComponent).also { instances.add(it) }
         return null
     }
 

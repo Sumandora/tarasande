@@ -16,7 +16,7 @@ class ManagerValue : Manager<Value>() {
 
 }
 
-abstract class Value(var owner: Any, var name: String) {
+abstract class Value(var owner: Any, var name: String, manage: Boolean = true) {
     open fun isEnabled() = true
     open fun onChange() {}
 
@@ -24,6 +24,7 @@ abstract class Value(var owner: Any, var name: String) {
     abstract fun load(jsonElement: JsonElement)
 
     init {
-        TarasandeMain.get().managerValue?.add(this)
+        if (manage)
+            TarasandeMain.get().managerValue?.add(this)
     }
 }

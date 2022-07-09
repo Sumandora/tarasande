@@ -40,7 +40,7 @@ class InformationBeds : Information("Bed ESP", "Beds") {
         if (bedESP.enabled) if (bedESP.calculateBestWay.value) if (bedESP.bedDatas.isNotEmpty()) {
             return "\n" + bedESP.bedDatas.sortedBy {
                 MinecraftClient.getInstance().player?.squaredDistanceTo(it.bedParts.let {
-                    var vec = Vec3d(0.0, 0.0, 0.0)
+                    var vec = Vec3d.ZERO
                     it.forEach { vec = vec.add(Vec3d.ofCenter(it)) }
                     vec.multiply(1.0 / it.size) // ffs there is no divide
                 })

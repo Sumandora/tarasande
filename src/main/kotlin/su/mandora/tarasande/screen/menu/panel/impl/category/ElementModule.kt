@@ -16,7 +16,7 @@ import su.mandora.tarasande.util.render.RenderUtil.isHovered
 import java.awt.Color
 import kotlin.math.min
 
-class ModuleElement(private val module: Module, var width: Double) : IElement {
+class ElementModule(private val module: Module, var width: Double) : IElement {
 
     private val defaultHeight = MinecraftClient.getInstance().textRenderer.fontHeight * 1.5 + 2.0
     private var toggleTime = 0L

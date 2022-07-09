@@ -6,7 +6,7 @@ import net.minecraft.util.registry.Registry
 import su.mandora.tarasande.base.value.Value
 import java.util.concurrent.CopyOnWriteArrayList
 
-abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: Registry<T>, vararg keys: T) : Value(owner, name) {
+abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: Registry<T>, vararg keys: T, manage: Boolean = true) : Value(owner, name, manage) {
 
     var list = CopyOnWriteArrayList<T>()
 

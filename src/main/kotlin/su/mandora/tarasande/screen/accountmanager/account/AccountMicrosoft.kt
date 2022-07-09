@@ -36,6 +36,7 @@ class AccountMicrosoft(
 
     var service: MinecraftSessionService? = null
 
+    @Suppress("unused") // Reflections
     constructor() : this("", "")
 
     override fun logIn() {

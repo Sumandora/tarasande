@@ -12,16 +12,16 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.event.EventRender2D
 import su.mandora.tarasande.event.EventScreenRender
 import su.mandora.tarasande.screen.menu.ScreenMenu
-import su.mandora.tarasande.util.render.framebuffer.WrappedFramebuffer
+import su.mandora.tarasande.util.render.framebuffer.FramebufferWrapped
 import su.mandora.tarasande.util.render.shader.Shader
 
 class Blur {
     private val upsample = Shader("blur/upsample", "default")
     private val downsample = Shader("blur/downsample", "default")
 
-    private val shapesFramebuffer = WrappedFramebuffer()
-    private val alternativeFramebuffer = WrappedFramebuffer()
-    private val blurredFramebuffer = WrappedFramebuffer()
+    private val shapesFramebuffer = FramebufferWrapped()
+    private val alternativeFramebuffer = FramebufferWrapped()
+    private val blurredFramebuffer = FramebufferWrapped()
 
     private val cutoutShader = Shader("cutout", "default")
 

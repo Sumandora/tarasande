@@ -63,8 +63,6 @@ class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCatego
                         }
                     }
 
-                    println("$selfTeam $otherTeam")
-
                     if (selfTeam == otherTeam) {
                         event.attackable = false
                     }

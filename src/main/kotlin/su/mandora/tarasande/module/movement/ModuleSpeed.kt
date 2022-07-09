@@ -12,6 +12,7 @@ import su.mandora.tarasande.mixin.accessor.IVec3d
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
@@ -64,7 +65,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                 val baseSpeed = event.velocity.horizontalLength()
 
                 val max = Math.PI * 2
-                val temp = (PlayerUtil.getMoveDirection() - moveDir) % max
+                val temp = (PlayerUtil.getMoveDirection() + PI / 2 - moveDir) % max
                 val delta = (2 * temp) % (max) - temp
 
                 val maxRotate = Math.toRadians(turnRate.value)
