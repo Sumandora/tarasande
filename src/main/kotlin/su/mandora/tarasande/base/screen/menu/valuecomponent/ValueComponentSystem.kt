@@ -25,7 +25,7 @@ class ManagerValueComponent : Manager<Pair<Class<out Value>, Class<out ValueComp
     fun newInstance(value: Value): ValueComponent? {
         for (pair in list)
             if (pair.first.isInstance(value))
-                return pair.second.declaredConstructors[0].newInstance(value) as ValueComponent
+                return pair.second.declaredConstructors[0].newInstance(value)
         return null
     }
 

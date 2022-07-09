@@ -23,8 +23,6 @@ import su.mandora.tarasande.mixin.accessor.IVec3d;
 import su.mandora.tarasande.module.render.ModuleESP;
 import su.mandora.tarasande.util.math.rotation.RotationUtil;
 
-import java.awt.*;
-
 @Mixin(Entity.class)
 public abstract class MixinEntity implements IEntity {
 

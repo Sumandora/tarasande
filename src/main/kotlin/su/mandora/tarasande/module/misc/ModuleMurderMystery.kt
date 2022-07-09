@@ -184,7 +184,8 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                 }
             }
             is EventIsEntityAttackable -> {
-                if (event.entity is PlayerEntity && !isMurderer() && !suspects.containsKey(event.entity.gameProfile)) return@Consumer
+                if (event.attackable && event.entity is PlayerEntity && !isMurderer() && !suspects.containsKey(event.entity.gameProfile))
+                    event.attackable = false
             }
             is EventPacket -> {
                 if (event.type == EventPacket.Type.RECEIVE) if (event.packet is PlayerRespawnS2CPacket) {

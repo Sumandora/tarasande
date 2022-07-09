@@ -29,6 +29,7 @@ import su.mandora.tarasande.mixin.accessor.ICrossbowItem
 import su.mandora.tarasande.mixin.accessor.IEntity
 import su.mandora.tarasande.mixin.accessor.IParticleManager
 import su.mandora.tarasande.mixin.accessor.IWorld
+import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import java.util.function.BiConsumer
 import java.util.function.Consumer
@@ -80,7 +81,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
 
     })
 
-    private fun predict(itemStack: ItemStack): ArrayList<Vec3d> {
+    internal fun predict(itemStack: ItemStack): ArrayList<Vec3d> {
         val projectileItem = projectileItems.first { it.isSame(itemStack.item) }
         (mc.world as IWorld).tarasande_setIsClient(false)
         val path = ArrayList<Vec3d>()
@@ -157,7 +158,14 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
             }
         })
 
+        val prevRotation = Rotation(mc.player!!)
+        if (RotationUtil.fakeRotation != null) {
+            mc.player?.yaw = RotationUtil.fakeRotation?.yaw!!
+            mc.player?.pitch = RotationUtil.fakeRotation?.pitch!!
+        }
         projectileItem.setupRoutine.accept(itemStack, persistentProjectileEntity)
+        mc.player?.yaw = prevRotation.yaw
+        mc.player?.pitch = prevRotation.pitch
         while (!collided) {
             val prevParticlesEnabled = (mc.particleManager as IParticleManager).tarasande_areParticlesEnabled() // race conditions :c
             (mc.particleManager as IParticleManager).tarasande_setParticlesEnabled(false)

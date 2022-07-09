@@ -181,7 +181,11 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
                     it.tarasande_setSession(account.session)
                     val authenticationService = YggdrasilAuthenticationService(java.net.Proxy.NO_PROXY, "", account.environment)
                     it.tarasande_setAuthenticationService(authenticationService)
-                    val userApiService = try { authenticationService.createUserApiService(account.session?.accessToken) } catch(ignored: Exception) { updatedUserApiService = false; UserApiService.OFFLINE }
+                    val userApiService = try {
+                        authenticationService.createUserApiService(account.session?.accessToken)
+                    } catch (ignored: Exception) {
+                        updatedUserApiService = false; UserApiService.OFFLINE
+                    }
                     it.tarasande_setUserApiService(userApiService)
                     it.tarasande_setSessionService(account.getSessionService())
                     it.tarasande_setServicesSignatureVerifier(SignatureVerifier.create(authenticationService.servicesKey))
@@ -190,7 +194,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
                 }
                 status = Formatting.GREEN.toString() + "Logged in as \"" + account.getDisplayName() + "\""
 
-                if(!updatedUserApiService)
+                if (!updatedUserApiService)
                     status += Formatting.RED.toString() + " (failed to update UserApiService)"
             } catch (e: Throwable) {
                 e.printStackTrace()

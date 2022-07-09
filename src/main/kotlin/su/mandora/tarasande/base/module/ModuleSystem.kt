@@ -5,10 +5,7 @@ import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.Manager
 import su.mandora.tarasande.event.EventTick
-import su.mandora.tarasande.module.combat.ModuleAntiBot
-import su.mandora.tarasande.module.combat.ModuleKillAura
-import su.mandora.tarasande.module.combat.ModuleTeams
-import su.mandora.tarasande.module.combat.ModuleWTap
+import su.mandora.tarasande.module.combat.*
 import su.mandora.tarasande.module.misc.*
 import su.mandora.tarasande.module.movement.*
 import su.mandora.tarasande.module.player.ModuleNuker
@@ -21,7 +18,7 @@ import su.mandora.tarasande.value.ValueBoolean
 class ManagerModule : Manager<Module>() {
 
     init {
-        add(ModuleSprint(), ModuleESP(), ModuleKillAura(), ModuleVelocity(), ModuleTimer(), ModuleScaffoldWalk(), ModuleSafeWalk(), ModuleFullBright(), ModuleSpammer(), ModuleDeadByDaylightEscape(), ModuleSpeed(), ModuleVehicleFlight(), ModuleNoSlowdown(), ModuleTeams(), ModuleInventoryMove(), ModuleBlink(), ModuleFlight(), ModuleTickBaseManipulation(), ModuleNoCooldown(), ModuleWTap(), ModuleTrajectories(), ModuleAntiBot(), ModuleNoFov(), ModuleLatency(), ModuleKeepSprint(), ModuleMurderMystery(), ModuleNoSwing(), ModuleColorCorrection(), ModuleWorldTime(), ModuleNuker(), ModuleMovementRecorder(), ModuleBedESP(), ModuleFog(), ModuleNoSign())
+        add(ModuleSprint(), ModuleESP(), ModuleKillAura(), ModuleVelocity(), ModuleTimer(), ModuleScaffoldWalk(), ModuleSafeWalk(), ModuleFullBright(), ModuleSpammer(), ModuleDeadByDaylightEscape(), ModuleSpeed(), ModuleVehicleFlight(), ModuleNoSlowdown(), ModuleTeams(), ModuleInventoryMove(), ModuleBlink(), ModuleFlight(), ModuleTickBaseManipulation(), ModuleNoCooldown(), ModuleWTap(), ModuleTrajectories(), ModuleAntiBot(), ModuleNoFov(), ModuleLatency(), ModuleKeepSprint(), ModuleMurderMystery(), ModuleNoSwing(), ModuleColorCorrection(), ModuleWorldTime(), ModuleNuker(), ModuleMovementRecorder(), ModuleBedESP(), ModuleFog(), ModuleNoSign(), ModuleProjectileAimBot())
         TarasandeMain.get().managerEvent?.add { event ->
             if (event is EventTick) if (event.state == EventTick.State.POST) {
                 for (module in list) for (i in 0 until module.bind.wasPressed()) module.switchState()

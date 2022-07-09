@@ -12,8 +12,6 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.mixin.accessor.ITextFieldWidget;
 
-import java.awt.*;
-
 @Mixin(TextFieldWidget.class)
 public abstract class MixinTextFieldWidget implements ITextFieldWidget {
 

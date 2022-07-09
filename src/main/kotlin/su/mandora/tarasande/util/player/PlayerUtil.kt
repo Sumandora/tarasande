@@ -21,6 +21,7 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.event.EventIsEntityAttackable
 import su.mandora.tarasande.mixin.accessor.IGameRenderer
 import su.mandora.tarasande.mixin.accessor.IKeyBinding
+import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 
@@ -47,6 +48,7 @@ object PlayerUtil {
     fun getTargetedEntity(reach: Double, rotation: Rotation): HitResult? {
         val gameRenderer = MinecraftClient.getInstance().gameRenderer
         val accessor = (gameRenderer as IGameRenderer)
+        val renderTickCounter = (MinecraftClient.getInstance() as IMinecraftClient).tarasande_getRenderTickCounter()
 
         val prevAllowThroughWalls = accessor.tarasande_isAllowThroughWalls()
         val prevReach = accessor.tarasande_getReach()
@@ -71,8 +73,13 @@ object PlayerUtil {
         val prevFakeRotation = RotationUtil.fakeRotation
         RotationUtil.fakeRotation = null // prevent rotationvec override by mixin
 
+        val prevTickDelta = renderTickCounter.tickDelta
+        renderTickCounter.tickDelta = 1.0f
+
         gameRenderer.updateTargetedEntity(1.0f)
         val hitResult = MinecraftClient.getInstance().crosshairTarget
+
+        renderTickCounter.tickDelta = prevTickDelta
 
         RotationUtil.fakeRotation = prevFakeRotation
 

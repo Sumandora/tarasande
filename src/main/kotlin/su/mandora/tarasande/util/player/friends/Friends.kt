@@ -15,7 +15,7 @@ class Friends {
         TarasandeMain.get().managerEvent?.add { event ->
             when (event) {
                 is EventIsEntityAttackable -> {
-                    if (event.entity != null && event.entity is PlayerEntity) if (friends.any { it.first == event.entity.gameProfile }) event.attackable = false
+                    if (event.attackable && event.entity != null && event.entity is PlayerEntity) if (friends.any { it.first == event.entity.gameProfile }) event.attackable = false
                 }
                 is EventTagName -> {
                     if (event.entity is PlayerEntity) {

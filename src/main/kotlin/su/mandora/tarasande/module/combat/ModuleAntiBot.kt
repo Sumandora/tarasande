@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.packet.s2c.play.EntityS2CPacket
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket
+import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
@@ -40,6 +41,9 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
             is EventPacket -> {
                 if (event.type == EventPacket.Type.RECEIVE) {
                     when (event.packet) {
+                        is PlayerRespawnS2CPacket -> {
+                            onDisable() // prevent memory leak
+                        }
                         is PlaySoundS2CPacket -> {
                             for (entity in mc.world?.entities!!) {
                                 if (entity is PlayerEntity && entity.pos?.squaredDistanceTo(Vec3d(event.packet.x, event.packet.y, event.packet.z))!! <= soundDistance.value * soundDistance.value) {
@@ -48,6 +52,8 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
                             }
                         }
                         is EntityS2CPacket -> {
+                            if (mc.world == null) return@Consumer
+
                             val entity = event.packet.getEntity(mc.world)
                             if (entity is PlayerEntity) if (groundMode.isSelected(0) && event.packet.isOnGround || groundMode.isSelected(1) && !event.packet.isOnGround) {
                                 passedGround.add(entity)
@@ -57,7 +63,7 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
                 }
             }
             is EventIsEntityAttackable -> {
-                if (event.entity != null) if (isBot(event.entity)) event.attackable = false
+                if (event.attackable && event.entity != null) if (isBot(event.entity)) event.attackable = false
             }
         }
     }
