@@ -53,12 +53,12 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
         val riptide = EnchantmentHelper.getRiptide(item)
         persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0f, 2.5f + riptide.toFloat() * 0.5f, 1.0f)
     }, ProjectileItem(Items.FISHING_ROD.javaClass, EntityType.FISHING_BOBBER, false) { _, persistentProjectileEntity ->
-        val f: Float = mc.player?.pitch!!
-        val g: Float = mc.player?.yaw!!
-        val h = MathHelper.cos(-g * (Math.PI.toFloat() / 180) - Math.PI.toFloat())
-        val i = MathHelper.sin(-g * (Math.PI.toFloat() / 180) - Math.PI.toFloat())
-        val j = -MathHelper.cos(-f * (Math.PI.toFloat() / 180))
-        val k = MathHelper.sin(-f * (Math.PI.toFloat() / 180))
+        val f = mc.player?.pitch!!
+        val g = mc.player?.yaw!!
+        val h = MathHelper.cos(Math.toRadians(-g.toDouble()).toFloat() - Math.PI.toFloat())
+        val i = MathHelper.sin(Math.toRadians(-g.toDouble()).toFloat() - Math.PI.toFloat())
+        val j = -MathHelper.cos(Math.toRadians(-f.toDouble()).toFloat())
+        val k = MathHelper.sin(Math.toRadians(-f.toDouble()).toFloat())
 
         persistentProjectileEntity.refreshPositionAndAngles(persistentProjectileEntity.x - i.toDouble() * 0.3, persistentProjectileEntity.y + 0.1, persistentProjectileEntity.z - h.toDouble() * 0.3, f, g)
 

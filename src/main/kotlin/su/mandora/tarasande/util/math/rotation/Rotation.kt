@@ -94,8 +94,8 @@ class Rotation(var yaw: Float, var pitch: Float) {
     }
 
     fun forwardVector(dist: Double): Vec3d {
-        val f = pitch * (Math.PI.toFloat() / 180)
-        val g = -yaw * (Math.PI.toFloat() / 180)
+        val f = Math.toRadians(pitch.toDouble()).toFloat()
+        val g = Math.toRadians(-yaw.toDouble()).toFloat()
         val h = MathHelper.cos(g)
         val i = MathHelper.sin(g)
         val j = MathHelper.cos(f)

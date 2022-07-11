@@ -108,6 +108,13 @@ class ValueComponentRegistry(value: Value) : ValueComponent(value) {
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         if (textFieldWidget.isFocused && (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)) {
+            if(searchResults.size == 1) {
+                val valueRegistry = value as ValueRegistry<*>
+                valueRegistry.add(searchResults[0])
+                valueRegistry.onChange()
+                textFieldWidget.text = ""
+                updateSearchResults()
+            }
             textFieldWidget.setTextFieldFocused(false)
             textFieldWidget.setCursorToEnd()
             return true

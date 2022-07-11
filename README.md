@@ -54,11 +54,11 @@
 - AutoTool
 - No Rotate
 - MurderMystery: Exclude Detective Items from Disallowed Items
-- ValueComponentRegistry: If only 1 result -> Enter: Add Item and reset text
 - Implement Badlion Timers (Maybe make a Log for all custom payloads for more generic usage)
 - BowAimbot: Prediction
 - Improve BedESP performance (Go inside from outside; see comment in BedESP class)
-- Scaffoldwalk still need some polishing / old settings have to be removed/implemented
+- Scaffoldwalk still need some polishing / old settings have to be removed/implemented (getAdjacentBlock is also not that good right now)
+- User configs
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

@@ -199,7 +199,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
                     val userApiService = try {
                         authenticationService.createUserApiService(account.session?.accessToken)
                     } catch (ignored: Exception) {
-                        updatedUserApiService = false;
+                        updatedUserApiService = false
                         UserApiService.OFFLINE
                     }
                     it.tarasande_setUserApiService(userApiService)

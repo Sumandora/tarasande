@@ -8,6 +8,7 @@ import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.*
 import net.minecraft.util.registry.Registry
+import net.minecraft.util.shape.VoxelShapes
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
@@ -22,6 +23,7 @@ import su.mandora.tarasande.util.player.clickspeed.ClickMethodCooldown
 import su.mandora.tarasande.util.player.clickspeed.ClickSpeedUtil
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.*
+import java.awt.Color
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import kotlin.math.*
@@ -33,7 +35,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val clickSpeedUtil = ClickSpeedUtil(this, { alwaysClick.value }, ClickMethodCooldown::class.java)
     private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.0, 1.0, 1.0, 1.0, 0.1)
 
-    //    private val goalYaw = ValueNumber(this, "Goal yaw", 0.0, 180.0, 360.0, 45.0)
+    private val goalYaw = ValueNumber(this, "Goal yaw", -45.0, 0.0, 45.0, 1.0)
     private val offsetGoalYaw = ValueBoolean(this, "Offset goal yaw", true)
     private val edgeDistance = ValueNumber(this, "Edge distance", 0.0, 0.5, 1.0, 0.05)
     private val edgeIncrement = ValueBoolean(this, "Edge increment", true)
@@ -149,57 +151,56 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                             val point = Vec3d.ofCenter(target?.first).add(Vec3d.of(dirVec).negate().multiply(0.5))
                             val rotatedVec = dirVec.let { Vec3d(abs(it.x) - 1.0, 0.0, abs(it.z) - 1.0) }
 
-                            // Don't use our current eyes, but use the eyes, which we are going to have
+                            if (lastRotation == null || run {
+                                    val rotationVector = (mc.player as IEntity).tarasande_invokeGetRotationVector(lastRotation?.pitch!!, lastRotation?.yaw!!)
+                                    val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos?.add(rotationVector.multiply(mc.interactionManager?.reachDistance?.toDouble()!!))!!)
+                                    hitResult == null || hitResult.type != HitResult.Type.BLOCK || hitResult.side != (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) || hitResult.blockPos == target?.first
+                                }) {
+                                val sideBegin = point.add(rotatedVec.multiply(0.5))
+                                val sideEnd = point.add(rotatedVec.multiply(0.5).negate())
 
-                            val lookPoint = BlockPos(mc.player?.eyePos!!)
-                            val nextBlock = lookPoint.subtract(target?.first?.subtract(lookPoint))?.withY(mc.player?.eyePos?.y?.toInt()!!)
+                                val padding = 0.01f
 
-                            val box = Vec3d.ofCenter(nextBlock).let { Box(it.x - 1.2, it.y, it.z - 1.2, it.x + 1.2, it.y, it.z + 1.2) }
+                                val finalPoint = if (!offsetGoalYaw.value) {
+                                    // calculating the closest point on the line to feet
+                                    val feet = mc.player?.pos!!
 
-                            val endLookPoint = Vec3d(
-                                if (target?.second?.offsetX != 0) MathHelper.clamp(mc.player?.eyePos?.x!!, box.minX, box.maxX) else mc.player?.eyePos?.x!!,
-                                mc.player?.eyePos?.y!!,
-                                if (target?.second?.offsetZ != 0) MathHelper.clamp(mc.player?.eyePos?.z!!, box.minZ, box.maxZ) else mc.player?.eyePos?.z!!
-                            )
+                                    val beginToPoint = Vec2f((point.x - sideBegin.x).toFloat(), (point.z - sideBegin.z).toFloat())
+                                    val beginToEnd = Vec2f((sideEnd.x - sideBegin.x).toFloat(), (sideEnd.z - sideBegin.z).toFloat())
 
-                            val sideBegin = point.add(rotatedVec.multiply(0.5))
-                            val sideEnd = point.add(rotatedVec.multiply(0.5).negate())
+                                    val squaredDist = beginToEnd.lengthSquared()
+                                    val dotProd = beginToPoint.dot(beginToEnd)
 
-                            val padding = 0.05f
+                                    var t = dotProd / squaredDist
 
-                            val finalPoint = if (!offsetGoalYaw.value) {
+                                    val closest = sideBegin.add(sideEnd.subtract(sideBegin).multiply(MathHelper.clamp(t, padding, 1.0f - padding).toDouble()))
 
-                                // calculating the closest point on the line to feet
-
-                                val feet = mc.player?.pos!!
-
-                                val beginToPoint = Vec2f((feet.x - sideBegin.x).toFloat(), (feet.z - sideBegin.z).toFloat())
-                                val beginToEnd = Vec2f((sideEnd.x - sideBegin.x).toFloat(), (sideEnd.z - sideBegin.z).toFloat())
-
-                                val squaredDist = beginToEnd.lengthSquared()
-                                val dotProd = beginToPoint.dot(beginToEnd)
-
-                                val t = dotProd / squaredDist
-
-                                sideBegin.add(sideEnd.subtract(sideBegin).multiply(MathHelper.clamp(t, padding, 1.0f - padding).toDouble()))
-                            } else {
-                                var t = padding
-                                var best: Vec3d? = null
-                                var dist = 0.0
-                                while (t <= 1.0 - padding) {
-                                    val position = sideBegin.add(sideEnd.subtract(sideBegin).multiply(t.toDouble()))
-                                    val rotation = abs(MathHelper.wrapDegrees(RotationUtil.getYaw(position.subtract(endLookPoint)) - mc.player?.yaw!! - 180))
-                                    if (best == null || dist > rotation) {
-                                        best = position
-                                        dist = rotation
+                                    if (t in padding..1.0f - padding) {
+                                        val dist = feet.distanceTo(closest)
+                                        val a = sin(Math.toRadians(goalYaw.value)) * dist
+                                        t += a.toFloat()
                                     }
-                                    t += 0.05f
-                                }
-                                best
-                            }
 
-                            if (finalPoint != null)
-                                lastRotation = RotationUtil.getRotations(endLookPoint, finalPoint)
+                                    sideBegin.add(sideEnd.subtract(sideBegin).multiply(MathHelper.clamp(t, padding, 1.0f - padding).toDouble()))
+                                } else {
+                                    var t = padding
+                                    var best: Vec3d? = null
+                                    var dist = 0.0
+                                    while (t <= 1.0 - padding) {
+                                        val position = sideBegin.add(sideEnd.subtract(sideBegin).multiply(t.toDouble()))
+                                        val rotation = abs(MathHelper.wrapDegrees(RotationUtil.getYaw(position.subtract(mc.player?.eyePos!!)) - mc.player?.yaw!! - 180 + goalYaw.value))
+                                        if (best == null || dist > rotation) {
+                                            best = position
+                                            dist = rotation
+                                        }
+                                        t += 0.05f
+                                    }
+                                    best
+                                }
+
+                                if (finalPoint != null)
+                                    lastRotation = RotationUtil.getRotations(mc.player?.eyePos!!, finalPoint)
+                            }
                         }
                     } else {
                         prevEdgeDistance = 0.5
@@ -208,7 +209,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 }
                 if (lastRotation == null) {
                     val rad = PlayerUtil.getMoveDirection() - PI / 2
-                    val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, mc.player?.pos?.add(cos(rad), 0.0, sin(rad))?.add(0.0, -3.0 /* premium way of forcing a far look down without locking pitch to some value */, 0.0)!!)
+                    val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, mc.player?.pos?.add(Vec3d(cos(rad), 0.0, sin(rad)).multiply(0.3))!!)
 
                     lastRotation = targetRot
                 }
@@ -324,7 +325,14 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     RenderUtil.blockOutline(event.matrices, shape, blockColor.getColor().rgb)
                     val facing = target?.second?.opposite
                     RenderUtil.blockOutline(event.matrices, shape.offset(facing?.offsetX?.toDouble()!!, facing.offsetY.toDouble(), facing.offsetZ.toDouble()), facingColor.getColor().rgb)
+                    val rad = PlayerUtil.getMoveDirection() - PI / 2
+                    val lookPoint = BlockPos(mc.player?.eyePos?.add(Vec3d(cos(rad), 0.0, sin(rad)).multiply(-1.0))!!)
+                    RenderUtil.blockOutline(event.matrices, VoxelShapes.fullCube().offset(lookPoint?.x?.toDouble()!!, lookPoint?.y?.toDouble()!!, lookPoint?.z?.toDouble()!!), Color.white.rgb)
                 }
+            }
+            is EventGoalMovement -> {
+                val rad = Math.toRadians(round(mc.player?.yaw!! / 45.0f) * 45.0f + 90.0)
+                event.yaw = RotationUtil.getYaw(Vec3d(cos(rad), 0.0, sin(rad)).multiply(3.0 /* some space*/)).toFloat()
             }
         }
     }
