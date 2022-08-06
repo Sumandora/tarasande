@@ -144,7 +144,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventPollEvents -> {
-                if (messages.isNotEmpty()) mc.player?.sendChatMessage(SharedConstants.stripInvalidChars(messages.removeFirst()))
+                if (messages.isNotEmpty()) TarasandeMain.get().managerModule?.get(ModuleSpammer::class.java)?.sendChatMessage(SharedConstants.stripInvalidChars(messages.removeFirst()))
             }
             is EventUpdate -> {
                 if (event.state == EventUpdate.State.PRE) {

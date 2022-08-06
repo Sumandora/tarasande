@@ -50,7 +50,7 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
         priorityMessages.clear()
     }
 
-    private fun sendChatMessage(text: String) {
+    fun sendChatMessage(text: String) {
         val prevBypassChat = (mc.player as IClientPlayerEntity).tarasande_getBypassChat()
         (mc.player as IClientPlayerEntity).tarasande_setBypassChat(true)
         // this method COULD be static, but Mojangs god tier coders didn't think of that

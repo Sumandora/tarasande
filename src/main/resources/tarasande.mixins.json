@@ -50,7 +50,6 @@
   },
   "client": [
     "MixinPlayerListHud",
-    "MixinProfileKeys",
     "MixinTelemetrySender"
   ]
 }

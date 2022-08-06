@@ -327,7 +327,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     RenderUtil.blockOutline(event.matrices, shape.offset(facing?.offsetX?.toDouble()!!, facing.offsetY.toDouble(), facing.offsetZ.toDouble()), facingColor.getColor().rgb)
                     val rad = PlayerUtil.getMoveDirection() - PI / 2
                     val lookPoint = BlockPos(mc.player?.eyePos?.add(Vec3d(cos(rad), 0.0, sin(rad)).multiply(-1.0))!!)
-                    RenderUtil.blockOutline(event.matrices, VoxelShapes.fullCube().offset(lookPoint?.x?.toDouble()!!, lookPoint?.y?.toDouble()!!, lookPoint?.z?.toDouble()!!), Color.white.rgb)
+                    // RenderUtil.blockOutline(event.matrices, VoxelShapes.fullCube().offset(lookPoint?.x?.toDouble()!!, lookPoint?.y?.toDouble()!!, lookPoint?.z?.toDouble()!!), Color.white.rgb)
                 }
             }
             is EventGoalMovement -> {

@@ -5,6 +5,7 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
+import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.listener.PacketListener;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,8 +37,8 @@ public abstract class MixinClientConnection implements IClientConnection {
     @Shadow
     public abstract void send(Packet<?> packet);
 
-    @Inject(method = "send(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V", at = @At("HEAD"), cancellable = true)
-    public void injectSend(Packet<?> packet, @Nullable GenericFutureListener<? extends Future<? super Void>> callback, CallbackInfo ci) {
+    @Inject(method = "send(Lnet/minecraft/network/Packet;Lnet/minecraft/network/PacketCallbacks;)V", at = @At("HEAD"), cancellable = true)
+    public void injectSend(Packet<?> packet, @Nullable PacketCallbacks callbacks, CallbackInfo ci) {
         if (!forced.contains(packet)) {
             EventPacket eventPacket = new EventPacket(EventPacket.Type.SEND, packet);
             TarasandeMain.Companion.get().getManagerEvent().call(eventPacket);
