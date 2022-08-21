@@ -13,7 +13,12 @@ import java.nio.file.Files
 class ManagerFile : Manager<File>() {
 
     init {
-        add(FileModules(), FileValues(), FileAccounts(), FileMenu())
+        add(
+            FileModules(),
+            FileValues(),
+            FileAccounts(),
+            FileMenu()
+        )
     }
 
     fun save() {

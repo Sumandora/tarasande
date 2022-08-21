@@ -14,7 +14,11 @@ import kotlin.math.abs
 class ManagerESP : Manager<ESPElement>() {
 
     init {
-        add(ESPElementBox(), ESPElementName(), ESPElementHealthBar())
+        add(
+            ESPElementBox(),
+            ESPElementName(),
+            ESPElementHealthBar()
+        )
     }
 
     fun renderBox(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
