@@ -1,302 +1,486 @@
-/**
- * Based on https://github.com/Ratsiiel/minecraft-auth-library
- */
 package su.mandora.tarasande.screen.accountmanager.account
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.google.gson.JsonPrimitive
-import com.mojang.authlib.exceptions.AuthenticationException
+import com.google.gson.annotations.SerializedName
 import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import net.minecraft.client.util.Session
+import net.minecraft.util.Util
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.screen.accountmanager.account.Account
 import su.mandora.tarasande.base.screen.accountmanager.account.AccountInfo
-import su.mandora.tarasande.base.screen.accountmanager.account.TextFieldInfo
-import java.io.*
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.net.*
 import java.nio.charset.StandardCharsets
+import java.sql.Timestamp
 import java.util.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
-import java.util.stream.Collectors
+import java.util.concurrent.ThreadLocalRandom
 
 @AccountInfo("Microsoft", true)
-class AccountMicrosoft(
-    @TextFieldInfo("E-Mail", false) val email: String,
-    @TextFieldInfo("Password", true) val password: String,
-) : Account() {
-    private val clientId = "00000000402b5328"
-    private val scopeUrl = "service::user.auth.xboxlive.com::MBI_SSL"
-
-    private var loginUrl: String? = null
-    private var loginCookie: String? = null
-    private var loginPPFT: String? = null
+class AccountMicrosoft : Account() {
+    private val oauthAuthorizeUrl = "https://login.live.com/oauth20_authorize.srf"
+    private val oauthTokenUrl = "https://login.live.com/oauth20_token.srf"
+    private val xboxAuthenticateUrl = "https://user.auth.xboxlive.com/user/authenticate"
+    private val xboxAuthorizeUrl = "https://xsts.auth.xboxlive.com/xsts/authorize"
+    private val minecraftLoginUrl = "https://api.minecraftservices.com/authentication/login_with_xbox"
+    private val minecraftProfileUrl = "https://api.minecraftservices.com/minecraft/profile"
+    private val clientId = "54fd49e4-2103-4044-9603-2b028c814ec3"
+    private val scope = "XboxLive.signin offline_access"
+    private val redirectUriBase = "http://localhost:"
+    private val timeout = 1000L * 60L
 
     var service: MinecraftSessionService? = null
 
-    @Suppress("unused") // Reflections
-    constructor() : this("", "")
+    private var msAuthProfile: MSAuthProfile? = null
+    private var redirectUri: String? = null
+    private var code: String? = null
+
+    private fun randomPort(): Int = ThreadLocalRandom.current().nextInt(0, Short.MAX_VALUE.toInt() * 2 /* unsigned */)
+
+    private fun setupHttpServer(): Int {
+        return try {
+            val serverSocket = ServerSocket(randomPort())
+            if(!serverSocket.isBound)
+                throw IllegalStateException("Not bound")
+            val t = Thread {
+                try {
+                    val socket = serverSocket.accept()
+                    val bufferedReader = BufferedReader(InputStreamReader(socket.getInputStream()))
+                    val content = StringBuilder()
+                    while (bufferedReader.ready())
+                        content.append(bufferedReader.read().toChar())
+                    code = content.toString().split("code=")[1].split(" ")[0].split("&")[0] // hack
+                    socket.getOutputStream().write("""HTTP/2 200 OK
+content-type: text/plain
+
+You can close this page now.""".toByteArray())
+                    socket.close()
+                    serverSocket.close()
+                } catch (t: Throwable) {
+                    t.printStackTrace()
+                    serverSocket.close()
+                }
+            }
+            t.name = "Microsoft login http server"
+            t.start()
+            val t2 = Thread {
+                val time = System.currentTimeMillis()
+                while(System.currentTimeMillis() - time < timeout) {
+                    if(t.isAlive)
+                        return@Thread
+                    Thread.sleep(1000L)
+                }
+                t.stop()
+            }
+            t2.name = "Microsoft login http server [Watchdog]"
+            t2.start()
+            serverSocket.localPort
+        } catch (t: Throwable) {
+            setupHttpServer()
+        }
+    }
 
     override fun logIn() {
-        val microsoftToken = generateTokenPair(generateLoginCode(email, password))
-        val xboxLiveToken = generateXboxTokenPair(microsoftToken!!)
-        val xboxToken = generateXboxTokenPair(xboxLiveToken!!)
+        if(msAuthProfile != null &&
+            (msAuthProfile?.xboxLiveAuth            ?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true ||
+             msAuthProfile?.xboxLiveSecurityTokens  ?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true)
+        ) {
+            msAuthProfile = msAuthProfile?.renew() // use refresh token to update the account
+        }
 
-        val url = URL(environment?.servicesHost + "/authentication/login_with_xbox")
-        val urlConnection = url.openConnection()
-        val httpURLConnection = urlConnection as HttpURLConnection
-        httpURLConnection.requestMethod = "POST"
-        httpURLConnection.doOutput = true
-        val request = JsonObject()
-        request.add("identityToken", JsonPrimitive("XBL3.0 x=" + xboxToken?.uhs + ";" + xboxToken?.token))
-        val requestBody = request.toString()
-        httpURLConnection.setFixedLengthStreamingMode(requestBody.length)
-        httpURLConnection.setRequestProperty("Content-Type", "application/json")
-        httpURLConnection.setRequestProperty("Host", URI(environment?.servicesHost!!).path)
-        httpURLConnection.connect()
-        httpURLConnection.outputStream.use { outputStream -> outputStream.write(requestBody.toByteArray(StandardCharsets.US_ASCII)) }
-        val jsonObject: JsonObject = parseResponseData(httpURLConnection)
-
-        val minecraftProfile = checkOwnership(jsonObject.get("access_token").asString)
+        if(msAuthProfile == null) {
+            redirectUri = redirectUriBase + setupHttpServer()
+            Util.getOperatingSystem().open(URI(oauthAuthorizeUrl + "?" +
+                "redirect_uri=" + redirectUri + "&" +
+                "scope=" + URLEncoder.encode(scope, StandardCharsets.UTF_8) + "&" +
+                "response_type=code&" +
+                "client_id=" + clientId
+            ))
+            val time = System.currentTimeMillis()
+            while(code == null) {
+                Thread.sleep(100)
+                if(System.currentTimeMillis() - time > timeout)
+                    throw IllegalStateException("Aborted")
+            }
+            msAuthProfile = buildFromCode(code!!)
+            code = null
+        }
 
         service = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment).createMinecraftSessionService()
-        session = Session(minecraftProfile.username, minecraftProfile.uuid.toString(), jsonObject.get("access_token").asString, Optional.of(xboxLiveToken.token), Optional.of(clientId), Session.AccountType.MSA)
-    }
-
-    private fun checkOwnership(minecraftToken: String): MinecraftProfile {
-        return try {
-            val url = URL("https://api.minecraftservices.com/minecraft/profile")
-            val urlConnection = url.openConnection()
-            val httpURLConnection = urlConnection as HttpURLConnection
-            httpURLConnection.requestMethod = "GET"
-            httpURLConnection.setRequestProperty("Authorization", "Bearer $minecraftToken")
-            httpURLConnection.setRequestProperty("Host", URI(environment?.servicesHost!!).path)
-            httpURLConnection.connect()
-            val jsonObject = parseResponseData(httpURLConnection)
-            val uuid: UUID = generateUUID(jsonObject.get("id").asString)
-            val name: String = jsonObject.get("name").asString
-            MinecraftProfile(uuid, name)
-        } catch (exception: IOException) {
-            throw AuthenticationException(String.format("Authentication error. Request could not be made! Cause: '%s'", exception.message))
-        }
-    }
-
-    private fun generateUUID(trimmedUUID: String): UUID {
-        val builder = StringBuilder(trimmedUUID.trim { it <= ' ' })
-        builder.insert(20, "-")
-        builder.insert(16, "-")
-        builder.insert(12, "-")
-        builder.insert(8, "-")
-        return UUID.fromString(builder.toString())
-    }
-
-    private fun generateLoginCode(email: String, password: String): String {
-        try {
-            val url = URL("https://login.live.com/oauth20_authorize.srf?redirect_uri=https://login.live.com/oauth20_desktop.srf&scope=$scopeUrl&display=touch&response_type=code&locale=en&client_id=$clientId")
-            val httpURLConnection: HttpURLConnection = url.openConnection() as HttpURLConnection
-            val inputStream: InputStream = if (httpURLConnection.responseCode == 200) httpURLConnection.inputStream else httpURLConnection.errorStream
-            loginCookie = httpURLConnection.getHeaderField("set-cookie")
-            val responseData = BufferedReader(InputStreamReader(inputStream)).lines().collect(Collectors.joining())
-            var bodyMatcher: Matcher = Pattern.compile("sFTTag:[ ]?'.*value=\"(.*)\"/>'").matcher(responseData)
-            loginPPFT = if (bodyMatcher.find()) {
-                bodyMatcher.group(1)
-            } else {
-                throw AuthenticationException("Authentication error. Could not find 'LOGIN-PFTT' tag from response!")
-            }
-            bodyMatcher = Pattern.compile("urlPost:[ ]?'(.+?(?='))").matcher(responseData)
-            loginUrl = if (bodyMatcher.find()) {
-                bodyMatcher.group(1)
-            } else {
-                throw AuthenticationException("Authentication error. Could not find 'LOGIN-URL' tag from response!")
-            }
-            if (loginCookie == null || loginPPFT == null || loginUrl == null) throw AuthenticationException("Authentication error. Error in authentication process!")
-        } catch (exception: IOException) {
-            throw AuthenticationException(String.format("Authentication error. Request could not be made! Cause: '%s'", exception.message))
-        }
-        return sendCodeData(email, password)
-    }
-
-    private fun sendCodeData(email: String, password: String): String {
-        val authToken: String
-        val requestData: MutableMap<String, String> = HashMap()
-        requestData["login"] = email
-        requestData["loginfmt"] = email
-        requestData["passwd"] = password
-        requestData["PPFT"] = loginPPFT!!
-        val postData = encodeURL(requestData)
-        authToken = try {
-            val data: ByteArray = postData.toByteArray(StandardCharsets.UTF_8)
-            val connection: HttpURLConnection = URL(loginUrl).openConnection() as HttpURLConnection
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
-            connection.setRequestProperty("Content-Length", data.size.toString())
-            connection.setRequestProperty("Cookie", loginCookie)
-            connection.doInput = true
-            connection.doOutput = true
-            connection.outputStream.use { outputStream -> outputStream.write(data) }
-            if (connection.responseCode != 200 || connection.url.toString() == loginUrl) {
-                throw AuthenticationException("Authentication error. Username or password is not valid.")
-            }
-            val pattern: Pattern = Pattern.compile("[?|&]code=([\\w.-]+)")
-            val tokenMatcher: Matcher = pattern.matcher(URLDecoder.decode(connection.url.toString(), StandardCharsets.UTF_8.name()))
-            if (tokenMatcher.find()) {
-                tokenMatcher.group(1)
-            } else {
-                throw AuthenticationException("Authentication error. Could not handle data from response.")
-            }
-        } catch (exception: IOException) {
-            throw AuthenticationException(String.format("Authentication error. Request could not be made! Cause: '%s'", exception.message))
-        }
-        loginUrl = null
-        loginCookie = null
-        loginPPFT = null
-        return authToken
-    }
-
-    private fun sendXboxRequest(httpURLConnection: HttpURLConnection, request: JsonObject, properties: JsonObject) {
-        request.add("Properties", properties)
-        val requestBody: String = request.toString()
-        httpURLConnection.setFixedLengthStreamingMode(requestBody.length)
-        httpURLConnection.setRequestProperty("Content-Type", "application/json")
-        httpURLConnection.setRequestProperty("Accept", "application/json")
-        httpURLConnection.connect()
-        httpURLConnection.outputStream.use { outputStream -> outputStream.write(requestBody.toByteArray(StandardCharsets.US_ASCII)) }
-    }
-
-    private fun generateTokenPair(authToken: String): MicrosoftToken? {
-        return try {
-            val arguments: MutableMap<String, String> = HashMap()
-            arguments["client_id"] = clientId
-            arguments["code"] = authToken
-            arguments["grant_type"] = "authorization_code"
-            arguments["redirect_uri"] = "https://login.live.com/oauth20_desktop.srf"
-            arguments["scope"] = scopeUrl
-            val argumentBuilder = StringJoiner("&")
-            for ((key, value) in arguments) {
-                argumentBuilder.add(encodeURL(key) + "=" + encodeURL(value))
-            }
-            val data: ByteArray = argumentBuilder.toString().toByteArray(StandardCharsets.UTF_8)
-            val url = URL("https://login.live.com/oauth20_token.srf")
-            val urlConnection: URLConnection = url.openConnection()
-            val httpURLConnection: HttpURLConnection = urlConnection as HttpURLConnection
-            httpURLConnection.requestMethod = "POST"
-            httpURLConnection.doOutput = true
-            httpURLConnection.setFixedLengthStreamingMode(data.size)
-            httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
-            httpURLConnection.connect()
-            httpURLConnection.outputStream.use { outputStream -> outputStream.write(data) }
-            val jsonObject: JsonObject = parseResponseData(httpURLConnection)
-            MicrosoftToken(jsonObject.get("access_token").asString, jsonObject.get("refresh_token").asString)
-        } catch (exception: IOException) {
-            throw AuthenticationException(String.format("Authentication error. Request could not be made! Cause: '%s'", exception.message))
-        }
-    }
-
-    private fun generateXboxTokenPair(microsoftToken: MicrosoftToken): XboxLiveToken? {
-        return try {
-            val url = URL("https://user.auth.xboxlive.com/user/authenticate")
-            val urlConnection: URLConnection = url.openConnection()
-            val httpURLConnection: HttpURLConnection = urlConnection as HttpURLConnection
-            httpURLConnection.doOutput = true
-            val request = JsonObject()
-            request.add("RelyingParty", JsonPrimitive("http://auth.xboxlive.com"))
-            request.add("TokenType", JsonPrimitive("JWT"))
-            val properties = JsonObject()
-            properties.add("AuthMethod", JsonPrimitive("RPS"))
-            properties.add("SiteName", JsonPrimitive("user.auth.xboxlive.com"))
-            properties.add("RpsTicket", JsonPrimitive(microsoftToken.token))
-            sendXboxRequest(httpURLConnection, request, properties)
-            val jsonObject: JsonObject = parseResponseData(httpURLConnection)
-            val uhs: String = (jsonObject.get("DisplayClaims").asJsonObject.getAsJsonArray("xui").get(0) as JsonObject).get("uhs").asString
-            XboxLiveToken(jsonObject.get("Token").asString, uhs)
-        } catch (exception: IOException) {
-            throw AuthenticationException(String.format("Authentication error. Request could not be made! Cause: '%s'", exception.message))
-        }
-    }
-
-    private fun generateXboxTokenPair(xboxLiveToken: XboxLiveToken): XboxToken? {
-        return try {
-            val url = URL("https://xsts.auth.xboxlive.com/xsts/authorize")
-            val urlConnection: URLConnection = url.openConnection()
-            val httpURLConnection: HttpURLConnection = urlConnection as HttpURLConnection
-            httpURLConnection.requestMethod = "POST"
-            httpURLConnection.doOutput = true
-            val request = JsonObject()
-            request.add("RelyingParty", JsonPrimitive("rp://api.minecraftservices.com/"))
-            request.add("TokenType", JsonPrimitive("JWT"))
-            val properties = JsonObject()
-            properties.add("SandboxId", JsonPrimitive("RETAIL"))
-            val userTokens = JsonArray()
-            userTokens.add(JsonPrimitive(xboxLiveToken.token))
-            properties.add("UserTokens", userTokens)
-            sendXboxRequest(httpURLConnection, request, properties)
-            if (httpURLConnection.responseCode == 401) {
-                throw AuthenticationException("No xbox account was found!")
-            }
-            val jsonObject: JsonObject = parseResponseData(httpURLConnection)
-            val uhs: String = (jsonObject.get("DisplayClaims").asJsonObject.get("xui").asJsonArray.get(0) as JsonObject).get("uhs").asString
-            XboxToken(jsonObject.get("Token").asString, uhs)
-        } catch (exception: IOException) {
-            throw AuthenticationException(String.format("Authentication error. Request could not be made! Cause: '%s'", exception.message))
-        }
-    }
-
-    private fun parseResponseData(httpURLConnection: HttpURLConnection): JsonObject {
-        val bufferedReader: BufferedReader = if (httpURLConnection.responseCode != 200) {
-            BufferedReader(InputStreamReader(httpURLConnection.errorStream))
+        if(msAuthProfile != null) {
+            session = msAuthProfile?.asSession()!!
         } else {
-            BufferedReader(InputStreamReader(httpURLConnection.inputStream))
-        }
-        val lines = bufferedReader.lines().collect(Collectors.joining())
-        val jsonObject: JsonObject = TarasandeMain.get().gson.fromJson(lines, JsonObject::class.java)!!
-        if (jsonObject.has("error")) {
-            throw AuthenticationException(jsonObject.get("error").toString() + ": " + jsonObject.get("error_description"))
-        }
-        return jsonObject
-    }
-
-    private fun encodeURL(url: String): String {
-        return try {
-            URLEncoder.encode(url, "UTF-8")
-        } catch (exception: UnsupportedEncodingException) {
-            throw UnsupportedOperationException(exception)
+            throw IllegalStateException("WHAT THE FUCK")
         }
     }
 
-    private fun encodeURL(map: MutableMap<String, String>): String {
-        val sb = StringBuilder()
-        for ((key, value) in map) {
-            if (sb.isNotEmpty()) {
-                sb.append("&")
-            }
-            sb.append(String.format("%s=%s", encodeURL(key), encodeURL(value)))
+    private fun buildFromCode(code: String): MSAuthProfile {
+        val oAuthToken = TarasandeMain.get().gson.fromJson(post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
+            it["client_id"] = clientId
+            it["code"] = code
+            it["grant_type"] = "authorization_code"
+            it["redirect_uri"] = redirectUri!!
+            it["scope"] = scope
+        }), JsonObject::class.java)
+        return buildFromOAuthToken(oAuthToken)
+    }
+
+    private fun buildFromRefreshToken(refreshToken: String): MSAuthProfile {
+        val oAuthToken = TarasandeMain.get().gson.fromJson(post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
+            it["client_id"] = clientId
+            it["refresh_token"] = refreshToken
+            it["grant_type"] = "refresh_token"
+            it["redirect_uri"] = redirectUri!!
+            it["scope"] = scope
+        }), JsonObject::class.java)
+        return buildFromOAuthToken(oAuthToken)
+    }
+
+    private fun buildFromOAuthToken(oAuthToken: JsonObject): MSAuthProfile {
+        val req = JsonObject()
+        val reqProps = JsonObject()
+        reqProps.addProperty("AuthMethod", "RPS")
+        reqProps.addProperty("SiteName", "user.auth.xboxlive.com")
+        reqProps.addProperty("RpsTicket", "d=" + oAuthToken["access_token"])
+        req.add("Properties", reqProps)
+        req.addProperty("RelyingParty", "http://auth.xboxlive.com")
+        req.addProperty("TokenType", "JWT")
+        val xboxLiveAuth = TarasandeMain.get().gson.fromJson(post(xboxAuthenticateUrl, 60 * 1000, "application/json", req.toString()), JsonObject::class.java)
+        return buildFromXboxLive(oAuthToken, xboxLiveAuth)
+    }
+
+    private fun buildFromXboxLive(oAuthToken: JsonObject, xboxLiveAuth: JsonObject): MSAuthProfile {
+        val req = JsonObject()
+        val reqProps = JsonObject()
+        val userTokens = JsonArray()
+        userTokens.add(xboxLiveAuth["Token"].asString)
+        reqProps.add("UserTokens", userTokens)
+        reqProps.addProperty("SandboxId", "RETAIL")
+        req.add("Properties", reqProps)
+        req.addProperty("RelyingParty", "rp://api.minecraftservices.com/")
+        req.addProperty("TokenType", "JWT")
+        val xboxLiveSecurityTokens = TarasandeMain.get().gson.fromJson(post(xboxAuthorizeUrl, 60 * 1000, "application/json", req.toString()), JsonObject::class.java)
+        return buildFromXboxLiveSecurityTokens(oAuthToken, xboxLiveAuth, xboxLiveSecurityTokens)
+    }
+
+    private fun buildFromXboxLiveSecurityTokens(oAuthToken: JsonObject, xboxLiveAuth: JsonObject, xboxLiveSecurityTokens: JsonObject): MSAuthProfile {
+        val req = JsonObject()
+        req.addProperty("identityToken", "XBL3.0 x=" + xboxLiveSecurityTokens.getAsJsonObject("DisplayClaims").getAsJsonArray("xui")[0].asJsonObject["uhs"].asString + ";" + xboxLiveSecurityTokens["Token"].asString)
+        val minecraftLogin = TarasandeMain.get().gson.fromJson(post(minecraftLoginUrl, 60 * 1000, "application/json", req.toString()), JsonObject::class.java)
+        return buildFromMinecraftLogin(oAuthToken, xboxLiveAuth, xboxLiveSecurityTokens, minecraftLogin)
+    }
+
+    private fun buildFromMinecraftLogin(oAuthToken: JsonObject, xboxLiveAuth: JsonObject, xboxLiveSecurityTokens: JsonObject, minecraftLogin: JsonObject): MSAuthProfile {
+        val minecraftProfile = TarasandeMain.get().gson.fromJson(get(minecraftProfileUrl, 60 * 1000, HashMap<String, String>().also {
+            it["Authorization"] = "Bearer " + minecraftLogin["access_token"].asString
+        }), JsonObject::class.java)
+        return MSAuthProfile(oAuthToken, xboxLiveAuth, xboxLiveSecurityTokens, minecraftLogin, minecraftProfile)
+    }
+
+    operator fun get(url: String, timeout: Int, headers: HashMap<String, String>): String {
+        val urlConnection = URL(url).openConnection() as HttpURLConnection
+        headers.forEach(urlConnection::setRequestProperty)
+        urlConnection.readTimeout = timeout
+        urlConnection.connectTimeout = timeout
+        urlConnection.requestMethod = "GET"
+        urlConnection.connect()
+        return String(urlConnection.inputStream.readAllBytes())
+    }
+
+    fun post(url: String, timeout: Int, arguments: HashMap<String, String>): String {
+        val argumentsStr = StringBuilder()
+        arguments.forEach {
+            argumentsStr.append(URLEncoder.encode(it.key, StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(it.value, StandardCharsets.UTF_8)).append("&")
         }
-        return sb.toString()
+        return post(url, timeout, "application/x-www-form-urlencoded", argumentsStr.substring(0, argumentsStr.length - 1))
+    }
+
+    fun post(url: String, timeout: Int, contentType: String, input: String): String {
+        val urlConnection = URL(url).openConnection() as HttpURLConnection
+        urlConnection.readTimeout = timeout
+        urlConnection.connectTimeout = timeout
+        urlConnection.requestMethod = "POST"
+        urlConnection.doOutput = true
+        urlConnection.setFixedLengthStreamingMode(input.length)
+        urlConnection.setRequestProperty("Content-Type", contentType)
+        urlConnection.setRequestProperty("Accept", contentType)
+        urlConnection.connect()
+        urlConnection.outputStream.write(input.toByteArray(StandardCharsets.UTF_8))
+        urlConnection.outputStream.flush()
+        return String(urlConnection.inputStream.readAllBytes())
     }
 
     override fun getDisplayName(): String {
-        return if (session != null) session?.username!! else email
+        return if (session != null) session?.username!! else "Unnamed Microsoft-account"
     }
 
     override fun getSessionService(): MinecraftSessionService? = service
 
     override fun save(): JsonArray {
         val jsonArray = JsonArray()
-        jsonArray.add(email)
-        jsonArray.add(password)
+        if(msAuthProfile != null)
+            jsonArray.add(TarasandeMain.get().gson.toJsonTree(msAuthProfile))
         return jsonArray
     }
 
     override fun load(jsonArray: JsonArray): Account {
-        return AccountMicrosoft(jsonArray[0].asString, jsonArray[1].asString)
+        return AccountMicrosoft().also { if(!jsonArray.isEmpty) it.msAuthProfile = TarasandeMain.get().gson.fromJson(jsonArray[0], MSAuthProfile::class.java) }
     }
 
-    override fun create(credentials: List<String>) = AccountMicrosoft(credentials[0], credentials[1])
+    override fun create(credentials: List<String>) = AccountMicrosoft()
+
+    inner class MSAuthProfile(oAuthToken: JsonObject, xboxLiveAuth: JsonObject, xboxLiveSecurityTokens: JsonObject, minecraftLogin: JsonObject, minecraftProfile: JsonObject) {
+        private var oAuthToken: OAuthToken? = null
+        var xboxLiveAuth: XboxLiveAuth? = null
+        var xboxLiveSecurityTokens: XboxLiveSecurityTokens? = null
+        private var minecraftLogin: MinecraftLogin? = null
+        private var minecraftProfile: MinecraftProfile? = null
+
+        init {
+            val gson = TarasandeMain.get().gson
+            this.oAuthToken = gson.fromJson(oAuthToken, OAuthToken::class.java)
+            this.xboxLiveAuth = gson.fromJson(xboxLiveAuth, XboxLiveAuth::class.java)
+            this.xboxLiveSecurityTokens = gson.fromJson(xboxLiveSecurityTokens, XboxLiveSecurityTokens::class.java)
+            this.minecraftLogin = gson.fromJson(minecraftLogin, MinecraftLogin::class.java)
+            this.minecraftProfile = gson.fromJson(minecraftProfile, MinecraftProfile::class.java)
+        }
+        fun asSession() = Session(
+            minecraftProfile?.name,
+            minecraftProfile?.id,
+            minecraftLogin?.accessToken,
+            Optional.of(xboxLiveAuth?.token!!),
+            Optional.of(AccountMicrosoft().clientId), // I hate the jvm, I hate the bytecode, I hate the language, I hate me, I hate everything!
+            Session.AccountType.MSA
+        )
+
+        fun renew(): MSAuthProfile { // I have no clue why I have to do this, but it crashes because "this" is null otherwise ._.
+            val microsoft = AccountMicrosoft()
+            microsoft.redirectUri = microsoft.redirectUriBase + microsoft.randomPort()
+            return microsoft.buildFromRefreshToken(oAuthToken?.refreshToken!!)
+        }
+
+        inner class OAuthToken {
+            @SerializedName("token_type")
+            var tokenType: String? = null
+
+            @SerializedName("expires_in")
+            var expiresIn = 0
+
+            @SerializedName("scope")
+            var scope: String? = null
+
+            @SerializedName("access_token")
+            var accessToken: String? = null
+
+            @SerializedName("refresh_token")
+            var refreshToken: String? = null
+
+            @SerializedName("authentication_token")
+            var authenticationToken: String? = null
+
+            @SerializedName("user_id")
+            var userId: String? = null
+            override fun toString(): String {
+                return "OAuthToken{" +
+                        "tokenType='" + tokenType + '\'' +
+                        ", expiresIn=" + expiresIn +
+                        ", scope='" + scope + '\'' +
+                        ", accessToken='" + accessToken + '\'' +
+                        ", refreshToken='" + refreshToken + '\'' +
+                        ", authenticationToken='" + authenticationToken + '\'' +
+                        ", userId='" + userId + '\'' +
+                        '}'
+            }
+        }
+
+        inner class XboxLiveAuth {
+            @SerializedName("IssueInstant")
+            var issueInstant: Timestamp? = null
+
+            @SerializedName("NotAfter")
+            var notAfter: Timestamp? = null
+
+            @SerializedName("Token")
+            var token: String? = null
+
+            @SerializedName("DisplayClaims")
+            var displayClaims: DisplayClaim? = null
+
+            inner class DisplayClaim {
+                @SerializedName("xui")
+                var xui: Array<Xui>? = null
+                override fun toString(): String {
+                    return "DisplayClaim{" +
+                            "xui=" + Arrays.toString(xui) +
+                            '}'
+                }
+
+                inner class Xui {
+                    @SerializedName("uhs")
+                    var uhs: String? = null
+                    override fun toString(): String {
+                        return "Xui{" +
+                                "uhs='" + uhs + '\'' +
+                                '}'
+                    }
+                }
+            }
+
+            override fun toString(): String {
+                return "XboxLiveAuth{" +
+                        "issueInstant=" + issueInstant +
+                        ", notAfter=" + notAfter +
+                        ", token='" + token + '\'' +
+                        ", displayClaims=" + displayClaims +
+                        '}'
+            }
+        }
+
+        inner class XboxLiveSecurityTokens {
+            @SerializedName("IssueInstant")
+            var issueInstant: Timestamp? = null
+
+            @SerializedName("NotAfter")
+            var notAfter: Timestamp? = null
+
+            @SerializedName("Token")
+            var token: String? = null
+
+            @SerializedName("DisplayClaims")
+            var displayClaims: DisplayClaim? = null
+            override fun toString(): String {
+                return "XboxLiveSecurityTokens{" +
+                        "issueInstant=" + issueInstant +
+                        ", notAfter=" + notAfter +
+                        ", token='" + token + '\'' +
+                        ", displayClaims=" + displayClaims +
+                        '}'
+            }
+
+            inner class DisplayClaim {
+                @SerializedName("xui")
+                var xui: Array<Xui>? = null
+                override fun toString(): String {
+                    return "DisplayClaim{" +
+                            "xui=" + Arrays.toString(xui) +
+                            '}'
+                }
+
+                inner class Xui {
+                    @SerializedName("uhs")
+                    var uhs: String? = null
+                    override fun toString(): String {
+                        return "Xui{" +
+                                "uhs='" + uhs + '\'' +
+                                '}'
+                    }
+                }
+            }
+        }
+
+        inner class MinecraftLogin {
+            @SerializedName("username")
+            var username: String? = null
+
+            @SerializedName("roles")
+            var roles: Array<Any>? = null
+
+            @SerializedName("access_token")
+            var accessToken: String? = null
+
+            @SerializedName("token_type")
+            var tokenType: String? = null
+
+            @SerializedName("expires_in")
+            var expiresIn = 0
+            override fun toString(): String {
+                return "MinecraftLogin{" +
+                        "username='" + username + '\'' +
+                        ", roles=" + Arrays.toString(roles) +
+                        ", accessToken='" + accessToken + '\'' +
+                        ", tokenType='" + tokenType + '\'' +
+                        ", expiresIn=" + expiresIn +
+                        '}'
+            }
+        }
+
+        inner class MinecraftProfile {
+            @SerializedName("id")
+            var id: String? = null
+
+            @SerializedName("name")
+            var name: String? = null
+
+            @SerializedName("skins")
+            var skins: Array<Skin>? = null
+
+            @SerializedName("capes")
+            var capes: Array<Cape>? = null
+            override fun toString(): String {
+                return "MinecraftProfile{" +
+                        "id='" + id + '\'' +
+                        ", name='" + name + '\'' +
+                        ", skins=" + Arrays.toString(skins) +
+                        ", capes=" + Arrays.toString(capes) +
+                        '}'
+            }
+
+            inner class Skin {
+                @SerializedName("id")
+                var id: String? = null
+
+                @SerializedName("state")
+                var state: String? = null
+
+                @SerializedName("url")
+                var url: String? = null
+
+                @SerializedName("variant")
+                var variant: String? = null
+                override fun toString(): String {
+                    return "Skin{" +
+                            "id='" + id + '\'' +
+                            ", state='" + state + '\'' +
+                            ", url='" + url + '\'' +
+                            ", variant='" + variant + '\'' +
+                            '}'
+                }
+            }
+
+            inner class Cape {
+                @SerializedName("id")
+                var id: String? = null
+
+                @SerializedName("state")
+                var state: String? = null
+
+                @SerializedName("url")
+                var url: String? = null
+
+                @SerializedName("alias")
+                var alias: String? = null
+                override fun toString(): String {
+                    return "Cape{" +
+                            "id='" + id + '\'' +
+                            ", state='" + state + '\'' +
+                            ", url='" + url + '\'' +
+                            ", alias='" + alias + '\'' +
+                            '}'
+                }
+            }
+        }
+
+        override fun toString(): String {
+            return "MSAuthProfile{" +
+                    "oAuthToken=" + oAuthToken +
+                    ", xboxLiveAuth=" + xboxLiveAuth +
+                    ", xboxLiveSecurityTokens=" + xboxLiveSecurityTokens +
+                    ", minecraftLogin=" + minecraftLogin +
+                    ", minecraftProfile=" + minecraftProfile +
+                    '}'
+        }
+    }
+
 }
-
-class MicrosoftToken(val token: String, val refreshToken: String)
-class XboxLiveToken(val token: String /* xuid */, val uhs: String)
-class XboxToken(val token: String, val uhs: String)
-
-class MinecraftProfile(val uuid: UUID, val username: String)

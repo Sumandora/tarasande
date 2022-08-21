@@ -19,6 +19,7 @@ import su.mandora.tarasande.value.ValueColor
 import su.mandora.tarasande.value.ValueNumber
 import java.awt.Color
 import kotlin.math.min
+import kotlin.math.ceil
 
 class ESPElementBox : ESPElement("Box") {
     private val width = ValueNumber(this, "Width", 2.0, 1.0, 5.0, 0.1)
@@ -75,7 +76,7 @@ class ESPElementHealthBar : ESPElementRotatable("Health bar", arrayOf(Orientatio
         val percentage = MathHelper.clamp(entity.health / entity.maxHealth, 0.0f, 1.0f)
         RenderUtil.fillHorizontalGradient(matrices, 0.0, 0.0, sideWidth * percentage, height, RenderUtil.colorInterpolate(fadeColorBegin.getColor(), fadeColorEnd.getColor(), 1.0 - percentage).rgb, fadeColorEnd.getColor().rgb)
         if (outlined.value) {
-            RenderUtil.outlinedFill(matrices, 0.0, 0.0, sideWidth, height, (height * 0.5).toFloat(), Color.black.rgb)
+            RenderUtil.outlinedFill(matrices, 0.0, 0.0, sideWidth, height, ceil(height * 0.5).toFloat(), Color.black.rgb)
         }
         matrices.pop()
     }

@@ -14,7 +14,10 @@ import java.util.*
 
 
 @AccountInfo(name = "Yggdrasil", suitableAsMain = true)
-class AccountYggdrasil(@TextFieldInfo(name = "Username/E-Mail", hidden = false) private val username: String, @TextFieldInfo(name = "Password", hidden = true) private val password: String) : Account() {
+class AccountYggdrasil(
+    @TextFieldInfo("Username/E-Mail", false) private val username: String,
+    @TextFieldInfo("Password", true) private val password: String
+) : Account() {
 
     private var service: MinecraftSessionService? = null
 

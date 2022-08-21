@@ -10,6 +10,7 @@ import su.mandora.tarasande.util.render.RenderUtil
 import java.awt.Color
 import kotlin.math.floor
 import kotlin.math.min
+import kotlin.math.round
 
 open class Panel(val title: String, var x: Double, var y: Double, val minWidth: Double, val minHeight: Double, val maxWidth: Double? = null, val maxHeight: Double? = null, private val background: Boolean = true) : IElement {
 
@@ -48,8 +49,8 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
         renderTitleBar(matrices, mouseX, mouseY, delta)
 
         if (dragInfo.dragging) {
-            x = mouseX - dragInfo.xOffset
-            y = mouseY - dragInfo.yOffset
+            x = round(mouseX - dragInfo.xOffset)
+            y = round(mouseY - dragInfo.yOffset)
         }
 
         x = MathHelper.clamp(x, 0.0, MinecraftClient.getInstance().window.scaledWidth.toDouble() - panelWidth)

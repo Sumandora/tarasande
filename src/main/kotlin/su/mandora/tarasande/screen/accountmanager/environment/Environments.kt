@@ -17,3 +17,11 @@ class EnvironmentPresetTheAltening : EnvironmentPreset(
     "http://sessionserver.thealtening.com",
     "https://api.minecraftservices.com"
 )
+
+class EnvironmentPresetEasyMC : EnvironmentPreset(
+    "Easy MC",
+    "https://authserver.mojang.com",
+    "https://api.mojang.com",
+    "https://sessionserver.easymc.io",
+    "https://api.minecraftservices.com"
+)

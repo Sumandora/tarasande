@@ -42,8 +42,7 @@ class ScreenBetterAccount(
         (this as IScreen).tarasande_getSelectables().clear()
 
         addDrawableChild(ButtonWidget(width - 200, 0, 100, 20, Text.of("Environment")) {
-            client?.setScreen(
-                ScreenBetterEnvironment(this, environment) { environment = it })
+            client?.setScreen(ScreenBetterEnvironment(this, environment) { environment = it })
         })
 
         addDrawableChild(
@@ -78,24 +77,24 @@ class ScreenBetterAccount(
                         addDrawableChild(
                             TextFieldWidgetPassword(
                                 textRenderer,
-                                width / 2 - 75,
+                                width / 2 - 150,
                                 (height * 0.25f + i * 25).toInt(),
-                                150,
+                                300,
                                 20,
                                 Text.of(textFieldInfo.name)
-                            ).also { it.setMaxLength(Int.MAX_VALUE) })
+                            ).also { it.setMaxLength(Int.MAX_VALUE); it.text = textFieldInfo.default })
                     )
                 } else {
                     textFields.add(
                         addDrawableChild(
                             TextFieldWidgetPlaceholder(
                                 textRenderer,
-                                width / 2 - 75,
+                                width / 2 - 150,
                                 (height * 0.25f + i * 25).toInt(),
-                                150,
+                                300,
                                 20,
                                 Text.of(textFieldInfo.name)
-                            ).also { it.setMaxLength(Int.MAX_VALUE) })
+                            ).also { it.setMaxLength(Int.MAX_VALUE); it.text = textFieldInfo.default })
                     )
                 }
             }

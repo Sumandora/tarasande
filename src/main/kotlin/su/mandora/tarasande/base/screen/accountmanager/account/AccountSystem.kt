@@ -7,6 +7,7 @@ import net.minecraft.client.util.Session
 import su.mandora.tarasande.base.Manager
 import su.mandora.tarasande.screen.accountmanager.account.AccountMicrosoft
 import su.mandora.tarasande.screen.accountmanager.account.AccountSession
+import su.mandora.tarasande.screen.accountmanager.account.AccountToken
 import su.mandora.tarasande.screen.accountmanager.account.AccountYggdrasil
 
 class ManagerAccount : Manager<Class<out Account>>() {
@@ -14,7 +15,8 @@ class ManagerAccount : Manager<Class<out Account>>() {
         add(
             AccountSession::class.java,
             AccountYggdrasil::class.java,
-            AccountMicrosoft::class.java
+            AccountMicrosoft::class.java,
+            AccountToken::class.java
         )
     }
 }

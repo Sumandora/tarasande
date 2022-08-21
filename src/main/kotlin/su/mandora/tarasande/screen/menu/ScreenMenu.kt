@@ -35,7 +35,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 
     private val managerGraph = ManagerGraph()
 
-    private val image = Identifier(TarasandeMain.get().name, "azusa.png")
+    private val image = Identifier(TarasandeMain.get().name, "nanakusa.png")
     private val particles = ArrayList<Particle>()
 
     // unused rn
@@ -106,9 +106,9 @@ class ScreenMenu : Screen(Text.of("Menu")) {
             RenderSystem.enableBlend()
             RenderSystem.defaultBlendFunc()
             RenderSystem.enableDepthTest()
-            val aspect = 698.0 / 1496.0
-            val width = height * aspect
-            val height = client?.window?.scaledHeight!! * 0.85
+            val aspect = 1414.0 / 920.0
+            val width = height / aspect
+            val height = width / aspect
             DrawableHelper.drawTexture(matrices, (client?.window?.scaledWidth!! - animation * width).toInt(), (client?.window?.scaledHeight!! - height).toInt(), 0, 0.0f, 0.0f, width.toInt(), height.toInt(), width.toInt(), height.toInt())
             matrices?.pop()
         }
@@ -140,7 +140,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
             val y = it.y + panelHeight - panelHeight * (1 - animation) / 2.0 - 1
             val width = it.panelWidth - it.panelWidth * (1 - animation)
             val height = (panelHeight - panelHeight * (1 - animation) - 1)
-            if (it !is PanelFixed && animation > 0.0) {
+            if (it.opened && it !is PanelFixed && animation > 0.0) {
                 GlStateManager._enableScissorTest()
                 GlStateManager._scissorBox(round(x * client?.window?.scaleFactor!!).toInt(), round(client?.window?.height!! - y * client?.window?.scaleFactor!!).toInt(), round(width * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1), round(height * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1))
             }

@@ -13,9 +13,9 @@ import java.util.*
 
 @AccountInfo(name = "Session", suitableAsMain = false) // We shouldn't allow users to use cracked accounts as mains, because if we later use the main to authenticate services, we might run into problems
 class AccountSession(
-    @TextFieldInfo(name = "Username", hidden = false) private val username: String,
-    @TextFieldInfo(name = "UUID", hidden = false) private val uuid: String,
-    @TextFieldInfo(name = "Access Token", hidden = false) private val accessToken: String
+    @TextFieldInfo("Username", false) private val username: String,
+    @TextFieldInfo("UUID", false) private val uuid: String,
+    @TextFieldInfo("Access Token", false) private val accessToken: String
 ) : Account() {
 
     private var service: MinecraftSessionService? = null
