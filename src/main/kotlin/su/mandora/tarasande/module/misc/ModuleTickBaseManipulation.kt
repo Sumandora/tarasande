@@ -68,12 +68,15 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
                     EventUpdate.State.PRE -> {
                         if (shifted > prevShifted) event.cancelled = true
                     }
+
                     EventUpdate.State.POST -> { // doing it in post means, that we skip as soon as we get it, otherwise we get a one tick delay
                         if (shifted >= prevShifted && skipCooldown.value) shifted = max(0L, shifted - ceil((0.9 - MinecraftClient.getInstance().player?.getAttackCooldownProgress(0.5F)!!).coerceAtLeast(0.0) * MinecraftClient.getInstance().player?.attackCooldownProgressPerTick!! * ((mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_getTickTime()).toLong())
                     }
+
                     else -> {}
                 }
             }
+
             is EventAttackEntity -> {
                 if (event.state != EventAttackEntity.State.PRE) return@Consumer
                 if (event.entity is LivingEntity) {
@@ -83,6 +86,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
                     }
                 }
             }
+
             is EventKeyBindingIsPressed -> {
                 if (defensive.value) {
                     if (shifted < prevShifted && didHit) {
@@ -92,6 +96,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
                     }
                 }
             }
+
             is EventTimeTravel -> {
                 if (mc.player != null) {
                     didHit = false

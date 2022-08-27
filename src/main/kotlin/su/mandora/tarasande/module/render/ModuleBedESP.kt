@@ -11,8 +11,6 @@ import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventRender3D
 import su.mandora.tarasande.event.EventUpdate
-import su.mandora.tarasande.mixin.accessor.IMinecraftClient
-import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
 import su.mandora.tarasande.util.pathfinder.Node
 import su.mandora.tarasande.util.pathfinder.PathFinder
 import su.mandora.tarasande.util.render.RenderUtil
@@ -20,7 +18,6 @@ import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueColor
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
-import kotlin.math.floor
 
 /**
  * This module is pretty cool, but can be extremely processing intensive
@@ -98,10 +95,11 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                     val beds = ArrayList<BlockPos>()
 
                     for (x in -rad..rad) for (y in -rad..rad) for (z in -rad..rad) {
-                        val blockPos = BlockPos(mc.player?.eyePos).add(x, y, z)
+                        val blockPos = BlockPos(mc.gameRenderer.camera.pos).add(x, y, z)
                         val blockState = mc.world?.getBlockState(blockPos)
 
-                        if (blockState?.block is BedBlock) beds.add(blockPos)
+                        if (blockState?.block is BedBlock)
+                            beds.add(blockPos)
                     }
 
                     for (bed in beds) {
@@ -114,27 +112,31 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                         if (bedDatas.any { it.bedParts.any { part1 -> bedParts.any { part2 -> part1 == part2 } } }) continue // we already processed these
 
                         if (!calculateBestWay.value || bedParts.any { allSurroundings(it).any { mc.world?.isAir(it)!! } }) {
-                            bedDatas.add(BedData(bedParts, ArrayList(), null))
+                            bedDatas.add(BedData(bedParts, null, null))
                             continue // this is pointless
                         }
 
-                        val defenders = calculateDefenses(bedParts)?.let { ArrayList(it) } ?: continue
-                        val outstanders = defenders.filter {
-                            allSurroundings(it).any {
-                                mc.world?.getBlockState(it)?.let { state ->
-                                    state.isAir || state.getCollisionShape(MinecraftClient.getInstance().world, it).isEmpty
-                                }!!
+                        val defenders = calculateDefenses(bedParts)?.let { ArrayList(it) }
+                        var solution: List<Node>? = null
+                        if (defenders != null) {
+                            val outstanders = defenders.filter {
+                                allSurroundings(it).any {
+                                    mc.world?.getBlockState(it)?.let { state ->
+                                        state.isAir || state.getCollisionShape(MinecraftClient.getInstance().world, it).isEmpty
+                                    }!!
+                                }
                             }
+                            defenders.removeIf { bedParts.contains(it) }
+
+                            if (outstanders.any { mc.world?.getBlockState(it)?.block is BedBlock }) continue // not a bedwars bed
+
+                            solution = Breaker.findSolution(outstanders, defenders, bedParts, maxProcessingTime.value.toLong())
                         }
-                        defenders.removeIf { bedParts.contains(it) }
-
-                        if (outstanders.any { mc.world?.getBlockState(it)?.block is BedBlock }) continue // not a bedwars bed
-
-                        val solution = Breaker.findSolution(outstanders, defenders, bedParts, maxProcessingTime.value.toLong())
                         bedDatas.add(BedData(bedParts, defenders, solution))
                     }
                 }
             }
+
             is EventRender3D -> {
                 for (bedData in bedDatas) {
                     for (bedPart in bedData.bedParts) {
@@ -142,12 +144,12 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                         val blockState = mc.world?.getBlockState(blockPos)
                         RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, bedColor.getColor().rgb)
                     }
-//                    for (node in bedData.defenders) {
+//                    for (node in bedData.defenders ?: continue) {
 //                        val blockPos = BlockPos(node.x, node.y, node.z)
 //                        val blockState = mc.world?.getBlockState(blockPos)
 //                        RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, Color(0, 0, 255, 50).rgb)
 //                    }
-                    for (node in bedData.solution ?: return@Consumer) {
+                    for (node in bedData.solution ?: continue) {
                         val blockPos = BlockPos(node.x, node.y, node.z)
                         val blockState = mc.world?.getBlockState(blockPos)
                         RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, solutionColor.getColor().rgb)
@@ -157,29 +159,27 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         }
     }
 
-    internal inner class BedData(val bedParts: Array<BlockPos>, val defenders: List<BlockPos>, val solution: List<Node>?) {
+    internal inner class BedData(val bedParts: Array<BlockPos>, private val defenders: List<BlockPos>?, val solution: List<Node>?) {
         override fun toString(): String {
             val stringBuilder = StringBuilder()
 
             stringBuilder.append("Bed at: " + bedParts.joinToString("; ") { "[" + it.toShortString() + "]" } + "\n")
+            if (defenders != null)
+                stringBuilder.append("Defenders: " + defenders.count() + "\n")
             if (solution != null) {
-                stringBuilder.append("Used blocks: " + solution.map {
-                    mc.world?.getBlockState(BlockPos(it.x, it.y, it.z))?.block?.name?.string
-                }.distinct().joinToString() + "\n")
-                stringBuilder.append("Breaking time: " + solution.sumOf {
-                    floor(1.0 / (1.0 - Breaker.getBreakSpeed(BlockPos(it.x, it.y, it.z))))
-                }.let { if (!it.isInfinite()) (it * (((MinecraftClient.getInstance() as IMinecraftClient).tarasande_getRenderTickCounter()) as IRenderTickCounter).tarasande_getTickTime() / 1000.0).toString() + "s" else it } + "\n")
+                stringBuilder.append("Solution length: " + solution.count() + "\n")
+                stringBuilder.append("Used blocks: " + solution.map { mc.world?.getBlockState(BlockPos(it.x, it.y, it.z))?.block?.name?.string }.distinct().joinToString() + "\n")
             }
 
             return stringBuilder.toString()
         }
     }
 
-    private object Breaker {
+    object Breaker {
 
-        val costCalc = object : Function2<Node, Node, Double> {
+        private val costCalc = object : Function2<Node, Node, Double> {
             override fun invoke(current: Node, movement: Node): Double {
-                return getBreakSpeed(BlockPos(movement.x, movement.y, movement.z))
+                return getBreakSpeed(BlockPos(movement.x, movement.y, movement.z)).first
             }
         }
 
@@ -212,13 +212,14 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
             return bestWay
         }
 
-        fun getBreakSpeed(blockPos: BlockPos): Double {
-            val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot ?: return 1.0
+        fun getBreakSpeed(blockPos: BlockPos): Pair<Double, Int> {
+            val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot ?: return Pair(1.0, -1)
             val state = MinecraftClient.getInstance().world?.getBlockState(blockPos)
-            if (state?.isAir!! || state.getCollisionShape(MinecraftClient.getInstance().world, blockPos).isEmpty) return 0.0
+            if (state?.isAir!! || state.getOutlineShape(MinecraftClient.getInstance().world, blockPos).isEmpty) return Pair(0.0, -1)
             val hardness = state.getHardness(MinecraftClient.getInstance().world, blockPos)
-            if (hardness <= 0.0f) return 1.0
+            if (hardness <= 0.0f) return Pair(1.0, -1)
             var bestMult = 0.0f
+            var bestTool = -1
             for (i in 0..8) {
                 MinecraftClient.getInstance().player?.inventory?.selectedSlot = i
                 var mult = MinecraftClient.getInstance().player?.getBlockBreakingSpeed(state)!!
@@ -226,11 +227,12 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                     mult *= 5.0f // bruh
                 }
                 if (bestMult < mult) {
+                    bestTool = i
                     bestMult = mult
                 }
             }
             MinecraftClient.getInstance().player?.inventory?.selectedSlot = origSlot
-            return 1.0 - bestMult / hardness / 30.0
+            return Pair(1.0 - bestMult / hardness / 30.0, bestTool)
         }
     }
 

@@ -18,6 +18,7 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.*
 import su.mandora.tarasande.module.combat.ModuleAntiBot
 import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.string.StringUtil
 import su.mandora.tarasande.value.*
 import java.util.*
@@ -88,6 +89,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                 if (ThreadLocalRandom.current().nextBoolean()) sentence += suspect
                 else sentence = "$suspect $sentence"
             }
+
             1 -> { // i saw suspect kill somebody, this message is super cool when suspect is on the other side of the map and there are 50 walls in between
                 sentence += "i saw $suspect kill "
                 if (ThreadLocalRandom.current().nextBoolean()) sentence += "somebody"
@@ -107,9 +109,11 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
             1 -> {
                 TarasandeMain.get().name + " suspects " + player.gameProfile.name + (" because he held $itemMessage")
             }
+
             2 -> {
                 generateLegitSentence(player.gameProfile.name)
             }
+
             3 -> {
                 try {
                     customMessage.format(player.gameProfile.name, itemMessage)
@@ -118,12 +122,13 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                     customMessage // fallback to not doing anything at all
                 }
             }
+
             else -> null
         }
         if (message != null && message.isNotEmpty()) messages.add(message)
     }
 
-    private fun isIllegalItem(item: Item) = if (item == Items.AIR) false else when {
+    private fun isIllegalItem(item: Item) = if (item == Items.AIR || (highlightDetectives.value && detectiveItems.list.contains(item))) false else when {
         detectionMethod.isSelected(0) -> !allowedItems.list.contains(item)
         detectionMethod.isSelected(1) -> disallowedItems.list.contains(item)
         else -> false
@@ -146,6 +151,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
             is EventPollEvents -> {
                 if (messages.isNotEmpty()) TarasandeMain.get().managerModule?.get(ModuleSpammer::class.java)?.sendChatMessage(SharedConstants.stripInvalidChars(messages.removeFirst()))
             }
+
             is EventUpdate -> {
                 if (event.state == EventUpdate.State.PRE) {
                     if (mc.world?.players?.size!! <= 1) return@Consumer
@@ -153,7 +159,8 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                         if (fakeNewsTimer.hasReached(fakeNewsTime)) {
                             var player: PlayerEntity? = null
                             while (player == null || player == mc.player) {
-                                player = mc.world?.players?.get(ThreadLocalRandom.current().nextInt(mc.world?.players?.size!!))
+                                val realPlayers = mc.world?.players?.filter { PlayerUtil.isAttackable(it) }
+                                player = realPlayers?.get(ThreadLocalRandom.current().nextInt(realPlayers.size))
                             }
                             @Suppress("BooleanLiteralArgument")
                             val randomIllegalItem = fakeNewsItems.list.randomOrNull()
@@ -166,6 +173,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                     }
                 }
             }
+
             is EventAttackEntity -> {
                 if (murdererAssistance.value && isMurderer()) {
                     when (event.state) {
@@ -179,14 +187,22 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                             }
                             if ((mc.player?.inventory?.selectedSlot!! != sword).also { switchedSlot = it }) mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(sword))
                         }
+
                         EventAttackEntity.State.POST -> if (switchedSlot) mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))
                     }
                 }
             }
+
             is EventIsEntityAttackable -> {
-                if (event.attackable && event.entity is PlayerEntity && !isMurderer() && !suspects.containsKey(event.entity.gameProfile))
-                    event.attackable = false
+                if (!isMurderer()) {
+                    if (event.entity !is PlayerEntity) {
+                        event.attackable = false
+                        return@Consumer
+                    }
+                    event.attackable = suspects.containsKey(event.entity.gameProfile)
+                }
             }
+
             is EventPacket -> {
                 if (event.type == EventPacket.Type.RECEIVE) if (event.packet is PlayerRespawnS2CPacket) {
                     suspects.clear()
@@ -221,6 +237,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                     }
                 }
             }
+
             is EventEntityColor -> {
                 if (event.entity is PlayerEntity) if (suspects.containsKey(event.entity.gameProfile)) event.color = murdererColorOverride.getColor()
                 else if (highlightDetectives.value && detectiveItems.list.any { event.entity.inventory.mainHandStack.item == it || event.entity.inventory.offHand[0].item == it }) event.color = detectiveColorOverride.getColor()

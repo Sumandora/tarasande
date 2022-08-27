@@ -80,9 +80,11 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
                 speed -= speed / speedDivider.value
             }
+
             is EventJump -> {
                 speed = calcSpeed()
             }
+
             is EventKeyBindingIsPressed -> {
                 if (event.keyBinding == mc.options.jumpKey && mc.player?.input?.movementInput?.lengthSquared()!! > 0.0) if (mc.player?.isOnGround!! && jumpHeight.value > 0.0) event.pressed = true
             }

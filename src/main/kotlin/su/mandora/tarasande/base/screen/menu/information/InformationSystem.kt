@@ -24,6 +24,9 @@ class ManagerInformation : Manager<Information>() {
             InformationEntities(),
             InformationWorldTime(),
 
+            // Badlion
+            InformationTimers(),
+
             // Modules
             InformationTimeShifted(),
             InformationMurderer(),

@@ -28,10 +28,10 @@ class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCatego
 
             if (mode.isSelected(1)) {
                 while (displayNameMode.isSelected(0)) {
-                    val selfTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == mc.player?.gameProfile } ?: break).siblings.firstOrNull { it.style.color != null }?.style?.color ?: break
-                    val otherTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == event.entity.gameProfile } ?: break).siblings.firstOrNull { it.style.color != null }?.style?.color ?: break
+                    val selfName = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == mc.player?.gameProfile } ?: break)
+                    val otherName = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == event.entity.gameProfile } ?: break)
 
-                    if (selfTeam == otherTeam) {
+                    if ((selfName.style ?: break) == (otherName.style ?: break) || (selfName.siblings.firstOrNull { it.style.color != null }?.style ?: break) == (otherName.siblings.firstOrNull { it.style.color != null }?.style ?: break)) {
                         event.attackable = false
                     }
                     break

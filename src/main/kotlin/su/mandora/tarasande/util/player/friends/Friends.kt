@@ -18,6 +18,7 @@ class Friends {
                 is EventIsEntityAttackable -> {
                     if (event.attackable && event.entity != null && event.entity is PlayerEntity) if (friends.any { it.first == event.entity.gameProfile }) event.attackable = false
                 }
+
                 is EventTagName -> {
                     if (event.entity is PlayerEntity) {
                         val profile = (event.entity as PlayerEntity).gameProfile
@@ -26,6 +27,7 @@ class Friends {
                                 event.displayName = event.displayName.copy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
                     }
                 }
+
                 is EventPlayerListName -> {
                     for (friend in friends)
                         if (friend.first == event.playerListEntry.profile && friend.second != null && friend.second != event.playerListEntry.profile.name)

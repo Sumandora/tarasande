@@ -122,6 +122,7 @@ class ValueComponentBind(value: Value) : ValueComponent(value) {
                 }
                 return keyName
             }
+
             ValueBind.Type.MOUSE -> return "Mouse#$button"
             else -> return "Invalid type"
         }

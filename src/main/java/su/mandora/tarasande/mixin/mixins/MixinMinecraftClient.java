@@ -206,8 +206,8 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     }
 
     @Override
-    public void tarasande_invokeDoAttack() {
-        this.doAttack();
+    public boolean tarasande_invokeDoAttack() {
+        return this.doAttack();
     }
 
     @Override

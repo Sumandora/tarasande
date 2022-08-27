@@ -42,16 +42,23 @@ class AccountMicrosoft : Account() {
     private fun setupHttpServer(): Int {
         return try {
             val serverSocket = ServerSocket(randomPort())
-            if(!serverSocket.isBound)
+            if (!serverSocket.isBound)
                 throw IllegalStateException("Not bound")
-            val t = Thread {
+            val t = Thread({
                 try {
+                    serverSocket.soTimeout = timeout.toInt()
                     val socket = serverSocket.accept()
+                    Thread.sleep(100L)
                     val bufferedReader = BufferedReader(InputStreamReader(socket.getInputStream()))
                     val content = StringBuilder()
                     while (bufferedReader.ready())
                         content.append(bufferedReader.read().toChar())
-                    code = content.toString().split("code=")[1].split(" ")[0].split("&")[0] // hack
+                    code = try {
+                        content.toString().split("code=")[1].split(" ")[0].split("&")[0]
+                    } catch (t: Throwable) {
+                        t.printStackTrace()
+                        return@Thread
+                    } // hack
                     socket.getOutputStream().write("""HTTP/2 200 OK
 content-type: text/plain
 
@@ -62,20 +69,8 @@ You can close this page now.""".toByteArray())
                     t.printStackTrace()
                     serverSocket.close()
                 }
-            }
-            t.name = "Microsoft login http server"
+            }, "Microsoft login http server")
             t.start()
-            val t2 = Thread {
-                val time = System.currentTimeMillis()
-                while(System.currentTimeMillis() - time < timeout) {
-                    if(t.isAlive)
-                        return@Thread
-                    Thread.sleep(1000L)
-                }
-                t.stop()
-            }
-            t2.name = "Microsoft login http server [Watchdog]"
-            t2.start()
             serverSocket.localPort
         } catch (t: Throwable) {
             setupHttpServer()
@@ -83,33 +78,33 @@ You can close this page now.""".toByteArray())
     }
 
     override fun logIn() {
-        if(msAuthProfile != null &&
-            (msAuthProfile?.xboxLiveAuth            ?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true ||
-             msAuthProfile?.xboxLiveSecurityTokens  ?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true)
+        code = null
+        if (msAuthProfile != null &&
+            (msAuthProfile?.xboxLiveAuth?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true ||
+                    msAuthProfile?.xboxLiveSecurityTokens?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true)
         ) {
             msAuthProfile = msAuthProfile?.renew() // use refresh token to update the account
         }
 
-        if(msAuthProfile == null) {
+        if (msAuthProfile == null) {
             redirectUri = redirectUriBase + setupHttpServer()
             Util.getOperatingSystem().open(URI(oauthAuthorizeUrl + "?" +
-                "redirect_uri=" + redirectUri + "&" +
-                "scope=" + URLEncoder.encode(scope, StandardCharsets.UTF_8) + "&" +
-                "response_type=code&" +
-                "client_id=" + clientId
+                    "redirect_uri=" + redirectUri + "&" +
+                    "scope=" + URLEncoder.encode(scope, StandardCharsets.UTF_8) + "&" +
+                    "response_type=code&" +
+                    "client_id=" + clientId
             ))
             val time = System.currentTimeMillis()
-            while(code == null) {
+            while (code == null) {
                 Thread.sleep(100)
-                if(System.currentTimeMillis() - time > timeout)
-                    throw IllegalStateException("Aborted")
+                if (System.currentTimeMillis() - time > timeout)
+                    throw IllegalStateException("Timeout")
             }
             msAuthProfile = buildFromCode(code!!)
-            code = null
         }
 
         service = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment).createMinecraftSessionService()
-        if(msAuthProfile != null) {
+        if (msAuthProfile != null) {
             session = msAuthProfile?.asSession()!!
         } else {
             throw IllegalStateException("WHAT THE FUCK")
@@ -117,13 +112,14 @@ You can close this page now.""".toByteArray())
     }
 
     private fun buildFromCode(code: String): MSAuthProfile {
-        val oAuthToken = TarasandeMain.get().gson.fromJson(post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
+        val str = post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
             it["client_id"] = clientId
             it["code"] = code
             it["grant_type"] = "authorization_code"
             it["redirect_uri"] = redirectUri!!
             it["scope"] = scope
-        }), JsonObject::class.java)
+        })
+        val oAuthToken = TarasandeMain.get().gson.fromJson(str, JsonObject::class.java)
         return buildFromOAuthToken(oAuthToken)
     }
 
@@ -220,13 +216,13 @@ You can close this page now.""".toByteArray())
 
     override fun save(): JsonArray {
         val jsonArray = JsonArray()
-        if(msAuthProfile != null)
+        if (msAuthProfile != null)
             jsonArray.add(TarasandeMain.get().gson.toJsonTree(msAuthProfile))
         return jsonArray
     }
 
     override fun load(jsonArray: JsonArray): Account {
-        return AccountMicrosoft().also { if(!jsonArray.isEmpty) it.msAuthProfile = TarasandeMain.get().gson.fromJson(jsonArray[0], MSAuthProfile::class.java) }
+        return AccountMicrosoft().also { if (!jsonArray.isEmpty) it.msAuthProfile = TarasandeMain.get().gson.fromJson(jsonArray[0], MSAuthProfile::class.java) }
     }
 
     override fun create(credentials: List<String>) = AccountMicrosoft()
@@ -246,6 +242,7 @@ You can close this page now.""".toByteArray())
             this.minecraftLogin = gson.fromJson(minecraftLogin, MinecraftLogin::class.java)
             this.minecraftProfile = gson.fromJson(minecraftProfile, MinecraftProfile::class.java)
         }
+
         fun asSession() = Session(
             minecraftProfile?.name,
             minecraftProfile?.id,

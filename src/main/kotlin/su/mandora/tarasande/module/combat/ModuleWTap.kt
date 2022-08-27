@@ -30,6 +30,7 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
                     changeBinds = false
                 }
             }
+
             is EventAttackEntity -> {
                 if (event.state != EventAttackEntity.State.PRE) return@Consumer
                 changeBinds = true
@@ -44,6 +45,7 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
                     if (mc.player?.isSprinting!!) mc.networkHandler?.sendPacket(ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING))
                 }
             }
+
             is EventKeyBindingIsPressed -> {
                 if (PlayerUtil.movementKeys.contains(event.keyBinding)) {
                     if (changeBinds) {
@@ -51,6 +53,7 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
                             mode.isSelected(0) -> {
                                 event.pressed = false
                             }
+
                             mode.isSelected(1) -> {
                                 event.pressed = !event.pressed
                             }

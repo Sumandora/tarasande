@@ -24,6 +24,7 @@ class ModuleFog : Module("Fog", "Changes the fog distance and color", ModuleCate
                 event.green = color.green / 255.0f
                 event.blue = color.blue / 255.0f
             }
+
             is EventClearColor -> {
                 val color = color.getColor()
                 event.red = color.red / 255.0f

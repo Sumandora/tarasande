@@ -56,6 +56,7 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
                                 EventUpdate.State.PRE_PACKET -> {
                                     mc.networkHandler?.sendPacket(PlayerActionC2SPacket(PlayerActionC2SPacket.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, Direction.DOWN))
                                 }
+
                                 EventUpdate.State.POST -> {
                                     val hand = PlayerUtil.getUsedHand()
                                     if (hand != null) {
@@ -66,6 +67,7 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
                                         accessor.tarasande_setOnlyPackets(prevOnlyPackets)
                                     }
                                 }
+
                                 else -> {}
                             }
                         }
@@ -82,6 +84,7 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
                     }
                 }
             }
+
             is EventItemCooldown -> if ((mc.interactionManager as IClientPlayerInteractionManager).tarasande_getOnlyPackets()) event.cooldown = 1.0F
         }
     }

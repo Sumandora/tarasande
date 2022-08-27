@@ -92,4 +92,9 @@ public abstract class MixinEntity implements IEntity {
     public void tarasande_setRandom(Random random) {
         this.random = random;
     }
+
+    @Override
+    public Vec3d tarasande_invokeMovementInputToVelocity(Vec3d movementInput, float speed, float yaw) {
+        return movementInputToVelocity(movementInput, speed, yaw);
+    }
 }

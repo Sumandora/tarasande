@@ -73,6 +73,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                                         throughWalls.isSelected(0) -> {
                                             if (hitResult.blockPos != blockPos) continue
                                         }
+
                                         throughWalls.isSelected(2) -> {
                                             blockPos = hitResult.blockPos
                                         }
@@ -95,6 +96,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                     event.maxRotateToOriginSpeed = 1.0
                 }
             }
+
             is EventUpdate -> {
                 if (event.state == EventUpdate.State.PRE) {
                     breaking = false
@@ -111,6 +113,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                                 }
                             }
                         }
+
                         breakSpeed.isSelected(1) -> {
                             for (pair in list) {
                                 mc.networkHandler?.sendPacket(PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, pair.first, pair.second.side))
@@ -121,6 +124,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                     }
                 }
             }
+
             is EventHandleBlockBreaking -> {
                 event.parameter = event.parameter || breaking
             }

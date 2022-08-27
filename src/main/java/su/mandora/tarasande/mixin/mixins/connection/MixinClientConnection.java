@@ -1,8 +1,6 @@
 package su.mandora.tarasande.mixin.mixins.connection;
 
 import io.netty.channel.Channel;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketCallbacks;
@@ -53,7 +51,6 @@ public abstract class MixinClientConnection implements IClientConnection {
         return channel;
     }
 
-    // might cause race conditions :c
     @Override
     public void tarasande_forceSend(Packet<?> packet) {
         forced.add(packet);

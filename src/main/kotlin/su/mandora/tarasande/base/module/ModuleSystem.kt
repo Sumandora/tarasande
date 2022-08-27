@@ -8,10 +8,7 @@ import su.mandora.tarasande.event.EventTick
 import su.mandora.tarasande.module.combat.*
 import su.mandora.tarasande.module.misc.*
 import su.mandora.tarasande.module.movement.*
-import su.mandora.tarasande.module.player.ModuleNoHunger
-import su.mandora.tarasande.module.player.ModuleNuker
-import su.mandora.tarasande.module.player.ModuleScaffoldWalk
-import su.mandora.tarasande.module.player.ModuleTimer
+import su.mandora.tarasande.module.player.*
 import su.mandora.tarasande.module.render.*
 import su.mandora.tarasande.value.ValueBind
 import su.mandora.tarasande.value.ValueBoolean
@@ -55,7 +52,13 @@ class ManagerModule : Manager<Module>() {
             ModuleFog(),
             ModuleNoSign(),
             ModuleProjectileAimBot(),
-            ModuleNoHunger()
+            ModuleNoHunger(),
+            ModuleNoRotate(),
+            ModuleQuakeAura(),
+            ModuleBlockBot(),
+            ModuleChestStealer(),
+            ModuleAutoTool(),
+            ModuleFreeCam()
         )
         TarasandeMain.get().managerEvent?.add { event ->
             if (event is EventTick) if (event.state == EventTick.State.POST) {

@@ -51,6 +51,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                     }
                 }
             }
+
             is EventUpdate -> {
                 if (event.state == EventUpdate.State.PRE) {
                     if (pulse.value) {

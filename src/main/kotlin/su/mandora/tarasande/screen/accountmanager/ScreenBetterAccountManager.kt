@@ -114,8 +114,14 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         drawCenteredText(matrices, textRenderer, if (status == null) "Account Manager" else status, width / 2, 8 - textRenderer.fontHeight / 2, -1)
-        if (proxy != null) textRenderer.drawWithShadow(matrices, "Proxy", 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight * 2 - 2, -1)
-        textRenderer.drawWithShadow(matrices, if (proxy == null) "No Proxy" else proxy?.socketAddress?.address?.hostAddress!! + ":" + proxy?.socketAddress?.port!! + " (" + proxy?.ping!! + "ms)", 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight, Color.white.rgb)
+        if (proxy != null)
+            textRenderer.drawWithShadow(matrices, "Proxy", 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight * 2 - 2, -1)
+
+        textRenderer.drawWithShadow(matrices, if (proxy == null) {
+            "No Proxy"
+        } else {
+            proxy?.socketAddress?.address?.hostAddress!! + ":" + proxy?.socketAddress?.port!! + " (" + (proxy?.ping ?: "?") + "ms)"
+        }, 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight, Color.white.rgb)
     }
 
     override fun close() {
@@ -130,6 +136,8 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
                 this.addEntry(EntryAccount(account))
             }
         }
+
+        override fun getScrollbarPositionX() = width - 6 // sick hardcoded value, thx mojang
 
         init {
             reload()

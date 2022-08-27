@@ -36,7 +36,8 @@ import su.mandora.tarasande.value.ValueNumber
 import su.mandora.tarasande.value.ValueNumberRange
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
-import kotlin.math.min
+import kotlin.math.cos
+import kotlin.math.sin
 import kotlin.math.sqrt
 
 class ModuleKillAura : Module("Kill aura", "Automatically attacks near players", ModuleCategory.COMBAT) {
@@ -103,17 +104,21 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             priority.isSelected(0) -> {
                 mc.player?.eyePos?.squaredDistanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, it.first.boundingBox.expand(it.first.targetingMargin.toDouble())))!!
             }
+
             priority.isSelected(1) -> {
                 if (it.first is LivingEntity) (it.first as LivingEntity).health
                 else 0
             }
+
             priority.isSelected(2) -> {
                 if (it.first is LivingEntity) (it.first as LivingEntity).hurtTime
                 else 0
             }
+
             priority.isSelected(3) -> {
                 RotationUtil.getRotations(mc.player?.eyePos!!, getBestAimPoint(it.first.boundingBox)).fov(RotationUtil.fakeRotation ?: Rotation(mc.player!!))
             }
+
             else -> 0.0
         }.toDouble()
     }
@@ -156,12 +161,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     var boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())
                     if (syncPosition.value) {
                         val accessor = entity as ILivingEntity
-                        boundingBox = boundingBox.offset(accessor.tarasande_getServerX() - entity.x, accessor.tarasande_getServerY() - entity.y, accessor.tarasande_getServerZ() - entity.z)
+                        if (accessor.tarasande_getBodyTrackingIncrements() > 0)
+                            boundingBox = boundingBox.offset(accessor.tarasande_getServerX() - entity.x, accessor.tarasande_getServerY() - entity.y, accessor.tarasande_getServerZ() - entity.z)
                     }
                     val bestAimPoint = getBestAimPoint(boundingBox)
                     if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
                     if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(currentRot) > fov.value) continue
-                    val aimPoint = if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() == 1.0f) {
+                    val aimPoint = if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() != 0.0f) {
                         mc.player?.eyePos?.add(currentRot.forwardVector(0.01))!!
                     } else {
                         // aim point calculation maybe slower, only run it if the range check is actually able to succeed under best conditions
@@ -221,12 +227,14 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 event.minRotateToOriginSpeed = aimSpeed.minValue
                 event.maxRotateToOriginSpeed = aimSpeed.maxValue
             }
+
             is EventTick -> {
                 if (event.state == EventTick.State.PRE) {
                     if (performedTick) clickSpeedUtil.reset()
                     performedTick = true
                 }
             }
+
             is EventAttack -> {
                 performedTick = false
                 clicked = false
@@ -243,7 +251,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
                 if (dontAttackWhenBlocking.value && allAttacked { it.isBlocking }) if (!simulateShieldBlock.value || allAttacked { it.blockedByShield(DamageSource.player(mc.player)) }) clicks = 0
 
-                if (mc.player?.isUsingItem!! && clicks > 0 && !blockMode.isSelected(0)) {
+                if (!blockMode.isSelected(0) && mc.player?.isUsingItem!! && clicks > 0) {
                     var hasTarget = false
                     for (entry in targets) {
                         if (entry.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue) {
@@ -252,12 +260,14 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                         }
                     }
                     if (hasTarget) {
-                        blocking = false
+                        if (!blockMode.isSelected(1) || needUnblock.value)
+                            blocking = false
                         waitForHit = true
                         when {
                             blockMode.isSelected(1) && needUnblock.value -> {
                                 mc.interactionManager?.stopUsingItem(mc.player)
                             }
+
                             blockMode.isSelected(2) -> {
                                 return@Consumer
                             }
@@ -300,13 +310,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                         }
                     }
                 }
-                if (targets.isNotEmpty() && (mode.isSelected(1) || targets[0].first !is PassiveEntity) && (!waitForHit) && !mc.player?.isUsingItem!! && !blockMode.isSelected(0)) {
+                if (targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && !waitForHit && !mc.player?.isUsingItem!! && !blockMode.isSelected(0)) {
                     var canBlock = true
                     if (blockCheckMode.isSelected(0)) {
                         val stack = mc.player?.getStackInHand(Hand.OFF_HAND)
                         if (stack?.item !is ShieldItem || mc.player?.itemCooldownManager?.isCoolingDown(stack.item)!! || mc.player?.getStackInHand(Hand.MAIN_HAND)?.useAction != UseAction.NONE) canBlock = false
                     }
-                    if (blockCheckMode.isSelected(1) && (mc.player?.getStackInHand(Hand.MAIN_HAND)?.item !is SwordItem || mc.player?.getStackInHand(Hand.OFF_HAND)?.useAction != UseAction.NONE)) canBlock = false
+                    if (blockCheckMode.isSelected(1) && (mc.player?.getStackInHand(Hand.MAIN_HAND)?.item !is SwordItem || mc.player?.getStackInHand(Hand.OFF_HAND)?.useAction.let { it != UseAction.NONE && it != UseAction.BLOCK })) canBlock = false
 
                     if (canBlock) {
                         var hasTarget = false
@@ -323,6 +333,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     }
                 }
             }
+
             is EventKeyBindingIsPressed -> {
                 if (event.keyBinding == mc.options.useKey) {
                     if (blocking && targets.isNotEmpty()) {
@@ -333,6 +344,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     if (waitForCritical.value && criticalSprint.value && forceCritical.value) if (!dontWaitWhenEnemyHasShield.value || ((mode.isSelected(0) && !hasShield(targets.first().first) || (mode.isSelected(1) && targets.none { hasShield(it.first) })))) if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!) if (!mc.player?.isOnGround!! && mc.player?.fallDistance!! >= 0.0f) if (mc.player?.isSprinting!!) event.pressed = false
                 }
             }
+
             is EventHandleBlockBreaking -> {
                 event.parameter = event.parameter || clicked
             }
@@ -340,7 +352,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
 
     private fun attack(entity: Entity?) {
-        clicked = true
         val original = mc.crosshairTarget
         if (entity != null) {
             mc.crosshairTarget = EntityHitResult(entity)
@@ -352,7 +363,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 override fun getType() = Type.MISS
             }
         }
-        (mc as IMinecraftClient).tarasande_invokeDoAttack()
+        clicked = clicked or (mc as IMinecraftClient).tarasande_invokeDoAttack()
         mc.crosshairTarget = original
     }
 
@@ -360,12 +371,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         return MathUtil.closestPointToBox(mc.player?.eyePos!!, box)
     }
 
-    private fun getAimPoint(box: Box, entity: LivingEntity): Vec3d? {
-        var best: Vec3d? = getBestAimPoint(box)
+    private fun getAimPoint(box: Box, entity: LivingEntity): Vec3d {
+        var best = getBestAimPoint(box)
+        var visible = PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, best)
 
         if (rotations.isSelected(0)) {
-            if (!PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, best!!)) {
-                best = null
+            if (!visible) {
+                var newBest: Vec3d? = null
                 var distanceToVec = Double.POSITIVE_INFINITY
                 var x = 0.0
                 while (x <= 1.0) {
@@ -377,51 +389,55 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                             if (PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, vector)) {
                                 val distSquared = mc.player?.eyePos?.squaredDistanceTo(vector)!!
                                 if (distSquared < distanceToVec) {
-                                    best = vector
+                                    newBest = vector
                                     distanceToVec = distSquared
                                 }
                             }
-
                             z += precision.value
                         }
                         y += precision.value
                     }
                     x += precision.value
                 }
-                if (best == null || distanceToVec > reach.maxValue * reach.maxValue) return null
+                if (newBest != null) {
+                    best = newBest
+                    visible = true
+                }
             }
         }
 
         if (rotations.isSelected(1)) {
-            var aimPoint = best?.add(0.0, 0.0, 0.0)!! /* copy */
+            var aimPoint = best.add(0.0, 0.0, 0.0)!! /* copy */
 
             // Humans always try to get to the middle
             val center = box.center
-            val dist = MathUtil.getBias(mc.player?.eyePos?.squaredDistanceTo(aimPoint)!! / (reach.maxValue * reach.maxValue), 0.45) // I have no idea why this works and looks like it does, but it's good and why remove it then
-            aimPoint = aimPoint.add((center.x - aimPoint.x) * min((1 - dist), 1.0), (center.y - aimPoint.y) * (1 - dist) * 0.5 /* Humans dislike aiming up and down */, (center.z - aimPoint.z) * min((1 - dist), 1.0))
+            val dist = MathUtil.getBias(mc.player?.eyePos?.squaredDistanceTo(aimPoint)!! / (reach.maxValue * reach.maxValue), 0.65) // I have no idea why this works and looks like it does, but it's good, so why remove it then
+            aimPoint = aimPoint.add((center.x - aimPoint.x) * (1 - dist), (center.y - aimPoint.y) * dist * 0.1 /* Humans dislike aiming up and down */, (center.z - aimPoint.z) * (1 - dist))
 
             // Humans can't hold their hands still
             val actualVelocity = Vec3d(mc.player?.prevX!! - mc.player?.x!!, mc.player?.prevY!! - mc.player?.y!!, mc.player?.prevZ!! - mc.player?.z!!)
             val diff = actualVelocity.subtract(entity.prevX - entity.x, entity.prevY - entity.y, entity.prevZ - entity.z)?.multiply(-1.0)!!
-//            if (diff.lengthSquared() > 0.0) { // either the target or the player has to move otherwise changing the rotation doesn't make sense
-//                aimPoint = aimPoint.add(
-//                    if (diff.x != 0.0) sin(System.currentTimeMillis() * 0.001) * 0.15 else 0.0,
-//                    if (diff.y != 0.0) cos(System.currentTimeMillis() * 0.001) * 0.15 else 0.0,
-//                    if (diff.z != 0.0) sin(System.currentTimeMillis() * 0.001) * 0.15 else 0.0
-//                )
-//            }
+            if (diff.lengthSquared() > 0.0) { // either the target or the player has to move otherwise changing the rotation doesn't make sense
+                val horChange = diff.horizontalLength()
+                aimPoint = aimPoint.add(
+                    sin(System.currentTimeMillis() * 0.005) * horChange,
+                    cos(System.currentTimeMillis() * 0.005) * (diff.y + horChange * 0.2),
+                    sin(System.currentTimeMillis() * 0.005) * horChange
+                )
+            }
 
             // Human aim is slow
             aimPoint = aimPoint.subtract(diff.multiply(0.5))
 
             // Don't aim through walls
-            while (!PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint) && rotations.isSelected(0)) {
+            while (visible && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint) && rotations.isSelected(0)) {
                 aimPoint = Vec3d(MathUtil.bringCloser(aimPoint.x, best.x, precision.value), MathUtil.bringCloser(aimPoint.y, best.y, precision.value), MathUtil.bringCloser(aimPoint.z, best.z, precision.value))
             }
 
             var distToBest = mc.player?.eyePos?.squaredDistanceTo(best)!!
-            if (distToBest <= reach.minValue * reach.minValue) {
-                while (mc.player?.eyePos?.squaredDistanceTo(aimPoint)!! > reach.minValue * reach.minValue) aimPoint = Vec3d(MathUtil.bringCloser(aimPoint.x, best.x, precision.value), MathUtil.bringCloser(aimPoint.y, best.y, precision.value), MathUtil.bringCloser(aimPoint.z, best.z, precision.value))
+            if (distToBest <= reach.minValue * reach.minValue && visible) {
+                while (mc.player?.eyePos?.squaredDistanceTo(aimPoint)!! > reach.minValue * reach.minValue)
+                    aimPoint = Vec3d(MathUtil.bringCloser(aimPoint.x, best.x, precision.value), MathUtil.bringCloser(aimPoint.y, best.y, precision.value), MathUtil.bringCloser(aimPoint.z, best.z, precision.value))
                 val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint))
                 if (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null) {
                     aimPoint = best

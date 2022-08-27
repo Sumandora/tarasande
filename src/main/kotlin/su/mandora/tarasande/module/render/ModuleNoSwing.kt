@@ -28,11 +28,13 @@ class ModuleNoSwing : Module("No swing", "Hides the hand swing animation", Modul
                     if (mode.isSelected(1) && hand.isSelected(event.packet.hand.ordinal))
                         event.cancelled = true
             }
+
             is EventSwing -> {
                 if (mode.isSelected(0))
                     if (hand.isSelected(event.hand.ordinal))
                         event.cancelled = true
             }
+
             is EventResetEquipProgress -> {
                 if (fixAnimations.value)
                     event.cancelled = true

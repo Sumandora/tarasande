@@ -39,17 +39,20 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
                     mode.isSelected(0) -> {
                         event.cancelled = true
                     }
+
                     mode.isSelected(1) -> {
                         event.velocityX *= horizontal.value
                         event.velocityY *= vertical.value
                         event.velocityZ *= horizontal.value
                     }
+
                     else -> {
                         lastVelocity = Vec3d(event.velocityX, event.velocityY, event.velocityZ)
                         receivedKnockback = true
                     }
                 }
             }
+
             is EventUpdate -> {
                 if (event.state == EventUpdate.State.PRE) {
                     when {
@@ -60,6 +63,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
                                 receivedKnockback = false
                             }
                         }
+
                         else -> {
                             receivedKnockback = false
                         }
@@ -69,6 +73,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
                     }
                 }
             }
+
             is EventKeyBindingIsPressed -> {
                 if (event.keyBinding == mc.options.jumpKey && isJumping) event.pressed = true
             }

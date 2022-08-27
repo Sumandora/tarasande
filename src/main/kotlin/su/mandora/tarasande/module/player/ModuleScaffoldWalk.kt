@@ -10,6 +10,7 @@ import net.minecraft.util.math.*
 import net.minecraft.util.registry.Registry
 import net.minecraft.util.shape.VoxelShapes
 import su.mandora.tarasande.base.event.Event
+import su.mandora.tarasande.base.event.Priority
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.*
@@ -23,7 +24,6 @@ import su.mandora.tarasande.util.player.clickspeed.ClickMethodCooldown
 import su.mandora.tarasande.util.player.clickspeed.ClickSpeedUtil
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.*
-import java.awt.Color
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import kotlin.math.*
@@ -35,7 +35,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val clickSpeedUtil = ClickSpeedUtil(this, { alwaysClick.value }, ClickMethodCooldown::class.java)
     private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.0, 1.0, 1.0, 1.0, 0.1)
 
-    private val goalYaw = ValueNumber(this, "Goal yaw", -45.0, 0.0, 45.0, 1.0)
+    private val goalYaw = ValueNumber(this, "Goal yaw", -60.0, 0.0, 60.0, 1.0)
     private val offsetGoalYaw = ValueBoolean(this, "Offset goal yaw", true)
     private val edgeDistance = ValueNumber(this, "Edge distance", 0.0, 0.5, 1.0, 0.05)
     private val edgeIncrement = ValueBoolean(this, "Edge increment", true)
@@ -55,6 +55,11 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val rotateAtEdgeExtrapolation = object : ValueNumber(this, "Rotate at edge extrapolation", 0.0, 1.0, 10.0, 1.0) {
         override fun isEnabled() = rotateAtEdgeMode.isEnabled() && rotateAtEdgeMode.isSelected(1)
     }
+    private val preventRerotation = ValueBoolean(this, "Prevent re-rotation", false)
+    private val rerotateOnFacingChange = object : ValueBoolean(this, "Re-rotate on facing change", false) {
+        override fun isEnabled() = preventRerotation.value
+    }
+    private val aimHeight = ValueNumber(this, "Aim height", 0.0, 0.5, 1.0, 0.05)
     private val silent = ValueBoolean(this, "Silent", false)
     private val lockView = ValueBoolean(this, "Lock view", false)
     private val headRoll = ValueMode(this, "Head roll", false, "Disabled", "Advantage", "Autism")
@@ -66,21 +71,25 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val tower = ValueMode(this, "Tower", false, "Vanilla", "Motion", "Teleport")
     private val blockColor = ValueColor(this, "Block color", 0.0f, 1.0f, 1.0f, 1.0f)
     private val facingColor = ValueColor(this, "Facing color", 0.0f, 1.0f, 1.0f, 1.0f)
+    private val aimTargetColor = ValueColor(this, "Aim target color", 0.0f, 1.0f, 1.0f, 1.0f)
+    private val placeLineColor = ValueColor(this, "Place line color", 0.0f, 1.0f, 1.0f, 1.0f)
 
     private val targets = ArrayList<Pair<BlockPos, Direction>>()
     private val timeUtil = TimeUtil()
 
     private var target: Pair<BlockPos, Direction>? = null
+    private var placeLine: Pair<Vec3d, Vec3d>? = null
+    private var aimTarget: Vec3d? = null
     private var lastRotation: Rotation? = null
     private var prevEdgeDistance = 0.5
+    private var preferredSide: Int? = null
 
     init {
+        // up & down (down should never happen unless we are trying to save ourselves)
+        targets.add(Pair(BlockPos(0, -1, 0), Direction.UP))
+        targets.add(Pair(BlockPos(0, 1, 0), Direction.DOWN))
+
         for (y in 0 downTo -1) {
-            // up
-            if (y == 0) {
-                targets.add(Pair(BlockPos(0, -1, 0), Direction.UP))
-                targets.add(Pair(BlockPos(0, 1, 0), Direction.DOWN))
-            }
             // straight
             targets.add(Pair(BlockPos(0, y, 1), Direction.SOUTH))
             targets.add(Pair(BlockPos(1, y, 0), Direction.EAST))
@@ -115,7 +124,10 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
 
     override fun onDisable() {
         target = null
+        aimTarget = null
+        placeLine = null
         lastRotation = null
+        preferredSide = null
     }
 
     private fun getAdjacentBlock(blockPos: BlockPos): Pair<BlockPos, Direction>? {
@@ -124,9 +136,21 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             val adjacent = blockPos.add(target.first.x, target.first.y, target.first.z)
             if (!mc.world?.isAir(adjacent)!!) arrayList.add(Triple(target.first, adjacent, target.second))
         }
-        return arrayList.minByOrNull { it.second.getSquaredDistance(mc.player?.pos?.add(Rotation(Math.toDegrees(PlayerUtil.getMoveDirection()).toFloat(), 0.0f).forwardVector(2.0))) }.let { if (it == null) null else Pair(it.second, it.third) }
+        var best: Pair<BlockPos, Direction>? = null
+        var dist = 0.0
+        for (target in arrayList) {
+            if (mc.options.jumpKey.isPressed && target.third == Direction.DOWN)
+                return Pair(target.second, target.third)
+            val dist2 = Vec3d.ofCenter(target.second).add(Vec3d.of(target.third.opposite.vector).multiply(0.5)).subtract(mc.player?.pos!!).horizontalLengthSquared()
+            if (best == null || dist2 < dist) {
+                best = Pair(target.second, target.third)
+                dist = dist2
+            }
+        }
+        return best
     }
 
+    @Priority(1001) // Killaura packets have to go first
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventPollEvents -> {
@@ -135,6 +159,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                         headRoll.isSelected(1) -> {
                             lastRotation = Rotation(mc.player?.yaw!!, lastRotation?.pitch!!)
                         }
+
                         headRoll.isSelected(2) -> {
                             lastRotation = Rotation(mc.player?.yaw!! * mc.player?.age!! * 45, lastRotation?.pitch!!)
                         }
@@ -144,28 +169,38 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 val below = mc.player?.blockPos?.add(0, -1, 0)!!
                 val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
                 if (mc.world?.isAir(below)!!) {
+                    val prevTarget = target
                     target = getAdjacentBlock(below)
                     if (target != null) {
                         if (!rotateAtEdge.value || ((rotateAtEdgeMode.isSelected(0) && round(Vec3d.ofCenter(target?.first).subtract(mc.player?.pos!!).multiply(Vec3d.of(target?.second?.vector)).horizontalLengthSquared() * 100) / 100.0 in (rotateAtEdgeDistance.value * rotateAtEdgeDistance.value)..1.0 || target?.second?.offsetY != 0) || (rotateAtEdgeMode.isSelected(1) && PlayerUtil.isOnEdge(rotateAtEdgeExtrapolation.value)))) {
                             val dirVec = target?.second?.vector!!
-                            val point = Vec3d.ofCenter(target?.first).add(Vec3d.of(dirVec).negate().multiply(0.5))
+                            val point = Vec3d.ofCenter(target?.first).add(0.0, MathHelper.clamp(aimHeight.value + ThreadLocalRandom.current().nextFloat() * 0.1 - 0.05, 0.0, 1.0) - 0.5, 0.0).add(Vec3d.of(dirVec).negate().multiply(0.5))
                             val rotatedVec = dirVec.let { Vec3d(abs(it.x) - 1.0, 0.0, abs(it.z) - 1.0) }
 
                             if (lastRotation == null || run {
-                                    val rotationVector = (mc.player as IEntity).tarasande_invokeGetRotationVector(lastRotation?.pitch!!, lastRotation?.yaw!!)
-                                    val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos?.add(rotationVector.multiply(mc.interactionManager?.reachDistance?.toDouble()!!))!!)
-                                    hitResult == null || hitResult.type != HitResult.Type.BLOCK || hitResult.side != (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) || hitResult.blockPos == target?.first
+                                    if (!preventRerotation.value)
+                                        true
+                                    else if (rerotateOnFacingChange.value && (prevTarget != null && prevTarget.second != target?.second)) {
+                                        preferredSide = null
+                                        true
+                                    } else {
+                                        val rotationVector = (mc.player as IEntity).tarasande_invokeGetRotationVector(lastRotation?.pitch!!, lastRotation?.yaw!!)
+                                        val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos?.add(rotationVector.multiply(mc.interactionManager?.reachDistance?.toDouble()!!))!!)
+                                        hitResult == null || hitResult.type != HitResult.Type.BLOCK || hitResult.side != (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) || hitResult.blockPos != target?.first
+                                    }
                                 }) {
                                 val sideBegin = point.add(rotatedVec.multiply(0.5))
                                 val sideEnd = point.add(rotatedVec.multiply(0.5).negate())
+
+                                placeLine = Pair(sideBegin, sideEnd)
 
                                 val padding = 0.01f
 
                                 val finalPoint = if (!offsetGoalYaw.value) {
                                     // calculating the closest point on the line to feet
-                                    val feet = mc.player?.pos!!
+                                    val eye = mc.player?.eyePos!!
 
-                                    val beginToPoint = Vec2f((point.x - sideBegin.x).toFloat(), (point.z - sideBegin.z).toFloat())
+                                    val beginToPoint = Vec2f((eye.x - sideBegin.x).toFloat(), (eye.z - sideBegin.z).toFloat())
                                     val beginToEnd = Vec2f((sideEnd.x - sideBegin.x).toFloat(), (sideEnd.z - sideBegin.z).toFloat())
 
                                     val squaredDist = beginToEnd.lengthSquared()
@@ -176,9 +211,20 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                     val closest = sideBegin.add(sideEnd.subtract(sideBegin).multiply(MathHelper.clamp(t, padding, 1.0f - padding).toDouble()))
 
                                     if (t in padding..1.0f - padding) {
-                                        val dist = feet.distanceTo(closest)
-                                        val a = sin(Math.toRadians(goalYaw.value)) * dist
-                                        t += a.toFloat()
+                                        val dist = eye.subtract(closest).horizontalLength()
+                                        val a = sin(Math.toRadians(-goalYaw.value * (60 / 45f /* those are triangles bitch */))) * dist
+                                        if (preferredSide == null) {
+                                            val solutions = listOf(t + a.toFloat(), t - a.toFloat())
+                                            val bestSolution = solutions.minBy { abs(it - 0.5) }
+                                            preferredSide = when {
+                                                bestSolution < t -> -1
+                                                bestSolution > t -> 1
+                                                else -> 0
+                                            }
+                                            t = bestSolution
+                                        } else {
+                                            t += (a * preferredSide!!).toFloat()
+                                        }
                                     }
 
                                     sideBegin.add(sideEnd.subtract(sideBegin).multiply(MathHelper.clamp(t, padding, 1.0f - padding).toDouble()))
@@ -198,6 +244,8 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                     best
                                 }
 
+                                aimTarget = finalPoint
+
                                 if (finalPoint != null)
                                     lastRotation = RotationUtil.getRotations(mc.player?.eyePos!!, finalPoint)
                             }
@@ -205,11 +253,16 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     } else {
                         prevEdgeDistance = 0.5
                         clickSpeedUtil.reset()
+                        preferredSide = null
                     }
                 }
                 if (lastRotation == null) {
                     val rad = PlayerUtil.getMoveDirection() - PI / 2
                     val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, mc.player?.pos?.add(Vec3d(cos(rad), 0.0, sin(rad)).multiply(0.3))!!)
+
+                    val diagonal = abs(round(mc.player?.yaw!! / 90) * 90 - mc.player?.yaw!!) > 22.5
+                    if (!diagonal)
+                        targetRot.yaw += goalYaw.value.toFloat()
 
                     lastRotation = targetRot
                 }
@@ -226,6 +279,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 event.minRotateToOriginSpeed = aimSpeed.minValue
                 event.maxRotateToOriginSpeed = aimSpeed.maxValue
             }
+
             is EventAttack -> {
                 if (target == null || RotationUtil.fakeRotation == null || event.dirty) {
                     clickSpeedUtil.reset()
@@ -277,7 +331,8 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                     event.dirty = true
 
                                     if (target?.second?.offsetY == 0) {
-                                        if (edgeIncrement.value && preventImpossibleEdge.value && prevEdgeDistance > newEdgeDist && mc.player?.isOnGround!!) mc.player?.jump()
+                                        if (edgeIncrement.value && preventImpossibleEdge.value && prevEdgeDistance > newEdgeDist && mc.player?.isOnGround!!)
+                                            mc.player?.jump()
                                         prevEdgeDistance = newEdgeDist
                                     }
 
@@ -285,7 +340,8 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                 }
                             }
                         } else if (alwaysClick.value) {
-                            for (i in 1..clicks) placeBlock(hitResult)
+                            for (i in 1..clicks)
+                                placeBlock(hitResult)
                             event.dirty = true
                         }
                     }
@@ -294,8 +350,10 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     }
                 }
             }
+
             is EventMovement -> {
-                if (event.entity != mc.player) return@Consumer
+                if (event.entity != mc.player)
+                    return@Consumer
                 if (target != null) {
                     if (mc.player?.input?.jumping!!) {
                         when {
@@ -306,6 +364,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                 event.velocity = velocity?.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!!)!!
                                 mc.player?.velocity = playerVelocity
                             }
+
                             tower.isSelected(2) -> {
                                 event.velocity = event.velocity.withAxis(Direction.Axis.Y, 1.0)
                             }
@@ -313,10 +372,12 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     }
                 }
             }
+
             is EventJump -> {
                 if (event.state != EventJump.State.PRE) return@Consumer
                 prevEdgeDistance = 0.5
             }
+
             is EventRender3D -> {
                 if (target != null) {
                     val blockPos = target?.first
@@ -325,11 +386,13 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     RenderUtil.blockOutline(event.matrices, shape, blockColor.getColor().rgb)
                     val facing = target?.second?.opposite
                     RenderUtil.blockOutline(event.matrices, shape.offset(facing?.offsetX?.toDouble()!!, facing.offsetY.toDouble(), facing.offsetZ.toDouble()), facingColor.getColor().rgb)
-                    val rad = PlayerUtil.getMoveDirection() - PI / 2
-                    val lookPoint = BlockPos(mc.player?.eyePos?.add(Vec3d(cos(rad), 0.0, sin(rad)).multiply(-1.0))!!)
-                    // RenderUtil.blockOutline(event.matrices, VoxelShapes.fullCube().offset(lookPoint?.x?.toDouble()!!, lookPoint?.y?.toDouble()!!, lookPoint?.z?.toDouble()!!), Color.white.rgb)
                 }
+                if (aimTarget != null)
+                    RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(Box.from(aimTarget).offset(-0.5, -0.5, -0.5).expand(-0.45)), aimTargetColor.getColor().rgb)
+                if (placeLine != null)
+                    RenderUtil.blockOutline(event.matrices, VoxelShapes.union(VoxelShapes.cuboid(Box.from(placeLine?.first).offset(-0.5, -0.5, -0.5).expand(-0.49)), VoxelShapes.cuboid(Box.from(placeLine?.second).offset(-0.5, -0.5, -0.5).expand(-0.49))), placeLineColor.getColor().rgb)
             }
+
             is EventGoalMovement -> {
                 val rad = Math.toRadians(round(mc.player?.yaw!! / 45.0f) * 45.0f + 90.0)
                 event.yaw = RotationUtil.getYaw(Vec3d(cos(rad), 0.0, sin(rad)).multiply(3.0 /* some space*/)).toFloat()

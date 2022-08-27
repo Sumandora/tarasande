@@ -18,7 +18,7 @@ public interface IMinecraftClient {
 
     void tarasande_invokeDoItemUse();
 
-    void tarasande_invokeDoAttack();
+    boolean tarasande_invokeDoAttack();
 
     RenderTickCounter tarasande_getRenderTickCounter();
 

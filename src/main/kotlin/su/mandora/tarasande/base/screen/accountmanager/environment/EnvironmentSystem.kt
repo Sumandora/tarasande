@@ -1,7 +1,9 @@
 package su.mandora.tarasande.base.screen.accountmanager.environment
 
 import su.mandora.tarasande.base.Manager
-import su.mandora.tarasande.screen.accountmanager.environment.*
+import su.mandora.tarasande.screen.accountmanager.environment.EnvironmentPresetEasyMC
+import su.mandora.tarasande.screen.accountmanager.environment.EnvironmentPresetMojang
+import su.mandora.tarasande.screen.accountmanager.environment.EnvironmentPresetTheAltening
 
 class ManagerEnvironment : Manager<EnvironmentPreset>() {
     init {

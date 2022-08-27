@@ -13,14 +13,6 @@
   "license": "All rights reserved",
   "icon": "assets/tarasande/icon.png",
   "environment": "client",
-  "entrypoints": {
-    "main": [
-      {
-        "adapter": "kotlin",
-        "value": "su.mandora.tarasande.Entrypoint::onInitialize"
-      }
-    ]
-  },
   "mixins": [
     "tarasande.mixins.json"
   ]

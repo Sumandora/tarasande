@@ -35,7 +35,7 @@ public class MixinScreen implements IScreen {
 
     @Inject(method = "render", at = @At("TAIL"))
     public void injectRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventScreenRender(matrices));
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventScreenRender(matrices, mouseX, mouseY));
     }
 
     @Override

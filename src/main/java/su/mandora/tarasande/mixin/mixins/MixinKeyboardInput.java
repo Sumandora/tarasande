@@ -19,18 +19,22 @@ public class MixinKeyboardInput extends Input {
         TarasandeMain.Companion.get().getManagerEvent().call(eventInput);
 
         this.pressingForward = this.pressingBack = this.pressingLeft = this.pressingRight = false;
-        if (movementForward > 0)
-            this.pressingForward = true;
-        else if (movementForward < 0)
-            this.pressingBack = true;
+        this.movementForward = this.movementSideways = 0.0f;
 
-        if (movementSideways > 0)
-            this.pressingLeft = true;
-        else if (movementSideways < 0)
-            this.pressingRight = true;
+        if (!eventInput.getCancelled()) {
+            if (movementForward > 0)
+                this.pressingForward = true;
+            else if (movementForward < 0)
+                this.pressingBack = true;
 
-        this.movementForward = eventInput.getMovementForward();
-        this.movementSideways = eventInput.getMovementSideways();
+            if (movementSideways > 0)
+                this.pressingLeft = true;
+            else if (movementSideways < 0)
+                this.pressingRight = true;
+
+            this.movementForward = eventInput.getMovementForward();
+            this.movementSideways = eventInput.getMovementSideways();
+        }
     }
 
     @Override

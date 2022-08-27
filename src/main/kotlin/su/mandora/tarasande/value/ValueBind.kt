@@ -24,15 +24,18 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
                             mousePressed = true
                             presses++
                         }
+
                         GLFW.GLFW_RELEASE -> mousePressed = false
                     }
                 }
+
                 is EventKey -> {
                     if (type == Type.KEY) if (MinecraftClient.getInstance().currentScreen == null) if (event.key == button) when (event.action) {
                         GLFW.GLFW_PRESS -> {
                             keyPressed = true
                             presses++
                         }
+
                         GLFW.GLFW_RELEASE -> keyPressed = false
                     }
                 }
@@ -71,6 +74,7 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
             Type.KEY -> {
                 keyPressed
             }
+
             Type.MOUSE -> {
                 mousePressed
             }

@@ -58,9 +58,9 @@ class PanelFixedEffects(x: Double, y: Double) : PanelFixed("Effects", x, y, 75.0
             var animation = animations.putIfAbsent(statusEffect, 0.0)
             if (animation == null || animation.isNaN()) animation = 0.0 else {
                 if (MinecraftClient.getInstance().player?.hasStatusEffect(statusEffect)!!) {
-                    animation += 0.01 * RenderUtil.deltaTime
+                    animation += 0.005 * RenderUtil.deltaTime
                 } else {
-                    animation -= 0.01 * RenderUtil.deltaTime
+                    animation -= 0.005 * RenderUtil.deltaTime
                 }
             }
             animations[statusEffect] = MathHelper.clamp(animation, 0.0, 1.0)

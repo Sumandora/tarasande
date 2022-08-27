@@ -15,7 +15,7 @@ class Screens {
         TarasandeMain.get().managerEvent?.add { event ->
             if (event is EventUpdate)
                 if (event.state == EventUpdate.State.PRE)
-                    if (TarasandeMain.get().clientValues?.menuHotkey?.wasPressed()!! > 0)
+                    if (TarasandeMain.get().clientValues?.menuHotkey?.wasPressed()!! % 2 == 0)
                         MinecraftClient.getInstance().setScreen(screenMenu)
         }
     }

@@ -39,9 +39,8 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 //    }
 
     fun filter(entity: Entity) =
-        entities.list.contains(entity.type) && (!hideBots.value || entity !is PlayerEntity || !TarasandeMain.get().managerModule?.get(
-            ModuleAntiBot::class.java
-        )?.isBot(entity)!!)
+        entities.list.contains(entity.type) &&
+                (!hideBots.value || entity !is PlayerEntity || entity == mc.player || !TarasandeMain.get().managerModule?.get(ModuleAntiBot::class.java)?.isBot(entity)!!)
 
     private val hashMap = HashMap<Entity, Rectangle>()
 
@@ -133,6 +132,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
                         hashMap[entity] = rectangle
                 }
             }
+
             is EventRender2D -> {
                 for (entry in hashMap.entries) {
                     TarasandeMain.get().managerESP?.renderBox(event.matrices, entry.key, entry.value)

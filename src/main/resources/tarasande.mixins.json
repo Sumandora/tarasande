@@ -4,6 +4,7 @@
   "package": "su.mandora.tarasande.mixin.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "MixinCamera",
     "MixinClientPlayerEntity",
     "MixinClientPlayerInteractionManager",
     "MixinCrossbowItem",
@@ -27,6 +28,7 @@
     "MixinMouse",
     "MixinParticleManager",
     "MixinPlayerEntity",
+    "MixinPlayerMoveC2SPacket",
     "MixinRenderSystem",
     "MixinRenderTickCounter",
     "MixinScreen",
@@ -49,6 +51,7 @@
     "defaultRequire": 1
   },
   "client": [
+    "MixinHandledScreen",
     "MixinPlayerListHud",
     "MixinTelemetrySender"
   ]

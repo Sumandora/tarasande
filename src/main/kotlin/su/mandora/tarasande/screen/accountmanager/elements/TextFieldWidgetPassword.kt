@@ -63,6 +63,7 @@ class TextFieldWidgetPassword(textRenderer: TextRenderer?, x: Int, y: Int, width
                         }
                         true
                     }
+
                     260, 264, 265, 266, 267 -> false
                     261 -> {
                         if ((this as ITextFieldWidget).tarasande_invokeIsEditable()) {
@@ -72,6 +73,7 @@ class TextFieldWidgetPassword(textRenderer: TextRenderer?, x: Int, y: Int, width
                         }
                         true
                     }
+
                     262 -> {
                         if (Screen.hasControlDown()) {
                             this.setCursorToEnd()
@@ -80,6 +82,7 @@ class TextFieldWidgetPassword(textRenderer: TextRenderer?, x: Int, y: Int, width
                         }
                         true
                     }
+
                     263 -> {
                         if (Screen.hasControlDown()) {
                             this.setCursorToStart()
@@ -88,14 +91,17 @@ class TextFieldWidgetPassword(textRenderer: TextRenderer?, x: Int, y: Int, width
                         }
                         true
                     }
+
                     268 -> {
                         setCursorToStart()
                         true
                     }
+
                     269 -> {
                         setCursorToEnd()
                         true
                     }
+
                     else -> false
                 }
             }

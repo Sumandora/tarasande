@@ -9,6 +9,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
+import su.mandora.tarasande.screen.accountmanager.elements.TextFieldWidgetPassword
 import su.mandora.tarasande.screen.accountmanager.elements.TextFieldWidgetPlaceholder
 import su.mandora.tarasande.util.connection.Proxy
 import su.mandora.tarasande.util.connection.ProxyAuthentication
@@ -34,6 +35,8 @@ class ScreenBetterProxy(
     private var usernameTextField: TextFieldWidget? = null
     private var passwordTextField: TextFieldWidget? = null
 
+    private var doneButton: ButtonWidget? = null
+
     private var proxyTypeButtonWidget: ButtonWidget? = null
     private var proxyType: ProxyType? = null
 
@@ -56,20 +59,6 @@ class ScreenBetterProxy(
                 it.text = proxy.socketAddress.port.toString()
             }
         })
-        addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 - 100, height / 2 - 15, 200, 20, Text.of("Username")).also {
-            usernameTextField = it
-            it.setMaxLength(Int.MAX_VALUE)
-            if (proxy?.proxyAuthentication != null) {
-                it.text = proxy.proxyAuthentication?.username!!
-            }
-        })
-        addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 - 100, height / 2 + 10, 200, 20, Text.of("Password")).also {
-            passwordTextField = it
-            it.setMaxLength(Int.MAX_VALUE)
-            if (proxy?.proxyAuthentication != null) {
-                it.text = proxy.proxyAuthentication?.password!!
-            }
-        })
         addDrawableChild(ButtonWidget(width / 2 - 75, height / 2 - 40, 150, 20, Text.of("Proxy Type: ")) {
             proxyType = ProxyType.values()[(proxyType?.ordinal!! + 1) % ProxyType.values().size]
             it.message = Text.of("Proxy Type: " + proxyType?.printable!!)
@@ -77,6 +66,20 @@ class ScreenBetterProxy(
             proxyTypeButtonWidget = it
             proxyType = proxy?.type ?: ProxyType.values()[0]
             it.message = Text.of("Proxy Type: " + proxyType?.printable!!)
+        })
+        addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 - 100, height / 2 - 15, 200, 20, Text.of("Username")).also {
+            usernameTextField = it
+            it.setMaxLength(Int.MAX_VALUE)
+            if (proxy?.proxyAuthentication != null) {
+                it.text = proxy.proxyAuthentication?.username!!
+            }
+        })
+        addDrawableChild(TextFieldWidgetPassword(textRenderer, width / 2 - 100, height / 2 + 10, 200, 20, Text.of("Password")).also {
+            passwordTextField = it
+            it.setMaxLength(Int.MAX_VALUE)
+            if (proxy?.proxyAuthentication != null) {
+                it.text = proxy.proxyAuthentication?.password!!
+            }
         })
 
         addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50, 100, 20, Text.of("Done")) {
@@ -89,8 +92,19 @@ class ScreenBetterProxy(
                 try {
                     val port = portTextField?.text?.toInt()!!
                     val inetSocketAddress = InetSocketAddress(ipTextField?.text!!, port)
-                    val proxy = if (usernameTextField?.text?.isNotEmpty()!! && (proxyType == ProxyType.SOCKS4 || passwordTextField?.text?.isNotEmpty()!!)) Proxy(inetSocketAddress, proxyType!!, ProxyAuthentication(usernameTextField?.text!!, if (proxyType == ProxyType.SOCKS4) null else passwordTextField?.text))
-                    else Proxy(inetSocketAddress, proxyType!!)
+                    val proxy =
+                        if (usernameTextField?.text?.isNotEmpty()!! && (proxyType == ProxyType.SOCKS4 || passwordTextField?.text?.isNotEmpty()!!))
+                            Proxy(inetSocketAddress, proxyType!!,
+                                if (usernameTextField?.text?.isNotEmpty() == true || passwordTextField?.text?.isNotEmpty() == true)
+                                    ProxyAuthentication(usernameTextField?.text!!,
+                                        if (proxyType == ProxyType.SOCKS4)
+                                            null
+                                        else
+                                            passwordTextField?.text
+                                    )
+                                else null
+                            )
+                        else Proxy(inetSocketAddress, proxyType!!)
                     proxyConsumer.accept(proxy)
                     if (pingThread != null && pingThread?.isAlive!!) pingThread?.stop() // even more hacky
                     Thread {
@@ -129,7 +143,7 @@ class ScreenBetterProxy(
                     status = Formatting.RED.toString() + throwable.message
                 }
             }
-        })
+        }.also { doneButton = it })
 
         addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50 + 25, 100, 20, Text.of("Back")) {
             RenderSystem.recordRenderCall {
@@ -160,15 +174,19 @@ class ScreenBetterProxy(
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        var focused = false
-        for (textField in listOf(ipTextField, portTextField, usernameTextField, passwordTextField)) if (textField?.isFocused!!) focused = true
-        if (hasControlDown() && keyCode == GLFW.GLFW_KEY_V && !focused) {
-            val clipboardContent = GLFW.glfwGetClipboardString(client?.window?.handle!!)
-            if (clipboardContent != null) {
-                val parts = clipboardContent.split(":")
-                if (parts.size == 2) {
-                    ipTextField?.text = parts[0]
-                    portTextField?.text = parts[1]
+        if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
+            doneButton?.onPress()
+        } else {
+            var focused = false
+            for (textField in listOf(ipTextField, portTextField, usernameTextField, passwordTextField)) if (textField?.isFocused!!) focused = true
+            if (hasControlDown() && keyCode == GLFW.GLFW_KEY_V && !focused) {
+                val clipboardContent = GLFW.glfwGetClipboardString(client?.window?.handle!!)
+                if (clipboardContent != null) {
+                    val parts = clipboardContent.split(":")
+                    if (parts.size == 2) {
+                        ipTextField?.text = parts[0]
+                        portTextField?.text = parts[1]
+                    }
                 }
             }
         }

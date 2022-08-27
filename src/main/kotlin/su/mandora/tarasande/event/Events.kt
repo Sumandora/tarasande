@@ -31,7 +31,7 @@ class EventTick(val state: State) : Event(false) {
 
 class EventResolutionUpdate(val width: Float, val height: Float) : Event(false)
 class EventRender2D(val matrices: MatrixStack) : Event(false)
-class EventScreenRender(val matrices: MatrixStack) : Event(false)
+class EventScreenRender(val matrices: MatrixStack, val mouseX: Int, val mouseY: Int) : Event(false)
 class EventRender3D(val matrices: MatrixStack, val positionMatrix: Matrix4f) : Event(false)
 
 class EventRenderEntity(val entity: Entity, val state: State) : Event(false) {
@@ -73,7 +73,7 @@ class EventVelocity(var velocityX: Double, var velocityY: Double, var velocityZ:
     }
 }
 
-class EventInput(var movementForward: Float, var movementSideways: Float) : Event(false)
+class EventInput(var movementForward: Float, var movementSideways: Float) : Event(true)
 class EventJump(var yaw: Float, val state: State) : Event(false) {
     enum class State {
         PRE, POST
@@ -151,3 +151,4 @@ class EventCameraOverride(val camera: Camera) : Event(false)
 class EventFogColor(var start: Float, var end: Float, var red: Float, var green: Float, var blue: Float) : Event(false)
 class EventClearColor(var red: Float, var green: Float, var blue: Float) : Event(false)
 class EventPlayerListName(val playerListEntry: PlayerListEntry, var displayName: Text) : Event(false)
+class EventRotationSet(var yaw: Float, var pitch: Float) : Event(false)

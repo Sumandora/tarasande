@@ -70,6 +70,7 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
                             mc.player?.input?.sneaking = tick.sneaking
                         }
                     }
+
                     EventUpdate.State.PRE_PACKET -> {
                         for (i in 0 until recordAndPlaybackButton.wasPressed()) {
                             var matchingRecord: Record? = null
@@ -107,6 +108,7 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
                                         playbackState = PlaybackState.EXECUTING
                                     }
                                 }
+
                                 PlaybackState.EXECUTING -> {
                                     lastRotation = Rotation(mc.player!!)
                                     executingIndex++
@@ -120,9 +122,11 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
                             }
                         }
                     }
+
                     else -> {}
                 }
             }
+
             is EventInput -> {
                 if (playbackState == PlaybackState.EXECUTING) {
                     val tick = playedBack?.ticks?.get(executingIndex)!!
@@ -131,11 +135,13 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
                     event.movementForward = tick.input.y
                 }
             }
+
             is EventKeyBindingIsPressed -> {
                 if ((event.keyBinding == mc.options.sneakKey || event.keyBinding == mc.options.forwardKey) && playbackState == PlaybackState.PREPARE) {
                     event.pressed = true
                 }
             }
+
             is EventMovement -> {
                 if (event.entity != mc.player) return@Consumer
 
@@ -144,6 +150,7 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
                 }
                 lastVelocity = event.velocity
             }
+
             is EventPollEvents -> {
                 if (playbackState != null && playedBack != null) {
                     when (playbackState!!) {
@@ -151,6 +158,7 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
                             val pos = playedBack?.ticks?.first()?.pos!!
                             event.rotation = RotationUtil.getRotations(mc.player?.eyePos!!, pos.add(0.0, mc.player?.standingEyeHeight?.toDouble()!!, 0.0))
                         }
+
                         PlaybackState.EXECUTING -> {
                             event.rotation = lastRotation?.smoothedTurn(playedBack?.ticks?.get(executingIndex)?.rotation!!, mc.tickDelta.toDouble())!!
                         }
@@ -162,18 +170,21 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
                     event.maxRotateToOriginSpeed = 1.0
                 }
             }
+
             is EventGoalMovement -> {
                 if (playbackState == PlaybackState.PREPARE) {
                     val pos = playedBack?.ticks?.first()?.pos!!
                     event.yaw = RotationUtil.getYaw(pos.subtract(mc.player?.pos!!)).toFloat()
                 }
             }
+
             is EventRender2D -> {
                 val str = if (recording) "Recording" else if (playbackState != null) playbackState?.name?.let {
                     it.first() + it.substring(1).lowercase()
                 } else ""
                 mc.textRenderer?.drawWithShadow(event.matrices, str, mc.window?.scaledWidth!! / 2.0f - mc.textRenderer.getWidth(str) / 2.0f, mc.window?.scaledHeight!! / 2.0f - mc.textRenderer.fontHeight, Color.white.rgb)
             }
+
             is EventRender3D -> {
                 GL11.glEnable(GL11.GL_BLEND)
                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)

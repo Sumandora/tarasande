@@ -10,4 +10,6 @@ public interface IEntity {
 
     void tarasande_setRandom(Random random);
 
+    Vec3d tarasande_invokeMovementInputToVelocity(Vec3d movementInput, float speed, float yaw);
+
 }

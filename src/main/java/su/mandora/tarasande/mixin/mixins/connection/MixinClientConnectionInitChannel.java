@@ -20,12 +20,26 @@ public class MixinClientConnectionInitChannel {
         Proxy proxy = TarasandeMain.Companion.get().getScreens().getBetterScreenAccountManager().getProxy();
         if (proxy != null) {
             switch (proxy.getType()) {
-                case HTTP ->
-                        channel.pipeline().addFirst("http-proxy-handler", new HttpProxyHandler(proxy.getSocketAddress(), proxy.getProxyAuthentication() != null ? proxy.getProxyAuthentication().getUsername() : "", proxy.getProxyAuthentication() != null && proxy.getProxyAuthentication().getPassword() != null ? proxy.getProxyAuthentication().getPassword() : ""));
-                case SOCKS4 ->
-                        channel.pipeline().addFirst("socks4-proxy-handler", new Socks4ProxyHandler(proxy.getSocketAddress(), proxy.getProxyAuthentication() != null ? proxy.getProxyAuthentication().getUsername() : null));
-                case SOCKS5 ->
-                        channel.pipeline().addFirst("socks5-proxy-handler", new Socks5ProxyHandler(proxy.getSocketAddress(), proxy.getProxyAuthentication() != null ? proxy.getProxyAuthentication().getUsername() : null, proxy.getProxyAuthentication() != null && proxy.getProxyAuthentication().getPassword() != null ? proxy.getProxyAuthentication().getPassword() : null));
+                case HTTP -> channel.pipeline().addFirst("http-proxy-handler",
+                        new HttpProxyHandler(
+                                proxy.getSocketAddress(),
+                                proxy.getProxyAuthentication() != null ? proxy.getProxyAuthentication().getUsername() : "",
+                                proxy.getProxyAuthentication() != null ? proxy.getProxyAuthentication().getPassword() : ""
+                        )
+                );
+                case SOCKS4 -> channel.pipeline().addFirst("socks4-proxy-handler",
+                        new Socks4ProxyHandler(
+                                proxy.getSocketAddress(),
+                                proxy.getProxyAuthentication() != null ? proxy.getProxyAuthentication().getUsername() : null
+                        )
+                );
+                case SOCKS5 -> channel.pipeline().addFirst("socks5-proxy-handler",
+                        new Socks5ProxyHandler(
+                                proxy.getSocketAddress(),
+                                proxy.getProxyAuthentication() != null ? proxy.getProxyAuthentication().getUsername() : null,
+                                proxy.getProxyAuthentication() != null ? proxy.getProxyAuthentication().getPassword() : null
+                        )
+                );
             }
         }
     }

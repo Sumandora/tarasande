@@ -9,7 +9,7 @@ import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
 import su.mandora.tarasande.module.misc.ModuleMurderMystery
 import su.mandora.tarasande.module.misc.ModuleTickBaseManipulation
 import su.mandora.tarasande.module.render.ModuleBedESP
-import kotlin.math.floor
+import kotlin.math.round
 
 class InformationTimeShifted : Information("Tick base manipulation", "Time shifted") {
     private val moduleTickBaseManipulation = TarasandeMain.get().managerModule?.get(ModuleTickBaseManipulation::class.java)!!
@@ -17,7 +17,7 @@ class InformationTimeShifted : Information("Tick base manipulation", "Time shift
     override fun getMessage(): String? {
         if (!moduleTickBaseManipulation.enabled) return null
         if (moduleTickBaseManipulation.shifted == 0L) return null
-        return moduleTickBaseManipulation.shifted.toString() + " (" + floor(moduleTickBaseManipulation.shifted / ((MinecraftClient.getInstance() as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_getTickTime()).toInt() + ")"
+        return moduleTickBaseManipulation.shifted.toString() + " (" + round(moduleTickBaseManipulation.shifted / ((MinecraftClient.getInstance() as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_getTickTime()).toInt() + ")"
     }
 }
 

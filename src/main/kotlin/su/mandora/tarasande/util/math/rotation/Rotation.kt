@@ -18,14 +18,16 @@ class Rotation(var yaw: Float, var pitch: Float) {
             val sensitivityPow3 = sensitivity * sensitivity * sensitivity
             val sensitivityPow3Mult8 = sensitivityPow3 * 8.0
 
-            return (if (MinecraftClient.getInstance().options.perspective.isFirstPerson && MinecraftClient.getInstance().player?.isUsingSpyglass!!) sensitivityPow3
-            else sensitivityPow3Mult8) * 0.15f
+            return if (MinecraftClient.getInstance().options.perspective.isFirstPerson && MinecraftClient.getInstance().player?.isUsingSpyglass!!)
+                sensitivityPow3
+            else
+                sensitivityPow3Mult8
         }
 
         fun calculateRotationChange(cursorDeltaX: Double, cursorDeltaY: Double): Rotation {
             val gcd = getGcd()
 
-            return Rotation((cursorDeltaX * gcd).toFloat(), (cursorDeltaY * gcd).toFloat())
+            return Rotation((cursorDeltaX * gcd).toFloat() * 0.15f, (cursorDeltaY * gcd).toFloat() * 0.15f)
         }
     }
 
@@ -36,9 +38,9 @@ class Rotation(var yaw: Float, var pitch: Float) {
     }
 
     fun correctSensitivity(prevRotation: Rotation): Rotation {
-        val gcd = getGcd()
-
         val deltaRotation = calcDelta(prevRotation)
+
+        val gcd = getGcd() * 0.15f
 
         val cursorDeltaX = round(deltaRotation.yaw / gcd)
         val cursorDeltaY = round(deltaRotation.pitch / gcd)

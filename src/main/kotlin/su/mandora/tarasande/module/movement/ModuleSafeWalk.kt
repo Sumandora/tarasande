@@ -11,7 +11,7 @@ import java.util.function.Consumer
 
 class ModuleSafeWalk : Module("Safe walk", "Prevents falling off blocks", ModuleCategory.MOVEMENT) {
 
-    private val sneak = ValueBoolean(this, "Sneak", false)
+    val sneak = ValueBoolean(this, "Sneak", false)
     private val onlyOnGround = object : ValueBoolean(this, "Only on ground", true) {
         override fun isEnabled() = sneak.value
     }

@@ -39,7 +39,6 @@
 9. Multi-version support
 
 ## TODO-List
-- BLOCK BOT !!!!
 - Vehicle Speed
 - Elytra Flight
 - Baritone Sprint Jump
@@ -49,16 +48,10 @@
 - PvP-Bot for Practice Game Modes
 - MidClick (alias prompt with screen and callback?)
 - KillAura: Calculate attack cycle from enemies
-- Configure ESP / "ESP Studio" - Fully customizable 2D esp setting like spirthack
-  - Right click for values in classes
-- AutoTool
-- No Rotate
-- MurderMystery: Exclude Detective Items from Disallowed Items
-- Implement Badlion Timers (Maybe make a Log for all custom payloads for more generic usage)
 - BowAimbot: Prediction
 - Improve BedESP performance (Go inside from outside; see comment in BedESP class)
-- Scaffoldwalk still need some polishing / old settings have to be removed/implemented (getAdjacentBlock is also not that good right now)
 - User configs
+- Crystal Aura
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

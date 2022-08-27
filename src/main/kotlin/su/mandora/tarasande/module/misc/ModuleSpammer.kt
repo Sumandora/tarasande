@@ -107,6 +107,7 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
                                 "Target is not in render distance"
                             }
                         }
+
                         else -> null
                     }
                     if (text != null) {
@@ -118,6 +119,7 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
                     timeUtil.reset()
                 }
             }
+
             is EventChat -> {
                 priorityMessages.add(event.chatMessage)
                 event.cancelled = true

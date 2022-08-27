@@ -47,6 +47,7 @@ class ModuleLatency : Module("Latency", "Controls network latency", ModuleCatego
                     }
                 }
             }
+
             is EventPollEvents -> { // runs more often than tick
                 val copy = ArrayList(packets) // sync
                 packets.removeIf { it.first < System.currentTimeMillis() }

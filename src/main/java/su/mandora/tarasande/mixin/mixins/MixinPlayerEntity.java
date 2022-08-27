@@ -15,7 +15,8 @@ public abstract class MixinPlayerEntity {
 
     @Inject(method = "clipAtLedge", at = @At("HEAD"), cancellable = true)
     public void injectClipAtLedge(CallbackInfoReturnable<Boolean> cir) {
-        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleSafeWalk.class).getEnabled())
+        ModuleSafeWalk moduleSafeWalk = TarasandeMain.Companion.get().getManagerModule().get(ModuleSafeWalk.class);
+        if (moduleSafeWalk.getEnabled() && !moduleSafeWalk.getSneak().getValue())
             cir.setReturnValue(true);
     }
 

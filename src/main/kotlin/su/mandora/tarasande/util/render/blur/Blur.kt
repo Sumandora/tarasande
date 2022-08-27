@@ -90,10 +90,12 @@ class Blur {
                     read = MinecraftClient.getInstance().framebuffer
                     write = alternativeFramebuffer
                 }
+
                 index % 2 != 0 -> {
                     read = alternativeFramebuffer
                     write = blurredFramebuffer
                 }
+
                 index % 2 == 0 -> {
                     read = blurredFramebuffer
                     write = alternativeFramebuffer
