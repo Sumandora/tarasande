@@ -48,7 +48,16 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         for (moduleCategory in ModuleCategory.values()) {
             panels.add(PanelCategory(moduleCategory, 0.0, 0.0))
         }
-        val fixedPanels = mutableListOf(PanelClientValues::class.java, PanelFriends::class.java, PanelFixedArrayList::class.java, PanelFixedInformation::class.java, PanelFixedEffects::class.java, PanelFixedInventory::class.java, PanelFixedWatermark::class.java)
+        val fixedPanels = mutableListOf(
+            PanelClientValues::class.java,
+            PanelFriends::class.java,
+            PanelFixedArrayList::class.java,
+            PanelFixedInformation::class.java,
+            PanelFixedEffects::class.java,
+            PanelFixedInventory::class.java,
+            PanelFixedWatermark::class.java,
+            PanelFixedHypixelBedwarsOverlay::class.java
+        )
         if (System.getProperty("os.name").contains("windows", true)) {
             fixedPanels.add(PanelFixedSpotify::class.java)
         }
@@ -74,10 +83,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         if (isClosing) animation = 1.0 - animation
 
         if (isClosing && animation <= 0.0) {
-            panels.forEach { it.onClose() }
-            RenderSystem.recordRenderCall {
-                super.close()
-            }
+            removed()
         }
 
         val color = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
@@ -196,7 +202,8 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         panels.forEach {
-            if (it.keyPressed(keyCode, scanCode, modifiers)) return false
+            if (it.keyPressed(keyCode, scanCode, modifiers))
+                return false
         }
         val animation = ((System.currentTimeMillis() - screenChangeTime) / openingAnimationLength).coerceAtMost(1.0)
         if (animation != 1.0) return false
@@ -218,6 +225,14 @@ class ScreenMenu : Screen(Text.of("Menu")) {
             screenChangeTime = System.currentTimeMillis()
             isClosing = true
         }
+    }
+
+    override fun removed() {
+        panels.forEach { it.onClose() }
+        RenderSystem.recordRenderCall {
+            super.close()
+        }
+        super.removed()
     }
 
     override fun shouldPause() = false

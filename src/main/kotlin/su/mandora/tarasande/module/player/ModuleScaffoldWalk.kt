@@ -161,7 +161,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                         }
 
                         headRoll.isSelected(2) -> {
-                            lastRotation = Rotation(mc.player?.yaw!! * mc.player?.age!! * 45, lastRotation?.pitch!!)
+                            lastRotation = Rotation(lastRotation?.yaw!! + mc.player?.age!! * 45, lastRotation?.pitch!!)
                         }
                     }
                 }

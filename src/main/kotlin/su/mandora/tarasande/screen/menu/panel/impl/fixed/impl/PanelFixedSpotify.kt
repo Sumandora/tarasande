@@ -27,7 +27,7 @@ class PanelFixedSpotify(x: Double, y: Double) : PanelFixed("Spotify", x, y, 75.0
         RenderSystem.enableBlend()
         val currTrack = MinecraftClient.getInstance().textRenderer.trimToWidth(currTrack, panelWidth.toInt())
         when (alignment) {
-            Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, currTrack, (x - (MinecraftClient.getInstance().textRenderer.getWidth(currTrack))).toFloat(), (y + MinecraftClient.getInstance().textRenderer.fontHeight).toFloat(), accent.rgb)
+            Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, currTrack, x.toFloat(), (y + MinecraftClient.getInstance().textRenderer.fontHeight).toFloat(), accent.rgb)
             Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, currTrack, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(currTrack).toFloat() / 2.0f, (y + MinecraftClient.getInstance().textRenderer.fontHeight).toFloat(), accent.rgb)
             Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, currTrack, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(currTrack)).toFloat(), (y + MinecraftClient.getInstance().textRenderer.fontHeight).toFloat(), accent.rgb)
         }

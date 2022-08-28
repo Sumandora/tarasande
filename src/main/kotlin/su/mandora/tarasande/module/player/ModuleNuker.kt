@@ -12,9 +12,9 @@ import net.minecraft.util.registry.Registry
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
+import su.mandora.tarasande.event.EventAttack
 import su.mandora.tarasande.event.EventHandleBlockBreaking
 import su.mandora.tarasande.event.EventPollEvents
-import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
@@ -65,7 +65,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                         if (collisionShape != null && !collisionShape.isEmpty) {
                             val pos = collisionShape.boundingBox.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble()).center
                             if (pos.squaredDistanceTo(mc.player?.eyePos) <= radius.value * radius.value) {
-                                val blockVec = Vec3d.of(blockPos)
+                                val blockVec = Vec3d.ofCenter(blockPos)
                                 val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, blockVec.add(pos.subtract(blockVec))) ?: continue
                                 if (hitResult.type != HitResult.Type.BLOCK) continue
                                 if (!throughWalls.isSelected(1)) {
@@ -90,36 +90,34 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                     list.clear()
                     list.addAll(newList)
 
-                    event.rotation = RotationUtil.getRotations(mc.player?.eyePos!!, Vec3d.ofCenter(list[0].first)).correctSensitivity()
+                    event.rotation = RotationUtil.getRotations(mc.player?.eyePos!!, list[0].second.pos).correctSensitivity()
 
                     event.minRotateToOriginSpeed = 1.0
                     event.maxRotateToOriginSpeed = 1.0
                 }
             }
 
-            is EventUpdate -> {
-                if (event.state == EventUpdate.State.PRE) {
-                    breaking = false
-                    when {
-                        breakSpeed.isSelected(0) -> {
-                            if (list.isNotEmpty()) {
-                                val pair = list[0]
-                                if (!mc.interactionManager?.isBreakingBlock!!) {
-                                    val original = mc.crosshairTarget
-                                    mc.crosshairTarget = if (pair.second.blockPos == pair.first) pair.second else pair.second.withBlockPos(pair.first)
-                                    (mc as IMinecraftClient).tarasande_invokeDoAttack()
-                                    mc.crosshairTarget = original
-                                    breaking = true
-                                }
+            is EventAttack -> {
+                breaking = false
+                when {
+                    breakSpeed.isSelected(0) -> {
+                        if (list.isNotEmpty()) {
+                            val pair = list[0]
+                            if (!mc.interactionManager?.isBreakingBlock!!) {
+                                val original = mc.crosshairTarget
+                                mc.crosshairTarget = if (pair.second.blockPos == pair.first) pair.second else pair.second.withBlockPos(pair.first)
+                                (mc as IMinecraftClient).tarasande_invokeDoAttack()
+                                mc.crosshairTarget = original
                             }
+                            breaking = true
                         }
+                    }
 
-                        breakSpeed.isSelected(1) -> {
-                            for (pair in list) {
-                                mc.networkHandler?.sendPacket(PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, pair.first, pair.second.side))
-                                mc.player?.swingHand(Hand.MAIN_HAND)
-                                mc.networkHandler?.sendPacket(PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, pair.first, pair.second.side))
-                            }
+                    breakSpeed.isSelected(1) -> {
+                        for (pair in list) {
+                            mc.networkHandler?.sendPacket(PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, pair.first, pair.second.side))
+                            mc.player?.swingHand(Hand.MAIN_HAND)
+                            mc.networkHandler?.sendPacket(PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, pair.first, pair.second.side))
                         }
                     }
                 }

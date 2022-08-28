@@ -162,7 +162,11 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
                 matrices?.translate((width / 2f).toDouble(), (y + textRenderer.fontHeight - textRenderer.fontHeight / 2f).toDouble(), 0.0)
                 matrices?.scale(2.0f, 2.0f, 1.0f)
                 matrices?.translate(-(width / 2f).toDouble(), (-(y + textRenderer.fontHeight - textRenderer.fontHeight / 2f)).toDouble(), 0.0)
-                drawCenteredText(matrices, textRenderer, Text.of((if (mainAccount == accounts.indexOf(account)) Formatting.YELLOW.toString() else "") + account.getDisplayName()), width / 2, y + 2, Color.white.rgb)
+                drawCenteredText(matrices, textRenderer, Text.of(when {
+                    client?.session?.equals(account.session) == true -> Formatting.GREEN.toString()
+                    mainAccount == accounts.indexOf(account) -> Formatting.YELLOW.toString()
+                    else -> ""
+                } + account.getDisplayName()), width / 2, y + 2, Color.white.rgb)
                 matrices?.pop()
             }
 

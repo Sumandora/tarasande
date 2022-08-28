@@ -30,5 +30,6 @@ class ClientValues {
     val delay = object : ValueNumber(this, "Delay", 0.0, 10000.0, 60000.0, 1000.0) {
         override fun isEnabled() = autoSaveConfig.value
     }
+    val hypixelApiKey = ValueText(this, "Hypixel API Key", "")
 
 }

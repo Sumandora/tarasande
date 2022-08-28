@@ -52,6 +52,7 @@
 - Improve BedESP performance (Go inside from outside; see comment in BedESP class)
 - User configs
 - Crystal Aura
+- Replace Spotify with DBus Music
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

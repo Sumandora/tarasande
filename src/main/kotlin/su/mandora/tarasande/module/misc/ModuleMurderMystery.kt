@@ -154,13 +154,14 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
 
             is EventUpdate -> {
                 if (event.state == EventUpdate.State.PRE) {
-                    if (mc.world?.players?.size!! <= 1) return@Consumer
                     if (!fakeNews.isSelected(0) && isMurderer() && murdererAssistance.value) {
                         if (fakeNewsTimer.hasReached(fakeNewsTime)) {
                             var player: PlayerEntity? = null
+                            val realPlayers = mc.world?.players?.filter { PlayerUtil.isAttackable(it) } ?: return@Consumer
+                            if (realPlayers.size <= 1)
+                                return@Consumer
                             while (player == null || player == mc.player) {
-                                val realPlayers = mc.world?.players?.filter { PlayerUtil.isAttackable(it) }
-                                player = realPlayers?.get(ThreadLocalRandom.current().nextInt(realPlayers.size))
+                                player = realPlayers.get(ThreadLocalRandom.current().nextInt(realPlayers.size))
                             }
                             @Suppress("BooleanLiteralArgument")
                             val randomIllegalItem = fakeNewsItems.list.randomOrNull()

@@ -20,8 +20,8 @@ class ValueComponentText(value: Value) : ValueComponent(value) {
     init {
         textFieldWidget.setMaxLength(Int.MAX_VALUE)
         textFieldWidget.setDrawsBackground(false)
-        textFieldWidget.text = null
         val valueText = value as ValueText
+        textFieldWidget.text = valueText.value
         textFieldWidget.setChangedListener {
             valueText.value = it
             valueText.onChange()
@@ -29,9 +29,6 @@ class ValueComponentText(value: Value) : ValueComponent(value) {
     }
 
     override fun init() {
-        if (textFieldWidget.text == null) {
-            textFieldWidget.text = (value as ValueText).value
-        }
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
@@ -39,7 +36,8 @@ class ValueComponentText(value: Value) : ValueComponent(value) {
         matrices?.push()
         matrices?.scale(0.5F, 0.5F, 1.0F)
         if (textFieldWidget.isFocused) (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.get().clientValues?.accentColor?.getColor()!!)
-        if (!value.isEnabled()) (textFieldWidget as ITextFieldWidget).tarasande_setColor(Color.white.darker().darker())
+        if (!value.isEnabled())
+            (textFieldWidget as ITextFieldWidget).tarasande_setColor(Color.white.darker().darker())
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
         (textFieldWidget as ITextFieldWidget).tarasande_setColor(null)
         matrices?.pop()
@@ -66,7 +64,8 @@ class ValueComponentText(value: Value) : ValueComponent(value) {
             textFieldWidget.setTextFieldFocused(false)
             textFieldWidget.setCursorToEnd()
             return true
-        } else textFieldWidget.keyPressed(keyCode, scanCode, modifiers)
+        } else
+            textFieldWidget.keyPressed(keyCode, scanCode, modifiers)
         return false
     }
 

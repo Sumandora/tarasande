@@ -23,6 +23,7 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
 
     float prevBodyYaw;
     float prevPrevBodyYaw;
+
     protected MixinLivingEntityRenderer(EntityRendererFactory.Context ctx) {
         super(ctx);
     }

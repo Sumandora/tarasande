@@ -62,10 +62,10 @@ class TarasandeMain {
         entityColor = EntityColor()
         managerClickMethod = ManagerClickMethod()
         managerModule = ManagerModule()
+        managerESP = ManagerESP()
         blur = Blur()
         screens = Screens() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
         friends = Friends()
-        managerESP = ManagerESP()
 
         managerFile?.load()
 

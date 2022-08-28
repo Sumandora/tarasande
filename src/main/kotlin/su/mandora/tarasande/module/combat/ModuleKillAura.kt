@@ -451,7 +451,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 )
             }
 
-            best = aimPoint
+            best = MathUtil.closestPointToBox(aimPoint, box)
         }
 
         return best

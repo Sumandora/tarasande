@@ -23,8 +23,8 @@ import java.util.function.Consumer
 
 class ModuleMovementRecorder : Module("Movement recorder", "Records your movement for later playback", ModuleCategory.MOVEMENT) {
 
-    private val recordAndPlaybackButton = ValueBind(this, "Record/Playback button", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN, true)
-    private val deleteButton = ValueBind(this, "Delete button", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN, true)
+    private val recordAndPlaybackButton = ValueBind(this, "Record/Playback button", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN)
+    private val deleteButton = ValueBind(this, "Delete button", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN)
 
     private var recording = false
     private val records = ArrayList<Record>()
