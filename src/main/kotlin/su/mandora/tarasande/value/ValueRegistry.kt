@@ -4,6 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import net.minecraft.util.registry.Registry
 import su.mandora.tarasande.base.value.Value
+import su.mandora.tarasande.util.string.StringUtil
 import java.util.concurrent.CopyOnWriteArrayList
 
 abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: Registry<T>, vararg keys: T, manage: Boolean = true) : Value(owner, name, manage) {
@@ -16,26 +17,27 @@ abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: 
 
     override fun save(): JsonElement {
         val jsonArray = JsonArray()
-        list.forEach { jsonArray.add(keyToString(it)) }
+        list.forEach { jsonArray.add(getTranslationKey(it)) }
         return jsonArray
     }
 
     override fun load(jsonElement: JsonElement) {
         val jsonArray = jsonElement.asJsonArray
         list.clear()
-        list.addAll(registry.filter { key -> jsonArray.any { it.asString.equals(keyToString(key)) } })
+        list.addAll(registry.filter { key -> jsonArray.any { it.asString.equals(getTranslationKey(key)) } })
     }
 
     open fun filter(key: T) = true
-    abstract fun keyToString(key: Any?): String
+    abstract fun getTranslationKey(key: Any?): String
 
     fun updateSearchResults(text: String, max: Int): ArrayList<WrappedKey<T>> {
         var count = 0
         val list = ArrayList<WrappedKey<T>>()
         for (key in registry) {
             if (count >= max) break
-            if (filter(key) && keyToString(key).contains(text, true) && this.list.none { it == key }) {
-                list.add(WrappedKey(key, keyToString(key)))
+            val translation = StringUtil.uncoverTranslation(getTranslationKey(key))
+            if (filter(key) && translation.contains(text, true) && this.list.none { it == key }) {
+                list.add(WrappedKey(key, translation))
                 count++
             }
         }

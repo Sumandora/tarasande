@@ -33,7 +33,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val delay = ValueNumber(this, "Delay", 0.0, 0.0, 500.0, 50.0)
     private val alwaysClick = ValueBoolean(this, "Always click", false)
     private val clickSpeedUtil = ClickSpeedUtil(this, { alwaysClick.value }, ClickMethodCooldown::class.java)
-    private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.0, 1.0, 1.0, 1.0, 0.1)
+    private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.1, 1.0, 1.0, 1.0, 0.1)
 
     private val goalYaw = ValueNumber(this, "Goal yaw", -60.0, 0.0, 60.0, 1.0)
     private val offsetGoalYaw = ValueBoolean(this, "Offset goal yaw", true)
@@ -65,7 +65,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val headRoll = ValueMode(this, "Head roll", false, "Disabled", "Advantage", "Autism")
     private val forbiddenItems = object : ValueRegistry<Item>(this, "Forbidden items", Registry.ITEM) {
         override fun filter(key: Item) = key is BlockItem
-        override fun keyToString(key: Any?) = (key as Item).name.string
+        override fun getTranslationKey(key: Any?) = (key as Item).translationKey
     }
     private val cubeShape = ValueBoolean(this, "Cube shape", true)
     private val tower = ValueMode(this, "Tower", false, "Vanilla", "Motion", "Teleport")
@@ -207,6 +207,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                     val dotProd = beginToPoint.dot(beginToEnd)
 
                                     var t = dotProd / squaredDist
+                                    val prevT = t
 
                                     val closest = sideBegin.add(sideEnd.subtract(sideBegin).multiply(MathHelper.clamp(t, padding, 1.0f - padding).toDouble()))
 
@@ -216,15 +217,16 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                         if (preferredSide == null) {
                                             val solutions = listOf(t + a.toFloat(), t - a.toFloat())
                                             val bestSolution = solutions.minBy { abs(it - 0.5) }
-                                            preferredSide = when {
-                                                bestSolution < t -> -1
-                                                bestSolution > t -> 1
-                                                else -> 0
-                                            }
                                             t = bestSolution
                                         } else {
                                             t += (a * preferredSide!!).toFloat()
                                         }
+                                    }
+
+                                    preferredSide = when {
+                                        prevT < t -> -1
+                                        prevT > t -> 1
+                                        else -> 0
                                     }
 
                                     sideBegin.add(sideEnd.subtract(sideBegin).multiply(MathHelper.clamp(t, padding, 1.0f - padding).toDouble()))
@@ -253,7 +255,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     } else {
                         prevEdgeDistance = 0.5
                         clickSpeedUtil.reset()
-                        preferredSide = null
                     }
                 }
                 if (lastRotation == null) {

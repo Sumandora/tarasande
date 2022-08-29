@@ -26,7 +26,7 @@ class InformationMurderer : Information("Murder Mystery", "Suspected murderers")
         val murderMystery = TarasandeMain.get().managerModule?.get(ModuleMurderMystery::class.java)!!
         if (murderMystery.enabled) if (murderMystery.suspects.isNotEmpty()) {
             return "\n" + murderMystery.suspects.entries.joinToString("\n") {
-                it.key.name + " (" + it.value.joinToString(" and ") { it.name.string } + ")"
+                it.key.name + " (" + it.value.joinToString(" and ") { it.name.string } + "§r)"
             }
         }
 

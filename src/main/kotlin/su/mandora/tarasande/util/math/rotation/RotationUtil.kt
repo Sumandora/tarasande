@@ -140,7 +140,27 @@ object RotationUtil {
                 lastMaxRotateToOriginSpeed = eventPollEvents.maxRotateToOriginSpeed
             } else if (fakeRotation != null) {
                 val realRotation = Rotation(MinecraftClient.getInstance().player!!)
-                val rotation = Rotation(fakeRotation!!).smoothedTurn(realRotation, if ((MinecraftClient.getInstance().player as ILivingEntity?)?.tarasande_getBodyTrackingIncrements()!! > 0) 1.0 else if (lastMinRotateToOriginSpeed == 1.0 && lastMaxRotateToOriginSpeed == 1.0) 1.0 else MathHelper.clamp((if (lastMinRotateToOriginSpeed == lastMaxRotateToOriginSpeed) lastMinRotateToOriginSpeed else ThreadLocalRandom.current().nextDouble(lastMinRotateToOriginSpeed.coerceAtMost(lastMaxRotateToOriginSpeed), lastMinRotateToOriginSpeed.coerceAtLeast(lastMaxRotateToOriginSpeed))) * RenderUtil.deltaTime * 0.05, 0.0, 1.0))
+                val rotation = Rotation(fakeRotation!!).smoothedTurn(
+                    realRotation,
+                    if ((MinecraftClient.getInstance().player as ILivingEntity?)?.tarasande_getBodyTrackingIncrements()!! > 0)
+                        1.0
+                    else if (lastMinRotateToOriginSpeed == 1.0 && lastMaxRotateToOriginSpeed == 1.0)
+                        1.0
+                    else
+                        MathHelper.clamp(
+                            (
+                                    if (lastMinRotateToOriginSpeed == lastMaxRotateToOriginSpeed)
+                                        lastMinRotateToOriginSpeed
+                                    else
+                                        ThreadLocalRandom.current().nextDouble(
+                                            lastMinRotateToOriginSpeed.coerceAtMost(lastMaxRotateToOriginSpeed),
+                                            lastMinRotateToOriginSpeed.coerceAtLeast(lastMaxRotateToOriginSpeed)
+                                        )
+                                    ) * RenderUtil.deltaTime * 0.05,
+                            0.0,
+                            1.0
+                        )
+                )
                 rotation.correctSensitivity()
                 val actualDist = fakeRotation?.fov(rotation)!!
                 val gcd = Rotation.getGcd() * 0.15f

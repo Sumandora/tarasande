@@ -52,7 +52,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         override fun isEnabled() = rayTrace.value && !mode.isSelected(1)
     }
     private val swingInAir = ValueBoolean(this, "Swing in air", true)
-    private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.0, 1.0, 1.0, 1.0, 0.1)
+    private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.1, 1.0, 1.0, 1.0, 0.1)
     private val dontAttackWhenBlocking = ValueBoolean(this, "Don't attack when blocking", false)
     private val simulateShieldBlock = object : ValueBoolean(this, "Simulate shield block", false) {
         override fun isEnabled() = dontAttackWhenBlocking.value

@@ -32,12 +32,12 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     private val allowedItems = object : ValueRegistry<Item>(this, "Allowed items", Registry.ITEM, Items.GOLD_INGOT) {
         override fun isEnabled() = detectionMethod.isSelected(0)
         override fun filter(key: Item) = key != Items.AIR
-        override fun keyToString(key: Any?) = (key as Item).name.string
+        override fun getTranslationKey(key: Any?) = (key as Item).translationKey
     }
     private val disallowedItems = object : ValueRegistry<Item>(this, "Disallowed items", Registry.ITEM, Items.IRON_SWORD) {
         override fun isEnabled() = detectionMethod.isSelected(1)
         override fun filter(key: Item) = key != Items.AIR
-        override fun keyToString(key: Any?) = (key as Item).name.string
+        override fun getTranslationKey(key: Any?) = (key as Item).translationKey
     }
     private val murdererColorOverride = ValueColor(this, "Murderer color override", 0.0f, 1.0f, 1.0f, 1.0f)
     private val highlightDetectives = ValueBoolean(this, "Highlight detectives", false)
@@ -47,7 +47,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     private val detectiveItems = object : ValueRegistry<Item>(this, "Detective items", Registry.ITEM, Items.BOW) {
         override fun isEnabled() = highlightDetectives.value
         override fun filter(key: Item) = key != Items.AIR
-        override fun keyToString(key: Any?) = (key as Item).name.string
+        override fun getTranslationKey(key: Any?) = (key as Item).translationKey
     }
     private val broadcast = ValueMode(this, "Broadcast", false, "Disabled", "Explanatory", "Legit", "Custom")
     private val customBroadcastMessage = object : ValueText(this, "Custom fake news message", "I'm sure it is %s because he held %s") {
@@ -61,7 +61,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     private val fakeNewsItems = object : ValueRegistry<Item>(this, "Fake news items", Registry.ITEM, Items.IRON_SWORD) {
         override fun isEnabled() = !fakeNews.isSelected(0)
         override fun filter(key: Item) = key != Items.AIR
-        override fun keyToString(key: Any?) = (key as Item).name.string
+        override fun getTranslationKey(key: Any?) = (key as Item).translationKey
     }
 
     val suspects = ConcurrentHashMap<GameProfile, Array<Item>>()

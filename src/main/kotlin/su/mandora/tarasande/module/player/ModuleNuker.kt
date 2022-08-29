@@ -33,12 +33,12 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
     private val includedBlocks = object : ValueRegistry<Block>(this, "Included blocks", Registry.BLOCK) {
         override fun isEnabled() = selectionMode.isSelected(0)
         override fun filter(key: Block) = key != Blocks.AIR
-        override fun keyToString(key: Any?) = (key as Block).name.string
+        override fun getTranslationKey(key: Any?) = (key as Block).translationKey
     }
     private val excludedBlocks = object : ValueRegistry<Block>(this, "Excluded blocks", Registry.BLOCK) {
         override fun isEnabled() = selectionMode.isSelected(1)
         override fun filter(key: Block) = key != Blocks.AIR
-        override fun keyToString(key: Any?) = (key as Block).name.string
+        override fun getTranslationKey(key: Any?) = (key as Block).translationKey
     }
     private val radius = ValueNumber(this, "Radius", 0.1, 4.5, 6.0, 0.1)
     private val throughWalls = ValueMode(this, "Through walls", false, "Off", "On", "Free")

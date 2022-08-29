@@ -26,7 +26,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
     val mode = ValueMode(this, "Mode", true, "Shader", "2D")
     private val entities =
         object : ValueRegistry<EntityType<*>>(this, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
-            override fun keyToString(key: Any?) = (key as EntityType<*>).name.string
+            override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
         }
     private val hideBots = object : ValueBoolean(this, "Hide bots", false) {
         override fun isEnabled() = entities.list.contains(EntityType.PLAYER)

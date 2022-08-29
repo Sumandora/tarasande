@@ -10,6 +10,7 @@ import su.mandora.tarasande.base.value.Value
 import su.mandora.tarasande.mixin.accessor.ITextFieldWidget
 import su.mandora.tarasande.screen.accountmanager.elements.TextFieldWidgetPlaceholder
 import su.mandora.tarasande.util.render.RenderUtil
+import su.mandora.tarasande.util.string.StringUtil
 import su.mandora.tarasande.value.ValueRegistry
 import su.mandora.tarasande.value.WrappedKey
 import java.awt.Color
@@ -43,7 +44,7 @@ class ValueComponentRegistry(value: Value) : ValueComponent(value) {
         for ((index, key) in valueRegistry.list.withIndex()) {
             matrices?.push()
             matrices?.scale(0.5F, 0.5F, 1.0F)
-            val stringRepresentation = valueRegistry.keyToString(key)
+            val stringRepresentation = StringUtil.uncoverTranslation(valueRegistry.getTranslationKey(key))
             MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, stringRepresentation, (width.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(stringRepresentation) / 2.0F) * 2.0F, MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (index + 0.5F) * 2.0F, if (valueRegistry.isEnabled()) if (RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), (width.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(stringRepresentation) / 2.0F).toDouble(), (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (index + 0.5F)).toDouble(), width, (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * ((index + 1) + 0.5F)).toDouble())) TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!! else Color.white.rgb else Color.white.darker().darker().rgb)
             matrices?.pop()
         }
@@ -79,7 +80,7 @@ class ValueComponentRegistry(value: Value) : ValueComponent(value) {
         }
 
         for ((index, key) in valueRegistry.list.withIndex()) {
-            if (RenderUtil.isHovered(mouseX, mouseY, (width.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(valueRegistry.keyToString(key)) / 2.0F).toDouble(), (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (index + 0.5F)).toDouble(), width, (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * ((index + 1) + 0.5F)).toDouble())) {
+            if (RenderUtil.isHovered(mouseX, mouseY, (width.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(StringUtil.uncoverTranslation(valueRegistry.getTranslationKey(key))) / 2.0F).toDouble(), (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (index + 0.5F)).toDouble(), width, (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * ((index + 1) + 0.5F)).toDouble())) {
                 valueRegistry.list.remove(key)
                 valueRegistry.onChange()
                 updateSearchResults()

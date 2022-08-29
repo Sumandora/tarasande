@@ -58,7 +58,8 @@ class ManagerModule : Manager<Module>() {
             ModuleBlockBot(),
             ModuleChestStealer(),
             ModuleAutoTool(),
-            ModuleFreeCam()
+            ModuleFreeCam(),
+            ModuleRain()
         )
         TarasandeMain.get().managerEvent?.add { event ->
             if (event is EventTick) if (event.state == EventTick.State.POST) {

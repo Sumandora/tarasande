@@ -24,7 +24,7 @@ import kotlin.math.sqrt
 
 class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims at targets with (cross-)bow", ModuleCategory.COMBAT) {
 
-    private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.0, 1.0, 1.0, 1.0, 0.1)
+    private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.1, 1.0, 1.0, 1.0, 0.1)
     private val lockView = ValueBoolean(this, "Lock view", false)
 
     private val gravity = 0.006
