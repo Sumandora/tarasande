@@ -1,6 +1,7 @@
 package su.mandora.tarasande.mixin.mixins.connection;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketCallbacks;
@@ -24,6 +25,15 @@ public abstract class MixinClientConnection implements IClientConnection {
     @Shadow
     private Channel channel;
 
+    @Shadow
+    public abstract void send(Packet<?> packet);
+
+    @Inject(method = "exceptionCaught", at = @At("HEAD"))
+    public void injectExceptionCaught(ChannelHandlerContext context, Throwable ex, CallbackInfo ci) {
+        ex.printStackTrace();
+    }
+
+
     @Inject(method = "handlePacket", at = @At("HEAD"), cancellable = true)
     private static <T extends PacketListener> void injectHandlePacket(Packet<T> packet, PacketListener listener, CallbackInfo ci) {
         EventPacket eventPacket = new EventPacket(EventPacket.Type.RECEIVE, packet);
@@ -31,9 +41,6 @@ public abstract class MixinClientConnection implements IClientConnection {
         if (eventPacket.getCancelled())
             ci.cancel();
     }
-
-    @Shadow
-    public abstract void send(Packet<?> packet);
 
     @Inject(method = "send(Lnet/minecraft/network/Packet;Lnet/minecraft/network/PacketCallbacks;)V", at = @At("HEAD"), cancellable = true)
     public void injectSend(Packet<?> packet, @Nullable PacketCallbacks callbacks, CallbackInfo ci) {

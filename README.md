@@ -53,6 +53,9 @@
 - User configs
 - Crystal Aura
 - Replace Spotify with DBus Music
+- Debug Category
+- No Fall
+- Forge Faker
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

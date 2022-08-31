@@ -69,10 +69,10 @@ class TarasandeMain {
 
         managerFile?.load()
 
-        if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && screens?.betterScreenAccountManager?.mainAccount != null) {
-            screens?.betterScreenAccountManager?.logIn(screens?.betterScreenAccountManager?.accounts!![screens?.betterScreenAccountManager?.mainAccount!!])
-            while (screens?.betterScreenAccountManager?.loginThread != null && screens?.betterScreenAccountManager?.loginThread?.isAlive!!) Thread.sleep(50L) // synchronize
-            screens?.betterScreenAccountManager?.status = null
+        if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && screens?.screenBetterAccountManager?.mainAccount != null) {
+            screens?.screenBetterAccountManager?.logIn(screens?.screenBetterAccountManager?.accounts!![screens?.screenBetterAccountManager?.mainAccount!!])
+            while (screens?.screenBetterAccountManager?.loginThread != null && screens?.screenBetterAccountManager?.loginThread?.isAlive!!) Thread.sleep(50L) // synchronize
+            screens?.screenBetterAccountManager?.status = null
         }
 
         autoSaveDaemon.start()

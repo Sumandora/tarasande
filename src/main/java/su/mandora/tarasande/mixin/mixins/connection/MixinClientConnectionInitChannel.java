@@ -17,7 +17,7 @@ public class MixinClientConnectionInitChannel {
     @SuppressWarnings("UnresolvedMixinReference")
     @Inject(method = "initChannel", at = @At("TAIL"))
     public void injectPostInitChannel(Channel channel, CallbackInfo ci) {
-        Proxy proxy = TarasandeMain.Companion.get().getScreens().getBetterScreenAccountManager().getProxy();
+        Proxy proxy = TarasandeMain.Companion.get().getScreens().getScreenBetterAccountManager().getProxy();
         if (proxy != null) {
             switch (proxy.getType()) {
                 case HTTP -> channel.pipeline().addFirst("http-proxy-handler",

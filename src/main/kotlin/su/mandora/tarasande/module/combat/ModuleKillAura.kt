@@ -83,7 +83,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val flexTurn = object : ValueNumber(this, "Flex turn", 0.0, 90.0, 180.0, 1.0) {
         override fun isEnabled() = flex.value
     }
-    private val flexHurtTime = object : ValueNumber(this, "Flex hurt time", 0.0, 0.5, 1.0, 0.1) {
+    private val flexHurtTime = object : ValueNumber(this, "Flex hurt time", 0.1, 0.5, 0.9, 0.1) {
         override fun isEnabled() = flex.value
     }
     private val syncPosition = ValueBoolean(this, "Sync position", false)
@@ -127,6 +127,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private var waitForHit = false
     private var clicked = false
     private var performedTick = false
+    private var lastFlex: Rotation? = null
 
     override fun onEnable() {
         clickSpeedUtil.reset()
@@ -135,6 +136,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     override fun onDisable() {
         clicked = false
         blocking = false
+        lastFlex = null
         targets.clear()
     }
 
@@ -180,7 +182,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     targets.add(Pair(entity, aimPoint))
                 }
                 if (targets.isEmpty()) {
-                    if (blocking) blocking = false
+                    if (blocking)
+                        blocking = false
+                    lastFlex = null
                     return@Consumer
                 }
 
@@ -197,24 +201,19 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 else ThreadLocalRandom.current().nextDouble(aimSpeed.minValue, aimSpeed.maxValue)) * RenderUtil.deltaTime * 0.05, 0.0, 1.0))
                 var finalRot = smoothedRot
 
-                var canFlex = true
-                for (entity in targets) {
-                    if (entity.first !is LivingEntity) {
-                        canFlex = false
-                        break
-                    }
-                    val livingEntity = entity.first as LivingEntity
-                    if (livingEntity.maxHurtTime == 0 || livingEntity.hurtTime < livingEntity.maxHurtTime * flexHurtTime.value) {
-                        canFlex = false
-                        break
-                    }
-                }
-                if (!flex.value || !canFlex) {
+                val lowestHurttime = targets.filter { it.first is LivingEntity && (it.first as LivingEntity).maxHurtTime > 0 }.minOfOrNull { val livingEntity = it.first as LivingEntity; livingEntity.hurtTime / livingEntity.maxHurtTime.toFloat() }
+
+                if (!flex.value || lowestHurttime == null || lowestHurttime < flexHurtTime.value) {
                     val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, smoothedRot)
-                    if (guaranteeHit.value && target.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue && (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null)) finalRot = targetRot
+                    if (guaranteeHit.value && target.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue && (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null)) {
+                        finalRot = targetRot
+                    }
                 } else {
-                    finalRot.yaw += ThreadLocalRandom.current().nextDouble(-flexTurn.value, flexTurn.value).toFloat()
-                    finalRot.pitch = ThreadLocalRandom.current().nextDouble(-flexTurn.value / 2, flexTurn.value / 2).toFloat()
+                    val delta = (lowestHurttime - flexHurtTime.value) / (1.0 - flexHurtTime.value)
+                    if(lastFlex == null) {
+                        lastFlex = Rotation(ThreadLocalRandom.current().nextDouble(-flexTurn.value, flexTurn.value).toFloat(), ThreadLocalRandom.current().nextDouble(-flexTurn.value / 2, flexTurn.value / 2).toFloat())
+                    }
+                    finalRot = finalRot.smoothedTurn(Rotation(finalRot.yaw + lastFlex?.yaw!!, lastFlex?.pitch!!), delta)
                 }
 
                 event.rotation = finalRot.correctSensitivity()
@@ -230,7 +229,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             is EventTick -> {
                 if (event.state == EventTick.State.PRE) {
-                    if (performedTick) clickSpeedUtil.reset()
+                    if (performedTick)
+                        clickSpeedUtil.reset()
                     performedTick = true
                 }
             }
@@ -247,9 +247,14 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
                 var clicks = clickSpeedUtil.getClicks()
 
-                if (waitForCritical.value) if (!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) }) if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!) if (!mc.player?.isOnGround!! && (mc.player?.fallDistance == 0.0f || (criticalSprint.value && !mc.player?.isSprinting!!))) clicks = 0
+                if (waitForCritical.value) if (!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) })
+                    if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
+                        if (!mc.player?.isOnGround!! && (mc.player?.fallDistance == 0.0f || (criticalSprint.value && !mc.player?.isSprinting!!)))
+                            clicks = 0
 
-                if (dontAttackWhenBlocking.value && allAttacked { it.isBlocking }) if (!simulateShieldBlock.value || allAttacked { it.blockedByShield(DamageSource.player(mc.player)) }) clicks = 0
+                if (dontAttackWhenBlocking.value && allAttacked { it.isBlocking })
+                    if (!simulateShieldBlock.value || allAttacked { it.blockedByShield(DamageSource.player(mc.player)) })
+                        clicks = 0
 
                 if (!blockMode.isSelected(0) && mc.player?.isUsingItem!! && clicks > 0) {
                     var hasTarget = false
@@ -298,16 +303,18 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                                 continue
                             }
                             attack(target)
+                            lastFlex = null
                             event.dirty = true
                             waitForHit = false
                             attacked = true
 
                             if (!mode.isSelected(1)) break
                         }
-                        if (!attacked) if (swingInAir.value) {
-                            attack(null)
-                            event.dirty = true
-                        }
+                        if (!attacked)
+                            if (swingInAir.value) {
+                                attack(null)
+                                event.dirty = true
+                            }
                     }
                 }
                 if (targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && !waitForHit && !mc.player?.isUsingItem!! && !blockMode.isSelected(0)) {
@@ -316,7 +323,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                         val stack = mc.player?.getStackInHand(Hand.OFF_HAND)
                         if (stack?.item !is ShieldItem || mc.player?.itemCooldownManager?.isCoolingDown(stack.item)!! || mc.player?.getStackInHand(Hand.MAIN_HAND)?.useAction != UseAction.NONE) canBlock = false
                     }
-                    if (blockCheckMode.isSelected(1) && (mc.player?.getStackInHand(Hand.MAIN_HAND)?.item !is SwordItem || mc.player?.getStackInHand(Hand.OFF_HAND)?.useAction.let { it != UseAction.NONE && it != UseAction.BLOCK })) canBlock = false
+                    if (blockCheckMode.isSelected(1) && (mc.player?.getStackInHand(Hand.MAIN_HAND)?.item !is SwordItem || mc.player?.getStackInHand(Hand.OFF_HAND)?.useAction.let { it != UseAction.NONE && it != UseAction.BLOCK }))
+                        canBlock = false
 
                     if (canBlock) {
                         var hasTarget = false

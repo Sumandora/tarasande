@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande.TarasandeMain;
 import su.mandora.tarasande.event.EventClearColor;
@@ -31,31 +32,27 @@ public class MixinRenderSystem {
         RotationUtil.INSTANCE.updateFakeRotation(false);
     }
 
-    @Inject(method = "_setShaderFogStart", at = @At("HEAD"), remap = false, cancellable = true)
-    private static void inject_setShaderFogStart(float f, CallbackInfo ci) {
-        EventFogColor eventFogColor = new EventFogColor(f, 0.0f, 0.0f, 0.0f, 0.0f);
+    @Redirect(method = "_setShaderFogStart", at = @At(value = "FIELD", target = "Lcom/mojang/blaze3d/systems/RenderSystem;shaderFogStart:F"), remap = false)
+    private static void hookedShaderFogStart(float value) {
+        EventFogColor eventFogColor = new EventFogColor(value, 0.0f, 0.0f, 0.0f, 0.0f);
         TarasandeMain.Companion.get().getManagerEvent().call(eventFogColor);
         shaderFogStart = eventFogColor.getStart();
-        ci.cancel();
     }
 
-    @Inject(method = "_setShaderFogEnd", at = @At("HEAD"), remap = false, cancellable = true)
-    private static void inject_setShaderFogEnd(float f, CallbackInfo ci) {
-        EventFogColor eventFogColor = new EventFogColor(0.0f, f, 0.0f, 0.0f, 0.0f);
+    @Redirect(method = "_setShaderFogEnd", at = @At(value = "FIELD", target = "Lcom/mojang/blaze3d/systems/RenderSystem;shaderFogEnd:F"), remap = false)
+    private static void hookedShaderFogEnd(float value) {
+        EventFogColor eventFogColor = new EventFogColor(0.0f, value, 0.0f, 0.0f, 0.0f);
         TarasandeMain.Companion.get().getManagerEvent().call(eventFogColor);
         shaderFogEnd = eventFogColor.getEnd();
-        ci.cancel();
     }
 
-    @Inject(method = "_setShaderFogColor", at = @At("HEAD"), remap = false, cancellable = true)
+    @Inject(method = "_setShaderFogColor", at = @At("TAIL"), remap = false)
     private static void inject_setShaderFogColor(float f, float g, float h, float i, CallbackInfo ci) {
-        EventFogColor eventFogColor = new EventFogColor(0.0f, 0.0f, f, g, h);
+        EventFogColor eventFogColor = new EventFogColor(0.0f, 0.0f, shaderFogColor[0], shaderFogColor[1], shaderFogColor[2]);
         TarasandeMain.Companion.get().getManagerEvent().call(eventFogColor);
         shaderFogColor[0] = eventFogColor.getRed();
         shaderFogColor[1] = eventFogColor.getGreen();
         shaderFogColor[2] = eventFogColor.getBlue();
-        shaderFogColor[3] = i;
-        ci.cancel();
     }
 
     @Inject(method = "clearColor", at = @At("HEAD"), remap = false, cancellable = true)

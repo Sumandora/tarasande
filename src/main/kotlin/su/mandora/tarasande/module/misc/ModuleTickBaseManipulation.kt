@@ -45,6 +45,21 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
     private val delay = object : ValueNumber(this, "Delay", 0.0, 600.0, 2000.0, 100.0) {
         override fun isEnabled() = autoCharge.value
     }
+    private val future = object : ValueBoolean(this, "Future", false) {
+        override fun onChange() {
+            if(shifted < 0L)
+                shifted = 0L
+        }
+    }
+    private val negativeUncharge = object : ValueBoolean(this, "Negative uncharge", false) {
+        override fun isEnabled() = future.value
+    }
+    private val futureHop = object : ValueBind(this, "Future hop", Type.KEY, GLFW.GLFW_KEY_UNKNOWN) {
+        override fun isEnabled() = future.value
+    }
+    private val hopLength = object : ValueNumber(this, "Hop length", 0.0, 500.0, 2000.0, 1.0) {
+        override fun isEnabled() = future.value
+    }
 
     private var prevTime = 0L
 
@@ -68,11 +83,10 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
                     EventUpdate.State.PRE -> {
                         if (shifted > prevShifted) event.cancelled = true
                     }
-
                     EventUpdate.State.POST -> { // doing it in post means, that we skip as soon as we get it, otherwise we get a one tick delay
-                        if (shifted >= prevShifted && skipCooldown.value) shifted = max(0L, shifted - ceil((0.9 - MinecraftClient.getInstance().player?.getAttackCooldownProgress(0.5F)!!).coerceAtLeast(0.0) * MinecraftClient.getInstance().player?.attackCooldownProgressPerTick!! * ((mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_getTickTime()).toLong())
+                        if (shifted >= prevShifted && skipCooldown.value)
+                            shifted = max(0L, shifted - ceil((0.9 - MinecraftClient.getInstance().player?.getAttackCooldownProgress(0.5F)!!).coerceAtLeast(0.0) * MinecraftClient.getInstance().player?.attackCooldownProgressPerTick!! * ((mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_getTickTime()).toLong())
                     }
-
                     else -> {}
                 }
             }
@@ -114,14 +128,26 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
                     }
                     if (resyncPositions.value && prevShifted < shifted) {
                         val iRenderTickCounter = (mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter
-                        for (i in 0..floor((event.time - iRenderTickCounter.tarasande_getPrevTimeMillis()) / iRenderTickCounter.tarasande_getTickTime()).toInt()) mc.world?.tickEntities()
+                        for (i in 0..floor((event.time - iRenderTickCounter.tarasande_getPrevTimeMillis()) / iRenderTickCounter.tarasande_getTickTime()).toInt())
+                            mc.world?.tickEntities()
                     }
-                    prevTime = event.time
-                    if (unchargeKey.isPressed()) shifted = if (instantUncharge.value) 0L else max(0L, (shifted - unchargeSpeed.value).toLong())
+                    if (unchargeKey.isPressed()) {
+                        if(shifted > 0L) {
+                            shifted = if (instantUncharge.value) 0L else max(0L, (shifted - unchargeSpeed.value).toLong())
+                        } else if(future.value && negativeUncharge.value) {
+                            shifted -= event.time - prevTime
+                        }
+                    }
+
+                    if(future.value)
+                        for(i in 0 until futureHop.wasPressed())
+                            shifted -= hopLength.value.toLong()
+
                     prevUnchargePressed = unchargeKey.isPressed()
                 } else {
                     shifted = 0L
                 }
+                prevTime = event.time
                 event.time -= shifted
             }
         }

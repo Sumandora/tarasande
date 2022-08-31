@@ -47,9 +47,11 @@ class ModuleNoRotate : Module("No rotate", "Prevents the server from rotating yo
         when (event) {
             is EventPacket -> {
                 if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerPositionLookS2CPacket) {
-                    prevRotation = Rotation(mc.player!!)
-                    if (RotationUtil.fakeRotation == null) // if this isnt the case the rotation is being handled by the RotationUtil
-                        rotation = evaluateNewRotation(event.packet)
+                    if(mc.player != null) {
+                        prevRotation = Rotation(mc.player!!)
+                        if (RotationUtil.fakeRotation == null) // if this isnt the case the rotation is being handled by the RotationUtil
+                            rotation = evaluateNewRotation(event.packet)
+                    }
                 }
             }
 

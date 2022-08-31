@@ -29,7 +29,7 @@ class ScreenBetterAccount(
 
     private val textFields: ArrayList<TextFieldWidget> = ArrayList()
     private var implementationClass: Class<out Account> =
-        TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list?.get(0)!!
+        TarasandeMain.get().screens?.screenBetterAccountManager?.managerAccount?.list?.get(0)!!
 
     private var environment: Environment? = null
 
@@ -54,9 +54,9 @@ class ScreenBetterAccount(
                 Text.of((implementationClass.annotations[0] as AccountInfo).name)
             ) { button ->
                 implementationClass =
-                    TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list!![(TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list?.indexOf(
+                    TarasandeMain.get().screens?.screenBetterAccountManager?.managerAccount?.list!![(TarasandeMain.get().screens?.screenBetterAccountManager?.managerAccount?.list?.indexOf(
                         implementationClass
-                    )!! + 1) % TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list?.size!!]
+                    )!! + 1) % TarasandeMain.get().screens?.screenBetterAccountManager?.managerAccount?.list?.size!!]
                 init()
                 button.message = Text.of(implementationClass.name)
             })

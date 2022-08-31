@@ -5,7 +5,11 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
+import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.NoticeScreen
 import net.minecraft.client.util.Session
+import net.minecraft.text.Text
 import net.minecraft.util.Util
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.screen.accountmanager.account.Account
@@ -29,7 +33,7 @@ class AccountMicrosoft : Account() {
     private val clientId = "54fd49e4-2103-4044-9603-2b028c814ec3"
     private val scope = "XboxLive.signin offline_access"
     private val redirectUriBase = "http://localhost:"
-    private val timeout = 1000L * 60L
+    private var cancelled = false
 
     var service: MinecraftSessionService? = null
 
@@ -39,16 +43,15 @@ class AccountMicrosoft : Account() {
 
     private fun randomPort(): Int = ThreadLocalRandom.current().nextInt(0, Short.MAX_VALUE.toInt() * 2 /* unsigned */)
 
-    private fun setupHttpServer(): Int {
+    private fun setupHttpServer(): ServerSocket {
         return try {
             val serverSocket = ServerSocket(randomPort())
             if (!serverSocket.isBound)
                 throw IllegalStateException("Not bound")
             val t = Thread({
                 try {
-                    serverSocket.soTimeout = timeout.toInt()
                     val socket = serverSocket.accept()
-                    Thread.sleep(100L)
+                    Thread.sleep(100L) // some browsers are slow for some reason
                     val bufferedReader = BufferedReader(InputStreamReader(socket.getInputStream()))
                     val content = StringBuilder()
                     while (bufferedReader.ready())
@@ -57,6 +60,7 @@ class AccountMicrosoft : Account() {
                         content.toString().split("code=")[1].split(" ")[0].split("&")[0]
                     } catch (t: Throwable) {
                         t.printStackTrace()
+                        cancelled = true
                         return@Thread
                     } // hack
                     socket.getOutputStream().write("""HTTP/2 200 OK
@@ -71,7 +75,7 @@ You can close this page now.""".toByteArray())
                 }
             }, "Microsoft login http server")
             t.start()
-            serverSocket.localPort
+            serverSocket
         } catch (t: Throwable) {
             setupHttpServer()
         }
@@ -79,26 +83,38 @@ You can close this page now.""".toByteArray())
 
     override fun logIn() {
         code = null
+        cancelled = false
         if (msAuthProfile != null &&
-            (msAuthProfile?.xboxLiveAuth?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true ||
-                    msAuthProfile?.xboxLiveSecurityTokens?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true)
+            (msAuthProfile?.xboxLiveAuth            ?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true ||
+             msAuthProfile?.xboxLiveSecurityTokens  ?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true)
         ) {
             msAuthProfile = msAuthProfile?.renew() // use refresh token to update the account
         }
 
         if (msAuthProfile == null) {
-            redirectUri = redirectUriBase + setupHttpServer()
+            val serverSocket = setupHttpServer()
+            val prevScreen = MinecraftClient.getInstance().currentScreen
+            RenderSystem.recordRenderCall {
+                MinecraftClient.getInstance().setScreen(NoticeScreen({ cancelled = true }, Text.of("Microsoft Login"), Text.of("Your webbrowser should've opened.\nPlease authorize yourself!\nClosing this screen will cancel the process!"), Text.of("Cancel"), false))
+            }
+            redirectUri = redirectUriBase + serverSocket.localPort
             Util.getOperatingSystem().open(URI(oauthAuthorizeUrl + "?" +
                     "redirect_uri=" + redirectUri + "&" +
                     "scope=" + URLEncoder.encode(scope, StandardCharsets.UTF_8) + "&" +
                     "response_type=code&" +
                     "client_id=" + clientId
             ))
-            val time = System.currentTimeMillis()
             while (code == null) {
-                Thread.sleep(100)
-                if (System.currentTimeMillis() - time > timeout)
-                    throw IllegalStateException("Timeout")
+                Thread.sleep(100L)
+                if(cancelled) {
+                    RenderSystem.recordRenderCall {
+                        MinecraftClient.getInstance().setScreen(prevScreen)
+                    }
+                    throw IllegalStateException("Cancelled")
+                }
+            }
+            RenderSystem.recordRenderCall {
+                MinecraftClient.getInstance().setScreen(prevScreen)
             }
             msAuthProfile = buildFromCode(code!!)
         }
@@ -258,6 +274,10 @@ You can close this page now.""".toByteArray())
             return microsoft.buildFromRefreshToken(oAuthToken?.refreshToken!!)
         }
 
+        override fun toString(): String {
+            return "MSAuthProfile(oAuthToken=$oAuthToken, xboxLiveAuth=$xboxLiveAuth, xboxLiveSecurityTokens=$xboxLiveSecurityTokens, minecraftLogin=$minecraftLogin, minecraftProfile=$minecraftProfile)"
+        }
+
         inner class OAuthToken {
             @SerializedName("token_type")
             var tokenType: String? = null
@@ -279,16 +299,9 @@ You can close this page now.""".toByteArray())
 
             @SerializedName("user_id")
             var userId: String? = null
+
             override fun toString(): String {
-                return "OAuthToken{" +
-                        "tokenType='" + tokenType + '\'' +
-                        ", expiresIn=" + expiresIn +
-                        ", scope='" + scope + '\'' +
-                        ", accessToken='" + accessToken + '\'' +
-                        ", refreshToken='" + refreshToken + '\'' +
-                        ", authenticationToken='" + authenticationToken + '\'' +
-                        ", userId='" + userId + '\'' +
-                        '}'
+                return "OAuthToken(tokenType=$tokenType, expiresIn=$expiresIn, scope=$scope, accessToken=$accessToken, refreshToken=$refreshToken, authenticationToken=$authenticationToken, userId=$userId)"
             }
         }
 
@@ -305,33 +318,26 @@ You can close this page now.""".toByteArray())
             @SerializedName("DisplayClaims")
             var displayClaims: DisplayClaim? = null
 
+            override fun toString(): String {
+                return "XboxLiveAuth(issueInstant=$issueInstant, notAfter=$notAfter, token=$token, displayClaims=$displayClaims)"
+            }
+
             inner class DisplayClaim {
                 @SerializedName("xui")
                 var xui: Array<Xui>? = null
+
                 override fun toString(): String {
-                    return "DisplayClaim{" +
-                            "xui=" + Arrays.toString(xui) +
-                            '}'
+                    return "DisplayClaim(xui=${xui?.contentToString()})"
                 }
 
                 inner class Xui {
                     @SerializedName("uhs")
                     var uhs: String? = null
+
                     override fun toString(): String {
-                        return "Xui{" +
-                                "uhs='" + uhs + '\'' +
-                                '}'
+                        return "Xui(uhs=$uhs)"
                     }
                 }
-            }
-
-            override fun toString(): String {
-                return "XboxLiveAuth{" +
-                        "issueInstant=" + issueInstant +
-                        ", notAfter=" + notAfter +
-                        ", token='" + token + '\'' +
-                        ", displayClaims=" + displayClaims +
-                        '}'
             }
         }
 
@@ -347,31 +353,25 @@ You can close this page now.""".toByteArray())
 
             @SerializedName("DisplayClaims")
             var displayClaims: DisplayClaim? = null
+
             override fun toString(): String {
-                return "XboxLiveSecurityTokens{" +
-                        "issueInstant=" + issueInstant +
-                        ", notAfter=" + notAfter +
-                        ", token='" + token + '\'' +
-                        ", displayClaims=" + displayClaims +
-                        '}'
+                return "XboxLiveSecurityTokens(issueInstant=$issueInstant, notAfter=$notAfter, token=$token, displayClaims=$displayClaims)"
             }
 
             inner class DisplayClaim {
                 @SerializedName("xui")
                 var xui: Array<Xui>? = null
+
                 override fun toString(): String {
-                    return "DisplayClaim{" +
-                            "xui=" + Arrays.toString(xui) +
-                            '}'
+                    return "DisplayClaim(xui=${xui?.contentToString()})"
                 }
 
                 inner class Xui {
                     @SerializedName("uhs")
                     var uhs: String? = null
+
                     override fun toString(): String {
-                        return "Xui{" +
-                                "uhs='" + uhs + '\'' +
-                                '}'
+                        return "Xui(uhs=$uhs)"
                     }
                 }
             }
@@ -392,14 +392,9 @@ You can close this page now.""".toByteArray())
 
             @SerializedName("expires_in")
             var expiresIn = 0
+
             override fun toString(): String {
-                return "MinecraftLogin{" +
-                        "username='" + username + '\'' +
-                        ", roles=" + Arrays.toString(roles) +
-                        ", accessToken='" + accessToken + '\'' +
-                        ", tokenType='" + tokenType + '\'' +
-                        ", expiresIn=" + expiresIn +
-                        '}'
+                return "MinecraftLogin(username=$username, roles=${roles?.contentToString()}, accessToken=$accessToken, tokenType=$tokenType, expiresIn=$expiresIn)"
             }
         }
 
@@ -415,13 +410,9 @@ You can close this page now.""".toByteArray())
 
             @SerializedName("capes")
             var capes: Array<Cape>? = null
+
             override fun toString(): String {
-                return "MinecraftProfile{" +
-                        "id='" + id + '\'' +
-                        ", name='" + name + '\'' +
-                        ", skins=" + Arrays.toString(skins) +
-                        ", capes=" + Arrays.toString(capes) +
-                        '}'
+                return "MinecraftProfile(id=$id, name=$name, skins=${skins?.contentToString()}, capes=${capes?.contentToString()})"
             }
 
             inner class Skin {
@@ -436,13 +427,9 @@ You can close this page now.""".toByteArray())
 
                 @SerializedName("variant")
                 var variant: String? = null
+
                 override fun toString(): String {
-                    return "Skin{" +
-                            "id='" + id + '\'' +
-                            ", state='" + state + '\'' +
-                            ", url='" + url + '\'' +
-                            ", variant='" + variant + '\'' +
-                            '}'
+                    return "Skin(id=$id, state=$state, url=$url, variant=$variant)"
                 }
             }
 
@@ -458,25 +445,11 @@ You can close this page now.""".toByteArray())
 
                 @SerializedName("alias")
                 var alias: String? = null
+
                 override fun toString(): String {
-                    return "Cape{" +
-                            "id='" + id + '\'' +
-                            ", state='" + state + '\'' +
-                            ", url='" + url + '\'' +
-                            ", alias='" + alias + '\'' +
-                            '}'
+                    return "Cape(id=$id, state=$state, url=$url, alias=$alias)"
                 }
             }
-        }
-
-        override fun toString(): String {
-            return "MSAuthProfile{" +
-                    "oAuthToken=" + oAuthToken +
-                    ", xboxLiveAuth=" + xboxLiveAuth +
-                    ", xboxLiveSecurityTokens=" + xboxLiveSecurityTokens +
-                    ", minecraftLogin=" + minecraftLogin +
-                    ", minecraftProfile=" + minecraftProfile +
-                    '}'
         }
     }
 

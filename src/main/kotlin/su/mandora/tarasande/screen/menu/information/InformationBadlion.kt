@@ -25,13 +25,8 @@ class InformationTimers : Information("Badlion", "Timers") {
                                 val request = data.split("|")[0]
                                 data = data.substring(request.length + 1, data.length)
                                 when (request) {
-                                    "REGISTER" -> enabled = true
-                                    "CHANGE_WORLD" -> enabled = false
-                                    "REMOVE_ALL_TIMERS" -> {
-                                        enabled = false
-                                        list.clear()
-                                    }
-
+                                    "REGISTER", "CHANGE_WORLD" -> enabled = true
+                                    "REMOVE_ALL_TIMERS" -> list.clear()
                                     "ADD_TIMER" -> {
                                         val timer = TarasandeMain.get().gson.fromJson(data, Timer::class.java)
                                         list.add(timer)
@@ -58,7 +53,7 @@ class InformationTimers : Information("Badlion", "Timers") {
                             }
                         }
                     } else if (event.packet is PlayerRespawnS2CPacket) {
-                        if (event.packet.dimension !== MinecraftClient.getInstance().world?.registryKey) {
+                        if (MinecraftClient.getInstance().world != null && event.packet.dimension != MinecraftClient.getInstance().world?.registryKey) {
                             list.clear()
                             enabled = false
                         }
@@ -81,10 +76,21 @@ class InformationTimers : Information("Badlion", "Timers") {
             var type: String? = null
         }
 
-        override fun toString(): String {
+        private fun calcInterpolatedTime(): Long {
             val timeDelta = (System.currentTimeMillis() - lastUpdated!!) / 50f
-            val expectedTime = ((currentTime!! - timeDelta) / 20f * 1000f).toLong()
-            return "$name " + String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(expectedTime), TimeUnit.MILLISECONDS.toSeconds(expectedTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(expectedTime)));
+            return ((currentTime!! - timeDelta) / 20f * 1000f).toLong()
+        }
+
+        internal fun isHidden(): Boolean {
+            return !repeating!! && calcInterpolatedTime() < 0L
+        }
+
+        override fun toString(): String {
+            val expectedTime = calcInterpolatedTime()
+            var txt = ""
+            if(name != null)
+                txt += "$name "
+            return String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(expectedTime), TimeUnit.MILLISECONDS.toSeconds(expectedTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(expectedTime)));
         }
     }
 
@@ -98,7 +104,7 @@ class InformationTimers : Information("Badlion", "Timers") {
     }
 
     override fun getMessage(): String? {
-        if (enabled || list.isEmpty()) return null
-        return "\n" + list.joinToString("\n")
+        if (!enabled || list.isEmpty()) return null
+        return "\n" + list.filter { !it.isHidden() }.joinToString("\n")
     }
 }

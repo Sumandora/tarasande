@@ -12,6 +12,8 @@ import java.nio.file.Files
 
 class ManagerFile : Manager<File>() {
 
+    var loaded = false
+
     init {
         add(
             FileModules(),
@@ -22,6 +24,8 @@ class ManagerFile : Manager<File>() {
     }
 
     fun save() {
+        if(!loaded) return
+
         for (file in list) {
             val fileObj = java.io.File(System.getProperty("user.home") + java.io.File.separator + TarasandeMain.get().name + java.io.File.separator + file.name)
             if (!fileObj.parentFile.exists()) fileObj.parentFile.mkdirs()
@@ -43,6 +47,7 @@ class ManagerFile : Manager<File>() {
                 }
             }
         }
+        loaded = true
     }
 }
 

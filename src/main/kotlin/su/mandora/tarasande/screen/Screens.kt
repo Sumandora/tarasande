@@ -8,7 +8,7 @@ import su.mandora.tarasande.screen.menu.ScreenMenu
 
 class Screens {
 
-    val betterScreenAccountManager = ScreenBetterAccountManager()
+    val screenBetterAccountManager = ScreenBetterAccountManager()
     val screenMenu = ScreenMenu()
 
     init {

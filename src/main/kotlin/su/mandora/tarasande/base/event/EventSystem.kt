@@ -1,13 +1,16 @@
 package su.mandora.tarasande.base.event
 
 import su.mandora.tarasande.base.Manager
+import su.mandora.tarasande.event.EventPacket
 import java.lang.reflect.ParameterizedType
 import java.util.function.Consumer
 
 class ManagerEvent : Manager<Pair<Int, Consumer<Event>>>() {
 
     fun call(event: Event) {
-        list.forEach { it.second.accept(event) }
+        list.forEach {
+            it.second.accept(event)
+        }
     }
 
     fun addObject(any: Any) {

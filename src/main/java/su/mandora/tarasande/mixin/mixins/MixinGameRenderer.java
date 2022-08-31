@@ -48,7 +48,7 @@ public class MixinGameRenderer implements IGameRenderer {
         return actualBlockReach;
     }
 
-    @Inject(method = "updateFovMultiplier", at = @At("RETURN"))
+    @Inject(method = "updateFovMultiplier", at = @At("TAIL"))
     public void injectUpdateMovementFovMultiplier(CallbackInfo ci) {
         EventMovementFovMultiplier eventMovementFovMultiplier = new EventMovementFovMultiplier(fovMultiplier);
         TarasandeMain.Companion.get().getManagerEvent().call(eventMovementFovMultiplier);

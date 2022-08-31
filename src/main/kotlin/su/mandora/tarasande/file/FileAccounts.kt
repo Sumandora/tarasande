@@ -44,7 +44,7 @@ class FileAccounts : File("Accounts") {
     override fun save(): JsonElement {
         val jsonObject = JsonObject()
         val jsonArray = JsonArray()
-        for (account in TarasandeMain.get().screens?.betterScreenAccountManager?.accounts!!) {
+        for (account in TarasandeMain.get().screens?.screenBetterAccountManager?.accounts!!) {
             val accountObject = JsonObject()
             accountObject.addProperty("Type", account.javaClass.getAnnotation(AccountInfo::class.java).name)
             accountObject.add("Account", account.save())
@@ -67,14 +67,14 @@ class FileAccounts : File("Accounts") {
             jsonArray.add(accountObject)
         }
         jsonObject.add("Accounts", jsonArray)
-        if (TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount != null) jsonObject.addProperty("Main-Account", TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount)
+        if (TarasandeMain.get().screens?.screenBetterAccountManager?.mainAccount != null) jsonObject.addProperty("Main-Account", TarasandeMain.get().screens?.screenBetterAccountManager?.mainAccount)
         return jsonObject
     }
 
     override fun load(jsonElement: JsonElement) {
         val jsonObject: JsonObject = jsonElement as JsonObject
         for (jsonElement2 in jsonObject.getAsJsonArray("Accounts")) {
-            for (accountClass in TarasandeMain.get().screens?.betterScreenAccountManager?.managerAccount?.list!!) {
+            for (accountClass in TarasandeMain.get().screens?.screenBetterAccountManager?.managerAccount?.list!!) {
                 val jsonObject2 = jsonElement2 as JsonObject
                 if (accountClass.getAnnotation(AccountInfo::class.java).name == jsonObject2.get("Type").asString) {
                     val account = accountClass.newInstance().load(jsonObject2.get("Account").asJsonArray)
@@ -86,11 +86,11 @@ class FileAccounts : File("Accounts") {
 
                     val environment = jsonObject2.getAsJsonObject("Environment")
                     account.environment = Environment.create(environment.get("Auth-Host").asString, environment.get("Accounts-Host").asString, environment.get("Session-Host").asString, environment.get("Services-Host").asString, "Custom")
-                    TarasandeMain.get().screens?.betterScreenAccountManager?.accounts?.add(account)
+                    TarasandeMain.get().screens?.screenBetterAccountManager?.accounts?.add(account)
                 }
             }
         }
-        if (jsonObject.has("Main-Account")) TarasandeMain.get().screens?.betterScreenAccountManager?.mainAccount = jsonObject.get("Main-Account").asInt
+        if (jsonObject.has("Main-Account")) TarasandeMain.get().screens?.screenBetterAccountManager?.mainAccount = jsonObject.get("Main-Account").asInt
     }
 
     override fun encrypt(input: String) = String(Base64.getEncoder().encode(encryptCipher?.doFinal(input.toByteArray())))

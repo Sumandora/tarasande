@@ -177,7 +177,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
     fun logIn(account: Account) {
         if (loginThread != null && loginThread?.isAlive!!) {
             try {
-                (loginThread?.runnable as RunnableLogin).aborted = true
+                (loginThread?.runnable as RunnableLogin).cancelled = true
             } catch (exception: IllegalStateException) { // This is an extremely tight case, which shouldn't happen in 99.9% of the cases
                 status = Formatting.RED.toString() + exception.message
                 return
@@ -187,7 +187,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
     }
 
     inner class RunnableLogin(var account: Account) : Runnable {
-        var aborted = false
+        var cancelled = false
             set(value) {
                 if (account.session != null)
                     throw IllegalStateException("Account has already been logged into")
@@ -200,7 +200,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
             try {
                 currentAccount = account
                 account.logIn()
-                if (aborted)
+                if (cancelled)
                     return
                 // This can't be "client" because it is called from ClientMain means it's null at this point in time
                 var updatedUserApiService = true

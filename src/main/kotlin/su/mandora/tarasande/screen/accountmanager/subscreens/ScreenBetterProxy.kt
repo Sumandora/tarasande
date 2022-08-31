@@ -114,12 +114,12 @@ class ScreenBetterProxy(
                             val beginTime = System.currentTimeMillis()
                             socket.connect(inetSocketAddress, 5000)
                             val timeDelta = System.currentTimeMillis() - beginTime
-                            if (TarasandeMain.get().screens?.betterScreenAccountManager?.proxy == proxy) {
+                            if (TarasandeMain.get().screens?.screenBetterAccountManager?.proxy == proxy) {
                                 status = RenderUtil.formattingByHex(RenderUtil.colorInterpolate(Color.green, Color.red.darker(), (timeDelta / 1000.0).coerceAtMost(1.0)).rgb).toString() + "Reached proxy in ${timeDelta}ms"
                                 proxy.ping = timeDelta
                             }
                         } catch (throwable: Throwable) {
-                            if (TarasandeMain.get().screens?.betterScreenAccountManager?.proxy == proxy) {
+                            if (TarasandeMain.get().screens?.screenBetterAccountManager?.proxy == proxy) {
                                 status = when (throwable) {
                                     is SocketTimeoutException -> Formatting.RED.toString() + "Timeout reached, unreachable"
                                     is IOException -> Formatting.RED.toString() + "Failed to reach proxy"
