@@ -8,6 +8,7 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventJump
 import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.EventMovement
+import su.mandora.tarasande.mixin.accessor.IKeyBinding
 import su.mandora.tarasande.mixin.accessor.IVec3d
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueNumber
@@ -51,7 +52,8 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                 if (mc.player?.isOnGround!!) {
                     if (jumpHeight.value > 0.0) {
                         mc.player?.jump()
-                        mc.player?.velocity = mc.player?.velocity?.multiply(1.0, jumpHeight.value, 1.0)
+                        if(!(mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
+                            mc.player?.velocity = mc.player?.velocity?.multiply(1.0, jumpHeight.value, 1.0)
                         val playerVelocityAccessor = mc.player?.velocity as IVec3d
                         playerVelocityAccessor.tarasande_setX(prevVelocity.x)
                         accessor.tarasande_setY(mc.player?.velocity?.y!!)

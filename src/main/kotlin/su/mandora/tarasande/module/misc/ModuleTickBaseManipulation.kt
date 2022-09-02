@@ -123,11 +123,12 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
                         if (prevUnchargePressed)
                             autoChargeDelay.reset()
 
-                        if (chargeKey.isPressed() || (future.value && resyncNegativity.value && shifted < 0L))
+                        if (chargeKey.isPressed())
                             shifted += event.time - prevTime
-                        else if (autoCharge.value && minimum.value > shifted && autoChargeDelay.hasReached(delay.value.toLong())) {
+                        else if (autoCharge.value && minimum.value > shifted && autoChargeDelay.hasReached(delay.value.toLong()))
                             shifted += min(event.time - prevTime, (minimum.value - shifted).toLong())
-                        }
+                        else if(future.value && resyncNegativity.value && shifted < 0L)
+                            shifted += min(event.time - prevTime, -shifted)
                     }
                     if (resyncPositions.value && prevShifted < shifted) {
                         val iRenderTickCounter = (mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter

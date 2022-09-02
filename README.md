@@ -52,7 +52,6 @@
 - Improve BedESP performance (Go inside from outside; see comment in BedESP class)
 - User configs
 - Crystal Aura
-- Replace Spotify with DBus Music
 - Debug Category
 - Forge Faker
 

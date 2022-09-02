@@ -6,6 +6,7 @@ import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
+import su.mandora.tarasande.base.event.Priority
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventKeyBindingIsPressed
@@ -28,6 +29,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         keybinding.add(mc.options.jumpKey)
     }
 
+    @Priority(1) // this has to be overridden by freecam
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventPacket -> {

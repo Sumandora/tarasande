@@ -58,8 +58,8 @@ class ScreenMenu : Screen(Text.of("Menu")) {
             PanelFixedWatermark::class.java,
             PanelFixedHypixelBedwarsOverlay::class.java
         )
-        if (System.getProperty("os.name").contains("windows", true)) {
-            fixedPanels.add(PanelFixedSpotify::class.java)
+        if (System.getProperty("os.name").contains("linux", true)) {
+            fixedPanels.add(PanelFixedNowPlaying::class.java)
         }
         for (panel in fixedPanels) {
             panels.add(panel.declaredConstructors[0].newInstance(0.0, 0.0) as Panel)
@@ -83,7 +83,10 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         if (isClosing) animation = 1.0 - animation
 
         if (isClosing && animation <= 0.0) {
-            removed()
+            panels.forEach { it.onClose() }
+            RenderSystem.recordRenderCall {
+                super.close()
+            }
         }
 
         val color = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
@@ -202,8 +205,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         panels.forEach {
-            if (it.keyPressed(keyCode, scanCode, modifiers))
-                return false
+            if (it.keyPressed(keyCode, scanCode, modifiers)) return false
         }
         val animation = ((System.currentTimeMillis() - screenChangeTime) / openingAnimationLength).coerceAtMost(1.0)
         if (animation != 1.0) return false
@@ -225,14 +227,6 @@ class ScreenMenu : Screen(Text.of("Menu")) {
             screenChangeTime = System.currentTimeMillis()
             isClosing = true
         }
-    }
-
-    override fun removed() {
-        panels.forEach { it.onClose() }
-        RenderSystem.recordRenderCall {
-            super.close()
-        }
-        super.removed()
     }
 
     override fun shouldPause() = false

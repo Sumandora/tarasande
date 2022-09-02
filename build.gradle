@@ -31,7 +31,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
 	// https://mvnrepository.com/artifact/io.netty/netty-handler-proxy
-	implementation 'io.netty:netty-handler-proxy:4.1.79.Final'
+	implementation 'io.netty:netty-handler-proxy:4.1.80.Final'
 }
 
 processResources {
@@ -77,13 +77,19 @@ publishing {
 	}
 }
 
+remapJar {
+	dependsOn shadowJar
+	input.set(shadowJar.archiveFile)
+}
 
 shadowJar {
 	archiveClassifier.set('shadow')
 	compileJava.options.encoding = 'UTF-8'
+
 	dependencies {
-		include(dependency('io.netty:netty-handler-proxy:4.1.79.Final'))
+		include(dependency('io.netty:netty-handler-proxy:4.1.80.Final'))
 	}
+	minimize()
 }
 
 compileKotlin.kotlinOptions.jvmTarget = "17"

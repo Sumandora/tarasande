@@ -42,7 +42,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
         mc.options.perspective = perspective
     }
 
-    @Priority(1) // let all of this stuff get overridden
+    @Priority(5) // let all of this stuff get overridden (inventory move is 1, because we have to take priority on movement keys)
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventCameraOverride -> {
