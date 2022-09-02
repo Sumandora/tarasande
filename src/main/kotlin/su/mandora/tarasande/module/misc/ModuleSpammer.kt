@@ -5,6 +5,7 @@ import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import org.apache.commons.lang3.RandomStringUtils
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
@@ -57,7 +58,7 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
         ChatScreen("").also {
             it.init(mc, mc.window.scaledWidth, mc.window.scaledHeight)
             for (c in text.toCharArray()) it.charTyped(c, 0)
-            it.sendMessage(it.children().first { it is TextFieldWidget }.let { (it as TextFieldWidget).text }, true)
+            it.keyPressed(GLFW.GLFW_KEY_ENTER, 0, 0)
         }
         (mc.player as IClientPlayerEntity).tarasande_setBypassChat(prevBypassChat)
     }

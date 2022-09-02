@@ -60,6 +60,9 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
     private val hopLength = object : ValueNumber(this, "Hop length", 0.0, 500.0, 2000.0, 1.0) {
         override fun isEnabled() = future.value
     }
+    private val resyncNegativity = object : ValueBoolean(this, "Resync negativity", false) {
+        override fun isEnabled() = future.value
+    }
 
     private var prevTime = 0L
 
@@ -120,7 +123,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
                         if (prevUnchargePressed)
                             autoChargeDelay.reset()
 
-                        if (chargeKey.isPressed())
+                        if (chargeKey.isPressed() || (future.value && resyncNegativity.value && shifted < 0L))
                             shifted += event.time - prevTime
                         else if (autoCharge.value && minimum.value > shifted && autoChargeDelay.hasReached(delay.value.toLong())) {
                             shifted += min(event.time - prevTime, (minimum.value - shifted).toLong())

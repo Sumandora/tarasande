@@ -214,25 +214,30 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
         fun getBreakSpeed(blockPos: BlockPos): Pair<Double, Int> {
             val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot ?: return Pair(1.0, -1)
-            val state = MinecraftClient.getInstance().world?.getBlockState(blockPos)
-            if (state?.isAir!! || state.getOutlineShape(MinecraftClient.getInstance().world, blockPos).isEmpty) return Pair(0.0, -1)
-            val hardness = state.getHardness(MinecraftClient.getInstance().world, blockPos)
-            if (hardness <= 0.0f) return Pair(1.0, -1)
-            var bestMult = 0.0f
+            var bestMult = 1.0
             var bestTool = -1
             for (i in 0..8) {
-                MinecraftClient.getInstance().player?.inventory?.selectedSlot = i
-                var mult = MinecraftClient.getInstance().player?.getBlockBreakingSpeed(state)!!
-                if (!MinecraftClient.getInstance().player?.isOnGround!!) {
-                    mult *= 5.0f // bruh
-                }
-                if (bestMult < mult) {
+                val mult = getBreakSpeed(blockPos, i)
+                if (bestMult > mult) {
                     bestTool = i
                     bestMult = mult
                 }
             }
             MinecraftClient.getInstance().player?.inventory?.selectedSlot = origSlot
-            return Pair(1.0 - bestMult / hardness / 30.0, bestTool)
+            return Pair(bestMult, bestTool)
+        }
+
+        fun getBreakSpeed(blockPos: BlockPos, item: Int): Double {
+            val state = MinecraftClient.getInstance().world?.getBlockState(blockPos)
+            if (state?.isAir!! || state.getOutlineShape(MinecraftClient.getInstance().world, blockPos).isEmpty) return 0.0
+            val hardness = state.getHardness(MinecraftClient.getInstance().world, blockPos)
+            if (hardness <= 0.0f) return 1.0
+            MinecraftClient.getInstance().player?.inventory?.selectedSlot = item
+            var mult = MinecraftClient.getInstance().player?.getBlockBreakingSpeed(state)!!
+            if (!MinecraftClient.getInstance().player?.isOnGround!!) {
+                mult *= 5.0f // bruh
+            }
+            return 1.0 - mult / hardness / 30.0
         }
     }
 

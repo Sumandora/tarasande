@@ -54,7 +54,8 @@ class Blur {
 
         TarasandeMain.get().managerEvent?.add { event ->
             if (event is EventScreenRender) {
-                if (MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenMenu) blurScene()
+                if (MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenMenu)
+                    blurScene()
             } else if (event is EventRender2D) {
                 blurScene()
             }
@@ -68,6 +69,7 @@ class Blur {
     fun blurScene(strength: Int? = null) {
         if (!RenderSystem.isOnRenderThread()) return
 
+        GL11.glPushMatrix()
         val texture2D = GL11.glIsEnabled(GL11.GL_TEXTURE_2D)
         GL11.glEnable(GL11.GL_TEXTURE_2D)
         val cullFace = GL11.glIsEnabled(GL11.GL_CULL_FACE)
@@ -142,6 +144,7 @@ class Blur {
 
         if (!texture2D) GL11.glDisable(GL11.GL_TEXTURE_2D)
         if (cullFace) GL11.glEnable(GL11.GL_CULL_FACE)
+        GL11.glPopMatrix()
     }
 
     private fun sample(read: Framebuffer, write: Framebuffer, offset: Float, scale: Float, deltaScale: Float): Framebuffer {

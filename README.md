@@ -54,7 +54,6 @@
 - Crystal Aura
 - Replace Spotify with DBus Music
 - Debug Category
-- No Fall
 - Forge Faker
 
 ## Notes

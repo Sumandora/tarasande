@@ -19,6 +19,11 @@ public class MixinPlayerMoveC2SPacket implements IPlayerMoveC2SPacket {
     @Final
     protected float pitch;
 
+    @Mutable
+    @Shadow
+    @Final
+    protected boolean onGround;
+
     @Override
     public void tarasande_setYaw(float yaw) {
         this.yaw = yaw;
@@ -27,5 +32,10 @@ public class MixinPlayerMoveC2SPacket implements IPlayerMoveC2SPacket {
     @Override
     public void tarasande_setPitch(float pitch) {
         this.pitch = pitch;
+    }
+
+    @Override
+    public void tarasande_setOnGround(boolean onGround) {
+        this.onGround = onGround;
     }
 }

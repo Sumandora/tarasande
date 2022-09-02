@@ -18,6 +18,9 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool for breaking a
                 return@Consumer
             val blockPos = (mc.crosshairTarget as BlockHitResult).blockPos
             val pair = ModuleBedESP.Breaker.getBreakSpeed(blockPos)
+            val currentSpeed = ModuleBedESP.Breaker.getBreakSpeed(blockPos, mc.player?.inventory?.selectedSlot ?: return@Consumer)
+            if(currentSpeed == pair.first) return@Consumer
+
             val bestTool = pair.second
             if (bestTool == -1) return@Consumer
             mc.player?.inventory?.selectedSlot = bestTool
