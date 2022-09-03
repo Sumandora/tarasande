@@ -9,6 +9,7 @@ import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.*
 import net.minecraft.util.registry.Registry
 import net.minecraft.util.shape.VoxelShapes
+import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.event.Priority
 import su.mandora.tarasande.base.module.Module
@@ -395,6 +396,8 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             }
 
             is EventGoalMovement -> {
+                if(!TarasandeMain.get().clientValues?.correctMovement?.isSelected(3)!!)
+                    return@Consumer
                 val rad = Math.toRadians(round(mc.player?.yaw!! / 45.0f) * 45.0f + 90.0)
                 event.yaw = RotationUtil.getYaw(Vec3d(cos(rad), 0.0, sin(rad)).multiply(3.0 /* some space*/)).toFloat()
             }

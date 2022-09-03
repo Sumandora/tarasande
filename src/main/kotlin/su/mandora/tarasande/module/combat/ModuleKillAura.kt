@@ -45,6 +45,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val mode = ValueMode(this, "Mode", false, "Single", "Multi")
     private val priority = ValueMode(this, "Priority", false, "Distance", "Health", "Hurt time", "FOV")
     private val fov = ValueNumber(this, "FOV", 0.0, 255.0, 255.0, 1.0)
+    private val fakeRotationFov = ValueBoolean(this, "Fake rotation FOV", false)
     private val reach = ValueNumberRange(this, "Reach", 0.1, 3.0, 4.0, 6.0, 0.1)
     private val clickSpeedUtil = ClickSpeedUtil(this, { true }) // for setting order
     private val rayTrace = ValueBoolean(this, "Ray trace", false)
@@ -102,7 +103,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val comparator: Comparator<Pair<Entity, Vec3d>> = Comparator.comparing {
         when {
             priority.isSelected(0) -> {
-                mc.player?.eyePos?.squaredDistanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, it.first.boundingBox.expand(it.first.targetingMargin.toDouble())))!!
+                mc.player?.eyePos?.squaredDistanceTo(getBestAimPoint(it.first.boundingBox.expand(it.first.targetingMargin.toDouble())))!!
             }
 
             priority.isSelected(1) -> {
@@ -116,7 +117,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
 
             priority.isSelected(3) -> {
-                RotationUtil.getRotations(mc.player?.eyePos!!, getBestAimPoint(it.first.boundingBox)).fov(RotationUtil.fakeRotation ?: Rotation(mc.player!!))
+                RotationUtil.getRotations(mc.player?.eyePos!!, getBestAimPoint(it.first.boundingBox)).fov(fovRotation())
             }
 
             else -> 0.0
@@ -139,6 +140,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         lastFlex = null
         targets.clear()
     }
+
+    private fun fovRotation() = if (fakeRotationFov.value && RotationUtil.fakeRotation != null) RotationUtil.fakeRotation!! else Rotation(mc.player!!)
 
     private fun hasShield(entity: Entity): Boolean {
         if (entity is PlayerEntity) {
@@ -168,12 +171,12 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     }
                     val bestAimPoint = getBestAimPoint(boundingBox)
                     if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
-                    if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(currentRot) > fov.value) continue
+                    if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(fovRotation()) > fov.value) continue
                     val aimPoint = if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() != 0.0f) {
                         mc.player?.eyePos?.add(currentRot.forwardVector(0.01))!!
                     } else {
                         // aim point calculation maybe slower, only run it if the range check is actually able to succeed under best conditions
-                        getAimPoint(boundingBox, entity) ?: continue
+                        getAimPoint(boundingBox, entity)
                     }
                     // in case the eyepos is inside the boundingbox the next 2 checks will always succeed, but keeping them might prevent some retarded situation which is going to be added with an update
                     if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
@@ -210,7 +213,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     }
                 } else {
                     val delta = (lowestHurttime - flexHurtTime.value) / (1.0 - flexHurtTime.value)
-                    if(lastFlex == null) {
+                    if (lastFlex == null) {
                         lastFlex = Rotation(ThreadLocalRandom.current().nextDouble(-flexTurn.value, flexTurn.value).toFloat(), ThreadLocalRandom.current().nextDouble(-flexTurn.value / 2, flexTurn.value / 2).toFloat())
                     }
                     finalRot = finalRot.smoothedTurn(Rotation(finalRot.yaw + lastFlex?.yaw!!, lastFlex?.pitch!!), delta)
@@ -376,7 +379,17 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
 
     private fun getBestAimPoint(box: Box): Vec3d {
-        return MathUtil.closestPointToBox(mc.player?.eyePos!!, box)
+        val start = mc.player?.eyePos!!
+        if (
+            box.minX < start.x && start.x < box.maxX &&
+            box.minZ < start.z && start.z < box.maxZ
+        )
+            return Vec3d(
+                box.minX + (box.maxX - box.minX) / 2.0,
+                MathHelper.clamp(start.y, box.minY, box.maxY),
+                box.minZ + (box.maxZ - box.minZ) / 2.0
+            )
+        return MathUtil.closestPointToBox(start, box)
     }
 
     private fun getAimPoint(box: Box, entity: LivingEntity): Vec3d {
@@ -419,8 +432,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             // Humans always try to get to the middle
             val center = box.center
-            val dist = MathUtil.getBias(mc.player?.eyePos?.squaredDistanceTo(aimPoint)!! / (reach.maxValue * reach.maxValue), 0.65) // I have no idea why this works and looks like it does, but it's good, so why remove it then
-            aimPoint = aimPoint.add((center.x - aimPoint.x) * (1 - dist), (center.y - aimPoint.y) * dist * 0.1 /* Humans dislike aiming up and down */, (center.z - aimPoint.z) * (1 - dist))
+            val dist = 1.0 - MathUtil.getBias(mc.player?.eyePos?.distanceTo(aimPoint)!! / reach.maxValue, 0.65) // I have no idea why this works and looks like it does, but it's good, so why remove it then
+            aimPoint = aimPoint.add((center.x - aimPoint.x) * dist, (center.y - aimPoint.y) * (1.0 - dist) * 0.4 /* Humans dislike aiming up and down */, (center.z - aimPoint.z) * dist)
 
             // Humans can't hold their hands still
             val actualVelocity = Vec3d(mc.player?.prevX!! - mc.player?.x!!, mc.player?.prevY!! - mc.player?.y!!, mc.player?.prevZ!! - mc.player?.z!!)

@@ -1,5 +1,6 @@
 package su.mandora.tarasande.module.render
 
+import net.minecraft.client.input.KeyboardInput
 import net.minecraft.client.option.Perspective
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
@@ -27,6 +28,8 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
     private var perspective: Perspective? = null
     private var yMotion = 0.0
 
+    private val myInput = KeyboardInput(mc.options)
+
     override fun onEnable() {
         if (mc.player != null) {
             position = mc.gameRenderer.camera.pos
@@ -42,7 +45,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
         mc.options.perspective = perspective
     }
 
-    @Priority(5) // let all of this stuff get overridden (inventory move is 1, because we have to take priority on movement keys)
+    @Priority(5) // let all of this stuff get overridden
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventCameraOverride -> {
@@ -71,15 +74,18 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
                 if (event.state == EventUpdate.State.PRE) {
                     if (velocity != null)
                         position = position?.add(velocity)
+                    myInput.tick(false, 1.0f)
                 }
             }
 
             is EventInput -> {
                 if (rotation == null)
                     onEnable()
-                velocity = (mc.player as IEntity).tarasande_invokeMovementInputToVelocity(Vec3d(event.movementSideways.toDouble(), 0.0, event.movementForward.toDouble()), speed.value.toFloat(), rotation?.yaw!!)
-                velocity = Vec3d(velocity?.x!!, yMotion, velocity?.z!!)
-                yMotion = 0.0
+                if(event.input == myInput) {
+                    velocity = (mc.player as IEntity).tarasande_invokeMovementInputToVelocity(Vec3d(event.movementSideways.toDouble(), 0.0, event.movementForward.toDouble()), speed.value.toFloat(), rotation?.yaw!!)
+                    velocity = Vec3d(velocity?.x!!, yMotion, velocity?.z!!)
+                    yMotion = 0.0
+                }
                 event.cancelled = true
             }
 

@@ -21,18 +21,12 @@ import su.mandora.tarasande.util.math.rotation.RotationUtil;
 @Mixin(LivingEntityRenderer.class)
 public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> {
 
-    float prevBodyYaw;
-    float prevPrevBodyYaw;
-
     protected MixinLivingEntityRenderer(EntityRendererFactory.Context ctx) {
         super(ctx);
     }
 
     @Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"))
     public void injectPreRender(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
-        prevPrevBodyYaw = livingEntity.prevBodyYaw;
-        prevBodyYaw = livingEntity.bodyYaw;
-
         if (livingEntity == MinecraftClient.getInstance().player && RotationUtil.INSTANCE.getFakeRotation() != null)
             livingEntity.bodyYaw = livingEntity.prevBodyYaw = RotationUtil.INSTANCE.getFakeRotation().getYaw();
 
@@ -42,14 +36,7 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
     @Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/EntityRenderer;render(Lnet/minecraft/entity/Entity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", shift = At.Shift.BEFORE))
     public void injectPostRender(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
         TarasandeMain.Companion.get().getManagerEvent().call(new EventRenderEntity(livingEntity, EventRenderEntity.State.POST));
-        livingEntity.bodyYaw = prevBodyYaw;
-        livingEntity.prevBodyYaw = prevPrevBodyYaw;
     }
-
-//    @Redirect(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerpAngleDegrees(FFF)F"))
-//    public float hookedLerpAngleDegrees(float delta, float start, float end) {
-//        return end;
-//    }
 
     @Redirect(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/EntityModel;setAngles(Lnet/minecraft/entity/Entity;FFFFF)V"))
     public <E extends Entity> void hookedSetAngles(EntityModel<E> entityModel, E entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {

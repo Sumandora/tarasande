@@ -82,6 +82,10 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         return list.distinct()
     }
 
+    override fun onDisable() {
+        bedDatas.clear()
+    }
+
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventUpdate -> {
@@ -183,18 +187,20 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
             }
         }
 
+        private val pathFinder = PathFinder(object : Function2<ClientWorld?, Node, Boolean> {
+            override fun invoke(world: ClientWorld?, node: Node) = true
+        }, cost = costCalc)
+
         fun findSolution(outstanders: List<BlockPos>, defenders: List<BlockPos>, beds: Array<BlockPos>, maxProcessingTime: Long): List<Node>? {
-            var bestWay: ArrayList<Node>? = null
+            var bestWay: List<Node>? = null
             val begin = System.currentTimeMillis()
             for (outstander in outstanders) {
-                if (System.currentTimeMillis() - begin > maxProcessingTime) return null
+                if (System.currentTimeMillis() - begin > maxProcessingTime) return bestWay
 
                 val bestBed = beds.minByOrNull { it.getSquaredDistance(outstander) } ?: continue
                 val beginNode = Node(outstander.x, outstander.y, outstander.z)
                 val endNode = Node(bestBed.x, bestBed.y, bestBed.z)
-                val way = PathFinder.findPath(beginNode, endNode, object : Function2<ClientWorld?, Node, Boolean> {
-                    override fun invoke(world: ClientWorld?, node: Node) = true
-                }, cost = costCalc, maxTime = maxProcessingTime) ?: break // timeout
+                val way = pathFinder.findPath(beginNode, endNode, maxProcessingTime) ?: break // timeout
                 if (bestWay == null) bestWay = way
                 else {
                     val bestG = bestWay[bestWay.size - 1].g
@@ -204,7 +210,8 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                         bestG == newG -> {
                             val bestPos = bestWay[0]
                             val newPos = way[0]
-                            if (MinecraftClient.getInstance().player?.squaredDistanceTo(bestPos.x.toDouble(), bestPos.y.toDouble(), bestPos.z.toDouble())!! > MinecraftClient.getInstance().player?.squaredDistanceTo(newPos.x.toDouble(), newPos.y.toDouble(), newPos.z.toDouble())!!) bestWay = way
+                            if (MinecraftClient.getInstance().player?.squaredDistanceTo(bestPos.x.toDouble(), bestPos.y.toDouble(), bestPos.z.toDouble())!! > MinecraftClient.getInstance().player?.squaredDistanceTo(newPos.x.toDouble(), newPos.y.toDouble(), newPos.z.toDouble())!!)
+                                bestWay = way
                         }
                     }
                 }

@@ -43,7 +43,6 @@
     "connection.MixinClientConnection",
     "connection.MixinClientConnectionInitChannel",
     "connection.MixinClientPlayNetworkHandler",
-    "multiconnect.MixinConnectionHandler",
     "opengl.MixinGameRenderer",
     "opengl.MixinWindow"
   ],

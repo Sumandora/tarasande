@@ -18,7 +18,11 @@ class PanelFixedNowPlaying(x: Double, y: Double) : PanelFixed("Now playing", x, 
         val t = Thread {
             while(true) {
                 val lines = getCurrentTrack().split("\n")
-                currTrack = lines[lines.indexOfFirst { it.contains("string \"xesam:title\"") } + 1].split("string \"")[1].let { it.substring(0, it.length - 1) } // this calculation is the most retarded shit I've ever wrote bruh
+                val titleLine = lines.indexOfFirst { it.contains("string \"xesam:title\"") }
+                if(titleLine == -1)
+                    currTrack = null
+                else
+                    currTrack = lines[lines.indexOfFirst { it.contains("string \"xesam:title\"") } + 1].split("string \"")[1].let { it.substring(0, it.length - 1) } // this calculation is the most retarded shit I've ever wrote bruh
                 Thread.sleep(1000L)
             }
         }

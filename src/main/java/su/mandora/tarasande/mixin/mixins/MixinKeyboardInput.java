@@ -15,7 +15,7 @@ public class MixinKeyboardInput extends Input {
 
     @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/KeyboardInput;jumping:Z"))
     public void injectTick(boolean slowDown, float f, CallbackInfo ci) {
-        EventInput eventInput = new EventInput(this.movementForward, this.movementSideways);
+        EventInput eventInput = new EventInput(this, this.movementForward, this.movementSideways);
         TarasandeMain.Companion.get().getManagerEvent().call(eventInput);
 
         this.pressingForward = this.pressingBack = this.pressingLeft = this.pressingRight = false;

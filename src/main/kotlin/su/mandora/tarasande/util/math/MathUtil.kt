@@ -8,15 +8,6 @@ import net.minecraft.util.math.Vec3d
 object MathUtil {
 
     fun closestPointToBox(start: Vec3d, box: Box): Vec3d {
-        if (
-            box.minX < start.x && start.x < box.maxX &&
-            box.minZ < start.z && start.z < box.maxZ
-        )
-            return Vec3d(
-                box.minX + (box.maxX - box.minX) / 2.0,
-                MathHelper.clamp(start.y, box.minY, box.maxY),
-                box.minZ + (box.maxZ - box.minZ) / 2.0
-            )
         return Vec3d(
             MathHelper.clamp(start.x, box.minX, box.maxX),
             MathHelper.clamp(start.y, box.minY, box.maxY),

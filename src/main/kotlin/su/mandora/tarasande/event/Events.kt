@@ -1,5 +1,6 @@
 package su.mandora.tarasande.event
 
+import net.minecraft.client.input.Input
 import net.minecraft.client.network.PlayerListEntry
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.render.Camera
@@ -73,7 +74,7 @@ class EventVelocity(var velocityX: Double, var velocityY: Double, var velocityZ:
     }
 }
 
-class EventInput(var movementForward: Float, var movementSideways: Float) : Event(true)
+class EventInput(val input: Input, var movementForward: Float, var movementSideways: Float) : Event(true)
 class EventJump(var yaw: Float, val state: State) : Event(false) {
     enum class State {
         PRE, POST
@@ -152,3 +153,4 @@ class EventFogColor(var start: Float, var end: Float, var red: Float, var green:
 class EventClearColor(var red: Float, var green: Float, var blue: Float) : Event(false)
 class EventPlayerListName(val playerListEntry: PlayerListEntry, var displayName: Text) : Event(false)
 class EventRotationSet(val yaw: Float, val pitch: Float) : Event(false)
+class EventUpdateTargetedEntity : Event(false)

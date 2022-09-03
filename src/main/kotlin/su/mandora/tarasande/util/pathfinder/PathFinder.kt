@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import java.util.PriorityQueue
 import kotlin.math.abs
 import kotlin.math.round
 import java.util.function.Function as JavaFunction
@@ -12,57 +13,49 @@ import java.util.function.Function as JavaFunction
  * A* Path Finding algorithm
  */
 
-object PathFinder {
-
-    private val manhattan = object : Function2<Node, Node, Double> {
-        override fun invoke(current: Node, target: Node): Double {
-            val delta = target.subtract(current)
-            return (abs(delta.x) + abs(delta.y) + abs(delta.z)).toDouble()
-        }
+private val manhattan = object : Function2<Node, Node, Double> {
+    override fun invoke(current: Node, target: Node): Double {
+        val delta = target.subtract(current)
+        return (abs(delta.x) + abs(delta.y) + abs(delta.z)).toDouble()
     }
+}
 
-    private val oneCost = object : Function2<Node, Node, Double> {
-        override fun invoke(current: Node, movement: Node): Double {
-            return 1.0
-        }
+private val oneCost = object : Function2<Node, Node, Double> {
+    override fun invoke(current: Node, movement: Node): Double {
+        return 1.0
     }
+}
 
-    private val allowedBlock = object : Function2<ClientWorld?, Node, Boolean> {
-        override fun invoke(world: ClientWorld?, node: Node): Boolean {
-            return world?.isAir(BlockPos(node.x, node.y, node.z))!! && !world.isAir(BlockPos(node.x, node.y - 1, node.z))
-        }
+private val notAir = object : Function2<ClientWorld?, Node, Boolean> {
+    override fun invoke(world: ClientWorld?, node: Node): Boolean {
+        return world?.isAir(BlockPos(node.x, node.y, node.z))!! && !world.isAir(BlockPos(node.x, node.y - 1, node.z))
     }
+}
 
-    private val never = JavaFunction<Node, Boolean> { false }
+private val never = JavaFunction<Node, Boolean> { false }
 
-    fun findPath(start: Vec3d, target: Vec3d, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost, maxTime: Long = 0L, abort: JavaFunction<Node, Boolean> = never): ArrayList<Vec3d>? {
+class PathFinder(private val allowedBlock: Function2<ClientWorld?, Node, Boolean> = notAir, private val heuristic: Function2<Node, Node, Double> = manhattan, private val cost: Function2<Node, Node, Double> = oneCost, private val abort: JavaFunction<Node, Boolean> = never) {
+
+    fun findPath(start: Vec3d, target: Vec3d, maxTime: Long? = null): List<Vec3d>? {
         val mappedPath = ArrayList<Vec3d>()
-        val path = findPath(Node(round(start.x).toInt(), round(start.y).toInt(), round(start.z).toInt()), Node(round(target.x).toInt(), round(target.y).toInt(), round(target.z).toInt()), allowedBlock, heuristic, cost, maxTime, abort) ?: return null
+        val path = findPath(Node(round(start.x).toInt(), round(start.y).toInt(), round(start.z).toInt()), Node(round(target.x).toInt(), round(target.y).toInt(), round(target.z).toInt()), maxTime) ?: return null
         for (vec in path) mappedPath.add(Vec3d(vec.x + 0.5, vec.y + 0.5, vec.z + 0.5))
         return mappedPath
     }
 
-    fun findPath(start: Node, target: Node, allowedBlock: Function2<ClientWorld?, Node, Boolean> = this.allowedBlock, heuristic: Function2<Node, Node, Double> = manhattan, cost: Function2<Node, Node, Double> = oneCost, maxTime: Long = 0L, abort: JavaFunction<Node, Boolean> = never): ArrayList<Node>? {
-        start.g = cost(start, start)
-        start.h = heuristic(start, start)
-        start.f = start.g + start.h
+    fun findPath(start: Node, target: Node, maxTime: Long? = null): List<Node>? {
         val open = ArrayList<Node>()
         val closed = ArrayList<Node>()
         open.add(start)
 
         if (start == target || abort.apply(start)) {
-            return open
+            return open.toList()
         }
 
         var current: Node? = null
         val begin = System.currentTimeMillis()
-        while ((maxTime == 0L || System.currentTimeMillis() - begin <= maxTime) && open.isNotEmpty()) {
-            current = null
-            for (move in open) {
-                if (current == null || move.f < current.f) {
-                    current = move
-                }
-            }
+        while ((maxTime == null || System.currentTimeMillis() - begin <= maxTime) && open.isNotEmpty()) {
+            current = open.minByOrNull { it.f }
 
             if (current == null || current == target || abort.apply(current)) {
                 break
@@ -78,7 +71,8 @@ object PathFinder {
                 var movementPossibility = movementPossibility
                 // hacky fix because we don't have a set grid size
                 for (movementPossibility2 in open) {
-                    if (movementPossibility2 == movementPossibility) movementPossibility = movementPossibility2
+                    if (movementPossibility2 == movementPossibility)
+                        movementPossibility = movementPossibility2
                 }
 
                 val tempG = current.g + cost.invoke(current, movementPossibility)
@@ -102,7 +96,7 @@ object PathFinder {
             }
         }
 
-        return /*if (current == null) null else*/ reconstructPath(current ?: return null)
+        return reconstructPath(current ?: return null)
     }
 
     private fun reconstructPath(current: Node): ArrayList<Node> {
@@ -127,7 +121,7 @@ object PathFinder {
 }
 
 
-class Node(var x: Int, var y: Int, var z: Int) {
+class Node(var x: Int, var y: Int, var z: Int) : Comparable<Node> {
     var g = 0.0
     var h = 0.0
     var f = 0.0
@@ -140,6 +134,8 @@ class Node(var x: Int, var y: Int, var z: Int) {
     fun subtract(other: Node): Node {
         return Node(other.x - x, other.y - y, other.z - z)
     }
+
+    override fun compareTo(other: Node) = f.compareTo(other.f)
 
     override fun equals(other: Any?): Boolean {
         return other is Node && other.x == x && other.y == y && other.z == z
