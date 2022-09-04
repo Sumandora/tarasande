@@ -13,17 +13,18 @@ import su.mandora.tarasande.event.EventRender2D
 import su.mandora.tarasande.event.EventScreenRender
 import su.mandora.tarasande.screen.menu.ScreenMenu
 import su.mandora.tarasande.util.render.framebuffer.FramebufferWrapped
+import su.mandora.tarasande.util.render.shader.Program
 import su.mandora.tarasande.util.render.shader.Shader
 
 class Blur {
-    private val upsample = Shader("blur/upsample", "default")
-    private val downsample = Shader("blur/downsample", "default")
+    private val upsample = Program(Shader("blur/upsample.frag", GL20.GL_FRAGMENT_SHADER), Shader("default.vert", GL20.GL_VERTEX_SHADER))
+    private val downsample = Program(Shader("blur/downsample.frag", GL20.GL_FRAGMENT_SHADER), Shader("default.vert", GL20.GL_VERTEX_SHADER))
 
     private val shapesFramebuffer = FramebufferWrapped()
     private val alternativeFramebuffer = FramebufferWrapped()
     private val blurredFramebuffer = FramebufferWrapped()
 
-    private val cutoutShader = Shader("cutout", "default")
+    private val cutoutShader = Program(Shader("cutout.frag", GL20.GL_FRAGMENT_SHADER), Shader("default.vert", GL20.GL_VERTEX_SHADER))
 
     var kawasePasses: ArrayList<Pair<Float, Float>>? = null
 

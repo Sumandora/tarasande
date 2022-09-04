@@ -5,47 +5,27 @@ import org.lwjgl.opengl.GL20.*
 import java.io.IOException
 import java.util.*
 
-class Shader(fragment: String, vertex: String) {
+class Shader(private val source: String, type: Int) {
 
-    private var programId = 0
-    private val uniformLocations = HashMap<String, Int>()
+    val id = glCreateShader(type)
 
     init {
-        val fragmentId: Int = glCreateShader(GL_FRAGMENT_SHADER)
-        val vertexId: Int = glCreateShader(GL_VERTEX_SHADER)
         try {
-            glShaderSource(fragmentId, String(IOUtils.toByteArray(Objects.requireNonNull(Shader::class.java.getResourceAsStream("$fragment.frag")))))
-            glShaderSource(vertexId, String(IOUtils.toByteArray(Objects.requireNonNull(Shader::class.java.getResourceAsStream("$vertex.vert")))))
+            glShaderSource(id, String(IOUtils.toByteArray(Objects.requireNonNull(Shader::class.java.getResourceAsStream("$source")))))
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        glCompileShader(fragmentId)
-        if (glGetShaderi(fragmentId, GL_COMPILE_STATUS) != GL_TRUE) error("$fragment " + glGetShaderInfoLog(fragmentId))
-        glCompileShader(vertexId)
-        if (glGetShaderi(vertexId, GL_COMPILE_STATUS) != GL_TRUE) error("$vertex " + glGetShaderInfoLog(vertexId))
-        programId = glCreateProgram()
-        glAttachShader(programId, fragmentId)
-        glAttachShader(programId, vertexId)
-        glLinkProgram(programId)
-        if (glGetProgrami(programId, GL_LINK_STATUS) != GL_TRUE) error("$fragment $vertex " + glGetProgramInfoLog(programId))
-        glValidateProgram(programId)
-        if (glGetProgrami(programId, GL_VALIDATE_STATUS) != GL_TRUE) error("$fragment $vertex " + glGetProgramInfoLog(programId))
-        glDeleteShader(fragmentId)
-        if (glGetShaderi(fragmentId, GL_DELETE_STATUS) != GL_TRUE) error("$fragment $vertex " + glGetShaderInfoLog(fragmentId))
-        glDeleteShader(vertexId)
-        if (glGetShaderi(vertexId, GL_DELETE_STATUS) != GL_TRUE) error("$fragment $vertex " + glGetShaderInfoLog(vertexId))
+
+        glCompileShader(id)
+        if (glGetShaderi(id, GL_COMPILE_STATUS) != GL_TRUE)
+            error("$source " + glGetShaderInfoLog(id))
+
     }
 
-    fun bindProgram(): Int {
-        val prevProgramId: Int = glGetInteger(GL_CURRENT_PROGRAM)
-        glUseProgram(programId)
-        return prevProgramId
-    }
-
-    fun getUniformLocation(uniformName: String): Int {
-        return uniformLocations.computeIfAbsent(uniformName) {
-            glGetUniformLocation(programId, uniformName)
-        }
+    fun delete() {
+        glDeleteShader(id)
+        if (glGetShaderi(id, GL_DELETE_STATUS) != GL_TRUE)
+            error("$source " + glGetShaderInfoLog(id))
     }
 
 }
