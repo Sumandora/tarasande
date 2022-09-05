@@ -81,7 +81,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
 
     })
 
-    internal fun predict(itemStack: ItemStack): ArrayList<Vec3d> {
+    fun predict(itemStack: ItemStack, rotation: Rotation?): ArrayList<Vec3d> {
         val projectileItem = projectileItems.first { it.isSame(itemStack.item) }
         (mc.world as IWorld).tarasande_setIsClient(false)
         val path = ArrayList<Vec3d>()
@@ -160,9 +160,9 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
 
         val prevRotation = Rotation(mc.player!!)
         val prevVelocity = Vec3d(0.0, 0.0, 0.0).also { (it as IVec3d).tarasande_copy(mc.player?.velocity) }
-        if (RotationUtil.fakeRotation != null) {
-            mc.player?.yaw = RotationUtil.fakeRotation?.yaw!!
-            mc.player?.pitch = RotationUtil.fakeRotation?.pitch!!
+        if (rotation != null) {
+            mc.player?.yaw = rotation.yaw
+            mc.player?.pitch = rotation.pitch
         }
         if (!predictVelocity.value) {
             mc.player?.velocity = Vec3d.ZERO
@@ -197,7 +197,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
                 RenderSystem.enableBlend()
                 RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
                 RenderSystem.disableCull()
-                GL11.glEnable(GL11.GL_LINE_SMOOTH)
+                //GL11.glEnable(GL11.GL_LINE_SMOOTH)
                 RenderSystem.disableDepthTest()
                 event.matrices.push()
                 val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
@@ -206,14 +206,14 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
                 val bufferBuilder = Tessellator.getInstance().buffer
                 bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
                 val matrix = event.matrices.peek()?.positionMatrix!!
-                val path = predict(stack!!)
+                val path = predict(stack!!, RotationUtil.fakeRotation)
                 for (vec in path) {
                     bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).color(1f, 1f, 1f, 1f).next()
                 }
                 BufferRenderer.drawWithShader(bufferBuilder.end())
                 event.matrices.pop()
                 RenderSystem.enableDepthTest()
-                GL11.glEnable(GL11.GL_LINE_SMOOTH)
+                //GL11.glEnable(GL11.GL_LINE_SMOOTH)
                 RenderSystem.enableCull()
                 RenderSystem.disableBlend()
             }

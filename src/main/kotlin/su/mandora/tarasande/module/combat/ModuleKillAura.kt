@@ -199,9 +199,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 val target = targets[0]
 
                 val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, target.second)
-                val smoothedRot = currentRot.smoothedTurn(targetRot, if (aimSpeed.minValue == 1.0 && aimSpeed.maxValue == 1.0) 1.0
-                else MathHelper.clamp((if (aimSpeed.minValue == aimSpeed.maxValue) aimSpeed.minValue
-                else ThreadLocalRandom.current().nextDouble(aimSpeed.minValue, aimSpeed.maxValue)) * RenderUtil.deltaTime * 0.05, 0.0, 1.0))
+                val smoothedRot = currentRot.smoothedTurn(targetRot, aimSpeed)
                 var finalRot = smoothedRot
 
                 val lowestHurttime = targets.filter { it.first is LivingEntity && (it.first as LivingEntity).maxHurtTime > 0 }.minOfOrNull { val livingEntity = it.first as LivingEntity; livingEntity.hurtTime / livingEntity.maxHurtTime.toFloat() }
@@ -378,7 +376,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         mc.crosshairTarget = original
     }
 
-    private fun getBestAimPoint(box: Box): Vec3d {
+    fun getBestAimPoint(box: Box): Vec3d {
         val start = mc.player?.eyePos!!
         if (
             box.minX < start.x && start.x < box.maxX &&

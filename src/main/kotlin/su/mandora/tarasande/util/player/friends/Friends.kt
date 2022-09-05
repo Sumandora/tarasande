@@ -7,6 +7,7 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.event.EventIsEntityAttackable
 import su.mandora.tarasande.event.EventPlayerListName
 import su.mandora.tarasande.event.EventTagName
+import su.mandora.tarasande.module.misc.ModuleNoFriends
 
 class Friends {
 
@@ -16,7 +17,11 @@ class Friends {
         TarasandeMain.get().managerEvent?.add { event ->
             when (event) {
                 is EventIsEntityAttackable -> {
-                    if (event.attackable && event.entity != null && event.entity is PlayerEntity) if (friends.any { it.first == event.entity.gameProfile }) event.attackable = false
+                    if(TarasandeMain.get().managerModule?.get(ModuleNoFriends::class.java)?.enabled == true)
+                        return@add
+                    if (event.attackable && event.entity != null && event.entity is PlayerEntity)
+                        if (friends.any { it.first == event.entity.gameProfile })
+                            event.attackable = false
                 }
 
                 is EventTagName -> {

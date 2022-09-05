@@ -43,7 +43,7 @@
 - Elytra Flight
 - Baritone Sprint Jump
 - More Anti Bots (Mode which checks if the entity tries to stay out of the line of sight)
-- Inventory management
+- Inventory Cleaner & Auto Armor
 - KillAura: Simulate Damage in case cooldown isn't gone but full dmg isn't needed to kill somebody
 - PvP-Bot for Practice Game Modes
 - MidClick (alias prompt with screen and callback?)
@@ -54,6 +54,19 @@
 - Crystal Aura
 - Debug Category
 - Forge Faker
+- Anti Vanish
+- Resource Pack Spoofer
+- Auto Soup&Pot
+- TNT Block
+- Air stuck
+- Anti Fall
+- Fast Use & Bow
+- Phase
+- Step
+- Parkour / Edge Jump
+- X-Ray / BlockESP
+- NameProtect
+- 
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

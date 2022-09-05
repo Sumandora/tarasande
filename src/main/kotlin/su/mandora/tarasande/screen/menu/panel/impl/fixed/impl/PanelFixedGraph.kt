@@ -13,15 +13,15 @@ class PanelFixedGraph(private val graph: Graph, x: Double, y: Double) : PanelFix
 
     private val values = ArrayList<Number>()
 
-    private var ints: Boolean = false
-    private var current: Double = 0.0
-    private var min: Double = 0.0
-    private var max: Double = 0.0
+    private var ints = false
+    private var current = 0.0
+    private var min = 0.0
+    private var max = 0.0
 
-    private var graphMinWidth: Double = 0.0
-    private var graphMaxWidth: Double = 0.0
-    private var currentWidth: Double = 0.0
-    private var finalWidth: Double = 0.0
+    private var graphMinWidth = 0.0
+    private var graphMaxWidth = 0.0
+    private var currentWidth = 0.0
+    private var finalWidth = 0.0
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         if (values.isEmpty()) {

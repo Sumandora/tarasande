@@ -264,14 +264,12 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
 
                     val diagonal = abs(round(mc.player?.yaw!! / 90) * 90 - mc.player?.yaw!!) > 22.5
                     if (!diagonal)
-                        targetRot.yaw += goalYaw.value.toFloat()
+                        targetRot.yaw += (goalYaw.value * (45.0 / 60.0)).toFloat() // those are not triangles anymore :c
 
                     lastRotation = targetRot
                 }
 
-                event.rotation = currentRot.smoothedTurn(lastRotation!!, if (aimSpeed.minValue == 1.0 && aimSpeed.maxValue == 1.0) 1.0
-                else MathHelper.clamp((if (aimSpeed.minValue == aimSpeed.maxValue) aimSpeed.minValue
-                else ThreadLocalRandom.current().nextDouble(aimSpeed.minValue, aimSpeed.maxValue)) * RenderUtil.deltaTime * 0.05, 0.0, 1.0)).correctSensitivity()
+                event.rotation = currentRot.smoothedTurn(lastRotation!!, aimSpeed).correctSensitivity()
 
                 if (lockView.value) {
                     mc.player?.yaw = event.rotation.yaw

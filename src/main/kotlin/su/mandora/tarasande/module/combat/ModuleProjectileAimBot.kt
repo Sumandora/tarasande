@@ -1,23 +1,25 @@
 package su.mandora.tarasande.module.combat
 
-import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.Entity
 import net.minecraft.item.ArrowItem
 import net.minecraft.item.BowItem
 import net.minecraft.item.CrossbowItem
 import net.minecraft.item.ItemStack
-import net.minecraft.util.math.MathHelper
+import net.minecraft.util.math.Direction
+import net.minecraft.util.math.Vec3d
+import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.mixin.accessor.ICrossbowItem
+import su.mandora.tarasande.module.render.ModuleTrajectories
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
-import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.ValueBoolean
+import su.mandora.tarasande.value.ValueNumber
 import su.mandora.tarasande.value.ValueNumberRange
-import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import kotlin.math.atan2
 import kotlin.math.sqrt
@@ -26,6 +28,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
 
     private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.1, 1.0, 1.0, 1.0, 0.1)
     private val lockView = ValueBoolean(this, "Lock view", false)
+    private val predictionAmount = ValueNumber(this, "Prediction amount", 0.0, 1.0, 2.0, 0.1)
 
     private val gravity = 0.006
 
@@ -38,7 +41,14 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
         val velocity = calcVelocity(stack)
         val root = sqrt(velocity * velocity * velocity * velocity - gravity * (gravity * dist * dist + 2 * deltaY * velocity * velocity))
         // Use the negated one first, because it's usually better
-        return -Math.toDegrees(atan2(velocity * velocity - root, gravity * dist))
+        return -Math.toDegrees(atan2(velocity * velocity /*+/-*/- root, gravity * dist))
+    }
+
+    private fun deadReckoning(stack: ItemStack, entity: Entity, rotation: Rotation): Vec3d {
+        val predicted = TarasandeMain.get().managerModule?.get(ModuleTrajectories::class.java)?.predict(stack, rotation)!!
+        if(predicted.size <= 0) return entity.boundingBox.center
+        val prev = Vec3d(entity.prevX, entity.prevY, entity.prevZ)
+        return entity.boundingBox.center.add(entity.pos?.subtract(prev)?.withAxis(Direction.Axis.Y, 0.0)?.multiply(predicted.size.toDouble() * predictionAmount.value))
     }
 
     val eventConsumer = Consumer<Event> { event ->
@@ -46,34 +56,42 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
             is EventPollEvents -> {
                 if (!mc.player?.isUsingItem!!) return@Consumer
                 val stack = mc.player?.getStackInHand(mc.player?.activeHand) ?: return@Consumer
-                if (!(stack.item is BowItem || (stack.item is CrossbowItem && (stack.item as ICrossbowItem).tarasande_invokeGetProjectiles(stack).any { it.item is ArrowItem }))) return@Consumer
+                if (stack.item !is BowItem && !(stack.item is CrossbowItem && (stack.item as ICrossbowItem).tarasande_invokeGetProjectiles(stack).any { it.item is ArrowItem })) return@Consumer
 
-                for (entity in mc.world?.entities?.filter { PlayerUtil.isAttackable(it) }?.map { it as LivingEntity }?.sortedBy { RotationUtil.getRotations(mc.player?.eyePos!!, it.eyePos).fov(Rotation(mc.player!!)) }?.sortedBy { !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.boundingBox.center) } ?: return@Consumer) {
-                    val target = entity.boundingBox.offset(mc.player?.velocity?.negate()).center
+                val entity = mc.world?.entities?.filter { PlayerUtil.isAttackable(it) && PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.eyePos) }?.minByOrNull { RotationUtil.getRotations(mc.player?.eyePos!!, it.eyePos).fov(Rotation(mc.player!!)) } ?: return@Consumer
 
-                    val solution = calcPitch(stack, mc.player?.eyePos?.subtract(target)?.horizontalLength()!!, target.y - mc.player?.eyeY!!)
+                var target = entity.boundingBox.center
 
-                    if (solution.isNaN()) continue
+                var solution = calcPitch(stack, mc.player?.eyePos?.distanceTo(target)!!, target.y - mc.player?.eyeY!!)
 
-                    val yaw = RotationUtil.getYaw(target.subtract(mc.player?.eyePos))
-                    val rotation = Rotation(yaw.toFloat(), solution.toFloat())
+                if (solution.isNaN()) return@Consumer
 
-                    val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
-                    val smoothedRot = currentRot.smoothedTurn(rotation, if (aimSpeed.minValue == 1.0 && aimSpeed.maxValue == 1.0) 1.0
-                    else MathHelper.clamp((if (aimSpeed.minValue == aimSpeed.maxValue) aimSpeed.minValue
-                    else ThreadLocalRandom.current().nextDouble(aimSpeed.minValue, aimSpeed.maxValue)) * RenderUtil.deltaTime * 0.05, 0.0, 1.0))
+                var yaw = RotationUtil.getYaw(target.subtract(mc.player?.eyePos))
+                var rotation = Rotation(yaw.toFloat(), solution.toFloat())
 
-                    event.rotation = smoothedRot
+                // DEAD RECKONING
+                target = deadReckoning(stack, entity, rotation)
 
-                    if (lockView.value) {
-                        mc.player?.yaw = event.rotation.yaw
-                        mc.player?.pitch = event.rotation.pitch
-                    }
+                solution = calcPitch(stack, mc.player?.eyePos?.distanceTo(target)!!, target.y - mc.player?.eyeY!!)
 
-                    event.minRotateToOriginSpeed = aimSpeed.minValue
-                    event.maxRotateToOriginSpeed = aimSpeed.maxValue
-                    return@Consumer
+                if (solution.isNaN()) return@Consumer
+
+                yaw = RotationUtil.getYaw(target.subtract(mc.player?.eyePos))
+                rotation = Rotation(yaw.toFloat(), solution.toFloat())
+                // DEAD RECKONING
+
+                val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
+                val smoothedRot = currentRot.smoothedTurn(rotation, aimSpeed)
+
+                event.rotation = smoothedRot.correctSensitivity()
+
+                if (lockView.value) {
+                    mc.player?.yaw = event.rotation.yaw
+                    mc.player?.pitch = event.rotation.pitch
                 }
+
+                event.minRotateToOriginSpeed = aimSpeed.minValue
+                event.maxRotateToOriginSpeed = aimSpeed.maxValue
             }
         }
     }

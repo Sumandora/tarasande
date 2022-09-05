@@ -4,6 +4,9 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
+import su.mandora.tarasande.util.render.RenderUtil
+import su.mandora.tarasande.value.ValueNumberRange
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.round
 import kotlin.math.sqrt
 
@@ -26,8 +29,12 @@ class Rotation(var yaw: Float, var pitch: Float) {
 
         fun calculateRotationChange(cursorDeltaX: Double, cursorDeltaY: Double): Rotation {
             val gcd = getGcd()
+            return Rotation((-cursorDeltaX * gcd).toFloat() * 0.15f, (-cursorDeltaY * gcd).toFloat() * 0.15f)
+        }
 
-            return Rotation((cursorDeltaX * gcd).toFloat() * 0.15f, (cursorDeltaY * gcd).toFloat() * 0.15f)
+        fun approximateCursorDeltas(deltaRotation: Rotation): Pair<Double, Double> {
+            val gcd = getGcd() * 0.15f
+            return Pair(-round(deltaRotation.yaw / gcd), -round(deltaRotation.pitch / gcd))
         }
     }
 
@@ -40,18 +47,25 @@ class Rotation(var yaw: Float, var pitch: Float) {
     fun correctSensitivity(prevRotation: Rotation): Rotation {
         val deltaRotation = calcDelta(prevRotation)
 
-        val gcd = getGcd() * 0.15f
-
-        val cursorDeltaX = round(deltaRotation.yaw / gcd)
-        val cursorDeltaY = round(deltaRotation.pitch / gcd)
-
-        val rotationChange = calculateRotationChange(cursorDeltaX, cursorDeltaY)
+        val cursorDeltas = approximateCursorDeltas(deltaRotation)
+        val rotationChange = calculateRotationChange(cursorDeltas.first, cursorDeltas.second)
 
         yaw = prevRotation.yaw - rotationChange.yaw
         pitch = prevRotation.pitch - rotationChange.pitch
         pitch = MathHelper.clamp(pitch, -90.0f, 90.0f)
 
         return this
+    }
+
+    fun smoothedTurn(target: Rotation, aimSpeed: ValueNumberRange): Rotation {
+        return smoothedTurn(target, Pair(aimSpeed.minValue, aimSpeed.maxValue))
+    }
+
+    fun smoothedTurn(target: Rotation, aimSpeed: Pair<Double, Double>): Rotation {
+        val smoothness = if (aimSpeed.first == 1.0 && aimSpeed.second == 1.0) 1.0
+        else MathHelper.clamp((if (aimSpeed.first == aimSpeed.second) aimSpeed.first
+        else ThreadLocalRandom.current().nextDouble(aimSpeed.first, aimSpeed.second)) * RenderUtil.deltaTime * 0.05, 0.0, 1.0)
+        return smoothedTurn(target, smoothness)
     }
 
     fun smoothedTurn(target: Rotation, smoothness: Double): Rotation {

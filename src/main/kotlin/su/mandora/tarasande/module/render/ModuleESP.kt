@@ -15,6 +15,7 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventRender2D
 import su.mandora.tarasande.event.EventRender3D
 import su.mandora.tarasande.mixin.accessor.IMatrix4f
+import su.mandora.tarasande.mixin.accessor.IWorldRenderer
 import su.mandora.tarasande.module.combat.ModuleAntiBot
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueMode
@@ -46,8 +47,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 
     private fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Vec3d? {
         val camPos = mc.gameRenderer.camera.pos.negate().add(vector)
-        val vec1 =
-            matrixVectorMultiply(modelView, Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1.0f))
+        val vec1 = matrixVectorMultiply(modelView, Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1.0f))
         val screenPos = matrixVectorMultiply(projection, vec1)
 
         if (screenPos.w <= 0.0) return null
@@ -94,6 +94,8 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
                     val interp = prevPos.add(entity.pos.subtract(prevPos).multiply(mc.tickDelta.toDouble()))
                     val boundingBox = entity.boundingBox.offset(interp.subtract(entity.pos))
 
+                    if(!(mc.worldRenderer as IWorldRenderer).tarasande_getFrustum().isVisible(boundingBox)) continue
+
                     val corners = arrayOf(
                         Vec3d(boundingBox.minX, boundingBox.minY, boundingBox.minZ),
                         Vec3d(boundingBox.maxX, boundingBox.minY, boundingBox.minZ),
@@ -109,8 +111,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
                     var rectangle: Rectangle? = null
 
                     for (corner in corners) {
-                        val projected =
-                            project(event.matrices.peek().positionMatrix, event.positionMatrix, corner) ?: continue
+                        val projected = project(event.matrices.peek().positionMatrix, event.positionMatrix, corner) ?: continue
                         if (rectangle == null)
                             rectangle = Rectangle(projected.x, projected.y, projected.x, projected.y)
                         else {

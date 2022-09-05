@@ -1,6 +1,7 @@
 package su.mandora.tarasande.mixin.mixins;
 
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.Frustum;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -16,16 +17,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande.TarasandeMain;
+import su.mandora.tarasande.mixin.accessor.IWorldRenderer;
 import su.mandora.tarasande.module.render.ModuleFog;
 import su.mandora.tarasande.module.render.ModuleRain;
 
 @Mixin(WorldRenderer.class)
-public abstract class MixinWorldRenderer {
+public abstract class MixinWorldRenderer implements IWorldRenderer {
 
     @Shadow
     public static int getLightmapCoordinates(BlockRenderView world, BlockPos pos) {
         return 0;
     }
+
+    @Shadow private Frustum frustum;
 
     @Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At("HEAD"), cancellable = true)
     public void injectRenderSky(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean bl, Runnable runnable, CallbackInfo ci) {
@@ -57,4 +61,8 @@ public abstract class MixinWorldRenderer {
         return getLightmapCoordinates(world, pos);
     }
 
+    @Override
+    public Frustum tarasande_getFrustum() {
+        return frustum;
+    }
 }
