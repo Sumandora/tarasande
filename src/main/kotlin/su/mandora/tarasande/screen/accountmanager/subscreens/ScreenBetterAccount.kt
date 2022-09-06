@@ -101,7 +101,7 @@ class ScreenBetterAccount(
         }
 
         addDrawableChild(ButtonWidget(width / 2 - 50, (height * 0.75f - 25).toInt(), 100, 20, Text.of(name)) {
-            val account = (implementationClass.newInstance() as Account).create(textFields.map { it.text })
+            val account = (implementationClass.getDeclaredConstructor().newInstance() as Account).create(textFields.map { it.text })
             account.environment = environment ?: YggdrasilEnvironment.PROD.environment
             accountConsumer.accept(account)
             close()

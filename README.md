@@ -53,7 +53,6 @@
 - User configs
 - Crystal Aura
 - Debug Category
-- Forge Faker
 - Anti Vanish
 - Resource Pack Spoofer
 - Auto Soup&Pot
@@ -66,7 +65,6 @@
 - Parkour / Edge Jump
 - X-Ray / BlockESP
 - NameProtect
-- 
 
 ## Notes
 - Matrix Bots never sneak (might be applicable to other bots)

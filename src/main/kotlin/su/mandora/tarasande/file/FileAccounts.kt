@@ -77,7 +77,7 @@ class FileAccounts : File("Accounts") {
             for (accountClass in TarasandeMain.get().screens?.screenBetterAccountManager?.managerAccount?.list!!) {
                 val jsonObject2 = jsonElement2 as JsonObject
                 if (accountClass.getAnnotation(AccountInfo::class.java).name == jsonObject2.get("Type").asString) {
-                    val account = accountClass.newInstance().load(jsonObject2.get("Account").asJsonArray)
+                    val account = accountClass.getDeclaredConstructor().newInstance().load(jsonObject2.get("Account").asJsonArray)
 
                     if (jsonObject2.has("Session")) {
                         val sessionObject = jsonObject2.get("Session").asJsonObject

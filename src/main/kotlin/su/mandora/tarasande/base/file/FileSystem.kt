@@ -12,8 +12,6 @@ import java.nio.file.Files
 
 class ManagerFile : Manager<File>() {
 
-    var loaded = false
-
     init {
         add(
             FileModules(),
@@ -24,10 +22,13 @@ class ManagerFile : Manager<File>() {
     }
 
     fun save() {
-        if(!loaded) return
-
         for (file in list) {
+            if (!file.loaded)
+                continue
             val fileObj = java.io.File(System.getProperty("user.home") + java.io.File.separator + TarasandeMain.get().name + java.io.File.separator + file.name)
+            if (fileObj.exists()) {
+                fileObj.renameTo(java.io.File(fileObj.path + "_backup"))
+            }
             if (!fileObj.parentFile.exists()) fileObj.parentFile.mkdirs()
             val fileWriter = FileWriter(fileObj)
             fileWriter.write(file.encrypt(TarasandeMain.get().gson.toJson(file.save()))!!)
@@ -42,16 +43,19 @@ class ManagerFile : Manager<File>() {
                 val content = file.decrypt(String(Files.readAllBytes(fileObj.toPath())))
                 if (content != null) {
                     val jsonElement = TarasandeMain.get().gson.fromJson(content, JsonElement::class.java)
-                    if (jsonElement != null) file.load(jsonElement)
-                    else System.err.println(file.name + " didn't load correctly!")
+                    if (jsonElement != null) {
+                        file.load(jsonElement)
+                        file.loaded = true
+                    } else System.err.println(file.name + " didn't load correctly!")
                 }
             }
         }
-        loaded = true
     }
 }
 
 abstract class File(val name: String) {
+
+    var loaded = false
 
     abstract fun save(): JsonElement
     abstract fun load(jsonElement: JsonElement)

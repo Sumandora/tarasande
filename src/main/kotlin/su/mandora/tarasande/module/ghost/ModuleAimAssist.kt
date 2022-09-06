@@ -10,10 +10,8 @@ import su.mandora.tarasande.module.combat.ModuleKillAura
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
-import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.ValueNumber
 import su.mandora.tarasande.value.ValueNumberRange
-import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 
 class ModuleAimAssist : Module("Aim assist", "Helps you aim at enemies", ModuleCategory.GHOST) {
@@ -25,21 +23,20 @@ class ModuleAimAssist : Module("Aim assist", "Helps you aim at enemies", ModuleC
 
     val eventConsumer = Consumer<Event> { event ->
         if(event is EventMouseDelta) {
-            val entity = mc.world?.entities?.filter { PlayerUtil.isAttackable(it) }?.filter { PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.eyePos) }?.filter { mc.player?.distanceTo(it)!! < reach.value }?.minByOrNull { RotationUtil.getRotations(mc.player?.eyePos!!, it.eyePos).fov(Rotation(mc.player!!)) } ?: return@Consumer
+            val selfRotation = Rotation(mc.player!!)
+            val entity = mc.world?.entities?.filter { PlayerUtil.isAttackable(it) }?.filter { mc.player?.distanceTo(it)!! < reach.value }?.filter { PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.eyePos) }?.minByOrNull { RotationUtil.getRotations(mc.player?.eyePos!!, it.eyePos).fov(selfRotation) } ?: return@Consumer
 
             val boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())
             val bestAimPoint = TarasandeMain.get().managerModule?.get(ModuleKillAura::class.java)?.getBestAimPoint(boundingBox)!!
 
-            val playerRotation = Rotation(mc.player!!)
+            val rotation = RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint)
 
-            val rotation = RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint) // correct wrap
-
-            if(rotation.fov(Rotation(mc.player!!)) > fov.value)
+            if (rotation.fov(selfRotation) > fov.value)
                 return@Consumer
 
-            val smoothedRot = Rotation(playerRotation).smoothedTurn(rotation, aimSpeed).correctSensitivity()
+            val smoothedRot = Rotation(selfRotation).smoothedTurn(rotation, aimSpeed).correctSensitivity() // correct wrap
 
-            val deltaRotation = smoothedRot.calcDelta(playerRotation)
+            val deltaRotation = smoothedRot.calcDelta(selfRotation)
             val cursorDeltas = Rotation.approximateCursorDeltas(deltaRotation)
 
             event.deltaX += MathHelper.clamp(cursorDeltas.first, -maxInfluence.value, maxInfluence.value)
