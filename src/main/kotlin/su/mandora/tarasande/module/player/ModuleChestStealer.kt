@@ -3,6 +3,7 @@ package su.mandora.tarasande.module.player
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen
 import net.minecraft.screen.slot.Slot
 import net.minecraft.screen.slot.SlotActionType
+import net.minecraft.text.LiteralTextContent
 import net.minecraft.util.math.Vec2f
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.base.event.Event
@@ -11,8 +12,10 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.mixin.accessor.IHandledScreen
 import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueNumber
 import su.mandora.tarasande.value.ValueNumberRange
+import su.mandora.tarasande.value.ValueText
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import kotlin.math.sqrt
@@ -23,6 +26,8 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
     private val openDelay = ValueNumber(this, "Open delay", 0.0, 100.0, 500.0, 1.0)
     private val closeDelay = ValueNumber(this, "Close delay", 0.0, 100.0, 500.0, 1.0)
     private val randomize = ValueNumber(this, "Randomize", 0.0, 0.0, 30.0, 1.0) // used to be called parkinson...
+    private val checkTitle = ValueBoolean(this, "Check title", false)
+    private val titleSubstring = ValueText(this, "Title substring", "Chest")
 
     private val timeUtil = TimeUtil()
 
@@ -52,13 +57,24 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
             }
 
             val accessor = mc.currentScreen as IHandledScreen
+
+            if (checkTitle.value) {
+                val title = accessor.tarasande_getTitle()
+                val content = title.content
+                if (content is LiteralTextContent)
+                    if (content.string?.contains(titleSubstring.value) == false)
+                        return@Consumer
+            }
+
             val screenHandler = (mc.currentScreen as GenericContainerScreen).screenHandler
 
             if (mousePos == null) {
                 mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
             }
 
-            val nextSlot = screenHandler.slots.filter { it != null && it.isEnabled && it.hasStack() && it.id < screenHandler.inventory.size() }.minByOrNull { mousePos?.distanceSquared(getDisplayPosition(accessor, it))!! }
+            val nextSlot = screenHandler.slots
+                .filter { it != null && it.isEnabled && it.hasStack() && it.id < screenHandler.inventory.size() }
+                .minByOrNull { mousePos?.distanceSquared(getDisplayPosition(accessor, it))!! }
 
             if (!timeUtil.hasReached(when {
                     wasClosed -> openDelay.value.toLong()

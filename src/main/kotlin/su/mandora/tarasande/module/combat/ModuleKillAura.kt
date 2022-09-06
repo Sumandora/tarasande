@@ -219,8 +219,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 event.rotation = finalRot.correctSensitivity()
 
                 if (lockView.value) {
-                    mc.player?.yaw = finalRot.yaw
-                    mc.player?.pitch = finalRot.pitch
+                    mc.player?.yaw = event.rotation.yaw
+                    mc.player?.pitch = event.rotation.pitch
                 }
 
                 event.minRotateToOriginSpeed = aimSpeed.minValue
@@ -286,13 +286,24 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                             var target = entry.first
                             val aimPoint = entry.second
 
-                            if (dontAttackWhenBlocking.value && target is LivingEntity && target.isBlocking) if (!simulateShieldBlock.value || target.blockedByShield(DamageSource.player(mc.player))) continue
+                            if (dontAttackWhenBlocking.value && target is LivingEntity && target.isBlocking)
+                                if (!simulateShieldBlock.value || target.blockedByShield(DamageSource.player(mc.player)))
+                                    continue
 
                             if (rayTrace.value) {
                                 if (RotationUtil.fakeRotation == null) {
                                     continue
                                 } else {
-                                    val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, if (!mode.isSelected(1)) (if (simulateMouseDelay.value) Rotation((mc.player as IClientPlayerEntity).tarasande_getLastYaw(), (mc.player as IClientPlayerEntity).tarasande_getLastPitch()) else RotationUtil.fakeRotation!!) else RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint))
+                                    val hitResult = PlayerUtil.getTargetedEntity(
+                                        reach.minValue,
+                                        if (!mode.isSelected(1))
+                                            if (simulateMouseDelay.value)
+                                                Rotation((mc.player as IClientPlayerEntity).tarasande_getLastYaw(), (mc.player as IClientPlayerEntity).tarasande_getLastPitch())
+                                            else
+                                                RotationUtil.fakeRotation!!
+                                        else
+                                            RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint),
+                                        throughWalls.value)
                                     if (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null) {
                                         continue
                                     } else {
@@ -349,7 +360,12 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     }
                 }
                 if (PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {
-                    if (waitForCritical.value && criticalSprint.value && forceCritical.value) if (!dontWaitWhenEnemyHasShield.value || ((mode.isSelected(0) && !hasShield(targets.first().first) || (mode.isSelected(1) && targets.none { hasShield(it.first) })))) if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!) if (!mc.player?.isOnGround!! && mc.player?.fallDistance!! >= 0.0f) if (mc.player?.isSprinting!!) event.pressed = false
+                    if (waitForCritical.value && criticalSprint.value && forceCritical.value)
+                        if (!dontWaitWhenEnemyHasShield.value || ((mode.isSelected(0) && !hasShield(targets.first().first) || (mode.isSelected(1) && targets.none { hasShield(it.first) }))))
+                            if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
+                                if (!mc.player?.isOnGround!! && mc.player?.fallDistance!! >= 0.0f)
+                                    if (mc.player?.isSprinting!!)
+                                        event.pressed = false
                 }
             }
 

@@ -12,17 +12,19 @@ class PanelFixedNowPlaying(x: Double, y: Double) : PanelFixed("Now playing", x, 
 
     private var currTrack: String? = null
 
-    private fun getCurrentTrack() = String(ProcessBuilder("bash","-c", "dbus-send --print-reply --dest=\$(qdbus org.mpris.MediaPlayer2.* | head -n 1) /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata'").start().inputStream.readAllBytes())
+    private fun getCurrentTrack(): String {
+        return String(ProcessBuilder("bash", "-c", "dbus-send --print-reply --dest=\$(dbus-send --session --dest=org.freedesktop.DBus --type=method_call --print-reply /org/freedesktop/DBus org.freedesktop.DBus.ListNames | grep mpris | sed -e 's/.*\\\"\\(.*\\)\\\"/\\1/' | head -n 1) /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata'").start().errorStream.readAllBytes())
+    }
 
     init {
         val t = Thread {
-            while(true) {
+            while (true) {
                 val lines = getCurrentTrack().split("\n")
                 val titleLine = lines.indexOfFirst { it.contains("string \"xesam:title\"") }
-                if(titleLine == -1)
-                    currTrack = null
+                currTrack = if (titleLine == -1)
+                    null
                 else
-                    currTrack = lines[lines.indexOfFirst { it.contains("string \"xesam:title\"") } + 1].split("string \"")[1].let { it.substring(0, it.length - 1) } // this calculation is the most retarded shit I've ever wrote bruh
+                    lines[lines.indexOfFirst { it.contains("string \"xesam:title\"") } + 1].split("string \"")[1].let { it.substring(0, it.length - 1) } // this calculation is the most retarded shit I've ever wrote bruh
                 Thread.sleep(1000L)
             }
         }
@@ -33,7 +35,7 @@ class PanelFixedNowPlaying(x: Double, y: Double) : PanelFixed("Now playing", x, 
     override fun isVisible() = currTrack != null
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        if(currTrack == null)
+        if (currTrack == null)
             return
 
         val accent = TarasandeMain.get().clientValues?.accentColor?.getColor()!!

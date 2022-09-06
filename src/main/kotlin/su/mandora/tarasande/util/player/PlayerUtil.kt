@@ -45,7 +45,7 @@ object PlayerUtil {
         return eventIsEntityAttackable.attackable
     }
 
-    fun getTargetedEntity(reach: Double, rotation: Rotation): HitResult? {
+    fun getTargetedEntity(reach: Double, rotation: Rotation, allowThroughWalls: Boolean = true): HitResult? {
         val gameRenderer = MinecraftClient.getInstance().gameRenderer
         val accessor = (gameRenderer as IGameRenderer)
         val renderTickCounter = (MinecraftClient.getInstance() as IMinecraftClient).tarasande_getRenderTickCounter()
@@ -54,7 +54,7 @@ object PlayerUtil {
         val prevReach = accessor.tarasande_getReach()
         val prevReachExtension = accessor.tarasande_isDisableReachExtension()
 
-        accessor.tarasande_setAllowThroughWalls(true)
+        accessor.tarasande_setAllowThroughWalls(allowThroughWalls)
         accessor.tarasande_setReach(reach)
         accessor.tarasande_setDisableReachExtension(true)
 

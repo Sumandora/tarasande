@@ -1,12 +1,14 @@
 package su.mandora.tarasande.mixin.mixins;
 
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import su.mandora.tarasande.mixin.accessor.IHandledScreen;
 
 @Mixin(HandledScreen.class)
-public class MixinHandledScreen implements IHandledScreen {
+public class MixinHandledScreen extends Screen implements IHandledScreen {
     @Shadow
     protected int x;
 
@@ -18,6 +20,10 @@ public class MixinHandledScreen implements IHandledScreen {
 
     @Shadow
     protected int backgroundHeight;
+
+    protected MixinHandledScreen(Text title) {
+        super(title);
+    }
 
     @Override
     public int tarasande_getX() {
@@ -37,5 +43,10 @@ public class MixinHandledScreen implements IHandledScreen {
     @Override
     public int tarasande_getBackgroundHeight() {
         return this.backgroundHeight;
+    }
+
+    @Override
+    public Text tarasande_getTitle() {
+        return title;
     }
 }
