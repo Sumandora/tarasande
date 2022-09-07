@@ -33,7 +33,7 @@ class ESPElementBox : ESPElement("Box") {
     }
 
     override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
-        val col = Color(entity.teamColorValue).let { Color(it.red, it.green, it.blue, 255) }.rgb
+        val col = Color(entity.teamColorValue).rgb // ignore alpha
         if (outlined.value) RenderUtil.outlinedFill(matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, outlineWidth.value.toFloat(), Color.black.rgb)
         RenderUtil.outlinedFill(matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, width.value.toFloat(), col)
     }
@@ -48,7 +48,7 @@ class ESPElementName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Ori
     }
 
     override fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double, orientation: Orientation) {
-        val col = Color(entity.teamColorValue).let { Color(it.red, it.green, it.blue, 255) }.rgb
+        val col = Color(entity.teamColorValue).rgb // ignore alpha
         val tagName = TagName.getTagName(entity)?.asOrderedText() ?: return
         matrices.push()
         val width = MinecraftClient.getInstance().textRenderer?.getWidth(tagName)!!

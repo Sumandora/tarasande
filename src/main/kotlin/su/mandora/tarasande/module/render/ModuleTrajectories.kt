@@ -197,7 +197,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
                 RenderSystem.enableBlend()
                 RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
                 RenderSystem.disableCull()
-                //GL11.glEnable(GL11.GL_LINE_SMOOTH)
+                GL11.glEnable(GL11.GL_LINE_SMOOTH)
                 RenderSystem.disableDepthTest()
                 event.matrices.push()
                 val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
@@ -213,7 +213,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
                 BufferRenderer.drawWithShader(bufferBuilder.end())
                 event.matrices.pop()
                 RenderSystem.enableDepthTest()
-                //GL11.glEnable(GL11.GL_LINE_SMOOTH)
+                GL11.glDisable(GL11.GL_LINE_SMOOTH)
                 RenderSystem.enableCull()
                 RenderSystem.disableBlend()
             }

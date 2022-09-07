@@ -115,7 +115,7 @@ class ScreenBetterProxy(
                             socket.connect(inetSocketAddress, 5000)
                             val timeDelta = System.currentTimeMillis() - beginTime
                             if (TarasandeMain.get().screens?.screenBetterAccountManager?.proxy == proxy) {
-                                status = RenderUtil.formattingByHex(RenderUtil.colorInterpolate(Color.green, Color.red.darker(), (timeDelta / 1000.0).coerceAtMost(1.0)).rgb).toString() + "Reached proxy in ${timeDelta}ms"
+                                status = RenderUtil.formattingByHex(RenderUtil.colorInterpolate(Color.green, Color.red.darker(), (timeDelta / 1000.0).coerceAtMost(1.0)).rgb).toString() + "Reached proxy in " + timeDelta + "ms"
                                 proxy.ping = timeDelta
                             }
                         } catch (throwable: Throwable) {

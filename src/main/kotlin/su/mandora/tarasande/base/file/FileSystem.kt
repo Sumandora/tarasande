@@ -26,10 +26,10 @@ class ManagerFile : Manager<File>() {
             if (!file.loaded)
                 continue
             val fileObj = java.io.File(System.getProperty("user.home") + java.io.File.separator + TarasandeMain.get().name + java.io.File.separator + file.name)
-            if (fileObj.exists()) {
+            if (!fileObj.parentFile.exists())
+                fileObj.parentFile.mkdirs()
+            if (fileObj.exists())
                 fileObj.renameTo(java.io.File(fileObj.path + "_backup"))
-            }
-            if (!fileObj.parentFile.exists()) fileObj.parentFile.mkdirs()
             val fileWriter = FileWriter(fileObj)
             fileWriter.write(file.encrypt(TarasandeMain.get().gson.toJson(file.save()))!!)
             fileWriter.close()
@@ -48,6 +48,8 @@ class ManagerFile : Manager<File>() {
                         file.loaded = true
                     } else System.err.println(file.name + " didn't load correctly!")
                 }
+            } else {
+                file.loaded = true
             }
         }
     }

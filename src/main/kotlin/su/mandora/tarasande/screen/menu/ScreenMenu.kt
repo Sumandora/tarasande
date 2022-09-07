@@ -2,9 +2,11 @@ package su.mandora.tarasande.screen.menu
 
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.render.GameRenderer
+import net.minecraft.client.texture.MissingSprite
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
@@ -35,7 +37,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 
     private val managerGraph = ManagerGraph()
 
-    private val image = Identifier(TarasandeMain.get().name, "nanakusa.png")
+    private var image: Identifier? = Identifier(TarasandeMain.get().name, "textures/nanakusa.png")
     private val particles = ArrayList<Particle>()
 
     // unused rn
@@ -45,6 +47,12 @@ class ScreenMenu : Screen(Text.of("Menu")) {
     val managerInformation = ManagerInformation()
 
     init {
+        // @mojang, this code is garbage. delete life
+        MinecraftClient.getInstance().textureManager.getTexture(image)
+        val imageTex = MinecraftClient.getInstance().textureManager.getTexture(image)
+        if (imageTex == null || imageTex == MissingSprite.getMissingSpriteTexture())
+            image = null
+
         for (moduleCategory in ModuleCategory.values()) {
             panels.add(PanelCategory(moduleCategory, 0.0, 0.0))
         }
@@ -106,7 +114,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 
         matrices?.push()
 
-        run {
+        if (image != null) {
             matrices?.push()
             RenderSystem.setShader { GameRenderer.getPositionTexShader() }
             RenderSystem.setShaderTexture(0, image)
@@ -124,9 +132,8 @@ class ScreenMenu : Screen(Text.of("Menu")) {
 
         matrices?.push()
         val numPoints = 100
-        for (i in 0..numPoints) {
-            if (particles.size == i && animation * numPoints >= i) particles.add(Particle(width / 2.0, height / 2.0))
-        }
+        if (particles.size < numPoints)
+            particles.add(Particle(width / 2.0, height / 2.0))
         matrices?.pop()
 
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)

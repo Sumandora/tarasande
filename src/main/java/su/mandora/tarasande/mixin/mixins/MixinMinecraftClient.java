@@ -151,20 +151,6 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
         return (moduleESP.getEnabled() && moduleESP.getMode().isSelected(0) && moduleESP.filter(entity)) || entity.isGlowing();
     }
 
-//    @Inject(method = "createUserApiService", at = @At("HEAD"), cancellable = true)
-//    public void injectCreateUserApiService(YggdrasilAuthenticationService authService, RunArgs runArgs, CallbackInfoReturnable<UserApiService> cir) {
-//        ReflectorClass reflectorClass = ReflectionUtil.INSTANCE.createReflectorClass("net.fabricmc.loader.launch.common.FabricLauncherBase");
-//        if (reflectorClass != null) {
-//            ReflectorAny getLauncher = reflectorClass.invokeMethod("getLauncher");
-//            if (getLauncher != null) {
-//                ReflectorAny isDevelopment = getLauncher.asReflectorClass().invokeMethod("isDevelopment");
-//                if (isDevelopment != null && isDevelopment.interpretAs(Boolean.class)) {
-//                    cir.setReturnValue(UserApiService.OFFLINE);
-//                }
-//            }
-//        }
-//    }
-
     @Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z", shift = At.Shift.BEFORE), slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doAttack()Z")))
     public void injectHandleInputEvents(CallbackInfo ci) {
         TarasandeMain.Companion.get().getManagerEvent().call(new EventAttack());

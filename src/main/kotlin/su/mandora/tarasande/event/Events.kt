@@ -1,5 +1,6 @@
 package su.mandora.tarasande.event
 
+import net.minecraft.block.BlockState
 import net.minecraft.client.input.Input
 import net.minecraft.client.network.PlayerListEntry
 import net.minecraft.client.option.KeyBinding
@@ -10,6 +11,7 @@ import net.minecraft.item.Item
 import net.minecraft.network.Packet
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
@@ -154,3 +156,4 @@ class EventClearColor(var red: Float, var green: Float, var blue: Float) : Event
 class EventPlayerListName(val playerListEntry: PlayerListEntry, var displayName: Text) : Event(false)
 class EventRotationSet(val yaw: Float, val pitch: Float) : Event(false)
 class EventUpdateTargetedEntity : Event(false)
+class EventRenderBlockModel(val state: BlockState, val pos: BlockPos) : Event(true)

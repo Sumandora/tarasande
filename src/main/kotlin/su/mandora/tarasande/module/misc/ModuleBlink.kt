@@ -68,11 +68,13 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     override fun onDisable() {
         val copy = ArrayList(packets) // sync
         packets.clear()
-        if (mc.networkHandler?.connection?.isOpen!!) {
+        if (mc.networkHandler?.connection?.isOpen == true) {
             for (pair in copy) {
                 when (pair.second) {
                     EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).tarasande_forceSend(pair.first)
-                    EventPacket.Type.RECEIVE -> if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener) (pair.first as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
+                    EventPacket.Type.RECEIVE ->
+                        if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener)
+                            (pair.first as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
                 }
             }
         }

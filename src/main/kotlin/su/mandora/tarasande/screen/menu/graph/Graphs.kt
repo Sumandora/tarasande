@@ -7,13 +7,30 @@ import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.screen.menu.graph.Graph
 import su.mandora.tarasande.event.EventPacket
+import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.event.EventSwing
 import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity
 import su.mandora.tarasande.util.render.RenderUtil
 import kotlin.math.round
 
 class GraphFPS : Graph("FPS", 200) {
-    override fun supplyData() = round(1000.0 / RenderUtil.deltaTime * 10) / 10.0
+
+    private val data = ArrayList<Double>()
+
+    init {
+        TarasandeMain.get().managerEvent?.add {
+            if (it is EventPollEvents)
+                data.add(RenderUtil.deltaTime)
+        }
+    }
+
+    override fun supplyData(): Double? {
+        val average = data.average()
+        data.clear()
+        if (average <= 0.0)
+            return null
+        return round(1000.0 / average * 10) / 10.0
+    }
 }
 
 class GraphTPS : Graph("TPS", 200) {

@@ -16,7 +16,9 @@ import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.*
 import su.mandora.tarasande.mixin.accessor.IEntity
+import su.mandora.tarasande.mixin.accessor.IKeyBinding
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
+import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
@@ -111,6 +113,14 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         }
     }
 
+    private fun intersection(line1Begin: Vec2f, line1End: Vec2f, line2Begin: Vec2f, line2End: Vec2f): Vec2f {
+        // https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
+        return Vec2f(
+            ((line1Begin.x * line1End.y - line1Begin.y * line1End.x) * (line2Begin.x - line2End.x) - (line1Begin.x - line1End.x) * (line2Begin.x * line2End.y - line2Begin.y * line2End.x)) / ((line1Begin.x - line1End.x) * (line2Begin.y - line2End.y) - (line1Begin.y - line1End.y) * (line2Begin.x - line2End.x)),
+            ((line1Begin.x * line1End.y - line1Begin.y * line1End.x) * (line2Begin.y - line2End.y) - (line1Begin.y - line1End.y) * (line2Begin.x * line2End.y - line2Begin.y * line2End.x)) / ((line1Begin.x - line1End.x) * (line2Begin.y - line2End.y) - (line1Begin.y - line1End.y) * (line2Begin.x - line2End.x))
+        )
+    }
+
     override fun onEnable() {
         prevEdgeDistance = 0.5
         clickSpeedUtil.reset()
@@ -140,8 +150,12 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         var best: Pair<BlockPos, Direction>? = null
         var dist = 0.0
         for (target in arrayList) {
-            if (mc.options.jumpKey.isPressed && target.third == Direction.DOWN)
-                return Pair(target.second, target.third)
+            if (target.third.offsetY != 0) {
+                if ((mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
+                    return Pair(target.second, target.third)
+                else if (best == null)
+                    continue
+            }
             val dist2 = Vec3d.ofCenter(target.second).add(Vec3d.of(target.third.opposite.vector).multiply(0.5)).subtract(mc.player?.pos!!).horizontalLengthSquared()
             if (best == null || dist2 < dist) {
                 best = Pair(target.second, target.third)
@@ -174,9 +188,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     target = getAdjacentBlock(below)
                     if (target != null) {
                         if (!rotateAtEdge.value || ((rotateAtEdgeMode.isSelected(0) && round(Vec3d.ofCenter(target?.first).subtract(mc.player?.pos!!).multiply(Vec3d.of(target?.second?.vector)).horizontalLengthSquared() * 100) / 100.0 in (rotateAtEdgeDistance.value * rotateAtEdgeDistance.value)..1.0 || target?.second?.offsetY != 0) || (rotateAtEdgeMode.isSelected(1) && PlayerUtil.isOnEdge(rotateAtEdgeExtrapolation.value)))) {
-                            val dirVec = target?.second?.vector!!
-                            val point = Vec3d.ofCenter(target?.first).add(0.0, MathHelper.clamp(aimHeight.value + ThreadLocalRandom.current().nextFloat() * 0.1 - 0.05, 0.0, 1.0) - 0.5, 0.0).add(Vec3d.of(dirVec).negate().multiply(0.5))
-                            val rotatedVec = dirVec.let { Vec3d(abs(it.x) - 1.0, 0.0, abs(it.z) - 1.0) }
 
                             if (lastRotation == null || run {
                                     if (!preventRerotation.value)
@@ -190,18 +201,43 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                         hitResult == null || hitResult.type != HitResult.Type.BLOCK || hitResult.side != (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) || hitResult.blockPos != target?.first
                                     }
                                 }) {
-                                val sideBegin = point.add(rotatedVec.multiply(0.5))
-                                val sideEnd = point.add(rotatedVec.multiply(0.5).negate())
 
-                                placeLine = Pair(sideBegin, sideEnd)
+                                val dirVec = target?.second?.vector!!
+                                var point = Vec3d.ofCenter(target?.first).add(Vec3d.of(dirVec).negate().multiply(0.5))
+                                val eye = mc.player?.eyePos!!
 
-                                val padding = 0.01f
+                                val padding = 0.01
 
-                                val finalPoint = if (!offsetGoalYaw.value) {
+                                val finalPoint = if (target?.second?.offsetY != 0) {
+                                    placeLine = null
+                                    val blockPos = target?.first
+                                    val blockState = mc.world?.getBlockState(target?.first)
+                                    val shape = blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos?.x?.toDouble()!!, blockPos.y.toDouble(), blockPos.z.toDouble())!!
+                                    if (shape.isEmpty)
+                                        point
+                                    else
+                                        MathUtil.closestPointToBox(aimTarget ?: eye, shape.boundingBox.expand(-padding))
+                                } else {
+                                    val rotatedVec = dirVec.let { Vec3d(abs(it.x) - 1.0, 0.0, abs(it.z) - 1.0) }
+                                    point = point.add(0.0, MathHelper.clamp(aimHeight.value + ThreadLocalRandom.current().nextFloat() * 0.1 - 0.05, 0.0, 1.0) - 0.5, 0.0)
+
+                                    val sideBegin = point.add(rotatedVec.multiply(0.5))
+                                    val sideEnd = point.add(rotatedVec.multiply(0.5).negate())
+
+                                    placeLine = Pair(sideBegin, sideEnd)
+
                                     // calculating the closest point on the line to feet
-                                    val eye = mc.player?.eyePos!!
+                                    var goalAim = eye
 
-                                    val beginToPoint = Vec2f((eye.x - sideBegin.x).toFloat(), (eye.z - sideBegin.z).toFloat())
+                                    if (offsetGoalYaw.value) {
+                                        val targetRot = mc.player?.yaw!! - 180
+                                        goalAim = intersection( // adjust our target
+                                            Vec2f(sideBegin.x.toFloat(), sideBegin.z.toFloat()), Vec2f(sideEnd.x.toFloat(), sideEnd.z.toFloat()),
+                                            Vec2f(eye.x.toFloat(), eye.z.toFloat()), eye.add(Rotation(targetRot, 0.0f).forwardVector(6.0)).let { Vec2f(it.x.toFloat(), it.z.toFloat()) }
+                                        ).let { Vec3d(it.x.toDouble(), point.y, it.y.toDouble()) }
+                                    }
+
+                                    val beginToPoint = Vec2f((goalAim.x - sideBegin.x).toFloat(), (goalAim.z - sideBegin.z).toFloat())
                                     val beginToEnd = Vec2f((sideEnd.x - sideBegin.x).toFloat(), (sideEnd.z - sideBegin.z).toFloat())
 
                                     val squaredDist = beginToEnd.lengthSquared()
@@ -210,7 +246,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                     var t = dotProd / squaredDist
                                     val prevT = t
 
-                                    val closest = sideBegin.add(sideEnd.subtract(sideBegin).multiply(MathHelper.clamp(t, padding, 1.0f - padding).toDouble()))
+                                    val closest = sideBegin.add(sideEnd.subtract(sideBegin).multiply(MathHelper.clamp(t.toDouble(), padding, 1.0 - padding)))
 
                                     if (t in padding..1.0f - padding) {
                                         val dist = eye.subtract(closest).horizontalLength()
@@ -227,30 +263,16 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                     preferredSide = when {
                                         prevT < t -> -1
                                         prevT > t -> 1
-                                        else -> 0
+                                        else -> null
                                     }
 
-                                    sideBegin.add(sideEnd.subtract(sideBegin).multiply(MathHelper.clamp(t, padding, 1.0f - padding).toDouble()))
-                                } else {
-                                    var t = padding
-                                    var best: Vec3d? = null
-                                    var dist = 0.0
-                                    while (t <= 1.0 - padding) {
-                                        val position = sideBegin.add(sideEnd.subtract(sideBegin).multiply(t.toDouble()))
-                                        val rotation = abs(MathHelper.wrapDegrees(RotationUtil.getYaw(position.subtract(mc.player?.eyePos!!)) - mc.player?.yaw!! - 180 + goalYaw.value))
-                                        if (best == null || dist > rotation) {
-                                            best = position
-                                            dist = rotation
-                                        }
-                                        t += 0.05f
-                                    }
-                                    best
+                                    sideBegin.add(sideEnd.subtract(sideBegin).multiply(MathHelper.clamp(t.toDouble(), padding, 1.0f - padding)))
                                 }
 
                                 aimTarget = finalPoint
 
                                 if (finalPoint != null)
-                                    lastRotation = RotationUtil.getRotations(mc.player?.eyePos!!, finalPoint)
+                                    lastRotation = RotationUtil.getRotations(eye, finalPoint)
                             }
                         }
                     } else {

@@ -318,7 +318,7 @@ object RenderUtil {
     }
 
     fun drawWithSmallShadow(matrices: MatrixStack?, text: String, x: Float, y: Float, color: Int) {
-        MinecraftClient.getInstance().textRenderer.draw(matrices, Formatting.strip(text), x + 0.5f, y + 0.5f, Color(color).darker().darker().darker().darker().rgb)
+        MinecraftClient.getInstance().textRenderer.draw(matrices, Formatting.strip(text), x + 0.5f, y + 0.5f, Color(color, true).darker().darker().darker().darker().rgb)
         MinecraftClient.getInstance().textRenderer.draw(matrices, text, x, y, color)
     }
 

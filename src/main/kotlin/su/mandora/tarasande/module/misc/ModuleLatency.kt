@@ -66,11 +66,13 @@ class ModuleLatency : Module("Latency", "Controls network latency", ModuleCatego
     }
 
     override fun onDisable() {
-        if (mc.networkHandler?.connection?.isOpen!!) {
+        if (mc.networkHandler?.connection?.isOpen == true) {
             for (triple in packets) {
                 when (triple.third) {
                     EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).tarasande_forceSend(triple.second)
-                    EventPacket.Type.RECEIVE -> if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener) (triple.second as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
+                    EventPacket.Type.RECEIVE ->
+                        if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener)
+                            (triple.second as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
                 }
             }
         }

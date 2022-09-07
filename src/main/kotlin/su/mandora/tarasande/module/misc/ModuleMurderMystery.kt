@@ -197,10 +197,9 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
             is EventIsEntityAttackable -> {
                 if (!isMurderer()) {
                     if (event.entity !is PlayerEntity) {
-                        event.attackable = false
                         return@Consumer
                     }
-                    event.attackable = suspects.containsKey(event.entity.gameProfile)
+                    event.attackable = event.attackable && suspects.containsKey(event.entity.gameProfile)
                 }
             }
 

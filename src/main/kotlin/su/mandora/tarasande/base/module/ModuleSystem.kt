@@ -6,7 +6,9 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.Manager
 import su.mandora.tarasande.event.EventTick
 import su.mandora.tarasande.module.combat.*
-import su.mandora.tarasande.module.ghost.*
+import su.mandora.tarasande.module.ghost.ModuleAimAssist
+import su.mandora.tarasande.module.ghost.ModuleAutoClicker
+import su.mandora.tarasande.module.ghost.ModuleReach
 import su.mandora.tarasande.module.misc.*
 import su.mandora.tarasande.module.movement.*
 import su.mandora.tarasande.module.player.*
@@ -66,7 +68,8 @@ class ManagerModule : Manager<Module>() {
             ModuleReach(),
             ModuleAutoClicker(),
             ModuleAimAssist(),
-            ModuleNoFriends()
+            ModuleNoFriends(),
+            ModuleBlockESP()
         )
         TarasandeMain.get().managerEvent?.add { event ->
             if (event is EventTick) if (event.state == EventTick.State.POST) {

@@ -327,7 +327,7 @@ You can close this page now.""".toByteArray())
                 var xui: Array<Xui>? = null
 
                 override fun toString(): String {
-                    return "DisplayClaim(xui=${xui?.contentToString()})"
+                    return "DisplayClaim(xui=" + xui?.contentToString() + ")"
                 }
 
                 inner class Xui {
@@ -363,7 +363,7 @@ You can close this page now.""".toByteArray())
                 var xui: Array<Xui>? = null
 
                 override fun toString(): String {
-                    return "DisplayClaim(xui=${xui?.contentToString()})"
+                    return "DisplayClaim(xui=" + xui?.contentToString() + ")"
                 }
 
                 inner class Xui {
@@ -394,7 +394,7 @@ You can close this page now.""".toByteArray())
             var expiresIn = 0
 
             override fun toString(): String {
-                return "MinecraftLogin(username=$username, roles=${roles?.contentToString()}, accessToken=$accessToken, tokenType=$tokenType, expiresIn=$expiresIn)"
+                return "MinecraftLogin(username=$username, roles=" + roles?.contentToString() + ", accessToken=$accessToken, tokenType=$tokenType, expiresIn=$expiresIn)"
             }
         }
 
@@ -412,7 +412,7 @@ You can close this page now.""".toByteArray())
             var capes: Array<Cape>? = null
 
             override fun toString(): String {
-                return "MinecraftProfile(id=$id, name=$name, skins=${skins?.contentToString()}, capes=${capes?.contentToString()})"
+                return "MinecraftProfile(id=$id, name=$name, skins=" + skins?.contentToString() + ", capes=" + capes?.contentToString() + ")"
             }
 
             inner class Skin {

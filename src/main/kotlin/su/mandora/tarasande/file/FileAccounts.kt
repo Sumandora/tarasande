@@ -17,28 +17,24 @@ import javax.crypto.spec.SecretKeySpec
 
 class FileAccounts : File("Accounts") {
 
-    private val fallbackKey = "y1dHz81YFjuCLWjrpGIirF6nauvYiGJT"
-
     private var encryptCipher: Cipher? = null
     private var decryptCipher: Cipher? = null
 
     init {
-        var hwid = SystemInfo().hardware.computerSystem.hardwareUUID
-        if (hwid.equals("unknown")) {
-            // can't get hwid, use pre-specified one (worst security ever)
-            hwid = fallbackKey
+        val hwid = SystemInfo().hardware.computerSystem.hardwareUUID
+        if (hwid != null && !hwid.equals("unknown")) { // if the hwid is non-existant, we just don't encrypt at all
+            var bytes = Base64.getEncoder().encode(String(Hex.encodeHex(hwid.toByteArray())).toByteArray())
+            when {
+                bytes.size > 32 -> bytes = Arrays.copyOfRange(bytes, 0, 32)
+                bytes.size > 24 -> bytes = Arrays.copyOfRange(bytes, 0, 24)
+                bytes.size > 16 -> bytes = Arrays.copyOfRange(bytes, 0, 16)
+            }
+            val keySpec = SecretKeySpec(bytes, 0, bytes.size, "AES")
+            encryptCipher = Cipher.getInstance("AES")
+            encryptCipher?.init(Cipher.ENCRYPT_MODE, keySpec)
+            decryptCipher = Cipher.getInstance("AES")
+            decryptCipher?.init(Cipher.DECRYPT_MODE, keySpec)
         }
-        var bytes = Base64.getEncoder().encode(String(Hex.encodeHex(hwid.toByteArray())).toByteArray())
-        when {
-            bytes.size > 32 -> bytes = Arrays.copyOfRange(bytes, 0, 32)
-            bytes.size > 24 -> bytes = Arrays.copyOfRange(bytes, 0, 24)
-            bytes.size > 16 -> bytes = Arrays.copyOfRange(bytes, 0, 16)
-        }
-        val keySpec = SecretKeySpec(bytes, 0, bytes.size, "AES")
-        encryptCipher = Cipher.getInstance("AES")
-        encryptCipher?.init(Cipher.ENCRYPT_MODE, keySpec)
-        decryptCipher = Cipher.getInstance("AES")
-        decryptCipher?.init(Cipher.DECRYPT_MODE, keySpec)
     }
 
     override fun save(): JsonElement {
@@ -93,12 +89,20 @@ class FileAccounts : File("Accounts") {
         if (jsonObject.has("Main-Account")) TarasandeMain.get().screens?.screenBetterAccountManager?.mainAccount = jsonObject.get("Main-Account").asInt
     }
 
-    override fun encrypt(input: String) = String(Base64.getEncoder().encode(encryptCipher?.doFinal(input.toByteArray())))
+    override fun encrypt(input: String): String {
+        if (encryptCipher == null)
+            return input
+        return String(Base64.getEncoder().encode(encryptCipher?.doFinal(input.toByteArray())))
+    }
 
-    override fun decrypt(input: String) = try {
-        String(decryptCipher?.doFinal(Base64.getDecoder().decode(input.toByteArray()))!!)
-    } catch (e: BadPaddingException) {
-        e.printStackTrace()
-        null
+    override fun decrypt(input: String): String? {
+        if (decryptCipher == null)
+            return input
+        return try {
+            String(decryptCipher?.doFinal(Base64.getDecoder().decode(input.toByteArray()))!!)
+        } catch (e: BadPaddingException) {
+            e.printStackTrace()
+            null
+        }
     }
 }
