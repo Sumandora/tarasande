@@ -40,6 +40,7 @@
     "MixinWorldRenderer",
     "MixinWorldTimeUpdateS2CPacket",
     "baritone.MixinLookBehavior",
+    "blockesp.MixinWorldSlice",
     "connection.MixinClientConnection",
     "connection.MixinClientConnectionInitChannel",
     "connection.MixinClientPlayNetworkHandler",
@@ -52,7 +53,7 @@
   "client": [
     "MixinHandledScreen",
     "MixinPlayerListHud",
-    "MixinRenderedChunk",
-    "MixinTelemetrySender"
+    "MixinTelemetrySender",
+    "blockesp.MixinRenderedChunk"
   ]
 }
