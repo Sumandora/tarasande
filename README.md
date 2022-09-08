@@ -63,7 +63,6 @@
 - Phase
 - Step
 - Parkour / Edge Jump
-- X-Ray / BlockESP
 - NameProtect
 
 ## Notes
