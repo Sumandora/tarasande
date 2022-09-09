@@ -71,14 +71,19 @@ class TarasandeMain {
 
         if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && screens?.screenBetterAccountManager?.mainAccount != null) {
             screens?.screenBetterAccountManager?.logIn(screens?.screenBetterAccountManager?.accounts!![screens?.screenBetterAccountManager?.mainAccount!!])
-            while (screens?.screenBetterAccountManager?.loginThread != null && screens?.screenBetterAccountManager?.loginThread?.isAlive!!) Thread.sleep(50L) // synchronize
+            while (screens?.screenBetterAccountManager?.loginThread != null && screens?.screenBetterAccountManager?.loginThread?.isAlive!!) Thread.sleep(
+                50L
+            ) // synchronize
             screens?.screenBetterAccountManager?.status = null
         }
 
         autoSaveDaemon.start()
+        // We can't guarantee that qdbus exists, nor can we guarantee that we are even using kde plasma, just hope for the best ^^
+        Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor suspend")
     }
 
     fun onUnload() {
+        Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor resume")
         managerFile?.save()
     }
 }
