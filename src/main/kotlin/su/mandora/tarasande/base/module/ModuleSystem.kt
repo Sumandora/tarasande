@@ -69,7 +69,8 @@ class ManagerModule : Manager<Module>() {
             ModuleAutoClicker(),
             ModuleAimAssist(),
             ModuleNoFriends(),
-            ModuleBlockESP()
+            ModuleBlockESP(),
+            ModuleParkour()
         )
         TarasandeMain.get().managerEvent?.add { event ->
             if (event is EventTick) if (event.state == EventTick.State.POST) {

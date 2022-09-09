@@ -14,18 +14,22 @@ open class PanelFixed(title: String, x: Double, y: Double, width: Double, height
 
     init {
         TarasandeMain.get().managerEvent?.add { event ->
-            if (event is EventRender2D) {
-                if (isVisible() && opened) {
-                    if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screens?.screenMenu) {
-                        event.matrices.push()
-                        render(event.matrices, -1, -1, MinecraftClient.getInstance().tickDelta)
-                        event.matrices.pop()
+            when (event) {
+                is EventRender2D -> {
+                    if (isVisible() && opened) {
+                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screens?.screenMenu) {
+                            event.matrices.push()
+                            render(event.matrices, -1, -1, MinecraftClient.getInstance().tickDelta)
+                            event.matrices.pop()
+                        }
                     }
                 }
-            } else if (event is EventTick) {
-                if (event.state == EventTick.State.PRE) {
-                    if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screens?.screenMenu) {
-                        tick()
+
+                is EventTick -> {
+                    if (event.state == EventTick.State.PRE) {
+                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screens?.screenMenu) {
+                            tick()
+                        }
                     }
                 }
             }

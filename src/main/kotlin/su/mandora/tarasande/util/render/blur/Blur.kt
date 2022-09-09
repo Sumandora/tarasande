@@ -54,11 +54,15 @@ class Blur {
         strengthLevels.add(Pair(5, 8.50f))
 
         TarasandeMain.get().managerEvent?.add { event ->
-            if (event is EventScreenRender) {
-                if (MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenMenu)
+            when (event) {
+                is EventScreenRender -> {
+                    if (MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenMenu)
+                        blurScene()
+                }
+
+                is EventRender2D -> {
                     blurScene()
-            } else if (event is EventRender2D) {
-                blurScene()
+                }
             }
         }
     }
