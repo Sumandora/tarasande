@@ -13,7 +13,13 @@ class PanelFixedNowPlaying(x: Double, y: Double) : PanelFixed("Now playing", x, 
     private var currTrack: String? = null
 
     private fun getCurrentTrack(): String {
-        return String(ProcessBuilder("bash", "-c", "dbus-send --print-reply --dest=\$(dbus-send --session --dest=org.freedesktop.DBus --type=method_call --print-reply /org/freedesktop/DBus org.freedesktop.DBus.ListNames | grep mpris | sed -e 's/.*\\\"\\(.*\\)\\\"/\\1/' | head -n 1) /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata'").start().errorStream.readAllBytes())
+        return String(
+            ProcessBuilder(
+                "bash",
+                "-c",
+                "dbus-send --print-reply --dest=\$(dbus-send --session --dest=org.freedesktop.DBus --type=method_call --print-reply /org/freedesktop/DBus org.freedesktop.DBus.ListNames | grep mpris | sed -e 's/.*\\\"\\(.*\\)\\\"/\\1/' | head -n 1) /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata'"
+            ).start().inputStream.readAllBytes()
+        )
     }
 
     init {
