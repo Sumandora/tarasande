@@ -1,4 +1,4 @@
-package su.mandora.tarasande.mixin.mixins;
+package su.mandora.tarasande.mixin.mixins.connection;
 
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 import org.spongepowered.asm.mixin.Final;

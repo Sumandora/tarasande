@@ -7,21 +7,10 @@ class ManagerInformation : Manager<Information>() {
 
     init {
         add(
-            // Player
-            InformationXYZ(),
-            InformationNetherXYZ(),
-            InformationRotation(),
-            InformationFakeRotation(),
-
-            // Time
-            InformationDate(),
-            InformationTime(),
-
             // Connection
             InformationHandlers(),
 
             // World
-            InformationEntities(),
             InformationWorldTime(),
 
             // Badlion
@@ -29,22 +18,21 @@ class ManagerInformation : Manager<Information>() {
 
             // Modules
             InformationTimeShifted(),
-            InformationMurderer(),
+            InformationSuspectedMurderers(),
             InformationBeds()
         )
     }
 
     fun getAllOwners(): List<String> {
-        return list.filter { it.isVisible() }.distinctBy { it.owner }.map { it.owner }
+        return list.distinctBy { it.owner }.map { it.owner }
     }
 
     fun getAllInformation(owner: String): List<Information> {
-        return list.filter { it.isVisible() }.filter { it.owner == owner }
+        return list.filter { it.owner == owner }
     }
 
 }
 
 abstract class Information(val owner: String, val information: String) {
-    fun isVisible() = true
     abstract fun getMessage(): String?
 }

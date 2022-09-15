@@ -90,7 +90,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                 else sentence = "$suspect $sentence"
             }
 
-            1 -> { // i saw suspect kill somebody, this message is super cool when suspect is on the other side of the map and there are 50 walls in between
+            1 -> { // I saw suspect kill somebody, this message is super cool when suspect is on the other side of the map and there are 50 walls in between
                 sentence += "i saw $suspect kill "
                 if (ThreadLocalRandom.current().nextBoolean()) sentence += "somebody"
             }
@@ -163,7 +163,6 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                             while (player == null || player == mc.player) {
                                 player = realPlayers.get(ThreadLocalRandom.current().nextInt(realPlayers.size))
                             }
-                            @Suppress("BooleanLiteralArgument")
                             val randomIllegalItem = fakeNewsItems.list.randomOrNull()
                             accuse(player, randomIllegalItem != null, false, randomIllegalItem ?: Items.AIR, Items.AIR, fakeNews.settings.indexOf(fakeNews.selected[0]), customFakeNewsMessage.value)
                             fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L

@@ -30,7 +30,8 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
         var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
         for (it in elementModuleList) {
             it.width = panelWidth - 4
-            if (y + it.getHeight() + 2 >= this.y - scrollOffset) it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
+            if (y + it.getHeight() + 2 >= this.y - scrollOffset)
+                it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
 
             matrices?.translate(0.0, it.getHeight() + 2, 0.0)
             y += it.getHeight() + 2

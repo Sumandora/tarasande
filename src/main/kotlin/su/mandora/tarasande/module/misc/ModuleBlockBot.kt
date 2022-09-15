@@ -28,7 +28,7 @@ class ModuleBlockBot : Module("Block bot", "Walks into the line of sight of othe
                 val targetEye = target.eyePos.add(Rotation(target).forwardVector(extension.value))
                 move = mc.player?.eyePos?.squaredDistanceTo(targetEye)!! > minDistance.value * minDistance.value
 
-                val rotation = if (!move) // if hes not moving, just look at him... make him mad ^^
+                val rotation = if (!move) // if he's not moving, just look at him... make him mad ^^
                     RotationUtil.getRotations(mc.player?.eyePos!!, target.eyePos)
                 else
                     RotationUtil.getRotations(mc.player?.eyePos!!, targetEye)

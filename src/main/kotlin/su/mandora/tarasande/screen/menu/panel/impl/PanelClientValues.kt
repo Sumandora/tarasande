@@ -9,13 +9,15 @@ import su.mandora.tarasande.util.render.RenderUtil
 
 class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150.0, 100.0) {
 
-    val elements = ArrayList<ValueComponent>()
+    private val elements = ArrayList<ValueComponent>()
 
     override fun init() {
         if (elements.isEmpty()) {
-            TarasandeMain.get().managerValue?.getValues(TarasandeMain.get().clientValues!!)
-                ?.forEach { elements.add(TarasandeMain.get().screens?.screenMenu?.managerValueComponent?.newInstance(it)!!) }
+            for (it in TarasandeMain.get().managerValue?.getValues(TarasandeMain.get().clientValues!!)!!) {
+                elements.add(TarasandeMain.get().screens?.screenMenu?.managerValueComponent?.newInstance(it)!!)
+            }
         }
+        elements.forEach(ValueComponent::init)
     }
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {

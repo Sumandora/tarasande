@@ -14,7 +14,6 @@ import su.mandora.tarasande.util.connection.Proxy;
 @Mixin(targets = "net/minecraft/network/ClientConnection$1")
 public class MixinClientConnectionInitChannel {
 
-    @SuppressWarnings("UnresolvedMixinReference")
     @Inject(method = "initChannel", at = @At("TAIL"))
     public void injectPostInitChannel(Channel channel, CallbackInfo ci) {
         Proxy proxy = TarasandeMain.Companion.get().getScreens().getScreenBetterAccountManager().getProxy();

@@ -190,7 +190,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
         var cancelled = false
             set(value) {
                 if (account.session != null)
-                    throw IllegalStateException("Account has already been logged into")
+                    error("Account has already been logged into")
                 field = value
             }
 

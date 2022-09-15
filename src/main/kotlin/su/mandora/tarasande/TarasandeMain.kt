@@ -38,7 +38,7 @@ class TarasandeMain {
         while (true) {
             if (clientValues?.autoSaveConfig?.value!!) {
                 managerFile?.save()
-                Thread.sleep(clientValues?.delay?.value?.toLong()!!)
+                Thread.sleep(clientValues?.autoSaveDelay?.value?.toLong()!!)
             }
         }
     }, autoSaveDaemonName)

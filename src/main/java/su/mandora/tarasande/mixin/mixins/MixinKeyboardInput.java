@@ -1,5 +1,6 @@
 package su.mandora.tarasande.mixin.mixins;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,9 +14,11 @@ import su.mandora.tarasande.event.EventInput;
 @Mixin(KeyboardInput.class)
 public class MixinKeyboardInput extends Input {
 
-    @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/KeyboardInput;jumping:Z"))
+    @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/KeyboardInput;sneaking:Z", shift = At.Shift.AFTER), cancellable = true)
     public void injectTick(boolean slowDown, float f, CallbackInfo ci) {
-        EventInput eventInput = new EventInput(this, this.movementForward, this.movementSideways);
+        if (this != MinecraftClient.getInstance().player.input)
+            return;
+        EventInput eventInput = new EventInput(this, this.movementForward, this.movementSideways, slowDown, f);
         TarasandeMain.Companion.get().getManagerEvent().call(eventInput);
 
         this.pressingForward = this.pressingBack = this.pressingLeft = this.pressingRight = false;
@@ -35,6 +38,9 @@ public class MixinKeyboardInput extends Input {
             this.movementForward = eventInput.getMovementForward();
             this.movementSideways = eventInput.getMovementSideways();
         }
+
+        if (!eventInput.getSlowDown())
+            ci.cancel(); // This is awful, but I can't change the parameter, because Java doesn't support references
     }
 
     @Override

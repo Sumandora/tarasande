@@ -6,7 +6,6 @@ import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventAttack
 import su.mandora.tarasande.event.EventHandleBlockBreaking
-import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.mixin.accessor.IKeyBinding
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.util.player.clickspeed.ClickSpeedUtil

@@ -1,6 +1,8 @@
 package su.mandora.tarasande.mixin.mixins;
 
 import net.minecraft.client.network.ClientPlayerInteractionManager;
+import net.minecraft.client.network.SequencedPacketCreator;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,6 +22,12 @@ public abstract class MixinClientPlayerInteractionManager implements IClientPlay
 
     @Shadow
     protected abstract void syncSelectedSlot();
+
+    @Shadow
+    private float currentBreakingProgress;
+
+    @Shadow
+    protected abstract void sendSequencedPacket(ClientWorld world, SequencedPacketCreator packetCreator);
 
     @Inject(method = "attackEntity", at = @At("HEAD"))
     public void injectPreAttackEntity(PlayerEntity player, Entity target, CallbackInfo ci) {
@@ -45,5 +53,20 @@ public abstract class MixinClientPlayerInteractionManager implements IClientPlay
     @Override
     public boolean tarasande_getOnlyPackets() {
         return onlyPackets;
+    }
+
+    @Override
+    public float tarasande_getCurrentBreakingProgress() {
+        return currentBreakingProgress;
+    }
+
+    @Override
+    public void tarasande_setCurrentBreakingProgress(float currentBreakingProgress) {
+        this.currentBreakingProgress = currentBreakingProgress;
+    }
+
+    @Override
+    public void tarasande_invokeSendSequencedPacket(ClientWorld world, SequencedPacketCreator packetCreator) {
+        sendSequencedPacket(world, packetCreator);
     }
 }

@@ -47,7 +47,7 @@ class AccountMicrosoft : Account() {
         return try {
             val serverSocket = ServerSocket(randomPort())
             if (!serverSocket.isBound)
-                throw IllegalStateException("Not bound")
+                error("Not bound")
             val t = Thread({
                 try {
                     val socket = serverSocket.accept()
@@ -110,7 +110,7 @@ You can close this page now.""".toByteArray())
                     RenderSystem.recordRenderCall {
                         MinecraftClient.getInstance().setScreen(prevScreen)
                     }
-                    throw IllegalStateException("Cancelled")
+                    error("Cancelled")
                 }
             }
             RenderSystem.recordRenderCall {
@@ -123,7 +123,7 @@ You can close this page now.""".toByteArray())
         if (msAuthProfile != null) {
             session = msAuthProfile?.asSession()!!
         } else {
-            throw IllegalStateException("WHAT THE FUCK")
+            error("WHAT THE FUCK")
         }
     }
 

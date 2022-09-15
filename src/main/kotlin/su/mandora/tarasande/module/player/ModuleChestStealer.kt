@@ -27,7 +27,9 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
     private val closeDelay = ValueNumber(this, "Close delay", 0.0, 100.0, 500.0, 1.0)
     private val randomize = ValueNumber(this, "Randomize", 0.0, 0.0, 30.0, 1.0) // used to be called parkinson...
     private val checkTitle = ValueBoolean(this, "Check title", false)
-    private val titleSubstring = ValueText(this, "Title substring", "Chest")
+    private val titleSubstring = object : ValueText(this, "Title substring", "Chest") {
+        override fun isEnabled() = checkTitle.value
+    }
 
     private val timeUtil = TimeUtil()
 

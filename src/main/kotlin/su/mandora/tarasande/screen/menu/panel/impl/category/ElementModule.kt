@@ -23,7 +23,7 @@ class ElementModule(private val module: Module, var width: Double) : IElement {
     private var expansionTime = 0L
     private var expanded = false
 
-    val components = ArrayList<ValueComponent>()
+    private val components = ArrayList<ValueComponent>()
 
     override fun init() {
         if (components.isEmpty()) {
@@ -31,6 +31,7 @@ class ElementModule(private val module: Module, var width: Double) : IElement {
                 components.add(TarasandeMain.get().screens?.screenMenu?.managerValueComponent?.newInstance(value)!!)
             }
         }
+        components.forEach(ValueComponent::init)
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {

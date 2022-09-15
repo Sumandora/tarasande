@@ -17,7 +17,7 @@ class ElementPlayer(val gameProfile: GameProfile, var width: Double) : IElement 
 
     private val value = object : ValueText(this, gameProfile.name, "", manage = false) {
         override fun onChange() {
-            TarasandeMain.get().friends?.setAlias(gameProfile, if (value.isNotEmpty()) value else null)
+            TarasandeMain.get().friends?.setAlias(gameProfile, value.ifEmpty { null })
         }
     }
     private val textField = ValueComponentText(value)
@@ -46,6 +46,7 @@ class ElementPlayer(val gameProfile: GameProfile, var width: Double) : IElement 
             accessor.tarasande_setColor(null)
             matrices?.pop()
         } else {
+            textField.setFocused(false)
             MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, gameProfile.name, xOffset.toFloat(), yOffset.toFloat(), Color.white.rgb)
         }
 

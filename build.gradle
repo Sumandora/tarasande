@@ -2,7 +2,7 @@ plugins {
 	id "fabric-loom"
 	id "maven-publish"
 	id "org.jetbrains.kotlin.jvm"
-	id 'com.github.johnrengelman.shadow'
+	id "com.github.johnrengelman.shadow"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -31,7 +31,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
 	// https://mvnrepository.com/artifact/io.netty/netty-handler-proxy
-	implementation 'io.netty:netty-handler-proxy:4.1.80.Final'
+    implementation "io.netty:netty-handler-proxy:${project.netty_proxy_handlers_version}"
 }
 
 processResources {
@@ -83,13 +83,13 @@ remapJar {
 }
 
 shadowJar {
-	archiveClassifier.set('shadow')
-	compileJava.options.encoding = 'UTF-8'
+    archiveClassifier.set("shadow")
+    compileJava.options.encoding = "UTF-8"
 
-	dependencies {
-		include(dependency('io.netty:netty-handler-proxy:4.1.80.Final'))
-	}
-	minimize()
+    dependencies {
+        include(dependency("io.netty:netty-handler-proxy:4.1.80.Final"))
+    }
+    minimize()
 }
 
 compileKotlin.kotlinOptions.jvmTarget = "17"

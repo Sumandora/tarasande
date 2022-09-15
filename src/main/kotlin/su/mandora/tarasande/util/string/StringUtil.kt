@@ -5,7 +5,6 @@ import net.minecraft.client.resource.language.LanguageDefinition
 import net.minecraft.client.resource.language.TranslationStorage
 import su.mandora.tarasande.mixin.accessor.ILanguageManager
 import java.util.*
-import kotlin.collections.HashMap
 
 object StringUtil {
 

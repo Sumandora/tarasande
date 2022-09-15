@@ -20,15 +20,18 @@ class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MO
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventKeyBindingIsPressed -> {
-                if (event.keyBinding == mc.options?.sprintKey) event.pressed = true
+                if (event.keyBinding == mc.options?.sprintKey)
+                    event.pressed = true
             }
 
             is EventIsWalking -> {
-                if (allowBackwards.isEnabled() && allowBackwards.value) event.walking = MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f
+                if (allowBackwards.isEnabled() && allowBackwards.value)
+                    event.walking = MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f
             }
 
             is EventHasForwardMovement -> {
-                if (allowBackwards.isEnabled() && allowBackwards.value) event.hasForwardMovement = MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f
+                if (allowBackwards.isEnabled() && allowBackwards.value)
+                    event.hasForwardMovement = MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f
             }
         }
     }

@@ -23,13 +23,13 @@ import kotlin.math.min
 
 class ESPElementBox : ESPElement("Box") {
     private val width = object : ValueNumber(this, "Width", 1.0, 2.0, 5.0, 0.1) {
-        override fun isEnabled() = enabled.value
+        override fun isEnabled() = enabled.isEnabled() && enabled.value
     }
     private val outlined = object : ValueBoolean(this, "Outlined", true) {
-        override fun isEnabled() = enabled.value
+        override fun isEnabled() = enabled.isEnabled() && enabled.value
     }
     private val outlineWidth = object : ValueNumber(this, "Outline width", 1.0, 2.0, 5.0, 0.1) {
-        override fun isEnabled() = enabled.value && outlined.value
+        override fun isEnabled() = enabled.isEnabled() && enabled.value && outlined.value
     }
 
     override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
@@ -41,10 +41,10 @@ class ESPElementBox : ESPElement("Box") {
 
 class ESPElementName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Orientation.RIGHT, Orientation.BOTTOM)) {
     private val outlined = object : ValueBoolean(this, "Outlined", true) {
-        override fun isEnabled() = enabled.value
+        override fun isEnabled() = enabled.isEnabled() && enabled.value
     }
     private val scale = object : ValueNumber(this, "Scale", 0.1, 1.0, 3.0, 0.1) {
-        override fun isEnabled() = enabled.value
+        override fun isEnabled() = enabled.isEnabled() && enabled.value
     }
 
     override fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double, orientation: Orientation) {
@@ -60,28 +60,28 @@ class ESPElementName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Ori
         matrices.translate(-sideWidth / 2, 0.0, 0.0)
         if (outlined.value) {
             val immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().buffer)
-            MinecraftClient.getInstance().textRenderer?.drawWithOutline(tagName, (sideWidth / 2f - width / 2f).toFloat(), -MinecraftClient.getInstance().textRenderer.fontHeight.toFloat(), col, Color.black.rgb, matrices.peek().positionMatrix, immediate, LightmapTextureManager.MAX_LIGHT_COORDINATE)
+            MinecraftClient.getInstance().textRenderer?.drawWithOutline(tagName, (sideWidth / 2f - width / 2f).toFloat(), 0.0f, col, Color.black.rgb, matrices.peek().positionMatrix, immediate, LightmapTextureManager.MAX_LIGHT_COORDINATE)
             immediate.draw()
         } else {
-            MinecraftClient.getInstance().textRenderer?.drawWithShadow(matrices, tagName, (sideWidth / 2f - width / 2f).toFloat(), -MinecraftClient.getInstance().textRenderer.fontHeight.toFloat(), col)
+            MinecraftClient.getInstance().textRenderer?.drawWithShadow(matrices, tagName, (sideWidth / 2f - width / 2f).toFloat(), 0.0f, col)
         }
         matrices.pop()
     }
 
     override fun getHeight(entity: Entity, sideWidth: Double): Double {
-        return MinecraftClient.getInstance().textRenderer.fontHeight.toDouble() * min(sideWidth / MinecraftClient.getInstance().textRenderer?.getWidth(TagName.getTagName(entity)?.asOrderedText() ?: return 0.0)!!, 3.0)
+        return MinecraftClient.getInstance().textRenderer.fontHeight.toDouble() * min(sideWidth / MinecraftClient.getInstance().textRenderer?.getWidth(TagName.getTagName(entity)?.asOrderedText() ?: return 0.0)!!, 3.0) * scale.value
     }
 }
 
 class ESPElementHealthBar : ESPElementRotatable("Health bar", arrayOf(Orientation.TOP, Orientation.BOTTOM)) {
     private val outlined = object : ValueBoolean(this, "Outlined", true) {
-        override fun isEnabled() = enabled.value
+        override fun isEnabled() = enabled.isEnabled() && enabled.value
     }
     private val fadeColorBegin = object : ValueColor(this, "Fade color begin", 0.33f /*green*/, 1.0f, 1.0f) {
-        override fun isEnabled() = enabled.value
+        override fun isEnabled() = enabled.isEnabled() && enabled.value
     }
     private val fadeColorEnd = object : ValueColor(this, "Fade color end", 0.0f /*red*/, 1.0f, 1.0f) {
-        override fun isEnabled() = enabled.value
+        override fun isEnabled() = enabled.isEnabled() && enabled.value
     }
 
     override fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double, orientation: Orientation) {
@@ -95,7 +95,7 @@ class ESPElementHealthBar : ESPElementRotatable("Health bar", arrayOf(Orientatio
         else
             RenderUtil.fillHorizontalGradient(matrices, 0.0, 0.0, sideWidth * percentage, height, RenderUtil.colorInterpolate(fadeColorBegin.getColor(), fadeColorEnd.getColor(), 1.0 - percentage).rgb, fadeColorEnd.getColor().rgb)
         if (outlined.value) {
-            RenderUtil.outlinedFill(matrices, 0.0, 0.0, sideWidth, height, ceil(height.coerceAtLeast(1.0) * 0.5).toFloat(), Color.black.rgb)
+            RenderUtil.outlinedFill(matrices, 0.0, 0.0, sideWidth, height, ceil(height * 0.5).coerceAtLeast(1.0).toFloat(), Color.black.rgb)
         }
         matrices.pop()
     }

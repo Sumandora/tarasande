@@ -12,7 +12,7 @@ class FramebufferWrapped : SimpleFramebuffer(MinecraftClient.getInstance().windo
 
         TarasandeMain.get().managerEvent?.add { event ->
             if (event is EventResolutionUpdate) {
-                resize(event.width.toInt(), event.height.toInt(), MinecraftClient.IS_SYSTEM_MAC)
+                resize(MinecraftClient.getInstance().window.framebufferWidth.toInt(), MinecraftClient.getInstance().window.framebufferHeight.toInt(), MinecraftClient.IS_SYSTEM_MAC)
             }
         }
     }

@@ -1,7 +1,6 @@
 package su.mandora.tarasande.base.event
 
 import su.mandora.tarasande.base.Manager
-import su.mandora.tarasande.event.EventPacket
 import java.lang.reflect.ParameterizedType
 import java.util.function.Consumer
 
@@ -59,7 +58,7 @@ open class Event(private val cancellable: Boolean) {
         set(value) = if (cancellable || !value) {
             field = value
         } else {
-            throw IllegalStateException("Event is not cancellable")
+            error("Event is not cancellable")
         }
 }
 

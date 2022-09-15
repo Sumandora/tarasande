@@ -4,6 +4,8 @@ import net.minecraft.util.math.Box
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
+import kotlin.math.ceil
+import kotlin.math.floor
 
 object MathUtil {
 
@@ -51,5 +53,13 @@ object MathUtil {
         }
         return list
     }
+
+    fun roundAwayFromZero(x: Double) =
+        if (x < 0)
+            floor(x)
+        else if (x > 0)
+            ceil(x)
+        else
+            x
 
 }

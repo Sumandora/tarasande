@@ -22,7 +22,6 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.*
 import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity
 import su.mandora.tarasande.mixin.accessor.IKeyBinding
-import su.mandora.tarasande.mixin.accessor.ILivingEntity
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
@@ -86,7 +85,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val flexHurtTime = object : ValueNumber(this, "Flex hurt time", 0.1, 0.5, 0.9, 0.1) {
         override fun isEnabled() = flex.value
     }
-    private val syncPosition = ValueBoolean(this, "Sync position", false)
     private val waitForCritical = ValueBoolean(this, "Wait for critical", false)
     private val dontWaitWhenEnemyHasShield = object : ValueBoolean(this, "Don't wait when enemy has shield", true) {
         override fun isEnabled() = waitForCritical.value
@@ -98,7 +96,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         override fun isEnabled() = waitForCritical.value && criticalSprint.value
     }
 
-    private val targets = ArrayList<Pair<Entity, Vec3d>>()
+    val targets = ArrayList<Pair<Entity, Vec3d>>()
     private val comparator: Comparator<Pair<Entity, Vec3d>> = Comparator.comparing {
         when {
             priority.isSelected(0) -> {
@@ -163,11 +161,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     val entity = entity as LivingEntity
 
                     var boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())
-                    if (syncPosition.value) {
-                        val accessor = entity as ILivingEntity
-                        if (accessor.tarasande_getBodyTrackingIncrements() > 0)
-                            boundingBox = boundingBox.offset(accessor.tarasande_getServerX() - entity.x, accessor.tarasande_getServerY() - entity.y, accessor.tarasande_getServerZ() - entity.z)
-                    }
                     val bestAimPoint = getBestAimPoint(boundingBox)
                     if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
                     if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(fovRotation()) > fov.value) continue

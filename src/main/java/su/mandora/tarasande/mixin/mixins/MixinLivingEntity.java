@@ -13,10 +13,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.TarasandeMain;
 import su.mandora.tarasande.event.EventJump;
 import su.mandora.tarasande.event.EventSwing;
 import su.mandora.tarasande.mixin.accessor.ILivingEntity;
+import su.mandora.tarasande.module.movement.ModuleNoCramming;
 import su.mandora.tarasande.util.math.rotation.Rotation;
 import su.mandora.tarasande.util.math.rotation.RotationUtil;
 
@@ -89,6 +91,12 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
             if (eventSwing.getCancelled())
                 ci.cancel();
         }
+    }
+
+    @Inject(method = "isPushable", at = @At("HEAD"), cancellable = true)
+    public void injectIsPushable(CallbackInfoReturnable<Boolean> cir) {
+        if ((Object) this == MinecraftClient.getInstance().player && TarasandeMain.Companion.get().getManagerModule().get(ModuleNoCramming.class).getEnabled())
+            cir.setReturnValue(false);
     }
 
     @Override

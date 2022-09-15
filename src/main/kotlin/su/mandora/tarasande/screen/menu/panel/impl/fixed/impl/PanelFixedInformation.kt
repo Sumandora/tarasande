@@ -48,7 +48,9 @@ class PanelFixedInformation(x: Double, y: Double) : PanelFixed("Information", x,
     }
 
     override fun isVisible(): Boolean {
-        for (information in TarasandeMain.get().screens?.screenMenu?.managerInformation?.list!!) if (information.isVisible()) return true
+        for (information in TarasandeMain.get().screens?.screenMenu?.managerInformation?.list!!)
+            if (information.getMessage() != null)
+                return true
         return false
     }
 

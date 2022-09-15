@@ -22,12 +22,15 @@ class ClientValues {
     }
     val unlockTicksPerFrame = ValueBoolean(this, "Unlock ticks per frame", false)
     val updateRotationsWhenTickSkipping = ValueBoolean(this, "Update rotations when tick skipping", false)
+    val updateRotationsAccurately = object : ValueBoolean(this, "Update rotations accurately", true) {
+        override fun isEnabled() = updateRotationsWhenTickSkipping.value
+    }
     val autoSaveConfig = object : ValueBoolean(this, "Auto save config", true) {
         override fun onChange() {
             TarasandeMain.get().autoSaveDaemon.name = TarasandeMain.get().autoSaveDaemonName + if (!value) " (disabled)" else ""
         }
     }
-    val delay = object : ValueNumber(this, "Delay", 0.0, 10000.0, 60000.0, 1000.0) {
+    val autoSaveDelay = object : ValueNumber(this, "Auto save delay", 0.0, 10000.0, 60000.0, 1000.0) {
         override fun isEnabled() = autoSaveConfig.value
     }
     val hypixelApiKey = ValueText(this, "Hypixel API Key", "")

@@ -1,7 +1,6 @@
 package su.mandora.tarasande.util.render.shader
 
 import org.lwjgl.opengl.GL20
-import java.util.HashMap
 
 class Program(vararg shaders: Shader) {
 

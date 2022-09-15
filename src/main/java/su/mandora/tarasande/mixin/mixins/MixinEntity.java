@@ -2,10 +2,11 @@ package su.mandora.tarasande.mixin.mixins;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.MovementType;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.util.shape.VoxelShape;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -17,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.TarasandeMain;
 import su.mandora.tarasande.event.EventMovement;
+import su.mandora.tarasande.event.EventStep;
 import su.mandora.tarasande.event.EventVelocityYaw;
 import su.mandora.tarasande.mixin.accessor.IEntity;
 import su.mandora.tarasande.mixin.accessor.IVec3d;
@@ -24,6 +26,7 @@ import su.mandora.tarasande.module.render.ModuleESP;
 import su.mandora.tarasande.util.math.rotation.RotationUtil;
 
 import java.awt.*;
+import java.util.List;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity implements IEntity {
@@ -32,8 +35,6 @@ public abstract class MixinEntity implements IEntity {
     @Shadow
     @Final
     protected Random random;
-    @Shadow
-    private EntityDimensions dimensions;
 
     @Shadow
     private static Vec3d movementInputToVelocity(Vec3d movementInput, float speed, float yaw) {
@@ -42,6 +43,14 @@ public abstract class MixinEntity implements IEntity {
 
     @Shadow
     protected abstract Vec3d getRotationVector(float pitch, float yaw);
+
+    @Shadow
+    private Vec3d pos;
+
+    @Shadow
+    private static Vec3d adjustMovementForCollisions(Vec3d movement, Box entityBoundingBox, List<VoxelShape> collisions) {
+        return null;
+    }
 
     @Inject(method = "getRotationVec", at = @At("HEAD"), cancellable = true)
     public void injectGetRotationVec(float tickDelta, CallbackInfoReturnable<Vec3d> cir) {
@@ -75,6 +84,25 @@ public abstract class MixinEntity implements IEntity {
             Color c = TarasandeMain.Companion.get().getEntityColor().getColor((Entity) (Object) this);
             if (c != null)
                 cir.setReturnValue(c.getRGB());
+        }
+    }
+
+    @Redirect(method = "adjustMovementForCollisions(Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/util/math/Vec3d;", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;stepHeight:F"))
+    public float hookedStepHeight(Entity instance) {
+        if ((Object) this == MinecraftClient.getInstance().player) {
+            EventStep eventStep = new EventStep(instance.stepHeight, EventStep.State.PRE);
+            TarasandeMain.Companion.get().getManagerEvent().call(eventStep);
+            return eventStep.getStepHeight();
+        }
+
+        return instance.stepHeight;
+    }
+
+    @Inject(method = "adjustMovementForCollisions(Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/util/math/Vec3d;", at = @At("RETURN"))
+    public void injectPostAdjustMovementForCollisions(Vec3d movement, CallbackInfoReturnable<Vec3d> cir) {
+        if ((Object) this == MinecraftClient.getInstance().player) {
+            EventStep eventStep = new EventStep((float) cir.getReturnValue().y, EventStep.State.POST);
+            TarasandeMain.Companion.get().getManagerEvent().call(eventStep);
         }
     }
 

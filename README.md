@@ -42,29 +42,30 @@
 - Vehicle Speed
 - Elytra Flight
 - Baritone Sprint Jump
-- More Anti Bots (Mode which checks if the entity tries to stay out of the line of sight)
-- Inventory Cleaner & Auto Armor
-- KillAura: Simulate Damage in case cooldown isn't gone but full dmg isn't needed to kill somebody
+- More Anti Bots (Mode which checks if the entity tries to stay out of the line of sight; Movement; Ever sneaked; Ticks
+  existed)
+- Inventory Cleaner & Auto Armor (Smart Stealer)
 - PvP-Bot for Practice Game Modes
-- MidClick (alias prompt with screen and callback?)
 - KillAura: Calculate attack cycle from enemies
-- BowAimbot: Prediction
 - Improve BedESP performance (Go inside from outside; see comment in BedESP class)
 - User configs
 - Crystal Aura
-- Debug Category
+- Tick Backtrack for Ghost Cheating
 - Anti Vanish
-- Resource Pack Spoofer
 - Auto Soup&Pot
 - TNT Block
 - Air stuck
 - Anti Fall
 - Fast Use & Bow
 - Phase
-- Step
-- Parkour / Edge Jump
-- NameProtect
+- Step: Calculate all motions; Prediction by LivingEntity#travel; Instantiate object and simulate
+- AutoTool: Auto Sword
+- Sneak module: This should use the input event and simply turn slowdown off
+- Change Name/Skin/Cape in Account Manager
+- Fast Break&Place (Place with autoclicker)
+- CivBreaker
+- Velocity: Addition depends on packet
+- GUI: anim time, making it a setting?
 
 ## Notes
-- Matrix Bots never sneak (might be applicable to other bots)
 - AutoTool: Axes can set shields on cooldown. Maybe implement that if possible axes are being used to set shields on cooldown before actually attacking with sword

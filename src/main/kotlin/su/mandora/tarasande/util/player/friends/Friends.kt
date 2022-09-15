@@ -8,10 +8,11 @@ import su.mandora.tarasande.event.EventIsEntityAttackable
 import su.mandora.tarasande.event.EventPlayerListName
 import su.mandora.tarasande.event.EventTagName
 import su.mandora.tarasande.module.misc.ModuleNoFriends
+import su.mandora.tarasande.module.render.ModuleNameProtect
 
 class Friends {
 
-    private val friends = ArrayList<Pair<GameProfile, String?>>()
+    val friends = ArrayList<Pair<GameProfile, String?>>()
 
     init {
         TarasandeMain.get().managerEvent?.add { event ->
@@ -25,6 +26,9 @@ class Friends {
                 }
 
                 is EventTagName -> {
+                    if (TarasandeMain.get().managerModule?.get(ModuleNameProtect::class.java)?.enabled == true) // Name protect will replace the names, so this is redundant
+                        return@add
+
                     if (event.entity is PlayerEntity) {
                         val profile = (event.entity as PlayerEntity).gameProfile
                         for (friend in friends)
@@ -34,9 +38,13 @@ class Friends {
                 }
 
                 is EventPlayerListName -> {
+                    if (TarasandeMain.get().managerModule?.get(ModuleNameProtect::class.java)?.enabled == true) // Name protect will replace the names, so this is redundant
+                        return@add
+
                     for (friend in friends)
-                        if (friend.first == event.playerListEntry.profile && friend.second != null && friend.second != event.playerListEntry.profile.name)
+                        if (friend.first == event.playerListEntry.profile && friend.second != null && friend.second != event.playerListEntry.profile.name) {
                             event.displayName = event.displayName.copy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
+                        }
                 }
             }
         }

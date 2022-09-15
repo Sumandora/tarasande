@@ -45,7 +45,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
     }
 
     private fun deadReckoning(stack: ItemStack, entity: Entity, rotation: Rotation): Vec3d {
-        val predicted = TarasandeMain.get().managerModule?.get(ModuleTrajectories::class.java)?.predict(stack, rotation)!!
+        val predicted = TarasandeMain.get().managerModule?.get(ModuleTrajectories::class.java)?.predict(stack, rotation, false)!!
         if(predicted.size <= 0) return entity.boundingBox.center
         val prev = Vec3d(entity.prevX, entity.prevY, entity.prevZ)
         return entity.boundingBox.center.add(entity.pos?.subtract(prev)?.withAxis(Direction.Axis.Y, 0.0)?.multiply(predicted.size.toDouble() * predictionAmount.value))

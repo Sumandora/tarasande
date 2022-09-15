@@ -35,9 +35,15 @@ class ValueComponentText(value: Value) : ValueComponent(value) {
         textFieldWidget.width = (width * 2).toInt()
         matrices?.push()
         matrices?.scale(0.5F, 0.5F, 1.0F)
-        if (textFieldWidget.isFocused) (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.get().clientValues?.accentColor?.getColor()!!)
+
+        if (textFieldWidget.isFocused)
+            (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.get().clientValues?.accentColor?.getColor()!!)
+        else
+            textFieldWidget.setCursorToEnd()
+
         if (!value.isEnabled())
             (textFieldWidget as ITextFieldWidget).tarasande_setColor(Color.white.darker().darker())
+
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
         (textFieldWidget as ITextFieldWidget).tarasande_setColor(null)
         matrices?.pop()
@@ -82,6 +88,8 @@ class ValueComponentText(value: Value) : ValueComponent(value) {
     }
 
     fun isFocused() = textFieldWidget.isFocused
+
+    fun setFocused(focused: Boolean) = textFieldWidget.setTextFieldFocused(focused)
 
     override fun getHeight() = MinecraftClient.getInstance().textRenderer.fontHeight.toDouble()
 }

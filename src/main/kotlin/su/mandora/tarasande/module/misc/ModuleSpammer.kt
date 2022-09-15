@@ -1,7 +1,6 @@
 package su.mandora.tarasande.module.misc
 
 import net.minecraft.client.gui.screen.ChatScreen
-import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import org.apache.commons.lang3.RandomStringUtils

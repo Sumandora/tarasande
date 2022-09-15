@@ -81,7 +81,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
 
     })
 
-    fun predict(itemStack: ItemStack, rotation: Rotation?): ArrayList<Vec3d> {
+    fun predict(itemStack: ItemStack, rotation: Rotation?, predictVelocity: Boolean): ArrayList<Vec3d> {
         val projectileItem = projectileItems.first { it.isSame(itemStack.item) }
         (mc.world as IWorld).tarasande_setIsClient(false)
         val path = ArrayList<Vec3d>()
@@ -164,7 +164,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
             mc.player?.yaw = rotation.yaw
             mc.player?.pitch = rotation.pitch
         }
-        if (!predictVelocity.value) {
+        if (!predictVelocity) {
             mc.player?.velocity = Vec3d.ZERO
         }
         projectileItem.setupRoutine.accept(itemStack, persistentProjectileEntity)
@@ -206,7 +206,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
                 val bufferBuilder = Tessellator.getInstance().buffer
                 bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
                 val matrix = event.matrices.peek()?.positionMatrix!!
-                val path = predict(stack!!, RotationUtil.fakeRotation)
+                val path = predict(stack!!, RotationUtil.fakeRotation, predictVelocity.value)
                 for (vec in path) {
                     bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).color(1f, 1f, 1f, 1f).next()
                 }

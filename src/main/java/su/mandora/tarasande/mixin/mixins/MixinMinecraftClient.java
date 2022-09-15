@@ -115,9 +115,12 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
         TarasandeMain.Companion.get().onUnload();
     }
 
-    @Inject(method = "onResolutionChanged", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;resize(IIZ)V", shift = At.Shift.AFTER))
-    public void injectOnResolutionChanged(CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventResolutionUpdate((float) this.window.getFramebufferWidth(), (float) this.window.getFramebufferHeight()));
+    @Redirect(method = "onResolutionChanged", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/Window;setScaleFactor(D)V"))
+    public void hookedSetScaleFactor(Window instance, double scaleFactor) {
+        double prevWidth = instance.getScaledWidth();
+        double prevHeight = instance.getScaledHeight();
+        instance.setScaleFactor(scaleFactor);
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventResolutionUpdate(prevWidth, prevHeight, this.window.getScaledWidth(), this.window.getScaledHeight()));
     }
 
     @Inject(method = "render", at = @At("HEAD"))

@@ -25,6 +25,8 @@ class GraphFPS : Graph("FPS", 200) {
     }
 
     override fun supplyData(): Double? {
+        if (data.isEmpty())
+            return null
         val average = data.average()
         data.clear()
         if (average <= 0.0)

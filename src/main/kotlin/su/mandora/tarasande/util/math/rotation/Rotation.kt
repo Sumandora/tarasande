@@ -116,7 +116,7 @@ class Rotation(var yaw: Float, var pitch: Float) {
         val i = MathHelper.sin(g)
         val j = MathHelper.cos(f)
         val k = MathHelper.sin(f)
-        return Vec3d(i * j * dist, -k * dist, h * j * dist)
+        return Vec3d((i * j).toDouble(), -k.toDouble(), (h * j).toDouble()).multiply(dist)
     }
 
 

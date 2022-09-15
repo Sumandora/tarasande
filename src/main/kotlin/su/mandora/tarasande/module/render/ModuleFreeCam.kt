@@ -1,6 +1,5 @@
 package su.mandora.tarasande.module.render
 
-import net.minecraft.client.input.KeyboardInput
 import net.minecraft.client.option.Perspective
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
@@ -10,7 +9,10 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.*
 import su.mandora.tarasande.mixin.accessor.ICamera
 import su.mandora.tarasande.mixin.accessor.IEntity
+import su.mandora.tarasande.mixin.accessor.IKeyBinding
+import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
+import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
@@ -23,12 +25,10 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
     private var position: Vec3d? = null
     private var beginRotation: Rotation? = null
     private var rotation: Rotation? = null
-    private var velocity: Vec3d? = null
+
+    private var prevCameraPos: Vec3d? = null
 
     private var perspective: Perspective? = null
-    private var yMotion = 0.0
-
-    private val myInput = KeyboardInput(mc.options)
 
     override fun onEnable() {
         if (mc.player != null) {
@@ -43,6 +43,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
         mc.player?.yaw = beginRotation?.yaw!!
         mc.player?.pitch = beginRotation?.pitch!!
         mc.options.perspective = perspective
+        prevCameraPos = null
     }
 
     @Priority(5) // let all of this stuff get overridden
@@ -54,7 +55,9 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
                 mc.options.perspective = Perspective.THIRD_PERSON_BACK
                 val accessor = event.camera as ICamera
 
-                accessor.tarasande_invokeSetPos(if (velocity != null) position?.add(velocity?.multiply(mc.tickDelta.toDouble())) else position)
+                accessor.tarasande_invokeSetPos((prevCameraPos ?: position)?.lerp(position, mc.tickDelta.toDouble()).also {
+                    prevCameraPos = it
+                })
                 accessor.tarasande_invokeSetRotation(rotation?.yaw!!, rotation?.pitch!!)
             }
 
@@ -72,36 +75,30 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
 
             is EventUpdate -> {
                 if (event.state == EventUpdate.State.PRE) {
-                    if (velocity != null)
-                        position = position?.add(velocity)
-                    myInput.tick(false, 1.0f)
+                    if (position == null || rotation == null)
+                        onEnable()
+                    var yMotion = 0.0
+                    if ((mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
+                        yMotion += speed.value
+                    if ((mc.options.sneakKey as IKeyBinding).tarasande_forceIsPressed())
+                        yMotion -= speed.value
+                    var velocity = (mc.player as IEntity).tarasande_invokeMovementInputToVelocity(Vec3d(
+                        MathUtil.roundAwayFromZero(PlayerUtil.input.movementSideways.toDouble()),
+                        0.0,
+                        MathUtil.roundAwayFromZero(PlayerUtil.input.movementForward.toDouble())
+                    ), speed.value.toFloat(), rotation?.yaw!!)
+                    velocity = Vec3d(velocity?.x!!, yMotion, velocity.z)
+                    position = position?.add(velocity)
                 }
             }
 
             is EventInput -> {
-                if (rotation == null)
-                    onEnable()
-                if(event.input == myInput) {
-                    velocity = (mc.player as IEntity).tarasande_invokeMovementInputToVelocity(Vec3d(event.movementSideways.toDouble(), 0.0, event.movementForward.toDouble()), speed.value.toFloat(), rotation?.yaw!!)
-                    velocity = Vec3d(velocity?.x!!, yMotion, velocity?.z!!)
-                    yMotion = 0.0
-                }
                 event.cancelled = true
             }
 
             is EventKeyBindingIsPressed -> {
-                if (event.pressed)
-                    when (event.keyBinding) {
-                        mc.options.jumpKey -> {
-                            yMotion += speed.value
-                            event.pressed = false
-                        }
-
-                        mc.options.sneakKey -> {
-                            yMotion -= speed.value
-                            event.pressed = false
-                        }
-                    }
+                if (!PlayerUtil.movementKeys.contains(event.keyBinding))
+                    event.pressed = false
             }
         }
     }

@@ -9,7 +9,6 @@ import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.*
 import net.minecraft.util.registry.Registry
 import net.minecraft.util.shape.VoxelShapes
-import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.event.Priority
 import su.mandora.tarasande.base.module.Module
@@ -281,7 +280,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     }
                 }
                 if (lastRotation == null) {
-                    val rad = PlayerUtil.getMoveDirection() - PI / 2
+                    val rad = Math.toRadians(PlayerUtil.getMoveDirection()) - PI / 2
                     val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, mc.player?.pos?.add(Vec3d(cos(rad), 0.0, sin(rad)).multiply(0.3))!!)
 
                     val diagonal = abs(round(mc.player?.yaw!! / 90) * 90 - mc.player?.yaw!!) > 22.5
@@ -377,7 +376,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 if (event.entity != mc.player)
                     return@Consumer
                 if (target != null) {
-                    if (mc.player?.input?.jumping!!) {
+                    if (PlayerUtil.input.jumping) {
                         when {
                             tower.isSelected(1) -> {
                                 val velocity = event.velocity.add(0.0, 0.0, 0.0)
@@ -413,13 +412,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(Box.from(aimTarget).offset(-0.5, -0.5, -0.5).expand(-0.45)), aimTargetColor.getColor().rgb)
                 if (placeLine != null)
                     RenderUtil.blockOutline(event.matrices, VoxelShapes.union(VoxelShapes.cuboid(Box.from(placeLine?.first).offset(-0.5, -0.5, -0.5).expand(-0.49)), VoxelShapes.cuboid(Box.from(placeLine?.second).offset(-0.5, -0.5, -0.5).expand(-0.49))), placeLineColor.getColor().rgb)
-            }
-
-            is EventGoalMovement -> {
-                if(!TarasandeMain.get().clientValues?.correctMovement?.isSelected(3)!!)
-                    return@Consumer
-                val rad = Math.toRadians(round(mc.player?.yaw!! / 45.0f) * 45.0f + 90.0)
-                event.yaw = RotationUtil.getYaw(Vec3d(cos(rad), 0.0, sin(rad)).multiply(3.0 /* some space*/)).toFloat()
             }
         }
     }

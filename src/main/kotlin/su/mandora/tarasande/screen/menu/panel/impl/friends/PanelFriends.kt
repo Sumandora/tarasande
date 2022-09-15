@@ -2,6 +2,7 @@ package su.mandora.tarasande.screen.menu.panel.impl.friends
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
+import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.screen.menu.panel.Panel
 import su.mandora.tarasande.util.render.RenderUtil
 
@@ -90,8 +91,7 @@ class PanelFriends(x: Double, y: Double) : Panel("Friends", x, y, 150.0, 100.0) 
                 elementPlayerList.add(elementPlayer)
             }
         }
-
-
+        elementPlayerList.sortBy { TarasandeMain.get().friends?.isFriend(it.gameProfile) != true } // friends to top
         elementPlayerList.forEach { it.tick() }
         super.tick()
     }

@@ -55,7 +55,6 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
                 is ValueComponentRegistry -> it.isFocused()
                 else -> false
             }
-            false
         }!!
     }
 

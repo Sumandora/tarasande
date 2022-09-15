@@ -13,7 +13,7 @@ public class MixinLightmapTextureManager {
 
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/NativeImage;setColor(III)V"))
     public void hookedSetColor(NativeImage instance, int x, int y, int color) {
-        EventGamma eventGamma = new EventGamma(color);
+        EventGamma eventGamma = new EventGamma(x, y, color);
         TarasandeMain.Companion.get().getManagerEvent().call(eventGamma);
         instance.setColor(x, y, eventGamma.getColor());
     }

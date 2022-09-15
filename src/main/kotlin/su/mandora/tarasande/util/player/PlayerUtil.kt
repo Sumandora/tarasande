@@ -1,7 +1,7 @@
 package su.mandora.tarasande.util.player
 
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.util.InputUtil
+import net.minecraft.client.input.KeyboardInput
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.mob.MobEntity
@@ -18,9 +18,9 @@ import net.minecraft.world.RaycastContext
 import net.minecraft.world.RaycastContext.FluidHandling
 import net.minecraft.world.RaycastContext.ShapeType
 import su.mandora.tarasande.TarasandeMain
+import su.mandora.tarasande.event.EventInput
 import su.mandora.tarasande.event.EventIsEntityAttackable
 import su.mandora.tarasande.mixin.accessor.IGameRenderer
-import su.mandora.tarasande.mixin.accessor.IKeyBinding
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
@@ -28,6 +28,17 @@ import su.mandora.tarasande.util.math.rotation.RotationUtil
 object PlayerUtil {
 
     val movementKeys = listOf(MinecraftClient.getInstance().options.forwardKey, MinecraftClient.getInstance().options.leftKey, MinecraftClient.getInstance().options.backKey, MinecraftClient.getInstance().options.rightKey)
+    val input = KeyboardInput(MinecraftClient.getInstance().options)
+
+    init {
+        TarasandeMain.get().managerEvent?.add { event ->
+            if (event is EventInput) {
+                if (event.input == MinecraftClient.getInstance().player?.input) {
+                    input.tick(event.slowDown, event.slowdownAmount)
+                }
+            }
+        }
+    }
 
     fun isAttackable(entity: Entity?): Boolean {
         var attackable = true
@@ -106,11 +117,7 @@ object PlayerUtil {
     }
 
     fun getMoveDirection(): Double {
-        val forward = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.forwardKey as IKeyBinding).tarasande_getBoundKey().code)
-        val left = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.leftKey as IKeyBinding).tarasande_getBoundKey().code)
-        val back = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.backKey as IKeyBinding).tarasande_getBoundKey().code)
-        val right = InputUtil.isKeyPressed(MinecraftClient.getInstance().window?.handle!!, (MinecraftClient.getInstance().options.rightKey as IKeyBinding).tarasande_getBoundKey().code)
-        return Math.toRadians(RotationUtil.getYaw(if (left && right) 0.0 else if (left) 1.0 else if (right) -1.0 else 0.0, if (forward && back) 0.0 else if (forward) 1.0 else if (back) -1.0 else 0.0) + (if (forward || left || back || right) 0.0 else 90.0) + MinecraftClient.getInstance().player?.yaw!!)
+        return RotationUtil.getYaw(input.movementInput) + (if (input.movementInput.lengthSquared() != 0.0f) 0.0 else 90.0) + MinecraftClient.getInstance().player?.yaw!!
     }
 
     fun isOnEdge(extrapolation: Double) = MinecraftClient.getInstance().world?.isSpaceEmpty(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.boundingBox?.offset(MinecraftClient.getInstance().player?.velocity?.x!! * extrapolation, -MinecraftClient.getInstance().player?.stepHeight?.toDouble()!!, MinecraftClient.getInstance().player?.velocity?.z!! * extrapolation))!!

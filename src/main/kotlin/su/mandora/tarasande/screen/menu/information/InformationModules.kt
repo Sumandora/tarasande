@@ -21,7 +21,7 @@ class InformationTimeShifted : Information("Tick base manipulation", "Time shift
     }
 }
 
-class InformationMurderer : Information("Murder Mystery", "Suspected murderers") {
+class InformationSuspectedMurderers : Information("Murder Mystery", "Suspected murderers") {
     override fun getMessage(): String? {
         val murderMystery = TarasandeMain.get().managerModule?.get(ModuleMurderMystery::class.java)!!
         if (murderMystery.enabled) if (murderMystery.suspects.isNotEmpty()) {

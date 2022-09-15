@@ -32,7 +32,7 @@ class EventTick(val state: State) : Event(false) {
     }
 }
 
-class EventResolutionUpdate(val width: Float, val height: Float) : Event(false)
+class EventResolutionUpdate(val prevWidth: Double, val prevHeight: Double, val width: Double, val height: Double) : Event(false)
 class EventRender2D(val matrices: MatrixStack) : Event(false)
 class EventScreenRender(val matrices: MatrixStack, val mouseX: Int, val mouseY: Int) : Event(false)
 class EventRender3D(val matrices: MatrixStack, val positionMatrix: Matrix4f) : Event(false)
@@ -76,14 +76,14 @@ class EventVelocity(var velocityX: Double, var velocityY: Double, var velocityZ:
     }
 }
 
-class EventInput(val input: Input, var movementForward: Float, var movementSideways: Float) : Event(true)
+class EventInput(val input: Input, var movementForward: Float, var movementSideways: Float, var slowDown: Boolean, val slowdownAmount: Float) : Event(true)
 class EventJump(var yaw: Float, val state: State) : Event(false) {
     enum class State {
         PRE, POST
     }
 }
 
-class EventGamma(var color: Int) : Event(false)
+class EventGamma(val x: Int, val y: Int, var color: Int) : Event(false)
 class EventMovement(val entity: Entity, var velocity: Vec3d) : Event(false)
 class EventSlowdown(var usingItem: Boolean) : Event(false)
 class EventSlowdownAmount(var slowdownAmount: Float) : Event(false)
@@ -122,7 +122,8 @@ class EventKeepSprint(var sprinting: Boolean) : Event(false)
 class EventAttack : Event(false) {
     var dirty = false
         set(value) {
-            if (field && !value) throw IllegalStateException(javaClass.name + " is already dirty")
+            if (field && !value)
+                error(javaClass.name + " is already dirty")
             field = value
         }
 }
@@ -157,3 +158,21 @@ class EventPlayerListName(val playerListEntry: PlayerListEntry, var displayName:
 class EventRotationSet(val yaw: Float, val pitch: Float) : Event(false)
 class EventUpdateTargetedEntity : Event(false)
 class EventRenderBlockModel(val state: BlockState, val pos: BlockPos) : Event(true)
+class EventStep : Event {
+    var stepHeight: Float
+        set(value) {
+            if (state == State.POST)
+                error("stepHeight can't be modified during POST")
+            field = value
+        }
+    val state: State
+
+    constructor(stepHeight: Float, state: State) : super(false) {
+        this.stepHeight = stepHeight
+        this.state = state
+    }
+
+    enum class State {
+        PRE, POST
+    }
+}

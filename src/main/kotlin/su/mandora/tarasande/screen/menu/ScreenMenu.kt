@@ -29,7 +29,7 @@ import kotlin.math.round
 
 class ScreenMenu : Screen(Text.of("Menu")) {
 
-    private val openingAnimationLength = 250.0
+    private val openingAnimationLength = 100.0
 
     val panels = CopyOnWriteArrayList<Panel>()
     private var screenChangeTime = System.currentTimeMillis()
@@ -75,6 +75,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         for (graph in managerGraph.list) {
             panels.add(PanelFixedGraph(graph, 0.0, 0.0))
         }
+        passEvents = false
     }
 
     override fun init() {

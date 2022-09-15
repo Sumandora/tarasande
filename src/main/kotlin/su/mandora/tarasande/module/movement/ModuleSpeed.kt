@@ -11,9 +11,9 @@ import su.mandora.tarasande.event.EventMovement
 import su.mandora.tarasande.mixin.accessor.IKeyBinding
 import su.mandora.tarasande.mixin.accessor.IVec3d
 import su.mandora.tarasande.util.player.PlayerUtil
+import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
-import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
@@ -26,12 +26,13 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
     private val speedValue = ValueNumber(this, "Speed", 0.0, 0.28, 1.0, 0.01)
     private val speedDivider = ValueNumber(this, "Speed divider", 1.0, 60.0, 200.0, 1.0)
     private val turnRate = ValueNumber(this, "Turn rate", 0.0, 180.0, 180.0, 1.0)
+    private val lowHop = ValueBoolean(this, "Low hop", false)
 
     private var speed = 0.0
     private var moveDir = 0.0
     private var firstMove = true
 
-    private fun calcSpeed(): Double = speedValue.value + 0.03 * if (mc.player?.hasStatusEffect(StatusEffects.SPEED)!!) mc.player?.getStatusEffect(StatusEffects.SPEED)?.amplifier!! else 0
+    fun calcSpeed(): Double = speedValue.value + 0.03 * if (mc.player?.hasStatusEffect(StatusEffects.SPEED)!!) mc.player?.getStatusEffect(StatusEffects.SPEED)?.amplifier!! else 0
 
     override fun onEnable() {
         firstMove = true
@@ -44,20 +45,29 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
                 if (mc.player?.velocity?.lengthSquared()!! <= 0.01) firstMove = true
 
-                if (mc.player?.input?.movementInput?.lengthSquared() == 0.0f) return@Consumer
+                if (PlayerUtil.input.movementInput?.lengthSquared() == 0.0f) return@Consumer
 
                 val accessor = event.velocity as IVec3d
 
                 val prevVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)!!
-                if (mc.player?.isOnGround!!) {
+                if (mc.player?.isOnGround == true) {
                     if (jumpHeight.value > 0.0) {
+
                         mc.player?.jump()
-                        if(!(mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
+
+                        if (!(mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
                             mc.player?.velocity = mc.player?.velocity?.multiply(1.0, jumpHeight.value, 1.0)
+
+                        accessor.tarasande_setY(mc.player?.velocity?.y!!)
+
                         val playerVelocityAccessor = mc.player?.velocity as IVec3d
                         playerVelocityAccessor.tarasande_setX(prevVelocity.x)
-                        accessor.tarasande_setY(mc.player?.velocity?.y!!)
+                        if (lowHop.value)
+                            playerVelocityAccessor.tarasande_setY(prevVelocity.y)
                         playerVelocityAccessor.tarasande_setZ(prevVelocity.z)
+
+                    } else {
+                        speed = calcSpeed()
                     }
                 }
                 if (event.velocity.y < 0.0) {
@@ -66,21 +76,19 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
                 val baseSpeed = event.velocity.horizontalLength()
 
-                val max = Math.PI * 2
-                val temp = (PlayerUtil.getMoveDirection() + PI / 2 - moveDir) % max
-                val delta = (2 * temp) % (max) - temp
+                val goal = PlayerUtil.getMoveDirection()
 
-                val maxRotate = Math.toRadians(turnRate.value)
-
-                moveDir += if (firstMove) delta else MathHelper.clamp(delta, -maxRotate, maxRotate)
+                moveDir = if (firstMove) goal else moveDir + MathHelper.clamp(MathHelper.wrapDegrees(goal - moveDir), -turnRate.value, turnRate.value)
 
                 firstMove = false
 
                 val moveSpeed = max(speed, baseSpeed)
-                accessor.tarasande_setX(cos(moveDir) * moveSpeed)
-                accessor.tarasande_setZ(sin(moveDir) * moveSpeed)
+                val rad = Math.toRadians(moveDir + 90)
+                accessor.tarasande_setX(cos(rad) * moveSpeed)
+                accessor.tarasande_setZ(sin(rad) * moveSpeed)
 
-                speed -= speed / speedDivider.value
+                if (mc.player?.isOnGround != true)
+                    speed -= speed / speedDivider.value
             }
 
             is EventJump -> {
@@ -88,7 +96,9 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
             }
 
             is EventKeyBindingIsPressed -> {
-                if (event.keyBinding == mc.options.jumpKey && mc.player?.input?.movementInput?.lengthSquared()!! > 0.0) if (mc.player?.isOnGround!! && jumpHeight.value > 0.0) event.pressed = true
+                if (!lowHop.value && event.keyBinding == mc.options.jumpKey && PlayerUtil.input.movementInput?.lengthSquared()!! > 0.0)
+                    if (mc.player?.isOnGround!! && jumpHeight.value > 0.0)
+                        event.pressed = true
             }
         }
     }

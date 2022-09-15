@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import net.minecraft.util.math.MathHelper
+import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
@@ -13,7 +14,6 @@ import su.mandora.tarasande.mixin.accessor.IPlayerMoveC2SPacket
 import su.mandora.tarasande.module.movement.ModuleNoRotate
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.render.RenderUtil
-import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import kotlin.math.*
 
@@ -84,13 +84,13 @@ object RotationUtil {
 
                 is EventIsWalking -> {
                     if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!! && (fakeRotation != null || goalMovementYaw != null)) {
-                        event.walking = (MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f) && abs(MathHelper.wrapDegrees(Math.toDegrees(PlayerUtil.getMoveDirection()) - (fakeRotation?.yaw ?: (goalMovementYaw ?: 0.0f)))) <= 45
+                        event.walking = (MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f) && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (fakeRotation?.yaw ?: (goalMovementYaw ?: 0.0f)))) <= 45
                     }
                 }
 
                 is EventHasForwardMovement -> {
                     if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!! && (fakeRotation != null || goalMovementYaw != null)) {
-                        event.hasForwardMovement = MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f && abs(MathHelper.wrapDegrees(Math.toDegrees(PlayerUtil.getMoveDirection()) - (fakeRotation?.yaw ?: (goalMovementYaw ?: 0.0f)))) <= 45
+                        event.hasForwardMovement = MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (fakeRotation?.yaw ?: (goalMovementYaw ?: 0.0f)))) <= 45
                     }
                 }
 
@@ -131,8 +131,13 @@ object RotationUtil {
     }
 
     private fun simulateFakeRotationUpdate() {
-        if (TarasandeMain.get().clientValues?.updateRotationsWhenTickSkipping?.value!!) for (i in 0..(1000.0 / RenderUtil.deltaTime).roundToInt()) // could use repeat here, but doesn't fit the code style
-            updateFakeRotation(true)
+        if (TarasandeMain.get().clientValues?.updateRotationsWhenTickSkipping?.value!!)
+            if (TarasandeMain.get().clientValues?.updateRotationsAccurately?.value!!) {
+                for (i in 0..(1000.0 / RenderUtil.deltaTime).roundToInt())
+                    updateFakeRotation(true)
+            } else {
+                updateFakeRotation(true)
+            }
     }
 
     fun updateFakeRotation(fake: Boolean) {
@@ -183,8 +188,9 @@ object RotationUtil {
     }
 
     fun getYaw(fromX: Double, fromZ: Double, toX: Double, toZ: Double) = getYaw(toX - fromX, toZ - fromZ)
-    fun getYaw(deltaX: Double, deltaZ: Double) = getYaw(Vec3d(deltaX, 0.0, deltaZ))
+    fun getYaw(deltaX: Double, deltaZ: Double) = getYaw(Vec2f(deltaX.toFloat(), deltaZ.toFloat()))
     fun getYaw(delta: Vec3d) = Math.toDegrees(atan2(delta.z, delta.x)) - 90
+    fun getYaw(delta: Vec2f) = Math.toDegrees(atan2(delta.y, delta.x).toDouble()) - 90
 
     fun getPitch(deltaY: Double, dist: Double) = -Math.toDegrees(atan2(deltaY, dist))
 

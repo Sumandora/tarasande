@@ -53,7 +53,6 @@ class ManagerModule : Manager<Module>() {
             ModuleMovementRecorder(),
             ModuleBedESP(),
             ModuleFog(),
-            ModuleNoSign(),
             ModuleProjectileAimBot(),
             ModuleNoHunger(),
             ModuleNoRotate(),
@@ -70,12 +69,21 @@ class ManagerModule : Manager<Module>() {
             ModuleAimAssist(),
             ModuleNoFriends(),
             ModuleBlockESP(),
-            ModuleParkour()
+            ModuleParkour(),
+            ModuleNameProtect(),
+            ModuleNoCramming(),
+            ModuleStep(),
+            ModuleResourcePackSpoofer(),
+            ModuleMidClick(),
+            ModuleTargetStrafe()
         )
         TarasandeMain.get().managerEvent?.add { event ->
-            if (event is EventTick) if (event.state == EventTick.State.POST) {
-                for (module in list) for (i in 0 until module.bind.wasPressed()) module.switchState()
-            }
+            if (event is EventTick)
+                if (event.state == EventTick.State.POST) {
+                    for (module in list)
+                        for (i in 0 until module.bind.wasPressed())
+                            module.switchState()
+                }
         }
     }
 

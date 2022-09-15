@@ -1,4 +1,4 @@
-package su.mandora.tarasande.mixin.mixins;
+package su.mandora.tarasande.mixin.mixins.connection;
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import org.spongepowered.asm.mixin.Final;

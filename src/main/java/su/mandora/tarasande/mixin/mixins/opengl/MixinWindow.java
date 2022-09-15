@@ -12,17 +12,14 @@ public class MixinWindow {
 
     @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lorg/lwjgl/glfw/GLFW;glfwWindowHint(II)V", remap = false))
     public void hookedGlfwWindowHint(int hint, int value) {
-        if (hint == 139265 && value == 196609)
-            GLFW.glfwWindowHint(139265, 196609);
-        if (hint == 139275 && value == 221185) // the same actually lol
-            GLFW.glfwWindowHint(139275, 221185);
-        if (hint == 139266 && value == 3)
-            GLFW.glfwWindowHint(139266, 2);
-        if (hint == 139267 && value == 2)
-            GLFW.glfwWindowHint(139267, 0);
+        if (hint == 139267 && value == 2) {
+            GLFW.glfwWindowHint(hint, 1);
+            return;
+        }
         if (hint == 139272 && value == 204801)
-            GLFW.glfwWindowHint(139272, 0);
+            return;
         if (hint == 139270 && value == 1)
-            return; // already done
+            return;
+        GLFW.glfwWindowHint(hint, value);
     }
 }
