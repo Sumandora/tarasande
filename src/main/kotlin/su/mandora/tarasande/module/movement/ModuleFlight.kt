@@ -29,7 +29,7 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
         override fun isEnabled() = mode.isSelected(1)
     }
 
-    @Priority(1001)
+    @Priority(1002) // we need to override step
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventVanillaFlight -> {
