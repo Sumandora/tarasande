@@ -46,7 +46,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
         prevCameraPos = null
     }
 
-    @Priority(5) // let all of this stuff get overridden
+    @Priority(1) // let all of this stuff get overridden
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventCameraOverride -> {

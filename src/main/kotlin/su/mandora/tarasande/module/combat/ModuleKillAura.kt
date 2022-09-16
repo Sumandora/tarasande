@@ -348,8 +348,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             is EventKeyBindingIsPressed -> {
                 if (event.keyBinding == mc.options.useKey) {
-                    if (blocking && targets.isNotEmpty()) {
-                        event.pressed = true
+                    if (targets.isNotEmpty()) {
+                        event.pressed = blocking
                     }
                 }
                 if (PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {

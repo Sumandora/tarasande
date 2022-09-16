@@ -9,7 +9,7 @@ import java.util.function.Consumer
 
 class ModuleNoCooldown : Module("No cooldown", "Removes any cooldown from items", ModuleCategory.MISC) {
 
-    @Priority(100) // is being overwritten by NoSlowdown
+    @Priority(999) // is being overwritten by NoSlowdown
     val eventConsumer = Consumer<Event> { event ->
         if (event is EventItemCooldown) {
             event.cooldown = 0.0f

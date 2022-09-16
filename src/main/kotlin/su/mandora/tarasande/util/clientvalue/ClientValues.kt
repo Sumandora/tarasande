@@ -34,5 +34,6 @@ class ClientValues {
         override fun isEnabled() = autoSaveConfig.value
     }
     val hypixelApiKey = ValueText(this, "Hypixel API Key", "")
+    val menuAnimationLength = ValueNumber(this, "Menu animation length", 0.0, 100.0, 500.0, 1.0)
 
 }

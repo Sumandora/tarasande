@@ -54,18 +54,18 @@
 - Anti Vanish
 - Auto Soup&Pot
 - TNT Block
-- Air stuck
 - Anti Fall
 - Fast Use & Bow
 - Phase
 - Step: Calculate all motions; Prediction by LivingEntity#travel; Instantiate object and simulate
 - AutoTool: Auto Sword
-- Sneak module: This should use the input event and simply turn slowdown off
 - Change Name/Skin/Cape in Account Manager
 - Fast Break&Place (Place with autoclicker)
 - CivBreaker
 - Velocity: Addition depends on packet
-- GUI: anim time, making it a setting?
+- ValueComponentNumber(Range) Textfields
+- -> Killaura: TP
+- No Web
 
 ## Notes
 - AutoTool: Axes can set shields on cooldown. Maybe implement that if possible axes are being used to set shields on cooldown before actually attacking with sword

@@ -3,11 +3,13 @@ package su.mandora.tarasande.module.render
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
+import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueText
 
 class ModuleNameProtect : Module("Name protect", "Hides your in-game name", ModuleCategory.RENDER) {
 
     private val protectedName = ValueText(this, "Protected name", TarasandeMain.get().name)
+    val hidePersonalName = ValueBoolean(this, "Hide personal name", true)
 
     private val border = "( |[^a-z]|\\b)"
 

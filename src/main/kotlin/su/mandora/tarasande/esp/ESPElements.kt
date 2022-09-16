@@ -18,7 +18,6 @@ import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueColor
 import su.mandora.tarasande.value.ValueNumber
 import java.awt.Color
-import kotlin.math.ceil
 import kotlin.math.min
 
 class ESPElementBox : ESPElement("Box") {
@@ -34,7 +33,8 @@ class ESPElementBox : ESPElement("Box") {
 
     override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
         val col = Color(entity.teamColorValue).rgb // ignore alpha
-        if (outlined.value) RenderUtil.outlinedFill(matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, outlineWidth.value.toFloat(), Color.black.rgb)
+        if (outlined.value)
+            RenderUtil.outlinedFill(matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, outlineWidth.value.toFloat(), Color.black.rgb)
         RenderUtil.outlinedFill(matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, width.value.toFloat(), col)
     }
 }
@@ -86,7 +86,7 @@ class ESPElementHealthBar : ESPElementRotatable("Health bar", arrayOf(Orientatio
 
     override fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double, orientation: Orientation) {
         val height = getHeight(entity, sideWidth)
-        if (height == 0.0) return
+        if (height <= 0.0) return
         entity as LivingEntity
         matrices.push()
         val percentage = MathHelper.clamp(entity.health / entity.maxHealth, 0.0f, 1.0f)
@@ -95,7 +95,7 @@ class ESPElementHealthBar : ESPElementRotatable("Health bar", arrayOf(Orientatio
         else
             RenderUtil.fillHorizontalGradient(matrices, 0.0, 0.0, sideWidth * percentage, height, RenderUtil.colorInterpolate(fadeColorBegin.getColor(), fadeColorEnd.getColor(), 1.0 - percentage).rgb, fadeColorEnd.getColor().rgb)
         if (outlined.value) {
-            RenderUtil.outlinedFill(matrices, 0.0, 0.0, sideWidth, height, ceil(height * 0.5).coerceAtLeast(1.0).toFloat(), Color.black.rgb)
+            RenderUtil.outlinedFill(matrices, 0.0, 0.0, sideWidth, height, (height * 0.5).coerceAtLeast(1.0).toFloat(), Color.black.rgb)
         }
         matrices.pop()
     }

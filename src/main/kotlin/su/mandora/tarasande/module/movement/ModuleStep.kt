@@ -23,14 +23,17 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
     private val slowdownTicks = object : ValueNumber(this, "Slowdown ticks", 1.0, 1.0, 10.0, 1.0) {
         override fun isEnabled() = slowdown.value < 1.0
     }
-    private val onGroundTicks = ValueNumber(this, "On-ground ticks", 1.0, 0.0, 10.0, 1.0)
+    private val onGroundTicks = ValueNumber(this, "On-ground ticks", 0.0, 0.0, 10.0, 1.0)
 
     private var stepTick = 0
     private var offGroundTick = 0
 
+    private var prevAge = 0
+
     override fun onEnable() {
         stepTick = 0
         offGroundTick = 0
+        prevAge = 0
     }
 
     @Priority(1001) // we have to slow the speed down
@@ -70,10 +73,11 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
             }
 
             is EventTick -> {
-                if (mc.player == null) {
+                if (mc.player == null || mc.player?.age!! < prevAge) {
                     stepTick = 0
                     offGroundTick = 0
                 }
+                prevAge = mc.player?.age ?: return@Consumer
             }
         }
     }

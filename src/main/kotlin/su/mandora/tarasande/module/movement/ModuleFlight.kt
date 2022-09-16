@@ -11,21 +11,17 @@ import su.mandora.tarasande.mixin.accessor.IEntity
 import su.mandora.tarasande.mixin.accessor.IKeyBinding
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.player.PlayerUtil
-import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
 
 class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", ModuleCategory.MOVEMENT) {
 
-    private val mode = ValueMode(this, "Mode", false, "Vanilla", "Motion")
-    private val flightSpeed = object : ValueNumber(this, "Flight speed", 0.0, 1.0, 5.0, 0.1) {
+    val mode = ValueMode(this, "Mode", false, "Vanilla", "Motion")
+    val flightSpeed = object : ValueNumber(this, "Flight speed", 0.0, 1.0, 5.0, 0.1) {
         override fun isEnabled() = mode.isSelected(0) || mode.isSelected(1)
     }
     private val baseYMotion = object : ValueNumber(this, "Base Y-motion", -1.0, 0.0, 1.0, 0.01) {
-        override fun isEnabled() = mode.isSelected(1)
-    }
-    val allowVertical = object : ValueBoolean(this, "Allow vertical", true) {
         override fun isEnabled() = mode.isSelected(1)
     }
 
@@ -45,12 +41,10 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
                 if (event.entity != mc.player)
                     return@Consumer
                 var yMotion = baseYMotion.value
-                if (allowVertical.value) {
-                    if ((mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
-                        yMotion += flightSpeed.value
-                    if ((mc.options.sneakKey as IKeyBinding).tarasande_forceIsPressed())
-                        yMotion -= flightSpeed.value
-                }
+                if ((mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
+                    yMotion += flightSpeed.value
+                if ((mc.options.sneakKey as IKeyBinding).tarasande_forceIsPressed())
+                    yMotion -= flightSpeed.value
                 event.velocity = (mc.player as IEntity).tarasande_invokeMovementInputToVelocity(Vec3d(
                     MathUtil.roundAwayFromZero(PlayerUtil.input.movementSideways.toDouble()),
                     0.0,

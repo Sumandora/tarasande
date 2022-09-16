@@ -10,6 +10,7 @@ import su.mandora.tarasande.base.event.Priority
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventMovement
+import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IVec3d
 import su.mandora.tarasande.module.combat.ModuleKillAura
 import su.mandora.tarasande.util.math.rotation.RotationUtil
@@ -25,25 +26,43 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
 
     private val radius = ValueNumber(this, "Radius", 0.0, 1.0, 6.0, 0.1)
 
+    private var invert = false
+
     @Priority(2000)
     val eventConsumer = Consumer<Event> { event ->
-        if (event is EventMovement) {
+        if (event is EventUpdate) {
+            if (event.state == EventUpdate.State.PRE)
+                if (mc.player?.horizontalCollision == true)
+                    invert = !invert
+        } else if (event is EventMovement) {
             if (event.entity != mc.player)
                 return@Consumer
             if (PlayerUtil.input.movementInput?.lengthSquared() == 0.0f)
                 return@Consumer
 
             val moduleKillAura = TarasandeMain.get().managerModule?.get(ModuleKillAura::class.java)!!
-            val enemy = if (moduleKillAura.enabled && moduleKillAura.targets.isNotEmpty()) moduleKillAura.targets[0].first else if (mc.crosshairTarget?.type == HitResult.Type.ENTITY && mc.crosshairTarget is EntityHitResult) (mc.crosshairTarget as EntityHitResult).entity else null
+            val enemy =
+                if (moduleKillAura.enabled && moduleKillAura.targets.isNotEmpty())
+                    moduleKillAura.targets[0].first
+                else if (mc.crosshairTarget?.type == HitResult.Type.ENTITY && mc.crosshairTarget is EntityHitResult) {
+                    val ent = (mc.crosshairTarget as EntityHitResult).entity
+                    if (PlayerUtil.isAttackable(ent))
+                        ent
+                    else
+                        null
+                } else
+                    null
 
             if (enemy == null)
                 return@Consumer
 
             val curPos = mc.player?.pos!!
             val center = enemy.pos
-            val selfSpeed = max(event.velocity.horizontalLength(), TarasandeMain.get().managerModule?.get(ModuleSpeed::class.java)?.calcSpeed()!!)
+            val selfSpeed = max(event.velocity.horizontalLength(), TarasandeMain.get().managerModule?.get(ModuleSpeed::class.java)?.let { it.calcSpeed(it.walkSpeed) }!!)
 
-            val angleOffset = Math.toDegrees(selfSpeed / radius.value)
+            var angleOffset = Math.toDegrees(selfSpeed / radius.value)
+            if (invert)
+                angleOffset *= -1
             var angle = Math.toRadians(RotationUtil.getYaw(curPos.subtract(center)) + angleOffset)
 
             val newPos = Vec3d(
@@ -54,10 +73,11 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
 
             val rotation = RotationUtil.getRotations(curPos, newPos)
             val forward = rotation.forwardVector(selfSpeed)
-            if (!TarasandeMain.get().managerModule?.get(ModuleFlight::class.java)?.let { it.allowVertical.isEnabled() && it.allowVertical.value }!!)
+            val moduleFlight = TarasandeMain.get().managerModule?.get(ModuleFlight::class.java)!!
+            if (moduleFlight.let { !it.enabled || !it.mode.isSelected(0) || !it.mode.isSelected(1) })
                 (forward as IVec3d).tarasande_setY(event.velocity.y)
             else {
-                val absY = abs(event.velocity.y)
+                val absY = abs(moduleFlight.flightSpeed.value)
                 (forward as IVec3d).tarasande_setY(MathHelper.clamp(forward.y, -absY, absY))
             }
 

@@ -29,8 +29,6 @@ import kotlin.math.round
 
 class ScreenMenu : Screen(Text.of("Menu")) {
 
-    private val openingAnimationLength = 100.0
-
     val panels = CopyOnWriteArrayList<Panel>()
     private var screenChangeTime = System.currentTimeMillis()
     private var isClosing = false
@@ -88,7 +86,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        var animation = ((System.currentTimeMillis() - screenChangeTime) / openingAnimationLength).coerceAtMost(1.0)
+        var animation = ((System.currentTimeMillis() - screenChangeTime) / TarasandeMain.get().clientValues?.menuAnimationLength?.value!!).coerceAtMost(1.0)
         if (isClosing) animation = 1.0 - animation
 
         if (isClosing && animation <= 0.0) {
@@ -182,7 +180,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        var animation = ((System.currentTimeMillis() - screenChangeTime) / openingAnimationLength).coerceAtMost(1.0)
+        var animation = ((System.currentTimeMillis() - screenChangeTime) / TarasandeMain.get().clientValues?.menuAnimationLength?.value!!).coerceAtMost(1.0)
         if (isClosing) animation = 1.0 - animation
 
         if (animation != 1.0) return true
@@ -215,7 +213,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         panels.forEach {
             if (it.keyPressed(keyCode, scanCode, modifiers)) return false
         }
-        val animation = ((System.currentTimeMillis() - screenChangeTime) / openingAnimationLength).coerceAtMost(1.0)
+        val animation = ((System.currentTimeMillis() - screenChangeTime) / TarasandeMain.get().clientValues?.menuAnimationLength?.value!!).coerceAtMost(1.0)
         if (animation != 1.0) return false
         return super.keyPressed(keyCode, scanCode, modifiers)
     }

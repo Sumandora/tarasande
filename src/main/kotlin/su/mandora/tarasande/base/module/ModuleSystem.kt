@@ -75,7 +75,10 @@ class ManagerModule : Manager<Module>() {
             ModuleStep(),
             ModuleResourcePackSpoofer(),
             ModuleMidClick(),
-            ModuleTargetStrafe()
+            ModuleTargetStrafe(),
+            ModuleSneak(),
+            ModuleAirStuck(),
+            ModuleTNTBlock()
         )
         TarasandeMain.get().managerEvent?.add { event ->
             if (event is EventTick)

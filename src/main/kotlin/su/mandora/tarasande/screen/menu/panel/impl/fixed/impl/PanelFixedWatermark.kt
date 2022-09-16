@@ -3,6 +3,7 @@ package su.mandora.tarasande.screen.menu.panel.impl.fixed.impl
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import su.mandora.tarasande.TarasandeMain
+import su.mandora.tarasande.module.render.ModuleNameProtect
 import su.mandora.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import java.net.InetAddress
 
@@ -24,6 +25,11 @@ class PanelFixedWatermark(x: Double, y: Double) : PanelFixed("Watermark", x, y, 
         matrices?.pop()
 
         MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, TarasandeMain.get().name, (x + 1).toFloat(), (y + panelHeight - (MinecraftClient.getInstance().textRenderer.fontHeight)).toFloat(), TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
+
+        val moduleNameProtect = TarasandeMain.get().managerModule?.get(ModuleNameProtect::class.java)!!
+
+        if (moduleNameProtect.enabled && moduleNameProtect.hidePersonalName.value)
+            return
 
         val userHost = System.getProperty("user.name") + "@" + InetAddress.getLocalHost().hostName
         MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, userHost, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(userHost) - 1).toFloat(), (y + panelHeight - (MinecraftClient.getInstance().textRenderer.fontHeight)).toFloat(), TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
