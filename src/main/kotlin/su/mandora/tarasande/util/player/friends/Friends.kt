@@ -15,10 +15,10 @@ class Friends {
     val friends = ArrayList<Pair<GameProfile, String?>>()
 
     init {
-        TarasandeMain.get().managerEvent?.add { event ->
+        TarasandeMain.get().managerEvent.add { event ->
             when (event) {
                 is EventIsEntityAttackable -> {
-                    if(TarasandeMain.get().managerModule?.get(ModuleNoFriends::class.java)?.enabled == true)
+                    if (TarasandeMain.get().managerModule.get(ModuleNoFriends::class.java).enabled)
                         return@add
                     if (event.attackable && event.entity != null && event.entity is PlayerEntity)
                         if (friends.any { it.first == event.entity.gameProfile })
@@ -26,7 +26,7 @@ class Friends {
                 }
 
                 is EventTagName -> {
-                    if (TarasandeMain.get().managerModule?.get(ModuleNameProtect::class.java)?.enabled == true) // Name protect will replace the names, so this is redundant
+                    if (TarasandeMain.get().managerModule.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
                         return@add
 
                     if (event.entity is PlayerEntity) {
@@ -38,7 +38,7 @@ class Friends {
                 }
 
                 is EventPlayerListName -> {
-                    if (TarasandeMain.get().managerModule?.get(ModuleNameProtect::class.java)?.enabled == true) // Name protect will replace the names, so this is redundant
+                    if (TarasandeMain.get().managerModule.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
                         return@add
 
                     for (friend in friends)
@@ -50,12 +50,12 @@ class Friends {
         }
     }
 
-    fun addFriend(gameProfile: GameProfile, alias: String? = null) {
+    private fun addFriend(gameProfile: GameProfile, alias: String? = null) {
         if (friends.any { it.first == gameProfile }) return
         friends.add(Pair(gameProfile, alias ?: gameProfile.name))
     }
 
-    fun remFriend(gameProfile: GameProfile) {
+    private fun remFriend(gameProfile: GameProfile) {
         friends.removeIf { it.first == gameProfile }
     }
 

@@ -17,21 +17,21 @@ class PanelFixedWatermark(x: Double, y: Double) : PanelFixed("Watermark", x, y, 
         val yScale = (panelHeight - 4) / (MinecraftClient.getInstance().textRenderer.fontHeight + 3.0)
 
         matrices?.push()
-        matrices?.translate(x + 1, y + MinecraftClient.getInstance().textRenderer.fontHeight + 1, 0.0)
+        matrices?.translate(x + 1, y + titleBarHeight + 1, 0.0)
         matrices?.scale(xScale.toFloat(), yScale.toFloat(), 1.0f)
-        matrices?.translate(-(x + 1), -(y + MinecraftClient.getInstance().textRenderer.fontHeight + 1), 0.0)
+        matrices?.translate(-(x + 1), -(y + titleBarHeight + 1), 0.0)
 
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, text, (x + 1).toFloat(), (y + MinecraftClient.getInstance().textRenderer.fontHeight + 1).toFloat(), TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, text, (x + 1).toFloat(), (y + titleBarHeight + 1).toFloat(), TarasandeMain.get().clientValues.accentColor.getColor().rgb)
         matrices?.pop()
 
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, TarasandeMain.get().name, (x + 1).toFloat(), (y + panelHeight - (MinecraftClient.getInstance().textRenderer.fontHeight)).toFloat(), TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, TarasandeMain.get().name, (x + 1).toFloat(), (y + panelHeight - titleBarHeight).toFloat(), TarasandeMain.get().clientValues.accentColor.getColor().rgb)
 
-        val moduleNameProtect = TarasandeMain.get().managerModule?.get(ModuleNameProtect::class.java)!!
+        val moduleNameProtect = TarasandeMain.get().managerModule.get(ModuleNameProtect::class.java)
 
         if (moduleNameProtect.enabled && moduleNameProtect.hidePersonalName.value)
             return
 
         val userHost = System.getProperty("user.name") + "@" + InetAddress.getLocalHost().hostName
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, userHost, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(userHost) - 1).toFloat(), (y + panelHeight - (MinecraftClient.getInstance().textRenderer.fontHeight)).toFloat(), TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, userHost, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(userHost) - 1).toFloat(), (y + panelHeight - titleBarHeight).toFloat(), TarasandeMain.get().clientValues.accentColor.getColor().rgb)
     }
 }

@@ -10,6 +10,7 @@ import su.mandora.tarasande.event.*
 import su.mandora.tarasande.mixin.accessor.ICamera
 import su.mandora.tarasande.mixin.accessor.IEntity
 import su.mandora.tarasande.mixin.accessor.IKeyBinding
+import su.mandora.tarasande.util.extension.plus
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
@@ -88,7 +89,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
                         MathUtil.roundAwayFromZero(PlayerUtil.input.movementForward.toDouble())
                     ), speed.value.toFloat(), rotation?.yaw!!)
                     velocity = Vec3d(velocity?.x!!, yMotion, velocity.z)
-                    position = position?.add(velocity)
+                    position = position!! + velocity
                 }
             }
 

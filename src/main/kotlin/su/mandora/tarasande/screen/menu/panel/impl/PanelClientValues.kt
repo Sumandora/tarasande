@@ -1,6 +1,5 @@
 package su.mandora.tarasande.screen.menu.panel.impl
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.screen.menu.valuecomponent.ValueComponent
@@ -13,8 +12,8 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
 
     override fun init() {
         if (elements.isEmpty()) {
-            for (it in TarasandeMain.get().managerValue?.getValues(TarasandeMain.get().clientValues!!)!!) {
-                elements.add(TarasandeMain.get().screens?.screenMenu?.managerValueComponent?.newInstance(it)!!)
+            for (it in TarasandeMain.get().managerValue.getValues(TarasandeMain.get().clientValues)) {
+                elements.add(TarasandeMain.get().screens.screenMenu.managerValueComponent.newInstance(it)!!)
             }
         }
         elements.forEach(ValueComponent::init)
@@ -22,9 +21,9 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         matrices?.push()
-        matrices?.translate(x + 2, y + MinecraftClient.getInstance().textRenderer.fontHeight + 2, 0.0)
+        matrices?.translate(x + 2, y + titleBarHeight + 2, 0.0)
         val x = x + 2
-        var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
+        var y = y + titleBarHeight + 2
         for (it in elements) {
             it.width = panelWidth - 4
             if (y + it.getHeight() >= this.y - scrollOffset)
@@ -40,11 +39,11 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (!RenderUtil.isHovered(mouseX, mouseY, x, y + MinecraftClient.getInstance().textRenderer.fontHeight, x + panelWidth, y + panelHeight))
+        if (!RenderUtil.isHovered(mouseX, mouseY, x, y + titleBarHeight, x + panelWidth, y + panelHeight))
             return super.mouseClicked(mouseX, mouseY, button)
 
         val x = x + 2
-        var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
+        var y = y + titleBarHeight + 2
         elements.forEach {
             if (it.value.isEnabled()) {
                 it.mouseClicked(mouseX - x, mouseY - y - scrollOffset, button)
@@ -56,7 +55,7 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int) {
         val x = x + 2
-        var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
+        var y = y + titleBarHeight + 2
         elements.forEach {
             if (it.value.isEnabled()) {
                 it.mouseReleased(mouseX - x, mouseY - y - scrollOffset, button)
@@ -68,7 +67,7 @@ class PanelClientValues(x: Double, y: Double) : Panel("Client Values", x, y, 150
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
         val x = x + 2
-        var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
+        var y = y + titleBarHeight + 2
         elements.forEach {
             if (it.value.isEnabled()) {
                 if (it.mouseScrolled(mouseX - x, mouseY - y - scrollOffset, amount))

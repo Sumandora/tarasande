@@ -18,7 +18,7 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
 
         str = replaceName(str, mc.session.profile.name, protectedName.value)
 
-        for (pair in TarasandeMain.get().friends?.friends!!) {
+        for (pair in TarasandeMain.get().friends.friends) {
             str = replaceName(str, pair.first.name, pair.second ?: continue)
         }
 

@@ -18,9 +18,9 @@ class PanelFriends(x: Double, y: Double) : Panel("Friends", x, y, 150.0, 100.0) 
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         matrices?.push()
-        matrices?.translate(x + 2, y + MinecraftClient.getInstance().textRenderer.fontHeight + 2, 0.0)
+        matrices?.translate(x + 2, y + titleBarHeight + 2, 0.0)
         val x = x + 2
-        var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
+        var y = y + titleBarHeight + 2
         for (it in elementPlayerList) {
             it.width = panelWidth - 4
             if (y + it.getHeight() + 2 >= this.y - scrollOffset) it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
@@ -34,9 +34,9 @@ class PanelFriends(x: Double, y: Double) : Panel("Friends", x, y, 150.0, 100.0) 
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        val hovered = RenderUtil.isHovered(mouseX, mouseY, x, y + MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), x + panelWidth, y + panelHeight)
+        val hovered = RenderUtil.isHovered(mouseX, mouseY, x, y + titleBarHeight, x + panelWidth, y + panelHeight)
         val x = x + 2
-        var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
+        var y = y + titleBarHeight + 2
         elementPlayerList.forEach {
             it.mouseClicked(if (hovered) mouseX - x else -1.0, if (hovered) mouseY - y - scrollOffset else -1.0, button)
             y += it.getHeight() + 2
@@ -46,7 +46,7 @@ class PanelFriends(x: Double, y: Double) : Panel("Friends", x, y, 150.0, 100.0) 
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int) {
         val x = x + 2
-        var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
+        var y = y + titleBarHeight + 2
         elementPlayerList.forEach {
             it.mouseReleased(mouseX - x, mouseY - y - scrollOffset, button)
             y += it.getHeight() + 2
@@ -56,7 +56,7 @@ class PanelFriends(x: Double, y: Double) : Panel("Friends", x, y, 150.0, 100.0) 
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
         val x = x + 2
-        var y = y + MinecraftClient.getInstance().textRenderer.fontHeight + 2
+        var y = y + titleBarHeight + 2
         elementPlayerList.forEach {
             if (it.mouseScrolled(mouseX - x, mouseY - y - scrollOffset, amount)) return true
             y += it.getHeight() + 2
@@ -91,7 +91,7 @@ class PanelFriends(x: Double, y: Double) : Panel("Friends", x, y, 150.0, 100.0) 
                 elementPlayerList.add(elementPlayer)
             }
         }
-        elementPlayerList.sortBy { TarasandeMain.get().friends?.isFriend(it.gameProfile) != true } // friends to top
+        elementPlayerList.sortBy { !TarasandeMain.get().friends.isFriend(it.gameProfile) } // friends to top
         elementPlayerList.forEach { it.tick() }
         super.tick()
     }

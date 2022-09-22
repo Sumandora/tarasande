@@ -25,6 +25,6 @@ abstract class Value(var owner: Any, var name: String, manage: Boolean = true) {
 
     init {
         if (manage)
-            TarasandeMain.get().managerValue?.add(this)
+            TarasandeMain.get().managerValue.add(this)
     }
 }

@@ -16,7 +16,7 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
     private var keyPressed = false
 
     init {
-        TarasandeMain.get().managerEvent?.add { event ->
+        TarasandeMain.get().managerEvent.add { event ->
             when (event) {
                 is EventMouse -> {
                     if (type == Type.MOUSE) if (MinecraftClient.getInstance().currentScreen == null) if (button == event.button) when (event.action) {

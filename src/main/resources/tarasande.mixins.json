@@ -4,6 +4,7 @@
   "package": "su.mandora.tarasande.mixin.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "MixinAbstractBlockState",
     "MixinCamera",
     "MixinClientPlayerEntity",
     "MixinClientPlayerInteractionManager",
@@ -28,6 +29,7 @@
     "MixinMouse",
     "MixinParticleManager",
     "MixinPlayerEntity",
+    "MixinProjectileUtil",
     "MixinRenderSystem",
     "MixinRenderTickCounter",
     "MixinScreen",

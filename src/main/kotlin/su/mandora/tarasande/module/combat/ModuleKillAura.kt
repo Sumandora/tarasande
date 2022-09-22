@@ -23,6 +23,9 @@ import su.mandora.tarasande.event.*
 import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity
 import su.mandora.tarasande.mixin.accessor.IKeyBinding
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
+import su.mandora.tarasande.util.extension.minus
+import su.mandora.tarasande.util.extension.plus
+import su.mandora.tarasande.util.extension.times
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
@@ -160,12 +163,12 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     if (!PlayerUtil.isAttackable(entity)) continue
                     val entity = entity as LivingEntity
 
-                    var boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())
+                    val boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())
                     val bestAimPoint = getBestAimPoint(boundingBox)
                     if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
                     if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(fovRotation()) > fov.value) continue
                     val aimPoint = if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() != 0.0f) {
-                        mc.player?.eyePos?.add(currentRot.forwardVector(0.01))!!
+                        mc.player?.eyePos!! + currentRot.forwardVector(0.01)
                     } else {
                         // aim point calculation maybe slower, only run it if the range check is actually able to succeed under best conditions
                         getAimPoint(boundingBox, entity)
@@ -267,6 +270,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                             }
 
                             blockMode.isSelected(2) -> {
+                                clickSpeedUtil.reset() // we can't count this as a attack, can we?
                                 return@Consumer
                             }
                         }
@@ -443,7 +447,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             // Humans can't hold their hands still
             val actualVelocity = Vec3d(mc.player?.prevX!! - mc.player?.x!!, mc.player?.prevY!! - mc.player?.y!!, mc.player?.prevZ!! - mc.player?.z!!)
-            val diff = actualVelocity.subtract(entity.prevX - entity.x, entity.prevY - entity.y, entity.prevZ - entity.z)?.multiply(-1.0)!!
+            val diff = actualVelocity.subtract(entity.prevX - entity.x, entity.prevY - entity.y, entity.prevZ - entity.z)!! * -1.0
             if (diff.lengthSquared() > 0.0) { // either the target or the player has to move otherwise changing the rotation doesn't make sense
                 val horChange = diff.horizontalLength()
                 aimPoint = aimPoint.add(
@@ -454,7 +458,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
 
             // Human aim is slow
-            aimPoint = aimPoint.subtract(diff.multiply(0.5))
+            aimPoint -= diff * 0.5
 
             // Don't aim through walls
             while (visible && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint) && rotations.isSelected(0)) {

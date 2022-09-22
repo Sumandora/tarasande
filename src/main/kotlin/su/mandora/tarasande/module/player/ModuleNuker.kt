@@ -14,6 +14,8 @@ import su.mandora.tarasande.event.EventAttack
 import su.mandora.tarasande.event.EventHandleBlockBreaking
 import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
+import su.mandora.tarasande.util.extension.minus
+import su.mandora.tarasande.util.extension.plus
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueMode
@@ -53,7 +55,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
         when {
             priority.isSelected(0) -> mc.player?.squaredDistanceTo(Vec3d.ofCenter(it.first))?.times(-1)
             priority.isSelected(1) -> mc.player?.squaredDistanceTo(Vec3d.ofCenter(it.first))
-            priority.isSelected(2) -> TarasandeMain.get().managerModule?.get(ModuleAutoTool::class.java)?.getBreakSpeed(it.first)!!
+            priority.isSelected(2) -> TarasandeMain.get().managerModule.get(ModuleAutoTool::class.java).getBreakSpeed(it.first)
             else -> 0.0
         }
     }
@@ -80,7 +82,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                         val pos = collisionShape.boundingBox.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble()).center
                         if (pos.squaredDistanceTo(mc.player?.eyePos) <= radius.value * radius.value) {
                             val blockVec = Vec3d.ofCenter(blockPos)
-                            val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, blockVec.add(pos.subtract(blockVec))) ?: continue
+                            val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, blockVec + (pos - blockVec))
                             if (hitResult.type != HitResult.Type.BLOCK)
                                 continue
                             if (!throughWalls.isSelected(1)) {

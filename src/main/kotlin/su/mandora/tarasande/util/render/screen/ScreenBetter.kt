@@ -7,7 +7,7 @@ import net.minecraft.text.Text
 open class ScreenBetter(private val prevScreen: Screen?) : Screen(Text.of("")) {
 
     override fun close() {
-        client?.setScreen(prevScreen)
+        client!!.setScreen(prevScreen)
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {

@@ -15,7 +15,7 @@ class InformationTimers : Information("Badlion", "Timers") {
     val list = CopyOnWriteArrayList<Timer>()
 
     init {
-        TarasandeMain.get().managerEvent?.add { event ->
+        TarasandeMain.get().managerEvent.add { event ->
             if (event is EventPacket)
                 if (event.type == EventPacket.Type.RECEIVE)
                     if (event.packet is CustomPayloadS2CPacket) {
@@ -65,8 +65,12 @@ class InformationTimers : Information("Badlion", "Timers") {
         var id: Long? = null
         var name: String? = null
         var item: Item? = null
+
+        @Suppress("MemberVisibilityCanBePrivate")
         var repeating: Boolean? = null
         var time: Long? = null
+
+        @Suppress("unused")
         var millis: Long? = null
         var currentTime: Long? = null
 
@@ -90,7 +94,7 @@ class InformationTimers : Information("Badlion", "Timers") {
             var txt = ""
             if(name != null)
                 txt += "$name "
-            return txt + String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(expectedTime), TimeUnit.MILLISECONDS.toSeconds(expectedTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(expectedTime)));
+            return txt + String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(expectedTime), TimeUnit.MILLISECONDS.toSeconds(expectedTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(expectedTime)))
         }
     }
 

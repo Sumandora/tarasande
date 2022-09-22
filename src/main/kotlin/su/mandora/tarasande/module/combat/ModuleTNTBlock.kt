@@ -21,10 +21,10 @@ class ModuleTNTBlock : Module("TNT block", "Auto-blocks when nearby TNT is explo
     @Priority(1)
     val eventConsumer = Consumer<Event> { event ->
         if (event is EventKeyBindingIsPressed && event.keyBinding == mc.options.useKey) {
-            val tnts = mc.world?.entities?.filter { it is TntEntity }
+            val tnts = mc.world?.entities?.filterIsInstance<TntEntity>()
             if (tnts?.none { mc.player?.distanceTo(it)!! < reach.value } == true)
                 return@Consumer
-            if (tnts?.none { (it as TntEntity).fuse < fuse.value } == true)
+            if (tnts?.none { it.fuse < fuse.value } == true)
                 return@Consumer
 
             event.pressed = true

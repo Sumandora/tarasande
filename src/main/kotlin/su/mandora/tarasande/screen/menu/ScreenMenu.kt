@@ -39,7 +39,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
     private val particles = ArrayList<Particle>()
 
     // unused rn
-    var hoveringText: String? = null
+    private var hoveringText: String? = null
 
     val managerValueComponent = ManagerValueComponent()
     val managerInformation = ManagerInformation()
@@ -51,8 +51,10 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         if (imageTex == null || imageTex == MissingSprite.getMissingSpriteTexture())
             image = null
 
+        var y = 5.0
+
         for (moduleCategory in ModuleCategory.values()) {
-            panels.add(PanelCategory(moduleCategory, 0.0, 0.0))
+            panels.add(PanelCategory(moduleCategory, 5.0, y).also { y += MinecraftClient.getInstance().textRenderer.fontHeight + 5 })
         }
         val fixedPanels = mutableListOf(
             PanelClientValues::class.java,
@@ -68,10 +70,10 @@ class ScreenMenu : Screen(Text.of("Menu")) {
             fixedPanels.add(PanelFixedNowPlaying::class.java)
         }
         for (panel in fixedPanels) {
-            panels.add(panel.declaredConstructors[0].newInstance(0.0, 0.0) as Panel)
+            panels.add(panel.declaredConstructors[0].newInstance(5.0, y).also { y += MinecraftClient.getInstance().textRenderer.fontHeight + 5 } as Panel)
         }
         for (graph in managerGraph.list) {
-            panels.add(PanelFixedGraph(graph, 0.0, 0.0))
+            panels.add(PanelFixedGraph(graph, 5.0, y).also { y += MinecraftClient.getInstance().textRenderer.fontHeight + 5 })
         }
         passEvents = false
     }
@@ -86,7 +88,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        var animation = ((System.currentTimeMillis() - screenChangeTime) / TarasandeMain.get().clientValues?.menuAnimationLength?.value!!).coerceAtMost(1.0)
+        var animation = ((System.currentTimeMillis() - screenChangeTime) / TarasandeMain.get().clientValues.menuAnimationLength.value).coerceAtMost(1.0)
         if (isClosing) animation = 1.0 - animation
 
         if (isClosing && animation <= 0.0) {
@@ -96,16 +98,16 @@ class ScreenMenu : Screen(Text.of("Menu")) {
             }
         }
 
-        val color = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
+        val color = TarasandeMain.get().clientValues.accentColor.getColor()
 
-        val strength = round(animation * TarasandeMain.get().clientValues?.blurStrength?.value!!).toInt()
+        val strength = round(animation * TarasandeMain.get().clientValues.blurStrength.value).toInt()
         if (strength > 0) {
-            TarasandeMain.get().blur?.bind(true)
+            TarasandeMain.get().blur.bind(true)
             RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, Color.white.rgb)
             client?.framebuffer?.beginWrite(true)
 
             if (animation != 1.0) { // Prevent it from recalculating every frame
-                TarasandeMain.get().blur?.blurScene(strength)
+                TarasandeMain.get().blur.blurScene(strength)
             } else {
                 super.render(matrices, mouseX, mouseY, delta)
             }
@@ -180,7 +182,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        var animation = ((System.currentTimeMillis() - screenChangeTime) / TarasandeMain.get().clientValues?.menuAnimationLength?.value!!).coerceAtMost(1.0)
+        var animation = ((System.currentTimeMillis() - screenChangeTime) / TarasandeMain.get().clientValues.menuAnimationLength.value).coerceAtMost(1.0)
         if (isClosing) animation = 1.0 - animation
 
         if (animation != 1.0) return true
@@ -213,7 +215,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         panels.forEach {
             if (it.keyPressed(keyCode, scanCode, modifiers)) return false
         }
-        val animation = ((System.currentTimeMillis() - screenChangeTime) / TarasandeMain.get().clientValues?.menuAnimationLength?.value!!).coerceAtMost(1.0)
+        val animation = ((System.currentTimeMillis() - screenChangeTime) / TarasandeMain.get().clientValues.menuAnimationLength.value).coerceAtMost(1.0)
         if (animation != 1.0) return false
         return super.keyPressed(keyCode, scanCode, modifiers)
     }

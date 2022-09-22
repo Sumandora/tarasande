@@ -38,6 +38,6 @@ abstract class ValueComponent(val value: Value) : IElement {
     var width = 0.0
 
     init {
-        TarasandeMain.get().screens?.screenMenu?.managerValueComponent?.instances?.add(this)
+        TarasandeMain.get().screens.screenMenu.managerValueComponent.instances.add(this)
     }
 }

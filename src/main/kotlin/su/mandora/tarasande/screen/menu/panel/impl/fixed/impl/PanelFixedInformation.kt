@@ -11,9 +11,9 @@ class PanelFixedInformation(x: Double, y: Double) : PanelFixed("Information", x,
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val text = ArrayList<String>()
-        for (owner in TarasandeMain.get().screens?.screenMenu?.managerInformation?.getAllOwners()!!) {
+        for (owner in TarasandeMain.get().screens.screenMenu.managerInformation.getAllOwners()) {
             val cache = ArrayList<String>()
-            val informations = TarasandeMain.get().screens?.screenMenu?.managerInformation?.getAllInformation(owner)!!
+            val informations = TarasandeMain.get().screens.screenMenu.managerInformation.getAllInformation(owner)
             for (information in informations) {
                 val message = information.getMessage()
                 if (message != null) {
@@ -40,15 +40,15 @@ class PanelFixedInformation(x: Double, y: Double) : PanelFixed("Information", x,
 
         for ((index, it) in text.withIndex()) {
             when (alignment) {
-                Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat(), y.toFloat() + MinecraftClient.getInstance().textRenderer.fontHeight * (index + 1), TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
-                Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat() / 2.0f, y.toFloat() + MinecraftClient.getInstance().textRenderer.fontHeight * (index + 1), TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
-                Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat(), y.toFloat() + MinecraftClient.getInstance().textRenderer.fontHeight * (index + 1), TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
+                Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat(), y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
+                Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat() / 2.0f, y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
+                Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat(), y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
             }
         }
     }
 
     override fun isVisible(): Boolean {
-        for (information in TarasandeMain.get().screens?.screenMenu?.managerInformation?.list!!)
+        for (information in TarasandeMain.get().screens.screenMenu.managerInformation.list)
             if (information.getMessage() != null)
                 return true
         return false

@@ -28,13 +28,13 @@ class PanelFixedHypixelBedwarsOverlay(x: Double, y: Double) : PanelFixed("Hypixe
         val t = Thread {
             while (true) {
                 try {
-                    if (TarasandeMain.get().clientValues?.hypixelApiKey?.value?.isEmpty()!! || !opened) {
+                    if (TarasandeMain.get().clientValues.hypixelApiKey.value.isEmpty() || !opened) {
                         Thread.sleep(1000L)
                     } else {
                         val entry = playerData.entries.firstOrNull { !it.value.requested } ?: continue
                         entry.value.requested = true
 
-                        val urlConnection = URL(String.format(url, entry.key.id.toString().replace("-", ""), TarasandeMain.get().clientValues?.hypixelApiKey?.value!!)).openConnection()
+                        val urlConnection = URL(String.format(url, entry.key.id.toString().replace("-", ""), TarasandeMain.get().clientValues.hypixelApiKey.value)).openConnection()
                         val jsonStr = String(urlConnection.getInputStream().readAllBytes())
                         val jsonElement = TarasandeMain.get().gson.fromJson(jsonStr, JsonElement::class.java)
                         if (jsonElement != null && !jsonElement.isJsonNull)
@@ -55,16 +55,16 @@ class PanelFixedHypixelBedwarsOverlay(x: Double, y: Double) : PanelFixed("Hypixe
     }
 
     private fun drawString(matrices: MatrixStack?, str: String, x: Double, y: Double) {
-        val accent = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
+        val accent = TarasandeMain.get().clientValues.accentColor.getColor()
         val width = MinecraftClient.getInstance().textRenderer.getWidth(str)
-        val fontHeight = MinecraftClient.getInstance().textRenderer.fontHeight
+        val titleBarHeight = titleBarHeight
         when (alignment) {
             Alignment.LEFT, Alignment.MIDDLE -> {
-                RenderUtil.drawWithSmallShadow(matrices, str, x.toFloat(), (y + fontHeight).toFloat(), accent.rgb)
+                RenderUtil.drawWithSmallShadow(matrices, str, x.toFloat(), (y + titleBarHeight).toFloat(), accent.rgb)
             }
 
             Alignment.RIGHT -> {
-                RenderUtil.drawWithSmallShadow(matrices, str, (x + panelWidth - width).toFloat(), (y + fontHeight).toFloat(), accent.rgb)
+                RenderUtil.drawWithSmallShadow(matrices, str, (x + panelWidth - width).toFloat(), (y + titleBarHeight).toFloat(), accent.rgb)
             }
         }
     }
@@ -124,14 +124,14 @@ class PanelFixedHypixelBedwarsOverlay(x: Double, y: Double) : PanelFixed("Hypixe
     }
 
     inner class Stats {
-        var requested = false
-        var playSession: Long? = null
-        var age: Long? = null
-        var level: Int? = null
-        var fkdr: Double? = null
-        var winstreak: Int? = null
-        var achievements: Int? = null
-        var apiResponseLength: Int? = null
+        internal var requested = false
+        private var playSession: Long? = null
+        private var age: Long? = null
+        private var level: Int? = null
+        private var fkdr: Double? = null
+        private var winstreak: Int? = null
+        private var achievements: Int? = null
+        private var apiResponseLength: Int? = null
 
         fun parse(jsonObject: JsonObject): Boolean {
             if (!jsonObject.get("success").asBoolean)

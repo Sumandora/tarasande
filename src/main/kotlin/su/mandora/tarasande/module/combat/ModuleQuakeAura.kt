@@ -1,11 +1,15 @@
 package su.mandora.tarasande.module.combat
 
+import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.EventPollEvents
+import su.mandora.tarasande.util.extension.minus
+import su.mandora.tarasande.util.extension.plus
+import su.mandora.tarasande.util.extension.times
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
@@ -32,9 +36,9 @@ class ModuleQuakeAura : Module("Quake aura", "Aimbot for Quake-like game modes",
                 val enemy = mc.world?.entities?.filter { PlayerUtil.isAttackable(it) }?.filter { PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.eyePos) }?.minByOrNull { RotationUtil.getRotations(mc.player?.eyePos!!, it.eyePos).fov(Rotation(mc.player!!)) } ?: return@Consumer
 
                 val enemyPos = enemy.pos
-                val enemyVelocity = enemyPos.subtract(Vec3d(enemy.lastRenderX, enemy.lastRenderY, enemy.lastRenderZ))
+                val enemyVelocity = enemyPos - Vec3d(enemy.lastRenderX, enemy.lastRenderY, enemy.lastRenderZ)
 
-                val extrapolatedPosition = enemy.eyePos.add(enemyVelocity.multiply(1.0, 0.0, 1.0).multiply(predict.value))
+                val extrapolatedPosition = enemy.eyePos + enemyVelocity.withAxis(Direction.Axis.Y, 0.0) * predict.value
 
                 event.rotation = RotationUtil.getRotations(mc.player?.eyePos!!, extrapolatedPosition.subtract(0.0, aimLower.value, 0.0)).correctSensitivity()
                 if (lockView.value) {

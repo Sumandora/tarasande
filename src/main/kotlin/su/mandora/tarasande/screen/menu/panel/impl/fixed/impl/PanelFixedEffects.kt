@@ -39,15 +39,15 @@ class PanelFixedEffects(x: Double, y: Double) : PanelFixed("Effects", x, y, 75.0
             }
         }
 
-        var index = 1.0
+        var index = 0.0
         activeStatusEffects.sortedBy { MinecraftClient.getInstance().textRenderer.getWidth(it.second) }.reversed().forEach {
             val animation = animations[it.first]!!
             val color = Color((it.third shr 16) and 0xFF, (it.third shr 8) and 0xFF, (it.third shr 0) and 0xFF, (animation * 255).toInt())
             RenderSystem.enableBlend()
             when (alignment) {
-                Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it.second, (x - (MinecraftClient.getInstance().textRenderer.getWidth(it.second) * (1.0 - animation))).toFloat(), (y + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
-                Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it.second, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it.second).toFloat() / 2.0f, (y + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
-                Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, it.second, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(it.second) * animation).toFloat(), (y + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
+                Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it.second, (x - (MinecraftClient.getInstance().textRenderer.getWidth(it.second) * (1.0 - animation))).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
+                Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it.second, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it.second).toFloat() / 2.0f, (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
+                Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, it.second, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(it.second) * animation).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
             }
             index += animation
         }

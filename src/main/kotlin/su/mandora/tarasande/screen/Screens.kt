@@ -12,10 +12,10 @@ class Screens {
     val screenMenu = ScreenMenu()
 
     init {
-        TarasandeMain.get().managerEvent?.add { event ->
+        TarasandeMain.get().managerEvent.add { event ->
             if (event is EventUpdate)
                 if (event.state == EventUpdate.State.PRE)
-                    if (TarasandeMain.get().clientValues?.menuHotkey?.wasPressed()?.let { it > 0 && it % 2 != 0 }!!)
+                    if (TarasandeMain.get().clientValues.menuHotkey.wasPressed().let { it > 0 && it % 2 != 0 })
                         MinecraftClient.getInstance().setScreen(screenMenu)
         }
     }

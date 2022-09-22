@@ -19,6 +19,7 @@ class ManagerInformation : Manager<Information>() {
             // Modules
             InformationTimeShifted(),
             InformationSuspectedMurderers(),
+            InformationFakeNewsCountdown(),
             InformationBeds()
         )
     }

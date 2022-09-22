@@ -17,6 +17,10 @@ import su.mandora.tarasande.event.EventRender3D
 import su.mandora.tarasande.mixin.accessor.IMatrix4f
 import su.mandora.tarasande.mixin.accessor.IWorldRenderer
 import su.mandora.tarasande.module.combat.ModuleAntiBot
+import su.mandora.tarasande.util.extension.minus
+import su.mandora.tarasande.util.extension.plus
+import su.mandora.tarasande.util.extension.times
+import su.mandora.tarasande.util.extension.unaryMinus
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueRegistry
@@ -33,20 +37,14 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
         override fun isEnabled() = entities.list.contains(EntityType.PLAYER)
     }
 
-//    private val espStudio = object : ValueButton(this, "ESP Studio") {
-//        override fun onChange() {
-//            mc.setScreen(null)
-//        }
-//    }
-
     fun filter(entity: Entity) =
         entities.list.contains(entity.type) &&
-                (!hideBots.value || entity !is PlayerEntity || entity == mc.player || !TarasandeMain.get().managerModule?.get(ModuleAntiBot::class.java)?.isBot(entity)!!)
+                (!hideBots.value || entity !is PlayerEntity || entity == mc.player || !TarasandeMain.get().managerModule.get(ModuleAntiBot::class.java).isBot(entity))
 
     private val hashMap = HashMap<Entity, Rectangle>()
 
     private fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Vec3d? {
-        val camPos = mc.gameRenderer.camera.pos.negate().add(vector)
+        val camPos = -mc.gameRenderer.camera.pos + vector
         val vec1 = matrixVectorMultiply(modelView, Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1.0f))
         val screenPos = matrixVectorMultiply(projection, vec1)
 
@@ -91,10 +89,10 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
                     if (mc.options.perspective.isFirstPerson && entity == mc.player) continue
 
                     val prevPos = Vec3d(entity.lastRenderX, entity.lastRenderY, entity.lastRenderZ)
-                    val interp = prevPos.add(entity.pos.subtract(prevPos).multiply(mc.tickDelta.toDouble()))
-                    val boundingBox = entity.boundingBox.offset(interp.subtract(entity.pos))
+                    val interp = prevPos + (entity.pos - prevPos) * mc.tickDelta.toDouble()
+                    val boundingBox = entity.boundingBox.offset(interp - entity.pos)
 
-                    if(!(mc.worldRenderer as IWorldRenderer).tarasande_getFrustum().isVisible(boundingBox)) continue
+                    if (!(mc.worldRenderer as IWorldRenderer).tarasande_getFrustum().isVisible(boundingBox)) continue
 
                     val corners = arrayOf(
                         Vec3d(boundingBox.minX, boundingBox.minY, boundingBox.minZ),
@@ -136,7 +134,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 
             is EventRender2D -> {
                 for (entry in hashMap.entries) {
-                    TarasandeMain.get().managerESP?.renderBox(event.matrices, entry.key, entry.value)
+                    TarasandeMain.get().managerESP.renderBox(event.matrices, entry.key, entry.value)
                 }
             }
         }

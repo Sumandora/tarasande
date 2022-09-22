@@ -21,7 +21,7 @@ object RenderUtil {
     }
 
     fun fill(matrices: MatrixStack?, x1: Double, y1: Double, x2: Double, y2: Double, color: Int) {
-        val matrix = matrices?.peek()?.positionMatrix!!
+        val matrix = matrices!!.peek().positionMatrix
         val f = (color shr 24 and 0xFF) / 255.0f
         val g = (color shr 16 and 0xFF) / 255.0f
         val h = (color shr 8 and 0xFF) / 255.0f
@@ -44,7 +44,7 @@ object RenderUtil {
     fun roundedFill(matrices: MatrixStack?, x1: Double, y1: Double, x2: Double, y2: Double, round: Double, color: Int) {
         RenderSystem.disableCull()
         RenderSystem.disableDepthTest()
-        val matrix = matrices?.peek()?.positionMatrix!!
+        val matrix = matrices!!.peek().positionMatrix
         val f = (color shr 24 and 0xFF) / 255.0f
         val g = (color shr 16 and 0xFF) / 255.0f
         val h = (color shr 8 and 0xFF) / 255.0f
@@ -70,7 +70,7 @@ object RenderUtil {
             quarterCircle += 0.025f
         }
         while (quarterCircle <= 0.5f) {
-            bufferBuilder.vertex(matrix, (x1 + round + round * cos(quarterCircle * PI * 2)).toFloat(), (y2 - round + round * Math.sin(quarterCircle * PI * 2)).toFloat(), 0.0f).color(g, h, k, f).next()
+            bufferBuilder.vertex(matrix, (x1 + round + round * cos(quarterCircle * PI * 2)).toFloat(), (y2 - round + round * sin(quarterCircle * PI * 2)).toFloat(), 0.0f).color(g, h, k, f).next()
             quarterCircle += 0.025f
         }
         BufferRenderer.drawWithShader(bufferBuilder.end())
@@ -83,7 +83,7 @@ object RenderUtil {
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
         val lineWidth = glGetFloat(GL_LINE_WIDTH)
         glLineWidth(width)
-        val matrix = matrices?.peek()?.positionMatrix!!
+        val matrix = matrices!!.peek().positionMatrix
         val f = (color shr 24 and 0xFF) / 255.0f
         val g = (color shr 16 and 0xFF) / 255.0f
         val h = (color shr 8 and 0xFF) / 255.0f
@@ -111,7 +111,7 @@ object RenderUtil {
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
         val lineWidth = glGetFloat(GL_LINE_WIDTH)
         glLineWidth(width)
-        val matrix = matrices?.peek()?.positionMatrix!!
+        val matrix = matrices!!.peek().positionMatrix
         val f = (colorStart shr 24 and 0xFF) / 255.0f
         val g = (colorStart shr 16 and 0xFF) / 255.0f
         val h = (colorStart shr 8 and 0xFF) / 255.0f
@@ -139,7 +139,7 @@ object RenderUtil {
     }
 
     fun fillHorizontalGradient(matrices: MatrixStack?, x1: Double, y1: Double, x2: Double, y2: Double, colorStart: Int, colorEnd: Int) {
-        val matrix = matrices?.peek()?.positionMatrix!!
+        val matrix = matrices!!.peek().positionMatrix
         val f = (colorStart shr 24 and 0xFF) / 255.0f
         val g = (colorStart shr 16 and 0xFF) / 255.0f
         val h = (colorStart shr 8 and 0xFF) / 255.0f
@@ -164,7 +164,7 @@ object RenderUtil {
     }
 
     fun fillVerticalGradient(matrices: MatrixStack?, x1: Double, y1: Double, x2: Double, y2: Double, colorStart: Int, colorEnd: Int) {
-        val matrix = matrices?.peek()?.positionMatrix!!
+        val matrix = matrices!!.peek().positionMatrix
         val f = (colorStart shr 24 and 0xFF) / 255.0f
         val g = (colorStart shr 16 and 0xFF) / 255.0f
         val h = (colorStart shr 8 and 0xFF) / 255.0f
@@ -193,7 +193,7 @@ object RenderUtil {
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
         val lineWidth = glGetFloat(GL_LINE_WIDTH)
         glLineWidth(width)
-        val matrix = matrices?.peek()?.positionMatrix!!
+        val matrix = matrices!!.peek().positionMatrix
         val f = (color shr 24 and 0xFF) / 255.0f
         val g = (color shr 16 and 0xFF) / 255.0f
         val h = (color shr 8 and 0xFF) / 255.0f
@@ -219,7 +219,7 @@ object RenderUtil {
     fun fillCircle(matrices: MatrixStack?, x: Double, y: Double, radius: Double, color: Int) {
         RenderSystem.disableCull()
         RenderSystem.disableDepthTest()
-        val matrix = matrices?.peek()?.positionMatrix!!
+        val matrix = matrices!!.peek().positionMatrix
         val f = (color shr 24 and 0xFF) / 255.0f
         val g = (color shr 16 and 0xFF) / 255.0f
         val h = (color shr 8 and 0xFF) / 255.0f
@@ -248,9 +248,7 @@ object RenderUtil {
         val h = (color shr 8 and 0xFF) / 255.0f
         val k = (color and 0xFF) / 255.0f
 
-        matrices?.push()
-
-        val matrix = matrices?.peek()?.positionMatrix!!
+        val matrix = matrices!!.peek().positionMatrix
 
         RenderSystem.enableBlend()
         RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
@@ -305,7 +303,6 @@ object RenderUtil {
 
         BufferRenderer.drawWithShader(bufferBuilder.end())
 
-        matrices.pop()
         RenderSystem.enableDepthTest()
         RenderSystem.enableBlend()
         glDisable(GL_LINE_SMOOTH)

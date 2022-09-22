@@ -13,11 +13,11 @@ import su.mandora.tarasande.event.EventMovement
 import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IVec3d
 import su.mandora.tarasande.module.combat.ModuleKillAura
+import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
-import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
@@ -40,7 +40,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
             if (PlayerUtil.input.movementInput?.lengthSquared() == 0.0f)
                 return@Consumer
 
-            val moduleKillAura = TarasandeMain.get().managerModule?.get(ModuleKillAura::class.java)!!
+            val moduleKillAura = TarasandeMain.get().managerModule.get(ModuleKillAura::class.java)
             val enemy =
                 if (moduleKillAura.enabled && moduleKillAura.targets.isNotEmpty())
                     moduleKillAura.targets[0].first
@@ -58,12 +58,12 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
 
             val curPos = mc.player?.pos!!
             val center = enemy.pos
-            val selfSpeed = max(event.velocity.horizontalLength(), TarasandeMain.get().managerModule?.get(ModuleSpeed::class.java)?.let { it.calcSpeed(it.walkSpeed) }!!)
+            val selfSpeed = max(event.velocity.horizontalLength(), TarasandeMain.get().managerModule.get(ModuleSpeed::class.java).let { it.calcSpeed(it.walkSpeed) })
 
             var angleOffset = Math.toDegrees(selfSpeed / radius.value)
             if (invert)
                 angleOffset *= -1
-            var angle = Math.toRadians(RotationUtil.getYaw(curPos.subtract(center)) + angleOffset)
+            val angle = Math.toRadians(RotationUtil.getYaw(curPos - center) + angleOffset)
 
             val newPos = Vec3d(
                 center.x - radius.value * sin(angle),
@@ -73,12 +73,11 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
 
             val rotation = RotationUtil.getRotations(curPos, newPos)
             val forward = rotation.forwardVector(selfSpeed)
-            val moduleFlight = TarasandeMain.get().managerModule?.get(ModuleFlight::class.java)!!
-            if (moduleFlight.let { !it.enabled || !it.mode.isSelected(0) || !it.mode.isSelected(1) })
+            val moduleFlight = TarasandeMain.get().managerModule.get(ModuleFlight::class.java)
+            if (moduleFlight.let { !it.enabled || !(it.mode.isSelected(0) || it.mode.isSelected(1)) })
                 (forward as IVec3d).tarasande_setY(event.velocity.y)
             else {
-                val absY = abs(moduleFlight.flightSpeed.value)
-                (forward as IVec3d).tarasande_setY(MathHelper.clamp(forward.y, -absY, absY))
+                (forward as IVec3d).tarasande_setY(MathHelper.clamp(forward.y, -moduleFlight.flightSpeed.value, moduleFlight.flightSpeed.value))
             }
 
             event.velocity = forward

@@ -17,11 +17,11 @@ class ModuleMidClick : Module("Mid click", "Friends mid-clicked players", Module
 
     val eventConsumer = Consumer<Event> { event ->
         if (event is EventMouse) {
-            if (event.action == GLFW.GLFW_PRESS && event.button == 2) {
-                val hitResult = PlayerUtil.getTargetedEntity(100.0, Rotation(mc.player!!), true)
+            if (event.action == GLFW.GLFW_PRESS && event.button == 2 && mc.currentScreen == null) {
+                val hitResult = PlayerUtil.getTargetedEntity(mc.options.viewDistance.value * 16.0, Rotation(mc.player!!), true)
                 if (hitResult != null && hitResult.type == HitResult.Type.ENTITY && hitResult is EntityHitResult)
                     if (hitResult.entity is PlayerEntity)
-                        TarasandeMain.get().friends?.changeFriendState((hitResult.entity as PlayerEntity).gameProfile)
+                        TarasandeMain.get().friends.changeFriendState((hitResult.entity as PlayerEntity).gameProfile)
             }
         }
     }

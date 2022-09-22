@@ -11,10 +11,9 @@ import su.mandora.tarasande.base.event.Priority
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventPacket
-import su.mandora.tarasande.event.EventUpdate
+import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.mixin.accessor.IClientConnection
 import su.mandora.tarasande.util.math.TimeUtil
-import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
 import java.util.concurrent.CopyOnWriteArrayList
@@ -23,12 +22,19 @@ import java.util.function.Consumer
 class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
 
     private val affectedPackets = ValueMode(this, "Affected packets", true, "Serverbound", "Clientbound")
-    private val pulse = ValueBoolean(this, "Pulse", false)
+    private val mode = object : ValueMode(this, "Mode", false, "State-dependent", "Pulse blink", "Latency") {
+        override fun onChange() = onDisable()
+    }
     private val pulseDelay = object : ValueNumber(this, "Pulse delay", 0.0, 500.0, 1000.0, 1.0) {
-        override fun isEnabled() = pulse.value
+        override fun isEnabled() = mode.isSelected(1)
+        override fun onChange() = onDisable()
+    }
+    private val latency = object : ValueNumber(this, "Latency", 0.0, 500.0, 1000.0, 1.0) {
+        override fun isEnabled() = mode.isSelected(2)
+        override fun onChange() = onDisable()
     }
 
-    private val packets = CopyOnWriteArrayList<Pair<Packet<*>, EventPacket.Type>>()
+    private val packets = CopyOnWriteArrayList<Triple<Packet<*>, EventPacket.Type, Long>>()
     private val timeUtil = TimeUtil()
 
     @Priority(9999)
@@ -37,46 +43,70 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
             is EventPacket -> {
                 if (event.cancelled) return@Consumer
                 if (event.packet != null) {
-                    if (mc.networkHandler?.connection == null || (mc.networkHandler?.connection as IClientConnection).tarasande_getChannel().attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY || ((event.type == EventPacket.Type.RECEIVE && event.packet is DisconnectS2CPacket) || (!pulse.value && mc.currentScreen is DownloadingTerrainScreen))) {
+                    if (mc.networkHandler?.connection == null ||
+                        (mc.networkHandler?.connection as IClientConnection).tarasande_getChannel().attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY ||
+                        (event.type == EventPacket.Type.RECEIVE && event.packet is DisconnectS2CPacket) ||
+                        (!mode.isSelected(1) && mc.currentScreen is DownloadingTerrainScreen)
+                    ) {
                         this.switchState()
                         return@Consumer
                     }
-                    if (pulse.value && mc.currentScreen is DownloadingTerrainScreen) {
+                    if (mode.isSelected(1) && mc.currentScreen is DownloadingTerrainScreen) {
                         onDisable()
                         return@Consumer
                     }
                     if (affectedPackets.isSelected(event.type.ordinal)) {
-                        packets.add(Pair(event.packet, event.type))
+                        packets.add(Triple(event.packet, event.type,
+                            if (mode.isSelected(2))
+                                System.currentTimeMillis() + latency.value.toLong()
+                            else
+                                System.currentTimeMillis()
+                        ))
                         event.cancelled = true
                     }
                 }
             }
 
-            is EventUpdate -> {
-                if (event.state == EventUpdate.State.PRE) {
-                    if (pulse.value) {
+            is EventPollEvents -> {
+                when {
+                    mode.isSelected(1) -> {
                         if (timeUtil.hasReached(pulseDelay.value.toLong())) {
-                            onDisable()
+                            onDisable(true)
                             timeUtil.reset()
                         }
                     }
+
+                    mode.isSelected(2) -> onDisable(false)
                 }
             }
         }
     }
 
     override fun onDisable() {
-        val copy = ArrayList(packets) // sync
-        packets.clear()
+        onDisable(true)
+    }
+
+    fun onDisable(all: Boolean) {
         if (mc.networkHandler?.connection?.isOpen == true) {
-            for (pair in copy) {
-                when (pair.second) {
-                    EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).tarasande_forceSend(pair.first)
-                    EventPacket.Type.RECEIVE ->
-                        if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener)
-                            (pair.first as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
+            val copy = ArrayList<Triple<Packet<*>, EventPacket.Type, Long>>()
+            packets.removeIf {
+                if (all || System.currentTimeMillis() >= it.third) {
+                    copy.add(it)
+                    true
+                } else
+                    false
+            }
+            for (triple in copy) {
+                if (all || System.currentTimeMillis() >= triple.third) {
+                    when (triple.second) {
+                        EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).tarasande_forceSend(triple.first)
+                        EventPacket.Type.RECEIVE ->
+                            if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener)
+                                (triple.first as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
+                    }
                 }
             }
-        }
+        } else
+            packets.clear()
     }
 }

@@ -60,7 +60,7 @@ class ValueComponentNumberRange(value: Value) : ValueComponent(value) {
         val minSliderPos = (valueNumber.minValue - valueNumber.min) / (valueNumber.max - valueNumber.min)
         val maxSliderPos = (valueNumber.maxValue - valueNumber.min) / (valueNumber.max - valueNumber.min)
 
-        var accentColor = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
+        var accentColor = TarasandeMain.get().clientValues.accentColor.getColor()
         var color = Color(accentColor.red, accentColor.green, accentColor.blue, 255 / 4)
         var otherColor = Color(255, 255, 255, 255 / 4)
 
@@ -97,11 +97,15 @@ class ValueComponentNumberRange(value: Value) : ValueComponent(value) {
             val minDelta = abs(minSliderPos - mousePos)
             val maxDelta = abs(maxSliderPos - mousePos)
 
+            @Suppress("KotlinConstantConditions")
             if (minDelta == maxDelta) {
-                if (mousePos < minSliderPos) minDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
-                if (mousePos > maxSliderPos) maxDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
-            } else if (minDelta < maxDelta) minDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
-            else if (maxDelta < minDelta) // left for convenience
+                if (mousePos < minSliderPos)
+                    minDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
+                if (mousePos > maxSliderPos)
+                    maxDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
+            } else if (minDelta < maxDelta)
+                minDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
+            else if (maxDelta < minDelta) // could be else
                 maxDragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
             return true
         }

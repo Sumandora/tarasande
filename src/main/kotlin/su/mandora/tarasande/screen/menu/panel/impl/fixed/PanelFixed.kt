@@ -13,11 +13,11 @@ import java.awt.Color
 open class PanelFixed(title: String, x: Double, y: Double, width: Double, height: Double = MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), resizable: Boolean = true, background: Boolean = false) : Panel(title, x, y, width, height, if (resizable) null else width, if (resizable) null else height, background) {
 
     init {
-        TarasandeMain.get().managerEvent?.add { event ->
+        TarasandeMain.get().managerEvent.add { event ->
             when (event) {
                 is EventRender2D -> {
                     if (isVisible() && opened) {
-                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screens?.screenMenu) {
+                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screens.screenMenu) {
                             event.matrices.push()
                             render(event.matrices, -1, -1, MinecraftClient.getInstance().tickDelta)
                             event.matrices.pop()
@@ -27,7 +27,7 @@ open class PanelFixed(title: String, x: Double, y: Double, width: Double, height
 
                 is EventTick -> {
                     if (event.state == EventTick.State.PRE) {
-                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screens?.screenMenu) {
+                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screens.screenMenu) {
                             tick()
                         }
                     }
@@ -41,8 +41,8 @@ open class PanelFixed(title: String, x: Double, y: Double, width: Double, height
         else if (x + panelWidth / 2 > MinecraftClient.getInstance().window.scaledWidth * 0.33 && x + panelWidth / 2 < MinecraftClient.getInstance().window.scaledWidth * 0.66) alignment = Alignment.MIDDLE
         else if (x + panelWidth / 2 > MinecraftClient.getInstance().window.scaledWidth * 0.66) alignment = Alignment.RIGHT
 
-        TarasandeMain.get().blur?.bind(true)
-        RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else MinecraftClient.getInstance().textRenderer?.fontHeight)?.toDouble()!!, Color.white.rgb)
+        TarasandeMain.get().blur.bind(true)
+        RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else titleBarHeight).toDouble(), Color.white.rgb)
         MinecraftClient.getInstance().framebuffer.beginWrite(true)
 
         super.render(matrices, mouseX, mouseY, delta)

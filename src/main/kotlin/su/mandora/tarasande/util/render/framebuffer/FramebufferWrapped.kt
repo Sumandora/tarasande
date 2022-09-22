@@ -10,9 +10,9 @@ class FramebufferWrapped : SimpleFramebuffer(MinecraftClient.getInstance().windo
     init {
         setClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
-        TarasandeMain.get().managerEvent?.add { event ->
+        TarasandeMain.get().managerEvent.add { event ->
             if (event is EventResolutionUpdate) {
-                resize(MinecraftClient.getInstance().window.framebufferWidth.toInt(), MinecraftClient.getInstance().window.framebufferHeight.toInt(), MinecraftClient.IS_SYSTEM_MAC)
+                resize(MinecraftClient.getInstance().window.framebufferWidth, MinecraftClient.getInstance().window.framebufferHeight, MinecraftClient.IS_SYSTEM_MAC)
             }
         }
     }

@@ -181,7 +181,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
     object Breaker {
 
-        private val costCalc = object : Function2<Node, Node, Double> {
+        private val heuristic = object : Function2<Node, Node, Double> {
             override fun invoke(current: Node, movement: Node): Double {
                 return getBreakSpeed(BlockPos(movement.x, movement.y, movement.z)).first
             }
@@ -189,7 +189,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
         private val pathFinder = PathFinder(object : Function2<ClientWorld?, Node, Boolean> {
             override fun invoke(world: ClientWorld?, node: Node) = true
-        }, cost = costCalc)
+        }, heuristic)
 
         fun findSolution(outstanders: List<BlockPos>, defenders: List<BlockPos>, beds: Array<BlockPos>, maxProcessingTime: Long): List<Node>? {
             var bestWay: List<Node>? = null

@@ -15,17 +15,19 @@ import java.util.*
 class AccountSession(
     @TextFieldInfo("Username", false) private val username: String,
     @TextFieldInfo("UUID", false) private val uuid: String,
-    @TextFieldInfo("Access Token", false) private val accessToken: String
+    @TextFieldInfo("Access Token", false) private val accessToken: String,
+    @TextFieldInfo("X Uid", false) private val xUid: String,
+    @TextFieldInfo("Client Uid", false) private val clientUid: String
 ) : Account() {
 
     private var service: MinecraftSessionService? = null
 
     @Suppress("unused") // Reflections
-    constructor() : this("", "", "")
+    constructor() : this("", "", "", "", "")
 
     override fun logIn() {
         service = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment).createMinecraftSessionService()
-        session = Session(username, uuid, accessToken, Optional.empty(), Optional.empty(), Session.AccountType.MOJANG)
+        session = Session(username, uuid, accessToken, if (xUid.isEmpty()) Optional.empty() else Optional.of(xUid), if (clientUid.isEmpty()) Optional.empty() else Optional.of(clientUid), if (xUid.isNotEmpty() || clientUid.isNotEmpty()) Session.AccountType.MSA else Session.AccountType.MOJANG)
     }
 
     override fun getDisplayName() = username
@@ -37,12 +39,14 @@ class AccountSession(
         jsonArray.add(username)
         jsonArray.add(uuid)
         jsonArray.add(accessToken)
+        jsonArray.add(xUid)
+        jsonArray.add(clientUid)
         return jsonArray
     }
 
     override fun load(jsonArray: JsonArray): Account {
-        return AccountSession(jsonArray[0].asString, jsonArray[1].asString, jsonArray[2].asString)
+        return AccountSession(jsonArray[0].asString, jsonArray[1].asString, jsonArray[2].asString, jsonArray[3].asString, jsonArray[4].asString)
     }
 
-    override fun create(credentials: List<String>) = AccountSession(credentials[0], credentials[1], credentials[2])
+    override fun create(credentials: List<String>) = AccountSession(credentials[0], credentials[1], credentials[2], credentials[3], credentials[4])
 }

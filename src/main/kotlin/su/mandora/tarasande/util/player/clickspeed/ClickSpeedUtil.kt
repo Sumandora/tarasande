@@ -11,7 +11,7 @@ import kotlin.math.min
 
 class ClickSpeedUtil(private val owner: Any, isVisible: Supplier<Boolean>, vararg excluded: Class<out ClickMethod>) {
 
-    private val clickMethods = TarasandeMain.get().managerClickMethod?.getAllExcept(*excluded)!!
+    private val clickMethods = TarasandeMain.get().managerClickMethod.getAllExcept(*excluded)
 
     private val cpsMode = object : ValueMode(owner, "CPS mode", false, *clickMethods.map { it.name }.toTypedArray()) {
         override fun isEnabled() = isVisible.get()

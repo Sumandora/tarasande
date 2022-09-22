@@ -19,8 +19,8 @@ class ModuleNoRotate : Module("No rotate", "Prevents the server from rotating yo
 
     private val recoverSpeed = ValueNumberRange(this, "Recover speed", 0.1, 1.0, 1.0, 1.0, 0.1)
 
-    var prevRotation: Rotation? = null
-    var rotation: Rotation? = null
+    private var prevRotation: Rotation? = null
+    private var rotation: Rotation? = null
 
     private fun wrapRotation(rotation: Rotation) {
         rotation.yaw = rotation.yaw % 360.0f

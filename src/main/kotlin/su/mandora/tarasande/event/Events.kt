@@ -12,6 +12,7 @@ import net.minecraft.network.Packet
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Box
 import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
@@ -176,3 +177,7 @@ class EventStep : Event {
         PRE, POST
     }
 }
+
+class EventBlockCollision(val state: BlockState, val pos: BlockPos, val entity: Entity) : Event(true)
+class EventEntityFlag(val entity: Entity, val flag: Int, var enabled: Boolean) : Event(false)
+class EventBoundingBoxOverride(val entity: Entity, var boundingBox: Box) : Event(false)

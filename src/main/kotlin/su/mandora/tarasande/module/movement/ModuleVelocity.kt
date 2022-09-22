@@ -7,6 +7,7 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.event.EventVelocity
+import su.mandora.tarasande.util.extension.plus
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueBoolean
@@ -81,7 +82,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
                         val pair = iterator.next()
                         if (pair.second <= mc.player?.age!!) {
                             val newVelocity = if (changeDirection.value) Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0f).forwardVector(pair.first.horizontalLength()) else pair.first
-                            mc.player?.velocity = if (addition.value) mc.player?.velocity?.add(newVelocity) else newVelocity
+                            mc.player?.velocity = if (addition.value) mc.player?.velocity!! + newVelocity else newVelocity
                             iterator.remove()
                         }
                     }

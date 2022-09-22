@@ -17,7 +17,7 @@ public class MixinDebugHud {
     }
 
     @Redirect(method = "getLeftText", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z"))
-    public boolean hookedAdd(List instance, Object e) {
+    public boolean hookedAdd(List<Object> instance, Object e) {
         instance.add(e);
         if (e instanceof String) {
             if (((String) e).startsWith("Facing"))

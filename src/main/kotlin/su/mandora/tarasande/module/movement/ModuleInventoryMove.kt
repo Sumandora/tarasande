@@ -49,13 +49,13 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
     }
 
     private fun isTextboxFocused(): Boolean {
-        return TarasandeMain.get().screens?.screenMenu?.managerValueComponent?.instances?.any {
+        return TarasandeMain.get().screens.screenMenu.managerValueComponent.instances.any {
             when (it) {
                 is ValueComponentText -> it.isFocused()
                 is ValueComponentRegistry -> it.isFocused()
                 else -> false
             }
-        }!!
+        }
     }
 
     private fun isPassingEvents(): Boolean {

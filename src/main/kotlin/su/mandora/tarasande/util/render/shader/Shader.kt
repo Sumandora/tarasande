@@ -11,7 +11,7 @@ class Shader(private val source: String, type: Int) {
 
     init {
         try {
-            glShaderSource(id, String(IOUtils.toByteArray(Objects.requireNonNull(Shader::class.java.getResourceAsStream("$source")))))
+            glShaderSource(id, String(IOUtils.toByteArray(Objects.requireNonNull(Shader::class.java.getResourceAsStream(source)))))
         } catch (e: IOException) {
             e.printStackTrace()
         }

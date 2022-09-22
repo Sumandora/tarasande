@@ -18,6 +18,7 @@ import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueColor
 import su.mandora.tarasande.value.ValueNumber
 import java.awt.Color
+import kotlin.math.abs
 import kotlin.math.min
 
 class ESPElementBox : ESPElement("Box") {
@@ -51,7 +52,7 @@ class ESPElementName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Ori
         val col = Color(entity.teamColorValue).rgb // ignore alpha
         val tagName = TagName.getTagName(entity)?.asOrderedText() ?: return
         matrices.push()
-        val width = MinecraftClient.getInstance().textRenderer?.getWidth(tagName)!!
+        val width = MinecraftClient.getInstance().textRenderer!!.getWidth(tagName)
         var factor = (sideWidth / width).toFloat()
         if (factor > 3.0f) factor = 3.0f
         factor *= scale.value.toFloat()
@@ -60,16 +61,16 @@ class ESPElementName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Ori
         matrices.translate(-sideWidth / 2, 0.0, 0.0)
         if (outlined.value) {
             val immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().buffer)
-            MinecraftClient.getInstance().textRenderer?.drawWithOutline(tagName, (sideWidth / 2f - width / 2f).toFloat(), 0.0f, col, Color.black.rgb, matrices.peek().positionMatrix, immediate, LightmapTextureManager.MAX_LIGHT_COORDINATE)
+            MinecraftClient.getInstance().textRenderer!!.drawWithOutline(tagName, (sideWidth / 2f - width / 2f).toFloat(), 0.0f, col, Color.black.rgb, matrices.peek().positionMatrix, immediate, LightmapTextureManager.MAX_LIGHT_COORDINATE)
             immediate.draw()
         } else {
-            MinecraftClient.getInstance().textRenderer?.drawWithShadow(matrices, tagName, (sideWidth / 2f - width / 2f).toFloat(), 0.0f, col)
+            MinecraftClient.getInstance().textRenderer!!.drawWithShadow(matrices, tagName, (sideWidth / 2f - width / 2f).toFloat(), 0.0f, col)
         }
         matrices.pop()
     }
 
     override fun getHeight(entity: Entity, sideWidth: Double): Double {
-        return MinecraftClient.getInstance().textRenderer.fontHeight.toDouble() * min(sideWidth / MinecraftClient.getInstance().textRenderer?.getWidth(TagName.getTagName(entity)?.asOrderedText() ?: return 0.0)!!, 3.0) * scale.value
+        return MinecraftClient.getInstance().textRenderer.fontHeight.toDouble() * min(sideWidth / MinecraftClient.getInstance().textRenderer!!.getWidth(TagName.getTagName(entity)?.asOrderedText() ?: return 0.0), 3.0) * scale.value
     }
 }
 
@@ -95,7 +96,7 @@ class ESPElementHealthBar : ESPElementRotatable("Health bar", arrayOf(Orientatio
         else
             RenderUtil.fillHorizontalGradient(matrices, 0.0, 0.0, sideWidth * percentage, height, RenderUtil.colorInterpolate(fadeColorBegin.getColor(), fadeColorEnd.getColor(), 1.0 - percentage).rgb, fadeColorEnd.getColor().rgb)
         if (outlined.value) {
-            RenderUtil.outlinedFill(matrices, 0.0, 0.0, sideWidth, height, (height * 0.5).coerceAtLeast(1.0).toFloat(), Color.black.rgb)
+            RenderUtil.outlinedFill(matrices, 0.0, 0.0, sideWidth, height, abs(height * 0.5).coerceAtLeast(1.0).toFloat(), Color.black.rgb)
         }
         matrices.pop()
     }

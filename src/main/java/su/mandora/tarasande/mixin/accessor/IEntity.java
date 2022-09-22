@@ -12,4 +12,6 @@ public interface IEntity {
 
     Vec3d tarasande_invokeMovementInputToVelocity(Vec3d movementInput, float speed, float yaw);
 
+    int tarasande_getSprintingFlagIndex();
+
 }

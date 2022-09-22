@@ -10,6 +10,7 @@ import su.mandora.tarasande.event.EventPacket
 import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.event.EventSwing
 import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity
+import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.render.RenderUtil
 import kotlin.math.round
 
@@ -18,7 +19,7 @@ class GraphFPS : Graph("FPS", 200) {
     private val data = ArrayList<Double>()
 
     init {
-        TarasandeMain.get().managerEvent?.add {
+        TarasandeMain.get().managerEvent.add {
             if (it is EventPollEvents)
                 data.add(RenderUtil.deltaTime)
         }
@@ -54,7 +55,7 @@ class GraphTPS : Graph("TPS", 200) {
     private var timeDelta = 0L
 
     init {
-        TarasandeMain.get().managerEvent?.add { event ->
+        TarasandeMain.get().managerEvent.add { event ->
             if (event is EventPacket) {
                 if (event.type == EventPacket.Type.RECEIVE && event.packet is WorldTimeUpdateS2CPacket) {
                     if (lastWorldTimePacket > 0L) {
@@ -74,7 +75,7 @@ class GraphCPS : Graph("CPS", 200) {
     private val clicks = ArrayList<Long>()
 
     init {
-        TarasandeMain.get().managerEvent?.add { event ->
+        TarasandeMain.get().managerEvent.add { event ->
             if (event is EventSwing) {
                 clicks.add(System.currentTimeMillis())
             }
@@ -112,7 +113,7 @@ class GraphPitchDelta : Graph("Pitch Delta", 200) {
 class GraphMotion : Graph("Motion", 200) {
     override fun supplyData(): Number? {
         if (MinecraftClient.getInstance().player == null) return null
-        return round(MinecraftClient.getInstance().player?.pos?.subtract(Vec3d(MinecraftClient.getInstance().player?.prevX!!, MinecraftClient.getInstance().player?.prevY!!, MinecraftClient.getInstance().player?.prevZ!!))?.horizontalLength()!! * 100) / 100.0
+        return round((MinecraftClient.getInstance().player?.pos!! - Vec3d(MinecraftClient.getInstance().player?.prevX!!, MinecraftClient.getInstance().player?.prevY!!, MinecraftClient.getInstance().player?.prevZ!!)).horizontalLength() * 100) / 100.0
     }
 }
 

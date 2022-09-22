@@ -20,7 +20,7 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
         override fun isEnabled() = mode.isSelected(2)
     }
 
-    var changeBinds = false
+    private var changeBinds = false
 
     @Priority(1001) // KillAura
     val eventConsumer = Consumer<Event> { event ->

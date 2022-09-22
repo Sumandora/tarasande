@@ -1,6 +1,5 @@
 package su.mandora.tarasande.module.movement
 
-import com.google.gson.JsonArray
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.*
@@ -10,11 +9,11 @@ import net.minecraft.util.math.Vec3d
 import org.apache.commons.lang3.ArrayUtils
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL11
-import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.*
+import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.value.ValueBind
@@ -174,7 +173,7 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
             is EventGoalMovement -> {
                 if (playbackState == PlaybackState.PREPARE) {
                     val pos = playedBack?.ticks?.first()?.pos!!
-                    event.yaw = RotationUtil.getYaw(pos.subtract(mc.player?.pos!!)).toFloat()
+                    event.yaw = RotationUtil.getYaw(pos - mc.player?.pos!!).toFloat()
                 }
             }
 
@@ -222,21 +221,6 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
         constructor(ticks: ArrayList<TickMovement>) : this() {
             this.ticks.addAll(ticks)
         }
-
-        fun toJson(): JsonArray {
-            val jsonArray = JsonArray()
-            for (tick in ticks) {
-                jsonArray.add(TarasandeMain.get().gson.toJson(tick))
-            }
-            return jsonArray
-        }
-
-        fun fromJson(jsonArray: JsonArray) {
-            for (jsonElement in jsonArray) {
-                ticks.add(TarasandeMain.get().gson.fromJson(jsonElement, TickMovement::class.java))
-            }
-        }
-
         fun copy() = Record(ticks)
     }
 

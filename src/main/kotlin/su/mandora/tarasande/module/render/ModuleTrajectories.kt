@@ -26,6 +26,7 @@ import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventRender3D
 import su.mandora.tarasande.mixin.accessor.*
+import su.mandora.tarasande.util.extension.times
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.value.ValueBoolean
@@ -101,7 +102,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
             override fun tick() {
                 super.tick()
                 if (!projectileItem.persistent) addVelocity(0.0, 0.02, 0.0)
-                if (projectileItem.entityType == EntityType.FISHING_BOBBER) velocity = velocity.multiply(0.92)
+                if (projectileItem.entityType == EntityType.FISHING_BOBBER) velocity *= 0.92
             }
         }
         persistentProjectileEntity.setPosition(mc.player?.getLerpedPos(mc.tickDelta)?.add(0.0, mc.player?.standingEyeHeight!! - 0.1, 0.0))

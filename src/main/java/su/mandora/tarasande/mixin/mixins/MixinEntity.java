@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.TarasandeMain;
+import su.mandora.tarasande.event.EventEntityFlag;
 import su.mandora.tarasande.event.EventMovement;
 import su.mandora.tarasande.event.EventStep;
 import su.mandora.tarasande.event.EventVelocityYaw;
@@ -51,6 +52,10 @@ public abstract class MixinEntity implements IEntity {
     private static Vec3d adjustMovementForCollisions(Vec3d movement, Box entityBoundingBox, List<VoxelShape> collisions) {
         return null;
     }
+
+    @Shadow
+    @Final
+    private static int SPRINTING_FLAG_INDEX;
 
     @Inject(method = "getRotationVec", at = @At("HEAD"), cancellable = true)
     public void injectGetRotationVec(float tickDelta, CallbackInfoReturnable<Vec3d> cir) {
@@ -106,6 +111,13 @@ public abstract class MixinEntity implements IEntity {
         }
     }
 
+    @Inject(method = "getFlag", at = @At("RETURN"), cancellable = true)
+    public void injectGetFlag(int index, CallbackInfoReturnable<Boolean> cir) {
+        EventEntityFlag eventEntityFlag = new EventEntityFlag((Entity) (Object) this, index, cir.getReturnValue());
+        TarasandeMain.Companion.get().getManagerEvent().call(eventEntityFlag);
+        cir.setReturnValue(eventEntityFlag.getEnabled());
+    }
+
     @Override
     public Vec3d tarasande_invokeGetRotationVector(float pitch, float yaw) {
         return getRotationVector(pitch, yaw);
@@ -124,5 +136,10 @@ public abstract class MixinEntity implements IEntity {
     @Override
     public Vec3d tarasande_invokeMovementInputToVelocity(Vec3d movementInput, float speed, float yaw) {
         return movementInputToVelocity(movementInput, speed, yaw);
+    }
+
+    @Override
+    public int tarasande_getSprintingFlagIndex() {
+        return SPRINTING_FLAG_INDEX;
     }
 }

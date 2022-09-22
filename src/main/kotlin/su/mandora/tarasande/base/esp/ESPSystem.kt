@@ -22,9 +22,9 @@ class ManagerESP : Manager<ESPElement>() {
             ESPElementHealthBar()
         )
 
-        val espModule = TarasandeMain.get().managerModule?.get(ModuleESP::class.java)!!
+        val espModule = TarasandeMain.get().managerModule.get(ModuleESP::class.java)
         list.forEach { espElement ->
-            TarasandeMain.get().managerValue?.getValues(espElement)?.forEach {
+            TarasandeMain.get().managerValue.getValues(espElement).forEach {
                 it.owner = espModule
                 it.name = espElement.name + ": " + it.name
             }
@@ -37,9 +37,9 @@ class ManagerESP : Manager<ESPElement>() {
 }
 
 abstract class ESPElement(val name: String) {
-    var enabled = object : ValueBoolean(TarasandeMain.get().managerModule?.get(ModuleESP::class.java)!!, name, false) {
+    var enabled = object : ValueBoolean(TarasandeMain.get().managerModule.get(ModuleESP::class.java), name, false) {
         override fun isEnabled(): Boolean {
-            return TarasandeMain.get().managerModule?.get(ModuleESP::class.java)?.mode?.isSelected(1)!!
+            return TarasandeMain.get().managerModule.get(ModuleESP::class.java).mode.isSelected(1)
         }
     }
 
@@ -49,7 +49,7 @@ abstract class ESPElement(val name: String) {
 abstract class ESPElementRotatable(name: String, private val forbiddenOrientations: Array<Orientation> = arrayOf()) : ESPElement(name) {
     val orientations = Orientation.values().filter { !forbiddenOrientations.contains(it) }
     var orientation: ValueMode? = if (orientations.size > 1)
-        object : ValueMode(TarasandeMain.get().managerModule?.get(ModuleESP::class.java)!!, "$name: Orientation", false, *orientations.map { it.name.substring(0, 1).uppercase() + it.name.substring(1).lowercase() }.toTypedArray()) {
+        object : ValueMode(TarasandeMain.get().managerModule.get(ModuleESP::class.java), "$name: Orientation", false, *orientations.map { it.name.substring(0, 1).uppercase() + it.name.substring(1).lowercase() }.toTypedArray()) {
             override fun isEnabled() = enabled.isEnabled() && enabled.value
         }
     else
@@ -59,7 +59,7 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
 
     override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
         val orientation = if (this.orientation != null)
-            orientations[this.orientation?.settings?.indexOf(this.orientation?.selected?.get(0)!!)!!]
+            orientations[this.orientation!!.settings.indexOf(this.orientation!!.selected.get(0))]
         else
             orientations[0]
         val sideWidth = when (orientation) {
@@ -68,9 +68,9 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
         }
         matrices.push()
         var padding = 2.0
-        for (espElement in TarasandeMain.get().managerESP?.list!!) {
+        for (espElement in TarasandeMain.get().managerESP.list) {
             if (espElement == this) break
-            if (espElement.enabled.value && espElement is ESPElementRotatable && espElement.orientations[espElement.orientation?.settings?.indexOf(espElement.orientation?.selected?.get(0) ?: 0) ?: 0] == orientation)
+            if (espElement.enabled.value && espElement is ESPElementRotatable && espElement.orientations[espElement.orientation?.settings?.indexOf(espElement.orientation!!.selected[0]) ?: 0] == orientation)
                 padding += espElement.getHeight(entity, sideWidth)
         }
         matrices.translate(rectangle.x, rectangle.y, 0.0)

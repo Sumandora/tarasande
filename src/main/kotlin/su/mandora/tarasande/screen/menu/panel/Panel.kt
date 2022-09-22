@@ -25,6 +25,8 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
     protected var alignment: Alignment = Alignment.LEFT
     var opened = false
 
+    internal val titleBarHeight = MinecraftClient.getInstance().textRenderer.fontHeight
+
     override fun init() {
     }
 
@@ -35,7 +37,7 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
         if (opened) {
             if (background) {
                 matrices?.push()
-                val accent = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
+                val accent = TarasandeMain.get().clientValues.accentColor.getColor()
                 RenderUtil.fill(matrices, x, y + MinecraftClient.getInstance().textRenderer.fontHeight, x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).let { Color(it.red, it.green, it.blue, 0) }, 0.3, 0.3, 0.3, 0.7).rgb)
                 matrices?.pop()
             }
@@ -67,11 +69,11 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
 
     open fun renderTitleBar(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         matrices?.push()
-        RenderUtil.fill(matrices, x, y, x + panelWidth, y + MinecraftClient.getInstance().textRenderer.fontHeight, TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!!)
+        RenderUtil.fill(matrices, x, y, x + panelWidth, y + titleBarHeight, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
         when (alignment) {
-            Alignment.LEFT -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + 1, y.toFloat() + 0.5F, Color.white.rgb)
-            Alignment.MIDDLE -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(title).toFloat() / 2.0F, y.toFloat() + 0.5F, Color.white.rgb)
-            Alignment.RIGHT -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(title).toFloat(), y.toFloat() + 0.5F, Color.white.rgb)
+            Alignment.LEFT -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2f - MinecraftClient.getInstance().textRenderer.fontHeight / 2f, Color.white.rgb)
+            Alignment.MIDDLE -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(title).toFloat() / 2.0F, y.toFloat() + titleBarHeight / 2f - MinecraftClient.getInstance().textRenderer.fontHeight / 2f, Color.white.rgb)
+            Alignment.RIGHT -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(title).toFloat(), y.toFloat() + titleBarHeight / 2f - MinecraftClient.getInstance().textRenderer.fontHeight / 2f, Color.white.rgb)
         }
         matrices?.pop()
     }
@@ -82,16 +84,16 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         val mouseX = floor(mouseX)
         val mouseY = floor(mouseY)
-        if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + (if (opened) panelHeight else MinecraftClient.getInstance().textRenderer.fontHeight.toDouble()))) {
+        if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + (if (opened) panelHeight else titleBarHeight.toDouble()))) {
             if (button == 0) {
-                if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + MinecraftClient.getInstance().textRenderer.fontHeight)) {
+                if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight.toDouble())) {
                     dragInfo.setDragInfo(true, mouseX - x, mouseY - y)
                 }
                 if (RenderUtil.isHovered(mouseX, mouseY, x + panelWidth - 5, y + panelHeight - 5, x + panelWidth + 5, y + panelHeight + 5)) {
                     resizeInfo.setDragInfo(true, mouseX - (x + panelWidth - 2), mouseY - (y + panelHeight - 2))
                 }
             } else if (button == 1) {
-                if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + MinecraftClient.getInstance().textRenderer.fontHeight)) opened = !opened
+                if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight.toDouble())) opened = !opened
             }
             return true
         }

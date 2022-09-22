@@ -7,6 +7,7 @@ import su.mandora.tarasande.event.EventGoalMovement
 import su.mandora.tarasande.event.EventInput
 import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.EventPollEvents
+import su.mandora.tarasande.util.extension.plus
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
@@ -25,7 +26,7 @@ class ModuleBlockBot : Module("Block bot", "Walks into the line of sight of othe
             is EventPollEvents -> {
                 val target = mc.world?.players?.filter { PlayerUtil.isAttackable(it) }?.minByOrNull { mc.player?.squaredDistanceTo(it)!! } ?: return@Consumer
 
-                val targetEye = target.eyePos.add(Rotation(target).forwardVector(extension.value))
+                val targetEye = target.eyePos + Rotation(target).forwardVector(extension.value)
                 move = mc.player?.eyePos?.squaredDistanceTo(targetEye)!! > minDistance.value * minDistance.value
 
                 val rotation = if (!move) // if he's not moving, just look at him... make him mad ^^

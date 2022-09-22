@@ -117,7 +117,7 @@ class ValueComponentBind(value: Value) : ValueComponent(value) {
                     }
                 }
 
-                if (keyName == null || keyName.isEmpty()) {
+                if (keyName.isNullOrEmpty()) {
                     keyName = "Key#$button"
                 }
                 return keyName

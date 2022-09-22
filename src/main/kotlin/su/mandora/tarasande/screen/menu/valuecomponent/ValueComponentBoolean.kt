@@ -28,8 +28,8 @@ class ValueComponentBoolean(value: Value) : ValueComponent(value) {
         val expandedAnimation = min((System.currentTimeMillis() - toggleTime) / 100.0 /* length in ms */, 1.0)
         val fade = (if ((value as ValueBoolean).value) expandedAnimation else 1.0 - expandedAnimation)
 
-        var color = RenderUtil.colorInterpolate(Color.white, TarasandeMain.get().clientValues?.accentColor?.getColor()!!, fade)
-        var colorInverted = RenderUtil.colorInterpolate(TarasandeMain.get().clientValues?.accentColor?.getColor()!!, Color.white, fade)
+        var color = RenderUtil.colorInterpolate(Color.white, TarasandeMain.get().clientValues.accentColor.getColor(), fade)
+        var colorInverted = RenderUtil.colorInterpolate(TarasandeMain.get().clientValues.accentColor.getColor(), Color.white, fade)
 
         if (!value.isEnabled()) {
             color = color.darker().darker()

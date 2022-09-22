@@ -27,7 +27,7 @@ class ModuleAimAssist : Module("Aim assist", "Helps you aim at enemies", ModuleC
             val entity = mc.world?.entities?.filter { PlayerUtil.isAttackable(it) }?.filter { mc.player?.distanceTo(it)!! < reach.value }?.filter { PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.eyePos) }?.minByOrNull { RotationUtil.getRotations(mc.player?.eyePos!!, it.eyePos).fov(selfRotation) } ?: return@Consumer
 
             val boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())
-            val bestAimPoint = TarasandeMain.get().managerModule?.get(ModuleKillAura::class.java)?.getBestAimPoint(boundingBox)!!
+            val bestAimPoint = TarasandeMain.get().managerModule.get(ModuleKillAura::class.java).getBestAimPoint(boundingBox)
 
             val rotation = RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint)
 

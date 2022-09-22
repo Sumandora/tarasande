@@ -13,16 +13,16 @@ import java.awt.Color
 
 class EntityColor {
 
-    private val selfColor = ValueColor(TarasandeMain.get().clientValues!!, "Self Color", 0.0f, 1.0f, 1.0f, 1.0f)
-    private val friendsColor = ValueColor(TarasandeMain.get().clientValues!!, "Friends Color", 0.0f, 1.0f, 1.0f, 1.0f)
-    private val useTeamColor = ValueBoolean(TarasandeMain.get().clientValues!!, "Use Team Color", true)
-    private val playerColor = object : ValueColor(TarasandeMain.get().clientValues!!, "Player Color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val selfColor = ValueColor(TarasandeMain.get().clientValues, "Self Color", 0.0f, 1.0f, 1.0f, 1.0f)
+    private val friendsColor = ValueColor(TarasandeMain.get().clientValues, "Friends Color", 0.0f, 1.0f, 1.0f, 1.0f)
+    private val useTeamColor = ValueBoolean(TarasandeMain.get().clientValues, "Use Team Color", true)
+    private val playerColor = object : ValueColor(TarasandeMain.get().clientValues, "Player Color", 0.0f, 1.0f, 1.0f, 1.0f) {
         override fun isEnabled() = !useTeamColor.value
     }
-    private val animalColor = object : ValueColor(TarasandeMain.get().clientValues!!, "Animal Color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val animalColor = object : ValueColor(TarasandeMain.get().clientValues, "Animal Color", 0.0f, 1.0f, 1.0f, 1.0f) {
         override fun isEnabled() = !useTeamColor.value
     }
-    private val mobColor = object : ValueColor(TarasandeMain.get().clientValues!!, "Mob Color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val mobColor = object : ValueColor(TarasandeMain.get().clientValues, "Mob Color", 0.0f, 1.0f, 1.0f, 1.0f) {
         override fun isEnabled() = !useTeamColor.value
     }
 
@@ -38,10 +38,10 @@ class EntityColor {
         }
 
         if (entity == MinecraftClient.getInstance().player) color = selfColor.getColor()
-        else if (entity is PlayerEntity && TarasandeMain.get().friends?.isFriend(entity.gameProfile) == true) color = friendsColor.getColor()
+        else if (entity is PlayerEntity && TarasandeMain.get().friends.isFriend(entity.gameProfile)) color = friendsColor.getColor()
 
         val eventEntityColor = EventEntityColor(entity, color)
-        TarasandeMain.get().managerEvent?.call(eventEntityColor)
+        TarasandeMain.get().managerEvent.call(eventEntityColor)
         return eventEntityColor.color
     }
 

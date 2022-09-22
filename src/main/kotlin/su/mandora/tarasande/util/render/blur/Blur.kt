@@ -53,7 +53,7 @@ class Blur {
         strengthLevels.add(Pair(5, 7.25f))
         strengthLevels.add(Pair(5, 8.50f))
 
-        TarasandeMain.get().managerEvent?.add { event ->
+        TarasandeMain.get().managerEvent.add { event ->
             when (event) {
                 is EventScreenRender -> {
                     if (MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenMenu)
@@ -80,12 +80,12 @@ class Blur {
         val cullFace = GL11.glIsEnabled(GL11.GL_CULL_FACE)
         GL11.glDisable(GL11.GL_CULL_FACE)
 
-        var last: Framebuffer? = null
+        lateinit var last: Framebuffer
 
         var totalScale = 1.0f
 
         if (kawasePasses == null) {
-            kawasePasses = calculateKawasePasses(TarasandeMain.get().clientValues?.blurStrength?.value?.toInt()!!)
+            kawasePasses = calculateKawasePasses(TarasandeMain.get().clientValues.blurStrength.value.toInt())
         }
 
         for ((index, kawasePass) in (if (strength != null) calculateKawasePasses(strength) else kawasePasses!!).withIndex()) {
@@ -125,7 +125,7 @@ class Blur {
         GL20.glUniform1i(cutoutShader.getUniformLocation("tex"), 1)
         GL13.glActiveTexture(GL13.GL_TEXTURE1)
         val texture1 = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D)
-        GlStateManager._bindTexture(last?.colorAttachment!!)
+        GlStateManager._bindTexture(last.colorAttachment)
 
         GL20.glUniform2f(cutoutShader.getUniformLocation("resolution"), blurredFramebuffer.textureWidth.toFloat(), blurredFramebuffer.textureHeight.toFloat())
 

@@ -12,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Items
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
+import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.RaycastContext
@@ -31,7 +32,7 @@ object PlayerUtil {
     val input = KeyboardInput(MinecraftClient.getInstance().options)
 
     init {
-        TarasandeMain.get().managerEvent?.add { event ->
+        TarasandeMain.get().managerEvent.add { event ->
             if (event is EventInput) {
                 if (event.input == MinecraftClient.getInstance().player?.input) {
                     input.tick(event.slowDown, event.slowdownAmount)
@@ -40,19 +41,21 @@ object PlayerUtil {
         }
     }
 
+    fun isPlayerMoving() = MinecraftClient.getInstance().player!!.input.movementInput.lengthSquared() > 0.8f * 0.8f
+
     fun isAttackable(entity: Entity?): Boolean {
         var attackable = true
         if (entity == null) attackable = false
         else if (entity !is LivingEntity) attackable = false
         else if (entity == MinecraftClient.getInstance().player) attackable = false
-        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(0)!! && entity is PlayerEntity) attackable = false
-        else if (TarasandeMain.get().clientValues?.dontAttackTamedEntities?.value!! && entity is TameableEntity && entity.ownerUuid == MinecraftClient.getInstance().player?.uuid) attackable = false
-        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(1)!! && entity is AnimalEntity) attackable = false
-        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(2)!! && ((entity is MobEntity || entity is Monster) && entity !is AnimalEntity)) attackable = false
-        else if (!TarasandeMain.get().clientValues?.targets?.isSelected(3)!! && (entity !is PlayerEntity && entity !is AnimalEntity && entity !is MobEntity)) attackable = false
+        else if (!TarasandeMain.get().clientValues.targets.isSelected(0) && entity is PlayerEntity) attackable = false
+        else if (TarasandeMain.get().clientValues.dontAttackTamedEntities.value && entity is TameableEntity && entity.ownerUuid == MinecraftClient.getInstance().player?.uuid) attackable = false
+        else if (!TarasandeMain.get().clientValues.targets.isSelected(1) && entity is AnimalEntity) attackable = false
+        else if (!TarasandeMain.get().clientValues.targets.isSelected(2) && ((entity is MobEntity || entity is Monster) && entity !is AnimalEntity)) attackable = false
+        else if (!TarasandeMain.get().clientValues.targets.isSelected(3) && (entity !is PlayerEntity && entity !is AnimalEntity && entity !is MobEntity)) attackable = false
 
         val eventIsEntityAttackable = EventIsEntityAttackable(entity, attackable)
-        TarasandeMain.get().managerEvent?.call(eventIsEntityAttackable)
+        TarasandeMain.get().managerEvent.call(eventIsEntityAttackable)
         return eventIsEntityAttackable.attackable
     }
 
@@ -75,11 +78,11 @@ object PlayerUtil {
         val prevCameraEntity = MinecraftClient.getInstance().cameraEntity
         MinecraftClient.getInstance().cameraEntity = MinecraftClient.getInstance().player // not using setter to avoid shader unloading, this is purely math, no rendering
 
-        val prevYaw = MinecraftClient.getInstance().player?.yaw!!
-        val prevPitch = MinecraftClient.getInstance().player?.pitch!!
+        val prevYaw = MinecraftClient.getInstance().player!!.yaw
+        val prevPitch = MinecraftClient.getInstance().player!!.pitch
 
-        MinecraftClient.getInstance().player?.yaw = rotation.yaw
-        MinecraftClient.getInstance().player?.pitch = rotation.pitch
+        MinecraftClient.getInstance().player!!.yaw = rotation.yaw
+        MinecraftClient.getInstance().player!!.pitch = rotation.pitch
 
         val prevFakeRotation = RotationUtil.fakeRotation
         RotationUtil.fakeRotation = null // prevent rotationvec override by mixin
@@ -109,24 +112,27 @@ object PlayerUtil {
         return hitResult
     }
 
-    fun rayCast(start: Vec3d, end: Vec3d) = MinecraftClient.getInstance().world?.raycast(RaycastContext(start, end, ShapeType.OUTLINE, FluidHandling.NONE, MinecraftClient.getInstance().player!!))
+    fun rayCast(start: Vec3d, end: Vec3d): BlockHitResult = MinecraftClient.getInstance().world!!.raycast(RaycastContext(start, end, ShapeType.OUTLINE, FluidHandling.NONE, MinecraftClient.getInstance().player!!))
 
     fun canVectorBeSeen(start: Vec3d, end: Vec3d): Boolean {
         val hitResult = rayCast(start, end)
-        return hitResult != null && hitResult.type != HitResult.Type.BLOCK
+        return hitResult.type != HitResult.Type.BLOCK
     }
 
     fun getMoveDirection(): Double {
-        return RotationUtil.getYaw(input.movementInput) + (if (input.movementInput.lengthSquared() != 0.0f) 0.0 else 90.0) + MinecraftClient.getInstance().player?.yaw!!
+        return RotationUtil.getYaw(input.movementInput) + (if (input.movementInput.lengthSquared() != 0.0f) 0.0 else 90.0) + MinecraftClient.getInstance().player!!.yaw
     }
 
-    fun isOnEdge(extrapolation: Double) = MinecraftClient.getInstance().world?.isSpaceEmpty(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.boundingBox?.offset(MinecraftClient.getInstance().player?.velocity?.x!! * extrapolation, -MinecraftClient.getInstance().player?.stepHeight?.toDouble()!!, MinecraftClient.getInstance().player?.velocity?.z!! * extrapolation))!!
+    fun isOnEdge(extrapolation: Double) = MinecraftClient.getInstance().player!!.let {
+        MinecraftClient.getInstance().world!!.isSpaceEmpty(it, it.boundingBox.offset(it.velocity.x * extrapolation, -it.stepHeight.toDouble(), it.velocity.z * extrapolation))
+    }
 
     fun getUsedHand(): Hand? {
         for (hand in Hand.values()) {
-            val stack = MinecraftClient.getInstance().player?.getStackInHand(hand)
-            if (stack != null && stack.item != Items.AIR) {
-                if (stack.useAction == UseAction.NONE) continue
+            val stack = MinecraftClient.getInstance().player!!.getStackInHand(hand)
+            if (stack.item != Items.AIR) {
+                if (stack.useAction == UseAction.NONE)
+                    continue
 
                 return hand
             }

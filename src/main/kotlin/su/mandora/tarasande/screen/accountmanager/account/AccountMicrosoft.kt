@@ -35,7 +35,7 @@ class AccountMicrosoft : Account() {
     private val redirectUriBase = "http://localhost:"
     private var cancelled = false
 
-    var service: MinecraftSessionService? = null
+    private var service: MinecraftSessionService? = null
 
     private var msAuthProfile: MSAuthProfile? = null
     private var redirectUri: String? = null

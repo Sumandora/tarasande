@@ -53,8 +53,8 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     private val customBroadcastMessage = object : ValueText(this, "Custom fake news message", "I'm sure it is %s because he held %s") {
         override fun isEnabled() = broadcast.isSelected(3)
     }
-    private val murdererAssistance = ValueBoolean(this, "Murderer assistance", true)
-    private val fakeNews = ValueMode(this, "Fake news", false, "Disabled", "Explanatory", "Legit", "Custom")
+    internal val murdererAssistance = ValueBoolean(this, "Murderer assistance", true)
+    internal val fakeNews = ValueMode(this, "Fake news", false, "Disabled", "Explanatory", "Legit", "Custom")
     private val customFakeNewsMessage = object : ValueText(this, "Custom fake news message", "I'm sure it is %s because he held %s") {
         override fun isEnabled() = fakeNews.isSelected(3)
     }
@@ -65,8 +65,8 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     }
 
     val suspects = ConcurrentHashMap<GameProfile, Array<Item>>()
-    private val fakeNewsTimer = TimeUtil()
-    private var fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
+    internal val fakeNewsTimer = TimeUtil()
+    internal var fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
     private var switchedSlot = false
 
     private val messages = ArrayList<String>()
@@ -125,7 +125,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
 
             else -> null
         }
-        if (message != null && message.isNotEmpty()) messages.add(message)
+        if (!message.isNullOrEmpty()) messages.add(message)
     }
 
     private fun isIllegalItem(item: Item) = if (item == Items.AIR || (highlightDetectives.value && detectiveItems.list.contains(item))) false else when {
@@ -134,7 +134,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         else -> false
     }
 
-    private fun isMurderer(): Boolean {
+    internal fun isMurderer(): Boolean {
         for (slot in 0 until PlayerInventory.getHotbarSize()) {
             if (isIllegalItem(mc.player?.inventory?.main?.get(slot)?.item!!)) return true
         }
@@ -149,7 +149,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventPollEvents -> {
-                if (messages.isNotEmpty()) TarasandeMain.get().managerModule?.get(ModuleSpammer::class.java)?.sendChatMessage(SharedConstants.stripInvalidChars(messages.removeFirst()))
+                if (messages.isNotEmpty()) TarasandeMain.get().managerModule.get(ModuleSpammer::class.java).sendChatMessage(SharedConstants.stripInvalidChars(messages.removeFirst()))
             }
 
             is EventUpdate -> {
@@ -161,7 +161,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                             if (realPlayers.size <= 1)
                                 return@Consumer
                             while (player == null || player == mc.player) {
-                                player = realPlayers.get(ThreadLocalRandom.current().nextInt(realPlayers.size))
+                                player = realPlayers[ThreadLocalRandom.current().nextInt(realPlayers.size)]
                             }
                             val randomIllegalItem = fakeNewsItems.list.randomOrNull()
                             accuse(player, randomIllegalItem != null, false, randomIllegalItem ?: Items.AIR, Items.AIR, fakeNews.settings.indexOf(fakeNews.selected[0]), customFakeNewsMessage.value)
@@ -211,7 +211,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                         return@Consumer
                     if (player !is PlayerEntity) return@Consumer
                     if (suspects.containsKey(player.gameProfile)) return@Consumer
-                    if (TarasandeMain.get().managerModule?.get(ModuleAntiBot::class.java)?.isBot(player)!!) return@Consumer
+                    if (TarasandeMain.get().managerModule.get(ModuleAntiBot::class.java).isBot(player)) return@Consumer
 
                     var mainHand: Item? = null
                     var offHand: Item? = null
@@ -224,10 +224,11 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                     val illegalOffHand = if (offHand != null) isIllegalItem(offHand) else false
 
                     if (illegalMainHand || illegalOffHand) {
+                        @Suppress("KotlinConstantConditions") // I could write the offhand branch into the else, but I prefer the style
                         suspects[player.gameProfile] = when {
-                            illegalMainHand && mainHand != null && illegalOffHand && offHand != null -> arrayOf(mainHand, offHand)
-                            illegalMainHand && mainHand != null -> arrayOf(mainHand)
-                            illegalOffHand && offHand != null -> arrayOf(offHand)
+                            illegalMainHand && illegalOffHand -> arrayOf(mainHand!!, offHand!!)
+                            illegalMainHand -> arrayOf(mainHand!!)
+                            illegalOffHand -> arrayOf(offHand!!)
                             else -> arrayOf()
                         }
                         if (!broadcast.isSelected(0)) {

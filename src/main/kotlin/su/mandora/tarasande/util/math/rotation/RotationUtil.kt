@@ -12,6 +12,7 @@ import su.mandora.tarasande.event.*
 import su.mandora.tarasande.mixin.accessor.ILivingEntity
 import su.mandora.tarasande.mixin.accessor.IPlayerMoveC2SPacket
 import su.mandora.tarasande.module.movement.ModuleNoRotate
+import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.render.RenderUtil
 import java.util.function.Consumer
@@ -31,30 +32,30 @@ object RotationUtil {
     private var disableNextTeleport = false
 
     init {
-        TarasandeMain.get().managerEvent?.add(Pair(1001, Consumer<Event> { event ->
+        TarasandeMain.get().managerEvent.add(Pair(1001, Consumer<Event> { event ->
             when (event) {
                 is EventJump -> {
                     if (event.state != EventJump.State.PRE) return@Consumer
                     if (goalMovementYaw != null) event.yaw = goalMovementYaw!!
                     if (fakeRotation != null)
-                        if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(2)!! || TarasandeMain.get().clientValues?.correctMovement?.isSelected(3)!!)
-                            event.yaw = fakeRotation?.yaw!!
+                        if (TarasandeMain.get().clientValues.correctMovement.isSelected(2) || TarasandeMain.get().clientValues.correctMovement.isSelected(3))
+                            event.yaw = fakeRotation!!.yaw
                 }
 
                 is EventVelocityYaw -> {
                     if (goalMovementYaw != null) event.yaw = goalMovementYaw!!
                     if (fakeRotation != null)
-                        if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(2)!! || TarasandeMain.get().clientValues?.correctMovement?.isSelected(3)!!)
-                            event.yaw = fakeRotation?.yaw!!
+                        if (TarasandeMain.get().clientValues.correctMovement.isSelected(2) || TarasandeMain.get().clientValues.correctMovement.isSelected(3))
+                            event.yaw = fakeRotation!!.yaw
                 }
 
                 is EventInput -> {
                     if (fakeRotation != null)
-                        if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(3)!!) {
+                        if (TarasandeMain.get().clientValues.correctMovement.isSelected(3)) {
                             if (event.movementForward == 0.0f && event.movementSideways == 0.0f) return@Consumer
 
-                            val realYaw = goalMovementYaw ?: MinecraftClient.getInstance().player?.yaw!!
-                            val fakeYaw = fakeRotation?.yaw!!
+                            val realYaw = goalMovementYaw ?: MinecraftClient.getInstance().player!!.yaw
+                            val fakeYaw = fakeRotation!!.yaw
 
                             val moveX = event.movementSideways * cos(Math.toRadians(realYaw.toDouble())) - event.movementForward * sin(Math.toRadians(realYaw.toDouble()))
                             val moveZ = event.movementForward * cos(Math.toRadians(realYaw.toDouble())) + event.movementSideways * sin(Math.toRadians(realYaw.toDouble()))
@@ -83,14 +84,14 @@ object RotationUtil {
                 }
 
                 is EventIsWalking -> {
-                    if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!! && (fakeRotation != null || goalMovementYaw != null)) {
-                        event.walking = (MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f) && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (fakeRotation?.yaw ?: (goalMovementYaw ?: 0.0f)))) <= 45
+                    if (TarasandeMain.get().clientValues.correctMovement.isSelected(1)) {
+                        event.walking = PlayerUtil.isPlayerMoving() && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (fakeRotation?.yaw ?: (goalMovementYaw ?: return@Consumer)))) <= 45
                     }
                 }
 
                 is EventHasForwardMovement -> {
-                    if (TarasandeMain.get().clientValues?.correctMovement?.isSelected(1)!! && (fakeRotation != null || goalMovementYaw != null)) {
-                        event.hasForwardMovement = MinecraftClient.getInstance().player?.input?.movementInput?.lengthSquared()!! > 0.8f * 0.8f && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (fakeRotation?.yaw ?: (goalMovementYaw ?: 0.0f)))) <= 45
+                    if (TarasandeMain.get().clientValues.correctMovement.isSelected(1)) {
+                        event.hasForwardMovement = PlayerUtil.isPlayerMoving() && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (fakeRotation?.yaw ?: (goalMovementYaw ?: return@Consumer)))) <= 45
                     }
                 }
 
@@ -98,7 +99,7 @@ object RotationUtil {
                     if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerPositionLookS2CPacket) {
                         disableNextTeleport = true
                         if (fakeRotation != null)
-                            fakeRotation = TarasandeMain.get().managerModule?.get(ModuleNoRotate::class.java)?.evaluateNewRotation(event.packet)
+                            fakeRotation = TarasandeMain.get().managerModule.get(ModuleNoRotate::class.java).evaluateNewRotation(event.packet)
                     } else if (event.type == EventPacket.Type.SEND && event.packet is PlayerMoveC2SPacket) {
                         if (fakeRotation != null) {
                             if (disableNextTeleport) { // this code is crap ._.
@@ -106,8 +107,8 @@ object RotationUtil {
                                 return@Consumer
                             }
                             val accessor = event.packet as IPlayerMoveC2SPacket
-                            accessor.tarasande_setYaw(fakeRotation?.yaw!!)
-                            accessor.tarasande_setPitch(fakeRotation?.pitch!!)
+                            accessor.tarasande_setYaw(fakeRotation!!.yaw)
+                            accessor.tarasande_setPitch(fakeRotation!!.pitch)
                         }
                     }
                 }
@@ -131,8 +132,8 @@ object RotationUtil {
     }
 
     private fun simulateFakeRotationUpdate() {
-        if (TarasandeMain.get().clientValues?.updateRotationsWhenTickSkipping?.value!!)
-            if (TarasandeMain.get().clientValues?.updateRotationsAccurately?.value!!) {
+        if (TarasandeMain.get().clientValues.updateRotationsWhenTickSkipping.value)
+            if (TarasandeMain.get().clientValues.updateRotationsAccurately.value) {
                 for (i in 0..(1000.0 / RenderUtil.deltaTime).roundToInt())
                     updateFakeRotation(true)
             } else {
@@ -143,7 +144,7 @@ object RotationUtil {
     fun updateFakeRotation(fake: Boolean) {
         if (MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().interactionManager != null) {
             val eventPollEvents = EventPollEvents(Rotation(MinecraftClient.getInstance().player!!), fake)
-            TarasandeMain.get().managerEvent?.call(eventPollEvents)
+            TarasandeMain.get().managerEvent.call(eventPollEvents)
             if (eventPollEvents.dirty) {
                 fakeRotation = eventPollEvents.rotation
                 lastMinRotateToOriginSpeed = eventPollEvents.minRotateToOriginSpeed
@@ -151,10 +152,10 @@ object RotationUtil {
             } else if (fakeRotation != null) {
                 val realRotation = Rotation(MinecraftClient.getInstance().player!!)
                 val rotation = Rotation(fakeRotation!!)
-                if ((MinecraftClient.getInstance().player as ILivingEntity?)?.tarasande_getBodyTrackingIncrements()!! == 0)
+                if ((MinecraftClient.getInstance().player as ILivingEntity).tarasande_getBodyTrackingIncrements() == 0)
                     rotation.smoothedTurn(realRotation, Pair(lastMinRotateToOriginSpeed, lastMaxRotateToOriginSpeed))
                 rotation.correctSensitivity()
-                val actualDist = fakeRotation?.fov(rotation)!!
+                val actualDist = fakeRotation!!.fov(rotation)
                 val gcd = Rotation.getGcd() * 0.15f
                 if (actualDist <= gcd / 2 + 0.1 /* little more */) {
                     val actualRotation = Rotation(MinecraftClient.getInstance().player!!)
@@ -171,15 +172,15 @@ object RotationUtil {
                 }
             }
 
-            val eventGoalMovement = EventGoalMovement(fakeRotation?.yaw ?: MinecraftClient.getInstance().player?.yaw!!)
-            TarasandeMain.get().managerEvent?.call(eventGoalMovement)
+            val eventGoalMovement = EventGoalMovement(fakeRotation?.yaw ?: MinecraftClient.getInstance().player!!.yaw)
+            TarasandeMain.get().managerEvent.call(eventGoalMovement)
             goalMovementYaw = if (eventGoalMovement.dirty) eventGoalMovement.yaw
             else null
         }
     }
 
     fun getRotations(from: Vec3d, to: Vec3d): Rotation {
-        val delta = to.subtract(from)
+        val delta = to - from
         return getRotations(delta)
     }
 
@@ -192,6 +193,5 @@ object RotationUtil {
     fun getYaw(delta: Vec3d) = Math.toDegrees(atan2(delta.z, delta.x)) - 90
     fun getYaw(delta: Vec2f) = Math.toDegrees(atan2(delta.y, delta.x).toDouble()) - 90
 
-    fun getPitch(deltaY: Double, dist: Double) = -Math.toDegrees(atan2(deltaY, dist))
-
+    private fun getPitch(deltaY: Double, dist: Double) = -Math.toDegrees(atan2(deltaY, dist))
 }

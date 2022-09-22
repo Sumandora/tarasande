@@ -45,7 +45,7 @@ class ValueComponentNumber(value: Value) : ValueComponent(value) {
 
         val sliderPos = (valueNumber.value - valueNumber.min) / (valueNumber.max - valueNumber.min)
 
-        var accentColor = TarasandeMain.get().clientValues?.accentColor?.getColor()!!
+        var accentColor = TarasandeMain.get().clientValues.accentColor.getColor()
         var color = Color(accentColor.red, accentColor.green, accentColor.blue, 255 / 4)
         var otherColor = Color(255, 255, 255, 255 / 4)
 

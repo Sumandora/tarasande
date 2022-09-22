@@ -10,10 +10,10 @@ import java.util.function.Consumer
 
 class InformationWorldTime : Information("World", "World Time") {
 
-    var lastUpdate: Pair<Long, Long>? = null
+    private var lastUpdate: Pair<Long, Long>? = null
 
     init {
-        TarasandeMain.get().managerEvent?.add(Pair(1, Consumer<Event> { event ->
+        TarasandeMain.get().managerEvent.add(Pair(1, Consumer<Event> { event ->
             if (event is EventPacket) {
                 if (event.type == EventPacket.Type.RECEIVE && event.packet is WorldTimeUpdateS2CPacket) {
                     lastUpdate = Pair(event.packet.timeOfDay, event.packet.time)

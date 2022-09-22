@@ -14,6 +14,9 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.mixin.accessor.ICrossbowItem
 import su.mandora.tarasande.module.render.ModuleTrajectories
+import su.mandora.tarasande.util.extension.minus
+import su.mandora.tarasande.util.extension.plus
+import su.mandora.tarasande.util.extension.times
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
@@ -45,10 +48,10 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
     }
 
     private fun deadReckoning(stack: ItemStack, entity: Entity, rotation: Rotation): Vec3d {
-        val predicted = TarasandeMain.get().managerModule?.get(ModuleTrajectories::class.java)?.predict(stack, rotation, false)!!
+        val predicted = TarasandeMain.get().managerModule.get(ModuleTrajectories::class.java).predict(stack, rotation, false)
         if(predicted.size <= 0) return entity.boundingBox.center
         val prev = Vec3d(entity.prevX, entity.prevY, entity.prevZ)
-        return entity.boundingBox.center.add(entity.pos?.subtract(prev)?.withAxis(Direction.Axis.Y, 0.0)?.multiply(predicted.size.toDouble() * predictionAmount.value))
+        return entity.boundingBox.center + (entity.pos!! - prev).withAxis(Direction.Axis.Y, 0.0) * (predicted.size.toDouble() * predictionAmount.value)
     }
 
     val eventConsumer = Consumer<Event> { event ->
@@ -66,7 +69,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
 
                 if (solution.isNaN()) return@Consumer
 
-                var yaw = RotationUtil.getYaw(target.subtract(mc.player?.eyePos))
+                var yaw = RotationUtil.getYaw(target - mc.player?.eyePos!!)
                 var rotation = Rotation(yaw.toFloat(), solution.toFloat())
 
                 // DEAD RECKONING
@@ -76,7 +79,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
 
                 if (solution.isNaN()) return@Consumer
 
-                yaw = RotationUtil.getYaw(target.subtract(mc.player?.eyePos))
+                yaw = RotationUtil.getYaw(target - mc.player?.eyePos!!)
                 rotation = Rotation(yaw.toFloat(), solution.toFloat())
                 // DEAD RECKONING
 

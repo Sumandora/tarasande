@@ -17,7 +17,7 @@ class ClientValues {
     val correctMovement = ValueMode(this, "Correct movement", false, "Off", "Prevent Backwards Sprinting", "Direct", "Silent")
     val blurStrength = object : ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0) {
         override fun onChange() {
-            TarasandeMain.get().blur?.kawasePasses = null
+            TarasandeMain.get().blur.kawasePasses = null
         }
     }
     val unlockTicksPerFrame = ValueBoolean(this, "Unlock ticks per frame", false)

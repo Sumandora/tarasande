@@ -25,7 +25,7 @@ class ValueComponentButton(value: Value) : ValueComponent(value) {
         matrices?.translate(width - 2 - textWidth / 2, getHeight() / 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
         matrices?.translate(-(width - 2 - textWidth / 2), -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, (width - 2 - textWidth / 2).toFloat(), (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F + 1).toFloat(), if (valueButton.isEnabled()) if (RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), width - 4 - textWidth / 2, getHeight() / 2.0 - MinecraftClient.getInstance().textRenderer.fontHeight / 2, width, getHeight() / 2.0 + MinecraftClient.getInstance().textRenderer.fontHeight / 2)) TarasandeMain.get().clientValues?.accentColor?.getColor()?.rgb!! else Color.white.rgb else Color.white.darker().darker().rgb)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, (width - 2 - textWidth / 2).toFloat(), (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F + 1).toFloat(), if (valueButton.isEnabled()) if (RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), width - 4 - textWidth / 2, getHeight() / 2.0 - MinecraftClient.getInstance().textRenderer.fontHeight / 2, width, getHeight() / 2.0 + MinecraftClient.getInstance().textRenderer.fontHeight / 2)) TarasandeMain.get().clientValues.accentColor.getColor().rgb else Color.white.rgb else Color.white.darker().darker().rgb)
         matrices?.pop()
     }
 

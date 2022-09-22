@@ -19,26 +19,36 @@ class TarasandeMain {
 
     val name = "tarasande" // "lowercase gang" ~kennytv
 
-    var managerEvent: ManagerEvent? = null
-    var managerFile: ManagerFile? = null
-    var managerValue: ManagerValue? = null
-    var clientValues: ClientValues? = null
-    var entityColor: EntityColor? = null
-    var managerClickMethod: ManagerClickMethod? = null
-    var managerModule: ManagerModule? = null
-    var blur: Blur? = null
-    var screens: Screens? = null
-    var friends: Friends? = null
-    var managerESP: ManagerESP? = null
+    lateinit var managerEvent: ManagerEvent
+        private set
+    private lateinit var managerFile: ManagerFile
+    lateinit var managerValue: ManagerValue
+        private set
+    lateinit var clientValues: ClientValues
+        private set
+    lateinit var entityColor: EntityColor
+        private set
+    lateinit var managerClickMethod: ManagerClickMethod
+        private set
+    lateinit var managerModule: ManagerModule
+        private set
+    lateinit var blur: Blur
+        private set
+    lateinit var screens: Screens
+        private set
+    lateinit var friends: Friends
+        private set
+    lateinit var managerESP: ManagerESP
+        private set
 
     val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
 
     val autoSaveDaemonName = "$name config auto save daemon"
     val autoSaveDaemon: Thread /* This has to be here because IntelliJ is the best IDE ever built */ = Thread({
         while (true) {
-            if (clientValues?.autoSaveConfig?.value!!) {
-                managerFile?.save()
-                Thread.sleep(clientValues?.autoSaveDelay?.value?.toLong()!!)
+            if (clientValues.autoSaveConfig.value) {
+                managerFile.save()
+                Thread.sleep(clientValues.autoSaveDelay.value.toLong())
             }
         }
     }, autoSaveDaemonName)
@@ -67,13 +77,13 @@ class TarasandeMain {
         screens = Screens() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
         friends = Friends()
 
-        managerFile?.load()
+        managerFile.load()
 
-        if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && screens?.screenBetterAccountManager?.mainAccount != null) {
-            screens?.screenBetterAccountManager?.logIn(screens?.screenBetterAccountManager?.accounts!![screens?.screenBetterAccountManager?.mainAccount!!])
-            while (screens?.screenBetterAccountManager?.loginThread != null && screens?.screenBetterAccountManager?.loginThread?.isAlive!!)
+        if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && screens.screenBetterAccountManager.mainAccount != null) {
+            screens.screenBetterAccountManager.logIn(screens.screenBetterAccountManager.accounts[screens.screenBetterAccountManager.mainAccount!!])
+            while (screens.screenBetterAccountManager.loginThread != null && screens.screenBetterAccountManager.loginThread!!.isAlive)
                 Thread.sleep(50L) // synchronize
-            screens?.screenBetterAccountManager?.status = null
+            screens.screenBetterAccountManager.status = null
         }
 
         autoSaveDaemon.start()
@@ -83,6 +93,6 @@ class TarasandeMain {
 
     fun onUnload() {
         Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor resume")
-        managerFile?.save()
+        managerFile.save()
     }
 }

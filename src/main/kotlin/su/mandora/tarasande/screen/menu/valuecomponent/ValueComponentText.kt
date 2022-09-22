@@ -37,7 +37,7 @@ class ValueComponentText(value: Value) : ValueComponent(value) {
         matrices?.scale(0.5F, 0.5F, 1.0F)
 
         if (textFieldWidget.isFocused)
-            (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.get().clientValues?.accentColor?.getColor()!!)
+            (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.get().clientValues.accentColor.getColor())
         else
             textFieldWidget.setCursorToEnd()
 

@@ -14,11 +14,11 @@ open class Manager<T : Any> {
 
     fun rem(vararg objects: T) = list.removeAll(objects.toSet())
 
-    fun <T> get(clazz: Class<T>): T? {
+    fun <T> get(clazz: Class<T>): T {
         for (t in list) {
             if (t.javaClass == clazz)
                 return t as T
         }
-        return null
+        error(clazz.name + " is not a member of list")
     }
 }

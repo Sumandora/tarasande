@@ -50,11 +50,8 @@
 - Improve BedESP performance (Go inside from outside; see comment in BedESP class)
 - User configs
 - Crystal Aura
-- Tick Backtrack for Ghost Cheating
 - Anti Vanish
 - Auto Soup&Pot
-- TNT Block
-- Anti Fall
 - Fast Use & Bow
 - Phase
 - Step: Calculate all motions; Prediction by LivingEntity#travel; Instantiate object and simulate
@@ -63,9 +60,10 @@
 - Fast Break&Place (Place with autoclicker)
 - CivBreaker
 - Velocity: Addition depends on packet
-- ValueComponentNumber(Range) Textfields
+- ValueComponentNumber(Range) Textfields (Right-click?)
 - -> Killaura: TP
-- No Web
+- Target strafe: Anti Void
+- Account manager: Add skins in selection
 
 ## Notes
 - AutoTool: Axes can set shields on cooldown. Maybe implement that if possible axes are being used to set shields on cooldown before actually attacking with sword

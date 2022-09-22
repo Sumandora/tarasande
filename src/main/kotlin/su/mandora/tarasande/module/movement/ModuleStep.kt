@@ -10,6 +10,7 @@ import su.mandora.tarasande.event.EventMovement
 import su.mandora.tarasande.event.EventStep
 import su.mandora.tarasande.event.EventTick
 import su.mandora.tarasande.event.EventUpdate
+import su.mandora.tarasande.util.extension.times
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
@@ -69,7 +70,7 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
                 if (event.entity != mc.player)
                     return@Consumer
                 if (mc.player?.age!! - stepTick < slowdownTicks.value)
-                    event.velocity = event.velocity.multiply(slowdown.value).let { if (slowdown.value != 0.0) it.withAxis(Direction.Axis.Y, event.velocity.y) else it }
+                    event.velocity = (event.velocity * slowdown.value).let { if (slowdown.value != 0.0) it.withAxis(Direction.Axis.Y, event.velocity.y) else it }
             }
 
             is EventTick -> {

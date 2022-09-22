@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
+import su.mandora.tarasande.util.extension.times
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.ValueNumberRange
 import java.util.concurrent.ThreadLocalRandom
@@ -21,7 +22,7 @@ class Rotation(var yaw: Float, var pitch: Float) {
             val sensitivityPow3 = sensitivity * sensitivity * sensitivity
             val sensitivityPow3Mult8 = sensitivityPow3 * 8.0
 
-            return if (MinecraftClient.getInstance().options.perspective.isFirstPerson && MinecraftClient.getInstance().player?.isUsingSpyglass!!)
+            return if (MinecraftClient.getInstance().options.perspective.isFirstPerson && MinecraftClient.getInstance().player!!.isUsingSpyglass)
                 sensitivityPow3
             else
                 sensitivityPow3Mult8
@@ -83,7 +84,7 @@ class Rotation(var yaw: Float, var pitch: Float) {
         return Rotation(MathHelper.wrapDegrees(other.yaw - yaw), other.pitch - pitch)
     }
 
-    fun dist(deltaRotation: Rotation): Float {
+    private fun dist(deltaRotation: Rotation): Float {
         return sqrt(deltaRotation.yaw * deltaRotation.yaw + deltaRotation.pitch * deltaRotation.pitch)
     }
 
@@ -116,7 +117,7 @@ class Rotation(var yaw: Float, var pitch: Float) {
         val i = MathHelper.sin(g)
         val j = MathHelper.cos(f)
         val k = MathHelper.sin(f)
-        return Vec3d((i * j).toDouble(), -k.toDouble(), (h * j).toDouble()).multiply(dist)
+        return Vec3d((i * j).toDouble(), -k.toDouble(), (h * j).toDouble()) * dist
     }
 
 

@@ -8,6 +8,7 @@ import su.mandora.tarasande.event.EventTick
 import su.mandora.tarasande.module.combat.*
 import su.mandora.tarasande.module.ghost.ModuleAimAssist
 import su.mandora.tarasande.module.ghost.ModuleAutoClicker
+import su.mandora.tarasande.module.ghost.ModuleBacktrace
 import su.mandora.tarasande.module.ghost.ModuleReach
 import su.mandora.tarasande.module.misc.*
 import su.mandora.tarasande.module.movement.*
@@ -43,7 +44,6 @@ class ManagerModule : Manager<Module>() {
             ModuleTrajectories(),
             ModuleAntiBot(),
             ModuleNoFov(),
-            ModuleLatency(),
             ModuleKeepSprint(),
             ModuleMurderMystery(),
             ModuleNoSwing(),
@@ -78,9 +78,13 @@ class ManagerModule : Manager<Module>() {
             ModuleTargetStrafe(),
             ModuleSneak(),
             ModuleAirStuck(),
-            ModuleTNTBlock()
+            ModuleTNTBlock(),
+            ModuleNoWeb(),
+            ModuleClickTP(),
+            ModuleBacktrace(),
+            ModuleAntiFall()
         )
-        TarasandeMain.get().managerEvent?.add { event ->
+        TarasandeMain.get().managerEvent.add { event ->
             if (event is EventTick)
                 if (event.state == EventTick.State.POST) {
                     for (module in list)
@@ -98,9 +102,9 @@ open class Module(val name: String, val description: String, val category: Modul
         set(value) {
             if (field != value) if (value) {
                 onEnable()
-                TarasandeMain.get().managerEvent?.addObject(this)
+                TarasandeMain.get().managerEvent.addObject(this)
             } else {
-                TarasandeMain.get().managerEvent?.remObject(this)
+                TarasandeMain.get().managerEvent.remObject(this)
                 onDisable()
             }
 

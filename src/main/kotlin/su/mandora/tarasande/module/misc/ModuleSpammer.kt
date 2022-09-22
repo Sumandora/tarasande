@@ -54,7 +54,18 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
         val prevBypassChat = (mc.player as IClientPlayerEntity).tarasande_getBypassChat()
         (mc.player as IClientPlayerEntity).tarasande_setBypassChat(true)
         // this method COULD be static, but Mojangs god tier coders didn't think of that
-        ChatScreen("").also {
+        object : ChatScreen("") {
+            override fun narrateScreenIfNarrationEnabled(onlyChangedNarrations: Boolean) {
+            }
+
+            override fun close() {
+            }
+
+            override fun sendMessage(chatText: String?, addToHistory: Boolean): Boolean {
+                super.sendMessage(chatText, addToHistory)
+                return false
+            }
+        }.also {
             it.init(mc, mc.window.scaledWidth, mc.window.scaledHeight)
             for (c in text.toCharArray()) it.charTyped(c, 0)
             it.keyPressed(GLFW.GLFW_KEY_ENTER, 0, 0)
