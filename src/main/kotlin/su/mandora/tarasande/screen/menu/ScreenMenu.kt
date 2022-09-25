@@ -66,7 +66,7 @@ class ScreenMenu : Screen(Text.of("Menu")) {
             PanelFixedWatermark::class.java,
             PanelFixedHypixelBedwarsOverlay::class.java
         )
-        if (System.getProperty("os.name").contains("linux", true)) {
+        if (TarasandeMain.get().linux) {
             fixedPanels.add(PanelFixedNowPlaying::class.java)
         }
         for (panel in fixedPanels) {

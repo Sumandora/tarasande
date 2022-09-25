@@ -3,6 +3,7 @@ package su.mandora.tarasande
 import com.google.gson.GsonBuilder
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
+import net.minecraft.util.Util
 import su.mandora.tarasande.base.esp.ManagerESP
 import su.mandora.tarasande.base.event.ManagerEvent
 import su.mandora.tarasande.base.file.ManagerFile
@@ -53,6 +54,8 @@ class TarasandeMain {
         }
     }, autoSaveDaemonName)
 
+    val linux = Util.getOperatingSystem() != Util.OperatingSystem.WINDOWS
+
     companion object {
         private val instance: TarasandeMain = TarasandeMain()
 
@@ -88,11 +91,14 @@ class TarasandeMain {
 
         autoSaveDaemon.start()
         // We can't guarantee that qdbus exists, nor can we guarantee that we are even using kde plasma, just hope for the best ^^
-        Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor suspend")
+        if (linux)
+            Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor suspend")
     }
 
     fun onUnload() {
-        Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor resume")
+        if (linux)
+            Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor resume")
+
         managerFile.save()
     }
 }
