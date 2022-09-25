@@ -6,7 +6,6 @@
   "client": [
     "ClientPlayerInteractionManagerMixin",
     "ClientPlayNetworkHandlerMixin",
-    "HeldItemRendererMixin",
     "KeyboardInputMixin",
     "MinecraftClientMixin",
     "MultiplayerScreenMixin",
@@ -22,7 +21,6 @@
     "ClientConnectionMixin",
     "ClientConnectionSubOneMixin",
     "EntityPredicatesMixin",
-    "ItemCooldownManagerMixin",
     "ItemPlacementContextMixin",
     "block.FarmlandBlockMixin",
     "block.LadderBlockMixin",

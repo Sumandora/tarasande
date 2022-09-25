@@ -65,4 +65,9 @@ public class ViaConfig extends AbstractViaConfig {
     public boolean is1_14HitboxFix() {
         return false;
     }
+
+    @Override
+    public boolean isShowShieldWhenSwordInHand() {
+        return true;
+    }
 }

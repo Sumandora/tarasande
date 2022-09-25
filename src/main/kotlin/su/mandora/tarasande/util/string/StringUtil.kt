@@ -14,6 +14,6 @@ object StringUtil {
         return languageCache.computeIfAbsent(languageDefinition) { TranslationStorage.load(MinecraftClient.getInstance().resourceManager, Collections.singletonList(languageDefinition)) }.get(key)
     }
 
-    fun formatEnumTypes(name: String) = name.substring(0, 1) + name.substring(1).lowercase()
+    fun formatEnumTypes(name: String) = (name.substring(0, 1) + name.substring(1).lowercase()).replace('_', ' ')
 
 }
