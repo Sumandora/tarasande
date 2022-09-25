@@ -44,7 +44,6 @@ public class MixinTitleScreen extends Screen {
             if ((buttonWidget.getMessage().getContent() instanceof TranslatableTextContent && ((TranslatableTextContent) buttonWidget.getMessage().getContent()).getKey().equals("menu.online")) || buttonWidget.getMessage().getString().contains("Realms")) {
                 buttonWidget.setWidth(buttonWidget.getWidth() / 2 - 2);
                 addDrawableChild(new ButtonWidget(buttonWidget.x + buttonWidget.getWidth() + 4, buttonWidget.y, buttonWidget.getWidth(), buttonWidget.getHeight(), Text.of("Account Manager"), button -> client.setScreen(TarasandeMain.Companion.get().getScreens().getScreenBetterAccountManager())));
-
             }
         }
         return addDrawableChild(drawableElement);

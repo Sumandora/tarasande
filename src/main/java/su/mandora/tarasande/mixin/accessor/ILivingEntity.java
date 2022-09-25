@@ -1,5 +1,7 @@
 package su.mandora.tarasande.mixin.accessor;
 
+import net.minecraft.item.ItemStack;
+
 public interface ILivingEntity {
     double tarasande_getServerX();
 
@@ -18,4 +20,6 @@ public interface ILivingEntity {
     int tarasande_getLastAttackedTicks();
 
     void tarasande_setLastAttackedTicks(int lastAttackedTicks);
+
+    void tarasande_invokeTickItemStackUsage(ItemStack itemStack);
 }

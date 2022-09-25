@@ -14,6 +14,7 @@ import su.mandora.tarasande.event.EventSlowdownAmount
 import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.mixin.accessor.IClientPlayerInteractionManager
 import su.mandora.tarasande.util.player.PlayerUtil
+import su.mandora.tarasande.util.string.StringUtil
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
 import java.util.concurrent.ThreadLocalRandom
@@ -21,27 +22,28 @@ import java.util.function.Consumer
 
 class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking etc... slowdowns", ModuleCategory.MOVEMENT) {
 
-    private val useActions = arrayListOf(*UseAction.values())
+    private val useActions = HashMap<UseAction, String>()
 
     init {
-        useActions.remove(UseAction.NONE)
+        for (useAction in UseAction.values())
+            if (useAction != UseAction.NONE)
+                useActions[useAction] = StringUtil.formatEnumTypes(useAction.name)
     }
 
-    private fun formatEnumTypes(useAction: UseAction) = useAction.name.substring(0, 1) + useAction.name.substring(1).lowercase()
 
     private val slowdown = ValueNumber(this, "Slowdown", 0.0, 1.0, 1.0, 0.1)
-    private val actions = ValueMode(this, "Actions", true, *useActions.map { formatEnumTypes(it) }.toTypedArray())
+    private val actions = ValueMode(this, "Actions", true, *useActions.map { it.value }.toTypedArray())
     private val bypass = ValueMode(this, "Bypass", true, "Reuse", "Rehold")
     private val reuseMode = object : ValueMode(this, "Reuse mode", false, "Same slot", "Different slot") {
         override fun isEnabled() = bypass.isSelected(1)
     }
-    private val bypassedActions = object : ValueMode(this, "Bypassed actions", true, *useActions.map { formatEnumTypes(it) }.toTypedArray()) {
+    private val bypassedActions = object : ValueMode(this, "Bypassed actions", true, *useActions.map { it.value }.toTypedArray()) {
         override fun isEnabled() = bypass.anySelected()
     }
 
     private fun isActionEnabled(setting: ValueMode): Boolean {
         val usedStack = mc.player?.getStackInHand(PlayerUtil.getUsedHand() ?: return false)
-        return usedStack != null && setting.selected.contains(formatEnumTypes(usedStack.useAction!!))
+        return usedStack != null && setting.selected.contains(useActions[usedStack.useAction!!])
     }
 
     val eventConsumer = Consumer<Event> { event ->

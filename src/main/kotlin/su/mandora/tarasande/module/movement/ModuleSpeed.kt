@@ -89,7 +89,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                 accessor.tarasande_setX(cos(rad) * moveSpeed)
                 accessor.tarasande_setZ(sin(rad) * moveSpeed)
 
-                if (mc.player?.isOnGround != true)
+                if (mc.player?.isOnGround == false)
                     speed -= speed / speedDivider.value
             }
 

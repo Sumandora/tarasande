@@ -33,9 +33,9 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
         override fun onChange() = passedInvisible.clear()
     }
 
-    private val passedSound = ArrayList<PlayerEntity>()
-    private val passedGround = ArrayList<PlayerEntity>()
-    private val passedInvisible = ArrayList<PlayerEntity>()
+    private val passedSound = HashSet<PlayerEntity>()
+    private val passedGround = HashSet<PlayerEntity>()
+    private val passedInvisible = HashSet<PlayerEntity>()
 
     override fun onDisable() {
         passedSound.clear()
@@ -54,7 +54,7 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
 
                         is PlaySoundS2CPacket -> {
                             for (entity in mc.world?.entities!!) {
-                                if (entity is PlayerEntity && entity.pos?.squaredDistanceTo(Vec3d(event.packet.x, event.packet.y, event.packet.z))!! <= soundDistance.value * soundDistance.value) {
+                                if (entity is PlayerEntity && !passedSound.contains(entity) && entity.pos?.squaredDistanceTo(Vec3d(event.packet.x, event.packet.y, event.packet.z))!! <= soundDistance.value * soundDistance.value) {
                                     passedSound.add(entity)
                                 }
                             }
@@ -64,9 +64,10 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
                             if (mc.world == null) return@Consumer
 
                             val entity = event.packet.getEntity(mc.world)
-                            if (entity is PlayerEntity) if (groundMode.isSelected(0) && event.packet.isOnGround || groundMode.isSelected(1) && !event.packet.isOnGround) {
-                                passedGround.add(entity)
-                            }
+                            if (entity is PlayerEntity)
+                                if (!passedGround.contains(entity) && groundMode.isSelected(0) && event.packet.isOnGround || groundMode.isSelected(1) && !event.packet.isOnGround) {
+                                    passedGround.add(entity)
+                                }
                         }
                     }
                 }
@@ -76,6 +77,8 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
                 if (event.state == EventUpdate.State.PRE) {
                     if (checks.isSelected(2)) {
                         for (player in mc.world?.players ?: return@Consumer) {
+                            if (passedInvisible.contains(player))
+                                continue
                             when {
                                 invisibleMode.isSelected(0) -> if (!player.isInvisible) passedInvisible.add(player)
                                 invisibleMode.isSelected(1) -> if (!player.isInvisibleTo(mc.player)) passedInvisible.add(player)

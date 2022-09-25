@@ -90,6 +90,9 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Shadow
     protected abstract boolean doAttack();
 
+    @Shadow
+    private int itemUseCooldown;
+
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;createUserApiService(Lcom/mojang/authlib/yggdrasil/YggdrasilAuthenticationService;Lnet/minecraft/client/RunArgs;)Lcom/mojang/authlib/minecraft/UserApiService;"))
     public void injectPreInit(RunArgs args, CallbackInfo ci) {
         TarasandeMain.Companion.get().onPreLoad();
@@ -247,5 +250,15 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Override
     public void tarasande_setProfileKeys(ProfileKeys profileKeys) {
         this.profileKeys = profileKeys;
+    }
+
+    @Override
+    public int tarasande_getItemUseCooldown() {
+        return itemUseCooldown;
+    }
+
+    @Override
+    public void tarasande_setItemUseCooldown(int itemUseCooldown) {
+        this.itemUseCooldown = itemUseCooldown;
     }
 }

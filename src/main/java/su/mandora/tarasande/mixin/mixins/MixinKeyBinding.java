@@ -43,4 +43,9 @@ public class MixinKeyBinding implements IKeyBinding {
     public InputUtil.Key tarasande_getBoundKey() {
         return boundKey;
     }
+
+    @Override
+    public void tarasande_increaseTimesPressed() {
+        timesPressed++;
+    }
 }

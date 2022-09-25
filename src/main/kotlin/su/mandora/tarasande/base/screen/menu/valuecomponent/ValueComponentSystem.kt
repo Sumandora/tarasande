@@ -1,9 +1,8 @@
 package su.mandora.tarasande.base.screen.menu.valuecomponent
 
-import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.Manager
 import su.mandora.tarasande.base.value.Value
-import su.mandora.tarasande.screen.menu.utils.IElement
+import su.mandora.tarasande.screen.menu.panel.impl.elements.Element
 import su.mandora.tarasande.screen.menu.valuecomponent.*
 import su.mandora.tarasande.value.*
 
@@ -28,16 +27,10 @@ class ManagerValueComponent : Manager<Pair<Class<out Value>, Class<out ValueComp
     fun newInstance(value: Value): ValueComponent? {
         for (pair in list)
             if (pair.first.isInstance(value))
-                return (pair.second.declaredConstructors[0].newInstance(value) as ValueComponent)
+                return (pair.second.declaredConstructors[0].newInstance(value) as ValueComponent).also { instances.add(it) }
         return null
     }
 
 }
 
-abstract class ValueComponent(val value: Value) : IElement {
-    var width = 0.0
-
-    init {
-        TarasandeMain.get().screens.screenMenu.managerValueComponent.instances.add(this)
-    }
-}
+abstract class ValueComponent(val value: Value) : Element(0.0)

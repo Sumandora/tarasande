@@ -6,7 +6,6 @@ import net.minecraft.client.render.BufferRenderer
 import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexFormat
 import net.minecraft.client.render.VertexFormats
-import net.minecraft.client.world.ClientWorld
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.PositionAndOnGround
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
@@ -20,7 +19,6 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventMouse
 import su.mandora.tarasande.event.EventRender3D
 import su.mandora.tarasande.util.math.rotation.Rotation
-import su.mandora.tarasande.util.pathfinder.Node
 import su.mandora.tarasande.util.pathfinder.PathFinder
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.render.RenderUtil
@@ -33,11 +31,7 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
         return mc.world?.getBlockState(pos)?.getCollisionShape(mc.world, pos).let { it == null || it.isEmpty }
     }
 
-    private val pathFinder = PathFinder(object : Function2<ClientWorld?, Node, Boolean> {
-        override fun invoke(world: ClientWorld?, node: Node): Boolean {
-            return isPassable(BlockPos(node.x, node.y, node.z)) && isPassable(BlockPos(node.x, node.y + 1, node.z))
-        }
-    })
+    private val pathFinder = PathFinder({ _, node -> isPassable(BlockPos(node.x, node.y, node.z)) && isPassable(BlockPos(node.x, node.y + 1, node.z)) })
 
     private var path: List<Vec3d>? = null
     private var goal: Vec3d? = null

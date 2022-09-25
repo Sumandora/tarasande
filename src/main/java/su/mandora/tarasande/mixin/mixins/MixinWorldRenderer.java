@@ -1,8 +1,6 @@
 package su.mandora.tarasande.mixin.mixins;
 
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.Frustum;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
@@ -16,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande.TarasandeMain;
+import su.mandora.tarasande.event.EventRender3D;
 import su.mandora.tarasande.mixin.accessor.IWorldRenderer;
 import su.mandora.tarasande.module.render.ModuleFog;
 import su.mandora.tarasande.module.render.ModuleRain;
@@ -28,7 +27,14 @@ public abstract class MixinWorldRenderer implements IWorldRenderer {
         return 0;
     }
 
-    @Shadow private Frustum frustum;
+    @Shadow
+    private Frustum frustum;
+
+
+    @Inject(method = "render", at = @At("TAIL"))
+    public void injectRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventRender3D(matrices, positionMatrix));
+    }
 
     @Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At("HEAD"), cancellable = true)
     public void injectRenderSky(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean bl, Runnable runnable, CallbackInfo ci) {

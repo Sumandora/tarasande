@@ -23,7 +23,7 @@ class ModuleAimAssist : Module("Aim assist", "Helps you aim at enemies", ModuleC
 
     val eventConsumer = Consumer<Event> { event ->
         if(event is EventMouseDelta) {
-            val selfRotation = Rotation(mc.player!!)
+            val selfRotation = Rotation(mc.player ?: return@Consumer)
             val entity = mc.world?.entities?.filter { PlayerUtil.isAttackable(it) }?.filter { mc.player?.distanceTo(it)!! < reach.value }?.filter { PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.eyePos) }?.minByOrNull { RotationUtil.getRotations(mc.player?.eyePos!!, it.eyePos).fov(selfRotation) } ?: return@Consumer
 
             val boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())

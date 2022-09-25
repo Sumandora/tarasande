@@ -16,11 +16,11 @@ import su.mandora.tarasande.base.screen.menu.graph.ManagerGraph
 import su.mandora.tarasande.base.screen.menu.information.ManagerInformation
 import su.mandora.tarasande.base.screen.menu.valuecomponent.ManagerValueComponent
 import su.mandora.tarasande.screen.menu.panel.Panel
-import su.mandora.tarasande.screen.menu.panel.impl.PanelClientValues
-import su.mandora.tarasande.screen.menu.panel.impl.category.PanelCategory
+import su.mandora.tarasande.screen.menu.panel.impl.elements.impl.category.PanelCategory
+import su.mandora.tarasande.screen.menu.panel.impl.elements.impl.clientvalues.PanelClientValues
+import su.mandora.tarasande.screen.menu.panel.impl.elements.impl.friends.PanelFriends
 import su.mandora.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import su.mandora.tarasande.screen.menu.panel.impl.fixed.impl.*
-import su.mandora.tarasande.screen.menu.panel.impl.friends.PanelFriends
 import su.mandora.tarasande.screen.menu.particle.Particle
 import su.mandora.tarasande.util.render.RenderUtil
 import java.awt.Color
@@ -54,10 +54,10 @@ class ScreenMenu : Screen(Text.of("Menu")) {
         var y = 5.0
 
         for (moduleCategory in ModuleCategory.values()) {
-            panels.add(PanelCategory(moduleCategory, 5.0, y).also { y += MinecraftClient.getInstance().textRenderer.fontHeight + 5 })
+            panels.add(PanelCategory(moduleCategory, 5.0, y).also { y += it.titleBarHeight + 5 })
         }
+        panels.add(PanelClientValues(this, 5.0, y).also { y += it.titleBarHeight + 5 })
         val fixedPanels = mutableListOf(
-            PanelClientValues::class.java,
             PanelFriends::class.java,
             PanelFixedArrayList::class.java,
             PanelFixedInformation::class.java,
@@ -70,10 +70,10 @@ class ScreenMenu : Screen(Text.of("Menu")) {
             fixedPanels.add(PanelFixedNowPlaying::class.java)
         }
         for (panel in fixedPanels) {
-            panels.add(panel.declaredConstructors[0].newInstance(5.0, y).also { y += MinecraftClient.getInstance().textRenderer.fontHeight + 5 } as Panel)
+            panels.add(panel.declaredConstructors[0].newInstance(5.0, y).also { y += (it as Panel).titleBarHeight + 5 } as Panel)
         }
         for (graph in managerGraph.list) {
-            panels.add(PanelFixedGraph(graph, 5.0, y).also { y += MinecraftClient.getInstance().textRenderer.fontHeight + 5 })
+            panels.add(PanelFixedGraph(graph, 5.0, y).also { y += it.titleBarHeight + 5 })
         }
         passEvents = false
     }

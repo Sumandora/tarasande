@@ -1,11 +1,9 @@
 package su.mandora.tarasande.module.player
 
-import net.minecraft.network.packet.c2s.play.RequestCommandCompletionsC2SPacket
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
-import su.mandora.tarasande.event.EventPacket
 import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueMode
@@ -60,10 +58,6 @@ class ModuleAntiFall : Module("Anti fall", "Tries to force a setback when you ar
                 }
                 wasOnGround = false
             }
-        } else if (event is EventPacket) {
-            if (event.type == EventPacket.Type.SEND)
-                if (event.packet is RequestCommandCompletionsC2SPacket)
-                    println(event.packet.partialCommand)
         }
     }
 }

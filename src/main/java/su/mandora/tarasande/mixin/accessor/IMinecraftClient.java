@@ -39,4 +39,8 @@ public interface IMinecraftClient {
     UserApiService tarasande_getUserApiService();
 
     void tarasande_setProfileKeys(ProfileKeys profileKeys);
+
+    int tarasande_getItemUseCooldown();
+
+    void tarasande_setItemUseCooldown(int itemUseCooldown);
 }

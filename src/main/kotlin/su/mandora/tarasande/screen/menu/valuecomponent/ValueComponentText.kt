@@ -20,15 +20,15 @@ class ValueComponentText(value: Value) : ValueComponent(value) {
     init {
         textFieldWidget.setMaxLength(Int.MAX_VALUE)
         textFieldWidget.setDrawsBackground(false)
+    }
+
+    override fun init() {
         val valueText = value as ValueText
         textFieldWidget.text = valueText.value
         textFieldWidget.setChangedListener {
             valueText.value = it
             valueText.onChange()
         }
-    }
-
-    override fun init() {
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {

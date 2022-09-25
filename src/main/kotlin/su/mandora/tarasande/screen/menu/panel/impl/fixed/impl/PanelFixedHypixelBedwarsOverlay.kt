@@ -37,11 +37,12 @@ class PanelFixedHypixelBedwarsOverlay(x: Double, y: Double) : PanelFixed("Hypixe
                         val urlConnection = URL(String.format(url, entry.key.id.toString().replace("-", ""), TarasandeMain.get().clientValues.hypixelApiKey.value)).openConnection()
                         val jsonStr = String(urlConnection.getInputStream().readAllBytes())
                         val jsonElement = TarasandeMain.get().gson.fromJson(jsonStr, JsonElement::class.java)
-                        if (jsonElement != null && !jsonElement.isJsonNull)
+                        if (jsonElement != null && !jsonElement.isJsonNull) {
                             if (!entry.value.parse(jsonElement.asJsonObject)) {
                                 blackList.add(entry.key)
                                 playerData.remove(entry.key)
                             }
+                        }
                         Thread.sleep(500L)
                     }
                 } catch (t: Throwable) {

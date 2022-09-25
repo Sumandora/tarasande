@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -55,6 +56,12 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Shadow
     public abstract float getYaw(float tickDelta);
+
+    @Shadow
+    protected abstract void tickActiveItemStack();
+
+    @Shadow
+    protected abstract void tickItemStackUsage(ItemStack stack);
 
     @Inject(method = "jump", at = @At("HEAD"))
     public void injectPreJump(CallbackInfo ci) {
@@ -142,5 +149,10 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     @Override
     public void tarasande_setLastAttackedTicks(int lastAttackedTicks) {
         this.lastAttackedTicks = lastAttackedTicks;
+    }
+
+    @Override
+    public void tarasande_invokeTickItemStackUsage(ItemStack itemStack) {
+        this.tickItemStackUsage(itemStack);
     }
 }

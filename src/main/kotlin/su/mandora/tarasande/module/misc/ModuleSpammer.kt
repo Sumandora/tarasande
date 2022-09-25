@@ -61,6 +61,9 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
             override fun close() {
             }
 
+            override fun removed() {
+            }
+
             override fun sendMessage(chatText: String?, addToHistory: Boolean): Boolean {
                 super.sendMessage(chatText, addToHistory)
                 return false

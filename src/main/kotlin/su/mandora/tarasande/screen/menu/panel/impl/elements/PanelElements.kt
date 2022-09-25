@@ -1,23 +1,15 @@
-package su.mandora.tarasande.screen.menu.panel.impl.category
+package su.mandora.tarasande.screen.menu.panel.impl.elements
 
 import net.minecraft.client.util.math.MatrixStack
-import su.mandora.tarasande.TarasandeMain
-import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.screen.menu.panel.Panel
 import su.mandora.tarasande.util.render.RenderUtil
 
-class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Double) : Panel(moduleCategory.name.first() + moduleCategory.name.substring(1).lowercase(), x, y, 150.0, 100.0) {
+open class PanelElements<T : Element>(title: String, x: Double, y: Double, minWidth: Double, minHeight: Double) : Panel(title, x, y, minWidth, minHeight) {
 
-    private val elementModuleList = ArrayList<ElementModule>()
-
-    init {
-        TarasandeMain.get().managerModule.list.forEach {
-            if (it.category == moduleCategory) elementModuleList.add(ElementModule(it, 100.0))
-        }
-    }
+    internal val elementList = ArrayList<T>()
 
     override fun init() {
-        for (it in elementModuleList) {
+        for (it in elementList) {
             it.init()
         }
     }
@@ -27,10 +19,9 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
         matrices?.translate(x + 2, y + titleBarHeight + 2, 0.0)
         val x = x + 2
         var y = y + titleBarHeight + 2
-        for (it in elementModuleList) {
+        for (it in elementList) {
             it.width = panelWidth - 4
-            if (y + it.getHeight() + 2 >= this.y - scrollOffset)
-                it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
+            if (y + it.getHeight() + 2 >= this.y - scrollOffset) it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
 
             matrices?.translate(0.0, it.getHeight() + 2, 0.0)
             y += it.getHeight() + 2
@@ -44,7 +35,7 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
         val hovered = RenderUtil.isHovered(mouseX, mouseY, x, y + titleBarHeight, x + panelWidth, y + panelHeight)
         val x = x + 2
         var y = y + titleBarHeight + 2
-        elementModuleList.forEach {
+        elementList.forEach {
             it.mouseClicked(if (hovered) mouseX - x else -1.0, if (hovered) mouseY - y - scrollOffset else -1.0, button)
             y += it.getHeight() + 2
         }
@@ -54,7 +45,7 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int) {
         val x = x + 2
         var y = y + titleBarHeight + 2
-        elementModuleList.forEach {
+        elementList.forEach {
             it.mouseReleased(mouseX - x, mouseY - y - scrollOffset, button)
             y += it.getHeight() + 2
         }
@@ -64,7 +55,7 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
         val x = x + 2
         var y = y + titleBarHeight + 2
-        elementModuleList.forEach {
+        elementList.forEach {
             if (it.mouseScrolled(mouseX - x, mouseY - y - scrollOffset, amount)) return true
             y += it.getHeight() + 2
         }
@@ -72,31 +63,33 @@ class PanelCategory(private val moduleCategory: ModuleCategory, x: Double, y: Do
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        elementModuleList.forEach {
+        elementList.forEach {
             if (it.keyPressed(keyCode, scanCode, modifiers)) return true
         }
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
     override fun charTyped(chr: Char, modifiers: Int) {
-        elementModuleList.forEach { it.charTyped(chr, modifiers) }
+        elementList.forEach { it.charTyped(chr, modifiers) }
         super.charTyped(chr, modifiers)
     }
 
     override fun tick() {
-        elementModuleList.forEach { it.tick() }
+        elementList.forEach { it.tick() }
         super.tick()
     }
 
     override fun onClose() {
-        elementModuleList.forEach { it.onClose() }
+        elementList.forEach { it.onClose() }
         super.onClose()
     }
 
     override fun getMaxScrollOffset(): Double {
         var height = 0.0
-        elementModuleList.forEach { height += it.getHeight() + 2 }
-        return if (height > 0.0) height - 2
-        else 0.0
+        elementList.forEach { height += it.getHeight() + 2 }
+        return if (height > 0.0)
+            height - 2
+        else
+            0.0
     }
 }

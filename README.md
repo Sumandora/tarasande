@@ -40,7 +40,6 @@
 
 ## TODO-List
 - Vehicle Speed
-- Elytra Flight
 - Baritone Sprint Jump
 - More Anti Bots (Mode which checks if the entity tries to stay out of the line of sight; Movement; Ever sneaked; Ticks
   existed)
@@ -52,18 +51,16 @@
 - Crystal Aura
 - Anti Vanish
 - Auto Soup&Pot
-- Fast Use & Bow
 - Phase
 - Step: Calculate all motions; Prediction by LivingEntity#travel; Instantiate object and simulate
 - AutoTool: Auto Sword
 - Change Name/Skin/Cape in Account Manager
-- Fast Break&Place (Place with autoclicker)
+- Fast Break
 - CivBreaker
-- Velocity: Addition depends on packet
-- ValueComponentNumber(Range) Textfields (Right-click?)
-- -> Killaura: TP
+- Killaura: TP
 - Target strafe: Anti Void
 - Account manager: Add skins in selection
+- AirJump/-Walk
 
 ## Notes
 - AutoTool: Axes can set shields on cooldown. Maybe implement that if possible axes are being used to set shields on cooldown before actually attacking with sword

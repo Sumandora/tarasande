@@ -260,15 +260,15 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                             val solutions = listOf(t + a.toFloat(), t - a.toFloat())
                                             val bestSolution = solutions.minBy { abs(it - 0.5) }
                                             t = bestSolution
+
+                                            preferredSide = when {
+                                                prevT < t -> -1
+                                                prevT > t -> 1
+                                                else -> null
+                                            }
                                         } else {
                                             t += (a * preferredSide!!).toFloat()
                                         }
-                                    }
-
-                                    preferredSide = when {
-                                        prevT < t -> -1
-                                        prevT > t -> 1
-                                        else -> null
                                     }
 
                                     sideBegin + (sideEnd - sideBegin) * MathHelper.clamp(t.toDouble(), padding, 1.0f - padding)

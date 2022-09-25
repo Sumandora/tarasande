@@ -64,7 +64,6 @@ public abstract class MixinEntity implements IEntity {
         }
     }
 
-    // This method has a large oof momento, because you can't call the original method with modified args because static and modifying the method itself will make you unable to check whether the rotation of the ClientPlayerEntity or some random other piece of garbage is used
     @Redirect(method = "updateVelocity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;movementInputToVelocity(Lnet/minecraft/util/math/Vec3d;FF)Lnet/minecraft/util/math/Vec3d;"))
     public Vec3d hookedMovementInputToVelocity(Vec3d movementInput, float speed, float yaw) {
         if ((Object) this == MinecraftClient.getInstance().player) {

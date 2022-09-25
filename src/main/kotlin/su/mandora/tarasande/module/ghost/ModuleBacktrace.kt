@@ -14,7 +14,7 @@ import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
 
-class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hitboxes", ModuleCategory.GHOST) {
+class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit boxes", ModuleCategory.GHOST) {
 
     private val ticks = ValueNumber(this, "Ticks", 0.0, 5.0, 20.0, 1.0)
 

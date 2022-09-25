@@ -8,4 +8,6 @@ public interface IKeyBinding {
     boolean tarasande_forceIsPressed();
 
     InputUtil.Key tarasande_getBoundKey();
+
+    void tarasande_increaseTimesPressed();
 }

@@ -57,6 +57,7 @@
   "client": [
     "MixinDebugHud",
     "MixinHandledScreen",
+    "MixinPendingUpdateManager",
     "MixinPlayerListHud",
     "MixinTelemetrySender",
     "blockesp.MixinRenderedChunk"

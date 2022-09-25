@@ -14,6 +14,7 @@ import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.player.PlayerUtil
+import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.ValueBind
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueNumber
@@ -138,7 +139,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
                     }
                     if (unchargeKey.isPressed()) {
                         if(shifted > 0L) {
-                            shifted = if (instantUncharge.value) 0L else max(0L, (shifted - unchargeSpeed.value).toLong())
+                            shifted = if (instantUncharge.value) 0L else max(0L, (shifted - unchargeSpeed.value * (RenderUtil.deltaTime / 100.0)).toLong())
                         } else if(future.value && negativeUncharge.value) {
                             shifted -= event.time - prevTime
                         }

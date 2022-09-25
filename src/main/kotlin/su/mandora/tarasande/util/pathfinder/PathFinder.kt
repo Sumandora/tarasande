@@ -4,30 +4,24 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import java.util.function.BiFunction
 import kotlin.math.abs
 
 /**
  * A* Path Finding algorithm
  */
 
-private val manhattan = object : Function2<Node, Node, Double> {
-    override fun invoke(current: Node, target: Node): Double {
-        val delta = target - current
-        return (abs(delta.x) + abs(delta.y) + abs(delta.z)).toDouble()
-    }
+private val manhattan = BiFunction<Node, Node, Double> { current, target ->
+    val delta = target - current
+    (abs(delta.x) + abs(delta.y) + abs(delta.z)).toDouble()
 }
 
-private val oneCost = object : Function2<Node, Node, Double> {
-    override fun invoke(start: Node, movement: Node): Double {
-        //return manhattan.invoke(start, movement)
-        return 1.0
-    }
+private val oneCost = BiFunction<Node, Node, Double> { _, _ ->
+    1.0
 }
 
-private val walkable = object : Function2<ClientWorld?, Node, Boolean> {
-    override fun invoke(world: ClientWorld?, node: Node): Boolean {
-        return world!!.isAir(BlockPos(node.x, node.y, node.z)) && !world.isAir(BlockPos(node.x, node.y - 1, node.z))
-    }
+private val walkable = BiFunction<ClientWorld?, Node, Boolean> { world, node ->
+    world!!.isAir(BlockPos(node.x, node.y, node.z)) && !world.isAir(BlockPos(node.x, node.y - 1, node.z))
 }
 
 private val directions = arrayOf(
@@ -39,7 +33,7 @@ private val directions = arrayOf(
     Node(0, -1, 0)
 )
 
-class PathFinder(private val allowedBlock: Function2<ClientWorld?, Node, Boolean> = walkable, private val heuristic: Function2<Node, Node, Double> = manhattan, private val cost: Function2<Node, Node, Double> = oneCost) {
+class PathFinder(private val allowedBlock: BiFunction<ClientWorld?, Node, Boolean> = walkable, private val heuristic: BiFunction<Node, Node, Double> = manhattan, private val cost: BiFunction<Node, Node, Double> = oneCost) {
 
     fun findPath(start: Vec3d, target: Vec3d, maxTime: Long? = null): List<Vec3d>? {
         val mappedPath = ArrayList<Vec3d>()
@@ -55,8 +49,11 @@ class PathFinder(private val allowedBlock: Function2<ClientWorld?, Node, Boolean
         val open = HashSet<Node>()
         val closed = HashSet<Node>()
         open.add(start)
+        start.g = cost.apply(start, start)
+        start.h = heuristic.apply(start, target)
+        start.f = start.g + start.h
 
-        if (start == target || !allowedBlock.invoke(MinecraftClient.getInstance().world, start) || !allowedBlock.invoke(MinecraftClient.getInstance().world, target)) {
+        if (start == target || !allowedBlock.apply(MinecraftClient.getInstance().world, start) || !allowedBlock.apply(MinecraftClient.getInstance().world, target)) {
             return open.toList()
         }
 
@@ -74,16 +71,28 @@ class PathFinder(private val allowedBlock: Function2<ClientWorld?, Node, Boolean
             closed.add(current)
 
             for (movementPossibility in directions) {
-                val movement = current + movementPossibility
+                var movement = current + movementPossibility
                 if (closed.contains(movement))
                     continue
-                if (!allowedBlock.invoke(MinecraftClient.getInstance().world, movement))
+                if (!allowedBlock.apply(MinecraftClient.getInstance().world, movement))
+                    continue
+                var contains = false
+//                for(a in open)
+//                    if(a == movement) {
+//                        movement = a
+//                        contains = true
+//                        break
+//                    }
+
+                val newCost = current.g + cost.apply(start, movement)
+
+                if (!contains)
+                    open.add(movement)
+                else if (movement.g <= newCost)
                     continue
 
-                open.add(movement)
-
-                movement.g = current.g + cost.invoke(start, movement)
-                movement.h = heuristic.invoke(movement, target)
+                movement.g = newCost
+                movement.h = heuristic.apply(movement, target)
 
                 if (bestNode == null || bestNode.h > movement.h)
                     bestNode = movement
@@ -120,7 +129,7 @@ class Node(var x: Int, var y: Int, var z: Int) : Comparable<Node> {
     }
 
     operator fun minus(other: Node): Node {
-        return Node(x - other.x, y - other.y, z - other.z)
+        return Node(other.x - x, other.y - y, other.z - z)
     }
 
     override fun compareTo(other: Node) = f.compareTo(other.f)

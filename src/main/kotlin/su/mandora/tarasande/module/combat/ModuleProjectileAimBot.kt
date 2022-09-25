@@ -13,6 +13,7 @@ import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.mixin.accessor.ICrossbowItem
+import su.mandora.tarasande.module.player.ModuleFastUse
 import su.mandora.tarasande.module.render.ModuleTrajectories
 import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.extension.plus
@@ -36,7 +37,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
     private val gravity = 0.006
 
     private fun calcVelocity(stack: ItemStack): Double {
-        return BowItem.getPullProgress(if (mc.player?.isUsingItem!!) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
+        return BowItem.getPullProgress(if (mc.player?.isUsingItem!! && !TarasandeMain.get().managerModule.get(ModuleFastUse::class.java).enabled) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
     }
 
     // https://en.wikipedia.org/wiki/Projectile_motion#Angle_%CE%B8_required_to_hit_coordinate_(x,_y)

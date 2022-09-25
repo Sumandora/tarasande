@@ -1,4 +1,4 @@
-package su.mandora.tarasande.screen.menu.panel.impl.category
+package su.mandora.tarasande.screen.menu.panel.impl.elements.impl.category
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
@@ -10,13 +10,13 @@ import org.lwjgl.opengl.GL11
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.screen.menu.valuecomponent.ValueComponent
-import su.mandora.tarasande.screen.menu.utils.IElement
+import su.mandora.tarasande.screen.menu.panel.impl.elements.Element
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.RenderUtil.isHovered
 import java.awt.Color
 import kotlin.math.min
 
-class ElementModule(private val module: Module, var width: Double) : IElement {
+class ElementModule(private val module: Module, width: Double) : Element(width) {
 
     private val defaultHeight = MinecraftClient.getInstance().textRenderer.fontHeight * 1.5 + 2.0
     private var toggleTime = 0L

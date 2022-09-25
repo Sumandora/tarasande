@@ -1,4 +1,4 @@
-package su.mandora.tarasande.screen.menu.panel.impl.friends
+package su.mandora.tarasande.screen.menu.panel.impl.elements.impl.friends
 
 import com.mojang.authlib.GameProfile
 import net.minecraft.client.MinecraftClient
@@ -6,14 +6,14 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.Vec2f
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.mixin.accessor.ITextFieldWidget
-import su.mandora.tarasande.screen.menu.utils.IElement
+import su.mandora.tarasande.screen.menu.panel.impl.elements.Element
 import su.mandora.tarasande.screen.menu.valuecomponent.ValueComponentText
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.ValueText
 import java.awt.Color
 import kotlin.math.min
 
-class ElementPlayer(val gameProfile: GameProfile, var width: Double) : IElement {
+class ElementPlayer(val gameProfile: GameProfile, width: Double) : Element(width) {
 
     private val value = object : ValueText(this, gameProfile.name, "", manage = false) {
         override fun onChange() {

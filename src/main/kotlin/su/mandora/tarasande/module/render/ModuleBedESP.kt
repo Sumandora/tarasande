@@ -4,7 +4,6 @@ import net.minecraft.block.BedBlock
 import net.minecraft.block.Blocks
 import net.minecraft.block.enums.BedPart
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.math.BlockPos
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
@@ -17,6 +16,7 @@ import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueColor
 import su.mandora.tarasande.value.ValueNumber
+import java.util.function.BiFunction
 import java.util.function.Consumer
 
 /**
@@ -34,6 +34,9 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
     }
 
     private val bedColor = object : ValueColor(this, "Bed color", 0.0f, 1.0f, 1.0f, 1.0f) {
+        override fun isEnabled() = calculateBestWay.value
+    }
+    private val defenderColor = object : ValueColor(this, "Defender color", 0.0f, 1.0f, 1.0f, 0.0f) {
         override fun isEnabled() = calculateBestWay.value
     }
     private val solutionColor = object : ValueColor(this, "Solution color", 0.0f, 1.0f, 1.0f, 1.0f) {
@@ -148,11 +151,11 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                         val blockState = mc.world?.getBlockState(blockPos)
                         RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, bedColor.getColor().rgb)
                     }
-//                    for (node in bedData.defenders ?: continue) {
-//                        val blockPos = BlockPos(node.x, node.y, node.z)
-//                        val blockState = mc.world?.getBlockState(blockPos)
-//                        RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, Color(0, 0, 255, 50).rgb)
-//                    }
+                    for (node in bedData.defenders ?: continue) {
+                        val blockPos = BlockPos(node.x, node.y, node.z)
+                        val blockState = mc.world?.getBlockState(blockPos)
+                        RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, defenderColor.getColor().rgb)
+                    }
                     for (node in bedData.solution ?: continue) {
                         val blockPos = BlockPos(node.x, node.y, node.z)
                         val blockState = mc.world?.getBlockState(blockPos)
@@ -163,7 +166,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         }
     }
 
-    internal inner class BedData(val bedParts: Array<BlockPos>, private val defenders: List<BlockPos>?, val solution: List<Node>?) {
+    internal inner class BedData(val bedParts: Array<BlockPos>, val defenders: List<BlockPos>?, val solution: List<Node>?) {
         override fun toString(): String {
             val stringBuilder = StringBuilder()
 
@@ -181,27 +184,24 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
     object Breaker {
 
-        private val heuristic = object : Function2<Node, Node, Double> {
-            override fun invoke(current: Node, movement: Node): Double {
-                return getBreakSpeed(BlockPos(movement.x, movement.y, movement.z)).first
-            }
-        }
+        private val breakSpeed = BiFunction<Node, Node, Double> { _, movement -> getBreakSpeed(BlockPos(movement.x, movement.y, movement.z)).first }
+        private var defenders: List<BlockPos>? = null
 
-        private val pathFinder = PathFinder(object : Function2<ClientWorld?, Node, Boolean> {
-            override fun invoke(world: ClientWorld?, node: Node) = true
-        }, heuristic)
+        private val pathFinder = PathFinder({ _, node -> defenders?.contains(BlockPos(node.x, node.y, node.z)) == true }, cost = breakSpeed)
 
         fun findSolution(outstanders: List<BlockPos>, defenders: List<BlockPos>, beds: Array<BlockPos>, maxProcessingTime: Long): List<Node>? {
+            this.defenders = defenders
             var bestWay: List<Node>? = null
             val begin = System.currentTimeMillis()
             for (outstander in outstanders) {
-                if (System.currentTimeMillis() - begin > maxProcessingTime) return bestWay
+                if (System.currentTimeMillis() - begin > maxProcessingTime) break
 
                 val bestBed = beds.minByOrNull { it.getSquaredDistance(outstander) } ?: continue
                 val beginNode = Node(outstander.x, outstander.y, outstander.z)
                 val endNode = Node(bestBed.x, bestBed.y, bestBed.z)
                 val way = pathFinder.findPath(beginNode, endNode, maxProcessingTime) ?: break // timeout
-                if (bestWay == null) bestWay = way
+                if (bestWay == null)
+                    bestWay = way
                 else {
                     val bestG = bestWay[bestWay.size - 1].g
                     val newG = way[way.size - 1].g
@@ -236,7 +236,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
         fun getBreakSpeed(blockPos: BlockPos, item: Int): Double {
             val state = MinecraftClient.getInstance().world?.getBlockState(blockPos)
-            if (state?.isAir!! || state.getOutlineShape(MinecraftClient.getInstance().world, blockPos).isEmpty) return 0.0
+            if (state?.isAir!! || state.getOutlineShape(MinecraftClient.getInstance().world, blockPos).isEmpty) return 1.0
             val hardness = state.getHardness(MinecraftClient.getInstance().world, blockPos)
             if (hardness <= 0.0f) return 1.0
             MinecraftClient.getInstance().player?.inventory?.selectedSlot = item
