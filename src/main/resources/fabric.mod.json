@@ -13,9 +13,6 @@
   "license": "All rights reserved",
   "icon": "assets/tarasande/icon.png",
   "environment": "client",
-  "entrypoints": {
-    "client": ["de.enzaxd.viaforge.ViaForge"]
-  },
   "mixins": [
     "tarasande.mixins.json",
     "viaforge.mixins.json"

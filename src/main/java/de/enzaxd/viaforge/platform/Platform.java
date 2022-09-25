@@ -14,6 +14,7 @@ import de.enzaxd.viaforge.util.JLoggerToLog4j;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import org.apache.logging.log4j.LogManager;
+import su.mandora.tarasande.TarasandeMain;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -51,7 +52,7 @@ public class Platform implements ViaPlatform<UUID> {
 
     @Override
     public String getPlatformVersion() {
-        return ViaForge.SHARED_VERSION+"";
+        return TarasandeMain.Companion.get().getProtocolHack().getVersion() + "";
     }
 
     @Override
@@ -67,7 +68,7 @@ public class Platform implements ViaPlatform<UUID> {
     @Override
     public FutureTaskId runAsync(Runnable runnable) {
         return new FutureTaskId(CompletableFuture
-                .runAsync(runnable, ViaForge.getInstance().getAsyncExecutor())
+                .runAsync(runnable, TarasandeMain.Companion.get().getProtocolHack().getAsyncExecutor())
                 .exceptionally(throwable -> {
                     if (!(throwable instanceof CancellationException)) {
                         throwable.printStackTrace();
@@ -79,18 +80,18 @@ public class Platform implements ViaPlatform<UUID> {
 
     @Override
     public FutureTaskId runSync(Runnable runnable) {
-        return new FutureTaskId(ViaForge.getInstance().getEventLoop().submit(runnable).addListener(errorLogger()));
+        return new FutureTaskId(TarasandeMain.Companion.get().getProtocolHack().getEventLoop().submit(runnable).addListener(errorLogger()));
     }
 
     @Override
     public PlatformTask runSync(Runnable runnable, long ticks) {
-        return new FutureTaskId(ViaForge.getInstance().getEventLoop().schedule(() -> runSync(runnable), ticks *
+        return new FutureTaskId(TarasandeMain.Companion.get().getProtocolHack().getEventLoop().schedule(() -> runSync(runnable), ticks *
                 50, TimeUnit.MILLISECONDS).addListener(errorLogger()));
     }
 
     @Override
     public PlatformTask runRepeatingSync(Runnable runnable, long ticks) {
-         return new FutureTaskId(ViaForge.getInstance().getEventLoop().scheduleAtFixedRate(() -> runSync(runnable),
+         return new FutureTaskId(TarasandeMain.Companion.get().getProtocolHack().getEventLoop().scheduleAtFixedRate(() -> runSync(runnable),
                  0, ticks * 50, TimeUnit.MILLISECONDS).addListener(errorLogger()));
     }
 

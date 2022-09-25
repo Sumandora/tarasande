@@ -14,6 +14,7 @@ import io.netty.channel.EventLoop;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.SharedConstants;
 import org.apache.logging.log4j.LogManager;
+import su.mandora.tarasande.value.ValueNumber;
 
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
@@ -22,25 +23,18 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.logging.Logger;
 
-public class ViaForge implements ClientModInitializer {
+public class ViaForge {
 
-    public final static int SHARED_VERSION = SharedConstants.getProtocolVersion();
-    public static int CURRENT_VERSION = SHARED_VERSION;
-
-    private static final ViaForge instance = new ViaForge();
     private final Logger jLogger = new JLoggerToLog4j(LogManager.getLogger("ViaForge"));
-    private final CompletableFuture<Void> initFuture = new CompletableFuture<>();
     private final ThreadFactory factory = new ThreadFactoryBuilder().setDaemon(true).setNameFormat("ViaForge-%d").build();
     private final ExecutorService asyncExecutor = Executors.newFixedThreadPool(8, factory);
     private final EventLoop eventLoop = new DefaultEventLoopGroup(1, factory).next();
-    private File file;
+    private ValueNumber protocol;
 
-    public static ViaForge getInstance() {
-        return instance;
-    }
+    public void build() {
+        this.protocol = new ValueNumber(this, "Protocol", Integer.MIN_VALUE, SharedConstants.getProtocolVersion(), Integer.MAX_VALUE, 1, true);
+        final CompletableFuture<Void> initFuture = new CompletableFuture<>();
 
-    @Override
-    public void onInitializeClient() {
         eventLoop.submit(initFuture::join);
 
         try {
@@ -49,8 +43,9 @@ public class ViaForge implements ClientModInitializer {
             throw new RuntimeException(e);
         }
 
-        this.file = new File("ViaForge");
-        if (this.file.mkdir())
+        final File file = new File("ViaForge");
+
+        if (file.mkdir())
             this.getjLogger().info("Creating ViaForge Folder");
 
         Via.init(
@@ -67,12 +62,16 @@ public class ViaForge implements ClientModInitializer {
         initFuture.complete(null);
     }
 
-    public Logger getjLogger() {
-        return jLogger;
+    public int getVersion() {
+        return (int) protocol.getValue();
     }
 
-    public CompletableFuture<Void> getInitFuture() {
-        return initFuture;
+    public void setVersion(final int target) {
+        this.protocol.setValue(target);
+    }
+
+    public Logger getjLogger() {
+        return jLogger;
     }
 
     public ExecutorService getAsyncExecutor() {
@@ -81,13 +80,5 @@ public class ViaForge implements ClientModInitializer {
 
     public EventLoop getEventLoop() {
         return eventLoop;
-    }
-
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
     }
 }
