@@ -26,9 +26,9 @@ public abstract class ClientPlayerInteractionManagerMixin {
 
     @Inject(method = "attackEntity", at = @At("HEAD"))
     private void injectAttackEntity(PlayerEntity player, Entity target, CallbackInfo ci) {
-        if (ProtocolEquals.isOlderOrEqualTo(VersionList.R1_8)) {
+        if (ProtocolEquals.isOlderOrEqualTo(VersionList.R1_8) && player instanceof IClientPlayerEntity_Protocol) {
             player.swingHand(Hand.MAIN_HAND);
-            ((IClientPlayerEntity_Protocol) player).florianMichael_cancelSwingsThisTick();
+            ((IClientPlayerEntity_Protocol) player).florianMichael_cancelSwingOnce();
         }
     }
 

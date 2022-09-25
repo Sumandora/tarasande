@@ -2,7 +2,6 @@ package de.enzaxd.viaforge.injection.mixin.entity;
 
 import de.enzaxd.viaforge.equals.ProtocolEquals;
 import de.enzaxd.viaforge.equals.VersionList;
-import de.enzaxd.viaforge.injection.access.IClientPlayerEntity_Protocol;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -13,7 +12,6 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
@@ -55,12 +53,6 @@ public abstract class LivingEntityMixin extends Entity {
     private static void removeShieldSlotPreference(ItemStack stack, CallbackInfoReturnable<EquipmentSlot> cir) {
         if (ProtocolEquals.isOlderOrEqualTo(VersionList.R1_9_4) && stack.isOf(Items.SHIELD))
             cir.setReturnValue(EquipmentSlot.MAINHAND);
-    }
-
-    @Inject(method = "tickHandSwing", at = @At("HEAD"))
-    private void onTickHandSwing(CallbackInfo ci) {
-        if (ProtocolEquals.isOlderOrEqualTo(VersionList.R1_8) && this instanceof IClientPlayerEntity_Protocol)
-            ((IClientPlayerEntity_Protocol) this).florianMichael_unCancelSwings();
     }
 
     @ModifyConstant(method = "tickMovement", constant = @Constant(doubleValue = 0.003D))

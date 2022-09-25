@@ -10,7 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(MovementTracker.class)
 public class MovementTrackerMixin {
 
-    @Shadow private boolean ground;
+    @Shadow(remap = false)
+    private boolean ground;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     public void injectConstructor(CallbackInfo ci) {

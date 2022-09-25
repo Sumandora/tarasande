@@ -47,6 +47,7 @@ public class ClientPlayerEntityMixin implements IClientPlayerEntity_Protocol {
     public void injectSwingHand(Hand hand, CallbackInfo ci) {
         if (ProtocolEquals.isOlderOrEqualTo(VersionList.R1_8) && areSwingCanceledThisTick)
             ci.cancel();
+        areSwingCanceledThisTick = false;
     }
 
     @Inject(
@@ -75,7 +76,7 @@ public class ClientPlayerEntityMixin implements IClientPlayerEntity_Protocol {
     @Inject(method = "isWalking", at = @At("HEAD"), cancellable = true)
     public void easierUnderwaterSprinting(CallbackInfoReturnable<Boolean> ci) {
         if (ProtocolEquals.isOlderOrEqualTo(VersionList.R1_14_1))
-            ci.setReturnValue(((ClientPlayerEntity) (Object) this).input.movementForward >= 0.8);
+            ci.setReturnValue(input.movementForward >= 0.8);
     }
 
     @Redirect(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;hasForwardMovement()Z", ordinal = 0))
@@ -93,12 +94,7 @@ public class ClientPlayerEntityMixin implements IClientPlayerEntity_Protocol {
     }
 
     @Override
-    public void florianMichael_cancelSwingsThisTick() {
+    public void florianMichael_cancelSwingOnce() {
         areSwingCanceledThisTick = true;
-    }
-
-    @Override
-    public void florianMichael_unCancelSwings() {
-        areSwingCanceledThisTick = false;
     }
 }

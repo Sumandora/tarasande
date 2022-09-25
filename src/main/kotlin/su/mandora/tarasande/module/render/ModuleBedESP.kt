@@ -133,11 +133,12 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                                     }!!
                                 }
                             }
-                            defenders.removeIf { bedParts.contains(it) }
 
                             if (outstanders.any { mc.world?.getBlockState(it)?.block is BedBlock }) continue // not a bedwars bed
 
                             solution = Breaker.findSolution(outstanders, defenders, bedParts, maxProcessingTime.value.toLong())
+
+                            defenders.removeIf { bedParts.contains(it) }
                         }
                         bedDatas.add(BedData(bedParts, defenders, solution))
                     }
