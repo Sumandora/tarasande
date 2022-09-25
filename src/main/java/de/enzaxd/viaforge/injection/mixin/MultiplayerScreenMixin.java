@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.tarasande.TarasandeMain;
 
 import java.util.stream.Collectors;
 
@@ -30,13 +31,13 @@ public class MultiplayerScreenMixin extends Screen {
     public void hookProtocolSelectorInit(CallbackInfo ci) {
         int i = 0;
         for (ProtocolVersion protocol : VersionList.getProtocols()) {
-            if (protocol.getVersion() == ViaForge.CURRENT_VERSION)
+            if (protocol.getVersion() == TarasandeMain.Companion.get().getProtocolHack().getVersion())
                 break;
             i++;
         }
 
         this.protocolSelector = new DropboxWidget(5, 5, 98, 10, 10, i, VersionList.getProtocols().stream().map(ProtocolVersion::getName).collect(Collectors.toList()));
-        this.protocolSelector.setClickAction(() -> ViaForge.CURRENT_VERSION = VersionList.getProtocols().get(this.protocolSelector.selected).getVersion());
+        this.protocolSelector.setClickAction(() -> TarasandeMain.Companion.get().getProtocolHack().setVersion(VersionList.getProtocols().get(this.protocolSelector.selected).getVersion()));
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.viaversion.viaversion.api.platform.ViaInjector;
 import com.viaversion.viaversion.libs.gson.JsonObject;
 import de.enzaxd.viaforge.ViaForge;
 import de.enzaxd.viaforge.handler.CommonTransformer;
+import su.mandora.tarasande.TarasandeMain;
 
 public class Injector implements ViaInjector {
 
@@ -17,7 +18,7 @@ public class Injector implements ViaInjector {
 
     @Override
     public int getServerProtocolVersion() {
-        return ViaForge.SHARED_VERSION;
+        return TarasandeMain.Companion.get().getProtocolHack().getVersion();
     }
 
     @Override

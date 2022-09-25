@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(Chunk1_16_2Type.class)
 public class Chunk1_16_2TypeMixin {
 
-    @Inject(method = "read(Lio/netty/buffer/ByteBuf;)Lcom/viaversion/viaversion/api/minecraft/chunks/Chunk;", at = @At(value = "INVOKE", target = "Lcom/viaversion/viaversion/api/type/types/VarIntType;readPrimitive(Lio/netty/buffer/ByteBuf;)I"), locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(method = "read(Lio/netty/buffer/ByteBuf;)Lcom/viaversion/viaversion/api/minecraft/chunks/Chunk;", at = @At(value = "INVOKE", target = "Lcom/viaversion/viaversion/api/type/types/VarIntType;readPrimitive(Lio/netty/buffer/ByteBuf;)I"), locals = LocalCapture.CAPTURE_FAILHARD, remap = false)
     public void trackFullChunk(ByteBuf input, CallbackInfoReturnable<Chunk> cir, int chunkX, int chunkZ, boolean fullChunk) {
         FullChunkTracker.track(chunkX, chunkZ, fullChunk);
     }

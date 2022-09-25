@@ -15,27 +15,27 @@
 package de.enzaxd.viaforge.equals;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.enzaxd.viaforge.ViaForge;
+import su.mandora.tarasande.TarasandeMain;
 
 public class ProtocolEquals {
 
     public static boolean isEqualTo(final ProtocolVersion protocolVersion) {
-        return ViaForge.CURRENT_VERSION == protocolVersion.getVersion();
+        return TarasandeMain.Companion.get().getProtocolHack().getVersion() == protocolVersion.getVersion();
     }
 
     public static boolean isOlderOrEqualTo(final ProtocolVersion protocolVersion) {
-        return ViaForge.CURRENT_VERSION <= protocolVersion.getVersion();
+        return TarasandeMain.Companion.get().getProtocolHack().getVersion() <= protocolVersion.getVersion();
     }
 
     public static boolean isOlderTo(final ProtocolVersion protocolVersion) {
-        return ViaForge.CURRENT_VERSION < protocolVersion.getVersion();
+        return TarasandeMain.Companion.get().getProtocolHack().getVersion() < protocolVersion.getVersion();
     }
 
     public static boolean isNewerTo(final ProtocolVersion protocolVersion) {
-        return ViaForge.CURRENT_VERSION > protocolVersion.getVersion();
+        return TarasandeMain.Companion.get().getProtocolHack().getVersion() > protocolVersion.getVersion();
     }
 
     public static boolean isNewerOrEqualTo(final ProtocolVersion protocolVersion) {
-        return ViaForge.CURRENT_VERSION >= protocolVersion.getVersion();
+        return TarasandeMain.Companion.get().getProtocolHack().getVersion() >= protocolVersion.getVersion();
     }
 }

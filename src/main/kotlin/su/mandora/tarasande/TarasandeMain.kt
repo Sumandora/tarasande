@@ -1,6 +1,7 @@
 package su.mandora.tarasande
 
 import com.google.gson.GsonBuilder
+import de.enzaxd.viaforge.ViaForge
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
@@ -26,6 +27,8 @@ class TarasandeMain {
     lateinit var managerValue: ManagerValue
         private set
     lateinit var clientValues: ClientValues
+        private set
+    lateinit var protocolHack: ViaForge
         private set
     lateinit var entityColor: EntityColor
         private set
@@ -72,6 +75,8 @@ class TarasandeMain {
         managerFile = ManagerFile()
         managerValue = ManagerValue()
         clientValues = ClientValues()
+        protocolHack = ViaForge()
+        protocolHack.build()
         entityColor = EntityColor()
         managerClickMethod = ManagerClickMethod()
         managerModule = ManagerModule()
