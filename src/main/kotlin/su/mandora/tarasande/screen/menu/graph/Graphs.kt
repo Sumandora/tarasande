@@ -113,7 +113,7 @@ class GraphPitchDelta : Graph("Pitch Delta", 200) {
 class GraphMotion : Graph("Motion", 200) {
     override fun supplyData(): Number? {
         if (MinecraftClient.getInstance().player == null) return null
-        return round((MinecraftClient.getInstance().player?.pos!! - Vec3d(MinecraftClient.getInstance().player?.prevX!!, MinecraftClient.getInstance().player?.prevY!!, MinecraftClient.getInstance().player?.prevZ!!)).horizontalLength() * 10000) / 10000.0
+        return round((MinecraftClient.getInstance().player?.pos!! - Vec3d(MinecraftClient.getInstance().player?.prevX!!, MinecraftClient.getInstance().player?.prevY!!, MinecraftClient.getInstance().player?.prevZ!!)).horizontalLength() * 100) / 100.0
     }
 }
 
