@@ -15,7 +15,7 @@ import java.net.URL
 import java.util.*
 
 
-@AccountInfo(name = "Token", suitableAsMain = true)
+@AccountInfo(name = "Token", suitableAsMain = false)
 class AccountToken(
     @TextFieldInfo("Redeem-Url", false, default = "https://api.easymc.io/v1/token/redeem") private val redeemUrl: String,
     @TextFieldInfo("Token", false) private val token: String
