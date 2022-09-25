@@ -75,8 +75,6 @@ class TarasandeMain {
         managerFile = ManagerFile()
         managerValue = ManagerValue()
         clientValues = ClientValues()
-        protocolHack = ViaForge()
-        protocolHack.build()
         entityColor = EntityColor()
         managerClickMethod = ManagerClickMethod()
         managerModule = ManagerModule()
@@ -87,6 +85,9 @@ class TarasandeMain {
 
         managerFile.load()
 
+        protocolHack = ViaForge()
+        protocolHack.build()
+
         if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && screens.screenBetterAccountManager.mainAccount != null) {
             screens.screenBetterAccountManager.logIn(screens.screenBetterAccountManager.accounts[screens.screenBetterAccountManager.mainAccount!!])
             while (screens.screenBetterAccountManager.loginThread != null && screens.screenBetterAccountManager.loginThread!!.isAlive)
@@ -96,13 +97,21 @@ class TarasandeMain {
 
         autoSaveDaemon.start()
         // We can't guarantee that qdbus exists, nor can we guarantee that we are even using kde plasma, just hope for the best ^^
-        if (linux)
-            Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor suspend")
+        if (linux) {
+            try {
+                Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor suspend")
+            } catch (ignored: Throwable) {
+            }
+        }
     }
 
     fun onUnload() {
-        if (linux)
-            Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor resume")
+        if (linux) {
+            try {
+                Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor resume")
+            } catch (ignored: Throwable) {
+            }
+        }
 
         managerFile.save()
     }

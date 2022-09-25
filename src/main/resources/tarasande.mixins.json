@@ -4,6 +4,7 @@
   "package": "su.mandora.tarasande.mixin.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "MixinEnchantmentHelper",
     "MixinAbstractBlockState",
     "MixinCamera",
     "MixinClientPlayerEntity",

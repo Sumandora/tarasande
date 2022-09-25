@@ -7,7 +7,7 @@ import su.mandora.tarasande.base.screen.menu.information.Information
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
 import su.mandora.tarasande.module.misc.ModuleMurderMystery
-import su.mandora.tarasande.module.misc.ModuleTickBaseManipulation
+import su.mandora.tarasande.module.exploit.ModuleTickBaseManipulation
 import su.mandora.tarasande.module.render.ModuleBedESP
 import su.mandora.tarasande.util.extension.div
 import su.mandora.tarasande.util.extension.plus

@@ -6,6 +6,7 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.Manager
 import su.mandora.tarasande.event.EventTick
 import su.mandora.tarasande.module.combat.*
+import su.mandora.tarasande.module.exploit.*
 import su.mandora.tarasande.module.ghost.*
 import su.mandora.tarasande.module.misc.*
 import su.mandora.tarasande.module.movement.*
@@ -83,7 +84,8 @@ class ManagerModule : Manager<Module>() {
             ModuleHitBox(),
             ModuleFastPlace(),
             ModuleFastUse(),
-            ModuleDisableSequencePackets()
+            ModuleDisableSequencePackets(),
+            ModuleAntiBindingCurse()
         )
         TarasandeMain.get().managerEvent.add { event ->
             if (event is EventTick)
@@ -125,5 +127,5 @@ open class Module(val name: String, val description: String, val category: Modul
 }
 
 enum class ModuleCategory {
-    COMBAT, MOVEMENT, PLAYER, RENDER, MISC, GHOST
+    COMBAT, MOVEMENT, PLAYER, RENDER, MISC, GHOST, EXPLOIT
 }
