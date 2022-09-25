@@ -1,12 +1,17 @@
 package de.enzaxd.viaforge.injection.mixin.entity;
 
+import com.mojang.authlib.GameProfile;
 import de.enzaxd.viaforge.equals.ProtocolEquals;
 import de.enzaxd.viaforge.equals.VersionList;
 import de.enzaxd.viaforge.injection.access.IClientPlayerEntity_Protocol;
 import net.minecraft.client.input.Input;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = ClientPlayerEntity.class, priority = 2000)
-public class ClientPlayerEntityMixin implements IClientPlayerEntity_Protocol {
+public class ClientPlayerEntityMixin extends AbstractClientPlayerEntity implements IClientPlayerEntity_Protocol {
 
     @Shadow private boolean lastOnGround;
 
@@ -27,6 +32,18 @@ public class ClientPlayerEntityMixin implements IClientPlayerEntity_Protocol {
 
     @Unique
     private boolean areSwingCanceledThisTick = false;
+
+    public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
+        super(world, profile, publicKey);
+    }
+
+    @Redirect(method = "Lnet/minecraft/client/network/ClientPlayerEntity;tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tickMovement()V"))
+    public void doNothing(AbstractClientPlayerEntity instance) {
+        if (instance.isBlocking() || instance.isUsingItem() || instance.isSneaking() || instance.isSubmergedInWater() && instance.getItemUseTime() != 0 && ProtocolEquals.isOlderOrEqualTo(VersionList.R1_8))
+            instance.setSprinting(false);
+
+        super.tickMovement();
+    }
 
     @Redirect(method = "sendMovementPackets", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerEntity;lastOnGround:Z", opcode = Opcodes.GETFIELD))
     public boolean redirectSendMovementPackets(ClientPlayerEntity player) {
