@@ -37,9 +37,9 @@ public class ClientPlayerEntityMixin extends AbstractClientPlayerEntity implemen
         super(world, profile, publicKey);
     }
 
-    @Redirect(method = "Lnet/minecraft/client/network/ClientPlayerEntity;tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tickMovement()V"))
+    @Redirect(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tickMovement()V"))
     public void doNothing(AbstractClientPlayerEntity instance) {
-        if (instance.isBlocking() || instance.isUsingItem() || instance.isSneaking() || instance.isSubmergedInWater() && instance.getItemUseTime() != 0 && ProtocolEquals.isOlderOrEqualTo(VersionList.R1_8))
+        if ((instance.isUsingItem() || instance.isSneaking() || instance.isSubmergedInWater()) && ProtocolEquals.isOlderOrEqualTo(VersionList.R1_8))
             instance.setSprinting(false);
 
         super.tickMovement();
