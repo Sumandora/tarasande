@@ -1,35 +1,43 @@
 plugins {
 	id "fabric-loom"
-	id "maven-publish"
 	id "org.jetbrains.kotlin.jvm"
 	id "com.github.johnrengelman.shadow"
 }
 
 //noinspection GroovyUnusedAssignment
-archivesBaseName = project.archives_base_name
-version = project.mod_version
-group = project.maven_group
+archivesBaseName = "tarasande"
+version = "1.8.7"
+group = "su.mandora"
 
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots"}
+	maven { url = "https://repo.viaversion.com" }
 	mavenCentral()
 }
 
+var libs = [
+		// Proxy -> https://mvnrepository.com/artifact/io.netty/netty-handler-proxy
+        "io.netty:netty-handler-proxy:4.1.82.Final",
+
+		// Protocol Hack -> https://github.com/ViaVersion/ViaVersion
+		"com.viaversion:viaversion:4.4.3-SNAPSHOT",
+
+		// Snake YML -> https://github.com/snakeyaml/snakeyaml
+		"org.yaml:snakeyaml:1.29"
+]
+
 dependencies {
-    // To change the versions see the gradle.properties file
+	// Fabric
     minecraft "com.mojang:minecraft:1.19.2"
     mappings "net.fabricmc:yarn:1.19.2+build.13:v2"
     modImplementation "net.fabricmc:fabric-loader:0.14.9"
 
+	// Kotlin
     modImplementation "net.fabricmc:fabric-language-kotlin:1.8.3+kotlin.1.7.10"
 
-    // https://mvnrepository.com/artifact/io.netty/netty-handler-proxy
-    implementation "io.netty:netty-handler-proxy:4.1.82.Final"
+	for (final def lib in libs) {
+		implementation(lib)
+	}
 }
 
 processResources {
@@ -41,37 +49,16 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
 	it.options.release = 17
 }
 
 java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 }
 
 jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}"}
-	}
-}
-
-// configure the maven publication
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
-	}
-
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
 	}
 }
 
@@ -84,9 +71,12 @@ remapJar {
 shadowJar {
     archiveClassifier.set("shadow")
     compileJava.options.encoding = "UTF-8"
+	exclude "native-binaries/*"
 
     dependencies {
-        include(dependency("io.netty:netty-handler-proxy:4.1.80.Final"))
+		for (final def lib in libs) {
+			include(dependency(lib))
+		}
     }
     minimize()
 }

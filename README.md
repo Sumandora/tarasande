@@ -10,7 +10,6 @@
 - Privacy of the user
 
 ## Out of scope
-- Translating between protocols
 - Offering performance improvements, which are related to other mods or the minecraft code
 - Providing crash fixes unrelated to the mod
 
