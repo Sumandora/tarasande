@@ -33,7 +33,9 @@
     "item.ItemAccessor",
     "item.ItemStackMixin",
     "item.SwordItemMixin",
+    "viaversion.Chunk1_16_2TypeMixin",
     "viaversion.MovementTrackerMixin",
-    "viaversion.ViaIdleThreadMixin"
+    "viaversion.ViaIdleThreadMixin",
+    "viaversion.WorldPackets_1_17Mixin"
   ]
 }
