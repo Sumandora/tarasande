@@ -8,7 +8,6 @@ import com.viaversion.viaversion.api.platform.PlatformTask;
 import com.viaversion.viaversion.api.platform.UnsupportedSoftware;
 import com.viaversion.viaversion.api.platform.ViaPlatform;
 import com.viaversion.viaversion.libs.gson.JsonObject;
-import de.enzaxd.viaforge.ViaForge;
 import de.enzaxd.viaforge.util.FutureTaskId;
 import de.enzaxd.viaforge.util.JLoggerToLog4j;
 import io.netty.util.concurrent.Future;

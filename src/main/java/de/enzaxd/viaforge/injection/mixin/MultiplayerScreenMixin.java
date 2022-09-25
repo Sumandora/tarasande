@@ -1,7 +1,6 @@
 package de.enzaxd.viaforge.injection.mixin;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.enzaxd.viaforge.ViaForge;
 import de.enzaxd.viaforge.equals.VersionList;
 import de.enzaxd.viaforge.gui.DropboxWidget;
 import net.minecraft.client.gui.screen.Screen;

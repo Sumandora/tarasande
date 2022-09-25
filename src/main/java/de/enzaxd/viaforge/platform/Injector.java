@@ -2,7 +2,6 @@ package de.enzaxd.viaforge.platform;
 
 import com.viaversion.viaversion.api.platform.ViaInjector;
 import com.viaversion.viaversion.libs.gson.JsonObject;
-import de.enzaxd.viaforge.ViaForge;
 import de.enzaxd.viaforge.handler.CommonTransformer;
 import su.mandora.tarasande.TarasandeMain;
 

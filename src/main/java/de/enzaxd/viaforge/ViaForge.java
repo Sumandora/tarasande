@@ -11,7 +11,6 @@ import de.enzaxd.viaforge.platform.ProviderLoader;
 import de.enzaxd.viaforge.util.JLoggerToLog4j;
 import io.netty.channel.DefaultEventLoopGroup;
 import io.netty.channel.EventLoop;
-import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.SharedConstants;
 import org.apache.logging.log4j.LogManager;
 import su.mandora.tarasande.value.ValueNumber;
