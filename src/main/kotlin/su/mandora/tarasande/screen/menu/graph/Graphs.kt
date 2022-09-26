@@ -1,5 +1,6 @@
 package su.mandora.tarasande.screen.menu.graph
 
+import de.florianmichael.tarasande.NettyStatsAdapter
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.PlayerListEntry
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
@@ -147,4 +148,12 @@ class GraphOnlinePlayers : Graph("Online Players", 200) {
 
 class GraphMemory : Graph("Memory", 200) {
     override fun supplyData() = round((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024.0 / 1024.0 * 100.0) / 100.0
+}
+
+class GraphIncomingTraffic : Graph("Incoming Traffic", 200) {
+    override fun supplyData() = NettyStatsAdapter.incoming()
+}
+
+class GraphOutgoingTraffic : Graph("Outgoing Traffic", 200) {
+    override fun supplyData() = NettyStatsAdapter.outgoing()
 }

@@ -15,7 +15,9 @@ class ManagerGraph : Manager<Graph>() {
             GraphMotion(),
             GraphPing(),
             GraphOnlinePlayers(),
-            GraphMemory()
+            GraphMemory(),
+            GraphIncomingTraffic(),
+            GraphOutgoingTraffic()
         )
     }
 }

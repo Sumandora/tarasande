@@ -1,5 +1,6 @@
 package su.mandora.tarasande.mixin.mixins.connection;
 
+import de.florianmichael.tarasande.NettyStatsAdapter;
 import io.netty.channel.Channel;
 import io.netty.handler.proxy.HttpProxyHandler;
 import io.netty.handler.proxy.Socks4ProxyHandler;
@@ -13,6 +14,11 @@ import su.mandora.tarasande.util.connection.Proxy;
 
 @Mixin(targets = "net/minecraft/network/ClientConnection$1")
 public class MixinClientConnectionInitChannel {
+
+    @Inject(method = "initChannel", at = @At("HEAD"))
+    public void injectHeadInitChannel(Channel channel, CallbackInfo ci) {
+        channel.pipeline().addLast("network_stats", NettyStatsAdapter.Companion.get());
+    }
 
     @Inject(method = "initChannel", at = @At("TAIL"))
     public void injectPostInitChannel(Channel channel, CallbackInfo ci) {
