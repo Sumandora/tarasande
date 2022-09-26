@@ -1,6 +1,6 @@
 package su.mandora.tarasande.mixin.mixins;
 
-import de.enzaxd.tarasande.module.exploit.ModuleAntiBindingCurse;
+import de.florianmichael.tarasande.module.exploit.ModuleAntiBindingCurse;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;

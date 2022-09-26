@@ -1,6 +1,6 @@
 package su.mandora.tarasande.mixin.mixins.connection;
 
-import de.florianmichael.tarasande.NettyStatsAdapter;
+import de.florianmichael.tarasande.screen.menu.graph.NettyStatsAdapter;
 import io.netty.channel.Channel;
 import io.netty.handler.proxy.HttpProxyHandler;
 import io.netty.handler.proxy.Socks4ProxyHandler;
@@ -29,7 +29,7 @@ public class MixinClientConnectionInitChannel {
                         new HttpProxyHandler(
                                 proxy.getSocketAddress(),
                                 proxy.getProxyAuthentication() != null ? proxy.getProxyAuthentication().getUsername() : "",
-                                proxy.getProxyAuthentication() != null ? proxy.getProxyAuthentication().getPassword() : ""
+                                proxy.getProxyAuthentication() != null && proxy.getProxyAuthentication().getPassword() != null ? proxy.getProxyAuthentication().getPassword() : ""
                         )
                 );
                 case SOCKS4 -> channel.pipeline().addFirst("socks4-proxy-handler",

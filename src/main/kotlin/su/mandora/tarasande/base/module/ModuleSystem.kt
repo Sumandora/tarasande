@@ -1,6 +1,6 @@
 package su.mandora.tarasande.base.module
 
-import de.enzaxd.tarasande.module.exploit.ModuleAntiBindingCurse
+import de.florianmichael.tarasande.module.exploit.ModuleAntiBindingCurse
 import net.minecraft.client.MinecraftClient
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain

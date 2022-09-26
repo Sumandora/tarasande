@@ -1,5 +1,7 @@
 package su.mandora.tarasande.base.screen.menu.graph
 
+import de.florianmichael.tarasande.screen.menu.graph.GraphIncomingTraffic
+import de.florianmichael.tarasande.screen.menu.graph.GraphOutgoingTraffic
 import su.mandora.tarasande.base.Manager
 import su.mandora.tarasande.screen.menu.graph.*
 

@@ -1,8 +1,9 @@
-package de.florianmichael.tarasande
+package de.florianmichael.tarasande.screen.menu.graph
 
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.ByteToMessageCodec
+import su.mandora.tarasande.base.screen.menu.graph.Graph
 import su.mandora.tarasande.util.math.TimeUtil
 
 class ReceivedTracker {
@@ -112,4 +113,12 @@ class NettyStatsAdapter : ByteToMessageCodec<ByteBuf>() {
 
         out!!.add(buf)
     }
+}
+
+class GraphIncomingTraffic : Graph("Incoming Traffic", 200) {
+    override fun supplyData() = NettyStatsAdapter.incoming()
+}
+
+class GraphOutgoingTraffic : Graph("Outgoing Traffic", 200) {
+    override fun supplyData() = NettyStatsAdapter.outgoing()
 }
