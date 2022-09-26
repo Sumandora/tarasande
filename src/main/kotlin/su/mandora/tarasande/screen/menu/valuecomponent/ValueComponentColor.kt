@@ -70,7 +70,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         matrices?.translate(0.0, (getPickerHeight() - 5) / 2.0, 0.0)
         matrices?.scale(0.5f, 0.5f, 1.0f)
         matrices?.translate(0.0, -(getPickerHeight() - 5) / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0f, ((getPickerHeight() - 5) / 2.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f).toFloat(), Color.WHITE.rgb)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0f, ((getPickerHeight() - 5) / 2.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f).toFloat(), Color.white.rgb)
         matrices?.pop()
 
         val matrix4f = matrices?.peek()?.positionMatrix!!
@@ -79,9 +79,10 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
 
-        val hsb = Color.getHSBColor(valueColor.hue, 1.0f, 1.0f)
+        val nextHue = if (valueColor.locked) TarasandeMain.get().clientValues.accentColor.hue else valueColor.hue
+        val hsb = Color.getHSBColor(nextHue, 1.0f, 1.0f)
         fill(matrices, x1, y1, x2, y2, hsb.rgb)
-        fillHorizontalGradient(matrices, x1, y1, x2, y2, Color.white.let { Color(it.red, it.green, it.blue, 0) }.rgb, white.rgb)
+        fillHorizontalGradient(matrices, x1, y1, x2, y2, Color.white.let { Color(it.red, it.green, it.blue, 0) }.rgb, Color.white.rgb)
         fillVerticalGradient(matrices, x1, y1, x2, y2, Color.black.let { Color(it.red, it.green, it.blue, 0) }.rgb, Color.black.rgb)
 
         if (!this.isAccent() && valueColor.locked) {
@@ -93,9 +94,9 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
             matrices.pop()
         }
 
-        outlinedFill(matrices, x1, y1, x2, y2, 2.0f, white.rgb)
-        outlinedCircle(matrices, x1 + (x2 - x1) * valueColor.sat, y1 + (y2 - y1) * (1.0 - valueColor.bri), 2.0, 2.0f, white.rgb)
-        fillCircle(matrices, x1 + (x2 - x1) * valueColor.sat, y1 + (y2 - y1) * (1.0 - valueColor.bri), 2.0, Color.getHSBColor(valueColor.hue, valueColor.sat, valueColor.bri).let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+        outlinedFill(matrices, x1, y1, x2, y2, 2.0f, Color.white.rgb)
+        outlinedCircle(matrices, x1 + (x2 - x1) * valueColor.sat, y1 + (y2 - y1) * (1.0 - valueColor.bri), 2.0, 2.0f, Color.white.rgb)
+        fillCircle(matrices, x1 + (x2 - x1) * valueColor.sat, y1 + (y2 - y1) * (1.0 - valueColor.bri), 2.0, Color.getHSBColor(nextHue, valueColor.sat, valueColor.bri).let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
         outlinedCircle(matrices, width - (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0 - 5, 2.0f, white.rgb)
         outlinedCircle(matrices, width - (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0, 2.0f, white.rgb)
 
