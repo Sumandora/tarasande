@@ -63,8 +63,5 @@
 - Force enable cramming
 - no cooldown: force enable / protocol adaptation
 
-### TODO-List (florian)
-- Add Tracker for 
-
 ## Notes
 - AutoTool: Axes can set shields on cooldown. Maybe implement that if possible axes are being used to set shields on cooldown before actually attacking with sword
