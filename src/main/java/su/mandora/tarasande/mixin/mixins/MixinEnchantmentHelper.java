@@ -15,6 +15,6 @@ public class MixinEnchantmentHelper {
     @Inject(method = "hasBindingCurse", at = @At("HEAD"), cancellable = true)
     private static void hookHack(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         if (TarasandeMain.Companion.get().getManagerModule().get(ModuleAntiBindingCurse.class).getEnabled())
-            cir.cancel();
+            cir.setReturnValue(false);
     }
 }
