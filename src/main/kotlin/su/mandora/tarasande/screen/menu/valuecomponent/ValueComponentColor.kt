@@ -49,7 +49,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         val x2 = width - (getPickerHeight() - 5) / 2.0 + cos(0.75) * ((getPickerHeight() - 5) / 2.0 - 5)
         val y2 = (getPickerHeight() - 5) / 2.0 + cos(0.75) * ((getPickerHeight() - 5) / 2.0 - 5)
 
-        if (alphaDragInfo.dragging) {
+        if (alphaDragInfo.dragging && !valueColor.locked) {
             valueColor.alpha = 1.0f - MathHelper.clamp((mouseY + (mouseY / (getPickerHeight() - 5) * 2 - 1) * 5) / (getPickerHeight() - 5), 0.0, 1.0).toFloat()
             valueColor.onChange()
         }
@@ -58,7 +58,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
             valueColor.bri = 1.0f - MathHelper.clamp((mouseY - y1) / (y2 - y1), 0.0, 1.0).toFloat()
             valueColor.onChange()
         }
-        if (wheelDragInfo.dragging) {
+        if (wheelDragInfo.dragging && !valueColor.locked) {
             val mousePos = Vec2f(mouseX.toFloat(), mouseY.toFloat())
             val middle = Vec2f((x1 + (x2 - x1) * 0.5).toFloat(), (y1 + (y2 - y1) * 0.5).toFloat())
             val mouseDir = mousePos.add(middle.multiply(-1.0f)).normalize() // large subtraction
@@ -162,7 +162,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         }
         val innerRadius = (getPickerHeight() - 5) / 2.0 - 5
         val outerRadius = (getPickerHeight() - 5) / 2.0
-        if (Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(Vec2f((x1 + (x2 - x1) * 0.5).toFloat(), (y1 + (y2 - y1) * 0.5).toFloat())) in (innerRadius * innerRadius)..(outerRadius * outerRadius)) {
+        if (Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(Vec2f((x1 + (x2 - x1) * 0.5).toFloat(), (y1 + (y2 - y1) * 0.5).toFloat())) in (innerRadius * innerRadius)..(outerRadius * outerRadius) && !value.locked) {
             val valueColor = value
             if (System.currentTimeMillis() - lastWheelClick < 250L) {
                 valueColor.rainbow = !valueColor.rainbow
