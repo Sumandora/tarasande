@@ -2,6 +2,7 @@ package su.mandora.tarasande.value
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.value.Value
 import java.awt.Color
 
@@ -19,11 +20,17 @@ open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var 
             field = value
             rainbowStart = System.currentTimeMillis()
         }
+    var locked: Boolean = false
 
     private var rainbowStart = 0L
 
     fun getColor(): Color {
-        val hsb = Color.getHSBColor(hue, sat, bri)
+        var customHue = this.hue
+
+        if (locked && this != TarasandeMain.get().clientValues.accentColor)
+            customHue = TarasandeMain.get().clientValues.accentColor.hue
+
+        val hsb = Color.getHSBColor(customHue, sat, bri)
         return Color(hsb.red, hsb.green, hsb.blue, if (alpha == null) 255 else (alpha!! * 255).toInt())
     }
 
@@ -36,6 +43,7 @@ open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var 
             jsonArray.add(alpha)
         }
         jsonArray.add(rainbow)
+        jsonArray.add(locked)
         return jsonArray
     }
 
@@ -47,8 +55,10 @@ open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var 
         if (alpha != null) {
             alpha = jsonArray[3].asFloat
             rainbow = jsonArray[4].asBoolean
+            locked = jsonArray[5].asBoolean
         } else {
             rainbow = jsonArray[3].asBoolean
+            locked = jsonArray[4].asBoolean
         }
     }
 }
