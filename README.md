@@ -60,6 +60,7 @@
 - Target strafe: Anti Void
 - Account manager: Add skins in selection
 - AirJump/-Walk
+- Force enable cramming
 
 ### TODO-List (florian)
 - Add Tracker for 
