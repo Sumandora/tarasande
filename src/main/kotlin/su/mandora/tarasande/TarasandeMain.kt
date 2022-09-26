@@ -87,7 +87,6 @@ class TarasandeMain {
         friends = Friends()
 
         protocolHack = ViaForge()
-        protocolHack.build()
 
         managerFile.load()
 

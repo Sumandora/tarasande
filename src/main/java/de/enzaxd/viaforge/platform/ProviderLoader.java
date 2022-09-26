@@ -6,10 +6,16 @@ import com.viaversion.viaversion.api.platform.ViaPlatformLoader;
 import com.viaversion.viaversion.api.protocol.version.VersionProvider;
 import com.viaversion.viaversion.protocols.base.BaseVersionProvider;
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider;
+import de.enzaxd.viaforge.ViaForge;
 import de.enzaxd.viaforge.util.FabricHandItemProvider;
-import su.mandora.tarasande.TarasandeMain;
 
 public class ProviderLoader implements ViaPlatformLoader {
+
+    private final ViaForge viaForge;
+
+    public ProviderLoader(ViaForge viaForge) {
+        this.viaForge = viaForge;
+    }
 
     @Override
     public void load() {
@@ -17,7 +23,7 @@ public class ProviderLoader implements ViaPlatformLoader {
             @Override
             public int getClosestServerProtocol(UserConnection connection) throws Exception {
                 if (connection.isClientSide())
-                    return TarasandeMain.Companion.get().getProtocolHack().getVersion();
+                    return viaForge.getVersion();
                 return super.getClosestServerProtocol(connection);
             }
         });

@@ -28,10 +28,9 @@ public class ViaForge {
     private final ThreadFactory factory = new ThreadFactoryBuilder().setDaemon(true).setNameFormat("ViaForge-%d").build();
     private final ExecutorService asyncExecutor = Executors.newFixedThreadPool(8, factory);
     private final EventLoop eventLoop = new DefaultEventLoopGroup(1, factory).next();
-    private ValueNumber protocol;
+    private final ValueNumber protocol = new ValueNumber(this, "Protocol", Integer.MIN_VALUE, SharedConstants.getProtocolVersion(), Integer.MAX_VALUE, 1, true);
 
-    public void build() {
-        this.protocol = new ValueNumber(this, "Protocol", Integer.MIN_VALUE, SharedConstants.getProtocolVersion(), Integer.MAX_VALUE, 1, true);
+    public ViaForge() {
         final CompletableFuture<Void> initFuture = new CompletableFuture<>();
 
         eventLoop.submit(initFuture::join);
@@ -49,9 +48,9 @@ public class ViaForge {
 
         Via.init(
                 ViaManagerImpl.builder()
-                        .injector(new Injector())
-                        .loader(new ProviderLoader())
-                        .platform(new Platform(file))
+                        .injector(new Injector(this))
+                        .loader(new ProviderLoader(this))
+                        .platform(new Platform(file, this))
                         .build()
         );
 

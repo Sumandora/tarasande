@@ -2,10 +2,16 @@ package de.enzaxd.viaforge.platform;
 
 import com.viaversion.viaversion.api.platform.ViaInjector;
 import com.viaversion.viaversion.libs.gson.JsonObject;
+import de.enzaxd.viaforge.ViaForge;
 import de.enzaxd.viaforge.handler.CommonTransformer;
-import su.mandora.tarasande.TarasandeMain;
 
 public class Injector implements ViaInjector {
+
+    private final ViaForge viaForge;
+
+    public Injector(ViaForge viaForge) {
+        this.viaForge = viaForge;
+    }
 
     @Override
     public void inject() {
@@ -17,7 +23,7 @@ public class Injector implements ViaInjector {
 
     @Override
     public int getServerProtocolVersion() {
-        return TarasandeMain.Companion.get().getProtocolHack().getVersion();
+        return viaForge.getVersion();
     }
 
     @Override
@@ -32,7 +38,6 @@ public class Injector implements ViaInjector {
 
     @Override
     public JsonObject getDump() {
-        JsonObject obj = new JsonObject();
-        return obj;
+        return new JsonObject();
     }
 }

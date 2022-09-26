@@ -8,12 +8,12 @@ import com.viaversion.viaversion.api.platform.PlatformTask;
 import com.viaversion.viaversion.api.platform.UnsupportedSoftware;
 import com.viaversion.viaversion.api.platform.ViaPlatform;
 import com.viaversion.viaversion.libs.gson.JsonObject;
+import de.enzaxd.viaforge.ViaForge;
 import de.enzaxd.viaforge.util.FutureTaskId;
 import de.enzaxd.viaforge.util.JLoggerToLog4j;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import org.apache.logging.log4j.LogManager;
-import su.mandora.tarasande.TarasandeMain;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -30,13 +30,16 @@ public class Platform implements ViaPlatform<UUID> {
 
     private final ViaConfig config;
     private final File dataFolder;
-    private final com.viaversion.viaversion.api.ViaAPI api;
+    private final com.viaversion.viaversion.api.ViaAPI<?> api;
 
-    public Platform(File dataFolder) {
+    private final ViaForge viaForge;
+
+    public Platform(File dataFolder, ViaForge viaForge) {
         Path configDir = dataFolder.toPath().resolve("ViaVersion");
         config = new ViaConfig(configDir.resolve("viaversion.yml").toFile());
         this.dataFolder = configDir.toFile();
         api = new ViaAPI();
+        this.viaForge = viaForge;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class Platform implements ViaPlatform<UUID> {
 
     @Override
     public String getPlatformVersion() {
-        return TarasandeMain.Companion.get().getProtocolHack().getVersion() + "";
+        return viaForge.getVersion() + "";
     }
 
     @Override
@@ -67,7 +70,7 @@ public class Platform implements ViaPlatform<UUID> {
     @Override
     public FutureTaskId runAsync(Runnable runnable) {
         return new FutureTaskId(CompletableFuture
-                .runAsync(runnable, TarasandeMain.Companion.get().getProtocolHack().getAsyncExecutor())
+                .runAsync(runnable, viaForge.getAsyncExecutor())
                 .exceptionally(throwable -> {
                     if (!(throwable instanceof CancellationException)) {
                         throwable.printStackTrace();
@@ -79,19 +82,19 @@ public class Platform implements ViaPlatform<UUID> {
 
     @Override
     public FutureTaskId runSync(Runnable runnable) {
-        return new FutureTaskId(TarasandeMain.Companion.get().getProtocolHack().getEventLoop().submit(runnable).addListener(errorLogger()));
+        return new FutureTaskId(viaForge.getEventLoop().submit(runnable).addListener(errorLogger()));
     }
 
     @Override
     public PlatformTask runSync(Runnable runnable, long ticks) {
-        return new FutureTaskId(TarasandeMain.Companion.get().getProtocolHack().getEventLoop().schedule(() -> runSync(runnable), ticks *
+        return new FutureTaskId(viaForge.getEventLoop().schedule(() -> runSync(runnable), ticks *
                 50, TimeUnit.MILLISECONDS).addListener(errorLogger()));
     }
 
     @Override
     public PlatformTask runRepeatingSync(Runnable runnable, long ticks) {
-         return new FutureTaskId(TarasandeMain.Companion.get().getProtocolHack().getEventLoop().scheduleAtFixedRate(() -> runSync(runnable),
-                 0, ticks * 50, TimeUnit.MILLISECONDS).addListener(errorLogger()));
+        return new FutureTaskId(viaForge.getEventLoop().scheduleAtFixedRate(() -> runSync(runnable),
+                0, ticks * 50, TimeUnit.MILLISECONDS).addListener(errorLogger()));
     }
 
     private <T extends Future<?>> GenericFutureListener<T> errorLogger() {
