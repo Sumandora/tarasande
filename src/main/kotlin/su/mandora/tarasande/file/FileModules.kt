@@ -11,7 +11,7 @@ class FileModules : File("Modules") {
     override fun save(): JsonElement {
         val jsonArray = JsonArray()
         for (module in TarasandeMain.get().managerModule.list)
-            if (module.enabled)
+            if (module._enabled)
                 jsonArray.add(module.name)
         return jsonArray
     }

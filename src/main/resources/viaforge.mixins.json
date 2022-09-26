@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "de.enzaxd.viaforge.injection.mixin",
   "compatibilityLevel": "JAVA_17",
+  "mixinPriority": 1,
   "client": [
     "ClientPlayerInteractionManagerMixin",
     "ClientPlayNetworkHandlerMixin",
@@ -21,6 +22,7 @@
     "ClientConnectionMixin",
     "ClientConnectionSubOneMixin",
     "EntityPredicatesMixin",
+    "ItemCooldownManagerMixin",
     "ItemPlacementContextMixin",
     "block.FarmlandBlockMixin",
     "block.LadderBlockMixin",

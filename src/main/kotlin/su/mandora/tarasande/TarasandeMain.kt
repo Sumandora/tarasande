@@ -5,6 +5,7 @@ import de.enzaxd.viaforge.ViaForge
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
+import org.slf4j.LoggerFactory
 import su.mandora.tarasande.base.esp.ManagerESP
 import su.mandora.tarasande.base.event.ManagerEvent
 import su.mandora.tarasande.base.file.ManagerFile
@@ -44,6 +45,8 @@ class TarasandeMain {
         private set
     lateinit var managerESP: ManagerESP
         private set
+
+    val logger = LoggerFactory.getLogger(name)!!
 
     val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
 

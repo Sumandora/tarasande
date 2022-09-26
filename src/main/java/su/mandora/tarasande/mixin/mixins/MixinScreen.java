@@ -33,7 +33,7 @@ public class MixinScreen implements IScreen {
     @Final
     private List<Selectable> selectables;
 
-    @Inject(method = "render", at = @At("TAIL"))
+    @Inject(method = "render", at = @At("HEAD"))
     public void injectRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         TarasandeMain.Companion.get().getManagerEvent().call(new EventScreenRender(matrices, mouseX, mouseY));
     }

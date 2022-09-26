@@ -34,21 +34,39 @@ class ValueComponentRegistry(value: Value) : ValueComponent(value) {
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val valueRegistry = value as ValueRegistry<*>
 
+        val white = Color.white.let { if (valueRegistry.isEnabled()) it else it.darker().darker() }
+
         matrices?.push()
         matrices?.translate(0.0, getHeight() / 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
         matrices?.translate(0.0, -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if (valueRegistry.isEnabled()) it else it.darker().darker() }.rgb)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), white.rgb)
         matrices?.pop()
 
         for ((index, key) in valueRegistry.list.withIndex()) {
             matrices?.push()
             matrices?.scale(0.5F, 0.5F, 1.0F)
             val stringRepresentation = StringUtil.uncoverTranslation(valueRegistry.getTranslationKey(key))
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, stringRepresentation, (width.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(stringRepresentation) / 2.0F) * 2.0F, MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (index + 0.5F) * 2.0F, if (valueRegistry.isEnabled()) if (RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), (width.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(stringRepresentation) / 2.0F).toDouble(), (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (index + 0.5F)).toDouble(), width, (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * ((index + 1) + 0.5F)).toDouble())) TarasandeMain.get().clientValues.accentColor.getColor().rgb else Color.white.rgb else Color.white.darker().darker().rgb)
+            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices,
+                stringRepresentation,
+                (width.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(stringRepresentation) / 2.0F) * 2.0F,
+                MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (index + 0.5F) * 2.0F,
+                if (valueRegistry.isEnabled())
+                    if (RenderUtil.isHovered(
+                            mouseX.toDouble(),
+                            mouseY.toDouble(),
+                            (width.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(stringRepresentation) / 2.0F).toDouble(),
+                            (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (index + 0.5F)).toDouble(),
+                            width,
+                            (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * ((index + 1) + 0.5F)).toDouble()))
+                        TarasandeMain.get().clientValues.accentColor.getColor().rgb
+                    else
+                        Color.white.rgb
+                else
+                    Color.white.darker().darker().rgb)
             matrices?.pop()
         }
-        RenderUtil.fill(matrices, width.toFloat() - 25.0, (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (valueRegistry.list.size + 0.5F)).toDouble() + 1.0, width, (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (valueRegistry.list.size + 0.5F)).toDouble() + 1.5, Color.white.let { if (valueRegistry.isEnabled()) it else it.darker().darker() }.rgb)
+        RenderUtil.fill(matrices, width.toFloat() - 25.0, (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (valueRegistry.list.size + 0.5F)).toDouble() + 1.0, width, (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (valueRegistry.list.size + 0.5F)).toDouble() + 1.5, white.rgb)
 
         matrices?.push()
         matrices?.translate(width - 40, MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (valueRegistry.list.size + 0.5F) + 2.0, 0.0)
@@ -62,7 +80,24 @@ class ValueComponentRegistry(value: Value) : ValueComponent(value) {
         for ((index, key) in searchResults.withIndex()) {
             matrices?.push()
             matrices?.scale(0.5F, 0.5F, 1.0F)
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, key.string, (width.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(key.string) / 2.0F) * 2.0F, (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * ((valueRegistry.list.size + 1) + index + 0.5F) + 2.0F) * 2.0F, if (valueRegistry.isEnabled()) if (RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), (width.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(key.string) / 2.0F).toDouble(), (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * ((valueRegistry.list.size + 1) + index + 0.5F) + 2.0F).toDouble(), width, (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * ((valueRegistry.list.size + 1) + index + 0.5F) + 2.0F + MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toDouble())) TarasandeMain.get().clientValues.accentColor.getColor().rgb else Color.white.rgb else Color.white.darker().darker().rgb)
+            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices,
+                key.string,
+                (width.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(key.string) / 2.0F) * 2.0F,
+                (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * ((valueRegistry.list.size + 1) + index + 0.5F) + 2.0F) * 2.0F,
+                (if (valueRegistry.isEnabled())
+                    if (RenderUtil.isHovered(
+                            mouseX.toDouble(),
+                            mouseY.toDouble(),
+                            (width.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(key.string) / 2.0F).toDouble(),
+                            (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * ((valueRegistry.list.size + 1) + index + 0.5F) + 2.0F).toDouble(),
+                            width,
+                            (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * ((valueRegistry.list.size + 1) + index + 0.5F) + 2.0F + MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toDouble()))
+                        TarasandeMain.get().clientValues.accentColor.getColor()
+                    else
+                        Color.white
+                else
+                    Color.white.darker().darker()).rgb
+            )
             matrices?.pop()
         }
     }

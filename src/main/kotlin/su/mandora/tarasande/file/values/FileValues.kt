@@ -1,15 +1,20 @@
-package su.mandora.tarasande.file
+package su.mandora.tarasande.file.values
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.file.File
+import su.mandora.tarasande.base.value.Value
+import java.util.function.Function
 
-class FileValues : File("Values") {
+open class FileValues(name: String, private val condition: Function<Value, Boolean>) : File(name) {
 
     override fun save(): JsonElement {
         val values = JsonObject()
         for (value in TarasandeMain.get().managerValue.list) {
+            if (!condition.apply(value))
+                continue
+
             var jsonObject: JsonObject
             if (values.has(value.owner.javaClass.name)) {
                 jsonObject = values.getAsJsonObject(value.owner.javaClass.name)
@@ -30,6 +35,9 @@ class FileValues : File("Values") {
     override fun load(jsonElement: JsonElement) {
         val jsonObject = jsonElement as JsonObject
         for (value in TarasandeMain.get().managerValue.list) {
+            if (!condition.apply(value))
+                continue
+
             if (jsonObject.has(value.owner.javaClass.name)) {
                 val jsonObject2 = jsonObject.getAsJsonObject(value.owner.javaClass.name)
                 if (jsonObject2.has(value.name)) {

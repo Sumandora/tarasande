@@ -61,7 +61,6 @@
 - Account manager: Add skins in selection
 - AirJump/-Walk
 - Force enable cramming
-- no cooldown: force enable / protocol adaptation
 
 ## Notes
 - AutoTool: Axes can set shields on cooldown. Maybe implement that if possible axes are being used to set shields on cooldown before actually attacking with sword

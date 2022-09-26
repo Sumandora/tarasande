@@ -1,12 +1,15 @@
 package su.mandora.tarasande.base.module
 
+import de.enzaxd.tarasande.module.exploit.ModuleAntiBindingCurse
 import net.minecraft.client.MinecraftClient
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.Manager
 import su.mandora.tarasande.event.EventTick
 import su.mandora.tarasande.module.combat.*
-import su.mandora.tarasande.module.exploit.*
+import su.mandora.tarasande.module.exploit.ModuleDeadByDaylightEscape
+import su.mandora.tarasande.module.exploit.ModuleResourcePackSpoofer
+import su.mandora.tarasande.module.exploit.ModuleTickBaseManipulation
 import su.mandora.tarasande.module.ghost.*
 import su.mandora.tarasande.module.misc.*
 import su.mandora.tarasande.module.movement.*
@@ -101,9 +104,13 @@ class ManagerModule : Manager<Module>() {
 
 open class Module(val name: String, val description: String, val category: ModuleCategory) {
     val visible = ValueBoolean(this, "Visible in ArrayList", true)
-    var enabled = false
+
+    @Suppress("PropertyName")
+    var _enabled = false
+        private set
+    var enabled: Boolean
         set(value) {
-            if (field != value) if (value) {
+            if (_enabled != value) if (value) {
                 onEnable()
                 TarasandeMain.get().managerEvent.addObject(this)
             } else {
@@ -111,8 +118,10 @@ open class Module(val name: String, val description: String, val category: Modul
                 onDisable()
             }
 
-            field = value
+            _enabled = value
         }
+        get() = _enabled && isEnabled()
+
     val bind = ValueBind(this, "Bind", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN)
 
     val mc: MinecraftClient = MinecraftClient.getInstance()
@@ -124,6 +133,7 @@ open class Module(val name: String, val description: String, val category: Modul
     open fun onEnable() {}
     open fun onDisable() {}
 
+    open fun isEnabled() = true
 }
 
 enum class ModuleCategory {

@@ -36,24 +36,32 @@ class ElementModule(private val module: Module, width: Double) : Element(width) 
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         RenderUtil.fill(matrices, 0.0, 0.0, this.width, this.getHeight(), Int.MIN_VALUE)
+
+        var white = Color.white
+
+        if (!module.isEnabled()) {
+            white = white.darker().darker()
+            expanded = false
+        }
+
         matrices?.push()
         matrices?.translate(2.0, this.defaultHeight / 4.0 + 1.0, 0.0)
         matrices?.scale(0.75f, 0.75f, 1.0f)
         matrices?.translate(-2.0, -(this.defaultHeight / 4.0 + 1.0f), 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, module.name, 2.0f, ((this.defaultHeight / 4.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f) + 1.0f).toFloat(), Color.white.rgb)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, module.name, 2.0f, ((this.defaultHeight / 4.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f) + 1.0f).toFloat(), white.rgb)
         matrices?.pop()
 
         matrices?.push()
         matrices?.translate(2.0, this.defaultHeight - this.defaultHeight / 4.0, 0.0)
         matrices?.scale(0.5f, 0.5f, 1.0f)
         matrices?.translate(-2.0, -(this.defaultHeight - this.defaultHeight / 4.0), 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, this.module.description, 2.0f, (this.defaultHeight - this.defaultHeight / 4.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f).toFloat(), Color.lightGray.rgb)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, this.module.description, 2.0f, (this.defaultHeight - this.defaultHeight / 4.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f).toFloat(), Color.lightGray.let { if (module.isEnabled()) it else it.darker().darker() }.rgb)
         matrices?.pop()
 
         val toggleAnimation = min((System.currentTimeMillis() - toggleTime) / 100.0, 1.0)
         val radius = if (module.enabled) toggleAnimation else 1.0 - toggleAnimation
         RenderUtil.fillCircle(matrices, width - 7, defaultHeight / 2, radius * 4.0, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
-        RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0f, RenderUtil.colorInterpolate(TarasandeMain.get().clientValues.accentColor.getColor(), Color.white, radius).rgb)
+        RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0f, RenderUtil.colorInterpolate(TarasandeMain.get().clientValues.accentColor.getColor(), Color.white, radius).let { if (module.isEnabled()) it else it.darker().darker() }.rgb)
 
         if (components.isNotEmpty()) {
             val expansionAnimation = min((System.currentTimeMillis() - expansionTime) / 100.0, 1.0)
@@ -73,7 +81,7 @@ class ElementModule(private val module: Module, width: Double) : Element(width) 
             matrices.translate(this.width - 16, this.defaultHeight / 2, 0.0)
             matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion((expansion * 90.0).toFloat()))
             matrices.translate(-(this.width - 16), -(this.defaultHeight / 2), 0.0)
-            val accentColor = TarasandeMain.get().clientValues.accentColor.getColor()
+            val accentColor = TarasandeMain.get().clientValues.accentColor.getColor().let { if (module.isEnabled()) it else it.darker().darker() }
             bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
             bufferBuilder.vertex(matrix, (this.width - 16 - 1).toFloat(), (this.defaultHeight / 2 - 2).toFloat(), 0.0f).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
             bufferBuilder.vertex(matrix, (this.width - 16 + 1).toFloat(), (this.defaultHeight / 2).toFloat(), 0.0f).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
@@ -99,6 +107,8 @@ class ElementModule(private val module: Module, width: Double) : Element(width) 
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (!module.isEnabled())
+            return isHovered(mouseX, mouseY, 0.0, 0.0, width, getHeight())
         if (expanded) {
             var yOffset = 0.0
             for (component in components) {
@@ -125,6 +135,8 @@ class ElementModule(private val module: Module, width: Double) : Element(width) 
     }
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int) {
+        if (!module.isEnabled())
+            return
         if (expanded) {
             var yOffset = 0.0
             for (component in components) {
@@ -137,6 +149,8 @@ class ElementModule(private val module: Module, width: Double) : Element(width) 
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+        if (!module.isEnabled())
+            return false
         for (component in components) {
             if (component.value.isEnabled() && component.mouseScrolled(mouseX, mouseY, amount)) {
                 return true
@@ -146,6 +160,8 @@ class ElementModule(private val module: Module, width: Double) : Element(width) 
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (!module.isEnabled())
+            return false
         for (component in components) {
             if (component.value.isEnabled() && component.keyPressed(keyCode, scanCode, modifiers)) {
                 return true
@@ -155,6 +171,8 @@ class ElementModule(private val module: Module, width: Double) : Element(width) 
     }
 
     override fun charTyped(chr: Char, modifiers: Int) {
+        if (!module.isEnabled())
+            return
         for (component in components) {
             if (component.value.isEnabled()) {
                 component.charTyped(chr, modifiers)

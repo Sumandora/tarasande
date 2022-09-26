@@ -20,11 +20,13 @@ class ValueComponentBind(value: Value) : ValueComponent(value) {
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val valueBind = value as ValueBind
 
+        val white = Color.white.let { if (valueBind.isEnabled()) it else it.darker().darker() }
+
         matrices?.push()
         matrices?.translate(0.0, getHeight() / 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
         matrices?.translate(0.0, -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if (valueBind.isEnabled()) it else it.darker().darker() }.rgb)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), white.rgb)
         matrices?.pop()
 
         val name = getName(valueBind.type, valueBind.button)
@@ -35,7 +37,7 @@ class ValueComponentBind(value: Value) : ValueComponent(value) {
         matrices?.translate(width, getHeight() / 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
         matrices?.translate(-width, -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, name, (width - textWidth).toFloat(), (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if (valueBind.isEnabled()) it else it.darker().darker() }.rgb)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, name, (width - textWidth).toFloat(), (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), white.rgb)
         matrices?.pop()
     }
 

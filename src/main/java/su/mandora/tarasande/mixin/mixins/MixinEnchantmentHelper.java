@@ -1,5 +1,6 @@
 package su.mandora.tarasande.mixin.mixins;
 
+import de.enzaxd.tarasande.module.exploit.ModuleAntiBindingCurse;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -7,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.module.exploit.ModuleAntiBindingCurse;
 
 @Mixin(EnchantmentHelper.class)
 public class MixinEnchantmentHelper {

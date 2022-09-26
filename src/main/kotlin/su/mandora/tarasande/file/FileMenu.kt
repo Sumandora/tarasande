@@ -31,12 +31,15 @@ class FileMenu : File("Menu") {
                 val jsonArray2 = jsonObject.get(panel.title).asJsonArray
                 panel.x = jsonArray2.get(0).asDouble
                 panel.y = jsonArray2.get(1).asDouble
+
                 panel.panelWidth = max(jsonArray2.get(2).asDouble, panel.minWidth)
                 if (panel.maxWidth != null)
-                    panel.panelWidth = min(panel.panelWidth, panel.maxWidth)
+                    panel.panelWidth = min(jsonArray2.get(2).asDouble, panel.maxWidth)
+
                 panel.panelHeight = max(jsonArray2.get(3).asDouble, panel.minHeight)
                 if (panel.maxHeight != null)
-                    panel.panelHeight = min(panel.panelHeight, panel.maxHeight)
+                    panel.panelHeight = min(jsonArray2.get(3).asDouble, panel.maxHeight)
+
                 panel.opened = jsonArray2.get(4).asBoolean
             }
         }

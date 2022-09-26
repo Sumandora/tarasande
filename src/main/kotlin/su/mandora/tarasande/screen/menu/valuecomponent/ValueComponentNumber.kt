@@ -48,13 +48,6 @@ class ValueComponentNumber(value: Value) : ValueComponent(value) {
         lastMousePos = Vec2f(mouseX.toFloat(), mouseY.toFloat())
         val valueNumber = value as ValueNumber
 
-        matrices?.push()
-        matrices?.translate(0.0, getHeight() / 2.0, 0.0)
-        matrices?.scale(0.5F, 0.5F, 1.0F)
-        matrices?.translate(0.0, -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if (valueNumber.isEnabled()) it else it.darker().darker() }.rgb)
-        matrices?.pop()
-
         if (dragInfo.dragging) {
             val mousePos = mouseX - (width - 50)
             val value = valueNumber.min + mousePos / 50.0 * (valueNumber.max - valueNumber.min)
@@ -63,18 +56,27 @@ class ValueComponentNumber(value: Value) : ValueComponent(value) {
 
         val sliderPos = MathHelper.clamp((valueNumber.value - valueNumber.min) / (valueNumber.max - valueNumber.min), 0.0, 1.0)
 
+        var white = Color.white
         var accentColor = TarasandeMain.get().clientValues.accentColor.getColor()
         var color = Color(accentColor.red, accentColor.green, accentColor.blue, 255 / 4)
         var otherColor = Color(255, 255, 255, 255 / 4)
 
         if (!value.isEnabled()) {
+            white = white.darker().darker()
             accentColor = accentColor.darker().darker()
             color = color.darker().darker()
             otherColor = otherColor.darker().darker()
         }
 
+        matrices?.push()
+        matrices?.translate(0.0, getHeight() / 2.0, 0.0)
+        matrices?.scale(0.5F, 0.5F, 1.0F)
+        matrices?.translate(0.0, -getHeight() / 2.0, 0.0)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), white.rgb)
+        matrices?.pop()
+
         RenderUtil.fillHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width - (1.0 - sliderPos) * 50, getHeight() * 0.75, otherColor.rgb, color.rgb)
-        RenderUtil.outlinedHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2.0F, Color.white.let { if (valueNumber.isEnabled()) it else it.darker().darker() }.rgb, accentColor.rgb)
+        RenderUtil.outlinedHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2.0F, white.rgb, accentColor.rgb)
 
         matrices?.push()
         matrices?.translate(width - 50 / 2, getHeight() / 2.0, 0.0)
@@ -93,7 +95,8 @@ class ValueComponentNumber(value: Value) : ValueComponent(value) {
                     ) + value.value.toString(),
             (width - 50 / 2.0F - MinecraftClient.getInstance().textRenderer.getWidth(value.value.toString()) / 2.0F).toFloat(),
             (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(),
-            Color.white.let { if (valueNumber.isEnabled()) it else it.darker().darker() }.rgb)
+            white.rgb
+        )
         matrices?.pop()
     }
 
