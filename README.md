@@ -61,6 +61,7 @@
 - Account manager: Add skins in selection
 - AirJump/-Walk
 - Force enable cramming
+- no cooldown: force enable / protocol adaptation
 
 ### TODO-List (florian)
 - Add Tracker for 
