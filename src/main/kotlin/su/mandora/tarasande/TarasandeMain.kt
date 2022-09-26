@@ -86,10 +86,10 @@ class TarasandeMain {
         screens = Screens() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
         friends = Friends()
 
-        managerFile.load()
-
         protocolHack = ViaForge()
         protocolHack.build()
+
+        managerFile.load()
 
         if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && screens.screenBetterAccountManager.mainAccount != null) {
             screens.screenBetterAccountManager.logIn(screens.screenBetterAccountManager.accounts[screens.screenBetterAccountManager.mainAccount!!])
