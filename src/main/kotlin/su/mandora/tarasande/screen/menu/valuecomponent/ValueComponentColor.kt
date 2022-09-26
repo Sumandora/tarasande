@@ -33,6 +33,8 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
     private val alphaDragInfo = DragInfo()
     private var lastWheelClick = 0L
 
+    private val lockToAccentColorText = "Lock to accent color"
+
     override fun init() {
     }
 
@@ -42,6 +44,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val valueColor = value as ValueColor
         val white = Color.white.let { if (valueColor.isEnabled() && !valueColor.locked) it else it.darker().darker() }
+        val unblockedWhite = Color.white.let { if (valueColor.isEnabled()) it else it.darker().darker() }
 
         val x1 = width - (getPickerHeight() - 5) / 2.0 - sin(0.75) * ((getPickerHeight() - 5) / 2.0 - 5)
         val y1 = (getPickerHeight() - 5) / 2.0 - sin(0.75) * ((getPickerHeight() - 5) / 2.0 - 5)
@@ -49,7 +52,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         val x2 = width - (getPickerHeight() - 5) / 2.0 + cos(0.75) * ((getPickerHeight() - 5) / 2.0 - 5)
         val y2 = (getPickerHeight() - 5) / 2.0 + cos(0.75) * ((getPickerHeight() - 5) / 2.0 - 5)
 
-        if (alphaDragInfo.dragging && !valueColor.locked) {
+        if (alphaDragInfo.dragging) {
             valueColor.alpha = 1.0f - MathHelper.clamp((mouseY + (mouseY / (getPickerHeight() - 5) * 2 - 1) * 5) / (getPickerHeight() - 5), 0.0, 1.0).toFloat()
             valueColor.onChange()
         }
@@ -58,7 +61,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
             valueColor.bri = 1.0f - MathHelper.clamp((mouseY - y1) / (y2 - y1), 0.0, 1.0).toFloat()
             valueColor.onChange()
         }
-        if (wheelDragInfo.dragging && !valueColor.locked) {
+        if (wheelDragInfo.dragging) {
             val mousePos = Vec2f(mouseX.toFloat(), mouseY.toFloat())
             val middle = Vec2f((x1 + (x2 - x1) * 0.5).toFloat(), (y1 + (y2 - y1) * 0.5).toFloat())
             val mouseDir = mousePos.add(middle.multiply(-1.0f)).normalize() // large subtraction
@@ -70,7 +73,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         matrices?.translate(0.0, (getPickerHeight() - 5) / 2.0, 0.0)
         matrices?.scale(0.5f, 0.5f, 1.0f)
         matrices?.translate(0.0, -(getPickerHeight() - 5) / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0f, ((getPickerHeight() - 5) / 2.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f).toFloat(), Color.white.rgb)
+        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0f, ((getPickerHeight() - 5) / 2.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f).toFloat(), white.rgb)
         matrices?.pop()
 
         val matrix4f = matrices?.peek()?.positionMatrix!!
@@ -80,22 +83,30 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
 
         val nextHue = if (valueColor.locked) TarasandeMain.get().clientValues.accentColor.hue else valueColor.hue
-        val hsb = Color.getHSBColor(nextHue, 1.0f, 1.0f)
+        val hsb = Color.getHSBColor(nextHue, 1.0f, 1.0f).let { if (valueColor.isEnabled()) it else it.darker().darker() }
         fill(matrices, x1, y1, x2, y2, hsb.rgb)
-        fillHorizontalGradient(matrices, x1, y1, x2, y2, Color.white.let { Color(it.red, it.green, it.blue, 0) }.rgb, Color.white.rgb)
-        fillVerticalGradient(matrices, x1, y1, x2, y2, Color.black.let { Color(it.red, it.green, it.blue, 0) }.rgb, Color.black.rgb)
+        fillHorizontalGradient(matrices, x1, y1, x2, y2, Color.white.let { Color(it.red, it.green, it.blue, 0) }.rgb, unblockedWhite.rgb)
+        fillVerticalGradient(matrices, x1, y1, x2, y2, Color.black.let { Color(it.red, it.green, it.blue, 0) }.rgb, Color.black.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
 
-        if (!this.isAccent() && valueColor.locked) {
+        if (!isAccent()) {
             matrices.push()
-            matrices.scale(0.5F, 0.5F, 1.0F)
-            val string = "Lock to accent color"
+            matrices.scale(0.5f, 0.5f, 0.5f)
 
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, string, x1.toFloat() * 2F - (MinecraftClient.getInstance().textRenderer.getWidth(string) / 4.0F), (y2.toFloat() + MinecraftClient.getInstance().textRenderer.fontHeight + 4) * 2, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
+            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices,
+                lockToAccentColorText,
+                (width * 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(lockToAccentColorText)).toFloat(),
+                getPickerHeight().toFloat() * 2.0f,
+                (if (!valueColor.locked)
+                    white
+                else if (valueColor.isEnabled())
+                    TarasandeMain.get().clientValues.accentColor.getColor()
+                else
+                    TarasandeMain.get().clientValues.accentColor.getColor().darker().darker()).rgb)
             matrices.pop()
         }
 
-        outlinedFill(matrices, x1, y1, x2, y2, 2.0f, Color.white.rgb)
-        outlinedCircle(matrices, x1 + (x2 - x1) * valueColor.sat, y1 + (y2 - y1) * (1.0 - valueColor.bri), 2.0, 2.0f, Color.white.rgb)
+        outlinedFill(matrices, x1, y1, x2, y2, 2.0f, unblockedWhite.rgb)
+        outlinedCircle(matrices, x1 + (x2 - x1) * valueColor.sat, y1 + (y2 - y1) * (1.0 - valueColor.bri), 2.0, 2.0f, unblockedWhite.rgb)
         fillCircle(matrices, x1 + (x2 - x1) * valueColor.sat, y1 + (y2 - y1) * (1.0 - valueColor.bri), 2.0, Color.getHSBColor(nextHue, valueColor.sat, valueColor.bri).let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
         outlinedCircle(matrices, width - (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0 - 5, 2.0f, white.rgb)
         outlinedCircle(matrices, width - (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0, 2.0f, white.rgb)
@@ -126,32 +137,23 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         fillCircle(matrices, this.width - (getPickerHeight() - 5) / 2.0 - sin((valueColor.hue + 0.5f) * PI * 2) * middleRadius, (getPickerHeight() - 5) / 2.0 + cos((valueColor.hue + 0.5f) * PI * 2) * middleRadius, width / 2.0, Color.getHSBColor(valueColor.hue, 1.0f, 1.0f).let { if (valueColor.isEnabled() && !valueColor.locked) it else it.darker().darker() }.rgb)
         if (valueColor.alpha != null) {
             val alpha = valueColor.alpha!!
-            fillVerticalGradient(matrices, this.width - (getPickerHeight() - 5) - 10, 0.0, this.width - (getPickerHeight() - 5) - 5, getPickerHeight() - 5, white.rgb, Color.black.rgb)
-            outlinedFill(matrices, this.width - (getPickerHeight() - 5) - 10, 0.0, this.width - (getPickerHeight() - 5) - 5, getPickerHeight() - 5, 2.0f, white.rgb)
-            fillCircle(matrices, this.width - (getPickerHeight() - 5) - 7.5, (getPickerHeight() - 5) * (1.0 - alpha) + (alpha * 2 - 1) * 2.5, 2.5, Color(alpha, alpha, alpha).let { if (valueColor.isEnabled() && !valueColor.locked) it else it.darker().darker() }.rgb)
-            outlinedCircle(matrices, this.width - (getPickerHeight() - 5) - 7.5, (getPickerHeight() - 5) * (1.0 - alpha) + (alpha * 2 - 1) * 2.5, 2.5, 2.0f, white.rgb)
+            fillVerticalGradient(matrices, this.width - (getPickerHeight() - 5) - 10, 0.0, this.width - (getPickerHeight() - 5) - 5, getPickerHeight() - 5, unblockedWhite.rgb, Color.black.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+            outlinedFill(matrices, this.width - (getPickerHeight() - 5) - 10, 0.0, this.width - (getPickerHeight() - 5) - 5, getPickerHeight() - 5, 2.0f, unblockedWhite.rgb)
+            fillCircle(matrices, this.width - (getPickerHeight() - 5) - 7.5, (getPickerHeight() - 5) * (1.0 - alpha) + (alpha * 2 - 1) * 2.5, 2.5, Color(alpha, alpha, alpha).let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+            outlinedCircle(matrices, this.width - (getPickerHeight() - 5) - 7.5, (getPickerHeight() - 5) * (1.0 - alpha) + (alpha * 2 - 1) * 2.5, 2.5, 2.0f, unblockedWhite.rgb)
         }
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (!isHovered(mouseX, mouseY, 0.0, 0.0, width, getHeight())) return false
 
-        if (button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE && !this.isAccent()) {
-            (value as ValueColor).locked = !value.locked
-            return true
-        }
-        if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT && !this.isAccent()) {
-            val accent = TarasandeMain.get().clientValues.accentColor
+        val valueColor = value as ValueColor
 
-            (value as ValueColor).hue = accent.hue
-            value.bri = accent.bri
-            value.sat = accent.sat
-            return true
-        }
-        if ((value as ValueColor).alpha != -1.0f && isHovered(mouseX, mouseY, width - (getPickerHeight() - 5) - 10, 0.0, width - (getPickerHeight() - 5) - 5, getPickerHeight() - 5)) {
+        if (valueColor.alpha != -1.0f && isHovered(mouseX, mouseY, width - (getPickerHeight() - 5) - 10, 0.0, width - (getPickerHeight() - 5) - 5, getPickerHeight() - 5)) {
             alphaDragInfo.setDragInfo(true, mouseX, mouseY)
             return true
         }
+
         val x1 = width - (getPickerHeight() - 5) / 2.0 - sin(0.75) * ((getPickerHeight() - 5) / 2.0 - 5)
         val y1 = (getPickerHeight() - 5) / 2.0 - sin(0.75) * ((getPickerHeight() - 5) / 2.0 - 5)
         val x2 = width - (getPickerHeight() - 5) / 2.0 + cos(0.75) * ((getPickerHeight() - 5) / 2.0 - 5)
@@ -160,20 +162,36 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
             rectDragInfo.setDragInfo(true, mouseX, mouseY)
             return true
         }
-        val innerRadius = (getPickerHeight() - 5) / 2.0 - 5
-        val outerRadius = (getPickerHeight() - 5) / 2.0
-        if (Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(Vec2f((x1 + (x2 - x1) * 0.5).toFloat(), (y1 + (y2 - y1) * 0.5).toFloat())) in (innerRadius * innerRadius)..(outerRadius * outerRadius) && !value.locked) {
-            val valueColor = value
-            if (System.currentTimeMillis() - lastWheelClick < 250L) {
-                valueColor.rainbow = !valueColor.rainbow
-            } else {
-                valueColor.rainbow = false
+
+        if (!valueColor.locked) {
+            val innerRadius = (getPickerHeight() - 5) / 2.0 - 5
+            val outerRadius = (getPickerHeight() - 5) / 2.0
+            if (Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(Vec2f((x1 + (x2 - x1) * 0.5).toFloat(), (y1 + (y2 - y1) * 0.5).toFloat())) in (innerRadius * innerRadius)..(outerRadius * outerRadius) && !valueColor.locked) {
+                if (System.currentTimeMillis() - lastWheelClick < 250L) {
+                    valueColor.rainbow = !valueColor.rainbow
+                } else {
+                    valueColor.rainbow = false
+                }
+                wheelDragInfo.setDragInfo(true, mouseX, mouseY)
+                lastWheelClick = System.currentTimeMillis()
+                return true
             }
-            wheelDragInfo.setDragInfo(true, mouseX, mouseY)
-            lastWheelClick = System.currentTimeMillis()
-            return true
         }
-        return false
+
+        if (!this.isAccent() && isHovered(mouseX, mouseY, width - MinecraftClient.getInstance().textRenderer.getWidth(lockToAccentColorText) / 2.0f, getPickerHeight(), width, getPickerHeight() + MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f)) {
+            if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+                val accent = TarasandeMain.get().clientValues.accentColor
+
+                valueColor.hue = accent.hue
+                valueColor.bri = accent.bri
+                valueColor.sat = accent.sat
+                return true
+            } else {
+                valueColor.locked = !valueColor.locked
+            }
+        }
+
+        return true
     }
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int) {
@@ -199,5 +217,5 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
     }
 
     private fun getPickerHeight() = 55.0
-    override fun getHeight() = getPickerHeight() + (if ((this.value as ValueColor).locked) MinecraftClient.getInstance().textRenderer.fontHeight / 2 else 0)
+    override fun getHeight() = getPickerHeight() + if (!isAccent()) MinecraftClient.getInstance().textRenderer.fontHeight else 0
 }

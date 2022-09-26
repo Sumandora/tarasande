@@ -39,11 +39,11 @@ open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var 
         jsonArray.add(hue)
         jsonArray.add(sat)
         jsonArray.add(bri)
+        jsonArray.add(rainbow)
+        jsonArray.add(locked)
         if (alpha != null) {
             jsonArray.add(alpha)
         }
-        jsonArray.add(rainbow)
-        jsonArray.add(locked)
         return jsonArray
     }
 
@@ -52,13 +52,10 @@ open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var 
         hue = jsonArray[0].asFloat
         sat = jsonArray[1].asFloat
         bri = jsonArray[2].asFloat
+        rainbow = jsonArray[3].asBoolean
+        locked = jsonArray[4].asBoolean
         if (alpha != null) {
-            alpha = jsonArray[3].asFloat
-            rainbow = jsonArray[4].asBoolean
-            locked = jsonArray[5].asBoolean
-        } else {
-            rainbow = jsonArray[3].asBoolean
-            locked = jsonArray[4].asBoolean
+            alpha = jsonArray[5].asFloat
         }
     }
 }
