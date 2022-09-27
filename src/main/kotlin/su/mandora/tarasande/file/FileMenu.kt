@@ -34,11 +34,11 @@ class FileMenu : File("Menu") {
 
                 panel.panelWidth = max(jsonArray2.get(2).asDouble, panel.minWidth)
                 if (panel.maxWidth != null)
-                    panel.panelWidth = min(jsonArray2.get(2).asDouble, panel.maxWidth)
+                    panel.panelWidth = min(panel.panelWidth, panel.maxWidth)
 
                 panel.panelHeight = max(jsonArray2.get(3).asDouble, panel.minHeight)
                 if (panel.maxHeight != null)
-                    panel.panelHeight = min(jsonArray2.get(3).asDouble, panel.maxHeight)
+                    panel.panelHeight = min(panel.panelHeight, panel.maxHeight)
 
                 panel.opened = jsonArray2.get(4).asBoolean
             }
