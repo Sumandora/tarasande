@@ -15,6 +15,7 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.base.screen.menu.graph.ManagerGraph
 import su.mandora.tarasande.base.screen.menu.information.ManagerInformation
 import su.mandora.tarasande.base.screen.menu.valuecomponent.ManagerValueComponent
+import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.screen.menu.panel.Panel
 import su.mandora.tarasande.screen.menu.panel.impl.elements.impl.category.PanelCategory
 import su.mandora.tarasande.screen.menu.panel.impl.elements.impl.clientvalues.PanelClientValues
@@ -27,7 +28,25 @@ import java.awt.Color
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.round
 
-class ScreenMenu : Screen(Text.of("Menu")) {
+class ScreenCheatMenuHandler {
+
+    private val screenCheatMenu = ScreenCheatMenu()
+
+    fun get(): ScreenCheatMenu {
+        return screenCheatMenu
+    }
+
+    init {
+        TarasandeMain.get().managerEvent.add { event ->
+            if (event is EventUpdate)
+                if (event.state == EventUpdate.State.PRE)
+                    if (TarasandeMain.get().clientValues.menuHotkey.wasPressed().let { it > 0 && it % 2 != 0 })
+                        MinecraftClient.getInstance().setScreen(get())
+        }
+    }
+}
+
+class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
     val panels = CopyOnWriteArrayList<Panel>()
     private var screenChangeTime = System.currentTimeMillis()

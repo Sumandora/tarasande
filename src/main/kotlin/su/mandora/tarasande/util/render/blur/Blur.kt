@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL20
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.event.EventRender2D
 import su.mandora.tarasande.event.EventScreenRender
-import su.mandora.tarasande.screen.menu.ScreenMenu
+import su.mandora.tarasande.screen.menu.ScreenCheatMenu
 import su.mandora.tarasande.util.render.framebuffer.FramebufferWrapped
 import su.mandora.tarasande.util.render.shader.Program
 import su.mandora.tarasande.util.render.shader.Shader
@@ -56,7 +56,7 @@ class Blur {
         TarasandeMain.get().managerEvent.add { event ->
             when (event) {
                 is EventScreenRender -> {
-                    if (MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenMenu)
+                    if (MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenCheatMenu)
                         blurScene()
                 }
 

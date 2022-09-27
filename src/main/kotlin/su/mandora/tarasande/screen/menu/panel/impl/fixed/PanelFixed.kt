@@ -17,7 +17,7 @@ open class PanelFixed(title: String, x: Double, y: Double, width: Double, height
             when (event) {
                 is EventRender2D -> {
                     if (isVisible() && opened) {
-                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screens.screenMenu) {
+                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screenCheatMenuHandler.get()) {
                             event.matrices.push()
                             render(event.matrices, -1, -1, MinecraftClient.getInstance().tickDelta)
                             event.matrices.pop()
@@ -27,7 +27,7 @@ open class PanelFixed(title: String, x: Double, y: Double, width: Double, height
 
                 is EventTick -> {
                     if (event.state == EventTick.State.PRE) {
-                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screens.screenMenu) {
+                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screenCheatMenuHandler.get()) {
                             tick()
                         }
                     }

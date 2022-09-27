@@ -1,5 +1,6 @@
 package su.mandora.tarasande.mixin.mixins.connection;
 
+import de.florianmichael.tarasande.menu.ElementMenuScreenAccountManager;
 import de.florianmichael.tarasande.screen.menu.graph.NettyStatsAdapter;
 import io.netty.channel.Channel;
 import io.netty.handler.proxy.HttpProxyHandler;
@@ -22,7 +23,7 @@ public class MixinClientConnectionInitChannel {
 
     @Inject(method = "initChannel", at = @At("TAIL"))
     public void injectPostInitChannel(Channel channel, CallbackInfo ci) {
-        Proxy proxy = TarasandeMain.Companion.get().getScreens().getScreenBetterAccountManager().getProxy();
+        Proxy proxy = ElementMenuScreenAccountManager.Companion.getScreenBetterAccountManager().getProxy();
         if (proxy != null) {
             switch (proxy.getType()) {
                 case HTTP -> channel.pipeline().addFirst("http-proxy-handler",

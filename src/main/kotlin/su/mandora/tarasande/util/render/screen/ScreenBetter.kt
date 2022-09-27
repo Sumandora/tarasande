@@ -10,6 +10,14 @@ open class ScreenBetter(private val prevScreen: Screen?) : Screen(Text.of("")) {
         client!!.setScreen(prevScreen)
     }
 
+    fun halfWidth(): Int {
+        return this.width / 2
+    }
+
+    fun halfHeight(): Int {
+        return this.height / 2
+    }
+
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         renderBackground(matrices)
         super.render(matrices, mouseX, mouseY, delta)

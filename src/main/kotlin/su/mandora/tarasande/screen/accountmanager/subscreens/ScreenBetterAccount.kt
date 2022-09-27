@@ -2,6 +2,7 @@ package su.mandora.tarasande.screen.accountmanager.subscreens
 
 import com.mojang.authlib.Environment
 import com.mojang.authlib.yggdrasil.YggdrasilEnvironment
+import de.florianmichael.tarasande.menu.ElementMenuScreenAccountManager
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
@@ -28,8 +29,7 @@ class ScreenBetterAccount(
 ) : ScreenBetter(prevScreen) {
 
     private val textFields: ArrayList<TextFieldWidget> = ArrayList()
-    private var implementationClass: Class<out Account> =
-        TarasandeMain.get().screens.screenBetterAccountManager.managerAccount.list[0]
+    private var implementationClass: Class<out Account> = ElementMenuScreenAccountManager.screenBetterAccountManager.managerAccount.list[0]
 
     private var environment: Environment? = null
 
@@ -54,9 +54,9 @@ class ScreenBetterAccount(
                 Text.of((implementationClass.annotations[0] as AccountInfo).name)
             ) { button ->
                 implementationClass =
-                    TarasandeMain.get().screens.screenBetterAccountManager.managerAccount.list[(TarasandeMain.get().screens.screenBetterAccountManager.managerAccount.list.indexOf(
+                    ElementMenuScreenAccountManager.screenBetterAccountManager.managerAccount.list[(ElementMenuScreenAccountManager.screenBetterAccountManager.managerAccount.list.indexOf(
                         implementationClass
-                    ) + 1) % TarasandeMain.get().screens.screenBetterAccountManager.managerAccount.list.size]
+                    ) + 1) % ElementMenuScreenAccountManager.screenBetterAccountManager.managerAccount.list.size]
                 init()
                 button.message = Text.of(implementationClass.name)
             })

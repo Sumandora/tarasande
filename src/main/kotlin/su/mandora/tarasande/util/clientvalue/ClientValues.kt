@@ -1,5 +1,6 @@
 package su.mandora.tarasande.util.clientvalue
 
+import de.florianmichael.tarasande.base.menu.ElementMenuScreen
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.value.*
@@ -35,5 +36,12 @@ class ClientValues {
     }
     val hypixelApiKey = ValueText(this, "Hypixel API Key", "")
     val menuAnimationLength = ValueNumber(this, "Menu animation length", 0.0, 100.0, 500.0, 1.0)
+    var focusedMenuEntry: ValueMode? = null
 
+    init {
+        val entries = mutableListOf("None")
+        entries.addAll(TarasandeMain.get().managerMenu.list.filterIsInstance<ElementMenuScreen>().map { e -> e.name })
+
+        focusedMenuEntry = ValueMode(this, "Focused menu entry", false, *entries.toTypedArray())
+    }
 }

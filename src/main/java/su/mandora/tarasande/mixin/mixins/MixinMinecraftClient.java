@@ -3,6 +3,7 @@ package su.mandora.tarasande.mixin.mixins;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.minecraft.UserApiService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+import de.florianmichael.tarasande.menu.ElementMenuScreenAccountManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -98,7 +99,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
         TarasandeMain.Companion.get().onPreLoad();
     }
 
-    @Inject(method = "<init>", at = @At("TAIL"))
+    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setOverlay(Lnet/minecraft/client/gui/screen/Overlay;)V", shift = At.Shift.AFTER))
     public void injectPostInit(RunArgs args, CallbackInfo ci) {
         TarasandeMain.Companion.get().onLateLoad();
     }
@@ -171,7 +172,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
 
     @Inject(method = "getSessionService", at = @At("RETURN"), cancellable = true)
     public void injectGetSessionService(CallbackInfoReturnable<MinecraftSessionService> cir) {
-        Account account = TarasandeMain.Companion.get().getScreens().getScreenBetterAccountManager().getCurrentAccount();
+        Account account = ElementMenuScreenAccountManager.Companion.getScreenBetterAccountManager().getCurrentAccount();
         if (account != null && account.getSessionService() != null) {
             cir.setReturnValue(account.getSessionService());
         }

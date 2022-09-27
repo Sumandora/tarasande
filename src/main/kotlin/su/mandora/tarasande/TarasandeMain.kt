@@ -2,6 +2,9 @@ package su.mandora.tarasande
 
 import com.google.gson.GsonBuilder
 import de.enzaxd.viaforge.ViaForge
+import de.florianmichael.tarasande.base.menu.ManagerMenu
+import de.florianmichael.tarasande.menu.ElementMenuScreenAccountManager
+import de.florianmichael.tarasande.screen.ScreenBetterClientMenuHandler
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
@@ -12,7 +15,7 @@ import su.mandora.tarasande.base.file.ManagerFile
 import su.mandora.tarasande.base.module.ManagerModule
 import su.mandora.tarasande.base.util.player.clickspeed.ManagerClickMethod
 import su.mandora.tarasande.base.value.ManagerValue
-import su.mandora.tarasande.screen.Screens
+import su.mandora.tarasande.screen.menu.ScreenCheatMenuHandler
 import su.mandora.tarasande.util.clientvalue.ClientValues
 import su.mandora.tarasande.util.player.entitycolor.EntityColor
 import su.mandora.tarasande.util.player.friends.Friends
@@ -39,11 +42,15 @@ class TarasandeMain {
         private set
     lateinit var blur: Blur
         private set
-    lateinit var screens: Screens
+    lateinit var screenCheatMenuHandler: ScreenCheatMenuHandler
+        private set
+    lateinit var screenBetterClientMenuHandler: ScreenBetterClientMenuHandler
         private set
     lateinit var friends: Friends
         private set
     lateinit var managerESP: ManagerESP
+        private set
+    lateinit var managerMenu: ManagerMenu
         private set
 
     val logger = LoggerFactory.getLogger(name)!!
@@ -77,24 +84,30 @@ class TarasandeMain {
     fun onLateLoad() {
         managerFile = ManagerFile()
         managerValue = ManagerValue()
+        managerMenu = ManagerMenu()
         clientValues = ClientValues()
         entityColor = EntityColor()
         managerClickMethod = ManagerClickMethod()
         managerModule = ManagerModule()
         managerESP = ManagerESP()
         blur = Blur()
-        screens = Screens() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
+        screenCheatMenuHandler = ScreenCheatMenuHandler() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
+        screenBetterClientMenuHandler = ScreenBetterClientMenuHandler()
         friends = Friends()
 
         protocolHack = ViaForge()
 
         managerFile.load()
 
-        if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && screens.screenBetterAccountManager.mainAccount != null) {
-            screens.screenBetterAccountManager.logIn(screens.screenBetterAccountManager.accounts[screens.screenBetterAccountManager.mainAccount!!])
-            while (screens.screenBetterAccountManager.loginThread != null && screens.screenBetterAccountManager.loginThread!!.isAlive)
+        val accountManager = ElementMenuScreenAccountManager.screenBetterAccountManager
+
+        if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && accountManager.mainAccount != null) {
+            accountManager.logIn(accountManager.accounts[accountManager.mainAccount!!])
+
+            while (accountManager.loginThread != null && accountManager.loginThread!!.isAlive)
                 Thread.sleep(50L) // synchronize
-            screens.screenBetterAccountManager.status = null
+
+            accountManager.status = null
         }
 
         autoSaveDaemon.start()

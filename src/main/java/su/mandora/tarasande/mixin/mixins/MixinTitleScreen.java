@@ -1,5 +1,6 @@
 package su.mandora.tarasande.mixin.mixins;
 
+import de.florianmichael.tarasande.screen.ScreenBetterClientMenu;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -43,7 +44,9 @@ public class MixinTitleScreen extends Screen {
         if (drawableElement instanceof ButtonWidget buttonWidget) {
             if ((buttonWidget.getMessage().getContent() instanceof TranslatableTextContent && ((TranslatableTextContent) buttonWidget.getMessage().getContent()).getKey().equals("menu.online")) || buttonWidget.getMessage().getString().contains("Realms")) {
                 buttonWidget.setWidth(buttonWidget.getWidth() / 2 - 2);
-                addDrawableChild(new ButtonWidget(buttonWidget.x + buttonWidget.getWidth() + 4, buttonWidget.y, buttonWidget.getWidth(), buttonWidget.getHeight(), Text.of("Account Manager"), button -> client.setScreen(TarasandeMain.Companion.get().getScreens().getScreenBetterAccountManager())));
+
+                var screenHandler = TarasandeMain.Companion.get().getScreenBetterClientMenuHandler();
+                addDrawableChild(new ButtonWidget(buttonWidget.x + buttonWidget.getWidth() + 4, buttonWidget.y, buttonWidget.getWidth(), buttonWidget.getHeight(), screenHandler.buttonText(), button -> screenHandler.doAction(this)));
             }
         }
         return addDrawableChild(drawableElement);

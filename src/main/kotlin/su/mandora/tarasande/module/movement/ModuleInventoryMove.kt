@@ -12,7 +12,7 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.EventPacket
 import su.mandora.tarasande.mixin.accessor.IKeyBinding
-import su.mandora.tarasande.screen.menu.ScreenMenu
+import su.mandora.tarasande.screen.menu.ScreenCheatMenu
 import su.mandora.tarasande.screen.menu.valuecomponent.ValueComponentRegistry
 import su.mandora.tarasande.screen.menu.valuecomponent.ValueComponentText
 import su.mandora.tarasande.util.player.PlayerUtil
@@ -49,7 +49,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
     }
 
     private fun isTextboxFocused(): Boolean {
-        return TarasandeMain.get().screens.screenMenu.managerValueComponent.instances.any {
+        return TarasandeMain.get().screenCheatMenuHandler.get().managerValueComponent.instances.any {
             when (it) {
                 is ValueComponentText -> it.isFocused()
                 is ValueComponentRegistry -> it.isFocused()
@@ -59,6 +59,6 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
     }
 
     private fun isPassingEvents(): Boolean {
-        return (enabled && (mc.currentScreen is HandledScreen<*> || (mc.currentScreen is ScreenMenu && !isTextboxFocused()))) || (mc.currentScreen == null || mc.currentScreen?.passEvents!!)
+        return (enabled && (mc.currentScreen is HandledScreen<*> || (mc.currentScreen is ScreenCheatMenu && !isTextboxFocused()))) || (mc.currentScreen == null || mc.currentScreen?.passEvents!!)
     }
 }

@@ -3,6 +3,7 @@ package su.mandora.tarasande.screen.accountmanager.subscreens
 import com.mojang.authlib.Environment
 import com.mojang.authlib.yggdrasil.YggdrasilEnvironment
 import com.mojang.blaze3d.systems.RenderSystem
+import de.florianmichael.tarasande.menu.ElementMenuScreenAccountManager
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
@@ -44,7 +45,7 @@ class ScreenBetterEnvironment(prevScreen: Screen?, private val environment: Envi
             addDrawableChild(it)
         }
 
-        for ((index, environmentPreset) in TarasandeMain.get().screens.screenBetterAccountManager.managerEnvironment.list.withIndex()) {
+        for ((index, environmentPreset) in ElementMenuScreenAccountManager.screenBetterAccountManager.managerEnvironment.list.withIndex()) {
             this.addDrawableChild(ButtonWidget(this.width - 100 * (index + 1), 0, 100, 20, Text.of(environmentPreset.name)) {
                 authHostTextField?.text = environmentPreset.authHost
                 accountsHostTextField?.text = environmentPreset.accountsHost

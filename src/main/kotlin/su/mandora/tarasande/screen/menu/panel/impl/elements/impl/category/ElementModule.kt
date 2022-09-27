@@ -28,7 +28,7 @@ class ElementModule(private val module: Module, width: Double) : Element(width) 
     override fun init() {
         if (components.isEmpty()) {
             for (value in TarasandeMain.get().managerValue.getValues(module)) {
-                components.add(TarasandeMain.get().screens.screenMenu.managerValueComponent.newInstance(value)!!)
+                components.add(TarasandeMain.get().screenCheatMenuHandler.get().managerValueComponent.newInstance(value)!!)
             }
         }
         components.forEach(ValueComponent::init)
