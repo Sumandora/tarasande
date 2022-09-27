@@ -10,7 +10,7 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.util.render.RenderUtil
 import java.awt.Color
 
-class ClickableWidgetPanel(val panel: UnmodifiablePanel) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelWidth.toInt(), Text.of(panel.title)), Element {
+class ClickableWidgetPanel(val panel: PanelUnmodifiable) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelWidth.toInt(), Text.of(panel.title)), Element {
 
     override fun appendNarrations(builder: NarrationMessageBuilder?) {
     }
