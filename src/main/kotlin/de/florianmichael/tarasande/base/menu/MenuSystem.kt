@@ -1,6 +1,8 @@
 package de.florianmichael.tarasande.base.menu
 
 import de.florianmichael.tarasande.menu.ElementMenuScreenAccountManager
+import de.florianmichael.tarasande.menu.ElementMenuScreenProtocolHack
+import de.florianmichael.tarasande.menu.ElementMenuScreenProxySystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
@@ -12,7 +14,9 @@ class ManagerMenu : Manager<ElementMenu>() {
 
     init {
         add(
-            ElementMenuScreenAccountManager()
+            ElementMenuScreenAccountManager(),
+            ElementMenuScreenProxySystem(),
+            ElementMenuScreenProtocolHack()
         )
     }
 

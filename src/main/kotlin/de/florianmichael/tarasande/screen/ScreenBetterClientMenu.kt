@@ -29,13 +29,17 @@ class ScreenBetterClientMenuHandler {
 
 class ScreenBetterClientMenu(parent: Screen) : ScreenBetter(parent) {
 
-    private val buttonWidth = 300
+    private val buttonWidth = 200
     private val buttonHeight = 20
     private val spacer = 4
 
     override fun init() {
         super.init()
         val startX = this.halfWidth() - (buttonWidth / 2)
+
+        this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.literal("<-")) {
+            close()
+        })
 
         TarasandeMain.get().managerMenu.list.forEachIndexed { index, menu ->
             this.addDrawableChild(ButtonWidget(startX, 50 + (index * (buttonHeight + spacer)), buttonWidth, buttonHeight, Text.literal(menu.name)) {

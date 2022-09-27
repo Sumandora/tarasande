@@ -23,7 +23,7 @@ public class MixinClientConnectionInitChannel {
 
     @Inject(method = "initChannel", at = @At("TAIL"))
     public void injectPostInitChannel(Channel channel, CallbackInfo ci) {
-        Proxy proxy = ElementMenuScreenAccountManager.Companion.getScreenBetterAccountManager().getProxy();
+        Proxy proxy = TarasandeMain.Companion.get().getManagerMenu().get(ElementMenuScreenAccountManager.class).getScreenBetterAccountManager().getProxy();
         if (proxy != null) {
             switch (proxy.getType()) {
                 case HTTP -> channel.pipeline().addFirst("http-proxy-handler",

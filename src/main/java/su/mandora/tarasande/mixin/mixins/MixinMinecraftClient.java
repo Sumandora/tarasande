@@ -172,7 +172,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
 
     @Inject(method = "getSessionService", at = @At("RETURN"), cancellable = true)
     public void injectGetSessionService(CallbackInfoReturnable<MinecraftSessionService> cir) {
-        Account account = ElementMenuScreenAccountManager.Companion.getScreenBetterAccountManager().getCurrentAccount();
+        Account account = TarasandeMain.Companion.get().getManagerMenu().get(ElementMenuScreenAccountManager.class).getScreenBetterAccountManager().getCurrentAccount();
         if (account != null && account.getSessionService() != null) {
             cir.setReturnValue(account.getSessionService());
         }

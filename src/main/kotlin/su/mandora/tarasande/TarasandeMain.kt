@@ -99,7 +99,7 @@ class TarasandeMain {
 
         managerFile.load()
 
-        val accountManager = ElementMenuScreenAccountManager.screenBetterAccountManager
+        val accountManager = managerMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager
 
         if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && accountManager.mainAccount != null) {
             accountManager.logIn(accountManager.accounts[accountManager.mainAccount!!])

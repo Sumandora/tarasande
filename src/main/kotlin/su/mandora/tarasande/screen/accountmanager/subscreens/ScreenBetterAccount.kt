@@ -21,7 +21,6 @@ import java.awt.Color
 import java.lang.reflect.Constructor
 import java.util.function.Consumer
 
-
 class ScreenBetterAccount(
     prevScreen: Screen,
     val name: String,
@@ -29,7 +28,7 @@ class ScreenBetterAccount(
 ) : ScreenBetter(prevScreen) {
 
     private val textFields: ArrayList<TextFieldWidget> = ArrayList()
-    private var implementationClass: Class<out Account> = ElementMenuScreenAccountManager.screenBetterAccountManager.managerAccount.list[0]
+    private var implementationClass: Class<out Account> = TarasandeMain.get().managerMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAccount.list[0]
 
     private var environment: Environment? = null
 
@@ -53,10 +52,9 @@ class ScreenBetterAccount(
                 20,
                 Text.of((implementationClass.annotations[0] as AccountInfo).name)
             ) { button ->
-                implementationClass =
-                    ElementMenuScreenAccountManager.screenBetterAccountManager.managerAccount.list[(ElementMenuScreenAccountManager.screenBetterAccountManager.managerAccount.list.indexOf(
-                        implementationClass
-                    ) + 1) % ElementMenuScreenAccountManager.screenBetterAccountManager.managerAccount.list.size]
+                val accountManager = TarasandeMain.get().managerMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager
+
+                implementationClass = accountManager.managerAccount.list[(accountManager.managerAccount.list.indexOf(implementationClass) + 1) % accountManager.managerAccount.list.size]
                 init()
                 button.message = Text.of(implementationClass.name)
             })
