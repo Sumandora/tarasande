@@ -60,6 +60,7 @@
 - Target strafe: Anti Void
 - Account manager: Add skins in selection
 - AirJump/-Walk
+- More Modularity by removing unnecessary TarasandeMain#get() calls
 
 ### TODO-List (Click GUI)
 - Correctly save and calculate the positions of the panels when resizing ingame
