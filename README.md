@@ -61,5 +61,11 @@
 - Account manager: Add skins in selection
 - AirJump/-Walk
 
+### TODO-List (Click GUI)
+- Correctly save and calculate the positions of the panels when resizing ingame
+- Make block picker more beautiful with icons
+- Make text inputs more beautiful with background
+- Scaling for the whole GUI, so you can scale it for your MC Gui a
+
 ## Notes
 - AutoTool: Axes can set shields on cooldown. Maybe implement that if possible axes are being used to set shields on cooldown before actually attacking with sword
