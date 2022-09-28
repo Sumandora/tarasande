@@ -27,7 +27,7 @@ open class ScreenBetterSlotList(parent: Screen, private val top: Int, private va
     override fun init() {
         super.init()
 
-        this.addDrawableChild(ScreenBetterSlotListWidget(client!!, this.listProvider, width, height, top, height - bottom, entryHeight).also { this.slotList = it })
+        this.addDrawableChild(ScreenBetterSlotListWidget(client!!, this.listProvider, width, height, top, height - bottom - top, entryHeight).also { this.slotList = it })
     }
 }
 

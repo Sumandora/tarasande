@@ -2,53 +2,44 @@ package de.florianmichael.tarasande.screen
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.enzaxd.viaforge.equals.VersionList
+import de.florianmichael.tarasande.render.RenderUtil
 import de.florianmichael.tarasande.screen.element.ScreenBetterSlotList
 import de.florianmichael.tarasande.screen.element.ScreenBetterSlotListEntry
 import de.florianmichael.tarasande.screen.element.ScreenBetterSlotListWidget
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
+import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.minecraft.text.TextColor
-import net.minecraft.util.Formatting
 import su.mandora.tarasande.TarasandeMain
 import java.awt.Color
 
-class ScreenBetterProtocolHack(parent: Screen) : ScreenBetterSlotList(
-    parent,
-    16,
-    20,
-    object : ScreenBetterSlotListWidget.ListProvider {
+class ScreenBetterProtocolHack(parent: Screen) : ScreenBetterSlotList(parent, 46, 12, object : ScreenBetterSlotListWidget.ListProvider {
 
-        override fun get(): List<ScreenBetterSlotListEntry> {
-            return VersionList.getProtocols().map { p -> ScreenBetterProtocolHack.ProtocolEntry(p) }
-        }
-    }) {
+        override fun get() = VersionList.getProtocols().map { p -> ProtocolEntry(p) }
+}) {
+
+    override fun init() {
+        super.init()
+
+        this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.literal("<-")) {
+            this.close()
+        })
+    }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
 
-        drawCenteredText(matrices, textRenderer, "Protocol Hack", width / 2, 8 - textRenderer.fontHeight / 2, -1)
+        RenderUtil.scale(2F)
+        RenderUtil.textCenter("Protocol Hack", width / 4F, 10F - textRenderer.fontHeight / 4)
+        RenderUtil.endPush()
     }
 
     class ProtocolEntry(val protocol: ProtocolVersion) : ScreenBetterSlotListEntry() {
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            val font = MinecraftClient.getInstance().textRenderer
-            val text = Text.literal(this.protocol.name)
-
-            matrices.push()
-            matrices.scale(2F, 2F, 2F)
-            // @formatting::off
-            font.drawWithShadow(matrices, text.styled {
-                it.withColor(
-                    TextColor.fromFormatting(
-                        if (TarasandeMain.get().protocolHack.version == this.protocol.version)
-                            Formatting.GREEN else Formatting.RED)
-                )
-            }, entryWidth / 2F - (font.getWidth(text.string) / 2F), 0F, Color.white.rgb)
-            // @formatting::on
-            matrices.pop()
+            RenderUtil.useMyStack(matrices)
+            RenderUtil.textCenter(Text.literal(this.protocol.name), entryWidth.toFloat(), 0F, Color.white.rgb)
+            RenderUtil.ourStack()
         }
 
         override fun onClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int): Boolean {

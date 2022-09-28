@@ -9,7 +9,6 @@
     "ClientPlayNetworkHandlerMixin",
     "KeyboardInputMixin",
     "MinecraftClientMixin",
-    "MultiplayerScreenMixin",
     "OtherClientPlayerEntityMixin",
     "PlayerEntityRendererMixin",
     "entity.ClientPlayerEntityMixin"
