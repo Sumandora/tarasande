@@ -7,10 +7,11 @@ import net.minecraft.client.gui.widget.ClickableWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import su.mandora.tarasande.TarasandeMain
+import su.mandora.tarasande.screen.menu.panel.Panel
 import su.mandora.tarasande.util.render.RenderUtil
 import java.awt.Color
 
-class ClickableWidgetPanel(val panel: PanelUnmodifiable) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelWidth.toInt(), Text.of(panel.title)), Element {
+class ClickableWidgetPanel(val panel: Panel) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelWidth.toInt(), Text.of(panel.title)), Element {
 
     override fun appendNarrations(builder: NarrationMessageBuilder?) {
     }
@@ -20,6 +21,7 @@ class ClickableWidgetPanel(val panel: PanelUnmodifiable) : ClickableWidget(panel
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        panel.opened = true
         TarasandeMain.get().blur.bind(true)
         RenderUtil.fill(matrices, panel.x, panel.y, panel.x + panel.panelWidth, panel.y + panel.panelHeight, Color.white.rgb)
         MinecraftClient.getInstance().framebuffer.beginWrite(true)
@@ -27,6 +29,7 @@ class ClickableWidgetPanel(val panel: PanelUnmodifiable) : ClickableWidget(panel
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        panel.modifiable = false
         return panel.mouseClicked(mouseX, mouseY, button)
     }
 

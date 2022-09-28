@@ -23,7 +23,8 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
     private var scrollSpeed = 0.0
 
     protected var alignment: Alignment = Alignment.LEFT
-    var opened = false
+    internal var opened = false
+    internal var modifiable = true
 
     internal val titleBarHeight = MinecraftClient.getInstance().textRenderer.fontHeight
 
@@ -82,6 +83,8 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (!modifiable)
+            return false
         val mouseX = floor(mouseX)
         val mouseY = floor(mouseY)
         if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + (if (opened) panelHeight else titleBarHeight.toDouble()))) {
