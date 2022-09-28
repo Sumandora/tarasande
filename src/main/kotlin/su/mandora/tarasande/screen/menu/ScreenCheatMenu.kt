@@ -54,7 +54,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
     private val managerGraph = ManagerGraph()
 
-    private var image: Identifier? = Identifier(TarasandeMain.get().name, "textures/nanakusa.png")
+    private var image: Identifier? = Identifier(TarasandeMain.get().name, "textures/rimuru.png")
     private val particles = ArrayList<Particle>()
 
     // unused rn
@@ -143,7 +143,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             RenderSystem.enableBlend()
             RenderSystem.defaultBlendFunc()
             RenderSystem.enableDepthTest()
-            val aspect = 1414.0 / 920.0
+            val aspect = 1000.0 / 833.0
             val width = height / aspect
             val height = width / aspect
             DrawableHelper.drawTexture(matrices, (client?.window?.scaledWidth!! - animation * width).toInt(), (client?.window?.scaledHeight!! - height).toInt(), 0, 0.0f, 0.0f, width.toInt(), height.toInt(), width.toInt(), height.toInt())
