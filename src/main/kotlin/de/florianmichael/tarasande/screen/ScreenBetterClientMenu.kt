@@ -9,17 +9,17 @@ import su.mandora.tarasande.util.render.screen.ScreenBetter
 
 class ScreenBetterClientMenuHandler {
 
-    private fun isSomethingSelected() = TarasandeMain.get().clientValues.focusedMenuEntry!!.anySelected() && TarasandeMain.get().clientValues.focusedMenuEntry!!.selected[0] != "None"
+    private fun anySelected() = TarasandeMain.get().clientValues.focusedMenuEntry!!.anySelected() && TarasandeMain.get().clientValues.focusedMenuEntry!!.selected[0] != "None"
 
     fun buttonText(): Text {
-        if (this.isSomethingSelected())
+        if (this.anySelected())
             return Text.literal(TarasandeMain.get().clientValues.focusedMenuEntry!!.selected[0])
 
         return Text.literal("Tarasande Menu")
     }
 
     fun doAction(parent: Screen) {
-        if (this.isSomethingSelected()) {
+        if (this.anySelected()) {
             TarasandeMain.get().managerMenu.byName(TarasandeMain.get().clientValues.focusedMenuEntry!!.selected[0]).onClick()
             return
         }

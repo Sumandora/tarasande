@@ -47,6 +47,7 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
         when (event) {
             is EventPacket -> {
                 if (event.type == EventPacket.Type.RECEIVE) {
+                    if (mc.world == null) return@Consumer
                     when (event.packet) {
                         is PlayerRespawnS2CPacket -> {
                             onDisable() // prevent memory leak
@@ -61,8 +62,6 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
                         }
 
                         is EntityS2CPacket -> {
-                            if (mc.world == null) return@Consumer
-
                             val entity = event.packet.getEntity(mc.world)
                             if (entity is PlayerEntity)
                                 if (!passedGround.contains(entity) && groundMode.isSelected(0) && event.packet.isOnGround || groundMode.isSelected(1) && !event.packet.isOnGround) {

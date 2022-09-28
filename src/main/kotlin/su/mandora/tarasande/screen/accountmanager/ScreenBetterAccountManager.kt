@@ -17,8 +17,6 @@ import su.mandora.tarasande.base.screen.accountmanager.account.ManagerAccount
 import su.mandora.tarasande.base.screen.accountmanager.environment.ManagerEnvironment
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.screen.accountmanager.subscreens.ScreenBetterAccount
-import su.mandora.tarasande.screen.accountmanager.subscreens.ScreenBetterProxy
-import su.mandora.tarasande.util.connection.Proxy
 import su.mandora.tarasande.util.render.screen.ScreenBetter
 import su.mandora.tarasande.util.threading.ThreadRunnableExposed
 import java.awt.Color
@@ -41,8 +39,6 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
     private var setMainButton: ButtonWidget? = null
     private var addButton: ButtonWidget? = null
     private var randomButton: ButtonWidget? = null
-
-    var proxy: Proxy? = null
 
     val managerAccount = ManagerAccount()
     val managerEnvironment = ManagerEnvironment()
@@ -92,12 +88,6 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
             }
         })
 
-        addDrawableChild(ButtonWidget(2, height - 2 - 20, 100, 20, Text.of("Proxy")) {
-            client?.setScreen(ScreenBetterProxy(this, proxy) { proxy ->
-                this.proxy = proxy
-            })
-        })
-
         tick()
         super.init()
     }
@@ -114,14 +104,6 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         drawCenteredText(matrices, textRenderer, if (status == null) "Account Manager" else status, width / 2, 8 - textRenderer.fontHeight / 2, -1)
-        if (proxy != null)
-            textRenderer.drawWithShadow(matrices, "Proxy", 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight * 2 - 2, -1)
-
-        textRenderer.drawWithShadow(matrices, if (proxy == null) {
-            "No Proxy"
-        } else {
-            proxy?.socketAddress?.address?.hostAddress!! + ":" + proxy?.socketAddress?.port!! + " (" + (proxy?.ping ?: "?") + "ms)"
-        }, 4f, height.toFloat() - 2 - 20 - textRenderer.fontHeight, Color.white.rgb)
     }
 
     override fun close() {

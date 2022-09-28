@@ -1,8 +1,6 @@
-package su.mandora.tarasande.screen.accountmanager.subscreens
+package su.mandora.tarasande.screen.proxy
 
 import com.mojang.blaze3d.systems.RenderSystem
-import de.florianmichael.tarasande.menu.ElementMenuScreenAccountManager
-import de.florianmichael.tarasande.menu.accountManagerScreen
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
@@ -18,6 +16,7 @@ import su.mandora.tarasande.util.connection.ProxyAuthentication
 import su.mandora.tarasande.util.connection.ProxyType
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.screen.ScreenBetter
+import su.mandora.tarasande.util.threading.ThreadRunnableExposed
 import java.awt.Color
 import java.io.IOException
 import java.net.InetSocketAddress
@@ -25,13 +24,8 @@ import java.net.Socket
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.nio.channels.IllegalBlockingModeException
-import java.util.function.Consumer
 
-class ScreenBetterProxy(
-    prevScreen: Screen?,
-    private val proxy: Proxy?,
-    private val proxyConsumer: Consumer<Proxy?>,
-) : ScreenBetter(prevScreen) {
+class ScreenBetterProxy(prevScreen: Screen?) : ScreenBetter(prevScreen) {
     private var ipTextField: TextFieldWidget? = null
     private var portTextField: TextFieldWidget? = null
     private var usernameTextField: TextFieldWidget? = null
@@ -44,9 +38,10 @@ class ScreenBetterProxy(
 
     private var status: String? = null
 
-    private var pingThread: Thread? = null
+    private var pingThread: ThreadRunnableExposed? = null
 
     override fun init() {
+        val proxy = TarasandeMain.get().proxy
         addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 - 100, height / 2 - 50 - 15, 143, 20, Text.of("IP-Address")).also {
             ipTextField = it
             it.setMaxLength(Int.MAX_VALUE)
@@ -107,34 +102,10 @@ class ScreenBetterProxy(
                                 else null
                             )
                         else Proxy(inetSocketAddress, proxyType!!)
-                    proxyConsumer.accept(proxy)
-                    if (pingThread != null && pingThread?.isAlive!!) pingThread?.stop() // even more hacky
-                    Thread {
-                        val socket = Socket()
-                        try {
-                            status = Formatting.YELLOW.toString() + "Pinging..."
-                            val beginTime = System.currentTimeMillis()
-                            socket.connect(inetSocketAddress, 5000)
-                            val timeDelta = System.currentTimeMillis() - beginTime
-                            if (accountManagerScreen().proxy == proxy) {
-                                status = RenderUtil.formattingByHex(RenderUtil.colorInterpolate(Color.green, Color.red.darker(), (timeDelta / 1000.0).coerceAtMost(1.0)).rgb).toString() + "Reached proxy in " + timeDelta + "ms"
-                                proxy.ping = timeDelta
-                            }
-                        } catch (throwable: Throwable) {
-                            if (accountManagerScreen().proxy == proxy) {
-                                status = when (throwable) {
-                                    is SocketTimeoutException -> Formatting.RED.toString() + "Timeout reached, unreachable"
-                                    is IOException -> Formatting.RED.toString() + "Failed to reach proxy"
-                                    is IllegalBlockingModeException -> Formatting.RED.toString() + "Illegal blocking method"
-                                    is IllegalArgumentException -> Formatting.RED.toString() + "Invalid IP or port"
-                                    else -> Formatting.RED.toString() + (if (throwable.message != null && throwable.message?.isNotEmpty()!!) throwable.message else "Unknown error")
-                                }
-                            }
-                            throwable.printStackTrace()
-                        } finally {
-                            socket.close()
-                        }
-                    }.also { pingThread = it }.start()
+                    TarasandeMain.get().proxy = proxy
+                    if (pingThread != null && pingThread?.isAlive!!)
+                        (pingThread?.runnable as RunnablePing).cancelled = true
+                    ThreadRunnableExposed(RunnablePing(proxy)).also { pingThread = it }.start()
                 } catch (numberFormatException: NumberFormatException) {
                     status = Formatting.RED.toString() + "Port is not numeric"
                 } catch (unknownHostException: UnknownHostException) {
@@ -150,14 +121,14 @@ class ScreenBetterProxy(
         addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50 + 25, 100, 20, Text.of("Back")) {
             RenderSystem.recordRenderCall {
                 close()
+                if (pingThread != null && pingThread?.isAlive!!)
+                    (pingThread?.runnable as RunnablePing).cancelled = true
             }
         })
 
         addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50 + 25 * 2, 100, 20, Text.of("Disable")) {
-            proxyConsumer.accept(null)
-            RenderSystem.recordRenderCall {
-                close()
-            }
+            TarasandeMain.get().proxy = null
+            status = "Disabled"
         })
 
         tick()
@@ -193,5 +164,38 @@ class ScreenBetterProxy(
             }
         }
         return super.keyPressed(keyCode, scanCode, modifiers)
+    }
+
+    inner class RunnablePing(val proxy: Proxy) : Runnable {
+        var cancelled = false
+
+        override fun run() {
+            val socket = Socket()
+            try {
+                status = Formatting.YELLOW.toString() + "Pinging..."
+                val beginTime = System.currentTimeMillis()
+                socket.connect(proxy.socketAddress, 5000)
+                if (cancelled)
+                    return
+                val timeDelta = System.currentTimeMillis() - beginTime
+                if (TarasandeMain.get().proxy == proxy) {
+                    status = RenderUtil.formattingByHex(RenderUtil.colorInterpolate(Color.green, Color.red.darker(), (timeDelta / 1000.0).coerceAtMost(1.0)).rgb).toString() + "Reached proxy in " + timeDelta + "ms"
+                    proxy.ping = timeDelta
+                }
+            } catch (throwable: Throwable) {
+                if (TarasandeMain.get().proxy == proxy) {
+                    status = when (throwable) {
+                        is SocketTimeoutException -> Formatting.RED.toString() + "Timeout reached, unreachable"
+                        is IOException -> Formatting.RED.toString() + "Failed to reach proxy"
+                        is IllegalBlockingModeException -> Formatting.RED.toString() + "Illegal blocking method"
+                        is IllegalArgumentException -> Formatting.RED.toString() + "Invalid IP or port"
+                        else -> Formatting.RED.toString() + (if (throwable.message != null && throwable.message?.isNotEmpty()!!) throwable.message else "Unknown error")
+                    }
+                }
+                throwable.printStackTrace()
+            } finally {
+                socket.close()
+            }
+        }
     }
 }

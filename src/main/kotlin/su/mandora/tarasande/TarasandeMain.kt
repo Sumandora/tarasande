@@ -17,6 +17,7 @@ import su.mandora.tarasande.base.util.player.clickspeed.ManagerClickMethod
 import su.mandora.tarasande.base.value.ManagerValue
 import su.mandora.tarasande.screen.menu.ScreenCheatMenuHandler
 import su.mandora.tarasande.util.clientvalue.ClientValues
+import su.mandora.tarasande.util.connection.Proxy
 import su.mandora.tarasande.util.player.entitycolor.EntityColor
 import su.mandora.tarasande.util.player.friends.Friends
 import su.mandora.tarasande.util.render.blur.Blur
@@ -68,6 +69,8 @@ class TarasandeMain {
     }, autoSaveDaemonName)
 
     val linux = Util.getOperatingSystem() != Util.OperatingSystem.WINDOWS
+
+    var proxy: Proxy? = null
 
     companion object {
         private val instance: TarasandeMain = TarasandeMain()
