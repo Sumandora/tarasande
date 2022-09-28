@@ -1,12 +1,16 @@
 package de.florianmichael.tarasande.screen.element
 
 import com.google.common.annotations.Beta
+import de.florianmichael.tarasande.util.render.RenderUtil
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
+import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget
+import net.minecraft.client.gui.widget.EntryListWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
+import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.render.screen.ScreenBetter
 
@@ -24,15 +28,32 @@ open class ScreenBetterSlotList(parent: Screen, private val top: Int, private va
             this.slotList?.reload()
     }
 
+    @Beta
+    fun renderTitle(title: String) {
+        RenderUtil.scale(2F)
+        RenderUtil.textCenter(title, width / 4F, 10F - textRenderer.fontHeight / 4)
+        RenderUtil.endPush()
+    }
+
     override fun init() {
         super.init()
+        var lastSelected: ScreenBetterSlotListEntry? = null
+        if (this.slotList != null)
+            lastSelected = this.slotList?.selectedOrNull
 
-        this.addDrawableChild(ScreenBetterSlotListWidget(client!!, this.listProvider, width, height, top, height - bottom - top, entryHeight).also { this.slotList = it })
+        this.addDrawableChild(ScreenBetterSlotListWidget(client!!, this.listProvider, width, height, top, height - bottom - top, entryHeight).also {
+            this.slotList = it
+
+            if (lastSelected != null)
+                this.slotList!!.setSelected(lastSelected)
+            else
+                this.slotList!!.setSelected(this.listProvider.get()[0])
+        })
     }
 }
 
 class ScreenBetterSlotListWidget(minecraft: MinecraftClient, private val listProvider: ListProvider, width: Int, height: Int, top: Int, bottom: Int, entryHeight: Int)
-    : AlwaysSelectedEntryListWidget<ScreenBetterSlotListEntry>(minecraft, width, height, top, bottom, entryHeight) {
+    : EntryListWidget<ScreenBetterSlotListEntry>(minecraft, width, height, top, bottom, entryHeight) {
 
     init {
         this.reload()
@@ -50,12 +71,18 @@ class ScreenBetterSlotListWidget(minecraft: MinecraftClient, private val listPro
     interface ListProvider {
         fun get(): List<ScreenBetterSlotListEntry>
     }
+
+    override fun appendNarrations(builder: NarrationMessageBuilder?) {
+    }
 }
 
-open class ScreenBetterSlotListEntry : AlwaysSelectedEntryListWidget.Entry<ScreenBetterSlotListEntry>() {
-    var parentList: AlwaysSelectedEntryListWidget<ScreenBetterSlotListEntry>? = null
+open class ScreenBetterSlotListEntry : EntryListWidget.Entry<ScreenBetterSlotListEntry>() {
+    var parentList: EntryListWidget<ScreenBetterSlotListEntry>? = null
     private var lastClick = TimeUtil()
 
+    open fun isSelected(): Boolean {
+        return false
+    }
     open fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
     }
 
@@ -77,8 +104,8 @@ open class ScreenBetterSlotListEntry : AlwaysSelectedEntryListWidget.Entry<Scree
         matrices?.push()
         matrices?.translate(x.toDouble(), y.toDouble(), 0.0)
         this.renderEntry(matrices!!, index, entryWidth / 2, entryHeight, mouseX, mouseY, hovered)
+        if (this.isSelected())
+            this.parentList?.setSelected(this)
         matrices.pop()
     }
-
-    override fun getNarration(): MutableText = Text.empty()
 }

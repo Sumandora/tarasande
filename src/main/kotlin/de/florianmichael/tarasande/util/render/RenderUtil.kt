@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande.render
+package de.florianmichael.tarasande.util.render
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.font.TextRenderer
@@ -19,11 +19,11 @@ object RenderUtil {
     }
 
     fun useMyStack(matrices: MatrixStack) {
-        this.globalStack = matrices
+        globalStack = matrices
     }
 
     fun ourStack() {
-        this.globalStack = this.endStack
+        globalStack = endStack
     }
 
     fun text(text: String, x: Float, y: Float) {
@@ -31,7 +31,7 @@ object RenderUtil {
     }
     fun text(text: Text, x: Float, y: Float) = text(text, x, y, -1)
     fun text(text: Text, x: Float, y: Float, color: Int) {
-        font().drawWithShadow(this.globalStack, text, x, y, color)
+        font().drawWithShadow(globalStack, text, x, y, color)
     }
 
     fun textCenter(text: String, x: Float, y: Float) {
@@ -39,7 +39,7 @@ object RenderUtil {
     }
     fun textCenter(text: Text, x: Float, y: Float) = textCenter(text, x, y, -1)
     fun textCenter(text: Text, x: Float, y: Float, color: Int) {
-        font().drawWithShadow(this.globalStack, text, (x - font().getWidth(text) / 2), y, color)
+        font().drawWithShadow(globalStack, text, (x - font().getWidth(text) / 2), y, color)
     }
 
     private fun font(): TextRenderer {

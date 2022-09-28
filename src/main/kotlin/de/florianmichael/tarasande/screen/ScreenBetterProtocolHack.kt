@@ -2,7 +2,7 @@ package de.florianmichael.tarasande.screen
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.enzaxd.viaforge.equals.VersionList
-import de.florianmichael.tarasande.render.RenderUtil
+import de.florianmichael.tarasande.util.render.RenderUtil
 import de.florianmichael.tarasande.screen.element.ScreenBetterSlotList
 import de.florianmichael.tarasande.screen.element.ScreenBetterSlotListEntry
 import de.florianmichael.tarasande.screen.element.ScreenBetterSlotListWidget
@@ -29,16 +29,18 @@ class ScreenBetterProtocolHack(parent: Screen) : ScreenBetterSlotList(parent, 46
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
 
-        RenderUtil.scale(2F)
-        RenderUtil.textCenter("Protocol Hack", width / 4F, 10F - textRenderer.fontHeight / 4)
-        RenderUtil.endPush()
+        this.renderTitle("Protocol Hack")
     }
 
     class ProtocolEntry(val protocol: ProtocolVersion) : ScreenBetterSlotListEntry() {
 
+        override fun isSelected(): Boolean {
+            return TarasandeMain.get().protocolHack.version == this.protocol.version
+        }
+
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
             RenderUtil.useMyStack(matrices)
-            RenderUtil.textCenter(Text.literal(this.protocol.name), entryWidth.toFloat(), 0F, if (TarasandeMain.get().protocolHack.version == this.protocol.version) Color.green.rgb else Color.red.rgb)
+            RenderUtil.textCenter(Text.literal(this.protocol.name), entryWidth.toFloat(), 0F, if (this.isSelected()) Color.green.rgb else Color.red.rgb)
             RenderUtil.ourStack()
         }
 
