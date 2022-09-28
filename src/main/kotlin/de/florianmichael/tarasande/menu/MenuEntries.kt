@@ -1,6 +1,7 @@
 package de.florianmichael.tarasande.menu
 
 import de.florianmichael.tarasande.base.menu.ElementMenuScreen
+import de.florianmichael.tarasande.screen.ScreenBetterProtocolHack
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.TitleScreen
@@ -27,6 +28,6 @@ class ElementMenuScreenProxySystem : ElementMenuScreen("Proxy System") {
 class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack") {
 
     override fun getScreen(): Screen {
-        return TitleScreen() // Not implemented yet
+        return ScreenBetterProtocolHack(MinecraftClient.getInstance().currentScreen!!)
     }
 }
