@@ -38,7 +38,7 @@ class ScreenBetterProtocolHack(parent: Screen) : ScreenBetterSlotList(parent, 46
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
             RenderUtil.useMyStack(matrices)
-            RenderUtil.textCenter(Text.literal(this.protocol.name), entryWidth.toFloat(), 0F, Color.white.rgb)
+            RenderUtil.textCenter(Text.literal(this.protocol.name), entryWidth.toFloat(), 0F, if (TarasandeMain.get().protocolHack.version == this.protocol.version) Color.green.rgb else Color.red.rgb)
             RenderUtil.ourStack()
         }
 
