@@ -34,6 +34,9 @@ class ScreenBetterClientMenuSettings(parent: Screen) : ScreenBetter(parent) {
 
     override fun init() {
         super.init()
+        this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.literal("<-")) {
+            close()
+        })
 
         this.addDrawableChild(ClickableWidgetPanel(object : PanelElements<ValueComponent>("Settings", 0.0, 0.0, 0.0, 0.0) {
 
