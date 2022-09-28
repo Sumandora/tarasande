@@ -12,9 +12,13 @@ import java.awt.Color
 
 class ManagerMenu : Manager<ElementMenu>() {
 
+    var settings: MenuSettingsParent? = null
+
     init {
         this.spacer("General")
         this.add(ElementMenuScreenAccountManager(), ElementMenuScreenProxySystem(), ElementMenuScreenProtocolHack())
+
+        this.settings = MenuSettingsParent(this)
     }
 
     fun byName(name: String): ElementMenu {
