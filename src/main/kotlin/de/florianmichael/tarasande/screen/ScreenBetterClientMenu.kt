@@ -41,8 +41,10 @@ class ScreenBetterClientMenu(parent: Screen) : ScreenBetter(parent) {
             close()
         })
 
+        val endHeight = TarasandeMain.get().managerMenu.list.size * (buttonHeight + spacer)
+
         TarasandeMain.get().managerMenu.list.forEachIndexed { index, menu ->
-            this.addDrawableChild(ButtonWidget(startX, 50 + (index * (buttonHeight + spacer)), buttonWidth, buttonHeight, Text.literal(menu.name)) {
+            this.addDrawableChild(ButtonWidget(startX, this.halfHeight() - endHeight / 2 + (index * (buttonHeight + spacer)), buttonWidth, buttonHeight, Text.literal(menu.name)) {
                 menu.onClick()
             })
         }
