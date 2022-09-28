@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.text.Text
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.screen.menu.valuecomponent.ValueComponent
 import su.mandora.tarasande.screen.menu.panel.impl.elements.PanelElements
@@ -23,7 +24,7 @@ class ScreenBetterClientMenuHandler {
 
     fun doAction(parent: Screen) {
         if (this.anySelected()) {
-            TarasandeMain.get().managerMenu.byName(TarasandeMain.get().managerMenu.settings!!.focusedMenuEntry!!.selected[0]).onClick()
+            TarasandeMain.get().managerMenu.byName(TarasandeMain.get().managerMenu.settings!!.focusedMenuEntry!!.selected[0]).onClick(GLFW.GLFW_MOUSE_BUTTON_LEFT)
             return
         }
         MinecraftClient.getInstance().setScreen(ScreenBetterClientMenu(parent))

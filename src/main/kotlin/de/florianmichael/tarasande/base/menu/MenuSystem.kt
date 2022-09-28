@@ -7,6 +7,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.base.Manager
 import java.awt.Color
 
@@ -35,10 +36,12 @@ class ManagerMenu : Manager<ElementMenu>() {
 abstract class ElementMenu(val name: String) {
 
     open fun buildWidget(x: Int, y: Int, width: Int, height: Int): ButtonWidget {
-        return ButtonWidget(x, y, width, height, this.buttonText()) {
-            this.onClick()
+        val widget = ButtonWidget(x, y, width, height, this.buttonText()) {
+            this.onClick((it as IClickableWidget).florianMichael_getLastMouseButton())
             it.message = this.buttonText()
         }
+        (widget as IClickableWidget).florianMichael_validateAllMouseButtons()
+        return widget
     }
 
     open fun buttonColor() : Int = Color.ORANGE.rgb
@@ -46,25 +49,30 @@ abstract class ElementMenu(val name: String) {
         it.withColor(this.buttonColor())
     }
 
-    abstract fun onClick()
+    abstract fun onClick(mouseButton: Int)
 }
 
 abstract class ElementMenuScreen(name: String) : ElementMenu(name) {
 
-    override fun onClick() {
-        MinecraftClient.getInstance().setScreen(this.getScreen())
+    override fun onClick(mouseButton: Int) {
+        if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT)
+            MinecraftClient.getInstance().setScreen(this.getScreen())
+        else
+            this.otherMouseHandling(mouseButton)
     }
 
     override fun buttonColor() = Color.white.rgb
-
     abstract fun getScreen(): Screen
+
+    open fun otherMouseHandling(button: Int) {
+    }
 }
 
 abstract class ElementMenuToggle(name: String) : ElementMenu(name) {
 
     internal var state = false
 
-    override fun onClick() {
+    override fun onClick(mouseButton: Int) {
         this.state = !this.state
         this.onToggle(this.state)
     }
@@ -75,7 +83,7 @@ abstract class ElementMenuToggle(name: String) : ElementMenu(name) {
 }
 
 class ElementMenuTitle(name: String) : ElementMenu(name) {
-    override fun onClick() {
+    override fun onClick(mouseButton: Int) {
     }
 
     override fun buttonColor() = Color.gray.rgb

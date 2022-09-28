@@ -7,6 +7,7 @@ import de.florianmichael.tarasande.screen.ScreenBetterProtocolHack
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.TitleScreen
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.screen.accountmanager.ScreenBetterAccountManager
 import su.mandora.tarasande.screen.proxy.ScreenBetterProxy
 
@@ -31,5 +32,12 @@ class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack") {
 
     override fun getScreen(): Screen {
         return ScreenBetterProtocolHack(MinecraftClient.getInstance().currentScreen!!)
+    }
+
+    override fun otherMouseHandling(button: Int) {
+        super.otherMouseHandling(button)
+
+        if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT)
+            println("Other key")
     }
 }
