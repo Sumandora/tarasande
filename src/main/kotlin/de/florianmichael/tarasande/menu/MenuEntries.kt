@@ -33,27 +33,3 @@ class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack") {
         return ScreenBetterProtocolHack(MinecraftClient.getInstance().currentScreen!!)
     }
 }
-
-class ElementMenuScreenServerListOptions : ElementMenuScreen("Server List Options") {
-
-    override fun getScreen(): Screen {
-        return TitleScreen()
-    }
-}
-
-class ElementMenuScreenBungeecordHack : ElementMenuToggle("Bungeecord Hack") {
-    override fun onToggle(state: Boolean) {
-    }
-}
-
-class ElementMenuScreenHAProxyHack : ElementMenuToggle("HA Proxy Hack") {
-    override fun onToggle(state: Boolean) {
-    }
-
-}
-
-class ElementMenuFritzBoxReconnect : ElementMenu("Reconnect Fritz!Box") {
-
-    override fun onClick() {
-    }
-}

@@ -14,13 +14,7 @@ class ManagerMenu : Manager<ElementMenu>() {
 
     init {
         this.spacer("General")
-        this.add(ElementMenuScreenAccountManager(), ElementMenuScreenProxySystem(), ElementMenuScreenServerListOptions())
-
-        this.spacer("Exploits")
-        this.add(ElementMenuScreenBungeecordHack(), ElementMenuScreenHAProxyHack())
-
-        this.spacer("Special")
-        this.add(ElementMenuFritzBoxReconnect())
+        this.add(ElementMenuScreenAccountManager(), ElementMenuScreenProxySystem(), ElementMenuScreenProtocolHack())
     }
 
     fun byName(name: String): ElementMenu {
