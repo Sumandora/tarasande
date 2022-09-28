@@ -15,7 +15,8 @@
   "environment": "client",
   "mixins": [
     "tarasande.mixins.json",
-    "viaforge.mixins.json"
+    "viaforge.mixins.json",
+    "michael_tarasande.mixins.json"
   ],
   "depends": {
     "fabric-language-kotlin": "*"

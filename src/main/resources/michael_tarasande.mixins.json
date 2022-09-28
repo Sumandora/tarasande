@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.florianmichael.tarasande.mixin.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "MixinClickableWidget"
+  ]
+}
