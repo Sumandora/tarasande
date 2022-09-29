@@ -13,6 +13,7 @@
   },
   "client": [
     "MixinClickableWidget",
-    "MixinClientPlayNetworkHandler"
+    "MixinClientPlayNetworkHandler",
+    "MixinMinecraftClient"
   ]
 }

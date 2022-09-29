@@ -1,6 +1,7 @@
 package su.mandora.tarasande.base.module
 
 import de.florianmichael.tarasande.module.exploit.*
+import de.florianmichael.tarasande.module.qol.ModuleInstantWorld
 import net.minecraft.client.MinecraftClient
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
@@ -93,7 +94,8 @@ class ManagerModule : Manager<Module>() {
             ModuleCommandBlockBypass(),
             ModuleAntiParticleHide(),
             ModulePrivateMsgDetector(),
-            ModuleNoChatContext()
+            ModuleNoChatContext(),
+            ModuleInstantWorld()
         )
         TarasandeMain.get().managerEvent.add { event ->
             if (event is EventTick)
@@ -142,5 +144,5 @@ open class Module(val name: String, val description: String, val category: Modul
 }
 
 enum class ModuleCategory {
-    COMBAT, MOVEMENT, PLAYER, RENDER, MISC, GHOST, EXPLOIT
+    COMBAT, MOVEMENT, PLAYER, RENDER, MISC, GHOST, EXPLOIT, QOL
 }
