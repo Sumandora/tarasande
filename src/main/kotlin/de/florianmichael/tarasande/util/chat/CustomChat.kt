@@ -20,6 +20,6 @@ object CustomChat {
     }
 
     private fun buildPrefix(): MutableText {
-        return Text.literal("Tarasande").styled { it.withColor(TextColor.fromRgb(TarasandeMain.get().clientValues.accentColor.getColor().rgb)) }.append(" ")
+        return Text.literal(TarasandeMain.get().name).styled { it.withColor(TextColor.fromRgb(TarasandeMain.get().clientValues.accentColor.getColor().rgb)) }.append(" ")
     }
 }

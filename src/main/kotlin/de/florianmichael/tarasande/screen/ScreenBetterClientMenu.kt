@@ -6,9 +6,6 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.text.Text
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
-import su.mandora.tarasande.base.screen.menu.valuecomponent.ValueComponent
-import su.mandora.tarasande.screen.menu.panel.impl.elements.PanelElements
-import su.mandora.tarasande.screen.widget.panel.ClickableWidgetPanel
 import su.mandora.tarasande.util.render.screen.ScreenBetter
 
 class ScreenBetterClientMenuHandler {
@@ -19,11 +16,11 @@ class ScreenBetterClientMenuHandler {
         if (this.anySelected())
             return Text.literal(TarasandeMain.get().managerMenu.settings!!.focusedMenuEntry!!.selected[0])
 
-        return Text.literal("Tarasande Menu")
+        return Text.literal(TarasandeMain.get().name.replaceFirstChar { it.uppercase() } + " Menu")
     }
 
     fun doAction(parent: Screen) {
-        if (this.anySelected()) {
+        if (this.anySelected() && !Screen.hasShiftDown()) {
             TarasandeMain.get().managerMenu.byName(TarasandeMain.get().managerMenu.settings!!.focusedMenuEntry!!.selected[0]).onClick(GLFW.GLFW_MOUSE_BUTTON_LEFT)
             return
         }

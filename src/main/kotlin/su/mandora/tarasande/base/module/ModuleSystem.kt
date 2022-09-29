@@ -146,5 +146,5 @@ open class Module(val name: String, val description: String, val category: Modul
 }
 
 enum class ModuleCategory {
-    COMBAT, MOVEMENT, PLAYER, RENDER, MISC, GHOST, EXPLOIT, QOL
+    COMBAT, MOVEMENT, PLAYER, RENDER, MISC, GHOST, EXPLOIT, QUALITY_OF_LIFE
 }

@@ -12,6 +12,8 @@ import su.mandora.tarasande.util.render.screen.ScreenBetter
 
 class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val owner: Any) : ScreenBetter(parent) {
 
+    lateinit var clickableWidgetPanel: ClickableWidgetPanel
+
     override fun init() {
         super.init()
         this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.literal("<-")) {
@@ -35,6 +37,10 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
                 this.x = (MinecraftClient.getInstance().window.scaledWidth / 2) - 150.0
                 this.y = MinecraftClient.getInstance().window.scaledHeight / 2 - (this.panelHeight / 2)
             }
-        }))
+        }).also { clickableWidgetPanel = it })
+    }
+
+    override fun tick() {
+        clickableWidgetPanel.tick()
     }
 }

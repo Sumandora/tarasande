@@ -7,7 +7,7 @@ import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import java.util.function.Consumer
 
-class ModuleInstantWorld : Module("Instant World", "Reverts 22w12a -> 22w13a loading conditions", ModuleCategory.QOL) {
+class ModuleInstantWorld : Module("Instant world", "Reverts 22w12a -> 22w13a loading conditions", ModuleCategory.QUALITY_OF_LIFE) {
 
     val eventConsumer = Consumer<Event> { event ->
         when (event) {

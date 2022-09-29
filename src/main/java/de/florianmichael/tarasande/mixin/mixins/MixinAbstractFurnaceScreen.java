@@ -20,6 +20,8 @@ import su.mandora.tarasande.screen.widget.panel.ClickableWidgetPanel;
 @Mixin(AbstractFurnaceScreen.class)
 public abstract class MixinAbstractFurnaceScreen<T extends AbstractFurnaceScreenHandler> extends HandledScreen<T> {
 
+    ClickableWidgetPanel clickableWidgetPanel;
+
     public MixinAbstractFurnaceScreen(T handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
     }
@@ -29,7 +31,7 @@ public abstract class MixinAbstractFurnaceScreen<T extends AbstractFurnaceScreen
         if (!TarasandeMain.Companion.get().getManagerModule().get(ModuleFurnaceProgress.class).getEnabled()) return;
         final var font = MinecraftClient.getInstance().textRenderer;
 
-        this.addDrawableChild(new ClickableWidgetPanel(new Panel("Furnace Progress", 0, 0, 0, 0, null, null, true) {
+        this.addDrawableChild(clickableWidgetPanel = new ClickableWidgetPanel(new Panel("Furnace Progress", 0, 0, 0, 0, null, null, true) {
             @Override
             public void init() {
                 super.init();
@@ -66,4 +68,10 @@ public abstract class MixinAbstractFurnaceScreen<T extends AbstractFurnaceScreen
             }
         }));
     }
+
+    @Inject(method = "handledScreenTick", at = @At("HEAD"))
+    public void injectHandledScreenTick(CallbackInfo ci) {
+        clickableWidgetPanel.tick();
+    }
+
 }

@@ -51,7 +51,7 @@ class ValueComponentText(value: Value) : ValueComponent(value) {
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (button != 0) return false
-        if (RenderUtil.isHovered(mouseX, mouseY, 1.0, 1.0, width, getHeight())) { // hacky fix for size hacks
+        if (value.isEnabled() && RenderUtil.isHovered(mouseX, mouseY, 1.0, 1.0, width, getHeight())) { // hacky fix for size hacks
             textFieldWidget.mouseClicked(width * 2, getHeight() / 2.0F, button)
         } else {
             textFieldWidget.mouseClicked(-1.0, -1.0, button)
