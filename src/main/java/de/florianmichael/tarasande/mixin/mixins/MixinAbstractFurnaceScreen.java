@@ -71,7 +71,8 @@ public abstract class MixinAbstractFurnaceScreen<T extends AbstractFurnaceScreen
 
     @Inject(method = "handledScreenTick", at = @At("HEAD"))
     public void injectHandledScreenTick(CallbackInfo ci) {
-        clickableWidgetPanel.tick();
-    }
+        if (this.clickableWidgetPanel == null) return;
 
+        this.clickableWidgetPanel.tick();
+    }
 }
