@@ -15,6 +15,7 @@
     "MixinAbstractFurnaceScreen",
     "MixinClickableWidget",
     "MixinClientPlayNetworkHandler",
+    "MixinGameRenderer",
     "MixinMinecraftClient"
   ]
 }

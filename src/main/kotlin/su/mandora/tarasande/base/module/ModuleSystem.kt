@@ -2,6 +2,7 @@ package su.mandora.tarasande.base.module
 
 import de.florianmichael.tarasande.module.exploit.*
 import de.florianmichael.tarasande.module.misc.ModuleFurnaceProgress
+import de.florianmichael.tarasande.module.player.ModuleNoMiningTrace
 import de.florianmichael.tarasande.module.qol.ModuleInstantWorld
 import net.minecraft.client.MinecraftClient
 import org.lwjgl.glfw.GLFW
@@ -97,7 +98,8 @@ class ManagerModule : Manager<Module>() {
             ModulePrivateMsgDetector(),
             ModuleNoChatContext(),
             ModuleInstantWorld(),
-            ModuleFurnaceProgress()
+            ModuleFurnaceProgress(),
+            ModuleNoMiningTrace()
         )
         TarasandeMain.get().managerEvent.add { event ->
             if (event is EventTick)
