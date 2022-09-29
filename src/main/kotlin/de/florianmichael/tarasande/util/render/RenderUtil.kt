@@ -26,12 +26,10 @@ object RenderUtil {
         globalStack = endStack
     }
 
-    fun text(text: String, x: Float, y: Float) {
-        text(Text.literal(text), x, y)
-    }
+    fun text(text: String, x: Float, y: Float) = text(Text.literal(text), x, y)
     fun text(text: Text, x: Float, y: Float) = text(text, x, y, -1)
-    fun text(text: Text, x: Float, y: Float, color: Int) {
-        font().drawWithShadow(globalStack, text, x, y, color)
+    fun text(text: Text, x: Float, y: Float, color: Int): Int {
+        return font().drawWithShadow(globalStack, text, x, y, color)
     }
 
     fun textCenter(text: String, x: Float, y: Float) {
