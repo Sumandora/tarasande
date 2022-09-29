@@ -4,12 +4,15 @@
   "package": "de.florianmichael.tarasande.mixin.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "MixinCommandBlock",
+    "MixinEntityStatusEffectS2CPacket",
     "MixinHandshakeC2SPacket"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-    "MixinClickableWidget"
+    "MixinClickableWidget",
+    "MixinClientPlayNetworkHandler"
   ]
 }
