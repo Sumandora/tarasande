@@ -61,6 +61,7 @@
 - Account manager: Add skins in selection
 - AirJump/-Walk
 - More Modularity by moving methods to utils
+- Static ESP Width
 
 ### TODO-List (Click GUI)
 - Correctly save and calculate the positions of the panels when resizing ingame
