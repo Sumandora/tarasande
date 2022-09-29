@@ -21,6 +21,9 @@ class ManagerMenu : Manager<ElementMenu>() {
         this.spacer("General")
         this.add(ElementMenuScreenAccountManager(), ElementMenuScreenProxySystem(), ElementMenuScreenProtocolHack())
 
+        this.spacer("Exploits")
+        this.add(ElementMenuToggleBungeeHack())
+
         this.settings = MenuSettingsParent(this)
     }
 
@@ -58,17 +61,11 @@ abstract class ElementMenu(val name: String) {
 abstract class ElementMenuScreen(name: String) : ElementMenu(name) {
 
     override fun onClick(mouseButton: Int) {
-        if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT)
-            MinecraftClient.getInstance().setScreen(this.getScreen())
-        else
-            this.otherMouseHandling(mouseButton)
+        MinecraftClient.getInstance().setScreen(this.getScreen())
     }
 
     override fun buttonColor() = Color.white.rgb
     abstract fun getScreen(): Screen
-
-    open fun otherMouseHandling(button: Int) {
-    }
 }
 
 abstract class ElementMenuToggle(name: String) : ElementMenu(name) {
@@ -76,13 +73,22 @@ abstract class ElementMenuToggle(name: String) : ElementMenu(name) {
     internal var state = false
 
     override fun onClick(mouseButton: Int) {
-        this.state = !this.state
-        this.onToggle(this.state)
+        if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+            this.state = !this.state
+            this.onToggle(this.state)
+
+            return
+        }
+
+        this.otherMouseHandling(mouseButton)
     }
 
     override fun buttonColor() = if (state) Color.green.rgb else Color.red.rgb
 
     abstract fun onToggle(state: Boolean)
+
+    open fun otherMouseHandling(button: Int) {
+    }
 }
 
 class ElementMenuTitle(name: String) : ElementMenu(name) {

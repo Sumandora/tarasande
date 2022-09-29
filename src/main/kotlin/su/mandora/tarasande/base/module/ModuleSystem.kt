@@ -1,6 +1,7 @@
 package su.mandora.tarasande.base.module
 
 import de.florianmichael.tarasande.module.exploit.ModuleAntiBindingCurse
+import de.florianmichael.tarasande.module.exploit.ModuleBungeeHack
 import net.minecraft.client.MinecraftClient
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
@@ -88,7 +89,8 @@ class ManagerModule : Manager<Module>() {
             ModuleFastPlace(),
             ModuleFastUse(),
             ModuleDisableSequencePackets(),
-            ModuleAntiBindingCurse()
+            ModuleAntiBindingCurse(),
+            ModuleBungeeHack()
         )
         TarasandeMain.get().managerEvent.add { event ->
             if (event is EventTick)
