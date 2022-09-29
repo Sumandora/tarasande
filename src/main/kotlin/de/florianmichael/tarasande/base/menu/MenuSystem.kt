@@ -2,6 +2,8 @@ package de.florianmichael.tarasande.base.menu
 
 import de.florianmichael.tarasande.menu.*
 import de.florianmichael.tarasande.mixin.accessor.IClickableWidget
+import de.florianmichael.tarasande.screen.widget.AllMouseButtonWidget
+import de.florianmichael.tarasande.screen.widget.AllMousePressAction
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
@@ -36,11 +38,12 @@ class ManagerMenu : Manager<ElementMenu>() {
 abstract class ElementMenu(val name: String) {
 
     open fun buildWidget(x: Int, y: Int, width: Int, height: Int): ButtonWidget {
-        val widget = ButtonWidget(x, y, width, height, this.buttonText()) {
-            this.onClick((it as IClickableWidget).florianMichael_getLastMouseButton())
-            it.message = this.buttonText()
-        }
-        (widget as IClickableWidget).florianMichael_validateAllMouseButtons()
+        val widget = AllMouseButtonWidget(x, y, width, height, this.buttonText(), object : AllMousePressAction() {
+            override fun onPress(mouseButton: Int, button: ButtonWidget) {
+                onClick(mouseButton)
+                button.message = buttonText()
+            }
+        })
         return widget
     }
 
