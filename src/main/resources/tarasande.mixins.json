@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "MixinAbstractBlockState",
+    "MixinAbstractClientPlayerEntity",
     "MixinCamera",
     "MixinClientPlayerEntity",
     "MixinClientPlayerInteractionManager",

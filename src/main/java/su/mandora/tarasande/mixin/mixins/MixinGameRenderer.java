@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.EventMovementFovMultiplier;
 import su.mandora.tarasande.event.EventUpdateTargetedEntity;
 import su.mandora.tarasande.mixin.accessor.IGameRenderer;
 
@@ -40,13 +39,6 @@ public class MixinGameRenderer implements IGameRenderer {
         if (reach > actualBlockReach)
             return (float) reach;
         return actualBlockReach;
-    }
-
-    @Inject(method = "updateFovMultiplier", at = @At("TAIL"))
-    public void injectUpdateMovementFovMultiplier(CallbackInfo ci) {
-        EventMovementFovMultiplier eventMovementFovMultiplier = new EventMovementFovMultiplier(fovMultiplier);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventMovementFovMultiplier);
-        fovMultiplier = eventMovementFovMultiplier.getMovementFovMultiplier();
     }
 
     @ModifyConstant(method = "updateTargetedEntity", constant = @Constant(doubleValue = 9.0))

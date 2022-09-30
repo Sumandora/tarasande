@@ -60,7 +60,6 @@
 - Target strafe: Anti Void
 - Account manager: Add skins in selection
 - AirJump/-Walk
-- Static ESP Width
 - Fix NettyStatsAdapter Sharable crash
 
 ### TODO-List (Click GUI)
