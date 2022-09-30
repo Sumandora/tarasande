@@ -25,13 +25,15 @@ class PanelFixedRadar(x: Double, y: Double) : PanelFixed("Radar", x, y, 100.0, 1
 			(panelWidth * scaleFactor).toInt(),
 			(panelHeight * scaleFactor).toInt()
 		)
+		val pos = MinecraftClient.getInstance().player?.getLerpedPos(MinecraftClient.getInstance().tickDelta)!!
 		for (entity in MinecraftClient.getInstance().world?.entities!!) {
-			val dist = sqrt((entity.x - MinecraftClient.getInstance().player?.x!!).pow(2.0) + (entity.z - MinecraftClient.getInstance().player?.z!!).pow(2.0))
+			val otherPos = entity.getLerpedPos(MinecraftClient.getInstance().tickDelta)!!
+			val dist = sqrt((otherPos.x - pos.x).pow(2.0) + (otherPos.z - pos.z).pow(2.0))
 
 			if (dist > (panelWidth + panelHeight) / 2)
 				continue
 
-			val yawDelta = RotationUtil.getYaw(MinecraftClient.getInstance().player?.x!!, MinecraftClient.getInstance().player?.z!!, entity.x, entity.z) - MathHelper.wrapDegrees(MinecraftClient.getInstance().player?.yaw!!) + 180
+			val yawDelta = RotationUtil.getYaw(pos.x, pos.z, otherPos.x, otherPos.z) - MathHelper.wrapDegrees(MinecraftClient.getInstance().player?.yaw!!) + 180
 
 			val x = -sin(yawDelta / 360.0 * PI * 2) * dist
 			val y = cos(yawDelta / 360.0 * PI * 2) * dist

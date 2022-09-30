@@ -10,7 +10,7 @@ class FileModules : File("Modules") {
     override fun save(): JsonElement {
         val jsonObject = JsonObject()
         for (module in TarasandeMain.get().managerModule.list)
-            jsonObject.addProperty(module.name, module.enabled)
+            jsonObject.addProperty(module.name, module._enabled)
         return jsonObject
     }
 
