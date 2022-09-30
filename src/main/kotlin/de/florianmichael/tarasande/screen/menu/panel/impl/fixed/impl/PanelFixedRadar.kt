@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
-import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.render.RenderUtil
@@ -37,7 +36,7 @@ class PanelFixedRadar(x: Double, y: Double) : PanelFixed("Radar", x, y, 100.0, 1
 			val x = -sin(yawDelta / 360.0 * PI * 2) * dist
 			val y = cos(yawDelta / 360.0 * PI * 2) * dist
 
-			RenderUtil.fillCircle(matrices, this.x + panelWidth / 2 + x, this.y + panelHeight / 2 + y, 2.0, (TarasandeMain.get().entityColor.getColor(entity) ?: Color.white).rgb)
+			RenderUtil.fillCircle(matrices, this.x + panelWidth / 2 + x, this.y + panelHeight / 2 + y, 2.0, Color(entity.teamColorValue).rgb /* alpha ignore */)
 		}
 
 		GlStateManager._disableScissorTest()
