@@ -40,11 +40,13 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
                     return@Consumer
                 if (event.entity != mc.player)
                     return@Consumer
-                var yMotion = baseYMotion.value
+                var yMotion = 0.0
                 if ((mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
                     yMotion += flightSpeed.value
                 if ((mc.options.sneakKey as IKeyBinding).tarasande_forceIsPressed())
                     yMotion -= flightSpeed.value
+                if (yMotion == 0.0)
+                    yMotion = baseYMotion.value
                 event.velocity = (mc.player as IEntity).tarasande_invokeMovementInputToVelocity(Vec3d(
                     MathUtil.roundAwayFromZero(PlayerUtil.input.movementSideways.toDouble()),
                     0.0,
