@@ -48,11 +48,13 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
                     yMotion -= flightSpeed.value
                 if (yMotion == 0.0)
                     yMotion = baseYMotion.value
-                event.velocity = (mc.player as IEntity).tarasande_invokeMovementInputToVelocity(Vec3d(
-                    MathUtil.roundAwayFromZero(PlayerUtil.input.movementSideways.toDouble()),
-                    0.0,
-                    MathUtil.roundAwayFromZero(PlayerUtil.input.movementForward.toDouble())
-                ), flightSpeed.value.toFloat(), mc.player?.yaw!!)
+                if (PlayerUtil.isPlayerMoving()) {
+                    event.velocity = (mc.player as IEntity).tarasande_invokeMovementInputToVelocity(Vec3d(
+                        MathUtil.roundAwayFromZero(PlayerUtil.input.movementSideways.toDouble()),
+                        0.0,
+                        MathUtil.roundAwayFromZero(PlayerUtil.input.movementForward.toDouble())
+                    ), flightSpeed.value.toFloat(), mc.player?.yaw!!)
+                }
                 (event.velocity as IVec3d).tarasande_setY(yMotion)
             }
         }
