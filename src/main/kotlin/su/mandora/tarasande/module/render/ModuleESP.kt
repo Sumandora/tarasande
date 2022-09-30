@@ -3,7 +3,6 @@ package su.mandora.tarasande.module.render
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.Vector4f
@@ -22,12 +21,10 @@ import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.extension.plus
 import su.mandora.tarasande.util.extension.times
 import su.mandora.tarasande.util.extension.unaryMinus
-import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueRegistry
 import java.util.function.Consumer
-import kotlin.math.sqrt
 
 class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCategory.RENDER) {
 
@@ -97,13 +94,16 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 
                     if (!(mc.worldRenderer as IWorldRenderer).tarasande_getFrustum().isVisible(boundingBox)) continue
 
-                    val side = Rotation(mc.player!!).also { it.yaw += 45f; it.pitch = 0f }.forwardVector(sqrt(boundingBox.xLength * boundingBox.xLength + boundingBox.zLength * boundingBox.zLength) / 2.0)
-
                     val corners = arrayOf(
-                        boundingBox.center.withAxis(Direction.Axis.Y, boundingBox.minY) + side,
-                        boundingBox.center.withAxis(Direction.Axis.Y, boundingBox.maxY) + side,
-                        boundingBox.center.withAxis(Direction.Axis.Y, boundingBox.minY) - side,
-                        boundingBox.center.withAxis(Direction.Axis.Y, boundingBox.maxY) - side
+                        Vec3d(boundingBox.minX, boundingBox.minY, boundingBox.minZ),
+                        Vec3d(boundingBox.maxX, boundingBox.minY, boundingBox.minZ),
+                        Vec3d(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ),
+                        Vec3d(boundingBox.minX, boundingBox.minY, boundingBox.maxZ),
+
+                        Vec3d(boundingBox.minX, boundingBox.maxY, boundingBox.minZ),
+                        Vec3d(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ),
+                        Vec3d(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ),
+                        Vec3d(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ)
                     )
 
                     var rectangle: Rectangle? = null
