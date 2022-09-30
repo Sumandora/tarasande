@@ -3,6 +3,7 @@ package de.florianmichael.tarasande.mixin.mixins;
 import de.florianmichael.tarasande.module.misc.ModuleFurnaceProgress;
 import de.florianmichael.tarasande.util.render.RenderUtil;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.ingame.AbstractFurnaceScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -29,13 +30,13 @@ public abstract class MixinAbstractFurnaceScreen<T extends AbstractFurnaceScreen
     @Inject(method = "init", at = @At("RETURN"))
     public void hookCustomWidget(CallbackInfo ci) {
         if (!TarasandeMain.Companion.get().getManagerModule().get(ModuleFurnaceProgress.class).getEnabled()) return;
-        final var font = MinecraftClient.getInstance().textRenderer;
+        final TextRenderer font = MinecraftClient.getInstance().textRenderer;
 
         this.addDrawableChild(clickableWidgetPanel = new ClickableWidgetPanel(new Panel("Furnace Progress", 0, 0, 0, 0, null, null, true) {
             @Override
             public void init() {
                 super.init();
-                final var maxHeight = (2.0 + 1.0) /* Element Size + Bar Height as Double because Kotlin */ * (font.fontHeight + 2);
+                final double maxHeight = (2.0 + 1.0) /* Element Size + Bar Height as Double because Kotlin */ * (font.fontHeight + 2);
 
                 this.setX(5);
                 this.setY(height / 2F - maxHeight / 2F);
@@ -52,8 +53,8 @@ public abstract class MixinAbstractFurnaceScreen<T extends AbstractFurnaceScreen
 
                 if (handler.isBurning()) {
                     // 23 = max
-                    var progress = 23 - handler.getCookProgress();
-                    var width = RenderUtil.INSTANCE.text("Item smelting finished in: " + ((progress / 2) + 1) + " seconds", 0, 0);
+                    int progress = 23 - handler.getCookProgress();
+                    int width = RenderUtil.INSTANCE.text("Item smelting finished in: " + ((progress / 2) + 1) + " seconds", 0, 0);
                     this.setPanelWidth(width + 2);
 
                     RenderUtil.INSTANCE.text("Fuel Power ends in: " + (handler.getFuelProgress() + 1) + " seconds", 0, font.fontHeight + 2);
