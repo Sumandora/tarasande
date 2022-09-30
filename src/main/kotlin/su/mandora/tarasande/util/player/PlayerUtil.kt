@@ -1,9 +1,11 @@
 package su.mandora.tarasande.util.player
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.ChatScreen
 import net.minecraft.client.input.KeyboardInput
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.mob.MobEntity
 import net.minecraft.entity.mob.Monster
 import net.minecraft.entity.passive.AnimalEntity
@@ -14,15 +16,19 @@ import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.hit.HitResult
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.RaycastContext
 import net.minecraft.world.RaycastContext.FluidHandling
 import net.minecraft.world.RaycastContext.ShapeType
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.event.EventInput
 import su.mandora.tarasande.event.EventIsEntityAttackable
+import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity
 import su.mandora.tarasande.mixin.accessor.IGameRenderer
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
+import su.mandora.tarasande.module.player.ModuleAutoTool
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 
@@ -138,5 +144,71 @@ object PlayerUtil {
             }
         }
         return null
+    }
+
+    const val walkSpeed = 0.28
+    fun calcBaseSpeed(baseSpeed: Double = walkSpeed): Double {
+        return baseSpeed + 0.03 *
+                if (MinecraftClient.getInstance().player?.hasStatusEffect(StatusEffects.SPEED)!!)
+                    MinecraftClient.getInstance().player?.getStatusEffect(StatusEffects.SPEED)?.amplifier!!
+                else
+                    0
+    }
+
+    fun sendChatMessage(text: String) {
+        val prevBypassChat = (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_getBypassChat()
+        (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_setBypassChat(true)
+        // this method COULD be static, but Mojangs god tier coders didn't think of that
+        object : ChatScreen("") {
+            override fun narrateScreenIfNarrationEnabled(onlyChangedNarrations: Boolean) {
+            }
+
+            override fun close() {
+            }
+
+            override fun removed() {
+            }
+
+            override fun sendMessage(chatText: String?, addToHistory: Boolean): Boolean {
+                super.sendMessage(chatText, addToHistory)
+                return false
+            }
+        }.also {
+            it.init(MinecraftClient.getInstance(), MinecraftClient.getInstance().window.scaledWidth, MinecraftClient.getInstance().window.scaledHeight)
+            for (c in text.toCharArray()) it.charTyped(c, 0)
+            it.keyPressed(GLFW.GLFW_KEY_ENTER, 0, 0)
+        }
+        (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_setBypassChat(prevBypassChat)
+    }
+
+    fun getBreakSpeed(blockPos: BlockPos): Pair<Double, Int> {
+        if (!TarasandeMain.get().managerModule.get(ModuleAutoTool::class.java).enabled)
+            return MinecraftClient.getInstance().player?.inventory?.selectedSlot!!.let { Pair(getBreakSpeed(blockPos, it), it) }
+
+        val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot ?: return Pair(1.0, -1)
+        var bestMult = 1.0
+        var bestTool = -1
+        for (i in 0..8) {
+            val mult = getBreakSpeed(blockPos, i)
+            if (bestMult > mult) {
+                bestTool = i
+                bestMult = mult
+            }
+        }
+        MinecraftClient.getInstance().player?.inventory?.selectedSlot = origSlot
+        return Pair(bestMult, bestTool)
+    }
+
+    fun getBreakSpeed(blockPos: BlockPos, item: Int): Double {
+        val state = MinecraftClient.getInstance().world?.getBlockState(blockPos)
+        if (state?.isAir!! || state.getOutlineShape(MinecraftClient.getInstance().world, blockPos).isEmpty) return 1.0
+        val hardness = state.getHardness(MinecraftClient.getInstance().world, blockPos)
+        if (hardness <= 0.0f) return 1.0
+        MinecraftClient.getInstance().player?.inventory?.selectedSlot = item
+        var mult = MinecraftClient.getInstance().player?.getBlockBreakingSpeed(state)!!
+        if (!MinecraftClient.getInstance().player?.isOnGround!!) {
+            mult *= 5.0f // bruh
+        }
+        return 1.0 - mult / hardness / 30.0
     }
 }

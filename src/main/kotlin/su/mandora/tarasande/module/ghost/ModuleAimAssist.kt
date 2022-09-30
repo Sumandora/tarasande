@@ -1,12 +1,11 @@
 package su.mandora.tarasande.module.ghost
 
 import net.minecraft.util.math.MathHelper
-import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventMouseDelta
-import su.mandora.tarasande.module.combat.ModuleKillAura
+import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
@@ -27,7 +26,7 @@ class ModuleAimAssist : Module("Aim assist", "Helps you aim at enemies", ModuleC
             val entity = mc.world?.entities?.filter { PlayerUtil.isAttackable(it) }?.filter { mc.player?.distanceTo(it)!! < reach.value }?.filter { PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.eyePos) }?.minByOrNull { RotationUtil.getRotations(mc.player?.eyePos!!, it.eyePos).fov(selfRotation) } ?: return@Consumer
 
             val boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())
-            val bestAimPoint = TarasandeMain.get().managerModule.get(ModuleKillAura::class.java).getBestAimPoint(boundingBox)
+            val bestAimPoint = MathUtil.getBestAimPoint(boundingBox)
 
             val rotation = RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint)
 

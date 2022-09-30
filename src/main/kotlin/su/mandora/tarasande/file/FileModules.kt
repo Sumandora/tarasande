@@ -1,25 +1,24 @@
 package su.mandora.tarasande.file
 
-import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
+import com.google.gson.JsonObject
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.file.File
 
 class FileModules : File("Modules") {
 
     override fun save(): JsonElement {
-        val jsonArray = JsonArray()
+        val jsonObject = JsonObject()
         for (module in TarasandeMain.get().managerModule.list)
-            if (module._enabled)
-                jsonArray.add(module.name)
-        return jsonArray
+            jsonObject.addProperty(module.name, module.enabled)
+        return jsonObject
     }
 
     override fun load(jsonElement: JsonElement) {
-        val jsonArray: JsonArray = jsonElement as JsonArray
+        val jsonObject = jsonElement as JsonObject
         for (module in TarasandeMain.get().managerModule.list)
-            module.enabled = jsonArray.contains(JsonPrimitive(module.name))
+            if (jsonObject.has(module.name))
+                module.enabled = jsonObject.get(module.name).asBoolean
     }
 
 }

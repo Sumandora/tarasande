@@ -14,7 +14,6 @@ import net.minecraft.util.UseAction
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.Box
-import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
@@ -103,7 +102,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val comparator: Comparator<Pair<Entity, Vec3d>> = Comparator.comparing {
         when {
             priority.isSelected(0) -> {
-                mc.player?.eyePos?.squaredDistanceTo(getBestAimPoint(it.first.boundingBox.expand(it.first.targetingMargin.toDouble())))!!
+                mc.player?.eyePos?.squaredDistanceTo(MathUtil.getBestAimPoint(it.first.boundingBox.expand(it.first.targetingMargin.toDouble())))!!
             }
 
             priority.isSelected(1) -> {
@@ -117,7 +116,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
 
             priority.isSelected(3) -> {
-                RotationUtil.getRotations(mc.player?.eyePos!!, getBestAimPoint(it.first.boundingBox)).fov(fovRotation())
+                RotationUtil.getRotations(mc.player?.eyePos!!, MathUtil.getBestAimPoint(it.first.boundingBox)).fov(fovRotation())
             }
 
             else -> 0.0
@@ -164,7 +163,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     val entity = entity as LivingEntity
 
                     val boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())
-                    val bestAimPoint = getBestAimPoint(boundingBox)
+                    val bestAimPoint = MathUtil.getBestAimPoint(boundingBox)
                     if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
                     if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(fovRotation()) > fov.value) continue
                     val aimPoint = if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() != 0.0f) {
@@ -388,22 +387,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         mc.crosshairTarget = original
     }
 
-    fun getBestAimPoint(box: Box): Vec3d {
-        val start = mc.player?.eyePos!!
-        if (
-            box.minX < start.x && start.x < box.maxX &&
-            box.minZ < start.z && start.z < box.maxZ
-        )
-            return Vec3d(
-                box.minX + (box.maxX - box.minX) / 2.0,
-                MathHelper.clamp(start.y, box.minY, box.maxY),
-                box.minZ + (box.maxZ - box.minZ) / 2.0
-            )
-        return MathUtil.closestPointToBox(start, box)
-    }
-
     private fun getAimPoint(box: Box, entity: LivingEntity): Vec3d {
-        var best = getBestAimPoint(box)
+        var best = MathUtil.getBestAimPoint(box)
         var visible = PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, best)
 
         if (rotations.isSelected(0)) {

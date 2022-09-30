@@ -1,5 +1,6 @@
 package su.mandora.tarasande.util.math
 
+import net.minecraft.client.MinecraftClient
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
@@ -14,6 +15,20 @@ object MathUtil {
             MathHelper.clamp(start.y, box.minY, box.maxY),
             MathHelper.clamp(start.z, box.minZ, box.maxZ)
         )
+    }
+
+    fun getBestAimPoint(box: Box): Vec3d {
+        val start = MinecraftClient.getInstance().player?.eyePos!!
+        if (
+            box.minX < start.x && start.x < box.maxX &&
+            box.minZ < start.z && start.z < box.maxZ
+        )
+            return Vec3d(
+                box.minX + (box.maxX - box.minX) / 2.0,
+                MathHelper.clamp(start.y, box.minY, box.maxY),
+                box.minZ + (box.maxZ - box.minZ) / 2.0
+            )
+        return closestPointToBox(start, box)
     }
 
     fun getBias(time: Double, bias: Double): Double {

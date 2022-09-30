@@ -14,7 +14,7 @@ open class Manager<T : Any> {
 
     fun rem(vararg objects: T) = list.removeAll(objects.toSet())
 
-    fun <T> get(clazz: Class<T>): T {
+    open fun <T> get(clazz: Class<T>): T {
         for (t in list) {
             if (t.javaClass == clazz)
                 return t as T

@@ -1,6 +1,5 @@
 package su.mandora.tarasande.module.movement
 
-import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.util.math.MathHelper
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
@@ -21,11 +20,9 @@ import kotlin.math.sin
 
 class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVEMENT) {
 
-    val walkSpeed = 0.28
-
     private val jumpHeight = ValueNumber(this, "Jump height", 0.0, 1.0, 2.0, 0.01)
     private val gravity = ValueNumber(this, "Gravity", 0.0, 1.0, 2.0, 0.1)
-    private val speedValue = ValueNumber(this, "Speed", 0.0, walkSpeed, 1.0, 0.01)
+    private val speedValue = ValueNumber(this, "Speed", 0.0, PlayerUtil.walkSpeed, 1.0, 0.01)
     private val speedDivider = ValueNumber(this, "Speed divider", 1.0, 60.0, 200.0, 1.0)
     private val turnRate = ValueNumber(this, "Turn rate", 0.0, 180.0, 180.0, 1.0)
     private val lowHop = ValueBoolean(this, "Low hop", false)
@@ -33,8 +30,6 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
     private var speed = 0.0
     private var moveDir = 0.0
     private var firstMove = true
-
-    fun calcSpeed(baseSpeed: Double): Double = baseSpeed + 0.03 * if (mc.player?.hasStatusEffect(StatusEffects.SPEED)!!) mc.player?.getStatusEffect(StatusEffects.SPEED)?.amplifier!! else 0
 
     override fun onEnable() {
         firstMove = true
@@ -69,7 +64,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                         playerVelocityAccessor.tarasande_setZ(prevVelocity.z)
 
                     } else {
-                        speed = calcSpeed(speedValue.value)
+                        speed = PlayerUtil.calcBaseSpeed(speedValue.value)
                     }
                 }
                 if (event.velocity.y < 0.0) {
@@ -94,7 +89,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
             }
 
             is EventJump -> {
-                speed = calcSpeed(speedValue.value)
+                speed = PlayerUtil.calcBaseSpeed(speedValue.value)
             }
 
             is EventKeyBindingIsPressed -> {

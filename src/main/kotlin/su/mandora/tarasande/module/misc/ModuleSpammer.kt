@@ -1,17 +1,15 @@
 package su.mandora.tarasande.module.misc
 
-import net.minecraft.client.gui.screen.ChatScreen
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import org.apache.commons.lang3.RandomStringUtils
-import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventChat
 import su.mandora.tarasande.event.EventPollEvents
-import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity
 import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
@@ -50,32 +48,6 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
         priorityMessages.clear()
     }
 
-    fun sendChatMessage(text: String) {
-        val prevBypassChat = (mc.player as IClientPlayerEntity).tarasande_getBypassChat()
-        (mc.player as IClientPlayerEntity).tarasande_setBypassChat(true)
-        // this method COULD be static, but Mojangs god tier coders didn't think of that
-        object : ChatScreen("") {
-            override fun narrateScreenIfNarrationEnabled(onlyChangedNarrations: Boolean) {
-            }
-
-            override fun close() {
-            }
-
-            override fun removed() {
-            }
-
-            override fun sendMessage(chatText: String?, addToHistory: Boolean): Boolean {
-                super.sendMessage(chatText, addToHistory)
-                return false
-            }
-        }.also {
-            it.init(mc, mc.window.scaledWidth, mc.window.scaledHeight)
-            for (c in text.toCharArray()) it.charTyped(c, 0)
-            it.keyPressed(GLFW.GLFW_KEY_ENTER, 0, 0)
-        }
-        (mc.player as IClientPlayerEntity).tarasande_setBypassChat(prevBypassChat)
-    }
-
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventPollEvents -> {
@@ -83,7 +55,7 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
 
                 if (timeUtil.hasReached(delay.value.toLong())) {
                     if (priorityMessages.isNotEmpty()) {
-                        sendChatMessage(priorityMessages.removeFirst())
+                        PlayerUtil.sendChatMessage(priorityMessages.removeFirst())
                         timeUtil.reset()
                         return@Consumer
                     }
@@ -128,7 +100,7 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
                         if (garbage.value) {
                             text = formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt())) + " $text " + formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt()))
                         }
-                        sendChatMessage(text)
+                        PlayerUtil.sendChatMessage(text)
                     }
                     timeUtil.reset()
                 }

@@ -6,7 +6,6 @@ import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.registry.Registry
-import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
@@ -55,7 +54,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
         when {
             priority.isSelected(0) -> mc.player?.squaredDistanceTo(Vec3d.ofCenter(it.first))?.times(-1)
             priority.isSelected(1) -> mc.player?.squaredDistanceTo(Vec3d.ofCenter(it.first))
-            priority.isSelected(2) -> TarasandeMain.get().managerModule.get(ModuleAutoTool::class.java).getBreakSpeed(it.first)
+            priority.isSelected(2) -> PlayerUtil.getBreakSpeed(it.first).first
             else -> 0.0
         }
     }

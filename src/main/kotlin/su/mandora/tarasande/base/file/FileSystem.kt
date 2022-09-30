@@ -51,12 +51,18 @@ class ManagerFile : Manager<File>() {
                 if (content != null) {
 
                     val jsonElement = TarasandeMain.get().gson.fromJson(content, JsonElement::class.java)
-                    if (jsonElement != null) {
+                    try {
+                        if (jsonElement != null) {
 
-                        file.load(jsonElement)
-                        file.loaded = true
+                            file.load(jsonElement)
+                            file.loaded = true
+                            continue
+                        }
+                    } catch (t: Throwable) {
+                        t.printStackTrace()
+                    }
 
-                    } else TarasandeMain.get().logger.error(file.name + " didn't load correctly!")
+                    TarasandeMain.get().logger.error(file.name + " didn't load correctly!")
                 }
             } else {
                 file.loaded = true

@@ -58,7 +58,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
 
             val curPos = mc.player?.pos!!
             val center = enemy.pos
-            val selfSpeed = max(event.velocity.horizontalLength(), TarasandeMain.get().managerModule.get(ModuleSpeed::class.java).let { it.calcSpeed(it.walkSpeed) })
+            val selfSpeed = max(event.velocity.horizontalLength(), PlayerUtil.calcBaseSpeed(PlayerUtil.walkSpeed))
 
             var angleOffset = Math.toDegrees(selfSpeed / radius.value)
             if (invert)

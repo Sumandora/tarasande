@@ -11,7 +11,6 @@ import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.event.*
 import su.mandora.tarasande.mixin.accessor.ILivingEntity
 import su.mandora.tarasande.mixin.accessor.IPlayerMoveC2SPacket
-import su.mandora.tarasande.module.movement.ModuleNoRotate
 import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.render.RenderUtil
@@ -99,7 +98,7 @@ object RotationUtil {
                     if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerPositionLookS2CPacket) {
                         disableNextTeleport = true
                         if (fakeRotation != null)
-                            fakeRotation = TarasandeMain.get().managerModule.get(ModuleNoRotate::class.java).evaluateNewRotation(event.packet)
+                            fakeRotation = evaluateNewRotation(event.packet)
                     } else if (event.type == EventPacket.Type.SEND && event.packet is PlayerMoveC2SPacket) {
                         if (fakeRotation != null) {
                             if (disableNextTeleport) { // this code is crap ._.
@@ -194,4 +193,20 @@ object RotationUtil {
     fun getYaw(delta: Vec2f) = Math.toDegrees(atan2(delta.y, delta.x).toDouble()) - 90
 
     private fun getPitch(deltaY: Double, dist: Double) = -Math.toDegrees(atan2(deltaY, dist))
+
+    fun evaluateNewRotation(packet: PlayerPositionLookS2CPacket): Rotation {
+        var j = packet.yaw
+        var k = packet.pitch
+        if (packet.flags.contains(PlayerPositionLookS2CPacket.Flag.X_ROT)) {
+            k += MinecraftClient.getInstance().player?.pitch!!
+        }
+        if (packet.flags.contains(PlayerPositionLookS2CPacket.Flag.Y_ROT)) {
+            j += MinecraftClient.getInstance().player?.yaw!!
+        }
+        // The pitch calculation is literally mojang dev iq overload, kept for historic reasons
+        val rot = Rotation(j, k)
+        rot.yaw = rot.yaw % 360.0f
+        rot.pitch = MathHelper.clamp(rot.pitch, -90.0f, 90.0f) % 360.0f
+        return rot
+    }
 }

@@ -60,13 +60,11 @@
 - Target strafe: Anti Void
 - Account manager: Add skins in selection
 - AirJump/-Walk
-- More Modularity by moving methods to utils
 - Static ESP Width
 
 ### TODO-List (Click GUI)
 - Correctly save and calculate the positions of the panels when resizing ingame
 - Make block picker more beautiful with icons
-- Make text inputs more beautiful with background
 - Scaling for the whole GUI, so you can scale it for your MC Gui scale
 
 ## Notes

@@ -12,6 +12,7 @@ import su.mandora.tarasande.event.EventRender3D
 import su.mandora.tarasande.event.EventUpdate
 import su.mandora.tarasande.util.pathfinder.Node
 import su.mandora.tarasande.util.pathfinder.PathFinder
+import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueColor
@@ -185,7 +186,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
     object Breaker {
 
-        private val breakSpeed = BiFunction<Node, Node, Double> { _, movement -> getBreakSpeed(BlockPos(movement.x, movement.y, movement.z)).first }
+        private val breakSpeed = BiFunction<Node, Node, Double> { _, movement -> PlayerUtil.getBreakSpeed(BlockPos(movement.x, movement.y, movement.z)).first }
         private var defenders: List<BlockPos>? = null
 
         private val pathFinder = PathFinder({ _, node -> defenders?.contains(BlockPos(node.x, node.y, node.z)) == true }, cost = breakSpeed)
@@ -218,34 +219,6 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                 }
             }
             return bestWay
-        }
-
-        fun getBreakSpeed(blockPos: BlockPos): Pair<Double, Int> {
-            val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot ?: return Pair(1.0, -1)
-            var bestMult = 1.0
-            var bestTool = -1
-            for (i in 0..8) {
-                val mult = getBreakSpeed(blockPos, i)
-                if (bestMult > mult) {
-                    bestTool = i
-                    bestMult = mult
-                }
-            }
-            MinecraftClient.getInstance().player?.inventory?.selectedSlot = origSlot
-            return Pair(bestMult, bestTool)
-        }
-
-        fun getBreakSpeed(blockPos: BlockPos, item: Int): Double {
-            val state = MinecraftClient.getInstance().world?.getBlockState(blockPos)
-            if (state?.isAir!! || state.getOutlineShape(MinecraftClient.getInstance().world, blockPos).isEmpty) return 1.0
-            val hardness = state.getHardness(MinecraftClient.getInstance().world, blockPos)
-            if (hardness <= 0.0f) return 1.0
-            MinecraftClient.getInstance().player?.inventory?.selectedSlot = item
-            var mult = MinecraftClient.getInstance().player?.getBlockBreakingSpeed(state)!!
-            if (!MinecraftClient.getInstance().player?.isOnGround!!) {
-                mult *= 5.0f // bruh
-            }
-            return 1.0 - mult / hardness / 30.0
         }
     }
 

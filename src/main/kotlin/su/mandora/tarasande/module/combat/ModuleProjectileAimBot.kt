@@ -14,13 +14,13 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.mixin.accessor.ICrossbowItem
 import su.mandora.tarasande.module.player.ModuleFastUse
-import su.mandora.tarasande.module.render.ModuleTrajectories
 import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.extension.plus
 import su.mandora.tarasande.util.extension.times
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
+import su.mandora.tarasande.util.player.ProjectileUtil
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueNumber
 import su.mandora.tarasande.value.ValueNumberRange
@@ -49,7 +49,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
     }
 
     private fun deadReckoning(stack: ItemStack, entity: Entity, rotation: Rotation): Vec3d {
-        val predicted = TarasandeMain.get().managerModule.get(ModuleTrajectories::class.java).predict(stack, rotation, false)
+        val predicted = ProjectileUtil.predict(stack, rotation, false)
         if(predicted.size <= 0) return entity.boundingBox.center
         val prev = Vec3d(entity.prevX, entity.prevY, entity.prevZ)
         return entity.boundingBox.center + (entity.pos!! - prev).withAxis(Direction.Axis.Y, 0.0) * (predicted.size.toDouble() * predictionAmount.value)

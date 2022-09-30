@@ -99,7 +99,8 @@ class ManagerModule : Manager<Module>() {
             ModuleNoChatContext(),
             ModuleInstantWorld(),
             ModuleFurnaceProgress(),
-            ModuleNoMiningTrace()
+            ModuleNoMiningTrace(),
+            ModuleDisableTelemetry()
         )
         TarasandeMain.get().managerEvent.add { event ->
             if (event is EventTick)
