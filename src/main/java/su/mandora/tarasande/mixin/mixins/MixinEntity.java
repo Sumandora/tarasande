@@ -23,6 +23,7 @@ import su.mandora.tarasande.event.EventStep;
 import su.mandora.tarasande.event.EventVelocityYaw;
 import su.mandora.tarasande.mixin.accessor.IEntity;
 import su.mandora.tarasande.mixin.accessor.IVec3d;
+import su.mandora.tarasande.module.render.ModuleESP;
 import su.mandora.tarasande.util.math.rotation.RotationUtil;
 
 import java.awt.*;
@@ -82,7 +83,7 @@ public abstract class MixinEntity implements IEntity {
 
     @Inject(method = "getTeamColorValue", at = @At("RETURN"), cancellable = true)
     public void injectGetTeamColorValue(CallbackInfoReturnable<Integer> cir) {
-        Color c = TarasandeMain.Companion.get().getEntityColor().getColor((Entity) (Object) this);
+        Color c = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class).getEntityColor().getColor((Entity) (Object) this);
         if (c != null)
             cir.setReturnValue(c.getRGB());
     }

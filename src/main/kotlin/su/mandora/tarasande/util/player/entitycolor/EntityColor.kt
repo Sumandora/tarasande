@@ -12,32 +12,30 @@ import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueColor
 import java.awt.Color
 
-class EntityColor {
+class EntityColor(private val moduleESP: ModuleESP) {
 
-    private val espModule = TarasandeMain.get().managerModule.get(ModuleESP::class.java)
-
-    private val modifyTeamColor = ValueBoolean(espModule, "Modify team color", true)
-    private val selfColor = object : ValueColor(espModule, "Self Color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val modifyTeamColor = ValueBoolean(moduleESP, "Modify team color", true)
+    private val selfColor = object : ValueColor(moduleESP, "Self Color", 0.0f, 1.0f, 1.0f, 1.0f) {
         override fun isEnabled() = modifyTeamColor.value
     }
-    private val friendsColor = object : ValueColor(espModule, "Friends Color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val friendsColor = object : ValueColor(moduleESP, "Friends Color", 0.0f, 1.0f, 1.0f, 1.0f) {
         override fun isEnabled() = modifyTeamColor.value
     }
-    private val useTeamColor = object : ValueBoolean(espModule, "Use Team Color", true) {
+    private val useTeamColor = object : ValueBoolean(moduleESP, "Use Team Color", true) {
         override fun isEnabled() = modifyTeamColor.value
     }
-    private val playerColor = object : ValueColor(espModule, "Player Color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val playerColor = object : ValueColor(moduleESP, "Player Color", 0.0f, 1.0f, 1.0f, 1.0f) {
         override fun isEnabled() = modifyTeamColor.value && !useTeamColor.value
     }
-    private val animalColor = object : ValueColor(espModule, "Animal Color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val animalColor = object : ValueColor(moduleESP, "Animal Color", 0.0f, 1.0f, 1.0f, 1.0f) {
         override fun isEnabled() = modifyTeamColor.value && !useTeamColor.value
     }
-    private val mobColor = object : ValueColor(espModule, "Mob Color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val mobColor = object : ValueColor(moduleESP, "Mob Color", 0.0f, 1.0f, 1.0f, 1.0f) {
         override fun isEnabled() = modifyTeamColor.value && !useTeamColor.value
     }
 
     fun getColor(entity: Entity): Color? {
-        if (!espModule.enabled || !modifyTeamColor.value)
+        if (!moduleESP.enabled || !modifyTeamColor.value)
             return null
         var color: Color? = null
 
