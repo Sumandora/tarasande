@@ -4,7 +4,6 @@ import com.google.gson.GsonBuilder
 import de.enzaxd.viaforge.ViaForge
 import de.florianmichael.tarasande.base.menu.ManagerMenu
 import de.florianmichael.tarasande.menu.ElementMenuScreenAccountManager
-import de.florianmichael.tarasande.screen.ScreenBetterClientMenuHandler
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
@@ -15,7 +14,7 @@ import su.mandora.tarasande.base.file.ManagerFile
 import su.mandora.tarasande.base.module.ManagerModule
 import su.mandora.tarasande.base.util.player.clickspeed.ManagerClickMethod
 import su.mandora.tarasande.base.value.ManagerValue
-import su.mandora.tarasande.screen.menu.ScreenCheatMenuHandler
+import su.mandora.tarasande.screen.menu.ScreenCheatMenu
 import su.mandora.tarasande.util.clientvalue.ClientValues
 import su.mandora.tarasande.util.connection.Proxy
 import su.mandora.tarasande.util.player.entitycolor.EntityColor
@@ -43,9 +42,7 @@ class TarasandeMain {
         private set
     lateinit var blur: Blur
         private set
-    lateinit var screenCheatMenuHandler: ScreenCheatMenuHandler
-        private set
-    lateinit var screenBetterClientMenuHandler: ScreenBetterClientMenuHandler
+    lateinit var screenCheatMenu: ScreenCheatMenu
         private set
     lateinit var friends: Friends
         private set
@@ -94,8 +91,7 @@ class TarasandeMain {
         entityColor = EntityColor()
         managerESP = ManagerESP()
         blur = Blur()
-        screenCheatMenuHandler = ScreenCheatMenuHandler() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
-        screenBetterClientMenuHandler = ScreenBetterClientMenuHandler()
+        screenCheatMenu = ScreenCheatMenu() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
         friends = Friends()
 
         protocolHack = ViaForge()

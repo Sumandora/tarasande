@@ -60,12 +60,14 @@
 - Target strafe: Anti Void
 - Account manager: Add skins in selection
 - AirJump/-Walk
-- Fix NettyStatsAdapter Sharable crash
 
 ### TODO-List (Click GUI)
 - Correctly save and calculate the positions of the panels when resizing ingame
 - Make block picker more beautiful with icons
 - Scaling for the whole GUI, so you can scale it for your MC Gui scale
+
+### TODO-List (florian)
+- TPS Hud Element recode for Protocol Hack
 
 ## Notes
 - AutoTool: Axes can set shields on cooldown. Maybe implement that if possible axes are being used to set shields on cooldown before actually attacking with sword

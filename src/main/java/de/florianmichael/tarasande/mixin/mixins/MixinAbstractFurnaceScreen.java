@@ -53,7 +53,6 @@ public abstract class MixinAbstractFurnaceScreen<T extends AbstractFurnaceScreen
                 if (handler.isBurning()) {
                     // 23 = max
                     var progress = 23 - handler.getCookProgress();
-
                     var width = RenderUtil.INSTANCE.text("Item smelting finished in: " + ((progress / 2) + 1) + " seconds", 0, 0);
                     this.setPanelWidth(width + 2);
 

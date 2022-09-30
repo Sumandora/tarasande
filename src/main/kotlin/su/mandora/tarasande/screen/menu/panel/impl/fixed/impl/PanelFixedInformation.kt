@@ -11,9 +11,9 @@ class PanelFixedInformation(x: Double, y: Double) : PanelFixed("Information", x,
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val text = ArrayList<String>()
-        for (owner in TarasandeMain.get().screenCheatMenuHandler.get().managerInformation.getAllOwners()) {
+        for (owner in TarasandeMain.get().screenCheatMenu.managerInformation.getAllOwners()) {
             val cache = ArrayList<String>()
-            val informations = TarasandeMain.get().screenCheatMenuHandler.get().managerInformation.getAllInformation(owner)
+            val informations = TarasandeMain.get().screenCheatMenu.managerInformation.getAllInformation(owner)
             for (information in informations) {
                 val message = information.getMessage()
                 if (message != null) {
@@ -48,7 +48,7 @@ class PanelFixedInformation(x: Double, y: Double) : PanelFixed("Information", x,
     }
 
     override fun isVisible(): Boolean {
-        for (information in TarasandeMain.get().screenCheatMenuHandler.get().managerInformation.list)
+        for (information in TarasandeMain.get().screenCheatMenu.managerInformation.list)
             if (information.getMessage() != null)
                 return true
         return false

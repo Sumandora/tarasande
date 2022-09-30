@@ -1,6 +1,7 @@
 package su.mandora.tarasande.mixin.mixins;
 
 import de.florianmichael.tarasande.screen.ScreenBetterClientMenu;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -10,8 +11,10 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -44,11 +47,28 @@ public class MixinTitleScreen extends Screen {
         if (drawableElement instanceof ButtonWidget buttonWidget) {
             if ((buttonWidget.getMessage().getContent() instanceof TranslatableTextContent && ((TranslatableTextContent) buttonWidget.getMessage().getContent()).getKey().equals("menu.online")) || buttonWidget.getMessage().getString().contains("Realms")) {
                 buttonWidget.setWidth(buttonWidget.getWidth() / 2 - 2);
+                final String selected = TarasandeMain.Companion.get().getManagerMenu().getSettings().getFocusedMenuEntry().getSelected().get(0);
 
-                var screenHandler = TarasandeMain.Companion.get().getScreenBetterClientMenuHandler();
-                addDrawableChild(new ButtonWidget(buttonWidget.x + buttonWidget.getWidth() + 4, buttonWidget.y, buttonWidget.getWidth(), buttonWidget.getHeight(), screenHandler.buttonText(), button -> screenHandler.doAction(this)));
+                Text buttonText = Text.literal((Character.toUpperCase(TarasandeMain.Companion.get().getName().charAt(0)) + TarasandeMain.Companion.get().getName().substring(1)) + " Menu");
+                if (this.anySelected() && !Screen.hasShiftDown()) {
+                    buttonText = Text.literal(selected);
+                }
+
+                addDrawableChild(new ButtonWidget(buttonWidget.x + buttonWidget.getWidth() + 4, buttonWidget.y, buttonWidget.getWidth(), buttonWidget.getHeight(), buttonText, button -> {
+                    if (this.anySelected() && !Screen.hasShiftDown()) {
+                        TarasandeMain.Companion.get().getManagerMenu().byName(selected).onClick(GLFW.GLFW_MOUSE_BUTTON_LEFT);
+                        return;
+                    }
+
+                    MinecraftClient.getInstance().setScreen(new ScreenBetterClientMenu(this));
+                }));
             }
         }
         return addDrawableChild(drawableElement);
+    }
+
+    @Unique
+    private boolean anySelected() {
+        return TarasandeMain.Companion.get().getManagerMenu().getSettings().getFocusedMenuEntry().anySelected() && !TarasandeMain.Companion.get().getManagerMenu().getSettings().getFocusedMenuEntry().getSelected().get(0).equals("None");
     }
 }

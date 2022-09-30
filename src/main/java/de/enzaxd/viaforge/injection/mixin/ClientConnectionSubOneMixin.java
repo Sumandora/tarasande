@@ -7,6 +7,8 @@ import de.enzaxd.viaforge.handler.CommonTransformer;
 import de.enzaxd.viaforge.handler.DecodeHandler;
 import de.enzaxd.viaforge.handler.EncodeHandler;
 import de.enzaxd.viaforge.injection.access.IClientConnection_Protocol;
+import de.florianmichael.tarasande.util.network.EventDecoder;
+import de.florianmichael.tarasande.util.network.EventEncoder;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import net.minecraft.network.ClientConnection;
@@ -33,6 +35,10 @@ public class ClientConnectionSubOneMixin {
             channel.pipeline()
                     .addBefore("encoder", CommonTransformer.HANDLER_ENCODER_NAME, new EncodeHandler(user))
                     .addBefore("decoder", CommonTransformer.HANDLER_DECODER_NAME, new DecodeHandler(user));
+
+            channel.pipeline()
+                    .addBefore(CommonTransformer.HANDLER_ENCODER_NAME, "tarasande-encoder", new EventEncoder())
+                    .addBefore(CommonTransformer.HANDLER_DECODER_NAME, "tarasande-decoder", new EventDecoder());
         }
     }
 }

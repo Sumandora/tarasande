@@ -15,7 +15,7 @@ import java.awt.Color
 
 class ManagerMenu : Manager<ElementMenu>() {
 
-    var settings: MenuSettingsParent? = null
+    val settings: MenuSettingsParent
 
     init {
         this.spacer("General")

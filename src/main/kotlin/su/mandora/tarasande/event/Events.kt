@@ -1,5 +1,6 @@
 package su.mandora.tarasande.event
 
+import io.netty.buffer.ByteBuf
 import net.minecraft.block.BlockState
 import net.minecraft.client.input.Input
 import net.minecraft.client.network.PlayerListEntry
@@ -182,3 +183,9 @@ class EventBlockCollision(val state: BlockState, val pos: BlockPos, val entity: 
 class EventEntityFlag(val entity: Entity, val flag: Int, var enabled: Boolean) : Event(false)
 class EventBoundingBoxOverride(val entity: Entity, var boundingBox: Box) : Event(false)
 class EventBlockChange(val pos: BlockPos, val state: BlockState) : Event(false)
+class EventPacketTransform(val type: Type, val buf: ByteBuf?) : Event(false) {
+
+    enum class Type {
+        DECODE, ENCODE
+    }
+}

@@ -7,7 +7,7 @@ import su.mandora.tarasande.value.ValueMode
 
 class MenuSettingsParent(managerMenu: ManagerMenu) {
 
-    var focusedMenuEntry: ValueMode? = null
+    val focusedMenuEntry: ValueMode
 
     init {
         val entries = mutableListOf("None")
