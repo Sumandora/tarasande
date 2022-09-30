@@ -33,7 +33,7 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         scrollOffset = MathHelper.clamp(scrollOffset + scrollSpeed, min(-(getMaxScrollOffset() - (panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight - 5)), 0.0), 0.0)
-        scrollSpeed -= scrollSpeed * 0.2
+        scrollSpeed = MathHelper.clamp(scrollSpeed - scrollSpeed * RenderUtil.deltaTime * 0.01, -100.0, 100.0)
 
         if (opened) {
             if (background) {
@@ -112,7 +112,7 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
         if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + panelHeight)) {
-            scrollSpeed += amount
+            scrollSpeed += amount * 3
             return true
         }
         return false
