@@ -62,7 +62,7 @@ class TarasandeMain {
     val autoSaveDaemon: Thread /* This has to be here because IntelliJ is the best IDE ever built */ = Thread({
         while (true) {
             if (clientValues.autoSaveConfig.value) {
-                managerFile.save()
+                managerFile.save(false)
                 Thread.sleep(clientValues.autoSaveDelay.value.toLong())
             }
         }
@@ -131,6 +131,6 @@ class TarasandeMain {
             }
         }
 
-        managerFile.save()
+        managerFile.save(true)
     }
 }

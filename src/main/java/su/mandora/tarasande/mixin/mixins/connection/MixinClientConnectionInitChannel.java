@@ -16,7 +16,7 @@ import su.mandora.tarasande.util.connection.Proxy;
 public class MixinClientConnectionInitChannel {
 
     @Inject(method = "initChannel", at = @At("HEAD"))
-    public void injectHeadInitChannel(Channel channel, CallbackInfo ci) {
+    public void injectPreInitChannel(Channel channel, CallbackInfo ci) {
         channel.pipeline().addLast("network_stats", NettyStatsAdapter.Companion.get());
     }
 

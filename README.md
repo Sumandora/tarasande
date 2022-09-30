@@ -61,6 +61,7 @@
 - Account manager: Add skins in selection
 - AirJump/-Walk
 - Static ESP Width
+- Fix NettyStatsAdapter Sharable crash
 
 ### TODO-List (Click GUI)
 - Correctly save and calculate the positions of the panels when resizing ingame

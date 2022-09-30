@@ -23,17 +23,14 @@ class ManagerFile : Manager<File>() {
         )
     }
 
-    fun save() {
+    fun save(backup: Boolean) {
         for (file in list) {
-            if (!file.loaded)
-                continue
-
             val fileObj = java.io.File(System.getProperty("user.home") + java.io.File.separator + TarasandeMain.get().name + java.io.File.separator + file.name)
 
             if (!fileObj.parentFile.exists())
                 fileObj.parentFile.mkdirs()
 
-            if (fileObj.exists())
+            if (fileObj.exists() && backup)
                 fileObj.renameTo(java.io.File(fileObj.path + "_backup"))
 
             val fileWriter = FileWriter(fileObj)
@@ -44,30 +41,24 @@ class ManagerFile : Manager<File>() {
 
     fun load() {
         for (file in list) {
-            val fileObj = java.io.File(System.getProperty("user.home") + java.io.File.separator + TarasandeMain.get().name + java.io.File.separator + file.name)
-            if (fileObj.exists()) {
-
-                val content = file.decrypt(String(Files.readAllBytes(fileObj.toPath())))
-                if (content != null) {
-
-                    val jsonElement = TarasandeMain.get().gson.fromJson(content, JsonElement::class.java)
-                    try {
-                        if (jsonElement != null) {
-
-                            file.load(jsonElement)
-                            file.loaded = true
-                            continue
-                        }
-                    } catch (t: Throwable) {
-                        t.printStackTrace()
-                    }
-
-                    TarasandeMain.get().logger.error(file.name + " didn't load correctly!")
+            try {
+                internalLoad(file, false)
+            } catch (t: Throwable) {
+                try {
+                    internalLoad(file, true)
+                } catch (t: Throwable) {
+                    TarasandeMain.get().logger.error(file.name + "didn't load correctly!")
                 }
-            } else {
-                file.loaded = true
             }
         }
+    }
+
+    private fun internalLoad(file: File, backup: Boolean) {
+        val fileObj = java.io.File(System.getProperty("user.home") + java.io.File.separator + TarasandeMain.get().name + java.io.File.separator + file.name + if (backup) "_backup" else "")
+        val content = file.decrypt(String(Files.readAllBytes(fileObj.toPath()))) ?: error(file.name + "'s content is empty")
+        val jsonElement = TarasandeMain.get().gson.fromJson(content, JsonElement::class.java)
+        file.load(jsonElement)
+        file.loaded = true
     }
 }
 

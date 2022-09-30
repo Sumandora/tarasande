@@ -181,3 +181,4 @@ class EventStep : Event {
 class EventBlockCollision(val state: BlockState, val pos: BlockPos, val entity: Entity) : Event(true)
 class EventEntityFlag(val entity: Entity, val flag: Int, var enabled: Boolean) : Event(false)
 class EventBoundingBoxOverride(val entity: Entity, var boundingBox: Box) : Event(false)
+class EventBlockChange(val pos: BlockPos, val state: BlockState) : Event(false)

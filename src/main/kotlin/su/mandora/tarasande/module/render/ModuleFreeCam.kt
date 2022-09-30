@@ -56,9 +56,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
                 mc.options.perspective = Perspective.THIRD_PERSON_BACK
                 val accessor = event.camera as ICamera
 
-                accessor.tarasande_invokeSetPos((prevCameraPos ?: position)?.lerp(position, mc.tickDelta.toDouble()).also {
-                    prevCameraPos = it
-                })
+                accessor.tarasande_invokeSetPos((prevCameraPos ?: position)?.lerp(position, mc.tickDelta.toDouble()))
                 accessor.tarasande_invokeSetRotation(rotation?.yaw!!, rotation?.pitch!!)
             }
 
@@ -89,6 +87,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
                         MathUtil.roundAwayFromZero(PlayerUtil.input.movementForward.toDouble())
                     ), speed.value.toFloat(), rotation?.yaw!!)
                     velocity = Vec3d(velocity?.x!!, yMotion, velocity.z)
+                    prevCameraPos = position
                     position = position!! + velocity
                 }
             }
