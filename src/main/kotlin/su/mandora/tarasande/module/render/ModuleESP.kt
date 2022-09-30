@@ -21,6 +21,7 @@ import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.extension.plus
 import su.mandora.tarasande.util.extension.times
 import su.mandora.tarasande.util.extension.unaryMinus
+import su.mandora.tarasande.util.player.entitycolor.EntityColor
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueRegistry
@@ -36,6 +37,8 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
     private val hideBots = object : ValueBoolean(this, "Hide bots", false) {
         override fun isEnabled() = entities.list.contains(EntityType.PLAYER)
     }
+
+    val entityColor = EntityColor(this)
 
     fun filter(entity: Entity) =
         entities.list.contains(entity.type) &&

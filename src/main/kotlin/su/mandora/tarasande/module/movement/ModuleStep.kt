@@ -48,7 +48,7 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
                     }
 
                     EventStep.State.POST -> {
-                        if (event.stepHeight > mc.player?.stepHeight!!) {
+                        if (event.stepHeight > mc.player?.stepHeight!! && mc.player?.isOnGround == true) {
                             if (mode.isSelected(1)) {
                                 mc.networkHandler?.sendPacket(PositionAndOnGround(mc.player?.pos?.x!!, mc.player?.pos?.y?.plus(event.stepHeight * 0.42F)!!, mc.player?.pos?.z!!, false))
                                 mc.networkHandler?.sendPacket(PositionAndOnGround(mc.player?.pos?.x!!, mc.player?.pos?.y?.plus(event.stepHeight * 0.75F)!!, mc.player?.pos?.z!!, false))

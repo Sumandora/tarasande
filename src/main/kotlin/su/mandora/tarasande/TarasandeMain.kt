@@ -17,7 +17,6 @@ import su.mandora.tarasande.base.value.ManagerValue
 import su.mandora.tarasande.screen.menu.ScreenCheatMenu
 import su.mandora.tarasande.util.clientvalue.ClientValues
 import su.mandora.tarasande.util.connection.Proxy
-import su.mandora.tarasande.util.player.entitycolor.EntityColor
 import su.mandora.tarasande.util.player.friends.Friends
 import su.mandora.tarasande.util.render.blur.Blur
 
@@ -33,8 +32,6 @@ class TarasandeMain {
     lateinit var clientValues: ClientValues
         private set
     lateinit var protocolHack: ViaForge
-        private set
-    lateinit var entityColor: EntityColor
         private set
     lateinit var managerClickMethod: ManagerClickMethod
         private set
@@ -88,7 +85,6 @@ class TarasandeMain {
         clientValues = ClientValues()
         managerClickMethod = ManagerClickMethod()
         managerModule = ManagerModule()
-        entityColor = EntityColor()
         managerESP = ManagerESP()
         blur = Blur()
         screenCheatMenu = ScreenCheatMenu() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
