@@ -9,6 +9,7 @@ import su.mandora.tarasande.event.EventMovement
 import su.mandora.tarasande.event.EventVanillaFlight
 import su.mandora.tarasande.mixin.accessor.IEntity
 import su.mandora.tarasande.mixin.accessor.IKeyBinding
+import su.mandora.tarasande.mixin.accessor.IVec3d
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueMode
@@ -52,7 +53,7 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
                     0.0,
                     MathUtil.roundAwayFromZero(PlayerUtil.input.movementForward.toDouble())
                 ), flightSpeed.value.toFloat(), mc.player?.yaw!!)
-                event.velocity = Vec3d(event.velocity.x, yMotion, event.velocity.z)
+                (event.velocity as IVec3d).tarasande_setY(yMotion)
             }
         }
     }
