@@ -85,7 +85,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             PanelFixedInventory::class.java,
             PanelFixedWatermark::class.java,
             PanelFixedHypixelBedwarsOverlay::class.java,
-
             PanelFixedRadar::class.java
         )
         if (TarasandeMain.get().linux) {

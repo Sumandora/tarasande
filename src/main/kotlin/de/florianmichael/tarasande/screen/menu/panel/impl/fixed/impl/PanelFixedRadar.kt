@@ -8,6 +8,7 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.render.RenderUtil
+import java.awt.Color
 import kotlin.math.*
 
 class PanelFixedRadar(x: Double, y: Double) : PanelFixed("Radar", x, y, 100.0, 100.0, background = true) {
@@ -20,10 +21,10 @@ class PanelFixedRadar(x: Double, y: Double) : PanelFixed("Radar", x, y, 100.0, 1
 		val scaleFactor = MinecraftClient.getInstance().window?.scaleFactor!!.toInt()
 
 		GlStateManager._scissorBox(
-			((x) * scaleFactor).toInt(),
+			(x * scaleFactor).toInt(),
 			(MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight) * scaleFactor).toInt(),
-			((panelWidth) * scaleFactor).toInt(),
-			((panelHeight) * scaleFactor).toInt()
+			(panelWidth * scaleFactor).toInt(),
+			(panelHeight * scaleFactor).toInt()
 		)
 		for (entity in MinecraftClient.getInstance().world?.entities!!) {
 			val dist = sqrt((entity.x - MinecraftClient.getInstance().player?.x!!).pow(2.0) + (entity.z - MinecraftClient.getInstance().player?.z!!).pow(2.0))
@@ -36,10 +37,7 @@ class PanelFixedRadar(x: Double, y: Double) : PanelFixed("Radar", x, y, 100.0, 1
 			val x = -sin(yawDelta / 360.0 * PI * 2) * dist
 			val y = cos(yawDelta / 360.0 * PI * 2) * dist
 
-			try {
-				RenderUtil.fillCircle(matrices, this.x + panelWidth / 2 + x, this.y + panelHeight / 2 + y, 2.0, TarasandeMain.get().entityColor.getColor(entity)!!.rgb)
-			} catch (ignored: Exception) {
-			}
+			RenderUtil.fillCircle(matrices, this.x + panelWidth / 2 + x, this.y + panelHeight / 2 + y, 2.0, (TarasandeMain.get().entityColor.getColor(entity) ?: Color.white).rgb)
 		}
 
 		GlStateManager._disableScissorTest()
