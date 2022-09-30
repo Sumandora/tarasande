@@ -1,6 +1,7 @@
 package su.mandora.tarasande.module.combat
 
 import net.minecraft.entity.Entity
+import net.minecraft.entity.EntityStatuses
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.effect.StatusEffects
@@ -9,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Items
 import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
+import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.EntityHitResult
@@ -48,6 +50,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val fakeRotationFov = ValueBoolean(this, "Fake rotation FOV", false)
     private val reach = ValueNumberRange(this, "Reach", 0.1, 3.0, 4.0, 6.0, 0.1)
     private val clickSpeedUtil = ClickSpeedUtil(this, { true }) // for setting order
+    private val waitForDamageValue = ValueBoolean(this, "Wait for damage", false)
     private val rayTrace = ValueBoolean(this, "Ray trace", false)
     private val simulateMouseDelay = object : ValueBoolean(this, "Simulate mouse delay", false) {
         override fun isEnabled() = rayTrace.value && !mode.isSelected(1)
@@ -128,6 +131,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private var clicked = false
     private var performedTick = false
     private var lastFlex: Rotation? = null
+    private var waitForDamage = true
 
     override fun onEnable() {
         clickSpeedUtil.reset()
@@ -138,6 +142,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         blocking = false
         lastFlex = null
         targets.clear()
+        waitForDamage = true
     }
 
     private fun fovRotation() = if (fakeRotationFov.value && RotationUtil.fakeRotation != null) RotationUtil.fakeRotation!! else Rotation(mc.player!!)
@@ -182,6 +187,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     if (blocking)
                         blocking = false
                     lastFlex = null
+                    waitForDamage = true
                     return@Consumer
                 }
 
@@ -234,22 +240,27 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 performedTick = false
                 clicked = false
 
-                if (targets.isEmpty() || event.dirty) {
+                var canHit = true
+
+                if (waitForCritical.value) if (!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) })
+                    if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
+                        if (!mc.player?.isOnGround!! && mc.player?.velocity?.y!! != 0.0 && (mc.player?.fallDistance == 0.0f || (criticalSprint.value && !mc.player?.isSprinting!!)))
+                            canHit = false
+
+                if (dontAttackWhenBlocking.value && allAttacked { it.isBlocking })
+                    if (!simulateShieldBlock.value || allAttacked { it.blockedByShield(DamageSource.player(mc.player)) })
+                        canHit = false
+
+                if (waitForDamageValue.value && waitForDamage)
+                    canHit = false
+
+                if (targets.isEmpty() || event.dirty || !canHit) {
                     clickSpeedUtil.reset()
                     waitForHit = false
                     return@Consumer
                 }
 
-                var clicks = clickSpeedUtil.getClicks()
-
-                if (waitForCritical.value) if (!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) })
-                    if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
-                        if (!mc.player?.isOnGround!! && mc.player?.velocity?.y!! != 0.0 && (mc.player?.fallDistance == 0.0f || (criticalSprint.value && !mc.player?.isSprinting!!)))
-                            clicks = 0
-
-                if (dontAttackWhenBlocking.value && allAttacked { it.isBlocking })
-                    if (!simulateShieldBlock.value || allAttacked { it.blockedByShield(DamageSource.player(mc.player)) })
-                        clicks = 0
+                val clicks = clickSpeedUtil.getClicks()
 
                 if (!blockMode.isSelected(0) && mc.player?.isUsingItem!! && clicks > 0) {
                     var hasTarget = false
@@ -367,6 +378,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             is EventHandleBlockBreaking -> {
                 event.parameter = event.parameter || clicked
+            }
+
+            is EventPacket -> {
+                if (event.type == EventPacket.Type.RECEIVE && event.packet is EntityStatusS2CPacket) {
+                    if (event.packet.getEntity(mc.world) == mc.player && event.packet.status == EntityStatuses.DAMAGE_FROM_GENERIC_SOURCE)
+                        waitForDamage = false
+                }
             }
         }
     }
