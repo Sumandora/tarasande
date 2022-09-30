@@ -23,7 +23,6 @@ import su.mandora.tarasande.event.EventStep;
 import su.mandora.tarasande.event.EventVelocityYaw;
 import su.mandora.tarasande.mixin.accessor.IEntity;
 import su.mandora.tarasande.mixin.accessor.IVec3d;
-import su.mandora.tarasande.module.render.ModuleESP;
 import su.mandora.tarasande.util.math.rotation.RotationUtil;
 
 import java.awt.*;
@@ -83,12 +82,9 @@ public abstract class MixinEntity implements IEntity {
 
     @Inject(method = "getTeamColorValue", at = @At("RETURN"), cancellable = true)
     public void injectGetTeamColorValue(CallbackInfoReturnable<Integer> cir) {
-        ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class);
-        if (moduleESP.getEnabled() && moduleESP.filter((Entity) (Object) this)) {
-            Color c = TarasandeMain.Companion.get().getEntityColor().getColor((Entity) (Object) this);
-            if (c != null)
-                cir.setReturnValue(c.getRGB());
-        }
+        Color c = TarasandeMain.Companion.get().getEntityColor().getColor((Entity) (Object) this);
+        if (c != null)
+            cir.setReturnValue(c.getRGB());
     }
 
     @Redirect(method = "adjustMovementForCollisions(Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/util/math/Vec3d;", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;stepHeight:F"))
