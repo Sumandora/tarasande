@@ -21,9 +21,9 @@ public abstract class MixinMinecraftClient {
         final EventChangeScreen eventChangeScreen = new EventChangeScreen(screen);
         TarasandeMain.Companion.get().getManagerEvent().call(eventChangeScreen);
 
-        if (eventChangeScreen.getCancelled()) {
-            ci.cancel();
+        if (eventChangeScreen.getDirty()) {
             this.setScreen(eventChangeScreen.getNewScreen());
+            ci.cancel();
         }
     }
 }

@@ -39,8 +39,4 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
             }
         }).also { clickableWidgetPanel = it })
     }
-
-    override fun tick() {
-        clickableWidgetPanel.tick()
-    }
 }

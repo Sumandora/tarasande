@@ -14,7 +14,6 @@ class ModuleInstantWorld : Module("Instant world", "Reverts 22w12a -> 22w13a loa
             is EventChangeScreen -> {
                 if (event.newScreen is DownloadingTerrainScreen) {
                     event.newScreen = null
-                    event.cancelled = true
                 }
             }
         }
