@@ -1,7 +1,6 @@
 package de.florianmichael.tarasande.mixin.mixins;
 
 import de.florianmichael.tarasande.event.EventBindingEnchantment;
-import de.florianmichael.tarasande.module.exploit.ModuleAntiBindingCurse;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,12 +12,10 @@ import su.mandora.tarasande.TarasandeMain;
 @Mixin(EnchantmentHelper.class)
 public class MixinEnchantmentHelper {
 
-    @Inject(method = "hasBindingCurse", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "hasBindingCurse", at = @At("RETURN"), cancellable = true)
     private static void hookHack(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        final EventBindingEnchantment eventBindingEnchantment = new EventBindingEnchantment();
+        final EventBindingEnchantment eventBindingEnchantment = new EventBindingEnchantment(cir.getReturnValue());
         TarasandeMain.Companion.get().getManagerEvent().call(eventBindingEnchantment);
-
-        if (eventBindingEnchantment.getCancelled())
-            cir.setReturnValue(false);
+        cir.setReturnValue(eventBindingEnchantment.getPresent());
     }
 }
