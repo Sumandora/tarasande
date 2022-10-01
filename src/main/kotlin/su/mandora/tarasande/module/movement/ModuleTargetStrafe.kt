@@ -11,7 +11,7 @@ import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventMovement
 import su.mandora.tarasande.event.EventUpdate
-import su.mandora.tarasande.mixin.accessor.IVec3d
+import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import su.mandora.tarasande.module.combat.ModuleKillAura
 import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.math.rotation.RotationUtil

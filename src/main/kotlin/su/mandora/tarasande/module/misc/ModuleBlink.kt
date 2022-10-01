@@ -12,7 +12,7 @@ import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventPacket
 import su.mandora.tarasande.event.EventPollEvents
-import su.mandora.tarasande.mixin.accessor.IClientConnection
+import net.tarasandedevelopment.tarasande.mixin.accessor.IClientConnection
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber

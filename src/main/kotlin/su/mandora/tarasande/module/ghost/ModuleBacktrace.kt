@@ -7,7 +7,7 @@ import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventBoundingBoxOverride
 import su.mandora.tarasande.event.EventUpdate
-import su.mandora.tarasande.mixin.accessor.IGameRenderer
+import net.tarasandedevelopment.tarasande.mixin.accessor.IGameRenderer
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil

@@ -4,7 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.mojang.authlib.Environment
-import de.florianmichael.tarasande.menu.ElementMenuScreenAccountManager
+import su.mandora.tarasande.clientmenu.ElementMenuScreenAccountManager
 import net.minecraft.client.util.Session
 import org.apache.commons.codec.binary.Hex
 import oshi.SystemInfo
@@ -43,7 +43,7 @@ class FileAccounts : File("Accounts") {
     override fun save(): JsonElement {
         val jsonObject = JsonObject()
         val jsonArray = JsonArray()
-        for (account in TarasandeMain.get().managerMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.accounts) {
+        for (account in TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.accounts) {
             val accountObject = JsonObject()
             accountObject.addProperty("Type", account.javaClass.getAnnotation(AccountInfo::class.java).name)
             accountObject.add("Account", account.save())
@@ -72,15 +72,15 @@ class FileAccounts : File("Accounts") {
             jsonArray.add(accountObject)
         }
         jsonObject.add("Accounts", jsonArray)
-        if (TarasandeMain.get().managerMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.mainAccount != null)
-            jsonObject.addProperty("Main-Account", TarasandeMain.get().managerMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.mainAccount)
+        if (TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.mainAccount != null)
+            jsonObject.addProperty("Main-Account", TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.mainAccount)
         return jsonObject
     }
 
     override fun load(jsonElement: JsonElement) {
         val jsonObject: JsonObject = jsonElement as JsonObject
         for (jsonElement2 in jsonObject.getAsJsonArray("Accounts")) {
-            for (accountClass in TarasandeMain.get().managerMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAccount.list) {
+            for (accountClass in TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAccount.list) {
                 val jsonObject2 = jsonElement2 as JsonObject
                 if (accountClass.getAnnotation(AccountInfo::class.java).name == jsonObject2.get("Type").asString) {
                     val account = accountClass.getDeclaredConstructor().newInstance().load(jsonObject2.get("Account").asJsonArray)
@@ -105,12 +105,12 @@ class FileAccounts : File("Accounts") {
                         environment.get("Services-Host").asString,
                         "Custom"
                     )
-                    TarasandeMain.get().managerMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.accounts.add(account)
+                    TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.accounts.add(account)
                 }
             }
         }
         if (jsonObject.has("Main-Account"))
-            TarasandeMain.get().managerMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.mainAccount = jsonObject.get("Main-Account").asInt
+            TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.mainAccount = jsonObject.get("Main-Account").asInt
     }
 
     override fun encrypt(input: String): String {

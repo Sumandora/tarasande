@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "su.mandora.tarasande.mixin.mixins",
+  "package": "net.tarasandedevelopment.tarasande.mixin.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "MixinAbstractBlockState",
@@ -9,10 +9,13 @@
     "MixinCamera",
     "MixinClientPlayerEntity",
     "MixinClientPlayerInteractionManager",
+    "MixinCommandBlock",
     "MixinCrossbowItem",
+    "MixinEnchantmentHelper",
     "MixinEntity",
     "MixinEntityPredicates",
     "MixinEntityRenderer",
+    "MixinEntityStatusEffectS2CPacket",
     "MixinFramebuffer",
     "MixinGameRenderer",
     "MixinHeldItemRenderer",
@@ -50,18 +53,45 @@
     "connection.MixinPlayerMoveC2SPacket",
     "connection.MixinWorldTimeUpdateS2CPacket",
     "opengl.MixinGameRenderer",
-    "opengl.MixinWindow"
+    "opengl.MixinWindow",
+    "protocolhack.MixinBrewingStandFuelSlot",
+    "protocolhack.MixinEntityPredicates",
+    "protocolhack.MixinItemCooldownManager",
+    "protocolhack.MixinItemPlacementContext",
+    "protocolhack.base.MixinClientConnection",
+    "protocolhack.base.MixinClientConnectionSubOne",
+    "protocolhack.block.MixinFarmlandBlock",
+    "protocolhack.block.MixinLadderBlock",
+    "protocolhack.block.MixinLilyPadBlock",
+    "protocolhack.entity.MixinEntity",
+    "protocolhack.entity.MixinLivingEntity",
+    "protocolhack.entity.MixinPlayerEntity",
+    "protocolhack.item.ItemAccessor",
+    "protocolhack.item.MixinItemStack",
+    "protocolhack.viaversion.MixinMovementTracker",
+    "protocolhack.viaversion.MixinViaIdleThread"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
     "MixinButtonWidget",
+    "MixinClickableWidget",
+    "MixinClientPlayNetworkHandler",
     "MixinDebugHud",
     "MixinHandledScreen",
     "MixinPendingUpdateManager",
     "MixinPlayerListHud",
     "MixinTelemetrySender",
-    "blockesp.MixinRenderedChunk"
+    "blockesp.MixinRenderedChunk",
+    "protocolhack.MixinClientPlayerInteractionManager",
+    "protocolhack.MixinClientPlayNetworkHandler",
+    "protocolhack.MixinConnectScreenSubRun",
+    "protocolhack.MixinKeyboardInput",
+    "protocolhack.MixinMinecraftClient",
+    "protocolhack.MixinOtherClientPlayerEntity",
+    "protocolhack.MixinPendingUpdateManager",
+    "protocolhack.MixinPlayerEntityRenderer",
+    "protocolhack.entity.MixinClientPlayerEntity"
   ]
 }

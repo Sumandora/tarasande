@@ -9,8 +9,8 @@ import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.EventMovement
 import su.mandora.tarasande.event.EventPacket
 import su.mandora.tarasande.event.EventUpdate
-import su.mandora.tarasande.mixin.accessor.IPlayerMoveC2SPacket
-import su.mandora.tarasande.mixin.accessor.IVec3d
+import net.tarasandedevelopment.tarasande.mixin.accessor.IPlayerMoveC2SPacket
+import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber

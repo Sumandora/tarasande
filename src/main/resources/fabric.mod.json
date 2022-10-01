@@ -14,8 +14,7 @@
   "icon": "assets/tarasande/icon.png",
   "environment": "client",
   "mixins": [
-    "tarasande.mixins.json",
-    "michael_tarasande.mixins.json"
+    "tarasande.mixins.json"
   ],
   "depends": {
     "fabric-language-kotlin": "*"

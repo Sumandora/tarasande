@@ -5,10 +5,10 @@ import com.mojang.authlib.Environment
 import com.mojang.authlib.minecraft.MinecraftSessionService
 import net.minecraft.client.util.Session
 import su.mandora.tarasande.base.Manager
-import su.mandora.tarasande.screen.accountmanager.account.AccountMicrosoft
-import su.mandora.tarasande.screen.accountmanager.account.AccountSession
-import su.mandora.tarasande.screen.accountmanager.account.AccountToken
-import su.mandora.tarasande.screen.accountmanager.account.AccountYggdrasil
+import su.mandora.tarasande.screen.list.accountmanager.account.AccountMicrosoft
+import su.mandora.tarasande.screen.list.accountmanager.account.AccountSession
+import su.mandora.tarasande.screen.list.accountmanager.account.AccountToken
+import su.mandora.tarasande.screen.list.accountmanager.account.AccountYggdrasil
 
 class ManagerAccount : Manager<Class<out Account>>() {
     init {

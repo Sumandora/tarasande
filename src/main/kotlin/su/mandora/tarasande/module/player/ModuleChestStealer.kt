@@ -10,7 +10,7 @@ import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventPollEvents
-import su.mandora.tarasande.mixin.accessor.IHandledScreen
+import net.tarasandedevelopment.tarasande.mixin.accessor.IHandledScreen
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueNumber

@@ -1,13 +1,13 @@
 package su.mandora.tarasande
 
 import com.google.gson.GsonBuilder
-import de.florianmichael.tarasande.base.menu.ManagerMenu
-import de.florianmichael.tarasande.menu.ElementMenuScreenAccountManager
-import de.florianmichael.tarasande.protocolhack.TarasandeProtocolHack
+import su.mandora.tarasande.clientmenu.ElementMenuScreenAccountManager
+import su.mandora.tarasande.protocolhack.TarasandeProtocolHack
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
 import org.slf4j.LoggerFactory
+import su.mandora.tarasande.base.clientmenu.ManagerClientMenu
 import su.mandora.tarasande.base.esp.ManagerESP
 import su.mandora.tarasande.base.event.ManagerEvent
 import su.mandora.tarasande.base.file.ManagerFile
@@ -45,7 +45,7 @@ class TarasandeMain {
         private set
     lateinit var managerESP: ManagerESP
         private set
-    lateinit var managerMenu: ManagerMenu
+    lateinit var managerClientMenu: ManagerClientMenu
         private set
 
     val logger = LoggerFactory.getLogger(name)!!
@@ -82,7 +82,7 @@ class TarasandeMain {
     fun onLateLoad() {
         managerFile = ManagerFile()
         managerValue = ManagerValue()
-        managerMenu = ManagerMenu()
+        managerClientMenu = ManagerClientMenu()
         clientValues = ClientValues()
         managerClickMethod = ManagerClickMethod()
         managerModule = ManagerModule()
@@ -95,7 +95,7 @@ class TarasandeMain {
 
         managerFile.load()
 
-        val accountManager = managerMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager
+        val accountManager = managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager
 
         if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && accountManager.mainAccount != null) {
             accountManager.logIn(accountManager.accounts[accountManager.mainAccount!!])

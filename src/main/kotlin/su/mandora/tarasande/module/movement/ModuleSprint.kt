@@ -7,7 +7,7 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventEntityFlag
 import su.mandora.tarasande.event.EventJump
 import su.mandora.tarasande.event.EventKeyBindingIsPressed
-import su.mandora.tarasande.mixin.accessor.IEntity
+import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueBoolean
 import java.util.function.Consumer

@@ -3,7 +3,7 @@ package su.mandora.tarasande.screen.menu.panel.impl.fixed.impl
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
-import su.mandora.tarasande.mixin.accessor.IInGameHud
+import net.tarasandedevelopment.tarasande.mixin.accessor.IInGameHud
 import su.mandora.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import kotlin.math.floor
 

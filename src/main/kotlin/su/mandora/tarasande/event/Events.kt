@@ -3,6 +3,8 @@ package su.mandora.tarasande.event
 import com.mojang.authlib.minecraft.MinecraftSessionService
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.BlockState
+import net.minecraft.client.gui.Element
+import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.input.Input
 import net.minecraft.client.network.PlayerListEntry
 import net.minecraft.client.option.KeyBinding
@@ -13,6 +15,7 @@ import net.minecraft.item.Item
 import net.minecraft.network.Packet
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
+import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Matrix4f
@@ -226,3 +229,38 @@ class EventRainGradient : Event {
 }
 
 class EventRenderSky : Event(true)
+class EventChangeScreen : Event {
+    var dirty = false
+    var newScreen: Screen?
+        set(value) {
+            field = value
+            dirty = true
+        }
+
+    constructor(newScreen: Screen?) : super(false) {
+        this.newScreen = newScreen
+        dirty = false
+    }
+}
+
+class EventChildren(val screen: Screen) : Event(false) {
+    private val children = ArrayList<Element>()
+
+    fun add(element: Element) {
+        children.add(element)
+    }
+
+    fun get() = children
+}
+
+class EventChatAcknowledge(var acknowledged: Boolean) : Event(false)
+class EventCommandBlockUsage(var allowed: Boolean) : Event(false)
+class EventBindingEnchantment(var present: Boolean) : Event(false)
+class EventEntityStatusGUI(val type: Type, var state: Boolean) : Event(false) {
+
+    enum class Type {
+        ICON, PARTICLES
+    }
+}
+
+class EventEntityRaycast(val hitResult: HitResult?) : Event(true)

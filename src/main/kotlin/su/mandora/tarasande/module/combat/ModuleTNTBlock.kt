@@ -7,7 +7,7 @@ import su.mandora.tarasande.base.event.Priority
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventKeyBindingIsPressed
-import su.mandora.tarasande.mixin.accessor.ITntEntity
+import net.tarasandedevelopment.tarasande.mixin.accessor.ITntEntity
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
 

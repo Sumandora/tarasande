@@ -2,7 +2,7 @@ package su.mandora.tarasande.screen.menu.information
 
 import net.minecraft.client.MinecraftClient
 import su.mandora.tarasande.base.screen.menu.information.Information
-import su.mandora.tarasande.mixin.accessor.IClientConnection
+import net.tarasandedevelopment.tarasande.mixin.accessor.IClientConnection
 
 class InformationHandlers : Information("Connection", "Handlers") {
     override fun getMessage(): String? {

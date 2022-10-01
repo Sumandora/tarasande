@@ -4,8 +4,8 @@ import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventTimeTravel
-import su.mandora.tarasande.mixin.accessor.IMinecraftClient
-import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
+import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
+import net.tarasandedevelopment.tarasande.mixin.accessor.IRenderTickCounter
 import su.mandora.tarasande.value.ValueMode
 import su.mandora.tarasande.value.ValueNumber
 import java.util.concurrent.ThreadLocalRandom

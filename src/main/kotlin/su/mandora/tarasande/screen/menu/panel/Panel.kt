@@ -1,6 +1,6 @@
 package su.mandora.tarasande.screen.menu.panel
 
-import de.florianmichael.tarasande.screen.ScreenBetterParentPopupSettings
+import su.mandora.tarasande.screen.ScreenBetterParentPopupSettings
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper

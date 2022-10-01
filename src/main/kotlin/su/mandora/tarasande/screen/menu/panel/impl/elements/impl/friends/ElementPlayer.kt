@@ -5,7 +5,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.Vec2f
 import su.mandora.tarasande.TarasandeMain
-import su.mandora.tarasande.mixin.accessor.ITextFieldWidget
+import net.tarasandedevelopment.tarasande.mixin.accessor.ITextFieldWidget
 import su.mandora.tarasande.screen.menu.panel.impl.elements.Element
 import su.mandora.tarasande.screen.menu.valuecomponent.ValueComponentText
 import su.mandora.tarasande.util.render.RenderUtil

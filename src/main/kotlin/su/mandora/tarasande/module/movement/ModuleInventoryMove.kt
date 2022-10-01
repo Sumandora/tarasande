@@ -11,7 +11,7 @@ import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.EventPacket
-import su.mandora.tarasande.mixin.accessor.IKeyBinding
+import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
 import su.mandora.tarasande.screen.menu.ScreenCheatMenu
 import su.mandora.tarasande.screen.menu.valuecomponent.ValueComponentRegistry
 import su.mandora.tarasande.screen.menu.valuecomponent.ValueComponentText

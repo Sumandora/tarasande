@@ -2,7 +2,6 @@ package su.mandora.tarasande.screen.menu
 
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
-import de.florianmichael.tarasande.screen.menu.panel.impl.fixed.impl.PanelFixedRadar
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.gui.screen.Screen

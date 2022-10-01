@@ -14,7 +14,7 @@ import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.random.Random
 import net.minecraft.util.math.random.RandomSplitter
-import su.mandora.tarasande.mixin.accessor.*
+import net.tarasandedevelopment.tarasande.mixin.accessor.*
 import su.mandora.tarasande.util.extension.times
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil

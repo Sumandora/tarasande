@@ -1,18 +1,14 @@
 package su.mandora.tarasande.base.module
 
-import de.florianmichael.tarasande.module.exploit.*
-import de.florianmichael.tarasande.module.misc.ModuleFurnaceProgress
-import de.florianmichael.tarasande.module.player.ModuleNoMiningTrace
-import de.florianmichael.tarasande.module.qol.ModuleInstantWorld
+import su.mandora.tarasande.module.player.ModuleNoMiningTrace
+import su.mandora.tarasande.module.qol.ModuleInstantWorld
 import net.minecraft.client.MinecraftClient
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.Manager
 import su.mandora.tarasande.event.EventTick
 import su.mandora.tarasande.module.combat.*
-import su.mandora.tarasande.module.exploit.ModuleDeadByDaylightEscape
-import su.mandora.tarasande.module.exploit.ModuleResourcePackSpoofer
-import su.mandora.tarasande.module.exploit.ModuleTickBaseManipulation
+import su.mandora.tarasande.module.exploit.*
 import su.mandora.tarasande.module.ghost.*
 import su.mandora.tarasande.module.misc.*
 import su.mandora.tarasande.module.movement.*

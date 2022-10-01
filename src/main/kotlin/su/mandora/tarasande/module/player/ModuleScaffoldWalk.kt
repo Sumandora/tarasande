@@ -16,10 +16,10 @@ import su.mandora.tarasande.base.event.Priority
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.*
-import su.mandora.tarasande.mixin.accessor.ICamera
-import su.mandora.tarasande.mixin.accessor.IEntity
-import su.mandora.tarasande.mixin.accessor.IKeyBinding
-import su.mandora.tarasande.mixin.accessor.IMinecraftClient
+import net.tarasandedevelopment.tarasande.mixin.accessor.ICamera
+import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
+import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
+import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.extension.plus
 import su.mandora.tarasande.util.extension.times

@@ -10,8 +10,8 @@ import su.mandora.tarasande.event.EventCollisionShape
 import su.mandora.tarasande.event.EventJump
 import su.mandora.tarasande.event.EventMovement
 import su.mandora.tarasande.event.EventVanillaFlight
-import su.mandora.tarasande.mixin.accessor.IEntity
-import su.mandora.tarasande.mixin.accessor.IKeyBinding
+import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
+import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueMode

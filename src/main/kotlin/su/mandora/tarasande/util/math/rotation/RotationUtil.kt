@@ -9,8 +9,8 @@ import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.event.*
-import su.mandora.tarasande.mixin.accessor.ILivingEntity
-import su.mandora.tarasande.mixin.accessor.IPlayerMoveC2SPacket
+import net.tarasandedevelopment.tarasande.mixin.accessor.ILivingEntity
+import net.tarasandedevelopment.tarasande.mixin.accessor.IPlayerMoveC2SPacket
 import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.render.RenderUtil

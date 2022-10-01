@@ -9,9 +9,11 @@ import su.mandora.tarasande.base.screen.menu.graph.Graph
 import su.mandora.tarasande.event.EventPacket
 import su.mandora.tarasande.event.EventPollEvents
 import su.mandora.tarasande.event.EventSwing
-import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity
+import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
+import su.mandora.tarasande.event.EventPacketTransform
 import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.render.RenderUtil
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.round
 
 class GraphFPS : Graph("FPS", 200) {
@@ -147,4 +149,44 @@ class GraphOnlinePlayers : Graph("Online Players", 200) {
 
 class GraphMemory : Graph("Memory", 200) {
     override fun supplyData() = round((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024.0 / 1024.0 * 100.0) / 100.0
+}
+
+class GraphIncomingTraffic : Graph("Incoming Traffic", 200) {
+
+    private val traffic = CopyOnWriteArrayList<Pair<Long, Int>>()
+
+    init {
+        TarasandeMain.get().managerEvent.add { event ->
+            if (event is EventPacketTransform && event.type == EventPacketTransform.Type.DECODE) {
+                traffic.add(Pair(System.currentTimeMillis(), event.buf!!.readableBytes()))
+            }
+        }
+    }
+
+    override fun supplyData(): Number {
+        traffic.removeIf { traffic -> System.currentTimeMillis() - traffic.first > 1000 }
+        return traffic.sumOf {
+            it.second
+        }
+    }
+}
+
+class GraphOutgoingTraffic : Graph("Outgoing Traffic", 200) {
+
+    private val traffic = CopyOnWriteArrayList<Pair<Long, Int>>()
+
+    init {
+        TarasandeMain.get().managerEvent.add { event ->
+            if (event is EventPacketTransform && event.type == EventPacketTransform.Type.ENCODE) {
+                traffic.add(Pair(System.currentTimeMillis(), event.buf!!.readableBytes()))
+            }
+        }
+    }
+
+    override fun supplyData(): Number {
+        traffic.removeIf { traffic -> System.currentTimeMillis() - traffic.first > 1000 }
+        return traffic.sumOf {
+            it.second
+        }
+    }
 }

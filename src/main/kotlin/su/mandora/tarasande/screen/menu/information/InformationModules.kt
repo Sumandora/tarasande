@@ -4,8 +4,8 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.screen.menu.information.Information
-import su.mandora.tarasande.mixin.accessor.IMinecraftClient
-import su.mandora.tarasande.mixin.accessor.IRenderTickCounter
+import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
+import net.tarasandedevelopment.tarasande.mixin.accessor.IRenderTickCounter
 import su.mandora.tarasande.module.misc.ModuleMurderMystery
 import su.mandora.tarasande.module.exploit.ModuleTickBaseManipulation
 import su.mandora.tarasande.module.render.ModuleBedESP

@@ -12,7 +12,7 @@ import su.mandora.tarasande.event.EventItemCooldown
 import su.mandora.tarasande.event.EventSlowdown
 import su.mandora.tarasande.event.EventSlowdownAmount
 import su.mandora.tarasande.event.EventUpdate
-import su.mandora.tarasande.mixin.accessor.IClientPlayerInteractionManager
+import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerInteractionManager
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.string.StringUtil
 import su.mandora.tarasande.value.ValueMode

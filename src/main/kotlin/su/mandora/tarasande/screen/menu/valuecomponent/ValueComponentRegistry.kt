@@ -7,8 +7,8 @@ import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.screen.menu.valuecomponent.ValueComponent
 import su.mandora.tarasande.base.value.Value
-import su.mandora.tarasande.mixin.accessor.ITextFieldWidget
-import su.mandora.tarasande.screen.accountmanager.elements.TextFieldWidgetPlaceholder
+import net.tarasandedevelopment.tarasande.mixin.accessor.ITextFieldWidget
+import su.mandora.tarasande.screen.list.accountmanager.elements.TextFieldWidgetPlaceholder
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.string.StringUtil
 import su.mandora.tarasande.value.ValueRegistry

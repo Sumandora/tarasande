@@ -4,7 +4,7 @@ import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventUpdateTargetedEntity
-import su.mandora.tarasande.mixin.accessor.IGameRenderer
+import net.tarasandedevelopment.tarasande.mixin.accessor.IGameRenderer
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
 

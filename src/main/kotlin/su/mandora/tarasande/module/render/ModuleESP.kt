@@ -15,8 +15,8 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventIsGlowing
 import su.mandora.tarasande.event.EventRender2D
 import su.mandora.tarasande.event.EventRender3D
-import su.mandora.tarasande.mixin.accessor.IMatrix4f
-import su.mandora.tarasande.mixin.accessor.IWorldRenderer
+import net.tarasandedevelopment.tarasande.mixin.accessor.IMatrix4f
+import net.tarasandedevelopment.tarasande.mixin.accessor.IWorldRenderer
 import su.mandora.tarasande.module.combat.ModuleAntiBot
 import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.extension.plus

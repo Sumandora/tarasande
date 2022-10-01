@@ -25,9 +25,9 @@ import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.event.EventInput
 import su.mandora.tarasande.event.EventIsEntityAttackable
-import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity
-import su.mandora.tarasande.mixin.accessor.IGameRenderer
-import su.mandora.tarasande.mixin.accessor.IMinecraftClient
+import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
+import net.tarasandedevelopment.tarasande.mixin.accessor.IGameRenderer
+import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.module.player.ModuleAutoTool
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil

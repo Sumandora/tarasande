@@ -21,9 +21,9 @@ import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.*
-import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity
-import su.mandora.tarasande.mixin.accessor.IKeyBinding
-import su.mandora.tarasande.mixin.accessor.IMinecraftClient
+import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
+import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
+import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.extension.plus
 import su.mandora.tarasande.util.extension.times

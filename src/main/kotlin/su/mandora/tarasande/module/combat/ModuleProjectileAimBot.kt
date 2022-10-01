@@ -12,7 +12,7 @@ import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventPollEvents
-import su.mandora.tarasande.mixin.accessor.ICrossbowItem
+import net.tarasandedevelopment.tarasande.mixin.accessor.ICrossbowItem
 import su.mandora.tarasande.module.player.ModuleFastUse
 import su.mandora.tarasande.util.extension.minus
 import su.mandora.tarasande.util.extension.plus

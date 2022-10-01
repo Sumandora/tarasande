@@ -7,7 +7,7 @@ import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventPacket
 import su.mandora.tarasande.event.EventUpdate
-import su.mandora.tarasande.mixin.accessor.IWorldTimeUpdateS2CPacket
+import net.tarasandedevelopment.tarasande.mixin.accessor.IWorldTimeUpdateS2CPacket
 import su.mandora.tarasande.value.ValueNumber
 import java.util.function.Consumer
 

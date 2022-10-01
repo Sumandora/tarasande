@@ -7,8 +7,8 @@ import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventJump
 import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.EventMovement
-import su.mandora.tarasande.mixin.accessor.IKeyBinding
-import su.mandora.tarasande.mixin.accessor.IVec3d
+import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
+import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueNumber

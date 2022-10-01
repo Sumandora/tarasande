@@ -4,7 +4,7 @@ import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventTick
-import su.mandora.tarasande.mixin.accessor.IMinecraftClient
+import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
 import java.util.function.Consumer
 
 class ModuleFastPlace : Module("Fast place", "Speeds up block placements", ModuleCategory.GHOST) {
