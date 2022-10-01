@@ -85,4 +85,8 @@ class TarasandeProtocolHack : INativeProvider {
     }
 
     fun isAuto() = this.auto.value
+
+    fun toggleAuto() {
+        this.auto.value = !this.auto.value
+    }
 }
