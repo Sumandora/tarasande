@@ -24,7 +24,7 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
 
             override fun init() {
                 for (it in TarasandeMain.get().managerValue.getValues(owner))
-                    elementList.add(TarasandeMain.get().screenCheatMenuHandler.get().managerValueComponent.newInstance(it)!!)
+                    elementList.add(TarasandeMain.get().screenCheatMenu.managerValueComponent.newInstance(it)!!)
                 super.init()
 
                 var height = titleBarHeight.toDouble()

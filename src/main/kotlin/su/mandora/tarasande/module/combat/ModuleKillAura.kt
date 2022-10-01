@@ -199,13 +199,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 val target = targets[0]
 
                 val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, target.second)
-                val smoothedRot = currentRot.smoothedTurn(targetRot, aimSpeed)
-                var finalRot = smoothedRot
+                var finalRot = targetRot
 
-                val lowestHurttime = targets.filter { it.first is LivingEntity && (it.first as LivingEntity).maxHurtTime > 0 }.minOfOrNull { val livingEntity = it.first as LivingEntity; livingEntity.hurtTime / livingEntity.maxHurtTime.toFloat() }
+                val lowestHurttime = targets.filter { it.first is LivingEntity && (it.first as LivingEntity).maxHurtTime > 0 }.minOfOrNull { val livingEntity = it.first as LivingEntity; (livingEntity.hurtTime - mc.tickDelta).coerceAtLeast(0.0f) / livingEntity.maxHurtTime.toFloat() }
 
                 if (!flex.value || lowestHurttime == null || lowestHurttime < flexHurtTime.value) {
-                    val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, smoothedRot)
+                    finalRot = currentRot.smoothedTurn(targetRot, aimSpeed)
+                    val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, finalRot)
                     if (guaranteeHit.value && target.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue && (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null)) {
                         finalRot = targetRot
                     }
