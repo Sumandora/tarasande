@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec3d
+import net.minecraft.util.shape.VoxelShape
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.util.math.rotation.Rotation
 import java.awt.Color
@@ -79,7 +80,7 @@ class EventVelocity(var velocityX: Double, var velocityY: Double, var velocityZ:
 }
 
 class EventInput(val input: Input, var movementForward: Float, var movementSideways: Float, var slowDown: Boolean, val slowdownAmount: Float) : Event(true)
-class EventJump(var yaw: Float, val state: State) : Event(false) {
+class EventJump(var yaw: Float, val state: State) : Event(state == State.PRE) {
     enum class State {
         PRE, POST
     }
@@ -184,8 +185,9 @@ class EventEntityFlag(val entity: Entity, val flag: Int, var enabled: Boolean) :
 class EventBoundingBoxOverride(val entity: Entity, var boundingBox: Box) : Event(false)
 class EventBlockChange(val pos: BlockPos, val state: BlockState) : Event(false)
 class EventPacketTransform(val type: Type, val buf: ByteBuf?) : Event(false) {
-
     enum class Type {
         DECODE, ENCODE
     }
 }
+
+class EventCollisionShape(val pos: BlockPos, var collisionShape: VoxelShape) : Event(false)

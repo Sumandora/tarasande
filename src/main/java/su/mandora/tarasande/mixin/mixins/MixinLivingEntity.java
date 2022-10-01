@@ -56,17 +56,16 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     public abstract float getYaw(float tickDelta);
 
     @Shadow
-    protected abstract void tickActiveItemStack();
-
-    @Shadow
     protected abstract void tickItemStackUsage(ItemStack stack);
 
-    @Inject(method = "jump", at = @At("HEAD"))
+    @Inject(method = "jump", at = @At("HEAD"), cancellable = true)
     public void injectPreJump(CallbackInfo ci) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             EventJump eventJump = new EventJump(originalYaw = getYaw(), EventJump.State.PRE);
             TarasandeMain.Companion.get().getManagerEvent().call(eventJump);
             setYaw(eventJump.getYaw());
+            if (eventJump.getCancelled())
+                ci.cancel();
         }
     }
 
