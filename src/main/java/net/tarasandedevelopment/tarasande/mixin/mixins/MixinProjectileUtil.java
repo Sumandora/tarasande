@@ -6,8 +6,8 @@ import net.minecraft.util.math.Box;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.EventBoundingBoxOverride;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventBoundingBoxOverride;
 
 @Mixin(ProjectileUtil.class)
 public class MixinProjectileUtil {

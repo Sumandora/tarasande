@@ -5,8 +5,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.EventKey;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventKey;
 
 @Mixin(Keyboard.class)
 public class MixinKeyboard {

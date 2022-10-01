@@ -4,8 +4,8 @@ import net.minecraft.client.font.TextVisitFactory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.EventTextVisit;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventTextVisit;
 
 @Mixin(TextVisitFactory.class)
 public class MixinTextVisitFactory {

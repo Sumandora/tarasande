@@ -28,9 +28,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.*;
-import su.mandora.tarasande.util.render.RenderUtil;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.*;
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil;
 
 @Mixin(MinecraftClient.class)
 public abstract class MixinMinecraftClient implements IMinecraftClient {

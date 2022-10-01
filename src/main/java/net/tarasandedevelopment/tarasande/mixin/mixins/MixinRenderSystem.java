@@ -9,10 +9,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.EventClearColor;
-import su.mandora.tarasande.event.EventFogColor;
-import su.mandora.tarasande.util.math.rotation.RotationUtil;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventClearColor;
+import net.tarasandedevelopment.tarasande.event.EventFogColor;
+import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 
 @Mixin(RenderSystem.class)
 public class MixinRenderSystem {

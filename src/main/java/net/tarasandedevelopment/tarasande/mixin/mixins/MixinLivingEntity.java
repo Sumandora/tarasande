@@ -14,12 +14,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.EventJump;
-import su.mandora.tarasande.event.EventSwing;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventJump;
+import net.tarasandedevelopment.tarasande.event.EventSwing;
 import net.tarasandedevelopment.tarasande.mixin.accessor.ILivingEntity;
-import su.mandora.tarasande.util.math.rotation.Rotation;
-import su.mandora.tarasande.util.math.rotation.RotationUtil;
+import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
+import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 
 @Mixin(value = LivingEntity.class, priority = 999 /* baritone fix */)
 public abstract class MixinLivingEntity extends Entity implements ILivingEntity {

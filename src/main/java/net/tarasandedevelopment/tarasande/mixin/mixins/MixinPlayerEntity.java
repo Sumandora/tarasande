@@ -6,9 +6,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.EventClipAtLedge;
-import su.mandora.tarasande.event.EventKeepSprint;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventClipAtLedge;
+import net.tarasandedevelopment.tarasande.event.EventKeepSprint;
 
 @Mixin(PlayerEntity.class)
 public abstract class MixinPlayerEntity {

@@ -14,9 +14,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.EventRotationSet;
-import su.mandora.tarasande.event.EventVelocity;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventRotationSet;
+import net.tarasandedevelopment.tarasande.event.EventVelocity;
 
 import java.net.URL;
 

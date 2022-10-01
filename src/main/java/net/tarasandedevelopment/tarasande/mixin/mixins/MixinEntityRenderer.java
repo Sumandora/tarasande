@@ -6,8 +6,8 @@ import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.EventDisplayName;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventDisplayName;
 
 @Mixin(EntityRenderer.class)
 public class MixinEntityRenderer {

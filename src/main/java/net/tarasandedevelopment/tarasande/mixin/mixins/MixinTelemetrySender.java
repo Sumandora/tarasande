@@ -6,8 +6,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.module.misc.ModuleDisableTelemetry;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.module.misc.ModuleDisableTelemetry;
 
 @Mixin(TelemetrySender.class)
 public class MixinTelemetrySender {

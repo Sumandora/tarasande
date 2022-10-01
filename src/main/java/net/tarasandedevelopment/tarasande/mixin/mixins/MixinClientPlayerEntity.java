@@ -15,8 +15,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.*;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.*;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity;
 
 @Mixin(ClientPlayerEntity.class)

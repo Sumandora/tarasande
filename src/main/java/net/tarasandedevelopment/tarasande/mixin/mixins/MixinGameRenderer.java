@@ -14,9 +14,9 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.EventEntityRaycast;
-import su.mandora.tarasande.event.EventUpdateTargetedEntity;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventEntityRaycast;
+import net.tarasandedevelopment.tarasande.event.EventUpdateTargetedEntity;
 
 import java.util.function.Predicate;
 

@@ -5,8 +5,8 @@ import net.minecraft.client.render.VertexConsumer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.EventColorCorrection;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventColorCorrection;
 
 @Mixin(Framebuffer.class)
 public class MixinFramebuffer {

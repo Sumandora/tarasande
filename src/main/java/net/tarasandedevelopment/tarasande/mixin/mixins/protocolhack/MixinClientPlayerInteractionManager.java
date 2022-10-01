@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
-import su.mandora.tarasande.protocolhack.provider.FabricHandItemProvider;
+import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricHandItemProvider;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;

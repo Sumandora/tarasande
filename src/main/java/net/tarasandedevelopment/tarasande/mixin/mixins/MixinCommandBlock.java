@@ -5,8 +5,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.EventCommandBlockUsage;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventCommandBlockUsage;
 
 @Mixin(CommandBlock.class)
 public class MixinCommandBlock {

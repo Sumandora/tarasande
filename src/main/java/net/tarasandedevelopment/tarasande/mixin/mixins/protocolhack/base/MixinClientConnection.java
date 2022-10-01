@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.base;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
-import su.mandora.tarasande.protocolhack.service.ProtocolAutoDetector;
+import net.tarasandedevelopment.tarasande.protocolhack.service.ProtocolAutoDetector;
 import de.florianmichael.viaprotocolhack.ViaProtocolHack;
 import de.florianmichael.viaprotocolhack.event.PipelineReorderEvent;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import su.mandora.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;

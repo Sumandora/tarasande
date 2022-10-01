@@ -14,10 +14,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.EventChildren;
-import su.mandora.tarasande.event.EventScreenRender;
-import su.mandora.tarasande.screen.widget.panel.ClickableWidgetPanel;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventChildren;
+import net.tarasandedevelopment.tarasande.event.EventScreenRender;
+import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel;
 
 import java.util.List;
 

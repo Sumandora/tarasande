@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.tarasande.util.math.rotation.Rotation;
+import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
 
 @Pseudo
 @Mixin(targets = "baritone.behavior.LookBehavior", remap = false)
