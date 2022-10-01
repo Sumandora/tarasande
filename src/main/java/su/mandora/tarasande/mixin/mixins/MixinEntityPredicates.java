@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 public class MixinEntityPredicates {
 
     @Inject(method = "canBePushedBy", at = @At("RETURN"), cancellable = true)
-    private static void injectIsPushable(Entity entity, CallbackInfoReturnable<Predicate<Entity>> cir) {
+    private static void injectCanBePushedBy(Entity entity, CallbackInfoReturnable<Predicate<Entity>> cir) {
         EventCanBePushedBy eventCanBePushedBy = new EventCanBePushedBy(entity, cir.getReturnValue());
         TarasandeMain.Companion.get().getManagerEvent().call(eventCanBePushedBy);
         cir.setReturnValue(eventCanBePushedBy.getPredicate());
