@@ -28,11 +28,11 @@
     "defaultRequire": 1
   },
   "client": [
-    "MixinAbstractFurnaceScreen",
     "MixinClickableWidget",
     "MixinClientPlayNetworkHandler",
     "MixinGameRenderer",
     "MixinMinecraftClient",
+    "MixinScreen",
     "protocolhack.MixinClientPlayerInteractionManager",
     "protocolhack.MixinClientPlayNetworkHandler",
     "protocolhack.MixinConnectScreenSubRun",

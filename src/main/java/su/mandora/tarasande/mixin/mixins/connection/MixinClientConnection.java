@@ -30,7 +30,7 @@ public abstract class MixinClientConnection implements IClientConnection {
 
     @Inject(method = "exceptionCaught", at = @At("HEAD"))
     public void injectExceptionCaught(ChannelHandlerContext context, Throwable ex, CallbackInfo ci) {
-        //TODO
+        // TODO | Anti Packet Kick
         ex.printStackTrace();
     }
 
