@@ -1,8 +1,10 @@
 package su.mandora.tarasande.screen.menu.panel
 
+import de.florianmichael.tarasande.screen.ScreenBetterParentPopupSettings
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.screen.menu.utils.DragInfo
 import su.mandora.tarasande.screen.menu.utils.IElement
@@ -88,15 +90,18 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
         val mouseX = floor(mouseX)
         val mouseY = floor(mouseY)
         if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + (if (opened) panelHeight else titleBarHeight.toDouble()))) {
-            if (button == 0) {
+            if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                 if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight.toDouble())) {
                     dragInfo.setDragInfo(true, mouseX - x, mouseY - y)
                 }
                 if (RenderUtil.isHovered(mouseX, mouseY, x + panelWidth - 5, y + panelHeight - 5, x + panelWidth + 5, y + panelHeight + 5)) {
                     resizeInfo.setDragInfo(true, mouseX - (x + panelWidth - 2), mouseY - (y + panelHeight - 2))
                 }
-            } else if (button == 1) {
+            } else if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                 if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight.toDouble())) opened = !opened
+            } else if (button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
+                TarasandeMain.get().screenCheatMenu.popup = true
+                if (TarasandeMain.get().managerValue.getValues(this).isNotEmpty()) MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Settings from " + this.title, this))
             }
             return true
         }

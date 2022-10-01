@@ -46,6 +46,8 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     val managerValueComponent = ManagerValueComponent()
     val managerInformation = ManagerInformation()
 
+    var popup = false
+
     init {
         // @mojang, this code is garbage. delete life
         MinecraftClient.getInstance().textureManager.getTexture(image)
@@ -89,6 +91,10 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     }
 
     override fun init() {
+        if (popup) {
+            popup = false
+            return
+        }
         screenChangeTime = System.currentTimeMillis()
         isClosing = false
         super.init()
@@ -241,6 +247,9 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     }
 
     override fun close() {
+        if (popup) {
+            return
+        }
         if (!isClosing) {
             screenChangeTime = System.currentTimeMillis()
             isClosing = true

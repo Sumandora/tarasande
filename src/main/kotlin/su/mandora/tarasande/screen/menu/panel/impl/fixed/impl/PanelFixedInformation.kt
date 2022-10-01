@@ -6,6 +6,7 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.screen.menu.panel.Alignment
 import su.mandora.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import su.mandora.tarasande.util.render.RenderUtil
+import su.mandora.tarasande.value.ValueBoolean
 
 class PanelFixedInformation(x: Double, y: Double) : PanelFixed("Information", x, y, 75.0, resizable = false) {
 
@@ -13,8 +14,8 @@ class PanelFixedInformation(x: Double, y: Double) : PanelFixed("Information", x,
         val text = ArrayList<String>()
         for (owner in TarasandeMain.get().screenCheatMenu.managerInformation.getAllOwners()) {
             val cache = ArrayList<String>()
-            val informations = TarasandeMain.get().screenCheatMenu.managerInformation.getAllInformation(owner)
-            for (information in informations) {
+            val informationList = TarasandeMain.get().screenCheatMenu.managerInformation.getAllInformation(owner)
+            for (information in informationList) {
                 val message = information.getMessage()
                 if (message != null) {
                     if (message.contains("\n")) {
