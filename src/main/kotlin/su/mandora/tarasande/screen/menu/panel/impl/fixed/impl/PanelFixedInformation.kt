@@ -6,7 +6,6 @@ import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.screen.menu.panel.Alignment
 import su.mandora.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import su.mandora.tarasande.util.render.RenderUtil
-import su.mandora.tarasande.value.ValueBoolean
 
 class PanelFixedInformation(x: Double, y: Double) : PanelFixed("Information", x, y, 75.0, resizable = false) {
 
