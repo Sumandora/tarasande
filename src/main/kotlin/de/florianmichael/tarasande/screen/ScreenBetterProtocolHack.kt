@@ -1,11 +1,11 @@
 package de.florianmichael.tarasande.screen
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import de.enzaxd.viaforge.equals.VersionList
 import de.florianmichael.tarasande.util.render.RenderUtil
 import de.florianmichael.tarasande.screen.element.ScreenBetterSlotList
 import de.florianmichael.tarasande.screen.element.ScreenBetterSlotListEntry
 import de.florianmichael.tarasande.screen.element.ScreenBetterSlotListWidget
+import de.florianmichael.viaprotocolhack.util.VersionList
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.util.math.MatrixStack
@@ -35,7 +35,7 @@ class ScreenBetterProtocolHack(parent: Screen) : ScreenBetterSlotList(parent, 46
     class ProtocolEntry(val protocol: ProtocolVersion) : ScreenBetterSlotListEntry() {
 
         override fun isSelected(): Boolean {
-            return TarasandeMain.get().protocolHack.version == this.protocol.version
+            return TarasandeMain.get().protocolHack.clientsideVersion() == this.protocol.version
         }
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
@@ -45,7 +45,7 @@ class ScreenBetterProtocolHack(parent: Screen) : ScreenBetterSlotList(parent, 46
         }
 
         override fun onClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int): Boolean {
-            TarasandeMain.get().protocolHack.version = this.protocol.version
+            TarasandeMain.get().protocolHack.setVersion(this.protocol.version)
             return true
         }
     }

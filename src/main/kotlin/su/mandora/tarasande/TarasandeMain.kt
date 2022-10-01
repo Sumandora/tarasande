@@ -1,9 +1,9 @@
 package su.mandora.tarasande
 
 import com.google.gson.GsonBuilder
-import de.enzaxd.viaforge.ViaForge
 import de.florianmichael.tarasande.base.menu.ManagerMenu
 import de.florianmichael.tarasande.menu.ElementMenuScreenAccountManager
+import de.florianmichael.tarasande.protocolhack.TarasandeProtocolHack
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
@@ -31,7 +31,7 @@ class TarasandeMain {
         private set
     lateinit var clientValues: ClientValues
         private set
-    lateinit var protocolHack: ViaForge
+    lateinit var protocolHack: TarasandeProtocolHack
         private set
     lateinit var managerClickMethod: ManagerClickMethod
         private set
@@ -90,7 +90,7 @@ class TarasandeMain {
         screenCheatMenu = ScreenCheatMenu() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
         friends = Friends()
 
-        protocolHack = ViaForge()
+        protocolHack = TarasandeProtocolHack()
 
         managerFile.load()
 

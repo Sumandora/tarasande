@@ -1,7 +1,6 @@
 package su.mandora.tarasande.module.misc
 
-import de.enzaxd.viaforge.equals.ProtocolEquals
-import de.enzaxd.viaforge.equals.VersionList
+import de.florianmichael.viaprotocolhack.util.VersionList
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.event.Priority
 import su.mandora.tarasande.base.module.Module
@@ -19,6 +18,6 @@ class ModuleNoCooldown : Module("No cooldown", "Removes any cooldown from items"
     }
 
     override fun isEnabled(): Boolean {
-        return ProtocolEquals.isNewerTo(VersionList.R1_8)
+        return VersionList.isNewerTo(VersionList.R1_8)
     }
 }
