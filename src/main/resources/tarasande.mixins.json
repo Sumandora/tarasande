@@ -66,7 +66,7 @@
     "protocolhack.entity.MixinEntity",
     "protocolhack.entity.MixinLivingEntity",
     "protocolhack.entity.MixinPlayerEntity",
-    "protocolhack.item.ItemAccessor",
+    "protocolhack.item.MixinItem",
     "protocolhack.item.MixinItemStack",
     "protocolhack.viaversion.MixinMovementTracker",
     "protocolhack.viaversion.MixinViaIdleThread"
