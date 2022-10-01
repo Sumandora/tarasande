@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande.TarasandeMain;
 import su.mandora.tarasande.event.EventRainGradient;
 import su.mandora.tarasande.event.EventRender3D;
+import su.mandora.tarasande.event.EventRenderSky;
 import su.mandora.tarasande.mixin.accessor.IWorldRenderer;
-import su.mandora.tarasande.module.render.ModuleFog;
 
 @Mixin(WorldRenderer.class)
 public abstract class MixinWorldRenderer implements IWorldRenderer {
@@ -38,7 +38,9 @@ public abstract class MixinWorldRenderer implements IWorldRenderer {
 
     @Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At("HEAD"), cancellable = true)
     public void injectRenderSky(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean bl, Runnable runnable, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleFog.class).getEnabled())
+        EventRenderSky eventRenderSky = new EventRenderSky();
+        TarasandeMain.Companion.get().getManagerEvent().call(eventRenderSky);
+        if (eventRenderSky.getCancelled())
             ci.cancel();
     }
 

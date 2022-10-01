@@ -224,3 +224,5 @@ class EventRainGradient : Event {
         this.dirty = false
     }
 }
+
+class EventRenderSky : Event(true)

@@ -5,6 +5,7 @@ import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
 import su.mandora.tarasande.event.EventClearColor
 import su.mandora.tarasande.event.EventFogColor
+import su.mandora.tarasande.event.EventRenderSky
 import su.mandora.tarasande.value.ValueColor
 import su.mandora.tarasande.value.ValueNumberRange
 import java.util.function.Consumer
@@ -30,6 +31,10 @@ class ModuleFog : Module("Fog", "Changes the fog distance and color", ModuleCate
                 event.red = color.red / 255.0f
                 event.green = color.green / 255.0f
                 event.blue = color.blue / 255.0f
+            }
+
+            is EventRenderSky -> {
+                event.cancelled = true
             }
         }
     }
