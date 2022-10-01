@@ -65,7 +65,7 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
                     return@Consumer
                 if (event.pos.y <= mc.player?.blockPos?.y!!) {
                     var yOffset = mc.player?.y!! - mc.player?.blockPos?.y!!
-                    if (event.pos.y < mc.player?.blockPos?.y!! && yOffset == 0.0)
+                    if (event.pos.y < mc.player?.blockPos?.y!!)
                         yOffset = 1.0
                     event.collisionShape = VoxelShapes.cuboid(0.0, 0.0, 0.0, 1.0, yOffset, 1.0)
                 }
