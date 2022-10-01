@@ -14,3 +14,12 @@ class EventChildren(val screen: Screen) : Event(false) {
 
     fun get() = children
 }
+class EventChatAcknowledge : Event(true)
+class EventCommandBlockUsage : Event(true)
+class EventBindingEnchantment : Event(true)
+class EventEntityStatusGUI(val type: Type, var state: Boolean) : Event(false) {
+
+    enum class Type {
+        ICON, PARTICLES
+    }
+}

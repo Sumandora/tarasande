@@ -1,5 +1,6 @@
 package de.florianmichael.tarasande.mixin.mixins;
 
+import de.florianmichael.tarasande.event.EventCommandBlockUsage;
 import de.florianmichael.tarasande.module.exploit.ModuleCommandBlockBypass;
 import net.minecraft.block.CommandBlock;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,7 +14,10 @@ public class MixinCommandBlock {
 
     @Redirect(method = "onUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isCreativeLevelTwoOp()Z"))
     public boolean redirectOnUse(PlayerEntity instance) {
-        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleCommandBlockBypass.class).getEnabled())
+        final EventCommandBlockUsage eventCommandBlockUsage = new EventCommandBlockUsage();
+        TarasandeMain.Companion.get().getManagerEvent().call(eventCommandBlockUsage);
+
+        if (eventCommandBlockUsage.getCancelled())
             return true;
 
         return instance.isCreativeLevelTwoOp();

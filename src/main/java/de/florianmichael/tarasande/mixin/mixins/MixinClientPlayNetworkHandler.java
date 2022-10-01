@@ -1,5 +1,6 @@
 package de.florianmichael.tarasande.mixin.mixins;
 
+import de.florianmichael.tarasande.event.EventChatAcknowledge;
 import de.florianmichael.tarasande.module.exploit.ModuleNoChatContext;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +13,10 @@ public class MixinClientPlayNetworkHandler {
 
     @ModifyVariable(method = "acknowledge", at = @At("HEAD"), argsOnly = true, index = 2)
     public boolean bypassMicrosoft(boolean value) {
-        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoChatContext.class).getEnabled())
+        final EventChatAcknowledge eventChatAcknowledge = new EventChatAcknowledge();
+        TarasandeMain.Companion.get().getManagerEvent().call(eventChatAcknowledge);
+
+        if (eventChatAcknowledge.getCancelled())
             return false;
 
         return value;
