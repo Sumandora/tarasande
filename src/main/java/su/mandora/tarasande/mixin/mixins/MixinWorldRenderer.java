@@ -48,7 +48,7 @@ public abstract class MixinWorldRenderer implements IWorldRenderer {
 
     @Redirect(method = "renderWeather", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getRainGradient(F)F"))
     public float hookedGetRainGradient(ClientWorld instance, float v) {
-        EventRainGradient eventRainGradient = new EventRainGradient(v);
+        EventRainGradient eventRainGradient = new EventRainGradient(instance.getRainGradient(v));
         TarasandeMain.Companion.get().getManagerEvent().call(eventRainGradient);
         forceRain = eventRainGradient.getDirty();
         return eventRainGradient.getGradient();
