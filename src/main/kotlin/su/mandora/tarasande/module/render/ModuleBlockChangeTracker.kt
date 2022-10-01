@@ -10,6 +10,7 @@ import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.value.ValueColor
 import su.mandora.tarasande.value.ValueNumber
 import java.awt.Color
+import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Consumer
 
 class ModuleBlockChangeTracker : Module("Block change tracker", "Tracks block changes", ModuleCategory.RENDER) {
@@ -17,7 +18,7 @@ class ModuleBlockChangeTracker : Module("Block change tracker", "Tracks block ch
     private val color = ValueColor(this, "Color", 0.0f, 1.0f, 1.0f, 1.0f)
     private val time = ValueNumber(this, "Time", 0.0, 1000.0, 10000.0, 500.0)
 
-    private val hashMap = HashMap<EventBlockChange, Long>()
+    private val hashMap = ConcurrentHashMap<EventBlockChange, Long>()
 
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
