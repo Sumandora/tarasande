@@ -37,4 +37,9 @@ public class CustomViaConfig extends AbstractViaConfig {
     public List<String> getUnsupportedOptions() {
         return UNSUPPORTED;
     }
+
+    @Override
+    public boolean isShowShieldWhenSwordInHand() {
+        return true;
+    }
 }
