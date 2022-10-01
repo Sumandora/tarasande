@@ -35,6 +35,7 @@
     "MixinMinecraftClient",
     "protocolhack.MixinClientPlayerInteractionManager",
     "protocolhack.MixinClientPlayNetworkHandler",
+    "protocolhack.MixinConnectScreenSubRun",
     "protocolhack.MixinKeyboardInput",
     "protocolhack.MixinMinecraftClient",
     "protocolhack.MixinOtherClientPlayerEntity",

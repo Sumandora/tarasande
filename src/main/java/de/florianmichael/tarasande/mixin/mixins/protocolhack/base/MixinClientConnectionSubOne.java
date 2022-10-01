@@ -12,6 +12,7 @@ import de.florianmichael.viaprotocolhack.netty.NettyConstants;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import net.minecraft.network.ClientConnection;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinClientConnectionSubOne {
 
     // synthetic field
+    @Final
     @Shadow
     ClientConnection field_11663;
 
