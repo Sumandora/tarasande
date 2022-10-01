@@ -18,13 +18,13 @@ public class MixinClickableWidget implements IClickableWidget {
     private boolean shouldCancelBackground;
 
     @Redirect(method = "renderButton", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ClickableWidget;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"))
-    public void removeBackground(ClickableWidget instance, MatrixStack matrixStack, int a, int b, int c, int d, int e, int f) {
+    public void hookedDrawTexture(ClickableWidget instance, MatrixStack matrixStack, int a, int b, int c, int d, int e, int f) {
         if (!this.shouldCancelBackground)
             instance.drawTexture(matrixStack, a, b, c, d, e, f);
     }
 
     @Inject(method = "playDownSound", at = @At("HEAD"), cancellable = true)
-    public void removeSound(SoundManager soundManager, CallbackInfo ci) {
+    public void injectPlayDownSound(SoundManager soundManager, CallbackInfo ci) {
         if (this.shouldCancelBackground)
             ci.cancel();
     }

@@ -22,7 +22,7 @@ public class MixinGameRenderer {
     @Redirect(method = "updateTargetedEntity", at =
     @At(value = "INVOKE",
             target = "Lnet/minecraft/entity/projectile/ProjectileUtil;raycast(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;D)Lnet/minecraft/util/hit/EntityHitResult;"))
-    public @Nullable EntityHitResult hookHack(Entity entity, Vec3d min, Vec3d max, Box box, Predicate<Entity> predicate, double d) {
+    public @Nullable EntityHitResult hookedRaycast(Entity entity, Vec3d min, Vec3d max, Box box, Predicate<Entity> predicate, double d) {
         EventEntityRaycast eventEntityRaycast = new EventEntityRaycast(MinecraftClient.getInstance().crosshairTarget);
         TarasandeMain.Companion.get().getManagerEvent().call(eventEntityRaycast);
         if (eventEntityRaycast.getCancelled()) {

@@ -23,7 +23,7 @@ public abstract class MixinScreen {
     @Shadow public abstract List<? extends Element> children();
 
     @Inject(method = "init(Lnet/minecraft/client/MinecraftClient;II)V", at = @At("RETURN"))
-    public void hookCustomChildren(MinecraftClient client, int width, int height, CallbackInfo ci) {
+    public void injectInit(MinecraftClient client, int width, int height, CallbackInfo ci) {
         final EventChildren eventChildren = new EventChildren((Screen) (Object) this);
         TarasandeMain.Companion.get().getManagerEvent().call(eventChildren);
 

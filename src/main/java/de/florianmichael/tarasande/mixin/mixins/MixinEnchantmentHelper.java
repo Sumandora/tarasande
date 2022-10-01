@@ -13,7 +13,7 @@ import su.mandora.tarasande.TarasandeMain;
 public class MixinEnchantmentHelper {
 
     @Inject(method = "hasBindingCurse", at = @At("RETURN"), cancellable = true)
-    private static void hookHack(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+    private static void injectHasBindingCurse(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         final EventBindingEnchantment eventBindingEnchantment = new EventBindingEnchantment(cir.getReturnValue());
         TarasandeMain.Companion.get().getManagerEvent().call(eventBindingEnchantment);
         cir.setReturnValue(eventBindingEnchantment.getPresent());

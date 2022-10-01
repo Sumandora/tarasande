@@ -11,7 +11,7 @@ import su.mandora.tarasande.TarasandeMain;
 public class MixinClientPlayNetworkHandler {
 
     @ModifyVariable(method = "acknowledge", at = @At("HEAD"), argsOnly = true, index = 2)
-    public boolean bypassMicrosoft(boolean value) {
+    public boolean modifyDisplayed(boolean value) {
         final EventChatAcknowledge eventChatAcknowledge = new EventChatAcknowledge(value);
         TarasandeMain.Companion.get().getManagerEvent().call(eventChatAcknowledge);
 

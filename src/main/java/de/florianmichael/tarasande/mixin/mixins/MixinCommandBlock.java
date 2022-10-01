@@ -12,7 +12,7 @@ import su.mandora.tarasande.TarasandeMain;
 public class MixinCommandBlock {
 
     @Redirect(method = "onUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isCreativeLevelTwoOp()Z"))
-    public boolean redirectOnUse(PlayerEntity instance) {
+    public boolean modifyIsCreativeLevelTwoOp(PlayerEntity instance) {
         final EventCommandBlockUsage eventCommandBlockUsage = new EventCommandBlockUsage(instance.isCreativeLevelTwoOp());
         TarasandeMain.Companion.get().getManagerEvent().call(eventCommandBlockUsage);
         return eventCommandBlockUsage.getAllowed();

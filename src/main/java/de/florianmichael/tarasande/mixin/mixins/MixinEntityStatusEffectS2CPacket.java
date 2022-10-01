@@ -13,7 +13,7 @@ import su.mandora.tarasande.TarasandeMain;
 public class MixinEntityStatusEffectS2CPacket {
 
     @Inject(method = "shouldShowIcon", at = @At("HEAD"), cancellable = true)
-    public void hookHudHack(CallbackInfoReturnable<Boolean> cir) {
+    public void injectShouldShowIcon(CallbackInfoReturnable<Boolean> cir) {
         final EventEntityStatusGUI eventEntityStatusGUI = new EventEntityStatusGUI(EventEntityStatusGUI.Type.ICON, cir.getReturnValue());
         TarasandeMain.Companion.get().getManagerEvent().call(eventEntityStatusGUI);
 
@@ -21,7 +21,7 @@ public class MixinEntityStatusEffectS2CPacket {
     }
 
     @Inject(method = "shouldShowParticles", at = @At("HEAD"), cancellable = true)
-    public void hookInventoryHack(CallbackInfoReturnable<Boolean> cir) {
+    public void injectShouldShowParticles(CallbackInfoReturnable<Boolean> cir) {
         final EventEntityStatusGUI eventEntityStatusGUI = new EventEntityStatusGUI(EventEntityStatusGUI.Type.PARTICLES, cir.getReturnValue());
         TarasandeMain.Companion.get().getManagerEvent().call(eventEntityStatusGUI);
 

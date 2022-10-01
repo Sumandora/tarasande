@@ -17,7 +17,7 @@ public abstract class MixinMinecraftClient {
     @Shadow public abstract void setScreen(@Nullable Screen screen);
 
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
-    public void hookChangeScreenEvent(Screen screen, CallbackInfo ci) {
+    public void injectSetScreen(Screen screen, CallbackInfo ci) {
         final EventChangeScreen eventChangeScreen = new EventChangeScreen(screen);
         TarasandeMain.Companion.get().getManagerEvent().call(eventChangeScreen);
 
