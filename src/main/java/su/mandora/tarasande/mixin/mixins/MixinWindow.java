@@ -11,6 +11,7 @@ import su.mandora.tarasande.TarasandeMain;
 
 @Mixin(Window.class)
 public class MixinWindow {
+    //TODO
 
     @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lorg/lwjgl/glfw/GLFW;glfwCreateWindow(IILjava/lang/CharSequence;JJ)J", remap = false))
     public long hookedGlfwCreateWindow(int width, int height, CharSequence title, long monitor, long share) {

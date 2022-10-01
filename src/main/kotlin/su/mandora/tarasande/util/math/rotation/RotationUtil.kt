@@ -29,9 +29,10 @@ object RotationUtil {
     private var goalMovementYaw: Float? = null
 
     private var disableNextTeleport = false
+    private var cachedRotation: Rotation? = null
 
     init {
-        TarasandeMain.get().managerEvent.add(Pair(1001, Consumer<Event> { event ->
+        TarasandeMain.get().managerEvent.add(Pair(9999, Consumer<Event> { event ->
             when (event) {
                 is EventJump -> {
                     if (event.state != EventJump.State.PRE) return@Consumer
@@ -125,6 +126,30 @@ object RotationUtil {
                     }
 
                     didRotate = false
+                }
+
+                is EventUpdate -> {
+                    when (event.state) {
+                        EventUpdate.State.PRE_PACKET -> {
+                            cachedRotation = Rotation(MinecraftClient.getInstance().player!!)
+                            if (fakeRotation != null) {
+                                MinecraftClient.getInstance().player!!.yaw = fakeRotation!!.yaw
+                                MinecraftClient.getInstance().player!!.pitch = fakeRotation!!.pitch
+                            }
+                        }
+
+                        EventUpdate.State.POST -> {
+                            MinecraftClient.getInstance().player!!.yaw = cachedRotation!!.yaw
+                            MinecraftClient.getInstance().player!!.pitch = cachedRotation!!.pitch
+                        }
+
+                        else -> {}
+                    }
+                }
+
+                is EventDebugHud -> {
+                    if (fakeRotation != null)
+                        event.list.add("[Tarsande Fake rotation] $fakeRotation")
                 }
             }
         }))

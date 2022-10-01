@@ -7,18 +7,18 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.module.movement.ModuleNoCramming;
+import su.mandora.tarasande.event.EventCanBePushedBy;
 
 import java.util.function.Predicate;
 
 @Mixin(EntityPredicates.class)
 public class MixinEntityPredicates {
 
-    @Inject(method = "canBePushedBy", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "canBePushedBy", at = @At("RETURN"), cancellable = true)
     private static void injectIsPushable(Entity entity, CallbackInfoReturnable<Predicate<Entity>> cir) {
-        ModuleNoCramming moduleNoCramming = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoCramming.class);
-        if (moduleNoCramming.getEnabled())
-            cir.setReturnValue(ignored -> moduleNoCramming.getMode().isSelected(0)); // mode == "enabled"
+        EventCanBePushedBy eventCanBePushedBy = new EventCanBePushedBy(entity, cir.getReturnValue());
+        TarasandeMain.Companion.get().getManagerEvent().call(eventCanBePushedBy);
+        cir.setReturnValue(eventCanBePushedBy.getPredicate());
     }
 
 }

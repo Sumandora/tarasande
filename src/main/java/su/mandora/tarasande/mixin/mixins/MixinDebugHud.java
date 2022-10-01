@@ -3,8 +3,11 @@ package su.mandora.tarasande.mixin.mixins;
 import net.minecraft.client.gui.hud.DebugHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import su.mandora.tarasande.util.math.rotation.RotationUtil;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import su.mandora.tarasande.TarasandeMain;
+import su.mandora.tarasande.event.EventDebugHud;
 
 import java.util.List;
 
@@ -16,15 +19,10 @@ public class MixinDebugHud {
         return degrees;
     }
 
-    @Redirect(method = "getLeftText", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z"))
-    public boolean hookedAdd(List<Object> instance, Object e) {
-        instance.add(e);
-        if (e instanceof String) {
-            if (((String) e).startsWith("Facing"))
-                if (RotationUtil.INSTANCE.getFakeRotation() != null)
-                    instance.add("[Tarsande Fake rotation] " + RotationUtil.INSTANCE.getFakeRotation());
-        }
-        return true;
+    @Inject(method = "getLeftText", at = @At(value = "RETURN"))
+    public void hookedAdd(CallbackInfoReturnable<List<String>> cir) {
+        EventDebugHud eventDebugHud = new EventDebugHud(cir.getReturnValue());
+        TarasandeMain.Companion.get().getManagerEvent().call(eventDebugHud);
     }
 
 }

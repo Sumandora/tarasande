@@ -65,6 +65,7 @@ class TarasandeMain {
     val linux = Util.getOperatingSystem() != Util.OperatingSystem.WINDOWS
 
     var proxy: Proxy? = null
+    var disabled = false
 
     companion object {
         private val instance: TarasandeMain = TarasandeMain()

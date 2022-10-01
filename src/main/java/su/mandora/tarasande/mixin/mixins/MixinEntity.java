@@ -17,16 +17,11 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.event.EventEntityFlag;
-import su.mandora.tarasande.event.EventMovement;
-import su.mandora.tarasande.event.EventStep;
-import su.mandora.tarasande.event.EventVelocityYaw;
+import su.mandora.tarasande.event.*;
 import su.mandora.tarasande.mixin.accessor.IEntity;
 import su.mandora.tarasande.mixin.accessor.IVec3d;
-import su.mandora.tarasande.module.render.ModuleESP;
 import su.mandora.tarasande.util.math.rotation.RotationUtil;
 
-import java.awt.*;
 import java.util.List;
 
 @Mixin(Entity.class)
@@ -83,9 +78,9 @@ public abstract class MixinEntity implements IEntity {
 
     @Inject(method = "getTeamColorValue", at = @At("RETURN"), cancellable = true)
     public void injectGetTeamColorValue(CallbackInfoReturnable<Integer> cir) {
-        Color c = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class).getEntityColor().getColor((Entity) (Object) this);
-        if (c != null)
-            cir.setReturnValue(c.getRGB());
+        EventTeamColor eventTeamColor = new EventTeamColor((Entity) (Object) this, cir.getReturnValue());
+        TarasandeMain.Companion.get().getManagerEvent().call(eventTeamColor);
+        cir.setReturnValue(eventTeamColor.getTeamColor());
     }
 
     @Redirect(method = "adjustMovementForCollisions(Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/util/math/Vec3d;", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;stepHeight:F"))

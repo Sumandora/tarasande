@@ -1,5 +1,6 @@
 package su.mandora.tarasande.base.event
 
+import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.Manager
 import java.lang.reflect.ParameterizedType
 import java.util.function.Consumer
@@ -7,6 +8,8 @@ import java.util.function.Consumer
 class ManagerEvent : Manager<Pair<Int, Consumer<Event>>>() {
 
     fun call(event: Event) {
+        if (TarasandeMain.get().disabled)
+            return
         list.forEach {
             it.second.accept(event)
         }

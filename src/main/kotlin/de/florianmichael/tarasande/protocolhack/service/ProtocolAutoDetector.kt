@@ -15,25 +15,14 @@ package de.florianmichael.tarasande.protocolhack.service
 
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
-import com.google.common.cache.LoadingCache
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
 import io.netty.bootstrap.Bootstrap
-import io.netty.channel.Channel
-import io.netty.channel.ChannelException
-import io.netty.channel.ChannelFuture
-import io.netty.channel.ChannelInitializer
-import io.netty.channel.ChannelOption
+import io.netty.channel.*
 import io.netty.channel.socket.nio.NioSocketChannel
 import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.util.concurrent.Future
-import net.minecraft.network.ClientConnection
-import net.minecraft.network.DecoderHandler
-import net.minecraft.network.NetworkSide
-import net.minecraft.network.NetworkState
-import net.minecraft.network.PacketEncoder
-import net.minecraft.network.SizePrepender
-import net.minecraft.network.SplitterHandler
+import net.minecraft.network.*
 import net.minecraft.network.listener.ClientQueryPacketListener
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.network.packet.c2s.query.QueryRequestC2SPacket
@@ -49,7 +38,7 @@ import java.util.logging.Level
 
 object ProtocolAutoDetector {
 
-    private val SERVER_VER: LoadingCache<InetSocketAddress, CompletableFuture<ProtocolVersion>> = CacheBuilder.newBuilder()
+    private val SERVER_VER = CacheBuilder.newBuilder()
         .expireAfterWrite(30, TimeUnit.SECONDS)
         .build(CacheLoader.from { address: InetSocketAddress ->
             val future: CompletableFuture<ProtocolVersion> = CompletableFuture<ProtocolVersion>()
@@ -111,8 +100,7 @@ object ProtocolAutoDetector {
                                     return clientConnection
                                 }
                             }
-                            clientConnection.send(HandshakeC2SPacket(address.getHostString(),
-                                address.getPort(), NetworkState.STATUS))
+                            clientConnection.send(HandshakeC2SPacket(address.hostString, address.port, NetworkState.STATUS))
                             clientConnection.send(QueryRequestC2SPacket())
                         }
                     }
@@ -123,12 +111,12 @@ object ProtocolAutoDetector {
             future
         })
 
-    fun detectVersion(address: InetSocketAddress?): CompletableFuture<ProtocolVersion> {
+    fun detectVersion(address: InetSocketAddress): CompletableFuture<ProtocolVersion> {
         return try {
             SERVER_VER.get(address)
         } catch (e: ExecutionException) {
             ViaProtocolHack.instance().logger().log(Level.WARNING, "Protocol auto detector error: ", e)
-            CompletableFuture.completedFuture<ProtocolVersion>(null)
+            CompletableFuture.completedFuture(null)
         }
     }
 }

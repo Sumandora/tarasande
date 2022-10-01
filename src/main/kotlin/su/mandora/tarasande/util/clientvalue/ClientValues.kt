@@ -1,8 +1,8 @@
 package su.mandora.tarasande.util.clientvalue
 
-import de.florianmichael.tarasande.base.menu.ElementMenuScreen
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TarasandeMain
+import su.mandora.tarasande.event.EventTicksPerFrame
 import su.mandora.tarasande.value.*
 
 class ClientValues {
@@ -36,4 +36,13 @@ class ClientValues {
     }
     val hypixelApiKey = ValueText(this, "Hypixel API Key", "")
     val menuAnimationLength = ValueNumber(this, "Menu animation length", 0.0, 100.0, 500.0, 1.0)
+
+    init {
+        TarasandeMain.get().managerEvent.add { event ->
+            if (event is EventTicksPerFrame) {
+                if (unlockTicksPerFrame.value)
+                    event.cancelled = true
+            }
+        }
+    }
 }

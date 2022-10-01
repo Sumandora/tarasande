@@ -18,13 +18,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.TarasandeMain;
 import su.mandora.tarasande.event.*;
 import su.mandora.tarasande.mixin.accessor.IClientPlayerEntity;
-import su.mandora.tarasande.util.math.rotation.Rotation;
-import su.mandora.tarasande.util.math.rotation.RotationUtil;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IClientPlayerEntity {
 
-    Rotation cachedRotation;
     EventVanillaFlight cachedEventVanillaFlight = null;
 
     boolean bypassChat;
@@ -65,20 +62,10 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tick()V", shift = At.Shift.AFTER))
     public void prePacketTick(CallbackInfo ci) {
         TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdate(EventUpdate.State.PRE_PACKET));
-
-        cachedRotation = new Rotation(this);
-        if (RotationUtil.INSTANCE.getFakeRotation() != null) {
-            Rotation rotation = RotationUtil.INSTANCE.getFakeRotation();
-            setYaw(rotation.getYaw());
-            setPitch(rotation.getPitch());
-        }
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void postTick(CallbackInfo ci) {
-        setYaw(cachedRotation.getYaw());
-        setPitch(cachedRotation.getPitch());
-
         TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdate(EventUpdate.State.POST));
     }
 
@@ -133,7 +120,8 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         getAbilities().flying = flying;
         getAbilities().setFlySpeed(flySpeed);
 
-        this.setFlag(Entity.FALL_FLYING_FLAG_INDEX, fallFlying);
+        if (cachedEventVanillaFlight.getDirty())
+            this.setFlag(Entity.FALL_FLYING_FLAG_INDEX, fallFlying);
     }
 
     @Override

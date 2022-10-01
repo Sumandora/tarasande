@@ -1,5 +1,6 @@
 package su.mandora.tarasande.event
 
+import com.mojang.authlib.minecraft.MinecraftSessionService
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.BlockState
 import net.minecraft.client.input.Input
@@ -20,6 +21,7 @@ import net.minecraft.util.shape.VoxelShape
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.util.math.rotation.Rotation
 import java.awt.Color
+import java.util.function.Predicate
 
 class EventChat(val chatMessage: String) : Event(true)
 class EventKey(val key: Int, val action: Int) : Event(true)
@@ -53,12 +55,13 @@ class EventPacket(val type: Type, val packet: Packet<*>?) : Event(true) {
 }
 
 class EventPollEvents : Event {
+    var dirty = false
+        private set
     var rotation: Rotation
         set(value) {
             dirty = true
             field = value
         }
-    var dirty = false
     var minRotateToOriginSpeed = 1.0
     var maxRotateToOriginSpeed = 1.0
     val fake: Boolean
@@ -94,6 +97,7 @@ class EventIsEntityAttackable(val entity: Entity?, var attackable: Boolean) : Ev
 
 class EventVanillaFlight : Event {
     var dirty = false
+        private set
     var flying: Boolean
         set(value) {
             dirty = true
@@ -159,7 +163,12 @@ class EventFogColor(var start: Float, var end: Float, var red: Float, var green:
 class EventClearColor(var red: Float, var green: Float, var blue: Float) : Event(false)
 class EventPlayerListName(val playerListEntry: PlayerListEntry, var displayName: Text) : Event(false)
 class EventRotationSet(val yaw: Float, val pitch: Float) : Event(false)
-class EventUpdateTargetedEntity : Event(false)
+class EventUpdateTargetedEntity(val state: State) : Event(false) {
+    enum class State {
+        PRE, POST
+    }
+}
+
 class EventRenderBlockModel(val state: BlockState, val pos: BlockPos) : Event(true)
 class EventStep : Event {
     var stepHeight: Float
@@ -191,3 +200,27 @@ class EventPacketTransform(val type: Type, val buf: ByteBuf?) : Event(false) {
 }
 
 class EventCollisionShape(val pos: BlockPos, var collisionShape: VoxelShape) : Event(false)
+class EventDebugHud(val list: MutableList<String>) : Event(false)
+class EventTeamColor(val entity: Entity, var teamColor: Int) : Event(false)
+class EventCanBePushedBy(val entity: Entity, var predicate: Predicate<Entity>) : Event(false)
+class EventDisplayName(val entity: Entity, var displayName: Text) : Event(false)
+class EventIsGlowing(val entity: Entity, var glowing: Boolean) : Event(false)
+class EventSessionService(var sessionService: MinecraftSessionService) : Event(false)
+class EventIncrementSequence : Event(true)
+class EventClipAtLedge(var clipping: Boolean) : Event(false)
+class EventTextVisit(var string: String) : Event(false)
+class EventTicksPerFrame(var ticks: Int, var max: Int) : Event(true)
+class EventRainGradient : Event {
+    var dirty = false
+        private set
+    var gradient: Float
+        set(value) {
+            field = value
+            dirty = true
+        }
+
+    constructor(gradient: Float) : super(false) {
+        this.gradient = gradient
+        this.dirty = false
+    }
+}

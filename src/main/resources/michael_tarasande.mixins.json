@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "MixinCommandBlock",
+    "MixinEnchantmentHelper",
     "MixinEntityStatusEffectS2CPacket",
     "MixinHandshakeC2SPacket",
     "protocolhack.MixinBrewingStandFuelSlot",

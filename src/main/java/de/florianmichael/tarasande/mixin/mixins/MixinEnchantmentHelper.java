@@ -1,4 +1,4 @@
-package su.mandora.tarasande.mixin.mixins;
+package de.florianmichael.tarasande.mixin.mixins;
 
 import de.florianmichael.tarasande.module.exploit.ModuleAntiBindingCurse;
 import net.minecraft.enchantment.EnchantmentHelper;

@@ -12,9 +12,11 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.network.encryption.SignatureVerifier
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import su.mandora.tarasande.TarasandeMain
 import su.mandora.tarasande.base.screen.accountmanager.account.Account
 import su.mandora.tarasande.base.screen.accountmanager.account.ManagerAccount
 import su.mandora.tarasande.base.screen.accountmanager.environment.ManagerEnvironment
+import su.mandora.tarasande.event.EventSessionService
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient
 import su.mandora.tarasande.screen.accountmanager.subscreens.ScreenBetterAccount
 import su.mandora.tarasande.util.render.screen.ScreenBetter
@@ -42,6 +44,14 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
 
     val managerAccount = ManagerAccount()
     val managerEnvironment = ManagerEnvironment()
+
+    init {
+        TarasandeMain.get().managerEvent.add { event ->
+            if (event is EventSessionService) {
+                event.sessionService = currentAccount?.getSessionService() ?: return@add
+            }
+        }
+    }
 
     override fun init() {
         addDrawableChild(AlwaysSelectedEntryListWidgetAccount(client, width, height, 16, height - 46).also { accountList = it })

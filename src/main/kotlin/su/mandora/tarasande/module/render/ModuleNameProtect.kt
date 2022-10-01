@@ -1,10 +1,13 @@
 package su.mandora.tarasande.module.render
 
 import su.mandora.tarasande.TarasandeMain
+import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
+import su.mandora.tarasande.event.EventTextVisit
 import su.mandora.tarasande.value.ValueBoolean
 import su.mandora.tarasande.value.ValueText
+import java.util.function.Consumer
 
 class ModuleNameProtect : Module("Name protect", "Hides your in-game name", ModuleCategory.RENDER) {
 
@@ -46,5 +49,10 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
     }
 
     private fun isAlphabetical(c: Char): Boolean = c in 'a'..'z' || c in 'A'..'Z'
+
+    val eventConsumer = Consumer<Event> { event ->
+        if (event is EventTextVisit)
+            event.string = replaceNames(event.string)
+    }
 
 }

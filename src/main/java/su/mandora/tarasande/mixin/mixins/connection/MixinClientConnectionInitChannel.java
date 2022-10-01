@@ -16,6 +16,7 @@ public class MixinClientConnectionInitChannel {
 
     @Inject(method = "initChannel", at = @At("TAIL"))
     public void injectPostInitChannel(Channel channel, CallbackInfo ci) {
+        //TODO
         Proxy proxy = TarasandeMain.Companion.get().getProxy();
         if (proxy != null) {
             switch (proxy.getType()) {

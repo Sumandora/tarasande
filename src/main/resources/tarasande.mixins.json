@@ -10,13 +10,11 @@
     "MixinClientPlayerEntity",
     "MixinClientPlayerInteractionManager",
     "MixinCrossbowItem",
-    "MixinEnchantmentHelper",
     "MixinEntity",
     "MixinEntityPredicates",
     "MixinEntityRenderer",
     "MixinFramebuffer",
     "MixinGameRenderer",
-    "MixinGlDebug",
     "MixinHeldItemRenderer",
     "MixinInGameHud",
     "MixinItemCooldownManager",
@@ -58,6 +56,7 @@
     "defaultRequire": 1
   },
   "client": [
+    "MixinButtonWidget",
     "MixinDebugHud",
     "MixinHandledScreen",
     "MixinPendingUpdateManager",

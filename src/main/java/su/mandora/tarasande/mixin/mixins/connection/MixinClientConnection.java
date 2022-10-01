@@ -30,9 +30,9 @@ public abstract class MixinClientConnection implements IClientConnection {
 
     @Inject(method = "exceptionCaught", at = @At("HEAD"))
     public void injectExceptionCaught(ChannelHandlerContext context, Throwable ex, CallbackInfo ci) {
+        //TODO
         ex.printStackTrace();
     }
-
 
     @Inject(method = "handlePacket", at = @At("HEAD"), cancellable = true)
     private static <T extends PacketListener> void injectHandlePacket(Packet<T> packet, PacketListener listener, CallbackInfo ci) {

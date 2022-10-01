@@ -5,7 +5,6 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande.TarasandeMain;
@@ -18,12 +17,15 @@ public class MixinGameRenderer implements IGameRenderer {
     boolean allowThroughWalls = false;
     boolean disableReachExtension = false;
     double reach = 3.0;
-    @Shadow
-    private float fovMultiplier;
 
     @Inject(method = "updateTargetedEntity", at = @At("HEAD"))
-    public void injectUpdateTargetedEntity(float tickDelta, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdateTargetedEntity());
+    public void injectPreUpdateTargetedEntity(float tickDelta, CallbackInfo ci) {
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.PRE));
+    }
+
+    @Inject(method = "updateTargetedEntity", at = @At("RETURN"))
+    public void injectPostUpdateTargetedEntity(float tickDelta, CallbackInfo ci) {
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.POST));
     }
 
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;"))

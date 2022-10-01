@@ -1,17 +1,16 @@
 package de.florianmichael.tarasande.screen
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import de.florianmichael.tarasande.util.render.RenderUtil
 import de.florianmichael.tarasande.screen.element.ScreenBetterSlotList
 import de.florianmichael.tarasande.screen.element.ScreenBetterSlotListEntry
 import de.florianmichael.tarasande.screen.element.ScreenBetterSlotListWidget
+import de.florianmichael.tarasande.util.render.RenderUtil
 import de.florianmichael.viaprotocolhack.util.VersionList
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.text.TextColor
-import net.minecraft.util.Formatting
 import su.mandora.tarasande.TarasandeMain
 import java.awt.Color
 
@@ -55,6 +54,10 @@ class ScreenBetterProtocolHack(parent: Screen) : ScreenBetterSlotList(parent, 46
             RenderUtil.useMyStack(matrices)
             RenderUtil.textCenter(Text.literal(this.protocol.name), entryWidth.toFloat(), 0F, if (this.isSelected()) colorShift(Color.green) else colorShift(Color.red))
             RenderUtil.ourStack()
+        }
+
+        override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+            return !TarasandeMain.get().protocolHack.isAuto() && super.mouseClicked(mouseX, mouseY, button)
         }
 
         override fun onClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int): Boolean {

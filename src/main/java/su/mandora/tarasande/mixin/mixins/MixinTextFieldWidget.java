@@ -32,6 +32,7 @@ public abstract class MixinTextFieldWidget implements ITextFieldWidget {
 
     @Inject(method = "mouseClicked", at = @At("HEAD"))
     public void injectMouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
+        //TODO
         if (MinecraftClient.getInstance().currentScreen != null)
             for (Element element : MinecraftClient.getInstance().currentScreen.children())
                 if (element != this) {

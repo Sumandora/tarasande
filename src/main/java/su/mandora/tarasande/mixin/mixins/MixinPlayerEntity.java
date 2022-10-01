@@ -7,17 +7,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.TarasandeMain;
+import su.mandora.tarasande.event.EventClipAtLedge;
 import su.mandora.tarasande.event.EventKeepSprint;
-import su.mandora.tarasande.module.movement.ModuleSafeWalk;
 
 @Mixin(PlayerEntity.class)
 public abstract class MixinPlayerEntity {
 
-    @Inject(method = "clipAtLedge", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "clipAtLedge", at = @At("RETURN"), cancellable = true)
     public void injectClipAtLedge(CallbackInfoReturnable<Boolean> cir) {
-        ModuleSafeWalk moduleSafeWalk = TarasandeMain.Companion.get().getManagerModule().get(ModuleSafeWalk.class);
-        if (moduleSafeWalk.getEnabled() && !moduleSafeWalk.getSneak().getValue())
-            cir.setReturnValue(true);
+        EventClipAtLedge eventClipAtLedge = new EventClipAtLedge(cir.getReturnValue());
+        TarasandeMain.Companion.get().getManagerEvent().call(eventClipAtLedge);
+        cir.setReturnValue(eventClipAtLedge.getClipping());
     }
 
     @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setSprinting(Z)V"))

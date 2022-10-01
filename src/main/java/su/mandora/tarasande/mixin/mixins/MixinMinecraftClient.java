@@ -3,7 +3,6 @@ package su.mandora.tarasande.mixin.mixins;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.minecraft.UserApiService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-import de.florianmichael.tarasande.menu.ElementMenuScreenAccountManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -28,10 +27,8 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.base.screen.accountmanager.account.Account;
 import su.mandora.tarasande.event.*;
 import su.mandora.tarasande.mixin.accessor.IMinecraftClient;
-import su.mandora.tarasande.module.render.ModuleESP;
 import su.mandora.tarasande.util.render.RenderUtil;
 
 @Mixin(MinecraftClient.class)
@@ -139,10 +136,12 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
     public int hookedMin(int a, int b) {
-        if (TarasandeMain.Companion.get().getClientValues().getUnlockTicksPerFrame().getValue()) {
-            return b;
+        EventTicksPerFrame eventTicksPerFrame = new EventTicksPerFrame(b, a);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventTicksPerFrame);
+        if (eventTicksPerFrame.getCancelled()) {
+            return eventTicksPerFrame.getTicks();
         }
-        return Math.min(a, b);
+        return Math.min(eventTicksPerFrame.getMax(), eventTicksPerFrame.getTicks());
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Util;getMeasuringTimeMs()J"), slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;tick()V")))
@@ -154,8 +153,9 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
 
     @Redirect(method = "hasOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isGlowing()Z"))
     public boolean hookedIsGlowing(Entity entity) {
-        ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class);
-        return (moduleESP.getEnabled() && moduleESP.getMode().isSelected(0) && moduleESP.filter(entity)) || entity.isGlowing();
+        EventIsGlowing eventIsGlowing = new EventIsGlowing(entity, entity.isGlowing());
+        TarasandeMain.Companion.get().getManagerEvent().call(eventIsGlowing);
+        return eventIsGlowing.getGlowing();
     }
 
     @Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z", shift = At.Shift.BEFORE), slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doAttack()Z")))
@@ -172,10 +172,9 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
 
     @Inject(method = "getSessionService", at = @At("RETURN"), cancellable = true)
     public void injectGetSessionService(CallbackInfoReturnable<MinecraftSessionService> cir) {
-        Account account = TarasandeMain.Companion.get().getManagerMenu().get(ElementMenuScreenAccountManager.class).getScreenBetterAccountManager().getCurrentAccount();
-        if (account != null && account.getSessionService() != null) {
-            cir.setReturnValue(account.getSessionService());
-        }
+        EventSessionService eventSessionService = new EventSessionService(cir.getReturnValue());
+        TarasandeMain.Companion.get().getManagerEvent().call(eventSessionService);
+        cir.setReturnValue(eventSessionService.getSessionService());
     }
 
     @Override

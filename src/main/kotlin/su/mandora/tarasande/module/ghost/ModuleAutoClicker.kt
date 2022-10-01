@@ -35,11 +35,16 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventAttack -> {
+                if (event.dirty)
+                    return@Consumer
+
                 for (entry in hashMap) {
                     if (buttons.selected.contains(keyMap[entry.key]) && (entry.key as IKeyBinding).tarasande_forceIsPressed()) {
                         val clicks = entry.value.getClicks()
-                        for (i in 1..clicks)
+                        for (i in 1..clicks) {
                             (entry.key as IKeyBinding).tarasande_increaseTimesPressed()
+                            event.dirty = true
+                        }
                     } else {
                         entry.value.reset()
                     }

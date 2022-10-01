@@ -3,6 +3,7 @@ package su.mandora.tarasande.module.movement
 import su.mandora.tarasande.base.event.Event
 import su.mandora.tarasande.base.module.Module
 import su.mandora.tarasande.base.module.ModuleCategory
+import su.mandora.tarasande.event.EventClipAtLedge
 import su.mandora.tarasande.event.EventKeyBindingIsPressed
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.value.ValueBoolean
@@ -21,6 +22,10 @@ class ModuleSafeWalk : Module("Safe walk", "Prevents falling off blocks", Module
 
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
+            is EventClipAtLedge -> {
+                event.clipping = event.clipping || !sneak.value
+            }
+
             is EventKeyBindingIsPressed -> {
                 if (event.keyBinding == mc.options.sneakKey && sneak.value)
                     if (!onlyOnGround.value || mc.player?.isOnGround!!)

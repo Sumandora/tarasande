@@ -114,14 +114,18 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
 
             is EventAttack -> {
                 breaking = false
+                if (event.dirty)
+                    return@Consumer
                 when {
                     breakSpeed.isSelected(0) -> {
                         if (list.isNotEmpty()) {
                             val pair = list[0]
                             mc.crosshairTarget = if (pair.second.blockPos == pair.first) pair.second else pair.second.withBlockPos(pair.first)
-                            if ((mc as IMinecraftClient).tarasande_getAttackCooldown() == 0)
+                            if ((mc as IMinecraftClient).tarasande_getAttackCooldown() == 0) {
                                 if (!(mc as IMinecraftClient).tarasande_invokeDoAttack())
                                     breaking = true
+                                event.dirty = true
+                            }
                         }
                     }
 
@@ -136,6 +140,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                                     (mc as IMinecraftClient).tarasande_invokeHandleBlockBreaking(true)
                             }
                             mc.crosshairTarget = original
+                            event.dirty = true
                         }
                     }
                 }
