@@ -6,16 +6,21 @@ import net.minecraft.network.NetworkState
 import net.minecraft.network.Packet
 import net.minecraft.network.listener.ClientPlayPacketListener
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket
+import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.event.Priority
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientConnection
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
+import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
+import net.tarasandedevelopment.tarasande.value.ValueBind
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
+import org.lwjgl.glfw.GLFW
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.function.Consumer
 
@@ -33,9 +38,22 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         override fun isEnabled() = mode.isSelected(2)
         override fun onChange() = onDisable()
     }
+    private val cancelKey = object : ValueBind(this, "Cancel key", Type.KEY, GLFW.GLFW_KEY_UNKNOWN) {
+        override fun isEnabled() = mode.isSelected(0) && affectedPackets.isSelected(0)
+    }
 
     private val packets = CopyOnWriteArrayList<Triple<Packet<*>, EventPacket.Type, Long>>()
     private val timeUtil = TimeUtil()
+
+    private var pos: Vec3d? = null
+    private var velocity: Vec3d? = null
+    private var rotation: Rotation? = null
+
+    override fun onEnable() {
+        pos = mc.player?.pos
+        velocity = mc.player?.velocity
+        rotation = Rotation(mc.player ?: return)
+    }
 
     @Priority(9999)
     val eventConsumer = Consumer<Event> { event ->
@@ -79,6 +97,20 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                     mode.isSelected(2) -> onDisable(false)
                 }
             }
+
+            is EventTick -> {
+                if (event.state == EventTick.State.PRE) {
+                    if (pos == null || velocity == null || rotation == null)
+                        onEnable()
+
+                    if (cancelKey.isEnabled())
+                        if (cancelKey.wasPressed() > 0) {
+                            packets.removeIf { it.second == EventPacket.Type.SEND }
+                            onDisable(all = true, cancelled = true)
+                            enabled = false
+                        }
+                }
+            }
         }
     }
 
@@ -86,7 +118,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         onDisable(true)
     }
 
-    fun onDisable(all: Boolean) {
+    fun onDisable(all: Boolean, cancelled: Boolean = false) {
         if (mc.networkHandler?.connection?.isOpen == true) {
             val copy = ArrayList<Triple<Packet<*>, EventPacket.Type, Long>>()
             packets.removeIf {
@@ -108,5 +140,11 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
             }
         } else
             packets.clear()
+        if (cancelled) {
+            mc.player?.setPosition(pos)
+            mc.player?.velocity = velocity
+            mc.player?.yaw = rotation?.yaw!!
+            mc.player?.pitch = rotation?.pitch!!
+        }
     }
 }
