@@ -8,10 +8,14 @@ import java.util.concurrent.CopyOnWriteArrayList
 open class Manager<T : Any> {
     val list = CopyOnWriteArrayList<T>()
 
-    open fun add(vararg objects: T) {
+    open fun add(obj: T) {
+        if (!list.contains(obj))
+            list.add(obj)
+    }
+
+    internal open fun add(vararg objects: T) {
         for (obj in objects) {
-            if (!list.contains(obj))
-                list.add(obj)
+            add(obj)
         }
 
         if (this !is ManagerEvent)
