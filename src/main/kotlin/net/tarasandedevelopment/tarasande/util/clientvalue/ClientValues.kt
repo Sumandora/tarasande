@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.util.clientvalue
 
+import org.lwjgl.glfw.GLFW
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.value.*
-import org.lwjgl.glfw.GLFW
 
 class ClientValues {
 
@@ -35,5 +35,17 @@ class ClientValues {
     }
     val hypixelApiKey = ValueText(this, "Hypixel API Key", "")
     val menuAnimationLength = ValueNumber(this, "Menu animation length", 0.0, 100.0, 500.0, 1.0)
+    val menuAccentBackground = ValueBoolean(this, "Menu accent background", true)
+    val menuBlurBackground = ValueBoolean(this, "Menu blur background", true)
+    val menuDrawImage = ValueBoolean(this, "Menu draw image", true)
 
+    val clientMenuFocusedEntry: ValueMode
+    val clientMenuCategories = ValueBoolean(this, "Client Menu Categories", true)
+
+    init {
+        val entries = mutableListOf("None")
+        entries.addAll(TarasandeMain.get().managerClientMenu.list.filterIsInstance<ElementMenuScreen>().map { e -> e.name })
+
+        clientMenuFocusedEntry = ValueMode(this, "Client Menu focused entry", false, *entries.toTypedArray())
+    }
 }

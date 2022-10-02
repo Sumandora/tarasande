@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.base.clientmenu.ElementMenuTitle
 import net.tarasandedevelopment.tarasande.util.render.screen.ScreenBetter
 
 class ScreenBetterClientMenu(parent: Screen) : ScreenBetter(parent) {
@@ -21,14 +22,18 @@ class ScreenBetterClientMenu(parent: Screen) : ScreenBetter(parent) {
         this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.literal("<-")) {
             close()
         })
-        this.addDrawableChild(ButtonWidget(5, 5, 98, 20, Text.literal("Settings")) {
-            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, "Menu Settings", TarasandeMain.get().managerClientMenu.settings!!))
+        this.addDrawableChild(ButtonWidget(5, 5, 98, 20, Text.literal("Client Values")) {
+            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, "Client Values", TarasandeMain.get().clientValues))
         })
 
-        val endHeight = TarasandeMain.get().managerClientMenu.list.size * (buttonHeight + spacer)
+        val endHeight = TarasandeMain.get().managerClientMenu.list.filter { element -> element !is ElementMenuTitle || TarasandeMain.get().clientValues.clientMenuCategories.value }.size * (buttonHeight + spacer)
 
-        TarasandeMain.get().managerClientMenu.list.forEachIndexed { index, menu ->
+        var index = 0
+        for (menu in TarasandeMain.get().managerClientMenu.list) {
+            if (!TarasandeMain.get().clientValues.clientMenuCategories.value && menu is ElementMenuTitle) continue
+
             this.addDrawableChild(menu.buildWidget(startX, this.halfHeight() - endHeight / 2 + (index * (buttonHeight + spacer)), buttonWidth, buttonHeight))
+            index++
         }
     }
 }

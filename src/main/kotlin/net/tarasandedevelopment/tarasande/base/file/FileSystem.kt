@@ -54,7 +54,7 @@ class ManagerFile : Manager<File>() {
     }
 
     private fun internalLoad(file: File, backup: Boolean) {
-        val fileObj = java.io.File(System.getProperty("user.home") + java.io.File.separator + TarasandeMain.get().name + java.io.File.separator + file.name + if (backup) "_backup" else "")
+        val fileObj = java.io.File(TarasandeMain.get().rootDirectory, file.name + if (backup) "_backup" else "")
         val content = file.decrypt(String(Files.readAllBytes(fileObj.toPath()))) ?: error(file.name + "'s content is empty")
         val jsonElement = TarasandeMain.get().gson.fromJson(content, JsonElement::class.java)
         file.load(jsonElement)

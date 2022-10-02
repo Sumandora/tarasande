@@ -14,8 +14,6 @@ import java.awt.Color
 
 class ManagerClientMenu : Manager<ElementMenu>() {
 
-    val settings: MenuSettingsParent
-
     init {
         this.spacer("General")
         this.add(ElementMenuScreenAccountManager(), ElementMenuScreenProxySystem(), ElementMenuScreenProtocolHack())
@@ -23,7 +21,9 @@ class ManagerClientMenu : Manager<ElementMenu>() {
         this.spacer("Exploits")
         this.add(ElementMenuToggleBungeeHack())
 
-        this.settings = MenuSettingsParent(this)
+        val fritzBox = ElementMenuFritzBoxReconnect()
+        this.add(ElementMenuFritzBoxReconnect.SubTitle(fritzBox))
+        this.add(fritzBox)
     }
 
     fun byName(name: String): ElementMenu {
@@ -53,6 +53,7 @@ abstract class ElementMenu(val name: String) {
     open fun buttonText() : Text = Text.literal(this.name).styled {
         it.withColor(this.buttonColor())
     }
+    open fun visible() = true
 
     abstract fun onClick(mouseButton: Int)
 }
@@ -90,7 +91,7 @@ abstract class ElementMenuToggle(name: String) : ElementMenu(name) {
     }
 }
 
-class ElementMenuTitle(name: String) : ElementMenu(name) {
+open class ElementMenuTitle(name: String) : ElementMenu(name) {
     override fun onClick(mouseButton: Int) {
     }
 

@@ -116,7 +116,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         val color = TarasandeMain.get().clientValues.accentColor.getColor()
 
         val strength = round(animation * TarasandeMain.get().clientValues.blurStrength.value).toInt()
-        if (strength > 0) {
+        if (strength > 0 && TarasandeMain.get().clientValues.menuBlurBackground.value) {
             TarasandeMain.get().blur.bind(true)
             RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, Color.white.rgb)
             client?.framebuffer?.beginWrite(true)
@@ -130,7 +130,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
         matrices?.push()
 
-        if (image != null) {
+        if (image != null && TarasandeMain.get().clientValues.menuDrawImage.value) {
             matrices?.push()
             RenderSystem.setShader { GameRenderer.getPositionTexShader() }
             RenderSystem.setShaderTexture(0, image)
@@ -154,9 +154,11 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
 
-        matrices?.push()
-        DrawableHelper.fill(matrices, 0, 0, width, height, Color(color.red, color.green, color.blue, (animation * 255 * 0.66).toInt()).rgb)
-        matrices?.pop()
+        if (TarasandeMain.get().clientValues.menuAccentBackground.value) {
+            matrices?.push()
+            DrawableHelper.fill(matrices, 0, 0, width, height, Color(color.red, color.green, color.blue, (animation * 255 * 0.66).toInt()).rgb)
+            matrices?.pop()
+        }
 
         particles.forEach { it.render(matrices, mouseX.toDouble(), mouseY.toDouble(), animation) }
 

@@ -26,7 +26,7 @@ class ScreenBetterProtocolHack(parent: Screen) : ScreenBetterSlotList(parent, 46
             this.close()
         })
 
-        this.addDrawableChild(ButtonWidget(5, 5, 98, 20, this.generateAutoDetectText()) {
+        this.addDrawableChild(ButtonWidget(this.width / 2 - 49, this.height - 25, 98, 20, this.generateAutoDetectText()) {
             TarasandeMain.get().protocolHack.toggleAuto()
             it.message = this.generateAutoDetectText()
         })
