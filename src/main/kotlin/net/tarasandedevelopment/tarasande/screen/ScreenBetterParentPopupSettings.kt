@@ -44,15 +44,15 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
         }).also { clickableWidgetPanel = it })
     }
 
-//    override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
-//        this.clickableWidgetPanel.mouseReleased(mouseX, mouseY, button)
-//        return super.mouseReleased(mouseX, mouseY, button)
-//    }
-//
-//    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
-//        this.clickableWidgetPanel.mouseScrolled(mouseX, mouseY, amount)
-//        return super.mouseScrolled(mouseX, mouseY, amount)
-//    }
+    override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        this.clickableWidgetPanel.mouseReleased(mouseX, mouseY, button)
+        return super.mouseReleased(mouseX, mouseY, button)
+    }
+
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+        this.clickableWidgetPanel.mouseScrolled(mouseX, mouseY, amount)
+        return super.mouseScrolled(mouseX, mouseY, amount)
+    }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         this.renderBackground(matrices)
