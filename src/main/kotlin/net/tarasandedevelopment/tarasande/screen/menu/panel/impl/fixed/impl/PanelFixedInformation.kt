@@ -3,15 +3,33 @@ package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueMode
 
 class PanelFixedInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : PanelFixed("Information", x, y, 75.0, resizable = false) {
 
-    var visible = ValueMode(this, "Elements", true, *screenCheatMenu.managerInformation.list.map { i -> i.owner + "/" + i.information }.toTypedArray())
+    var visible = ValueMode(this, "Elements", true, *screenCheatMenu.managerInformation.list.map { i -> i.owner + ": " + i.information }.toTypedArray())
+
+    init {
+        for (information in screenCheatMenu.managerInformation.list) {
+            if (TarasandeMain.get().managerValue.getValues(information).isNotEmpty()) {
+                val name = information.owner + "/" + information.information
+
+                object : ValueButton(this, "$name settings") {
+                    override fun onChange() {
+                        super.onChange()
+
+                        MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, information))
+                    }
+                }
+            }
+        }
+    }
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val text = ArrayList<String>()
@@ -20,7 +38,7 @@ class PanelFixedInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMe
             val cache = ArrayList<String>()
             val informationList = TarasandeMain.get().screenCheatMenu.managerInformation.getAllInformation(owner)
             for (information in informationList) {
-                if (!visible.selected.contains(information.owner + "/" + information.information)) continue
+                if (!visible.selected.contains(information.owner + ": " + information.information)) continue
 
                 val message = information.getMessage()
                 if (message != null) {

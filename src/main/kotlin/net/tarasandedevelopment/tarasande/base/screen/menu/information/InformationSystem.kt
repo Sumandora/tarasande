@@ -11,9 +11,6 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
             // Connection
             InformationHandlers(),
 
-            // World
-            InformationWorldTime(),
-
             // Badlion
             InformationTimers(),
 
@@ -22,6 +19,10 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
             InformationSuspectedMurderers(),
             InformationFakeNewsCountdown()
         )
+
+        informationList.forEach {
+            add(it)
+        }
 
         for (graph in screenCheatMenu.managerGraph.list) {
             add(InformationGraphValue(graph))

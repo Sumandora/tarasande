@@ -155,7 +155,7 @@ class GraphMemory : Graph("Memory", 200) {
 
 class GraphIncomingTraffic : Graph("Incoming Traffic", 200) {
 
-    private val decimalPlaces = ValueNumber(this, "Decimal Places", 1.0, 1.0, 5.0, 1.0)
+    private val decimalPlaces = ValueNumber(this, "Decimal places", 1.0, 1.0, 5.0, 1.0)
     private val traffic = CopyOnWriteArrayList<Pair<Long, Int>>()
 
     init {
@@ -178,7 +178,7 @@ class GraphIncomingTraffic : Graph("Incoming Traffic", 200) {
 
 class GraphOutgoingTraffic : Graph("Outgoing Traffic", 200) {
 
-    private val decimalPlaces = ValueNumber(this, "Decimal Places", 1.0, 1.0, 5.0, 1.0)
+    private val decimalPlaces = ValueNumber(this, "Decimal places", 1.0, 1.0, 5.0, 1.0)
     private val traffic = CopyOnWriteArrayList<Pair<Long, Int>>()
 
     init {
