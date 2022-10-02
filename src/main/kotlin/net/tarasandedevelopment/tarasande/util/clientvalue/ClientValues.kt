@@ -1,8 +1,9 @@
 package net.tarasandedevelopment.tarasande.util.clientvalue
 
-import org.lwjgl.glfw.GLFW
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.base.clientmenu.ElementMenuScreen
 import net.tarasandedevelopment.tarasande.value.*
+import org.lwjgl.glfw.GLFW
 
 class ClientValues {
 
