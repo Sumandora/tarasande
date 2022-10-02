@@ -8,21 +8,36 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
 
     init {
         add(
+            // Player
+            InformationXYZ(),
+            InformationNetherXYZ(),
+            InformationRotation(),
+            InformationFakeRotation(),
+
+            // Time
+            InformationDate(),
+            InformationTime(),
+
             // Connection
             InformationHandlers(),
 
+            // World
+            InformationEntities(),
+            InformationWorldTime(),
+            InformationSpawnPoint(),
+
             // Badlion
             InformationTimers(),
+
+            // Server
+            InformationServerBrand(),
+            InformationProtocolVersion(),
 
             // Modules
             InformationTimeShifted(),
             InformationSuspectedMurderers(),
             InformationFakeNewsCountdown()
         )
-
-        informationList.forEach {
-            add(it)
-        }
 
         for (graph in screenCheatMenu.managerGraph.list) {
             add(InformationGraphValue(graph))
