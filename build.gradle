@@ -78,7 +78,6 @@ shadowJar {
 			include(dependency(lib))
 		}
     }
-    minimize()
 }
 
 compileKotlin.kotlinOptions.jvmTarget = "17"
