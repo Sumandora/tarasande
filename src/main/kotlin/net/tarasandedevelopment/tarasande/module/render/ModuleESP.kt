@@ -12,7 +12,6 @@ import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.event.Priority
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
-import net.tarasandedevelopment.tarasande.event.EventIsGlowing
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.mixin.accessor.IMatrix4f
@@ -140,10 +139,6 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
                 for (entry in hashMap.entries) {
                     TarasandeMain.get().managerESP.renderBox(event.matrices, entry.key, entry.value)
                 }
-            }
-
-            is EventIsGlowing -> {
-                event.glowing = event.glowing || (mode.isSelected(0) && filter(event.entity))
             }
         }
     }

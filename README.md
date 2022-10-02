@@ -59,7 +59,6 @@
 - Killaura: TP
 - Target strafe: Anti Void
 - Account manager: Add skins in selection
-- Revert useless Event-based mixins
 
 ### TODO-List (Click GUI)
 - Correctly save and calculate the positions of the panels when resizing ingame

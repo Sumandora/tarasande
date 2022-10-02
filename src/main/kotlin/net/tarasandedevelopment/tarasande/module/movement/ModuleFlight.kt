@@ -9,7 +9,6 @@ import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventCollisionShape
 import net.tarasandedevelopment.tarasande.event.EventJump
 import net.tarasandedevelopment.tarasande.event.EventMovement
-import net.tarasandedevelopment.tarasande.event.EventVanillaFlight
 import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
 import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
@@ -31,13 +30,6 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
     @Priority(1002) // we need to override step
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
-            is EventVanillaFlight -> {
-                if (!mode.isSelected(0))
-                    return@Consumer
-                event.flying = true
-                event.flightSpeed *= flightSpeed.value.toFloat()
-            }
-
             is EventMovement -> {
                 if (!mode.isSelected(1))
                     return@Consumer

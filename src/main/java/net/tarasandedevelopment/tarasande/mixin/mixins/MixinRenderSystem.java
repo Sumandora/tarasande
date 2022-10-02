@@ -2,6 +2,9 @@ package net.tarasandedevelopment.tarasande.mixin.mixins;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.module.render.ModuleFog;
+import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -9,10 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventClearColor;
-import net.tarasandedevelopment.tarasande.event.EventFogColor;
-import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 
 @Mixin(RenderSystem.class)
 public class MixinRenderSystem {
@@ -34,33 +33,50 @@ public class MixinRenderSystem {
 
     @Redirect(method = "_setShaderFogStart", at = @At(value = "FIELD", target = "Lcom/mojang/blaze3d/systems/RenderSystem;shaderFogStart:F"), remap = false)
     private static void hookedShaderFogStart(float value) {
-        EventFogColor eventFogColor = new EventFogColor(value, 0.0f, 0.0f, 0.0f, 0.0f);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventFogColor);
-        shaderFogStart = eventFogColor.getStart();
+        shaderFogStart = value;
+        if(!TarasandeMain.Companion.get().getDisabled()) {
+            ModuleFog moduleFog = TarasandeMain.Companion.get().getManagerModule().get(ModuleFog.class);
+            if(moduleFog.getEnabled()) {
+                shaderFogStart *= moduleFog.getDistance().getMinValue();
+            }
+        }
     }
 
     @Redirect(method = "_setShaderFogEnd", at = @At(value = "FIELD", target = "Lcom/mojang/blaze3d/systems/RenderSystem;shaderFogEnd:F"), remap = false)
     private static void hookedShaderFogEnd(float value) {
-        EventFogColor eventFogColor = new EventFogColor(0.0f, value, 0.0f, 0.0f, 0.0f);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventFogColor);
-        shaderFogEnd = eventFogColor.getEnd();
+        shaderFogEnd = value;
+        if(!TarasandeMain.Companion.get().getDisabled()) {
+            ModuleFog moduleFog = TarasandeMain.Companion.get().getManagerModule().get(ModuleFog.class);
+            if(moduleFog.getEnabled()) {
+                shaderFogEnd *= moduleFog.getDistance().getMaxValue();
+            }
+        }
     }
 
     @Inject(method = "_setShaderFogColor", at = @At("TAIL"), remap = false)
     private static void inject_setShaderFogColor(float f, float g, float h, float i, CallbackInfo ci) {
-        EventFogColor eventFogColor = new EventFogColor(0.0f, 0.0f, shaderFogColor[0], shaderFogColor[1], shaderFogColor[2]);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventFogColor);
-        shaderFogColor[0] = eventFogColor.getRed();
-        shaderFogColor[1] = eventFogColor.getGreen();
-        shaderFogColor[2] = eventFogColor.getBlue();
+        if(!TarasandeMain.Companion.get().getDisabled()) {
+            ModuleFog moduleFog = TarasandeMain.Companion.get().getManagerModule().get(ModuleFog.class);
+            if(moduleFog.getEnabled()) {
+                shaderFogColor[0] = moduleFog.getColor().getColor().getRed() / 255.0f;
+                shaderFogColor[1] = moduleFog.getColor().getColor().getGreen() / 255.0f;
+                shaderFogColor[2] = moduleFog.getColor().getColor().getBlue() / 255.0f;
+                shaderFogEnd *= moduleFog.getDistance().getMaxValue();
+            }
+        }
     }
 
-    @Inject(method = "clearColor", at = @At("HEAD"), remap = false, cancellable = true)
-    private static void injectClearColor(float red, float green, float blue, float alpha, CallbackInfo ci) {
-        EventClearColor eventClearColor = new EventClearColor(red, green, blue);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventClearColor);
-        GlStateManager._clearColor(eventClearColor.getRed(), eventClearColor.getGreen(), eventClearColor.getBlue(), alpha);
-        ci.cancel();
+    @Redirect(method = "clearColor", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;_clearColor(FFFF)V"), remap = false)
+    private static void injectClearColor(float red, float green, float blue, float alpha) {
+        if(!TarasandeMain.Companion.get().getDisabled()) {
+            ModuleFog moduleFog = TarasandeMain.Companion.get().getManagerModule().get(ModuleFog.class);
+            if (moduleFog.getEnabled()) {
+                red = moduleFog.getColor().getColor().getRed() / 255.0f;
+                green = moduleFog.getColor().getColor().getGreen() / 255.0f;
+                blue = moduleFog.getColor().getColor().getBlue() / 255.0f;
+            }
+        }
+        GlStateManager._clearColor(red, green, blue, alpha);
     }
 
 }

@@ -5,7 +5,6 @@ import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.event.EventResetEquipProgress
 import net.tarasandedevelopment.tarasande.event.EventSwing
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
@@ -17,7 +16,7 @@ class ModuleNoSwing : Module("No swing", "Hides the hand swing animation", Modul
     private val hand = object : ValueMode(this, "Hand", true, "Main hand", "Off hand") {
         override fun isEnabled() = mode.anySelected()
     }
-    private val fixAnimations = object : ValueBoolean(this, "Fix animations", true) {
+    val fixAnimations = object : ValueBoolean(this, "Fix animations", true) {
         override fun isEnabled() = mode.isSelected(0)
     }
 
@@ -33,11 +32,6 @@ class ModuleNoSwing : Module("No swing", "Hides the hand swing animation", Modul
                 if (mode.isSelected(0))
                     if (hand.isSelected(event.hand.ordinal))
                         event.cancelled = true
-            }
-
-            is EventResetEquipProgress -> {
-                if (fixAnimations.value)
-                    event.cancelled = true
             }
         }
     }

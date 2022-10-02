@@ -9,8 +9,6 @@ import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventItemCooldown
-import net.tarasandedevelopment.tarasande.event.EventSlowdown
-import net.tarasandedevelopment.tarasande.event.EventSlowdownAmount
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerInteractionManager
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
@@ -31,8 +29,8 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
     }
 
 
-    private val slowdown = ValueNumber(this, "Slowdown", 0.0, 1.0, 1.0, 0.1)
-    private val actions = ValueMode(this, "Actions", true, *useActions.map { it.value }.toTypedArray())
+    val slowdown = ValueNumber(this, "Slowdown", 0.0, 1.0, 1.0, 0.1)
+    val actions = ValueMode(this, "Actions", true, *useActions.map { it.value }.toTypedArray())
     private val bypass = ValueMode(this, "Bypass", true, "Reuse", "Rehold")
     private val reuseMode = object : ValueMode(this, "Reuse mode", false, "Same slot", "Different slot") {
         override fun isEnabled() = bypass.isSelected(1)
@@ -41,15 +39,13 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
         override fun isEnabled() = bypass.anySelected()
     }
 
-    private fun isActionEnabled(setting: ValueMode): Boolean {
+    fun isActionEnabled(setting: ValueMode): Boolean {
         val usedStack = mc.player?.getStackInHand(PlayerUtil.getUsedHand() ?: return false)
         return usedStack != null && setting.selected.contains(useActions[usedStack.useAction!!])
     }
 
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
-            is EventSlowdownAmount -> if (isActionEnabled(actions)) event.slowdownAmount = slowdown.value.toFloat()
-            is EventSlowdown -> if (isActionEnabled(actions)) event.usingItem = false
             is EventUpdate -> {
                 if (mc.player?.isUsingItem!!) {
                     if (isActionEnabled(bypassedActions)) {

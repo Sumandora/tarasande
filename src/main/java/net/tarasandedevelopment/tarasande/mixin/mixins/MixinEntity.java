@@ -7,8 +7,15 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventEntityFlag;
+import net.tarasandedevelopment.tarasande.event.EventMovement;
+import net.tarasandedevelopment.tarasande.event.EventStep;
+import net.tarasandedevelopment.tarasande.event.EventVelocityYaw;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d;
+import net.tarasandedevelopment.tarasande.module.render.ModuleESP;
+import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -18,10 +25,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.*;
-import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 
+import java.awt.*;
 import java.util.List;
 
 @Mixin(Entity.class)
@@ -78,9 +83,14 @@ public abstract class MixinEntity implements IEntity {
 
     @Inject(method = "getTeamColorValue", at = @At("RETURN"), cancellable = true)
     public void injectGetTeamColorValue(CallbackInfoReturnable<Integer> cir) {
-        EventTeamColor eventTeamColor = new EventTeamColor((Entity) (Object) this, cir.getReturnValue());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventTeamColor);
-        cir.setReturnValue(eventTeamColor.getTeamColor());
+        if(!TarasandeMain.Companion.get().getDisabled()) {
+            ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerESP().get(ModuleESP.class);
+            if(moduleESP.getEnabled()) {
+                Color c = moduleESP.getEntityColor().getColor((Entity) (Object) this);
+                if(c != null)
+                    cir.setReturnValue(c.getRGB());
+            }
+        }
     }
 
     @Redirect(method = "adjustMovementForCollisions(Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/util/math/Vec3d;", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;stepHeight:F"))

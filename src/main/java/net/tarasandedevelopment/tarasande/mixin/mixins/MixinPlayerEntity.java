@@ -1,23 +1,25 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventKeepSprint;
+import net.tarasandedevelopment.tarasande.module.movement.ModuleSafeWalk;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventClipAtLedge;
-import net.tarasandedevelopment.tarasande.event.EventKeepSprint;
 
 @Mixin(PlayerEntity.class)
 public abstract class MixinPlayerEntity {
 
-    @Inject(method = "clipAtLedge", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "clipAtLedge", at = @At("HEAD"), cancellable = true)
     public void injectClipAtLedge(CallbackInfoReturnable<Boolean> cir) {
-        EventClipAtLedge eventClipAtLedge = new EventClipAtLedge(cir.getReturnValue());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventClipAtLedge);
-        cir.setReturnValue(eventClipAtLedge.getClipping());
+        if(!TarasandeMain.Companion.get().getDisabled()) {
+            ModuleSafeWalk moduleSafeWalk = TarasandeMain.Companion.get().getManagerModule().get(ModuleSafeWalk.class);
+            if(moduleSafeWalk.getEnabled() && !moduleSafeWalk.getSneak().getValue())
+                cir.setReturnValue(true);
+        }
     }
 
     @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setSprinting(Z)V"))

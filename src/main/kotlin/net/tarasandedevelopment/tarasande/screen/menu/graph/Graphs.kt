@@ -7,10 +7,10 @@ import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.menu.graph.Graph
 import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventPacketTransform
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.event.EventSwing
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
-import net.tarasandedevelopment.tarasande.event.EventPacketTransform
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.util.concurrent.CopyOnWriteArrayList
@@ -165,9 +165,7 @@ class GraphIncomingTraffic : Graph("Incoming Traffic", 200) {
 
     override fun supplyData(): Number {
         traffic.removeIf { traffic -> System.currentTimeMillis() - traffic.first > 1000 }
-        return traffic.sumOf {
-            it.second
-        }
+        return traffic.sumOf { it.second }
     }
 }
 
@@ -185,8 +183,6 @@ class GraphOutgoingTraffic : Graph("Outgoing Traffic", 200) {
 
     override fun supplyData(): Number {
         traffic.removeIf { traffic -> System.currentTimeMillis() - traffic.first > 1000 }
-        return traffic.sumOf {
-            it.second
-        }
+        return traffic.sumOf { it.second }
     }
 }

@@ -9,20 +9,22 @@ import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventChat;
+import net.tarasandedevelopment.tarasande.event.EventIsWalking;
+import net.tarasandedevelopment.tarasande.event.EventUpdate;
+import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity;
+import net.tarasandedevelopment.tarasande.module.movement.ModuleFlight;
+import net.tarasandedevelopment.tarasande.module.movement.ModuleNoSlowdown;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.*;
-import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IClientPlayerEntity {
-
-    EventVanillaFlight cachedEventVanillaFlight = null;
 
     boolean bypassChat;
 
@@ -71,29 +73,26 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;getFoodLevel()I"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;hasForwardMovement()Z")))
     public boolean hookedIsUsingItem(ClientPlayerEntity clientPlayerEntity) {
-        EventSlowdown eventSlowdown = new EventSlowdown(clientPlayerEntity.isUsingItem());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventSlowdown);
-        return eventSlowdown.getUsingItem();
+        if(!TarasandeMain.Companion.get().getDisabled()) {
+            ModuleNoSlowdown moduleNoSlowdown = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSlowdown.class);
+            if(moduleNoSlowdown.getEnabled()) {
+                if(moduleNoSlowdown.isActionEnabled(moduleNoSlowdown.getActions()))
+                    return false;
+            }
+        }
+        return clientPlayerEntity.isUsingItem();
     }
 
     @ModifyConstant(method = "tickMovement", constant = @Constant(floatValue = 0.2F))
     public float slowdownAmount(float original) {
-        EventSlowdownAmount eventSlowdownAmount = new EventSlowdownAmount(original);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventSlowdownAmount);
-        return eventSlowdownAmount.getSlowdownAmount();
-    }
-
-    @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;flying:Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;knockDownwards()V"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;hasJumpingMount()Z")))
-    public boolean flying(PlayerAbilities instance) {
-        EventVanillaFlight eventVanillaFlight = new EventVanillaFlight(instance.flying, instance.getFlySpeed());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventVanillaFlight);
-        cachedEventVanillaFlight = eventVanillaFlight;
-        return eventVanillaFlight.getFlying();
-    }
-
-    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerAbilities;getFlySpeed()F"))
-    public float hookedGetFlySpeed(PlayerAbilities instance) {
-        return cachedEventVanillaFlight.getDirty() ? cachedEventVanillaFlight.getFlightSpeed() : instance.getFlySpeed();
+        if(!TarasandeMain.Companion.get().getDisabled()) {
+            ModuleNoSlowdown moduleNoSlowdown = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSlowdown.class);
+            if(moduleNoSlowdown.getEnabled()) {
+                if(moduleNoSlowdown.isActionEnabled(moduleNoSlowdown.getActions()))
+                    return (float) moduleNoSlowdown.getSlowdown().getValue();
+            }
+        }
+        return original;
     }
 
     @Inject(method = "isWalking", at = @At("RETURN"), cancellable = true)
@@ -103,6 +102,29 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         cir.setReturnValue(eventIsWalking.getWalking());
     }
 
+    boolean flight;
+    float flightSpeed;
+
+    @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;flying:Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;knockDownwards()V"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;hasJumpingMount()Z")))
+    public boolean flying(PlayerAbilities instance) {
+        flight = false;
+        flightSpeed = 0.05f;
+        if(!TarasandeMain.Companion.get().getDisabled()) {
+            ModuleFlight moduleFlight = TarasandeMain.Companion.get().getManagerModule().get(ModuleFlight.class);
+            if(moduleFlight.getEnabled() && moduleFlight.getMode().isSelected(0)) {
+                flight = true;
+                flightSpeed = (float) moduleFlight.getFlightSpeed().getValue();
+                return true;
+            }
+        }
+        return instance.flying;
+    }
+
+    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerAbilities;getFlySpeed()F"))
+    public float hookedGetFlySpeed(PlayerAbilities instance) {
+        return flight ? flightSpeed : instance.getFlySpeed();
+    }
+
     @Override
     public void travel(Vec3d movementInput) {
         boolean fallFlying = this.getFlag(Entity.FALL_FLYING_FLAG_INDEX);
@@ -110,9 +132,9 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         boolean flying = getAbilities().flying;
         float flySpeed = getAbilities().getFlySpeed();
 
-        if (cachedEventVanillaFlight.getDirty()) {
-            getAbilities().flying = cachedEventVanillaFlight.getFlying();
-            getAbilities().setFlySpeed(cachedEventVanillaFlight.getFlightSpeed());
+        if (flight) {
+            getAbilities().flying = flight;
+            getAbilities().setFlySpeed(flightSpeed);
         }
 
         super.travel(movementInput);
@@ -120,7 +142,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         getAbilities().flying = flying;
         getAbilities().setFlySpeed(flySpeed);
 
-        if (cachedEventVanillaFlight.getDirty())
+        if (flight)
             this.setFlag(Entity.FALL_FLYING_FLAG_INDEX, fallFlying);
     }
 

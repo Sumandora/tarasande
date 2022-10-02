@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.event
 
-import com.mojang.authlib.minecraft.MinecraftSessionService
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.BlockState
 import net.minecraft.client.gui.Element
@@ -15,7 +14,6 @@ import net.minecraft.item.Item
 import net.minecraft.network.Packet
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
-import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Matrix4f
@@ -24,7 +22,6 @@ import net.minecraft.util.shape.VoxelShape
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import java.awt.Color
-import java.util.function.Predicate
 
 class EventChat(val chatMessage: String) : Event(true)
 class EventKey(val key: Int, val action: Int) : Event(true)
@@ -44,12 +41,6 @@ class EventResolutionUpdate(val prevWidth: Double, val prevHeight: Double, val w
 class EventRender2D(val matrices: MatrixStack) : Event(false)
 class EventScreenRender(val matrices: MatrixStack, val mouseX: Int, val mouseY: Int) : Event(false)
 class EventRender3D(val matrices: MatrixStack, val positionMatrix: Matrix4f) : Event(false)
-
-class EventRenderEntity(val entity: Entity, val state: State) : Event(false) {
-    enum class State {
-        PRE, POST
-    }
-}
 
 class EventPacket(val type: Type, val packet: Packet<*>?) : Event(true) {
     enum class Type {
@@ -94,27 +85,8 @@ class EventJump(var yaw: Float, val state: State) : Event(state == State.PRE) {
 
 class EventGamma(val x: Int, val y: Int, var color: Int) : Event(false)
 class EventMovement(val entity: Entity, var velocity: Vec3d) : Event(false)
-class EventSlowdown(var usingItem: Boolean) : Event(false)
-class EventSlowdownAmount(var slowdownAmount: Float) : Event(false)
 class EventIsEntityAttackable(val entity: Entity?, var attackable: Boolean) : Event(false)
 
-class EventVanillaFlight : Event {
-    var dirty = false
-        private set
-    var flying: Boolean
-        set(value) {
-            dirty = true
-            field = value
-        }
-    var flightSpeed: Float
-
-    constructor(flying: Boolean, flightSpeed: Float) : super(false) {
-        this.flying = flying
-        this.flightSpeed = flightSpeed
-        this.dirty = false
-    }
-
-}
 
 class EventMouse(val button: Int, val action: Int) : Event(true)
 class EventMouseDelta(var deltaX: Double, var deltaY: Double) : Event(false)
@@ -143,7 +115,6 @@ class EventEntityColor(val entity: Entity, var color: Color?) : Event(false)
 class EventHasForwardMovement(var hasForwardMovement: Boolean) : Event(false)
 class EventSwing(var hand: Hand) : Event(true)
 class EventColorCorrection(var red: Int, var green: Int, var blue: Int) : Event(false)
-class EventResetEquipProgress : Event(true)
 class EventIsWalking(var walking: Boolean) : Event(false)
 class EventTagName(var entity: Entity, var displayName: Text) : Event(false)
 
@@ -162,8 +133,6 @@ class EventGoalMovement : Event {
 }
 
 class EventCameraOverride(val camera: Camera) : Event(false)
-class EventFogColor(var start: Float, var end: Float, var red: Float, var green: Float, var blue: Float) : Event(false)
-class EventClearColor(var red: Float, var green: Float, var blue: Float) : Event(false)
 class EventPlayerListName(val playerListEntry: PlayerListEntry, var displayName: Text) : Event(false)
 class EventRotationSet(val yaw: Float, val pitch: Float) : Event(false)
 class EventUpdateTargetedEntity(val state: State) : Event(false) {
@@ -195,7 +164,6 @@ class EventStep : Event {
 class EventBlockCollision(val state: BlockState, val pos: BlockPos, val entity: Entity) : Event(true)
 class EventEntityFlag(val entity: Entity, val flag: Int, var enabled: Boolean) : Event(false)
 class EventBoundingBoxOverride(val entity: Entity, var boundingBox: Box) : Event(false)
-class EventBlockChange(val pos: BlockPos, val state: BlockState) : Event(false)
 class EventPacketTransform(val type: Type, val buf: ByteBuf?) : Event(false) {
     enum class Type {
         DECODE, ENCODE
@@ -204,31 +172,8 @@ class EventPacketTransform(val type: Type, val buf: ByteBuf?) : Event(false) {
 
 class EventCollisionShape(val pos: BlockPos, var collisionShape: VoxelShape) : Event(false)
 class EventDebugHud(val list: MutableList<String>) : Event(false)
-class EventTeamColor(val entity: Entity, var teamColor: Int) : Event(false)
-class EventCanBePushedBy(val entity: Entity, var predicate: Predicate<Entity>) : Event(false)
-class EventDisplayName(val entity: Entity, var displayName: Text) : Event(false)
-class EventIsGlowing(val entity: Entity, var glowing: Boolean) : Event(false)
-class EventSessionService(var sessionService: MinecraftSessionService) : Event(false)
-class EventIncrementSequence : Event(true)
-class EventClipAtLedge(var clipping: Boolean) : Event(false)
 class EventTextVisit(var string: String) : Event(false)
-class EventTicksPerFrame(var ticks: Int, var max: Int) : Event(true)
-class EventRainGradient : Event {
-    var dirty = false
-        private set
-    var gradient: Float
-        set(value) {
-            field = value
-            dirty = true
-        }
 
-    constructor(gradient: Float) : super(false) {
-        this.gradient = gradient
-        this.dirty = false
-    }
-}
-
-class EventRenderSky : Event(true)
 class EventChangeScreen : Event {
     var dirty = false
     var newScreen: Screen?
@@ -252,15 +197,3 @@ class EventChildren(val screen: Screen) : Event(false) {
 
     fun get() = children
 }
-
-class EventChatAcknowledge(var acknowledged: Boolean) : Event(false)
-class EventCommandBlockUsage(var allowed: Boolean) : Event(false)
-class EventBindingEnchantment(var present: Boolean) : Event(false)
-class EventEntityStatusGUI(val type: Type, var state: Boolean) : Event(false) {
-
-    enum class Type {
-        ICON, PARTICLES
-    }
-}
-
-class EventEntityRaycast(val hitResult: HitResult?) : Event(true)

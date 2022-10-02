@@ -8,11 +8,11 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.util.math.MathHelper
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.esp.ESPElement
 import net.tarasandedevelopment.tarasande.base.esp.ESPElementRotatable
 import net.tarasandedevelopment.tarasande.base.esp.Orientation
 import net.tarasandedevelopment.tarasande.module.render.ModuleESP
-import net.tarasandedevelopment.tarasande.util.player.tagname.TagName
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueColor
@@ -50,7 +50,7 @@ class ESPElementName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Ori
 
     override fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double, orientation: Orientation) {
         val col = Color(entity.teamColorValue).rgb // ignore alpha
-        val tagName = TagName.getTagName(entity)?.asOrderedText() ?: return
+        val tagName = TarasandeMain.get().tagName.getTagName(entity)?.asOrderedText() ?: return
         matrices.push()
         val width = MinecraftClient.getInstance().textRenderer!!.getWidth(tagName)
         var factor = (sideWidth / width).toFloat()
@@ -70,7 +70,7 @@ class ESPElementName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Ori
     }
 
     override fun getHeight(entity: Entity, sideWidth: Double): Double {
-        return MinecraftClient.getInstance().textRenderer.fontHeight.toDouble() * min(sideWidth / MinecraftClient.getInstance().textRenderer!!.getWidth(TagName.getTagName(entity)?.asOrderedText() ?: return 0.0), 3.0) * scale.value
+        return MinecraftClient.getInstance().textRenderer.fontHeight.toDouble() * min(sideWidth / MinecraftClient.getInstance().textRenderer!!.getWidth(TarasandeMain.get().tagName.getTagName(entity)?.asOrderedText() ?: return 0.0), 3.0) * scale.value
     }
 }
 

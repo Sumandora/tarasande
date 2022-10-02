@@ -7,7 +7,6 @@ import net.minecraft.entity.passive.AnimalEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventEntityColor
-import net.tarasandedevelopment.tarasande.event.EventTeamColor
 import net.tarasandedevelopment.tarasande.module.render.ModuleESP
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueColor
@@ -33,16 +32,6 @@ class EntityColor(private val moduleESP: ModuleESP) {
     }
     private val mobColor = object : ValueColor(moduleESP, "Mob Color", 0.0f, 1.0f, 1.0f, 1.0f) {
         override fun isEnabled() = modifyTeamColor.value && !useTeamColor.value
-    }
-
-    init {
-        TarasandeMain.get().managerEvent.add { event ->
-            if (event is EventTeamColor) {
-                val c = TarasandeMain.get().managerModule.get(ModuleESP::class.java).entityColor.getColor(event.entity)
-                if (c != null)
-                    event.teamColor = c.rgb
-            }
-        }
     }
 
     fun getColor(entity: Entity): Color? {

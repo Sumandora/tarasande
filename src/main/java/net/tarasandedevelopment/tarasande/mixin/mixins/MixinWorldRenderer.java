@@ -7,17 +7,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.biome.Biome;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventRender3D;
+import net.tarasandedevelopment.tarasande.mixin.accessor.IWorldRenderer;
+import net.tarasandedevelopment.tarasande.module.render.ModuleFog;
+import net.tarasandedevelopment.tarasande.module.render.ModuleRain;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventRainGradient;
-import net.tarasandedevelopment.tarasande.event.EventRender3D;
-import net.tarasandedevelopment.tarasande.event.EventRenderSky;
-import net.tarasandedevelopment.tarasande.mixin.accessor.IWorldRenderer;
 
 @Mixin(WorldRenderer.class)
 public abstract class MixinWorldRenderer implements IWorldRenderer {
@@ -38,20 +38,24 @@ public abstract class MixinWorldRenderer implements IWorldRenderer {
 
     @Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At("HEAD"), cancellable = true)
     public void injectRenderSky(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean bl, Runnable runnable, CallbackInfo ci) {
-        EventRenderSky eventRenderSky = new EventRenderSky();
-        TarasandeMain.Companion.get().getManagerEvent().call(eventRenderSky);
-        if (eventRenderSky.getCancelled())
-            ci.cancel();
+        if (!TarasandeMain.Companion.get().getDisabled())
+            if(TarasandeMain.Companion.get().getManagerModule().get(ModuleFog.class).getEnabled())
+                ci.cancel();
     }
 
     private boolean forceRain = false;
 
     @Redirect(method = "renderWeather", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getRainGradient(F)F"))
     public float hookedGetRainGradient(ClientWorld instance, float v) {
-        EventRainGradient eventRainGradient = new EventRainGradient(instance.getRainGradient(v));
-        TarasandeMain.Companion.get().getManagerEvent().call(eventRainGradient);
-        forceRain = eventRainGradient.getDirty();
-        return eventRainGradient.getGradient();
+        forceRain = false;
+        if(!TarasandeMain.Companion.get().getDisabled()) {
+            ModuleRain moduleRain = TarasandeMain.Companion.get().getManagerModule().get(ModuleRain.class);
+            if(moduleRain.getEnabled()) {
+                forceRain = true;
+                return (float) moduleRain.getGradient().getValue();
+            }
+        }
+        return instance.getRainGradient(v);
     }
 
     @Redirect(method = "renderWeather", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/Biome;getPrecipitation()Lnet/minecraft/world/biome/Biome$Precipitation;"))

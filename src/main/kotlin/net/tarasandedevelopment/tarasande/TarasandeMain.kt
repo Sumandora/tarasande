@@ -18,6 +18,7 @@ import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.util.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import net.tarasandedevelopment.tarasande.util.player.friends.Friends
+import net.tarasandedevelopment.tarasande.util.player.tagname.TagName
 import net.tarasandedevelopment.tarasande.util.render.blur.Blur
 
 class TarasandeMain {
@@ -46,6 +47,8 @@ class TarasandeMain {
     lateinit var managerESP: ManagerESP
         private set
     lateinit var managerClientMenu: ManagerClientMenu
+        private set
+    lateinit var tagName: TagName
         private set
 
     val logger = LoggerFactory.getLogger(name)!!
@@ -90,6 +93,7 @@ class TarasandeMain {
         blur = Blur()
         screenCheatMenu = ScreenCheatMenu() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
         friends = Friends()
+        tagName = TagName()
 
         protocolHack = TarasandeProtocolHack()
 

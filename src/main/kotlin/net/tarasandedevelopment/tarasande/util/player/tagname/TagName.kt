@@ -4,11 +4,10 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.event.EventDisplayName
 import net.tarasandedevelopment.tarasande.event.EventTagName
 import net.tarasandedevelopment.tarasande.event.EventTick
 
-object TagName {
+class TagName {
 
     private val hashMap = HashMap<Entity, Text>()
 
@@ -27,10 +26,6 @@ object TagName {
                         TarasandeMain.get().managerEvent.call(eventTagName)
                         hashMap[entity] = eventTagName.displayName
                     }
-                }
-
-                is EventDisplayName -> {
-                    event.displayName = getTagName(event.entity) ?: return@add
                 }
             }
         }

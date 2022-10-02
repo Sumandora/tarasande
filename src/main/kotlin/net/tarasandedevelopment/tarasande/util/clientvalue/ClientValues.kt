@@ -1,9 +1,8 @@
 package net.tarasandedevelopment.tarasande.util.clientvalue
 
-import org.lwjgl.glfw.GLFW
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.event.EventTicksPerFrame
 import net.tarasandedevelopment.tarasande.value.*
+import org.lwjgl.glfw.GLFW
 
 class ClientValues {
 
@@ -37,12 +36,4 @@ class ClientValues {
     val hypixelApiKey = ValueText(this, "Hypixel API Key", "")
     val menuAnimationLength = ValueNumber(this, "Menu animation length", 0.0, 100.0, 500.0, 1.0)
 
-    init {
-        TarasandeMain.get().managerEvent.add { event ->
-            if (event is EventTicksPerFrame) {
-                if (unlockTicksPerFrame.value)
-                    event.cancelled = true
-            }
-        }
-    }
 }

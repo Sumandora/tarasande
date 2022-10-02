@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande.module.movement
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
-import net.tarasandedevelopment.tarasande.event.EventClipAtLedge
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
@@ -21,17 +20,11 @@ class ModuleSafeWalk : Module("Safe walk", "Prevents falling off blocks", Module
     }
 
     val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventClipAtLedge -> {
-                event.clipping = event.clipping || !sneak.value
-            }
-
-            is EventKeyBindingIsPressed -> {
-                if (event.keyBinding == mc.options.sneakKey && sneak.value)
-                    if (!onlyOnGround.value || mc.player?.isOnGround!!)
-                        if (PlayerUtil.isOnEdge(extrapolation.value))
-                            event.pressed = true
-            }
+        if (event is EventKeyBindingIsPressed) {
+            if (event.keyBinding == mc.options.sneakKey && sneak.value)
+                if (!onlyOnGround.value || mc.player?.isOnGround!!)
+                    if (PlayerUtil.isOnEdge(extrapolation.value))
+                        event.pressed = true
         }
     }
 

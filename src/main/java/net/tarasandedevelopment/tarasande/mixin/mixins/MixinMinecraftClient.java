@@ -16,7 +16,13 @@ import net.minecraft.client.util.Window;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.encryption.SignatureVerifier;
 import net.minecraft.util.Util;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.Account;
+import net.tarasandedevelopment.tarasande.clientmenu.ElementMenuScreenAccountManager;
+import net.tarasandedevelopment.tarasande.event.*;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient;
+import net.tarasandedevelopment.tarasande.module.render.ModuleESP;
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,9 +34,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.*;
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil;
 
 @Mixin(MinecraftClient.class)
 public abstract class MixinMinecraftClient implements IMinecraftClient {
@@ -139,12 +142,11 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
     public int hookedMin(int a, int b) {
-        EventTicksPerFrame eventTicksPerFrame = new EventTicksPerFrame(b, a);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventTicksPerFrame);
-        if (eventTicksPerFrame.getCancelled()) {
-            return eventTicksPerFrame.getTicks();
-        }
-        return Math.min(eventTicksPerFrame.getMax(), eventTicksPerFrame.getTicks());
+        if(!TarasandeMain.Companion.get().getDisabled())
+            if (TarasandeMain.Companion.get().getClientValues().getUnlockTicksPerFrame().getValue()) {
+                return b;
+            }
+        return Math.min(a, b);
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Util;getMeasuringTimeMs()J"), slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;tick()V")))
@@ -156,9 +158,13 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
 
     @Redirect(method = "hasOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isGlowing()Z"))
     public boolean hookedIsGlowing(Entity entity) {
-        EventIsGlowing eventIsGlowing = new EventIsGlowing(entity, entity.isGlowing());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventIsGlowing);
-        return eventIsGlowing.getGlowing();
+        boolean glowing = entity.isGlowing();
+        if(!TarasandeMain.Companion.get().getDisabled()) {
+            ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class);
+            if(moduleESP != null)
+                return glowing || (moduleESP.getMode().isSelected(0) && moduleESP.filter(entity));
+        }
+        return glowing;
     }
 
     @Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z", shift = At.Shift.BEFORE), slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doAttack()Z")))
@@ -175,9 +181,9 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
 
     @Inject(method = "getSessionService", at = @At("RETURN"), cancellable = true)
     public void injectGetSessionService(CallbackInfoReturnable<MinecraftSessionService> cir) {
-        EventSessionService eventSessionService = new EventSessionService(cir.getReturnValue());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventSessionService);
-        cir.setReturnValue(eventSessionService.getSessionService());
+        Account account = TarasandeMain.Companion.get().getManagerClientMenu().get(ElementMenuScreenAccountManager.class).getScreenBetterAccountManager().getCurrentAccount();
+        if(account != null)
+            cir.setReturnValue(account.getSessionService());
     }
 
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
