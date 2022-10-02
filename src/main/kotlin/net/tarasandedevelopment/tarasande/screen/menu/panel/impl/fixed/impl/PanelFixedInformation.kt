@@ -18,7 +18,7 @@ class PanelFixedInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMe
     init {
         for (information in screenCheatMenu.managerInformation.list) {
             if (TarasandeMain.get().managerValue.getValues(information).isNotEmpty()) {
-                val name = information.owner + "/" + information.information
+                val name = information.owner + ": " + information.information
 
                 object : ValueButton(this, "$name settings") {
                     override fun onChange() {
