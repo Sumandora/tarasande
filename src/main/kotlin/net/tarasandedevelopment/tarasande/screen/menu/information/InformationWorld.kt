@@ -6,7 +6,6 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.screen.menu.information.Information
 import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl.PanelFixedInformation
 import java.util.function.Consumer
 
 class InformationWorldTime : Information("World", "World Time") {
@@ -23,7 +22,7 @@ class InformationWorldTime : Information("World", "World Time") {
         }))
     }
 
-    override fun getMessage(parent: PanelFixedInformation): String? {
+    override fun getMessage(): String? {
         if (MinecraftClient.getInstance().world == null)
             return null
         if (lastUpdate == null)

@@ -22,7 +22,7 @@ class PanelFixedInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMe
             for (information in informationList) {
                 if (!visible.selected.contains(information.owner + "/" + information.information)) continue
 
-                val message = information.getMessage(this)
+                val message = information.getMessage()
                 if (message != null) {
                     if (message.contains("\n")) {
                         val parts = message.split("\n")
@@ -56,7 +56,7 @@ class PanelFixedInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMe
 
     override fun isVisible(): Boolean {
         for (information in TarasandeMain.get().screenCheatMenu.managerInformation.list)
-            if (information.getMessage(this) != null)
+            if (information.getMessage() != null)
                 return true
         return false
     }
