@@ -15,14 +15,13 @@ class PanelFixedInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMe
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val text = ArrayList<String>()
-        var index = 0
         for (owner in TarasandeMain.get().screenCheatMenu.managerInformation.getAllOwners()) {
-            index++
-            if (!visible.isSelected(index - 1)) continue
 
             val cache = ArrayList<String>()
             val informationList = TarasandeMain.get().screenCheatMenu.managerInformation.getAllInformation(owner)
             for (information in informationList) {
+                if (!visible.selected.contains(information.owner + "/" + information.information)) continue
+
                 val message = information.getMessage(this)
                 if (message != null) {
                     if (message.contains("\n")) {
