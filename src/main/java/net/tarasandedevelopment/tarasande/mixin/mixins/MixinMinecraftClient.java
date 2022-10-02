@@ -161,7 +161,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
         boolean glowing = entity.isGlowing();
         if(!TarasandeMain.Companion.get().getDisabled()) {
             ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class);
-            if(moduleESP != null)
+            if (moduleESP.getEnabled())
                 return glowing || (moduleESP.getMode().isSelected(0) && moduleESP.filter(entity));
         }
         return glowing;
