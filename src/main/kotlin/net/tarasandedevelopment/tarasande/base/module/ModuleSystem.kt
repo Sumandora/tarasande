@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.module.ghost.*
 import net.tarasandedevelopment.tarasande.module.misc.*
 import net.tarasandedevelopment.tarasande.module.movement.*
 import net.tarasandedevelopment.tarasande.module.player.*
-import net.tarasandedevelopment.tarasande.module.qol.ModuleInstantWorld
+import net.tarasandedevelopment.tarasande.module.qualityoflife.ModuleInstantWorld
 import net.tarasandedevelopment.tarasande.module.render.*
 import net.tarasandedevelopment.tarasande.value.ValueBind
 import net.tarasandedevelopment.tarasande.value.ValueBoolean

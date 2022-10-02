@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.module.qol
+package net.tarasandedevelopment.tarasande.module.qualityoflife
 
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen
 import net.tarasandedevelopment.tarasande.base.event.Event

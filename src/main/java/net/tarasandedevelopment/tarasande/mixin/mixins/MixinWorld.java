@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins;
 
-import kotlin.Pair;
+import kotlin.Triple;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,7 +30,7 @@ public abstract class MixinWorld implements IWorld {
             ModuleBlockChangeTracker moduleBlockChangeTracker = TarasandeMain.Companion.get().getManagerModule().get(ModuleBlockChangeTracker.class);
             if(moduleBlockChangeTracker.getEnabled())
                 if(!getBlockState(pos).getBlock().equals(state.getBlock()))
-                    moduleBlockChangeTracker.getHashMap().put(new Pair<>(pos, state), System.currentTimeMillis());
+                    moduleBlockChangeTracker.getChanges().add(new Triple<>(pos, state, System.currentTimeMillis()));
         }
     }
 
