@@ -3,11 +3,12 @@ package net.tarasandedevelopment.tarasande.value
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import net.minecraft.client.MinecraftClient
-import org.lwjgl.glfw.GLFW
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.value.Value
 import net.tarasandedevelopment.tarasande.event.EventKey
 import net.tarasandedevelopment.tarasande.event.EventMouse
+import org.lwjgl.glfw.GLFW
 
 open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, var mouse: Boolean = true, manage: Boolean = true) : Value(owner, name, manage) {
 
@@ -22,7 +23,8 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
                     if (type == Type.MOUSE) if (MinecraftClient.getInstance().currentScreen == null) if (button == event.button) when (event.action) {
                         GLFW.GLFW_PRESS -> {
                             mousePressed = true
-                            presses++
+                            if (owner is Module && owner.enabled)
+                                presses++
                         }
 
                         GLFW.GLFW_RELEASE -> mousePressed = false
@@ -33,7 +35,8 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
                     if (type == Type.KEY) if (MinecraftClient.getInstance().currentScreen == null) if (event.key == button) when (event.action) {
                         GLFW.GLFW_PRESS -> {
                             keyPressed = true
-                            presses++
+                            if (owner is Module && owner.enabled)
+                                presses++
                         }
 
                         GLFW.GLFW_RELEASE -> keyPressed = false
