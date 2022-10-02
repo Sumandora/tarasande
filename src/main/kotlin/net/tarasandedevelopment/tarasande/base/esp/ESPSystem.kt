@@ -31,8 +31,6 @@ class ManagerESP : Manager<ESPElement>() {
                     MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, element))
                 }
             }
-
-        this.finishLoading()
     }
 
     fun renderBox(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {

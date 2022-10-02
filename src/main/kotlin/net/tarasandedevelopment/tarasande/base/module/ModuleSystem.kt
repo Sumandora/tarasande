@@ -107,8 +107,6 @@ class ManagerModule : Manager<Module>() {
                             module.switchState()
                 }
         }
-
-        this.finishLoading()
     }
 }
 

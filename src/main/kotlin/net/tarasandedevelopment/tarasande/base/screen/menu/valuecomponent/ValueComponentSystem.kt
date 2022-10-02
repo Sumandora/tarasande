@@ -22,8 +22,6 @@ class ManagerValueComponent : Manager<Pair<Class<out Value>, Class<out ValueComp
             Pair(ValueRegistry::class.java, ValueComponentRegistry::class.java),
             Pair(ValueButton::class.java, ValueComponentButton::class.java)
         )
-
-        this.finishLoading()
     }
 
     fun newInstance(value: Value): ValueComponent? {

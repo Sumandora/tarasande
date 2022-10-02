@@ -28,8 +28,6 @@ class ManagerGraph : Manager<Graph>() {
                     for (graph in list)
                         graph.lastData = graph.supplyData()
         }
-
-        this.finishLoading()
     }
 }
 

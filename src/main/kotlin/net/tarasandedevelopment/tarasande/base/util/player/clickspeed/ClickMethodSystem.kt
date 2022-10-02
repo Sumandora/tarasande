@@ -18,12 +18,9 @@ class ManagerClickMethod : Manager<Class<out ClickMethod>>() {
             ClickMethodDynamic::class.java,
             ClickMethodCooldown::class.java
         )
-
-        this.finishLoading()
     }
 
     fun getAllExcept(vararg excluded: Class<out ClickMethod>): List<ClickMethod> {
         return list.filter { !excluded.contains(it) }.map { it.getDeclaredConstructor().newInstance() }
     }
-
 }

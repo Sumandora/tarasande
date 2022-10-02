@@ -36,16 +36,14 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
             // Modules
             InformationTimeShifted(),
             InformationSuspectedMurderers(),
-            InformationFakeNewsCountdown()
+            InformationFakeNewsCountdown(),
+
+            // Graphs
+            *screenCheatMenu.managerGraph.list.map { e -> InformationGraphValue(e) }.toTypedArray(),
+
+            // Beds
+            InformationBeds()
         )
-
-        for (graph in screenCheatMenu.managerGraph.list) {
-            add(InformationGraphValue(graph))
-        }
-
-        add(InformationBeds())
-
-        this.finishLoading()
     }
 
     fun getAllOwners(): List<String> {

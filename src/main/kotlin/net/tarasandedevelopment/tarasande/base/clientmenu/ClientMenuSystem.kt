@@ -15,27 +15,27 @@ import java.awt.Color
 class ManagerClientMenu : Manager<ElementMenu>() {
 
     init {
-        this.spacer("General")
-        this.add(ElementMenuScreenAccountManager(), ElementMenuScreenProxySystem(), ElementMenuScreenProtocolHack())
-
-        this.spacer("Exploits")
-        this.add(ElementMenuToggleBungeeHack())
-
         val fritzBox = ElementMenuFritzBoxReconnect()
-        this.add(ElementMenuFritzBoxReconnect.SubTitle(fritzBox))
-        this.add(fritzBox)
 
-        this.finishLoading()
+        this.add(
+            ElementMenuTitle("General"),
+
+            ElementMenuScreenAccountManager(),
+            ElementMenuScreenProxySystem(),
+            ElementMenuScreenProtocolHack(),
+
+            ElementMenuTitle("Exploits"),
+            ElementMenuToggleBungeeHack(),
+
+            ElementMenuFritzBoxReconnect.SubTitle(fritzBox),
+            fritzBox
+        )
     }
 
     fun byName(name: String): ElementMenu {
         return this.list.first {
                 e -> e.name.equals(name, true)
         }
-    }
-
-    private fun spacer(text: String) {
-        this.add(ElementMenuTitle(text))
     }
 }
 
