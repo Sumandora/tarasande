@@ -171,8 +171,8 @@ class GraphIncomingTraffic : Graph("Incoming Traffic", 200) {
         return traffic.sumOf { it.second }
     }
 
-    override fun formatHud(): String {
-        return StringUtil.formatBytes(this.supplyData().toLong(), this.decimalPlaces.value.toInt())
+    override fun formatHud(): String? {
+        return StringUtil.formatBytes(this.lastData?.toLong() ?: return null, this.decimalPlaces.value.toInt())
     }
 }
 
@@ -195,7 +195,7 @@ class GraphOutgoingTraffic : Graph("Outgoing Traffic", 200) {
     }
 
 
-    override fun formatHud(): String {
-        return StringUtil.formatBytes(this.supplyData().toLong(), this.decimalPlaces.value.toInt())
+    override fun formatHud(): String? {
+        return StringUtil.formatBytes(this.lastData?.toLong() ?: return null, this.decimalPlaces.value.toInt())
     }
 }

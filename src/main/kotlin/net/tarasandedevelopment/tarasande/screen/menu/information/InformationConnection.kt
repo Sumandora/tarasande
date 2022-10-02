@@ -6,7 +6,7 @@ import net.tarasandedevelopment.tarasande.mixin.accessor.IClientConnection
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl.PanelFixedInformation
 
 class InformationHandlers : Information("Connection", "Handlers") {
-    override fun getMessage(panel: PanelFixedInformation): String? {
+    override fun getMessage(parent: PanelFixedInformation): String? {
         if (MinecraftClient.getInstance().networkHandler == null || MinecraftClient.getInstance().networkHandler?.connection == null) return null
         val names = ((MinecraftClient.getInstance().networkHandler?.connection as IClientConnection).tarasande_getChannel() ?: return null).pipeline().names()
         if (names.isEmpty()) return null

@@ -6,7 +6,7 @@ import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl.Pane
 
 class InformationGraphValue(private val graph: Graph) : Information("Graph", graph.name) {
 
-    override fun getMessage(panel: PanelFixedInformation): String {
+    override fun getMessage(parent: PanelFixedInformation): String? {
         return graph.formatHud()
     }
 }

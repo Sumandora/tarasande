@@ -97,7 +97,7 @@ class PanelFixedGraph(private val graph: Graph, x: Double, y: Double) : PanelFix
     }
 
     override fun tick() {
-        val data: Number? = graph.supplyData()
+        val data: Number? = graph.lastData
         if (data != null) {
             this.values.add(data)
             while (this.values.size > this.graph.bufferLength) {

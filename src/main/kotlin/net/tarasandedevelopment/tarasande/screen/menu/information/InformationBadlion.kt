@@ -108,7 +108,7 @@ class InformationTimers : Information("Badlion", "Timers") {
         var time: Long? = null
     }
 
-    override fun getMessage(panel: PanelFixedInformation): String? {
+    override fun getMessage(parent: PanelFixedInformation): String? {
         if (!enabled || list.isEmpty()) return null
         return "\n" + list.filter { !it.isHidden() }.joinToString("\n")
     }

@@ -23,7 +23,7 @@ class InformationWorldTime : Information("World", "World Time") {
         }))
     }
 
-    override fun getMessage(panel: PanelFixedInformation): String? {
+    override fun getMessage(parent: PanelFixedInformation): String? {
         if (MinecraftClient.getInstance().world == null)
             return null
         if (lastUpdate == null)
