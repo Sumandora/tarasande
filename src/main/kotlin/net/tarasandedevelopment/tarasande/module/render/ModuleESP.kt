@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.render
 
+import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.player.PlayerEntity
@@ -17,12 +18,14 @@ import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.mixin.accessor.IMatrix4f
 import net.tarasandedevelopment.tarasande.mixin.accessor.IWorldRenderer
 import net.tarasandedevelopment.tarasande.module.combat.ModuleAntiBot
+import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.extension.times
 import net.tarasandedevelopment.tarasande.util.extension.unaryMinus
 import net.tarasandedevelopment.tarasande.util.player.entitycolor.EntityColor
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueRegistry
 import java.util.function.Consumer
@@ -36,6 +39,19 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
         }
     private val hideBots = object : ValueBoolean(this, "Hide bots", false) {
         override fun isEnabled() = entities.list.contains(EntityType.PLAYER)
+    }
+
+    init {
+        object : ValueButton(this, "Entity colors") {
+            override fun onChange() {
+                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, entityColor))
+            }
+        }
+        object : ValueButton(this, "2D ESP settings") {
+            override fun onChange() {
+                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, TarasandeMain.get().managerESP))
+            }
+        }
     }
 
     val entityColor = EntityColor(this)

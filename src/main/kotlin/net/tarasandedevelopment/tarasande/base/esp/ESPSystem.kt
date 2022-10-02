@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.base.esp
 
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.Vec3f
@@ -9,7 +10,9 @@ import net.tarasandedevelopment.tarasande.esp.ESPElementBox
 import net.tarasandedevelopment.tarasande.esp.ESPElementHealthBar
 import net.tarasandedevelopment.tarasande.esp.ESPElementName
 import net.tarasandedevelopment.tarasande.module.render.ModuleESP
+import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import kotlin.math.abs
 
@@ -22,13 +25,12 @@ class ManagerESP : Manager<ESPElement>() {
             ESPElementHealthBar()
         )
 
-        val espModule = TarasandeMain.get().managerModule.get(ModuleESP::class.java)
-        list.forEach { espElement ->
-            TarasandeMain.get().managerValue.getValues(espElement).forEach {
-                it.owner = espModule
-                it.name = espElement.name + ": " + it.name
+        for (element in list)
+            object : ValueButton(this, element.name) {
+                override fun onChange() {
+                    MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, element))
+                }
             }
-        }
     }
 
     fun renderBox(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {

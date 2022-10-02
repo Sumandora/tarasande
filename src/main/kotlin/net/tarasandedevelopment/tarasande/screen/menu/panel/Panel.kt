@@ -101,7 +101,6 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
                 if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight.toDouble())) opened = !opened
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
                 if (TarasandeMain.get().managerValue.getValues(this).isNotEmpty()) {
-                    TarasandeMain.get().screenCheatMenu.popup = true
                     MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Settings of \"" + this.title + "\"", this))
                 }
             }

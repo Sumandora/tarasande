@@ -12,25 +12,25 @@ import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueColor
 import java.awt.Color
 
-class EntityColor(private val moduleESP: ModuleESP) {
+class EntityColor(val moduleESP: ModuleESP) {
 
-    private val modifyTeamColor = ValueBoolean(moduleESP, "Modify team color", true)
-    private val selfColor = object : ValueColor(moduleESP, "Self Color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val modifyTeamColor = ValueBoolean(this, "Modify team color", true)
+    private val selfColor = object : ValueColor(this, "Self Color", 0.0f, 1.0f, 1.0f, 1.0f) {
         override fun isEnabled() = modifyTeamColor.value
     }
-    private val friendsColor = object : ValueColor(moduleESP, "Friends Color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val friendsColor = object : ValueColor(this, "Friends Color", 0.0f, 1.0f, 1.0f, 1.0f) {
         override fun isEnabled() = modifyTeamColor.value
     }
-    private val useTeamColor = object : ValueBoolean(moduleESP, "Use Team Color", true) {
+    private val useTeamColor = object : ValueBoolean(this, "Use Team Color", true) {
         override fun isEnabled() = modifyTeamColor.value
     }
-    private val playerColor = object : ValueColor(moduleESP, "Player Color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val playerColor = object : ValueColor(this, "Player Color", 0.0f, 1.0f, 1.0f, 1.0f) {
         override fun isEnabled() = modifyTeamColor.value && !useTeamColor.value
     }
-    private val animalColor = object : ValueColor(moduleESP, "Animal Color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val animalColor = object : ValueColor(this, "Animal Color", 0.0f, 1.0f, 1.0f, 1.0f) {
         override fun isEnabled() = modifyTeamColor.value && !useTeamColor.value
     }
-    private val mobColor = object : ValueColor(moduleESP, "Mob Color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val mobColor = object : ValueColor(this, "Mob Color", 0.0f, 1.0f, 1.0f, 1.0f) {
         override fun isEnabled() = modifyTeamColor.value && !useTeamColor.value
     }
 

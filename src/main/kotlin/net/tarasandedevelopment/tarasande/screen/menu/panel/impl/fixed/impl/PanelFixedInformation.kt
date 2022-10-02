@@ -22,8 +22,6 @@ class PanelFixedInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMe
 
                 object : ValueButton(this, "$name settings") {
                     override fun onChange() {
-                        super.onChange()
-
                         MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, information))
                     }
                 }
