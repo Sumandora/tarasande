@@ -6,12 +6,13 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
+import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 
-class PanelFixedArrayList(x: Double, y: Double) : PanelFixed("Array List", x, y, 75.0, resizable = false) {
+class PanelFixedArrayList(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : PanelFixed("Array List", x, y, 75.0, resizable = false) {
 
     private val animations = HashMap<Module, Double>()
 

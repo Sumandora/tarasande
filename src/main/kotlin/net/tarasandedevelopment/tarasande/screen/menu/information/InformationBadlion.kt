@@ -6,6 +6,7 @@ import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.menu.information.Information
 import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl.PanelFixedInformation
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 
@@ -107,7 +108,7 @@ class InformationTimers : Information("Badlion", "Timers") {
         var time: Long? = null
     }
 
-    override fun getMessage(): String? {
+    override fun getMessage(panel: PanelFixedInformation): String? {
         if (!enabled || list.isEmpty()) return null
         return "\n" + list.filter { !it.isHidden() }.joinToString("\n")
     }

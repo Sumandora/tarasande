@@ -4,10 +4,11 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
 import net.tarasandedevelopment.tarasande.mixin.accessor.IInGameHud
+import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import kotlin.math.floor
 
-class PanelFixedInventory(x: Double, y: Double) : PanelFixed("Inventory", x, y, 150.0, 66.0, false, true) {
+class PanelFixedInventory(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : PanelFixed("Inventory", x, y, 150.0, 66.0, false, true) {
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         var m = 1

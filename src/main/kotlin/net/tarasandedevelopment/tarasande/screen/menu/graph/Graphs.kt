@@ -13,6 +13,8 @@ import net.tarasandedevelopment.tarasande.event.EventSwing
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import net.tarasandedevelopment.tarasande.util.string.StringUtil
+import net.tarasandedevelopment.tarasande.value.ValueNumber
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.round
 
@@ -153,6 +155,7 @@ class GraphMemory : Graph("Memory", 200) {
 
 class GraphIncomingTraffic : Graph("Incoming Traffic", 200) {
 
+    private val decimalPlaces = ValueNumber(this, "Decimal Places", 1.0, 1.0, 5.0, 1.0)
     private val traffic = CopyOnWriteArrayList<Pair<Long, Int>>()
 
     init {
@@ -167,10 +170,15 @@ class GraphIncomingTraffic : Graph("Incoming Traffic", 200) {
         traffic.removeIf { traffic -> System.currentTimeMillis() - traffic.first > 1000 }
         return traffic.sumOf { it.second }
     }
+
+    override fun formatHud(): String {
+        return StringUtil.formatBytes(this.supplyData().toLong(), this.decimalPlaces.value.toInt())
+    }
 }
 
 class GraphOutgoingTraffic : Graph("Outgoing Traffic", 200) {
 
+    private val decimalPlaces = ValueNumber(this, "Decimal Places", 1.0, 1.0, 5.0, 1.0)
     private val traffic = CopyOnWriteArrayList<Pair<Long, Int>>()
 
     init {
@@ -184,5 +192,10 @@ class GraphOutgoingTraffic : Graph("Outgoing Traffic", 200) {
     override fun supplyData(): Number {
         traffic.removeIf { traffic -> System.currentTimeMillis() - traffic.first > 1000 }
         return traffic.sumOf { it.second }
+    }
+
+
+    override fun formatHud(): String {
+        return StringUtil.formatBytes(this.supplyData().toLong(), this.decimalPlaces.value.toInt())
     }
 }

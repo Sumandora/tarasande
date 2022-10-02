@@ -6,6 +6,7 @@ import com.mojang.authlib.GameProfile
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
@@ -17,7 +18,7 @@ import kotlin.math.roundToInt
 /*
  * This code is probably worse than it has to be, but I just couldn't think of anything better (sleep deprivation :c)
  */
-class PanelFixedHypixelBedwarsOverlay(x: Double, y: Double) : PanelFixed("Hypixel Bedwars Overlay", x, y, 200.0, resizable = true) {
+class PanelFixedHypixelBedwarsOverlay(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : PanelFixed("Hypixel Bedwars Overlay", x, y, 200.0, resizable = true) {
 
     private val blackList = ArrayList<GameProfile>()
     private val playerData = ConcurrentHashMap<GameProfile, Stats>()
