@@ -36,6 +36,9 @@ class ClientValues {
     }
     val hypixelApiKey = ValueText(this, "Hypixel API Key", "")
     val menuAnimationLength = ValueNumber(this, "Menu animation length", 0.0, 100.0, 500.0, 1.0)
+    val menuAccentBackground = ValueBoolean(this, "Menu accent background", true)
+    val menuBlurBackground = ValueBoolean(this, "Menu blur background", true)
+    val menuDrawImage = ValueBoolean(this, "Menu draw image", true)
 
     init {
         TarasandeMain.get().managerEvent.add { event ->
