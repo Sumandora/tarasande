@@ -6,7 +6,6 @@ import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec2f
-import org.lwjgl.glfw.GLFW
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.menu.valuecomponent.ValueComponent
 import net.tarasandedevelopment.tarasande.base.value.Value
@@ -19,6 +18,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil.isHovered
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil.outlinedCircle
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil.outlinedFill
 import net.tarasandedevelopment.tarasande.value.ValueColor
+import org.lwjgl.glfw.GLFW
 import java.awt.Color
 import kotlin.math.PI
 import kotlin.math.atan2
@@ -149,7 +149,22 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
 
         val valueColor = value as ValueColor
 
-        if (valueColor.alpha != -1.0f && isHovered(mouseX, mouseY, width - (getPickerHeight() - 5) - 10, 0.0, width - (getPickerHeight() - 5) - 5, getPickerHeight() - 5)) {
+        if (!this.isAccent() && isHovered(mouseX, mouseY, width - MinecraftClient.getInstance().textRenderer.getWidth(lockToAccentColorText) / 2.0f, getPickerHeight(), width, getPickerHeight() + MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f)) {
+            if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+                val accent = TarasandeMain.get().clientValues.accentColor
+
+                valueColor.hue = accent.hue
+                valueColor.bri = accent.bri
+                valueColor.sat = accent.sat
+                return true
+            } else {
+                valueColor.locked = !valueColor.locked
+            }
+        }
+
+        if (button != GLFW.GLFW_MOUSE_BUTTON_LEFT) return false
+
+        if (valueColor.alpha != null && isHovered(mouseX, mouseY, width - (getPickerHeight() - 5) - 10, 0.0, width - (getPickerHeight() - 5) - 5, getPickerHeight() - 5)) {
             alphaDragInfo.setDragInfo(true, mouseX, mouseY)
             return true
         }
@@ -177,20 +192,6 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
                 return true
             }
         }
-
-        if (!this.isAccent() && isHovered(mouseX, mouseY, width - MinecraftClient.getInstance().textRenderer.getWidth(lockToAccentColorText) / 2.0f, getPickerHeight(), width, getPickerHeight() + MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f)) {
-            if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-                val accent = TarasandeMain.get().clientValues.accentColor
-
-                valueColor.hue = accent.hue
-                valueColor.bri = accent.bri
-                valueColor.sat = accent.sat
-                return true
-            } else {
-                valueColor.locked = !valueColor.locked
-            }
-        }
-
         return true
     }
 
