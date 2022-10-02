@@ -28,10 +28,13 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
         super(ctx);
     }
 
-    @Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"), cancellable = true)
+    T livingEntity;
+
+    @Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"))
     public void injectPreRender(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
         if (livingEntity == MinecraftClient.getInstance().player && RotationUtil.INSTANCE.getFakeRotation() != null)
             livingEntity.bodyYaw = livingEntity.prevBodyYaw = RotationUtil.INSTANCE.getFakeRotation().getYaw();
+        this.livingEntity = livingEntity;
     }
 
     @Redirect(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/EntityModel;setAngles(Lnet/minecraft/entity/Entity;FFFFF)V"))
@@ -75,7 +78,8 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
         if (!TarasandeMain.Companion.get().getDisabled()) {
             ModuleTrueSight moduleTrueSight = TarasandeMain.Companion.get().getManagerModule().get(ModuleTrueSight.class);
             if (moduleTrueSight.getEnabled())
-                f = (float) moduleTrueSight.getAlpha().getValue();
+                if (livingEntity.isInvisibleTo(MinecraftClient.getInstance().player) || livingEntity.isInvisible())
+                    f = (float) moduleTrueSight.getAlpha().getValue();
         }
 
         instance.render(matrixStack, vertexConsumer, a, b, c, d, e, f);
