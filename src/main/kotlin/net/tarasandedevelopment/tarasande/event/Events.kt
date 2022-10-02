@@ -19,6 +19,7 @@ import net.minecraft.util.math.Box
 import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShape
+import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import java.awt.Color
@@ -196,3 +197,4 @@ class EventChildren(val screen: Screen) : Event(false) {
 
     fun get() = children
 }
+class EventLoadManager(val manager: Manager<*>) : Event(false)

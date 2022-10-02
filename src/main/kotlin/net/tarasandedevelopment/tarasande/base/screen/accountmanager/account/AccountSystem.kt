@@ -16,6 +16,8 @@ class ManagerAccount : Manager<Class<out Account>>() {
             AccountRefreshToken::class.java,
             AccountToken::class.java
         )
+
+        this.finishLoading()
     }
 }
 

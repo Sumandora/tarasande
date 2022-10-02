@@ -24,6 +24,8 @@ class ManagerClientMenu : Manager<ElementMenu>() {
         val fritzBox = ElementMenuFritzBoxReconnect()
         this.add(ElementMenuFritzBoxReconnect.SubTitle(fritzBox))
         this.add(fritzBox)
+
+        this.finishLoading()
     }
 
     fun byName(name: String): ElementMenu {

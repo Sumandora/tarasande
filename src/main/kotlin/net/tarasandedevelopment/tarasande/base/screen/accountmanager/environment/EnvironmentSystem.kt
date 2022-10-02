@@ -12,6 +12,8 @@ class ManagerEnvironment : Manager<EnvironmentPreset>() {
             EnvironmentPresetTheAltening(),
             EnvironmentPresetEasyMC()
         )
+
+        this.finishLoading()
     }
 }
 

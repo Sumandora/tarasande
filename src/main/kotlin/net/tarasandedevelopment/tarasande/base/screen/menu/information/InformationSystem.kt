@@ -44,6 +44,8 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
         }
 
         add(InformationBeds())
+
+        this.finishLoading()
     }
 
     fun getAllOwners(): List<String> {

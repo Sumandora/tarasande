@@ -1,9 +1,13 @@
 package net.tarasandedevelopment.tarasande.base
 
+import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.event.EventLoadManager
 import java.util.concurrent.CopyOnWriteArrayList
 
 open class Manager<T : Any> {
     val list = CopyOnWriteArrayList<T>()
+
+    fun finishLoading() = TarasandeMain.get().managerEvent.call(EventLoadManager(this))
 
     open fun add(vararg objects: T) {
         for (obj in objects) {

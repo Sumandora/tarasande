@@ -107,8 +107,9 @@ class ManagerModule : Manager<Module>() {
                             module.switchState()
                 }
         }
-    }
 
+        this.finishLoading()
+    }
 }
 
 open class Module(val name: String, val description: String, val category: ModuleCategory) {

@@ -21,6 +21,8 @@ class ManagerFile : Manager<File>() {
             FileAccounts(),
             FileMenu()
         )
+
+        this.finishLoading()
     }
 
     fun save(backup: Boolean) {

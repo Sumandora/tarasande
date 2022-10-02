@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
+import net.tarasandedevelopment.tarasande.base.addon.ManagerAddon
 import net.tarasandedevelopment.tarasande.base.clientmenu.ManagerClientMenu
 import net.tarasandedevelopment.tarasande.base.esp.ManagerESP
 import net.tarasandedevelopment.tarasande.base.event.ManagerEvent
@@ -27,6 +28,8 @@ class TarasandeMain {
     val name = "tarasande" // "lowercase gang" ~kennytv
 
     lateinit var managerEvent: ManagerEvent
+        private set
+    lateinit var managerAddon: ManagerAddon
         private set
     private lateinit var managerFile: ManagerFile
     lateinit var managerValue: ManagerValue
@@ -81,6 +84,7 @@ class TarasandeMain {
 
     fun onPreLoad() {
         managerEvent = ManagerEvent()
+        managerAddon = ManagerAddon()
     }
 
     fun onLateLoad() {
