@@ -9,14 +9,12 @@ import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricMovementTr
 import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricVersionProvider
 import de.florianmichael.viaprotocolhack.INativeProvider
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
-import de.florianmichael.viaprotocolhack.util.VersionList
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.ModContainer
 import net.fabricmc.loader.api.metadata.Person
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.event.EventDebugHud
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import java.io.File
@@ -29,10 +27,6 @@ class TarasandeProtocolHack : INativeProvider {
 
     init {
         ViaProtocolHack.instance().init(this)
-        TarasandeMain.get().managerEvent.add { event ->
-            if (event is EventDebugHud)
-                event.list.add("[Protocol] " + VersionList.getProtocols().find { it.version == ViaProtocolHack.instance().current() }?.name)
-        }
     }
 
     override fun isSinglePlayer(): Boolean {

@@ -1,11 +1,14 @@
 package net.tarasandedevelopment.tarasande.screen.menu.information
 
+import de.florianmichael.viaprotocolhack.ViaProtocolHack
+import de.florianmichael.viaprotocolhack.util.VersionList
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.screen.menu.information.Information
 import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import java.util.function.Consumer
@@ -54,5 +57,15 @@ class SpawnPoint : InformationMisc("Spawn Point") {
     }
 }
 
-val informationList = mutableListOf(WorldTime(), ServerBrand(), SpawnPoint())
+class ProtocolVersion : InformationMisc("Protocol Version") {
+
+    override fun getMessage() = VersionList.getProtocols().find { it.version == ViaProtocolHack.instance().current() }?.name
+}
+
+class FakeRotation : InformationMisc("Fake Rotation") {
+
+    override fun getMessage() = RotationUtil.fakeRotation?.let { it.yaw.toString() + " " + it.pitch }
+}
+
+val informationList = mutableListOf(WorldTime(), ServerBrand(), SpawnPoint(), ProtocolVersion(), FakeRotation())
 abstract class InformationMisc(name: String) : Information("Misc", name)

@@ -146,11 +146,6 @@ object RotationUtil {
                         else -> {}
                     }
                 }
-
-                is EventDebugHud -> {
-                    if (fakeRotation != null)
-                        event.list.add("[Tarsande Fake rotation] $fakeRotation")
-                }
             }
         }))
     }

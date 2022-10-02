@@ -78,7 +78,6 @@
     "MixinButtonWidget",
     "MixinClickableWidget",
     "MixinClientPlayNetworkHandler",
-    "MixinDebugHud",
     "MixinHandledScreen",
     "MixinPendingUpdateManager",
     "MixinPlayerListHud",
