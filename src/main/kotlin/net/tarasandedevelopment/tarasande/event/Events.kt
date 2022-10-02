@@ -171,7 +171,6 @@ class EventPacketTransform(val type: Type, val buf: ByteBuf?) : Event(false) {
 }
 
 class EventCollisionShape(val pos: BlockPos, var collisionShape: VoxelShape) : Event(false)
-class EventDebugHud(val list: MutableList<String>) : Event(false)
 class EventTextVisit(var string: String) : Event(false)
 
 class EventChangeScreen : Event {
