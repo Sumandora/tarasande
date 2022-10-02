@@ -22,14 +22,10 @@ import kotlin.math.abs
 import kotlin.math.min
 
 class ESPElementBox : ESPElement("Box") {
-    private val width = object : ValueNumber(this, "Width", 1.0, 2.0, 5.0, 0.1) {
-        override fun isEnabled() = enabled.isEnabled() && enabled.value
-    }
-    private val outlined = object : ValueBoolean(this, "Outlined", true) {
-        override fun isEnabled() = enabled.isEnabled() && enabled.value
-    }
+    private val width = ValueNumber(this, "Width", 1.0, 2.0, 5.0, 0.1)
+    private val outlined = ValueBoolean(this, "Outlined", true)
     private val outlineWidth = object : ValueNumber(this, "Outline width", 1.0, 2.0, 5.0, 0.1) {
-        override fun isEnabled() = enabled.isEnabled() && enabled.value && outlined.value
+        override fun isEnabled() = outlined.value
     }
 
     override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
@@ -41,12 +37,8 @@ class ESPElementBox : ESPElement("Box") {
 }
 
 class ESPElementName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Orientation.RIGHT, Orientation.BOTTOM)) {
-    private val outlined = object : ValueBoolean(this, "Outlined", true) {
-        override fun isEnabled() = enabled.isEnabled() && enabled.value
-    }
-    private val scale = object : ValueNumber(this, "Scale", 0.1, 1.0, 3.0, 0.1) {
-        override fun isEnabled() = enabled.isEnabled() && enabled.value
-    }
+    private val outlined = ValueBoolean(this, "Outlined", true)
+    private val scale = ValueNumber(this, "Scale", 0.1, 1.0, 3.0, 0.1)
 
     override fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double, orientation: Orientation) {
         val col = Color(entity.teamColorValue).rgb // ignore alpha
@@ -75,15 +67,9 @@ class ESPElementName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Ori
 }
 
 class ESPElementHealthBar : ESPElementRotatable("Health bar", arrayOf(Orientation.TOP, Orientation.BOTTOM)) {
-    private val outlined = object : ValueBoolean(this, "Outlined", true) {
-        override fun isEnabled() = enabled.isEnabled() && enabled.value
-    }
-    private val fadeColorBegin = object : ValueColor(this, "Fade color begin", 0.33f /*green*/, 1.0f, 1.0f) {
-        override fun isEnabled() = enabled.isEnabled() && enabled.value
-    }
-    private val fadeColorEnd = object : ValueColor(this, "Fade color end", 0.0f /*red*/, 1.0f, 1.0f) {
-        override fun isEnabled() = enabled.isEnabled() && enabled.value
-    }
+    private val outlined = ValueBoolean(this, "Outlined", true)
+    private val fadeColorBegin = ValueColor(this, "Fade color begin", 0.33f /*green*/, 1.0f, 1.0f)
+    private val fadeColorEnd = ValueColor(this, "Fade color end", 0.0f /*red*/, 1.0f, 1.0f)
 
     override fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double, orientation: Orientation) {
         val height = getHeight(entity, sideWidth)

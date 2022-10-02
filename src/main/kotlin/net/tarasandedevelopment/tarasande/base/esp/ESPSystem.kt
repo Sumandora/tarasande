@@ -39,11 +39,7 @@ class ManagerESP : Manager<ESPElement>() {
 }
 
 abstract class ESPElement(val name: String) {
-    var enabled = object : ValueBoolean(TarasandeMain.get().managerModule.get(ModuleESP::class.java), name, false) {
-        override fun isEnabled(): Boolean {
-            return TarasandeMain.get().managerModule.get(ModuleESP::class.java).mode.isSelected(1)
-        }
-    }
+    var enabled = ValueBoolean(this, name, false)
 
     abstract fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle)
 }
@@ -51,9 +47,7 @@ abstract class ESPElement(val name: String) {
 abstract class ESPElementRotatable(name: String, private val forbiddenOrientations: Array<Orientation> = arrayOf()) : ESPElement(name) {
     val orientations = Orientation.values().filter { !forbiddenOrientations.contains(it) }
     var orientation: ValueMode? = if (orientations.size > 1)
-        object : ValueMode(TarasandeMain.get().managerModule.get(ModuleESP::class.java), "$name: Orientation", false, *orientations.map { it.name.substring(0, 1).uppercase() + it.name.substring(1).lowercase() }.toTypedArray()) {
-            override fun isEnabled() = enabled.isEnabled() && enabled.value
-        }
+        ValueMode(this, "$name: Orientation", false, *orientations.map { it.name.substring(0, 1).uppercase() + it.name.substring(1).lowercase() }.toTypedArray())
     else
         null
 

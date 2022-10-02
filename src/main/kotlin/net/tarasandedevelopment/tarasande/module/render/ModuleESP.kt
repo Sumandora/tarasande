@@ -51,6 +51,10 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
             override fun onChange() {
                 MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, TarasandeMain.get().managerESP))
             }
+
+            override fun isEnabled(): Boolean {
+                return mode.isSelected(1)
+            }
         }
     }
 
