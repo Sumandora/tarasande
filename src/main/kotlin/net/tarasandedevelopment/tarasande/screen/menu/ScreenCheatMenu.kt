@@ -34,7 +34,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     private var screenChangeTime = System.currentTimeMillis()
     private var isClosing = false
 
-    private val managerGraph = ManagerGraph()
+    val managerGraph = ManagerGraph()
 
     private var image: Identifier? = Identifier(TarasandeMain.get().name, "textures/rimuru.png")
     private val particles = ArrayList<Particle>()
@@ -43,7 +43,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     private var hoveringText: String? = null
 
     val managerValueComponent = ManagerValueComponent()
-    val managerInformation = ManagerInformation()
+    val managerInformation = ManagerInformation(this)
 
     var popup = false
 
@@ -74,7 +74,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             fixedPanels.add(PanelFixedNowPlaying::class.java)
         }
         for (panel in fixedPanels) {
-            panels.add(panel.declaredConstructors[0].newInstance(5.0, y).also { y += (it as Panel).titleBarHeight + 5 } as Panel)
+            panels.add(panel.declaredConstructors[0].newInstance(5.0, y, this).also { y += (it as Panel).titleBarHeight + 5 } as Panel)
         }
         for (graph in managerGraph.list) {
             panels.add(PanelFixedGraph(graph, 5.0, y).also { y += it.titleBarHeight + 5 })

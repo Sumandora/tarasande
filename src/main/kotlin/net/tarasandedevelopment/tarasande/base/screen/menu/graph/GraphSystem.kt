@@ -24,4 +24,6 @@ class ManagerGraph : Manager<Graph>() {
 
 abstract class Graph(val name: String, val bufferLength: Int) {
     abstract fun supplyData(): Number?
+
+    open fun formatHud() = this.supplyData().toString()
 }

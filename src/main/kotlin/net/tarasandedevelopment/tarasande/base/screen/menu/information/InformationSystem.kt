@@ -1,9 +1,11 @@
 package net.tarasandedevelopment.tarasande.base.screen.menu.information
 
 import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.information.*
+import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl.PanelFixedInformation
 
-class ManagerInformation : Manager<Information>() {
+class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Information>() {
 
     init {
         add(
@@ -19,9 +21,14 @@ class ManagerInformation : Manager<Information>() {
             // Modules
             InformationTimeShifted(),
             InformationSuspectedMurderers(),
-            InformationFakeNewsCountdown(),
-            InformationBeds()
+            InformationFakeNewsCountdown()
         )
+
+        for (graph in screenCheatMenu.managerGraph.list) {
+            add(InformationGraphValue(graph))
+        }
+
+        add(InformationBeds())
     }
 
     fun getAllOwners(): List<String> {
@@ -35,5 +42,5 @@ class ManagerInformation : Manager<Information>() {
 }
 
 abstract class Information(val owner: String, val information: String) {
-    abstract fun getMessage(): String?
+    abstract fun getMessage(parent: PanelFixedInformation): String?
 }

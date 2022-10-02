@@ -3,19 +3,27 @@ package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import net.tarasandedevelopment.tarasande.value.ValueMode
 
-class PanelFixedInformation(x: Double, y: Double) : PanelFixed("Information", x, y, 75.0, resizable = false) {
+class PanelFixedInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : PanelFixed("Information", x, y, 75.0, resizable = false) {
+
+    var visible = ValueMode(this, "Elements", true, *screenCheatMenu.managerInformation.list.map { i -> i.owner + "/" + i.information }.toTypedArray())
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val text = ArrayList<String>()
+        var index = 0
         for (owner in TarasandeMain.get().screenCheatMenu.managerInformation.getAllOwners()) {
+            index++
+            if (!visible.isSelected(index - 1)) continue
+
             val cache = ArrayList<String>()
             val informationList = TarasandeMain.get().screenCheatMenu.managerInformation.getAllInformation(owner)
             for (information in informationList) {
-                val message = information.getMessage()
+                val message = information.getMessage(this)
                 if (message != null) {
                     if (message.contains("\n")) {
                         val parts = message.split("\n")
@@ -49,7 +57,7 @@ class PanelFixedInformation(x: Double, y: Double) : PanelFixed("Information", x,
 
     override fun isVisible(): Boolean {
         for (information in TarasandeMain.get().screenCheatMenu.managerInformation.list)
-            if (information.getMessage() != null)
+            if (information.getMessage(this) != null)
                 return true
         return false
     }
