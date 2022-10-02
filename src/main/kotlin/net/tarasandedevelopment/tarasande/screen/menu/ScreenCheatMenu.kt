@@ -10,6 +10,7 @@ import net.minecraft.client.texture.MissingSprite
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
+import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.base.screen.menu.graph.ManagerGraph
@@ -70,7 +71,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             PanelFixedHypixelBedwarsOverlay::class.java,
             PanelFixedRadar::class.java
         )
-        if (TarasandeMain.get().linux) {
+        if (Util.getOperatingSystem() == Util.OperatingSystem.LINUX) {
             fixedPanels.add(PanelFixedNowPlaying::class.java)
         }
         for (panel in fixedPanels) {

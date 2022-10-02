@@ -1,18 +1,20 @@
 package net.tarasandedevelopment.tarasande.clientmenu
 
-import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
-import net.tarasandedevelopment.tarasande.screen.list.protocolhack.ScreenBetterProtocolHack
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
-import org.lwjgl.glfw.GLFW
+import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.clientmenu.ElementMenu
 import net.tarasandedevelopment.tarasande.base.clientmenu.ElementMenuScreen
 import net.tarasandedevelopment.tarasande.base.clientmenu.ElementMenuTitle
 import net.tarasandedevelopment.tarasande.base.clientmenu.ElementMenuToggle
 import net.tarasandedevelopment.tarasande.module.exploit.ModuleBungeeHack
+import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.list.accountmanager.ScreenBetterAccountManager
+import net.tarasandedevelopment.tarasande.screen.list.protocolhack.ScreenBetterProtocolHack
 import net.tarasandedevelopment.tarasande.screen.list.proxy.ScreenBetterProxy
+import org.lwjgl.glfw.GLFW
+import org.spongepowered.include.com.google.common.io.Files
 import java.io.File
 
 class ElementMenuScreenAccountManager : ElementMenuScreen("Account Manager") {
@@ -55,8 +57,14 @@ class ElementMenuToggleBungeeHack : ElementMenuToggle("Bungee Hack") {
 }
 
 class ElementMenuFritzBoxReconnect : ElementMenu("Fritz!Box Reconnect") {
+    private val scriptName = "ip_changer_fritzbox.vbs"
+    private val script = File(TarasandeMain.get().rootDirectory, scriptName)
 
-    private val script = File(TarasandeMain.get().rootDirectory, "ip_changer_fritzbox.vbs")
+    init {
+        if (visible())
+            if (!script.exists())
+                Files.write(TarasandeMain::class.java.getResourceAsStream(scriptName)?.readAllBytes() ?: error("$scriptName not found"), script)
+    }
 
     override fun onClick(mouseButton: Int) {
         val builder = ProcessBuilder("wscript", this.script.absolutePath)
@@ -69,5 +77,5 @@ class ElementMenuFritzBoxReconnect : ElementMenu("Fritz!Box Reconnect") {
         override fun visible() = parent.visible()
     }
 
-    override fun visible() = script.exists()
+    override fun visible() = Util.getOperatingSystem() == Util.OperatingSystem.WINDOWS
 }

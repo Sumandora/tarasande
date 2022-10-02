@@ -1,12 +1,9 @@
 package net.tarasandedevelopment.tarasande
 
 import com.google.gson.GsonBuilder
-import net.tarasandedevelopment.tarasande.clientmenu.ElementMenuScreenAccountManager
-import net.tarasandedevelopment.tarasande.protocolhack.TarasandeProtocolHack
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
-import org.slf4j.LoggerFactory
 import net.tarasandedevelopment.tarasande.base.clientmenu.ManagerClientMenu
 import net.tarasandedevelopment.tarasande.base.esp.ManagerESP
 import net.tarasandedevelopment.tarasande.base.event.ManagerEvent
@@ -14,12 +11,15 @@ import net.tarasandedevelopment.tarasande.base.file.ManagerFile
 import net.tarasandedevelopment.tarasande.base.module.ManagerModule
 import net.tarasandedevelopment.tarasande.base.util.player.clickspeed.ManagerClickMethod
 import net.tarasandedevelopment.tarasande.base.value.ManagerValue
+import net.tarasandedevelopment.tarasande.clientmenu.ElementMenuScreenAccountManager
+import net.tarasandedevelopment.tarasande.protocolhack.TarasandeProtocolHack
 import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.util.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import net.tarasandedevelopment.tarasande.util.player.friends.Friends
 import net.tarasandedevelopment.tarasande.util.player.tagname.TagName
 import net.tarasandedevelopment.tarasande.util.render.blur.Blur
+import org.slf4j.LoggerFactory
 import java.io.File
 
 class TarasandeMain {
@@ -66,7 +66,6 @@ class TarasandeMain {
         }
     }, autoSaveDaemonName)
 
-    val linux = Util.getOperatingSystem() != Util.OperatingSystem.WINDOWS
     val rootDirectory = File(System.getProperty("user.home") + File.separator + name)
 
     var proxy: Proxy? = null
@@ -114,7 +113,7 @@ class TarasandeMain {
 
         autoSaveDaemon.start()
         // We can't guarantee that qdbus exists, nor can we guarantee that we are even using kde plasma, just hope for the best ^^
-        if (linux) {
+        if (Util.getOperatingSystem() == Util.OperatingSystem.LINUX) {
             try {
                 Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor suspend")
             } catch (ignored: Throwable) {
@@ -123,7 +122,7 @@ class TarasandeMain {
     }
 
     fun onUnload() {
-        if (linux) {
+        if (Util.getOperatingSystem() == Util.OperatingSystem.LINUX) {
             try {
                 Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor resume")
             } catch (ignored: Throwable) {
