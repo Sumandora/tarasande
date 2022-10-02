@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande.base.screen.menu.information
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.information.*
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl.PanelFixedInformation
 
 class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Information>() {
 
@@ -42,5 +41,5 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
 }
 
 abstract class Information(val owner: String, val information: String) {
-    abstract fun getMessage(parent: PanelFixedInformation): String?
+    abstract fun getMessage(): String?
 }

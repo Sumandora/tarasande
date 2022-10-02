@@ -9,7 +9,6 @@ import net.tarasandedevelopment.tarasande.mixin.accessor.IRenderTickCounter
 import net.tarasandedevelopment.tarasande.module.exploit.ModuleTickBaseManipulation
 import net.tarasandedevelopment.tarasande.module.misc.ModuleMurderMystery
 import net.tarasandedevelopment.tarasande.module.render.ModuleBedESP
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl.PanelFixedInformation
 import net.tarasandedevelopment.tarasande.util.extension.div
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import kotlin.math.round
@@ -17,7 +16,7 @@ import kotlin.math.round
 class InformationTimeShifted : Information("Tick base manipulation", "Time shifted") {
     private val moduleTickBaseManipulation = TarasandeMain.get().managerModule.get(ModuleTickBaseManipulation::class.java)
 
-    override fun getMessage(parent: PanelFixedInformation): String? {
+    override fun getMessage(): String? {
         if (!moduleTickBaseManipulation.enabled) return null
         if (moduleTickBaseManipulation.shifted == 0L) return null
         return moduleTickBaseManipulation.shifted.toString() + " (" + round(moduleTickBaseManipulation.shifted / ((MinecraftClient.getInstance() as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_getTickTime()).toInt() + ")"
@@ -25,7 +24,7 @@ class InformationTimeShifted : Information("Tick base manipulation", "Time shift
 }
 
 class InformationSuspectedMurderers : Information("Murder Mystery", "Suspected murderers") {
-    override fun getMessage(parent: PanelFixedInformation): String? {
+    override fun getMessage(): String? {
         val murderMystery = TarasandeMain.get().managerModule.get(ModuleMurderMystery::class.java)
         if (murderMystery.enabled)
             if (murderMystery.suspects.isNotEmpty()) {
@@ -39,7 +38,7 @@ class InformationSuspectedMurderers : Information("Murder Mystery", "Suspected m
 }
 
 class InformationFakeNewsCountdown : Information("Murder Mystery", "Fake news countdown") {
-    override fun getMessage(parent: PanelFixedInformation): String? {
+    override fun getMessage(): String? {
         val murderMystery = TarasandeMain.get().managerModule.get(ModuleMurderMystery::class.java)
         if (murderMystery.enabled)
             if (!murderMystery.fakeNews.isSelected(0) && murderMystery.isMurderer() && murderMystery.murdererAssistance.value)
@@ -50,7 +49,7 @@ class InformationFakeNewsCountdown : Information("Murder Mystery", "Fake news co
 }
 
 class InformationBeds : Information("Bed ESP", "Beds") {
-    override fun getMessage(parent: PanelFixedInformation): String? {
+    override fun getMessage(): String? {
         val bedESP = TarasandeMain.get().managerModule.get(ModuleBedESP::class.java)
         if (bedESP.enabled) if (bedESP.calculateBestWay.value) if (bedESP.bedDatas.isNotEmpty()) {
             return "\n" + bedESP.bedDatas.sortedBy {
