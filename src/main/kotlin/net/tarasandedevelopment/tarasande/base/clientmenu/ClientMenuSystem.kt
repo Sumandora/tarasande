@@ -14,16 +14,12 @@ import java.awt.Color
 
 class ManagerClientMenu : Manager<ElementMenu>() {
 
-    val settings: MenuSettingsParent
-
     init {
         this.spacer("General")
         this.add(ElementMenuScreenAccountManager(), ElementMenuScreenProxySystem(), ElementMenuScreenProtocolHack())
 
         this.spacer("Exploits")
         this.add(ElementMenuToggleBungeeHack())
-
-        this.settings = MenuSettingsParent(this)
     }
 
     fun byName(name: String): ElementMenu {

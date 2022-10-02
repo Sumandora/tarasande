@@ -21,8 +21,8 @@ class ScreenBetterClientMenu(parent: Screen) : ScreenBetter(parent) {
         this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.literal("<-")) {
             close()
         })
-        this.addDrawableChild(ButtonWidget(5, 5, 98, 20, Text.literal("Settings")) {
-            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, "Menu Settings", TarasandeMain.get().managerClientMenu.settings!!))
+        this.addDrawableChild(ButtonWidget(5, 5, 98, 20, Text.literal("Client Values")) {
+            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, "Client Values", TarasandeMain.get().clientValues))
         })
 
         val endHeight = TarasandeMain.get().managerClientMenu.list.size * (buttonHeight + spacer)

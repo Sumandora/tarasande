@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.util.clientvalue
 
 import org.lwjgl.glfw.GLFW
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.base.clientmenu.ElementMenuScreen
 import net.tarasandedevelopment.tarasande.event.EventTicksPerFrame
 import net.tarasandedevelopment.tarasande.value.*
 
@@ -36,6 +37,9 @@ class ClientValues {
     }
     val hypixelApiKey = ValueText(this, "Hypixel API Key", "")
     val menuAnimationLength = ValueNumber(this, "Menu animation length", 0.0, 100.0, 500.0, 1.0)
+
+    val focusedMenuEntry: ValueMode
+
     val menuAccentBackground = ValueBoolean(this, "Menu accent background", true)
     val menuBlurBackground = ValueBoolean(this, "Menu blur background", true)
     val menuDrawImage = ValueBoolean(this, "Menu draw image", true)
@@ -47,5 +51,11 @@ class ClientValues {
                     event.cancelled = true
             }
         }
+
+
+        val entries = mutableListOf("None")
+        entries.addAll(TarasandeMain.get().managerClientMenu.list.filterIsInstance<ElementMenuScreen>().map { e -> e.name })
+
+        focusedMenuEntry = ValueMode(this, "Focused menu entry", false, *entries.toTypedArray())
     }
 }
