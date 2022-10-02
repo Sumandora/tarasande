@@ -52,7 +52,7 @@ class TarasandeProtocolHack : INativeProvider {
     }
 
     override fun run(): File {
-        return File(System.getProperty("user.home") + File.separator + TarasandeMain.get().name)
+        return TarasandeMain.get().rootDirectory
     }
 
     override fun createDump(): JsonObject {

@@ -22,7 +22,7 @@ class ClientValues {
             TarasandeMain.get().blur.kawasePasses = null
         }
     }
-    val unlockTicksPerFrame = ValueBoolean(this, "Unlock ticks per frame", false)
+    private val unlockTicksPerFrame = ValueBoolean(this, "Unlock ticks per frame", false)
     val updateRotationsWhenTickSkipping = ValueBoolean(this, "Update rotations when tick skipping", false)
     val updateRotationsAccurately = object : ValueBoolean(this, "Update rotations accurately", true) {
         override fun isEnabled() = updateRotationsWhenTickSkipping.value
@@ -36,13 +36,14 @@ class ClientValues {
         override fun isEnabled() = autoSaveConfig.value
     }
     val hypixelApiKey = ValueText(this, "Hypixel API Key", "")
+
     val menuAnimationLength = ValueNumber(this, "Menu animation length", 0.0, 100.0, 500.0, 1.0)
-
-    val focusedMenuEntry: ValueMode
-
     val menuAccentBackground = ValueBoolean(this, "Menu accent background", true)
     val menuBlurBackground = ValueBoolean(this, "Menu blur background", true)
     val menuDrawImage = ValueBoolean(this, "Menu draw image", true)
+
+    val clientMenuFocusedEntry: ValueMode
+    val clientMenuCategories = ValueBoolean(this, "Client Menu Categories", true)
 
     init {
         TarasandeMain.get().managerEvent.add { event ->
@@ -56,6 +57,6 @@ class ClientValues {
         val entries = mutableListOf("None")
         entries.addAll(TarasandeMain.get().managerClientMenu.list.filterIsInstance<ElementMenuScreen>().map { e -> e.name })
 
-        focusedMenuEntry = ValueMode(this, "Focused menu entry", false, *entries.toTypedArray())
+        clientMenuFocusedEntry = ValueMode(this, "Client Menu focused entry", false, *entries.toTypedArray())
     }
 }

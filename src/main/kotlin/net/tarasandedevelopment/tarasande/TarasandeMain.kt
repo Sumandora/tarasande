@@ -19,6 +19,7 @@ import net.tarasandedevelopment.tarasande.util.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import net.tarasandedevelopment.tarasande.util.player.friends.Friends
 import net.tarasandedevelopment.tarasande.util.render.blur.Blur
+import java.io.File
 
 class TarasandeMain {
 
@@ -63,6 +64,7 @@ class TarasandeMain {
     }, autoSaveDaemonName)
 
     val linux = Util.getOperatingSystem() != Util.OperatingSystem.WINDOWS
+    val rootDirectory = File(System.getProperty("user.home") + File.separator + name)
 
     var proxy: Proxy? = null
     var disabled = false
