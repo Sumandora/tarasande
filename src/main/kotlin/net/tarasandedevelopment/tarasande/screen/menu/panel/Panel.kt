@@ -1,14 +1,14 @@
 package net.tarasandedevelopment.tarasande.screen.menu.panel
 
-import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
-import org.lwjgl.glfw.GLFW
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.menu.utils.DragInfo
 import net.tarasandedevelopment.tarasande.screen.menu.utils.IElement
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import org.lwjgl.glfw.GLFW
 import java.awt.Color
 import kotlin.math.floor
 import kotlin.math.min
@@ -102,7 +102,7 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
                 if (TarasandeMain.get().managerValue.getValues(this).isNotEmpty()) {
                     TarasandeMain.get().screenCheatMenu.popup = true
-                    MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Settings from " + this.title, this))
+                    MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Settings of \"" + this.title + "\"", this))
                 }
             }
             return true

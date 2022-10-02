@@ -25,13 +25,11 @@ class ValueComponentMode(value: Value) : ValueComponent(value) {
         matrices?.pop()
 
         matrices?.push()
-        matrices?.translate(width, getHeight() / 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
-        matrices?.translate(-width, -getHeight() / 2.0, 0.0)
         for ((index, setting) in valueMode.settings.withIndex()) {
             var color = if (valueMode.selected.contains(setting)) TarasandeMain.get().clientValues.accentColor.getColor() else Color.white
             if (!valueMode.isEnabled()) color = color.darker().darker()
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, setting, (width - MinecraftClient.getInstance().textRenderer.getWidth(setting)).toFloat(), (getHeight() / 2.0F + (index - (valueMode.settings.size - 1) / 2.0) * MinecraftClient.getInstance().textRenderer.fontHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), color.rgb)
+            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, setting, (width * 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(setting)).toFloat(), (getHeight() / 2.0F + (index - (valueMode.settings.size - 1) / 2.0 + 0.5) * (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f) - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat() * 2.0f, color.rgb)
         }
         matrices?.pop()
     }
@@ -40,8 +38,8 @@ class ValueComponentMode(value: Value) : ValueComponent(value) {
         if (button != 0) return false
         val valueMode = value as ValueMode
         for ((index, setting) in valueMode.settings.withIndex()) {
-            val x = width - MinecraftClient.getInstance().textRenderer.getWidth(setting) / 2
-            val y = getHeight() / 2.0F + (index - (valueMode.settings.size - 1) / 2.0) * (MinecraftClient.getInstance().textRenderer.fontHeight / 2) - MinecraftClient.getInstance().textRenderer.fontHeight / 4.0F
+            val x = width - MinecraftClient.getInstance().textRenderer.getWidth(setting) / 2.0f
+            val y = getHeight() / 2.0F + (index - (valueMode.settings.size - 1) / 2.0 + 0.5) * (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f) - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F
             if (RenderUtil.isHovered(mouseX, mouseY, x, y, width, y + MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F)) {
                 valueMode.select(index)
                 valueMode.onChange()
