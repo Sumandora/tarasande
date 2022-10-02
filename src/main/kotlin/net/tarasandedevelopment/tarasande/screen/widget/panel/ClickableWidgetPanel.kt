@@ -39,7 +39,6 @@ class ClickableWidgetPanel(val panel: Panel) : ClickableWidget(panel.x.toInt(), 
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
-        println("mouse scrolled")
         return panel.mouseScrolled(mouseX, mouseY, amount)
     }
 

@@ -84,7 +84,7 @@ public abstract class MixinEntity implements IEntity {
     @Inject(method = "getTeamColorValue", at = @At("RETURN"), cancellable = true)
     public void injectGetTeamColorValue(CallbackInfoReturnable<Integer> cir) {
         if(!TarasandeMain.Companion.get().getDisabled()) {
-            ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerESP().get(ModuleESP.class);
+            ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class);
             if(moduleESP.getEnabled()) {
                 Color c = moduleESP.getEntityColor().getColor((Entity) (Object) this);
                 if(c != null)

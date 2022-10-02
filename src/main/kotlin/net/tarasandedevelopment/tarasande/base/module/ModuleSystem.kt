@@ -1,9 +1,6 @@
 package net.tarasandedevelopment.tarasande.base.module
 
-import net.tarasandedevelopment.tarasande.module.player.ModuleNoMiningTrace
-import net.tarasandedevelopment.tarasande.module.qol.ModuleInstantWorld
 import net.minecraft.client.MinecraftClient
-import org.lwjgl.glfw.GLFW
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.event.EventTick
@@ -13,9 +10,11 @@ import net.tarasandedevelopment.tarasande.module.ghost.*
 import net.tarasandedevelopment.tarasande.module.misc.*
 import net.tarasandedevelopment.tarasande.module.movement.*
 import net.tarasandedevelopment.tarasande.module.player.*
+import net.tarasandedevelopment.tarasande.module.qol.ModuleInstantWorld
 import net.tarasandedevelopment.tarasande.module.render.*
 import net.tarasandedevelopment.tarasande.value.ValueBind
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
+import org.lwjgl.glfw.GLFW
 
 class ManagerModule : Manager<Module>() {
 
@@ -97,7 +96,8 @@ class ManagerModule : Manager<Module>() {
             ModuleFurnaceProgress(),
             ModuleNoMiningTrace(),
             ModuleDisableTelemetry(),
-            ModuleBlockChangeTracker()
+            ModuleBlockChangeTracker(),
+            ModuleTrueSight()
         )
         TarasandeMain.get().managerEvent.add { event ->
             if (event is EventTick)
