@@ -74,7 +74,7 @@ public class MixinGameRenderer implements IGameRenderer {
             ModuleNoMiningTrace moduleNoMiningTrace = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoMiningTrace.class);
             if(moduleNoMiningTrace.getEnabled())
                 if(!moduleNoMiningTrace.getOnlyWhenPickaxe().getValue() || (MinecraftClient.getInstance().player.getMainHandStack().getItem() instanceof PickaxeItem || MinecraftClient.getInstance().player.getMainHandStack().getItem() instanceof PickaxeItem))
-                    if(MinecraftClient.getInstance().crosshairTarget.getType() == HitResult.Type.BLOCK)
+                    if (MinecraftClient.getInstance().crosshairTarget == null || MinecraftClient.getInstance().crosshairTarget.getType() == HitResult.Type.BLOCK)
                         return null;
         }
         return ProjectileUtil.raycast(entity, min, max, box, predicate, d);
