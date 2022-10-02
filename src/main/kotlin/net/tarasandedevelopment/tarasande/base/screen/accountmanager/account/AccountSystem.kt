@@ -5,10 +5,7 @@ import com.mojang.authlib.Environment
 import com.mojang.authlib.minecraft.MinecraftSessionService
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.base.Manager
-import net.tarasandedevelopment.tarasande.screen.list.accountmanager.account.AccountMicrosoft
-import net.tarasandedevelopment.tarasande.screen.list.accountmanager.account.AccountSession
-import net.tarasandedevelopment.tarasande.screen.list.accountmanager.account.AccountToken
-import net.tarasandedevelopment.tarasande.screen.list.accountmanager.account.AccountYggdrasil
+import net.tarasandedevelopment.tarasande.screen.list.accountmanager.account.*
 
 class ManagerAccount : Manager<Class<out Account>>() {
     init {
@@ -16,6 +13,7 @@ class ManagerAccount : Manager<Class<out Account>>() {
             AccountSession::class.java,
             AccountYggdrasil::class.java,
             AccountMicrosoft::class.java,
+            AccountRefreshToken::class.java,
             AccountToken::class.java
         )
     }

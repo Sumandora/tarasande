@@ -23,27 +23,27 @@ import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 @AccountInfo("Microsoft", true)
-class AccountMicrosoft : Account() {
+open class AccountMicrosoft : Account() {
     private val oauthAuthorizeUrl = "https://login.live.com/oauth20_authorize.srf"
     private val oauthTokenUrl = "https://login.live.com/oauth20_token.srf"
     private val xboxAuthenticateUrl = "https://user.auth.xboxlive.com/user/authenticate"
     private val xboxAuthorizeUrl = "https://xsts.auth.xboxlive.com/xsts/authorize"
     private val minecraftLoginUrl = "https://api.minecraftservices.com/authentication/login_with_xbox"
     private val minecraftProfileUrl = "https://api.minecraftservices.com/minecraft/profile"
-    private val clientId = "54fd49e4-2103-4044-9603-2b028c814ec3"
-    private val scope = "XboxLive.signin offline_access"
-    private val redirectUriBase = "http://localhost:"
+    protected var clientId = "54fd49e4-2103-4044-9603-2b028c814ec3"
+    protected var scope = "XboxLive.signin offline_access"
+    protected val redirectUriBase = "http://localhost:"
     private var cancelled = false
 
     private var service: MinecraftSessionService? = null
 
-    private var msAuthProfile: MSAuthProfile? = null
-    private var redirectUri: String? = null
+    protected var msAuthProfile: MSAuthProfile? = null
+    protected var redirectUri: String? = null
     private var code: String? = null
 
-    private fun randomPort(): Int = ThreadLocalRandom.current().nextInt(0, Short.MAX_VALUE.toInt() * 2 /* unsigned */)
+    protected fun randomPort(): Int = ThreadLocalRandom.current().nextInt(0, Short.MAX_VALUE.toInt() * 2 /* unsigned */)
 
-    private fun setupHttpServer(): ServerSocket {
+    protected open fun setupHttpServer(): ServerSocket {
         return try {
             val serverSocket = ServerSocket(randomPort())
             if (!serverSocket.isBound)
@@ -85,8 +85,8 @@ You can close this page now.""".toByteArray())
         code = null
         cancelled = false
         if (msAuthProfile != null &&
-            (msAuthProfile?.xboxLiveAuth            ?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true ||
-             msAuthProfile?.xboxLiveSecurityTokens  ?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true)
+            (msAuthProfile?.xboxLiveAuth?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true ||
+                    msAuthProfile?.xboxLiveSecurityTokens?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true)
         ) {
             msAuthProfile = msAuthProfile?.renew() // use refresh token to update the account
         }
@@ -139,7 +139,7 @@ You can close this page now.""".toByteArray())
         return buildFromOAuthToken(oAuthToken)
     }
 
-    private fun buildFromRefreshToken(refreshToken: String): MSAuthProfile {
+    protected fun buildFromRefreshToken(refreshToken: String): MSAuthProfile {
         val oAuthToken = TarasandeMain.get().gson.fromJson(post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
             it["client_id"] = clientId
             it["refresh_token"] = refreshToken
