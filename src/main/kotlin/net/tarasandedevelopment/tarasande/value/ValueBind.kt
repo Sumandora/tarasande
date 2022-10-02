@@ -23,7 +23,7 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
                     if (type == Type.MOUSE) if (MinecraftClient.getInstance().currentScreen == null) if (button == event.button) when (event.action) {
                         GLFW.GLFW_PRESS -> {
                             mousePressed = true
-                            if (owner is Module && owner.enabled)
+                            if (owner !is Module || this == owner.bind || owner.enabled)
                                 presses++
                         }
 
@@ -35,7 +35,7 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
                     if (type == Type.KEY) if (MinecraftClient.getInstance().currentScreen == null) if (event.key == button) when (event.action) {
                         GLFW.GLFW_PRESS -> {
                             keyPressed = true
-                            if (owner is Module && owner.enabled)
+                            if (owner !is Module || this == owner.bind || owner.enabled)
                                 presses++
                         }
 
