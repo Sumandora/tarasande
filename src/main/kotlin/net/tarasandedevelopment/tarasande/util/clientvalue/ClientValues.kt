@@ -42,6 +42,7 @@ class ClientValues {
 
     val clientMenuFocusedEntry: ValueMode
     val clientMenuCategories = ValueBoolean(this, "Client Menu: Categories", true)
+    val focuseTerminalOnOpen = ValueBoolean(this, "Focuse terminal on open", true)
 
     init {
         val entries = mutableListOf("None")

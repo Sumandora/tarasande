@@ -27,6 +27,7 @@ import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixe
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl.*
 import net.tarasandedevelopment.tarasande.screen.menu.particle.Particle
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import org.lwjgl.glfw.GLFW
 import java.awt.Color
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.round
@@ -87,7 +88,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             this.panels.add(PanelFixedGraph(graph, 5.0, y).also { y += it.titleBarHeight + 5 })
         }
         passEvents = false
-
         TarasandeMain.get().managerEvent.add { event ->
             if (event is EventUpdate)
                 if (event.state == EventUpdate.State.PRE)
@@ -107,6 +107,11 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         for (panel in panels) panel.init()
 
         particles.clear()
+
+        panels.forEach {
+            if (it is PanelElementsTerminal && TarasandeMain.get().clientValues.focuseTerminalOnOpen.value)
+                it.textField.setFocused(true)
+        }
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
@@ -248,6 +253,10 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE && TarasandeMain.get().clientValues.focuseTerminalOnOpen.value) {
+            this.close()
+            return false
+        }
         panels.forEach {
             if (it.keyPressed(keyCode, scanCode, modifiers)) return false
         }
