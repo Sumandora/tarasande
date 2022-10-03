@@ -12,6 +12,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.creative.LightItems
 import net.tarasandedevelopment.tarasande.creative.SpecialVanillaItems
+import net.tarasandedevelopment.tarasande.creative.cicExploits
 import net.tarasandedevelopment.tarasande.creative.spawnerExploits
 import net.tarasandedevelopment.tarasande.mixin.accessor.IInGameHud
 import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
@@ -27,10 +28,15 @@ class ManagerCreative : Manager<ExploitCreative>() {
 
     init {
         add(
+            // Special Vanilla
             SpecialVanillaItems(),
             LightItems(),
 
-            *spawnerExploits.toTypedArray()
+            // Spawner Exploits
+            *spawnerExploits.toTypedArray(),
+
+            // CreativeItemControl Exploit
+            *cicExploits.toTypedArray()
         )
 
         globalOwner = GlobalOwner(this)
