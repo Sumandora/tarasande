@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.creative
 
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.base.creative.Action
 import net.tarasandedevelopment.tarasande.base.creative.ExploitCreative
@@ -18,5 +19,33 @@ class SpecialVanillaItems : ExploitCreative("Special Vanilla Items", ItemStack(I
                 }
             })
         }
+    }
+}
+
+class LightItems : ExploitCreative("Light Levels", ItemStack(Items.LIGHT)) {
+
+    init {
+        for (i in 0 until 16) {
+            val stack = createLight(i)
+
+            this.createAction("Get with Level $i", stack, object : Action {
+                override fun on() {
+                    ItemUtil.give(createLight(i))
+                }
+            })
+        }
+    }
+
+    private fun createLight(level: Int): ItemStack {
+        val stack = ItemStack(Items.LIGHT)
+        val base = NbtCompound()
+
+        val blockStateTag = NbtCompound()
+        blockStateTag.putInt("level", level)
+
+        base.put("BlockStateTag", blockStateTag)
+        stack.nbt = base
+
+        return stack
     }
 }
