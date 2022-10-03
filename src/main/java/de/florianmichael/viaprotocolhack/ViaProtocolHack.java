@@ -48,10 +48,6 @@ public class ViaProtocolHack {
         return provider;
     }
 
-    public int current() {
-        return this.provider().clientsideVersion();
-    }
-
     public File directory() {
         return directory;
     }
