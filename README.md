@@ -8,10 +8,8 @@
 - Bypass various anticheats
 - Be able to use the modification without being caught
 - Privacy of the user
-
-## Out of scope
-- Offering performance improvements, which are related to other mods or the minecraft code
-- Providing crash fixes unrelated to the mod
+- Provide advanced protocol translations
+- Offering performance improvements and crash fixes
 
 ## Features
 ### High Priority
