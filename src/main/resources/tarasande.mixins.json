@@ -99,6 +99,10 @@
     "protocolhack.MixinPendingUpdateManager",
     "protocolhack.MixinPlayerEntityRenderer",
     "protocolhack.entity.MixinClientPlayerEntity",
+    "protocolhack.screen.MixinCommandBlockScreen",
+    "protocolhack.screen.MixinDownloadingTerrainScreen",
+    "protocolhack.screen.MixinJigsawBlockScreen",
+    "protocolhack.screen.MixinStructureBlockScreen_1",
     "protocolhack.signatures1_19_0.MixinClientPlayerEntity",
     "protocolhack.signatures1_19_0.MixinProfileKeys"
   ]
