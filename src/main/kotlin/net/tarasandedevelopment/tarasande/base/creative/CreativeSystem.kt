@@ -1,13 +1,26 @@
 package net.tarasandedevelopment.tarasande.base.creative
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
+import de.florianmichael.viaprotocolhack.util.VersionList
+import net.minecraft.block.Blocks
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
+import net.minecraft.util.registry.Registry
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.tarasande.creative.LightItems
 import net.tarasandedevelopment.tarasande.creative.SpecialVanillaItems
+import net.tarasandedevelopment.tarasande.creative.cicExploits
+import net.tarasandedevelopment.tarasande.creative.spawnerExploits
 import net.tarasandedevelopment.tarasande.mixin.accessor.IInGameHud
 import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.util.ItemUtil
+import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande.value.ValueButton
+import net.tarasandedevelopment.tarasande.value.ValueMode
+import kotlin.reflect.typeOf
 
 class ManagerCreative : Manager<ExploitCreative>() {
 
@@ -15,7 +28,15 @@ class ManagerCreative : Manager<ExploitCreative>() {
 
     init {
         add(
-            SpecialVanillaItems()
+            // Special Vanilla
+            SpecialVanillaItems(),
+            LightItems(),
+
+            // Spawner Exploits
+            *spawnerExploits.toTypedArray(),
+
+            // CreativeItemControl Exploit
+            *cicExploits.toTypedArray()
         )
 
         globalOwner = GlobalOwner(this)
@@ -23,6 +44,19 @@ class ManagerCreative : Manager<ExploitCreative>() {
 }
 
 class GlobalOwner(managerCreative: ManagerCreative) {
+
+    private val storages = mutableListOf(
+        Items.CHEST,
+        Items.TRAPPED_CHEST,
+        Items.HOPPER,
+        Items.FURNACE,
+        Items.BLAST_FURNACE,
+        Items.DROPPER,
+        Items.DISPENSER,
+        Items.BARREL
+    )
+
+    private val packager: ValueMode
 
     init {
         managerCreative.list.forEach {
@@ -34,18 +68,60 @@ class GlobalOwner(managerCreative: ManagerCreative) {
                 }
             }
         }
+
+        val settings = mutableListOf("None")
+        settings.addAll(this.storages.map { s -> StringUtil.uncoverTranslation(s.translationKey) })
+
+        packager = ValueMode(this, "Spawner Packager", false, *settings.toTypedArray())
+    }
+
+    fun getPackagedItem(): ItemStack? {
+        if (!packager.anySelected() || packager.isSelected(0)) return null
+
+        this.storages.forEachIndexed { index, item ->
+            if (packager.isSelected(index))
+                return item.defaultStack
+        }
+
+        return null
     }
 }
 
 abstract class ExploitCreative(val name: String, val icon: ItemStack) {
+
+    open fun supportedVersion(): List<ProtocolVersion> = VersionList.getProtocols()
 
     fun createAction(name: String, icon: ItemStack, action: Action) {
         object : ValueButtonItem(this, name, icon) {
             override fun onChange() {
                 action.on()
             }
+
+            override fun isEnabled() = supportedVersion().map { p -> p.version }.contains(TarasandeMain.get().protocolHack.realClientsideVersion) || MinecraftClient.getInstance().isInSingleplayer
         }
     }
+}
+
+abstract class ExploitCreativeItem(name: String, icon: ItemStack) : ExploitCreative(name, icon) {
+
+    init {
+        createAction("Get Item", this.icon, object : Action {
+            override fun on() {
+                ItemUtil.give(get())
+            }
+        })
+    }
+
+    abstract fun get(): ItemStack
+}
+
+abstract class ExploitCreativeItemSpawner(name: String, icon: ItemStack) : ExploitCreativeItem(name, icon) {
+
+    override fun get(): ItemStack {
+        return ItemUtil.packageExploit(getSpawner())
+    }
+
+    abstract fun getSpawner(): ItemStack
 }
 
 open class ValueButtonItem(owner: Any, name: String, val stack: ItemStack) : ValueButton(owner, name) {
