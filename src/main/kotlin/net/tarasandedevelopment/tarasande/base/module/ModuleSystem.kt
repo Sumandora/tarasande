@@ -10,6 +10,7 @@ import net.tarasandedevelopment.tarasande.module.ghost.*
 import net.tarasandedevelopment.tarasande.module.misc.*
 import net.tarasandedevelopment.tarasande.module.movement.*
 import net.tarasandedevelopment.tarasande.module.player.*
+import net.tarasandedevelopment.tarasande.module.qualityoflife.ModuleEnchantmentTranslation
 import net.tarasandedevelopment.tarasande.module.qualityoflife.ModuleInstantWorld
 import net.tarasandedevelopment.tarasande.module.render.*
 import net.tarasandedevelopment.tarasande.value.ValueBind
@@ -97,7 +98,8 @@ class ManagerModule : Manager<Module>() {
             ModuleNoMiningTrace(),
             ModuleDisableTelemetry(),
             ModuleBlockChangeTracker(),
-            ModuleTrueSight()
+            ModuleTrueSight(),
+            ModuleEnchantmentTranslation()
         )
         TarasandeMain.get().managerEvent.add { event ->
             if (event is EventTick)
