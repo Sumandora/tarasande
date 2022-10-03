@@ -16,5 +16,5 @@ class InformationServerBrand : Information("Server", "Server Brand") {
 
 class InformationProtocolVersion : Information("Server", "Protocol Version") {
 
-    override fun getMessage() = VersionList.getProtocols().find { it.version == ViaProtocolHack.instance().current() }?.name
+    override fun getMessage() = VersionList.getProtocols().find { it.version == ViaProtocolHack.instance().provider().realClientsideVersion() }?.name
 }

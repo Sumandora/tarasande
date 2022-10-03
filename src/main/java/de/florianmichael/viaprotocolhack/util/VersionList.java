@@ -94,35 +94,35 @@ public class VersionList {
         if (isSingleplayer())
             return false;
 
-        return ViaProtocolHack.instance().current() == protocolVersion.getVersion();
+        return ViaProtocolHack.instance().provider().realClientsideVersion() == protocolVersion.getVersion();
     }
 
     public static boolean isOlderOrEqualTo(final ProtocolVersion protocolVersion) {
         if (isSingleplayer())
             return false;
 
-        return ViaProtocolHack.instance().current() <= protocolVersion.getVersion();
+        return ViaProtocolHack.instance().provider().realClientsideVersion() <= protocolVersion.getVersion();
     }
 
     public static boolean isOlderTo(final ProtocolVersion protocolVersion) {
         if (isSingleplayer() || protocolVersion == null)
             return false;
 
-        return ViaProtocolHack.instance().current() < protocolVersion.getVersion();
+        return ViaProtocolHack.instance().provider().realClientsideVersion() < protocolVersion.getVersion();
     }
 
     public static boolean isNewerTo(final ProtocolVersion protocolVersion) {
         if (isSingleplayer() || protocolVersion == null)
             return false;
 
-        return ViaProtocolHack.instance().current() > protocolVersion.getVersion();
+        return ViaProtocolHack.instance().provider().realClientsideVersion() > protocolVersion.getVersion();
     }
 
     public static boolean isNewerOrEqualTo(final ProtocolVersion protocolVersion) {
         if (isSingleplayer() || protocolVersion == null)
             return false;
 
-        return ViaProtocolHack.instance().current() >= protocolVersion.getVersion();
+        return ViaProtocolHack.instance().provider().realClientsideVersion() >= protocolVersion.getVersion();
     }
 
     public static boolean isSupported(int server, int client) {

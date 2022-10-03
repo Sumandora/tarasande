@@ -25,6 +25,8 @@ class TarasandeProtocolHack : INativeProvider {
     private val auto = ValueBoolean(this, "Auto", false)
     private val compression = arrayOf("decompress", "compress")
 
+    var realClientsideVersion = this.clientsideVersion()
+
     init {
         ViaProtocolHack.instance().init(this)
     }
@@ -39,6 +41,10 @@ class TarasandeProtocolHack : INativeProvider {
 
     override fun clientsideVersion(): Int {
         return this.version.value.toInt()
+    }
+
+    override fun realClientsideVersion(): Int {
+        return this.realClientsideVersion
     }
 
     override fun nettyOrder(): Array<String> {

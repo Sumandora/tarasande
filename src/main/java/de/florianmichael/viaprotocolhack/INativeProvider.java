@@ -9,6 +9,7 @@ public interface INativeProvider {
 
     boolean isSinglePlayer();
     int clientsideVersion();
+    int realClientsideVersion();
     String[] nettyOrder(); // 0 = decompress, 1 = compress
     File run();
     JsonObject createDump();

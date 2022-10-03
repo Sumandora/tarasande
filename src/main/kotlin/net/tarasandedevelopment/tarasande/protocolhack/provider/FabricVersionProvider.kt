@@ -35,6 +35,7 @@ class FabricVersionProvider : BaseVersionProvider() {
             if (!supported)
                 currentVersion = info.protocolVersion
 
+            TarasandeMain.get().protocolHack.realClientsideVersion = currentVersion
             return currentVersion
         }
         return ProtocolVersion.getProtocol(SharedConstants.getGameVersion().protocolVersion).version
