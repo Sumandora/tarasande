@@ -23,8 +23,11 @@ class FabricVersionProvider : BaseVersionProvider() {
                     if (TarasandeMain.get().protocolHack.isAuto()) {
                         val autoVersion = ProtocolAutoDetector.detectVersion(address).getNow(null)
 
-                        if (autoVersion != null)
+                        if (autoVersion != null) {
+                            TarasandeMain.get().protocolHack.realClientsideVersion = autoVersion.version
+
                             return autoVersion.version
+                        }
                     }
                 } catch (e: Exception) {
                     ViaProtocolHack.instance().logger().warning("Could not auto detect: $e")
