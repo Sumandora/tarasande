@@ -2,12 +2,12 @@ package net.tarasandedevelopment.tarasande.mixin.mixins;
 
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.item.Item;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventItemCooldown;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventItemCooldown;
 
 @Mixin(ItemCooldownManager.class)
 public class MixinItemCooldownManager {

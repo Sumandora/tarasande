@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins;
 
-import net.tarasandedevelopment.tarasande.mixin.accessor.IClickableWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.util.math.MatrixStack;
+import net.tarasandedevelopment.tarasande.mixin.accessor.IClickableWidget;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;

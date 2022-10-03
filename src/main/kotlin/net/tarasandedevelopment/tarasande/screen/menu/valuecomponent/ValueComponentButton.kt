@@ -1,12 +1,10 @@
 package net.tarasandedevelopment.tarasande.screen.menu.valuecomponent
 
-import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.menu.valuecomponent.ValueComponent
 import net.tarasandedevelopment.tarasande.base.value.Value
-import net.tarasandedevelopment.tarasande.mixin.accessor.IMatrix4f
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueButton
 import java.awt.Color

@@ -5,7 +5,6 @@ import net.minecraft.screen.slot.Slot
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.text.LiteralTextContent
 import net.minecraft.util.math.Vec2f
-import org.lwjgl.glfw.GLFW
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
@@ -16,6 +15,7 @@ import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import net.tarasandedevelopment.tarasande.value.ValueNumberRange
 import net.tarasandedevelopment.tarasande.value.ValueText
+import org.lwjgl.glfw.GLFW
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import kotlin.math.sqrt

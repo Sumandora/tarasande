@@ -11,8 +11,8 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.AccountInfo
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.TextFieldInfo
-import net.tarasandedevelopment.tarasande.clientmenu.ElementMenuScreenAccountManager
 import net.tarasandedevelopment.tarasande.mixin.accessor.IScreen
+import net.tarasandedevelopment.tarasande.screen.menu.clientmenu.ElementMenuScreenAccountManager
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPassword
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.util.render.screen.ScreenBetter
@@ -37,8 +37,10 @@ class ScreenBetterAccount(
     override fun init() {
         textFields.clear()
         children().clear()
-        (this as IScreen).tarasande_getDrawables().clear()
-        (this as IScreen).tarasande_getSelectables().clear()
+        (this as IScreen).also {
+            it.tarasande_getDrawables().clear()
+            it.tarasande_getSelectables().clear()
+        }
 
         addDrawableChild(ButtonWidget(width - 200, 0, 100, 20, Text.of("Environment")) {
             client?.setScreen(ScreenBetterEnvironment(this, environment) { environment = it })

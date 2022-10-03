@@ -1,15 +1,15 @@
 package net.tarasandedevelopment.tarasande.base.clientmenu
 
-import net.tarasandedevelopment.tarasande.mixin.accessor.IClickableWidget
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.text.Text
-import org.lwjgl.glfw.GLFW
 import net.tarasandedevelopment.tarasande.base.Manager
-import net.tarasandedevelopment.tarasande.clientmenu.*
+import net.tarasandedevelopment.tarasande.mixin.accessor.IClickableWidget
+import net.tarasandedevelopment.tarasande.screen.menu.clientmenu.*
 import net.tarasandedevelopment.tarasande.screen.widget.AllMouseButtonWidget
 import net.tarasandedevelopment.tarasande.screen.widget.AllMousePressAction
+import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
 class ManagerClientMenu : Manager<ElementMenu>() {

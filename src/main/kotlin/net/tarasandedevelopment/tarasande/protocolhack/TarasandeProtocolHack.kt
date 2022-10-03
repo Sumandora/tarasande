@@ -5,8 +5,6 @@ import com.viaversion.viaversion.api.protocol.version.VersionProvider
 import com.viaversion.viaversion.libs.gson.JsonArray
 import com.viaversion.viaversion.libs.gson.JsonObject
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
-import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricMovementTransmitterProvider
-import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricVersionProvider
 import de.florianmichael.viaprotocolhack.INativeProvider
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
 import net.fabricmc.loader.api.FabricLoader
@@ -15,6 +13,8 @@ import net.fabricmc.loader.api.metadata.Person
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricMovementTransmitterProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricVersionProvider
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import java.io.File

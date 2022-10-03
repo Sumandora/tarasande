@@ -1,13 +1,13 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins;
 
 import net.minecraft.client.util.Window;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
 
 @Mixin(Window.class)
 public class MixinWindow {

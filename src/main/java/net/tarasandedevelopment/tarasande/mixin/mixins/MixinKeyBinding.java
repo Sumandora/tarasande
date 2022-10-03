@@ -2,14 +2,14 @@ package net.tarasandedevelopment.tarasande.mixin.mixins;
 
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed;
 
 @Mixin(KeyBinding.class)
 public class MixinKeyBinding implements IKeyBinding {

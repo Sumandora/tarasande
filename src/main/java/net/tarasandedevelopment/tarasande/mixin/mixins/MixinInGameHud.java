@@ -6,6 +6,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventRender2D;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IInGameHud;
 import net.tarasandedevelopment.tarasande.util.math.MathUtil;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,8 +15,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventRender2D;
 
 @Mixin(InGameHud.class)
 public abstract class MixinInGameHud implements IInGameHud {

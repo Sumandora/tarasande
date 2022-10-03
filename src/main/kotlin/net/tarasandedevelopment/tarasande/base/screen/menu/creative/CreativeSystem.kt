@@ -1,26 +1,23 @@
-package net.tarasandedevelopment.tarasande.base.creative
+package net.tarasandedevelopment.tarasande.base.screen.menu.creative
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.viaprotocolhack.util.VersionList
-import net.minecraft.block.Blocks
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
-import net.tarasandedevelopment.tarasande.creative.LightItems
-import net.tarasandedevelopment.tarasande.creative.SpecialVanillaItems
-import net.tarasandedevelopment.tarasande.creative.cicExploits
-import net.tarasandedevelopment.tarasande.creative.spawnerExploits
 import net.tarasandedevelopment.tarasande.mixin.accessor.IInGameHud
 import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.screen.menu.creative.LightItems
+import net.tarasandedevelopment.tarasande.screen.menu.creative.SpecialVanillaItems
+import net.tarasandedevelopment.tarasande.screen.menu.creative.cicExploits
+import net.tarasandedevelopment.tarasande.screen.menu.creative.spawnerExploits
 import net.tarasandedevelopment.tarasande.util.ItemUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueMode
-import kotlin.reflect.typeOf
 
 class ManagerCreative : Manager<ExploitCreative>() {
 

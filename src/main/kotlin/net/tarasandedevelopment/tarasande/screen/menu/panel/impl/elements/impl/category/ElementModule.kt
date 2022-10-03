@@ -6,13 +6,13 @@ import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3f
-import org.lwjgl.opengl.GL11
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.screen.menu.valuecomponent.ValueComponent
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.Element
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil.isHovered
+import org.lwjgl.opengl.GL11
 import java.awt.Color
 import kotlin.math.min
 

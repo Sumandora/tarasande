@@ -11,8 +11,6 @@ import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShapes
-import org.lwjgl.glfw.GLFW
-import org.lwjgl.opengl.GL11
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
@@ -22,6 +20,8 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.pathfinder.PathFinder
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import org.lwjgl.glfw.GLFW
+import org.lwjgl.opengl.GL11
 import java.awt.Color
 import java.util.function.Consumer
 

@@ -1,7 +1,5 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
-import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
-import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricHandItemProvider;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -12,6 +10,8 @@ import net.minecraft.network.Packet;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
+import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
+import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricHandItemProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

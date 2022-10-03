@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.entity;
 
 import com.mojang.authlib.GameProfile;
-import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -10,6 +9,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
+import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;

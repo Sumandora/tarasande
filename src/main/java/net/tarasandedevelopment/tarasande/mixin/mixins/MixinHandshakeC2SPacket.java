@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins;
 
-import net.tarasandedevelopment.tarasande.mixin.accessor.IHandshakeC2SPacket;
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
+import net.tarasandedevelopment.tarasande.mixin.accessor.IHandshakeC2SPacket;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;

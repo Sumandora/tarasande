@@ -1,9 +1,6 @@
 package net.tarasandedevelopment.tarasande.screen.list.protocolhack
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import net.tarasandedevelopment.tarasande.screen.element.ScreenBetterSlotList
-import net.tarasandedevelopment.tarasande.screen.element.ScreenBetterSlotListEntry
-import net.tarasandedevelopment.tarasande.screen.element.ScreenBetterSlotListWidget
 import de.florianmichael.viaprotocolhack.util.VersionList
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
@@ -11,6 +8,9 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.text.TextColor
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.screen.element.ScreenBetterSlotList
+import net.tarasandedevelopment.tarasande.screen.element.ScreenBetterSlotListEntry
+import net.tarasandedevelopment.tarasande.screen.element.ScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 

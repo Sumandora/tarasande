@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
-import org.lwjgl.glfw.GLFW
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
@@ -8,6 +7,7 @@ import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import net.tarasandedevelopment.tarasande.value.ValueBind
 import net.tarasandedevelopment.tarasande.value.ValueNumber
+import org.lwjgl.glfw.GLFW
 import java.util.function.Consumer
 
 class ModuleVehicleFlight : Module("Vehicle flight", "Makes you fly with vehicles (e.g. boat, horses)", ModuleCategory.MOVEMENT) {

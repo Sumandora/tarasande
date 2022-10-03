@@ -3,11 +3,11 @@ package net.tarasandedevelopment.tarasande.protocolhack.provider
 import com.viaversion.viaversion.api.connection.UserConnection
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import com.viaversion.viaversion.protocols.base.BaseVersionProvider
-import net.tarasandedevelopment.tarasande.protocolhack.service.ProtocolAutoDetector
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
 import de.florianmichael.viaprotocolhack.util.VersionList
 import net.minecraft.SharedConstants
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.protocolhack.service.ProtocolAutoDetector
 import java.net.InetSocketAddress
 
 class FabricVersionProvider : BaseVersionProvider() {

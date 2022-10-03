@@ -2,11 +2,11 @@ package net.tarasandedevelopment.tarasande.screen.menu.valuecomponent
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
-import org.lwjgl.glfw.GLFW
 import net.tarasandedevelopment.tarasande.base.screen.menu.valuecomponent.ValueComponent
 import net.tarasandedevelopment.tarasande.base.value.Value
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueBind
+import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
 class ValueComponentBind(value: Value) : ValueComponent(value) {

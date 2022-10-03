@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.clientmenu
+package net.tarasandedevelopment.tarasande.screen.menu.clientmenu
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen

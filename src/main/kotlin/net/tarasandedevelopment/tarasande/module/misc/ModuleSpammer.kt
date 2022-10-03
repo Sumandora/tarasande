@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.module.misc
 
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
-import org.apache.commons.lang3.RandomStringUtils
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
@@ -14,6 +13,7 @@ import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import net.tarasandedevelopment.tarasande.value.ValueText
+import org.apache.commons.lang3.RandomStringUtils
 import java.util.function.Consumer
 import kotlin.math.round
 import kotlin.math.sqrt

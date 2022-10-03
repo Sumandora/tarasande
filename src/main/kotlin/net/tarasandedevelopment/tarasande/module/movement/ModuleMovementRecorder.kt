@@ -6,9 +6,6 @@ import net.minecraft.client.render.*
 import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
-import org.apache.commons.lang3.ArrayUtils
-import org.lwjgl.glfw.GLFW
-import org.lwjgl.opengl.GL11
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
@@ -17,6 +14,9 @@ import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.value.ValueBind
+import org.apache.commons.lang3.ArrayUtils
+import org.lwjgl.glfw.GLFW
+import org.lwjgl.opengl.GL11
 import java.awt.Color
 import java.util.function.Consumer
 

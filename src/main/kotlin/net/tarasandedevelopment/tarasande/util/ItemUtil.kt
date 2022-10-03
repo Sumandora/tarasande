@@ -3,11 +3,7 @@ package net.tarasandedevelopment.tarasande.util
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.nbt.NbtByte
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.nbt.NbtList
-import net.minecraft.nbt.NbtShort
-import net.minecraft.nbt.NbtString
+import net.minecraft.nbt.*
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.util.chat.CustomChat
@@ -35,7 +31,7 @@ object ItemUtil {
 
     // ReinerWahnsinn Spawner Bypass for Spigot/CraftBukkit 1.8.3
     fun packageExploit(stack: ItemStack): ItemStack {
-        val packager = TarasandeMain.get().managerCreative.globalOwner.getPackagedItem() ?: return stack
+        val packager = TarasandeMain.get().screenCheatMenu.managerCreative.globalOwner.getPackagedItem() ?: return stack
 
         val packagedItem = ItemStack(packager.item)
 

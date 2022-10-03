@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.creative
+package net.tarasandedevelopment.tarasande.screen.menu.creative
 
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -7,7 +7,7 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtDouble
 import net.minecraft.nbt.NbtString
 import net.minecraft.util.registry.Registry
-import net.tarasandedevelopment.tarasande.base.creative.ExploitCreativeItem
+import net.tarasandedevelopment.tarasande.base.screen.menu.creative.ExploitCreativeItem
 import net.tarasandedevelopment.tarasande.value.ValueRegistry
 
 val cicExploits = mutableListOf(Kick(), Clear())

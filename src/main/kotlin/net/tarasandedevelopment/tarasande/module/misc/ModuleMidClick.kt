@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande.module.misc
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.hit.HitResult
-import org.lwjgl.glfw.GLFW
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
@@ -11,6 +10,7 @@ import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventMouse
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
+import org.lwjgl.glfw.GLFW
 import java.util.function.Consumer
 
 class ModuleMidClick : Module("Mid click", "Friends mid-clicked players", ModuleCategory.MISC) {

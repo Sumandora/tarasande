@@ -1,11 +1,11 @@
-package net.tarasandedevelopment.tarasande.creative
+package net.tarasandedevelopment.tarasande.screen.menu.creative
 
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.registry.Registry
-import net.tarasandedevelopment.tarasande.base.creative.Action
-import net.tarasandedevelopment.tarasande.base.creative.ExploitCreative
+import net.tarasandedevelopment.tarasande.base.screen.menu.creative.Action
+import net.tarasandedevelopment.tarasande.base.screen.menu.creative.ExploitCreative
 import net.tarasandedevelopment.tarasande.util.ItemUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 

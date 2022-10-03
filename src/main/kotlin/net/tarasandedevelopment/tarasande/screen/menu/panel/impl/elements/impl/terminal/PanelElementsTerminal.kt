@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.terminal
 
 import net.minecraft.client.MinecraftClient
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.menu.valuecomponent.ValueComponent
 import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.PanelElements

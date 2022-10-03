@@ -6,7 +6,11 @@ import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventChildren;
+import net.tarasandedevelopment.tarasande.event.EventScreenRender;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IScreen;
+import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,10 +18,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventChildren;
-import net.tarasandedevelopment.tarasande.event.EventScreenRender;
-import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel;
 
 import java.util.List;
 

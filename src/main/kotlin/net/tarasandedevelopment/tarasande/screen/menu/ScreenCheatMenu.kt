@@ -13,6 +13,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
+import net.tarasandedevelopment.tarasande.base.screen.menu.creative.ManagerCreative
 import net.tarasandedevelopment.tarasande.base.screen.menu.graph.ManagerGraph
 import net.tarasandedevelopment.tarasande.base.screen.menu.information.ManagerInformation
 import net.tarasandedevelopment.tarasande.base.screen.menu.valuecomponent.ManagerValueComponent
@@ -27,7 +28,6 @@ import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixe
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl.*
 import net.tarasandedevelopment.tarasande.screen.menu.particle.Particle
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import org.lwjgl.glfw.GLFW
 import java.awt.Color
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.round
@@ -48,6 +48,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
     val managerValueComponent = ManagerValueComponent()
     val managerInformation = ManagerInformation(this)
+    val managerCreative = ManagerCreative()
 
     var popup = false
 
@@ -219,7 +220,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         if (animation != 1.0) return true
 
         if (this.isOverExtras(mouseX, mouseY)) {
-            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, this.extrasText, TarasandeMain.get().managerCreative.globalOwner))
+            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, this.extrasText, managerCreative.globalOwner))
             return true
         }
 
