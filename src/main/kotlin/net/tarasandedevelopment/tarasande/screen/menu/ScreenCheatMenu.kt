@@ -53,8 +53,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
     private val extrasText = "Creative Items and Exploits"
 
-    private var everChangedFocus = false
-
     init {
         // @mojang, this code is garbage. delete life
         MinecraftClient.getInstance().textureManager.getTexture(image)
@@ -103,7 +101,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             popup = false
             return
         }
-        everChangedFocus = false
         screenChangeTime = System.currentTimeMillis()
         isClosing = false
         super.init()
@@ -211,9 +208,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
         RenderUtil.roundedFill(matrices, this.width / 2.0 - ((textRenderer.getWidth(this.extrasText) + 4) / 2.0), -3.0 - animation * textHeight, this.width / 2.0 + ((textRenderer.getWidth(this.extrasText) + 4) / 2.0), textHeight * animation, 3.0, Int.MIN_VALUE)
         RenderUtil.textCenter(matrices, Text.literal(this.extrasText), this.width / 2.0F, 2.0F - (1.0F - animation.toFloat()) * textHeight.toFloat(), if (this.isOverExtras(mouseX.toDouble(), mouseY.toDouble())) TarasandeMain.get().clientValues.accentColor.getColor().rgb else -1)
-
-        if (!panels.filterIsInstance<PanelElementsTerminal>().first().textField.isFocused())
-            everChangedFocus = true
     }
 
     private fun isOverExtras(mouseX: Double, mouseY: Double) = RenderUtil.isHovered(mouseX, mouseY, this.width / 2.0 - ((textRenderer.getWidth(this.extrasText) + 4) / 2.0), -3.0, this.width / 2.0 + ((textRenderer.getWidth(this.extrasText) + 4) / 2.0), textRenderer.fontHeight.toDouble() + 2)
@@ -254,10 +248,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE && !everChangedFocus && panels.filterIsInstance<PanelElementsTerminal>().first().textField.isFocused() && TarasandeMain.get().clientValues.autoFocusTerminal.value) {
-            this.close()
-            return false
-        }
         panels.forEach {
             if (it.keyPressed(keyCode, scanCode, modifiers)) return false
         }

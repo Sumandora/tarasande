@@ -13,15 +13,10 @@ import org.lwjgl.glfw.GLFW
 class PanelElementsTerminal(x: Double, y: Double, val screenCheatMenu: ScreenCheatMenu) : PanelElements<ValueComponent>("Terminal", x, y, 150.0, 100.0) {
 
     private val value = ValueText(this, "Prompt", "", manage = false)
-    val textField = ValueComponentText(value, MinecraftClient.getInstance().textRenderer.fontHeight / 2.0).also { screenCheatMenu.managerValueComponent.instances.add(it) }
+    private val textField = ValueComponentText(value, MinecraftClient.getInstance().textRenderer.fontHeight / 2.0).also { screenCheatMenu.managerValueComponent.instances.add(it) }
 
     init {
         elementList.add(textField)
-    }
-
-    override fun init() {
-        if (TarasandeMain.get().clientValues.autoFocusTerminal.value)
-            textField.setFocused(true)
     }
 
     private fun resetScrolling() {
