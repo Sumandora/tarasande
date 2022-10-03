@@ -6,6 +6,7 @@ import net.minecraft.client.util.Session
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.base.addon.ManagerAddon
 import net.tarasandedevelopment.tarasande.base.clientmenu.ManagerClientMenu
+import net.tarasandedevelopment.tarasande.base.creative.ManagerCreative
 import net.tarasandedevelopment.tarasande.base.esp.ManagerESP
 import net.tarasandedevelopment.tarasande.base.event.ManagerEvent
 import net.tarasandedevelopment.tarasande.base.file.ManagerFile
@@ -52,6 +53,8 @@ class TarasandeMain {
         private set
     lateinit var managerClientMenu: ManagerClientMenu
         private set
+    lateinit var managerCreative: ManagerCreative
+        private set
     lateinit var tagName: TagName
         private set
 
@@ -95,6 +98,7 @@ class TarasandeMain {
         managerClickMethod = ManagerClickMethod()
         managerModule = ManagerModule()
         managerESP = ManagerESP()
+        managerCreative = ManagerCreative()
         blur = Blur()
         screenCheatMenu = ScreenCheatMenu() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
         friends = Friends()

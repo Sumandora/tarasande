@@ -1,9 +1,11 @@
 package net.tarasandedevelopment.tarasande.util.math
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.mixin.accessor.IMatrix4f
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -47,4 +49,9 @@ object MathUtil {
         else
             x
 
+    fun fromMatrices(matrixStack: MatrixStack): Vec3d {
+        val positions = matrixStack.peek().positionMatrix as IMatrix4f
+
+        return Vec3d(positions.tarasande_getA03().toDouble(), positions.tarasande_getA13().toDouble(), positions.tarasande_getA23().toDouble())
+    }
 }

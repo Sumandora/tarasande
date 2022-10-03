@@ -1,10 +1,12 @@
 package net.tarasandedevelopment.tarasande.screen.menu.valuecomponent
 
+import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.menu.valuecomponent.ValueComponent
 import net.tarasandedevelopment.tarasande.base.value.Value
+import net.tarasandedevelopment.tarasande.mixin.accessor.IMatrix4f
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueButton
 import java.awt.Color
@@ -20,6 +22,8 @@ class ValueComponentButton(value: Value) : ValueComponent(value) {
         val textWidth = MinecraftClient.getInstance().textRenderer.getWidth(valueButton.name)
 
         RenderUtil.fill(matrices, width - 4 - textWidth / 2, getHeight() / 2.0 - MinecraftClient.getInstance().textRenderer.fontHeight / 2, width, getHeight() / 2.0 + MinecraftClient.getInstance().textRenderer.fontHeight / 2, Int.MIN_VALUE)
+
+        valueButton.customRendering(matrices, delta)
 
         matrices?.push()
         matrices?.translate(width - 2 - textWidth / 2, getHeight() / 2.0, 0.0)

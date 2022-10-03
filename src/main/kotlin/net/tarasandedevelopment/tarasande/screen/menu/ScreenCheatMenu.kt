@@ -17,6 +17,7 @@ import net.tarasandedevelopment.tarasande.base.screen.menu.graph.ManagerGraph
 import net.tarasandedevelopment.tarasande.base.screen.menu.information.ManagerInformation
 import net.tarasandedevelopment.tarasande.base.screen.menu.valuecomponent.ManagerValueComponent
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.category.PanelCategory
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.clientvalues.PanelClientValues
@@ -24,6 +25,7 @@ import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.f
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl.*
 import net.tarasandedevelopment.tarasande.screen.menu.particle.Particle
+import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 import java.util.concurrent.CopyOnWriteArrayList
@@ -47,6 +49,8 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     val managerInformation = ManagerInformation(this)
 
     var popup = false
+
+    val extrasText = "Extras"
 
     init {
         // @mojang, this code is garbage. delete life
@@ -197,13 +201,25 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             textRenderer.drawWithShadow(matrices, hoveringText, mouseX.toFloat(), mouseY.toFloat(), Color.white.rgb)
             matrices?.pop()
         }
+
+        val textHeight = textRenderer.fontHeight.toDouble() + 2
+
+        RenderUtil.roundedFill(matrices, this.width / 2.0 - ((textRenderer.getWidth(this.extrasText) + 4) / 2.0), -3.0 - animation * textHeight, this.width / 2.0 + ((textRenderer.getWidth(this.extrasText) + 4) / 2.0), textHeight * animation, 3.0, Int.MIN_VALUE)
+        RenderUtil.textCenter(matrices, Text.literal(this.extrasText), this.width / 2.0F, 2.0F - (1.0F - animation.toFloat()) * textHeight.toFloat(), if (this.isOverExtras(mouseX.toDouble(), mouseY.toDouble())) TarasandeMain.get().clientValues.accentColor.getColor().rgb else -1)
     }
+
+    private fun isOverExtras(mouseX: Double, mouseY: Double) = RenderUtil.isHovered(mouseX, mouseY, this.width / 2.0 - ((textRenderer.getWidth(this.extrasText) + 4) / 2.0), -3.0, this.width / 2.0 + ((textRenderer.getWidth(this.extrasText) + 4) / 2.0), textRenderer.fontHeight.toDouble() + 2)
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         var animation = ((System.currentTimeMillis() - screenChangeTime) / TarasandeMain.get().clientValues.menuAnimationLength.value).coerceAtMost(1.0)
         if (isClosing) animation = 1.0 - animation
 
         if (animation != 1.0) return true
+
+        if (this.isOverExtras(mouseX, mouseY)) {
+            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, "Creative Items and Exploits", TarasandeMain.get().managerCreative.globalOwner))
+            return true
+        }
 
         for (it in panels) {
             if (it.mouseClicked(mouseX, mouseY, button)) {
