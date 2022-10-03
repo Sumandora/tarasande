@@ -69,7 +69,10 @@
     "protocolhack.entity.MixinPlayerEntity",
     "protocolhack.item.MixinItem",
     "protocolhack.item.MixinItemStack",
+    "protocolhack.signatures1_19_0.MixinArgumentSignatureDataMap",
+    "protocolhack.signatures1_19_0.MixinPlayerPublicKeySubPublicKeyData",
     "protocolhack.viaversion.MixinMovementTracker",
+    "protocolhack.viaversion.MixinProtocol1_19_1To1_19",
     "protocolhack.viaversion.MixinViaIdleThread"
   ],
   "injectors": {
@@ -92,6 +95,8 @@
     "protocolhack.MixinOtherClientPlayerEntity",
     "protocolhack.MixinPendingUpdateManager",
     "protocolhack.MixinPlayerEntityRenderer",
-    "protocolhack.entity.MixinClientPlayerEntity"
+    "protocolhack.entity.MixinClientPlayerEntity",
+    "protocolhack.signatures1_19_0.MixinClientPlayerEntity",
+    "protocolhack.signatures1_19_0.MixinProfileKeys"
   ]
 }
