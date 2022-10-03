@@ -27,14 +27,14 @@ public class MixinProtocol1_19_1To1_19 extends AbstractProtocol<ClientboundPacke
                 this.map(Type.OPTIONAL_PROFILE_KEY);
                 this.read(Type.OPTIONAL_UUID);
             }
-        });
+        }, true);
         this.registerClientbound(State.LOGIN, ClientboundLoginPackets.HELLO.getId(), ClientboundLoginPackets.HELLO.getId(), new PacketRemapper() {
             public void registerMap() {
             }
-        });
+        }, true);
         this.registerServerbound(State.LOGIN, ServerboundLoginPackets.ENCRYPTION_KEY.getId(), ServerboundLoginPackets.ENCRYPTION_KEY.getId(), new PacketRemapper() {
             public void registerMap() {
             }
-        });
+        }, true);
     }
 }
