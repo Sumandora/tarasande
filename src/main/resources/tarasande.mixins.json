@@ -18,6 +18,7 @@
     "MixinEntityStatusEffectS2CPacket",
     "MixinFramebuffer",
     "MixinGameRenderer",
+    "MixinHandshakeC2SPacket",
     "MixinHeldItemRenderer",
     "MixinInGameHud",
     "MixinItemCooldownManager",

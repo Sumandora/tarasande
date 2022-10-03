@@ -6,22 +6,25 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.listener.PacketListener;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventPacket;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientConnection;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventPacket;
 
 import java.util.ArrayList;
 
 @Mixin(ClientConnection.class)
 public abstract class MixinClientConnection implements IClientConnection {
 
+    @Unique
     private static final ArrayList<Packet<?>> forced = new ArrayList<>();
+
     @Shadow
     private Channel channel;
 

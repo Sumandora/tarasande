@@ -16,6 +16,7 @@ import net.tarasandedevelopment.tarasande.mixin.accessor.IGameRenderer;
 import net.tarasandedevelopment.tarasande.module.player.ModuleNoMiningTrace;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -24,8 +25,11 @@ import java.util.function.Predicate;
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer implements IGameRenderer {
 
+    @Unique
     boolean allowThroughWalls = false;
+    @Unique
     boolean disableReachExtension = false;
+    @Unique
     double reach = 3.0;
 
     @Inject(method = "updateTargetedEntity", at = @At("HEAD"))
@@ -66,9 +70,7 @@ public class MixinGameRenderer implements IGameRenderer {
         return instance.hasExtendedReach();
     }
 
-    @Redirect(method = "updateTargetedEntity", at =
-    @At(value = "INVOKE",
-            target = "Lnet/minecraft/entity/projectile/ProjectileUtil;raycast(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;D)Lnet/minecraft/util/hit/EntityHitResult;"))
+    @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/ProjectileUtil;raycast(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;D)Lnet/minecraft/util/hit/EntityHitResult;"))
     public @Nullable EntityHitResult hookedRaycast(Entity entity, Vec3d min, Vec3d max, Box box, Predicate<Entity> predicate, double d) {
         if(!TarasandeMain.Companion.get().getDisabled()) {
             ModuleNoMiningTrace moduleNoMiningTrace = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoMiningTrace.class);

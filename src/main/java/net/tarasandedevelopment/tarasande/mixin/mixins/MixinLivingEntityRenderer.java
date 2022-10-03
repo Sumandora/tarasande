@@ -15,6 +15,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.module.render.ModuleTrueSight;
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -28,6 +29,7 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
         super(ctx);
     }
 
+    @Unique
     T livingEntity;
 
     @Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"))

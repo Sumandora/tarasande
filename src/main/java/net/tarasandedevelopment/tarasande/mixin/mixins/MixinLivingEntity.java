@@ -8,18 +8,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Slice;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventJump;
 import net.tarasandedevelopment.tarasande.event.EventSwing;
 import net.tarasandedevelopment.tarasande.mixin.accessor.ILivingEntity;
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = LivingEntity.class, priority = 999 /* baritone fix */)
 public abstract class MixinLivingEntity extends Entity implements ILivingEntity {
@@ -46,7 +47,6 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     protected double serverHeadYaw;
     @Shadow
     protected int lastAttackedTicks;
-    private float originalYaw;
 
     public MixinLivingEntity(EntityType<?> type, World world) {
         super(type, world);
@@ -57,6 +57,9 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Shadow
     protected abstract void tickItemStackUsage(ItemStack stack);
+
+    @Unique
+    private float originalYaw;
 
     @Inject(method = "jump", at = @At("HEAD"), cancellable = true)
     public void injectPreJump(CallbackInfo ci) {
