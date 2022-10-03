@@ -6,11 +6,12 @@ import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
+import net.tarasandedevelopment.tarasande.mixin.accessor.ITextFieldWidget;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import net.tarasandedevelopment.tarasande.mixin.accessor.ITextFieldWidget;
 
 import java.awt.*;
 
@@ -22,13 +23,15 @@ public abstract class MixinTextFieldWidget implements ITextFieldWidget {
 
     @Shadow
     private String text;
-    private Color color = null;
 
     @Shadow
     protected abstract void erase(int offset);
 
     @Shadow
     protected abstract boolean isEditable();
+
+    @Unique
+    private Color color = null;
 
     @Inject(method = "mouseClicked", at = @At("HEAD"))
     public void injectMouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {

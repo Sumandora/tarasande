@@ -24,10 +24,7 @@ import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient;
 import net.tarasandedevelopment.tarasande.module.render.ModuleESP;
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -37,47 +34,59 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MinecraftClient.class)
 public abstract class MixinMinecraftClient implements IMinecraftClient {
+
     @Shadow
     private static int currentFps;
+
     @Shadow
     @Final
     public GameOptions options;
+
     @Shadow
     @Nullable
     public ClientPlayerEntity player;
+
     @Shadow
     protected int attackCooldown;
+
     @Shadow
     @Final
     private Window window;
+
     @Mutable
     @Shadow
     @Final
     private Session session;
+
     @Mutable
     @Shadow
     @Final
     private MinecraftSessionService sessionService;
-    private long startTime = 0L;
+
     @Shadow
     @Final
     private RenderTickCounter renderTickCounter;
+
     @Mutable
     @Shadow
     @Final
     private UserApiService userApiService;
+
     @Mutable
     @Shadow
     @Final
     private ProfileKeys profileKeys;
+
     @Mutable
     @Shadow
     @Final
     private YggdrasilAuthenticationService authenticationService;
+
     @Mutable
     @Shadow
     @Final
     private SignatureVerifier servicesSignatureVerifier;
+
     @Mutable
     @Shadow
     @Final
@@ -95,7 +104,11 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Shadow
     private int itemUseCooldown;
 
-    @Shadow public abstract void setScreen(@Nullable Screen screen);
+    @Unique
+    private long startTime = 0L;
+
+    @Shadow
+    public abstract void setScreen(@Nullable Screen screen);
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;createUserApiService(Lcom/mojang/authlib/yggdrasil/YggdrasilAuthenticationService;Lnet/minecraft/client/RunArgs;)Lcom/mojang/authlib/minecraft/UserApiService;"))
     public void injectPreInit(RunArgs args, CallbackInfo ci) {
@@ -142,7 +155,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
     public int hookedMin(int a, int b) {
-        if(!TarasandeMain.Companion.get().getDisabled())
+        if (!TarasandeMain.Companion.get().getDisabled())
             if (TarasandeMain.Companion.get().getClientValues().getUnlockTicksPerFrame().getValue()) {
                 return b;
             }
@@ -159,7 +172,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Redirect(method = "hasOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isGlowing()Z"))
     public boolean hookedIsGlowing(Entity entity) {
         boolean glowing = entity.isGlowing();
-        if(!TarasandeMain.Companion.get().getDisabled()) {
+        if (!TarasandeMain.Companion.get().getDisabled()) {
             ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class);
             if (moduleESP.getEnabled())
                 return glowing || (moduleESP.getMode().isSelected(0) && moduleESP.filter(entity));
@@ -182,7 +195,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Inject(method = "getSessionService", at = @At("RETURN"), cancellable = true)
     public void injectGetSessionService(CallbackInfoReturnable<MinecraftSessionService> cir) {
         Account account = TarasandeMain.Companion.get().getManagerClientMenu().get(ElementMenuScreenAccountManager.class).getScreenBetterAccountManager().getCurrentAccount();
-        if(account != null)
+        if (account != null)
             cir.setReturnValue(account.getSessionService());
     }
 

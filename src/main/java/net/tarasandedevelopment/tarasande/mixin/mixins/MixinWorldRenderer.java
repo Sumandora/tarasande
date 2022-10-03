@@ -14,6 +14,7 @@ import net.tarasandedevelopment.tarasande.module.render.ModuleFog;
 import net.tarasandedevelopment.tarasande.module.render.ModuleRain;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -43,6 +44,7 @@ public abstract class MixinWorldRenderer implements IWorldRenderer {
                 ci.cancel();
     }
 
+    @Unique
     private boolean forceRain = false;
 
     @Redirect(method = "renderWeather", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getRainGradient(F)F"))

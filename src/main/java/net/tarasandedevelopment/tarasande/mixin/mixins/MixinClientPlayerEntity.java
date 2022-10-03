@@ -19,6 +19,7 @@ import net.tarasandedevelopment.tarasande.module.movement.ModuleNoSlowdown;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -26,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ClientPlayerEntity.class)
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IClientPlayerEntity {
 
+    @Unique
     boolean bypassChat;
 
     @Shadow
@@ -102,16 +104,19 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         cir.setReturnValue(eventIsWalking.getWalking());
     }
 
+    @Unique
     boolean flight;
+
+    @Unique
     float flightSpeed;
 
     @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;flying:Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;knockDownwards()V"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;hasJumpingMount()Z")))
     public boolean flying(PlayerAbilities instance) {
         flight = false;
         flightSpeed = 0.05f;
-        if(!TarasandeMain.Companion.get().getDisabled()) {
+        if (!TarasandeMain.Companion.get().getDisabled()) {
             ModuleFlight moduleFlight = TarasandeMain.Companion.get().getManagerModule().get(ModuleFlight.class);
-            if(moduleFlight.getEnabled() && moduleFlight.getMode().isSelected(0)) {
+            if (moduleFlight.getEnabled() && moduleFlight.getMode().isSelected(0)) {
                 flight = true;
                 flightSpeed = (float) moduleFlight.getFlightSpeed().getValue();
                 return true;
