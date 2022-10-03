@@ -41,6 +41,8 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
                 for (entry in hashMap) {
                     if (buttons.selected.contains(keyMap[entry.key]) && (entry.key as IKeyBinding).tarasande_forceIsPressed()) {
                         val clicks = entry.value.getClicks()
+                        if (entry.key == mc.options.useKey && mc.player?.isUsingItem == true)
+                            return@Consumer
                         for (i in 1..clicks) {
                             (entry.key as IKeyBinding).tarasande_increaseTimesPressed()
                             event.dirty = true
@@ -54,7 +56,12 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
             is EventKeyBindingIsPressed -> {
                 for (entry in hashMap) {
                     if (buttons.selected.contains(keyMap[entry.key]) && event.keyBinding == entry.key) {
-                        event.pressed = if (entry.key == mc.options.attackKey) event.pressed && mc.crosshairTarget?.type == HitResult.Type.BLOCK else false
+                        event.pressed =
+                            when (entry.key) {
+                                mc.options.attackKey -> event.pressed && mc.crosshairTarget?.type == HitResult.Type.BLOCK
+                                mc.options.useKey -> event.pressed || (mc.player?.isUsingItem == true && (event.keyBinding as IKeyBinding).tarasande_forceIsPressed())
+                                else -> false
+                            }
                     }
                 }
             }

@@ -22,6 +22,9 @@ import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(DownloadingTerrainScreen.class)
 public class MixinDownloadingTerrainScreen extends Screen {
@@ -33,8 +36,8 @@ public class MixinDownloadingTerrainScreen extends Screen {
         super(title);
     }
 
-    @Override
-    public void tick() {
+    @Inject(method = "tick", at = @At("HEAD"))
+    public void injectTick(CallbackInfo ci) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_12_1)) {
             tickCounter++;
 

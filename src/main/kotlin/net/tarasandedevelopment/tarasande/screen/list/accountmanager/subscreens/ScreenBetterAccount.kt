@@ -2,21 +2,21 @@ package net.tarasandedevelopment.tarasande.screen.list.accountmanager.subscreens
 
 import com.mojang.authlib.Environment
 import com.mojang.authlib.yggdrasil.YggdrasilEnvironment
-import net.tarasandedevelopment.tarasande.clientmenu.ElementMenuScreenAccountManager
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import org.lwjgl.glfw.GLFW
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.AccountInfo
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.TextFieldInfo
+import net.tarasandedevelopment.tarasande.clientmenu.ElementMenuScreenAccountManager
 import net.tarasandedevelopment.tarasande.mixin.accessor.IScreen
-import net.tarasandedevelopment.tarasande.screen.list.accountmanager.elements.TextFieldWidgetPassword
-import net.tarasandedevelopment.tarasande.screen.list.accountmanager.elements.TextFieldWidgetPlaceholder
+import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPassword
+import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.util.render.screen.ScreenBetter
+import org.lwjgl.glfw.GLFW
 import java.awt.Color
 import java.lang.reflect.Constructor
 import java.util.function.Consumer

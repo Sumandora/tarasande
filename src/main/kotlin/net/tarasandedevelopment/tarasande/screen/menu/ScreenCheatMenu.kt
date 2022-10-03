@@ -19,13 +19,13 @@ import net.tarasandedevelopment.tarasande.base.screen.menu.valuecomponent.Manage
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.category.PanelCategory
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.clientvalues.PanelClientValues
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.friends.PanelFriends
+import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.category.PanelElementsCategory
+import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.clientvalues.PanelElementsClientValues
+import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.friends.PanelElementsFriends
+import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.terminal.PanelElementsTerminal
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl.*
 import net.tarasandedevelopment.tarasande.screen.menu.particle.Particle
-import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 import java.util.concurrent.CopyOnWriteArrayList
@@ -62,11 +62,13 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         var y = 5.0
 
         for (moduleCategory in ModuleCategory.values()) {
-            panels.add(PanelCategory(moduleCategory, 5.0, y).also { y += it.titleBarHeight + 5 })
+            panels.add(PanelElementsCategory(moduleCategory, 5.0, y).also { y += it.titleBarHeight + 5 })
         }
-        panels.add(PanelClientValues(this, 5.0, y).also { y += it.titleBarHeight + 5 })
-        val fixedPanels = mutableListOf(
-            PanelFriends::class.java,
+        panels.add(PanelElementsClientValues(this, 5.0, y).also { y += it.titleBarHeight + 5 })
+        val panels = mutableListOf(
+            PanelElementsFriends::class.java,
+            PanelElementsTerminal::class.java,
+
             PanelFixedArrayList::class.java,
             PanelFixedInformation::class.java,
             PanelFixedEffects::class.java,
@@ -76,13 +78,13 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             PanelFixedRadar::class.java
         )
         if (Util.getOperatingSystem() == Util.OperatingSystem.LINUX) {
-            fixedPanels.add(PanelFixedNowPlaying::class.java)
+            panels.add(PanelFixedNowPlaying::class.java)
         }
-        for (panel in fixedPanels) {
-            panels.add(panel.declaredConstructors[0].newInstance(5.0, y, this).also { y += (it as Panel).titleBarHeight + 5 } as Panel)
+        for (panel in panels) {
+            this.panels.add(panel.declaredConstructors[0].newInstance(5.0, y, this).also { y += (it as Panel).titleBarHeight + 5 } as Panel)
         }
         for (graph in managerGraph.list) {
-            panels.add(PanelFixedGraph(graph, 5.0, y).also { y += it.titleBarHeight + 5 })
+            this.panels.add(PanelFixedGraph(graph, 5.0, y).also { y += it.titleBarHeight + 5 })
         }
         passEvents = false
 

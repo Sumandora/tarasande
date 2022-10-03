@@ -24,7 +24,8 @@ open class FileValues(name: String, private val condition: Function<Value, Boole
             }
             try {
                 val jsonElement = value.save()
-                if (jsonElement != null) jsonObject.add(value.name, jsonElement)
+                if (jsonElement != null)
+                    jsonObject.add(value.name, jsonElement)
             } catch (t: Throwable) {
                 t.printStackTrace()
             }

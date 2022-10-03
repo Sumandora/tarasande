@@ -5,7 +5,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.PanelElements
 
-class PanelFriends(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : PanelElements<ElementPlayer>("Friends", x, y, 150.0, 100.0) {
+class PanelElementsFriends(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : PanelElements<ElementPlayer>("Friends", x, y, 150.0, 100.0) {
 
     override fun tick() {
         elementList.removeIf {

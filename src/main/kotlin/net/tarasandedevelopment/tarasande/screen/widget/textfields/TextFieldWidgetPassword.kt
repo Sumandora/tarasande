@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.screen.list.accountmanager.elements
+package net.tarasandedevelopment.tarasande.screen.widget.textfields
 
 import com.google.common.base.Strings
 import net.minecraft.client.MinecraftClient

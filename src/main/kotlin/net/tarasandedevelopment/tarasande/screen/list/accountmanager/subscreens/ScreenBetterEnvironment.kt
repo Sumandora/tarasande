@@ -3,13 +3,13 @@ package net.tarasandedevelopment.tarasande.screen.list.accountmanager.subscreens
 import com.mojang.authlib.Environment
 import com.mojang.authlib.yggdrasil.YggdrasilEnvironment
 import com.mojang.blaze3d.systems.RenderSystem
-import net.tarasandedevelopment.tarasande.clientmenu.ElementMenuScreenAccountManager
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.screen.list.accountmanager.elements.TextFieldWidgetPlaceholder
+import net.tarasandedevelopment.tarasande.clientmenu.ElementMenuScreenAccountManager
+import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.util.render.screen.ScreenBetter
 import java.util.function.Consumer
 

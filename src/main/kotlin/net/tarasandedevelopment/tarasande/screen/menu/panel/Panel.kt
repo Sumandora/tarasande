@@ -22,7 +22,7 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
     var panelHeight = minHeight
 
     protected var scrollOffset = 0.0
-    private var scrollSpeed = 0.0
+    protected var scrollSpeed = 0.0
 
     protected var alignment: Alignment = Alignment.LEFT
     internal var opened = false

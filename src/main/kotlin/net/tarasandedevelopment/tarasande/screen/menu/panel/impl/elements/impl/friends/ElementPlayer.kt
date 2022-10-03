@@ -20,7 +20,7 @@ class ElementPlayer(val gameProfile: GameProfile, width: Double) : Element(width
             TarasandeMain.get().friends.setAlias(gameProfile, value.ifEmpty { null })
         }
     }
-    private val textField = ValueComponentText(value)
+    private val textField = ValueComponentText(value).also { TarasandeMain.get().screenCheatMenu.managerValueComponent.instances.add(it) }
 
     private val defaultHeight = MinecraftClient.getInstance().textRenderer.fontHeight * 1.5 + 2.0
     private var friendTime = 0L

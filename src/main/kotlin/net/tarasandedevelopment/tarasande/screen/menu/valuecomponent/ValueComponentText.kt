@@ -3,17 +3,23 @@ package net.tarasandedevelopment.tarasande.screen.menu.valuecomponent
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import org.lwjgl.glfw.GLFW
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.menu.valuecomponent.ValueComponent
 import net.tarasandedevelopment.tarasande.base.value.Value
 import net.tarasandedevelopment.tarasande.mixin.accessor.ITextFieldWidget
-import net.tarasandedevelopment.tarasande.screen.list.accountmanager.elements.TextFieldWidgetPlaceholder
+import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueText
+import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
 class ValueComponentText(value: Value) : ValueComponent(value) {
+
+    var height: Double? = null
+
+    constructor(value: Value, height: Double) : this(value) {
+        this.height = height
+    }
 
     val textFieldWidget = TextFieldWidgetPlaceholder(MinecraftClient.getInstance().textRenderer, 1, 1, 1, (getHeight() * 2).toInt() - 1, Text.of((value as ValueText).name))
 
@@ -91,5 +97,5 @@ class ValueComponentText(value: Value) : ValueComponent(value) {
 
     fun setFocused(focused: Boolean) = textFieldWidget.setTextFieldFocused(focused)
 
-    override fun getHeight() = MinecraftClient.getInstance().textRenderer.fontHeight.toDouble()
+    override fun getHeight() = height ?: MinecraftClient.getInstance().textRenderer.fontHeight.toDouble()
 }

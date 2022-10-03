@@ -4,6 +4,7 @@ import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventBoundingBoxOverride
+import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import java.util.function.Consumer
 
@@ -13,7 +14,8 @@ class ModuleHitBox : Module("Hit box", "Makes enemy hit boxes larger", ModuleCat
 
     val eventConsumer = Consumer<Event> { event ->
         if (event is EventBoundingBoxOverride) {
-            event.boundingBox = event.boundingBox.expand(expand.value)
+            if (PlayerUtil.isAttackable(event.entity))
+                event.boundingBox = event.boundingBox.expand(expand.value)
         }
     }
 

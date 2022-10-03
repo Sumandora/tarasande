@@ -42,7 +42,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
                 if (mc.player?.velocity?.lengthSquared()!! <= 0.01) firstMove = true
 
-                if (PlayerUtil.input.movementInput?.lengthSquared() == 0.0f) return@Consumer
+                if (mc.player?.input?.movementInput?.lengthSquared() == 0.0f) return@Consumer
 
                 val accessor = event.velocity as IVec3d
 

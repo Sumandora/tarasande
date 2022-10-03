@@ -20,14 +20,15 @@ class ManagerValueComponent : Manager<Pair<Class<out Value>, Class<out ValueComp
             Pair(ValueText::class.java, ValueComponentText::class.java),
             Pair(ValueColor::class.java, ValueComponentColor::class.java),
             Pair(ValueRegistry::class.java, ValueComponentRegistry::class.java),
-            Pair(ValueButton::class.java, ValueComponentButton::class.java)
+            Pair(ValueButton::class.java, ValueComponentButton::class.java),
+            Pair(ValueSpacer::class.java, ValueComponentSpacer::class.java)
         )
     }
 
     fun newInstance(value: Value): ValueComponent? {
         for (pair in list)
             if (pair.first.isInstance(value))
-                return (pair.second.declaredConstructors[0].newInstance(value) as ValueComponent).also { instances.add(it) }
+                return (pair.second.getDeclaredConstructor(Value::class.java).newInstance(value) as ValueComponent).also { instances.add(it) }
         return null
     }
 
