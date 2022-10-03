@@ -50,7 +50,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
     var popup = false
 
-    val extrasText = "Extras"
+    private val extrasText = "Creative Items and Exploits"
 
     init {
         // @mojang, this code is garbage. delete life
@@ -217,7 +217,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         if (animation != 1.0) return true
 
         if (this.isOverExtras(mouseX, mouseY)) {
-            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, "Creative Items and Exploits", TarasandeMain.get().managerCreative.globalOwner))
+            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, this.extrasText, TarasandeMain.get().managerCreative.globalOwner))
             return true
         }
 

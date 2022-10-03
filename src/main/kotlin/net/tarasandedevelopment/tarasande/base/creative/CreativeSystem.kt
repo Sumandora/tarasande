@@ -30,7 +30,7 @@ class GlobalOwner(managerCreative: ManagerCreative) {
                 override fun onChange() {
                     super.onChange()
 
-                    MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, it.name + " Creative Items", it))
+                    MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, it.name, it))
                 }
             }
         }

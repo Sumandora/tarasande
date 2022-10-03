@@ -63,7 +63,7 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         this.renderBackground(matrices)
         if (MinecraftClient.getInstance().world != null)
-            this.prevScreen!!.render(matrices, mouseX, mouseY, delta)
+            this.prevScreen!!.render(matrices, -1, -1, delta)
 
         super.render(matrices, mouseX, mouseY, delta)
     }
