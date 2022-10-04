@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.util.chat
+package net.tarasandedevelopment.tarasande.util.player.chat
 
 import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.TarasandeMain
@@ -18,7 +18,7 @@ object CommunicationUtil {
         end.append(": ")
         end.append(message)
 
-        this.add(end.toString())
+        add(end.toString())
     }
 
     fun printInformation(message: String) {
@@ -27,7 +27,7 @@ object CommunicationUtil {
         end.append(information)
         end.append(message)
 
-        this.add(end.toString())
+        add(end.toString())
     }
 
     internal fun add(message: String) {

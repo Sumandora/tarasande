@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.screen.menu.command
 
 import net.tarasandedevelopment.tarasande.base.command.Command
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.terminal.PanelElementsTerminal
-import net.tarasandedevelopment.tarasande.util.chat.CommunicationUtil
+import net.tarasandedevelopment.tarasande.util.player.chat.CommunicationUtil
 
 class CommandNotificationTest : Command("notification") {
 
