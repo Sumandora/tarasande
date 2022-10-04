@@ -4,10 +4,10 @@ import net.fabricmc.loader.api.FabricLoader
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 
-class ManagerAddon : Manager<SandeEntrypoint>() {
+class ManagerAddon : Manager<SandeAddon>() {
 
     init {
-        FabricLoader.getInstance().getEntrypointContainers("tarasande", SandeEntrypoint::class.java).forEach {
+        FabricLoader.getInstance().getEntrypointContainers("tarasande", SandeAddon::class.java).forEach {
             val metadata = it.provider.metadata
             val addon = it.entrypoint
 
