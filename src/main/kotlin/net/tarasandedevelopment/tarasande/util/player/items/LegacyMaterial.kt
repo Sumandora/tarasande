@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.util.player
+package net.tarasandedevelopment.tarasande.util.player.items
 
 import net.minecraft.item.Item
 import net.minecraft.item.Items
