@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl
+package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
@@ -6,12 +6,12 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.panel.Alignment
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
+import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueMode
 
-class PanelFixedInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : PanelFixed("Information", x, y, 75.0, resizable = false) {
+class PanelInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Information", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), resizable = false, fixed = true) {
 
     var visible = ValueMode(this, "Elements", true, *screenCheatMenu.managerInformation.list.map { i -> i.owner + ": " + i.information }.toTypedArray())
 

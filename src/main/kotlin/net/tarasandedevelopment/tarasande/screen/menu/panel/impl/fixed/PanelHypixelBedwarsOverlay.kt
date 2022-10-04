@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl
+package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -8,7 +8,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.panel.Alignment
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
+import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.net.URL
 import java.util.concurrent.ConcurrentHashMap
@@ -18,7 +18,7 @@ import kotlin.math.roundToInt
 /*
  * This code is probably worse than it has to be, but I just couldn't think of anything better (sleep deprivation :c)
  */
-class PanelFixedHypixelBedwarsOverlay(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : PanelFixed("Hypixel Bedwars Overlay", x, y, 200.0, resizable = true) {
+class PanelHypixelBedwarsOverlay(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Hypixel Bedwars Overlay", x, y, 200.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), fixed = true) {
 
     private val blackList = ArrayList<GameProfile>()
     private val playerData = ConcurrentHashMap<GameProfile, Stats>()

@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl
+package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
@@ -6,10 +6,10 @@ import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.panel.Alignment
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
+import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
-class PanelFixedNowPlaying(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : PanelFixed("Now playing", x, y, 75.0, resizable = false) {
+class PanelNowPlaying(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Now playing", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), resizable = false, fixed = true) {
 
     private var currTrack: String? = null
 

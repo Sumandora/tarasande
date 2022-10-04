@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl
+package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
@@ -8,11 +8,11 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.panel.Alignment
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
+import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 
-class PanelFixedArrayList(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : PanelFixed("Array List", x, y, 75.0, resizable = false) {
+class PanelArrayList(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Array List", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), resizable = false, fixed = true) {
 
     private val animations = HashMap<Module, Double>()
 

@@ -1,17 +1,17 @@
-package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl
+package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed
 
 import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
 import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
+import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 import kotlin.math.*
 
-class PanelFixedRadar(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : PanelFixed("Radar", x, y, 100.0, 100.0, background = true) {
+class PanelRadar(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Radar", x, y, 100.0, 100.0, background = true, fixed = true) {
 
 	override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
 		if (MinecraftClient.getInstance().player == null)

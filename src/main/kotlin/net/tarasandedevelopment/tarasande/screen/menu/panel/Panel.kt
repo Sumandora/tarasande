@@ -4,6 +4,8 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.event.EventRender2D
+import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.menu.utils.DragInfo
 import net.tarasandedevelopment.tarasande.screen.menu.utils.IElement
@@ -14,7 +16,20 @@ import kotlin.math.floor
 import kotlin.math.min
 import kotlin.math.round
 
-open class Panel(val title: String, var x: Double, var y: Double, val minWidth: Double, val minHeight: Double, val maxWidth: Double? = null, val maxHeight: Double? = null, private val background: Boolean = true) : IElement {
+open class Panel(
+    val title: String,
+    var x: Double,
+    var y: Double,
+    val minWidth: Double,
+    val minHeight: Double,
+    val maxWidth: Double? = null,
+    val maxHeight: Double? = null,
+    private val background: Boolean = true,
+    private val resizable: Boolean = true,
+    internal val fixed: Boolean = false
+) : IElement {
+
+    constructor(title: String, x: Double, y: Double, width: Double, height: Double, background: Boolean, resizable: Boolean, fixed: Boolean) : this(title, x, y, width, height, null, null, background, resizable, fixed)
 
     private val dragInfo = DragInfo()
     private val resizeInfo = DragInfo()
@@ -30,16 +45,55 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
 
     internal val titleBarHeight = MinecraftClient.getInstance().textRenderer.fontHeight
 
+    init {
+        if (fixed)
+            TarasandeMain.get().managerEvent.add { event ->
+                when (event) {
+                    is EventRender2D -> {
+                        if (isVisible() && opened) {
+                            if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screenCheatMenu) {
+                                event.matrices.push()
+                                render(event.matrices, -1, -1, MinecraftClient.getInstance().tickDelta)
+                                event.matrices.pop()
+                            }
+                        }
+                    }
+
+                    is EventTick -> {
+                        if (event.state == EventTick.State.PRE) {
+                            if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screenCheatMenu) {
+                                tick()
+                            }
+                        }
+                    }
+                }
+            }
+    }
+
     override fun init() {
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        if (fixed) {
+            when {
+                x + panelWidth / 2 <= MinecraftClient.getInstance().window.scaledWidth * 0.33 -> alignment = Alignment.LEFT
+                x + panelWidth / 2 > MinecraftClient.getInstance().window.scaledWidth * 0.33 && x + panelWidth / 2 < MinecraftClient.getInstance().window.scaledWidth * 0.66 -> alignment = Alignment.MIDDLE
+                x + panelWidth / 2 > MinecraftClient.getInstance().window.scaledWidth * 0.66 -> alignment = Alignment.RIGHT
+            }
+        }
+
         scrollOffset = MathHelper.clamp(scrollOffset + scrollSpeed, min(-(getMaxScrollOffset() - (panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight - 5)), 0.0), 0.0)
         scrollSpeed = MathHelper.clamp(scrollSpeed - scrollSpeed * RenderUtil.deltaTime * 0.01, -100.0, 100.0)
 
         if (opened) {
             if (background) {
                 matrices?.push()
+                if (fixed) {
+                    TarasandeMain.get().blur.bind(true)
+                    RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else titleBarHeight).toDouble(), Color.white.rgb)
+                    MinecraftClient.getInstance().framebuffer.beginWrite(true)
+                }
+
                 val accent = TarasandeMain.get().clientValues.accentColor.getColor()
                 RenderUtil.fill(matrices, x, y + MinecraftClient.getInstance().textRenderer.fontHeight, x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).let { Color(it.red, it.green, it.blue, 0) }, 0.3, 0.3, 0.3, 0.7).rgb)
                 matrices?.pop()
@@ -94,7 +148,7 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
                 if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight.toDouble())) {
                     dragInfo.setDragInfo(true, mouseX - x, mouseY - y)
                 }
-                if (RenderUtil.isHovered(mouseX, mouseY, x + panelWidth - 5, y + panelHeight - 5, x + panelWidth + 5, y + panelHeight + 5)) {
+                if (resizable && RenderUtil.isHovered(mouseX, mouseY, x + panelWidth - 5, y + panelHeight - 5, x + panelWidth + 5, y + panelHeight + 5)) {
                     resizeInfo.setDragInfo(true, mouseX - (x + panelWidth - 2), mouseY - (y + panelHeight - 2))
                 }
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
@@ -142,6 +196,8 @@ open class Panel(val title: String, var x: Double, var y: Double, val minWidth: 
     }
 
     override fun getHeight() = 0.0 // never used
+
+    open fun isVisible() = true
 }
 
 enum class Alignment {

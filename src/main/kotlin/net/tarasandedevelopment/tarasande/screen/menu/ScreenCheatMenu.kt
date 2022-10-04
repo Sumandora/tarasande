@@ -26,8 +26,7 @@ import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.c
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.friends.PanelElementsFriends
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.notification.PanelElementsNotification
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.terminal.PanelElementsTerminal
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl.*
+import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.*
 import net.tarasandedevelopment.tarasande.screen.menu.particle.Particle
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
@@ -75,22 +74,22 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             PanelElementsTerminal::class.java,
             PanelElementsNotification::class.java,
 
-            PanelFixedArrayList::class.java,
-            PanelFixedInformation::class.java,
-            PanelFixedEffects::class.java,
-            PanelFixedInventory::class.java,
-            PanelFixedWatermark::class.java,
-            PanelFixedHypixelBedwarsOverlay::class.java,
-            PanelFixedRadar::class.java
+            PanelArrayList::class.java,
+            PanelInformation::class.java,
+            PanelEffects::class.java,
+            PanelInventory::class.java,
+            PanelWatermark::class.java,
+            PanelHypixelBedwarsOverlay::class.java,
+            PanelRadar::class.java
         )
         if (Util.getOperatingSystem() == Util.OperatingSystem.LINUX) {
-            panels.add(PanelFixedNowPlaying::class.java)
+            panels.add(PanelNowPlaying::class.java)
         }
         for (panel in panels) {
             this.panels.add(panel.declaredConstructors[0].newInstance(5.0, y, this).also { y += (it as Panel).titleBarHeight + 5 } as Panel)
         }
         for (graph in managerGraph.list) {
-            this.panels.add(PanelFixedGraph(graph, 5.0, y).also { y += it.titleBarHeight + 5 })
+            this.panels.add(PanelGraph(graph, 5.0, y).also { y += it.titleBarHeight + 5 })
         }
         passEvents = false
         TarasandeMain.get().managerEvent.add { event ->
@@ -177,7 +176,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         panels.reversed().forEach {
             matrices?.push()
             val panelHeight = (if (it.opened) it.panelHeight else textRenderer?.fontHeight)?.toDouble()!!
-            if (it !is PanelFixed || !(it.isVisible() && it.opened)) {
+            if (!it.fixed || !(it.isVisible() && it.opened)) {
                 matrices?.translate(it.x + it.panelWidth / 2.0, it.y + panelHeight / 2.0, 0.0)
                 matrices?.scale(animation.toFloat(), animation.toFloat(), 1.0F)
                 matrices?.translate(-(it.x + it.panelWidth / 2.0), -(it.y + panelHeight / 2.0), 0.0)
@@ -186,11 +185,11 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             val y = it.y + panelHeight - panelHeight * (1 - animation) / 2.0 - 1
             val width = it.panelWidth - it.panelWidth * (1 - animation)
             val height = (panelHeight - panelHeight * (1 - animation) - 1)
-            if (it.opened && it !is PanelFixed && animation > 0.0) {
+            if (it.opened && !it.fixed && animation > 0.0) {
                 GlStateManager._enableScissorTest()
                 GlStateManager._scissorBox(round(x * client?.window?.scaleFactor!!).toInt(), round(client?.window?.height!! - y * client?.window?.scaleFactor!!).toInt(), round(width * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1), round(height * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1))
             }
-            if (it is PanelFixed || animation > 0.0) {
+            if (it.fixed || animation > 0.0) {
                 it.render(matrices, mouseX, mouseY, delta)
             }
             GlStateManager._disableScissorTest()

@@ -4,7 +4,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
-open class PanelElements<T : Element>(title: String, x: Double, y: Double, minWidth: Double, minHeight: Double) : Panel(title, x, y, minWidth, minHeight) {
+open class PanelElements<T : Element>(title: String, x: Double, y: Double, minWidth: Double, minHeight: Double, fixed: Boolean = false) : Panel(title, x, y, minWidth, minHeight, fixed = fixed) {
 
     internal val elementList = ArrayList<T>()
 

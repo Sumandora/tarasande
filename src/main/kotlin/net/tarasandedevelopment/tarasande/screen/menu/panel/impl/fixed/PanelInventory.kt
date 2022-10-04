@@ -1,14 +1,14 @@
-package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl
+package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
 import net.tarasandedevelopment.tarasande.mixin.accessor.IInGameHud
 import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
+import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import kotlin.math.floor
 
-class PanelFixedInventory(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : PanelFixed("Inventory", x, y, 150.0, 66.0, false, true) {
+class PanelInventory(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Inventory", x, y, 150.0, 66.0, resizable = false, fixed = true) {
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         var m = 1

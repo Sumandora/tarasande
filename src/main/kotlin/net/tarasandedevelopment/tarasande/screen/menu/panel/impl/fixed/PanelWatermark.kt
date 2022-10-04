@@ -1,16 +1,16 @@
-package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl
+package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.module.render.ModuleNameProtect
 import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
+import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import java.net.InetAddress
 
 private const val text = "タラサンデ"
 
-class PanelFixedWatermark(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : PanelFixed("Watermark", x, y, MinecraftClient.getInstance().textRenderer.getWidth(text) * 5.0, MinecraftClient.getInstance().textRenderer.fontHeight * 5.0, true, true) {
+class PanelWatermark(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Watermark", x, y, MinecraftClient.getInstance().textRenderer.getWidth(text) * 5.0, MinecraftClient.getInstance().textRenderer.fontHeight * 5.0, fixed = true) {
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         // Mind the shadows and leave some space
