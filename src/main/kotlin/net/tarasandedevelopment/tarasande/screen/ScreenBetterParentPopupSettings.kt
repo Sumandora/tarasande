@@ -45,8 +45,6 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
 
                 this.x = (MinecraftClient.getInstance().window.scaledWidth / 2) - 150.0
                 this.y = MinecraftClient.getInstance().window.scaledHeight / 2 - (this.panelHeight / 2)
-
-                this.opened = true
             }
         }).also { clickableWidgetPanel = it })
     }
