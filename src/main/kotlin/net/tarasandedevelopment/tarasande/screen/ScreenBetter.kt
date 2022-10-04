@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.util.render.screen
+package net.tarasandedevelopment.tarasande.screen
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen

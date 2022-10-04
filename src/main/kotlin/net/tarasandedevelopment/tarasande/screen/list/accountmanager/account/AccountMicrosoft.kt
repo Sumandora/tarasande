@@ -21,7 +21,6 @@ import java.nio.charset.StandardCharsets
 import java.sql.Timestamp
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
-import javax.crypto.SecretKey
 
 @AccountInfo("Microsoft", true)
 open class AccountMicrosoft : Account() {
@@ -136,6 +135,9 @@ You can close this page now.""".toByteArray())
             it["grant_type"] = "authorization_code"
             it["redirect_uri"] = redirectUri!!
             it["scope"] = scope
+            if (clientSecret != null) {
+                it["client_secret"] = clientSecret!!
+            }
         })
         val oAuthToken = TarasandeMain.get().gson.fromJson(str, JsonObject::class.java)
         return buildFromOAuthToken(oAuthToken)

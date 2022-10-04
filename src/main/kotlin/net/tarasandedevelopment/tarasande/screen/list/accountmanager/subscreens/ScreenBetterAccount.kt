@@ -12,10 +12,10 @@ import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.Acc
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.AccountInfo
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.TextFieldInfo
 import net.tarasandedevelopment.tarasande.mixin.accessor.IScreen
+import net.tarasandedevelopment.tarasande.screen.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.menu.clientmenu.ElementMenuScreenAccountManager
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPassword
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder
-import net.tarasandedevelopment.tarasande.util.render.screen.ScreenBetter
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
 import java.lang.reflect.Constructor

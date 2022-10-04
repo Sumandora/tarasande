@@ -182,7 +182,6 @@ open class Panel(
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
-        println("$mouseX $mouseY $x $y")
         if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + panelHeight)) {
             scrollSpeed += amount * 3
             return true

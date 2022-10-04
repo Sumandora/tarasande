@@ -10,7 +10,6 @@ import net.tarasandedevelopment.tarasande.base.screen.menu.valuecomponent.ValueC
 import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.PanelElements
 import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
-import net.tarasandedevelopment.tarasande.util.render.screen.ScreenBetter
 
 class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val owner: Any) : ScreenBetter(parent) {
 
