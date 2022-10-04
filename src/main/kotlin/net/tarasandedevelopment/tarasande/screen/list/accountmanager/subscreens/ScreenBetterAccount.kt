@@ -42,13 +42,11 @@ class ScreenBetterAccount(
             it.tarasande_getSelectables().clear()
         }
 
-        addDrawableChild(ButtonWidget(5, 5, 100, 20, Text.of("Environment")) {
-            client?.setScreen(ScreenBetterEnvironment(this, environment) { environment = it })
-        })
+        super.init()
 
         addDrawableChild(
             ButtonWidget(
-                width - 105,
+                5,
                 5,
                 100,
                 20,
@@ -60,6 +58,10 @@ class ScreenBetterAccount(
                 init()
                 button.message = Text.of(implementationClass.name)
             })
+
+        addDrawableChild(ButtonWidget(5, 30, 100, 20, Text.of("Environment")) {
+            client?.setScreen(ScreenBetterEnvironment(this, environment) { environment = it })
+        })
 
         var constructor: Constructor<*>? = null
         for (c in implementationClass.constructors) {
@@ -108,8 +110,6 @@ class ScreenBetterAccount(
         }.also { submitButton = it })
 
         this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { this.close() })
-
-        super.init()
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {

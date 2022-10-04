@@ -107,13 +107,15 @@ class TarasandeMain {
 
         val accountManager = managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager
 
-        if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && accountManager.mainAccount != null) {
-            accountManager.logIn(accountManager.accounts[accountManager.mainAccount!!])
+        try {
+            if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && accountManager.mainAccount != null) {
+                accountManager.logIn(accountManager.accounts[accountManager.mainAccount!!])
 
-            while (accountManager.loginThread != null && accountManager.loginThread!!.isAlive)
-                Thread.sleep(50L) // synchronize
-
-            accountManager.status = null
+                while (accountManager.loginThread != null && accountManager.loginThread!!.isAlive)
+                    Thread.sleep(50L) // synchronize
+            }
+        } catch (ignored: Exception) {
+            // In case something went wrong
         }
 
         autoSaveDaemon.start()

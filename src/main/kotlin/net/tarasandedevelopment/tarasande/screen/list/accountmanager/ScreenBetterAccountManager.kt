@@ -4,7 +4,6 @@ import com.mojang.authlib.minecraft.UserApiService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.network.SocialInteractionsManager
 import net.minecraft.client.util.ProfileKeys
@@ -12,17 +11,23 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.network.encryption.SignatureVerifier
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.ManagerAccount
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.environment.ManagerEnvironment
 import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
 import net.tarasandedevelopment.tarasande.screen.ScreenBetter
+import net.tarasandedevelopment.tarasande.screen.element.ScreenBetterSlotList
+import net.tarasandedevelopment.tarasande.screen.element.ScreenBetterSlotListEntry
+import net.tarasandedevelopment.tarasande.screen.element.ScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.screen.list.accountmanager.subscreens.ScreenBetterAccount
+import net.tarasandedevelopment.tarasande.screen.menu.clientmenu.ElementMenuScreenAccountManager
+import net.tarasandedevelopment.tarasande.util.player.chat.CommunicationUtil
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import java.awt.Color
 import java.util.concurrent.ThreadLocalRandom
 
-class ScreenBetterAccountManager : ScreenBetter(null) {
+class ScreenBetterAccountManager() : ScreenBetterSlotList(46, 10, MinecraftClient.getInstance().textRenderer.fontHeight * 2) {
 
     val accounts = ArrayList<Account>()
     var currentAccount: Account? = null
@@ -30,9 +35,6 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
     var mainAccount: Int? = null
 
     var loginThread: ThreadRunnableExposed? = null
-    var status: String? = null
-
-    private var accountList: AlwaysSelectedEntryListWidgetAccount? = null
 
     private var loginButton: ButtonWidget? = null
     private var removeButton: ButtonWidget? = null
@@ -43,125 +45,109 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
     val managerAccount = ManagerAccount()
     val managerEnvironment = ManagerEnvironment()
 
-    override fun init() {
-        addDrawableChild(AlwaysSelectedEntryListWidgetAccount(client, width, height, 16, height - 46).also { accountList = it })
+    private fun setStatus(status: String) = CommunicationUtil.printInformation("Account Manager: $status")
 
-        addDrawableChild(ButtonWidget(width / 2 - 203, height - 46 + 2, 100, 20, Text.of("Login")) { logIn(accountList?.selectedOrNull?.account!!) }.also { loginButton = it })
-        addDrawableChild(ButtonWidget(width / 2 - 101, height - 46 + 2, 100, 20, Text.of("Remove")) {
-            if (accounts.indexOf(accountList?.selectedOrNull?.account) == mainAccount) mainAccount = null
-            accounts.remove(accountList?.selectedOrNull?.account)
-            accountList?.reload()
-            accountList?.setSelected(null)
+    fun selected(): Account? {
+        if (this.slotList!!.selectedOrNull == null) return null
+
+        return (this.slotList!!.selectedOrNull as EntryAccount).account
+    }
+
+    override fun init() {
+        this.provideElements(object : ScreenBetterSlotListWidget.ListProvider {
+            override fun get(): List<ScreenBetterSlotListEntry> {
+                return accounts.map { a -> EntryAccount(a) }
+            }
+        })
+        super.init()
+
+        addDrawableChild(ButtonWidget(width / 2 - 152, height - 46 - 3, 100, 20, Text.of("Login")) { logIn(this.selected()) }.also { loginButton = it })
+        addDrawableChild(ButtonWidget(width / 2 - 50, height - 46 - 3, 100, 20, Text.of("Remove")) {
+            if (this.selected() == null) return@ButtonWidget
+
+            if (accounts.indexOf(this.selected()!!) == mainAccount) mainAccount = null
+            accounts.remove(this.selected())
+            slotList?.reload()
+            slotList?.setSelected(null)
         }.also { removeButton = it })
-        addDrawableChild(ButtonWidget(width / 2 + 1, height - 46 + 2, 100, 20, Text.of("Direct Login")) {
-            client?.setScreen(ScreenBetterAccount(this, "Direct Login") {
-                logIn(it)
-            })
-        }.also { addButton = it })
-        addDrawableChild(ButtonWidget(width / 2 + 103, height - 46 + 2, 100, 20, Text.of("Set Main")) {
-            val account = accountList?.selectedOrNull?.account!!
+        addDrawableChild(ButtonWidget(width / 2 + 52, height - 46 - 3, 100, 20, Text.of("Set Main")) {
+            val account = this.selected() ?: return@ButtonWidget
+
             if (account.session == null) {
-                status = Formatting.RED.toString() + "Account hasn't been logged into yet"
+                this.setStatus(Formatting.RED.toString() + "Account hasn't been logged into yet")
             } else {
                 val index = accounts.indexOf(account)
                 if (mainAccount != index) {
                     mainAccount = index
-                    status = Formatting.YELLOW.toString() + account.getDisplayName() + " is now the Main-Account"
+                    this.setStatus(Formatting.YELLOW.toString() + account.getDisplayName() + " is now the Main-Account")
                 } else {
                     mainAccount = null
-                    status = Formatting.YELLOW.toString() + account.getDisplayName() + " is no longer a Main-Account"
+                    this.setStatus(Formatting.YELLOW.toString() + account.getDisplayName() + " is no longer a Main-Account")
                 }
             }
         }.also { setMainButton = it })
 
-        addDrawableChild(ButtonWidget(width / 2 - 203, height - 46 + 2 + 20 + 2, 100, 20, Text.of("Direct Login")) { client?.setScreen(ScreenBetterAccount(this, "Direct Login") { logIn(it) }) })
-        addDrawableChild(ButtonWidget(width / 2 - 101, height - 46 + 2 + 20 + 2, 100, 20, Text.of("Random Account")) { logIn(accounts[ThreadLocalRandom.current().nextInt(accounts.size)]) }.also { randomButton = it })
-        addDrawableChild(ButtonWidget(width / 2 + 1, height - 46 + 2 + 20 + 2, 100, 20, Text.of("Add")) {
+        addDrawableChild(ButtonWidget(width / 2 - 152, height - 46 + 2 + 20 - 3, 100, 20, Text.of("Direct Login")) { client?.setScreen(ScreenBetterAccount(this, "Direct Login") { logIn(it) }) })
+        addDrawableChild(ButtonWidget(width / 2 - 50, height - 46 + 2 + 20 - 3, 100, 20, Text.of("Random Account")) { logIn(accounts[ThreadLocalRandom.current().nextInt(accounts.size)]) }.also { randomButton = it })
+        addDrawableChild(ButtonWidget(width / 2 + 52, height - 46 + 2 + 20 - 3, 100, 20, Text.of("Add")) {
             client?.setScreen(ScreenBetterAccount(this, "Add Account") { account ->
                 accounts.add(account)
-                accountList?.reload()
+                this.slotList?.reload()
             })
         }.also { addButton = it })
-        addDrawableChild(ButtonWidget(width / 2 + 103, height - 46 + 2 + 20 + 2, 100, 20, Text.of("Back")) {
+        addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
             RenderSystem.recordRenderCall {
                 close()
             }
         })
-
         tick()
-        super.init()
     }
 
     override fun tick() {
-        loginButton?.active = accountList?.selectedOrNull != null
-        removeButton?.active = accountList?.selectedOrNull != null
-        setMainButton?.active = accountList?.selectedOrNull != null
-        if (accountList?.selectedOrNull != null) setMainButton?.active = accountList?.selectedOrNull?.account?.isSuitableAsMain() == true
+        loginButton?.active = slotList?.selectedOrNull != null
+        removeButton?.active = slotList?.selectedOrNull != null
+        setMainButton?.active = slotList?.selectedOrNull != null
+        if (slotList?.selectedOrNull != null) setMainButton?.active = this.selected()!!.isSuitableAsMain() == true
         randomButton?.active = accounts.isNotEmpty()
         super.tick()
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
-        drawCenteredText(matrices, textRenderer, if (status == null) "Account Manager" else status, width / 2, 8 - textRenderer.fontHeight / 2, -1)
+        this.renderTitle(matrices, "Account Manager")
     }
 
-    override fun close() {
-        status = null
-        super.close()
-    }
+    inner class EntryAccount(var account: Account) : ScreenBetterSlotListEntry() {
 
-    inner class AlwaysSelectedEntryListWidgetAccount(mcIn: MinecraftClient?, widthIn: Int, heightIn: Int, topIn: Int, bottomIn: Int) : AlwaysSelectedEntryListWidget<AlwaysSelectedEntryListWidgetAccount.EntryAccount>(mcIn, widthIn, heightIn, topIn, bottomIn, MinecraftClient.getInstance().textRenderer.fontHeight * 2) {
-        internal fun reload() {
-            this.clearEntries()
-            for (account in accounts) {
-                this.addEntry(EntryAccount(account))
-            }
+        override fun onDoubleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
+            logIn(account)
+            super.onDoubleClickEntry(mouseX, mouseY, mouseButton)
         }
 
-        override fun getScrollbarPositionX() = width - 6 // sick hardcoded value, thx mojang
+        override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
+            super.renderEntry(matrices, index, entryWidth, entryHeight, mouseX, mouseY, hovered)
 
-        init {
-            reload()
-        }
-
-        inner class EntryAccount(var account: Account) : Entry<EntryAccount>() {
-            private var lastClick: Long = 0
-
-            override fun mouseClicked(x: Double, y: Double, button: Int): Boolean {
-                if (button == 0) {
-                    if (System.currentTimeMillis() - lastClick < 300) {
-                        logIn(account)
-                    }
-                    setSelected(this)
-                    lastClick = System.currentTimeMillis()
-                }
-                return super.mouseClicked(x, y, button)
-            }
-
-            override fun render(matrices: MatrixStack?, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {
-                matrices?.push()
-                matrices?.translate((width / 2f).toDouble(), (y + textRenderer.fontHeight - textRenderer.fontHeight / 2f).toDouble(), 0.0)
-                matrices?.scale(2.0f, 2.0f, 1.0f)
-                matrices?.translate(-(width / 2f).toDouble(), (-(y + textRenderer.fontHeight - textRenderer.fontHeight / 2f)).toDouble(), 0.0)
-                drawCenteredText(matrices, textRenderer, Text.of(when {
-                    client?.session?.equals(account.session) == true -> Formatting.GREEN.toString()
-                    mainAccount == accounts.indexOf(account) -> Formatting.YELLOW.toString()
-                    else -> ""
-                } + account.getDisplayName()), width / 2, y + 2, Color.white.rgb)
-                matrices?.pop()
-            }
-
-            override fun getNarration(): Text = Text.of(account.getDisplayName())
+            matrices.push()
+            matrices.translate((entryWidth).toDouble(), (textRenderer.fontHeight - textRenderer.fontHeight / 2f).toDouble(), 0.0)
+            matrices.scale(2.0f, 2.0f, 1.0f)
+            matrices.translate(-(entryWidth).toDouble(), (-(textRenderer.fontHeight - textRenderer.fontHeight / 2f)).toDouble(), 0.0)
+            drawCenteredText(matrices, textRenderer, Text.of(when {
+                client?.session?.equals(account.session) == true -> Formatting.GREEN.toString()
+                mainAccount == accounts.indexOf(account) -> Formatting.YELLOW.toString()
+                else -> ""
+            } + account.getDisplayName()), entryWidth, 2, Color.white.rgb)
+            matrices.pop()
         }
     }
 
-    fun logIn(account: Account) {
+    fun logIn(account: Account?) {
+        if (account == null) return
+
         if (loginThread != null && loginThread?.isAlive!!) {
             try {
                 (loginThread?.runnable as RunnableLogin).cancelled = true
             } catch (exception: IllegalStateException) { // This is an extremely tight case, which shouldn't happen in 99.9% of the cases
-                status = Formatting.RED.toString() + exception.message
+                this.setStatus(Formatting.RED.toString() + exception.message)
                 return
             }
         }
@@ -177,7 +163,7 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
             }
 
         override fun run() {
-            status = Formatting.YELLOW.toString() + "Logging in..."
+            setStatus(Formatting.YELLOW.toString() + "Logging in...")
             val prevAccount = currentAccount
             try {
                 currentAccount = account
@@ -202,13 +188,11 @@ class ScreenBetterAccountManager : ScreenBetter(null) {
                     it.tarasande_setSocialInteractionsManager(SocialInteractionsManager(MinecraftClient.getInstance(), userApiService))
                     it.tarasande_setProfileKeys(ProfileKeys(it.tarasande_getUserApiService(), account.session?.profile?.id, MinecraftClient.getInstance().runDirectory.toPath()))
                 }
-                status = Formatting.GREEN.toString() + "Logged in as \"" + account.getDisplayName() + "\""
+                setStatus(Formatting.GREEN.toString() + "Logged in as \"" + account.getDisplayName() + "\"" + (if (!updatedUserApiService) Formatting.RED.toString() + " (failed to update UserApiService)" else ""))
 
-                if (!updatedUserApiService)
-                    status += Formatting.RED.toString() + " (failed to update UserApiService)"
             } catch (e: Throwable) {
                 e.printStackTrace()
-                status = if (e.message?.isEmpty()!!) Formatting.RED.toString() + "Login failed!" else Formatting.RED.toString() + e.message
+                setStatus(if (e.message?.isEmpty()!!) Formatting.RED.toString() + "Login failed!" else Formatting.RED.toString() + e.message)
                 currentAccount = prevAccount
             }
         }

@@ -46,7 +46,7 @@ class ScreenBetterEnvironment(prevScreen: Screen?, private val environment: Envi
         }
 
         for ((index, environmentPreset) in TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerEnvironment.list.withIndex()) {
-            this.addDrawableChild(ButtonWidget(this.width - 105 * (index + 1), 5, 100, 20, Text.of(environmentPreset.name)) {
+            this.addDrawableChild(ButtonWidget(5 + (index * 105), 5, 100, 20, Text.of(environmentPreset.name)) {
                 authHostTextField?.text = environmentPreset.authHost
                 accountsHostTextField?.text = environmentPreset.accountsHost
                 sessionHostTextField?.text = environmentPreset.sessionHost
@@ -63,6 +63,7 @@ class ScreenBetterEnvironment(prevScreen: Screen?, private val environment: Envi
             RenderSystem.recordRenderCall { close() }
         })
 
+        super.init()
     }
 
 }

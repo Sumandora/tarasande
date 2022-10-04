@@ -36,8 +36,11 @@ class ElementMenuScreenProxySystem : ElementMenuScreen("Proxy System") {
 
 class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack") {
 
+    var screenBetterProtocolHack = ScreenBetterProtocolHack()
+
     override fun getScreen(): Screen {
-        return ScreenBetterProtocolHack(MinecraftClient.getInstance().currentScreen!!)
+        screenBetterProtocolHack.prevScreen = MinecraftClient.getInstance().currentScreen
+        return this.screenBetterProtocolHack
     }
 }
 

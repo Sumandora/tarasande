@@ -3,10 +3,11 @@ package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import java.util.concurrent.CopyOnWriteArrayList
 
 open class PanelElements<T : Element>(title: String, x: Double, y: Double, minWidth: Double, minHeight: Double, fixed: Boolean = false) : Panel(title, x, y, minWidth, minHeight, fixed = fixed) {
 
-    internal val elementList = ArrayList<T>()
+    internal val elementList = CopyOnWriteArrayList<T>()
 
     override fun init() {
         for (it in elementList) {

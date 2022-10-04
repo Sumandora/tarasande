@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.screen.list.protocolhack
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.viaprotocolhack.util.VersionList
-import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
@@ -11,12 +10,19 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.element.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.screen.element.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.element.ScreenBetterSlotListWidget
+import net.tarasandedevelopment.tarasande.screen.menu.clientmenu.ElementMenuScreenProtocolHack
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 
-class ScreenBetterProtocolHack(parent: Screen) : ScreenBetterSlotList(parent, 46, 12, object : ScreenBetterSlotListWidget.ListProvider {
-        override fun get() = VersionList.getProtocols().map { p -> ProtocolEntry(p) }
-}) {
+class ScreenBetterProtocolHack : ScreenBetterSlotList(46, 12) {
+
+    init {
+        this.provideElements(object : ScreenBetterSlotListWidget.ListProvider {
+            override fun get(): List<ScreenBetterSlotListEntry> {
+                return VersionList.getProtocols().map { p -> EntryProtocol(p) }
+            }
+        })
+    }
 
     override fun init() {
         super.init()
@@ -25,7 +31,7 @@ class ScreenBetterProtocolHack(parent: Screen) : ScreenBetterSlotList(parent, 46
             this.close()
         })
 
-        this.addDrawableChild(ButtonWidget(this.width / 2 - 49, this.height - 25, 98, 20, this.generateAutoDetectText()) {
+        this.addDrawableChild(ButtonWidget(this.width / 2 - 49, this.height - 27, 98, 20, this.generateAutoDetectText()) {
             TarasandeMain.get().protocolHack.toggleAuto()
             it.message = this.generateAutoDetectText()
         })
@@ -39,11 +45,7 @@ class ScreenBetterProtocolHack(parent: Screen) : ScreenBetterSlotList(parent, 46
         this.renderTitle(matrices, "Protocol Hack")
     }
 
-    class ProtocolEntry(val protocol: ProtocolVersion) : ScreenBetterSlotListEntry() {
-
-        override fun isSelected(): Boolean {
-            return TarasandeMain.get().protocolHack.clientsideVersion() == this.protocol.version
-        }
+    class EntryProtocol(val protocol: ProtocolVersion) : ScreenBetterSlotListEntry() {
 
         private fun colorShift(input: Color): Int {
             return if (TarasandeMain.get().protocolHack.isAuto()) input.darker().darker().darker().rgb else input.rgb
@@ -57,9 +59,9 @@ class ScreenBetterProtocolHack(parent: Screen) : ScreenBetterSlotList(parent, 46
             return !TarasandeMain.get().protocolHack.isAuto() && super.mouseClicked(mouseX, mouseY, button)
         }
 
-        override fun onClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int): Boolean {
+        override fun onSingleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
             TarasandeMain.get().protocolHack.setVersion(this.protocol.version)
-            return true
+            super.onSingleClickEntry(mouseX, mouseY, mouseButton)
         }
     }
 }
