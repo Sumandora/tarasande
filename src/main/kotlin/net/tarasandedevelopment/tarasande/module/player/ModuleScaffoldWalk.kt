@@ -1,7 +1,5 @@
 package net.tarasandedevelopment.tarasande.module.player
 
-import net.minecraft.client.option.Perspective
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.util.Hand
@@ -16,7 +14,6 @@ import net.tarasandedevelopment.tarasande.base.event.Priority
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.*
-import net.tarasandedevelopment.tarasande.mixin.accessor.ICamera
 import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
 import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
 import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
@@ -262,10 +259,11 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                             t = bestSolution
 
                                             preferredSide = when {
-                                                prevT < t -> -1
-                                                prevT > t -> 1
+                                                prevT < t -> 1
+                                                prevT > t -> -1
                                                 else -> null
                                             }
+                                            println(preferredSide)
                                         } else {
                                             t += (a * preferredSide!!).toFloat()
                                         }
@@ -415,26 +413,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(Box.from(aimTarget).offset(-0.5, -0.5, -0.5).expand(-0.45)), aimTargetColor.getColor().rgb)
                 if (placeLine != null)
                     RenderUtil.blockOutline(event.matrices, VoxelShapes.union(VoxelShapes.cuboid(Box.from(placeLine?.first).offset(-0.5, -0.5, -0.5).expand(-0.49)), VoxelShapes.cuboid(Box.from(placeLine?.second).offset(-0.5, -0.5, -0.5).expand(-0.49))), placeLineColor.getColor().rgb)
-            }
-
-            is EventCameraOverride -> {
-                if (mc.options.perspective != Perspective.THIRD_PERSON_FRONT)
-                    return@Consumer
-                if (RotationUtil.fakeRotation == null)
-                    return@Consumer
-
-                val offset = (mc.player?.age!! + mc.tickDelta) / 50.0
-
-                val dist = 2.0
-
-                val playerEye = mc.player?.getLerpedPos(mc.tickDelta)?.add(0.0, PlayerEntity.STANDING_DIMENSIONS.height.toDouble(), 0.0)!!
-                val cameraPos = playerEye.add(cos(offset) * dist, dist, sin(offset) * dist)
-
-                val accessor = event.camera as ICamera
-
-                accessor.tarasande_invokeSetPos(cameraPos)
-                val rotation = RotationUtil.getRotations(cameraPos, playerEye)
-                accessor.tarasande_invokeSetRotation(rotation.yaw, rotation.pitch)
             }
         }
     }
