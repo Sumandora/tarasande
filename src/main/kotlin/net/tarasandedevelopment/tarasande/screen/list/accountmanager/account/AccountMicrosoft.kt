@@ -21,6 +21,7 @@ import java.nio.charset.StandardCharsets
 import java.sql.Timestamp
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
+import javax.crypto.SecretKey
 
 @AccountInfo("Microsoft", true)
 open class AccountMicrosoft : Account() {
@@ -32,6 +33,7 @@ open class AccountMicrosoft : Account() {
     private val minecraftProfileUrl = "https://api.minecraftservices.com/minecraft/profile"
     protected var clientId = "54fd49e4-2103-4044-9603-2b028c814ec3"
     protected var scope = "XboxLive.signin offline_access"
+    protected var clientSecret: String? = null
     protected val redirectUriBase = "http://localhost:"
     private var cancelled = false
 
@@ -146,6 +148,9 @@ You can close this page now.""".toByteArray())
             it["grant_type"] = "refresh_token"
             it["redirect_uri"] = redirectUri!!
             it["scope"] = scope
+            if (clientSecret != null) {
+                it["client_secret"] = clientSecret!!
+            }
         }), JsonObject::class.java)
         return buildFromOAuthToken(oAuthToken)
     }
