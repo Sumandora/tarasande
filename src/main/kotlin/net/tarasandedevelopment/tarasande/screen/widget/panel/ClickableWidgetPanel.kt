@@ -11,7 +11,7 @@ import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 
-class ClickableWidgetPanel(val panel: Panel) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelWidth.toInt(), Text.of(panel.title)), Element {
+open class ClickableWidgetPanel(val panel: Panel) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelWidth.toInt(), Text.of(panel.title)), Element {
 
     override fun appendNarrations(builder: NarrationMessageBuilder?) {
     }

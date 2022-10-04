@@ -33,7 +33,6 @@ open class ScreenBetterSlotList(parent: Screen, private val top: Int, private va
     }
 
     override fun init() {
-        super.init()
         var lastSelected: ScreenBetterSlotListEntry? = null
         if (this.slotList != null)
             lastSelected = this.slotList?.selectedOrNull
@@ -46,6 +45,8 @@ open class ScreenBetterSlotList(parent: Screen, private val top: Int, private va
             else
                 this.slotList!!.setSelected(this.listProvider.get()[0])
         })
+
+        super.init()
     }
 }
 
