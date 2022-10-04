@@ -14,9 +14,29 @@ open class ScreenBetter(internal var prevScreen: Screen?) : Screen(Text.of("")) 
         super.init()
 
         this.addDrawableChild(object : ClickableWidgetPanel(TarasandeMain.get().screenCheatMenu.panels.filterIsInstance<PanelElementsNotification>().first()) {
-            init {
+
+            override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+                val oldX = this.panel.x
+                val oldY = this.panel.y
+
                 panel.x = MinecraftClient.getInstance().window.scaledWidth - panel.panelWidth - 5
                 panel.y = 5.0
+                super.render(matrices, mouseX, mouseY, delta)
+                panel.x = oldX
+                panel.y = oldY
+            }
+
+            override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+                val oldX = this.panel.x
+                val oldY = this.panel.y
+
+                panel.x = MinecraftClient.getInstance().window.scaledWidth - panel.panelWidth - 5
+                panel.y = 5.0
+                val returnType = super.mouseClicked(mouseX, mouseY, button)
+                panel.x = oldX
+                panel.y = oldY
+
+                return returnType
             }
         })
     }

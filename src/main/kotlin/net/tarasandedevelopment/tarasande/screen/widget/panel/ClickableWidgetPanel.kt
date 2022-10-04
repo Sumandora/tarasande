@@ -17,13 +17,14 @@ open class ClickableWidgetPanel(val panel: Panel) : ClickableWidget(panel.x.toIn
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        panel.opened = true
         panel.render(matrices, mouseX, mouseY, delta)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        panel.modifiable = true
+        val returnType = panel.mouseClicked(mouseX, mouseY, button)
         panel.modifiable = false
-        return panel.mouseClicked(mouseX, mouseY, button)
+        return returnType
     }
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
