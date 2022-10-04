@@ -15,6 +15,8 @@ open class ScreenBetter(internal var prevScreen: Screen?) : Screen(Text.of("")) 
     override fun init() {
         super.init()
 
+        if (MinecraftClient.getInstance().world != null) return
+
         this.addDrawableChild(object : ClickableWidgetPanel(TarasandeMain.get().screenCheatMenu.panels.filterIsInstance<PanelElementsNotification>().first()) {
 
             override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {

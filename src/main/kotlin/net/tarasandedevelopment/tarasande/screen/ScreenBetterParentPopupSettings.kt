@@ -26,8 +26,6 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
             close()
         })
 
-        if (MinecraftClient.getInstance().world != null) return
-
         this.addDrawableChild(ClickableWidgetPanel(object : PanelElements<ValueComponent>(this.titleName, 0.0, 0.0, 0.0, 0.0) {
 
             override fun init() {
