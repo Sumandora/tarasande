@@ -320,14 +320,14 @@ object RenderUtil {
         MinecraftClient.getInstance().textRenderer.draw(matrices, text, x, y, color)
     }
 
-    fun text(matrices: MatrixStack?, text: String, x: Float, y: Float) = text(matrices, Text.literal(text), x, y)
+    fun text(matrices: MatrixStack?, text: String, x: Float, y: Float) = text(matrices, Text.of(text), x, y)
     fun text(matrices: MatrixStack?, text: Text, x: Float, y: Float) = text(matrices, text, x, y, -1)
     fun text(matrices: MatrixStack?, text: Text, x: Float, y: Float, color: Int): Int {
         return font().drawWithShadow(matrices, text, x, y, color)
     }
 
     fun textCenter(matrices: MatrixStack?, text: String, x: Float, y: Float) {
-        textCenter(matrices, Text.literal(text), x, y)
+        textCenter(matrices, Text.of(text), x, y)
     }
     fun textCenter(matrices: MatrixStack?, text: Text, x: Float, y: Float) = textCenter(matrices, text, x, y, -1)
     fun textCenter(matrices: MatrixStack?, text: Text, x: Float, y: Float, color: Int) {

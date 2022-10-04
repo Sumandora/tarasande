@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed
 
-import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
@@ -17,15 +16,6 @@ class PanelRadar(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
 		if (MinecraftClient.getInstance().player == null)
 			return
 
-		GlStateManager._enableScissorTest()
-		val scaleFactor = MinecraftClient.getInstance().window?.scaleFactor!!.toInt()
-
-		GlStateManager._scissorBox(
-			(x * scaleFactor).toInt(),
-			(MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight) * scaleFactor).toInt(),
-			(panelWidth * scaleFactor).toInt(),
-			(panelHeight * scaleFactor).toInt()
-		)
 		val pos = MinecraftClient.getInstance().player?.getLerpedPos(MinecraftClient.getInstance().tickDelta)!!
 		for (entity in MinecraftClient.getInstance().world?.entities!!) {
 			val otherPos = entity.getLerpedPos(MinecraftClient.getInstance().tickDelta)!!
@@ -41,7 +31,5 @@ class PanelRadar(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
 
 			RenderUtil.fillCircle(matrices, this.x + panelWidth / 2 + x, this.y + panelHeight / 2 + y, 2.0, Color(entity.teamColorValue).rgb /* alpha ignore */)
 		}
-
-		GlStateManager._disableScissorTest()
 	}
 }

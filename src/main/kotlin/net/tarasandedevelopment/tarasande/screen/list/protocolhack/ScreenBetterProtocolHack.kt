@@ -22,7 +22,7 @@ class ScreenBetterProtocolHack(parent: Screen) : ScreenBetterSlotList(parent, 46
     override fun init() {
         super.init()
 
-        this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.literal("<-")) {
+        this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
             this.close()
         })
 
@@ -51,7 +51,7 @@ class ScreenBetterProtocolHack(parent: Screen) : ScreenBetterSlotList(parent, 46
         }
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            RenderUtil.textCenter(matrices, Text.literal(this.protocol.name), entryWidth.toFloat(), 0F, if (this.isSelected()) colorShift(Color.green) else colorShift(Color.red))
+            RenderUtil.textCenter(matrices, Text.of(this.protocol.name), entryWidth.toFloat(), 0F, if (this.isSelected()) colorShift(Color.green) else colorShift(Color.red))
         }
 
         override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

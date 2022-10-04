@@ -30,9 +30,9 @@ public class MixinTitleScreen extends Screen {
                 buttonWidget.setWidth(buttonWidget.getWidth() / 2 - 2);
                 final String selected = TarasandeMain.Companion.get().getClientValues().getClientMenuFocusedEntry().getSelected().get(0);
 
-                Text buttonText = Text.literal((Character.toUpperCase(TarasandeMain.Companion.get().getName().charAt(0)) + TarasandeMain.Companion.get().getName().substring(1)) + " Menu");
+                Text buttonText = Text.of((Character.toUpperCase(TarasandeMain.Companion.get().getName().charAt(0)) + TarasandeMain.Companion.get().getName().substring(1)) + " Menu");
                 if (this.anySelected()) {
-                    buttonText = Text.literal(selected);
+                    buttonText = Text.of(selected);
                 }
 
                 addDrawableChild(new ButtonWidget(buttonWidget.x + buttonWidget.getWidth() + 4, buttonWidget.y, buttonWidget.getWidth(), buttonWidget.getHeight(), buttonText, button -> {

@@ -89,7 +89,7 @@ object ProtocolAutoDetector {
                                 }
 
                                 override fun onPong(packet: QueryPongS2CPacket) {
-                                    clientConnection.disconnect(Text.literal("Pong not requested!"))
+                                    clientConnection.disconnect(Text.of("Pong not requested!"))
                                 }
 
                                 override fun onDisconnected(reason: Text) {

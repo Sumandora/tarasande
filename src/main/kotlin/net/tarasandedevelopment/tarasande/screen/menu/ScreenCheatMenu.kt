@@ -211,7 +211,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         val textHeight = textRenderer.fontHeight.toDouble() + 2
 
         RenderUtil.roundedFill(matrices, this.width / 2.0 - ((textRenderer.getWidth(this.extrasText) + 4) / 2.0), -3.0 - animation * textHeight, this.width / 2.0 + ((textRenderer.getWidth(this.extrasText) + 4) / 2.0), textHeight * animation, 3.0, Int.MIN_VALUE)
-        RenderUtil.textCenter(matrices, Text.literal(this.extrasText), this.width / 2.0F, 2.0F - (1.0F - animation.toFloat()) * textHeight.toFloat(), if (this.isOverExtras(mouseX.toDouble(), mouseY.toDouble())) TarasandeMain.get().clientValues.accentColor.getColor().rgb else -1)
+        RenderUtil.textCenter(matrices, Text.of(this.extrasText), this.width / 2.0F, 2.0F - (1.0F - animation.toFloat()) * textHeight.toFloat(), if (this.isOverExtras(mouseX.toDouble(), mouseY.toDouble())) TarasandeMain.get().clientValues.accentColor.getColor().rgb else -1)
     }
 
     private fun isOverExtras(mouseX: Double, mouseY: Double) = RenderUtil.isHovered(mouseX, mouseY, this.width / 2.0 - ((textRenderer.getWidth(this.extrasText) + 4) / 2.0), -3.0, this.width / 2.0 + ((textRenderer.getWidth(this.extrasText) + 4) / 2.0), textRenderer.fontHeight.toDouble() + 2)

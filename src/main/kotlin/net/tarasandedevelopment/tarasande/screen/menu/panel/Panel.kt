@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.screen.menu.panel
 
+import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
@@ -101,7 +102,17 @@ open class Panel(
 
             matrices?.push()
             matrices?.translate(0.0, scrollOffset, 0.0)
+
+            GlStateManager._enableScissorTest()
+            val scaleFactor = MinecraftClient.getInstance().window?.scaleFactor!!.toInt()
+            GlStateManager._scissorBox(
+                (x * scaleFactor).toInt(),
+                (MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight) * scaleFactor).toInt(),
+                (panelWidth * scaleFactor).toInt(),
+                (panelHeight * scaleFactor).toInt()
+            )
             renderContent(matrices, mouseX, mouseY, delta)
+            GlStateManager._disableScissorTest()
             matrices?.pop()
         }
 

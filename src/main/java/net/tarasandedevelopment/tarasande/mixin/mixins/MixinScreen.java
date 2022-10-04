@@ -36,7 +36,8 @@ public abstract class MixinScreen implements IScreen {
     @Final
     private List<Selectable> selectables;
 
-    @Shadow protected abstract <T extends Element & Drawable> T addDrawableChild(Element drawableElement);
+    @Shadow
+    protected abstract <T extends Element> T addDrawableChild(T drawableElement);
 
     @Shadow public abstract List<? extends Element> children();
 
