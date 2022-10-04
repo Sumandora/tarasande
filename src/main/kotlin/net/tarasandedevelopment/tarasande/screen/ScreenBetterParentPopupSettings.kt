@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPan
 
 class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val owner: Any) : ScreenBetter(parent) {
 
-    private lateinit var clickableWidgetPanel: ClickableWidgetPanel
+    private var clickableWidgetPanel: ClickableWidgetPanel? = null
 
     init {
         if (parent is ScreenCheatMenu)
@@ -25,6 +25,8 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
         this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
             close()
         })
+
+        if (MinecraftClient.getInstance().world != null) return
 
         this.addDrawableChild(ClickableWidgetPanel(object : PanelElements<ValueComponent>(this.titleName, 0.0, 0.0, 0.0, 0.0) {
 
@@ -52,12 +54,12 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
     }
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        this.clickableWidgetPanel.mouseReleased(mouseX, mouseY, button)
+        this.clickableWidgetPanel?.mouseReleased(mouseX, mouseY, button)
         return super.mouseReleased(mouseX, mouseY, button)
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
-        this.clickableWidgetPanel.mouseScrolled(mouseX, mouseY, amount)
+        this.clickableWidgetPanel?.mouseScrolled(mouseX, mouseY, amount)
         return super.mouseScrolled(mouseX, mouseY, amount)
     }
 
