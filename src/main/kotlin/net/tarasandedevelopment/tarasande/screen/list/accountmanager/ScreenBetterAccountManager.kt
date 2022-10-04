@@ -16,8 +16,8 @@ import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.Acc
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.ManagerAccount
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.environment.ManagerEnvironment
 import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
+import net.tarasandedevelopment.tarasande.screen.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.list.accountmanager.subscreens.ScreenBetterAccount
-import net.tarasandedevelopment.tarasande.util.render.screen.ScreenBetter
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import java.awt.Color
 import java.util.concurrent.ThreadLocalRandom

@@ -15,7 +15,6 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 
 class ScreenBetterProtocolHack(parent: Screen) : ScreenBetterSlotList(parent, 46, 12, object : ScreenBetterSlotListWidget.ListProvider {
-
         override fun get() = VersionList.getProtocols().map { p -> ProtocolEntry(p) }
 }) {
 

@@ -6,9 +6,9 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
 import net.minecraft.client.gui.widget.EntryListWidget
 import net.minecraft.client.util.math.MatrixStack
+import net.tarasandedevelopment.tarasande.screen.ScreenBetter
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import net.tarasandedevelopment.tarasande.util.render.screen.ScreenBetter
 
 open class ScreenBetterSlotList(parent: Screen, private val top: Int, private val bottom: Int, private val entryHeight: Int, private var listProvider: ScreenBetterSlotListWidget.ListProvider) : ScreenBetter(parent) {
 

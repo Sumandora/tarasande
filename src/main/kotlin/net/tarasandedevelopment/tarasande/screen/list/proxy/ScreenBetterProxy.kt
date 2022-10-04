@@ -8,13 +8,13 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.screen.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPassword
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import net.tarasandedevelopment.tarasande.util.connection.ProxyAuthentication
 import net.tarasandedevelopment.tarasande.util.connection.ProxyType
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import net.tarasandedevelopment.tarasande.util.render.screen.ScreenBetter
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
