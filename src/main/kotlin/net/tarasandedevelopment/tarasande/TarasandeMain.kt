@@ -112,6 +112,8 @@ class TarasandeMain {
 
                 while (accountManager.loginThread != null && accountManager.loginThread!!.isAlive)
                     Thread.sleep(50L) // synchronize
+
+                accountManager.status = ""
             }
         } catch (ignored: Throwable) {
             // In case something went wrong

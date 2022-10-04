@@ -11,23 +11,19 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.network.encryption.SignatureVerifier
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.ManagerAccount
 import net.tarasandedevelopment.tarasande.base.screen.accountmanager.environment.ManagerEnvironment
 import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
-import net.tarasandedevelopment.tarasande.screen.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.element.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.screen.element.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.element.ScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.screen.list.accountmanager.subscreens.ScreenBetterAccount
-import net.tarasandedevelopment.tarasande.screen.menu.clientmenu.ElementMenuScreenAccountManager
-import net.tarasandedevelopment.tarasande.util.player.chat.CommunicationUtil
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import java.awt.Color
 import java.util.concurrent.ThreadLocalRandom
 
-class ScreenBetterAccountManager() : ScreenBetterSlotList(46, 10, MinecraftClient.getInstance().textRenderer.fontHeight * 2) {
+class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.getInstance().textRenderer.fontHeight * 2) {
 
     val accounts = ArrayList<Account>()
     var currentAccount: Account? = null
@@ -45,7 +41,7 @@ class ScreenBetterAccountManager() : ScreenBetterSlotList(46, 10, MinecraftClien
     val managerAccount = ManagerAccount()
     val managerEnvironment = ManagerEnvironment()
 
-    private fun setStatus(status: String) = CommunicationUtil.printInformation("Account Manager: $status")
+    var status = ""
 
     fun selected(): Account? {
         if (this.slotList!!.selectedOrNull == null) return null
@@ -74,15 +70,15 @@ class ScreenBetterAccountManager() : ScreenBetterSlotList(46, 10, MinecraftClien
             val account = this.selected() ?: return@ButtonWidget
 
             if (account.session == null) {
-                this.setStatus(Formatting.RED.toString() + "Account hasn't been logged into yet")
+                status = Formatting.RED.toString() + "Account hasn't been logged into yet"
             } else {
                 val index = accounts.indexOf(account)
                 if (mainAccount != index) {
                     mainAccount = index
-                    this.setStatus(Formatting.YELLOW.toString() + account.getDisplayName() + " is now the Main-Account")
+                    status = Formatting.YELLOW.toString() + account.getDisplayName() + " is now the Main-Account"
                 } else {
                     mainAccount = null
-                    this.setStatus(Formatting.YELLOW.toString() + account.getDisplayName() + " is no longer a Main-Account")
+                    status = Formatting.YELLOW.toString() + account.getDisplayName() + " is no longer a Main-Account"
                 }
             }
         }.also { setMainButton = it })
@@ -115,6 +111,7 @@ class ScreenBetterAccountManager() : ScreenBetterSlotList(46, 10, MinecraftClien
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         this.renderTitle(matrices, "Account Manager")
+        drawCenteredText(matrices, textRenderer, Text.of(status), width / 2, 2 * textRenderer.fontHeight * 2, Color.white.rgb)
     }
 
     inner class EntryAccount(var account: Account) : ScreenBetterSlotListEntry() {
@@ -147,7 +144,7 @@ class ScreenBetterAccountManager() : ScreenBetterSlotList(46, 10, MinecraftClien
             try {
                 (loginThread?.runnable as RunnableLogin).cancelled = true
             } catch (exception: IllegalStateException) { // This is an extremely tight case, which shouldn't happen in 99.9% of the cases
-                this.setStatus(Formatting.RED.toString() + exception.message)
+                status = Formatting.RED.toString() + exception.message
                 return
             }
         }
@@ -163,7 +160,7 @@ class ScreenBetterAccountManager() : ScreenBetterSlotList(46, 10, MinecraftClien
             }
 
         override fun run() {
-            setStatus(Formatting.YELLOW.toString() + "Logging in...")
+            status = Formatting.YELLOW.toString() + "Logging in..."
             val prevAccount = currentAccount
             try {
                 currentAccount = account
@@ -188,11 +185,11 @@ class ScreenBetterAccountManager() : ScreenBetterSlotList(46, 10, MinecraftClien
                     it.tarasande_setSocialInteractionsManager(SocialInteractionsManager(MinecraftClient.getInstance(), userApiService))
                     it.tarasande_setProfileKeys(ProfileKeys(it.tarasande_getUserApiService(), account.session?.profile?.id, MinecraftClient.getInstance().runDirectory.toPath()))
                 }
-                setStatus(Formatting.GREEN.toString() + "Logged in as \"" + account.getDisplayName() + "\"" + (if (!updatedUserApiService) Formatting.RED.toString() + " (failed to update UserApiService)" else ""))
+                status = Formatting.GREEN.toString() + "Logged in as \"" + account.getDisplayName() + "\"" + if (!updatedUserApiService) Formatting.RED.toString() + " (failed to update UserApiService)" else ""
 
             } catch (e: Throwable) {
                 e.printStackTrace()
-                setStatus(if (e.message?.isEmpty()!!) Formatting.RED.toString() + "Login failed!" else Formatting.RED.toString() + e.message)
+                status = if (e.message?.isEmpty()!!) Formatting.RED.toString() + "Login failed!" else Formatting.RED.toString() + e.message
                 currentAccount = prevAccount
             }
         }
