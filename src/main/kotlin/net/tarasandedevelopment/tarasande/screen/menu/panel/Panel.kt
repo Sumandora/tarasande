@@ -8,6 +8,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.utils.DragInfo
 import net.tarasandedevelopment.tarasande.screen.menu.utils.IElement
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
@@ -105,12 +106,13 @@ open class Panel(
 
             GlStateManager._enableScissorTest()
             val scaleFactor = MinecraftClient.getInstance().window?.scaleFactor!!.toInt()
-            GlStateManager._scissorBox(
-                (x * scaleFactor).toInt(),
-                (MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight) * scaleFactor).toInt(),
-                (panelWidth * scaleFactor).toInt(),
-                (panelHeight * scaleFactor).toInt()
-            )
+            if (MinecraftClient.getInstance().currentScreen !is ScreenCheatMenu)
+                GlStateManager._scissorBox(
+                    (x * scaleFactor).toInt(),
+                    (MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight) * scaleFactor).toInt(),
+                    (panelWidth * scaleFactor).toInt(),
+                    (panelHeight * scaleFactor).toInt()
+                )
             renderContent(matrices, mouseX, mouseY, delta)
             GlStateManager._disableScissorTest()
             matrices?.pop()
