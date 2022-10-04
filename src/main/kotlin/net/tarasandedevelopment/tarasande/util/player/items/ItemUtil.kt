@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.util
+package net.tarasandedevelopment.tarasande.util.player.items
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
@@ -6,7 +6,7 @@ import net.minecraft.item.Items
 import net.minecraft.nbt.*
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.util.chat.CustomChat
+import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 
 object ItemUtil {
@@ -18,15 +18,15 @@ object ItemUtil {
 
     fun give(stack: ItemStack) {
         if (!MinecraftClient.getInstance().player?.abilities!!.creativeMode) {
-            CustomChat.print(this.noCreative)
+            CustomChat.print(noCreative)
             return
         }
 
         if (!MinecraftClient.getInstance().player?.inventory!!.insertStack(stack)) {
-            CustomChat.print(this.noSpace)
+            CustomChat.print(noSpace)
         }
 
-        CustomChat.print(this.placed)
+        CustomChat.print(placed)
     }
 
     // ReinerWahnsinn Spawner Bypass for Spigot/CraftBukkit 1.8.3

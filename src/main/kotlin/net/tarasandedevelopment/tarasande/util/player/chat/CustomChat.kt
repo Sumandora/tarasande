@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.util.chat
+package net.tarasandedevelopment.tarasande.util.player.chat
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.MutableText
