@@ -42,14 +42,14 @@ class ScreenBetterAccount(
             it.tarasande_getSelectables().clear()
         }
 
-        addDrawableChild(ButtonWidget(width - 200, 0, 100, 20, Text.of("Environment")) {
+        addDrawableChild(ButtonWidget(5, 5, 100, 20, Text.of("Environment")) {
             client?.setScreen(ScreenBetterEnvironment(this, environment) { environment = it })
         })
 
         addDrawableChild(
             ButtonWidget(
-                width - 100,
-                0,
+                width - 105,
+                5,
                 100,
                 20,
                 Text.of((implementationClass.annotations[0] as AccountInfo).name)
@@ -100,14 +100,14 @@ class ScreenBetterAccount(
             }
         }
 
-        addDrawableChild(ButtonWidget(width / 2 - 50, (height * 0.75f - 25).toInt(), 100, 20, Text.of(name)) {
+        addDrawableChild(ButtonWidget(width / 2 - 50, 25 + (height * 0.75f).toInt(), 100, 20, Text.of(name)) {
             val account = (implementationClass.getDeclaredConstructor().newInstance() as Account).create(textFields.map { it.text })
             account.environment = environment ?: YggdrasilEnvironment.PROD.environment
             accountConsumer.accept(account)
             close()
         }.also { submitButton = it })
 
-        addDrawableChild(ButtonWidget(width / 2 - 50, (height * 0.75f).toInt(), 100, 20, Text.of("Back")) { close() })
+        this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { this.close() })
 
         super.init()
     }
