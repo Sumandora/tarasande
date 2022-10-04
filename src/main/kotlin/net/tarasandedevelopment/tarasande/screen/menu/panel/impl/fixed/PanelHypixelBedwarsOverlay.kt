@@ -18,7 +18,7 @@ import kotlin.math.roundToInt
 /*
  * This code is probably worse than it has to be, but I just couldn't think of anything better (sleep deprivation :c)
  */
-class PanelHypixelBedwarsOverlay(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Hypixel Bedwars Overlay", x, y, 200.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), fixed = true) {
+class PanelHypixelBedwarsOverlay(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Hypixel Bedwars Overlay", x, y, 200.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), background = false, fixed = true) {
 
     private val blackList = ArrayList<GameProfile>()
     private val playerData = ConcurrentHashMap<GameProfile, Stats>()

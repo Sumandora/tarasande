@@ -96,23 +96,23 @@ open class Panel(
                 val accent = TarasandeMain.get().clientValues.accentColor.getColor()
                 RenderUtil.fill(matrices, x, y + MinecraftClient.getInstance().textRenderer.fontHeight, x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).let { Color(it.red, it.green, it.blue, 0) }, 0.3, 0.3, 0.3, 0.7).rgb)
                 matrices?.pop()
+
+                if (fixed) {
+                    GlStateManager._enableScissorTest()
+                    val scaleFactor = MinecraftClient.getInstance().window?.scaleFactor!!.toInt()
+                    GlStateManager._scissorBox(
+                        (x * scaleFactor).toInt(),
+                        (MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight) * scaleFactor).toInt(),
+                        (panelWidth * scaleFactor).toInt(),
+                        (panelHeight * scaleFactor).toInt()
+                    )
+                }
             }
 
             matrices?.push()
             matrices?.translate(0.0, scrollOffset, 0.0)
-
-            if (fixed) {
-                GlStateManager._enableScissorTest()
-                val scaleFactor = MinecraftClient.getInstance().window?.scaleFactor!!.toInt()
-                GlStateManager._scissorBox(
-                    (x * scaleFactor).toInt(),
-                    (MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight) * scaleFactor).toInt(),
-                    (panelWidth * scaleFactor).toInt(),
-                    (panelHeight * scaleFactor).toInt()
-                )
-            }
             renderContent(matrices, mouseX, mouseY, delta)
-            if (fixed)
+            if (fixed && background)
                 GlStateManager._disableScissorTest()
 
             matrices?.pop()

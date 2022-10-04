@@ -16,7 +16,7 @@ import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 
-class PanelEffects(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Effects", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), resizable = false, fixed = true) {
+class PanelEffects(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Effects", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), background = false, resizable = false, fixed = true) {
 
     private val animations = HashMap<StatusEffect, Double>()
     private val prevInstances = HashMap<StatusEffect, StatusEffectInstance>()

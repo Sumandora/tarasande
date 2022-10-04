@@ -12,7 +12,7 @@ import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 
-class PanelArrayList(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Array List", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), resizable = false, fixed = true) {
+class PanelArrayList(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Array List", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), background = false, resizable = false, fixed = true) {
 
     private val animations = HashMap<Module, Double>()
 

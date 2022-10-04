@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.screen.menu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
-class PanelNowPlaying(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Now playing", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), resizable = false, fixed = true) {
+class PanelNowPlaying(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Now playing", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), background = false, resizable = false, fixed = true) {
 
     private var currTrack: String? = null
 
