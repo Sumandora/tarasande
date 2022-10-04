@@ -8,7 +8,6 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
-import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.utils.DragInfo
 import net.tarasandedevelopment.tarasande.screen.menu.utils.IElement
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
@@ -90,11 +89,9 @@ open class Panel(
         if (opened) {
             if (background) {
                 matrices?.push()
-                if (fixed) {
-                    TarasandeMain.get().blur.bind(true)
-                    RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else titleBarHeight).toDouble(), Color.white.rgb)
-                    MinecraftClient.getInstance().framebuffer.beginWrite(true)
-                }
+                TarasandeMain.get().blur.bind(true)
+                RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else titleBarHeight).toDouble(), Color.white.rgb)
+                MinecraftClient.getInstance().framebuffer.beginWrite(true)
 
                 val accent = TarasandeMain.get().clientValues.accentColor.getColor()
                 RenderUtil.fill(matrices, x, y + MinecraftClient.getInstance().textRenderer.fontHeight, x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).let { Color(it.red, it.green, it.blue, 0) }, 0.3, 0.3, 0.3, 0.7).rgb)
@@ -104,17 +101,20 @@ open class Panel(
             matrices?.push()
             matrices?.translate(0.0, scrollOffset, 0.0)
 
-            GlStateManager._enableScissorTest()
-            val scaleFactor = MinecraftClient.getInstance().window?.scaleFactor!!.toInt()
-            if (MinecraftClient.getInstance().currentScreen !is ScreenCheatMenu)
+            if (fixed) {
+                GlStateManager._enableScissorTest()
+                val scaleFactor = MinecraftClient.getInstance().window?.scaleFactor!!.toInt()
                 GlStateManager._scissorBox(
                     (x * scaleFactor).toInt(),
                     (MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight) * scaleFactor).toInt(),
                     (panelWidth * scaleFactor).toInt(),
                     (panelHeight * scaleFactor).toInt()
                 )
+            }
             renderContent(matrices, mouseX, mouseY, delta)
-            GlStateManager._disableScissorTest()
+            if (fixed)
+                GlStateManager._disableScissorTest()
+
             matrices?.pop()
         }
 

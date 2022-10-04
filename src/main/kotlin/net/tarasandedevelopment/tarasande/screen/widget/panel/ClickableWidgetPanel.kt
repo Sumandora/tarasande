@@ -1,15 +1,11 @@
 package net.tarasandedevelopment.tarasande.screen.widget.panel
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
 import net.minecraft.client.gui.widget.ClickableWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import java.awt.Color
 
 open class ClickableWidgetPanel(val panel: Panel) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelWidth.toInt(), Text.of(panel.title)), Element {
 
@@ -22,9 +18,6 @@ open class ClickableWidgetPanel(val panel: Panel) : ClickableWidget(panel.x.toIn
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         panel.opened = true
-        TarasandeMain.get().blur.bind(true)
-        RenderUtil.fill(matrices, panel.x, panel.y, panel.x + panel.panelWidth, panel.y + panel.panelHeight, Color.white.rgb)
-        MinecraftClient.getInstance().framebuffer.beginWrite(true)
         panel.render(matrices, mouseX, mouseY, delta)
     }
 
