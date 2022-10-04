@@ -33,6 +33,11 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
             InformationServerBrand(),
             InformationProtocolVersion(),
 
+            // Features
+            InformationFeaturesModules(),
+            InformationFeaturesProtocols(),
+            InformationFeaturesCreativeItems(),
+
             // Modules
             InformationTimeShifted(),
             InformationSuspectedMurderers(),
