@@ -34,15 +34,18 @@ import org.lwjgl.glfw.GLFW
 
 object PlayerUtil {
 
-    val movementKeys = listOf(MinecraftClient.getInstance().options.forwardKey, MinecraftClient.getInstance().options.leftKey, MinecraftClient.getInstance().options.backKey, MinecraftClient.getInstance().options.rightKey)
+    val movementKeys = listOf(
+        MinecraftClient.getInstance().options.forwardKey,
+        MinecraftClient.getInstance().options.leftKey,
+        MinecraftClient.getInstance().options.backKey,
+        MinecraftClient.getInstance().options.rightKey
+    )
     val input = KeyboardInput(MinecraftClient.getInstance().options)
 
     init {
         TarasandeMain.get().managerEvent.add { event ->
             if (event is EventInput) {
-                if (event.input == MinecraftClient.getInstance().player?.input) {
-                    input.tick(event.slowDown, event.slowdownAmount)
-                }
+                input.tick(event.slowDown, event.slowdownAmount)
             }
         }
     }

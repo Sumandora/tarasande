@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.render
 
+import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.option.Perspective
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.base.event.Event
@@ -22,6 +23,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
 
     private val speed = ValueNumber(this, "Speed", 0.1, 1.0, 5.0, 0.1)
     private val lockRotation = ValueBoolean(this, "Lock rotation", true)
+    private val keepMovement = ValueBoolean(this, "Keep movement", false)
 
     private var position: Vec3d? = null
     private var beginRotation: Rotation? = null
@@ -30,6 +32,8 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
     private var prevCameraPos: Vec3d? = null
 
     private var perspective: Perspective? = null
+    private var firstInput: Pair<Float, Float>? = null
+    private var map = HashMap<KeyBinding, Boolean>()
 
     override fun onEnable() {
         if (mc.player != null) {
@@ -37,6 +41,9 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
             rotation = Rotation(mc.player!!)
             beginRotation = rotation
             perspective = mc.options.perspective
+            firstInput = mc.player?.input?.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
+            for (keyBinding in mc.options.allKeys.filter { !PlayerUtil.movementKeys.contains(it) })
+                map[keyBinding] = keyBinding.isPressed
         }
     }
 
@@ -45,6 +52,8 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
         mc.player?.pitch = beginRotation?.pitch!!
         mc.options.perspective = perspective
         prevCameraPos = null
+        firstInput = null
+        map.clear()
     }
 
     @Priority(1) // let all of this stuff get overridden
@@ -63,8 +72,8 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
             is EventPollEvents -> {
                 if (beginRotation == null)
                     onEnable()
-                rotation = event.rotation
-                if (lockRotation.value) {
+                rotation = Rotation(mc.player!!)
+                if (lockRotation.value && !event.dirty) {
                     event.rotation = beginRotation!!
                     // We return ourselves in onDisable
                     event.minRotateToOriginSpeed = 0.0
@@ -93,12 +102,19 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
             }
 
             is EventInput -> {
-                event.cancelled = true
+                if (firstInput == null)
+                    onEnable()
+                if (firstInput != null && keepMovement.value) {
+                    event.movementForward = firstInput?.first!!
+                    event.movementSideways = firstInput?.second!!
+                }
             }
 
             is EventKeyBindingIsPressed -> {
-                if (!PlayerUtil.movementKeys.contains(event.keyBinding))
-                    event.pressed = false
+                if (map.isEmpty())
+                    onEnable()
+                if (!PlayerUtil.movementKeys.contains(event.keyBinding) && (!keepMovement.value || event.keyBinding != mc.options.sneakKey /* safewalk */))
+                    event.pressed = keepMovement.value && map[event.keyBinding] ?: false
             }
         }
     }
