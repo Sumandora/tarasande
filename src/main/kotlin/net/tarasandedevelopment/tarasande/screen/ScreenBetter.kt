@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPan
 
 open class ScreenBetter(internal var prevScreen: Screen?) : Screen(Text.of("")) {
 
-    private lateinit var clickableWidgetPanel: ClickableWidgetPanel
+    private var clickableWidgetPanel: ClickableWidgetPanel? = null
 
     override fun init() {
         super.init()
@@ -76,7 +76,7 @@ open class ScreenBetter(internal var prevScreen: Screen?) : Screen(Text.of("")) 
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
-        clickableWidgetPanel.mouseScrolled(mouseX, mouseY, amount)
+        clickableWidgetPanel?.mouseScrolled(mouseX, mouseY, amount)
         return super.mouseScrolled(mouseX, mouseY, amount)
     }
 }
