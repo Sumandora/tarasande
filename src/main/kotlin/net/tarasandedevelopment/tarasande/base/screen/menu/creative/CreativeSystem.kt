@@ -14,7 +14,7 @@ import net.tarasandedevelopment.tarasande.screen.menu.creative.LightItems
 import net.tarasandedevelopment.tarasande.screen.menu.creative.SpecialVanillaItems
 import net.tarasandedevelopment.tarasande.screen.menu.creative.cicExploits
 import net.tarasandedevelopment.tarasande.screen.menu.creative.spawnerExploits
-import net.tarasandedevelopment.tarasande.util.ItemUtil
+import net.tarasandedevelopment.tarasande.util.player.items.ItemUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueMode

@@ -8,6 +8,7 @@ import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventBoundingBoxOverride
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.mixin.accessor.IGameRenderer
+import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
@@ -25,7 +26,7 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
             is EventBoundingBoxOverride -> {
                 val playerRotation = Rotation(mc.player!!)
                 val playerEye = mc.player?.eyePos
-                val rotationVec = mc.player?.eyePos?.add(playerRotation.forwardVector((mc.gameRenderer as IGameRenderer).tarasande_getReach()))
+                val rotationVec = mc.player?.eyePos!! + playerRotation.forwardVector((mc.gameRenderer as IGameRenderer).tarasande_getReach())
                 event.boundingBox = boundingBoxes[event.entity]?.filter { it.raycast(playerEye, rotationVec).isPresent }?.minByOrNull { playerEye?.squaredDistanceTo(MathUtil.closestPointToBox(playerEye, it))!! } ?: return@Consumer
             }
 

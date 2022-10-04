@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
-import net.tarasandedevelopment.tarasande.util.player.ProjectileUtil
+import net.tarasandedevelopment.tarasande.util.player.projectile.ProjectileUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import org.lwjgl.opengl.GL11
 import java.util.function.Consumer

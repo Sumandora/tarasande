@@ -6,7 +6,7 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.base.screen.menu.creative.Action
 import net.tarasandedevelopment.tarasande.base.screen.menu.creative.ExploitCreative
-import net.tarasandedevelopment.tarasande.util.ItemUtil
+import net.tarasandedevelopment.tarasande.util.player.items.ItemUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 
 class SpecialVanillaItems : ExploitCreative("Special Vanilla Items", ItemStack(Items.COMMAND_BLOCK)) {
