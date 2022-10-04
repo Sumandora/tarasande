@@ -22,27 +22,29 @@ open class ClickableWidgetPanel(val panel: Panel) : ClickableWidget(panel.x.toIn
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        panel.modifiable = true
-        val returnType = panel.mouseClicked(mouseX, mouseY, button)
         panel.modifiable = false
-        return panel.isVisible() && returnType
+        val returnType = panel.isVisible() && panel.mouseClicked(mouseX, mouseY, button)
+        panel.modifiable = true
+        return returnType
     }
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        panel.mouseReleased(mouseX, mouseY, button)
+        if (panel.isVisible())
+            panel.mouseReleased(mouseX, mouseY, button)
         return true
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
-        return panel.mouseScrolled(mouseX, mouseY, amount)
+        return panel.isVisible() && panel.mouseScrolled(mouseX, mouseY, amount)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        return panel.keyPressed(keyCode, scanCode, modifiers)
+        return panel.isVisible() && panel.keyPressed(keyCode, scanCode, modifiers)
     }
 
     override fun charTyped(chr: Char, modifiers: Int): Boolean {
-        panel.charTyped(chr, modifiers)
+        if (panel.isVisible())
+            panel.charTyped(chr, modifiers)
         return false
     }
 

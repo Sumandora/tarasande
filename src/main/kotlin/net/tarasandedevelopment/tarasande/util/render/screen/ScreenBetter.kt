@@ -10,6 +10,8 @@ import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPan
 
 open class ScreenBetter(internal var prevScreen: Screen?) : Screen(Text.of("")) {
 
+    private lateinit var clickableWidgetPanel: ClickableWidgetPanel
+
     override fun init() {
         super.init()
 
@@ -38,7 +40,20 @@ open class ScreenBetter(internal var prevScreen: Screen?) : Screen(Text.of("")) 
 
                 return returnType
             }
-        })
+
+            override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+                val oldX = this.panel.x
+                val oldY = this.panel.y
+
+                panel.x = MinecraftClient.getInstance().window.scaledWidth - panel.panelWidth - 5
+                panel.y = 5.0
+                val returnType = super.mouseScrolled(mouseX, mouseY, amount)
+                panel.x = oldX
+                panel.y = oldY
+
+                return returnType
+            }
+        }.also { clickableWidgetPanel = it })
     }
 
     override fun close() {
@@ -56,5 +71,10 @@ open class ScreenBetter(internal var prevScreen: Screen?) : Screen(Text.of("")) 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         renderBackground(matrices)
         super.render(matrices, mouseX, mouseY, delta)
+    }
+
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+        clickableWidgetPanel.mouseScrolled(mouseX, mouseY, amount)
+        return super.mouseScrolled(mouseX, mouseY, amount)
     }
 }

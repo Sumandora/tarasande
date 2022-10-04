@@ -152,12 +152,10 @@ open class Panel(
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (!modifiable)
-            return false
         val mouseX = floor(mouseX)
         val mouseY = floor(mouseY)
         if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + (if (opened) panelHeight else titleBarHeight.toDouble()))) {
-            if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+            if (modifiable && button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                 if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight.toDouble())) {
                     dragInfo.setDragInfo(true, mouseX - x, mouseY - y)
                 }
@@ -184,6 +182,7 @@ open class Panel(
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+        println("$mouseX $mouseY $x $y")
         if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + panelHeight)) {
             scrollSpeed += amount * 3
             return true
