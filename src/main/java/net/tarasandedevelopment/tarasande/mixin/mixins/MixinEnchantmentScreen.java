@@ -16,7 +16,7 @@ public class MixinEnchantmentScreen {
     @Redirect(method = "drawBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawTrimmed(Lnet/minecraft/text/StringVisitable;IIII)V"))
     public void modifyDrawTrimmed(TextRenderer instance, StringVisitable text, int x, int y, int maxWidth, int color) {
         if (TarasandeMain.Companion.get().getManagerModule().get(ModuleEnchantmentTranslation.class).getEnabled())
-            text = Text.literal(text.getString()); //Removes the style
+            text = Text.of(text.getString()); //Removes the style
 
         instance.drawTrimmed(text, x, y, maxWidth, color);
     }

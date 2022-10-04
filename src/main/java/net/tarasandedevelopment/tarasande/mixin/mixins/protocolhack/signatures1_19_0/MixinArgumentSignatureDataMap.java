@@ -24,7 +24,7 @@ public class MixinArgumentSignatureDataMap {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_19)) {
             final List<ArgumentSignatureDataMap.Entry> list = ArgumentSignatureDataMap.toNameValuePairs(arguments).stream().map(entry -> {
                 final MessageMetadata metadata = MessageSigner1_19_0.INSTANCE.get();
-                final MessageSignatureData messageSignatureData = MessageSigner1_19_0.INSTANCE.sign((Signer) signer, Text.literal(entry.getFirst()), metadata.sender(), metadata.timestamp(), metadata.salt());
+                final MessageSignatureData messageSignatureData = MessageSigner1_19_0.INSTANCE.sign((Signer) signer, Text.of(entry.getFirst()), metadata.sender(), metadata.timestamp(), metadata.salt());
 
                 return new ArgumentSignatureDataMap.Entry(entry.getFirst(), messageSignatureData);
             }).collect(Collectors.toList());

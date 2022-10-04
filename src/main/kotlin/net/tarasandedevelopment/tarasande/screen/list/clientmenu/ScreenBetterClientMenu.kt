@@ -19,10 +19,10 @@ class ScreenBetterClientMenu(parent: Screen) : ScreenBetter(parent) {
         super.init()
         val startX = this.halfWidth() - (buttonWidth / 2)
 
-        this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.literal("<-")) {
+        this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
             close()
         })
-        this.addDrawableChild(ButtonWidget(5, 5, 98, 20, Text.literal("Client Values")) {
+        this.addDrawableChild(ButtonWidget(5, 5, 98, 20, Text.of("Client Values")) {
             MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, "Client Values", TarasandeMain.get().clientValues))
         })
 
