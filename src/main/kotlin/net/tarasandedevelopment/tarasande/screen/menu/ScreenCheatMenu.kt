@@ -12,6 +12,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.base.command.ManagerCommand
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.base.screen.menu.creative.ManagerCreative
 import net.tarasandedevelopment.tarasande.base.screen.menu.graph.ManagerGraph
@@ -23,6 +24,7 @@ import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.category.PanelElementsCategory
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.clientvalues.PanelElementsClientValues
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.friends.PanelElementsFriends
+import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.notification.PanelElementsNotification
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.terminal.PanelElementsTerminal
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.PanelFixed
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed.impl.*
@@ -49,6 +51,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     val managerValueComponent = ManagerValueComponent()
     val managerInformation = ManagerInformation(this)
     val managerCreative = ManagerCreative()
+    val managerCommand = ManagerCommand()
 
     var popup = false
 
@@ -70,6 +73,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         val panels = mutableListOf(
             PanelElementsFriends::class.java,
             PanelElementsTerminal::class.java,
+            PanelElementsNotification::class.java,
 
             PanelFixedArrayList::class.java,
             PanelFixedInformation::class.java,

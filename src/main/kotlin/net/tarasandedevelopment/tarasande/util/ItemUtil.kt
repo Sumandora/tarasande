@@ -4,29 +4,28 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.nbt.*
-import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.util.chat.CustomChat
+import net.tarasandedevelopment.tarasande.util.chat.CommunicationUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 
 object ItemUtil {
 
-    private val noCreative = Text.literal("You must be in creative mode to use this.")
-    private val noSpace = Text.literal("No space in hotbar.")
+    private const val noCreative = "You must be in creative mode to use this."
+    private const val noSpace = "No space in hotbar."
 
-    private val placed = Text.literal("The item was placed in your hotbar")
+    private const val placed = "The item was placed in your hotbar"
 
     fun give(stack: ItemStack) {
         if (!MinecraftClient.getInstance().player?.abilities!!.creativeMode) {
-            CustomChat.print(this.noCreative)
+            CommunicationUtil.printInformation(this.noCreative)
             return
         }
 
         if (!MinecraftClient.getInstance().player?.inventory!!.insertStack(stack)) {
-            CustomChat.print(this.noSpace)
+            CommunicationUtil.printInformation(this.noSpace)
         }
 
-        CustomChat.print(this.placed)
+        CommunicationUtil.printInformation(this.placed)
     }
 
     // ReinerWahnsinn Spawner Bypass for Spigot/CraftBukkit 1.8.3

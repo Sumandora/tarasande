@@ -6,6 +6,7 @@ import net.minecraft.client.util.Session
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.base.addon.ManagerAddon
 import net.tarasandedevelopment.tarasande.base.clientmenu.ManagerClientMenu
+import net.tarasandedevelopment.tarasande.base.command.ManagerCommand
 import net.tarasandedevelopment.tarasande.base.esp.ManagerESP
 import net.tarasandedevelopment.tarasande.base.event.ManagerEvent
 import net.tarasandedevelopment.tarasande.base.file.ManagerFile
