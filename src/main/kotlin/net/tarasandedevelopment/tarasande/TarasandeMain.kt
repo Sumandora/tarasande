@@ -5,14 +5,14 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.base.addon.ManagerAddon
-import net.tarasandedevelopment.tarasande.base.clientmenu.ManagerClientMenu
+import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ManagerClientMenu
 import net.tarasandedevelopment.tarasande.base.esp.ManagerESP
 import net.tarasandedevelopment.tarasande.base.event.ManagerEvent
 import net.tarasandedevelopment.tarasande.base.file.ManagerFile
 import net.tarasandedevelopment.tarasande.base.module.ManagerModule
 import net.tarasandedevelopment.tarasande.base.util.player.clickspeed.ManagerClickMethod
 import net.tarasandedevelopment.tarasande.base.value.ManagerValue
-import net.tarasandedevelopment.tarasande.protocolhack.TarasandeProtocolHack
+import net.tarasandedevelopment.tarasande.protocol.TarasandeProtocolHack
 import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.menu.clientmenu.ElementMenuScreenAccountManager
 import net.tarasandedevelopment.tarasande.util.clientvalue.ClientValues

@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.util.clientvalue
 
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.clientmenu.ElementMenuScreen
+import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuScreen
 import net.tarasandedevelopment.tarasande.value.*
 import org.lwjgl.glfw.GLFW
 

@@ -17,7 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.network.encryption.SignatureVerifier;
 import net.minecraft.util.Util;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.Account;
+import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.Account;
 import net.tarasandedevelopment.tarasande.event.*;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient;
 import net.tarasandedevelopment.tarasande.module.render.ModuleESP;

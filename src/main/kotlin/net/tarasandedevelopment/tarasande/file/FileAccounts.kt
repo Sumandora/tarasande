@@ -7,7 +7,7 @@ import com.mojang.authlib.Environment
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.file.File
-import net.tarasandedevelopment.tarasande.base.screen.accountmanager.account.AccountInfo
+import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.AccountInfo
 import net.tarasandedevelopment.tarasande.screen.menu.clientmenu.ElementMenuScreenAccountManager
 import org.apache.commons.codec.binary.Hex
 import oshi.SystemInfo
