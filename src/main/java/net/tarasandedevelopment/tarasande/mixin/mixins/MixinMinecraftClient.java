@@ -21,7 +21,7 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.
 import net.tarasandedevelopment.tarasande.event.*;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient;
 import net.tarasandedevelopment.tarasande.module.render.ModuleESP;
-import net.tarasandedevelopment.tarasande.screen.menu.clientmenu.ElementMenuScreenAccountManager;
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.clientmenu.ElementMenuScreenAccountManager;
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;

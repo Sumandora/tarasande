@@ -6,7 +6,7 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClickableWidget
-import net.tarasandedevelopment.tarasande.screen.menu.clientmenu.*
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.clientmenu.*
 import net.tarasandedevelopment.tarasande.screen.widget.AllMouseButtonWidget
 import net.tarasandedevelopment.tarasande.screen.widget.AllMousePressAction
 import org.lwjgl.glfw.GLFW

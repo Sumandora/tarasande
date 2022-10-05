@@ -6,9 +6,9 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.screen.menu.valuecomponent.ValueComponent
-import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.PanelElements
+import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ValueComponent
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.PanelElements
 import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
 
 class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val owner: Any) : ScreenBetter(parent) {

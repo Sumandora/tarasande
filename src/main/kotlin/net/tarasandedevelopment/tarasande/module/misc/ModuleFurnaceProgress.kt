@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventChildren
-import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.util.function.Consumer

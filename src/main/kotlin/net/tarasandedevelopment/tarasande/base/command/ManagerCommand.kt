@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.base.command
 
 import net.tarasandedevelopment.tarasande.base.Manager
-import net.tarasandedevelopment.tarasande.screen.menu.command.CommandNotificationTest
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.terminal.PanelElementsTerminal
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.command.CommandNotificationTest
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.terminal.PanelElementsTerminal
 
 class ManagerCommand : Manager<Command>() {
 
