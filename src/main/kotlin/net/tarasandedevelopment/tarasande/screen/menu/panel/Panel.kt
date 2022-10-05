@@ -7,7 +7,7 @@ import net.minecraft.util.math.MathHelper
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventTick
-import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.menu.utils.DragInfo
 import net.tarasandedevelopment.tarasande.screen.menu.utils.IElement
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil

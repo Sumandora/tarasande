@@ -9,8 +9,8 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuScre
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuTitle
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuToggle
 import net.tarasandedevelopment.tarasande.module.exploit.ModuleBungeeHack
-import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
-import net.tarasandedevelopment.tarasande.screen.list.accountmanager.ScreenBetterAccountManager
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.ScreenBetterAccountManager
 import net.tarasandedevelopment.tarasande.screen.clientmenu.protocolhack.ScreenBetterProtocolHack
 import net.tarasandedevelopment.tarasande.screen.clientmenu.proxy.ScreenBetterProxy
 import org.lwjgl.glfw.GLFW

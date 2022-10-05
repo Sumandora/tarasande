@@ -6,8 +6,8 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuTitle
-import net.tarasandedevelopment.tarasande.screen.ScreenBetter
-import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 
 class ScreenBetterClientMenu(parent: Screen) : ScreenBetter(parent) {
 

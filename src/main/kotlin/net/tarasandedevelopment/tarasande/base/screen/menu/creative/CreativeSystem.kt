@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
-import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.menu.creative.LightItems
 import net.tarasandedevelopment.tarasande.screen.menu.creative.SpecialVanillaItems
 import net.tarasandedevelopment.tarasande.screen.menu.creative.cicExploits

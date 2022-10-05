@@ -8,7 +8,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.screen.ScreenBetter
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPassword
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.util.connection.Proxy

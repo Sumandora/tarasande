@@ -12,7 +12,7 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.AccountInfo
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.TextFieldInfo
 import net.tarasandedevelopment.tarasande.mixin.accessor.IScreen
-import net.tarasandedevelopment.tarasande.screen.ScreenBetter
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.menu.clientmenu.ElementMenuScreenAccountManager
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPassword
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder

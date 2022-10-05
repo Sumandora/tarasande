@@ -7,7 +7,7 @@ import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget
 import net.minecraft.client.gui.widget.EntryListWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.screen.ScreenBetter
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
 open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, private val entryHeight: Int) : ScreenBetter(null) {

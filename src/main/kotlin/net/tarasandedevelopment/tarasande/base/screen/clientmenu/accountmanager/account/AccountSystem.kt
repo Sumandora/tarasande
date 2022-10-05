@@ -6,7 +6,6 @@ import com.mojang.authlib.minecraft.MinecraftSessionService
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.account.*
-import net.tarasandedevelopment.tarasande.screen.list.accountmanager.account.*
 
 class ManagerAccount : Manager<Class<out Account>>() {
     init {

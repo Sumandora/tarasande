@@ -19,7 +19,7 @@ import net.tarasandedevelopment.tarasande.base.screen.menu.graph.ManagerGraph
 import net.tarasandedevelopment.tarasande.base.screen.menu.information.ManagerInformation
 import net.tarasandedevelopment.tarasande.base.screen.menu.valuecomponent.ManagerValueComponent
 import net.tarasandedevelopment.tarasande.event.EventUpdate
-import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.category.PanelElementsCategory
 import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.clientvalues.PanelElementsClientValues
