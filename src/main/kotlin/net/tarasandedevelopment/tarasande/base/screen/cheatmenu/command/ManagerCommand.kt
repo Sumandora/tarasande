@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.base.command
+package net.tarasandedevelopment.tarasande.base.screen.cheatmenu.command
 
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.command.CommandNotificationTest

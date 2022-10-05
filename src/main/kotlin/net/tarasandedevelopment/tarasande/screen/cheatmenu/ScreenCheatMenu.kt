@@ -12,7 +12,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.command.ManagerCommand
+import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.command.ManagerCommand
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.creative.ManagerCreative
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.graph.ManagerGraph

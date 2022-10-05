@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.screen.cheatmenu.command
 
-import net.tarasandedevelopment.tarasande.base.command.Command
+import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.command.Command
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.terminal.PanelElementsTerminal
 import net.tarasandedevelopment.tarasande.util.player.chat.CommunicationUtil
 
