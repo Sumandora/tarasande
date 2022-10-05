@@ -4,15 +4,21 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.text.Text
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClickableWidget
 import net.tarasandedevelopment.tarasande.screen.clientmenu.*
 import net.tarasandedevelopment.tarasande.screen.widget.AllMouseButtonWidget
 import net.tarasandedevelopment.tarasande.screen.widget.AllMousePressAction
+import net.tarasandedevelopment.tarasande.value.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.ValueMode
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
 class ManagerClientMenu : Manager<ElementMenu>() {
+
+    val clientMenuFocusedEntry: ValueMode
+    val clientMenuCategories = ValueBoolean(this, "Show categories", false)
 
     init {
         val fritzBox = ElementMenuFritzBoxReconnect()
@@ -30,6 +36,11 @@ class ManagerClientMenu : Manager<ElementMenu>() {
             ElementMenuFritzBoxReconnect.SubTitle(fritzBox),
             fritzBox
         )
+
+        val entries = mutableListOf("None")
+        entries.addAll(list.filterIsInstance<ElementMenuScreen>().map { e -> e.name })
+
+        clientMenuFocusedEntry = ValueMode(this, "Focused entry", false, *entries.toTypedArray())
     }
 
     fun byName(name: String): ElementMenu {

@@ -22,16 +22,16 @@ class ScreenBetterClientMenu(parent: Screen) : ScreenBetter(parent) {
         this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
             close()
         })
-        this.addDrawableChild(ButtonWidget(5, 5, 98, 20, Text.of("Client Values")) {
-            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, "Client Values", TarasandeMain.get().clientValues))
+        this.addDrawableChild(ButtonWidget(5, 5, 98, 20, Text.of("Settings")) {
+            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, "Settings", TarasandeMain.get().managerClientMenu))
         })
 
-        val endHeight = TarasandeMain.get().managerClientMenu.list.filter { element -> (element !is ElementMenuTitle || TarasandeMain.get().clientValues.clientMenuCategories.value) && element.visible() }.size * (buttonHeight + spacer)
+        val endHeight = TarasandeMain.get().managerClientMenu.list.filter { element -> (element !is ElementMenuTitle || TarasandeMain.get().managerClientMenu.clientMenuCategories.value) && element.visible() }.size * (buttonHeight + spacer)
 
         var index = 0
         for (menu in TarasandeMain.get().managerClientMenu.list) {
             if (!menu.visible()) continue
-            if (!TarasandeMain.get().clientValues.clientMenuCategories.value && menu is ElementMenuTitle) continue
+            if (!TarasandeMain.get().managerClientMenu.clientMenuCategories.value && menu is ElementMenuTitle) continue
             this.addDrawableChild(menu.buildWidget(startX, this.halfHeight() - endHeight / 2 + (index * (buttonHeight + spacer)), buttonWidth, buttonHeight))
             index++
         }
