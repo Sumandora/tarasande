@@ -6,7 +6,7 @@ import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.event.EventLoadManager
 import java.util.function.Consumer
 
-abstract class SandeAddon {
+abstract class Addon {
     val managerConsumer = Consumer { event: Event -> if (event is EventLoadManager) onLoadManager(event.manager) }
 
     var modId: String? = null
