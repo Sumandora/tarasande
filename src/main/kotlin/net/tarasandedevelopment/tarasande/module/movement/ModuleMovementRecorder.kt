@@ -127,12 +127,13 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
             }
 
             is EventInput -> {
-                if (playbackState == PlaybackState.EXECUTING) {
-                    val tick = playedBack?.ticks?.get(executingIndex)!!
+                if (event.input == MinecraftClient.getInstance().player?.input)
+                    if (playbackState == PlaybackState.EXECUTING) {
+                        val tick = playedBack?.ticks?.get(executingIndex)!!
 
-                    event.movementSideways = tick.input.x
-                    event.movementForward = tick.input.y
-                }
+                        event.movementSideways = tick.input.x
+                        event.movementForward = tick.input.y
+                    }
             }
 
             is EventKeyBindingIsPressed -> {

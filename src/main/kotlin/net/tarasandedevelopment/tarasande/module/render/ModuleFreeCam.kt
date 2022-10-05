@@ -1,5 +1,7 @@
 package net.tarasandedevelopment.tarasande.module.render
 
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.input.KeyboardInput
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.option.Perspective
 import net.minecraft.util.math.Vec3d
@@ -32,8 +34,11 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
     private var prevCameraPos: Vec3d? = null
 
     private var perspective: Perspective? = null
+    private var firstRealInput: Pair<Float, Float>? = null
     private var firstInput: Pair<Float, Float>? = null
     private var map = HashMap<KeyBinding, Boolean>()
+
+    private val input = KeyboardInput(mc.options)
 
     override fun onEnable() {
         if (mc.player != null) {
@@ -41,6 +46,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
             rotation = Rotation(mc.player!!)
             beginRotation = rotation
             perspective = mc.options.perspective
+            firstRealInput = PlayerUtil.input.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
             firstInput = mc.player?.input?.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
             for (keyBinding in mc.options.allKeys.filter { !PlayerUtil.movementKeys.contains(it) })
                 map[keyBinding] = keyBinding.isPressed
@@ -52,6 +58,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
         mc.player?.pitch = beginRotation?.pitch!!
         mc.options.perspective = perspective
         prevCameraPos = null
+        firstRealInput = null
         firstInput = null
         map.clear()
     }
@@ -91,9 +98,9 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
                     if ((mc.options.sneakKey as IKeyBinding).tarasande_forceIsPressed())
                         yMotion -= speed.value
                     var velocity = (mc.player as IEntity).tarasande_invokeMovementInputToVelocity(Vec3d(
-                        MathUtil.roundAwayFromZero(PlayerUtil.input.movementSideways.toDouble()),
+                        MathUtil.roundAwayFromZero(input.movementSideways.toDouble()),
                         0.0,
-                        MathUtil.roundAwayFromZero(PlayerUtil.input.movementForward.toDouble())
+                        MathUtil.roundAwayFromZero(input.movementForward.toDouble())
                     ), speed.value.toFloat(), rotation?.yaw!!)
                     velocity = Vec3d(velocity?.x!!, yMotion, velocity.z)
                     prevCameraPos = position
@@ -102,12 +109,22 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
             }
 
             is EventInput -> {
-                if (firstInput == null)
+                if (firstInput == null || firstRealInput == null)
                     onEnable()
-                if (firstInput != null && keepMovement.value) {
-                    event.movementForward = firstInput?.first!!
-                    event.movementSideways = firstInput?.second!!
-                }
+                if (event.input == MinecraftClient.getInstance().player?.input)
+                    input.tick(event.slowDown, event.slowdownAmount)
+                if (keepMovement.value)
+                    if (event.input == MinecraftClient.getInstance().player?.input) {
+                        if (firstInput != null) {
+                            event.movementForward = firstInput?.first!!
+                            event.movementSideways = firstInput?.second!!
+                        }
+                    } else if (event.input == PlayerUtil.input) {
+                        if (firstRealInput != null) {
+                            event.movementForward = firstRealInput?.first!!
+                            event.movementSideways = firstRealInput?.second!!
+                        }
+                    }
             }
 
             is EventKeyBindingIsPressed -> {

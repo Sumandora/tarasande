@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.misc
 
+import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
@@ -41,8 +42,9 @@ class ModuleBlockBot : Module("Block bot", "Walks into the line of sight of othe
             }
 
             is EventInput -> {
-                if (move)
-                    event.movementForward = 1.0f
+                if (event.input == MinecraftClient.getInstance().player?.input)
+                    if (move)
+                        event.movementForward = 1.0f
             }
 
             is EventKeyBindingIsPressed -> {

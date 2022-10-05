@@ -45,7 +45,8 @@ object PlayerUtil {
     init {
         TarasandeMain.get().managerEvent.add { event ->
             if (event is EventInput) {
-                input.tick(event.slowDown, event.slowdownAmount)
+                if (event.input == MinecraftClient.getInstance().player?.input)
+                    input.tick(event.slowDown, event.slowdownAmount)
             }
         }
     }

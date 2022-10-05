@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
@@ -16,8 +15,6 @@ public class MixinKeyboardInput extends Input {
 
     @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/KeyboardInput;sneaking:Z", shift = At.Shift.AFTER), cancellable = true)
     public void injectTick(boolean slowDown, float f, CallbackInfo ci) {
-        if (this != MinecraftClient.getInstance().player.input)
-            return;
         EventInput eventInput = new EventInput(this, this.movementForward, this.movementSideways, slowDown, f);
         TarasandeMain.Companion.get().getManagerEvent().call(eventInput);
 

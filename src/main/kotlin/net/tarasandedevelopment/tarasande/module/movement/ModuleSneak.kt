@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
+import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
@@ -21,8 +22,9 @@ class ModuleSneak : Module("Sneak", "Automatically sneaks", ModuleCategory.MOVEM
                     event.pressed = event.pressed || !standStill.value || !PlayerUtil.isPlayerMoving()
 
             is EventInput ->
-                if (dontSlowdown.value)
-                    event.slowDown = false
+                if (event.input == MinecraftClient.getInstance().player?.input)
+                    if (dontSlowdown.value)
+                        event.slowDown = false
         }
     }
 
