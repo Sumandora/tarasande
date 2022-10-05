@@ -22,9 +22,11 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
 
     override fun init() {
         super.init()
-        this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
-            close()
-        })
+        if (MinecraftClient.getInstance().world == null) {
+            this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
+                close()
+            })
+        }
 
         this.addDrawableChild(ClickableWidgetPanel(object : PanelElements<ValueComponent>(this.titleName, 0.0, 0.0, 0.0, 0.0) {
 
