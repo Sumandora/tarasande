@@ -5,21 +5,25 @@ import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.menu.valuecomponent.ValueComponent
 import net.tarasandedevelopment.tarasande.base.value.Value
+import net.tarasandedevelopment.tarasande.mixin.accessor.IInGameHud
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueButton
+import net.tarasandedevelopment.tarasande.value.ValueButtonItem
 import java.awt.Color
 
-class ValueComponentButton(value: Value) : ValueComponent(value) {
+class ValueComponentButtonItem(value: Value) : ValueComponent(value) {
 
     override fun init() {
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        val valueButton = value as ValueButton
+        val valueButton = value as ValueButtonItem
 
         val textWidth = MinecraftClient.getInstance().textRenderer.getWidth(valueButton.name)
 
         RenderUtil.fill(matrices, width - 4 - textWidth / 2, getHeight() / 2.0 - MinecraftClient.getInstance().textRenderer.fontHeight / 2, width, getHeight() / 2.0 + MinecraftClient.getInstance().textRenderer.fontHeight / 2, Int.MIN_VALUE)
+
+        (MinecraftClient.getInstance().inGameHud as IInGameHud).tarasande_invokeRenderHotbarItem(0, 0, delta, matrices, valueButton.icon)
 
         matrices?.push()
         matrices?.translate(width - 2 - textWidth / 2, getHeight() / 2.0, 0.0)
@@ -30,7 +34,7 @@ class ValueComponentButton(value: Value) : ValueComponent(value) {
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        val valueButton = value as ValueButton
+        val valueButton = value as ValueButtonItem
 
         val textWidth = MinecraftClient.getInstance().textRenderer.getWidth(valueButton.name)
 

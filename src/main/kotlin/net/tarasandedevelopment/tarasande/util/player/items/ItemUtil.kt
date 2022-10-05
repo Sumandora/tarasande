@@ -30,7 +30,7 @@ object ItemUtil {
 
     // ReinerWahnsinn Spawner Bypass for Spigot/CraftBukkit 1.8.3
     fun packageExploit(stack: ItemStack): ItemStack {
-        val packager = TarasandeMain.get().screenCheatMenu.managerCreative.globalOwner.getPackagedItem() ?: return stack
+        val packager = TarasandeMain.get().screenCheatMenu.managerCreative.getPackagedItem() ?: return stack
 
         val packagedItem = ItemStack(packager.item)
 

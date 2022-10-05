@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.screen.list.accountmanager.subscreens
 
 import com.mojang.authlib.Environment
 import com.mojang.authlib.yggdrasil.YggdrasilEnvironment
+import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
@@ -27,7 +28,8 @@ class ScreenBetterAccount(
     private val accountConsumer: Consumer<Account>,
 ) : ScreenBetter(prevScreen) {
 
-    private val textFields: ArrayList<TextFieldWidget> = ArrayList()
+    private val informationList = ArrayList<Element>()
+    private val modeSelections = HashMap<String, String>()
     private var implementationClass: Class<out Account> = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAccount.list[0]
 
     private var environment: Environment? = null
@@ -35,7 +37,7 @@ class ScreenBetterAccount(
     private var submitButton: ButtonWidget? = null
 
     override fun init() {
-        textFields.clear()
+        informationList.clear()
         children().clear()
         (this as IScreen).also {
             it.tarasande_getDrawables().clear()
@@ -73,9 +75,9 @@ class ScreenBetterAccount(
         for (i in parameters.indices) {
             val parameterType = parameters[i]
             if (parameterType.isAnnotationPresent(TextFieldInfo::class.java)) {
-                val textFieldInfo: TextFieldInfo = parameterType.getAnnotation(TextFieldInfo::class.java)
+                val textFieldInfo = parameterType.getAnnotation(TextFieldInfo::class.java)
                 if (textFieldInfo.hidden) {
-                    textFields.add(
+                    informationList.add(
                         addDrawableChild(
                             TextFieldWidgetPassword(
                                 textRenderer,
@@ -87,7 +89,7 @@ class ScreenBetterAccount(
                             ).also { it.setMaxLength(Int.MAX_VALUE); it.text = textFieldInfo.default })
                     )
                 } else {
-                    textFields.add(
+                    informationList.add(
                         addDrawableChild(
                             TextFieldWidgetPlaceholder(
                                 textRenderer,
@@ -99,11 +101,36 @@ class ScreenBetterAccount(
                             ).also { it.setMaxLength(Int.MAX_VALUE); it.text = textFieldInfo.default })
                     )
                 }
+            } else if (parameterType.isAnnotationPresent(ModeInfo::class.java)) {
+                val modeInfo = parameterType.getAnnotation(ModeInfo::class.java)
+
+                if (!modeSelections.contains(modeInfo.name))
+                    modeSelections[modeInfo.name] = modeInfo.options[0]
+
+                val prefix = Text.literal(modeInfo.name + ": ");
+                this.informationList.add(addDrawableChild(ButtonWidget(width / 2 - 150, (height * 0.25f + i * 25).toInt(), 300, 20, prefix.append(Text.of(modeSelections[modeInfo.name]))) {
+                    val currentIndex = modeInfo.options.indexOf(it.message.string.split(" ")[1])
+                    if (currentIndex + 1 >= modeInfo.options.size)
+                        modeSelections[modeInfo.name] = modeInfo.options[0]
+                    else
+                        modeSelections[modeInfo.name] = modeInfo.options[currentIndex + 1]
+                }))
             }
         }
 
         addDrawableChild(ButtonWidget(width / 2 - 50, 25 + (height * 0.75f).toInt(), 100, 20, Text.of(name)) {
-            val account = (implementationClass.getDeclaredConstructor().newInstance() as Account).create(textFields.map { it.text })
+            val providedList = ArrayList<String>()
+            informationList.forEach {
+                if (it is TextFieldWidget)
+                    providedList.add(it.text)
+                else if (it is ButtonWidget) {
+                    modeSelections.forEach { (key, value) ->
+                        if (it.message.string.contains(key, true))
+                            providedList.add(value)
+                    }
+                }
+            }
+            val account = (implementationClass.getDeclaredConstructor().newInstance() as Account).create(providedList)
             account.environment = environment ?: YggdrasilEnvironment.PROD.environment
             accountConsumer.accept(account)
             close()
@@ -119,16 +146,18 @@ class ScreenBetterAccount(
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         var focused = false
-        for (textField in textFields)
-            if (textField.isFocused)
-                focused = true
+        for (element in informationList)
+            if (element is TextFieldWidget)
+                if (element.isFocused)
+                    focused = true
         if (hasControlDown() && keyCode == GLFW.GLFW_KEY_V && !focused) {
             val clipboardContent = GLFW.glfwGetClipboardString(client?.window?.handle!!)
             if (clipboardContent != null) {
                 val parts = clipboardContent.split(":")
-                if (parts.size == textFields.size)
-                    for ((index, textField) in textFields.withIndex())
-                        textField.text = parts[index]
+                if (parts.size == informationList.size)
+                    for ((index, element) in informationList.withIndex())
+                        if (element is TextFieldWidget)
+                            element.text = parts[index]
             }
         }
         if (keyCode == GLFW.GLFW_KEY_ENTER)
