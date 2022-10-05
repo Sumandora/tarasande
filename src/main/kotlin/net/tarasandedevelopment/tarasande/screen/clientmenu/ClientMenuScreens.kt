@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.screen.cheatmenu.clientmenu
+package net.tarasandedevelopment.tarasande.screen.clientmenu
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
@@ -11,7 +11,7 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuTogg
 import net.tarasandedevelopment.tarasande.module.exploit.ModuleBungeeHack
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.ScreenBetterAccountManager
-import net.tarasandedevelopment.tarasande.screen.clientmenu.protocolhack.ScreenBetterProtocolHack
+import net.tarasandedevelopment.tarasande.screen.clientmenu.protocol.ScreenBetterProtocolHack
 import net.tarasandedevelopment.tarasande.screen.clientmenu.proxy.ScreenBetterProxy
 import org.lwjgl.glfw.GLFW
 import org.spongepowered.include.com.google.common.io.Files

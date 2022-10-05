@@ -14,7 +14,7 @@ import net.tarasandedevelopment.tarasande.base.util.player.clickspeed.ManagerCli
 import net.tarasandedevelopment.tarasande.base.value.ManagerValue
 import net.tarasandedevelopment.tarasande.protocol.TarasandeProtocolHack
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.clientmenu.ElementMenuScreenAccountManager
+import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAccountManager
 import net.tarasandedevelopment.tarasande.util.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import net.tarasandedevelopment.tarasande.util.player.friends.Friends

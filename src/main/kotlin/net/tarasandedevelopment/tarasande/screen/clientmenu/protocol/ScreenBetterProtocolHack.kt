@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.screen.clientmenu.protocolhack
+package net.tarasandedevelopment.tarasande.screen.clientmenu.protocol
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.viaprotocolhack.util.VersionList
