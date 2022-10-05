@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.fixed
 
+import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
@@ -16,6 +17,7 @@ class PanelInventory(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : P
         for (q in 9..35) {
             val r = (x + (q % 9) * (panelWidth / 9.0)).toInt()
             val s = (y + titleBarHeight.toDouble() + 2.0 + (floor(q / 9.0) - 1) * ((panelHeight - titleBarHeight) / 3)).toInt()
+            RenderSystem.enableCull()
             (MinecraftClient.getInstance().inGameHud as IInGameHud).tarasande_invokeRenderHotbarItem(r, s, MinecraftClient.getInstance().tickDelta, MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.inventory?.main?.get(q) as ItemStack, m++)
         }
     }

@@ -43,6 +43,7 @@ class PanelGraph(private val graph: Graph, x: Double, y: Double) : Panel(graph.n
         BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
+        RenderSystem.enableCull()
 
         val normalizedHeight = 1.0 - this.normalize(current, min, max)
         val height = (panelHeight - titleBarHeight) * normalizedHeight
