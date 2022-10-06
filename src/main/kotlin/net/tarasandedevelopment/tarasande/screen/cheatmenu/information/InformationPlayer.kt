@@ -6,6 +6,11 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 
+class InformationName : Information("Player", "Name") {
+
+    override fun getMessage() = MinecraftClient.getInstance().session.username!!
+}
+
 class InformationXYZ : Information("Player", "XYZ") {
     private val decimalPlacesX = ValueNumber(this, "Decimal places: x", 0.0, 1.0, 5.0, 1.0)
     private val decimalPlacesY = ValueNumber(this, "Decimal places: y", 0.0, 1.0, 5.0, 1.0)

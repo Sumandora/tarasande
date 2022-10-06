@@ -9,6 +9,7 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
     init {
         add(
             // Player
+            InformationName(),
             InformationXYZ(),
             InformationNetherXYZ(),
             InformationRotation(),
