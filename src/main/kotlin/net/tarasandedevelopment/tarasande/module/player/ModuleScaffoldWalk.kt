@@ -263,7 +263,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                                 prevT > t -> -1
                                                 else -> null
                                             }
-                                            println(preferredSide)
                                         } else {
                                             t += (a * preferredSide!!).toFloat()
                                         }

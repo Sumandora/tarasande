@@ -22,9 +22,9 @@ open class Panel(
     var x: Double,
     var y: Double,
     val minWidth: Double,
-    val minHeight: Double,
+    var minHeight: Double,
     val maxWidth: Double? = null,
-    val maxHeight: Double? = null,
+    var maxHeight: Double? = null,
     private val background: Boolean = true,
     private val resizable: Boolean = true,
     internal val fixed: Boolean = false
@@ -83,7 +83,7 @@ open class Panel(
             }
         }
 
-        scrollOffset = MathHelper.clamp(scrollOffset + scrollSpeed, min(-(getMaxScrollOffset() - (panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight - 5)), 0.0), 0.0)
+        scrollOffset = MathHelper.clamp(scrollOffset + scrollSpeed, min(-(getMaxScrollOffset() - (panelHeight - titleBarHeight - 5)), 0.0), 0.0)
         scrollSpeed = MathHelper.clamp(scrollSpeed - scrollSpeed * RenderUtil.deltaTime * 0.01, -100.0, 100.0)
 
         if (opened) {

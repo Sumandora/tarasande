@@ -55,7 +55,7 @@ public abstract class MixinScreen implements IScreen {
             this.addDrawableChild(element);
     }
 
-    @Inject(method = "tick", at = @At("RETURN"))
+    @Inject(method = "tick", at = @At("HEAD"))
     public void injectTick(CallbackInfo ci) {
         for (Element child : this.children())
             if (child instanceof ClickableWidgetPanel clickableWidgetPanel)

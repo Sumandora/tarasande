@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.module.misc
+package net.tarasandedevelopment.tarasande.module.render
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.HandledScreen
@@ -12,11 +12,10 @@ import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.V
 import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.PanelElements
 import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
-import net.tarasandedevelopment.tarasande.value.ValueColor
 import net.tarasandedevelopment.tarasande.value.ValueSpacer
 import java.util.function.Consumer
 
-class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress in the furnace.", ModuleCategory.MISC) {
+class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress in the furnace.", ModuleCategory.RENDER) {
 
     val eventConsumer = Consumer<Event> {
         when (it) {
@@ -25,19 +24,11 @@ class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress
                 if (it.screen.screenHandler !is AbstractFurnaceScreenHandler) return@Consumer
 
                 val screenHandler = it.screen.screenHandler as AbstractFurnaceScreenHandler
-                val font = MinecraftClient.getInstance().textRenderer
 
-                it.add(ClickableWidgetPanel(object : PanelElements<ValueComponent>("Furnace Progress", 0.0, 0.0, 0.0, 0.0) {
-                    override fun init() {
-                        super.init()
-                        x = 5.0
-                        panelWidth = 100.0
-                    }
+                it.add(ClickableWidgetPanel(object : PanelElements<ValueComponent>("Furnace Progress", 5.0, 0.0, 100.0, 0.0) {
+                    private fun addText(input: String) = elementList.add(TarasandeMain.get().screenCheatMenu.managerValueComponent.newInstance(ValueSpacer(this, input)))
 
-                    private fun addText(input: String) = elementList.add(0, TarasandeMain.get().screenCheatMenu.managerValueComponent.newInstance(ValueSpacer(this, input))!!)
-
-                    override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-                        super.renderContent(matrices, mouseX, mouseY, delta)
+                    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
                         elementList.clear()
                         y = MinecraftClient.getInstance().window.scaledHeight / 2f - panelHeight / 2f
 
@@ -46,13 +37,13 @@ class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress
 
                             addText("Item smelting finished in: " + (progress / 2 + 1) + " seconds")
                             addText("Fuel Power ends in: " + (screenHandler.fuelProgress + 1) + " seconds")
+                        } else
+                            addText("Waiting...")
+                        this.minHeight = titleBarHeight + 2.0 + (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0 + 2.0) * (if (screenHandler.isBurning) 2 else 1)
 
-                            return
-                        }
-
-                        addText("Waiting...")
+                        super.render(matrices, mouseX, mouseY, delta)
                     }
-                }, true))
+                }))
             }
         }
     }

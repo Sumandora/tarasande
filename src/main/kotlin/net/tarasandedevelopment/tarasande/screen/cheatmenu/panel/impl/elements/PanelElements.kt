@@ -17,12 +17,13 @@ open class PanelElements<T : Element>(title: String, x: Double, y: Double, minWi
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         matrices?.push()
-        matrices?.translate(x + 2, y + titleBarHeight + 2, 0.0)
         val x = x + 2
         var y = y + titleBarHeight + 2
+        matrices?.translate(x, y, 0.0)
         for (it in elementList) {
             it.width = panelWidth - 4
-            if (y + it.getHeight() + 2 >= this.y - scrollOffset) it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
+            if (y + it.getHeight() + 2 >= this.y - scrollOffset)
+                it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
 
             matrices?.translate(0.0, it.getHeight() + 2, 0.0)
             y += it.getHeight() + 2
@@ -76,7 +77,10 @@ open class PanelElements<T : Element>(title: String, x: Double, y: Double, minWi
     }
 
     override fun tick() {
-        elementList.forEach { it.tick() }
+        elementList.forEach {
+            it.width = panelWidth - 4
+            it.tick()
+        }
         super.tick()
     }
 

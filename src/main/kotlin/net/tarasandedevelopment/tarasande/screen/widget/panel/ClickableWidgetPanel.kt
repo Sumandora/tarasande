@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.screen.widget.panel
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
 import net.minecraft.client.gui.widget.ClickableWidget
@@ -8,7 +7,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 
-open class ClickableWidgetPanel(val panel: Panel, private val autoAdjustHeight: Boolean = false) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelWidth.toInt(), Text.of(panel.title)), Element {
+open class ClickableWidgetPanel(val panel: Panel) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelWidth.toInt(), Text.of(panel.title)), Element {
 
     override fun appendNarrations(builder: NarrationMessageBuilder?) {
     }
@@ -18,10 +17,6 @@ open class ClickableWidgetPanel(val panel: Panel, private val autoAdjustHeight: 
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        if (autoAdjustHeight) {
-            panel.panelHeight = panel.getMaxScrollOffset() + panel.titleBarHeight
-        }
-
         val opened = panel.opened
         panel.opened = true
         if (panel.isVisible())
