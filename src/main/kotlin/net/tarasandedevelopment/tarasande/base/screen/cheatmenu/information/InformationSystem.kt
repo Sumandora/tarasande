@@ -38,6 +38,8 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
             InformationFeaturesModules(),
             InformationFeaturesProtocols(),
             InformationFeaturesCreativeItems(),
+            InformationFeaturesValues(),
+            InformationFeaturesGraphs(),
 
             // Modules
             InformationTimeShifted(),

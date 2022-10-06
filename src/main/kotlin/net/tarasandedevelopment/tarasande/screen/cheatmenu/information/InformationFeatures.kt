@@ -18,3 +18,13 @@ class InformationFeaturesCreativeItems : Information("Features", "Creative Items
 
     override fun getMessage() = TarasandeMain.get().screenCheatMenu.managerCreative.list.size.toString()
 }
+
+class InformationFeaturesValues : Information("Features", "Values") {
+
+    override fun getMessage() = TarasandeMain.get().managerValue.list.size.toString()
+}
+
+class InformationFeaturesGraphs : Information("Features", "Graphs") {
+
+    override fun getMessage() = TarasandeMain.get().screenCheatMenu.managerGraph.list.size.toString()
+}
