@@ -25,7 +25,7 @@ class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress
 
                 val screenHandler = it.screen.screenHandler as AbstractFurnaceScreenHandler
 
-                it.add(ClickableWidgetPanel(object : PanelElements<ValueComponent>("Furnace Progress", 5.0, 0.0, 100.0, 0.0) {
+                it.add(ClickableWidgetPanel(object : PanelElements<ValueComponent>("Furnace progress", 5.0, 0.0, 100.0, 0.0) {
                     private fun addText(input: String) = elementList.add(TarasandeMain.get().screenCheatMenu.managerValueComponent.newInstance(ValueSpacer(this, input)))
 
                     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
@@ -36,7 +36,7 @@ class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress
                             val progress = 23 /* max */ - screenHandler.cookProgress
 
                             addText("Item smelting finished in: " + (progress / 2 + 1) + " seconds")
-                            addText("Fuel Power ends in: " + (screenHandler.fuelProgress + 1) + " seconds")
+                            addText("Fuel power ends in: " + (screenHandler.fuelProgress + 1) + " seconds")
                         } else
                             addText("Waiting...")
                         this.minHeight = titleBarHeight + 2.0 + (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0 + 2.0) * (if (screenHandler.isBurning) 2 else 1)
