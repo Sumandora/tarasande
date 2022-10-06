@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.terminal
+package net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.terminal
 
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ValueComponent
