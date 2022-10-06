@@ -22,9 +22,9 @@ open class Panel(
     var x: Double,
     var y: Double,
     val minWidth: Double,
-    var minHeight: Double,
+    val minHeight: Double,
     val maxWidth: Double? = null,
-    var maxHeight: Double? = null,
+    val maxHeight: Double? = null,
     private val background: Boolean = true,
     private val resizable: Boolean = true,
     internal val fixed: Boolean = false
