@@ -64,6 +64,7 @@
 - Account manager: Add skins in selection
 - (Banners in protocol selection)
 - Account manager: Rewrite
+- Settings for HypixelBedwarsOverlay
 
 ### TODO-List (Click GUI)
 - Correctly save and calculate the positions of the panels when resizing ingame

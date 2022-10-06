@@ -18,20 +18,16 @@ class PanelElementsTerminal(x: Double, y: Double, val screenCheatMenu: ScreenChe
         elementList.add(textField)
     }
 
-    private fun resetScrolling() {
-        scrollSpeed = 0.0
-        scrollOffset = -getMaxScrollOffset()
-    }
-
     override fun charTyped(chr: Char, modifiers: Int) {
         if (textField.isFocused()) {
-            resetScrolling()
+            scrollOffset = -getMaxScrollOffset()
         }
         super.charTyped(chr, modifiers)
     }
 
     fun add(input: String) {
-        elementList.add(elementList.size - 1, screenCheatMenu.managerValueComponent.newInstance(ValueSpacer(this, input))!!)
+        elementList.add(elementList.size - 1, screenCheatMenu.managerValueComponent.newInstance(ValueSpacer(this, input)))
+        scrollSpeed -= 1.0
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
@@ -41,7 +37,6 @@ class PanelElementsTerminal(x: Double, y: Double, val screenCheatMenu: ScreenChe
                     screenCheatMenu.managerCommand.execute(textField.textFieldWidget.text, this)
                     value.value = ""
                     textField.textFieldWidget.text = ""
-                    resetScrolling()
                     return true
                 }
 

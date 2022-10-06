@@ -5,7 +5,6 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
@@ -320,17 +319,13 @@ object RenderUtil {
         MinecraftClient.getInstance().textRenderer.draw(matrices, text, x, y, color)
     }
 
-    fun text(matrices: MatrixStack?, text: String, x: Float, y: Float) = text(matrices, Text.of(text), x, y)
-    fun text(matrices: MatrixStack?, text: Text, x: Float, y: Float) = text(matrices, text, x, y, -1)
-    fun text(matrices: MatrixStack?, text: Text, x: Float, y: Float, color: Int): Int {
+    fun text(matrices: MatrixStack?, text: String, x: Float, y: Float) = text(matrices, text, x, y, -1)
+    fun text(matrices: MatrixStack?, text: String, x: Float, y: Float, color: Int): Int {
         return font().drawWithShadow(matrices, text, x, y, color)
     }
 
-    fun textCenter(matrices: MatrixStack?, text: String, x: Float, y: Float) {
-        textCenter(matrices, Text.of(text), x, y)
-    }
-    fun textCenter(matrices: MatrixStack?, text: Text, x: Float, y: Float) = textCenter(matrices, text, x, y, -1)
-    fun textCenter(matrices: MatrixStack?, text: Text, x: Float, y: Float, color: Int) {
+    fun textCenter(matrices: MatrixStack?, text: String, x: Float, y: Float) = textCenter(matrices, text, x, y, -1)
+    fun textCenter(matrices: MatrixStack?, text: String, x: Float, y: Float, color: Int) {
         font().drawWithShadow(matrices, text, (x - font().getWidth(text) / 2), y, color)
     }
 
