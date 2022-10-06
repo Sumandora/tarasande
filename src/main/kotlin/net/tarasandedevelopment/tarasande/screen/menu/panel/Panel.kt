@@ -189,7 +189,7 @@ open class Panel(
         return false
     }
 
-    open fun getMaxScrollOffset(): Double = 0.0
+    open fun getMaxScrollOffset() = 0.0
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         return false
