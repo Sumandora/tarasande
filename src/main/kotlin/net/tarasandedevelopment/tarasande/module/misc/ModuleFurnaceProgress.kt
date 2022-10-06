@@ -12,6 +12,7 @@ import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.V
 import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.PanelElements
 import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
+import net.tarasandedevelopment.tarasande.value.ValueColor
 import net.tarasandedevelopment.tarasande.value.ValueSpacer
 import java.util.function.Consumer
 
@@ -29,12 +30,8 @@ class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress
                 it.add(ClickableWidgetPanel(object : PanelElements<ValueComponent>("Furnace Progress", 0.0, 0.0, 0.0, 0.0) {
                     override fun init() {
                         super.init()
-                        val maxHeight = (2.0 * ((font.fontHeight + 2) / 2) + titleBarHeight + 4) // 2 Elements + Title height
-
                         x = 5.0
-                        y = MinecraftClient.getInstance().window.scaledHeight / 2f - maxHeight / 2f
                         panelWidth = 100.0
-                        panelHeight = maxHeight
                     }
 
                     private fun addText(input: String) = elementList.add(0, TarasandeMain.get().screenCheatMenu.managerValueComponent.newInstance(ValueSpacer(this, input))!!)
@@ -42,6 +39,7 @@ class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress
                     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
                         super.renderContent(matrices, mouseX, mouseY, delta)
                         elementList.clear()
+                        y = MinecraftClient.getInstance().window.scaledHeight / 2f - panelHeight / 2f
 
                         if (screenHandler.isBurning) {
                             val progress = 23 /* max */ - screenHandler.cookProgress
@@ -54,7 +52,7 @@ class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress
 
                         addText("Waiting...")
                     }
-                }))
+                }, true))
             }
         }
     }
