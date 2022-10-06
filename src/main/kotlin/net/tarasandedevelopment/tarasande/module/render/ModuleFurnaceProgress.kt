@@ -39,7 +39,7 @@ class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress
                             addText("Fuel power ends in: " + (screenHandler.fuelProgress + 1) + " seconds")
                         } else
                             addText("Waiting...")
-                        this.minHeight = titleBarHeight + 2.0 + (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0 + 2.0) * (if (screenHandler.isBurning) 2 else 1)
+                        this.panelHeight = titleBarHeight + 2.0 + (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0 + 2.0) * (if (screenHandler.isBurning) 2 else 1)
 
                         super.render(matrices, mouseX, mouseY, delta)
                     }

@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins;
 import net.minecraft.block.CommandBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.module.exploit.ModuleCommandBlockBypass;
+import net.tarasandedevelopment.tarasande.module.render.ModuleCommandBlockBypass;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
