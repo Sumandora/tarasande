@@ -10,7 +10,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.screen.list.clientmenu.ScreenBetterClientMenu;
+import net.tarasandedevelopment.tarasande.screen.clientmenu.ScreenBetterClientMenu;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -28,7 +28,7 @@ public class MixinTitleScreen extends Screen {
         if (drawableElement instanceof ButtonWidget buttonWidget) {
             if ((buttonWidget.getMessage().getContent() instanceof TranslatableTextContent && ((TranslatableTextContent) buttonWidget.getMessage().getContent()).getKey().equals("menu.online")) || buttonWidget.getMessage().getString().contains("Realms")) {
                 buttonWidget.setWidth(buttonWidget.getWidth() / 2 - 2);
-                final String selected = TarasandeMain.Companion.get().getClientValues().getClientMenuFocusedEntry().getSelected().get(0);
+                final String selected = TarasandeMain.Companion.get().getManagerClientMenu().getClientMenuFocusedEntry().getSelected().get(0);
 
                 Text buttonText = Text.of((Character.toUpperCase(TarasandeMain.Companion.get().getName().charAt(0)) + TarasandeMain.Companion.get().getName().substring(1)) + " Menu");
                 if (this.anySelected()) {
@@ -50,6 +50,6 @@ public class MixinTitleScreen extends Screen {
 
     @Unique
     private boolean anySelected() {
-        return TarasandeMain.Companion.get().getClientValues().getClientMenuFocusedEntry().anySelected() && !TarasandeMain.Companion.get().getClientValues().getClientMenuFocusedEntry().getSelected().get(0).equals("None");
+        return TarasandeMain.Companion.get().getManagerClientMenu().getClientMenuFocusedEntry().anySelected() && !TarasandeMain.Companion.get().getManagerClientMenu().getClientMenuFocusedEntry().getSelected().get(0).equals("None");
     }
 }

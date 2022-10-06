@@ -26,14 +26,19 @@
 
 ## Roadmap
 1. Base
-2. Account Management (with encrypted files)
-3. ClickGUI
-4. Basic combat modules
-5. Basic movement modules
-6. Basic render modules
-7. More advanced modules
-8. Anarchy modules
-9. Multi-version support
+2. Tarasande Menu (client menu) 
+   - Account Management (with encrypted files)
+   - Proxy System
+   - Protocol Translation
+   - Basic exploits (bungee hack)
+3. ClickGUI (cheat menu)
+   - Basic combat modules
+   - Basic movement modules
+   - Basic render modules
+   - More advanced modules
+   - Anarchy modules
+   - Quality of life modules
+4. Multi-version support
 
 ## TODO-List
 - Vehicle Speed

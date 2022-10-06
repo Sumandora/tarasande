@@ -12,9 +12,9 @@ import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
-import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.screen.menu.valuecomponent.ValueComponentRegistry
-import net.tarasandedevelopment.tarasande.screen.menu.valuecomponent.ValueComponentText
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentRegistry
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentText
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import java.util.function.Consumer

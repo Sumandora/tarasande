@@ -18,7 +18,7 @@ import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.mixin.accessor.IMatrix4f
 import net.tarasandedevelopment.tarasande.mixin.accessor.IWorldRenderer
 import net.tarasandedevelopment.tarasande.module.combat.ModuleAntiBot
-import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.extension.times

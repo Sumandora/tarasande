@@ -4,13 +4,15 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.screen.AbstractFurnaceScreenHandler
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
+import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ValueComponent
 import net.tarasandedevelopment.tarasande.event.EventChildren
-import net.tarasandedevelopment.tarasande.screen.menu.panel.Panel
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.PanelElements
 import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import net.tarasandedevelopment.tarasande.value.ValueSpacer
 import java.util.function.Consumer
 
 class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress in the furnace.", ModuleCategory.MISC) {
@@ -24,30 +26,33 @@ class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress
                 val screenHandler = it.screen.screenHandler as AbstractFurnaceScreenHandler
                 val font = MinecraftClient.getInstance().textRenderer
 
-                it.add(ClickableWidgetPanel(object : Panel("Furnace Progress", 0.0, 0.0, 0.0, 0.0, null, null, true) {
+                it.add(ClickableWidgetPanel(object : PanelElements<ValueComponent>("Furnace Progress", 0.0, 0.0, 0.0, 0.0) {
                     override fun init() {
                         super.init()
-                        val maxHeight: Double = (2.0 + 1.0) /* Element Size + Bar Height as Double because Kotlin */ * (font.fontHeight + 2)
+                        val maxHeight = (2.0 * ((font.fontHeight + 2) / 2) + titleBarHeight + 4) // 2 Elements + Title height
+
                         x = 5.0
                         y = MinecraftClient.getInstance().window.scaledHeight / 2f - maxHeight / 2f
                         panelWidth = 100.0
                         panelHeight = maxHeight
                     }
 
+                    private fun addText(input: String) = elementList.add(0, TarasandeMain.get().screenCheatMenu.managerValueComponent.newInstance(ValueSpacer(this, input))!!)
+
                     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-                        matrices!!.push()
-                        matrices.translate(x + 2, y + font.fontHeight + 4, 0.0)
+                        super.renderContent(matrices, mouseX, mouseY, delta)
+                        elementList.clear()
+
                         if (screenHandler.isBurning) {
-                            // 23 = max
-                            val progress: Int = 23 - screenHandler.cookProgress
-                            val width = RenderUtil.text(matrices, "Item smelting finished in: " + (progress / 2 + 1) + " seconds", 0f, 0f)
-                            panelWidth = (width + 2).toDouble()
-                            RenderUtil.text(matrices, "Fuel Power ends in: " + (screenHandler.fuelProgress + 1) + " seconds", 0f, (font.fontHeight + 2).toFloat())
-                        } else {
-                            RenderUtil.text(matrices, "Waiting...", 0f, 0f)
-                            panelWidth = 100.0
+                            val progress = 23 /* max */ - screenHandler.cookProgress
+
+                            addText("Item smelting finished in: " + (progress / 2 + 1) + " seconds")
+                            addText("Fuel Power ends in: " + (screenHandler.fuelProgress + 1) + " seconds")
+
+                            return
                         }
-                        matrices.pop()
+
+                        addText("Waiting...")
                     }
                 }))
             }

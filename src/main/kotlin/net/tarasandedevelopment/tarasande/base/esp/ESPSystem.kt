@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.esp.ESPElementBox
 import net.tarasandedevelopment.tarasande.esp.ESPElementHealthBar
 import net.tarasandedevelopment.tarasande.esp.ESPElementName
 import net.tarasandedevelopment.tarasande.module.render.ModuleESP
-import net.tarasandedevelopment.tarasande.screen.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueMode

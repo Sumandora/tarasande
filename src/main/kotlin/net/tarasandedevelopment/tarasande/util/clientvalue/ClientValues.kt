@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.util.clientvalue
 
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.clientmenu.ElementMenuScreen
+import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuScreen
 import net.tarasandedevelopment.tarasande.value.*
 import org.lwjgl.glfw.GLFW
 
@@ -39,14 +39,4 @@ class ClientValues {
         override fun isEnabled() = autoSaveConfig.value
     }
     val hypixelApiKey = ValueText(this, "Hypixel API Key", "")
-
-    val clientMenuFocusedEntry: ValueMode
-    val clientMenuCategories = ValueBoolean(this, "Client Menu: Categories", true)
-
-    init {
-        val entries = mutableListOf("None")
-        entries.addAll(TarasandeMain.get().managerClientMenu.list.filterIsInstance<ElementMenuScreen>().map { e -> e.name })
-
-        clientMenuFocusedEntry = ValueMode(this, "Client Menu: focused entry", false, *entries.toTypedArray())
-    }
 }

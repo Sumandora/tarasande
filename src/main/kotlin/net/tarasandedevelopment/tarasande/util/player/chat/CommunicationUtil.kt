@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.util.player.chat
 import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
-import net.tarasandedevelopment.tarasande.screen.menu.panel.impl.elements.impl.notification.PanelElementsNotification
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.notification.PanelElementsNotification
 import net.tarasandedevelopment.tarasande.value.ValueSpacer
 
 object CommunicationUtil {

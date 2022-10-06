@@ -8,7 +8,7 @@ import net.minecraft.client.gl.Framebuffer
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
-import net.tarasandedevelopment.tarasande.screen.menu.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.util.render.framebuffer.FramebufferWrapped
 import net.tarasandedevelopment.tarasande.util.render.shader.Program
 import net.tarasandedevelopment.tarasande.util.render.shader.Shader
