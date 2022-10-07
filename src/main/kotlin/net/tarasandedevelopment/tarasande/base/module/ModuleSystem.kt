@@ -112,7 +112,6 @@ class ManagerModule : Manager<Module>() {
 }
 
 open class Module(val name: String, val description: String, val category: ModuleCategory) {
-    var visibleInMenu = true
     val visible = ValueBoolean(this, "Visible in ArrayList", true)
 
     @Suppress("PropertyName")
