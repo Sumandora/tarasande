@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.util.player.items
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.enchantment.Enchantment
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.nbt.*
@@ -27,6 +28,8 @@ object ItemUtil {
 
         CommunicationUtil.printInformation(placed)
     }
+
+    fun enchantSimpleName(enchantment: Enchantment, length: Int) = enchantment.getName(0).string.substring(0, length)
 
     // ReinerWahnsinn Spawner Bypass for Spigot/CraftBukkit 1.8.3
     fun packageExploit(stack: ItemStack): ItemStack {
