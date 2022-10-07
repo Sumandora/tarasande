@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.terminal
 
 import net.minecraft.client.MinecraftClient
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ValueComponent
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.PanelElements
@@ -16,6 +17,10 @@ class PanelElementsTerminal(x: Double, y: Double, val screenCheatMenu: ScreenChe
 
     init {
         elementList.add(textField)
+
+        this.add("Welcome to the Tarasande Terminal")
+        this.add("Available commands: " + screenCheatMenu.managerCommand.list.size)
+        this.add("You can use \"help\" to show all commands")
     }
 
     override fun charTyped(chr: Char, modifiers: Int) {
