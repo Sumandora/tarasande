@@ -70,7 +70,7 @@ open class ScreenBetterSlotListEntry : AlwaysSelectedEntryListWidget.Entry<Scree
     private var lastClick: Long = 0
     private var index = 0
 
-    fun isSelected() = (this.parentList!! as ScreenBetterSlotListWidget).parent.selected == index
+    open fun isSelected() = (this.parentList!! as ScreenBetterSlotListWidget).parent.selected == index
 
     open fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
     }

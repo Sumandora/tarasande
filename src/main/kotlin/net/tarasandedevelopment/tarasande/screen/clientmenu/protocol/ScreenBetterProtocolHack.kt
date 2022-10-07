@@ -46,6 +46,10 @@ class ScreenBetterProtocolHack : ScreenBetterSlotList(46, 12) {
 
     class EntryProtocol(val protocol: ProtocolVersion) : ScreenBetterSlotListEntry() {
 
+        override fun isSelected(): Boolean {
+            return TarasandeMain.get().protocolHack.realClientsideVersion == protocol.version
+        }
+
         private fun colorShift(input: Color): Int {
             return if (TarasandeMain.get().protocolHack.isAuto()) input.darker().darker().darker().rgb else input.rgb
         }
