@@ -88,7 +88,6 @@ class ManagerModule : Manager<Module>() {
             ModuleFastUse(),
             ModuleDisableSequencePackets(),
             ModuleAntiBindingCurse(),
-            ModuleBungeeHack(),
             ModuleCommandBlockBypass(),
             ModuleAntiParticleHide(),
             ModulePrivateMsgDetector(),

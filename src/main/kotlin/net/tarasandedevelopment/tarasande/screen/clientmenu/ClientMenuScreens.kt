@@ -2,20 +2,25 @@ package net.tarasandedevelopment.tarasande.screen.clientmenu
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
+import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenu
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuScreen
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuTitle
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuToggle
-import net.tarasandedevelopment.tarasande.module.exploit.ModuleBungeeHack
-import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.mixin.accessor.IHandshakeC2SPacket
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.ScreenBetterAccountManager
 import net.tarasandedevelopment.tarasande.screen.clientmenu.protocol.ScreenBetterProtocolHack
 import net.tarasandedevelopment.tarasande.screen.clientmenu.proxy.ScreenBetterProxy
-import org.lwjgl.glfw.GLFW
+import net.tarasandedevelopment.tarasande.value.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.ValueText
 import org.spongepowered.include.com.google.common.io.Files
 import java.io.File
+import java.util.*
+import java.util.function.Consumer
 
 class ElementMenuScreenAccountManager : ElementMenuScreen("Account Manager") {
 
@@ -46,16 +51,36 @@ class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack") {
 
 class ElementMenuToggleBungeeHack : ElementMenuToggle("Bungee Hack") {
 
-    override fun onToggle(state: Boolean) {
-        TarasandeMain.get().managerModule.get(ModuleBungeeHack::class.java).enabled = state
+    private val endIP = ValueText(this, "End IP", "127.0.0.1")
+    private val customUUID = ValueBoolean(this, "Custom UUID", false)
+    private val uuid = object : ValueText(this, "UUID", UUID.randomUUID().toString()) {
+
+        override fun isEnabled() = customUUID.value
     }
 
-    override fun otherMouseHandling(button: Int) {
-        super.otherMouseHandling(button)
+    private val zero = "\u0000"
+    private fun stripID(input: String) = input.replace("-", "")
 
-        if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, this.name, TarasandeMain.get().managerModule.get(ModuleBungeeHack::class.java)))
+    val eventConsumer = Consumer<Event> { event ->
+        when (event) {
+            is EventPacket -> {
+                if (event.type != EventPacket.Type.SEND) return@Consumer
+                if (event.packet !is HandshakeC2SPacket) return@Consumer
+
+                var uuid = MinecraftClient.getInstance().session.uuid
+                if (this.customUUID.value)
+                    uuid = this.uuid.value
+
+                (event.packet as IHandshakeC2SPacket).tarasande_extendAddress(this.zero + this.endIP.value + this.zero + this.stripID(uuid))
+            }
         }
+    }
+
+    override fun onToggle(state: Boolean) {
+        if (state)
+            TarasandeMain.get().managerEvent.addObject(this)
+        else
+            TarasandeMain.get().managerEvent.remObject(this)
     }
 }
 

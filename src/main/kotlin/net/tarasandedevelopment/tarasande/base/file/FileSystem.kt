@@ -4,8 +4,9 @@ import com.google.gson.JsonElement
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.file.FileAccounts
-import net.tarasandedevelopment.tarasande.file.FileMenu
+import net.tarasandedevelopment.tarasande.file.FileCheatMenu
 import net.tarasandedevelopment.tarasande.file.FileModules
+import net.tarasandedevelopment.tarasande.file.FileClientMenu
 import net.tarasandedevelopment.tarasande.file.values.FileValuesBinds
 import net.tarasandedevelopment.tarasande.file.values.FileValuesNonBinds
 import java.io.FileWriter
@@ -19,7 +20,8 @@ class ManagerFile : Manager<File>() {
             FileValuesBinds(),
             FileValuesNonBinds(),
             FileAccounts(),
-            FileMenu()
+            FileCheatMenu(),
+            FileClientMenu()
         )
     }
 

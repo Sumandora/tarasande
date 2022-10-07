@@ -7,6 +7,7 @@ import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClickableWidget
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.clientmenu.*
 import net.tarasandedevelopment.tarasande.screen.widget.AllMouseButtonWidget
 import net.tarasandedevelopment.tarasande.screen.widget.AllMousePressAction
@@ -55,6 +56,12 @@ abstract class ElementMenu(val name: String) {
     open fun buildWidget(x: Int, y: Int, width: Int, height: Int): ButtonWidget {
         val widget = AllMouseButtonWidget(x, y, width, height, this.buttonText(), object : AllMousePressAction() {
             override fun onPress(mouseButton: Int, button: ButtonWidget) {
+                if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+                    if (TarasandeMain.get().managerValue.getValues(this@ElementMenu).isNotEmpty()) {
+                        MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, this@ElementMenu))
+                        return
+                    }
+                }
                 onClick(mouseButton)
                 button.message = buttonText()
             }
@@ -92,16 +99,11 @@ abstract class ElementMenuToggle(name: String) : ElementMenu(name) {
 
             return
         }
-
-        this.otherMouseHandling(mouseButton)
     }
 
     override fun buttonColor() = if (state) Color.green.rgb else Color.red.rgb
 
     abstract fun onToggle(state: Boolean)
-
-    open fun otherMouseHandling(button: Int) {
-    }
 }
 
 open class ElementMenuTitle(name: String) : ElementMenu(name) {

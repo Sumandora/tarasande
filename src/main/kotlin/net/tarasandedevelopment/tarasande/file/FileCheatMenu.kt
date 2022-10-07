@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.base.file.File
 import kotlin.math.max
 import kotlin.math.min
 
-class FileMenu : File("Menu") {
+class FileCheatMenu : File("CheatMenu") {
 
     override fun save(): JsonElement {
         val jsonObject = JsonObject()
