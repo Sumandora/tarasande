@@ -19,8 +19,9 @@ class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
     private val itemDimension = 20
 
     private val skipEmpty = ValueBoolean(this, "Skip empty", false)
-    private val showEnchantments = ValueBoolean(this, "Show enchantments", true)
-    private val maxEnchantmentLength = ValueNumber(this, "Max enchantment length", 1.0, 3.0, 5.0, 1.0)
+    private val showEnchantments = ValueBoolean(this, "Enchantments", true)
+    private val maxEnchantmentLength = ValueNumber(this, "Enchantments: max length", 1.0, 3.0, 5.0, 1.0)
+    private val enchantmentScale = ValueNumber(this, "Enchantments: scale", 0.1, 0.5, 2.0, 1.0)
 
     override fun isVisible(): Boolean {
         for (itemStack in MinecraftClient.getInstance().player!!.inventory.armor)
@@ -38,17 +39,15 @@ class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
 
             (MinecraftClient.getInstance().inGameHud as IInGameHud).tarasande_invokeRenderHotbarItem(x.toInt() + m, y.toInt() + titleBarHeight, delta, matrices, armor)
             if (showEnchantments.value) {
-                val scale = 0.5F
-
                 matrices?.push()
-                matrices?.scale(scale, scale, 1F)
-                matrices?.translate(x / scale, (y / scale) + (titleBarHeight), 0.0)
+                matrices?.scale(enchantmentScale.value.toFloat(), enchantmentScale.value.toFloat(), 1F)
+                matrices?.translate(x / enchantmentScale.value.toFloat(), (y / enchantmentScale.value.toFloat()) + (titleBarHeight), 0.0)
                 EnchantmentHelper.get(armor).onEachIndexed { index, entry ->
                     RenderUtil.textCenter(
                         matrices,
                         ItemUtil.enchantSimpleName(entry.key, maxEnchantmentLength.value.toInt()) + " " + entry.value,
-                        (m.toFloat() + (itemDimension / 2)) / scale,
-                        (itemDimension + (index * titleBarHeight / 2)) / scale,
+                        (m.toFloat() + (itemDimension / 2)) / enchantmentScale.value.toFloat(),
+                        (itemDimension + (index * titleBarHeight / 2)) / enchantmentScale.value.toFloat(),
                         Color.white.rgb
                     )
                 }
