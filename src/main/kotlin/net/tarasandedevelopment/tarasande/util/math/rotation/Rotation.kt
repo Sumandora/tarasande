@@ -120,5 +120,6 @@ class Rotation(var yaw: Float, var pitch: Float) {
         return Vec3d((i * j).toDouble(), -k.toDouble(), (h * j).toDouble()) * dist
     }
 
+    operator fun plus(other: Rotation) = Rotation(yaw + other.yaw, pitch + other.pitch)
 
 }

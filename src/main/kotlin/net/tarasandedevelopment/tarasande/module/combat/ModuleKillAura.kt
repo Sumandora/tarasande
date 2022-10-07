@@ -382,7 +382,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             is EventPacket -> {
                 if (event.type == EventPacket.Type.RECEIVE && event.packet is EntityStatusS2CPacket) {
-                    if (event.packet.getEntity(mc.world) == mc.player && event.packet.status == EntityStatuses.DAMAGE_FROM_GENERIC_SOURCE)
+                    if (mc.world != null && event.packet.getEntity(mc.world) == mc.player && event.packet.status == EntityStatuses.DAMAGE_FROM_GENERIC_SOURCE)
                         waitForDamage = false
                 }
             }

@@ -79,13 +79,20 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
             is EventPollEvents -> {
                 if (beginRotation == null)
                     onEnable()
-                rotation = Rotation(mc.player!!)
+                mc.player?.yaw = beginRotation?.yaw!!
+                mc.player?.pitch = beginRotation?.pitch!!
                 if (lockRotation.value && !event.dirty) {
                     event.rotation = beginRotation!!
                     // We return ourselves in onDisable
                     event.minRotateToOriginSpeed = 0.0
                     event.maxRotateToOriginSpeed = 0.0
                 }
+            }
+
+            is EventMouseDelta -> {
+                rotation = rotation?.plus(Rotation.calculateRotationChange(-event.deltaX, -event.deltaY))?.correctSensitivity() // clamp
+                event.deltaX = 0.0
+                event.deltaY = 0.0
             }
 
             is EventUpdate -> {
