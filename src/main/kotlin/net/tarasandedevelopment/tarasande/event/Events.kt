@@ -23,6 +23,7 @@ import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import java.awt.Color
+import java.net.InetSocketAddress
 
 class EventChat(val chatMessage: String) : Event(true)
 class EventKey(val key: Int, val action: Int) : Event(true)
@@ -198,3 +199,4 @@ class EventChildren(val screen: Screen) : Event(false) {
     fun get() = children
 }
 class EventLoadManager(val manager: Manager<*>) : Event(false)
+class EventConnectServer(val address: InetSocketAddress) : Event(false)

@@ -5,6 +5,7 @@ import net.minecraft.client.resource.language.LanguageDefinition
 import net.minecraft.client.resource.language.TranslationStorage
 import net.tarasandedevelopment.tarasande.mixin.accessor.ILanguageManager
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 object StringUtil {
 
@@ -32,5 +33,35 @@ object StringUtil {
             round(bytes / 1024.0 / 1024.0 / 1024.0, count) + " Gb"
         else
             round(bytes / 1024.0 / 1024.0 / 1024.0 / 1024.0, count) + " Tb"
+    }
+
+    fun formatTime(input: Long): String {
+        var input = input
+
+        val days = TimeUnit.MILLISECONDS.toDays(input)
+        input -= TimeUnit.DAYS.toMillis(days)
+        val hours = TimeUnit.MILLISECONDS.toHours(input)
+        input -= TimeUnit.HOURS.toMillis(hours)
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(input)
+        input -= TimeUnit.MINUTES.toMillis(minutes)
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(input)
+
+        val builder = StringBuilder()
+
+        if (seconds > 0) builder.append(seconds).append(" seconds")
+        val thisSplit = ", "
+        if (minutes > 0) {
+            if (seconds != 0L) builder.append(thisSplit)
+            builder.append(minutes).append(" minutes")
+        }
+        if (hours > 0) {
+            builder.append(thisSplit)
+            builder.append(hours).append(" hours")
+        }
+        if (days > 0) {
+            builder.append(thisSplit)
+            builder.append(days).append(" days")
+        }
+        return builder.toString()
     }
 }

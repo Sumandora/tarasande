@@ -21,6 +21,8 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
 
             // Connection
             InformationHandlers(),
+            InformationProtocolVersion(),
+            InformationPlayTime(),
 
             // World
             InformationEntities(),
@@ -32,7 +34,6 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
 
             // Server
             InformationServerBrand(),
-            InformationProtocolVersion(),
 
             // Features
             InformationFeaturesModules(),

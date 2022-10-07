@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(targets = "net/minecraft/network/ClientConnection$1")
-public class MixinClientConnectionInitChannel {
+public class MixinClientConnectionSubInitChannel {
 
     @Inject(method = "initChannel", at = @At("TAIL"))
     public void injectPostInitChannel(Channel channel, CallbackInfo ci) {
