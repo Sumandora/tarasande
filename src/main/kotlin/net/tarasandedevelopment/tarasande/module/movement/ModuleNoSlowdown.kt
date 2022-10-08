@@ -10,7 +10,6 @@ import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventItemCooldown
 import net.tarasandedevelopment.tarasande.event.EventUpdate
-import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerInteractionManager
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
@@ -44,6 +43,8 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
         return usedStack != null && setting.selected.contains(useActions[usedStack.useAction!!])
     }
 
+    private var interacting = false
+
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
             is EventUpdate -> {
@@ -58,11 +59,9 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
                                 EventUpdate.State.POST -> {
                                     val hand = PlayerUtil.getUsedHand()
                                     if (hand != null) {
-                                        val accessor = mc.interactionManager as IClientPlayerInteractionManager
-                                        val prevOnlyPackets = accessor.tarasande_getOnlyPackets()
-                                        accessor.tarasande_setOnlyPackets(true)
+                                        interacting = true
                                         mc.interactionManager?.interactItem(mc.player, hand)
-                                        accessor.tarasande_setOnlyPackets(prevOnlyPackets)
+                                        interacting = false
                                     }
                                 }
 
@@ -83,7 +82,7 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
                 }
             }
 
-            is EventItemCooldown -> if ((mc.interactionManager as IClientPlayerInteractionManager).tarasande_getOnlyPackets()) event.cooldown = 1.0F
+            is EventItemCooldown -> if (interacting) event.cooldown = 1.0F
         }
     }
 }
