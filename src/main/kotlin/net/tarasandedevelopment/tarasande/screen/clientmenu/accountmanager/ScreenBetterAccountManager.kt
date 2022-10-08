@@ -129,7 +129,7 @@ class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
             super.renderEntry(matrices, index, entryWidth, entryHeight, mouseX, mouseY, hovered)
 
-            if (account.skinRenderer != null) {
+            if (account.skinRenderer != null && account.skinRenderer!!.player != null) {
                 val position = MathUtil.fromMatrices(matrices)
 
                 val modelViewStack = RenderSystem.getModelViewStack()
