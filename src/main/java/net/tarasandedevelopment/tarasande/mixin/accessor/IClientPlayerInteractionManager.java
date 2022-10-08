@@ -4,9 +4,6 @@ import net.minecraft.client.network.SequencedPacketCreator;
 import net.minecraft.client.world.ClientWorld;
 
 public interface IClientPlayerInteractionManager {
-    boolean tarasande_getOnlyPackets();
-
-    void tarasande_setOnlyPackets(boolean onlyPackets);
 
     float tarasande_getCurrentBreakingProgress();
 

@@ -5,10 +5,10 @@ import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.Info
 
 class InformationCPU : Information("Hardware", "CPU") {
 
-    override fun getMessage() = GlDebugInfo.getCpuInfo()
+    override fun getMessage() = GlDebugInfo.getCpuInfo()!!
 }
 
 class InformationGPU : Information("Hardware", "GPU") {
 
-    override fun getMessage() = GlDebugInfo.getRenderer()
+    override fun getMessage() = GlDebugInfo.getRenderer()!!
 }

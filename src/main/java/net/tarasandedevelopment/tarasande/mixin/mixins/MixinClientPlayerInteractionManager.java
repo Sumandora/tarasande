@@ -10,20 +10,12 @@ import net.tarasandedevelopment.tarasande.event.EventAttackEntity;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerInteractionManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPlayerInteractionManager.class)
 public abstract class MixinClientPlayerInteractionManager implements IClientPlayerInteractionManager {
-
-    @Unique
-    boolean onlyPackets = false;
-
-    @Shadow
-    protected abstract void syncSelectedSlot();
 
     @Shadow
     private float currentBreakingProgress;
@@ -39,22 +31,6 @@ public abstract class MixinClientPlayerInteractionManager implements IClientPlay
     @Inject(method = "attackEntity", at = @At("TAIL"))
     public void injectPostAttackEntity(PlayerEntity player, Entity target, CallbackInfo ci) {
         TarasandeMain.Companion.get().getManagerEvent().call(new EventAttackEntity(target, EventAttackEntity.State.POST));
-    }
-
-    @Redirect(method = "interactItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;syncSelectedSlot()V"))
-    public void hookedSyncSelectedSlot(ClientPlayerInteractionManager instance) {
-        if (!onlyPackets)
-            syncSelectedSlot();
-    }
-
-    @Override
-    public void tarasande_setOnlyPackets(boolean onlyPackets) {
-        this.onlyPackets = onlyPackets;
-    }
-
-    @Override
-    public boolean tarasande_getOnlyPackets() {
-        return onlyPackets;
     }
 
     @Override
