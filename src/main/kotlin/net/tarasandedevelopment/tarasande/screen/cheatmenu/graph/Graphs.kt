@@ -208,3 +208,21 @@ class GraphOutgoingTraffic : Graph("Outgoing Traffic", 200) {
         return StringUtil.formatBytes(this.lastData?.toLong() ?: return null, this.decimalPlaces.value.toInt())
     }
 }
+
+class GraphTX : Graph("TX", 200) {
+
+    override fun supplyData(): Number? {
+        if (MinecraftClient.getInstance().world == null) return null
+
+        return MinecraftClient.getInstance().networkHandler!!.connection.averagePacketsSent.toInt()
+    }
+}
+
+class GraphRX : Graph("RX", 200) {
+
+    override fun supplyData(): Number? {
+        if (MinecraftClient.getInstance().world == null) return null
+
+        return MinecraftClient.getInstance().networkHandler!!.connection.averagePacketsReceived.toInt()
+    }
+}
