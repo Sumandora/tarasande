@@ -6,6 +6,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.addon.Addon
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
@@ -42,6 +43,13 @@ class ScreenBetterAddons : ScreenBetterSlotList(46, MinecraftClient.getInstance(
     }
 
     class EntryAddon(val addon: Addon) : ScreenBetterSlotListEntry() {
+
+        override fun onDoubleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
+            super.onDoubleClickEntry(mouseX, mouseY, mouseButton)
+
+            if (TarasandeMain.get().managerValue.getValues(addon).isNotEmpty())
+                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, addon.modId!!, addon))
+        }
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
             matrices.push()
