@@ -29,10 +29,10 @@ class TarasandeMain {
 
     lateinit var managerEvent: ManagerEvent
         private set
-    lateinit var managerAddon: ManagerAddon
-        private set
     private lateinit var managerFile: ManagerFile
     lateinit var managerValue: ManagerValue
+        private set
+    lateinit var managerAddon: ManagerAddon
         private set
     lateinit var clientValues: ClientValues
         private set
@@ -84,12 +84,12 @@ class TarasandeMain {
 
     fun onPreLoad() {
         managerEvent = ManagerEvent()
-        managerAddon = ManagerAddon()
     }
 
     fun onLateLoad() {
         managerFile = ManagerFile()
         managerValue = ManagerValue()
+        managerAddon = ManagerAddon()
         managerClientMenu = ManagerClientMenu()
         clientValues = ClientValues()
         managerClickMethod = ManagerClickMethod()
