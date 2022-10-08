@@ -16,7 +16,7 @@ abstract class Addon {
     abstract fun create(tarasandeMain: TarasandeMain?)
     abstract fun onLoadManager(manager: Manager<*>?)
 
-    fun defaultEventConsumer(): Consumer<Event>? {
+    open fun defaultEventConsumer(): Consumer<Event>? {
         return null
     }
 }

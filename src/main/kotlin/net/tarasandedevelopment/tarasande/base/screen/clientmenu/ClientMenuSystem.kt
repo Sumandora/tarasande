@@ -30,6 +30,7 @@ class ManagerClientMenu : Manager<ElementMenu>() {
             ElementMenuScreenAccountManager(),
             ElementMenuScreenProxySystem(),
             ElementMenuScreenProtocolHack(),
+            ElementMenuScreenAddons(),
 
             ElementMenuTitle("Exploits"),
             ElementMenuToggleBungeeHack(),
