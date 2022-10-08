@@ -17,7 +17,7 @@ import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
 
-class PanelMousePad(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Mouse Pad", x, y, 100.0, 50.0, background = true, fixed = true) {
+class PanelMousepad(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Mousepad", x, y, 100.0, 50.0, background = true, fixed = true) {
 
     private val rotations = ArrayList<Pair<Float, Float>>()
     private var lastRotation: Rotation? = null
@@ -65,7 +65,7 @@ class PanelMousePad(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Pa
 
         for (rotation in rotations)
             bufferBuilder.
-            vertex(matrix, (x + panelWidth / 2f + (rotation.first / xMax) * (panelWidth / 2f)).toFloat(), (y + panelHeight / 2f + (rotation.second / yMax) * (panelHeight / 2f)).toFloat(), 0.0f).
+            vertex(matrix, (x + panelWidth / 2f + (rotation.first / xMax) * (panelWidth / 2f)).toFloat(), (y + (panelHeight + titleBarHeight) / 2f + (rotation.second / yMax) * ((panelHeight - titleBarHeight) / 2f)).toFloat(), 0.0f).
             color(1.0f, 1.0f, 1.0f, 1.0f).
             next()
 
@@ -74,7 +74,7 @@ class PanelMousePad(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Pa
         RenderSystem.disableBlend()
         RenderSystem.enableCull()
 
-        RenderUtil.fillCircle(matrices, (x + panelWidth / 2f + (rotations.last().first / xMax) * (panelWidth / 2f)), (y + panelHeight / 2f + (rotations.last().second / yMax) * (panelHeight / 2f)), 1.0, Color.white.rgb)
+        RenderUtil.fillCircle(matrices, (x + panelWidth / 2f + (rotations.last().first / xMax) * (panelWidth / 2f)), (y + (panelHeight + titleBarHeight) / 2f + (rotations.last().second / yMax) * ((panelHeight - titleBarHeight) / 2f)), 1.0, Color.white.rgb)
 
         while (rotations.size > 20)
             rotations.removeAt(0)

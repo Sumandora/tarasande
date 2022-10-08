@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.graph.Graph
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 import java.awt.Color
@@ -22,6 +23,12 @@ class PanelGraph(private val graph: Graph, x: Double, y: Double) : Panel(graph.n
     private var graphMaxWidth = 0.0
     private var currentWidth = 0.0
     private var finalWidth = 0.0
+
+    init {
+        TarasandeMain.get().managerValue.getValues(graph).forEach {
+            it.owner = this
+        }
+    }
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         if (values.isEmpty()) {

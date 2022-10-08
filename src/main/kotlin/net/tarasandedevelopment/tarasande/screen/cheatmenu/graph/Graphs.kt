@@ -6,15 +6,15 @@ import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.graph.Graph
-import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.event.EventPacketTransform
-import net.tarasandedevelopment.tarasande.event.EventPollEvents
-import net.tarasandedevelopment.tarasande.event.EventSwing
+import net.tarasandedevelopment.tarasande.base.value.Value
+import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
+import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
+import org.lwjgl.glfw.GLFW
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.round
 
@@ -76,12 +76,21 @@ class GraphTPS : Graph("TPS", 200) {
 
 class GraphCPS : Graph("CPS", 200) {
 
+    private var clickMode = ValueMode(this, "Click mode", false, "Hand swing", "mouse click")
     private val clicks = ArrayList<Long>()
 
     init {
         TarasandeMain.get().managerEvent.add { event ->
-            if (event is EventSwing) {
-                clicks.add(System.currentTimeMillis())
+            when (event) {
+                is EventSwing -> {
+                    if (clickMode!!.isSelected(0))
+                        clicks.add(System.currentTimeMillis())
+                }
+
+                is EventMouse -> {
+                    if (event.action == GLFW.GLFW_PRESS && clickMode!!.isSelected(1))
+                        clicks.add(System.currentTimeMillis())
+                }
             }
         }
     }
