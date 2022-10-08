@@ -21,7 +21,7 @@ import java.util.function.Consumer
 
 class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
 
-    private val canceledPackets = ValueMode(this, "Canceled packets", true, "Open", "Close")
+    val canceledPackets = ValueMode(this, "Canceled packets", true, "Open", "Close")
 
     private val keybinding = ArrayList(PlayerUtil.movementKeys)
 

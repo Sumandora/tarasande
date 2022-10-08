@@ -73,6 +73,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val blockOutOfReach = object : ValueBoolean(this, "Block out of reach", true) {
         override fun isEnabled() = !blockMode.isSelected(0)
     }
+    private val counterBlocking = ValueBoolean(this, "Counter blocking", false)
     private val guaranteeHit = ValueBoolean(this, "Guarantee hit", false)
     private val rotations = ValueMode(this, "Rotations", true, "Around walls", "Randomized")
     private val precision = object : ValueNumber(this, "Precision", 0.0, 0.01, 1.0, 0.01) {
@@ -275,10 +276,16 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                             var target = entry.first
                             val aimPoint = entry.second
 
-                            if (!disablesShield)
+                            if (!disablesShield) {
                                 if (dontAttackWhenBlocking.value && target is LivingEntity && target.isBlocking)
                                     if (!simulateShieldBlock.value || target.blockedByShield(DamageSource.player(mc.player)))
                                         continue
+                            } else if (counterBlocking.value) {
+                                if (target is PlayerEntity) {
+                                    if (target.offHandStack.item is ShieldItem && !target.isBlocking)
+                                        continue
+                                }
+                            }
 
                             if (rayTrace.value) {
                                 if (RotationUtil.fakeRotation == null) {
