@@ -19,7 +19,9 @@ class ManagerGraph : Manager<Graph>() {
             GraphOnlinePlayers(),
             GraphMemory(),
             GraphIncomingTraffic(),
-            GraphOutgoingTraffic()
+            GraphOutgoingTraffic(),
+            GraphTX(),
+            GraphRX()
         )
 
         TarasandeMain.get().managerEvent.add { event ->
