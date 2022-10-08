@@ -133,6 +133,8 @@ You can close this page now.""".toByteArray())
         } else {
             error("WHAT THE FUCK")
         }
+
+        super.logIn()
     }
 
     private fun buildFromCode(code: String): MSAuthProfile {

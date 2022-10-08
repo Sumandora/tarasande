@@ -107,6 +107,9 @@
     "protocolhack.screen.MixinJigsawBlockScreen",
     "protocolhack.screen.MixinStructureBlockScreen_1",
     "protocolhack.signatures1_19_0.MixinClientPlayerEntity",
-    "protocolhack.signatures1_19_0.MixinProfileKeys"
+    "protocolhack.signatures1_19_0.MixinProfileKeys",
+    "skin.MixinInventoryScreen",
+    "skin.MixinLivingEntityRenderer",
+    "skin.MixinPlayerEntityRenderer"
   ]
 }

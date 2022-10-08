@@ -14,6 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.module.render.ModuleTrueSight;
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
+import net.tarasandedevelopment.tarasande.util.player.DummyPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -77,7 +78,7 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
 
     @Redirect(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/EntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
     public void hookedRender(EntityModel<?> instance, MatrixStack matrixStack, VertexConsumer vertexConsumer, int a, int b, float c, float d, float e, float f) {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
+        if (!TarasandeMain.Companion.get().getDisabled() && !(livingEntity instanceof DummyPlayer)) {
             ModuleTrueSight moduleTrueSight = TarasandeMain.Companion.get().getManagerModule().get(ModuleTrueSight.class);
             if (moduleTrueSight.getEnabled())
                 if (livingEntity.isInvisibleTo(MinecraftClient.getInstance().player) || livingEntity.isInvisible())

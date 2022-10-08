@@ -72,7 +72,7 @@ class ScreenBetterAccount(
         }
 
         var i = 0
-        for (field in fields.reversed()) {
+        for (field in fields) {
             field.isAccessible = true
             if (field.isAnnotationPresent(ExtraInfo::class.java)) {
                 val anyField = field.get(accountImplementation)

@@ -4,6 +4,7 @@ import com.mojang.authlib.minecraft.UserApiService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.network.SocialInteractionsManager
 import net.minecraft.client.util.ProfileKeys
@@ -20,11 +21,13 @@ import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.subscreens.ScreenBetterAccount
+import net.tarasandedevelopment.tarasande.util.math.MathUtil
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import java.awt.Color
 import java.util.concurrent.ThreadLocalRandom
 
-class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.getInstance().textRenderer.fontHeight * 2) {
+class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.getInstance().textRenderer.fontHeight * 5) {
 
     val accounts = ArrayList<Account>()
     var currentAccount: Account? = null
@@ -126,16 +129,40 @@ class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
             super.renderEntry(matrices, index, entryWidth, entryHeight, mouseX, mouseY, hovered)
 
+            if (account.skinRenderer != null) {
+                val position = MathUtil.fromMatrices(matrices)
+
+                val modelViewStack = RenderSystem.getModelViewStack()
+                modelViewStack.push()
+                modelViewStack.translate(position.x, position.y, position.z)
+
+                RenderSystem.applyModelViewMatrix()
+
+                InventoryScreen.drawEntity(11, 39, 20, 0F, 0F, account.skinRenderer!!.player)
+
+                modelViewStack.pop()
+                RenderSystem.applyModelViewMatrix()
+            }
+
             matrices.push()
             matrices.translate((entryWidth).toDouble(), (textRenderer.fontHeight - textRenderer.fontHeight / 2f).toDouble(), 0.0)
             matrices.scale(2.0f, 2.0f, 1.0f)
             matrices.translate(-(entryWidth).toDouble(), (-(textRenderer.fontHeight - textRenderer.fontHeight / 2f)).toDouble(), 0.0)
-            drawCenteredText(matrices, textRenderer, Text.of(when {
+            RenderUtil.textCenter(matrices, Text.of(when {
                 client?.session?.equals(account.session) == true -> Formatting.GREEN.toString()
                 mainAccount == accounts.indexOf(account) -> Formatting.YELLOW.toString()
                 else -> ""
-            } + account.getDisplayName()), entryWidth, 2, Color.white.rgb)
+            } + account.getDisplayName()).string, entryWidth.toFloat(), entryHeight / 4F - textRenderer.fontHeight / 4F, Color.white.rgb)
             matrices.pop()
+
+            if (account.session != null) {
+                val string = account.session!!.uuid
+
+                matrices.push()
+                matrices.scale(0.5F, 0.5F, 0.5F)
+                RenderUtil.text(matrices, string, (entryWidth.toFloat() * 4) - textRenderer.getWidth(string) - 10, (entryHeight * 2 - textRenderer.fontHeight).toFloat() - 1, Color.white.rgb)
+                matrices.pop()
+            }
         }
     }
 
