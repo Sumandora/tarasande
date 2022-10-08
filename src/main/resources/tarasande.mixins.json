@@ -87,6 +87,7 @@
     "MixinClickableWidget",
     "MixinClientPlayNetworkHandler",
     "MixinEnchantmentScreen",
+    "MixinGameMenuScreen",
     "MixinHandledScreen",
     "MixinPendingUpdateManager",
     "MixinPlayerListHud",

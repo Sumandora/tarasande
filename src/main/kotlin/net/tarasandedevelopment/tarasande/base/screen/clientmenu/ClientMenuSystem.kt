@@ -14,12 +14,13 @@ import net.tarasandedevelopment.tarasande.screen.widget.AllMousePressAction
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import org.lwjgl.glfw.GLFW
+import org.spongepowered.asm.mixin.Unique
 import java.awt.Color
 
 class ManagerClientMenu : Manager<ElementMenu>() {
 
-    val clientMenuFocusedEntry: ValueMode
-    val clientMenuCategories = ValueBoolean(this, "Show categories", false)
+    private val clientMenuFocusedEntry: ValueMode
+    internal val clientMenuCategories = ValueBoolean(this, "Show categories", false)
 
     init {
         val fritzBox = ElementMenuFritzBoxReconnect()
@@ -46,8 +47,29 @@ class ManagerClientMenu : Manager<ElementMenu>() {
     }
 
     fun byName(name: String): ElementMenu {
-        return this.list.first {
-                e -> e.name.equals(name, true)
+        return this.list.first { e ->
+            e.name.equals(name, true)
+        }
+    }
+
+    @Unique
+    private fun anySelected(): Boolean {
+        return clientMenuFocusedEntry.anySelected() && clientMenuFocusedEntry.selected[0] != "None"
+    }
+
+    fun createButton(x: Int, y: Int, width: Int, height: Int, parent: Screen): ButtonWidget {
+        val selected = clientMenuFocusedEntry.selected[0]
+
+        var buttonText = Text.of(TarasandeMain.get().name.let { it[0].uppercaseChar().toString() + it.substring(1) + " Menu" })
+        if (anySelected()) {
+            buttonText = Text.of(selected)
+        }
+
+        return ButtonWidget(x, y, width, height, buttonText) {
+            if (this.anySelected() && !Screen.hasShiftDown()) {
+                byName(selected).onClick(GLFW.GLFW_MOUSE_BUTTON_LEFT)
+            }
+            MinecraftClient.getInstance().setScreen(ScreenBetterClientMenu(parent))
         }
     }
 }
