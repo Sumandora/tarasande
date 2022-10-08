@@ -3,9 +3,14 @@ package net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager
 import com.google.gson.JsonArray
 import com.mojang.authlib.Environment
 import com.mojang.authlib.minecraft.MinecraftSessionService
+import com.mojang.authlib.yggdrasil.YggdrasilEnvironment
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.Screen
+import net.minecraft.client.gui.widget.ButtonWidget.PressAction
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.account.*
+import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.subscreens.ScreenBetterEnvironment
 
 class ManagerAccount : Manager<Class<out Account>>() {
     init {
@@ -23,6 +28,8 @@ abstract class Account {
     var environment: Environment? = null
     var session: Session? = null
 
+    open fun defaultEnvironment(): Environment = YggdrasilEnvironment.PROD.environment
+
     abstract fun logIn()
     abstract fun getDisplayName(): String
     abstract fun getSessionService(): MinecraftSessionService?
@@ -30,7 +37,18 @@ abstract class Account {
     abstract fun save(): JsonArray
     abstract fun load(jsonArray: JsonArray): Account
 
-    abstract fun create(credentials: List<String>): Account
+    abstract fun create(credentials: List<String>)
 
-    fun isSuitableAsMain() = (javaClass.declaredAnnotations[0] as AccountInfo).suitableAsMain
+    @ExtraInfo("Environment")
+    open val environmentExtra = object : Extra {
+        override fun click(prevScreen: Screen) {
+            MinecraftClient.getInstance().setScreen(ScreenBetterEnvironment(prevScreen, environment) {
+                environment = it
+            })
+        }
+    }
+
+    interface Extra {
+        fun click(prevScreen: Screen)
+    }
 }

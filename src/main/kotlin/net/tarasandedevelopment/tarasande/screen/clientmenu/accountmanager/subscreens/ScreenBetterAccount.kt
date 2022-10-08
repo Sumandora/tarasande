@@ -10,6 +10,7 @@ import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.AccountInfo
+import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.ExtraInfo
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.TextFieldInfo
 import net.tarasandedevelopment.tarasande.mixin.accessor.IScreen
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
@@ -19,6 +20,7 @@ import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidg
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
 import java.lang.reflect.Constructor
+import java.lang.reflect.Field
 import java.util.function.Consumer
 
 class ScreenBetterAccount(
@@ -28,13 +30,16 @@ class ScreenBetterAccount(
 ) : ScreenBetter(prevScreen) {
 
     private val textFields: ArrayList<TextFieldWidget> = ArrayList()
-    private var implementationClass: Class<out Account> = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAccount.list[0]
 
-    private var environment: Environment? = null
+    private var implementationClass: Class<out Account> = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAccount.list[0]
+    private var accountImplementation: Account? = null
 
     private var submitButton: ButtonWidget? = null
 
     override fun init() {
+        if (accountImplementation == null) {
+            accountImplementation = implementationClass.getDeclaredConstructor().newInstance()
+        }
         textFields.clear()
         children().clear()
         (this as IScreen).also {
@@ -55,25 +60,36 @@ class ScreenBetterAccount(
                 val accountManager = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager
 
                 implementationClass = accountManager.managerAccount.list[(accountManager.managerAccount.list.indexOf(implementationClass) + 1) % accountManager.managerAccount.list.size]
+                accountImplementation = implementationClass.getDeclaredConstructor().newInstance()
                 init()
                 button.message = Text.of(implementationClass.name)
             })
 
-        addDrawableChild(ButtonWidget(5, 30, 100, 20, Text.of("Environment")) {
-            client?.setScreen(ScreenBetterEnvironment(this, environment) { environment = it })
-        })
+        var index = 0
 
-        var constructor: Constructor<*>? = null
-        for (c in implementationClass.constructors) {
-            if (constructor == null || c.parameters.size > constructor.parameters.size) {
-                constructor = c
-            }
+        val fields = implementationClass.declaredFields.toMutableList()
+
+        var myClass = implementationClass
+        while (myClass.superclass != null) {
+            fields.addAll(myClass.superclass.declaredFields)
+            myClass = myClass.superclass as Class<out Account>
         }
-        val parameters = constructor?.parameters!!
-        for (i in parameters.indices) {
-            val parameterType = parameters[i]
-            if (parameterType.isAnnotationPresent(TextFieldInfo::class.java)) {
-                val textFieldInfo: TextFieldInfo = parameterType.getAnnotation(TextFieldInfo::class.java)
+
+        var i = 0
+        for (field in fields.reversed()) {
+            field.isAccessible = true
+            println(field.isAnnotationPresent(TextFieldInfo::class.java))
+            if (field.isAnnotationPresent(ExtraInfo::class.java)) {
+                val anyField = field.get(accountImplementation)
+
+                if (anyField is Account.Extra) {
+                    addDrawableChild(ButtonWidget(width - 105, 5 + index * 23, 100, 20, Text.of(field.getAnnotation(ExtraInfo::class.java).name)) {
+                        anyField.click(this)
+                    })
+                    index++
+                }
+            } else if (field.isAnnotationPresent(TextFieldInfo::class.java)) {
+                val textFieldInfo: TextFieldInfo = field.getAnnotation(TextFieldInfo::class.java)
                 if (textFieldInfo.hidden) {
                     textFields.add(
                         addDrawableChild(
@@ -99,13 +115,17 @@ class ScreenBetterAccount(
                             ).also { it.setMaxLength(Int.MAX_VALUE); it.text = textFieldInfo.default })
                     )
                 }
+
+                i++
             }
         }
 
         addDrawableChild(ButtonWidget(width / 2 - 50, 25 + (height * 0.75f).toInt(), 100, 20, Text.of(name)) {
-            val account = (implementationClass.getDeclaredConstructor().newInstance() as Account).create(textFields.map { it.text })
-            account.environment = environment ?: YggdrasilEnvironment.PROD.environment
-            accountConsumer.accept(account)
+            accountImplementation!!.create(textFields.map { it.text })
+            if (accountImplementation!!.environment == null)
+                accountImplementation!!.environment = accountImplementation!!.defaultEnvironment()
+
+            accountConsumer.accept(accountImplementation!!)
             close()
         }.also { submitButton = it })
 

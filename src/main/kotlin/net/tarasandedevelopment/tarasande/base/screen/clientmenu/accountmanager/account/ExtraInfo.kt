@@ -2,4 +2,4 @@ package net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager
 
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class TextFieldInfo(val name: String, val hidden: Boolean, val default: String = "")
+annotation class ExtraInfo(val name: String)

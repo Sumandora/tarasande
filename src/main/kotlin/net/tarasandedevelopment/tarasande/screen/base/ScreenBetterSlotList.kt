@@ -82,6 +82,7 @@ open class ScreenBetterSlotListEntry : AlwaysSelectedEntryListWidget.Entry<Scree
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         (this.parentList!! as ScreenBetterSlotListWidget).parent.selected = this.index
+        this.parentList!!.setSelected(this)
 
         this.onSingleClickEntry(mouseX, mouseY, button)
         if (System.currentTimeMillis() - lastClick < 300) {

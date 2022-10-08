@@ -4,29 +4,18 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.TextFieldInfo
 import java.net.ServerSocket
 
-@AccountInfo("Refresh-Token", true)
-class AccountRefreshToken(
-    @TextFieldInfo("Redirect-Uri", false) private val _redirectUri: String,
-    @TextFieldInfo("Client-Id", true) private val _clientId: String,
-    @TextFieldInfo("Refresh-Token", true) private val token: String,
-    @TextFieldInfo("Scope", false) private val _scope: String,
-    @TextFieldInfo("Client-Secret", true) private val _clientSecret: String
-) : AccountMicrosoft() {
+@AccountInfo("Refresh-Token")
+class AccountRefreshToken : AccountMicrosoft() {
 
-    @Suppress("unused") // Reflections
-    constructor() : this("", "", "", "", "")
+    @TextFieldInfo("Refresh-Token", true)
+    private var token: String = ""
 
     override fun setupHttpServer(): ServerSocket {
         error("Account is invalid")
     }
 
     override fun logIn() {
-        clientId = _clientId
-        redirectUri = _redirectUri
-        scope = _scope
-        if (_clientSecret.isNotEmpty()) {
-            clientSecret = _clientSecret
-        }
+        redirectUri = azureApp!!.redirectUri + randomPort()
         msAuthProfile = buildFromRefreshToken(token)
 
         super.logIn()
@@ -36,5 +25,7 @@ class AccountRefreshToken(
         return if (session == null) "Unnamed Refresh-Token account" else super.getDisplayName()
     }
 
-    override fun create(credentials: List<String>) = AccountRefreshToken(credentials[0], credentials[1], credentials[2], credentials[3], credentials[4])
+    override fun create(credentials: List<String>) {
+        token = credentials[0]
+    }
 }

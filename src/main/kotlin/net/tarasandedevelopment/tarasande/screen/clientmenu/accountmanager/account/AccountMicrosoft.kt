@@ -8,12 +8,18 @@ import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.NoticeScreen
+import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.Session
 import net.minecraft.text.Text
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.AccountInfo
+import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.ExtraInfo
+import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.azureapp.AzureAppPreset
+import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAccountManager
+import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.azureapp.AzureAppPresetInGameSwitcher
+import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.subscreens.ScreenBetterAzureApps
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.*
@@ -22,7 +28,7 @@ import java.sql.Timestamp
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-@AccountInfo("Microsoft", true)
+@AccountInfo("Microsoft")
 open class AccountMicrosoft : Account() {
     private val oauthAuthorizeUrl = "https://login.live.com/oauth20_authorize.srf"
     private val oauthTokenUrl = "https://login.live.com/oauth20_token.srf"
@@ -30,10 +36,6 @@ open class AccountMicrosoft : Account() {
     private val xboxAuthorizeUrl = "https://xsts.auth.xboxlive.com/xsts/authorize"
     private val minecraftLoginUrl = "https://api.minecraftservices.com/authentication/login_with_xbox"
     private val minecraftProfileUrl = "https://api.minecraftservices.com/minecraft/profile"
-    protected var clientId = "54fd49e4-2103-4044-9603-2b028c814ec3"
-    protected var scope = "XboxLive.signin offline_access"
-    protected var clientSecret: String? = null
-    protected val redirectUriBase = "http://localhost:"
     private var cancelled = false
 
     private var service: MinecraftSessionService? = null
@@ -41,6 +43,8 @@ open class AccountMicrosoft : Account() {
     protected var msAuthProfile: MSAuthProfile? = null
     protected var redirectUri: String? = null
     private var code: String? = null
+
+    var azureApp: AzureAppPreset? = null
 
     protected fun randomPort(): Int = ThreadLocalRandom.current().nextInt(0, Short.MAX_VALUE.toInt() * 2 /* unsigned */)
 
@@ -83,6 +87,9 @@ You can close this page now.""".toByteArray())
     }
 
     override fun logIn() {
+        if (azureApp == null) {
+            azureApp = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAzureApp.get(AzureAppPresetInGameSwitcher::class.java)
+        }
         code = null
         cancelled = false
         if (msAuthProfile != null &&
@@ -98,12 +105,12 @@ You can close this page now.""".toByteArray())
             RenderSystem.recordRenderCall {
                 MinecraftClient.getInstance().setScreen(NoticeScreen({ cancelled = true }, Text.of("Microsoft Login"), Text.of("Your webbrowser should've opened.\nPlease authorize yourself!\nClosing this screen will cancel the process!"), Text.of("Cancel"), false))
             }
-            redirectUri = redirectUriBase + serverSocket.localPort
+            redirectUri = azureApp!!.redirectUri + serverSocket.localPort
             Util.getOperatingSystem().open(URI(oauthAuthorizeUrl + "?" +
                     "redirect_uri=" + redirectUri + "&" +
-                    "scope=" + URLEncoder.encode(scope, StandardCharsets.UTF_8) + "&" +
+                    "scope=" + URLEncoder.encode(this.azureApp!!.scope, StandardCharsets.UTF_8) + "&" +
                     "response_type=code&" +
-                    "client_id=" + clientId
+                    "client_id=" + this.azureApp!!.clientId
             ))
             while (code == null) {
                 Thread.sleep(100L)
@@ -130,13 +137,13 @@ You can close this page now.""".toByteArray())
 
     private fun buildFromCode(code: String): MSAuthProfile {
         val str = post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
-            it["client_id"] = clientId
+            it["client_id"] = this.azureApp!!.clientId.toString()
             it["code"] = code
             it["grant_type"] = "authorization_code"
             it["redirect_uri"] = redirectUri!!
-            it["scope"] = scope
-            if (clientSecret != null) {
-                it["client_secret"] = clientSecret!!
+            it["scope"] = this.azureApp!!.scope
+            if (this.azureApp!!.clientSecret != null) {
+                it["client_secret"] = this.azureApp!!.clientSecret!!
             }
         })
         val oAuthToken = TarasandeMain.get().gson.fromJson(str, JsonObject::class.java)
@@ -145,13 +152,13 @@ You can close this page now.""".toByteArray())
 
     protected fun buildFromRefreshToken(refreshToken: String): MSAuthProfile {
         val oAuthToken = TarasandeMain.get().gson.fromJson(post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
-            it["client_id"] = clientId
+            it["client_id"] = this.azureApp!!.clientId.toString()
             it["refresh_token"] = refreshToken
             it["grant_type"] = "refresh_token"
             it["redirect_uri"] = redirectUri!!
-            it["scope"] = scope
-            if (clientSecret != null) {
-                it["client_secret"] = clientSecret!!
+            it["scope"] = this.azureApp!!.scope
+            if (this.azureApp!!.clientSecret != null) {
+                it["client_secret"] = this.azureApp!!.clientSecret!!
             }
         }), JsonObject::class.java)
         return buildFromOAuthToken(oAuthToken)
@@ -195,7 +202,7 @@ You can close this page now.""".toByteArray())
         val minecraftProfile = TarasandeMain.get().gson.fromJson(get(minecraftProfileUrl, 60 * 1000, HashMap<String, String>().also {
             it["Authorization"] = "Bearer " + minecraftLogin["access_token"].asString
         }), JsonObject::class.java)
-        return MSAuthProfile(oAuthToken, xboxLiveAuth, xboxLiveSecurityTokens, minecraftLogin, minecraftProfile)
+        return MSAuthProfile(oAuthToken, xboxLiveAuth, xboxLiveSecurityTokens, minecraftLogin, minecraftProfile, azureApp!!)
     }
 
     operator fun get(url: String, timeout: Int, headers: HashMap<String, String>): String {
@@ -231,6 +238,16 @@ You can close this page now.""".toByteArray())
         return String(urlConnection.inputStream.readAllBytes())
     }
 
+    @ExtraInfo("Azure Apps")
+    val azureAppsExtra = object : Extra {
+        override fun click(prevScreen: Screen) {
+            MinecraftClient.getInstance().setScreen(ScreenBetterAzureApps(prevScreen, azureApp) {
+                azureApp = it
+                println(azureApp!!.name)
+            })
+        }
+    }
+
     override fun getDisplayName(): String {
         return if (session != null) session?.username!! else "Unnamed Microsoft-account"
     }
@@ -248,9 +265,10 @@ You can close this page now.""".toByteArray())
         return AccountMicrosoft().also { if (!jsonArray.isEmpty) it.msAuthProfile = TarasandeMain.get().gson.fromJson(jsonArray[0], MSAuthProfile::class.java) }
     }
 
-    override fun create(credentials: List<String>) = AccountMicrosoft()
+    override fun create(credentials: List<String>) {
+    }
 
-    inner class MSAuthProfile(oAuthToken: JsonObject, xboxLiveAuth: JsonObject, xboxLiveSecurityTokens: JsonObject, minecraftLogin: JsonObject, minecraftProfile: JsonObject) {
+    inner class MSAuthProfile(oAuthToken: JsonObject, xboxLiveAuth: JsonObject, xboxLiveSecurityTokens: JsonObject, minecraftLogin: JsonObject, minecraftProfile: JsonObject, val azureApp: AzureAppPreset) {
         private var oAuthToken: OAuthToken? = null
         var xboxLiveAuth: XboxLiveAuth? = null
         var xboxLiveSecurityTokens: XboxLiveSecurityTokens? = null
@@ -271,13 +289,13 @@ You can close this page now.""".toByteArray())
             minecraftProfile?.id,
             minecraftLogin?.accessToken,
             Optional.of(xboxLiveAuth?.token!!),
-            Optional.of(AccountMicrosoft().clientId), // I hate the jvm, I hate the bytecode, I hate the language, I hate me, I hate everything!
+            Optional.of(azureApp.clientId.toString()), // I hate the jvm, I hate the bytecode, I hate the language, I hate me, I hate everything!
             Session.AccountType.MSA
         )
 
         fun renew(): MSAuthProfile { // I have no clue why I have to do this, but it crashes because "this" is null otherwise ._.
             val microsoft = AccountMicrosoft()
-            microsoft.redirectUri = microsoft.redirectUriBase + microsoft.randomPort()
+            microsoft.redirectUri = azureApp.redirectUri + microsoft.randomPort()
             return microsoft.buildFromRefreshToken(oAuthToken?.refreshToken!!)
         }
 

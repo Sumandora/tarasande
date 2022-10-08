@@ -13,6 +13,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.ManagerAccount
+import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.azureapp.ManagerAzureApp
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.environment.ManagerEnvironment
 import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
@@ -40,6 +41,7 @@ class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.
 
     val managerAccount = ManagerAccount()
     val managerEnvironment = ManagerEnvironment()
+    val managerAzureApp = ManagerAzureApp()
 
     var status = ""
 
@@ -103,7 +105,7 @@ class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.
         loginButton?.active = slotList?.selectedOrNull != null
         removeButton?.active = slotList?.selectedOrNull != null
         setMainButton?.active = slotList?.selectedOrNull != null
-        if (slotList?.selectedOrNull != null) setMainButton?.active = this.selected()!!.isSuitableAsMain() == true
+        if (slotList?.selectedOrNull != null) setMainButton?.active = true
         randomButton?.active = accounts.isNotEmpty()
         super.tick()
     }

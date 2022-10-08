@@ -24,6 +24,13 @@ class ScreenBetterProtocolHack : ScreenBetterSlotList(46, 12) {
     }
 
     override fun init() {
+        val providedList = this.listProvider!!.get()
+
+        for (entry in providedList)
+            if (entry is EntryProtocol)
+                if (TarasandeMain.get().protocolHack.clientsideVersion() == entry.protocol.version)
+                    selected = providedList.indexOf(entry)
+
         super.init()
 
         this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
@@ -45,10 +52,6 @@ class ScreenBetterProtocolHack : ScreenBetterSlotList(46, 12) {
     }
 
     class EntryProtocol(val protocol: ProtocolVersion) : ScreenBetterSlotListEntry() {
-
-        override fun isSelected(): Boolean {
-            return TarasandeMain.get().protocolHack.realClientsideVersion == protocol.version
-        }
 
         private fun colorShift(input: Color): Int {
             return if (TarasandeMain.get().protocolHack.isAuto()) input.darker().darker().darker().rgb else input.rgb

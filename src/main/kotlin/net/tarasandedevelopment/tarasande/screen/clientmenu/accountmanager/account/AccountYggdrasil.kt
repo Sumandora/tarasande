@@ -12,17 +12,16 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.
 import java.net.Proxy
 import java.util.*
 
+@AccountInfo(name = "Yggdrasil")
+class AccountYggdrasil : Account() {
 
-@AccountInfo(name = "Yggdrasil", suitableAsMain = true)
-class AccountYggdrasil(
-    @TextFieldInfo("Username/E-Mail", false) private val username: String,
-    @TextFieldInfo("Password", true) private val password: String
-) : Account() {
+    @TextFieldInfo("Username/E-Mail", false)
+    var username: String = ""
+
+    @TextFieldInfo("Password", true)
+    var password: String = ""
 
     private var service: MinecraftSessionService? = null
-
-    @Suppress("unused") // Reflections
-    constructor() : this("", "")
 
     override fun logIn() {
         val authenticationService = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment)
@@ -48,8 +47,15 @@ class AccountYggdrasil(
     }
 
     override fun load(jsonArray: JsonArray): Account {
-        return AccountYggdrasil(jsonArray[0].asString, jsonArray[1].asString)
+        val account = AccountYggdrasil()
+        account.username = jsonArray[0].asString
+        account.password = jsonArray[1].asString
+
+        return account
     }
 
-    override fun create(credentials: List<String>) = AccountYggdrasil(credentials[0], credentials[1])
+    override fun create(credentials: List<String>) {
+        username = credentials[0]
+        password = credentials[1]
+    }
 }

@@ -9,21 +9,28 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.TextFieldInfo
 import java.net.Proxy
 import java.util.*
+import kotlin.math.acos
 
 
-@AccountInfo(name = "Session", suitableAsMain = false) // We shouldn't allow users to use cracked accounts as mains, because if we later use the main to authenticate services, we might run into problems
-class AccountSession(
-    @TextFieldInfo("Username", false) private val username: String,
-    @TextFieldInfo("UUID", false) private val uuid: String,
-    @TextFieldInfo("Access Token", false) private val accessToken: String,
-    @TextFieldInfo("X Uid", false) private val xUid: String,
-    @TextFieldInfo("Client Uid", false) private val clientUid: String
-) : Account() {
+@AccountInfo(name = "Session")
+class AccountSession : Account() {
+
+    @TextFieldInfo("Username", false)
+    private var username: String = ""
+
+    @TextFieldInfo("UUID", false)
+    private var uuid: String = ""
+
+    @TextFieldInfo("Access Token", false)
+    private var accessToken: String = ""
+
+    @TextFieldInfo("X Uid", false)
+    private var xUid: String = ""
+
+    @TextFieldInfo("Client Uid", false)
+    private var clientUid: String = ""
 
     private var service: MinecraftSessionService? = null
-
-    @Suppress("unused") // Reflections
-    constructor() : this("", "", "", "", "")
 
     override fun logIn() {
         service = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment).createMinecraftSessionService()
@@ -45,8 +52,22 @@ class AccountSession(
     }
 
     override fun load(jsonArray: JsonArray): Account {
-        return AccountSession(jsonArray[0].asString, jsonArray[1].asString, jsonArray[2].asString, jsonArray[3].asString, jsonArray[4].asString)
+        val account = AccountSession()
+
+        account.username = jsonArray[0].asString
+        account.uuid = jsonArray[1].asString
+        account.accessToken = jsonArray[2].asString
+        account.xUid = jsonArray[3].asString
+        account.clientUid = jsonArray[4].asString
+
+        return account
     }
 
-    override fun create(credentials: List<String>) = AccountSession(credentials[0], credentials[1], credentials[2], credentials[3], credentials[4])
+    override fun create(credentials: List<String>) {
+        username = credentials[0]
+        uuid = credentials[1]
+        accessToken = credentials[2]
+        xUid = credentials[3]
+        clientUid = credentials[4]
+    }
 }
