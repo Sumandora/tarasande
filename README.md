@@ -71,7 +71,6 @@
 
 ### TODO-List (florian)
 - TPS Hud Element recode for Protocol Hack
-- KillAura: Remove Auto block check
 
 ## Notes
 - AutoTool: Axes can set shields on cooldown. Maybe implement that if possible axes are being used to set shields on cooldown before actually attacking with sword

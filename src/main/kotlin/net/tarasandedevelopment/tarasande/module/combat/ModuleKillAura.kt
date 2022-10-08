@@ -9,7 +9,6 @@ import net.minecraft.entity.passive.PassiveEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Items
 import net.minecraft.item.ShieldItem
-import net.minecraft.item.SwordItem
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
@@ -70,9 +69,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
     private val needUnblock = object : ValueBoolean(this, "Need unblock", true) {
         override fun isEnabled() = blockMode.isSelected(1)
-    }
-    private val blockCheckMode = object : ValueMode(this, "Auto block check", false, "Shield", "Sword") {
-        override fun isEnabled() = !blockMode.isSelected(0)
     }
     private val blockOutOfReach = object : ValueBoolean(this, "Block out of reach", true) {
         override fun isEnabled() = !blockMode.isSelected(0)
@@ -248,14 +244,18 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                             canHit = false
 
                 val disablesShield = mc.player?.disablesShield()!!
-                if (dontAttackWhenBlocking.value && (allAttacked { it.isBlocking } || disablesShield))
-                    if (!simulateShieldBlock.value || (allAttacked { it.blockedByShield(DamageSource.player(mc.player)) } || disablesShield))
-                        canHit = false
+                if (!disablesShield) {
+                    if (dontAttackWhenBlocking.value && allAttacked { it.isBlocking })
+                        if (!simulateShieldBlock.value || allAttacked { it.blockedByShield(DamageSource.player(mc.player)) })
+                            canHit = false
+                }
 
                 if (waitForDamageValue.value && waitForDamage)
                     canHit = false
 
                 if (targets.isEmpty() || event.dirty || !canHit) {
+                    if (targets.isNotEmpty())
+                        block() // This is a rare case of us, only being able to hit the enemy the first tick and later becoming unable to.
                     clickSpeedUtil.reset()
                     waitForHit = false
                     return@Consumer
@@ -264,29 +264,10 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 val clicks = clickSpeedUtil.getClicks()
 
                 if (!blockMode.isSelected(0) && mc.player?.isUsingItem!! && clicks > 0) {
-                    var hasTarget = false
-                    for (entry in targets) {
-                        if (entry.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue) {
-                            hasTarget = true
-                            break
-                        }
-                    }
-                    if (hasTarget) {
-                        if (!blockMode.isSelected(1) || needUnblock.value)
-                            blocking = false
-                        waitForHit = true
-                        when {
-                            blockMode.isSelected(1) && needUnblock.value -> {
-                                mc.interactionManager?.stopUsingItem(mc.player)
-                            }
-
-                            blockMode.isSelected(2) -> {
-                                clickSpeedUtil.reset() // we can't count this as a attack, can we?
-                                return@Consumer
-                            }
-                        }
-                    }
+                    if (unblock())
+                        return@Consumer
                 }
+
                 if (!mc.player?.isUsingItem!! || (blockMode.isSelected(1) && !needUnblock.value)) {
                     for (click in 1..clicks) {
                         var attacked = false
@@ -294,9 +275,10 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                             var target = entry.first
                             val aimPoint = entry.second
 
-                            if (dontAttackWhenBlocking.value && target is LivingEntity && target.isBlocking)
-                                if (!simulateShieldBlock.value || target.blockedByShield(DamageSource.player(mc.player)))
-                                    continue
+                            if (!disablesShield)
+                                if (dontAttackWhenBlocking.value && target is LivingEntity && target.isBlocking)
+                                    if (!simulateShieldBlock.value || target.blockedByShield(DamageSource.player(mc.player)))
+                                        continue
 
                             if (rayTrace.value) {
                                 if (RotationUtil.fakeRotation == null) {
@@ -336,28 +318,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                             }
                     }
                 }
-                if (targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && !waitForHit && !mc.player?.isUsingItem!! && !blockMode.isSelected(0)) {
-                    var canBlock = true
-                    if (blockCheckMode.isSelected(0)) {
-                        val stack = mc.player?.getStackInHand(Hand.OFF_HAND)
-                        if (stack?.item !is ShieldItem || mc.player?.itemCooldownManager?.isCoolingDown(stack.item)!! || mc.player?.getStackInHand(Hand.MAIN_HAND)?.useAction != UseAction.NONE) canBlock = false
-                    }
-                    if (blockCheckMode.isSelected(1) && (mc.player?.getStackInHand(Hand.MAIN_HAND)?.item !is SwordItem || mc.player?.getStackInHand(Hand.OFF_HAND)?.useAction.let { it != UseAction.NONE && it != UseAction.BLOCK }))
-                        canBlock = false
 
-                    if (canBlock) {
-                        var hasTarget = false
-                        for (entry in targets) {
-                            if (blockOutOfReach.value || entry.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue) {
-                                hasTarget = true
-                                break
-                            }
-                        }
-                        if (hasTarget) {
-                            blocking = true
-                            (mc.options.useKey as IKeyBinding).tarasande_setTimesPressed(1)
-                        }
-                    }
+                if (targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && !waitForHit && !mc.player?.isUsingItem!! && !blockMode.isSelected(0)) {
+                    block()
                 }
             }
 
@@ -490,6 +453,49 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         }
 
         return best
+    }
+
+    private fun block() {
+        val stack = mc.player?.getStackInHand(Hand.OFF_HAND)
+        if (stack?.item !is ShieldItem || mc.player?.itemCooldownManager?.isCoolingDown(stack.item)!! || mc.player?.getStackInHand(Hand.MAIN_HAND)?.useAction != UseAction.NONE) return
+
+        var hasTarget = false
+        for (entry in targets) {
+            if (blockOutOfReach.value || entry.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue) {
+                hasTarget = true
+                break
+            }
+        }
+        if (hasTarget) {
+            blocking = true
+            (mc.options.useKey as IKeyBinding).tarasande_setTimesPressed(1)
+        }
+    }
+
+    private fun unblock(): Boolean {
+        var hasTarget = false
+        for (entry in targets) {
+            if (entry.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue) {
+                hasTarget = true
+                break
+            }
+        }
+        if (hasTarget) {
+            if (!blockMode.isSelected(1) || needUnblock.value)
+                blocking = false
+            waitForHit = true
+            when {
+                blockMode.isSelected(1) && needUnblock.value -> {
+                    mc.interactionManager?.stopUsingItem(mc.player)
+                }
+
+                blockMode.isSelected(2) -> {
+                    clickSpeedUtil.reset() // we can't count this as an attack, can we?
+                    return true
+                }
+            }
+        }
+        return false
     }
 
 }
