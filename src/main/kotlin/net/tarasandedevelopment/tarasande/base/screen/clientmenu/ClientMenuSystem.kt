@@ -57,7 +57,7 @@ class ManagerClientMenu : Manager<ElementMenu>() {
         return clientMenuFocusedEntry.anySelected() && clientMenuFocusedEntry.selected[0] != "None"
     }
 
-    fun createButton(x: Int, y: Int, width: Int, height: Int, parent: Screen): ButtonWidget {
+    fun createButtonText(): Text {
         val selected = clientMenuFocusedEntry.selected[0]
 
         var buttonText = Text.of(TarasandeMain.get().name.let { it[0].uppercaseChar().toString() + it.substring(1) + " Menu" })
@@ -65,7 +65,13 @@ class ManagerClientMenu : Manager<ElementMenu>() {
             buttonText = Text.of(selected)
         }
 
-        return ButtonWidget(x, y, width, height, buttonText) {
+        return buttonText
+    }
+
+    fun createButton(x: Int, y: Int, width: Int, height: Int, parent: Screen): ButtonWidget {
+        val selected = clientMenuFocusedEntry.selected[0]
+
+        return ButtonWidget(x, y, width, height, this.createButtonText()) {
             if (this.anySelected() && !Screen.hasShiftDown()) {
                 byName(selected).onClick(GLFW.GLFW_MOUSE_BUTTON_LEFT)
             }
