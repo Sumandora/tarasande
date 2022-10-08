@@ -48,6 +48,8 @@ class PanelMousePad(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Pa
     }
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        if (rotations.isNotEmpty()) return
+
         val xMax = max(Collections.max(rotations.stream().map { abs(it.first) }.toList()).toDouble(), panelWidth / 2)
         val yMax = max(Collections.max(rotations.stream().map { abs(it.second) }.toList()).toDouble(), panelHeight / 2)
 
