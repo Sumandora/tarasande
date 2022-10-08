@@ -118,9 +118,14 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
             is EventInput -> {
                 if (firstInput == null || firstRealInput == null)
                     onEnable()
-                if (event.input == MinecraftClient.getInstance().player?.input)
+                if (event.input == MinecraftClient.getInstance().player?.input) {
                     input.tick(event.slowDown, event.slowdownAmount)
-                if (keepMovement.value)
+                    if (!keepMovement.value) {
+                        event.movementForward = 0.0f
+                        event.movementSideways = 0.0f
+                    }
+                }
+                if (keepMovement.value) {
                     if (event.input == MinecraftClient.getInstance().player?.input) {
                         if (firstInput != null) {
                             event.movementForward = firstInput?.first!!
@@ -132,12 +137,13 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
                             event.movementSideways = firstRealInput?.second!!
                         }
                     }
+                }
             }
 
             is EventKeyBindingIsPressed -> {
                 if (map.isEmpty())
                     onEnable()
-                if (!PlayerUtil.movementKeys.contains(event.keyBinding) && (!keepMovement.value || event.keyBinding != mc.options.sneakKey /* safewalk */))
+                if (!PlayerUtil.movementKeys.contains(event.keyBinding))
                     event.pressed = keepMovement.value && map[event.keyBinding] ?: false
             }
         }
