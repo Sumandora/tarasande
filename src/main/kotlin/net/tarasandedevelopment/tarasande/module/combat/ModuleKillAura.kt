@@ -192,6 +192,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
                 targets.sortBy { it.first is LivingEntity && (it.first as LivingEntity).isDead }
                 targets.sortBy { it.second.squaredDistanceTo(mc.player?.eyePos!!) > reach.minValue * reach.minValue }
+                targets.sortBy { shouldAttackEntity(it.first) }
 
                 val target = targets[0]
 
@@ -244,14 +245,10 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                         if (!mc.player?.isOnGround!! && mc.player?.velocity?.y!! != 0.0 && (mc.player?.fallDistance == 0.0f || (criticalSprint.value && !mc.player?.isSprinting!!)))
                             canHit = false
 
-                val disablesShield = mc.player?.disablesShield()!!
-                if (!disablesShield) {
-                    if (dontAttackWhenBlocking.value && allAttacked { it.isBlocking })
-                        if (!simulateShieldBlock.value || allAttacked { it.blockedByShield(DamageSource.player(mc.player)) })
-                            canHit = false
-                }
+                if (canHit && allAttacked { !shouldAttackEntity(it) })
+                    canHit = false
 
-                if (waitForDamageValue.value && waitForDamage)
+                if (canHit && waitForDamageValue.value && waitForDamage)
                     canHit = false
 
                 if (targets.isEmpty() || event.dirty || !canHit) {
@@ -276,16 +273,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                             var target = entry.first
                             val aimPoint = entry.second
 
-                            if (!disablesShield) {
-                                if (dontAttackWhenBlocking.value && target is LivingEntity && target.isBlocking)
-                                    if (!simulateShieldBlock.value || target.blockedByShield(DamageSource.player(mc.player)))
-                                        continue
-                            } else if (counterBlocking.value) {
-                                if (target is PlayerEntity) {
-                                    if (target.offHandStack.item is ShieldItem && !target.isBlocking)
-                                        continue
-                                }
-                            }
+                            if (!shouldAttackEntity(target))
+                                continue
 
                             if (rayTrace.value) {
                                 if (RotationUtil.fakeRotation == null) {
@@ -503,6 +492,20 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
         }
         return false
+    }
+
+    private fun shouldAttackEntity(entity: Entity): Boolean {
+        if (mc.player?.disablesShield() == false) {
+            if (dontAttackWhenBlocking.value && entity is LivingEntity && entity.isBlocking)
+                if (!simulateShieldBlock.value || entity.blockedByShield(DamageSource.player(mc.player)))
+                    return false
+        } else if (counterBlocking.value) {
+            if (entity is PlayerEntity) {
+                if (entity.offHandStack.item is ShieldItem && !entity.isBlocking)
+                    return false
+            }
+        }
+        return true
     }
 
 }
