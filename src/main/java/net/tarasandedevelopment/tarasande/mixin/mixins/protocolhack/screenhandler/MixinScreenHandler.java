@@ -39,7 +39,7 @@ public class MixinScreenHandler implements IScreenHandler_Protocol {
     }
 
     @Override
-    public short getAndIncrementLastActionId() {
+    public short tarasande_getAndIncrementLastActionId() {
         return ++lastActionId;
     }
 }

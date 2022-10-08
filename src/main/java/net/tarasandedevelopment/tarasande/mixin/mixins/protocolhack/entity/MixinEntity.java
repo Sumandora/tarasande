@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.entity;
 
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
@@ -13,10 +14,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -108,5 +106,11 @@ public abstract class MixinEntity {
     public void expandHitBox(CallbackInfoReturnable<Float> cir) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_8))
             cir.setReturnValue(0.1F);
+    }
+
+    @Redirect(method = { "setYaw", "setPitch" }, at = @At(value = "INVOKE", target = "Ljava/lang/Float;isFinite(F)Z"))
+    public boolean modifyIsFinite(float f) {
+        //noinspection ConstantConditions
+        return Float.isFinite(f) || (Object) this instanceof ClientPlayerEntity;
     }
 }

@@ -5,8 +5,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.tag.FluidTags;
+import net.minecraft.tag.TagKey;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -39,13 +43,40 @@ public abstract class MixinLivingEntity extends Entity {
         return horizontalCollision;
     }
 
-    // TODO: when @At(reverse = true) is added to mixin:
-    //@Redirect(method = "travel", slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getBaseMovementSpeedMultiplier()F")), at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isSprinting()Z", ordinal = 0, reverse = true))
+    @ModifyVariable(method = "applyFluidMovingSpeed", ordinal = 0, at = @At("HEAD"), argsOnly = true)
+    private boolean modifyMovingDown(boolean movingDown) {
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2))
+            return true;
+        return movingDown;
+    }
+
+    @Redirect(method = "travel",
+            slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/entity/effect/StatusEffects;LEVITATION:Lnet/minecraft/entity/effect/StatusEffect;", ordinal = 0)),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;onLanding()V", ordinal = 0))
+    private void dontResetLevitationFallDistance(LivingEntity instance) {
+        if (VersionList.isNewerTo(VersionList.R1_12_2))
+            instance.onLanding();
+    }
+
     @Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isSprinting()Z", ordinal = 0))
     private boolean modifySwimSprintSpeed(LivingEntity self) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
             return false;
         return self.isSprinting();
+    }
+
+    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getFluidHeight(Lnet/minecraft/tag/TagKey;)D"))
+    private double redirectFluidHeight(LivingEntity instance, TagKey<Fluid> tagKey) {
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2) && tagKey == FluidTags.WATER)
+            if (instance.getFluidHeight(tagKey) > 0)
+                return 1;
+        return instance.getFluidHeight(tagKey);
+    }
+
+    @Inject(method = "applyFluidMovingSpeed", at = @At("HEAD"), cancellable = true)
+    private void modifySwimSprintFallSpeed(double gravity, boolean movingDown, Vec3d velocity, CallbackInfoReturnable<Vec3d> ci) {
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2) && !hasNoGravity())
+            ci.setReturnValue(new Vec3d(velocity.x, velocity.y - 0.02, velocity.z));
     }
 
     @Inject(method = "getPreferredEquipmentSlot", at = @At("HEAD"), cancellable = true)

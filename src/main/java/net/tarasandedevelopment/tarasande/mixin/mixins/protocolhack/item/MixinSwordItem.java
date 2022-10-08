@@ -1,6 +1,6 @@
 /*
  * Copyright (c) FlorianMichael as EnZaXD 2022
- * Created on 7/8/22, 5:18 PM
+ * Created on 6/24/22, 8:28 PM
  *
  * --FLORIAN MICHAEL PRIVATE LICENCE v1.0--
  *
@@ -12,10 +12,26 @@
  * The owner "Florian Michael" is free to change this license.
  */
 
-package net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack;
+package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.item;
 
-public interface IScreenHandler_Protocol {
+import de.florianmichael.viaprotocolhack.util.VersionList;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
+import net.minecraft.item.ToolItem;
+import net.minecraft.item.ToolMaterial;
+import org.spongepowered.asm.mixin.Mixin;
 
-    short tarasande_getAndIncrementLastActionId();
+@Mixin(SwordItem.class)
+public class MixinSwordItem extends ToolItem {
 
+    public MixinSwordItem(ToolMaterial material, Settings settings) {
+        super(material, settings);
+    }
+
+    @Override
+    public int getMaxUseTime(ItemStack stack) {
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_8))
+            return 72000;
+        return super.getMaxUseTime(stack);
+    }
 }
