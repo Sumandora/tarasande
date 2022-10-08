@@ -1,7 +1,5 @@
 package net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.subscreens
 
-import com.mojang.authlib.Environment
-import com.mojang.authlib.yggdrasil.YggdrasilEnvironment
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
@@ -19,8 +17,6 @@ import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidg
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
-import java.lang.reflect.Constructor
-import java.lang.reflect.Field
 import java.util.function.Consumer
 
 class ScreenBetterAccount(
@@ -78,7 +74,6 @@ class ScreenBetterAccount(
         var i = 0
         for (field in fields.reversed()) {
             field.isAccessible = true
-            println(field.isAnnotationPresent(TextFieldInfo::class.java))
             if (field.isAnnotationPresent(ExtraInfo::class.java)) {
                 val anyField = field.get(accountImplementation)
 

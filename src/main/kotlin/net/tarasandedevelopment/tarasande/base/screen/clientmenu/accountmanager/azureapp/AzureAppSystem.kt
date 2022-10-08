@@ -2,13 +2,13 @@ package net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager
 
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.azureapp.*
-import java.util.UUID
+import java.util.*
 
 class ManagerAzureApp : Manager<AzureAppPreset>() {
 
     init {
         add(
-            AzureAppPresetInGameSwitcher(),
+            AzureAppPresetInGameAccountSwitcher(),
             AzureAppPresetBashAuth(),
             AzureAppPresetPolyMC(),
             AzureAppPresetMultiMC(),

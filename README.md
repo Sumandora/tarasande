@@ -63,7 +63,6 @@
 - Target strafe: Anti Void
 - Account manager: Add skins in selection
 - (Banners in protocol selection)
-- Account manager: Rewrite
 - Settings for HypixelBedwarsOverlay
 
 ### TODO-List (Click GUI)
