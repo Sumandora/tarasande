@@ -10,9 +10,9 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.azureapp.AzureAppPreset
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAccountManager
-import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.azureapp.AzureAppPresetInGameSwitcher
+import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.azureapp.AzureAppPresetInGameAccountSwitcher
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder
-import java.util.UUID
+import java.util.*
 import java.util.function.Consumer
 
 class ScreenBetterAzureApps(prevScreen: Screen?, private val azureApp: AzureAppPreset?, private val environmentConsumer: Consumer<AzureAppPreset>) : ScreenBetter(prevScreen) {
@@ -23,7 +23,7 @@ class ScreenBetterAzureApps(prevScreen: Screen?, private val azureApp: AzureAppP
     private var clientSecretTextField: TextFieldWidget? = null
 
     override fun init() {
-        val defaultApp = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAzureApp.get(AzureAppPresetInGameSwitcher::class.java)
+        val defaultApp = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAzureApp.get(AzureAppPresetInGameAccountSwitcher::class.java)
 
         clientIdTextField = TextFieldWidgetPlaceholder(this.textRenderer, this.width / 2 - 100, this.height / 2 - 50 - 15, 200, 20, Text.of("Client ID")).also {
             it.setMaxLength(Int.MAX_VALUE)
@@ -73,7 +73,12 @@ class ScreenBetterAzureApps(prevScreen: Screen?, private val azureApp: AzureAppP
         })
 
         this.addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50 + 25, 100, 20, Text.of("Done")) {
-            environmentConsumer.accept(AzureAppPreset("Custom", UUID.fromString(this.clientIdTextField!!.text), this.scopeTextField!!.text, this.redirectUriTextField!!.text, this.clientSecretTextField!!.text))
+            environmentConsumer.accept(AzureAppPreset("Custom",
+                UUID.fromString(this.clientIdTextField!!.text),
+                this.scopeTextField!!.text,
+                this.redirectUriTextField!!.text,
+                this.clientSecretTextField!!.text.let { it.ifBlank { null } }
+            ))
             RenderSystem.recordRenderCall { close() }
         })
 

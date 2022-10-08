@@ -18,7 +18,7 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.ExtraInfo
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.azureapp.AzureAppPreset
 import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAccountManager
-import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.azureapp.AzureAppPresetInGameSwitcher
+import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.azureapp.AzureAppPresetInGameAccountSwitcher
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.subscreens.ScreenBetterAzureApps
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -88,7 +88,7 @@ You can close this page now.""".toByteArray())
 
     override fun logIn() {
         if (azureApp == null) {
-            azureApp = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAzureApp.get(AzureAppPresetInGameSwitcher::class.java)
+            azureApp = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAzureApp.get(AzureAppPresetInGameAccountSwitcher::class.java)
         }
         code = null
         cancelled = false
@@ -158,6 +158,7 @@ You can close this page now.""".toByteArray())
             it["redirect_uri"] = redirectUri!!
             it["scope"] = this.azureApp!!.scope
             if (this.azureApp!!.clientSecret != null) {
+                println("AAAAA")
                 it["client_secret"] = this.azureApp!!.clientSecret!!
             }
         }), JsonObject::class.java)
@@ -243,7 +244,6 @@ You can close this page now.""".toByteArray())
         override fun click(prevScreen: Screen) {
             MinecraftClient.getInstance().setScreen(ScreenBetterAzureApps(prevScreen, azureApp) {
                 azureApp = it
-                println(azureApp!!.name)
             })
         }
     }
@@ -268,7 +268,7 @@ You can close this page now.""".toByteArray())
     override fun create(credentials: List<String>) {
     }
 
-    inner class MSAuthProfile(oAuthToken: JsonObject, xboxLiveAuth: JsonObject, xboxLiveSecurityTokens: JsonObject, minecraftLogin: JsonObject, minecraftProfile: JsonObject, val azureApp: AzureAppPreset) {
+    inner class MSAuthProfile(oAuthToken: JsonObject, xboxLiveAuth: JsonObject, xboxLiveSecurityTokens: JsonObject, minecraftLogin: JsonObject, minecraftProfile: JsonObject, private val azureApp: AzureAppPreset) {
         private var oAuthToken: OAuthToken? = null
         var xboxLiveAuth: XboxLiveAuth? = null
         var xboxLiveSecurityTokens: XboxLiveSecurityTokens? = null
@@ -282,6 +282,7 @@ You can close this page now.""".toByteArray())
             this.xboxLiveSecurityTokens = gson.fromJson(xboxLiveSecurityTokens, XboxLiveSecurityTokens::class.java)
             this.minecraftLogin = gson.fromJson(minecraftLogin, MinecraftLogin::class.java)
             this.minecraftProfile = gson.fromJson(minecraftProfile, MinecraftProfile::class.java)
+
         }
 
         fun asSession() = Session(
@@ -300,8 +301,9 @@ You can close this page now.""".toByteArray())
         }
 
         override fun toString(): String {
-            return "MSAuthProfile(oAuthToken=$oAuthToken, xboxLiveAuth=$xboxLiveAuth, xboxLiveSecurityTokens=$xboxLiveSecurityTokens, minecraftLogin=$minecraftLogin, minecraftProfile=$minecraftProfile)"
+            return "MSAuthProfile(azureApp=$azureApp, oAuthToken=$oAuthToken, xboxLiveAuth=$xboxLiveAuth, xboxLiveSecurityTokens=$xboxLiveSecurityTokens, minecraftLogin=$minecraftLogin, minecraftProfile=$minecraftProfile)"
         }
+
 
         inner class OAuthToken {
             @SerializedName("token_type")

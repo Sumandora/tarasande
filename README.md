@@ -53,7 +53,6 @@
 - Crystal Aura
 - Anti Vanish
 - Auto Soup&Pot
-- Phase
 - Step: Calculate all motions; Prediction by LivingEntity#travel; Instantiate object and simulate
 - AutoTool: Auto Sword
 - Change Name/Skin/Cape in Account Manager
@@ -63,7 +62,6 @@
 - Target strafe: Anti Void
 - Account manager: Add skins in selection
 - (Banners in protocol selection)
-- Account manager: Rewrite
 - Settings for HypixelBedwarsOverlay
 
 ### TODO-List (Click GUI)

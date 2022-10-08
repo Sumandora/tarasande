@@ -98,7 +98,8 @@ class ManagerModule : Manager<Module>() {
             ModuleDisableTelemetry(),
             ModuleBlockChangeTracker(),
             ModuleTrueSight(),
-            ModuleEnchantmentTranslation()
+            ModuleEnchantmentTranslation(),
+            ModulePhase()
         )
         TarasandeMain.get().managerEvent.add { event ->
             if (event is EventTick)

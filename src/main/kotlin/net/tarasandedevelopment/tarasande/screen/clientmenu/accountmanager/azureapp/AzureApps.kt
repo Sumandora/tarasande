@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.azureapp
 
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.azureapp.AzureAppPreset
-import java.util.UUID
+import java.util.*
 
-class AzureAppPresetInGameSwitcher : AzureAppPreset(
+class AzureAppPresetInGameAccountSwitcher : AzureAppPreset(
     "Ingame Account Switcher",
     UUID.fromString("54fd49e4-2103-4044-9603-2b028c814ec3"),
     "XboxLive.signin offline_access"

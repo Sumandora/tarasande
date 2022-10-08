@@ -15,6 +15,7 @@ import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.extension.plus
+import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
@@ -42,6 +43,9 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
     private val radius = ValueNumber(this, "Radius", 0.1, 4.5, 6.0, 0.1)
     private val throughWalls = ValueMode(this, "Through walls", false, "Off", "On", "Free")
     private val breakSpeed = ValueMode(this, "Break speed", false, "Vanilla", "Instant")
+    private val delay = object : ValueNumber(this, "Delay", 0.0, 200.0, 1000.0, 1.0) {
+        override fun isEnabled() = breakSpeed.isSelected(1)
+    }
     private val maxDestructions = object : ValueNumber(this, "Max destructions", 1.0, floor(4.5.pow(3.0)), 6.0.pow(3.0), 1.0) {
         override fun isEnabled() = breakSpeed.isSelected(1)
     }
@@ -58,6 +62,8 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
             else -> 0.0
         }
     }
+
+    private val timeUtil = TimeUtil()
 
     val eventConsumer = Consumer<Event> { event ->
         when (event) {
@@ -132,6 +138,8 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                     breakSpeed.isSelected(1) -> {
                         if ((mc as IMinecraftClient).tarasande_getAttackCooldown() > 0)
                             return@Consumer
+                        if (!timeUtil.hasReached(delay.value.toLong()))
+                            return@Consumer
                         for (pair in list) {
                             val original = mc.crosshairTarget
                             mc.crosshairTarget = if (pair.second.blockPos == pair.first) pair.second else pair.second.withBlockPos(pair.first)
@@ -140,6 +148,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                                     (mc as IMinecraftClient).tarasande_invokeHandleBlockBreaking(true)
                             }
                             mc.crosshairTarget = original
+                            timeUtil.reset()
                             event.dirty = true
                         }
                     }
