@@ -35,7 +35,7 @@ class ModuleAimAssist : Module("Aim assist", "Helps you aim at enemies", ModuleC
 
             val smoothedRot = Rotation(selfRotation).smoothedTurn(rotation, aimSpeed).correctSensitivity() // correct wrap
 
-            val deltaRotation = smoothedRot.calcDelta(selfRotation)
+            val deltaRotation = smoothedRot.closestDelta(selfRotation)
             val cursorDeltas = Rotation.approximateCursorDeltas(deltaRotation)
 
             event.deltaX += MathHelper.clamp(cursorDeltas.first, -maxInfluence.value, maxInfluence.value)

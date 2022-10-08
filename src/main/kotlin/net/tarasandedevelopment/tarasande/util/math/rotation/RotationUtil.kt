@@ -226,7 +226,7 @@ object RotationUtil {
         }
         // The pitch calculation is literally mojang dev iq overload, kept for historic reasons
         val rot = Rotation(j, k)
-        rot.yaw = rot.yaw % 360.0f
+        rot.yaw %= 360.0f
         rot.pitch = MathHelper.clamp(rot.pitch, -90.0f, 90.0f) % 360.0f
         return rot
     }

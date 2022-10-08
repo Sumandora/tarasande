@@ -46,13 +46,15 @@ class Rotation(var yaw: Float, var pitch: Float) {
     }
 
     fun correctSensitivity(prevRotation: Rotation): Rotation {
-        val deltaRotation = calcDelta(prevRotation)
+        val deltaRotation = closestDelta(prevRotation)
 
         val cursorDeltas = approximateCursorDeltas(deltaRotation)
         val rotationChange = calculateRotationChange(cursorDeltas.first, cursorDeltas.second)
 
-        yaw = prevRotation.yaw - rotationChange.yaw
-        pitch = prevRotation.pitch - rotationChange.pitch
+        val delta = prevRotation - rotationChange
+
+        yaw = delta.yaw
+        pitch = delta.pitch
         pitch = MathHelper.clamp(pitch, -90.0f, 90.0f)
 
         return this
@@ -70,17 +72,17 @@ class Rotation(var yaw: Float, var pitch: Float) {
     }
 
     fun smoothedTurn(target: Rotation, smoothness: Double): Rotation {
-        val deltaRotation = calcDelta(target)
-        yaw += deltaRotation.yaw * smoothness.toFloat()
-        pitch += deltaRotation.pitch * smoothness.toFloat()
+        val deltaRotation = closestDelta(target) * smoothness.toFloat()
+        yaw += deltaRotation.yaw
+        pitch += deltaRotation.pitch
         return this
     }
 
     fun fov(other: Rotation): Float {
-        return dist(calcDelta(other))
+        return dist(closestDelta(other))
     }
 
-    fun calcDelta(other: Rotation): Rotation {
+    fun closestDelta(other: Rotation): Rotation {
         return Rotation(MathHelper.wrapDegrees(other.yaw - yaw), other.pitch - pitch)
     }
 
@@ -121,5 +123,7 @@ class Rotation(var yaw: Float, var pitch: Float) {
     }
 
     operator fun plus(other: Rotation) = Rotation(yaw + other.yaw, pitch + other.pitch)
+    operator fun minus(other: Rotation) = Rotation(yaw - other.yaw, pitch - other.pitch)
+    operator fun times(value: Float) = Rotation(yaw * value, pitch * value)
 
 }

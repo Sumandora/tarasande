@@ -85,8 +85,10 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     public void injectTickMovement(CallbackInfo ci) {
         if (this.bodyTrackingIncrements > 0 && (Object) this == MinecraftClient.getInstance().player && RotationUtil.INSTANCE.getFakeRotation() != null) {
             Rotation rotation = RotationUtil.INSTANCE.getFakeRotation();
-            rotation.setYaw((rotation.getYaw() + (float) MathHelper.wrapDegrees(this.serverYaw - (double) rotation.getYaw()) / (float) this.bodyTrackingIncrements) % 360.0F);
-            rotation.setPitch((rotation.getPitch() + (float) (this.serverPitch - (double) rotation.getPitch()) / (float) this.bodyTrackingIncrements) % 360.0F);
+            RotationUtil.INSTANCE.setFakeRotation(new Rotation(
+                    (rotation.getYaw() + (float) MathHelper.wrapDegrees(this.serverYaw - (double) rotation.getYaw()) / (float) this.bodyTrackingIncrements) % 360.0F,
+                    (rotation.getPitch() + (float) (this.serverPitch - (double) rotation.getPitch()) / (float) this.bodyTrackingIncrements) % 360.0F
+            ));
         }
     }
 
