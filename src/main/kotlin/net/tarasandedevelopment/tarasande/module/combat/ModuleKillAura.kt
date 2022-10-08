@@ -155,7 +155,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
 
     private fun allAttacked(block: (LivingEntity) -> Boolean): Boolean {
-        return (mode.isSelected(0) && targets.first().first.let { it is LivingEntity && block(it) }) || (mode.isSelected(1) && targets.all { it.first is LivingEntity && block((it.first as LivingEntity)) })
+        return (mode.isSelected(0) && targets.firstOrNull()?.first.let { it is LivingEntity && block(it) }) || (mode.isSelected(1) && targets.all { it.first is LivingEntity && block((it.first as LivingEntity)) })
     }
 
     val eventConsumer = Consumer<Event> { event ->
@@ -247,8 +247,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                         if (!mc.player?.isOnGround!! && mc.player?.velocity?.y!! != 0.0 && (mc.player?.fallDistance == 0.0f || (criticalSprint.value && !mc.player?.isSprinting!!)))
                             canHit = false
 
-                if (dontAttackWhenBlocking.value && allAttacked { it.isBlocking })
-                    if (!simulateShieldBlock.value || allAttacked { it.blockedByShield(DamageSource.player(mc.player)) })
+                val disablesShield = mc.player?.disablesShield()!!
+                if (dontAttackWhenBlocking.value && (allAttacked { it.isBlocking } || disablesShield))
+                    if (!simulateShieldBlock.value || (allAttacked { it.blockedByShield(DamageSource.player(mc.player)) } || disablesShield))
                         canHit = false
 
                 if (waitForDamageValue.value && waitForDamage)
