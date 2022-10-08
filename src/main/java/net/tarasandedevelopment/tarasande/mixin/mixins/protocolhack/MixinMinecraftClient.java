@@ -12,7 +12,9 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.Hand;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol;
+import net.tarasandedevelopment.tarasande.module.movement.ModuleInventoryMove;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -46,6 +48,12 @@ public abstract class MixinMinecraftClient {
         final UserConnection viaConnection = ((IClientConnection_Protocol) getNetworkHandler().getConnection()).tarasande_getViaConnection();
 
         if (VersionList.isOlderOrEqualTo(VersionList.R1_11_1) && viaConnection != null) {
+            if (!TarasandeMain.Companion.get().getDisabled()) {
+                ModuleInventoryMove moduleInventoryMove = TarasandeMain.Companion.get().getManagerModule().get(ModuleInventoryMove.class);
+                if (moduleInventoryMove.isEnabled() && moduleInventoryMove.getCanceledPackets().isSelected(0))
+                    return;
+            }
+
             final PacketWrapper clickStatus = PacketWrapper.create(ServerboundPackets1_9_3.CLIENT_STATUS, viaConnection);
 
             clickStatus.write(Type.VAR_INT, 2); // Open Inventory Achievement
