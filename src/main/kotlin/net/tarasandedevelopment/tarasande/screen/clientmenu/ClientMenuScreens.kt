@@ -58,6 +58,10 @@ class ElementMenuScreenAddons : ElementMenuScreen("Addons") {
         screenBetterAddons.prevScreen = MinecraftClient.getInstance().currentScreen
         return this.screenBetterAddons
     }
+
+    override fun visible(): Boolean {
+        return TarasandeMain.get().managerAddon.list.isNotEmpty()
+    }
 }
 
 class ElementMenuToggleBungeeHack : ElementMenuToggle("Bungee Hack") {
