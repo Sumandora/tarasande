@@ -13,7 +13,6 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil.fakeRotation
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
-import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -48,8 +47,10 @@ class PanelMousePad(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Pa
     }
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        val xMax = max(Collections.max(rotations.stream().map { abs(it.first) }.toList()).toDouble(), panelWidth / 2)
-        val yMax = max(Collections.max(rotations.stream().map { abs(it.second) }.toList()).toDouble(), panelHeight / 2)
+        if (rotations.isEmpty())
+            return
+        val xMax = max(rotations.stream().mapToDouble { abs(it.first).toDouble() }.max().asDouble, panelWidth / 2.0)
+        val yMax = max(rotations.stream().mapToDouble { abs(it.second).toDouble() }.max().asDouble, panelHeight / 2.0)
 
         val matrix = matrices?.peek()?.positionMatrix!!
 
