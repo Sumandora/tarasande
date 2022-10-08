@@ -1,6 +1,6 @@
 /*
  * Copyright (c) FlorianMichael as EnZaXD 2022
- * Created on 7/8/22, 5:18 PM
+ * Created on 21.06.22, 14:28
  *
  * --FLORIAN MICHAEL PRIVATE LICENCE v1.0--
  *
@@ -12,10 +12,21 @@
  * The owner "Florian Michael" is free to change this license.
  */
 
-package net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack;
+package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.entity;
 
-public interface IScreenHandler_Protocol {
+import de.florianmichael.viaprotocolhack.util.VersionList;
+import net.minecraft.entity.ItemEntity;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-    short tarasande_getAndIncrementLastActionId();
+@Mixin(ItemEntity.class)
+public class MixinItemEntity {
 
+    @Inject(method = "applyWaterBuoyancy", at = @At("HEAD"), cancellable = true)
+    public void injectApplyWaterBuoyancy(CallbackInfo ci) {
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
+            ci.cancel();
+    }
 }

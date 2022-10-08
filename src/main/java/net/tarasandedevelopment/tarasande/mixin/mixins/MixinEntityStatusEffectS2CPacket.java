@@ -15,7 +15,7 @@ public class MixinEntityStatusEffectS2CPacket {
     public void injectShouldShowIcon(CallbackInfoReturnable<Boolean> cir) {
         if(!TarasandeMain.Companion.get().getDisabled()) {
             ModuleAntiParticleHide moduleAntiParticleHide = TarasandeMain.Companion.get().getManagerModule().get(ModuleAntiParticleHide.class);
-            if(moduleAntiParticleHide.getEnabled() && moduleAntiParticleHide.getHud().getValue())
+            if(moduleAntiParticleHide.getEnabled() && moduleAntiParticleHide.getHud().isEnabled() && moduleAntiParticleHide.getHud().getValue())
                 cir.setReturnValue(true);
         }
     }

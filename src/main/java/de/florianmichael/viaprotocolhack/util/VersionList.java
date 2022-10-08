@@ -87,6 +87,9 @@ public class VersionList {
     }
 
     private static boolean isSingleplayer() {
+        if (ViaProtocolHack.instance().provider() == null)
+            return true;
+
         return ViaProtocolHack.instance().provider().isSinglePlayer();
     }
 
