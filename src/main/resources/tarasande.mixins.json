@@ -115,7 +115,8 @@
     "protocolhack.viaversion.MixinProtocol1_13To1_12_2",
     "protocolhack.viaversion.MixinProtocol1_16To1_15_2",
     "protocolhack.viaversion.MixinProtocol1_19_1To1_19",
-    "protocolhack.viaversion.MixinViaIdleThread"
+    "protocolhack.viaversion.MixinViaIdleThread",
+    "skin.MixinPlayerSkinProvider"
   ],
   "injectors": {
     "defaultRequire": 1
