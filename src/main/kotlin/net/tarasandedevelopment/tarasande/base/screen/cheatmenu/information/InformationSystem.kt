@@ -24,6 +24,10 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
             InformationProtocolVersion(),
             InformationPlayTime(),
 
+            // Hardware
+            InformationCPU(),
+            InformationGPU(),
+
             // World
             InformationEntities(),
             InformationWorldTime(),
