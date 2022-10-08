@@ -80,7 +80,8 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             PanelWatermark::class.java,
             PanelHypixelBedwarsOverlay::class.java,
             PanelRadar::class.java,
-            PanelArmor::class.java
+            PanelArmor::class.java,
+            PanelMousePad::class.java
         )
         if (Util.getOperatingSystem() == Util.OperatingSystem.LINUX) {
             panels.add(PanelNowPlaying::class.java)
