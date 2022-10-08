@@ -17,9 +17,11 @@ import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
 import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
 import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
+import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.extension.times
+import net.tarasandedevelopment.tarasande.util.extension.unaryMinus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
@@ -158,7 +160,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 else if (best == null)
                     continue
             }
-            val dist2 = (Vec3d.ofCenter(target.second) + Vec3d.of(target.third.opposite.vector) * 0.5 - mc.player?.pos!!).horizontalLengthSquared()
+            val dist2 = mc.player?.pos?.squaredDistanceTo(Vec3d.ofCenter(target.second) + -Vec3d.of(target.first) * 0.5)!!
             if (best == null || dist2 < dist) {
                 best = Pair(target.second, target.third)
                 dist = dist2

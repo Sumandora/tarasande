@@ -201,16 +201,16 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, target.second)
                 var finalRot = targetRot
 
-                val lowestHurttime = targets.filter { it.first is LivingEntity && (it.first as LivingEntity).maxHurtTime > 0 }.minOfOrNull { val livingEntity = it.first as LivingEntity; (livingEntity.hurtTime - mc.tickDelta).coerceAtLeast(0.0f) / livingEntity.maxHurtTime.toFloat() }
+                val lowestHurtTime = target.first.let { if(it is LivingEntity && it.maxHurtTime > 0) (it.hurtTime - mc.tickDelta).coerceAtLeast(0.0f) / it.maxHurtTime else null }
 
-                if (!flex.value || lowestHurttime == null || lowestHurttime < flexHurtTime.value) {
+                if (!flex.value || lowestHurtTime == null || lowestHurtTime < flexHurtTime.value) {
                     finalRot = currentRot.smoothedTurn(targetRot, aimSpeed)
                     val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, finalRot)
                     if (guaranteeHit.value && target.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue && (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null)) {
                         finalRot = targetRot
                     }
                 } else {
-                    val delta = (lowestHurttime - flexHurtTime.value) / (1.0 - flexHurtTime.value)
+                    val delta = (lowestHurtTime - flexHurtTime.value) / (1.0 - flexHurtTime.value)
                     if (lastFlex == null) {
                         lastFlex = Rotation(ThreadLocalRandom.current().nextDouble(-flexTurn.value, flexTurn.value).toFloat(), ThreadLocalRandom.current().nextDouble(-flexTurn.value / 2, flexTurn.value / 2).toFloat())
                     }
