@@ -7,6 +7,7 @@ import com.viaversion.viaversion.libs.gson.JsonObject
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.viaprotocolhack.INativeProvider
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
+import de.florianmichael.viaprotocolhack.util.VersionList
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.ModContainer
 import net.fabricmc.loader.api.metadata.Person
@@ -36,8 +37,10 @@ class TarasandeProtocolHack : INativeProvider {
 
         TarasandeMain.get().managerEvent.add {
             if (it is EventConnectServer) {
-                for (storage in ((MinecraftClient.getInstance() as IMinecraftClient_Protocol).fontManager as IFontManager_Protocol).fontStorages) {
-                    (storage.value as IFontStorage_Protocol).reload()
+                if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2)) {
+                    for (storage in ((MinecraftClient.getInstance() as IMinecraftClient_Protocol).fontManager as IFontManager_Protocol).fontStorages) {
+                        (storage.value as IFontStorage_Protocol).reload()
+                    }
                 }
             }
         }
