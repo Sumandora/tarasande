@@ -10,7 +10,6 @@ import net.tarasandedevelopment.tarasande.event.EventCollisionShape
 import net.tarasandedevelopment.tarasande.event.EventJump
 import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
-import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
@@ -36,9 +35,9 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
                 if (event.entity != mc.player)
                     return@Consumer
                 var yMotion = 0.0
-                if ((mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
+                if (PlayerUtil.input.jumping)
                     yMotion += flightSpeed.value
-                if ((mc.options.sneakKey as IKeyBinding).tarasande_forceIsPressed())
+                if (PlayerUtil.input.sneaking)
                     yMotion -= flightSpeed.value
                 if (yMotion == 0.0)
                     yMotion = baseYMotion.value
