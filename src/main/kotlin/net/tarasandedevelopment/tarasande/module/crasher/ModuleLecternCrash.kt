@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.crasher
 
 import com.google.common.collect.Lists
-import de.florianmichael.viaprotocolhack.util.VersionList
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.LecternScreen
@@ -12,9 +11,7 @@ import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.exploit.ExploitInjector
 
-class ModuleLecternCrash : Module("Lectern Crash", "Crashes the server using lecterns on 1.14+", ModuleCategory.CRASHER) {
-
-    override fun isEnabled() = VersionList.isNewerTo(VersionList.R1_14)
+class ModuleLecternCrash : Module("Lectern crash", "Crashes the server using lecterns on 1.14+", ModuleCategory.CRASHER) {
 
     init {
         ExploitInjector.hook(LecternScreen::class.java, "Lectern Crash 1.14+", object : ExploitInjector.Action {
