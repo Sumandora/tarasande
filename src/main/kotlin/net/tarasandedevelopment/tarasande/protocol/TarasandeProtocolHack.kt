@@ -7,17 +7,12 @@ import com.viaversion.viaversion.libs.gson.JsonObject
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.viaprotocolhack.INativeProvider
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
-import de.florianmichael.viaprotocolhack.util.VersionList
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.ModContainer
 import net.fabricmc.loader.api.metadata.Person
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.event.EventConnectServer
-import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IFontManager_Protocol
-import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IFontStorage_Protocol
-import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IMinecraftClient_Protocol
 import net.tarasandedevelopment.tarasande.protocol.provider.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande.protocol.provider.FabricVersionProvider
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
@@ -34,16 +29,6 @@ class TarasandeProtocolHack : INativeProvider {
 
     init {
         ViaProtocolHack.instance().init(this)
-
-        TarasandeMain.get().managerEvent.add {
-            if (it is EventConnectServer) {
-                if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2)) {
-                    for (storage in ((MinecraftClient.getInstance() as IMinecraftClient_Protocol).fontManager as IFontManager_Protocol).fontStorages) {
-                        (storage.value as IFontStorage_Protocol).reload()
-                    }
-                }
-            }
-        }
     }
 
     override fun isSinglePlayer(): Boolean {
