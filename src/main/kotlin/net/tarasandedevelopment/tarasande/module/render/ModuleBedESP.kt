@@ -180,7 +180,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                 stringBuilder.append("Used blocks: " + solution.map { mc.world?.getBlockState(BlockPos(it.x, it.y, it.z))?.block?.name?.string }.distinct().joinToString() + "\n")
             }
 
-            return stringBuilder.toString().trim('\n')
+            return stringBuilder.toString()
         }
     }
 

@@ -58,7 +58,7 @@ class InformationBeds : Information("Bed ESP", "Beds") {
                     it.forEach { vec += Vec3d.ofCenter(it) }
                     vec / it.size
                 })
-            }.joinToString("\n") { it.toString() }
+            }.joinToString("\n") { it.toString() }.let { it.substring(0, it.length - 1) }
         }
 
         return null
