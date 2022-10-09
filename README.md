@@ -60,9 +60,10 @@
 - CivBreaker
 - Killaura: TP
 - Target strafe: Anti Void
-- Account manager: Add skins in selection
+- Readd Kill Aura block check mode, because serversided viaversion is crap
 - (Banners in protocol selection)
 - Settings for HypixelBedwarsOverlay
+- EventRenderBlockModel is slow - EventManager recode
 
 ### TODO-List (Click GUI)
 - Correctly save and calculate the positions of the panels when resizing ingame
