@@ -67,7 +67,6 @@ public class CustomViaDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (PipelineUtil.containsCause(cause, CancelCodecException.class)) return;
-        super.exceptionCaught(ctx, cause);
 
         if ((PipelineUtil.containsCause(cause, InformativeException.class)
                 && info.getProtocolInfo().getState() != State.HANDSHAKE)
