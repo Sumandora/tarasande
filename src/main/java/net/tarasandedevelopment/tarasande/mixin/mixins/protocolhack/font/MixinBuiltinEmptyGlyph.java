@@ -16,6 +16,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.font;
 
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.font.BuiltinEmptyGlyph;
+import net.tarasandedevelopment.tarasande.TarasandeEntrypoint;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,7 +27,7 @@ public class MixinBuiltinEmptyGlyph {
 
     @Inject(method = "getAdvance", at = @At("HEAD"), cancellable = true)
     public void injectGetAdvance(CallbackInfoReturnable<Float> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2) && !TarasandeEntrypoint.INSTANCE.getDashLoader())
             cir.setReturnValue(0F);
     }
 }

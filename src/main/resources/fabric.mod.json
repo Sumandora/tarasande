@@ -14,6 +14,14 @@
   "license": "All rights reserved",
   "icon": "assets/tarasande/icon.png",
   "environment": "client",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "net.tarasandedevelopment.tarasande.TarasandeEntrypoint::onInitialize"
+      }
+    ]
+  },
   "mixins": [
     "tarasande.mixins.json"
   ],

@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.font;
 import com.mojang.blaze3d.systems.RenderSystem;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.font.*;
+import net.tarasandedevelopment.tarasande.TarasandeEntrypoint;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IFontStorage_Protocol;
 import net.tarasandedevelopment.tarasande.protocol.font.BuiltinEmptyGlyph_1_12;
 import org.spongepowered.asm.mixin.Final;
@@ -47,12 +48,14 @@ public abstract class MixinFontStorage implements IFontStorage_Protocol {
 
     @Inject(method = "getRectangleRenderer", at = @At("HEAD"), cancellable = true)
     public void replaceRenderer(CallbackInfoReturnable<GlyphRenderer> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2) && !TarasandeEntrypoint.INSTANCE.getDashLoader())
             cir.setReturnValue(this.unknownGlyphRenderer);
     }
 
     @Override
     public void reload() {
+        if (TarasandeEntrypoint.INSTANCE.getDashLoader()) return;
+
         ownReloading = true;
         if (this.fonts != null) {
             this.fonts.clear();
