@@ -151,6 +151,9 @@ You can close this page now.""".toByteArray())
     }
 
     protected fun buildFromRefreshToken(refreshToken: String): MSAuthProfile {
+        if (azureApp == null) {
+            azureApp = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAzureApp.get(AzureAppPresetInGameAccountSwitcher::class.java)
+        }
         val oAuthToken = TarasandeMain.get().gson.fromJson(post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
             it["client_id"] = this.azureApp!!.clientId.toString()
             it["refresh_token"] = refreshToken

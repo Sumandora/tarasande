@@ -42,4 +42,9 @@ public class CustomViaConfig extends AbstractViaConfig {
     public boolean isShowShieldWhenSwordInHand() {
         return true;
     }
+
+    @Override
+    public boolean isLeftHandedHandling() {
+        return false;
+    }
 }
