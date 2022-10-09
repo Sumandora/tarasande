@@ -5,8 +5,8 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.file.FileAccounts
 import net.tarasandedevelopment.tarasande.file.FileCheatMenu
-import net.tarasandedevelopment.tarasande.file.FileModules
 import net.tarasandedevelopment.tarasande.file.FileClientMenu
+import net.tarasandedevelopment.tarasande.file.FileModules
 import net.tarasandedevelopment.tarasande.file.values.FileValuesBinds
 import net.tarasandedevelopment.tarasande.file.values.FileValuesNonBinds
 import java.io.FileWriter
@@ -46,17 +46,19 @@ class ManagerFile : Manager<File>() {
             try {
                 internalLoad(file, false)
             } catch (t: Throwable) {
+                t.printStackTrace()
                 try {
                     internalLoad(file, true)
                 } catch (t: Throwable) {
-                    TarasandeMain.get().logger.error(file.name + "didn't load correctly!")
+                    t.printStackTrace()
+                    TarasandeMain.get().logger.error(file.name + " didn't load correctly!")
                 }
             }
         }
     }
 
     private fun internalLoad(file: File, backup: Boolean) {
-        val fileObj = java.io.File(TarasandeMain.get().rootDirectory, file.name + if (backup) "_backup" else "")
+        val fileObj = java.io.File(TarasandeMain.get().rootDirectory, file.name + (if (backup) "_backup" else ""))
         val content = file.decrypt(String(Files.readAllBytes(fileObj.toPath()))) ?: error(file.name + "'s content is empty")
         val jsonElement = TarasandeMain.get().gson.fromJson(content, JsonElement::class.java)
         file.load(jsonElement)

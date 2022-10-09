@@ -73,6 +73,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val blockOutOfReach = object : ValueBoolean(this, "Block out of reach", true) {
         override fun isEnabled() = !blockMode.isSelected(0)
     }
+    private val preventBlockCooldown = ValueBoolean(this, "Prevent block cooldown", false)
     private val counterBlocking = ValueBoolean(this, "Counter blocking", false)
     private val guaranteeHit = ValueBoolean(this, "Guarantee hit", false)
     private val rotations = ValueMode(this, "Rotations", true, "Around walls", "Randomized")
@@ -323,7 +324,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             is EventKeyBindingIsPressed -> {
                 if (event.keyBinding == mc.options.useKey) {
                     if (targets.isNotEmpty()) {
-                        event.pressed = blocking
+                        event.pressed = blocking && (!preventBlockCooldown.value || allAttacked { !it.disablesShield() })
                     }
                 }
                 if (PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {

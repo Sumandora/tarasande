@@ -38,7 +38,7 @@ class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.
 
     private var loginButton: ButtonWidget? = null
     private var removeButton: ButtonWidget? = null
-    private var setMainButton: ButtonWidget? = null
+    private var toggleMainButton: ButtonWidget? = null
     private var addButton: ButtonWidget? = null
     private var randomButton: ButtonWidget? = null
 
@@ -71,7 +71,7 @@ class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.
             slotList?.reload()
             slotList?.setSelected(null)
         }.also { removeButton = it })
-        addDrawableChild(ButtonWidget(width / 2 + 52, height - 46 - 3, 100, 20, Text.of("Set Main")) {
+        addDrawableChild(ButtonWidget(width / 2 + 52, height - 46 - 3, 100, 20, Text.of("Toggle main")) {
             val account = this.selected() ?: return@ButtonWidget
 
             if (account.session == null) {
@@ -86,7 +86,7 @@ class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.
                     status = Formatting.YELLOW.toString() + account.getDisplayName() + " is no longer a Main-Account"
                 }
             }
-        }.also { setMainButton = it })
+        }.also { toggleMainButton = it })
 
         addDrawableChild(ButtonWidget(width / 2 - 152, height - 46 + 2 + 20 - 3, 100, 20, Text.of("Direct Login")) { client?.setScreen(ScreenBetterAccount(this, "Direct Login") { logIn(it) }) })
         addDrawableChild(ButtonWidget(width / 2 - 50, height - 46 + 2 + 20 - 3, 100, 20, Text.of("Random Account")) { logIn(accounts[ThreadLocalRandom.current().nextInt(accounts.size)]) }.also { randomButton = it })
@@ -107,8 +107,8 @@ class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.
     override fun tick() {
         loginButton?.active = slotList?.selectedOrNull != null
         removeButton?.active = slotList?.selectedOrNull != null
-        setMainButton?.active = slotList?.selectedOrNull != null
-        if (slotList?.selectedOrNull != null) setMainButton?.active = true
+        toggleMainButton?.active = slotList?.selectedOrNull != null
+        if (slotList?.selectedOrNull != null) toggleMainButton?.active = true
         randomButton?.active = accounts.isNotEmpty()
         super.tick()
     }

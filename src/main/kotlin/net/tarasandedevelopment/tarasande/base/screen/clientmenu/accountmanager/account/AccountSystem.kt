@@ -2,12 +2,10 @@ package net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager
 
 import com.google.gson.JsonArray
 import com.mojang.authlib.Environment
-import com.mojang.authlib.GameProfile
 import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilEnvironment
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.gui.widget.ButtonWidget.PressAction
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.account.*
@@ -29,15 +27,16 @@ class ManagerAccount : Manager<Class<out Account>>() {
 abstract class Account {
     var environment: Environment? = null
     var session: Session? = null
+        set(value) {
+            if (value != null)
+                skinRenderer = SkinRenderer(value.profile)
+            field = value
+        }
     var skinRenderer: SkinRenderer? = null
 
     open fun defaultEnvironment(): Environment = YggdrasilEnvironment.PROD.environment
 
-    open fun logIn() {
-        if (session == null) return
-
-        skinRenderer = SkinRenderer(this.session!!.profile)
-    }
+    abstract fun logIn()
     abstract fun getDisplayName(): String
     abstract fun getSessionService(): MinecraftSessionService?
 
