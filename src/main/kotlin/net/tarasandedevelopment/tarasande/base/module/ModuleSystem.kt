@@ -5,13 +5,13 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.module.combat.*
+import net.tarasandedevelopment.tarasande.module.crasher.*
 import net.tarasandedevelopment.tarasande.module.exploit.*
 import net.tarasandedevelopment.tarasande.module.ghost.*
 import net.tarasandedevelopment.tarasande.module.misc.*
 import net.tarasandedevelopment.tarasande.module.movement.*
 import net.tarasandedevelopment.tarasande.module.player.*
-import net.tarasandedevelopment.tarasande.module.qualityoflife.ModuleEnchantmentTranslation
-import net.tarasandedevelopment.tarasande.module.qualityoflife.ModuleInstantWorld
+import net.tarasandedevelopment.tarasande.module.qualityoflife.*
 import net.tarasandedevelopment.tarasande.module.render.*
 import net.tarasandedevelopment.tarasande.value.ValueBind
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
@@ -100,7 +100,8 @@ class ManagerModule : Manager<Module>() {
             ModuleTrueSight(),
             ModuleEnchantmentTranslation(),
             ModulePhase(),
-            ModuleInventoryCleaner()
+            ModuleInventoryCleaner(),
+            ModuleLecternCrash()
         )
         TarasandeMain.get().managerEvent.add { event ->
             if (event is EventTick)
@@ -148,5 +149,5 @@ open class Module(val name: String, val description: String, val category: Modul
 }
 
 enum class ModuleCategory {
-    COMBAT, MOVEMENT, PLAYER, RENDER, MISC, GHOST, EXPLOIT, QUALITY_OF_LIFE
+    COMBAT, MOVEMENT, PLAYER, RENDER, MISC, GHOST, EXPLOIT, QUALITY_OF_LIFE, CRASHER, DUPE
 }
