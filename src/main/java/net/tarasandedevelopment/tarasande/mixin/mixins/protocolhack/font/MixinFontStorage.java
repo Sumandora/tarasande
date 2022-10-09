@@ -56,7 +56,9 @@ public abstract class MixinFontStorage implements IFontStorage_Protocol {
         ownReloading = true;
         if (this.fonts != null) {
             this.fonts.clear();
-            RenderSystem.recordRenderCall(() -> setFonts(myFonts));
+            if (this.myFonts != null) {
+                RenderSystem.recordRenderCall(() -> setFonts(myFonts));
+            }
         }
         ownReloading = false;
     }
