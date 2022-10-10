@@ -11,6 +11,7 @@ import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentRegistry
@@ -24,6 +25,8 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
     val canceledPackets = ValueMode(this, "Canceled packets", true, "Open", "Close")
 
     private val keybinding = ArrayList(PlayerUtil.movementKeys)
+
+    private var textBoxFocused = false
 
     init {
         keybinding.add(mc.options.jumpKey)
@@ -45,6 +48,11 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
                     if (keybinding.contains(event.keyBinding))
                         event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, (event.keyBinding as IKeyBinding).tarasande_getBoundKey().code)
             }
+
+            is EventTick -> {
+                if (event.state == EventTick.State.POST)
+                    textBoxFocused = isTextboxFocused()
+            }
         }
     }
 
@@ -59,6 +67,6 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
     }
 
     private fun isPassingEvents(): Boolean {
-        return (enabled && (mc.currentScreen is HandledScreen<*> || (mc.currentScreen is ScreenCheatMenu && !isTextboxFocused()))) || (mc.currentScreen == null || mc.currentScreen?.passEvents!!)
+        return (enabled && (mc.currentScreen is HandledScreen<*> || (mc.currentScreen is ScreenCheatMenu && !textBoxFocused))) || (mc.currentScreen == null || mc.currentScreen?.passEvents!!)
     }
 }

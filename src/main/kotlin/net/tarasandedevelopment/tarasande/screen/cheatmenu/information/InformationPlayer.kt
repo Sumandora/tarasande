@@ -39,6 +39,22 @@ class InformationNetherXYZ : Information("Player", "Nether XYZ") {
     }
 }
 
+class InformationVelocity : Information("Player", "Velocity") {
+    private val decimalPlacesX = ValueNumber(this, "Decimal places: x", 0.0, 1.0, 5.0, 1.0)
+    private val decimalPlacesY = ValueNumber(this, "Decimal places: y", 0.0, 1.0, 5.0, 1.0)
+    private val decimalPlacesZ = ValueNumber(this, "Decimal places: z", 0.0, 1.0, 5.0, 1.0)
+
+    override fun getMessage(): String? {
+        if (MinecraftClient.getInstance().player == null) return null
+
+        return MinecraftClient.getInstance().player?.velocity?.let {
+            StringUtil.round(it.x, decimalPlacesX.value.toInt()) + " " +
+                    StringUtil.round(it.y, decimalPlacesY.value.toInt()) + " " +
+                    StringUtil.round(it.z, decimalPlacesZ.value.toInt())
+        }
+    }
+}
+
 class InformationRotation : Information("Player", "Rotation") {
     private val decimalPlacesYaw = ValueNumber(this, "Decimal places: yaw", 0.0, 1.0, 5.0, 1.0)
     private val decimalPlacesPitch = ValueNumber(this, "Decimal places: pitch", 0.0, 1.0, 5.0, 1.0)

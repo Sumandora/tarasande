@@ -1,10 +1,10 @@
 package net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed
 
+import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
 import net.tarasandedevelopment.tarasande.mixin.accessor.IInGameHud
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
@@ -37,7 +37,9 @@ class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
             if (armor == ItemStack.EMPTY && skipEmpty.value)
                     return
 
+            RenderSystem.enableCull()
             (MinecraftClient.getInstance().inGameHud as IInGameHud).tarasande_invokeRenderHotbarItem(x.toInt() + m, y.toInt() + titleBarHeight, delta, matrices, armor)
+
             if (showEnchantments.value) {
                 matrices?.push()
                 matrices?.scale(enchantmentScale.value.toFloat(), enchantmentScale.value.toFloat(), 1F)

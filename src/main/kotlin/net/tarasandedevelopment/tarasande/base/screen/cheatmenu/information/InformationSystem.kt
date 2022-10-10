@@ -12,6 +12,7 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
             InformationName(),
             InformationXYZ(),
             InformationNetherXYZ(),
+            InformationVelocity(),
             InformationRotation(),
             InformationFakeRotation(),
 

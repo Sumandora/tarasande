@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent
 
+import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
@@ -22,6 +23,7 @@ class ValueComponentButtonItem(value: Value) : ValueComponent(value) {
 
         RenderUtil.fill(matrices, width - 4 - textWidth / 2, getHeight() / 2.0 - MinecraftClient.getInstance().textRenderer.fontHeight / 2, width, getHeight() / 2.0 + MinecraftClient.getInstance().textRenderer.fontHeight / 2, Int.MIN_VALUE)
 
+        RenderSystem.enableCull()
         (MinecraftClient.getInstance().inGameHud as IInGameHud).tarasande_invokeRenderHotbarItem(0, 0, delta, matrices, valueButton.icon)
 
         matrices?.push()
