@@ -9,6 +9,7 @@ import net.minecraft.entity.passive.PassiveEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Items
 import net.minecraft.item.ShieldItem
+import net.minecraft.item.SwordItem
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
@@ -62,18 +63,23 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
     private val throughWalls = ValueBoolean(this, "Through walls", false)
     private val attackCooldown = ValueBoolean(this, "Attack cooldown", false)
-    private val blockMode = object : ValueMode(this, "Auto block", false, "Disabled", "Permanent", "Legit") {
+    private val autoBlock = object : ValueMode(this, "Auto block", false, "Disabled", "Permanent", "Legit") {
         override fun onChange() {
             blocking = false
         }
     }
+    private val blockItem = object : ValueMode(this, "Block item", false, "Shield", "Sword") {
+        override fun isEnabled() = !autoBlock.isSelected(0)
+    }
     private val needUnblock = object : ValueBoolean(this, "Need unblock", true) {
-        override fun isEnabled() = blockMode.isSelected(1)
+        override fun isEnabled() = autoBlock.isSelected(1)
     }
     private val blockOutOfReach = object : ValueBoolean(this, "Block out of reach", true) {
-        override fun isEnabled() = !blockMode.isSelected(0)
+        override fun isEnabled() = !autoBlock.isSelected(0)
     }
-    private val preventBlockCooldown = ValueBoolean(this, "Prevent block cooldown", false)
+    private val preventBlockCooldown = object : ValueBoolean(this, "Prevent block cooldown", false) {
+        override fun isEnabled() = !autoBlock.isSelected(0)
+    }
     private val counterBlocking = ValueBoolean(this, "Counter blocking", false)
     private val guaranteeHit = ValueBoolean(this, "Guarantee hit", false)
     private val rotations = ValueMode(this, "Rotations", true, "Around walls", "Randomized")
@@ -262,12 +268,12 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
                 val clicks = clickSpeedUtil.getClicks()
 
-                if (!blockMode.isSelected(0) && mc.player?.isUsingItem!! && clicks > 0) {
+                if (!autoBlock.isSelected(0) && mc.player?.isUsingItem!! && clicks > 0) {
                     if (unblock())
                         return@Consumer
                 }
 
-                if (!mc.player?.isUsingItem!! || (blockMode.isSelected(1) && !needUnblock.value)) {
+                if (!mc.player?.isUsingItem!! || (autoBlock.isSelected(1) && !needUnblock.value)) {
                     for (click in 1..clicks) {
                         var attacked = false
                         for (entry in targets) {
@@ -316,7 +322,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     }
                 }
 
-                if (targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && !waitForHit && !mc.player?.isUsingItem!! && !blockMode.isSelected(0)) {
+                if (targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && !waitForHit && !mc.player?.isUsingItem!! && !autoBlock.isSelected(0)) {
                     block()
                 }
             }
@@ -453,8 +459,19 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
 
     private fun block() {
-        val stack = mc.player?.getStackInHand(Hand.OFF_HAND)
-        if (stack?.item !is ShieldItem || mc.player?.itemCooldownManager?.isCoolingDown(stack.item)!! || mc.player?.getStackInHand(Hand.MAIN_HAND)?.useAction != UseAction.NONE) return
+        when {
+            blockItem.isSelected(0) -> {
+                val stack = mc.player?.getStackInHand(Hand.OFF_HAND)
+                if (stack?.item !is ShieldItem || mc.player?.itemCooldownManager?.isCoolingDown(stack.item)!! || mc.player?.getStackInHand(Hand.MAIN_HAND)?.useAction != UseAction.NONE)
+                    return
+            }
+
+            blockItem.isSelected(1) -> {
+                val stack = mc.player?.getStackInHand(Hand.MAIN_HAND)
+                if (stack?.item !is SwordItem || mc.player?.getStackInHand(Hand.OFF_HAND)?.useAction != UseAction.NONE)
+                    return
+            }
+        }
 
         var hasTarget = false
         for (entry in targets) {
@@ -478,15 +495,15 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
         }
         if (hasTarget) {
-            if (!blockMode.isSelected(1) || needUnblock.value)
+            if (!autoBlock.isSelected(1) || needUnblock.value)
                 blocking = false
             waitForHit = true
             when {
-                blockMode.isSelected(1) && needUnblock.value -> {
+                autoBlock.isSelected(1) && needUnblock.value -> {
                     mc.interactionManager?.stopUsingItem(mc.player)
                 }
 
-                blockMode.isSelected(2) -> {
+                autoBlock.isSelected(2) -> {
                     clickSpeedUtil.reset() // we can't count this as an attack, can we?
                     return true
                 }
