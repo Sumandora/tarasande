@@ -9,7 +9,9 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
+import net.tarasandedevelopment.tarasande.module.movement.ModuleNoSlowdown;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,8 +40,11 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity implemen
 
     @Redirect(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tickMovement()V"))
     public void doNothing(AbstractClientPlayerEntity instance) {
-        if ((instance.isUsingItem() || instance.isSneaking() || instance.isSubmergedInWater()) && VersionList.isOlderOrEqualTo(VersionList.R1_8))
-            instance.setSprinting(false);
+        if ((instance.isUsingItem() || instance.isSneaking() || instance.isSubmergedInWater()) && VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
+            ModuleNoSlowdown moduleNoSlowdown = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSlowdown.class);
+            if (!moduleNoSlowdown.getEnabled() || !moduleNoSlowdown.getPreventUnsprint().getValue())
+                instance.setSprinting(false);
+        }
 
         super.tickMovement();
     }
