@@ -21,6 +21,7 @@ class ModuleAntiFall : Module("Anti fall", "Tries to force a setback when you ar
     private val boost = object : ValueNumber(this, "Boost", 0.0, 1.0, 10.0, 0.1) {
         override fun isEnabled() = mode.isSelected(1)
     }
+    private val repeating = ValueBoolean(this, "Repeating", false)
 
     private var lastOnGroundPos: Vec3d? = null
     private var wasOnGround = false
@@ -41,7 +42,7 @@ class ModuleAntiFall : Module("Anti fall", "Tries to force a setback when you ar
                     @Suppress("UNREACHABLE_CODE") // thx kotlin compiler, if I remove this, I get a syntax error
                     true
                 })) {
-                if (wasOnGround) {
+                if ((wasOnGround || repeating.value) && mc.player?.input?.sneaking == false) {
                     when {
                         mode.isSelected(0) -> {
                             if (lastOnGroundPos != null) {
@@ -55,6 +56,7 @@ class ModuleAntiFall : Module("Anti fall", "Tries to force a setback when you ar
                             mc.player?.velocity = mc.player?.velocity?.multiply(boost.value, jumpMultiplier.value, boost.value)
                         }
                     }
+                    mc.player?.fallDistance = 0.0f
                 }
                 wasOnGround = false
             }
