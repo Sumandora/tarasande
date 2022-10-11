@@ -37,7 +37,12 @@ public class ViaProtocolHack {
         CompletableFuture.runAsync(() -> {
             final ViaVersionPlatform platform = new ViaVersionPlatform(this.logger());
 
-            Via.init(ViaManagerImpl.builder().injector(new CustomViaInjector()).loader(new CustomViaProviders()).platform(platform).build());
+            final ViaManagerImpl.ViaManagerBuilder builder = ViaManagerImpl.builder().injector(new CustomViaInjector()).loader(new CustomViaProviders()).platform(platform);
+
+            if (provider().commandHandler().isPresent())
+                builder.commandHandler(provider().commandHandler().get());
+
+            Via.init(builder.build());
             platform.init();
 
             ((ViaManagerImpl) Via.getManager()).init();

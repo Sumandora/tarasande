@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.protocol.signatures1_19_0
+package net.tarasandedevelopment.tarasande.protocol.util
 
 import net.minecraft.network.encryption.Signer
 import net.minecraft.network.message.MessageMetadata
