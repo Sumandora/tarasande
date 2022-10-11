@@ -22,6 +22,9 @@ public class MixinKeyboardInput extends Input {
         this.movementForward = this.movementSideways = 0.0f;
 
         if (!eventInput.getCancelled()) {
+            this.movementForward = eventInput.getMovementForward();
+            this.movementSideways = eventInput.getMovementSideways();
+
             if (movementForward > 0)
                 this.pressingForward = true;
             else if (movementForward < 0)
@@ -31,9 +34,6 @@ public class MixinKeyboardInput extends Input {
                 this.pressingLeft = true;
             else if (movementSideways < 0)
                 this.pressingRight = true;
-
-            this.movementForward = eventInput.getMovementForward();
-            this.movementSideways = eventInput.getMovementSideways();
         }
 
         if (!eventInput.getSlowDown())
