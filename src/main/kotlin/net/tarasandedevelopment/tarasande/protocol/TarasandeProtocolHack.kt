@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.protocol
 
 import com.viaversion.viaversion.api.platform.providers.ViaProviders
 import com.viaversion.viaversion.api.protocol.version.VersionProvider
+import com.viaversion.viaversion.commands.ViaCommandHandler
 import com.viaversion.viaversion.libs.gson.JsonArray
 import com.viaversion.viaversion.libs.gson.JsonObject
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
@@ -13,11 +14,14 @@ import net.fabricmc.loader.api.metadata.Person
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.protocol.command.TarasandeCommandHandler
 import net.tarasandedevelopment.tarasande.protocol.provider.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande.protocol.provider.FabricVersionProvider
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.terminal.PanelElementsTerminal
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import java.io.File
+import java.util.*
 
 class TarasandeProtocolHack : INativeProvider {
 
@@ -88,6 +92,10 @@ class TarasandeProtocolHack : INativeProvider {
     override fun createProviders(providers: ViaProviders?) {
         providers?.register(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
         providers?.register(VersionProvider::class.java, FabricVersionProvider())
+    }
+
+    override fun commandHandler(): Optional<ViaCommandHandler> {
+        return Optional.of(TarasandeCommandHandler())
     }
 
     fun isAuto() = this.auto.value

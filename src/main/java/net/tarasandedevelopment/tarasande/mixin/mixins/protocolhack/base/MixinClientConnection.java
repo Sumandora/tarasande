@@ -7,7 +7,7 @@ import io.netty.channel.Channel;
 import net.minecraft.network.ClientConnection;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol;
-import net.tarasandedevelopment.tarasande.protocol.service.ProtocolAutoDetector;
+import net.tarasandedevelopment.tarasande.protocol.util.ProtocolAutoDetector;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;

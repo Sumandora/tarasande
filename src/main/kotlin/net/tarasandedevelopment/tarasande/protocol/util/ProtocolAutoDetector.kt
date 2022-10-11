@@ -11,7 +11,7 @@
  * cancelled by copying or removing the license and in case of violation a criminal consequence is to be expected.
  * The owner "Florian Michael" is free to change this license.
  */
-package net.tarasandedevelopment.tarasande.protocol.service
+package net.tarasandedevelopment.tarasande.protocol.util
 
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader

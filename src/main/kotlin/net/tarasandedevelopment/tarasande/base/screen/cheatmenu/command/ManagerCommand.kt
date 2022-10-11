@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.base.screen.cheatmenu.command
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.command.CommandHelp
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.command.CommandNotificationTest
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.command.CommandViaDump
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.terminal.PanelElementsTerminal
 
 class ManagerCommand : Manager<Command>() {
@@ -10,7 +11,8 @@ class ManagerCommand : Manager<Command>() {
     init {
         add(
             CommandNotificationTest(),
-            CommandHelp()
+            CommandHelp(),
+            CommandViaDump()
         )
     }
 
