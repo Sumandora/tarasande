@@ -5,9 +5,11 @@ import de.florianmichael.viaprotocolhack.ViaProtocolHack;
 import de.florianmichael.viaprotocolhack.event.PipelineReorderEvent;
 import io.netty.channel.Channel;
 import net.minecraft.network.ClientConnection;
+import net.minecraft.text.Text;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol;
 import net.tarasandedevelopment.tarasande.protocol.util.ProtocolAutoDetector;
+import net.tarasandedevelopment.tarasande.protocol.util.WolfHealthTracker1_14_4;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -41,6 +43,11 @@ public class MixinClientConnection implements IClientConnection_Protocol {
             } catch (Exception e) {
                 ViaProtocolHack.instance().logger().log(Level.WARNING, "Could not auto-detect protocol for " + address + " " + e);
             }
+    }
+
+    @Inject(method = "disconnect", at = @At("RETURN"))
+    public void onDisconnect(Text disconnectReason, CallbackInfo ci) {
+        WolfHealthTracker1_14_4.INSTANCE.clear();
     }
 
     @Override
