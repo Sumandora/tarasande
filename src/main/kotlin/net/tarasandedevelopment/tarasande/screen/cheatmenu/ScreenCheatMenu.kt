@@ -24,7 +24,6 @@ import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.i
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.clientvalues.PanelElementsClientValues
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.creative.PanelElementsCreative
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.friends.PanelElementsFriends
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.notification.PanelElementsNotification
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.terminal.PanelElementsTerminal
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed.*
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.particle.Particle
@@ -70,7 +69,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         val panels = mutableListOf(
             PanelElementsFriends::class.java,
             PanelElementsTerminal::class.java,
-            PanelElementsNotification::class.java,
             PanelElementsCreative::class.java,
 
             PanelArrayList::class.java,

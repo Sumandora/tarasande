@@ -5,28 +5,29 @@ import net.minecraft.enchantment.Enchantment
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.nbt.*
+import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.util.player.chat.CommunicationUtil
+import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 
 object ItemUtil {
 
-    private const val noCreative = "You must be in creative mode to use this."
-    private const val noSpace = "No space in hotbar."
+    private val noCreative = Text.literal("You must be in creative mode to use this.")
+    private val noSpace = Text.literal("No space in hotbar.")
 
-    private const val placed = "The item was placed in your hotbar"
+    private val placed = Text.literal("The item was placed in your hotbar")
 
     fun give(stack: ItemStack) {
         if (!MinecraftClient.getInstance().player?.abilities!!.creativeMode) {
-            CommunicationUtil.printInformation(noCreative)
+            CustomChat.print(noCreative)
             return
         }
 
         if (!MinecraftClient.getInstance().player?.inventory!!.insertStack(stack)) {
-            CommunicationUtil.printInformation(noSpace)
+            CustomChat.print(noSpace)
         }
 
-        CommunicationUtil.printInformation(placed)
+        CustomChat.print(placed)
     }
 
     fun enchantSimpleName(enchantment: Enchantment, length: Int) = enchantment.getName(0).string.substring(0, length)
