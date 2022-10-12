@@ -17,7 +17,6 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.protocol.command.TarasandeCommandHandler
 import net.tarasandedevelopment.tarasande.protocol.provider.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande.protocol.provider.FabricVersionProvider
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.terminal.PanelElementsTerminal
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import java.io.File
