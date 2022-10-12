@@ -200,3 +200,4 @@ class EventChildren(val screen: Screen) : Event(false) {
 }
 class EventLoadManager(val manager: Manager<*>) : Event(false)
 class EventConnectServer(val address: InetSocketAddress) : Event(false)
+class EventSkipIdlePacket : Event(false)
