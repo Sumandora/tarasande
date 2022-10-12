@@ -14,6 +14,7 @@ import net.minecraft.sound.SoundEvent
 import net.minecraft.stat.StatHandler
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.mixin.accessor.IParticleManager
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 
 object PredictionEngine {
@@ -21,7 +22,7 @@ object PredictionEngine {
     fun predictState(count: Int): Pair<ClientPlayerEntity, ArrayList<Vec3d>> {
         /*
          * Irgendwie funktioniert das hier ohne Minecraft code in den Utilklassen?
-         * Ich glaub E-Sound ist einfach scheiße
+         * Ich glaub, E-Sound ist einfach scheiße
          *
          * Darauf kracht das Crystal! :sunglasses:
          */
@@ -44,7 +45,7 @@ object PredictionEngine {
                 }
             ) {
                 override fun sendPacket(packet: Packet<*>?) {
-                    // lmao dont send packets
+                    // lmao don't send packets
                 }
             },
             StatHandler(),
@@ -64,9 +65,6 @@ object PredictionEngine {
             override fun fall(heightDifference: Double, onGround: Boolean, state: BlockState?, landedPosition: BlockPos?) {
             }
 
-            override fun spawnSprintingParticles() {
-            }
-
             override fun isCamera(): Boolean {
                 return true // 1, 2 Polizei 3, 4 Crystal hier 5, 6 Alte Hex, 7, 8 Crystal kracht
             }
@@ -75,9 +73,6 @@ object PredictionEngine {
             }
 
             override fun playSound(event: SoundEvent?, category: SoundCategory?, volume: Float, pitch: Float) {
-            }
-
-            override fun onSwimmingStart() {
             }
         }
         SharedConstants.isDevelopment = wasDevelopment
@@ -104,12 +99,15 @@ object PredictionEngine {
 
         val list = ArrayList<Vec3d>()
 
+        val prevParticlesEnabled = (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_areParticlesEnabled() // race conditions :c
+        (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(false)
         for (i in 0 until count) {
             playerEntity.resetPosition()
             playerEntity.age++
             playerEntity.tickMovement()
             list.add(playerEntity.pos)
         }
+        (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(prevParticlesEnabled)
 
         // bruder also von einer Skala von Augustus bis Koks ist das hier schon safe Klientus
         mc.player?.velocity = selfVelocity
