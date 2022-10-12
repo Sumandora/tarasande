@@ -60,7 +60,6 @@
 - CivBreaker
 - Killaura: TP
 - Target strafe: Anti Void
-- Readd Kill Aura block check mode, because serversided viaversion is crap
 - (Banners in protocol selection)
 - Settings for HypixelBedwarsOverlay
 - EventRenderBlockModel is slow - EventManager recode
