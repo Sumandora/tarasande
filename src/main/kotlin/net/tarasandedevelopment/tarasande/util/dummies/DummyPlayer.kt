@@ -1,10 +1,9 @@
-package net.tarasandedevelopment.tarasande.util.player
+package net.tarasandedevelopment.tarasande.util.dummies
 
 import com.mojang.authlib.GameProfile
 import net.minecraft.client.network.AbstractClientPlayerEntity
 import net.minecraft.client.util.DefaultSkinHelper
 import net.minecraft.util.Identifier
-import net.tarasandedevelopment.tarasande.util.world.DummyWorld
 
 class DummyPlayer(val profile: GameProfile, private val skinImage: Identifier, private val capeImage: Identifier) : AbstractClientPlayerEntity(DummyWorld(), profile, null) {
 

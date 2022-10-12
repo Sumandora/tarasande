@@ -103,7 +103,8 @@ class ManagerModule : Manager<Module>() {
             ModulePhase(),
             ModuleInventoryCleaner(),
             ModuleLecternCrash(),
-            ModuleCraftingDupe()
+            ModuleCraftingDupe(),
+            ModulePrediction()
         )
         TarasandeMain.get().managerEvent.add { event ->
             if (event is EventTick)

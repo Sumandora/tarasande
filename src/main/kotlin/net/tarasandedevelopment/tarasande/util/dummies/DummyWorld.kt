@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.util.world
+package net.tarasandedevelopment.tarasande.util.dummies
 
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.math.BlockPos

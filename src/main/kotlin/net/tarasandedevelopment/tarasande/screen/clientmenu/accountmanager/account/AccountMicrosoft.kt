@@ -161,7 +161,6 @@ You can close this page now.""".toByteArray())
             it["redirect_uri"] = redirectUri!!
             it["scope"] = this.azureApp!!.scope
             if (this.azureApp!!.clientSecret != null) {
-                println("AAAAA")
                 it["client_secret"] = this.azureApp!!.clientSecret!!
             }
         }), JsonObject::class.java)

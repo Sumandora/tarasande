@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.skin;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.entity.LivingEntity;
-import net.tarasandedevelopment.tarasande.util.player.DummyPlayer;
+import net.tarasandedevelopment.tarasande.util.dummies.DummyPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

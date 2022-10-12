@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
@@ -57,6 +58,9 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tick()V", shift = At.Shift.BEFORE), cancellable = true)
     public void preTick(CallbackInfo ci) {
+        if ((Object) this != MinecraftClient.getInstance().player)
+            return;
+
         EventUpdate eventUpdate = new EventUpdate(EventUpdate.State.PRE);
         TarasandeMain.Companion.get().getManagerEvent().call(eventUpdate);
         if (eventUpdate.getCancelled())
@@ -65,11 +69,17 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tick()V", shift = At.Shift.AFTER))
     public void prePacketTick(CallbackInfo ci) {
+        if ((Object) this != MinecraftClient.getInstance().player)
+            return;
+
         TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdate(EventUpdate.State.PRE_PACKET));
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void postTick(CallbackInfo ci) {
+        if ((Object) this != MinecraftClient.getInstance().player)
+            return;
+
         TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdate(EventUpdate.State.POST));
     }
 

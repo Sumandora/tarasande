@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.skin;
 
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.entity.LivingEntity;
-import net.tarasandedevelopment.tarasande.util.player.DummyPlayer;
+import net.tarasandedevelopment.tarasande.util.dummies.DummyPlayer;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
