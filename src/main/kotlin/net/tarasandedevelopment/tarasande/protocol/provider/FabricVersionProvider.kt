@@ -21,7 +21,7 @@ class FabricVersionProvider : BaseVersionProvider() {
             if (address is InetSocketAddress) {
                 try {
                     if (TarasandeMain.get().protocolHack.isAuto()) {
-                        val autoVersion = ProtocolAutoDetector.detectVersion(address).getNow(null)
+                        val autoVersion = ProtocolAutoDetector.detectVersion(address).get()
 
                         if (autoVersion != null) {
                             TarasandeMain.get().protocolHack.realClientsideVersion = autoVersion.version
