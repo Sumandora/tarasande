@@ -26,6 +26,9 @@ object PredictionEngine {
          * Darauf kracht das Crystal! :sunglasses:
          */
         val mc = MinecraftClient.getInstance()
+
+        val selfVelocity = mc.player?.velocity!!
+
         val wasDevelopment = SharedConstants.isDevelopment
         SharedConstants.isDevelopment = true // prevent that telemetry sender to do any bs
         val playerEntity = object : ClientPlayerEntity(mc,
@@ -104,9 +107,12 @@ object PredictionEngine {
         for (i in 0 until count) {
             playerEntity.resetPosition()
             playerEntity.age++
-            playerEntity.tick()
+            playerEntity.tickMovement()
             list.add(playerEntity.pos)
         }
+
+        // bruder also von einer Skala von Augustus bis Koks ist das hier schon safe Klientus
+        mc.player?.velocity = selfVelocity
 
         return Pair(playerEntity, list)
     }
