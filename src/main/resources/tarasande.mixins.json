@@ -44,6 +44,7 @@
     "MixinTextVisitFactory",
     "MixinTitleScreen",
     "MixinTntEntity",
+    "MixinTridentItem",
     "MixinVec3d",
     "MixinWindow",
     "MixinWorld",

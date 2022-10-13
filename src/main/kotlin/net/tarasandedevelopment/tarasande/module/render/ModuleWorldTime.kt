@@ -9,10 +9,22 @@ import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.mixin.accessor.IWorldTimeUpdateS2CPacket
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import java.util.function.Consumer
 
 class ModuleWorldTime : Module("World time", "Changes the time of day", ModuleCategory.RENDER) {
+
+    val moonStates = arrayOf(
+        "Full moon",
+        "Warning gibbous",
+        "Last quarter",
+        "Waning crescent",
+        "New moon",
+        "Waxing crescent",
+        "First quarter",
+        "Waxing gibbous"
+    )
 
     private val modifyTime = ValueBoolean(this, "Modify time", true)
     // I am unsure if this is supposed to be the max time or is just a coincidence to be the same value
@@ -21,14 +33,14 @@ class ModuleWorldTime : Module("World time", "Changes the time of day", ModuleCa
     }
 
     private val modifyMoonPhase = ValueBoolean(this, "Modify moon phase", false)
-    private val moonPhase = object : ValueNumber(this, "Moon phase", 0.0, 0.0, 7.0, 1.0) {
+    private val moonPhase = object : ValueMode(this, "Moon phase", false, *moonStates) {
         override fun isEnabled() = modifyMoonPhase.value
     }
 
     fun moonPhase(): Int {
-        if (!enabled || !modifyMoonPhase.value) return -1
+        if (!enabled || !modifyMoonPhase.value || !moonPhase.anySelected()) return -1
 
-        return moonPhase.value.toInt()
+        return moonStates.indexOf(this.moonPhase.selected[0])
     }
 
     val eventConsumer = Consumer<Event> { event ->
