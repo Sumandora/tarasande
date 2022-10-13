@@ -7,7 +7,7 @@ plugins {
 //noinspection GroovyUnusedAssignment
 archivesBaseName = "tarasande"
 version = "1.8.7"
-group = "su.mandora"
+group = "net.tarasandedevelopment"
 
 repositories {
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots"}
