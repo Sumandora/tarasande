@@ -14,6 +14,9 @@ import net.minecraft.sound.SoundEvent
 import net.minecraft.stat.StatHandler
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
+import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
+import net.tarasandedevelopment.tarasande.mixin.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.mixin.accessor.IParticleManager
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 
@@ -96,6 +99,26 @@ object PredictionEngine {
             playerEntity.yaw = RotationUtil.fakeRotation?.yaw!!
             playerEntity.pitch = RotationUtil.fakeRotation?.pitch!!
         }
+        playerEntity.isOnGround = mc.player?.isOnGround == true
+        playerEntity.velocity = mc.player?.velocity
+        playerEntity.pose = mc.player?.pose
+        (playerEntity as IClientPlayerEntity).tarasande_setAutoJumpEnabled(mc.player?.isAutoJumpEnabled == true)
+        (playerEntity as IClientPlayerEntity).tarasande_setTicksToNextAutojump((mc.player as IClientPlayerEntity).tarasande_getTicksToNextAutojump())
+        (playerEntity as ILivingEntity).tarasande_setJumpingCooldown((mc.player as ILivingEntity).tarasande_getJumpingCooldown())
+        playerEntity.horizontalCollision = mc.player?.horizontalCollision == true
+        playerEntity.verticalCollision = mc.player?.verticalCollision == true
+        playerEntity.collidedSoftly = mc.player?.collidedSoftly == true
+        playerEntity.movementSpeed = mc.player?.movementSpeed!!
+        playerEntity.airStrafingSpeed = mc.player?.airStrafingSpeed!!
+        playerEntity.forwardSpeed = mc.player?.forwardSpeed!!
+        playerEntity.sidewaysSpeed = mc.player?.sidewaysSpeed!!
+        playerEntity.upwardSpeed = mc.player?.upwardSpeed!!
+        playerEntity.speed = mc.player?.speed!!
+        playerEntity.horizontalSpeed = mc.player?.horizontalSpeed!!
+        (playerEntity as IEntity).tarasande_setSubmergedInWater(mc.player?.isSubmergedInWater == true)
+        (playerEntity as IEntity).tarasande_setTouchingWater(mc.player?.isTouchingWater == true)
+        playerEntity.isSwimming = mc.player?.isSwimming == true
+
 
         val list = ArrayList<Vec3d>()
 
@@ -104,7 +127,7 @@ object PredictionEngine {
         for (i in 0 until count) {
             playerEntity.resetPosition()
             playerEntity.age++
-            playerEntity.tickMovement()
+            playerEntity.tick()
             list.add(playerEntity.pos)
         }
         (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(prevParticlesEnabled)

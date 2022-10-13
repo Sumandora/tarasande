@@ -22,4 +22,8 @@ public interface ILivingEntity {
     void tarasande_setLastAttackedTicks(int lastAttackedTicks);
 
     void tarasande_invokeTickItemStackUsage(ItemStack itemStack);
+
+    int tarasande_getJumpingCooldown();
+
+    void tarasande_setJumpingCooldown(int jumpingCooldown);
 }

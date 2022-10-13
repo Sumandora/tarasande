@@ -46,9 +46,17 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Shadow
     public abstract float getPitch(float tickDelta);
 
-    @Shadow private float mountJumpStrength;
+    @Shadow
+    private float mountJumpStrength;
 
-    @Shadow private int field_3938;
+    @Shadow
+    private int field_3938;
+
+    @Shadow
+    private boolean autoJumpEnabled;
+
+    @Shadow
+    private int ticksToNextAutojump;
 
     @Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
     public void injectSendChatMessagePacket(String message, Text preview, CallbackInfo ci) {
@@ -193,5 +201,20 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Override
     public void tarasande_setField_3938(int jumpPowerCounter) {
         this.field_3938 = jumpPowerCounter;
+    }
+
+    @Override
+    public void tarasande_setAutoJumpEnabled(boolean autoJumpEnabled) {
+        this.autoJumpEnabled = autoJumpEnabled;
+    }
+
+    @Override
+    public int tarasande_getTicksToNextAutojump() {
+        return ticksToNextAutojump;
+    }
+
+    @Override
+    public void tarasande_setTicksToNextAutojump(int ticksToNextAutojump) {
+        this.ticksToNextAutojump = ticksToNextAutojump;
     }
 }
