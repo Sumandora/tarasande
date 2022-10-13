@@ -52,7 +52,9 @@ class InformationOpenChannels : Information("Server", "Open Channels") {
         }
     }
 
-    override fun getMessage(): String {
-        return openChannels.joinToString("\n")
+    override fun getMessage(): String? {
+        if (openChannels.isEmpty()) return null
+
+        return "\n" + openChannels.joinToString("\n")
     }
 }
