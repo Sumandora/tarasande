@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande.screen.cheatmenu.information
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.Information
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
@@ -36,12 +35,12 @@ class InformationOpenChannels : Information("Server", "Open Channels") {
             if (it is EventPacket) {
                 if (it.type == EventPacket.Type.RECEIVE && it.packet is CustomPayloadS2CPacket) {
                     if (it.packet.channel.toString() == "minecraft:register") {
-                        it.packet.data.toString(StandardCharsets.UTF_8).split(" ").forEach { data ->
+                        it.packet.data.toString(StandardCharsets.UTF_8).split("\u0000").forEach { data ->
                             if (!openChannels.contains(data))
                                 openChannels.add(data)
                         }
                     } else if (it.packet.channel.toString() == "minecraft:unregister") {
-                        it.packet.data.toString(StandardCharsets.UTF_8).split(" ").forEach { data ->
+                        it.packet.data.toString(StandardCharsets.UTF_8).split("\u0000").forEach { data ->
                             if (openChannels.contains(data))
                                 openChannels.remove(data)
                         }
