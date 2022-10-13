@@ -5,6 +5,7 @@ import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.Information
+import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
@@ -16,7 +17,7 @@ class InformationTimers : Information("Badlion", "Timers") {
 
     init {
         TarasandeMain.get().managerEvent.add { event ->
-            if (event is EventPacket)
+            if (event is EventPacket) {
                 if (event.type == EventPacket.Type.RECEIVE)
                     if (event.packet is CustomPayloadS2CPacket) {
                         if (event.packet.channel.toString() == "badlion:timers") {
@@ -58,6 +59,10 @@ class InformationTimers : Information("Badlion", "Timers") {
                             enabled = false
                         }
                     }
+            } else if (event is EventDisconnect) {
+                list.clear()
+                enabled = false
+            }
         }
     }
 
@@ -92,7 +97,7 @@ class InformationTimers : Information("Badlion", "Timers") {
         override fun toString(): String {
             val expectedTime = calcInterpolatedTime()
             var txt = ""
-            if(name != null)
+            if (name != null)
                 txt += "$name "
             return txt + String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(expectedTime), TimeUnit.MILLISECONDS.toSeconds(expectedTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(expectedTime)))
         }

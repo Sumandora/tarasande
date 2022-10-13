@@ -6,7 +6,9 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.listener.PacketListener;
+import net.minecraft.text.Text;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventDisconnect;
 import net.tarasandedevelopment.tarasande.event.EventPacket;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientConnection;
 import org.jetbrains.annotations.Nullable;
@@ -54,6 +56,11 @@ public abstract class MixinClientConnection implements IClientConnection {
                 ci.cancel();
         } else
             forced.remove(packet);
+    }
+
+    @Inject(method = "disconnect", at = @At("RETURN"))
+    public void injectDisconnect(Text disconnectReason, CallbackInfo ci) {
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventDisconnect());
     }
 
     @Override
