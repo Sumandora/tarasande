@@ -10,4 +10,7 @@ public interface IClientPlayerEntity {
 
     void tarasande_setBypassChat(boolean bypassChat);
 
+    void tarasande_setMountJumpStrength(float jumpPower);
+
+    void tarasande_setField_3938(int jumpPowerCounter);
 }
