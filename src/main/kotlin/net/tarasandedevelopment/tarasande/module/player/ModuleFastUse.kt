@@ -15,7 +15,7 @@ import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import java.util.function.Consumer
 
-class ModuleFastUse : Module("Fast use", "Speeds up item usage (Protocol-dependant)", ModuleCategory.PLAYER) {
+class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.PLAYER) {
 
     private val useActions = arrayOf(UseAction.EAT, UseAction.DRINK, UseAction.BOW, UseAction.SPEAR, UseAction.CROSSBOW)
     private val actions: ValueMode

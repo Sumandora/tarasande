@@ -15,7 +15,7 @@ import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPan
 import net.tarasandedevelopment.tarasande.value.ValueSpacer
 import java.util.function.Consumer
 
-class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress in the furnace.", ModuleCategory.RENDER) {
+class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress in the furnace", ModuleCategory.RENDER) {
 
     val eventConsumer = Consumer<Event> {
         when (it) {
