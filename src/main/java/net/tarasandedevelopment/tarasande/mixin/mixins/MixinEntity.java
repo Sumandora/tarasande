@@ -16,10 +16,7 @@ import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d;
 import net.tarasandedevelopment.tarasande.module.render.ModuleESP;
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -56,6 +53,12 @@ public abstract class MixinEntity implements IEntity {
     @Shadow
     @Final
     private static int SPRINTING_FLAG_INDEX;
+
+    @Shadow
+    @Final
+    private static int INVISIBLE_FLAG_INDEX;
+    @Unique
+    private boolean forceFlagRetrieval = false;
 
     @Inject(method = "getRotationVec", at = @At("HEAD"), cancellable = true)
     public void injectGetRotationVec(float tickDelta, CallbackInfoReturnable<Vec3d> cir) {
@@ -112,8 +115,15 @@ public abstract class MixinEntity implements IEntity {
         }
     }
 
+    @Shadow
+    protected abstract boolean getFlag(int index);
+
     @Inject(method = "getFlag", at = @At("RETURN"), cancellable = true)
     public void injectGetFlag(int index, CallbackInfoReturnable<Boolean> cir) {
+        if (forceFlagRetrieval) {
+            forceFlagRetrieval = false;
+            return;
+        }
         EventEntityFlag eventEntityFlag = new EventEntityFlag((Entity) (Object) this, index, cir.getReturnValue());
         TarasandeMain.Companion.get().getManagerEvent().call(eventEntityFlag);
         cir.setReturnValue(eventEntityFlag.getEnabled());
@@ -142,5 +152,16 @@ public abstract class MixinEntity implements IEntity {
     @Override
     public int tarasande_getSprintingFlagIndex() {
         return SPRINTING_FLAG_INDEX;
+    }
+
+    @Override
+    public int tarasande_getInvisibleFlagIndex() {
+        return INVISIBLE_FLAG_INDEX;
+    }
+
+    @Override
+    public boolean tarasande_forceGetFlag(int index) {
+        forceFlagRetrieval = true;
+        return getFlag(index);
     }
 }
