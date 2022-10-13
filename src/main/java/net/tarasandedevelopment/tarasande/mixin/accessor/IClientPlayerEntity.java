@@ -13,4 +13,10 @@ public interface IClientPlayerEntity {
     void tarasande_setMountJumpStrength(float jumpPower);
 
     void tarasande_setField_3938(int jumpPowerCounter);
+
+    void tarasande_setAutoJumpEnabled(boolean autoJumpEnabled);
+
+    int tarasande_getTicksToNextAutojump();
+
+    void tarasande_setTicksToNextAutojump(int ticksToNextAutojump);
 }

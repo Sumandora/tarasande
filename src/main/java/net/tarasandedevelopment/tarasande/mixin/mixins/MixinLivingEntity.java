@@ -58,6 +58,8 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     @Shadow
     protected abstract void tickItemStackUsage(ItemStack stack);
 
+    @Shadow
+    private int jumpingCooldown;
     @Unique
     private float originalYaw;
 
@@ -150,5 +152,15 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     @Override
     public void tarasande_invokeTickItemStackUsage(ItemStack itemStack) {
         this.tickItemStackUsage(itemStack);
+    }
+
+    @Override
+    public int tarasande_getJumpingCooldown() {
+        return jumpingCooldown;
+    }
+
+    @Override
+    public void tarasande_setJumpingCooldown(int jumpingCooldown) {
+        this.jumpingCooldown = jumpingCooldown;
     }
 }
