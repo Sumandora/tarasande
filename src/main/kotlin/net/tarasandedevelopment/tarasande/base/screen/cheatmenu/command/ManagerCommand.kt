@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.base.screen.cheatmenu.command
 
 import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.command.CommandCowDupe
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.command.CommandHelp
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.command.CommandNotificationTest
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.command.CommandViaDump
@@ -12,7 +13,8 @@ class ManagerCommand : Manager<Command>() {
         add(
             CommandNotificationTest(),
             CommandHelp(),
-            CommandViaDump()
+            CommandViaDump(),
+            CommandCowDupe()
         )
     }
 
