@@ -12,6 +12,7 @@
     "MixinCommandBlock",
     "MixinConnectScreenSubConnect",
     "MixinCrossbowItem",
+    "MixinCustomPayloadC2SPacket",
     "MixinEnchantmentHelper",
     "MixinEntity",
     "MixinEntityPredicates",
