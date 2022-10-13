@@ -11,7 +11,8 @@ class ModuleFastPlace : Module("Fast place", "Speeds up block placements", Modul
 
     val eventConsumer = Consumer<Event> { event ->
         if (event is EventTick)
-            (mc as IMinecraftClient).tarasande_setItemUseCooldown(0)
+            if (event.state == EventTick.State.PRE)
+                (mc as IMinecraftClient).tarasande_setItemUseCooldown(0)
     }
 
 }

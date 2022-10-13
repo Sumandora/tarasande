@@ -74,11 +74,13 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
             }
 
             is EventTick -> {
-                if (mc.player == null || mc.player?.age!! < prevAge) {
-                    stepTick = 0
-                    offGroundTick = 0
+                if (event.state == EventTick.State.PRE) {
+                    if (mc.player == null || mc.player?.age!! < prevAge) {
+                        stepTick = 0
+                        offGroundTick = 0
+                    }
+                    prevAge = mc.player?.age ?: return@Consumer
                 }
-                prevAge = mc.player?.age ?: return@Consumer
             }
         }
     }
