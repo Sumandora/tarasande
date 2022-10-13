@@ -63,6 +63,7 @@
 - (Banners in protocol selection)
 - Settings for HypixelBedwarsOverlay
 - EventRenderBlockModel is slow - EventManager recode
+- BowAimbot acting weird
 
 ### TODO-List (Click GUI)
 - Correctly save and calculate the positions of the panels when resizing ingame
