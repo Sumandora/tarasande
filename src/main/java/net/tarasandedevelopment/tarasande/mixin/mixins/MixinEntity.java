@@ -118,6 +118,12 @@ public abstract class MixinEntity implements IEntity {
     @Shadow
     protected abstract boolean getFlag(int index);
 
+    @Shadow
+    protected boolean submergedInWater;
+
+    @Shadow
+    protected boolean touchingWater;
+
     @Inject(method = "getFlag", at = @At("RETURN"), cancellable = true)
     public void injectGetFlag(int index, CallbackInfoReturnable<Boolean> cir) {
         if (forceFlagRetrieval) {
@@ -163,5 +169,15 @@ public abstract class MixinEntity implements IEntity {
     public boolean tarasande_forceGetFlag(int index) {
         forceFlagRetrieval = true;
         return getFlag(index);
+    }
+
+    @Override
+    public void tarasande_setSubmergedInWater(boolean submergedInWater) {
+        this.submergedInWater = submergedInWater;
+    }
+
+    @Override
+    public void tarasande_setTouchingWater(boolean touchingWater) {
+        this.touchingWater = touchingWater;
     }
 }

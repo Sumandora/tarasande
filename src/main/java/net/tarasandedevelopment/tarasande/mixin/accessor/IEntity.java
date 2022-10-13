@@ -18,4 +18,8 @@ public interface IEntity {
 
     boolean tarasande_forceGetFlag(int index);
 
+    void tarasande_setTouchingWater(boolean touchingWater);
+
+    void tarasande_setSubmergedInWater(boolean submergedInWater);
+
 }

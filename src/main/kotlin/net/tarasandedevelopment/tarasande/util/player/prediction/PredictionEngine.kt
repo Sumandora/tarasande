@@ -15,6 +15,7 @@ import net.minecraft.stat.StatHandler
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
+import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
 import net.tarasandedevelopment.tarasande.mixin.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.mixin.accessor.IParticleManager
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
@@ -114,6 +115,9 @@ object PredictionEngine {
         playerEntity.upwardSpeed = mc.player?.upwardSpeed!!
         playerEntity.speed = mc.player?.speed!!
         playerEntity.horizontalSpeed = mc.player?.horizontalSpeed!!
+        (playerEntity as IEntity).tarasande_setSubmergedInWater(mc.player?.isSubmergedInWater == true)
+        (playerEntity as IEntity).tarasande_setTouchingWater(mc.player?.isTouchingWater == true)
+        playerEntity.isSwimming = mc.player?.isSwimming == true
 
 
         val list = ArrayList<Vec3d>()
@@ -123,7 +127,7 @@ object PredictionEngine {
         for (i in 0 until count) {
             playerEntity.resetPosition()
             playerEntity.age++
-            playerEntity.tickMovement()
+            playerEntity.tick()
             list.add(playerEntity.pos)
         }
         (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(prevParticlesEnabled)
