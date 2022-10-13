@@ -1,8 +1,14 @@
 package net.tarasandedevelopment.tarasande.screen.cheatmenu.information
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
+import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.Information
+import net.tarasandedevelopment.tarasande.event.EventDisconnect
+import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
+import java.nio.charset.StandardCharsets
 
 class InformationServerBrand : Information("Server", "Server Brand") {
 
@@ -18,5 +24,36 @@ class InformationServerBrand : Information("Server", "Server Brand") {
             return brand
         }
         return null
+    }
+}
+
+class InformationOpenChannels : Information("Server", "Open Channels") {
+
+    private val openChannels = ArrayList<String>()
+
+    init {
+        TarasandeMain.get().managerEvent.add {
+            if (it is EventPacket) {
+                if (it.type == EventPacket.Type.RECEIVE && it.packet is CustomPayloadS2CPacket) {
+                    if (it.packet.channel.toString() == "minecraft:register") {
+                        it.packet.data.toString(StandardCharsets.UTF_8).split(" ").forEach { data ->
+                            if (!openChannels.contains(data))
+                                openChannels.add(data)
+                        }
+                    } else if (it.packet.channel.toString() == "minecraft:unregister") {
+                        it.packet.data.toString(StandardCharsets.UTF_8).split(" ").forEach { data ->
+                            if (openChannels.contains(data))
+                                openChannels.remove(data)
+                        }
+                    }
+                }
+            } else if (it is EventDisconnect) {
+                openChannels.clear()
+            }
+        }
+    }
+
+    override fun getMessage(): String {
+        return openChannels.joinToString("\n")
     }
 }
