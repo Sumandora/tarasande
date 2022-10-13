@@ -105,7 +105,8 @@ class ManagerModule : Manager<Module>() {
             ModuleLecternCrash(),
             ModuleCraftingDupe(),
             ModulePrediction(),
-            ModuleClientBrandSpoofer()
+            ModuleClientBrandSpoofer(),
+            ModulePerfectHorseJump()
         )
         TarasandeMain.get().managerEvent.add { event ->
             if (event is EventTick)

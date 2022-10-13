@@ -46,6 +46,10 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Shadow
     public abstract float getPitch(float tickDelta);
 
+    @Shadow private float mountJumpStrength;
+
+    @Shadow private int field_3938;
+
     @Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
     public void injectSendChatMessagePacket(String message, Text preview, CallbackInfo ci) {
         if (bypassChat)
@@ -179,5 +183,15 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Override
     public void tarasande_setBypassChat(boolean bypassChat) {
         this.bypassChat = bypassChat;
+    }
+
+    @Override
+    public void tarasande_setMountJumpStrength(float jumpPower) {
+        this.mountJumpStrength = jumpPower;
+    }
+
+    @Override
+    public void tarasande_setField_3938(int jumpPowerCounter) {
+        this.field_3938 = jumpPowerCounter;
     }
 }
