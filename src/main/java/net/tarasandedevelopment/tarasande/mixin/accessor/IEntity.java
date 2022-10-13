@@ -14,4 +14,8 @@ public interface IEntity {
 
     int tarasande_getSprintingFlagIndex();
 
+    int tarasande_getInvisibleFlagIndex();
+
+    boolean tarasande_forceGetFlag(int index);
+
 }

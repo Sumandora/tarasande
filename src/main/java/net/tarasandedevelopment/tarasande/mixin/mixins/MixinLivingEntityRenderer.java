@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity;
 import net.tarasandedevelopment.tarasande.module.render.ModuleTrueSight;
 import net.tarasandedevelopment.tarasande.util.dummies.DummyPlayer;
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
@@ -80,9 +81,11 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
     public void hookedRender(EntityModel<?> instance, MatrixStack matrixStack, VertexConsumer vertexConsumer, int a, int b, float c, float d, float e, float f) {
         if (!TarasandeMain.Companion.get().getDisabled() && !(livingEntity instanceof DummyPlayer)) {
             ModuleTrueSight moduleTrueSight = TarasandeMain.Companion.get().getManagerModule().get(ModuleTrueSight.class);
-            if (moduleTrueSight.getEnabled())
-                if (livingEntity.isInvisibleTo(MinecraftClient.getInstance().player) || livingEntity.isInvisible())
+            if (moduleTrueSight.getEnabled()) {
+                IEntity accessor = (IEntity) livingEntity;
+                if (livingEntity.isInvisibleTo(MinecraftClient.getInstance().player) || accessor.tarasande_forceGetFlag(accessor.tarasande_getInvisibleFlagIndex()))
                     f = (float) moduleTrueSight.getAlpha().getValue();
+            }
         }
 
         instance.render(matrixStack, vertexConsumer, a, b, c, d, e, f);
