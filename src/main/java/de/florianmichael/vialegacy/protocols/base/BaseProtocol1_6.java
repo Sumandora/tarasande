@@ -11,10 +11,6 @@ public class BaseProtocol1_6 extends AbstractProtocol {
 
     public static final BaseProtocol1_6 INSTANCE = new BaseProtocol1_6();
 
-    public BaseProtocol1_6() {
-        this.initialize();
-    }
-
     @Override
     protected void registerPackets() {
         super.registerPackets();

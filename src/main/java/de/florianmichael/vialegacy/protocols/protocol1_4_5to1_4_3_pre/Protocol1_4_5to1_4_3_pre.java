@@ -16,8 +16,8 @@ package de.florianmichael.vialegacy.protocols.protocol1_4_5to1_4_3_pre;
 
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.vialegacy.api.type.TypeRegistry_1_4_2;
 import de.florianmichael.vialegacy.api.type.TypeRegistry_1_6_4;
-import de.florianmichael.vialegacy.api.type._1_4_2.TypeRegistry1_4_2;
 import de.florianmichael.vialegacy.api.via.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_4_7to1_4_5.ClientboundPackets1_4_5;
 import de.florianmichael.vialegacy.protocols.protocol1_4_7to1_4_5.ServerboundPackets1_4_5;
@@ -48,7 +48,7 @@ public class Protocol1_4_5to1_4_3_pre extends EnZaProtocol<ClientboundPackets1_4
 
 				map(Type.SHORT); // Current item
 
-				map(TypeRegistry1_4_2.METADATA_LIST, TypeRegistry_1_6_4.METADATA_LIST); // Metadata list
+				map(TypeRegistry_1_4_2.METADATA_LIST, TypeRegistry_1_6_4.METADATA_LIST); // Metadata list
 			}
 		});
 
@@ -71,7 +71,7 @@ public class Protocol1_4_5to1_4_3_pre extends EnZaProtocol<ClientboundPackets1_4
 				map(Type.SHORT); // Velocity-Y
 				map(Type.SHORT); // Velocity-Z
 
-				map(TypeRegistry1_4_2.METADATA_LIST, TypeRegistry_1_6_4.METADATA_LIST); // Metadata list
+				map(TypeRegistry_1_4_2.METADATA_LIST, TypeRegistry_1_6_4.METADATA_LIST); // Metadata list
 			}
 		});
 
@@ -88,7 +88,7 @@ public class Protocol1_4_5to1_4_3_pre extends EnZaProtocol<ClientboundPackets1_4
 			@Override
 			public void registerMap() {
 				map(Type.INT); // Entity-Id
-				map(TypeRegistry1_4_2.METADATA_LIST, TypeRegistry_1_6_4.METADATA_LIST); // Metadata list
+				map(TypeRegistry_1_4_2.METADATA_LIST, TypeRegistry_1_6_4.METADATA_LIST); // Metadata list
 			}
 		});
 	}

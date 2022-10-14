@@ -62,6 +62,7 @@ class ScreenBetterProtocolHack : ScreenBetterSlotList(46, 12) {
         }
 
         override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+            println(TarasandeMain.get().protocolHack.clientsideVersion())
             return !TarasandeMain.get().protocolHack.isAuto() && super.mouseClicked(mouseX, mouseY, button)
         }
 
