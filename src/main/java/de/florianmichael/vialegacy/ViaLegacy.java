@@ -8,6 +8,7 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.vialegacy.exception.ViaLegacyException;
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.vialegacy.protocols.base.BaseProtocol1_6;
+import de.florianmichael.vialegacy.protocols.protocol1_4_2to1_3_2.Protocol1_4_2to1_3_2;
 import de.florianmichael.vialegacy.protocols.protocol1_4_3_preto1_4_2.Protocol1_4_3_preto1_4_2;
 import de.florianmichael.vialegacy.protocols.protocol1_4_5to1_4_3_pre.Protocol1_4_5to1_4_3_pre;
 import de.florianmichael.vialegacy.protocols.protocol1_4_7to1_4_5.Protocol1_4_7to1_4_5;
@@ -50,6 +51,8 @@ public class ViaLegacy {
         registerProtocol(LegacyProtocolVersion.R1_4_7, LegacyProtocolVersion.R1_4_5, new Protocol1_4_7to1_4_5());
         registerProtocol(LegacyProtocolVersion.R1_4_5, LegacyProtocolVersion.R1_4_3_PRE, new Protocol1_4_5to1_4_3_pre());
         registerProtocol(LegacyProtocolVersion.R1_4_3_PRE, LegacyProtocolVersion.R1_4_2, new Protocol1_4_3_preto1_4_2());
+
+        registerProtocol(LegacyProtocolVersion.R1_4_2, LegacyProtocolVersion.R1_3_2, new Protocol1_4_2to1_3_2());
 
         final int newestVersion = LegacyProtocolVersion.PROTOCOL_VERSIONS.get(2).getVersion();
         final int lastVersion = LegacyProtocolVersion.PROTOCOL_VERSIONS.get(LegacyProtocolVersion.PROTOCOL_VERSIONS.size() - 1).getVersion();
