@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.module.player
 
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPacket
@@ -21,12 +21,12 @@ class ModuleNoHunger : Module("No hunger", "Prevents sprinting packets", ModuleC
         }
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        if (event is EventPacket)
+    init {
+        registerEvent(EventPacket::class.java) { event ->
             if (event.type == EventPacket.Type.SEND)
                 if (event.packet is ClientCommandC2SPacket)
                     if (event.packet.mode == ClientCommandC2SPacket.Mode.STOP_SPRINTING || event.packet.mode == ClientCommandC2SPacket.Mode.START_SPRINTING)
                         event.cancelled = true
+        }
     }
-
 }

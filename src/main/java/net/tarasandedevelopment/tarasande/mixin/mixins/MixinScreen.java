@@ -43,13 +43,13 @@ public abstract class MixinScreen implements IScreen {
 
     @Inject(method = "render", at = @At("HEAD"))
     public void injectRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventScreenRender(matrices, mouseX, mouseY));
+        TarasandeMain.Companion.get().getEventDispatcher().call(new EventScreenRender(matrices, mouseX, mouseY));
     }
 
     @Inject(method = "init(Lnet/minecraft/client/MinecraftClient;II)V", at = @At("RETURN"))
     public void injectInit(MinecraftClient client, int width, int height, CallbackInfo ci) {
         final EventChildren eventChildren = new EventChildren((Screen) (Object) this);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventChildren);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventChildren);
 
         for (Element element : eventChildren.get())
             this.addDrawableChild(element);

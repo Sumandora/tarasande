@@ -6,7 +6,7 @@ import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket
 import net.minecraft.util.UseAction
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventItemCooldown
@@ -48,44 +48,45 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
 
     private var interacting = false
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventUpdate -> {
-                if (mc.player?.isUsingItem!!) {
-                    if (isActionEnabled(bypassedActions)) {
-                        if (bypass.isSelected(0)) {
-                            when (event.state) {
-                                EventUpdate.State.PRE_PACKET -> {
-                                    mc.networkHandler?.sendPacket(PlayerActionC2SPacket(PlayerActionC2SPacket.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, Direction.DOWN))
-                                }
-
-                                EventUpdate.State.POST -> {
-                                    val hand = PlayerUtil.getUsedHand()
-                                    if (hand != null) {
-                                        interacting = true
-                                        mc.interactionManager?.interactItem(mc.player, hand)
-                                        interacting = false
-                                    }
-                                }
-
-                                else -> {}
+    init {
+        registerEvent(EventUpdate::class.java) { event ->
+            if (mc.player?.isUsingItem!!) {
+                if (isActionEnabled(bypassedActions)) {
+                    if (bypass.isSelected(0)) {
+                        when (event.state) {
+                            EventUpdate.State.PRE_PACKET -> {
+                                mc.networkHandler?.sendPacket(PlayerActionC2SPacket(PlayerActionC2SPacket.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, Direction.DOWN))
                             }
+
+                            EventUpdate.State.POST -> {
+                                val hand = PlayerUtil.getUsedHand()
+                                if (hand != null) {
+                                    interacting = true
+                                    mc.interactionManager?.interactItem(mc.player, hand)
+                                    interacting = false
+                                }
+                            }
+
+                            else -> {}
                         }
-                        if (bypass.isSelected(1)) {
-                            if (event.state == EventUpdate.State.PRE) {
-                                if (reuseMode.isSelected(1)) {
-                                    var slot = mc.player?.inventory?.selectedSlot!!
-                                    while (slot == mc.player?.inventory?.selectedSlot!!) slot = ThreadLocalRandom.current().nextInt(0, 8)
-                                    mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(slot))
-                                }
-                                mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))
+                    }
+                    if (bypass.isSelected(1)) {
+                        if (event.state == EventUpdate.State.PRE) {
+                            if (reuseMode.isSelected(1)) {
+                                var slot = mc.player?.inventory?.selectedSlot!!
+                                while (slot == mc.player?.inventory?.selectedSlot!!) slot = ThreadLocalRandom.current().nextInt(0, 8)
+                                mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(slot))
                             }
+                            mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))
                         }
                     }
                 }
             }
+        }
 
-            is EventItemCooldown -> if (interacting) event.cooldown = 1.0F
+        registerEvent(EventItemCooldown::class.java) { event ->
+            if (interacting)
+                event.cooldown = 1.0F
         }
     }
 }

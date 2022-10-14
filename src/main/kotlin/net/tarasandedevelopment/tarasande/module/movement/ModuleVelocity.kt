@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
@@ -45,72 +45,69 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
     private var isJumping = false
     private var delays = ArrayList<Triple<Vec3d, Int, EventVelocity.Packet>>()
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventVelocity -> {
-                if (!packets.isSelected(event.packet.ordinal)) return@Consumer
+    init {
+        registerEvent(EventVelocity::class.java) { event ->
+            if (!packets.isSelected(event.packet.ordinal)) return@registerEvent
 
-                when {
-                    mode.isSelected(0) -> {
-                        event.cancelled = true
+            when {
+                mode.isSelected(0) -> {
+                    event.cancelled = true
+                }
+
+                mode.isSelected(1) -> {
+                    if (delay.value > 0.0) {
+                        delays.add(Triple(Vec3d(event.velocityX * horizontal.value, event.velocityY * vertical.value, event.velocityZ * horizontal.value), mc.player?.age!! + delay.value.toInt(), event.packet))
+                    } else {
+                        val newVelocity = if (changeDirection.value) Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0f).forwardVector(sqrt(event.velocityX * event.velocityX + event.velocityZ * event.velocityZ)) else Vec3d(event.velocityX, 0.0, event.velocityZ)
+                        event.velocityX = newVelocity.x * horizontal.value
+                        event.velocityY *= vertical.value
+                        event.velocityZ = newVelocity.z * horizontal.value
                     }
+                }
 
-                    mode.isSelected(1) -> {
-                        if (delay.value > 0.0) {
-                            delays.add(Triple(Vec3d(event.velocityX * horizontal.value, event.velocityY * vertical.value, event.velocityZ * horizontal.value), mc.player?.age!! + delay.value.toInt(), event.packet))
-                        } else {
-                            val newVelocity = if (changeDirection.value) Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0f).forwardVector(sqrt(event.velocityX * event.velocityX + event.velocityZ * event.velocityZ)) else Vec3d(event.velocityX, 0.0, event.velocityZ)
-                            event.velocityX = newVelocity.x * horizontal.value
-                            event.velocityY *= vertical.value
-                            event.velocityZ = newVelocity.z * horizontal.value
+                else -> {
+                    if (ThreadLocalRandom.current().nextInt(100) <= chance.value) {
+                        lastVelocity = Vec3d(event.velocityX, event.velocityY, event.velocityZ)
+                        receivedKnockback = true
+                    }
+                }
+            }
+        }
+
+        registerEvent(EventUpdate::class.java) { event ->
+            if (event.state == EventUpdate.State.PRE) {
+                val iterator = delays.iterator()
+                while (iterator.hasNext()) {
+                    val triple = iterator.next()
+                    if (triple.second <= mc.player?.age!!) {
+                        val newVelocity = if (changeDirection.value) Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0f).forwardVector(triple.first.horizontalLength()) else triple.first
+                        mc.player?.velocity = if (addition.isSelected(2) || (addition.isSelected(1) && triple.third == EventVelocity.Packet.EXPLOSION)) mc.player?.velocity!! + newVelocity else newVelocity
+                        iterator.remove()
+                    }
+                }
+                when {
+                    mode.isSelected(2) -> {
+                        if (receivedKnockback) {
+                            if (lastVelocity?.horizontalLengthSquared()!! > 0.01 && mc.player?.isOnGround!!)
+                                isJumping = true
+
+                            receivedKnockback = false
                         }
                     }
 
                     else -> {
-                        if (ThreadLocalRandom.current().nextInt(100) <= chance.value) {
-                            lastVelocity = Vec3d(event.velocityX, event.velocityY, event.velocityZ)
-                            receivedKnockback = true
-                        }
+                        receivedKnockback = false
                     }
                 }
-            }
-
-            is EventUpdate -> {
-                if (event.state == EventUpdate.State.PRE) {
-                    val iterator = delays.iterator()
-                    while (iterator.hasNext()) {
-                        val triple = iterator.next()
-                        if (triple.second <= mc.player?.age!!) {
-                            val newVelocity = if (changeDirection.value) Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0f).forwardVector(triple.first.horizontalLength()) else triple.first
-                            mc.player?.velocity = if (addition.isSelected(2) || (addition.isSelected(1) && triple.third == EventVelocity.Packet.EXPLOSION)) mc.player?.velocity!! + newVelocity else newVelocity
-                            iterator.remove()
-                        }
-                    }
-                    when {
-                        mode.isSelected(2) -> {
-                            if (receivedKnockback) {
-                                if (lastVelocity?.horizontalLengthSquared()!! > 0.01 && mc.player?.isOnGround!!)
-                                    isJumping = true
-
-                                receivedKnockback = false
-                            }
-                        }
-
-                        else -> {
-                            receivedKnockback = false
-                        }
-                    }
-                    if (!mc.player?.isOnGround!!) {
-                        isJumping = false
-                    }
+                if (!mc.player?.isOnGround!!) {
+                    isJumping = false
                 }
-            }
-
-            is EventKeyBindingIsPressed -> {
-                if (event.keyBinding == mc.options.jumpKey)
-                    event.pressed = event.pressed || isJumping
             }
         }
-    }
 
+        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
+            if (event.keyBinding == mc.options.jumpKey)
+                event.pressed = event.pressed || isJumping
+        }
+    }
 }

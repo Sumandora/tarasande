@@ -63,7 +63,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         if (bypassChat)
             return;
         EventChat eventChat = new EventChat(message);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventChat);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventChat);
         if (eventChat.getCancelled())
             ci.cancel();
     }
@@ -74,7 +74,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
             return;
 
         EventUpdate eventUpdate = new EventUpdate(EventUpdate.State.PRE);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventUpdate);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventUpdate);
         if (eventUpdate.getCancelled())
             ci.cancel();
     }
@@ -84,7 +84,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         if ((Object) this != MinecraftClient.getInstance().player)
             return;
 
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdate(EventUpdate.State.PRE_PACKET));
+        TarasandeMain.Companion.get().getEventDispatcher().call(new EventUpdate(EventUpdate.State.PRE_PACKET));
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -92,7 +92,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         if ((Object) this != MinecraftClient.getInstance().player)
             return;
 
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdate(EventUpdate.State.POST));
+        TarasandeMain.Companion.get().getEventDispatcher().call(new EventUpdate(EventUpdate.State.POST));
     }
 
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;getFoodLevel()I"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;hasForwardMovement()Z")))
@@ -122,7 +122,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Inject(method = "isWalking", at = @At("RETURN"), cancellable = true)
     public void injectIsWalking(CallbackInfoReturnable<Boolean> cir) {
         EventIsWalking eventIsWalking = new EventIsWalking(cir.getReturnValue());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventIsWalking);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventIsWalking);
         cir.setReturnValue(eventIsWalking.getWalking());
     }
 

@@ -17,7 +17,6 @@ import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.*
@@ -37,7 +36,6 @@ import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import net.tarasandedevelopment.tarasande.value.ValueNumberRange
 import java.util.concurrent.ThreadLocalRandom
-import java.util.function.Consumer
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
@@ -162,198 +160,195 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         return (mode.isSelected(0) && targets.firstOrNull()?.first.let { it is LivingEntity && block(it) }) || (mode.isSelected(1) && targets.all { it.first is LivingEntity && block((it.first as LivingEntity)) })
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventPollEvents -> {
-                targets.clear()
-                val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
-                for (entity in mc.world?.entities!!) {
-                    if (!PlayerUtil.isAttackable(entity)) continue
-                    val entity = entity as LivingEntity
+    init {
+        registerEvent(EventPollEvents::class.java) { event ->
+            targets.clear()
+            val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
+            for (entity in mc.world?.entities!!) {
+                if (!PlayerUtil.isAttackable(entity)) continue
+                val entity = entity as LivingEntity
 
-                    val boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())
-                    val bestAimPoint = MathUtil.getBestAimPoint(boundingBox)
-                    if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
-                    if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(fovRotation()) > fov.value) continue
-                    val aimPoint = if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() != 0.0f) {
-                        mc.player?.eyePos!! + currentRot.forwardVector(0.01)
-                    } else {
-                        // aim point calculation maybe slower, only run it if the range check is actually able to succeed under best conditions
-                        getAimPoint(boundingBox, entity)
-                    }
-                    // in case the eyepos is inside the boundingbox the next 2 checks will always succeed, but keeping them might prevent some retarded situation which is going to be added with an update
-                    if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
-                    if (!throughWalls.value && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint)) continue
-
-                    targets.add(Pair(entity, aimPoint))
-                }
-                if (targets.isEmpty()) {
-                    if (blocking)
-                        blocking = false
-                    lastFlex = null
-                    waitForDamage = true
-                    return@Consumer
-                }
-
-                targets.sortWith(comparator)
-
-                targets.sortBy { it.first is LivingEntity && (it.first as LivingEntity).isDead }
-                targets.sortBy { it.second.squaredDistanceTo(mc.player?.eyePos!!) > reach.minValue * reach.minValue }
-                targets.sortBy { shouldAttackEntity(it.first) }
-
-                val target = targets[0]
-
-                val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, target.second)
-                var finalRot = targetRot
-
-                val lowestHurtTime = target.first.let { if(it is LivingEntity && it.maxHurtTime > 0) (it.hurtTime - mc.tickDelta).coerceAtLeast(0.0f) / it.maxHurtTime else null }
-
-                if (!flex.value || lowestHurtTime == null || lowestHurtTime < flexHurtTime.value) {
-                    finalRot = currentRot.smoothedTurn(targetRot, aimSpeed)
-                    val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, finalRot)
-                    if (guaranteeHit.value && target.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue && (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null)) {
-                        finalRot = targetRot
-                    }
+                val boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())
+                val bestAimPoint = MathUtil.getBestAimPoint(boundingBox)
+                if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
+                if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(fovRotation()) > fov.value) continue
+                val aimPoint = if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() != 0.0f) {
+                    mc.player?.eyePos!! + currentRot.forwardVector(0.01)
                 } else {
-                    val delta = (lowestHurtTime - flexHurtTime.value) / (1.0 - flexHurtTime.value)
-                    if (lastFlex == null) {
-                        lastFlex = Rotation(ThreadLocalRandom.current().nextDouble(-flexTurn.value, flexTurn.value).toFloat(), ThreadLocalRandom.current().nextDouble(-flexTurn.value / 2, flexTurn.value / 2).toFloat())
-                    }
-                    finalRot = finalRot.smoothedTurn(Rotation(finalRot.yaw + lastFlex?.yaw!!, lastFlex?.pitch!!), delta)
+                    // aim point calculation maybe slower, only run it if the range check is actually able to succeed under best conditions
+                    getAimPoint(boundingBox, entity)
                 }
+                // in case the eyepos is inside the boundingbox the next 2 checks will always succeed, but keeping them might prevent some retarded situation which is going to be added with an update
+                if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
+                if (!throughWalls.value && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint)) continue
 
-                event.rotation = finalRot.correctSensitivity()
-
-                if (lockView.value) {
-                    mc.player?.yaw = event.rotation.yaw
-                    mc.player?.pitch = event.rotation.pitch
-                }
-
-                event.minRotateToOriginSpeed = aimSpeed.minValue
-                event.maxRotateToOriginSpeed = aimSpeed.maxValue
+                targets.add(Pair(entity, aimPoint))
+            }
+            if (targets.isEmpty()) {
+                if (blocking)
+                    blocking = false
+                lastFlex = null
+                waitForDamage = true
+                return@registerEvent
             }
 
-            is EventTick -> {
-                if (event.state == EventTick.State.PRE) {
-                    if (performedTick)
-                        clickSpeedUtil.reset()
-                    performedTick = true
+            targets.sortWith(comparator)
+
+            targets.sortBy { it.first is LivingEntity && (it.first as LivingEntity).isDead }
+            targets.sortBy { it.second.squaredDistanceTo(mc.player?.eyePos!!) > reach.minValue * reach.minValue }
+            targets.sortBy { shouldAttackEntity(it.first) }
+
+            val target = targets[0]
+
+            val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, target.second)
+            var finalRot = targetRot
+
+            val lowestHurtTime = target.first.let { if(it is LivingEntity && it.maxHurtTime > 0) (it.hurtTime - mc.tickDelta).coerceAtLeast(0.0f) / it.maxHurtTime else null }
+
+            if (!flex.value || lowestHurtTime == null || lowestHurtTime < flexHurtTime.value) {
+                finalRot = currentRot.smoothedTurn(targetRot, aimSpeed)
+                val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, finalRot)
+                if (guaranteeHit.value && target.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue && (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null)) {
+                    finalRot = targetRot
                 }
+            } else {
+                val delta = (lowestHurtTime - flexHurtTime.value) / (1.0 - flexHurtTime.value)
+                if (lastFlex == null) {
+                    lastFlex = Rotation(ThreadLocalRandom.current().nextDouble(-flexTurn.value, flexTurn.value).toFloat(), ThreadLocalRandom.current().nextDouble(-flexTurn.value / 2, flexTurn.value / 2).toFloat())
+                }
+                finalRot = finalRot.smoothedTurn(Rotation(finalRot.yaw + lastFlex?.yaw!!, lastFlex?.pitch!!), delta)
             }
 
-            is EventAttack -> {
-                performedTick = false
-                clicked = false
+            event.rotation = finalRot.correctSensitivity()
 
-                var canHit = true
+            if (lockView.value) {
+                mc.player?.yaw = event.rotation.yaw
+                mc.player?.pitch = event.rotation.pitch
+            }
 
-                if (waitForCritical.value) if (!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) })
-                    if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
-                        if (!mc.player?.isOnGround!! && mc.player?.velocity?.y!! != 0.0 && (mc.player?.fallDistance == 0.0f || (criticalSprint.value && !mc.player?.isSprinting!!)))
-                            canHit = false
+            event.minRotateToOriginSpeed = aimSpeed.minValue
+            event.maxRotateToOriginSpeed = aimSpeed.maxValue
+        }
 
-                if (canHit && allAttacked { !shouldAttackEntity(it) })
-                    canHit = false
-
-                if (canHit && waitForDamageValue.value && waitForDamage)
-                    canHit = false
-
-                if (targets.isEmpty() || event.dirty || !canHit) {
-                    if (targets.isNotEmpty())
-                        block() // This is a rare case of us, only being able to hit the enemy the first tick and later becoming unable to.
+        registerEvent(EventTick::class.java) { event ->
+            if (event.state == EventTick.State.PRE) {
+                if (performedTick)
                     clickSpeedUtil.reset()
-                    waitForHit = false
-                    return@Consumer
-                }
-
-                val clicks = clickSpeedUtil.getClicks()
-
-                if (!autoBlock.isSelected(0) && mc.player?.isUsingItem!! && clicks > 0) {
-                    if (unblock())
-                        return@Consumer
-                }
-
-                if (!mc.player?.isUsingItem!! || (autoBlock.isSelected(1) && !needUnblock.value)) {
-                    for (click in 1..clicks) {
-                        var attacked = false
-                        for (entry in targets) {
-                            var target = entry.first
-                            val aimPoint = entry.second
-
-                            if (!shouldAttackEntity(target))
-                                continue
-
-                            if (rayTrace.value) {
-                                if (RotationUtil.fakeRotation == null) {
-                                    continue
-                                } else {
-                                    val hitResult = PlayerUtil.getTargetedEntity(
-                                        reach.minValue,
-                                        if (!mode.isSelected(1))
-                                            if (simulateMouseDelay.value)
-                                                Rotation((mc.player as IClientPlayerEntity).tarasande_getLastYaw(), (mc.player as IClientPlayerEntity).tarasande_getLastPitch())
-                                            else
-                                                RotationUtil.fakeRotation!!
-                                        else
-                                            RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint),
-                                        throughWalls.value)
-                                    if (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null) {
-                                        continue
-                                    } else {
-                                        target = hitResult.entity
-                                    }
-                                }
-                            } else if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.minValue * reach.minValue) {
-                                continue
-                            }
-                            attack(target)
-                            lastFlex = null
-                            event.dirty = true
-                            waitForHit = false
-                            attacked = true
-
-                            if (!mode.isSelected(1)) break
-                        }
-                        if (!attacked)
-                            if (swingInAir.value) {
-                                attack(null)
-                                event.dirty = true
-                            }
-                    }
-                }
-
-                if (targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && !waitForHit && !mc.player?.isUsingItem!! && !autoBlock.isSelected(0)) {
-                    block()
-                }
-            }
-
-            is EventKeyBindingIsPressed -> {
-                if (event.keyBinding == mc.options.useKey) {
-                    if (targets.isNotEmpty()) {
-                        event.pressed = blocking && (!preventBlockCooldown.value || allAttacked { !it.disablesShield() })
-                    }
-                }
-                if (PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {
-                    if (waitForCritical.value && criticalSprint.value && forceCritical.value)
-                        if (!dontWaitWhenEnemyHasShield.value || ((mode.isSelected(0) && !hasShield(targets.first().first) || (mode.isSelected(1) && targets.none { hasShield(it.first) }))))
-                            if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
-                                if (!mc.player?.isOnGround!! && mc.player?.fallDistance!! >= 0.0f)
-                                    if (mc.player?.isSprinting!!)
-                                        event.pressed = false
-                }
-            }
-
-            is EventHandleBlockBreaking -> {
-                event.parameter = event.parameter || clicked
-            }
-
-            is EventPacket -> {
-                if (event.type == EventPacket.Type.RECEIVE && event.packet is EntityStatusS2CPacket) {
-                    if (mc.world != null && event.packet.getEntity(mc.world) == mc.player && event.packet.status == EntityStatuses.DAMAGE_FROM_GENERIC_SOURCE)
-                        waitForDamage = false
-                }
+                performedTick = true
             }
         }
+
+        registerEvent(EventAttack::class.java) { event ->
+            performedTick = false
+            clicked = false
+
+            var canHit = true
+
+            if (waitForCritical.value) if (!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) })
+                if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
+                    if (!mc.player?.isOnGround!! && mc.player?.velocity?.y!! != 0.0 && (mc.player?.fallDistance == 0.0f || (criticalSprint.value && !mc.player?.isSprinting!!)))
+                        canHit = false
+
+            if (canHit && allAttacked { !shouldAttackEntity(it) })
+                canHit = false
+
+            if (canHit && waitForDamageValue.value && waitForDamage)
+                canHit = false
+
+            if (targets.isEmpty() || event.dirty || !canHit) {
+                if (targets.isNotEmpty())
+                    block() // This is a rare case of us, only being able to hit the enemy the first tick and later becoming unable to.
+                clickSpeedUtil.reset()
+                waitForHit = false
+                return@registerEvent
+            }
+
+            val clicks = clickSpeedUtil.getClicks()
+
+            if (!autoBlock.isSelected(0) && mc.player?.isUsingItem!! && clicks > 0) {
+                if (unblock())
+                    return@registerEvent
+            }
+
+            if (!mc.player?.isUsingItem!! || (autoBlock.isSelected(1) && !needUnblock.value)) {
+                for (click in 1..clicks) {
+                    var attacked = false
+                    for (entry in targets) {
+                        var target = entry.first
+                        val aimPoint = entry.second
+
+                        if (!shouldAttackEntity(target))
+                            continue
+
+                        if (rayTrace.value) {
+                            if (RotationUtil.fakeRotation == null) {
+                                continue
+                            } else {
+                                val hitResult = PlayerUtil.getTargetedEntity(
+                                    reach.minValue,
+                                    if (!mode.isSelected(1))
+                                        if (simulateMouseDelay.value)
+                                            Rotation((mc.player as IClientPlayerEntity).tarasande_getLastYaw(), (mc.player as IClientPlayerEntity).tarasande_getLastPitch())
+                                        else
+                                            RotationUtil.fakeRotation!!
+                                    else
+                                        RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint),
+                                    throughWalls.value)
+                                if (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null) {
+                                    continue
+                                } else {
+                                    target = hitResult.entity
+                                }
+                            }
+                        } else if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.minValue * reach.minValue) {
+                            continue
+                        }
+                        attack(target)
+                        lastFlex = null
+                        event.dirty = true
+                        waitForHit = false
+                        attacked = true
+
+                        if (!mode.isSelected(1)) break
+                    }
+                    if (!attacked)
+                        if (swingInAir.value) {
+                            attack(null)
+                            event.dirty = true
+                        }
+                }
+            }
+
+            if (targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && !waitForHit && !mc.player?.isUsingItem!! && !autoBlock.isSelected(0)) {
+                block()
+            }
+        }
+
+        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
+            if (event.keyBinding == mc.options.useKey) {
+                if (targets.isNotEmpty()) {
+                    event.pressed = blocking && (!preventBlockCooldown.value || allAttacked { !it.disablesShield() })
+                }
+            }
+            if (PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {
+                if (waitForCritical.value && criticalSprint.value && forceCritical.value)
+                    if (!dontWaitWhenEnemyHasShield.value || ((mode.isSelected(0) && !hasShield(targets.first().first) || (mode.isSelected(1) && targets.none { hasShield(it.first) }))))
+                        if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
+                            if (!mc.player?.isOnGround!! && mc.player?.fallDistance!! >= 0.0f)
+                                if (mc.player?.isSprinting!!)
+                                    event.pressed = false
+            }
+        }
+
+        registerEvent(EventHandleBlockBreaking::class.java) { event ->
+            event.parameter = event.parameter || clicked
+        }
+
+        registerEvent(EventPacket::class.java) { event ->
+            if (event.type == EventPacket.Type.RECEIVE && event.packet is EntityStatusS2CPacket) {
+                if (mc.world != null && event.packet.getEntity(mc.world) == mc.player && event.packet.status == EntityStatuses.DAMAGE_FROM_GENERIC_SOURCE)
+                    waitForDamage = false
+            } }
     }
 
     private fun attack(entity: Entity?) {

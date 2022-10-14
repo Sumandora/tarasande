@@ -122,12 +122,12 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void injectPreTick(CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventTick(EventTick.State.PRE));
+        TarasandeMain.Companion.get().getEventDispatcher().call(new EventTick(EventTick.State.PRE));
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void injectPostTick(CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventTick(EventTick.State.POST));
+        TarasandeMain.Companion.get().getEventDispatcher().call(new EventTick(EventTick.State.POST));
     }
 
     @Inject(method = "stop", at = @At("HEAD"))
@@ -140,7 +140,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
         double prevWidth = instance.getScaledWidth();
         double prevHeight = instance.getScaledHeight();
         instance.setScaleFactor(scaleFactor);
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventResolutionUpdate(prevWidth, prevHeight, this.window.getScaledWidth(), this.window.getScaledHeight()));
+        TarasandeMain.Companion.get().getEventDispatcher().call(new EventResolutionUpdate(prevWidth, prevHeight, this.window.getScaledWidth(), this.window.getScaledHeight()));
     }
 
     @Inject(method = "render", at = @At("HEAD"))
@@ -165,7 +165,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Util;getMeasuringTimeMs()J"), slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;tick()V")))
     public long hookedGetMeasuringTimeMs() {
         EventTimeTravel eventTimeTravel = new EventTimeTravel(Util.getMeasuringTimeMs());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventTimeTravel);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventTimeTravel);
         return eventTimeTravel.getTime();
     }
 
@@ -182,13 +182,13 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
 
     @Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z", shift = At.Shift.BEFORE), slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doAttack()Z")))
     public void injectHandleInputEvents(CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventAttack());
+        TarasandeMain.Companion.get().getEventDispatcher().call(new EventAttack());
     }
 
     @Redirect(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;handleBlockBreaking(Z)V"))
     public void hookedHandleBlockBreaking(MinecraftClient instance, boolean bl) {
         EventHandleBlockBreaking eventHandleBlockBreaking = new EventHandleBlockBreaking(bl);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventHandleBlockBreaking);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventHandleBlockBreaking);
         ((IMinecraftClient) instance).tarasande_invokeHandleBlockBreaking(eventHandleBlockBreaking.getParameter());
     }
 
@@ -202,7 +202,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     public void injectSetScreen(Screen screen, CallbackInfo ci) {
         final EventChangeScreen eventChangeScreen = new EventChangeScreen(screen);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventChangeScreen);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventChangeScreen);
 
         if (eventChangeScreen.getDirty()) {
             this.setScreen(eventChangeScreen.getNewScreen());

@@ -5,7 +5,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.OnGroundOnly
 import net.minecraft.util.UseAction
 import net.minecraft.util.registry.Registry
-import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventUpdate
@@ -13,7 +12,6 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.util.function.Consumer
 
 class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.PLAYER) {
 
@@ -61,22 +59,23 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
         }
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        if (event is EventUpdate && event.state == EventUpdate.State.PRE_PACKET) {
-            if (mc.player?.isUsingItem == true) {
-                val usedStack = mc.player?.getStackInHand(PlayerUtil.getUsedHand() ?: return@Consumer)!!
-                if (useActions.contains(usedStack.useAction) && actions.selected.contains(nameMap[usedStack.useAction!!])) {
-                    val useTime = mc.player?.itemUseTime!!
-                    if (useTime > settings[usedStack.useAction]?.value!!) {
-                        for (i in 0..useTime) {
-                            mc.networkHandler?.sendPacket(OnGroundOnly(mc.player?.isOnGround!!))
+    init {
+        registerEvent(EventUpdate::class.java) { event ->
+            if (event.state == EventUpdate.State.PRE_PACKET) {
+                if (mc.player?.isUsingItem == true) {
+                    val usedStack = mc.player?.getStackInHand(PlayerUtil.getUsedHand() ?: return@registerEvent)!!
+                    if (useActions.contains(usedStack.useAction) && actions.selected.contains(nameMap[usedStack.useAction!!])) {
+                        val useTime = mc.player?.itemUseTime!!
+                        if (useTime > settings[usedStack.useAction]?.value!!) {
+                            for (i in 0..useTime) {
+                                mc.networkHandler?.sendPacket(OnGroundOnly(mc.player?.isOnGround!!))
+                            }
+                            if (usedStack.useAction == UseAction.BOW || usedStack.useAction == UseAction.SPEAR || usedStack.isUsedOnRelease)
+                                mc.interactionManager?.stopUsingItem(mc.player)
                         }
-                        if (usedStack.useAction == UseAction.BOW || usedStack.useAction == UseAction.SPEAR || usedStack.isUsedOnRelease)
-                            mc.interactionManager?.stopUsingItem(mc.player)
                     }
                 }
             }
         }
     }
-
 }

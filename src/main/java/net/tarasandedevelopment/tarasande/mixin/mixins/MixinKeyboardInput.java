@@ -16,7 +16,7 @@ public class MixinKeyboardInput extends Input {
     @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/KeyboardInput;sneaking:Z", shift = At.Shift.AFTER), cancellable = true)
     public void injectTick(boolean slowDown, float f, CallbackInfo ci) {
         EventInput eventInput = new EventInput(this, this.movementForward, this.movementSideways, slowDown, f);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventInput);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventInput);
 
         this.pressingForward = this.pressingBack = this.pressingLeft = this.pressingRight = false;
         this.movementForward = this.movementSideways = 0.0f;
@@ -43,7 +43,7 @@ public class MixinKeyboardInput extends Input {
     @Override
     public boolean hasForwardMovement() {
         EventHasForwardMovement eventHasForwardMovement = new EventHasForwardMovement(super.hasForwardMovement());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventHasForwardMovement);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventHasForwardMovement);
         return eventHasForwardMovement.getHasForwardMovement();
     }
 }

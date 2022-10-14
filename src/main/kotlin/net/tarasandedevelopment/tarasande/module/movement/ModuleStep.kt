@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande.module.movement
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.PositionAndOnGround
 import net.minecraft.util.math.Direction
-import net.tarasandedevelopment.tarasande.base.event.Event
-import net.tarasandedevelopment.tarasande.base.event.Priority
+import net.tarasandedevelopment.eventsystem.Event
+import net.tarasandedevelopment.eventsystem.Priority
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventMovement
@@ -37,50 +37,47 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
         prevAge = 0
     }
 
-    @Priority(1001) // we have to slow the speed down
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventStep -> {
-                when (event.state) {
-                    EventStep.State.PRE -> {
-                        if (mc.player?.age!! - offGroundTick > onGroundTicks.value)
-                            event.stepHeight = stepHeight.value.toFloat()
-                    }
+    init {
+        registerEvent(EventStep::class.java) { event ->
+            when (event.state) {
+                EventStep.State.PRE -> {
+                    if (mc.player?.age!! - offGroundTick > onGroundTicks.value)
+                        event.stepHeight = stepHeight.value.toFloat()
+                }
 
-                    EventStep.State.POST -> {
-                        if (event.stepHeight > mc.player?.stepHeight!! && mc.player?.isOnGround == true) {
-                            if (mode.isSelected(1)) {
-                                mc.networkHandler?.sendPacket(PositionAndOnGround(mc.player?.pos?.x!!, mc.player?.pos?.y?.plus(event.stepHeight * 0.42F)!!, mc.player?.pos?.z!!, false))
-                                mc.networkHandler?.sendPacket(PositionAndOnGround(mc.player?.pos?.x!!, mc.player?.pos?.y?.plus(event.stepHeight * 0.75F)!!, mc.player?.pos?.z!!, false))
-                            }
-                            stepTick = mc.player?.age!!
+                EventStep.State.POST -> {
+                    if (event.stepHeight > mc.player?.stepHeight!! && mc.player?.isOnGround == true) {
+                        if (mode.isSelected(1)) {
+                            mc.networkHandler?.sendPacket(PositionAndOnGround(mc.player?.pos?.x!!, mc.player?.pos?.y?.plus(event.stepHeight * 0.42F)!!, mc.player?.pos?.z!!, false))
+                            mc.networkHandler?.sendPacket(PositionAndOnGround(mc.player?.pos?.x!!, mc.player?.pos?.y?.plus(event.stepHeight * 0.75F)!!, mc.player?.pos?.z!!, false))
                         }
+                        stepTick = mc.player?.age!!
                     }
                 }
             }
+        }
 
-            is EventUpdate -> {
-                if (event.state == EventUpdate.State.PRE)
-                    if (mc.player?.isOnGround == false && mc.player?.age!! - stepTick > 3) {
-                        offGroundTick = mc.player?.age!!
-                    }
-            }
-
-            is EventMovement -> {
-                if (event.entity != mc.player)
-                    return@Consumer
-                if (mc.player?.age!! - stepTick < slowdownTicks.value)
-                    event.velocity = (event.velocity * slowdown.value).let { if (slowdown.value != 0.0) it.withAxis(Direction.Axis.Y, event.velocity.y) else it }
-            }
-
-            is EventTick -> {
-                if (event.state == EventTick.State.PRE) {
-                    if (mc.player == null || mc.player?.age!! < prevAge) {
-                        stepTick = 0
-                        offGroundTick = 0
-                    }
-                    prevAge = mc.player?.age ?: return@Consumer
+        registerEvent(EventUpdate::class.java) { event ->
+            if (event.state == EventUpdate.State.PRE)
+                if (mc.player?.isOnGround == false && mc.player?.age!! - stepTick > 3) {
+                    offGroundTick = mc.player?.age!!
                 }
+        }
+
+        registerEvent(EventMovement::class.java, 1001) { event ->
+            if (event.entity != mc.player)
+                return@registerEvent
+            if (mc.player?.age!! - stepTick < slowdownTicks.value)
+                event.velocity = (event.velocity * slowdown.value).let { if (slowdown.value != 0.0) it.withAxis(Direction.Axis.Y, event.velocity.y) else it }
+        }
+
+        registerEvent(EventTick::class.java) { event ->
+            if (event.state == EventTick.State.PRE) {
+                if (mc.player == null || mc.player?.age!! < prevAge) {
+                    stepTick = 0
+                    offGroundTick = 0
+                }
+                prevAge = mc.player?.age ?: return@registerEvent
             }
         }
     }

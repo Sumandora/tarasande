@@ -19,8 +19,8 @@ import net.minecraft.util.math.Box
 import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShape
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.Manager
-import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import java.awt.Color
 import java.net.InetSocketAddress

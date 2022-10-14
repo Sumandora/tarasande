@@ -5,8 +5,8 @@ import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.event.Event
-import net.tarasandedevelopment.tarasande.base.event.Priority
+import net.tarasandedevelopment.eventsystem.Event
+import net.tarasandedevelopment.eventsystem.Priority
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventMovement
@@ -28,17 +28,18 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
 
     private var invert = false
 
-    @Priority(2000)
-    val eventConsumer = Consumer<Event> { event ->
-        if (event is EventUpdate) {
+    init {
+        registerEvent(EventUpdate::class.java) { event ->
             if (event.state == EventUpdate.State.PRE)
                 if (mc.player?.horizontalCollision == true)
                     invert = !invert
-        } else if (event is EventMovement) {
+        }
+
+        registerEvent(EventMovement::class.java, 2000) { event ->
             if (event.entity != mc.player)
-                return@Consumer
+                return@registerEvent
             if (PlayerUtil.input.movementInput?.lengthSquared() == 0.0f)
-                return@Consumer
+                return@registerEvent
 
             val moduleKillAura = TarasandeMain.get().managerModule.get(ModuleKillAura::class.java)
             val enemy =
@@ -54,7 +55,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
                     null
 
             if (enemy == null)
-                return@Consumer
+                return@registerEvent
 
             val curPos = mc.player?.pos!!
             val center = enemy.pos

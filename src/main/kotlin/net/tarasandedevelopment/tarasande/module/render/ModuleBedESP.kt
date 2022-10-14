@@ -5,7 +5,6 @@ import net.minecraft.block.Blocks
 import net.minecraft.block.enums.BedPart
 import net.minecraft.client.MinecraftClient
 import net.minecraft.util.math.BlockPos
-import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventRender3D
@@ -18,7 +17,6 @@ import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueColor
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import java.util.function.BiFunction
-import java.util.function.Consumer
 
 /**
  * This module is pretty cool, but can be extremely processing intensive
@@ -90,79 +88,77 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         bedDatas.clear()
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventUpdate -> {
-                if (event.state == EventUpdate.State.PRE) {
-                    if (mc.player?.age?.mod(refreshRate.value.toInt()) != 0) return@Consumer
+    init {
+        registerEvent(EventUpdate::class.java) { event ->
+            if (event.state == EventUpdate.State.PRE) {
+                if (mc.player?.age?.mod(refreshRate.value.toInt()) != 0) return@registerEvent
 
-                    val rad = searchRadius.value.toInt()
+                val rad = searchRadius.value.toInt()
 
-                    bedDatas.clear()
+                bedDatas.clear()
 
-                    val beds = ArrayList<BlockPos>()
+                val beds = ArrayList<BlockPos>()
 
-                    for (x in -rad..rad) for (y in -rad..rad) for (z in -rad..rad) {
-                        val blockPos = BlockPos(mc.gameRenderer.camera.pos).add(x, y, z)
-                        val blockState = mc.world?.getBlockState(blockPos)
+                for (x in -rad..rad) for (y in -rad..rad) for (z in -rad..rad) {
+                    val blockPos = BlockPos(mc.gameRenderer.camera.pos).add(x, y, z)
+                    val blockState = mc.world?.getBlockState(blockPos)
 
-                        if (blockState?.block is BedBlock)
-                            beds.add(blockPos)
+                    if (blockState?.block is BedBlock)
+                        beds.add(blockPos)
+                }
+
+                for (bed in beds) {
+                    val state = mc.world?.getBlockState(bed)!!
+                    val part = state.get(BedBlock.PART)
+                    val facing = state.get(BedBlock.FACING)?.let { if (part == BedPart.FOOT) it else it.opposite }
+                    val otherPartOfBed = bed.offset(facing)
+                    val bedParts = arrayOf(bed, otherPartOfBed)
+
+                    if (bedDatas.any { it.bedParts.any { part1 -> bedParts.any { part2 -> part1 == part2 } } }) continue // we already processed these
+
+                    if (!calculateBestWay.value || bedParts.any { allSurroundings(it).any { mc.world?.isAir(it)!! } }) {
+                        bedDatas.add(BedData(bedParts, null, null))
+                        continue // this is pointless
                     }
 
-                    for (bed in beds) {
-                        val state = mc.world?.getBlockState(bed)!!
-                        val part = state.get(BedBlock.PART)
-                        val facing = state.get(BedBlock.FACING)?.let { if (part == BedPart.FOOT) it else it.opposite }
-                        val otherPartOfBed = bed.offset(facing)
-                        val bedParts = arrayOf(bed, otherPartOfBed)
-
-                        if (bedDatas.any { it.bedParts.any { part1 -> bedParts.any { part2 -> part1 == part2 } } }) continue // we already processed these
-
-                        if (!calculateBestWay.value || bedParts.any { allSurroundings(it).any { mc.world?.isAir(it)!! } }) {
-                            bedDatas.add(BedData(bedParts, null, null))
-                            continue // this is pointless
-                        }
-
-                        val defenders = calculateDefenses(bedParts)?.let { ArrayList(it) }
-                        var solution: List<Node>? = null
-                        if (defenders != null) {
-                            val outstanders = defenders.filter {
-                                allSurroundings(it).any {
-                                    mc.world?.getBlockState(it)?.let { state ->
-                                        state.isAir || state.getCollisionShape(MinecraftClient.getInstance().world, it).isEmpty
-                                    }!!
-                                }
+                    val defenders = calculateDefenses(bedParts)?.let { ArrayList(it) }
+                    var solution: List<Node>? = null
+                    if (defenders != null) {
+                        val outstanders = defenders.filter {
+                            allSurroundings(it).any {
+                                mc.world?.getBlockState(it)?.let { state ->
+                                    state.isAir || state.getCollisionShape(MinecraftClient.getInstance().world, it).isEmpty
+                                }!!
                             }
-
-                            if (outstanders.any { mc.world?.getBlockState(it)?.block is BedBlock }) continue // not a bedwars bed
-
-                            solution = Breaker.findSolution(outstanders, defenders, bedParts, maxProcessingTime.value.toLong())
-
-                            defenders.removeIf { bedParts.contains(it) }
                         }
-                        bedDatas.add(BedData(bedParts, defenders, solution))
+
+                        if (outstanders.any { mc.world?.getBlockState(it)?.block is BedBlock }) continue // not a bedwars bed
+
+                        solution = Breaker.findSolution(outstanders, defenders, bedParts, maxProcessingTime.value.toLong())
+
+                        defenders.removeIf { bedParts.contains(it) }
                     }
+                    bedDatas.add(BedData(bedParts, defenders, solution))
                 }
             }
+        }
 
-            is EventRender3D -> {
-                for (bedData in bedDatas) {
-                    for (bedPart in bedData.bedParts) {
-                        val blockPos = BlockPos(bedPart.x, bedPart.y, bedPart.z)
-                        val blockState = mc.world?.getBlockState(blockPos)
-                        RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, bedColor.getColor().rgb)
-                    }
-                    for (node in bedData.defenders ?: continue) {
-                        val blockPos = BlockPos(node.x, node.y, node.z)
-                        val blockState = mc.world?.getBlockState(blockPos)
-                        RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, defenderColor.getColor().rgb)
-                    }
-                    for (node in bedData.solution ?: continue) {
-                        val blockPos = BlockPos(node.x, node.y, node.z)
-                        val blockState = mc.world?.getBlockState(blockPos)
-                        RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, solutionColor.getColor().rgb)
-                    }
+        registerEvent(EventRender3D::class.java) { event ->
+            for (bedData in bedDatas) {
+                for (bedPart in bedData.bedParts) {
+                    val blockPos = BlockPos(bedPart.x, bedPart.y, bedPart.z)
+                    val blockState = mc.world?.getBlockState(blockPos)
+                    RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, bedColor.getColor().rgb)
+                }
+                for (node in bedData.defenders ?: continue) {
+                    val blockPos = BlockPos(node.x, node.y, node.z)
+                    val blockState = mc.world?.getBlockState(blockPos)
+                    RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, defenderColor.getColor().rgb)
+                }
+                for (node in bedData.solution ?: continue) {
+                    val blockPos = BlockPos(node.x, node.y, node.z)
+                    val blockState = mc.world?.getBlockState(blockPos)
+                    RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, solutionColor.getColor().rgb)
                 }
             }
         }

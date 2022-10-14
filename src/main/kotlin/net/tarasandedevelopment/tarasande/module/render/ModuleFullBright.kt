@@ -1,12 +1,10 @@
 package net.tarasandedevelopment.tarasande.module.render
 
-import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventGamma
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueColor
-import java.util.function.Consumer
 
 class ModuleFullBright : Module("Full bright", "Makes everything bright", ModuleCategory.RENDER) {
 
@@ -15,8 +13,8 @@ class ModuleFullBright : Module("Full bright", "Makes everything bright", Module
         override fun isEnabled() = !bright.value
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        if (event is EventGamma) {
+    init {
+        registerEvent(EventGamma::class.java) { event ->
             var red = event.color shr 16 and 255
             var green = event.color shr 8 and 255
             var blue = event.color shr 0 and 255

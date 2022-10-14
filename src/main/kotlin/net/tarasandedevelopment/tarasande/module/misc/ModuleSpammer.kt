@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.module.misc
 
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventChat
@@ -48,68 +48,66 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
         priorityMessages.clear()
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventPollEvents -> {
-                if (event.fake) return@Consumer
+    init {
+        registerEvent(EventPollEvents::class.java) { event ->
+            if (event.fake) return@registerEvent
 
-                if (timeUtil.hasReached(delay.value.toLong())) {
-                    if (priorityMessages.isNotEmpty()) {
-                        PlayerUtil.sendChatMessage(priorityMessages.removeFirst())
-                        timeUtil.reset()
-                        return@Consumer
-                    }
-                    if (noArbitraryTexts.value) return@Consumer
-                    var text = when {
-                        mode.isSelected(0) -> message.value
-                        mode.isSelected(1) -> {
-                            var target: Entity? = null
-                            for (entity in mc.world?.entities!!) {
-                                if (entity is PlayerEntity && entity.gameProfile.name.equals(this.target.value, true)) {
-                                    target = entity
-                                    break
-                                }
+            if (timeUtil.hasReached(delay.value.toLong())) {
+                if (priorityMessages.isNotEmpty()) {
+                    PlayerUtil.sendChatMessage(priorityMessages.removeFirst())
+                    timeUtil.reset()
+                    return@registerEvent
+                }
+                if (noArbitraryTexts.value) return@registerEvent
+                var text = when {
+                    mode.isSelected(0) -> message.value
+                    mode.isSelected(1) -> {
+                        var target: Entity? = null
+                        for (entity in mc.world?.entities!!) {
+                            if (entity is PlayerEntity && entity.gameProfile.name.equals(this.target.value, true)) {
+                                target = entity
+                                break
                             }
+                        }
 
-                            if (target != null) {
-                                var closest: PlayerEntity? = null
-                                var dist = 0.0
-                                for (entity in mc.world?.entities!!) {
-                                    if (entity is PlayerEntity && target != entity) {
-                                        val dist2 = target.squaredDistanceTo(entity)
-                                        if (closest == null || dist2 < dist) {
-                                            closest = entity
-                                            dist = dist2
-                                        }
+                        if (target != null) {
+                            var closest: PlayerEntity? = null
+                            var dist = 0.0
+                            for (entity in mc.world?.entities!!) {
+                                if (entity is PlayerEntity && target != entity) {
+                                    val dist2 = target.squaredDistanceTo(entity)
+                                    if (closest == null || dist2 < dist) {
+                                        closest = entity
+                                        dist = dist2
                                     }
                                 }
-
-                                var string = "X: " + (round(target.x * 10) / 10.0) + " Y: " + (round(target.y * 10) / 10.0) + " Z: " + (round(target.z * 10) / 10.0)
-                                if (closest != null) {
-                                    string += " " + closest.gameProfile.name + " (" + (round(sqrt(dist) * 10) / 10) + "m)"
-                                }
-                                string
-                            } else {
-                                "Target is not in render distance"
                             }
-                        }
 
-                        else -> null
-                    }
-                    if (text != null) {
-                        if (garbage.value) {
-                            text = formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt())) + " $text " + formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt()))
+                            var string = "X: " + (round(target.x * 10) / 10.0) + " Y: " + (round(target.y * 10) / 10.0) + " Z: " + (round(target.z * 10) / 10.0)
+                            if (closest != null) {
+                                string += " " + closest.gameProfile.name + " (" + (round(sqrt(dist) * 10) / 10) + "m)"
+                            }
+                            string
+                        } else {
+                            "Target is not in render distance"
                         }
-                        PlayerUtil.sendChatMessage(text)
                     }
-                    timeUtil.reset()
+
+                    else -> null
                 }
+                if (text != null) {
+                    if (garbage.value) {
+                        text = formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt())) + " $text " + formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt()))
+                    }
+                    PlayerUtil.sendChatMessage(text)
+                }
+                timeUtil.reset()
             }
+        }
 
-            is EventChat -> {
-                priorityMessages.add(event.chatMessage)
-                event.cancelled = true
-            }
+        registerEvent(EventChat::class.java) { event ->
+            priorityMessages.add(event.chatMessage)
+            event.cancelled = true
         }
     }
 

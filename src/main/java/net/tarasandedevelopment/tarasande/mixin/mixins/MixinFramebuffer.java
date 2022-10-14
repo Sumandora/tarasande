@@ -14,7 +14,7 @@ public class MixinFramebuffer {
     @Redirect(method = "drawInternal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumer;color(IIII)Lnet/minecraft/client/render/VertexConsumer;"))
     public VertexConsumer hookedColor(VertexConsumer instance, int r, int g, int b, int a) {
         EventColorCorrection eventColorCorrection = new EventColorCorrection(r, g, b);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventColorCorrection);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventColorCorrection);
         return instance.color(eventColorCorrection.getRed(), eventColorCorrection.getGreen(), eventColorCorrection.getBlue(), a);
     }
 

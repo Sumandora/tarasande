@@ -8,7 +8,7 @@ import net.minecraft.client.render.VertexFormat
 import net.minecraft.client.render.VertexFormats
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Hand
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventRender3D
@@ -22,15 +22,15 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
 
     private val predictVelocity = ValueBoolean(this, "Predict velocity", false)
 
-    val eventConsumer = Consumer<Event> { event ->
-        if (event is EventRender3D) {
+    init {
+        registerEvent(EventRender3D::class.java) { event ->
             var stack: ItemStack? = null; Hand.values().forEach { hand ->
-                if (ProjectileUtil.projectileItems.any {
-                        mc.player?.getStackInHand(hand)?.item?.let { item ->
-                            it.isSame(item)
-                        } == true
-                    }) stack = mc.player?.getStackInHand(hand)
-            }
+            if (ProjectileUtil.projectileItems.any {
+                    mc.player?.getStackInHand(hand)?.item?.let { item ->
+                        it.isSame(item)
+                    } == true
+                }) stack = mc.player?.getStackInHand(hand)
+        }
 
             if (stack != null) {
                 RenderSystem.enableBlend()

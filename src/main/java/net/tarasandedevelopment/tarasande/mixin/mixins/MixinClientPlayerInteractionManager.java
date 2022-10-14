@@ -25,12 +25,12 @@ public abstract class MixinClientPlayerInteractionManager implements IClientPlay
 
     @Inject(method = "attackEntity", at = @At("HEAD"))
     public void injectPreAttackEntity(PlayerEntity player, Entity target, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventAttackEntity(target, EventAttackEntity.State.PRE));
+        TarasandeMain.Companion.get().getEventDispatcher().call(new EventAttackEntity(target, EventAttackEntity.State.PRE));
     }
 
     @Inject(method = "attackEntity", at = @At("TAIL"))
     public void injectPostAttackEntity(PlayerEntity player, Entity target, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventAttackEntity(target, EventAttackEntity.State.POST));
+        TarasandeMain.Companion.get().getEventDispatcher().call(new EventAttackEntity(target, EventAttackEntity.State.POST));
     }
 
     @Override

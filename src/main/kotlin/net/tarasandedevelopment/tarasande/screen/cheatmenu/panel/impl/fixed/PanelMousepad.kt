@@ -21,16 +21,14 @@ class PanelMousepad(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Pa
     private var lastRotation: Rotation? = null
 
     init {
-        TarasandeMain.get().managerEvent.add {
-            if (it is EventUpdate) {
-                if (it.state == EventUpdate.State.POST) {
-                    val rotation = if (RotationUtil.fakeRotation != null) RotationUtil.fakeRotation else Rotation(MinecraftClient.getInstance().player!!)
-                    if (lastRotation != null)
-                        rotations.add(rotation!! - lastRotation!!)
-                    lastRotation = rotation
-                    while (rotations.size > 20)
-                        rotations.removeAt(0)
-                }
+        TarasandeMain.get().eventDispatcher.add(EventUpdate::class.java) {
+            if (it.state == EventUpdate.State.POST) {
+                val rotation = if (RotationUtil.fakeRotation != null) RotationUtil.fakeRotation else Rotation(MinecraftClient.getInstance().player!!)
+                if (lastRotation != null)
+                    rotations.add(rotation!! - lastRotation!!)
+                lastRotation = rotation
+                while (rotations.size > 20)
+                    rotations.removeAt(0)
             }
         }
     }

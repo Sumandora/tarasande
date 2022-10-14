@@ -15,37 +15,35 @@ class Friends {
     val friends = ArrayList<Pair<GameProfile, String?>>()
 
     init {
-        TarasandeMain.get().managerEvent.add { event ->
-            when (event) {
-                is EventIsEntityAttackable -> {
-                    if (TarasandeMain.get().managerModule.get(ModuleNoFriends::class.java).enabled)
-                        return@add
-                    if (event.attackable && event.entity != null && event.entity is PlayerEntity)
-                        if (friends.any { it.first == event.entity.gameProfile })
-                            event.attackable = false
-                }
+        TarasandeMain.get().eventDispatcher.also {
+            it.add(EventIsEntityAttackable::class.java) {
+                if (TarasandeMain.get().managerModule.get(ModuleNoFriends::class.java).enabled)
+                    return@add
 
-                is EventTagName -> {
-                    if (TarasandeMain.get().managerModule.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
-                        return@add
+                if (it.attackable && it.entity != null && it.entity is PlayerEntity)
+                    if (friends.any { friend -> friend.first == it.entity.gameProfile })
+                        it.attackable = false
+            }
+            it.add(EventTagName::class.java) {
+                if (TarasandeMain.get().managerModule.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
+                    return@add
 
-                    if (event.entity is PlayerEntity) {
-                        val profile = (event.entity as PlayerEntity).gameProfile
-                        for (friend in friends)
-                            if (friend.first == profile && friend.second != null && friend.second != profile.name)
-                                event.displayName = event.displayName.copy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
-                    }
-                }
-
-                is EventPlayerListName -> {
-                    if (TarasandeMain.get().managerModule.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
-                        return@add
-
+                if (it.entity is PlayerEntity) {
+                    val profile = (it.entity as PlayerEntity).gameProfile
                     for (friend in friends)
-                        if (friend.first == event.playerListEntry.profile && friend.second != null && friend.second != event.playerListEntry.profile.name) {
-                            event.displayName = event.displayName.copy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
-                        }
+                        if (friend.first == profile && friend.second != null && friend.second != profile.name)
+                            it.displayName = it.displayName.copy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
                 }
+            }
+            it.add(EventPlayerListName::class.java) {
+                if (TarasandeMain.get().managerModule.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
+                    return@add
+
+                for (friend in friends)
+                    if (friend.first == it.playerListEntry.profile && friend.second != null && friend.second != it.playerListEntry.profile.name) {
+                        it.displayName = it.displayName.copy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
+                    }
+
             }
         }
     }

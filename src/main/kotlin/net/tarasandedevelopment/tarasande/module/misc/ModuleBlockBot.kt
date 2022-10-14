@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.misc
 
 import net.minecraft.client.MinecraftClient
-import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventGoalMovement
@@ -13,7 +12,6 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.util.function.Consumer
 
 class ModuleBlockBot : Module("Block bot", "Walks into the line of sight of other players", ModuleCategory.MISC) {
 
@@ -22,35 +20,33 @@ class ModuleBlockBot : Module("Block bot", "Walks into the line of sight of othe
 
     private var move = false
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventPollEvents -> {
-                val target = mc.world?.players?.filter { PlayerUtil.isAttackable(it) }?.minByOrNull { mc.player?.squaredDistanceTo(it)!! } ?: return@Consumer
+    init {
+        registerEvent(EventPollEvents::class.java) { event ->
+            val target = mc.world?.players?.filter { PlayerUtil.isAttackable(it) }?.minByOrNull { mc.player?.squaredDistanceTo(it)!! } ?: return@registerEvent
 
-                val targetEye = target.eyePos + Rotation(target).forwardVector(extension.value)
-                move = mc.player?.eyePos?.squaredDistanceTo(targetEye)!! > minDistance.value * minDistance.value
+            val targetEye = target.eyePos + Rotation(target).forwardVector(extension.value)
+            move = mc.player?.eyePos?.squaredDistanceTo(targetEye)!! > minDistance.value * minDistance.value
 
-                val rotation = if (!move) // if he's not moving, just look at him... make him mad ^^
-                    RotationUtil.getRotations(mc.player?.eyePos!!, target.eyePos)
-                else
-                    RotationUtil.getRotations(mc.player?.eyePos!!, targetEye)
-                event.rotation = rotation.correctSensitivity()
-            }
+            val rotation = if (!move) // if he's not moving, just look at him... make him mad ^^
+                RotationUtil.getRotations(mc.player?.eyePos!!, target.eyePos)
+            else
+                RotationUtil.getRotations(mc.player?.eyePos!!, targetEye)
+            event.rotation = rotation.correctSensitivity()
+        }
 
-            is EventGoalMovement -> {
-                event.yaw = RotationUtil.fakeRotation?.yaw ?: return@Consumer
-            }
+        registerEvent(EventGoalMovement::class.java) { event ->
+            event.yaw = RotationUtil.fakeRotation?.yaw ?: return@registerEvent
+        }
 
-            is EventInput -> {
-                if (event.input == MinecraftClient.getInstance().player?.input)
-                    if (move)
-                        event.movementForward = 1.0f
-            }
+        registerEvent(EventInput::class.java) { event ->
+            if (event.input == MinecraftClient.getInstance().player?.input)
+                if (move)
+                    event.movementForward = 1.0f
+        }
 
-            is EventKeyBindingIsPressed -> {
-                if (event.keyBinding == mc.options.jumpKey)
-                    event.pressed = mc.player?.horizontalCollision!!
-            }
+        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
+            if (event.keyBinding == mc.options.jumpKey)
+                event.pressed = mc.player?.horizontalCollision!!
         }
     }
 

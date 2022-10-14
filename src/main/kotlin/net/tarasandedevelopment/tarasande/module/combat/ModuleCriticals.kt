@@ -1,14 +1,12 @@
 package net.tarasandedevelopment.tarasande.module.combat
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
-import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.util.function.Consumer
 
 class ModuleCriticals : Module("Criticals", "Forces critical hits", ModuleCategory.COMBAT) {
 
@@ -23,10 +21,10 @@ class ModuleCriticals : Module("Criticals", "Forces critical hits", ModuleCatego
         override fun isEnabled() = mode.isSelected(3)
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        if(event is EventAttackEntity) {
+    init {
+        registerEvent(EventAttackEntity::class.java) { event ->
             if(mc.player?.isInLava!! || mc.player?.isInSwimmingPose!!)
-                return@Consumer
+                return@registerEvent
             when {
                 mode.isSelected(0) -> {
                     if(mc.player?.isOnGround!!) {
@@ -38,13 +36,13 @@ class ModuleCriticals : Module("Criticals", "Forces critical hits", ModuleCatego
                 }
                 mode.isSelected(1) -> {
                     if(!mc.player?.isOnGround!!)
-                        return@Consumer
+                        return@registerEvent
                     mc.player?.jump()
                     (mc.player?.velocity as IVec3d).tarasande_setY(mc.player?.velocity?.y!! * motion.value)
                 }
                 mode.isSelected(2) -> {
                     if(!mc.player?.isOnGround!!)
-                        return@Consumer
+                        return@registerEvent
                     mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.OnGroundOnly(false))
                 }
                 mode.isSelected(3) -> {

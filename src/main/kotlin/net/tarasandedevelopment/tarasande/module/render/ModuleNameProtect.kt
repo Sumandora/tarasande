@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.module.render
 
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventTextVisit
@@ -16,7 +16,7 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
 
     private val border = "( |[^a-z]|\\b)"
 
-    fun replaceNames(str: String): String {
+    private fun replaceNames(str: String): String {
         var str = str
 
         str = replaceName(str, mc.session.profile.name, protectedName.value)
@@ -50,9 +50,10 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
 
     private fun isAlphabetical(c: Char): Boolean = c in 'a'..'z' || c in 'A'..'Z'
 
-    val eventConsumer = Consumer<Event> { event ->
-        if (event is EventTextVisit)
+    init {
+        registerEvent(EventTextVisit::class.java) { event ->
             event.string = replaceNames(event.string)
+        }
     }
 
 }

@@ -67,7 +67,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     public void injectPreJump(CallbackInfo ci) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             EventJump eventJump = new EventJump(originalYaw = getYaw(), EventJump.State.PRE);
-            TarasandeMain.Companion.get().getManagerEvent().call(eventJump);
+            TarasandeMain.Companion.get().getEventDispatcher().call(eventJump);
             setYaw(eventJump.getYaw());
             if (eventJump.getCancelled())
                 ci.cancel();
@@ -78,7 +78,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     public void injectPostJump(CallbackInfo ci) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             EventJump eventJump = new EventJump(originalYaw, EventJump.State.POST);
-            TarasandeMain.Companion.get().getManagerEvent().call(eventJump);
+            TarasandeMain.Companion.get().getEventDispatcher().call(eventJump);
             setYaw(eventJump.getYaw());
         }
     }
@@ -98,7 +98,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     public void injectSwingHand(Hand hand, CallbackInfo ci) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             EventSwing eventSwing = new EventSwing(hand);
-            TarasandeMain.Companion.get().getManagerEvent().call(eventSwing);
+            TarasandeMain.Companion.get().getEventDispatcher().call(eventSwing);
             if (eventSwing.getCancelled())
                 ci.cancel();
         }

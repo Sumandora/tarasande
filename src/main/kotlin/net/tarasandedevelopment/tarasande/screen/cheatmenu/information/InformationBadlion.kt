@@ -16,13 +16,13 @@ class InformationTimers : Information("Badlion", "Timers") {
     val list = CopyOnWriteArrayList<Timer>()
 
     init {
-        TarasandeMain.get().managerEvent.add { event ->
-            if (event is EventPacket) {
-                if (event.type == EventPacket.Type.RECEIVE)
-                    if (event.packet is CustomPayloadS2CPacket) {
-                        if (event.packet.channel.toString() == "badlion:timers") {
+        TarasandeMain.get().eventDispatcher.also {
+            it.add(EventPacket::class.java) {
+                if (it.type == EventPacket.Type.RECEIVE)
+                    if (it.packet is CustomPayloadS2CPacket) {
+                        if (it.packet.channel.toString() == "badlion:timers") {
                             try {
-                                var data = String(event.packet.data.writtenBytes)
+                                var data = String(it.packet.data.writtenBytes)
                                 val request = data.split("|")[0]
                                 data = data.substring(request.length + 1, data.length)
                                 when (request) {
@@ -53,13 +53,14 @@ class InformationTimers : Information("Badlion", "Timers") {
                                 throwable.printStackTrace()
                             }
                         }
-                    } else if (event.packet is PlayerRespawnS2CPacket) {
-                        if (MinecraftClient.getInstance().world != null && event.packet.dimension != MinecraftClient.getInstance().world?.registryKey) {
+                    } else if (it.packet is PlayerRespawnS2CPacket) {
+                        if (MinecraftClient.getInstance().world != null && it.packet.dimension != MinecraftClient.getInstance().world?.registryKey) {
                             list.clear()
                             enabled = false
                         }
                     }
-            } else if (event is EventDisconnect) {
+            }
+            it.add(EventDisconnect::class.java) {
                 list.clear()
                 enabled = false
             }

@@ -14,7 +14,7 @@ public class MixinKeyboard {
     @Inject(method = "onKey", at = @At("HEAD"), cancellable = true)
     public void injectOnKeyPress(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
         EventKey eventKey = new EventKey(key, action);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventKey);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventKey);
         if (eventKey.getCancelled())
             ci.cancel();
     }

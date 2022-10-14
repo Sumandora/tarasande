@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
 import net.minecraft.client.MinecraftClient
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventInput
@@ -15,16 +15,16 @@ class ModuleSneak : Module("Sneak", "Automatically sneaks", ModuleCategory.MOVEM
     private val standStill = ValueBoolean(this, "Stand still", false)
     private val dontSlowdown = ValueBoolean(this, "Don't slowdown", false)
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventKeyBindingIsPressed ->
-                if (event.keyBinding == mc.options.sneakKey)
-                    event.pressed = event.pressed || !standStill.value || !PlayerUtil.isPlayerMoving()
+    init {
+        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
+            if (event.keyBinding == mc.options.sneakKey)
+                event.pressed = event.pressed || !standStill.value || !PlayerUtil.isPlayerMoving()
+        }
 
-            is EventInput ->
-                if (event.input == MinecraftClient.getInstance().player?.input)
-                    if (dontSlowdown.value)
-                        event.slowDown = false
+        registerEvent(EventInput::class.java) { event ->
+            if (event.input == MinecraftClient.getInstance().player?.input)
+                if (dontSlowdown.value)
+                    event.slowDown = false
         }
     }
 

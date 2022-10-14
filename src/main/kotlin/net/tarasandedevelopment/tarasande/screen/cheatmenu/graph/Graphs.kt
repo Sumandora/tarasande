@@ -6,7 +6,6 @@ import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.graph.Graph
-import net.tarasandedevelopment.tarasande.base.value.Value
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.util.extension.minus
@@ -23,9 +22,8 @@ class GraphFPS : Graph("FPS", 200) {
     private val data = ArrayList<Double>()
 
     init {
-        TarasandeMain.get().managerEvent.add {
-            if (it is EventPollEvents)
-                data.add(RenderUtil.deltaTime)
+        TarasandeMain.get().eventDispatcher.add(EventPollEvents::class.java) {
+            data.add(RenderUtil.deltaTime)
         }
     }
 
@@ -59,14 +57,12 @@ class GraphTPS : Graph("TPS", 200) {
     private var timeDelta = 0L
 
     init {
-        TarasandeMain.get().managerEvent.add { event ->
-            if (event is EventPacket) {
-                if (event.type == EventPacket.Type.RECEIVE && event.packet is WorldTimeUpdateS2CPacket) {
-                    if (lastWorldTimePacket > 0L) {
-                        timeDelta = System.currentTimeMillis() - lastWorldTimePacket
-                    }
-                    lastWorldTimePacket = System.currentTimeMillis()
+        TarasandeMain.get().eventDispatcher.add(EventPacket::class.java) {
+            if (it.type == EventPacket.Type.RECEIVE && it.packet is WorldTimeUpdateS2CPacket) {
+                if (lastWorldTimePacket > 0L) {
+                    timeDelta = System.currentTimeMillis() - lastWorldTimePacket
                 }
+                lastWorldTimePacket = System.currentTimeMillis()
             }
         }
     }
@@ -80,17 +76,14 @@ class GraphCPS : Graph("CPS", 200) {
     private val clicks = ArrayList<Long>()
 
     init {
-        TarasandeMain.get().managerEvent.add { event ->
-            when (event) {
-                is EventSwing -> {
-                    if (clickMode!!.isSelected(0))
-                        clicks.add(System.currentTimeMillis())
-                }
-
-                is EventMouse -> {
-                    if (event.action == GLFW.GLFW_PRESS && clickMode!!.isSelected(1))
-                        clicks.add(System.currentTimeMillis())
-                }
+        TarasandeMain.get().eventDispatcher.also {
+            it.add(EventSwing::class.java) {
+                if (clickMode.isSelected(0))
+                    clicks.add(System.currentTimeMillis())
+            }
+            it.add(EventMouse::class.java) {
+                if (it.action == GLFW.GLFW_PRESS && clickMode.isSelected(1))
+                    clicks.add(System.currentTimeMillis())
             }
         }
     }
@@ -168,9 +161,9 @@ class GraphIncomingTraffic : Graph("Incoming Traffic", 200) {
     private val traffic = CopyOnWriteArrayList<Pair<Long, Int>>()
 
     init {
-        TarasandeMain.get().managerEvent.add { event ->
-            if (event is EventPacketTransform && event.type == EventPacketTransform.Type.DECODE) {
-                traffic.add(Pair(System.currentTimeMillis(), event.buf!!.readableBytes()))
+        TarasandeMain.get().eventDispatcher.add(EventPacketTransform::class.java) {
+            if (it.type == EventPacketTransform.Type.DECODE) {
+                traffic.add(Pair(System.currentTimeMillis(), it.buf!!.readableBytes()))
             }
         }
     }
@@ -191,9 +184,9 @@ class GraphOutgoingTraffic : Graph("Outgoing Traffic", 200) {
     private val traffic = CopyOnWriteArrayList<Pair<Long, Int>>()
 
     init {
-        TarasandeMain.get().managerEvent.add { event ->
-            if (event is EventPacketTransform && event.type == EventPacketTransform.Type.ENCODE) {
-                traffic.add(Pair(System.currentTimeMillis(), event.buf!!.readableBytes()))
+        TarasandeMain.get().eventDispatcher.add(EventPacketTransform::class.java) {
+            if (it.type == EventPacketTransform.Type.ENCODE) {
+                traffic.add(Pair(System.currentTimeMillis(), it.buf!!.readableBytes()))
             }
         }
     }

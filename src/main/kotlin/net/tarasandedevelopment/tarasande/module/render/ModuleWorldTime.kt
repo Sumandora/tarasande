@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.module.render
 
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.minecraft.world.World
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPacket
@@ -43,18 +43,16 @@ class ModuleWorldTime : Module("World time", "Changes the time of day", ModuleCa
         return moonStates.indexOf(this.moonPhase.selected[0])
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventUpdate -> {
-                if (event.state == EventUpdate.State.PRE) {
-                    mc.world?.timeOfDay = time.value.toLong()
-                }
+    init {
+        registerEvent(EventUpdate::class.java) { event ->
+            if (event.state == EventUpdate.State.PRE) {
+                mc.world?.timeOfDay = time.value.toLong()
             }
+        }
 
-            is EventPacket -> {
-                if (event.type == EventPacket.Type.RECEIVE && event.packet is WorldTimeUpdateS2CPacket) {
-                    (event.packet as IWorldTimeUpdateS2CPacket).tarasande_setTimeOfDay(time.value.toLong())
-                }
+        registerEvent(EventPacket::class.java) { event ->
+            if (event.type == EventPacket.Type.RECEIVE && event.packet is WorldTimeUpdateS2CPacket) {
+                (event.packet as IWorldTimeUpdateS2CPacket).tarasande_setTimeOfDay(time.value.toLong())
             }
         }
     }

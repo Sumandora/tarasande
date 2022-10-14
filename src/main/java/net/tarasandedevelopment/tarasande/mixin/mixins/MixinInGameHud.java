@@ -24,7 +24,7 @@ public abstract class MixinInGameHud implements IInGameHud {
 
     @Inject(method = "render", at = @At("TAIL"))
     public void injectRender(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventRender2D(matrices));
+        TarasandeMain.Companion.get().getEventDispatcher().call(new EventRender2D(matrices));
     }
 
     @Override

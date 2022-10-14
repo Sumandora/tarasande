@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
@@ -20,8 +20,8 @@ class ModuleSafeWalk : Module("Safe walk", "Prevents falling off blocks", Module
         override fun isEnabled() = sneak.value
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        if (event is EventKeyBindingIsPressed) {
+    init {
+        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
             if (event.keyBinding == mc.options.sneakKey && sneak.value)
                 event.pressed = event.pressed || when {
                     offGround.isSelected(0) -> mc.player?.isOnGround == true && PlayerUtil.isOnEdge(extrapolation.value)

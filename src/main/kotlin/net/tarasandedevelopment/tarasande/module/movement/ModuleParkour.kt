@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
@@ -19,21 +19,20 @@ class ModuleParkour : Module("Parkour", "Jumps when falling off ledges", ModuleC
 
     private var wasOnGround = false
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventUpdate ->
-                if (event.state == EventUpdate.State.PRE) {
-                    if (detectionMethod.isSelected(1) && wasOnGround && mc.player?.isOnGround == false && mc.player?.velocity?.y!! < 0.0) {
-                        mc.player?.jump()
-                    }
-                    wasOnGround = mc.player?.isOnGround == true
+    init {
+        registerEvent(EventUpdate::class.java) { event ->
+            if (event.state == EventUpdate.State.PRE) {
+                if (detectionMethod.isSelected(1) && wasOnGround && mc.player?.isOnGround == false && mc.player?.velocity?.y!! < 0.0) {
+                    mc.player?.jump()
                 }
+                wasOnGround = mc.player?.isOnGround == true
+            }
+        }
 
-            is EventKeyBindingIsPressed -> {
-                if (event.keyBinding == mc.options.jumpKey) {
-                    if (detectionMethod.isSelected(0) && PlayerUtil.isOnEdge(extrapolation.value))
-                        event.pressed = true
-                }
+        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
+            if (event.keyBinding == mc.options.jumpKey) {
+                if (detectionMethod.isSelected(0) && PlayerUtil.isOnEdge(extrapolation.value))
+                    event.pressed = true
             }
         }
     }

@@ -95,7 +95,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
             } else if (this.lastOnGround != this.onGround || VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
                 this.networkHandler.sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(this.onGround));
             } else {
-                TarasandeMain.Companion.get().getManagerEvent().call(new EventSkipIdlePacket());
+                TarasandeMain.Companion.get().getEventDispatcher().call(new EventSkipIdlePacket());
             }
             if (VersionList.isOlderOrEqualTo(VersionList.R1_8))
                 ++this.ticksSinceLastPositionPacketSent;

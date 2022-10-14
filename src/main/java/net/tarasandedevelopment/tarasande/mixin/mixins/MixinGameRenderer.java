@@ -34,12 +34,12 @@ public class MixinGameRenderer implements IGameRenderer {
 
     @Inject(method = "updateTargetedEntity", at = @At("HEAD"))
     public void injectPreUpdateTargetedEntity(float tickDelta, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.PRE));
+        TarasandeMain.Companion.get().getEventDispatcher().call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.PRE));
     }
 
     @Inject(method = "updateTargetedEntity", at = @At("RETURN"))
     public void injectPostUpdateTargetedEntity(float tickDelta, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.POST));
+        TarasandeMain.Companion.get().getEventDispatcher().call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.POST));
     }
 
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;"))

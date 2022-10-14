@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.base
 
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.event.ManagerEvent
 import net.tarasandedevelopment.tarasande.event.EventLoadManager
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -18,8 +17,7 @@ open class Manager<T : Any> {
             add(obj)
         }
 
-        if (this !is ManagerEvent)
-            TarasandeMain.get().managerEvent.call(EventLoadManager(this))
+        TarasandeMain.get().eventDispatcher.call(EventLoadManager(this))
     }
 
     fun rem(vararg objects: T) = list.removeAll(objects.toSet())

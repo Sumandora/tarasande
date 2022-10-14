@@ -5,8 +5,6 @@ import net.minecraft.client.util.InputUtil
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.event.Event
-import net.tarasandedevelopment.tarasande.base.event.Priority
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
@@ -18,7 +16,6 @@ import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueC
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentText
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
-import java.util.function.Consumer
 
 class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
 
@@ -32,27 +29,24 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         keybinding.add(mc.options.jumpKey)
     }
 
-    @Priority(1) // this has to be overridden by freecam
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventPacket -> {
-                if (event.type == EventPacket.Type.SEND) {
-                    if ((canceledPackets.isSelected(0) && event.packet is ClientCommandC2SPacket && event.packet.mode == ClientCommandC2SPacket.Mode.OPEN_INVENTORY) ||
-                        (canceledPackets.isSelected(1) && event.packet is CloseHandledScreenC2SPacket && event.packet.syncId == 0))
-                        event.cancelled = true
-                }
+    init {
+        registerEvent(EventPacket::class.java) { event ->
+            if (event.type == EventPacket.Type.SEND) {
+                if ((canceledPackets.isSelected(0) && event.packet is ClientCommandC2SPacket && event.packet.mode == ClientCommandC2SPacket.Mode.OPEN_INVENTORY) ||
+                    (canceledPackets.isSelected(1) && event.packet is CloseHandledScreenC2SPacket && event.packet.syncId == 0))
+                    event.cancelled = true
             }
+        }
 
-            is EventKeyBindingIsPressed -> {
-                if (isPassingEvents())
-                    if (keybinding.contains(event.keyBinding))
-                        event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, (event.keyBinding as IKeyBinding).tarasande_getBoundKey().code)
-            }
+        registerEvent(EventKeyBindingIsPressed::class.java, 1) { event ->
+            if (isPassingEvents())
+                if (keybinding.contains(event.keyBinding))
+                    event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, (event.keyBinding as IKeyBinding).tarasande_getBoundKey().code)
+        }
 
-            is EventTick -> {
-                if (event.state == EventTick.State.POST)
-                    textBoxFocused = isTextboxFocused()
-            }
+        registerEvent(EventTick::class.java) { event ->
+            if (event.state == EventTick.State.POST)
+                textBoxFocused = isTextboxFocused()
         }
     }
 

@@ -15,7 +15,7 @@ public class MixinItemCooldownManager {
     @Inject(method = "getCooldownProgress", at = @At("RETURN"), cancellable = true)
     public void injectGetCooldownProgress(Item item, float partialTicks, CallbackInfoReturnable<Float> cir) {
         EventItemCooldown eventItemCooldown = new EventItemCooldown(item, cir.getReturnValue());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventItemCooldown);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventItemCooldown);
         cir.setReturnValue(eventItemCooldown.getCooldown());
     }
 

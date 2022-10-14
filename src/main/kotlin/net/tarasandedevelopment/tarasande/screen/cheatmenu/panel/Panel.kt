@@ -48,23 +48,21 @@ open class Panel(
 
     init {
         if (fixed)
-            TarasandeMain.get().managerEvent.add { event ->
-                when (event) {
-                    is EventRender2D -> {
-                        if (isVisible() && opened) {
-                            if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screenCheatMenu) {
-                                event.matrices.push()
-                                render(event.matrices, -1, -1, MinecraftClient.getInstance().tickDelta)
-                                event.matrices.pop()
-                            }
+            TarasandeMain.get().eventDispatcher.also {
+                it.add(EventRender2D::class.java) {
+                    if (isVisible() && opened) {
+                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screenCheatMenu) {
+                            it.matrices.push()
+                            render(it.matrices, -1, -1, MinecraftClient.getInstance().tickDelta)
+                            it.matrices.pop()
                         }
                     }
+                }
 
-                    is EventTick -> {
-                        if (event.state == EventTick.State.PRE) {
-                            if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screenCheatMenu) {
-                                tick()
-                            }
+                it.add(EventTick::class.java) {
+                    if (it.state == EventTick.State.PRE) {
+                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screenCheatMenu) {
+                            tick()
                         }
                     }
                 }

@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.player
 
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventTimeTravel
@@ -32,8 +32,8 @@ class ModuleTimer : Module("Timer", "Changes the clientside ticks per second", M
         ((mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_setTickTime((1000.0 / 20.0f).toFloat())
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        if (event is EventTimeTravel) {
+    init {
+        registerEvent(EventTimeTravel::class.java) {
             when {
                 mode.isSelected(0) -> ((mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_setTickTime((1000.0 / ticksPerSecond.value).toFloat())
                 mode.isSelected(1) -> ((mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_setTickTime((1000.0 / max(ticksPerSecond.value + ThreadLocalRandom.current().nextInt(-variation.value.toInt() / 2, variation.value.toInt() / 2), 1.0)).toFloat())
@@ -41,5 +41,4 @@ class ModuleTimer : Module("Timer", "Changes the clientside ticks per second", M
             }
         }
     }
-
 }

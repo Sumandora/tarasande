@@ -31,8 +31,8 @@ class InformationOpenChannels : Information("Server", "Open Channels") {
     private val openChannels = ArrayList<String>()
 
     init {
-        TarasandeMain.get().managerEvent.add {
-            if (it is EventPacket) {
+        TarasandeMain.get().eventDispatcher.also {
+            it.add(EventPacket::class.java) {
                 if (it.type == EventPacket.Type.RECEIVE && it.packet is CustomPayloadS2CPacket) {
                     if (it.packet.channel.toString() == "minecraft:register") {
                         it.packet.data.toString(StandardCharsets.UTF_8).split("\u0000").forEach { data ->
@@ -46,7 +46,8 @@ class InformationOpenChannels : Information("Server", "Open Channels") {
                         }
                     }
                 }
-            } else if (it is EventDisconnect) {
+            }
+            it.add(EventDisconnect::class.java) {
                 openChannels.clear()
             }
         }

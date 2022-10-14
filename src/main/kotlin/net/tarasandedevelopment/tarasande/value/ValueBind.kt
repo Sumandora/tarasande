@@ -17,31 +17,32 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
     private var keyPressed = false
 
     init {
-        TarasandeMain.get().managerEvent.add { event ->
-            when (event) {
-                is EventMouse -> {
-                    if (type == Type.MOUSE) if (MinecraftClient.getInstance().currentScreen == null) if (button == event.button) when (event.action) {
-                        GLFW.GLFW_PRESS -> {
-                            mousePressed = true
-                            if (owner !is Module || this == owner.bind || owner.enabled)
-                                presses++
+        TarasandeMain.get().eventDispatcher.also {
+            it.add(EventMouse::class.java) {
+                if (type == Type.MOUSE) if (MinecraftClient.getInstance().currentScreen == null)
+                    if (button == it.button)
+                        when (it.action) {
+                            GLFW.GLFW_PRESS -> {
+                                mousePressed = true
+                                if (owner !is Module || this == owner.bind || owner.enabled)
+                                    presses++
+                            }
+
+                            GLFW.GLFW_RELEASE -> mousePressed = false
                         }
+            }
+            it.add(EventKey::class.java) {
+                if (type == Type.KEY) if (MinecraftClient.getInstance().currentScreen == null)
+                    if (it.key == button)
+                        when (it.action) {
+                            GLFW.GLFW_PRESS -> {
+                                keyPressed = true
+                                if (owner !is Module || this == owner.bind || owner.enabled)
+                                    presses++
+                            }
 
-                        GLFW.GLFW_RELEASE -> mousePressed = false
-                    }
-                }
-
-                is EventKey -> {
-                    if (type == Type.KEY) if (MinecraftClient.getInstance().currentScreen == null) if (event.key == button) when (event.action) {
-                        GLFW.GLFW_PRESS -> {
-                            keyPressed = true
-                            if (owner !is Module || this == owner.bind || owner.enabled)
-                                presses++
+                            GLFW.GLFW_RELEASE -> keyPressed = false
                         }
-
-                        GLFW.GLFW_RELEASE -> keyPressed = false
-                    }
-                }
             }
         }
     }

@@ -12,7 +12,7 @@ import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.*
@@ -146,103 +146,104 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         suspects.clear()
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventPollEvents -> {
-                if (messages.isNotEmpty())
-                    PlayerUtil.sendChatMessage(SharedConstants.stripInvalidChars(messages.removeFirst()))
-            }
+    init {
+        registerEvent(EventPollEvents::class.java) {
+            if (messages.isNotEmpty())
+                PlayerUtil.sendChatMessage(SharedConstants.stripInvalidChars(messages.removeFirst()))
+        }
 
-            is EventUpdate -> {
-                if (event.state == EventUpdate.State.PRE) {
-                    if (!fakeNews.isSelected(0) && isMurderer() && murdererAssistance.value) {
-                        if (fakeNewsTimer.hasReached(fakeNewsTime)) {
-                            var player: PlayerEntity? = null
-                            val realPlayers = mc.world?.players?.filter { PlayerUtil.isAttackable(it) } ?: return@Consumer
-                            if (realPlayers.size <= 1)
-                                return@Consumer
-                            while (player == null || player == mc.player) {
-                                player = realPlayers[ThreadLocalRandom.current().nextInt(realPlayers.size)]
-                            }
-                            val randomIllegalItem = fakeNewsItems.list.randomOrNull()
-                            accuse(player, randomIllegalItem != null, false, randomIllegalItem ?: Items.AIR, Items.AIR, fakeNews.settings.indexOf(fakeNews.selected[0]), customFakeNewsMessage.value)
-                            fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
-                            fakeNewsTimer.reset()
+        registerEvent(EventUpdate::class.java) { event ->
+            if (event.state == EventUpdate.State.PRE) {
+                if (!fakeNews.isSelected(0) && isMurderer() && murdererAssistance.value) {
+                    if (fakeNewsTimer.hasReached(fakeNewsTime)) {
+                        var player: PlayerEntity? = null
+                        val realPlayers = mc.world?.players?.filter { PlayerUtil.isAttackable(it) } ?: return@registerEvent
+                        if (realPlayers.size <= 1)
+                            return@registerEvent
+                        while (player == null || player == mc.player) {
+                            player = realPlayers[ThreadLocalRandom.current().nextInt(realPlayers.size)]
                         }
-                    } else {
+                        val randomIllegalItem = fakeNewsItems.list.randomOrNull()
+                        accuse(player, randomIllegalItem != null, false, randomIllegalItem ?: Items.AIR, Items.AIR, fakeNews.settings.indexOf(fakeNews.selected[0]), customFakeNewsMessage.value)
+                        fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
                         fakeNewsTimer.reset()
                     }
+                } else {
+                    fakeNewsTimer.reset()
                 }
             }
+        }
 
-            is EventAttackEntity -> {
-                if (murdererAssistance.value && isMurderer()) {
-                    when (event.state) {
-                        EventAttackEntity.State.PRE -> {
-                            var sword = 0
-                            for (slot in 0 until PlayerInventory.getHotbarSize()) {
-                                if (isIllegalItem(mc.player?.inventory?.main?.get(slot)?.item!!)) {
-                                    sword = slot
-                                    break
-                                }
+        registerEvent(EventAttackEntity::class.java) { event ->
+            if (murdererAssistance.value && isMurderer()) {
+                when (event.state) {
+                    EventAttackEntity.State.PRE -> {
+                        var sword = 0
+                        for (slot in 0 until PlayerInventory.getHotbarSize()) {
+                            if (isIllegalItem(mc.player?.inventory?.main?.get(slot)?.item!!)) {
+                                sword = slot
+                                break
                             }
-                            if ((mc.player?.inventory?.selectedSlot!! != sword).also { switchedSlot = it }) mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(sword))
                         }
+                        if ((mc.player?.inventory?.selectedSlot!! != sword).also { switchedSlot = it }) mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(sword))
+                    }
 
-                        EventAttackEntity.State.POST -> if (switchedSlot) mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))
+                    EventAttackEntity.State.POST -> if (switchedSlot) mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))
+                }
+            }
+        }
+
+        registerEvent(EventIsEntityAttackable::class.java) { event ->
+            if (!isMurderer()) {
+                if (event.entity !is PlayerEntity) {
+                    return@registerEvent
+                }
+                event.attackable = event.attackable && suspects.containsKey(event.entity.gameProfile)
+            }
+        }
+
+        registerEvent(EventPacket::class.java) { event ->
+            if (event.type == EventPacket.Type.RECEIVE) if (event.packet is PlayerRespawnS2CPacket) {
+                suspects.clear()
+            } else if (event.packet is EntityEquipmentUpdateS2CPacket) {
+                val player = mc.world?.getEntityById(event.packet.id)
+                if (player == mc.player) // I swear I almost played a round without this
+                    return@registerEvent
+                if (player !is PlayerEntity) return@registerEvent
+                if (suspects.containsKey(player.gameProfile)) return@registerEvent
+                if (TarasandeMain.get().managerModule.get(ModuleAntiBot::class.java).isBot(player)) return@registerEvent
+
+                var mainHand: Item? = null
+                var offHand: Item? = null
+                for (pair in event.packet.equipmentList) {
+                    if (pair.first == EquipmentSlot.MAINHAND) mainHand = pair.second.item
+                    else if (pair.first == EquipmentSlot.OFFHAND) offHand = pair.second.item
+                }
+
+                val illegalMainHand = if (mainHand != null) isIllegalItem(mainHand) else false
+                val illegalOffHand = if (offHand != null) isIllegalItem(offHand) else false
+
+                if (illegalMainHand || illegalOffHand) {
+                    @Suppress("KotlinConstantConditions") // I could write the offhand branch into the else, but I prefer the style
+                    suspects[player.gameProfile] = when {
+                        illegalMainHand && illegalOffHand -> arrayOf(mainHand!!, offHand!!)
+                        illegalMainHand -> arrayOf(mainHand!!)
+                        illegalOffHand -> arrayOf(offHand!!)
+                        else -> arrayOf()
+                    }
+                    if (!broadcast.isSelected(0)) {
+                        accuse(player, illegalMainHand, illegalOffHand, mainHand ?: Items.AIR, offHand ?: Items.AIR, broadcast.settings.indexOf(broadcast.selected[0]), customBroadcastMessage.value)
                     }
                 }
             }
+        }
 
-            is EventIsEntityAttackable -> {
-                if (!isMurderer()) {
-                    if (event.entity !is PlayerEntity) {
-                        return@Consumer
-                    }
-                    event.attackable = event.attackable && suspects.containsKey(event.entity.gameProfile)
-                }
-            }
-
-            is EventPacket -> {
-                if (event.type == EventPacket.Type.RECEIVE) if (event.packet is PlayerRespawnS2CPacket) {
-                    suspects.clear()
-                } else if (event.packet is EntityEquipmentUpdateS2CPacket) {
-                    val player = mc.world?.getEntityById(event.packet.id)
-                    if (player == mc.player) // I swear I almost played a round without this
-                        return@Consumer
-                    if (player !is PlayerEntity) return@Consumer
-                    if (suspects.containsKey(player.gameProfile)) return@Consumer
-                    if (TarasandeMain.get().managerModule.get(ModuleAntiBot::class.java).isBot(player)) return@Consumer
-
-                    var mainHand: Item? = null
-                    var offHand: Item? = null
-                    for (pair in event.packet.equipmentList) {
-                        if (pair.first == EquipmentSlot.MAINHAND) mainHand = pair.second.item
-                        else if (pair.first == EquipmentSlot.OFFHAND) offHand = pair.second.item
-                    }
-
-                    val illegalMainHand = if (mainHand != null) isIllegalItem(mainHand) else false
-                    val illegalOffHand = if (offHand != null) isIllegalItem(offHand) else false
-
-                    if (illegalMainHand || illegalOffHand) {
-                        @Suppress("KotlinConstantConditions") // I could write the offhand branch into the else, but I prefer the style
-                        suspects[player.gameProfile] = when {
-                            illegalMainHand && illegalOffHand -> arrayOf(mainHand!!, offHand!!)
-                            illegalMainHand -> arrayOf(mainHand!!)
-                            illegalOffHand -> arrayOf(offHand!!)
-                            else -> arrayOf()
-                        }
-                        if (!broadcast.isSelected(0)) {
-                            accuse(player, illegalMainHand, illegalOffHand, mainHand ?: Items.AIR, offHand ?: Items.AIR, broadcast.settings.indexOf(broadcast.selected[0]), customBroadcastMessage.value)
-                        }
-                    }
-                }
-            }
-
-            is EventEntityColor -> {
-                if (event.entity is PlayerEntity) if (suspects.containsKey(event.entity.gameProfile)) event.color = murdererColorOverride.getColor()
-                else if (highlightDetectives.value && detectiveItems.list.any { event.entity.inventory.mainHandStack.item == it || event.entity.inventory.offHand[0].item == it }) event.color = detectiveColorOverride.getColor()
-            }
+        registerEvent(EventEntityColor::class.java) { event ->
+            if (event.entity is PlayerEntity)
+                if (suspects.containsKey(event.entity.gameProfile))
+                    event.color = murdererColorOverride.getColor()
+            else if (highlightDetectives.value && detectiveItems.list.any { event.entity.inventory.mainHandStack.item == it || event.entity.inventory.offHand[0].item == it })
+                event.color = detectiveColorOverride.getColor()
         }
     }
 

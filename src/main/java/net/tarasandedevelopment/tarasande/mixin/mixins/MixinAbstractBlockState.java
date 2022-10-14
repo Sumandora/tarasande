@@ -27,7 +27,7 @@ public abstract class MixinAbstractBlockState {
     @Inject(method = "onEntityCollision", at = @At("HEAD"), cancellable = true)
     public void injectOnEntityCollision(World world, BlockPos pos, Entity entity, CallbackInfo ci) {
         EventBlockCollision eventBlockCollision = new EventBlockCollision(this.asBlockState(), pos, entity);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventBlockCollision);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventBlockCollision);
         if (eventBlockCollision.getCancelled())
             ci.cancel();
     }
@@ -35,7 +35,7 @@ public abstract class MixinAbstractBlockState {
     @Inject(method = "getCollisionShape(Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/ShapeContext;)Lnet/minecraft/util/shape/VoxelShape;", at = @At("RETURN"), cancellable = true)
     public void injectGetCollisionShape(BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
         EventCollisionShape eventCollisionShape = new EventCollisionShape(pos, cir.getReturnValue());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventCollisionShape);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventCollisionShape);
         cir.setReturnValue(eventCollisionShape.getCollisionShape());
     }
 

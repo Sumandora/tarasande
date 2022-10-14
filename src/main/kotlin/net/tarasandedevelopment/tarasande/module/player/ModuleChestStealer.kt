@@ -5,7 +5,6 @@ import net.minecraft.screen.slot.Slot
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.text.LiteralTextContent
 import net.minecraft.util.math.Vec2f
-import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
@@ -17,7 +16,6 @@ import net.tarasandedevelopment.tarasande.value.ValueNumberRange
 import net.tarasandedevelopment.tarasande.value.ValueText
 import org.lwjgl.glfw.GLFW
 import java.util.concurrent.ThreadLocalRandom
-import java.util.function.Consumer
 import kotlin.math.sqrt
 
 class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a chest", ModuleCategory.PLAYER) {
@@ -41,21 +39,22 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
         return Vec2f(accessor.tarasande_getX() + slot.x.toFloat() + 8, accessor.tarasande_getY() + slot.y.toFloat() + 8)
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        /*
-         * Side story: <=1.12.2 does this in the tick method
-         * We do it in the frame
-         * Means we can steal faster and on top, we can steal with a low timer, without any issues
-         * Maybe 1.8 isn't so good after all for cheating?
-         */
-        if (event is EventPollEvents) {
+    init {
+        registerEvent(EventPollEvents::class.java) { event ->
+            /*
+             * Side story: <=1.12.2 does this in the tick method
+             * We do it in the frame
+             * Means we can steal faster and on top, we can steal with a low timer, without any issues
+             * Maybe 1.8 isn't so good after all for cheating?
+             */
+
             if (event.fake)
-                return@Consumer
+                return@registerEvent
             if (mc.currentScreen !is GenericContainerScreen) {
                 timeUtil.reset()
                 wasClosed = true
                 mousePos = null
-                return@Consumer
+                return@registerEvent
             }
 
             val accessor = mc.currentScreen as IHandledScreen
@@ -65,7 +64,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 val content = title.content
                 if (content is LiteralTextContent)
                     if (content.string?.contains(titleSubstring.value) == false)
-                        return@Consumer
+                        return@registerEvent
             }
 
             val screenHandler = (mc.currentScreen as GenericContainerScreen).screenHandler
@@ -82,7 +81,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                     wasClosed -> openDelay.value.toLong()
                     nextSlot == null -> closeDelay.value.toLong()
                     else -> nextDelay
-                })) return@Consumer
+                })) return@registerEvent
             wasClosed = false
             timeUtil.reset()
 
@@ -101,5 +100,4 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
             }
         }
     }
-
 }

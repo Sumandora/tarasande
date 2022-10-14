@@ -4,12 +4,10 @@ import de.florianmichael.viaprotocolhack.ViaProtocolHack
 import de.florianmichael.viaprotocolhack.util.VersionList
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.Information
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientConnection
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
-import java.util.function.Consumer
 
 class InformationHandlers : Information("Connection", "Handlers") {
     override fun getMessage(): String? {
@@ -30,10 +28,8 @@ class InformationPlayTime : Information("Connection", "Play Time") {
     private var time = 0L
 
     init {
-        TarasandeMain.get().managerEvent.add {
-            if (it is EventConnectServer) {
-                time = System.currentTimeMillis()
-            }
+        TarasandeMain.get().eventDispatcher.add(EventConnectServer::class.java) {
+            time = System.currentTimeMillis()
         }
     }
 

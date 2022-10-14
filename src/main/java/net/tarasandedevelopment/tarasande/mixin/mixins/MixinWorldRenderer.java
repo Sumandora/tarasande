@@ -34,7 +34,7 @@ public abstract class MixinWorldRenderer implements IWorldRenderer {
 
     @Inject(method = "render", at = @At("TAIL"))
     public void injectRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventRender3D(matrices, positionMatrix));
+        TarasandeMain.Companion.get().getEventDispatcher().call(new EventRender3D(matrices, positionMatrix));
     }
 
     @Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At("HEAD"), cancellable = true)

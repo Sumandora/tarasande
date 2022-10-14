@@ -15,14 +15,17 @@ class ManagerAddon : Manager<Addon>() {
             addon.modAuthors = metadata.authors.map { p -> p.name }
             addon.modVersion = metadata.version.friendlyString
 
-            TarasandeMain.get().managerEvent.add(it.entrypoint.managerConsumer)
-
-            val consumer = addon.defaultEventConsumer()
-            if (consumer != null)
-                TarasandeMain.get().managerEvent.add(consumer)
-
             this.add(addon)
             addon.create(TarasandeMain.get())
         }
     }
+}
+
+abstract class Addon {
+    var modId: String? = null
+    var modAuthors: List<String>? = null
+    var modVersion: String? = null
+
+    abstract fun create(tarasandeMain: TarasandeMain?)
+    abstract fun onLoadManager(manager: Manager<*>?)
 }

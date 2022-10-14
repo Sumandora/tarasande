@@ -25,7 +25,7 @@ public abstract class MixinPlayerEntity {
     @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setSprinting(Z)V"))
     public void hookedSetSprinting(PlayerEntity instance, boolean b) {
         EventKeepSprint eventKeepSprint = new EventKeepSprint(b);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventKeepSprint);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventKeepSprint);
         if (!eventKeepSprint.getSprinting())
             instance.setSprinting(b);
     }

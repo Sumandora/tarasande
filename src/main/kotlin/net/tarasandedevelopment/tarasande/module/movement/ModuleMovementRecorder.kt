@@ -6,7 +6,7 @@ import net.minecraft.client.render.*
 import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.*
@@ -55,162 +55,160 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
         lastRotation = null
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventUpdate -> {
-                when (event.state) {
-                    EventUpdate.State.PRE -> {
-                        if (playbackState == PlaybackState.EXECUTING) {
-                            val tick = playedBack?.ticks?.get(executingIndex)!!
-
-                            mc.player?.isSprinting = tick.sprinting
-
-                            mc.player?.isSneaking = tick.sneaking
-                            mc.player?.input?.sneaking = tick.sneaking
-                        }
-                    }
-
-                    EventUpdate.State.PRE_PACKET -> {
-                        for (i in 0 until recordAndPlaybackButton.wasPressed()) {
-                            var matchingRecord: Record? = null
-                            if (!recording) {
-                                for (record in records) {
-                                    if (record.ticks.first().pos.squaredDistanceTo(mc.player?.pos) <= 0.5 * 0.5) {
-                                        matchingRecord = record
-                                        break
-                                    }
-                                }
-                            }
-                            if (matchingRecord != null) {
-                                playedBack = matchingRecord
-                                executingIndex = 0
-                                lastRotation = Rotation(mc.player!!)
-                                playbackState = PlaybackState.PREPARE
-                            } else {
-                                recording = !recording
-                                currentRecording = if (recording) {
-                                    Record()
-                                } else {
-                                    if (!deleteButton.isPressed() && currentRecording != null && currentRecording?.ticks?.isNotEmpty()!! && currentRecording?.ticks?.any { it.movement.horizontalLengthSquared() > 0.0 }!!) records.add(currentRecording?.copy()!!)
-                                    null
-                                }
-                            }
-                        }
-
-                        if (recording) {
-                            if (lastVelocity != null) currentRecording?.ticks?.add(TickMovement(Rotation(mc.player!!), lastVelocity!!, mc.player?.pos!!, mc.player?.isSprinting!!, mc.player?.isSneaking!!, mc.player?.input?.movementInput!!))
-                        } else if (playbackState != null) {
-                            when (playbackState!!) {
-                                PlaybackState.PREPARE -> {
-                                    val pos = playedBack?.ticks?.first()?.pos!!
-                                    if (mc.player?.pos?.squaredDistanceTo(pos)!! <= 0.1 * 0.1) {
-                                        playbackState = PlaybackState.EXECUTING
-                                    }
-                                }
-
-                                PlaybackState.EXECUTING -> {
-                                    lastRotation = Rotation(mc.player!!)
-                                    executingIndex++
-                                    if (executingIndex >= playedBack?.ticks?.size!! || playedBack?.ticks?.get(executingIndex)?.pos?.squaredDistanceTo(mc.player?.pos)!! > 4.0 * 4.0) {
-                                        playedBack = null
-                                        playbackState = null
-                                        executingIndex = 0
-                                        lastRotation = null
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    else -> {}
-                }
-            }
-
-            is EventInput -> {
-                if (event.input == MinecraftClient.getInstance().player?.input)
+    init {
+        registerEvent(EventUpdate::class.java) { event ->
+            when (event.state) {
+                EventUpdate.State.PRE -> {
                     if (playbackState == PlaybackState.EXECUTING) {
                         val tick = playedBack?.ticks?.get(executingIndex)!!
 
-                        event.movementSideways = tick.input.x
-                        event.movementForward = tick.input.y
+                        mc.player?.isSprinting = tick.sprinting
+
+                        mc.player?.isSneaking = tick.sneaking
+                        mc.player?.input?.sneaking = tick.sneaking
                     }
-            }
-
-            is EventKeyBindingIsPressed -> {
-                if ((event.keyBinding == mc.options.sneakKey || event.keyBinding == mc.options.forwardKey) && playbackState == PlaybackState.PREPARE) {
-                    event.pressed = true
                 }
+
+                EventUpdate.State.PRE_PACKET -> {
+                    for (i in 0 until recordAndPlaybackButton.wasPressed()) {
+                        var matchingRecord: Record? = null
+                        if (!recording) {
+                            for (record in records) {
+                                if (record.ticks.first().pos.squaredDistanceTo(mc.player?.pos) <= 0.5 * 0.5) {
+                                    matchingRecord = record
+                                    break
+                                }
+                            }
+                        }
+                        if (matchingRecord != null) {
+                            playedBack = matchingRecord
+                            executingIndex = 0
+                            lastRotation = Rotation(mc.player!!)
+                            playbackState = PlaybackState.PREPARE
+                        } else {
+                            recording = !recording
+                            currentRecording = if (recording) {
+                                Record()
+                            } else {
+                                if (!deleteButton.isPressed() && currentRecording != null && currentRecording?.ticks?.isNotEmpty()!! && currentRecording?.ticks?.any { it.movement.horizontalLengthSquared() > 0.0 }!!) records.add(currentRecording?.copy()!!)
+                                null
+                            }
+                        }
+                    }
+
+                    if (recording) {
+                        if (lastVelocity != null) currentRecording?.ticks?.add(TickMovement(Rotation(mc.player!!), lastVelocity!!, mc.player?.pos!!, mc.player?.isSprinting!!, mc.player?.isSneaking!!, mc.player?.input?.movementInput!!))
+                    } else if (playbackState != null) {
+                        when (playbackState!!) {
+                            PlaybackState.PREPARE -> {
+                                val pos = playedBack?.ticks?.first()?.pos!!
+                                if (mc.player?.pos?.squaredDistanceTo(pos)!! <= 0.1 * 0.1) {
+                                    playbackState = PlaybackState.EXECUTING
+                                }
+                            }
+
+                            PlaybackState.EXECUTING -> {
+                                lastRotation = Rotation(mc.player!!)
+                                executingIndex++
+                                if (executingIndex >= playedBack?.ticks?.size!! || playedBack?.ticks?.get(executingIndex)?.pos?.squaredDistanceTo(mc.player?.pos)!! > 4.0 * 4.0) {
+                                    playedBack = null
+                                    playbackState = null
+                                    executingIndex = 0
+                                    lastRotation = null
+                                }
+                            }
+                        }
+                    }
+                }
+
+                else -> {}
             }
+        }
 
-            is EventMovement -> {
-                if (event.entity != mc.player) return@Consumer
-
+        registerEvent(EventInput::class.java) { event ->
+            if (event.input == MinecraftClient.getInstance().player?.input)
                 if (playbackState == PlaybackState.EXECUTING) {
-                    event.velocity = playedBack?.ticks?.get(executingIndex)?.movement!!
+                    val tick = playedBack?.ticks?.get(executingIndex)!!
+
+                    event.movementSideways = tick.input.x
+                    event.movementForward = tick.input.y
                 }
-                lastVelocity = event.velocity
+        }
+
+        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
+            if ((event.keyBinding == mc.options.sneakKey || event.keyBinding == mc.options.forwardKey) && playbackState == PlaybackState.PREPARE) {
+                event.pressed = true
             }
+        }
 
-            is EventPollEvents -> {
-                if (playbackState != null && playedBack != null) {
-                    when (playbackState!!) {
-                        PlaybackState.PREPARE -> {
-                            val pos = playedBack?.ticks?.first()?.pos!!
-                            event.rotation = RotationUtil.getRotations(mc.player?.eyePos!!, pos.add(0.0, mc.player?.standingEyeHeight?.toDouble()!!, 0.0))
-                        }
+        registerEvent(EventMovement::class.java) { event ->
+            if (event.entity != mc.player) return@registerEvent
 
-                        PlaybackState.EXECUTING -> {
-                            event.rotation = lastRotation?.smoothedTurn(playedBack?.ticks?.get(executingIndex)?.rotation!!, mc.tickDelta.toDouble())!!
-                        }
+            if (playbackState == PlaybackState.EXECUTING) {
+                event.velocity = playedBack?.ticks?.get(executingIndex)?.movement!!
+            }
+            lastVelocity = event.velocity
+        }
+
+        registerEvent(EventPollEvents::class.java) { event ->
+            if (playbackState != null && playedBack != null) {
+                when (playbackState!!) {
+                    PlaybackState.PREPARE -> {
+                        val pos = playedBack?.ticks?.first()?.pos!!
+                        event.rotation = RotationUtil.getRotations(mc.player?.eyePos!!, pos.add(0.0, mc.player?.standingEyeHeight?.toDouble()!!, 0.0))
                     }
-                    event.rotation.correctSensitivity()
-                    mc.player?.yaw = event.rotation.yaw
-                    mc.player?.pitch = event.rotation.pitch
-                    event.minRotateToOriginSpeed = 1.0
-                    event.maxRotateToOriginSpeed = 1.0
-                }
-            }
 
-            is EventGoalMovement -> {
-                if (playbackState == PlaybackState.PREPARE) {
-                    val pos = playedBack?.ticks?.first()?.pos!!
-                    event.yaw = RotationUtil.getYaw(pos - mc.player?.pos!!).toFloat()
-                }
-            }
-
-            is EventRender2D -> {
-                val str = if (recording) "Recording" else if (playbackState != null) playbackState?.name?.let {
-                    it.first() + it.substring(1).lowercase()
-                } else ""
-                mc.textRenderer?.drawWithShadow(event.matrices, str, mc.window?.scaledWidth!! / 2.0f - mc.textRenderer.getWidth(str) / 2.0f, mc.window?.scaledHeight!! / 2.0f - mc.textRenderer.fontHeight, Color.white.rgb)
-            }
-
-            is EventRender3D -> {
-                GL11.glEnable(GL11.GL_BLEND)
-                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
-                GL11.glDisable(GL11.GL_CULL_FACE)
-                GL11.glEnable(GL11.GL_LINE_SMOOTH)
-                GL11.glDisable(GL11.GL_DEPTH_TEST)
-                GL11.glDepthMask(false)
-                event.matrices.push()
-                val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
-                event.matrices.translate(-vec3d!!.x, -vec3d.y, -vec3d.z)
-                val bufferBuilder = Tessellator.getInstance().buffer
-                RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
-                val matrix = event.matrices.peek()?.positionMatrix!!
-                if (playbackState != null && playedBack != null) {
-                    drawPath(bufferBuilder, matrix, playedBack!!, 1.0f)
-                } else {
-                    for (record in if (currentRecording != null) ArrayUtils.add(records.toTypedArray(), currentRecording!!) else records.toTypedArray()) {
-                        drawPath(bufferBuilder, matrix, record, 1f - (mc.player?.pos?.squaredDistanceTo(record.ticks.first().pos)!! / (16.0 * 16.0)).toFloat().coerceAtMost(1.0f))
+                    PlaybackState.EXECUTING -> {
+                        event.rotation = lastRotation?.smoothedTurn(playedBack?.ticks?.get(executingIndex)?.rotation!!, mc.tickDelta.toDouble())!!
                     }
                 }
-                event.matrices.pop()
-                GL11.glDisable(GL11.GL_BLEND)
-                GL11.glDisable(GL11.GL_LINE_SMOOTH)
-                GL11.glEnable(GL11.GL_DEPTH_TEST)
-                GL11.glDepthMask(true)
+                event.rotation.correctSensitivity()
+                mc.player?.yaw = event.rotation.yaw
+                mc.player?.pitch = event.rotation.pitch
+                event.minRotateToOriginSpeed = 1.0
+                event.maxRotateToOriginSpeed = 1.0
             }
+        }
+
+        registerEvent(EventGoalMovement::class.java) { event ->
+            if (playbackState == PlaybackState.PREPARE) {
+                val pos = playedBack?.ticks?.first()?.pos!!
+                event.yaw = RotationUtil.getYaw(pos - mc.player?.pos!!).toFloat()
+            }
+        }
+
+        registerEvent(EventRender2D::class.java) { event ->
+            val str = if (recording) "Recording" else if (playbackState != null) playbackState?.name?.let {
+                it.first() + it.substring(1).lowercase()
+            } else ""
+            mc.textRenderer?.drawWithShadow(event.matrices, str, mc.window?.scaledWidth!! / 2.0f - mc.textRenderer.getWidth(str) / 2.0f, mc.window?.scaledHeight!! / 2.0f - mc.textRenderer.fontHeight, Color.white.rgb)
+        }
+
+        registerEvent(EventRender3D::class.java) { event ->
+            GL11.glEnable(GL11.GL_BLEND)
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+            GL11.glDisable(GL11.GL_CULL_FACE)
+            GL11.glEnable(GL11.GL_LINE_SMOOTH)
+            GL11.glDisable(GL11.GL_DEPTH_TEST)
+            GL11.glDepthMask(false)
+            event.matrices.push()
+            val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
+            event.matrices.translate(-vec3d!!.x, -vec3d.y, -vec3d.z)
+            val bufferBuilder = Tessellator.getInstance().buffer
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
+            val matrix = event.matrices.peek()?.positionMatrix!!
+            if (playbackState != null && playedBack != null) {
+                drawPath(bufferBuilder, matrix, playedBack!!, 1.0f)
+            } else {
+                for (record in if (currentRecording != null) ArrayUtils.add(records.toTypedArray(), currentRecording!!) else records.toTypedArray()) {
+                    drawPath(bufferBuilder, matrix, record, 1f - (mc.player?.pos?.squaredDistanceTo(record.ticks.first().pos)!! / (16.0 * 16.0)).toFloat().coerceAtMost(1.0f))
+                }
+            }
+            event.matrices.pop()
+            GL11.glDisable(GL11.GL_BLEND)
+            GL11.glDisable(GL11.GL_LINE_SMOOTH)
+            GL11.glEnable(GL11.GL_DEPTH_TEST)
+            GL11.glDepthMask(true)
         }
     }
 

@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
 import net.minecraft.util.math.MathHelper
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventJump
@@ -35,68 +35,66 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
         firstMove = true
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventMovement -> {
-                if (event.entity != mc.player) return@Consumer
+    init {
+        registerEvent(EventMovement::class.java) { event ->
+            if (event.entity != mc.player) return@registerEvent
 
-                if (mc.player?.velocity?.lengthSquared()!! <= 0.01) firstMove = true
+            if (mc.player?.velocity?.lengthSquared()!! <= 0.01) firstMove = true
 
-                if (mc.player?.input?.movementInput?.lengthSquared() == 0.0f) return@Consumer
+            if (mc.player?.input?.movementInput?.lengthSquared() == 0.0f) return@registerEvent
 
-                val accessor = event.velocity as IVec3d
+            val accessor = event.velocity as IVec3d
 
-                val prevVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)!!
-                if (mc.player?.isOnGround == true) {
-                    if (jumpHeight.value > 0.0) {
+            val prevVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)!!
+            if (mc.player?.isOnGround == true) {
+                if (jumpHeight.value > 0.0) {
 
-                        mc.player?.jump()
+                    mc.player?.jump()
 
-                        if (!(mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
-                            mc.player?.velocity = mc.player?.velocity?.multiply(1.0, jumpHeight.value, 1.0)
+                    if (!(mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
+                        mc.player?.velocity = mc.player?.velocity?.multiply(1.0, jumpHeight.value, 1.0)
 
-                        accessor.tarasande_setY(mc.player?.velocity?.y!!)
+                    accessor.tarasande_setY(mc.player?.velocity?.y!!)
 
-                        val playerVelocityAccessor = mc.player?.velocity as IVec3d
-                        playerVelocityAccessor.tarasande_setX(prevVelocity.x)
-                        if (lowHop.value && mc.player?.horizontalCollision == false)
-                            playerVelocityAccessor.tarasande_setY(prevVelocity.y)
-                        playerVelocityAccessor.tarasande_setZ(prevVelocity.z)
+                    val playerVelocityAccessor = mc.player?.velocity as IVec3d
+                    playerVelocityAccessor.tarasande_setX(prevVelocity.x)
+                    if (lowHop.value && mc.player?.horizontalCollision == false)
+                        playerVelocityAccessor.tarasande_setY(prevVelocity.y)
+                    playerVelocityAccessor.tarasande_setZ(prevVelocity.z)
 
-                    } else {
-                        speed = PlayerUtil.calcBaseSpeed(speedValue.value)
-                    }
+                } else {
+                    speed = PlayerUtil.calcBaseSpeed(speedValue.value)
                 }
-                if (event.velocity.y < 0.0) {
-                    accessor.tarasande_setY(event.velocity.y * gravity.value)
-                }
-
-                val baseSpeed = event.velocity.horizontalLength()
-
-                val goal = PlayerUtil.getMoveDirection()
-
-                moveDir = if (firstMove) goal else moveDir + MathHelper.clamp(MathHelper.wrapDegrees(goal - moveDir), -turnRate.value, turnRate.value)
-
-                firstMove = false
-
-                val moveSpeed = max(speed, baseSpeed)
-                val rad = Math.toRadians(moveDir + 90)
-                accessor.tarasande_setX(cos(rad) * moveSpeed)
-                accessor.tarasande_setZ(sin(rad) * moveSpeed)
-
-                if (mc.player?.isOnGround == false)
-                    speed -= speed / speedDivider.value
+            }
+            if (event.velocity.y < 0.0) {
+                accessor.tarasande_setY(event.velocity.y * gravity.value)
             }
 
-            is EventJump -> {
-                speed = PlayerUtil.calcBaseSpeed(speedValue.value)
-            }
+            val baseSpeed = event.velocity.horizontalLength()
 
-            is EventKeyBindingIsPressed -> {
-                if (!lowHop.value && event.keyBinding == mc.options.jumpKey && PlayerUtil.input.movementInput?.lengthSquared()!! > 0.0)
-                    if (mc.player?.isOnGround!! && jumpHeight.value > 0.0)
-                        event.pressed = true
-            }
+            val goal = PlayerUtil.getMoveDirection()
+
+            moveDir = if (firstMove) goal else moveDir + MathHelper.clamp(MathHelper.wrapDegrees(goal - moveDir), -turnRate.value, turnRate.value)
+
+            firstMove = false
+
+            val moveSpeed = max(speed, baseSpeed)
+            val rad = Math.toRadians(moveDir + 90)
+            accessor.tarasande_setX(cos(rad) * moveSpeed)
+            accessor.tarasande_setZ(sin(rad) * moveSpeed)
+
+            if (mc.player?.isOnGround == false)
+                speed -= speed / speedDivider.value
+        }
+
+        registerEvent(EventJump::class.java) {
+            speed = PlayerUtil.calcBaseSpeed(speedValue.value)
+        }
+
+        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
+            if (!lowHop.value && event.keyBinding == mc.options.jumpKey && PlayerUtil.input.movementInput?.lengthSquared()!! > 0.0)
+                if (mc.player?.isOnGround!! && jumpHeight.value > 0.0)
+                    event.pressed = true
         }
     }
 

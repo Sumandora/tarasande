@@ -15,7 +15,7 @@ public abstract class MixinPlayerListHud {
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Lnet/minecraft/text/Text;"))
     public Text hookedGetPlayerName(PlayerListHud instance, PlayerListEntry entry) {
         EventPlayerListName eventPlayerListName = new EventPlayerListName(entry, instance.getPlayerName(entry));
-        TarasandeMain.Companion.get().getManagerEvent().call(eventPlayerListName);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventPlayerListName);
         return eventPlayerListName.getDisplayName();
     }
 

@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.base.module
 
 import net.minecraft.client.MinecraftClient
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.event.EventTick
@@ -17,6 +18,7 @@ import net.tarasandedevelopment.tarasande.module.render.*
 import net.tarasandedevelopment.tarasande.value.ValueBind
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import org.lwjgl.glfw.GLFW
+import java.util.function.Consumer
 
 class ManagerModule : Manager<Module>() {
 
@@ -110,19 +112,18 @@ class ManagerModule : Manager<Module>() {
             ModuleTridentBoost(),
             ModuleLiveOverflowMovement()
         )
-        TarasandeMain.get().managerEvent.add { event ->
-            if (event is EventTick)
-                if (event.state == EventTick.State.POST) {
-                    for (module in list)
-                        for (i in 0 until module.bind.wasPressed())
-                            module.switchState()
-                }
+        TarasandeMain.get().eventDispatcher.add(EventTick::class.java) {
+            if (it.state == EventTick.State.POST) {
+                for (module in list)
+                    for (i in 0 until module.bind.wasPressed())
+                        module.switchState()
+            }
         }
     }
 }
 
 open class Module(val name: String, val description: String, val category: ModuleCategory) {
-    val visible = ValueBoolean(this, "Visible in ArrayList", true)
+    private val eventListeners = HashSet<Triple<Class<Event>, Int, Consumer<Event>>>()
 
     @Suppress("PropertyName")
     var _enabled = false
@@ -131,9 +132,9 @@ open class Module(val name: String, val description: String, val category: Modul
         set(value) {
             if (_enabled != value) if (value) {
                 onEnable()
-                TarasandeMain.get().managerEvent.addObject(this)
+                eventListeners.forEach { TarasandeMain.get().eventDispatcher.add(it.first, it.second, it.third) }
             } else {
-                TarasandeMain.get().managerEvent.remObject(this)
+                eventListeners.forEach { TarasandeMain.get().eventDispatcher.rem(it.first, it.third) }
                 onDisable()
             }
 
@@ -141,6 +142,7 @@ open class Module(val name: String, val description: String, val category: Modul
         }
         get() = _enabled && isEnabled()
 
+    val visible = ValueBoolean(this, "Visible in ArrayList", true)
     val bind = ValueBind(this, "Bind", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN)
 
     val mc: MinecraftClient = MinecraftClient.getInstance()
@@ -153,6 +155,11 @@ open class Module(val name: String, val description: String, val category: Modul
     open fun onDisable() {}
 
     open fun isEnabled() = true
+
+    fun <T : Event> registerEvent(clazz: Class<T>, priority: Int = 1000, c: Consumer<T>) {
+        @Suppress("UNCHECKED_CAST") // BYPASS GENERICS ONCE AGAIN $$$$$$$
+        eventListeners.add(Triple(clazz as Class<Event>, priority, c as Consumer<Event>))
+    }
 }
 
 enum class ModuleCategory {

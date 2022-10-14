@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
 import net.minecraft.util.shape.VoxelShapes
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventCollisionShape
@@ -24,25 +24,22 @@ class ModulePhase : Module("Phase", "Allows you to move through blocks", ModuleC
         override fun isEnabled() = mode.isSelected(1)
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventUpdate -> {
-                if (event.state != EventUpdate.State.PRE)
-                    return@Consumer
+    init {
+        registerEvent(EventUpdate::class.java) { event ->
+            if (event.state != EventUpdate.State.PRE)
+                return@registerEvent
 
-                if (mode.isSelected(0))
-                    if (mc.player?.horizontalCollision == true) {
-                        mc.player?.setPosition(mc.player?.pos!! + Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0f).forwardVector(distance.value))
-                    }
-            }
-
-            is EventCollisionShape -> {
-                if (mode.isSelected(1)) {
-                    if (fallThrough.value || event.pos.y >= mc.player?.blockPos?.y!!)
-                        event.collisionShape = VoxelShapes.empty()
+            if (mode.isSelected(0))
+                if (mc.player?.horizontalCollision == true) {
+                    mc.player?.setPosition(mc.player?.pos!! + Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0f).forwardVector(distance.value))
                 }
+        }
+
+        registerEvent(EventCollisionShape::class.java) { event ->
+            if (mode.isSelected(1)) {
+                if (fallThrough.value || event.pos.y >= mc.player?.blockPos?.y!!)
+                    event.collisionShape = VoxelShapes.empty()
             }
         }
     }
-
 }

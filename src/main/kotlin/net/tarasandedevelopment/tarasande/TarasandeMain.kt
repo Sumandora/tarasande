@@ -4,10 +4,10 @@ import com.google.gson.GsonBuilder
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
+import net.tarasandedevelopment.eventsystem.EventDispatcher
 import net.tarasandedevelopment.tarasande.base.addon.ManagerAddon
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ManagerClientMenu
 import net.tarasandedevelopment.tarasande.base.esp.ManagerESP
-import net.tarasandedevelopment.tarasande.base.event.ManagerEvent
 import net.tarasandedevelopment.tarasande.base.file.ManagerFile
 import net.tarasandedevelopment.tarasande.base.module.ManagerModule
 import net.tarasandedevelopment.tarasande.base.util.player.clickspeed.ManagerClickMethod
@@ -27,8 +27,10 @@ class TarasandeMain {
 
     val name = "tarasande" // "lowercase gang" ~kennytv
 
-    lateinit var managerEvent: ManagerEvent
+    lateinit var eventDispatcher: EventDispatcher
         private set
+
+
     private lateinit var managerFile: ManagerFile
     lateinit var managerValue: ManagerValue
         private set
@@ -83,7 +85,7 @@ class TarasandeMain {
     }
 
     fun onPreLoad() {
-        managerEvent = ManagerEvent()
+        eventDispatcher = EventDispatcher()
     }
 
     fun onLateLoad() {

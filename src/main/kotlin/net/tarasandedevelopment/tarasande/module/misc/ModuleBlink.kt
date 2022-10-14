@@ -7,8 +7,6 @@ import net.minecraft.network.Packet
 import net.minecraft.network.listener.ClientPlayPacketListener
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.base.event.Event
-import net.tarasandedevelopment.tarasande.base.event.Priority
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPacket
@@ -22,7 +20,6 @@ import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import org.lwjgl.glfw.GLFW
 import java.util.concurrent.CopyOnWriteArrayList
-import java.util.function.Consumer
 
 class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
 
@@ -55,61 +52,58 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         rotation = Rotation(mc.player ?: return)
     }
 
-    @Priority(9999)
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventPacket -> {
-                if (event.cancelled) return@Consumer
-                if (event.packet != null) {
-                    if (mc.networkHandler?.connection == null ||
-                        (mc.networkHandler?.connection as IClientConnection).tarasande_getChannel().attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY ||
-                        (event.type == EventPacket.Type.RECEIVE && event.packet is DisconnectS2CPacket) ||
-                        (!mode.isSelected(1) && mc.currentScreen is DownloadingTerrainScreen)
-                    ) {
-                        this.switchState()
-                        return@Consumer
-                    }
-                    if (mode.isSelected(1) && mc.currentScreen is DownloadingTerrainScreen) {
-                        onDisable()
-                        return@Consumer
-                    }
-                    if (affectedPackets.isSelected(event.type.ordinal)) {
-                        packets.add(Triple(event.packet, event.type,
-                            if (mode.isSelected(2))
-                                System.currentTimeMillis() + latency.value.toLong()
-                            else
-                                System.currentTimeMillis()
-                        ))
-                        event.cancelled = true
-                    }
+    init {
+        registerEvent(EventPacket::class.java, 9999) { event ->
+            if (event.cancelled) return@registerEvent
+            if (event.packet != null) {
+                if (mc.networkHandler?.connection == null ||
+                    (mc.networkHandler?.connection as IClientConnection).tarasande_getChannel().attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY ||
+                    (event.type == EventPacket.Type.RECEIVE && event.packet is DisconnectS2CPacket) ||
+                    (!mode.isSelected(1) && mc.currentScreen is DownloadingTerrainScreen)
+                ) {
+                    this.switchState()
+                    return@registerEvent
+                }
+                if (mode.isSelected(1) && mc.currentScreen is DownloadingTerrainScreen) {
+                    onDisable()
+                    return@registerEvent
+                }
+                if (affectedPackets.isSelected(event.type.ordinal)) {
+                    packets.add(Triple(event.packet, event.type,
+                        if (mode.isSelected(2))
+                            System.currentTimeMillis() + latency.value.toLong()
+                        else
+                            System.currentTimeMillis()
+                    ))
+                    event.cancelled = true
                 }
             }
+        }
 
-            is EventPollEvents -> {
-                when {
-                    mode.isSelected(1) -> {
-                        if (timeUtil.hasReached(pulseDelay.value.toLong())) {
-                            onDisable(true)
-                            timeUtil.reset()
-                        }
+        registerEvent(EventPollEvents::class.java, 9999) {
+            when {
+                mode.isSelected(1) -> {
+                    if (timeUtil.hasReached(pulseDelay.value.toLong())) {
+                        onDisable(true)
+                        timeUtil.reset()
                     }
-
-                    mode.isSelected(2) -> onDisable(false)
                 }
+
+                mode.isSelected(2) -> onDisable(false)
             }
+        }
 
-            is EventTick -> {
-                if (event.state == EventTick.State.PRE) {
-                    if (pos == null || velocity == null || rotation == null)
-                        onEnable()
+        registerEvent(EventTick::class.java, 9999) { event ->
+            if (event.state == EventTick.State.PRE) {
+                if (pos == null || velocity == null || rotation == null)
+                    onEnable()
 
-                    if (cancelKey.isEnabled())
-                        if (cancelKey.wasPressed() > 0) {
-                            packets.removeIf { it.second == EventPacket.Type.SEND }
-                            onDisable(all = true, cancelled = true)
-                            enabled = false
-                        }
-                }
+                if (cancelKey.isEnabled())
+                    if (cancelKey.wasPressed() > 0) {
+                        packets.removeIf { it.second == EventPacket.Type.SEND }
+                        onDisable(all = true, cancelled = true)
+                        enabled = false
+                    }
             }
         }
     }

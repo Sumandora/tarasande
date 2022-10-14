@@ -24,11 +24,10 @@ class ManagerGraph : Manager<Graph>() {
             GraphRX()
         )
 
-        TarasandeMain.get().managerEvent.add { event ->
-            if (event is EventTick)
-                if (event.state == EventTick.State.PRE)
-                    for (graph in list)
-                        graph.lastData = graph.supplyData()
+        TarasandeMain.get().eventDispatcher.add(EventTick::class.java) {
+            if (it.state == EventTick.State.PRE)
+                for (graph in list)
+                    graph.lastData = graph.supplyData()
         }
     }
 }

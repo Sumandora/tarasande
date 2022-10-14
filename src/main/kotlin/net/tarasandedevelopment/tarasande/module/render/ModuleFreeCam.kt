@@ -5,8 +5,6 @@ import net.minecraft.client.input.KeyboardInput
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.option.Perspective
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.base.event.Event
-import net.tarasandedevelopment.tarasande.base.event.Priority
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.*
@@ -19,7 +17,6 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.util.function.Consumer
 
 class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around freely", ModuleCategory.RENDER) {
 
@@ -63,92 +60,88 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
         map.clear()
     }
 
-    @Priority(1) // let all of this stuff get overridden
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventCameraOverride -> {
-                if (position == null || rotation == null)
-                    onEnable()
-                mc.options.perspective = Perspective.THIRD_PERSON_BACK
-                val accessor = event.camera as ICamera
+    init {
+        registerEvent(EventCameraOverride::class.java, 1) { event ->
+            if (position == null || rotation == null)
+                onEnable()
+            mc.options.perspective = Perspective.THIRD_PERSON_BACK
+            val accessor = event.camera as ICamera
 
-                accessor.tarasande_invokeSetPos((prevCameraPos ?: position)?.lerp(position, mc.tickDelta.toDouble()))
-                accessor.tarasande_invokeSetRotation(rotation?.yaw!!, rotation?.pitch!!)
-            }
+            accessor.tarasande_invokeSetPos((prevCameraPos ?: position)?.lerp(position, mc.tickDelta.toDouble()))
+            accessor.tarasande_invokeSetRotation(rotation?.yaw!!, rotation?.pitch!!)
+        }
 
-            is EventPollEvents -> {
-                if (beginRotation == null)
-                    onEnable()
-                mc.player?.yaw = beginRotation?.yaw!!
-                mc.player?.pitch = beginRotation?.pitch!!
-                if (lockRotation.value && !event.dirty) {
-                    event.rotation = beginRotation!!
-                    // We return ourselves in onDisable
-                    event.minRotateToOriginSpeed = 0.0
-                    event.maxRotateToOriginSpeed = 0.0
-                }
-            }
-
-            is EventMouseDelta -> {
-                rotation = rotation?.plus(Rotation.calculateRotationChange(-event.deltaX, -event.deltaY))?.correctSensitivity() // clamp
-                event.deltaX = 0.0
-                event.deltaY = 0.0
-            }
-
-            is EventUpdate -> {
-                if (event.state == EventUpdate.State.PRE) {
-                    if (position == null || rotation == null)
-                        onEnable()
-                    var yMotion = 0.0
-                    if ((mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
-                        yMotion += speed.value
-                    if ((mc.options.sneakKey as IKeyBinding).tarasande_forceIsPressed())
-                        yMotion -= speed.value
-                    var velocity = (mc.player as IEntity).tarasande_invokeMovementInputToVelocity(Vec3d(
-                        MathUtil.roundAwayFromZero(input.movementSideways.toDouble()),
-                        0.0,
-                        MathUtil.roundAwayFromZero(input.movementForward.toDouble())
-                    ), speed.value.toFloat(), rotation?.yaw!!)
-                    velocity = Vec3d(velocity?.x!!, yMotion, velocity.z)
-                    prevCameraPos = position
-                    position = position!! + velocity
-                }
-            }
-
-            is EventInput -> {
-                if (firstInput == null || firstRealInput == null)
-                    onEnable()
-                if (event.input == MinecraftClient.getInstance().player?.input) {
-                    input.tick(event.slowDown, event.slowdownAmount)
-                    if (!keepMovement.value) {
-                        event.movementForward = 0.0f
-                        event.movementSideways = 0.0f
-                    }
-                } else if (event.input == PlayerUtil.input) {
-                    event.cancelled = true
-                }
-                if (keepMovement.value) {
-                    if (event.input == MinecraftClient.getInstance().player?.input) {
-                        if (firstInput != null) {
-                            event.movementForward = firstInput?.first!!
-                            event.movementSideways = firstInput?.second!!
-                        }
-                    } else if (event.input == PlayerUtil.input) {
-                        if (firstRealInput != null) {
-                            event.movementForward = firstRealInput?.first!!
-                            event.movementSideways = firstRealInput?.second!!
-                        }
-                    }
-                }
-            }
-
-            is EventKeyBindingIsPressed -> {
-                if (map.isEmpty())
-                    onEnable()
-                if (!PlayerUtil.movementKeys.contains(event.keyBinding))
-                    event.pressed = keepMovement.value && map[event.keyBinding] ?: false
+        registerEvent(EventPollEvents::class.java, 1) { event ->
+            if (beginRotation == null)
+                onEnable()
+            mc.player?.yaw = beginRotation?.yaw!!
+            mc.player?.pitch = beginRotation?.pitch!!
+            if (lockRotation.value && !event.dirty) {
+                event.rotation = beginRotation!!
+                // We return ourselves in onDisable
+                event.minRotateToOriginSpeed = 0.0
+                event.maxRotateToOriginSpeed = 0.0
             }
         }
-    }
 
+        registerEvent(EventMouseDelta::class.java, 1) { event ->
+            rotation = rotation?.plus(Rotation.calculateRotationChange(-event.deltaX, -event.deltaY))?.correctSensitivity() // clamp
+            event.deltaX = 0.0
+            event.deltaY = 0.0
+        }
+
+        registerEvent(EventUpdate::class.java, 1) { event ->
+            if (event.state == EventUpdate.State.PRE) {
+                if (position == null || rotation == null)
+                    onEnable()
+                var yMotion = 0.0
+                if ((mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
+                    yMotion += speed.value
+                if ((mc.options.sneakKey as IKeyBinding).tarasande_forceIsPressed())
+                    yMotion -= speed.value
+                var velocity = (mc.player as IEntity).tarasande_invokeMovementInputToVelocity(Vec3d(
+                    MathUtil.roundAwayFromZero(input.movementSideways.toDouble()),
+                    0.0,
+                    MathUtil.roundAwayFromZero(input.movementForward.toDouble())
+                ), speed.value.toFloat(), rotation?.yaw!!)
+                velocity = Vec3d(velocity?.x!!, yMotion, velocity.z)
+                prevCameraPos = position
+                position = position!! + velocity
+            }
+        }
+
+        registerEvent(EventInput::class.java, 1) { event ->
+            if (firstInput == null || firstRealInput == null)
+                onEnable()
+            if (event.input == MinecraftClient.getInstance().player?.input) {
+                input.tick(event.slowDown, event.slowdownAmount)
+                if (!keepMovement.value) {
+                    event.movementForward = 0.0f
+                    event.movementSideways = 0.0f
+                }
+            } else if (event.input == PlayerUtil.input) {
+                event.cancelled = true
+            }
+            if (keepMovement.value) {
+                if (event.input == MinecraftClient.getInstance().player?.input) {
+                    if (firstInput != null) {
+                        event.movementForward = firstInput?.first!!
+                        event.movementSideways = firstInput?.second!!
+                    }
+                } else if (event.input == PlayerUtil.input) {
+                    if (firstRealInput != null) {
+                        event.movementForward = firstRealInput?.first!!
+                        event.movementSideways = firstRealInput?.second!!
+                    }
+                }
+            }
+        }
+
+        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
+            if (map.isEmpty())
+                onEnable()
+            if (!PlayerUtil.movementKeys.contains(event.keyBinding))
+                event.pressed = keepMovement.value && map[event.keyBinding] ?: false
+        }
+    }
 }

@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.module.ghost
 
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.util.hit.HitResult
-import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventAttack
@@ -10,7 +9,6 @@ import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
 import net.tarasandedevelopment.tarasande.util.player.clickspeed.ClickSpeedUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
-import java.util.function.Consumer
 
 class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you", ModuleCategory.GHOST) {
 
@@ -32,37 +30,35 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
         hashMap.forEach { (_, u) -> u.reset() }
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventAttack -> {
-                if (event.dirty)
-                    return@Consumer
+    init {
+        registerEvent(EventAttack::class.java) { event ->
+            if (event.dirty)
+                return@registerEvent
 
-                for (entry in hashMap) {
-                    if (buttons.selected.contains(keyMap[entry.key]) && (entry.key as IKeyBinding).tarasande_forceIsPressed()) {
-                        val clicks = entry.value.getClicks()
-                        if (entry.key == mc.options.useKey && mc.player?.isUsingItem == true)
-                            return@Consumer
-                        for (i in 1..clicks) {
-                            (entry.key as IKeyBinding).tarasande_increaseTimesPressed()
-                            event.dirty = true
-                        }
-                    } else {
-                        entry.value.reset()
+            for (entry in hashMap) {
+                if (buttons.selected.contains(keyMap[entry.key]) && (entry.key as IKeyBinding).tarasande_forceIsPressed()) {
+                    val clicks = entry.value.getClicks()
+                    if (entry.key == mc.options.useKey && mc.player?.isUsingItem == true)
+                        return@registerEvent
+                    for (i in 1..clicks) {
+                        (entry.key as IKeyBinding).tarasande_increaseTimesPressed()
+                        event.dirty = true
                     }
+                } else {
+                    entry.value.reset()
                 }
             }
+        }
 
-            is EventKeyBindingIsPressed -> {
-                for (entry in hashMap) {
-                    if (buttons.selected.contains(keyMap[entry.key]) && event.keyBinding == entry.key) {
-                        event.pressed =
-                            when (entry.key) {
-                                mc.options.attackKey -> event.pressed && mc.crosshairTarget?.type == HitResult.Type.BLOCK
-                                mc.options.useKey -> event.pressed || (mc.player?.isUsingItem == true && (event.keyBinding as IKeyBinding).tarasande_forceIsPressed())
-                                else -> false
-                            }
-                    }
+        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
+            for (entry in hashMap) {
+                if (buttons.selected.contains(keyMap[entry.key]) && event.keyBinding == entry.key) {
+                    event.pressed =
+                        when (entry.key) {
+                            mc.options.attackKey -> event.pressed && mc.crosshairTarget?.type == HitResult.Type.BLOCK
+                            mc.options.useKey -> event.pressed || (mc.player?.isUsingItem == true && (event.keyBinding as IKeyBinding).tarasande_forceIsPressed())
+                            else -> false
+                        }
                 }
             }
         }

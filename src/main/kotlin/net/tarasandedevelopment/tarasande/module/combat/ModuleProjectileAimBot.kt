@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
@@ -55,49 +55,46 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
         return entity.boundingBox.center + (entity.pos!! - prev).withAxis(Direction.Axis.Y, 0.0) * (predicted.size.toDouble() * predictionAmount.value)
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventPollEvents -> {
-                if (!mc.player?.isUsingItem!!) return@Consumer
-                val stack = mc.player?.getStackInHand(mc.player?.activeHand) ?: return@Consumer
-                if (stack.item !is BowItem && !(stack.item is CrossbowItem && (stack.item as ICrossbowItem).tarasande_invokeGetProjectiles(stack).any { it.item is ArrowItem })) return@Consumer
+    init {
+        registerEvent(EventPollEvents::class.java) { event ->
+            if (!mc.player?.isUsingItem!!) return@registerEvent
+            val stack = mc.player?.getStackInHand(mc.player?.activeHand) ?: return@registerEvent
+            if (stack.item !is BowItem && !(stack.item is CrossbowItem && (stack.item as ICrossbowItem).tarasande_invokeGetProjectiles(stack).any { it.item is ArrowItem })) return@registerEvent
 
-                val entity = mc.world?.entities?.filter { PlayerUtil.isAttackable(it) && PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.eyePos) }?.minByOrNull { RotationUtil.getRotations(mc.player?.eyePos!!, it.eyePos).fov(Rotation(mc.player!!)) } ?: return@Consumer
+            val entity = mc.world?.entities?.filter { PlayerUtil.isAttackable(it) && PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.eyePos) }?.minByOrNull { RotationUtil.getRotations(mc.player?.eyePos!!, it.eyePos).fov(Rotation(mc.player!!)) } ?: return@registerEvent
 
-                var target = entity.boundingBox.center
+            var target = entity.boundingBox.center
 
-                var solution = calcPitch(stack, mc.player?.eyePos?.distanceTo(target)!!, target.y - mc.player?.eyeY!!)
+            var solution = calcPitch(stack, mc.player?.eyePos?.distanceTo(target)!!, target.y - mc.player?.eyeY!!)
 
-                if (solution.isNaN()) return@Consumer
+            if (solution.isNaN()) return@registerEvent
 
-                var yaw = RotationUtil.getYaw(target - mc.player?.eyePos!!)
-                var rotation = Rotation(yaw.toFloat(), solution.toFloat())
+            var yaw = RotationUtil.getYaw(target - mc.player?.eyePos!!)
+            var rotation = Rotation(yaw.toFloat(), solution.toFloat())
 
-                // DEAD RECKONING
-                target = deadReckoning(stack, entity, rotation)
+            // DEAD RECKONING
+            target = deadReckoning(stack, entity, rotation)
 
-                solution = calcPitch(stack, mc.player?.eyePos?.distanceTo(target)!!, target.y - mc.player?.eyeY!!)
+            solution = calcPitch(stack, mc.player?.eyePos?.distanceTo(target)!!, target.y - mc.player?.eyeY!!)
 
-                if (solution.isNaN()) return@Consumer
+            if (solution.isNaN()) return@registerEvent
 
-                yaw = RotationUtil.getYaw(target - mc.player?.eyePos!!)
-                rotation = Rotation(yaw.toFloat(), solution.toFloat())
-                // DEAD RECKONING
+            yaw = RotationUtil.getYaw(target - mc.player?.eyePos!!)
+            rotation = Rotation(yaw.toFloat(), solution.toFloat())
+            // DEAD RECKONING
 
-                val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
-                val smoothedRot = currentRot.smoothedTurn(rotation, aimSpeed)
+            val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
+            val smoothedRot = currentRot.smoothedTurn(rotation, aimSpeed)
 
-                event.rotation = smoothedRot.correctSensitivity()
+            event.rotation = smoothedRot.correctSensitivity()
 
-                if (lockView.value) {
-                    mc.player?.yaw = event.rotation.yaw
-                    mc.player?.pitch = event.rotation.pitch
-                }
-
-                event.minRotateToOriginSpeed = aimSpeed.minValue
-                event.maxRotateToOriginSpeed = aimSpeed.maxValue
+            if (lockView.value) {
+                mc.player?.yaw = event.rotation.yaw
+                mc.player?.pitch = event.rotation.pitch
             }
+
+            event.minRotateToOriginSpeed = aimSpeed.minValue
+            event.maxRotateToOriginSpeed = aimSpeed.maxValue
         }
     }
-
 }

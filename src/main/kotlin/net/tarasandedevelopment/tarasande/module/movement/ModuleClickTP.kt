@@ -11,7 +11,6 @@ import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShapes
-import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventMouse
@@ -23,7 +22,6 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL11
 import java.awt.Color
-import java.util.function.Consumer
 
 class ModuleClickTP : Module("Click tp", "Teleports you to the position you click at", ModuleCategory.MOVEMENT) {
 
@@ -41,8 +39,8 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
         goal = null
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        if (event is EventMouse) {
+    init {
+        registerEvent(EventMouse::class.java) { event ->
             if (event.action == GLFW.GLFW_PRESS && event.button == 1 && mc.currentScreen == null) {
                 val hitResult = PlayerUtil.getTargetedEntity(mc.options.viewDistance.value * 16.0, Rotation(mc.player!!), false)
                 if (hitResult != null) {
@@ -52,23 +50,25 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
                         else
                             BlockPos(hitResult.pos)
                     if (blockPos == null)
-                        return@Consumer
+                        return@registerEvent
 
                     while (!isPassable(blockPos))
                         blockPos = blockPos.add(0, 1, 0)
 
-                    for (vec in (pathFinder.findPath(mc.player?.pos!!, Vec3d.of(blockPos).also { goal = it }, 1000L) ?: return@Consumer).also { path = it }) {
+                    for (vec in (pathFinder.findPath(mc.player?.pos!!, Vec3d.of(blockPos).also { goal = it }, 1000L) ?: return@registerEvent).also { path = it }) {
                         mc.networkHandler?.sendPacket(PositionAndOnGround(vec.x, vec.y, vec.z, false))
                         mc.player?.setPosition(vec)
                     }
                 }
             }
-        } else if (event is EventRender3D) {
+        }
+
+        registerEvent(EventRender3D::class.java) { event ->
             if (goal != null) {
                 RenderUtil.blockOutline(event.matrices, VoxelShapes.fullCube().offset(goal?.x!!, goal?.y!!, goal?.z!!), Color(255, 255, 255, 50).rgb)
             }
             if (path == null)
-                return@Consumer
+                return@registerEvent
             RenderSystem.enableBlend()
             RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
             RenderSystem.disableCull()

@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventMovement
@@ -15,8 +15,8 @@ class ModuleVehicleFlight : Module("Vehicle flight", "Makes you fly with vehicle
     private val verticalSpeed = ValueNumber(this, "Vertical speed", 0.0, 0.1, 1.0, 0.1)
     private val downwardsBind = ValueBind(this, "Downwards bind", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN)
 
-    val eventConsumer = Consumer<Event> { event ->
-        if (event is EventMovement) {
+    init {
+        registerEvent(EventMovement::class.java) { event ->
             val vehicle = mc.player?.vehicle
             if (vehicle != null) {
                 if (event.entity == vehicle) {

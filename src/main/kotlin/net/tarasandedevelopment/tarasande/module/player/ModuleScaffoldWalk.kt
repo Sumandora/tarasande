@@ -9,15 +9,14 @@ import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.*
 import net.minecraft.util.registry.Registry
 import net.minecraft.util.shape.VoxelShapes
-import net.tarasandedevelopment.tarasande.base.event.Event
-import net.tarasandedevelopment.tarasande.base.event.Priority
+import net.tarasandedevelopment.eventsystem.Event
+import net.tarasandedevelopment.eventsystem.Priority
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
 import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
 import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
-import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.extension.times
@@ -169,252 +168,249 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         return best
     }
 
-    @Priority(1001) // Killaura packets have to go first
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventPollEvents -> {
-                if (lastRotation != null) {
-                    when {
-                        headRoll.isSelected(1) -> {
-                            lastRotation = Rotation(mc.player?.yaw!!, lastRotation?.pitch!!)
-                        }
+    init {
+        registerEvent(EventPollEvents::class.java, 1001) { event ->
+            if (lastRotation != null) {
+                when {
+                    headRoll.isSelected(1) -> {
+                        lastRotation = Rotation(mc.player?.yaw!!, lastRotation?.pitch!!)
+                    }
 
-                        headRoll.isSelected(2) -> {
-                            lastRotation = Rotation(lastRotation?.yaw!! + mc.player?.age!! * 45, lastRotation?.pitch!!)
-                        }
+                    headRoll.isSelected(2) -> {
+                        lastRotation = Rotation(lastRotation?.yaw!! + mc.player?.age!! * 45, lastRotation?.pitch!!)
                     }
                 }
+            }
 
-                val below = mc.player?.blockPos?.add(0, -1, 0)!!
-                val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
-                if (mc.world?.isAir(below)!!) {
-                    val prevTarget = target
-                    target = getAdjacentBlock(below)
-                    if (target != null) {
-                        if (!rotateAtEdge.value || ((rotateAtEdgeMode.isSelected(0) && ((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= rotateAtEdgeDistance.value * rotateAtEdgeDistance.value || target?.second?.offsetY != 0) || (rotateAtEdgeMode.isSelected(1) && PlayerUtil.isOnEdge(rotateAtEdgeExtrapolation.value)))) {
+            val below = mc.player?.blockPos?.add(0, -1, 0)!!
+            val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
+            if (mc.world?.isAir(below)!!) {
+                val prevTarget = target
+                target = getAdjacentBlock(below)
+                if (target != null) {
+                    if (!rotateAtEdge.value || ((rotateAtEdgeMode.isSelected(0) && ((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= rotateAtEdgeDistance.value * rotateAtEdgeDistance.value || target?.second?.offsetY != 0) || (rotateAtEdgeMode.isSelected(1) && PlayerUtil.isOnEdge(rotateAtEdgeExtrapolation.value)))) {
 
-                            if (lastRotation == null || run {
-                                    if (!preventRerotation.value)
-                                        true
-                                    else if (rerotateOnFacingChange.value && (prevTarget != null && prevTarget.second != target?.second)) {
-                                        preferredSide = null
-                                        true
-                                    } else {
-                                        val rotationVector = (mc.player as IEntity).tarasande_invokeGetRotationVector(lastRotation?.pitch!!, lastRotation?.yaw!!)
-                                        val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector * mc.interactionManager?.reachDistance?.toDouble()!!)
-                                        hitResult.type != HitResult.Type.BLOCK || hitResult.side != (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) || hitResult.blockPos != target?.first
-                                    }
-                                }) {
-
-                                val dirVec = target?.second?.vector!!
-                                var point = Vec3d.ofCenter(target?.first) + Vec3d.of(dirVec) * -0.5
-                                val eye = mc.player?.eyePos!!
-
-                                val padding = 0.01
-
-                                val finalPoint = if (target?.second?.offsetY != 0) {
-                                    placeLine = null
-                                    val blockPos = target?.first
-                                    val blockState = mc.world?.getBlockState(target?.first)
-                                    val shape = blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos?.x?.toDouble()!!, blockPos.y.toDouble(), blockPos.z.toDouble())!!
-                                    if (shape.isEmpty)
-                                        point
-                                    else
-                                        MathUtil.closestPointToBox(aimTarget ?: eye, shape.boundingBox.expand(-padding))
+                        if (lastRotation == null || run {
+                                if (!preventRerotation.value)
+                                    true
+                                else if (rerotateOnFacingChange.value && (prevTarget != null && prevTarget.second != target?.second)) {
+                                    preferredSide = null
+                                    true
                                 } else {
-                                    val rotatedVec = dirVec.let { Vec3d(abs(it.x) - 1.0, 0.0, abs(it.z) - 1.0) }
-                                    point = point.add(0.0, MathHelper.clamp(aimHeight.value + ThreadLocalRandom.current().nextFloat() * 0.1 - 0.05, 0.0, 1.0) - 0.5, 0.0)
+                                    val rotationVector = (mc.player as IEntity).tarasande_invokeGetRotationVector(lastRotation?.pitch!!, lastRotation?.yaw!!)
+                                    val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector * mc.interactionManager?.reachDistance?.toDouble()!!)
+                                    hitResult.type != HitResult.Type.BLOCK || hitResult.side != (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) || hitResult.blockPos != target?.first
+                                }
+                            }) {
 
-                                    val sideBegin = point + rotatedVec * 0.5
-                                    val sideEnd = point + rotatedVec * -0.5
+                            val dirVec = target?.second?.vector!!
+                            var point = Vec3d.ofCenter(target?.first) + Vec3d.of(dirVec) * -0.5
+                            val eye = mc.player?.eyePos!!
 
-                                    placeLine = Pair(sideBegin, sideEnd)
+                            val padding = 0.01
 
-                                    // calculating the closest point on the line to feet
-                                    var goalAim = eye
+                            val finalPoint = if (target?.second?.offsetY != 0) {
+                                placeLine = null
+                                val blockPos = target?.first
+                                val blockState = mc.world?.getBlockState(target?.first)
+                                val shape = blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos?.x?.toDouble()!!, blockPos.y.toDouble(), blockPos.z.toDouble())!!
+                                if (shape.isEmpty)
+                                    point
+                                else
+                                    MathUtil.closestPointToBox(aimTarget ?: eye, shape.boundingBox.expand(-padding))
+                            } else {
+                                val rotatedVec = dirVec.let { Vec3d(abs(it.x) - 1.0, 0.0, abs(it.z) - 1.0) }
+                                point = point.add(0.0, MathHelper.clamp(aimHeight.value + ThreadLocalRandom.current().nextFloat() * 0.1 - 0.05, 0.0, 1.0) - 0.5, 0.0)
 
-                                    if (offsetGoalYaw.value) {
-                                        val targetRot = mc.player?.yaw!! - 180
-                                        goalAim = intersection( // adjust our target
-                                            Vec2f(sideBegin.x.toFloat(), sideBegin.z.toFloat()), Vec2f(sideEnd.x.toFloat(), sideEnd.z.toFloat()),
-                                            Vec2f(eye.x.toFloat(), eye.z.toFloat()), (eye + Rotation(targetRot, 0.0f).forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)).let { Vec2f(it.x.toFloat(), it.z.toFloat()) }
-                                        ).let { Vec3d(it.x.toDouble(), point.y, it.y.toDouble()) }
-                                    }
+                                val sideBegin = point + rotatedVec * 0.5
+                                val sideEnd = point + rotatedVec * -0.5
 
-                                    val beginToPoint = Vec2f((goalAim.x - sideBegin.x).toFloat(), (goalAim.z - sideBegin.z).toFloat())
-                                    val beginToEnd = Vec2f((sideEnd.x - sideBegin.x).toFloat(), (sideEnd.z - sideBegin.z).toFloat())
+                                placeLine = Pair(sideBegin, sideEnd)
 
-                                    val squaredDist = beginToEnd.lengthSquared()
-                                    val dotProd = beginToPoint.dot(beginToEnd)
+                                // calculating the closest point on the line to feet
+                                var goalAim = eye
 
-                                    var t = dotProd / squaredDist
-                                    val prevT = t
+                                if (offsetGoalYaw.value) {
+                                    val targetRot = mc.player?.yaw!! - 180
+                                    goalAim = intersection( // adjust our target
+                                        Vec2f(sideBegin.x.toFloat(), sideBegin.z.toFloat()), Vec2f(sideEnd.x.toFloat(), sideEnd.z.toFloat()),
+                                        Vec2f(eye.x.toFloat(), eye.z.toFloat()), (eye + Rotation(targetRot, 0.0f).forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)).let { Vec2f(it.x.toFloat(), it.z.toFloat()) }
+                                    ).let { Vec3d(it.x.toDouble(), point.y, it.y.toDouble()) }
+                                }
 
-                                    val closest = sideBegin + (sideEnd - sideBegin) * MathHelper.clamp(t.toDouble(), padding, 1.0 - padding)
+                                val beginToPoint = Vec2f((goalAim.x - sideBegin.x).toFloat(), (goalAim.z - sideBegin.z).toFloat())
+                                val beginToEnd = Vec2f((sideEnd.x - sideBegin.x).toFloat(), (sideEnd.z - sideBegin.z).toFloat())
 
-                                    if (t in padding..1.0f - padding) {
-                                        val dist = (eye - closest).horizontalLength()
-                                        val a = sin(Math.toRadians(-goalYaw.value * (60 / 45f /* those are triangles bitch */))) * dist
-                                        if (preferredSide == null) {
-                                            val solutions = listOf(t + a.toFloat(), t - a.toFloat())
-                                            val bestSolution = solutions.minBy { abs(it - 0.5) }
-                                            t = bestSolution
+                                val squaredDist = beginToEnd.lengthSquared()
+                                val dotProd = beginToPoint.dot(beginToEnd)
 
-                                            preferredSide = when {
-                                                prevT < t -> 1
-                                                prevT > t -> -1
-                                                else -> null
-                                            }
-                                        } else {
-                                            t += (a * preferredSide!!).toFloat()
+                                var t = dotProd / squaredDist
+                                val prevT = t
+
+                                val closest = sideBegin + (sideEnd - sideBegin) * MathHelper.clamp(t.toDouble(), padding, 1.0 - padding)
+
+                                if (t in padding..1.0f - padding) {
+                                    val dist = (eye - closest).horizontalLength()
+                                    val a = sin(Math.toRadians(-goalYaw.value * (60 / 45f /* those are triangles bitch */))) * dist
+                                    if (preferredSide == null) {
+                                        val solutions = listOf(t + a.toFloat(), t - a.toFloat())
+                                        val bestSolution = solutions.minBy { abs(it - 0.5) }
+                                        t = bestSolution
+
+                                        preferredSide = when {
+                                            prevT < t -> 1
+                                            prevT > t -> -1
+                                            else -> null
                                         }
+                                    } else {
+                                        t += (a * preferredSide!!).toFloat()
                                     }
-
-                                    sideBegin + (sideEnd - sideBegin) * MathHelper.clamp(t.toDouble(), padding, 1.0f - padding)
                                 }
 
-                                aimTarget = finalPoint
-
-                                lastRotation = RotationUtil.getRotations(eye, finalPoint)
+                                sideBegin + (sideEnd - sideBegin) * MathHelper.clamp(t.toDouble(), padding, 1.0f - padding)
                             }
+
+                            aimTarget = finalPoint
+
+                            lastRotation = RotationUtil.getRotations(eye, finalPoint)
                         }
-                    } else {
-                        prevEdgeDistance = 0.5
-                        clickSpeedUtil.reset()
                     }
-                }
-                if (lastRotation == null) {
-                    val rad = Math.toRadians(PlayerUtil.getMoveDirection()) - PI / 2
-                    val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, mc.player?.pos!! + Vec3d(cos(rad), 0.0, sin(rad)) * 0.3)
-
-                    val diagonal = abs(round(mc.player?.yaw!! / 90) * 90 - mc.player?.yaw!!) > 22.5
-                    if (!diagonal)
-                        targetRot.yaw += (-goalYaw.value * (45.0 / 60.0)).toFloat() // those are not triangles anymore :c
-
-                    lastRotation = targetRot
-                }
-
-                event.rotation = currentRot.smoothedTurn(lastRotation!!, aimSpeed).correctSensitivity()
-
-                if (lockView.value) {
-                    mc.player?.yaw = event.rotation.yaw
-                    mc.player?.pitch = event.rotation.pitch
-                }
-
-                event.minRotateToOriginSpeed = aimSpeed.minValue
-                event.maxRotateToOriginSpeed = aimSpeed.maxValue
-            }
-
-            is EventAttack -> {
-                if (target == null || RotationUtil.fakeRotation == null || event.dirty) {
+                } else {
+                    prevEdgeDistance = 0.5
                     clickSpeedUtil.reset()
-                    return@Consumer
                 }
+            }
+            if (lastRotation == null) {
+                val rad = Math.toRadians(PlayerUtil.getMoveDirection()) - PI / 2
+                val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, mc.player?.pos!! + Vec3d(cos(rad), 0.0, sin(rad)) * 0.3)
 
-                val airBelow = mc.world?.isAir(BlockPos(mc.player?.pos?.add(0.0, -1.0, 0.0)))!!
+                val diagonal = abs(round(mc.player?.yaw!! / 90) * 90 - mc.player?.yaw!!) > 22.5
+                if (!diagonal)
+                    targetRot.yaw += (-goalYaw.value * (45.0 / 60.0)).toFloat() // those are not triangles anymore :c
 
-                if (airBelow || alwaysClick.value) {
-                    val newEdgeDist = getNewEdgeDist()
-                    val clicks = clickSpeedUtil.getClicks()
-                    val prevSlot = mc.player?.inventory?.selectedSlot
-                    var hasBlock = false
-                    for (hand in Hand.values()) {
-                        val stack = mc.player?.getStackInHand(hand)
-                        if (stack != null) {
-                            if (stack.item is BlockItem && isBlockItemValid(stack.item as BlockItem)) {
-                                hasBlock = true
-                            } else if (stack.item.getUseAction(stack) != UseAction.NONE) {
-                                break
-                            }
+                lastRotation = targetRot
+            }
+
+            event.rotation = currentRot.smoothedTurn(lastRotation!!, aimSpeed).correctSensitivity()
+
+            if (lockView.value) {
+                mc.player?.yaw = event.rotation.yaw
+                mc.player?.pitch = event.rotation.pitch
+            }
+
+            event.minRotateToOriginSpeed = aimSpeed.minValue
+            event.maxRotateToOriginSpeed = aimSpeed.maxValue
+        }
+
+        registerEvent(EventAttack::class.java, 1001) { event ->
+            if (target == null || RotationUtil.fakeRotation == null || event.dirty) {
+                clickSpeedUtil.reset()
+                return@registerEvent
+            }
+
+            val airBelow = mc.world?.isAir(BlockPos(mc.player?.pos?.add(0.0, -1.0, 0.0)))!!
+
+            if (airBelow || alwaysClick.value) {
+                val newEdgeDist = getNewEdgeDist()
+                val clicks = clickSpeedUtil.getClicks()
+                val prevSlot = mc.player?.inventory?.selectedSlot
+                var hasBlock = false
+                for (hand in Hand.values()) {
+                    val stack = mc.player?.getStackInHand(hand)
+                    if (stack != null) {
+                        if (stack.item is BlockItem && isBlockItemValid(stack.item as BlockItem)) {
+                            hasBlock = true
+                        } else if (stack.item.getUseAction(stack) != UseAction.NONE) {
+                            break
                         }
                     }
-                    if (!hasBlock) {
-                        if (silent.value) {
-                            var blockAmount = 0
-                            var blockSlot: Int? = null
-                            for (slot in 0..8) {
-                                val stack = mc.player?.inventory?.main?.get(slot)
-                                if (stack != null && stack.item is BlockItem && isBlockItemValid(stack.item as BlockItem)) {
-                                    if (blockSlot == null || blockAmount > stack.count) {
-                                        blockSlot = slot
-                                        blockAmount = stack.count
-                                    }
-                                }
-                            }
-                            if (blockSlot != null) {
-                                mc.player?.inventory?.selectedSlot = blockSlot
-                            } else return@Consumer
-                        } else return@Consumer
-                    }
-                    val rotationVector = (mc.player as IEntity).tarasande_invokeGetRotationVector(RotationUtil.fakeRotation?.pitch!!, RotationUtil.fakeRotation?.yaw!!)
-                    val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector * mc.interactionManager?.reachDistance?.toDouble()!!)
-                    if (hitResult.type == HitResult.Type.BLOCK && hitResult.side == (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) && hitResult.blockPos == target?.first) {
-                        if (airBelow && (((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= newEdgeDist * newEdgeDist || target?.first?.y!! < mc.player?.y!!)) {
-                            if (timeUtil.hasReached(delay.value.toLong())) {
-                                placeBlock(hitResult)
-                                event.dirty = true
-
-                                if (target?.second?.offsetY == 0) {
-                                    if (edgeIncrement.value && preventImpossibleEdge.value && prevEdgeDistance > newEdgeDist && mc.player?.isOnGround!!)
-                                        mc.player?.jump()
-                                    prevEdgeDistance = newEdgeDist
-                                }
-
-                                timeUtil.reset()
-                            }
-                        }
-                    } else if (alwaysClick.value) {
-                        for (i in 1..clicks)
-                            placeBlock(hitResult)
-                        event.dirty = true
-                    }
+                }
+                if (!hasBlock) {
                     if (silent.value) {
-                        mc.player?.inventory?.selectedSlot = prevSlot
+                        var blockAmount = 0
+                        var blockSlot: Int? = null
+                        for (slot in 0..8) {
+                            val stack = mc.player?.inventory?.main?.get(slot)
+                            if (stack != null && stack.item is BlockItem && isBlockItemValid(stack.item as BlockItem)) {
+                                if (blockSlot == null || blockAmount > stack.count) {
+                                    blockSlot = slot
+                                    blockAmount = stack.count
+                                }
+                            }
+                        }
+                        if (blockSlot != null) {
+                            mc.player?.inventory?.selectedSlot = blockSlot
+                        } else return@registerEvent
+                    } else return@registerEvent
+                }
+                val rotationVector = (mc.player as IEntity).tarasande_invokeGetRotationVector(RotationUtil.fakeRotation?.pitch!!, RotationUtil.fakeRotation?.yaw!!)
+                val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector * mc.interactionManager?.reachDistance?.toDouble()!!)
+                if (hitResult.type == HitResult.Type.BLOCK && hitResult.side == (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) && hitResult.blockPos == target?.first) {
+                    if (airBelow && (((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= newEdgeDist * newEdgeDist || target?.first?.y!! < mc.player?.y!!)) {
+                        if (timeUtil.hasReached(delay.value.toLong())) {
+                            placeBlock(hitResult)
+                            event.dirty = true
+
+                            if (target?.second?.offsetY == 0) {
+                                if (edgeIncrement.value && preventImpossibleEdge.value && prevEdgeDistance > newEdgeDist && mc.player?.isOnGround!!)
+                                    mc.player?.jump()
+                                prevEdgeDistance = newEdgeDist
+                            }
+
+                            timeUtil.reset()
+                        }
                     }
+                } else if (alwaysClick.value) {
+                    for (i in 1..clicks)
+                        placeBlock(hitResult)
+                    event.dirty = true
+                }
+                if (silent.value) {
+                    mc.player?.inventory?.selectedSlot = prevSlot
                 }
             }
+        }
 
-            is EventMovement -> {
-                if (event.entity != mc.player)
-                    return@Consumer
-                if (target != null) {
-                    if (PlayerUtil.input.jumping) {
-                        when {
-                            tower.isSelected(1) -> {
-                                val velocity = event.velocity.add(0.0, 0.0, 0.0)
-                                val playerVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)
-                                mc.player?.jump()
-                                event.velocity = velocity?.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!!)!!
-                                mc.player?.velocity = playerVelocity
-                            }
+        registerEvent(EventMovement::class.java) { event ->
+            if (event.entity != mc.player)
+                return@registerEvent
+            if (target != null) {
+                if (PlayerUtil.input.jumping) {
+                    when {
+                        tower.isSelected(1) -> {
+                            val velocity = event.velocity.add(0.0, 0.0, 0.0)
+                            val playerVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)
+                            mc.player?.jump()
+                            event.velocity = velocity?.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!!)!!
+                            mc.player?.velocity = playerVelocity
+                        }
 
-                            tower.isSelected(2) -> {
-                                event.velocity = event.velocity.withAxis(Direction.Axis.Y, 1.0)
-                            }
+                        tower.isSelected(2) -> {
+                            event.velocity = event.velocity.withAxis(Direction.Axis.Y, 1.0)
                         }
                     }
                 }
             }
+        }
 
-            is EventJump -> {
-                if (event.state != EventJump.State.PRE) return@Consumer
-                prevEdgeDistance = 0.5
-            }
+        registerEvent(EventJump::class.java) { event ->
+            if (event.state != EventJump.State.PRE) return@registerEvent
+            prevEdgeDistance = 0.5
+        }
 
-            is EventRender3D -> {
-                if (target != null) {
-                    val blockPos = target?.first
-                    val blockState = mc.world?.getBlockState(target?.first)
-                    val shape = blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos?.x?.toDouble()!!, blockPos.y.toDouble(), blockPos.z.toDouble())!!
-                    RenderUtil.blockOutline(event.matrices, shape, blockColor.getColor().rgb)
-                    val facing = target?.second?.opposite
-                    RenderUtil.blockOutline(event.matrices, shape.offset(facing?.offsetX?.toDouble()!!, facing.offsetY.toDouble(), facing.offsetZ.toDouble()), facingColor.getColor().rgb)
-                }
-                if (aimTarget != null)
-                    RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(Box.from(aimTarget).offset(-0.5, -0.5, -0.5).expand(-0.45)), aimTargetColor.getColor().rgb)
-                if (placeLine != null)
-                    RenderUtil.blockOutline(event.matrices, VoxelShapes.union(VoxelShapes.cuboid(Box.from(placeLine?.first).offset(-0.5, -0.5, -0.5).expand(-0.49)), VoxelShapes.cuboid(Box.from(placeLine?.second).offset(-0.5, -0.5, -0.5).expand(-0.49))), placeLineColor.getColor().rgb)
+        registerEvent(EventRender3D::class.java) { event ->
+            if (target != null) {
+                val blockPos = target?.first
+                val blockState = mc.world?.getBlockState(target?.first)
+                val shape = blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos?.x?.toDouble()!!, blockPos.y.toDouble(), blockPos.z.toDouble())!!
+                RenderUtil.blockOutline(event.matrices, shape, blockColor.getColor().rgb)
+                val facing = target?.second?.opposite
+                RenderUtil.blockOutline(event.matrices, shape.offset(facing?.offsetX?.toDouble()!!, facing.offsetY.toDouble(), facing.offsetZ.toDouble()), facingColor.getColor().rgb)
             }
+            if (aimTarget != null)
+                RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(Box.from(aimTarget).offset(-0.5, -0.5, -0.5).expand(-0.45)), aimTargetColor.getColor().rgb)
+            if (placeLine != null)
+                RenderUtil.blockOutline(event.matrices, VoxelShapes.union(VoxelShapes.cuboid(Box.from(placeLine?.first).offset(-0.5, -0.5, -0.5).expand(-0.49)), VoxelShapes.cuboid(Box.from(placeLine?.second).offset(-0.5, -0.5, -0.5).expand(-0.49))), placeLineColor.getColor().rgb)
         }
     }
 

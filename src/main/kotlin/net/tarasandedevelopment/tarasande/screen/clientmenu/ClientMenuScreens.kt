@@ -5,7 +5,6 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenu
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuScreen
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuTitle
@@ -21,7 +20,6 @@ import net.tarasandedevelopment.tarasande.value.ValueText
 import org.spongepowered.include.com.google.common.io.Files
 import java.io.File
 import java.util.*
-import java.util.function.Consumer
 
 class ElementMenuScreenAccountManager : ElementMenuScreen("Account Manager") {
 
@@ -76,12 +74,11 @@ class ElementMenuToggleBungeeHack : ElementMenuToggle("Bungee Hack") {
     private val zero = "\u0000"
     private fun stripID(input: String) = input.replace("-", "")
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventPacket -> {
-                if (event.type != EventPacket.Type.SEND) return@Consumer
-                if (event.packet !is HandshakeC2SPacket) return@Consumer
-
+    init {
+        TarasandeMain.get().eventDispatcher.add(EventPacket::class.java) { event ->
+            if (event.type != EventPacket.Type.SEND) return@add
+            if (event.packet !is HandshakeC2SPacket) return@add
+            if(state) {
                 var uuid = MinecraftClient.getInstance().session.uuid
                 if (this.customUUID.value)
                     uuid = this.uuid.value
@@ -92,10 +89,7 @@ class ElementMenuToggleBungeeHack : ElementMenuToggle("Bungee Hack") {
     }
 
     override fun onToggle(state: Boolean) {
-        if (state)
-            TarasandeMain.get().managerEvent.addObject(this)
-        else
-            TarasandeMain.get().managerEvent.remObject(this)
+        // state check in event listener
     }
 }
 

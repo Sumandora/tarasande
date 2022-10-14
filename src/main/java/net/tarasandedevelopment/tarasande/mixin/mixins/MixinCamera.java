@@ -23,7 +23,7 @@ public abstract class MixinCamera implements ICamera {
 
     @Inject(method = "update", at = @At("TAIL"))
     public void injectUpdate(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventCameraOverride((Camera) (Object) this));
+        TarasandeMain.Companion.get().getEventDispatcher().call(new EventCameraOverride((Camera) (Object) this));
     }
 
     @Override

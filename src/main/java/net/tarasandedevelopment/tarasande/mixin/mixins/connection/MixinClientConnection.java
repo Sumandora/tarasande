@@ -42,7 +42,7 @@ public abstract class MixinClientConnection implements IClientConnection {
     @Inject(method = "handlePacket", at = @At("HEAD"), cancellable = true)
     private static <T extends PacketListener> void injectHandlePacket(Packet<T> packet, PacketListener listener, CallbackInfo ci) {
         EventPacket eventPacket = new EventPacket(EventPacket.Type.RECEIVE, packet);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventPacket);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventPacket);
         if (eventPacket.getCancelled())
             ci.cancel();
     }
@@ -51,7 +51,7 @@ public abstract class MixinClientConnection implements IClientConnection {
     public void injectSend(Packet<?> packet, @Nullable PacketCallbacks callbacks, CallbackInfo ci) {
         if (!forced.contains(packet)) {
             EventPacket eventPacket = new EventPacket(EventPacket.Type.SEND, packet);
-            TarasandeMain.Companion.get().getManagerEvent().call(eventPacket);
+            TarasandeMain.Companion.get().getEventDispatcher().call(eventPacket);
             if (eventPacket.getCancelled())
                 ci.cancel();
         } else
@@ -60,7 +60,7 @@ public abstract class MixinClientConnection implements IClientConnection {
 
     @Inject(method = "disconnect", at = @At("RETURN"))
     public void injectDisconnect(Text disconnectReason, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventDisconnect());
+        TarasandeMain.Companion.get().getEventDispatcher().call(new EventDisconnect());
     }
 
     @Override

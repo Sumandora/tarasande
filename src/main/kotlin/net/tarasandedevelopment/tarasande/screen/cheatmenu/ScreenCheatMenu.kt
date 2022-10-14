@@ -91,11 +91,10 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             this.panels.add(PanelGraph(graph, 5.0, y).also { y += it.titleBarHeight + 5 })
         }
         passEvents = false
-        TarasandeMain.get().managerEvent.add { event ->
-            if (event is EventUpdate)
-                if (event.state == EventUpdate.State.PRE)
-                    if (TarasandeMain.get().clientValues.menuHotkey.wasPressed().let { it > 0 && it % 2 != 0 })
-                        MinecraftClient.getInstance().setScreen(this)
+        TarasandeMain.get().eventDispatcher.add(EventUpdate::class.java) { event ->
+            if (event.state == EventUpdate.State.PRE)
+                if (TarasandeMain.get().clientValues.menuHotkey.wasPressed().let { it > 0 && it % 2 != 0 })
+                    MinecraftClient.getInstance().setScreen(this)
         }
     }
 

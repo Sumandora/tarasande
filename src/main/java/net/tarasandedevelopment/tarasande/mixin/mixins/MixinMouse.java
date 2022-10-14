@@ -22,7 +22,7 @@ public class MixinMouse {
     @Inject(method = "onMouseButton", at = @At("HEAD"), cancellable = true)
     public void injectOnMouseButton(long window, int button, int action, int mods, CallbackInfo ci) {
         EventMouse eventMouse = new EventMouse(button, action);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventMouse);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventMouse);
         if (eventMouse.getCancelled())
             ci.cancel();
     }
@@ -30,7 +30,7 @@ public class MixinMouse {
     @Inject(method = "updateMouse", at = @At("HEAD"))
     public void injectUpdateMouse(CallbackInfo ci) {
         EventMouseDelta eventMouseDelta = new EventMouseDelta(cursorDeltaX, cursorDeltaY);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventMouseDelta);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventMouseDelta);
         cursorDeltaX = eventMouseDelta.getDeltaX();
         cursorDeltaY = eventMouseDelta.getDeltaY();
     }

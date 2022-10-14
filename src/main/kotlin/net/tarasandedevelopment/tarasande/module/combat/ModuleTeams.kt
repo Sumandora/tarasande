@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.module.combat
 
 import net.minecraft.entity.player.PlayerEntity
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
@@ -15,10 +15,10 @@ class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCatego
         override fun isEnabled() = mode.isSelected(1)
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        if (event is EventIsEntityAttackable) {
-            if (!event.attackable) return@Consumer
-            if (event.entity !is PlayerEntity) return@Consumer
+    init {
+        registerEvent(EventIsEntityAttackable::class.java) { event ->
+            if (!event.attackable) return@registerEvent
+            if (event.entity !is PlayerEntity) return@registerEvent
 
             if (mode.isSelected(0)) {
                 if (event.entity.isTeammate(mc.player)) {

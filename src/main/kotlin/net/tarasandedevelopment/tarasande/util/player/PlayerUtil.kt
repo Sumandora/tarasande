@@ -43,11 +43,9 @@ object PlayerUtil {
     val input = KeyboardInput(MinecraftClient.getInstance().options)
 
     init {
-        TarasandeMain.get().managerEvent.add { event ->
-            if (event is EventInput) {
-                if (event.input == MinecraftClient.getInstance().player?.input)
-                    input.tick(event.slowDown, event.slowdownAmount)
-            }
+        TarasandeMain.get().eventDispatcher.add(EventInput::class.java) {
+            if (it.input == MinecraftClient.getInstance().player?.input)
+                input.tick(it.slowDown, it.slowdownAmount)
         }
     }
 
@@ -65,7 +63,7 @@ object PlayerUtil {
         else if (!TarasandeMain.get().clientValues.targets.isSelected(3) && (entity !is PlayerEntity && entity !is AnimalEntity && entity !is MobEntity)) attackable = false
 
         val eventIsEntityAttackable = EventIsEntityAttackable(entity, attackable)
-        TarasandeMain.get().managerEvent.call(eventIsEntityAttackable)
+        TarasandeMain.get().eventDispatcher.call(eventIsEntityAttackable)
         return eventIsEntityAttackable.attackable
     }
 

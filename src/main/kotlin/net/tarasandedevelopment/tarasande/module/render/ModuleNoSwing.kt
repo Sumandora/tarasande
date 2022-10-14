@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.module.render
 
 import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket
-import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPacket
@@ -20,20 +20,17 @@ class ModuleNoSwing : Module("No swing", "Hides the hand swing animation", Modul
         override fun isEnabled() = mode.isSelected(0)
     }
 
-    val eventConsumer = Consumer<Event> { event ->
-        when (event) {
-            is EventPacket -> {
-                if (event.type == EventPacket.Type.RECEIVE && event.packet is HandSwingC2SPacket)
-                    if (mode.isSelected(1) && hand.isSelected(event.packet.hand.ordinal))
-                        event.cancelled = true
-            }
+    init {
+        registerEvent(EventPacket::class.java) { event ->
+            if (event.type == EventPacket.Type.RECEIVE && event.packet is HandSwingC2SPacket)
+                if (mode.isSelected(1) && hand.isSelected(event.packet.hand.ordinal))
+                    event.cancelled = true
+        }
 
-            is EventSwing -> {
-                if (mode.isSelected(0))
-                    if (hand.isSelected(event.hand.ordinal))
-                        event.cancelled = true
-            }
+        registerEvent(EventSwing::class.java) { event ->
+            if (mode.isSelected(0))
+                if (hand.isSelected(event.hand.ordinal))
+                    event.cancelled = true
         }
     }
-
 }

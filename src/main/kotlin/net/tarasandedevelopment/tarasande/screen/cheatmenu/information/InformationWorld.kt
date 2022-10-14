@@ -4,12 +4,10 @@ import com.google.common.collect.Iterables
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.Information
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.util.function.Consumer
 
 class InformationEntities : Information("World", "Entities") {
     override fun getMessage(): String? {
@@ -24,13 +22,11 @@ class InformationWorldTime : Information("World", "World Time") {
     var lastUpdate: Pair<Long, Long>? = null
 
     init {
-        TarasandeMain.get().managerEvent.add(Pair(1, Consumer<Event> { event ->
-            if (event is EventPacket) {
-                if (event.type == EventPacket.Type.RECEIVE && event.packet is WorldTimeUpdateS2CPacket) {
-                    lastUpdate = Pair(event.packet.timeOfDay, event.packet.time)
-                }
+        TarasandeMain.get().eventDispatcher.add(EventPacket::class.java, 1) {
+            if (it.type == EventPacket.Type.RECEIVE && it.packet is WorldTimeUpdateS2CPacket) {
+                lastUpdate = Pair(it.packet.timeOfDay, it.packet.time)
             }
-        }))
+        }
     }
 
     override fun getMessage(): String? {
