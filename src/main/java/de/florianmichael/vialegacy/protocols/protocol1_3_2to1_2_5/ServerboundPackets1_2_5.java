@@ -1,10 +1,11 @@
-package de.florianmichael.vialegacy.protocols.protocol1_4_2to1_3_2;
+package de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5;
 
 import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
 
-public enum ServerboundPackets1_3_2 implements ServerboundPacketType {
+public enum ServerboundPackets1_2_5 implements ServerboundPacketType {
 
 	KEEP_ALIVE(0x00),
+	JOIN_GAME(0x01),
 	CHAT_MESSAGE(0x03),
 	INTERACT_ENTITY(0x07),
 	PLAYER_MOVEMENT(0x0A),
@@ -26,12 +27,12 @@ public enum ServerboundPackets1_3_2 implements ServerboundPacketType {
 	PLAYER_ABILITIES(0xCA),
 	TAB_COMPLETE(0xCB),
 	CLIENT_SETTINGS(0xCC),
-	CLIENT_STATUS(0x09),
+	CLIENT_STATUS(0xCD),
 	PLUGIN_MESSAGE(0xFA);
 
 	private final int id;
 
-	ServerboundPackets1_3_2(final int id) {
+	ServerboundPackets1_2_5(final int id) {
 		this.id = id;
 	}
 

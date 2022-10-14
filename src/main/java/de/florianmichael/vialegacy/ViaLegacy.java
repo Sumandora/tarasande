@@ -4,10 +4,13 @@ import com.google.common.collect.BoundType;
 import com.google.common.collect.Range;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.Protocol;
+import com.viaversion.viaversion.api.protocol.ProtocolPathEntry;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.vialegacy.exception.ViaLegacyException;
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.vialegacy.protocols.base.BaseProtocol1_6;
+import de.florianmichael.vialegacy.protocols.protocol1_2_5to1_2_3.Protocol1_2_5to1_2_3;
+import de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5.Protocol1_3_2to1_2_5;
 import de.florianmichael.vialegacy.protocols.protocol1_4_2to1_3_2.Protocol1_4_2to1_3_2;
 import de.florianmichael.vialegacy.protocols.protocol1_4_3_preto1_4_2.Protocol1_4_3_preto1_4_2;
 import de.florianmichael.vialegacy.protocols.protocol1_4_5to1_4_3_pre.Protocol1_4_5to1_4_3_pre;
@@ -21,6 +24,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre.Protocol1_6
 import de.florianmichael.vialegacy.protocols.protocol1_7_10to1_7_5.Protocol1_7_10to1_7_5;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.Protocol1_7_5to1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.Protocol1_8to1_7_10;
+import net.minecraft.SharedConstants;
 
 import java.util.logging.Logger;
 
@@ -53,6 +57,9 @@ public class ViaLegacy {
         registerProtocol(LegacyProtocolVersion.R1_4_3_PRE, LegacyProtocolVersion.R1_4_2, new Protocol1_4_3_preto1_4_2());
 
         registerProtocol(LegacyProtocolVersion.R1_4_2, LegacyProtocolVersion.R1_3_2, new Protocol1_4_2to1_3_2());
+
+        registerProtocol(LegacyProtocolVersion.R1_3_2, LegacyProtocolVersion.R1_2_5, new Protocol1_3_2to1_2_5());
+        registerProtocol(LegacyProtocolVersion.R1_2_5, LegacyProtocolVersion.R1_2_3, new Protocol1_2_5to1_2_3());
 
         final int newestVersion = LegacyProtocolVersion.PROTOCOL_VERSIONS.get(2).getVersion();
         final int lastVersion = LegacyProtocolVersion.PROTOCOL_VERSIONS.get(LegacyProtocolVersion.PROTOCOL_VERSIONS.size() - 1).getVersion();

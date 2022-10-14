@@ -3,6 +3,7 @@ package de.florianmichael.viaprotocolhack;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.viaversion.viaversion.ViaManagerImpl;
 import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.ViaManager;
 import de.florianmichael.viaprotocolhack.platform.CustomViaProviders;
 import de.florianmichael.viaprotocolhack.platform.ViaVersionPlatform;
 import de.florianmichael.viaprotocolhack.platform.viaversion.CustomViaInjector;
@@ -43,9 +44,13 @@ public class ViaProtocolHack {
                 builder.commandHandler(provider().commandHandler().get());
 
             Via.init(builder.build());
+            final ViaManagerImpl viaManager = (ViaManagerImpl) Via.getManager();
+
+            viaManager.getProtocolManager().setMaxProtocolPathSize(Integer.MAX_VALUE);
+            viaManager.getProtocolManager().setMaxPathDeltaIncrease(-1);
             platform.init();
 
-            ((ViaManagerImpl) Via.getManager()).init();
+            viaManager.init();
         }).whenComplete((unused, throwable) -> whenComplete.run());
     }
 

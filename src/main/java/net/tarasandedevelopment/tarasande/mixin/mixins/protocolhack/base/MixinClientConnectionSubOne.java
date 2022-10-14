@@ -38,7 +38,7 @@ public class MixinClientConnectionSubOne {
             ((IClientConnection_Protocol) field_11663).tarasande_setViaConnection(user);
             new ProtocolPipelineImpl(user);
 
-            if (LegacyProtocolVersion.SPLITTER_TRACKER.containsKey(TarasandeMain.Companion.get().getProtocolHack().realClientsideVersion())) {
+            if (LegacyProtocolVersion.SPLITTER_TRACKER.containsKey(TarasandeMain.Companion.get().getProtocolHack().clientsideVersion())) {
                 user.getProtocolInfo().getPipeline().add(BaseProtocol1_6.INSTANCE);
             }
 

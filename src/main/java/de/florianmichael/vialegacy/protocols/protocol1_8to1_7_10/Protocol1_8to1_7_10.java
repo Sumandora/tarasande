@@ -1124,7 +1124,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             @Override
             public void registerMap() {
                 handler(packetWrapper -> {
-                    int amount = packetWrapper.read(Type.BYTE);
+                    int amount = packetWrapper.read(Type.UNSIGNED_BYTE);
                     int[] entityIds = new int[amount];
 
                     for (int i = 0; i < amount; i++)

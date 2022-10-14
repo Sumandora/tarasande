@@ -11,10 +11,6 @@ public class BaseProtocol1_6 extends AbstractProtocol {
 
     public static final BaseProtocol1_6 INSTANCE = new BaseProtocol1_6();
 
-    public BaseProtocol1_6() {
-        this.initialize();
-    }
-
     @Override
     protected void registerPackets() {
         super.registerPackets();
@@ -30,8 +26,6 @@ public class BaseProtocol1_6 extends AbstractProtocol {
                     final Integer port = packetWrapper.passthrough(Type.UNSIGNED_SHORT);
 
                     final HandshakeStorage handshakeStorage = packetWrapper.user().get(HandshakeStorage.class);
-
-                    System.out.println(hostname + " " + port);
 
                     assert handshakeStorage != null;
                     handshakeStorage.hostname = hostname;

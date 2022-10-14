@@ -20,13 +20,11 @@ import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.vialegacy.api.type.TypeRegistry1_7_6_10;
+import de.florianmichael.vialegacy.api.type.TypeRegistry_1_4_2;
 import de.florianmichael.vialegacy.api.type.TypeRegistry_1_6_4;
-import de.florianmichael.vialegacy.api.type._1_4_2.TypeRegistry1_4_2;
 import de.florianmichael.vialegacy.api.via.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_4_3_preto1_4_2.ClientboundPackets1_4_2;
 import de.florianmichael.vialegacy.protocols.protocol1_4_3_preto1_4_2.ServerboundPackets1_4_2;
-import de.florianmichael.vialegacy.protocols.protocol1_4_5to1_4_3_pre.ClientboundPackets1_4_3_pre;
-import de.florianmichael.vialegacy.protocols.protocol1_4_5to1_4_3_pre.ServerboundPackets1_4_3_pre;
 
 public class Protocol1_4_2to1_3_2 extends EnZaProtocol<ClientboundPackets1_3_2, ClientboundPackets1_4_2, ServerboundPackets1_3_2, ServerboundPackets1_4_2> {
 
@@ -78,7 +76,7 @@ public class Protocol1_4_2to1_3_2 extends EnZaProtocol<ClientboundPackets1_3_2, 
 				map(Type.SHORT); // Velocity-Y
 				map(Type.SHORT); // Velocity-Z
 
-				map(TypeRegistry1_4_2.METADATA_LIST); // Metadata list
+				map(TypeRegistry_1_4_2.METADATA_LIST); // Metadata list
 
 				handler((pw) -> {
 					final int type = pw.get(Type.BYTE, 0);
