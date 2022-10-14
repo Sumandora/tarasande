@@ -8,6 +8,8 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.vialegacy.exception.ViaLegacyException;
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.vialegacy.protocols.base.BaseProtocol1_6;
+import de.florianmichael.vialegacy.protocols.protocol1_4_3_preto1_4_2.Protocol1_4_3_preto1_4_2;
+import de.florianmichael.vialegacy.protocols.protocol1_4_5to1_4_3_pre.Protocol1_4_5to1_4_3_pre;
 import de.florianmichael.vialegacy.protocols.protocol1_4_7to1_4_5.Protocol1_4_7to1_4_5;
 import de.florianmichael.vialegacy.protocols.protocol1_5_1to1_4_7.Protocol1_5_1to1_4_7;
 import de.florianmichael.vialegacy.protocols.protocol1_5_2to1_5_1.Protocol1_5_2to1_5_1;
@@ -21,14 +23,6 @@ import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.Protocol1_8to1_
 
 import java.util.logging.Logger;
 
-/**
-TODO -> 1.6.1:
-    Block Placing doesn't work
-
-TODO -> 1.4.5:
-    Dropping doesn't work
-    Block Breaking doesn't work
- */
 public class ViaLegacy {
 
     private static IViaLegacyProvider provider;
@@ -54,6 +48,8 @@ public class ViaLegacy {
 
         registerProtocol(LegacyProtocolVersion.R1_5_1, LegacyProtocolVersion.R1_4_7, new Protocol1_5_1to1_4_7());
         registerProtocol(LegacyProtocolVersion.R1_4_7, LegacyProtocolVersion.R1_4_5, new Protocol1_4_7to1_4_5());
+        registerProtocol(LegacyProtocolVersion.R1_4_5, LegacyProtocolVersion.R1_4_3_PRE, new Protocol1_4_5to1_4_3_pre());
+        registerProtocol(LegacyProtocolVersion.R1_4_3_PRE, LegacyProtocolVersion.R1_4_2, new Protocol1_4_3_preto1_4_2());
 
         final int newestVersion = LegacyProtocolVersion.PROTOCOL_VERSIONS.get(2).getVersion();
         final int lastVersion = LegacyProtocolVersion.PROTOCOL_VERSIONS.get(LegacyProtocolVersion.PROTOCOL_VERSIONS.size() - 1).getVersion();

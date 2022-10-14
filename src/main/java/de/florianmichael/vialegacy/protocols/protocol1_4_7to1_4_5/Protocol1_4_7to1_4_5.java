@@ -145,11 +145,11 @@ public class Protocol1_4_7to1_4_5 extends EnZaProtocol<ClientboundPackets1_4_5, 
 		this.registerServerbound(ServerboundPackets1_4_7.PLAYER_DIGGING, new PacketRemapper() {
 			@Override
 			public void registerMap() {
-				map(Type.BYTE); // Status
+				map(Type.UNSIGNED_BYTE); // Status
 				map(Type.INT); // X-Position
 				map(Type.UNSIGNED_BYTE); // Y-Position
 				map(Type.INT); // Z-Position
-				map(Type.BYTE); // Face
+				map(Type.UNSIGNED_BYTE); // Face
 
 				handler((pw) -> {
 					int status = pw.get(Type.UNSIGNED_BYTE, 0);
