@@ -44,39 +44,6 @@ public class Protocol1_6_2to1_6_1 extends EnZaProtocol<ClientboundPackets1_6_1, 
 
 	@Override
 	protected void registerPackets() {
-		this.cancelClientbound(ClientboundPackets1_6_1.CREATIVE_INVENTORY_ACTION);
-
-		this.registerServerbound(ServerboundPackets1_6_2.PLAYER_BLOCK_PLACEMENT, new PacketRemapper() {
-
-			@Override
-			public void registerMap() {
-				map(Type.INT); // X-Position
-				map(Type.UNSIGNED_BYTE); // Y-Position
-				map(Type.INT); // Z-Position
-
-				map(Type.UNSIGNED_BYTE); // Direction
-
-				map(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM); // Slot
-
-				map(Type.UNSIGNED_BYTE); // Cursor X
-				map(Type.UNSIGNED_BYTE); // Cursor Y
-				map(Type.UNSIGNED_BYTE); // Cursor Z
-			}
-		});
-
-		this.registerClientbound(ClientboundPackets1_6_1.BLOCK_CHANGE, new PacketRemapper() {
-
-			@Override
-			public void registerMap() {
-				map(Type.INT); // X-Position
-				map(Type.UNSIGNED_BYTE); // Y-Position
-				map(Type.INT); // Z-Position
-
-				map(Type.SHORT); // Block-Type
-				map(Type.BYTE); // Block Metadata
-			}
-		});
-
 		this.registerClientbound(ClientboundPackets1_6_1.ENTITY_PROPERTIES, new PacketRemapper() {
 
 			@Override
