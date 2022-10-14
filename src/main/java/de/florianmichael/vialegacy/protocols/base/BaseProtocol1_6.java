@@ -31,8 +31,6 @@ public class BaseProtocol1_6 extends AbstractProtocol {
 
                     final HandshakeStorage handshakeStorage = packetWrapper.user().get(HandshakeStorage.class);
 
-                    System.out.println(hostname + " " + port);
-
                     assert handshakeStorage != null;
                     handshakeStorage.hostname = hostname;
                     handshakeStorage.port = port;
