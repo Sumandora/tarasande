@@ -62,7 +62,6 @@
 - Target strafe: Anti Void
 - (Banners in protocol selection)
 - Settings for HypixelBedwarsOverlay
-- EventRenderBlockModel is slow - EventManager recode
 - BowAimbot acting weird
 
 ### TODO-List (Click GUI)
