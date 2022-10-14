@@ -33,7 +33,7 @@ public class _1_6_4PacketDecoder extends ByteToMessageDecoder {
         int start = buf.readerIndex();
 
         if (splitterLogic != null)
-            splitterLogic.read(buf, new TransformInstanceUtil(buf));
+            splitterLogic.read(buf, new TransformInstanceUtil());
 
         int now = buf.readerIndex() - start;
         buf.resetReaderIndex();

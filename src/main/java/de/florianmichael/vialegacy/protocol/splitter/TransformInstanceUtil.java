@@ -6,40 +6,34 @@ import io.netty.buffer.ByteBuf;
 
 public class TransformInstanceUtil {
 
-    private final ByteBuf byteBuf;
-
-    public TransformInstanceUtil(final ByteBuf byteBuf) {
-        this.byteBuf = byteBuf;
-    }
-
-    public void read1_7_10_CompressedNbtItem() {
+    public void read1_7_10_CompressedNbtItem(final ByteBuf buf) {
         try {
-            TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM.read(this.byteBuf);
+            TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM.read(buf);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void read1_7_10_CompressedNbt() {
+    public void read1_7_10_CompressedNbt(final ByteBuf buf) {
         try {
-            TypeRegistry1_7_6_10.COMPRESSED_NBT.read(this.byteBuf);
+            TypeRegistry1_7_6_10.COMPRESSED_NBT.read(buf);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void read1_6_4_MetadataList() {
+    public void read1_6_4_MetadataList(final ByteBuf buf) {
         try {
-            TypeRegistry_1_6_4.METADATA_LIST.read(this.byteBuf);
+            TypeRegistry_1_6_4.METADATA_LIST.read(buf);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void readString() {
-        final short length = this.byteBuf.readShort();
+    public void readString(final ByteBuf buf) {
+        final short length = buf.readShort();
 
         for (int i = 0; i < length; i++)
-            this.byteBuf.readShort();
+            buf.readChar();
     }
 }

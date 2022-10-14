@@ -14,7 +14,7 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 	JOIN_GAME(0x01, (buffer, transformer) -> {
 		buffer.readInt();
 
-		transformer.readString();
+		transformer.readString(buffer);
 
 		buffer.readByte();
 		buffer.readByte();
@@ -22,7 +22,7 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 		buffer.readByte();
 		buffer.readByte();
 	}),
-	CHAT_MESSAGE(0x03, (buffer, transformer) -> transformer.readString()),
+	CHAT_MESSAGE(0x03, (buffer, transformer) -> transformer.readString(buffer)),
 	TIME_UPDATE(0x04, (buffer, transformer) -> {
 		buffer.readLong();
 		buffer.readLong();
@@ -32,7 +32,7 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 
 		buffer.readShort();
 
-		transformer.read1_7_10_CompressedNbtItem();
+		transformer.read1_7_10_CompressedNbtItem(buffer);
 	}),
 	SPAWN_POSITION(0x06, (buffer, transformer) -> {
 		buffer.readInt();
@@ -52,7 +52,7 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 
 		buffer.readShort();
 
-		transformer.readString();
+		transformer.readString(buffer);
 	})),
 	PLAYER_POSITION(0x0D, ((buffer, transformer) -> {
 		buffer.readDouble();
@@ -82,7 +82,7 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 	SPAWN_PLAYER(0x14, ((buffer, transformer) -> {
 		buffer.readInt();
 
-		transformer.readString();
+		transformer.readString(buffer);
 
 		buffer.readInt();
 		buffer.readInt();
@@ -92,7 +92,7 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 		buffer.readByte();
 		buffer.readShort();
 
-		transformer.read1_6_4_MetadataList();
+		transformer.read1_6_4_MetadataList(buffer);
 	})),
 	COLLECT_ITEM(0x16, ((buffer, transformer) -> {
 		buffer.readInt();
@@ -135,12 +135,12 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 		buffer.readShort();
 		buffer.readShort();
 
-		transformer.read1_6_4_MetadataList();
+		transformer.read1_6_4_MetadataList(buffer);
 	})),
 	SPAWN_PAINTING(0x19, ((buffer, transformer) -> {
 		buffer.readInt();
 
-		transformer.readString();
+		transformer.readString(buffer);
 
 		buffer.readInt();
 		buffer.readInt();
@@ -219,7 +219,7 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 	ENTITY_METADATA(0x28, ((buffer, transformer) -> {
 		buffer.readInt();
 
-		transformer.read1_6_4_MetadataList();
+		transformer.read1_6_4_MetadataList(buffer);
 	})),
 	ENTITY_EFFECT(0x29, ((buffer, transformer) -> {
 		buffer.readInt();
@@ -246,7 +246,7 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 		final int x = buffer.readInt();
 
 		for (int i = 0; i < x; i++) {
-			transformer.readString();
+			transformer.readString(buffer);
 			buffer.readDouble();
 		}
 	})),
@@ -352,7 +352,7 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 		buffer.readBoolean();
 	})),
 	NAMED_SOUND(0x3E, ((buffer, transformer) -> {
-		transformer.readString();
+		transformer.readString(buffer);
 
 		buffer.readInt();
 		buffer.readInt();
@@ -363,7 +363,7 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 		buffer.readUnsignedByte();
 	})),
 	SPAWN_PARTICLE(0x3F, ((buffer, transformer) -> {
-		transformer.readString();
+		transformer.readString(buffer);
 
 		buffer.readFloat();
 		buffer.readFloat();
@@ -393,7 +393,7 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 
 		final int x = buffer.readByte();
 
-		transformer.readString();
+		transformer.readString(buffer);
 		buffer.readByte();
 		buffer.readBoolean();
 
@@ -406,12 +406,12 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 
 		buffer.readShort();
 
-		transformer.read1_7_10_CompressedNbtItem();
+		transformer.read1_7_10_CompressedNbtItem(buffer);
 	})),
 	CREATIVE_INVENTORY_ACTION(0x6B, (buffer, transformer) -> {
 		buffer.readShort();
 
-		transformer.read1_7_10_CompressedNbtItem();
+		transformer.read1_7_10_CompressedNbtItem(buffer);
 	}),
 	WINDOW_ITEMS(0x68, ((buffer, transformer) -> {
 		buffer.readByte();
@@ -419,7 +419,7 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 		final int x = buffer.readShort();
 
 		for (int i = 0; i < x; i++)
-			transformer.read1_7_10_CompressedNbtItem();
+			transformer.read1_7_10_CompressedNbtItem(buffer);
 	})),
 	WINDOW_PROPERTY(0x69, ((buffer, transformer) -> {
 		buffer.readByte();
@@ -441,10 +441,10 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 
 		buffer.readInt();
 
-		transformer.readString();
-		transformer.readString();
-		transformer.readString();
-		transformer.readString();
+		transformer.readString(buffer);
+		transformer.readString(buffer);
+		transformer.readString(buffer);
+		transformer.readString(buffer);
 	})),
 	MAP_DATA(0x83, ((buffer, transformer) -> {
 		buffer.readShort();
@@ -462,7 +462,7 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 		buffer.readInt();
 		buffer.readByte();
 
-		transformer.read1_7_10_CompressedNbt();
+		transformer.read1_7_10_CompressedNbt(buffer);
 	})),
 	OPEN_SIGN_EDITOR(0x85, ((buffer, transformer) -> {
 		buffer.readByte();
@@ -476,7 +476,7 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 		buffer.readInt();
 	}),
 	PLAYER_INFO(0xC9, ((buffer, transformer) -> {
-		transformer.readString();
+		transformer.readString(buffer);
 
 		buffer.readByte();
 
@@ -488,55 +488,55 @@ public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 		buffer.readFloat();
 		buffer.readFloat();
 	})),
-	TAB_COMPLETE(0xCB, ((buffer, transformer) -> transformer.readString())),
+	TAB_COMPLETE(0xCB, ((buffer, transformer) -> transformer.readString(buffer))),
 	SCOREBOARD_OBJECTIVE(0xCE, ((buffer, transformer) -> {
-		transformer.readString();
-		transformer.readString();
+		transformer.readString(buffer);
+		transformer.readString(buffer);
 
 		buffer.readByte();
 	})),
 	UPDATE_SCORE(0xCF, ((buffer, transformer) -> {
-		transformer.readString();
+		transformer.readString(buffer);
 
 		final byte b = buffer.readByte();
 
 		if (b != 1) {
-			transformer.readString();
+			transformer.readString(buffer);
 			buffer.readInt();
 		}
 	})),
 	DISPLAY_SCOREBOARD(0xD0, ((buffer, transformer) -> {
 		buffer.readByte();
 
-		transformer.readString();
+		transformer.readString(buffer);
 	})),
 	TEAMS(0xD1, (buffer, transformer) -> {
-		transformer.readString();
+		transformer.readString(buffer);
 
 		final int b = buffer.readByte();
 
 		if (b == 0 || b == 2) {
-			transformer.readString();
-			transformer.readString();
-			transformer.readString();
+			transformer.readString(buffer);
+			transformer.readString(buffer);
+			transformer.readString(buffer);
 			buffer.readByte();
 		}
 		if (b == 0 || b == 3 || b == 4) {
 			final int x = buffer.readShort();
 
 			for (int i = 0; i < x; i++)
-				transformer.readString();
+				transformer.readString(buffer);
 		}
 	}),
 	PLUGIN_MESSAGE(0xFA, ((buffer, transformer) -> {
-		transformer.readString();
+		transformer.readString(buffer);
 
 		final short s = buffer.readShort();
 
 		for (int i = 0; i < s; i++)
 			buffer.readByte();
 	})),
-	DISCONNECT(0xFF, ((buffer, transformer) -> transformer.readString()));
+	DISCONNECT(0xFF, ((buffer, transformer) -> transformer.readString(buffer)));
 
 	private final int id;
 	private final IPacketSplitterLogic splitter;

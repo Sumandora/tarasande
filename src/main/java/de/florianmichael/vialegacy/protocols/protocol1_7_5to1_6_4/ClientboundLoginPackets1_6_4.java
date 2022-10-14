@@ -8,7 +8,7 @@ import de.florianmichael.vialegacy.protocol.splitter.LegacyClientboundPacketType
 public enum ClientboundLoginPackets1_6_4 implements LegacyClientboundPacketType {
 
 	SERVER_AUTH_DATA(0xFD, ((buffer, transformer) -> {
-		transformer.readString();
+		transformer.readString(buffer);
 
 		final int s = buffer.readShort();
 

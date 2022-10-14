@@ -11,6 +11,6 @@ public class DisconnectPacketRemapper extends PacketRemapper {
     @Override
     public void registerMap() {
         map(TypeRegistry_1_6_4.STRING, Type.STRING);
-        handler((pw) -> pw.set(Type.STRING, 0, ComponentSerializer.toString(TextComponent.fromLegacyText(pw.get(Type.STRING, 0)))));
+//        handler((pw) -> pw.set(Type.STRING, 0, ComponentSerializer.toString(TextComponent.fromLegacyText(pw.get(Type.STRING, 0)))));
     }
 }
