@@ -1,8 +1,10 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.base;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
+import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.viaprotocolhack.ViaProtocolHack;
 import de.florianmichael.viaprotocolhack.event.PipelineReorderEvent;
+import de.florianmichael.viaprotocolhack.util.VersionList;
 import io.netty.channel.Channel;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.text.Text;
@@ -18,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import javax.crypto.Cipher;
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -27,6 +30,7 @@ public class MixinClientConnection implements IClientConnection_Protocol {
 
     @Shadow private Channel channel;
 
+    @Shadow private boolean encrypted;
     @Unique
     private UserConnection viaConnection;
 
@@ -48,6 +52,17 @@ public class MixinClientConnection implements IClientConnection_Protocol {
     @Inject(method = "disconnect", at = @At("RETURN"))
     public void onDisconnect(Text disconnectReason, CallbackInfo ci) {
         WolfHealthTracker1_14_4.INSTANCE.clear();
+    }
+
+    @Inject(method = "setupEncryption", at = @At("HEAD"), cancellable = true)
+    public void injectSetupEncryption(Cipher decryptionCipher, Cipher encryptionCipher, CallbackInfo ci) {
+        if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.R1_6_4)) {
+            TarasandeMain.Companion.get().getProtocolHack().getViaLegacy().setDecryptionKey(decryptionCipher);
+            TarasandeMain.Companion.get().getProtocolHack().getViaLegacy().setEncryptionKey(encryptionCipher);
+
+            this.encrypted = true;
+            ci.cancel();
+        }
     }
 
     @Override

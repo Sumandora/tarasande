@@ -28,7 +28,7 @@ public class ViaProtocolHack {
     private INativeProvider provider;
     private File directory;
 
-    public void init(final INativeProvider provider) throws Exception {
+    public void init(final INativeProvider provider, final Runnable whenComplete) throws Exception {
         this.provider = provider;
         this.directory = new File(this.provider.run(), "ViaProtocolHack");
 
@@ -46,7 +46,7 @@ public class ViaProtocolHack {
             platform.init();
 
             ((ViaManagerImpl) Via.getManager()).init();
-        });
+        }).whenComplete((unused, throwable) -> whenComplete.run());
     }
 
     public INativeProvider provider() {

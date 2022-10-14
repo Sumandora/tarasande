@@ -96,11 +96,10 @@ class TarasandeMain {
         managerModule = ManagerModule()
         managerESP = ManagerESP()
         blur = Blur()
+        protocolHack = TarasandeProtocolHack()
         screenCheatMenu = ScreenCheatMenu() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
         friends = Friends()
         tagName = TagName()
-
-        protocolHack = TarasandeProtocolHack()
 
         managerFile.load()
 

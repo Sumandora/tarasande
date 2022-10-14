@@ -1,11 +1,14 @@
 package net.tarasandedevelopment.tarasande.protocol
 
 import com.viaversion.viaversion.api.platform.providers.ViaProviders
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import com.viaversion.viaversion.api.protocol.version.VersionProvider
 import com.viaversion.viaversion.commands.ViaCommandHandler
 import com.viaversion.viaversion.libs.gson.JsonArray
 import com.viaversion.viaversion.libs.gson.JsonObject
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
+import de.florianmichael.vialegacy.ViaLegacy
+import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
 import de.florianmichael.viaprotocolhack.INativeProvider
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
 import net.fabricmc.loader.api.FabricLoader
@@ -15,12 +18,14 @@ import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.protocol.command.TarasandeCommandHandler
+import net.tarasandedevelopment.tarasande.protocol.platform.ViaLegacyTarasandePlatform
 import net.tarasandedevelopment.tarasande.protocol.provider.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande.protocol.provider.FabricVersionProvider
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import java.io.File
 import java.util.*
+import java.util.logging.Logger
 
 class TarasandeProtocolHack : INativeProvider {
 
@@ -30,8 +35,12 @@ class TarasandeProtocolHack : INativeProvider {
 
     var realClientsideVersion = this.clientsideVersion()
 
+    val viaLegacy = ViaLegacyTarasandePlatform(this)
+
     init {
-        ViaProtocolHack.instance().init(this)
+        ViaProtocolHack.instance().init(this) {
+            ViaLegacy.init(viaLegacy, Logger.getLogger("ViaLegacy-Tarasande"))
+        }
     }
 
     override fun isSinglePlayer(): Boolean {
@@ -96,6 +105,8 @@ class TarasandeProtocolHack : INativeProvider {
     override fun commandHandler(): Optional<ViaCommandHandler> {
         return Optional.of(TarasandeCommandHandler())
     }
+
+    override fun optionalVersions(): MutableList<ProtocolVersion> = LegacyProtocolVersion.PROTOCOL_VERSIONS
 
     fun isAuto() = this.auto.value
 

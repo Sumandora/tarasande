@@ -23,7 +23,10 @@ var libs = [
 		"com.viaversion:viaversion:4.4.3-SNAPSHOT",
 
 		// Snake YML -> https://github.com/snakeyaml/snakeyaml
-		"org.yaml:snakeyaml:1.29"
+		"org.yaml:snakeyaml:1.29",
+
+		// BungeeCord Chat -> https://mvnrepository.com/artifact/net.md-5/bungeecord-api
+		"net.md-5:bungeecord-api:1.16-R0.4"
 ]
 
 dependencies {

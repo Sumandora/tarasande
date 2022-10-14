@@ -19,6 +19,7 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.ViaProtocolHack;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -133,6 +134,8 @@ public class VersionList {
     }
 
     public static List<ProtocolVersion> getProtocols() {
-        return protocols;
+        final List<ProtocolVersion> versions = new ArrayList<>(protocols);
+        versions.addAll(ViaProtocolHack.instance().provider().optionalVersions());
+        return versions;
     }
 }
