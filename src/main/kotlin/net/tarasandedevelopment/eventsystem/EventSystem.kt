@@ -2,11 +2,12 @@ package net.tarasandedevelopment.eventsystem
 
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventTick
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.function.Consumer
 
 class EventDispatcher {
 
-    private val eventListeners = HashMap<Class<*>, ArrayList<Pair<Consumer<Event>, Int>>>()
+    private val eventListeners = HashMap<Class<*>, CopyOnWriteArrayList<Pair<Consumer<Event>, Int>>>()
 
     fun call(event: Event) {
         if(TarasandeMain.get().disabled)
@@ -15,7 +16,7 @@ class EventDispatcher {
     }
 
     fun <T : Event> add(clazz: Class<T>, priority: Int = 1000, c: Consumer<T>) {
-        eventListeners.computeIfAbsent(clazz){ArrayList()}.also {
+        eventListeners.computeIfAbsent(clazz) { CopyOnWriteArrayList() }.also {
             @Suppress("UNCHECKED_CAST") // bypass generics $$$$$
             it.add(Pair(c as Consumer<Event>, priority))
             it.sortBy { it.second }
