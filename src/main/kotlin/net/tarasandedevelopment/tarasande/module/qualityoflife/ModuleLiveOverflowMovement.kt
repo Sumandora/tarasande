@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.mixin.accessor.IPlayerMoveC2SPacket
 import java.util.function.Consumer
 import kotlin.math.roundToInt
 
-class ModuleLiveOverflowMovement : Module("LiverOverflow movement", "Bot movement for 176.9.20.205", ModuleCategory.QUALITY_OF_LIFE) {
+class ModuleLiveOverflowMovement : Module("LiveOverflow movement", "Bot movement for 176.9.20.205", ModuleCategory.QUALITY_OF_LIFE) {
 
     val eventConsumer = Consumer<Event> {
         if (it is EventPacket) {
