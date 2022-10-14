@@ -5,12 +5,14 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_12to1_11_1.Protocol1_12To1_11_1;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.ServerboundPackets1_9_3;
+import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.item.SwordItem;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol;
@@ -41,6 +43,15 @@ public abstract class MixinMinecraftClient {
     private void redirectDoItemUse(HeldItemRenderer heldItemRenderer, Hand hand) {
         if (VersionList.isNewerTo(VersionList.R1_8) || !(player.getStackInHand(hand).getItem() instanceof SwordItem))
             heldItemRenderer.resetEquipProgress(hand);
+    }
+
+    @Redirect(method = "doItemUse",
+            slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;interactEntity(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;")),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ActionResult;isAccepted()Z", ordinal = 0))
+    private boolean preventGenericInteract(ActionResult instance) {
+        if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.R1_7_10))
+            return true;
+        return instance.isAccepted();
     }
 
     @Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;hasRidingInventory()Z"))
