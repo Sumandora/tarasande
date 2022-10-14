@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
@@ -24,7 +23,6 @@ import net.tarasandedevelopment.tarasande.util.player.projectile.ProjectileUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import net.tarasandedevelopment.tarasande.value.ValueNumberRange
-import java.util.function.Consumer
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
@@ -65,7 +63,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
 
             var target = entity.boundingBox.center
 
-            var solution = calcPitch(stack, mc.player?.eyePos?.distanceTo(target)!!, target.y - mc.player?.eyeY!!)
+            var solution = calcPitch(stack, mc.player?.eyePos?.subtract(target)?.horizontalLength()!!, target.y - mc.player?.eyeY!!)
 
             if (solution.isNaN()) return@registerEvent
 
@@ -75,7 +73,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
             // DEAD RECKONING
             target = deadReckoning(stack, entity, rotation)
 
-            solution = calcPitch(stack, mc.player?.eyePos?.distanceTo(target)!!, target.y - mc.player?.eyeY!!)
+            solution = calcPitch(stack, mc.player?.eyePos?.subtract(target)?.horizontalLength()!!, target.y - mc.player?.eyeY!!)
 
             if (solution.isNaN()) return@registerEvent
 

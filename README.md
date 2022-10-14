@@ -62,7 +62,6 @@
 - Target strafe: Anti Void
 - (Banners in protocol selection)
 - Settings for HypixelBedwarsOverlay
-- BowAimbot acting weird
 
 ### TODO-List (Click GUI)
 - Correctly save and calculate the positions of the panels when resizing ingame
