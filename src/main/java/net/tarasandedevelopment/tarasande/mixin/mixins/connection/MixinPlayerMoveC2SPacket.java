@@ -24,6 +24,22 @@ public class MixinPlayerMoveC2SPacket implements IPlayerMoveC2SPacket {
     @Final
     protected boolean onGround;
 
+    @Mutable
+    @Shadow @Final public double x;
+
+    @Mutable
+    @Shadow @Final public double z;
+
+    @Override
+    public void tarasande_setX(double x) {
+        this.x = x;
+    }
+
+    @Override
+    public void tarasande_setZ(double z) {
+        this.z = z;
+    }
+
     @Override
     public void tarasande_setYaw(float yaw) {
         this.yaw = yaw;
