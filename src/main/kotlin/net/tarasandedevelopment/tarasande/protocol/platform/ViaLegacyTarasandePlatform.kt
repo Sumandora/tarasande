@@ -49,4 +49,12 @@ class ViaLegacyTarasandePlatform(private val protocolHack: TarasandeProtocolHack
         channel.pipeline().replace("prepender", "prepender", ForwardMessageToByteEncoder())
         channel.pipeline().remove("splitter")
     }
+
+    override fun sendJoinServer_1_2_5(serverId: String) {
+        MinecraftClient.getInstance().sessionService.joinServer(
+            MinecraftClient.getInstance().session.profile,
+            MinecraftClient.getInstance().session.accessToken,
+            serverId
+        )
+    }
 }

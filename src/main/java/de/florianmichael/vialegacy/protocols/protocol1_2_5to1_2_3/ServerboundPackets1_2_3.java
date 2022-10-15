@@ -8,6 +8,7 @@ public enum ServerboundPackets1_2_3 implements ServerboundPacketType {
 	JOIN_GAME(0x01),
 	CHAT_MESSAGE(0x03),
 	INTERACT_ENTITY(0x07),
+	RESPAWN(0x09),
 	PLAYER_MOVEMENT(0x0A),
 	PLAYER_POSITION(0x0B),
 	PLAYER_ROTATION(0x0C),

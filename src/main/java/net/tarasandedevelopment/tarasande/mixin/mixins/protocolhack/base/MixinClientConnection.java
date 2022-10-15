@@ -56,7 +56,7 @@ public class MixinClientConnection implements IClientConnection_Protocol {
 
     @Inject(method = "setupEncryption", at = @At("HEAD"), cancellable = true)
     public void injectSetupEncryption(Cipher decryptionCipher, Cipher encryptionCipher, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.R1_6_4)) {
+        if (LegacyProtocolVersion.SPLITTER_TRACKER.containsKey(TarasandeMain.Companion.get().getProtocolHack().clientsideVersion())) {
             TarasandeMain.Companion.get().getProtocolHack().getViaLegacy().setDecryptionKey(decryptionCipher);
             TarasandeMain.Companion.get().getProtocolHack().getViaLegacy().setEncryptionKey(encryptionCipher);
 

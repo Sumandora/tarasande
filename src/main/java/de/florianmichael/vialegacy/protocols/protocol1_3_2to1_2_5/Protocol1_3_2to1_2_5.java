@@ -28,6 +28,7 @@ import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.IntTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.ShortTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.StringTag;
+import de.florianmichael.vialegacy.ViaLegacy;
 import de.florianmichael.vialegacy.api.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.api.type.TypeRegistry_1_4_2;
 import de.florianmichael.vialegacy.api.type.TypeRegistry_1_6_4;
@@ -124,7 +125,7 @@ public class Protocol1_3_2to1_2_5 extends EnZaProtocol<ClientboundPackets1_2_5, 
 
 		this.cancelServerbound(ServerboundPackets1_3_2.CLIENT_SETTINGS);
 
-		this.registerServerbound(ServerboundPackets1_3_2.CLIENT_STATUS, new PacketRemapper() {
+		this.registerServerbound(ServerboundPackets1_3_2.CLIENT_STATUS, ServerboundPackets1_2_5.RESPAWN, new PacketRemapper() {
 			@Override
 			public void registerMap() {
 				handler((pw) -> {
@@ -190,38 +191,6 @@ public class Protocol1_3_2to1_2_5 extends EnZaProtocol<ClientboundPackets1_2_5, 
 			}
 		});
 
-		this.registerServerbound(State.LOGIN, ClientboundLoginPackets1_6_4.SHARED_KEY.getId(), ClientboundLoginPackets1_6_4.SHARED_KEY.getId(), new PacketRemapper() {
-			@Override
-			public void registerMap() {
-				handler(pw -> {
-					short len = pw.passthrough(Type.SHORT);
-					pw.passthrough(new CustomByteType((int) len));
-					len = pw.passthrough(Type.SHORT);
-					pw.passthrough(new CustomByteType((int) len));
-					pw.cancel();
-
-					final PacketWrapper loginSuccess = PacketWrapper.create(ServerboundLoginPackets1_6_4.CLIENT_PROTOCOL, pw.user());
-					loginSuccess.write(Type.STRING, UUID.randomUUID().toString().replace("-", ""));
-					loginSuccess.write(Type.STRING, pw.user().getProtocolInfo().getUsername());
-					loginSuccess.send(Protocol1_7_5to1_6_4.class);
-
-					final PacketWrapper login = PacketWrapper.create(ServerboundPackets1_2_5.JOIN_GAME, pw.user());
-					login.write(Type.INT, Math.abs(pw.user().getProtocolInfo().getServerProtocolVersion()));
-
-					login.write(TypeRegistry_1_6_4.STRING, pw.user().getProtocolInfo().getUsername());
-					login.write(TypeRegistry_1_6_4.STRING, "");
-
-					login.write(Type.INT, 0);
-					login.write(Type.INT, 0);
-					login.write(Type.BYTE, (byte) 0);
-					login.write(Type.BYTE, (byte) 0);
-					login.write(Type.BYTE, (byte) 0);
-
-					login.sendToServer(Protocol1_3_2to1_2_5.class);
-				});
-			}
-		});
-
 		this.registerServerbound(ServerboundPackets1_3_2.CLICK_WINDOW, new PacketRemapper() {
 			@Override
 			public void registerMap() {
@@ -282,46 +251,35 @@ public class Protocol1_3_2to1_2_5 extends EnZaProtocol<ClientboundPackets1_2_5, 
 					final String serverId = pw.read(TypeRegistry_1_6_4.STRING);
 					pw.cancel();
 
-					if (serverId.equals("-")) {
-						final PacketWrapper loginSuccess = PacketWrapper.create(ClientboundLoginPackets1_2_5.HANDSHAKE, pw.user());
-
-						loginSuccess.write(Type.STRING, UUID.randomUUID().toString().replace("-", ""));
-						loginSuccess.write(Type.STRING, pw.user().getProtocolInfo().getUsername());
-						loginSuccess.send(Protocol1_7_5to1_6_4.class);
-						pw.user().getProtocolInfo().setState(State.PLAY);
-
-						final PacketWrapper login = PacketWrapper.create(ServerboundPackets1_2_5.JOIN_GAME, pw.user());
-						login.write(Type.INT, Math.abs(pw.user().getProtocolInfo().getServerProtocolVersion()));
-
-						login.write(TypeRegistry_1_6_4.STRING, pw.user().getProtocolInfo().getUsername());
-						login.write(TypeRegistry_1_6_4.STRING, "");
-
-						login.write(Type.INT, 0);
-						login.write(Type.INT, 0);
-
-						login.write(Type.BYTE, (byte) 0);
-						login.write(Type.BYTE, (byte) 0);
-						login.write(Type.BYTE, (byte) 0);
-
-						login.sendToServer(Protocol1_3_2to1_2_5.class);
-					} else {
-						final KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-						keyGen.initialize(1024);
-
-						final PacketWrapper encryptionReq = PacketWrapper.create(ClientboundLoginPackets1_6_4.SERVER_AUTH_DATA, pw.user());
-						encryptionReq.write(TypeRegistry_1_6_4.STRING, serverId);
-
-						encryptionReq.write(TypeRegistry_1_6_4.BYTEARRAY, keyGen.generateKeyPair().getPublic().getEncoded());
-						encryptionReq.write(TypeRegistry_1_6_4.BYTEARRAY, new byte[4]);
-
-						encryptionReq.send(Protocol1_3_2to1_2_5.class);
+					if (!serverId.equals("-")) {
+						ViaLegacy.getProvider().sendJoinServer_1_2_5(serverId);
 					}
+
+					final PacketWrapper loginSuccess = PacketWrapper.create(ClientboundLoginPackets1_2_5.HANDSHAKE, pw.user());
+
+					loginSuccess.write(Type.STRING, UUID.randomUUID().toString().replace("-", ""));
+					loginSuccess.write(Type.STRING, pw.user().getProtocolInfo().getUsername());
+					loginSuccess.send(Protocol1_7_5to1_6_4.class);
+					pw.user().getProtocolInfo().setState(State.PLAY);
+
+					final PacketWrapper login = PacketWrapper.create(ServerboundPackets1_2_5.JOIN_GAME, pw.user());
+					login.write(Type.INT, Math.abs(pw.user().getProtocolInfo().getServerProtocolVersion()));
+
+					login.write(TypeRegistry_1_6_4.STRING, pw.user().getProtocolInfo().getUsername());
+					login.write(TypeRegistry_1_6_4.STRING, "");
+
+					login.write(Type.INT, 0);
+					login.write(Type.INT, 0);
+
+					login.write(Type.BYTE, (byte) 0);
+					login.write(Type.BYTE, (byte) 0);
+					login.write(Type.BYTE, (byte) 0);
+
+					login.sendToServer(Protocol1_3_2to1_2_5.class);
 				});
 			}
 		});
 
-		this.cancelClientbound(State.LOGIN, ClientboundLoginPackets1_6_4.SHARED_KEY.getId());
-		this.cancelClientbound(State.LOGIN, ClientboundLoginPackets1_6_4.SERVER_AUTH_DATA.getId());
 
 		this.registerClientbound(ClientboundPackets1_2_5.ENTITY_EQUIPMENT, new PacketRemapper() {
 			@Override

@@ -575,7 +575,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final int effectID = pw.read(Type.INT);
 
                     final int x = pw.read(Type.INT);
-                    final int y = pw.read(Type.BYTE);
+                    final int y = pw.read(Type.UNSIGNED_BYTE);
                     final int z = pw.read(Type.INT);
 
                     final int data = pw.read(Type.INT);

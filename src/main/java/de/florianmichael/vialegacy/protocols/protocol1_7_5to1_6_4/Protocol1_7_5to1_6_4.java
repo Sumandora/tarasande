@@ -278,8 +278,6 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     byte[] publicKey = pw.get(TypeRegistry_1_6_4.BYTEARRAY, 0);
                     byte[] verifyToken = pw.get(TypeRegistry_1_6_4.BYTEARRAY, 1);
 
-                    System.out.println(serverId);
-
                     if (serverId.equals("-")) {
                         pw.cancel();
                         // Write Login Success packet

@@ -4,7 +4,6 @@ import com.google.common.collect.BoundType;
 import com.google.common.collect.Range;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.Protocol;
-import com.viaversion.viaversion.api.protocol.ProtocolPathEntry;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.vialegacy.exception.ViaLegacyException;
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
@@ -24,7 +23,6 @@ import de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre.Protocol1_6
 import de.florianmichael.vialegacy.protocols.protocol1_7_10to1_7_5.Protocol1_7_10to1_7_5;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.Protocol1_7_5to1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.Protocol1_8to1_7_10;
-import net.minecraft.SharedConstants;
 
 import java.util.logging.Logger;
 

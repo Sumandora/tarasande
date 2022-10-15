@@ -131,7 +131,7 @@ public class Protocol1_4_2to1_3_2 extends EnZaProtocol<ClientboundPackets1_3_2, 
 				map(Type.BYTE); // View Distance
 				map(Type.BYTE); // Chat flags
 
-				map(Type.UNSIGNED_BYTE); // Difficulty
+				map(Type.BYTE); // Difficulty
 				map(Type.BOOLEAN, Type.NOTHING); // Show Cape
 			}
 		});

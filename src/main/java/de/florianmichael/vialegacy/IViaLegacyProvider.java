@@ -13,4 +13,6 @@ public interface IViaLegacyProvider {
 
     void fixPipelineOrder_1_6(final Channel channel, final String decoder, final String encoder);
     void rewriteElements_1_6(final UserConnection connection, final Channel channel, final String decoder, final String encoder);
+
+    void sendJoinServer_1_2_5(final String serverId);
 }

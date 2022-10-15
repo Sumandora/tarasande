@@ -4,6 +4,8 @@ import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitterLogic;
 import de.florianmichael.vialegacy.protocol.splitter.LegacyClientboundPacketType;
 
+import java.util.Arrays;
+
 public enum ClientboundLoginPackets1_2_5 implements LegacyClientboundPacketType {
 
 	HANDSHAKE(0x02, (buffer, transformer) -> {
@@ -17,7 +19,9 @@ public enum ClientboundLoginPackets1_2_5 implements LegacyClientboundPacketType 
 		this.id = id;
 		this.splitter = splitter;
 
-		this.registerSplitter(LegacyProtocolVersion.R1_2_5);
+		for (LegacyProtocolVersion legacyProtocolVersion : Arrays.asList(LegacyProtocolVersion.R1_2_5, LegacyProtocolVersion.R1_2_3, LegacyProtocolVersion.R1_1)) {
+			this.registerSplitter(legacyProtocolVersion);
+		}
 	}
 
 	@Override
