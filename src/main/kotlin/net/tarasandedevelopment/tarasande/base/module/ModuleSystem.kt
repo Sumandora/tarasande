@@ -113,7 +113,8 @@ class ManagerModule : Manager<Module>() {
             ModuleLiveOverflowMovement(),
             ModuleAutoRespawn(),
             ModulePortalScreen(),
-            ModuleAutoFish()
+            ModuleAutoFish(),
+            ModuleJesus()
         )
         TarasandeMain.get().eventDispatcher.add(EventTick::class.java) {
             if (it.state == EventTick.State.POST) {
