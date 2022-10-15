@@ -12,14 +12,14 @@
  * The owner "Florian Michael" is free to change this license.
  */
 
-package de.florianmichael.vialegacy.api.type._1_6_4;
+package de.florianmichael.vialegacy.api.type._1_7_6_10;
 
 import com.viaversion.viaversion.api.type.Type;
 import io.netty.buffer.ByteBuf;
 
-public class ByteArrayType_1_6_4 extends Type<byte[]> {
-	
-	public ByteArrayType_1_6_4() {
+public class ByteArrayType_1_7_6_10 extends Type<byte[]> {
+
+	public ByteArrayType_1_7_6_10() {
 		super(byte[].class);
 	}
 

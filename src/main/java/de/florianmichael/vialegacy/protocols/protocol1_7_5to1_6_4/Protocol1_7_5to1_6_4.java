@@ -125,7 +125,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     }
                     out.writeInt(port);
                     out.close();
-                    req.write(TypeRegistry_1_6_4.BYTEARRAY, baos.toByteArray());
+                    req.write(TypeRegistry1_7_6_10.BYTEARRAY, baos.toByteArray());
                     req.sendToServer(Protocol1_7_5to1_6_4.class);
                 });
             }
@@ -270,13 +270,13 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 map(TypeRegistry_1_6_4.STRING, Type.STRING); // Server-Id
-                map(TypeRegistry_1_6_4.BYTEARRAY); // PublicKey
-                map(TypeRegistry_1_6_4.BYTEARRAY); // VerifyToken
+                map(TypeRegistry1_7_6_10.BYTEARRAY); // PublicKey
+                map(TypeRegistry1_7_6_10.BYTEARRAY); // VerifyToken
                 handler((pw) -> {
                     String serverId = pw.get(Type.STRING, 0);
                     // If server id is equal to '-' than the server is cracked.
-                    byte[] publicKey = pw.get(TypeRegistry_1_6_4.BYTEARRAY, 0);
-                    byte[] verifyToken = pw.get(TypeRegistry_1_6_4.BYTEARRAY, 1);
+                    byte[] publicKey = pw.get(TypeRegistry1_7_6_10.BYTEARRAY, 0);
+                    byte[] verifyToken = pw.get(TypeRegistry1_7_6_10.BYTEARRAY, 1);
 
                     if (serverId.equals("-")) {
                         pw.cancel();
@@ -1063,11 +1063,11 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 handler((pw) -> {
                     short type = pw.read(Type.SHORT);
                     int id = pw.read(Type.SHORT);
-                    byte[] data = pw.read(TypeRegistry_1_6_4.BYTEARRAY);
+                    byte[] data = pw.read(TypeRegistry1_7_6_10.BYTEARRAY);
                     pw.clearPacket();
 
                     pw.write(Type.VAR_INT, id);
-                    pw.write(TypeRegistry_1_6_4.BYTEARRAY, data);
+                    pw.write(TypeRegistry1_7_6_10.BYTEARRAY, data);
                 });
             }
         });

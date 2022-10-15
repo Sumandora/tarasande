@@ -18,4 +18,5 @@ public class TypeRegistry1_7_6_10 {
 	public static final Type<Metadata> METADATA = new MetadataType_1_7_6_10();
 	public static final Type<CompoundTag> NBT = new NBTType_1_7_6_10();
 
+	public static final Type<byte[]> BYTEARRAY = new ByteArrayType_1_7_6_10();
 }

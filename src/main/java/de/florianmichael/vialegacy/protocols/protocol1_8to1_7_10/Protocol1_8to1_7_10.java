@@ -52,11 +52,9 @@ import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.Tablist
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.WindowIDTracker;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.Unpooled;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
@@ -865,28 +863,65 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 });
                 handler(packetWrapper -> {
                     String channel = packetWrapper.get(Type.STRING, 0);
-                    short length = packetWrapper.read(Type.SHORT);
-                    if (channel.equals("MC|Brand")) {
-                        byte[] data = new byte[length];
-                        for (int i = 0; i < length; i++)
-                            data[i] = packetWrapper.read(Type.BYTE);
+                    switch (channel) {
+                        case "MC|Brand" -> {
+                            byte[] data = packetWrapper.read(TypeRegistry1_7_6_10.BYTEARRAY);
+                            System.out.println(new String(data));
+                            packetWrapper.write(Type.STRING, new String(data));
+                        }
+                        case "MC|TrList" -> {
+                            packetWrapper.read(Type.UNSIGNED_SHORT); // Length of ByteArray
 
-                        String brand = new String(data, StandardCharsets.UTF_8);
-                        final ByteBuf buf = Unpooled.buffer();
-                        Type.STRING.write(buf, brand);
-                        byte[] data2 = new byte[buf.readableBytes()];
-                        buf.readBytes(data2);
-                        packetWrapper.write(Type.BYTE_ARRAY_PRIMITIVE, data2);
-//
-//                        while (buf.readableBytes() > 0)
-//                            packetWrapper.write(Type.BYTE, buf.readByte());
-                        buf.release();
-                    } else {
-                        for (int i = 0; i < length; i++)
-                            packetWrapper.passthrough(Type.BYTE);
+                            packetWrapper.passthrough(Type.INT);
+                            final int size = packetWrapper.passthrough(Type.UNSIGNED_BYTE);
+                            for (int i = 0; i < size; ++i) {
+                                Item item = packetWrapper.read(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM);
+                                packetWrapper.write(Type.ITEM, item);
+                                item = packetWrapper.read(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM);
+                                packetWrapper.write(Type.ITEM, item);
 
-                        if (channel.equals("MC|AdvCdm")) packetWrapper.write(Type.BYTE, (byte) 1);
+                                boolean thirdItem = packetWrapper.passthrough(Type.BOOLEAN);
+
+                                if (thirdItem) {
+                                    item = packetWrapper.read(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM);
+                                    packetWrapper.write(Type.ITEM, item);
+                                }
+
+                                packetWrapper.passthrough(Type.BOOLEAN); // Unavailable
+                                packetWrapper.write(Type.INT, 0); // Max uses
+                                packetWrapper.write(Type.INT, 0); // Max trades
+                            }
+                        }
+                        case "MC|RPack" -> {
+                            final byte[] data = packetWrapper.read(TypeRegistry1_7_6_10.BYTEARRAY);
+                            packetWrapper.clearPacket();
+                            packetWrapper.setId(ClientboundPackets1_8.RESOURCE_PACK);
+                            System.out.println(new String(data));
+                            packetWrapper.write(Type.STRING, new String(data)); // url
+                            packetWrapper.write(Type.STRING, ""); // hash
+                        }
                     }
+//                    if (channel.equals("MC|Brand")) {
+//                        byte[] data = new byte[length];
+//                        for (int i = 0; i < length; i++)
+//                            data[i] = packetWrapper.read(Type.BYTE);
+//
+//                        String brand = new String(data, StandardCharsets.UTF_8);
+//                        final ByteBuf buf = Unpooled.buffer();
+//                        Type.STRING.write(buf, brand);
+//                        byte[] data2 = new byte[buf.readableBytes()];
+//                        buf.readBytes(data2);
+//                        packetWrapper.write(Type.BYTE_ARRAY_PRIMITIVE, data2);
+////
+////                        while (buf.readableBytes() > 0)
+////                            packetWrapper.write(Type.BYTE, buf.readByte());
+//                        buf.release();
+//                    } else {
+//                        for (int i = 0; i < length; i++)
+//                            packetWrapper.passthrough(Type.BYTE);
+//
+//                        if (channel.equals("MC|AdvCdm")) packetWrapper.write(Type.BYTE, (byte) 1);
+//                    }
                 });
             }
         });

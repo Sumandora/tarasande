@@ -15,14 +15,12 @@
 package de.florianmichael.vialegacy.api.type;
 
 import com.viaversion.viaversion.api.type.Type;
-import de.florianmichael.vialegacy.api.type._1_6_4.ByteArrayType_1_6_4;
 import de.florianmichael.vialegacy.api.type._1_6_4.MetadataListType_1_6_4;
 import de.florianmichael.vialegacy.api.type._1_6_4.StringType_1_6_4;
 
 public class TypeRegistry_1_6_4 {
 	
 	public static final Type<String> STRING = new StringType_1_6_4();
-	public static final Type<byte[]> BYTEARRAY = new ByteArrayType_1_6_4();
 	public static final MetadataListType_1_6_4 METADATA_LIST = new MetadataListType_1_6_4();
 
 }
