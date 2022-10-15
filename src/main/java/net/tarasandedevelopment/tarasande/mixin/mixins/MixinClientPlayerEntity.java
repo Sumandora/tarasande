@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
@@ -15,6 +16,7 @@ import net.tarasandedevelopment.tarasande.event.EventChat;
 import net.tarasandedevelopment.tarasande.event.EventIsWalking;
 import net.tarasandedevelopment.tarasande.event.EventUpdate;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity;
+import net.tarasandedevelopment.tarasande.module.exploit.ModulePortalScreen;
 import net.tarasandedevelopment.tarasande.module.misc.ModuleAutoRespawn;
 import net.tarasandedevelopment.tarasande.module.movement.ModuleFlight;
 import net.tarasandedevelopment.tarasande.module.movement.ModuleNoSlowdown;
@@ -179,6 +181,14 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         if (!TarasandeMain.Companion.get().getDisabled())
             if (TarasandeMain.Companion.get().getManagerModule().get(ModuleAutoRespawn.class).getEnabled())
                 cir.setReturnValue(false);
+    }
+
+    @Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;shouldPause()Z"))
+    public boolean hookedShouldPause(Screen instance) {
+        if (!TarasandeMain.Companion.get().getDisabled())
+            if (TarasandeMain.Companion.get().getManagerModule().get(ModulePortalScreen.class).getEnabled())
+                return true;
+        return instance.shouldPause();
     }
 
     @Override

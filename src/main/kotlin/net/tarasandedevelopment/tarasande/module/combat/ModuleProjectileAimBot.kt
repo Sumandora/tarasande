@@ -31,6 +31,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
     private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.1, 1.0, 1.0, 1.0, 0.1)
     private val lockView = ValueBoolean(this, "Lock view", false)
     private val predictionAmount = ValueNumber(this, "Prediction amount", 0.0, 1.0, 2.0, 0.1)
+    private val throughWalls = ValueBoolean(this, "Through walls", false)
 
     private val gravity = 0.006
 
@@ -59,7 +60,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
             val stack = mc.player?.getStackInHand(mc.player?.activeHand) ?: return@registerEvent
             if (stack.item !is BowItem && !(stack.item is CrossbowItem && (stack.item as ICrossbowItem).tarasande_invokeGetProjectiles(stack).any { it.item is ArrowItem })) return@registerEvent
 
-            val entity = mc.world?.entities?.filter { PlayerUtil.isAttackable(it) && PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.eyePos) }?.minByOrNull { RotationUtil.getRotations(mc.player?.eyePos!!, it.eyePos).fov(Rotation(mc.player!!)) } ?: return@registerEvent
+            val entity = mc.world?.entities?.filter { PlayerUtil.isAttackable(it) && (throughWalls.value || PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.eyePos)) }?.minByOrNull { RotationUtil.getRotations(mc.player?.eyePos!!, it.eyePos).fov(Rotation(mc.player!!)) } ?: return@registerEvent
 
             var target = entity.boundingBox.center
 

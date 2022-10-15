@@ -132,6 +132,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
                     if (firstRealInput != null) {
                         event.movementForward = firstRealInput?.first!!
                         event.movementSideways = firstRealInput?.second!!
+                        event.cancelled = false
                     }
                 }
             }
