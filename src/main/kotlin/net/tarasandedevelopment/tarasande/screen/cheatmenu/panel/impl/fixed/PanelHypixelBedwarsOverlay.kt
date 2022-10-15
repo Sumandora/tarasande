@@ -163,7 +163,7 @@ class PanelHypixelBedwarsOverlay(x: Double, y: Double, screenCheatMenu: ScreenCh
                         val finalKills = bedwarsStats.get("final_kills_bedwars")
                         val finalDeaths = bedwarsStats.get("final_deaths_bedwars")
                         if (finalKills != null && finalDeaths != null)
-                            fkdr = (finalKills.asInt / finalDeaths.asInt.toDouble() * 100).roundToInt() / 100.0
+                            fkdr = (finalKills.asInt / finalDeaths.asInt.coerceAtLeast(1).toDouble() * 100).roundToInt() / 100.0
                         val winstreak = bedwarsStats.get("winstreak")
                         val twoFourWinstreak = bedwarsStats.get("two_four_winstreak")
                         val fourThreeWinstreak = bedwarsStats.get("four_three_winstreak")
