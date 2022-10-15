@@ -73,7 +73,11 @@ class ManagerClientMenu : Manager<ElementMenu>() {
 
         return ButtonWidget(x, y, width, height, this.createButtonText()) {
             if (this.anySelected() && !Screen.hasShiftDown()) {
-                byName(selected).onClick(GLFW.GLFW_MOUSE_BUTTON_LEFT)
+                val screen = byName(selected)
+                if (screen.visible()) {
+                    screen.onClick(GLFW.GLFW_MOUSE_BUTTON_LEFT)
+                    return@ButtonWidget
+                }
             }
             MinecraftClient.getInstance().setScreen(ScreenBetterClientMenu(parent))
         }
