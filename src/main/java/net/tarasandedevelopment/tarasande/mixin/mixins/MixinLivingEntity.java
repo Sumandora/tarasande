@@ -12,14 +12,13 @@ import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventJump;
 import net.tarasandedevelopment.tarasande.event.EventSwing;
 import net.tarasandedevelopment.tarasande.mixin.accessor.ILivingEntity;
+import net.tarasandedevelopment.tarasande.module.movement.ModuleFastClimb;
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = LivingEntity.class, priority = 999 /* baritone fix */)
@@ -60,6 +59,10 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Shadow
     private int jumpingCooldown;
+
+    @Shadow
+    public abstract boolean isClimbing();
+
     @Unique
     private float originalYaw;
 
@@ -102,6 +105,16 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
             if (eventSwing.getCancelled())
                 ci.cancel();
         }
+    }
+
+    @ModifyConstant(method = "applyMovementInput", constant = @Constant(doubleValue = 0.2))
+    public double modifyClimbSpeed(double original) {
+        if (!TarasandeMain.Companion.get().getDisabled() && isClimbing()) {
+            ModuleFastClimb moduleFastClimb = TarasandeMain.Companion.get().getManagerModule().get(ModuleFastClimb.class);
+            if (moduleFastClimb.getEnabled())
+                original *= moduleFastClimb.getMultiplier().getValue();
+        }
+        return original;
     }
 
     @Override

@@ -17,7 +17,7 @@ class ModuleJesus : Module("Jesus", "Lets you walk on liquids", ModuleCategory.M
         registerEvent(EventCollisionShape::class.java) { event ->
             if (mc.player?.isSubmergedInWater == true || mc.player?.isInLava == true || mc.player?.input?.sneaking == true)
                 return@registerEvent
-            if (event.pos.y <= mc.player?.blockPos?.y!!)
+            if (event.pos.y < mc.player?.y!!)
                 if (mc.world?.getBlockState(event.pos)?.fluidState?.isEmpty == false) {
                     event.collisionShape = VoxelShapes.cuboid(0.0, 0.0, 0.0, 1.0, height.value * (mc.world?.getBlockState(event.pos)?.fluidState?.height?.toDouble() ?: 1.0), 1.0)
                 }

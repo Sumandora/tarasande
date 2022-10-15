@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.util.clientvalue
 
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuScreen
 import net.tarasandedevelopment.tarasande.value.*
 import org.lwjgl.glfw.GLFW
 
@@ -39,4 +38,5 @@ class ClientValues {
         override fun isEnabled() = autoSaveConfig.value
     }
     val hypixelApiKey = ValueText(this, "Hypixel API Key", "")
+    val passEventsInScreens = ValueBoolean(this, "Pass events in screens", true)
 }

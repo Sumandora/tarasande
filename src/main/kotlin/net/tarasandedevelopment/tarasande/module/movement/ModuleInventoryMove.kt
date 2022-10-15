@@ -15,11 +15,13 @@ import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentRegistry
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentText
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
+import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 
 class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
 
     val canceledPackets = ValueMode(this, "Canceled packets", true, "Open", "Close")
+    private val updateSneaking = ValueBoolean(this, "Update sneaking", false)
 
     private val keybinding = ArrayList(PlayerUtil.movementKeys)
 
@@ -27,6 +29,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
 
     init {
         keybinding.add(mc.options.jumpKey)
+        keybinding.add(mc.options.sneakKey)
     }
 
     init {
@@ -41,7 +44,8 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         registerEvent(EventKeyBindingIsPressed::class.java, 1) { event ->
             if (isPassingEvents())
                 if (keybinding.contains(event.keyBinding))
-                    event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, (event.keyBinding as IKeyBinding).tarasande_getBoundKey().code)
+                    if (event.keyBinding != mc.options.sneakKey || updateSneaking.value)
+                        event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, (event.keyBinding as IKeyBinding).tarasande_getBoundKey().code)
         }
 
         registerEvent(EventTick::class.java) { event ->
@@ -61,6 +65,6 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
     }
 
     private fun isPassingEvents(): Boolean {
-        return (enabled && (mc.currentScreen is HandledScreen<*> || (mc.currentScreen is ScreenCheatMenu && !textBoxFocused))) || (mc.currentScreen == null || mc.currentScreen?.passEvents!!)
+        return (enabled && (mc.currentScreen is HandledScreen<*> || (mc.currentScreen is ScreenCheatMenu && !textBoxFocused))) || (mc.currentScreen == null || mc.currentScreen?.passEvents == true)
     }
 }

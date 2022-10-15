@@ -25,10 +25,7 @@ import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAcc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -212,6 +209,25 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
             this.setScreen(eventChangeScreen.getNewScreen());
             ci.cancel();
         }
+    }
+
+    @Redirect(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;currentScreen:Lnet/minecraft/client/gui/screen/Screen;"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;resetDebugHudChunk()V"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;handleInputEvents()V")))
+    public Screen hookedCurrentScreen(MinecraftClient instance) {
+        if (!TarasandeMain.Companion.get().getDisabled()) {
+            if (TarasandeMain.Companion.get().getClientValues().getPassEventsInScreens().getValue())
+                if (MinecraftClient.getInstance().player != null)
+                    return null;
+        }
+        return instance.currentScreen;
+    }
+
+    @ModifyConstant(method = "tick", constant = @Constant(intValue = 10000))
+    public int modifyStallCooldown(int constant) {
+        if (!TarasandeMain.Companion.get().getDisabled()) {
+            if (TarasandeMain.Companion.get().getClientValues().getPassEventsInScreens().getValue())
+                return attackCooldown;
+        }
+        return constant;
     }
 
     @Override
