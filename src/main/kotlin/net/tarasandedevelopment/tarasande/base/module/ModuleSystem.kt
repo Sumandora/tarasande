@@ -115,7 +115,8 @@ class ManagerModule : Manager<Module>() {
             ModulePortalScreen(),
             ModuleAutoFish(),
             ModuleJesus(),
-            ModuleFastClimb()
+            ModuleFastClimb(),
+            ModuleAntiAFK()
         )
         TarasandeMain.get().eventDispatcher.add(EventTick::class.java) {
             if (it.state == EventTick.State.POST) {

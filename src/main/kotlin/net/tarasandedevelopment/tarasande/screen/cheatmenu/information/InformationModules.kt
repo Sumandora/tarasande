@@ -8,10 +8,12 @@ import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
 import net.tarasandedevelopment.tarasande.mixin.accessor.IRenderTickCounter
 import net.tarasandedevelopment.tarasande.module.exploit.ModuleTickBaseManipulation
 import net.tarasandedevelopment.tarasande.module.misc.ModuleMurderMystery
+import net.tarasandedevelopment.tarasande.module.player.ModuleAntiAFK
 import net.tarasandedevelopment.tarasande.module.render.ModuleBedESP
 import net.tarasandedevelopment.tarasande.util.extension.div
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import kotlin.math.round
+import kotlin.math.roundToInt
 
 class InformationTimeShifted : Information("Tick base manipulation", "Time shifted") {
     private val moduleTickBaseManipulation = TarasandeMain.get().managerModule.get(ModuleTickBaseManipulation::class.java)
@@ -25,10 +27,10 @@ class InformationTimeShifted : Information("Tick base manipulation", "Time shift
 
 class InformationSuspectedMurderers : Information("Murder Mystery", "Suspected murderers") {
     override fun getMessage(): String? {
-        val murderMystery = TarasandeMain.get().managerModule.get(ModuleMurderMystery::class.java)
-        if (murderMystery.enabled)
-            if (murderMystery.suspects.isNotEmpty()) {
-                return "\n" + murderMystery.suspects.entries.joinToString("\n") {
+        val moduleMurderMystery = TarasandeMain.get().managerModule.get(ModuleMurderMystery::class.java)
+        if (moduleMurderMystery.enabled)
+            if (moduleMurderMystery.suspects.isNotEmpty()) {
+                return "\n" + moduleMurderMystery.suspects.entries.joinToString("\n") {
                     it.key.name + " (" + it.value.joinToString(" and ") { it.name.string } + "§r)"
                 }
             }
@@ -39,10 +41,10 @@ class InformationSuspectedMurderers : Information("Murder Mystery", "Suspected m
 
 class InformationFakeNewsCountdown : Information("Murder Mystery", "Fake news countdown") {
     override fun getMessage(): String? {
-        val murderMystery = TarasandeMain.get().managerModule.get(ModuleMurderMystery::class.java)
-        if (murderMystery.enabled)
-            if (!murderMystery.fakeNews.isSelected(0) && murderMystery.isMurderer() && murderMystery.murdererAssistance.value)
-                return (murderMystery.fakeNewsTime - (System.currentTimeMillis() - murderMystery.fakeNewsTimer.time)).toString()
+        val moduleMurderMystery = TarasandeMain.get().managerModule.get(ModuleMurderMystery::class.java)
+        if (moduleMurderMystery.enabled)
+            if (!moduleMurderMystery.fakeNews.isSelected(0) && moduleMurderMystery.isMurderer() && moduleMurderMystery.murdererAssistance.value)
+                return (moduleMurderMystery.fakeNewsTime - (System.currentTimeMillis() - moduleMurderMystery.fakeNewsTimer.time)).toString()
 
         return null
     }
@@ -50,9 +52,9 @@ class InformationFakeNewsCountdown : Information("Murder Mystery", "Fake news co
 
 class InformationBeds : Information("Bed ESP", "Beds") {
     override fun getMessage(): String? {
-        val bedESP = TarasandeMain.get().managerModule.get(ModuleBedESP::class.java)
-        if (bedESP.enabled) if (bedESP.calculateBestWay.value) if (bedESP.bedDatas.isNotEmpty()) {
-            return "\n" + bedESP.bedDatas.sortedBy {
+        val moduleBedESP = TarasandeMain.get().managerModule.get(ModuleBedESP::class.java)
+        if (moduleBedESP.enabled) if (moduleBedESP.calculateBestWay.value) if (moduleBedESP.bedDatas.isNotEmpty()) {
+            return "\n" + moduleBedESP.bedDatas.sortedBy {
                 MinecraftClient.getInstance().player?.squaredDistanceTo(it.bedParts.let {
                     var vec = Vec3d.ZERO
                     it.forEach { vec += Vec3d.ofCenter(it) }
@@ -60,6 +62,16 @@ class InformationBeds : Information("Bed ESP", "Beds") {
                 })
             }.joinToString("\n") { it.toString() }.let { it.substring(0, it.length - 1) }
         }
+
+        return null
+    }
+}
+
+class InformationAntiAFKCountdown : Information("Anti AFK", "Jump countdown") {
+    override fun getMessage(): String? {
+        val moduleAntiAFK = TarasandeMain.get().managerModule.get(ModuleAntiAFK::class.java)
+        if (moduleAntiAFK.enabled)
+            return (((moduleAntiAFK.delay.value * 1000L) - (System.currentTimeMillis() - moduleAntiAFK.timer.time)) / 1000.0).roundToInt().toString()
 
         return null
     }

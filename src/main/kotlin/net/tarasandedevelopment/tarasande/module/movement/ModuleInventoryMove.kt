@@ -23,13 +23,13 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
     val canceledPackets = ValueMode(this, "Canceled packets", true, "Open", "Close")
     private val updateSneaking = ValueBoolean(this, "Update sneaking", false)
 
-    private val keybinding = ArrayList(PlayerUtil.movementKeys)
+    private val movementKeys = ArrayList(PlayerUtil.movementKeys)
 
     private var textBoxFocused = false
 
     init {
-        keybinding.add(mc.options.jumpKey)
-        keybinding.add(mc.options.sneakKey)
+        movementKeys.add(mc.options.jumpKey)
+        movementKeys.add(mc.options.sneakKey)
     }
 
     init {
@@ -43,7 +43,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
 
         registerEvent(EventKeyBindingIsPressed::class.java, 1) { event ->
             if (isPassingEvents())
-                if (keybinding.contains(event.keyBinding))
+                if (movementKeys.contains(event.keyBinding))
                     if (event.keyBinding != mc.options.sneakKey || updateSneaking.value)
                         event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, (event.keyBinding as IKeyBinding).tarasande_getBoundKey().code)
         }

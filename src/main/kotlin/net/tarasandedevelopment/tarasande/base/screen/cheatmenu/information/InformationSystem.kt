@@ -53,6 +53,7 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
             InformationSuspectedMurderers(),
             InformationFakeNewsCountdown(),
             InformationBeds(),
+            InformationAntiAFKCountdown(),
 
             // Graphs
             *screenCheatMenu.managerGraph.list.map { e -> InformationGraphValue(e) }.toTypedArray()
