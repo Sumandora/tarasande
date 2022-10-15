@@ -72,6 +72,7 @@
     "protocolhack.block.MixinAnvilBlock",
     "protocolhack.block.MixinBedBlock",
     "protocolhack.block.MixinBlock",
+    "protocolhack.block.MixinBlockView",
     "protocolhack.block.MixinBrewingStandBlock",
     "protocolhack.block.MixinCauldronBlock",
     "protocolhack.block.MixinEndPortalBlock",
