@@ -15,6 +15,7 @@ import net.tarasandedevelopment.tarasande.event.EventChat;
 import net.tarasandedevelopment.tarasande.event.EventIsWalking;
 import net.tarasandedevelopment.tarasande.event.EventUpdate;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity;
+import net.tarasandedevelopment.tarasande.module.misc.ModuleAutoRespawn;
 import net.tarasandedevelopment.tarasande.module.movement.ModuleFlight;
 import net.tarasandedevelopment.tarasande.module.movement.ModuleNoSlowdown;
 import org.jetbrains.annotations.Nullable;
@@ -171,6 +172,13 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
         if (flight)
             this.setFlag(Entity.FALL_FLYING_FLAG_INDEX, fallFlying);
+    }
+
+    @Inject(method = "showsDeathScreen", at = @At("HEAD"), cancellable = true)
+    public void injectShowsDeathScreen(CallbackInfoReturnable<Boolean> cir) {
+        if (!TarasandeMain.Companion.get().getDisabled())
+            if (TarasandeMain.Companion.get().getManagerModule().get(ModuleAutoRespawn.class).getEnabled())
+                cir.setReturnValue(false);
     }
 
     @Override

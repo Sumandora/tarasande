@@ -110,7 +110,8 @@ class ManagerModule : Manager<Module>() {
             ModuleClientBrandSpoofer(),
             ModulePerfectHorseJump(),
             ModuleTridentBoost(),
-            ModuleLiveOverflowMovement()
+            ModuleLiveOverflowMovement(),
+            ModuleAutoRespawn()
         )
         TarasandeMain.get().eventDispatcher.add(EventTick::class.java) {
             if (it.state == EventTick.State.POST) {

@@ -183,7 +183,7 @@ class EventChangeScreen : Event {
             dirty = true
         }
 
-    constructor(newScreen: Screen?) : super(false) {
+    constructor(newScreen: Screen?) : super(true) {
         this.newScreen = newScreen
         dirty = false
     }

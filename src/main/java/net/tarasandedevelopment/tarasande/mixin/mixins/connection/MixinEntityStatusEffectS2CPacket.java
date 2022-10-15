@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins;
+package net.tarasandedevelopment.tarasande.mixin.mixins.connection;
 
 import net.minecraft.network.packet.s2c.play.EntityStatusEffectS2CPacket;
 import net.tarasandedevelopment.tarasande.TarasandeMain;

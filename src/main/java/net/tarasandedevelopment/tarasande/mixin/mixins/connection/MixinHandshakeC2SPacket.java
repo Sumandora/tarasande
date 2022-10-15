@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins;
+package net.tarasandedevelopment.tarasande.mixin.mixins.connection;
 
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IHandshakeC2SPacket;

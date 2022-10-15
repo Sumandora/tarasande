@@ -9,12 +9,14 @@ import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventRotationSet;
 import net.tarasandedevelopment.tarasande.event.EventVelocity;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayNetworkHandler;
+import net.tarasandedevelopment.tarasande.module.exploit.ModuleNoChatContext;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -54,6 +56,13 @@ public abstract class MixinClientPlayNetworkHandler implements IClientPlayNetwor
         TarasandeMain.Companion.get().getEventDispatcher().call(new EventRotationSet(client.player.getYaw(), client.player.getPitch()));
     }
 
+    @ModifyVariable(method = "acknowledge", at = @At("HEAD"), argsOnly = true, index = 2)
+    public boolean modifyDisplayed(boolean value) {
+        if (!TarasandeMain.Companion.get().getDisabled())
+            if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoChatContext.class).getEnabled())
+                return false;
+        return value;
+    }
 
     @Override
     public URL tarasande_invokeResolveUrl(String url) {
