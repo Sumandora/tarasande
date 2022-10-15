@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins;
+package net.tarasandedevelopment.tarasande.mixin.mixins.item;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.TridentItem;

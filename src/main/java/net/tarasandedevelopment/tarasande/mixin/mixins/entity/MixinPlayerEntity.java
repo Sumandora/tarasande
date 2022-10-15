@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins;
+package net.tarasandedevelopment.tarasande.mixin.mixins.entity;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.tarasandedevelopment.tarasande.TarasandeMain;

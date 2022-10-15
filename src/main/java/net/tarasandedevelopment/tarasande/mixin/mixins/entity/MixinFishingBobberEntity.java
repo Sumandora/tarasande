@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins;
+package net.tarasandedevelopment.tarasande.mixin.mixins.entity;
 
 import net.minecraft.entity.projectile.FishingBobberEntity;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IFishingBobberEntity;

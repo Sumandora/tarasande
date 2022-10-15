@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins;
+package net.tarasandedevelopment.tarasande.mixin.mixins.item;
 
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;

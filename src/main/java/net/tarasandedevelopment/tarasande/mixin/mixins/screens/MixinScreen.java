@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins;
+package net.tarasandedevelopment.tarasande.mixin.mixins.screens;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;

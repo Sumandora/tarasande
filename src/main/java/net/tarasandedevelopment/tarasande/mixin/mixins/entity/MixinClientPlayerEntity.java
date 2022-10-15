@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins;
+package net.tarasandedevelopment.tarasande.mixin.mixins.entity;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;

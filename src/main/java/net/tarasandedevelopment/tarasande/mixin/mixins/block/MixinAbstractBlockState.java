@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins;
+package net.tarasandedevelopment.tarasande.mixin.mixins.block;
 
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;

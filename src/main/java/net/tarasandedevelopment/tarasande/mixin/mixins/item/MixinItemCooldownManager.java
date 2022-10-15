@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins;
+package net.tarasandedevelopment.tarasande.mixin.mixins.item;
 
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.item.Item;
