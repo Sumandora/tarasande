@@ -62,6 +62,7 @@
 - Target strafe: Anti Void
 - (Banners in protocol selection)
 - Settings for HypixelBedwarsOverlay
+- PathFinder
 
 ### TODO-List (Click GUI)
 - Correctly save and calculate the positions of the panels when resizing ingame
@@ -69,7 +70,9 @@
 - Scaling for the whole GUI, so you can scale it for your MC Gui scale
 
 ### TODO-List (florian)
+
 - TPS Hud Element recode for Protocol Hack
+- placing blocks in localplayer
 
 ## Notes
 - AutoTool: Axes can set shields on cooldown. Maybe implement that if possible axes are being used to set shields on cooldown before actually attacking with sword
