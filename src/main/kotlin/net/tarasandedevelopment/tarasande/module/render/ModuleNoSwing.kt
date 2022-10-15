@@ -1,14 +1,12 @@
 package net.tarasandedevelopment.tarasande.module.render
 
 import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventSwing
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
-import java.util.function.Consumer
 
 class ModuleNoSwing : Module("No swing", "Hides the hand swing animation", ModuleCategory.RENDER) {
 
@@ -16,9 +14,7 @@ class ModuleNoSwing : Module("No swing", "Hides the hand swing animation", Modul
     private val hand = object : ValueMode(this, "Hand", true, "Main hand", "Off hand") {
         override fun isEnabled() = mode.anySelected()
     }
-    val fixAnimations = object : ValueBoolean(this, "Fix animations", true) {
-        override fun isEnabled() = mode.isSelected(0)
-    }
+    val disableEquipProgress = ValueBoolean(this, "Disable equip progress", true)
 
     init {
         registerEvent(EventPacket::class.java) { event ->
