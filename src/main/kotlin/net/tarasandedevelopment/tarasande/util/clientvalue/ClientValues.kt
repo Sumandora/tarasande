@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.util.clientvalue
 
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.blur.BlurKawase
 import net.tarasandedevelopment.tarasande.value.*
 import org.lwjgl.glfw.GLFW
 
@@ -19,9 +20,10 @@ class ClientValues {
         override fun isEnabled() = targets.isSelected(1)
     }
     val correctMovement = ValueMode(this, "Correct movement", false, "Off", "Prevent Backwards Sprinting", "Direct", "Silent")
+    val blurMode = ValueMode(this, "Blur mode", false, *TarasandeMain.get().managerBlur.list.map { it.name }.toTypedArray())
     val blurStrength = object : ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0) {
         override fun onChange() {
-            TarasandeMain.get().blur.kawasePasses = null
+            TarasandeMain.get().managerBlur.get(BlurKawase::class.java).kawasePasses = null
         }
     }
     val unlockTicksPerFrame = ValueBoolean(this, "Unlock ticks per frame", false)

@@ -12,8 +12,8 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.command.ManagerCommand
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
+import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.command.ManagerCommand
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.creative.ManagerCreative
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.graph.ManagerGraph
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.ManagerInformation
@@ -126,12 +126,12 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
         val strength = round(animation * TarasandeMain.get().clientValues.blurStrength.value).toInt()
         if (strength > 0 && TarasandeMain.get().clientValues.menuBlurBackground.value) {
-            TarasandeMain.get().blur.bind(true)
+            TarasandeMain.get().managerBlur.bind(true)
             RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, Color.white.rgb)
             client?.framebuffer?.beginWrite(true)
 
             if (animation != 1.0) { // Prevent it from recalculating every frame
-                TarasandeMain.get().blur.blurScene(strength)
+                TarasandeMain.get().managerBlur.blurScene(strength)
             } else {
                 super.render(matrices, mouseX, mouseY, delta)
             }

@@ -6,10 +6,11 @@ import net.minecraft.client.util.Session
 import net.minecraft.util.Util
 import net.tarasandedevelopment.eventsystem.EventDispatcher
 import net.tarasandedevelopment.tarasande.base.addon.ManagerAddon
-import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ManagerClientMenu
+import net.tarasandedevelopment.tarasande.base.blur.ManagerBlur
 import net.tarasandedevelopment.tarasande.base.esp.ManagerESP
 import net.tarasandedevelopment.tarasande.base.file.ManagerFile
 import net.tarasandedevelopment.tarasande.base.module.ManagerModule
+import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ManagerClientMenu
 import net.tarasandedevelopment.tarasande.base.util.player.clickspeed.ManagerClickMethod
 import net.tarasandedevelopment.tarasande.base.value.ManagerValue
 import net.tarasandedevelopment.tarasande.protocol.TarasandeProtocolHack
@@ -19,7 +20,6 @@ import net.tarasandedevelopment.tarasande.util.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import net.tarasandedevelopment.tarasande.util.player.friends.Friends
 import net.tarasandedevelopment.tarasande.util.player.tagname.TagName
-import net.tarasandedevelopment.tarasande.util.render.blur.Blur
 import org.slf4j.LoggerFactory
 import java.io.File
 
@@ -36,6 +36,8 @@ class TarasandeMain {
         private set
     lateinit var managerAddon: ManagerAddon
         private set
+    lateinit var managerBlur: ManagerBlur
+        private set
     lateinit var clientValues: ClientValues
         private set
     lateinit var protocolHack: TarasandeProtocolHack
@@ -43,8 +45,6 @@ class TarasandeMain {
     lateinit var managerClickMethod: ManagerClickMethod
         private set
     lateinit var managerModule: ManagerModule
-        private set
-    lateinit var blur: Blur
         private set
     lateinit var screenCheatMenu: ScreenCheatMenu
         private set
@@ -93,11 +93,11 @@ class TarasandeMain {
         managerValue = ManagerValue()
         managerAddon = ManagerAddon()
         managerClientMenu = ManagerClientMenu()
+        managerBlur = ManagerBlur()
         clientValues = ClientValues()
         managerClickMethod = ManagerClickMethod()
         managerModule = ManagerModule()
         managerESP = ManagerESP()
-        blur = Blur()
         protocolHack = TarasandeProtocolHack()
         screenCheatMenu = ScreenCheatMenu() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
         friends = Friends()

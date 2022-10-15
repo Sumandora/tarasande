@@ -24,9 +24,7 @@ open class ValueMode(owner: Any, name: String, private var multiSelection: Boole
         }
     }
 
-    fun isSelected(index: Int): Boolean {
-        return selected.contains(settings[index])
-    }
+    fun isSelected(index: Int) = selected.contains(settings[index])
 
     fun anySelected() = selected.isNotEmpty()
 

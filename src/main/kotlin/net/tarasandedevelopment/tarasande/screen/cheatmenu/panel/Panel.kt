@@ -87,7 +87,7 @@ open class Panel(
         if (opened) {
             if (background) {
                 matrices?.push()
-                TarasandeMain.get().blur.bind(true)
+                TarasandeMain.get().managerBlur.bind(true)
                 RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else titleBarHeight).toDouble(), Color.white.rgb)
                 MinecraftClient.getInstance().framebuffer.beginWrite(true)
 
