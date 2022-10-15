@@ -10,15 +10,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(BlockView.class)
-public class MixinBlockView {
+public interface MixinBlockView {
 
     @Redirect(method = "raycastBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;getRaycastShape(Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/shape/VoxelShape;"))
-    public VoxelShape hookedGetRaycastShape(BlockState instance, BlockView blockView, BlockPos blockPos) {
+    default VoxelShape hookedGetRaycastShape(BlockState instance, BlockView blockView, BlockPos blockPos) {
         VoxelShape shape = instance.getRaycastShape(blockView, blockPos);
         // It appears, that certain game states react unstable to the shape changes we are producing.
         if (shape == null)
             shape = VoxelShapes.empty();
         return shape;
     }
-
 }
