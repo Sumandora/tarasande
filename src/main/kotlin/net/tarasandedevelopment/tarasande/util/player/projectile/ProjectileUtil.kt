@@ -87,7 +87,14 @@ object ProjectileUtil {
             override fun tick() {
                 super.tick()
                 if (!projectileItem.persistent) addVelocity(0.0, 0.02, 0.0)
-                if (projectileItem.entityType == EntityType.FISHING_BOBBER) velocity *= 0.92
+                if (projectileItem.entityType == EntityType.FISHING_BOBBER)
+                    velocity *= 0.92
+            }
+
+            override fun checkBlockCollision() {
+                (MinecraftClient.getInstance().world as IWorld).tarasande_setIsClient(true)
+                super.checkBlockCollision()
+                (MinecraftClient.getInstance().world as IWorld).tarasande_setIsClient(false)
             }
         }
         persistentProjectileEntity.setPosition(MinecraftClient.getInstance().player?.getLerpedPos(MinecraftClient.getInstance().tickDelta)?.add(0.0, MinecraftClient.getInstance().player?.standingEyeHeight!! - 0.1, 0.0))
