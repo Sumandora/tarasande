@@ -29,6 +29,9 @@ import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.api.type.types.CustomByteType;
 import com.viaversion.viaversion.api.type.types.VoidType;
 import com.viaversion.viaversion.api.type.types.version.Types1_8;
+import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;
+import com.viaversion.viaversion.libs.opennbt.tag.builtin.ListTag;
+import com.viaversion.viaversion.libs.opennbt.tag.builtin.StringTag;
 import com.viaversion.viaversion.protocol.packet.PacketWrapperImpl;
 import com.viaversion.viaversion.protocols.base.ClientboundLoginPackets;
 import com.viaversion.viaversion.protocols.base.ServerboundLoginPackets;
@@ -37,6 +40,7 @@ import com.viaversion.viaversion.protocols.protocol1_8.ServerboundPackets1_8;
 import com.viaversion.viaversion.util.ChatColorUtil;
 import com.viaversion.viaversion.util.GsonUtil;
 import de.florianmichael.vialegacy.ViaLegacy;
+import de.florianmichael.vialegacy.api.minecraft_util.ChatUtil;
 import de.florianmichael.vialegacy.api.profile.GameProfile;
 import de.florianmichael.vialegacy.api.profile.property.Property;
 import de.florianmichael.vialegacy.api.type.TypeRegistry1_7_6_10;
@@ -52,9 +56,11 @@ import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.Tablist
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.WindowIDTracker;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.Unpooled;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
@@ -66,7 +72,7 @@ import java.util.zip.Inflater;
  * # code and are subject to the FMPL v1.0 License.                                                                    #
  * # Made by Florian Michael                                                                                           #
  * #####################################################################################################################
- *
+ * <p>
  * - CarpetBlock Bounding Box
  */
 public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, ClientboundPackets1_8, ServerboundPackets1_7_10, ServerboundPackets1_8> {
@@ -880,7 +886,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                                 item = packetWrapper.read(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM);
                                 packetWrapper.write(Type.ITEM, item);
 
-                                boolean thirdItem = packetWrapper.passthrough(Type.BOOLEAN);
+                                final boolean thirdItem = packetWrapper.passthrough(Type.BOOLEAN);
 
                                 if (thirdItem) {
                                     item = packetWrapper.read(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM);
@@ -901,27 +907,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                             packetWrapper.write(Type.STRING, ""); // hash
                         }
                     }
-//                    if (channel.equals("MC|Brand")) {
-//                        byte[] data = new byte[length];
-//                        for (int i = 0; i < length; i++)
-//                            data[i] = packetWrapper.read(Type.BYTE);
-//
-//                        String brand = new String(data, StandardCharsets.UTF_8);
-//                        final ByteBuf buf = Unpooled.buffer();
-//                        Type.STRING.write(buf, brand);
-//                        byte[] data2 = new byte[buf.readableBytes()];
-//                        buf.readBytes(data2);
-//                        packetWrapper.write(Type.BYTE_ARRAY_PRIMITIVE, data2);
-////
-////                        while (buf.readableBytes() > 0)
-////                            packetWrapper.write(Type.BYTE, buf.readByte());
-//                        buf.release();
-//                    } else {
-//                        for (int i = 0; i < length; i++)
-//                            packetWrapper.passthrough(Type.BYTE);
-//
-//                        if (channel.equals("MC|AdvCdm")) packetWrapper.write(Type.BYTE, (byte) 1);
-//                    }
                 });
             }
         });
@@ -1268,11 +1253,36 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             @Override
             public void registerMap() {
                 map(Type.STRING);
-                handler(packetWrapper -> {
-                    byte[] data = packetWrapper.read(Type.REMAINING_BYTES);
-                    packetWrapper.write(Type.SHORT, (short) data.length);
-                    for (byte b : data)
-                        packetWrapper.write(Type.BYTE, b);
+                handler((pw) -> {
+                    final String channel = pw.get(Type.STRING, 0);
+                    switch (channel) {
+                        case "MC|ItemName" -> {
+                            final byte[] name = pw.read(Type.STRING).getBytes(StandardCharsets.UTF_8);
+                            pw.write(Type.REMAINING_BYTES, name);
+                        }
+                        case "MC|BEdit", "MC|BSign" -> {
+                            final Item item = pw.read(Type.ITEM);
+                            final CompoundTag tag = item.tag();
+                            if (tag != null && tag.contains("pages")) {
+                                final ListTag pages = tag.get("pages");
+                                if (pages != null) {
+                                    for (int i = 0; i < pages.size(); i++) {
+                                        final StringTag page = pages.get(i);
+                                        page.setValue(ChatUtil.jsonToLegacy(page.getValue()));
+                                    }
+                                }
+                            }
+                            pw.write(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, item);
+                        }
+                    }
+                    pw.cancel();
+                    pw.setPacketType(null);
+                    final ByteBuf buf = Unpooled.buffer();
+                    pw.writeToBuffer(buf);
+                    final PacketWrapper wrapper = PacketWrapper.create(ServerboundPackets1_8.PLUGIN_MESSAGE, buf, pw.user());
+                    wrapper.passthrough(Type.STRING);
+                    wrapper.write(Type.SHORT, (short) buf.readableBytes());
+                    wrapper.sendToServer(Protocol1_8to1_7_10.class);
                 });
             }
         });
