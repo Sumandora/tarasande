@@ -872,7 +872,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     switch (channel) {
                         case "MC|Brand" -> {
                             byte[] data = packetWrapper.read(TypeRegistry1_7_6_10.BYTEARRAY);
-                            System.out.println(new String(data));
                             packetWrapper.write(Type.STRING, new String(data));
                         }
                         case "MC|TrList" -> {
@@ -902,7 +901,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                             final byte[] data = packetWrapper.read(TypeRegistry1_7_6_10.BYTEARRAY);
                             packetWrapper.clearPacket();
                             packetWrapper.setId(ClientboundPackets1_8.RESOURCE_PACK);
-                            System.out.println(new String(data));
                             packetWrapper.write(Type.STRING, new String(data)); // url
                             packetWrapper.write(Type.STRING, ""); // hash
                         }
