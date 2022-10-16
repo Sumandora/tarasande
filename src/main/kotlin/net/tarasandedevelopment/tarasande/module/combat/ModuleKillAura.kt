@@ -1,5 +1,11 @@
 package net.tarasandedevelopment.tarasande.module.combat
 
+import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.render.BufferRenderer
+import net.minecraft.client.render.Tessellator
+import net.minecraft.client.render.VertexFormat
+import net.minecraft.client.render.VertexFormats
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityStatuses
 import net.minecraft.entity.LivingEntity
@@ -10,19 +16,24 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Items
 import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.hit.HitResult
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
 import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
+import net.tarasandedevelopment.tarasande.mixin.accessor.IRenderTickCounter
+import net.tarasandedevelopment.tarasande.module.movement.ModuleClickTP
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.extension.times
@@ -35,6 +46,7 @@ import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import net.tarasandedevelopment.tarasande.value.ValueNumberRange
+import org.lwjgl.opengl.GL11
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.cos
 import kotlin.math.sin
@@ -135,6 +147,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private var lastFlex: Rotation? = null
     private var waitForDamage = true
 
+    private var teleportPath: ArrayList<Vec3d>? = null
+
     override fun onEnable() {
         clickSpeedUtil.reset()
     }
@@ -145,6 +159,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         lastFlex = null
         targets.clear()
         waitForDamage = true
+        teleportPath = null
     }
 
     private fun fovRotation() = if (fakeRotationFov.value && RotationUtil.fakeRotation != null) RotationUtil.fakeRotation!! else Rotation(mc.player!!)
@@ -189,6 +204,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     blocking = false
                 lastFlex = null
                 waitForDamage = true
+                teleportPath = null
                 return@registerEvent
             }
 
@@ -271,51 +287,70 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
 
             if (!mc.player?.isUsingItem!! || (autoBlock.isSelected(1) && !needUnblock.value)) {
-                for (click in 1..clicks) {
-                    var attacked = false
-                    for (entry in targets) {
-                        var target = entry.first
-                        val aimPoint = entry.second
+                var attacked = false
+                var imaginaryPosition = mc.player?.pos!!
+                teleportPath = ArrayList()
+                val maxTeleportTime = (((mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_getTickTime() / targets.size.toDouble()).toLong()
+                for (entry in targets) {
+                    var target = entry.first
+                    val aimPoint = entry.second
 
-                        if (!shouldAttackEntity(target))
+                    if (!shouldAttackEntity(target))
+                        continue
+
+                    val distance = aimPoint.squaredDistanceTo(mc.player?.eyePos!!)
+
+                    if (rayTrace.value) {
+                        if (RotationUtil.fakeRotation == null) {
                             continue
-
-                        if (rayTrace.value) {
-                            if (RotationUtil.fakeRotation == null) {
+                        } else {
+                            val hitResult = PlayerUtil.getTargetedEntity(
+                                reach.minValue,
+                                if (!mode.isSelected(1))
+                                    if (simulateMouseDelay.value)
+                                        Rotation((mc.player as IClientPlayerEntity).tarasande_getLastYaw(), (mc.player as IClientPlayerEntity).tarasande_getLastPitch())
+                                    else
+                                        RotationUtil.fakeRotation!!
+                                else
+                                    RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint),
+                                throughWalls.value)
+                            if (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null) {
                                 continue
                             } else {
-                                val hitResult = PlayerUtil.getTargetedEntity(
-                                    reach.minValue,
-                                    if (!mode.isSelected(1))
-                                        if (simulateMouseDelay.value)
-                                            Rotation((mc.player as IClientPlayerEntity).tarasande_getLastYaw(), (mc.player as IClientPlayerEntity).tarasande_getLastPitch())
-                                        else
-                                            RotationUtil.fakeRotation!!
-                                    else
-                                        RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint),
-                                    throughWalls.value)
-                                if (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null) {
-                                    continue
-                                } else {
-                                    target = hitResult.entity
-                                }
+                                target = hitResult.entity
                             }
-                        } else if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.minValue * reach.minValue) {
-                            continue
                         }
-                        attack(target)
-                        lastFlex = null
-                        event.dirty = true
-                        waitForHit = false
-                        attacked = true
-
-                        if (!mode.isSelected(1)) break
+                    } else if (distance > reach.minValue * reach.minValue) {
+                        continue
                     }
-                    if (!attacked)
-                        if (swingInAir.value) {
-                            attack(null)
-                            event.dirty = true
+
+                    if (distance > 6.0 * 6.0 && distance <= reach.minValue * reach.minValue) {
+                        println(distance)
+                        (TarasandeMain.get().managerModule.get(ModuleClickTP::class.java).pathFinder.findPath(imaginaryPosition, target.pos, maxTeleportTime) ?: continue).forEach {
+                            mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(it.x, it.y, it.z, mc.world?.getBlockState(BlockPos(it.add(0.0, -1.0, 0.0)))?.isAir == false))
+                            teleportPath?.add(it)
+                            imaginaryPosition = it
                         }
+                    }
+
+                    attack(target, clicks)
+                    lastFlex = null
+                    event.dirty = true
+                    waitForHit = false
+                    attacked = true
+
+                    if (!mode.isSelected(1))
+                        break
+                }
+                if (!attacked && swingInAir.value) {
+                    attack(null, clicks)
+                    event.dirty = true
+                }
+                if (mc.player?.pos != imaginaryPosition) {
+                    TarasandeMain.get().managerModule.get(ModuleClickTP::class.java).pathFinder.findPath(imaginaryPosition, mc.player?.pos!!, maxTeleportTime)?.forEach {
+                        mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(it.x, it.y, it.z, mc.world?.getBlockState(BlockPos(it.add(0.0, -1.0, 0.0)))?.isAir == false))
+                        teleportPath?.add(it)
+                    }
                 }
             }
 
@@ -348,10 +383,37 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             if (event.type == EventPacket.Type.RECEIVE && event.packet is EntityStatusS2CPacket) {
                 if (mc.world != null && event.packet.getEntity(mc.world) == mc.player && event.packet.status == EntityStatuses.DAMAGE_FROM_GENERIC_SOURCE)
                     waitForDamage = false
-            } }
+            }
+        }
+
+        registerEvent(EventRender3D::class.java) { event ->
+            if (teleportPath == null || teleportPath?.isEmpty() == true)
+                return@registerEvent
+            RenderSystem.enableBlend()
+            RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+            RenderSystem.disableCull()
+            GL11.glEnable(GL11.GL_LINE_SMOOTH)
+            RenderSystem.disableDepthTest()
+            event.matrices.push()
+            val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
+            event.matrices.translate(-vec3d.x, -vec3d.y, -vec3d.z)
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
+            val bufferBuilder = Tessellator.getInstance().buffer
+            bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
+            val matrix = event.matrices.peek()?.positionMatrix!!
+            for (vec in teleportPath!!) {
+                bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).color(1f, 1f, 1f, 1f).next()
+            }
+            BufferRenderer.drawWithShader(bufferBuilder.end())
+            event.matrices.pop()
+            RenderSystem.enableDepthTest()
+            GL11.glDisable(GL11.GL_LINE_SMOOTH)
+            RenderSystem.enableCull()
+            RenderSystem.disableBlend()
+        }
     }
 
-    private fun attack(entity: Entity?) {
+    private fun attack(entity: Entity?, repeat: Int) {
         val original = mc.crosshairTarget
         if (entity != null) {
             mc.crosshairTarget = EntityHitResult(entity)
@@ -363,7 +425,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 override fun getType() = Type.MISS
             }
         }
-        clicked = clicked or (mc as IMinecraftClient).tarasande_invokeDoAttack()
+        for (i in 0 until repeat)
+            clicked = clicked or (mc as IMinecraftClient).tarasande_invokeDoAttack()
         mc.crosshairTarget = original
     }
 

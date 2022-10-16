@@ -58,11 +58,9 @@
 - Change Name/Skin/Cape in Account Manager
 - Fast Break
 - CivBreaker
-- Killaura: TP
 - Target strafe: Anti Void
 - (Banners in protocol selection)
 - Settings for HypixelBedwarsOverlay
-- PathFinder
 - ViaLegacy texture pack using ProtocolPatcher
 - Entity Control
 

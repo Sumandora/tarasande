@@ -29,7 +29,7 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
         return mc.world?.getBlockState(pos)?.getCollisionShape(mc.world, pos).let { it == null || it.isEmpty }
     }
 
-    private val pathFinder = PathFinder({ _, node -> isPassable(BlockPos(node.x, node.y, node.z)) && isPassable(BlockPos(node.x, node.y + 1, node.z)) })
+    val pathFinder = PathFinder({ _, node -> isPassable(BlockPos(node.x, node.y, node.z)) && isPassable(BlockPos(node.x, node.y + 1, node.z)) })
 
     private var path: List<Vec3d>? = null
     private var goal: Vec3d? = null
