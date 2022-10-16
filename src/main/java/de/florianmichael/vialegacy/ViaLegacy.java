@@ -28,10 +28,16 @@ import java.util.logging.Logger;
 
 /**
  * Known Issues in my Protocol Stuff
+ * TODO | Unknown
+ *  - Mining Fast Checks
+
+ * TODO | 1.8.x
+ *  - Fix MineMen TabList
+
  * TODO | 1.7.10
  *  - Fix Tablist remapping
  *  - Fix Entities on Minemen
- *
+
  * TODO | 1.6.4
  *  - Crafting Table CraftResult was Clientside back in the time (invisible for us)
  */

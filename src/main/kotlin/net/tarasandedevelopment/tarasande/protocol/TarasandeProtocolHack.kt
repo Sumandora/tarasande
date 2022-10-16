@@ -6,6 +6,7 @@ import com.viaversion.viaversion.api.protocol.version.VersionProvider
 import com.viaversion.viaversion.commands.ViaCommandHandler
 import com.viaversion.viaversion.libs.gson.JsonArray
 import com.viaversion.viaversion.libs.gson.JsonObject
+import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.vialegacy.ViaLegacy
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
@@ -19,6 +20,7 @@ import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.protocol.command.TarasandeCommandHandler
 import net.tarasandedevelopment.tarasande.protocol.platform.ViaLegacyTarasandePlatform
+import net.tarasandedevelopment.tarasande.protocol.provider.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande.protocol.provider.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande.protocol.provider.FabricVersionProvider
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
@@ -100,6 +102,7 @@ class TarasandeProtocolHack : INativeProvider {
     override fun createProviders(providers: ViaProviders?) {
         providers?.register(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
         providers?.register(VersionProvider::class.java, FabricVersionProvider())
+        providers?.register(HandItemProvider::class.java, FabricHandItemProvider())
     }
 
     override fun commandHandler(): Optional<ViaCommandHandler> {

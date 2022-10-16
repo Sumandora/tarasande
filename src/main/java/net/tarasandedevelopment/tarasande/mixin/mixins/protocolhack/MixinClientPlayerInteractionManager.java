@@ -1,27 +1,48 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
+import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
+import com.viaversion.viaversion.api.type.Type;
+import com.viaversion.viaversion.protocols.protocol1_16_2to1_16_1.ServerboundPackets1_16_2;
+import com.viaversion.viaversion.protocols.protocol1_17to1_16_4.Protocol1_17To1_16_4;
 import de.florianmichael.viaprotocolhack.util.VersionList;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
+import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
+import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
+import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
+import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IScreenHandler_Protocol;
 import net.tarasandedevelopment.tarasande.protocol.provider.FabricHandItemProvider;
+import net.tarasandedevelopment.tarasande.protocol.util.MinecraftViaItemRewriter;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
+
 @Mixin(ClientPlayerInteractionManager.class)
 public abstract class MixinClientPlayerInteractionManager {
+
+    @Shadow @Final private MinecraftClient client;
+
+    @Unique
+    private ItemStack oldCursorStack;
+
+    @Unique
+    private List<ItemStack> oldItems;
 
     @Inject(method = "attackEntity", at = @At("HEAD"))
     private void injectAttackEntity(PlayerEntity player, Entity target, CallbackInfo ci) {
@@ -29,6 +50,62 @@ public abstract class MixinClientPlayerInteractionManager {
             player.swingHand(Hand.MAIN_HAND);
             ((IClientPlayerEntity_Protocol) player).tarasande_cancelSwingOnce();
         }
+    }
+
+    @ModifyVariable(method = "clickSlot", at = @At(value = "STORE"), ordinal = 0)
+    private List<ItemStack> captureOldItems(List<ItemStack> oldItems) {
+        assert client.player != null;
+        oldCursorStack = client.player.currentScreenHandler.getCursorStack().copy();
+        return this.oldItems = oldItems;
+    }
+
+    // Special Cases
+    @Unique
+    private boolean shouldEmpty(final SlotActionType type, final int slot) {
+        // quick craft always uses empty stack for verification
+        if (type == SlotActionType.QUICK_CRAFT) return true;
+
+        // quick move always uses empty stack for verification since 1.12
+        if (type == SlotActionType.QUICK_MOVE && VersionList.isNewerTo(VersionList.R1_11_1)) return true;
+
+        // pickup with slot -999 (outside window) to throw items always uses empty stack for verification
+        return type == SlotActionType.PICKUP && slot == -999;
+    }
+
+    @Redirect(method = "clickSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/Packet;)V"))
+    private void modifySlotClickPacket(ClientPlayNetworkHandler instance, Packet<?> packet) {
+        try {
+            if (VersionList.isOlderOrEqualTo(VersionList.R1_16_5) && packet instanceof ClickSlotC2SPacket clickSlot) {
+                ItemStack slotItemBeforeModification;
+
+                if (this.shouldEmpty(clickSlot.getActionType(), clickSlot.getSlot()))
+                    slotItemBeforeModification = ItemStack.EMPTY;
+                else if (clickSlot.getSlot() < 0 || clickSlot.getSlot() >= oldItems.size())
+                    slotItemBeforeModification = oldCursorStack;
+                else
+                    slotItemBeforeModification = oldItems.get(clickSlot.getSlot());
+
+                final PacketWrapper clickSlotPacket = PacketWrapper.create(ServerboundPackets1_16_2.CLICK_WINDOW, ((IClientConnection_Protocol) client.getNetworkHandler().getConnection()).tarasande_getViaConnection());
+
+                clickSlotPacket.write(Type.UNSIGNED_BYTE, (short) clickSlot.getSyncId());
+                clickSlotPacket.write(Type.SHORT, (short) clickSlot.getSlot());
+                clickSlotPacket.write(Type.BYTE, (byte) clickSlot.getButton());
+                assert client.player != null;
+                clickSlotPacket.write(Type.SHORT, ((IScreenHandler_Protocol) client.player.currentScreenHandler).tarasande_getAndIncrementLastActionId());
+                clickSlotPacket.write(Type.VAR_INT, clickSlot.getActionType().ordinal());
+                clickSlotPacket.write(Type.FLAT_VAR_INT_ITEM, MinecraftViaItemRewriter.INSTANCE.minecraftToViaItem(slotItemBeforeModification, VersionList.R1_16.getVersion()));
+
+                clickSlotPacket.sendToServer(Protocol1_17To1_16_4.class);
+
+                oldCursorStack = null;
+                oldItems = null;
+
+                return;
+            }
+        } catch (Exception ignored) {
+        }
+
+        instance.sendPacket(packet);
     }
 
     @Inject(method = "hasLimitedAttackSpeed", at = @At("HEAD"), cancellable = true)

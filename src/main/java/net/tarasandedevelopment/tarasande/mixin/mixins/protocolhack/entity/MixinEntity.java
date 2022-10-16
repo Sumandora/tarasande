@@ -2,6 +2,8 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.entity;
 
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import net.minecraft.block.Block;
+import net.minecraft.block.SoulSandBlock;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.fluid.Fluid;
@@ -44,6 +46,14 @@ public abstract class MixinEntity {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2))
             return 1E-4;
         return epsilon;
+    }
+
+    @Redirect(method = "getVelocityMultiplier", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getVelocityMultiplier()F"))
+    public float redirectGetVelocityMultiplier(Block instance) {
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_4) && instance instanceof SoulSandBlock)
+            return 1.0F;
+
+        return instance.getVelocityMultiplier();
     }
 
     @Inject(method = "setSwimming", at = @At("HEAD"), cancellable = true)
