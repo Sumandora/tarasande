@@ -49,7 +49,7 @@ public class MixinEntityPackets_1_8 {
 
                 // Checks if the packet is valid @author FlorianMichael
                 handler((pw) -> {
-                    final int slotId = pw.get(Type.SHORT, 0);
+                    final int slotId = pw.get(Type.VAR_INT, 1);
                     if (slotId <= 0 || slotId >= EquipmentSlot.values().length) {
                         pw.cancel();
                     }
