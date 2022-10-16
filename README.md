@@ -62,7 +62,6 @@
 - (Banners in protocol selection)
 - Settings for HypixelBedwarsOverlay
 - ViaLegacy texture pack using ProtocolPatcher
-- Entity Control
 
 ### TODO-List (Click GUI)
 - Correctly save and calculate the positions of the panels when resizing ingame

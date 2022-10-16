@@ -37,7 +37,7 @@ class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PL
         }
 
         registerEvent(EventMouseDelta::class.java) { event ->
-            if (event.deltaX == 0.0 && event.deltaY == 0.0)
+            if (event.deltaX != 0.0 || event.deltaY != 0.0)
                 timer.reset()
         }
 
