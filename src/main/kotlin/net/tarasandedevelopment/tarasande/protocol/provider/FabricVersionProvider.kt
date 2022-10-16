@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.protocol.provider
 
-import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.connection.UserConnection
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import com.viaversion.viaversion.protocols.base.BaseVersionProvider
@@ -14,8 +13,7 @@ class FabricVersionProvider : BaseVersionProvider() {
 
     override fun getClosestServerProtocol(connection: UserConnection?): Int {
         if (connection!!.isClientSide) {
-            val info = connection.protocolInfo
-            var currentVersion = TarasandeMain.get().protocolHack.clientsideVersion()
+            val currentVersion = TarasandeMain.get().protocolHack.clientsideVersion()
             val address = connection.channel?.remoteAddress()
 
             if (address is InetSocketAddress) {

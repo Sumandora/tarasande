@@ -56,6 +56,7 @@ object PlayerUtil {
         if (entity == null) attackable = false
         else if (entity !is LivingEntity) attackable = false
         else if (entity == MinecraftClient.getInstance().player) attackable = false
+        else if (entity == MinecraftClient.getInstance().player?.vehicle && !TarasandeMain.get().clientValues.attackRidingEntity.value) attackable = false
         else if (!TarasandeMain.get().clientValues.targets.isSelected(0) && entity is PlayerEntity) attackable = false
         else if (TarasandeMain.get().clientValues.dontAttackTamedEntities.value && entity is TameableEntity && entity.ownerUuid == MinecraftClient.getInstance().player?.uuid) attackable = false
         else if (!TarasandeMain.get().clientValues.targets.isSelected(1) && entity is AnimalEntity) attackable = false

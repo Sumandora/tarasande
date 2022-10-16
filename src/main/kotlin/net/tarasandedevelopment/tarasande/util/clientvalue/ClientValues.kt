@@ -19,6 +19,7 @@ class ClientValues {
     val dontAttackTamedEntities = object : ValueBoolean(this, "Don't attack tamed entities", false) {
         override fun isEnabled() = targets.isSelected(1)
     }
+    val attackRidingEntity = ValueBoolean(this, "Attack riding entity", false)
     val correctMovement = ValueMode(this, "Correct movement", false, "Off", "Prevent Backwards Sprinting", "Direct", "Silent")
     val blurMode = ValueMode(this, "Blur mode", false, *TarasandeMain.get().managerBlur.list.map { it.name }.toTypedArray())
     val blurStrength = object : ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0) {
