@@ -55,8 +55,6 @@ class ScreenBetterSlotListWidget(val parent: ScreenBetterSlotList, minecraft: Mi
         }
     }
 
-    override fun getScrollbarPositionX() = width - 6 // sick hardcoded value, thx mojang
-
     interface ListProvider {
         fun get(): List<ScreenBetterSlotListEntry>
     }

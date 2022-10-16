@@ -749,7 +749,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             @Override
             public void registerMap() {
                 handler((pw) -> {
-                    final String name = pw.read(Type.STRING);
+                    pw.passthrough(Type.STRING); // name
                     final String value = pw.read(Type.STRING);
                     final byte mode = pw.read(Type.BYTE);
 
