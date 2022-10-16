@@ -81,7 +81,9 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                     wasClosed -> openDelay.value.toLong()
                     nextSlot == null -> closeDelay.value.toLong()
                     else -> nextDelay
-                })) return@registerEvent
+                }))
+                return@registerEvent
+
             wasClosed = false
             timeUtil.reset()
 
