@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import java.util.*
 import java.util.function.BiFunction
 import kotlin.math.abs
 
@@ -13,7 +14,8 @@ import kotlin.math.abs
 
 private val manhattan = BiFunction<Node, Node, Double> { current, target ->
     val delta = target - current
-    (abs(delta.x) + abs(delta.y) + abs(delta.z)).toDouble()
+    // Ok, so I have no clue where igs found that 2.5, but it makes this way faster, so.... Thank you, I guess ^^
+    2.5 * (abs(delta.x) + abs(delta.y) + abs(delta.z)).toDouble()
 }
 
 private val oneCost = BiFunction<Node, Node, Double> { _, _ ->
@@ -46,48 +48,47 @@ class PathFinder(private val allowedBlock: BiFunction<ClientWorld?, Node, Boolea
     }
 
     fun findPath(start: Node, target: Node, maxTime: Long? = null): List<Node>? {
-        val open = HashSet<Node>()
-        val closed = HashSet<Node>()
-        open.add(start)
+        val open = HashMap<Int, Node>()
+        val closed = HashSet<Int>()
+        open[start.hashCode()] = start
         start.g = cost.apply(start, start)
         start.h = heuristic.apply(start, target)
         start.f = start.g + start.h
 
         if (start == target || !allowedBlock.apply(MinecraftClient.getInstance().world, start) || !allowedBlock.apply(MinecraftClient.getInstance().world, target)) {
-            return open.toList()
+            return Collections.singletonList(open.values.first())
         }
 
         var bestNode: Node? = null
         var current: Node?
         val begin = System.currentTimeMillis()
         while ((maxTime == null || System.currentTimeMillis() - begin <= maxTime) && open.isNotEmpty()) {
-            current = open.minBy(Node::f)
+            val lowest = open.minBy { entry -> entry.value.f }
+            open.remove(lowest.key)
 
+            current = lowest.value
             if (current == target) {
                 break
             }
 
-            open.remove(current)
-            closed.add(current)
+            closed.add(current.hashCode())
 
             for (movementPossibility in directions) {
                 var movement = current + movementPossibility
-                if (closed.contains(movement))
+
+                if (closed.contains(movement.hashCode()))
                     continue
+
+                var contains = true
+                movement = open[movement.hashCode()] ?: run { contains = false; movement }
+
                 if (!allowedBlock.apply(MinecraftClient.getInstance().world, movement))
                     continue
-                var contains = false
-//                for(a in open)
-//                    if(a == movement) {
-//                        movement = a
-//                        contains = true
-//                        break
-//                    }
 
                 val newCost = current.g + cost.apply(start, movement)
 
                 if (!contains)
-                    open.add(movement)
+                    open[movement.hashCode()] = movement
                 else if (movement.g <= newCost)
                     continue
 
@@ -116,7 +117,6 @@ class PathFinder(private val allowedBlock: BiFunction<ClientWorld?, Node, Boolea
         return ArrayList(path.reversed())
     }
 }
-
 
 class Node(var x: Int, var y: Int, var z: Int) : Comparable<Node> {
     var g = 0.0
