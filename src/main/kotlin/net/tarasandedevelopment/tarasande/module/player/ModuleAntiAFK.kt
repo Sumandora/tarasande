@@ -1,8 +1,10 @@
 package net.tarasandedevelopment.tarasande.module.player
 
+import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueNumber
@@ -27,6 +29,12 @@ class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PL
     }
 
     init {
+        registerEvent(EventUpdate::class.java) { event ->
+            if (event.state == EventUpdate.State.PRE)
+                if (mc.currentScreen is HandledScreen<*> || mc.player == null)
+                    timer.reset()
+        }
+
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
             if (timer.hasReached((delay.value * 1000).toLong())) {
                 if (event.keyBinding == mc.options.jumpKey) {
