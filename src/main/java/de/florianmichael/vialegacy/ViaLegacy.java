@@ -30,7 +30,6 @@ import java.util.logging.Logger;
  * Known Issues in my Protocol Stuff
  * TODO | 1.7.10
  *  - Fix Tablist remapping
- *  - Fix Scoreboards on Minemen
  *  - Fix Entities on Minemen
  *
  * TODO | 1.6.4
