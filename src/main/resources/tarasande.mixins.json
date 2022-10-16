@@ -113,7 +113,6 @@
     "protocolhack.signatures1_19_0.MixinArgumentSignatureDataMap",
     "protocolhack.signatures1_19_0.MixinPlayerPublicKeySubPublicKeyData",
     "protocolhack.viaversion.MixinAbstractProtocol",
-    "protocolhack.viaversion.MixinInventoryPackets1_14",
     "protocolhack.viaversion.MixinMetadataRewriter1_15To1_14_4",
     "protocolhack.viaversion.MixinMovementTracker",
     "protocolhack.viaversion.MixinProtocol1_13_1To1_13",
