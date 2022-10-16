@@ -45,8 +45,6 @@ object ArmorUpdater1_8_0 {
             }
         }
 
-        println("$armor $oldArmor")
-
         if (armor == oldArmor) return
         oldArmor = armor
 
