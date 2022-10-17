@@ -40,6 +40,7 @@ import java.util.logging.Logger;
 
  * TODO | 1.6.4
  *  - Crafting Table CraftResult was Clientside back in the time (invisible for us)
+ *  - Edit: RecipeRemapper Base with all versions
  */
 public class ViaLegacy {
 
