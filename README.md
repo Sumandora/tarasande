@@ -60,6 +60,8 @@
 - Notebot
 - Recode Mixins with AccessWidener and conventions
 - HA Proxy Hack
+- SeedUtils and Shadow seed cracker 
+- OreSim
 
 ## TODO-List (Flori | ViaLegacy)
 
