@@ -71,7 +71,7 @@
 - 1.6.4: Crafting Table CraftResult was clientside back in the time 
 - 1.6.4: Reciperemapper base with all versions
 
-### TODO-List (General)
+## TODO-List (General)
 - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
 - ClickGUI: Make block picker more beautiful with icons
 - ClickGUI: Scaling for the whole GUI, so you can scale it for your MC Gui scale
