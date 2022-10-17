@@ -28,6 +28,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
     private val titleSubstring = object : ValueText(this, "Title substring", "Chest") {
         override fun isEnabled() = checkTitle.value
     }
+    private val failChance = ValueNumber(this, "Fail chance", 0.0, 0.0, 100.0, 1.0)
 
     private val timeUtil = TimeUtil()
 
@@ -73,7 +74,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
             }
 
-            val nextSlot = screenHandler.slots
+            var nextSlot = screenHandler.slots
                 .filter { it != null && it.isEnabled && it.hasStack() && it.id < screenHandler.inventory.size() }
                 .minByOrNull { mousePos?.distanceSquared(getDisplayPosition(accessor, it))!! }
 
@@ -94,11 +95,19 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                     if (randomize.value == 0.0) 0.0f else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat(),
                     if (randomize.value == 0.0) 0.0f else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat()
                 ))
+                if (ThreadLocalRandom.current().nextInt(100) < failChance.value) {
+                    val interp = mousePos?.add(displayPos?.add(mousePos?.negate())?.multiply(ThreadLocalRandom.current().nextDouble(0.0, 1.0).toFloat()))
+                    screenHandler.slots
+                        .filter { it != null && it.isEnabled && it.id < screenHandler.inventory.size() }
+                        .minByOrNull { interp?.distanceSquared(getDisplayPosition(accessor, it))!! }?.also {
+                            nextSlot = it
+                        }
+                }
                 val distance = mousePos?.distanceSquared(displayPos)!!
                 mousePos = displayPos
                 val mapped = sqrt(distance).div(Vec2f(accessor.tarasande_getBackgroundWidth().toFloat(), accessor.tarasande_getBackgroundHeight().toFloat()).length())
                 nextDelay = (delay.minValue + (delay.maxValue - delay.minValue) * mapped).toLong()
-                mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot.id, GLFW.GLFW_MOUSE_BUTTON_1, SlotActionType.QUICK_MOVE, mc.player)
+                mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot?.id!!, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.QUICK_MOVE, mc.player)
             }
         }
     }
