@@ -61,7 +61,7 @@ class ValueComponentRegistry(value: Value) : ValueComponent(value) {
                             (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * ((index + 1) + 0.5F)).toDouble()))
                         TarasandeMain.get().clientValues.accentColor.getColor().rgb
                     else
-                        Color.white.rgb
+                        -1
                 else
                     Color.white.darker().darker().rgb)
             matrices?.pop()

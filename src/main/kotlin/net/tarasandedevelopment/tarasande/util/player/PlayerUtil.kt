@@ -49,7 +49,7 @@ object PlayerUtil {
         }
     }
 
-    fun isPlayerMoving() = MinecraftClient.getInstance().player!!.input.movementInput.lengthSquared() > 0.8f * 0.8f
+    fun isPlayerMoving() = MinecraftClient.getInstance().player!!.input.movementInput.lengthSquared() != 0.0f
 
     fun isAttackable(entity: Entity?): Boolean {
         var attackable = true
@@ -213,5 +213,13 @@ object PlayerUtil {
             mult *= 5.0f // bruh
         }
         return 1.0 - mult / hardness / 30.0
+    }
+
+    fun predictFallDistance(position: BlockPos = MinecraftClient.getInstance().player?.blockPos!!): Int? {
+        var y = 0
+        while (MinecraftClient.getInstance().world?.isAir(position.add(0, -y, 0).also { if (it.y < 0) return null })!!) {
+            y++
+        }
+        return y
     }
 }

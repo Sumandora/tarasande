@@ -16,6 +16,8 @@ public interface IEntity {
 
     int tarasande_getInvisibleFlagIndex();
 
+    int tarasande_getSneakingFlagIndex();
+
     boolean tarasande_forceGetFlag(int index);
 
     void tarasande_setTouchingWater(boolean touchingWater);

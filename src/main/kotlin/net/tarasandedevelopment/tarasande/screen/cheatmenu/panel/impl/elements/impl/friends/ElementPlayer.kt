@@ -47,7 +47,7 @@ class ElementPlayer(val gameProfile: GameProfile, width: Double) : Element(width
             matrices?.pop()
         } else {
             textField.setFocused(false)
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, gameProfile.name, xOffset.toFloat(), yOffset.toFloat(), Color.white.rgb)
+            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, gameProfile.name, xOffset.toFloat(), yOffset.toFloat(), -1)
         }
 
         val toggleAnimation = min((System.currentTimeMillis() - friendTime) / 100.0, 1.0)

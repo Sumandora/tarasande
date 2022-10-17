@@ -127,7 +127,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         val strength = round(animation * TarasandeMain.get().clientValues.blurStrength.value).toInt()
         if (strength > 0 && TarasandeMain.get().clientValues.menuBlurBackground.value) {
             TarasandeMain.get().managerBlur.bind(true)
-            RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, Color.white.rgb)
+            RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
             client?.framebuffer?.beginWrite(true)
 
             if (animation != 1.0) { // Prevent it from recalculating every frame
@@ -202,7 +202,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             matrices?.translate((mouseX + strWidth / 2).toDouble(), (mouseY + textRenderer.fontHeight / 2).toDouble(), 0.0)
             matrices?.scale(0.5f, 0.5f, 1.0f)
             matrices?.translate(-(mouseX + strWidth / 2).toDouble(), -(mouseY + textRenderer.fontHeight / 2).toDouble(), 0.0)
-            textRenderer.drawWithShadow(matrices, hoveringText, mouseX.toFloat(), mouseY.toFloat(), Color.white.rgb)
+            textRenderer.drawWithShadow(matrices, hoveringText, mouseX.toFloat(), mouseY.toFloat(), -1)
             matrices?.pop()
         }
     }

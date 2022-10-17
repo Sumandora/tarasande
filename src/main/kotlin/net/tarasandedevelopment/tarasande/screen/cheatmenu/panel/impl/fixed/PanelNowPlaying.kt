@@ -5,9 +5,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
 class PanelNowPlaying(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Now playing", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), background = false, resizable = false, fixed = true) {
 
@@ -47,10 +45,6 @@ class PanelNowPlaying(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : 
 
         val accent = TarasandeMain.get().clientValues.accentColor.getColor()
         RenderSystem.enableBlend()
-        when (alignment) {
-            Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, currTrack!!, x.toFloat(), (y + titleBarHeight).toFloat(), accent.rgb)
-            Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, currTrack!!, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(currTrack).toFloat() / 2.0f, (y + titleBarHeight).toFloat(), accent.rgb)
-            Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, currTrack!!, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(currTrack)).toFloat(), (y + titleBarHeight).toFloat(), accent.rgb)
-        }
+        alignedString(matrices, currTrack!!, accent.rgb, MinecraftClient.getInstance().textRenderer.fontHeight.toFloat())
     }
 }

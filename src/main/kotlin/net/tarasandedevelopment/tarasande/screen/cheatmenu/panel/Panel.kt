@@ -69,6 +69,14 @@ open class Panel(
             }
     }
 
+    protected fun alignedString(matrices: MatrixStack?, string: String, color: Int, yOffset: Float = 0.0f) {
+        when (alignment) {
+            Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, string, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2f - MinecraftClient.getInstance().textRenderer.fontHeight / 2f + yOffset, color)
+            Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, string, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(string).toFloat() / 2.0F, y.toFloat() + titleBarHeight / 2f - MinecraftClient.getInstance().textRenderer.fontHeight / 2f + yOffset, color)
+            Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, string, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(string).toFloat(), y.toFloat() + titleBarHeight / 2f - MinecraftClient.getInstance().textRenderer.fontHeight / 2f + yOffset, color)
+        }
+    }
+
     override fun init() {
     }
 
@@ -88,7 +96,7 @@ open class Panel(
             if (background) {
                 matrices?.push()
                 TarasandeMain.get().managerBlur.bind(true)
-                RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else titleBarHeight).toDouble(), Color.white.rgb)
+                RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else titleBarHeight).toDouble(), -1)
                 MinecraftClient.getInstance().framebuffer.beginWrite(true)
 
                 val accent = TarasandeMain.get().clientValues.accentColor.getColor()
@@ -138,11 +146,7 @@ open class Panel(
     open fun renderTitleBar(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         matrices?.push()
         RenderUtil.fill(matrices, x, y, x + panelWidth, y + titleBarHeight, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
-        when (alignment) {
-            Alignment.LEFT -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2f - MinecraftClient.getInstance().textRenderer.fontHeight / 2f, Color.white.rgb)
-            Alignment.MIDDLE -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(title).toFloat() / 2.0F, y.toFloat() + titleBarHeight / 2f - MinecraftClient.getInstance().textRenderer.fontHeight / 2f, Color.white.rgb)
-            Alignment.RIGHT -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(title).toFloat(), y.toFloat() + titleBarHeight / 2f - MinecraftClient.getInstance().textRenderer.fontHeight / 2f, Color.white.rgb)
-        }
+        alignedString(matrices, title, -1)
         matrices?.pop()
     }
 

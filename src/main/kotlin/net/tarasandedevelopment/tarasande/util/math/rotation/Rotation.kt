@@ -17,6 +17,8 @@ class Rotation(var yaw: Float, var pitch: Float) {
     constructor(entity: Entity) : this(entity.yaw, entity.pitch)
 
     companion object {
+        const val MAXIMUM_DELTA = 255.0 // sqrt(180 * 180 + 180 * 180)
+
         fun getGcd(): Double {
             val sensitivity = MinecraftClient.getInstance().options.mouseSensitivity.value * 0.6f.toDouble() + 0.2f.toDouble()
             val sensitivityPow3 = sensitivity * sensitivity * sensitivity

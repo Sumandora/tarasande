@@ -124,6 +124,10 @@ public abstract class MixinEntity implements IEntity {
     @Shadow
     protected boolean touchingWater;
 
+    @Shadow
+    @Final
+    private static int SNEAKING_FLAG_INDEX;
+
     @Inject(method = "getFlag", at = @At("RETURN"), cancellable = true)
     public void injectGetFlag(int index, CallbackInfoReturnable<Boolean> cir) {
         if (forceFlagRetrieval) {
@@ -163,6 +167,11 @@ public abstract class MixinEntity implements IEntity {
     @Override
     public int tarasande_getInvisibleFlagIndex() {
         return INVISIBLE_FLAG_INDEX;
+    }
+
+    @Override
+    public int tarasande_getSneakingFlagIndex() {
+        return SNEAKING_FLAG_INDEX;
     }
 
     @Override

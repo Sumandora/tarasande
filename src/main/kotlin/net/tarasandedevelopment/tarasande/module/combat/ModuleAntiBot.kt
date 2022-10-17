@@ -8,38 +8,56 @@ import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
+import net.tarasandedevelopment.tarasande.event.EventEntityFlag
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
+import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
+import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
+import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 
 class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with bots", ModuleCategory.COMBAT) {
-    private val checks = object : ValueMode(this, "Checks", true, "Sound", "Ground", "Invisible") {
-        override fun onChange() = onDisable()
+    private val checks = ValueMode(this, "Checks", true, "Ticks existed", "Sound", "Ground", "Invisible", "Sneaked", "Movement", "Line of sight")
+    private val ticksExisted = object : ValueNumber(this, "Ticks existed", 0.0, 20.0, 100.0, 1.0) {
+        override fun isEnabled() = checks.isSelected(0)
     }
     private val soundDistance = object : ValueNumber(this, "Sound distance", 0.0, 1.0, 1.0, 0.1) {
-        override fun isEnabled() = checks.isSelected(0)
-        override fun onChange() = passedSound.clear()
+        override fun isEnabled() = checks.isSelected(1)
     }
     private val groundMode = object : ValueMode(this, "Ground mode", false, "On ground", "Off ground") {
-        override fun isEnabled() = checks.isSelected(1)
-        override fun onChange() = passedGround.clear()
+        override fun isEnabled() = checks.isSelected(2)
     }
     private val invisibleMode = object : ValueMode(this, "Invisible mode", true, "Invisible to everyone", "Invisible to self") {
-        override fun isEnabled() = checks.isSelected(2)
-        override fun onChange() = passedInvisible.clear()
+        override fun isEnabled() = checks.isSelected(3)
+    }
+    private val fov = object : ValueNumber(this, "FOV", 0.0, Rotation.MAXIMUM_DELTA / 2, Rotation.MAXIMUM_DELTA, 1.0) {
+        override fun isEnabled() = checks.isSelected(6)
+    }
+
+    init {
+        object : ValueButton(this, "Reset captured data") {
+            override fun onChange() = onDisable()
+        }
     }
 
     private val passedSound = HashSet<PlayerEntity>()
     private val passedGround = HashSet<PlayerEntity>()
     private val passedInvisible = HashSet<PlayerEntity>()
+    private val passedSneak = HashSet<PlayerEntity>()
+    private val passedMovement = HashSet<PlayerEntity>()
+    private val passedLineOfSight = HashSet<PlayerEntity>()
 
     override fun onDisable() {
         passedSound.clear()
         passedGround.clear()
         passedInvisible.clear()
+        passedSneak.clear()
+        passedMovement.clear()
+        passedLineOfSight.clear()
     }
 
     init {
@@ -61,13 +79,31 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
 
                     is EntityS2CPacket -> {
                         val entity = event.packet.getEntity(mc.world)
-                        if (entity is PlayerEntity)
-                            if (!passedGround.contains(entity) && groundMode.isSelected(0) && event.packet.isOnGround || groundMode.isSelected(1) && !event.packet.isOnGround) {
-                                passedGround.add(entity)
+                        if (entity is PlayerEntity) {
+                            if (!passedMovement.contains(entity)) {
+                                if (event.packet.deltaX != 0.toShort() || event.packet.deltaY != 0.toShort() || event.packet.deltaZ != 0.toShort())
+                                    passedMovement.add(entity)
                             }
+                            if (!passedGround.contains(entity)) {
+                                if (groundMode.isSelected(0) && event.packet.isOnGround || groundMode.isSelected(1) && !event.packet.isOnGround)
+                                    passedGround.add(entity)
+                            }
+                            if (!passedLineOfSight.contains(entity)) {
+                                val serverPosition = entity.trackedPosition.withDelta(event.packet.deltaX.toLong(), event.packet.deltaY.toLong(), event.packet.deltaZ.toLong())
+                                if ((mc.player as IClientPlayerEntity).let { Rotation(it.tarasande_getLastYaw(), it.tarasande_getLastPitch()) }.fov(RotationUtil.getRotations(mc.player?.eyePos!!, serverPosition)) <= fov.value)
+                                    passedLineOfSight.add(entity)
+                            }
+                        }
                     }
                 }
             }
+        }
+
+        registerEvent(EventEntityFlag::class.java) { event ->
+            if (event.entity is PlayerEntity && !passedSneak.contains(event.entity))
+                if (event.flag == (event.entity as IEntity).tarasande_getSneakingFlagIndex())
+                    if (event.enabled)
+                        passedSneak.add(event.entity)
         }
 
         registerEvent(EventUpdate::class.java) { event ->
@@ -95,9 +131,13 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
     fun isBot(entity: Entity): Boolean {
         if (!enabled) return false
         if (entity is PlayerEntity) {
-            if (checks.isSelected(0) && !passedSound.contains(entity)) return true
-            if (checks.isSelected(1) && !passedGround.contains(entity)) return true
-            if (checks.isSelected(2) && !passedInvisible.contains(entity)) return true
+            if (checks.isSelected(0) && entity.age < ticksExisted.value) return true
+            if (checks.isSelected(1) && !passedSound.contains(entity)) return true
+            if (checks.isSelected(2) && !passedGround.contains(entity)) return true
+            if (checks.isSelected(3) && !passedInvisible.contains(entity)) return true
+            if (checks.isSelected(4) && !passedSneak.contains(entity)) return true
+            if (checks.isSelected(5) && !passedMovement.contains(entity)) return true
+            if (checks.isSelected(6) && !passedLineOfSight.contains(entity)) return true
         }
         return false
     }

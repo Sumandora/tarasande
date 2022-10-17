@@ -6,7 +6,6 @@ import net.minecraft.text.Text
 import net.minecraft.text.TextColor
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
-import java.awt.Color
 
 object CustomChat {
 
@@ -15,14 +14,14 @@ object CustomChat {
 
         end.append(module.name)
         end.append(": ")
-        end.append(message.styled { it.withColor(TextColor.fromRgb(Color.white.rgb)) })
+        end.append(message.styled { it.withColor(TextColor.fromRgb(-1)) })
 
         MinecraftClient.getInstance().inGameHud.chatHud.addMessage(end)
     }
 
     fun print(message: MutableText) {
         val end = buildPrefix()
-        end.append(message.styled { it.withColor(TextColor.fromRgb(Color.white.rgb)) })
+        end.append(message.styled { it.withColor(TextColor.fromRgb(-1)) })
 
         MinecraftClient.getInstance().inGameHud.chatHud.addMessage(end)
     }

@@ -117,7 +117,7 @@ abstract class ElementMenuScreen(name: String) : ElementMenu(name) {
         MinecraftClient.getInstance().setScreen(this.getScreen())
     }
 
-    override fun buttonColor() = Color.white.rgb
+    override fun buttonColor() = -1
     abstract fun getScreen(): Screen
 }
 

@@ -17,6 +17,7 @@ import net.minecraft.item.Items
 import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
+import net.minecraft.network.packet.s2c.play.EntityAnimationS2CPacket
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
@@ -55,8 +56,8 @@ import kotlin.math.sqrt
 class ModuleKillAura : Module("Kill aura", "Automatically attacks near players", ModuleCategory.COMBAT) {
 
     private val mode = ValueMode(this, "Mode", false, "Single", "Multi")
-    private val priority = ValueMode(this, "Priority", false, "Distance", "Health", "Hurt time", "FOV")
-    private val fov = ValueNumber(this, "FOV", 0.0, 255.0, 255.0, 1.0)
+    private val priority = ValueMode(this, "Priority", false, "Distance", "Health", "Hurt time", "FOV", "Attack cooldown")
+    private val fov = ValueNumber(this, "FOV", 0.0, Rotation.MAXIMUM_DELTA, Rotation.MAXIMUM_DELTA, 1.0)
     private val fakeRotationFov = ValueBoolean(this, "Fake rotation FOV", false)
     private val reach = ValueNumberRange(this, "Reach", 0.1, 3.0, 4.0, 6.0, 0.1)
     private val clickSpeedUtil = ClickSpeedUtil(this, { true }) // for setting order
@@ -123,17 +124,25 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
 
             priority.isSelected(1) -> {
-                if (it.first is LivingEntity) (it.first as LivingEntity).health
-                else 0
+                if (it.first is LivingEntity)
+                    (it.first as LivingEntity).health
+                else
+                    0
             }
 
             priority.isSelected(2) -> {
-                if (it.first is LivingEntity) (it.first as LivingEntity).hurtTime
-                else 0
+                if (it.first is LivingEntity)
+                    (it.first as LivingEntity).hurtTime
+                else
+                    0
             }
 
             priority.isSelected(3) -> {
                 RotationUtil.getRotations(mc.player?.eyePos!!, MathUtil.getBestAimPoint(it.first.boundingBox)).fov(fovRotation())
+            }
+
+            priority.isSelected(4) -> {
+                entityCooldowns.getOrDefault(it.first, 0)
             }
 
             else -> 0.0
@@ -148,6 +157,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private var waitForDamage = true
 
     private var teleportPath: ArrayList<Vec3d>? = null
+    private var entityCooldowns = HashMap<Entity, Int>()
 
     override fun onEnable() {
         clickSpeedUtil.reset()
@@ -380,9 +390,21 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         }
 
         registerEvent(EventPacket::class.java) { event ->
-            if (event.type == EventPacket.Type.RECEIVE && event.packet is EntityStatusS2CPacket) {
-                if (mc.world != null && event.packet.getEntity(mc.world) == mc.player && event.packet.status == EntityStatuses.DAMAGE_FROM_GENERIC_SOURCE)
-                    waitForDamage = false
+            if (event.type == EventPacket.Type.RECEIVE) {
+                when (event.packet) {
+                    is EntityStatusS2CPacket -> {
+                        if (mc.world != null && event.packet.getEntity(mc.world) == mc.player && event.packet.status == EntityStatuses.DAMAGE_FROM_GENERIC_SOURCE)
+                            waitForDamage = false
+                    }
+
+                    is EntityAnimationS2CPacket -> {
+                        if (event.packet.animationId == EntityAnimationS2CPacket.SWING_MAIN_HAND) {
+                            val entity = mc.world?.getEntityById(event.packet.id)
+                            if (entity != null)
+                                entityCooldowns[entity] = entity.age
+                        }
+                    }
+                }
             }
         }
 

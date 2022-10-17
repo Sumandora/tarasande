@@ -11,7 +11,6 @@ import net.minecraft.util.Formatting
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
@@ -45,11 +44,7 @@ class PanelEffects(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Pan
             val animation = animations[it.first]!!
             val color = Color((it.third shr 16) and 0xFF, (it.third shr 8) and 0xFF, (it.third shr 0) and 0xFF, (animation * 255).toInt())
             RenderSystem.enableBlend()
-            when (alignment) {
-                Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it.second, (x - (MinecraftClient.getInstance().textRenderer.getWidth(it.second) * (1.0 - animation))).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
-                Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it.second, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it.second).toFloat() / 2.0f, (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
-                Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, it.second, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(it.second) * animation).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
-            }
+            alignedString(matrices, it.second, color.rgb, ((index + animation) * MinecraftClient.getInstance().textRenderer.fontHeight).toFloat())
             index += animation
         }
     }

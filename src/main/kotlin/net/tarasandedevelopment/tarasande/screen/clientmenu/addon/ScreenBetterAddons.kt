@@ -11,7 +11,6 @@ import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import java.awt.Color
 
 class ScreenBetterAddons : ScreenBetterSlotList(46, MinecraftClient.getInstance().textRenderer.fontHeight * 2 + 5) {
 
@@ -39,7 +38,7 @@ class ScreenBetterAddons : ScreenBetterSlotList(46, MinecraftClient.getInstance(
         this.renderTitle(matrices, "Addons")
 
         if (this.list.isNotEmpty() && this.list.size >= this.selected)
-            RenderUtil.textCenter(matrices, "Developed by: " + this.list[this.selected].addon.modAuthors!!.joinToString(", "), this.width / 2F, height - 17F, Color.white.rgb)
+            RenderUtil.textCenter(matrices, "Developed by: " + this.list[this.selected].addon.modAuthors!!.joinToString(", "), this.width / 2F, height - 17F, -1)
     }
 
     class EntryAddon(val addon: Addon) : ScreenBetterSlotListEntry() {
@@ -54,7 +53,7 @@ class ScreenBetterAddons : ScreenBetterSlotList(46, MinecraftClient.getInstance(
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
             matrices.push()
             matrices.scale(2F, 2F, 2F)
-            RenderUtil.textCenter(matrices, this.addon.modId!! + " (" + this.addon.modVersion!! + ")", entryWidth.toFloat() / 2F, 1F, Color.white.rgb)
+            RenderUtil.textCenter(matrices, this.addon.modId!! + " (" + this.addon.modVersion!! + ")", entryWidth.toFloat() / 2F, 1F, -1)
             matrices.pop()
         }
     }

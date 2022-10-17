@@ -31,13 +31,6 @@ class ModuleAntiFall : Module("Anti fall", "Tries to force a setback when you ar
                     lastOnGroundPos = mc.player?.pos
                     wasOnGround = true
                 } else if (mc.player?.fallDistance!! > fallDistance.value && (!void.value || run {
-                        var y = 0
-                        while (true)
-                            if (mc.world?.isAir(mc.player?.blockPos?.add(0, -y, 0)?.also { if (it.y < 0) return@run true }) == true) {
-                                y++
-                            } else {
-                                return@run false
-                            }
                         @Suppress("UNREACHABLE_CODE") // thx kotlin compiler, if I remove this, I get a syntax error
                         true
                     })) {

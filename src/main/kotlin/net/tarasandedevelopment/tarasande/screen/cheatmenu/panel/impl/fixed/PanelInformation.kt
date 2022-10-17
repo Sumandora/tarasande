@@ -5,9 +5,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueMode
 
@@ -62,11 +60,7 @@ class PanelInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) :
         }
 
         for ((index, it) in text.withIndex()) {
-            when (alignment) {
-                Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat(), y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
-                Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat() / 2.0f, y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
-                Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat(), y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
-            }
+            alignedString(matrices, it, TarasandeMain.get().clientValues.accentColor.getColor().rgb, (index + 1) * MinecraftClient.getInstance().textRenderer.fontHeight.toFloat())
         }
     }
 

@@ -11,7 +11,6 @@ import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import java.awt.Color
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -58,6 +57,6 @@ class PanelMousepad(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Pa
         RenderSystem.disableBlend()
         RenderSystem.enableCull()
 
-        RenderUtil.fillCircle(matrices, (x + panelWidth / 2f + (rotations.last().yaw / xMax) * (panelWidth / 2f)), (y + (panelHeight + titleBarHeight) / 2f + (rotations.last().pitch / yMax) * ((panelHeight - titleBarHeight) / 2f)), 1.0, Color.white.rgb)
+        RenderUtil.fillCircle(matrices, (x + panelWidth / 2f + (rotations.last().yaw / xMax) * (panelWidth / 2f)), (y + (panelHeight + titleBarHeight) / 2f + (rotations.last().pitch / yMax) * ((panelHeight - titleBarHeight) / 2f)), 1.0, -1)
     }
 }

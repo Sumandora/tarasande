@@ -12,7 +12,6 @@ import net.tarasandedevelopment.tarasande.util.player.items.ItemUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.awt.Color
 
 class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Armor", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), background = false, resizable = false, fixed = true) {
 
@@ -50,7 +49,7 @@ class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
                         ItemUtil.enchantSimpleName(entry.key, maxEnchantmentLength.value.toInt()) + " " + entry.value,
                         (m.toFloat() + (itemDimension / 2)) / enchantmentScale.value.toFloat(),
                         (itemDimension + (index * titleBarHeight / 2)) / enchantmentScale.value.toFloat(),
-                        Color.white.rgb
+                        -1
                     )
                 }
                 matrices?.pop()

@@ -16,7 +16,6 @@ import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAcc
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPassword
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder
 import org.lwjgl.glfw.GLFW
-import java.awt.Color
 import java.util.function.Consumer
 
 class ScreenBetterAccount(
@@ -129,7 +128,7 @@ class ScreenBetterAccount(
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
-        drawCenteredText(matrices, textRenderer, name, width / 2, 8 - textRenderer.fontHeight / 2, Color.white.rgb)
+        drawCenteredText(matrices, textRenderer, name, width / 2, 8 - textRenderer.fontHeight / 2, -1)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {

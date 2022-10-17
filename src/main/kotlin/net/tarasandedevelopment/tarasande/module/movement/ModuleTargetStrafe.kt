@@ -2,11 +2,10 @@ package net.tarasandedevelopment.tarasande.module.movement
 
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.hit.HitResult
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.eventsystem.Event
-import net.tarasandedevelopment.eventsystem.Priority
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventMovement
@@ -17,7 +16,6 @@ import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.util.function.Consumer
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
@@ -25,8 +23,22 @@ import kotlin.math.sin
 class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a circle", ModuleCategory.MOVEMENT) {
 
     private val radius = ValueNumber(this, "Radius", 0.0, 1.0, 6.0, 0.1)
+    private val maximumFallDistance = ValueNumber(this, "Maximum fall distance", 0.0, 5.0, 15.0, 0.1)
 
     private var invert = false
+
+    private fun calculateNextPosition(selfSpeed: Double, curPos: Vec3d, center: Vec3d): Vec3d {
+        var angleOffset = Math.toDegrees(selfSpeed / radius.value)
+        if (invert)
+            angleOffset *= -1
+        val angle = Math.toRadians(RotationUtil.getYaw(curPos - center) + angleOffset)
+
+        return Vec3d(
+            center.x - radius.value * sin(angle),
+            center.y,
+            center.z + radius.value * cos(angle)
+        )
+    }
 
     init {
         registerEvent(EventUpdate::class.java) { event ->
@@ -61,16 +73,12 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
             val center = enemy.pos
             val selfSpeed = max(event.velocity.horizontalLength(), PlayerUtil.calcBaseSpeed(PlayerUtil.walkSpeed))
 
-            var angleOffset = Math.toDegrees(selfSpeed / radius.value)
-            if (invert)
-                angleOffset *= -1
-            val angle = Math.toRadians(RotationUtil.getYaw(curPos - center) + angleOffset)
+            var newPos = calculateNextPosition(selfSpeed, curPos, center)
 
-            val newPos = Vec3d(
-                center.x - radius.value * sin(angle),
-                center.y,
-                center.z + radius.value * cos(angle)
-            )
+            if (PlayerUtil.predictFallDistance(BlockPos(newPos)).let { it == null || it > maximumFallDistance.value }) {
+                invert = !invert
+                newPos = calculateNextPosition(selfSpeed, curPos, center)
+            }
 
             val rotation = RotationUtil.getRotations(curPos, newPos)
             val forward = rotation.forwardVector(selfSpeed)

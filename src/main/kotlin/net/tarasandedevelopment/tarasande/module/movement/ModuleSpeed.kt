@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
 import net.minecraft.util.math.MathHelper
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventJump
@@ -12,7 +11,6 @@ import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.util.function.Consumer
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
@@ -41,7 +39,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
             if (mc.player?.velocity?.lengthSquared()!! <= 0.01) firstMove = true
 
-            if (mc.player?.input?.movementInput?.lengthSquared() == 0.0f) return@registerEvent
+            if (!PlayerUtil.isPlayerMoving()) return@registerEvent
 
             val accessor = event.velocity as IVec3d
 

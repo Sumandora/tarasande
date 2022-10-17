@@ -120,7 +120,8 @@ class ManagerModule : Manager<Module>() {
             ModuleEntityControl(),
             ModuleFastBreak(),
             ModuleCivBreak(),
-            ModuleHealingBot()
+            ModuleHealingBot(),
+            ModuleVehicleSpeed()
         )
         TarasandeMain.get().eventDispatcher.add(EventTick::class.java) {
             if (it.state == EventTick.State.POST) {

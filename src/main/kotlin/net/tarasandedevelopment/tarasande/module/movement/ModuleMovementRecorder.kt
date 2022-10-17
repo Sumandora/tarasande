@@ -6,7 +6,6 @@ import net.minecraft.client.render.*
 import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.*
@@ -17,8 +16,6 @@ import net.tarasandedevelopment.tarasande.value.ValueBind
 import org.apache.commons.lang3.ArrayUtils
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL11
-import java.awt.Color
-import java.util.function.Consumer
 
 class ModuleMovementRecorder : Module("Movement recorder", "Records your movement for later playback", ModuleCategory.MOVEMENT) {
 
@@ -181,7 +178,7 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
             val str = if (recording) "Recording" else if (playbackState != null) playbackState?.name?.let {
                 it.first() + it.substring(1).lowercase()
             } else ""
-            mc.textRenderer?.drawWithShadow(event.matrices, str, mc.window?.scaledWidth!! / 2.0f - mc.textRenderer.getWidth(str) / 2.0f, mc.window?.scaledHeight!! / 2.0f - mc.textRenderer.fontHeight, Color.white.rgb)
+            mc.textRenderer?.drawWithShadow(event.matrices, str, mc.window?.scaledWidth!! / 2.0f - mc.textRenderer.getWidth(str) / 2.0f, mc.window?.scaledHeight!! / 2.0f - mc.textRenderer.fontHeight, -1)
         }
 
         registerEvent(EventRender3D::class.java) { event ->

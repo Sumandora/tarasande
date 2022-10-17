@@ -41,21 +41,13 @@
 4. Multi-version support
 
 ## TODO-List
-- Vehicle Speed
-- Baritone Sprint Jump
-- More Anti Bots (Mode which checks if the entity tries to stay out of the line of sight; Movement; Ever sneaked; Ticks
-  existed)
 - Inventory Cleaner & Auto Armor (Smart Stealer)
-- PvP-Bot for Practice Game Modes
-- KillAura: Calculate attack cycle from enemies
-- Improve BedESP performance (Go inside from outside; see comment in BedESP class)
 - User configs
 - Crystal Aura
 - Anti Vanish
 - Step: Calculate all motions; Prediction by LivingEntity#travel; Instantiate object and simulate
 - AutoTool: Auto Sword
 - Change Name/Skin/Cape in Account Manager
-- Target strafe: Anti Void
 - (Banners in protocol selection)
 - Settings for HypixelBedwarsOverlay
 - ViaLegacy texture pack using ProtocolPatcher

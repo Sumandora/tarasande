@@ -24,7 +24,6 @@ import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.subsc
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
-import java.awt.Color
 import java.util.concurrent.ThreadLocalRandom
 
 class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.getInstance().textRenderer.fontHeight * 5) {
@@ -116,7 +115,7 @@ class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         this.renderTitle(matrices, "Account Manager")
-        drawCenteredText(matrices, textRenderer, Text.of(status), width / 2, 2 * textRenderer.fontHeight * 2, Color.white.rgb)
+        drawCenteredText(matrices, textRenderer, Text.of(status), width / 2, 2 * textRenderer.fontHeight * 2, -1)
     }
 
     inner class EntryAccount(var account: Account) : ScreenBetterSlotListEntry() {
@@ -152,7 +151,7 @@ class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.
                 client?.session?.equals(account.session) == true -> Formatting.GREEN.toString()
                 mainAccount == accounts.indexOf(account) -> Formatting.YELLOW.toString()
                 else -> ""
-            } + account.getDisplayName()).string, entryWidth.toFloat(), entryHeight / 4F - textRenderer.fontHeight / 4F, Color.white.rgb)
+            } + account.getDisplayName()).string, entryWidth.toFloat(), entryHeight / 4F - textRenderer.fontHeight / 4F, -1)
             matrices.pop()
 
             if (account.session != null) {
@@ -160,7 +159,7 @@ class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.
 
                 matrices.push()
                 matrices.scale(0.5F, 0.5F, 0.5F)
-                RenderUtil.text(matrices, string, (entryWidth.toFloat() * 4) - textRenderer.getWidth(string) - 10, (entryHeight * 2 - textRenderer.fontHeight).toFloat() - 1, Color.white.rgb)
+                RenderUtil.text(matrices, string, (entryWidth.toFloat() * 4) - textRenderer.getWidth(string) - 10, (entryHeight * 2 - textRenderer.fontHeight).toFloat() - 1, -1)
                 matrices.pop()
             }
         }
