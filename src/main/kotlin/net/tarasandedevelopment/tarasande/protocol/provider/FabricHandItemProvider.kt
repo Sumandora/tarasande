@@ -13,8 +13,6 @@ class FabricHandItemProvider : HandItemProvider() {
     }
 
     override fun getHandItem(info: UserConnection?): Item? {
-        val item = MinecraftViaItemRewriter.minecraftToViaItem(lastUsedItem)
-        println(item)
-        return item
+        return MinecraftViaItemRewriter.minecraftToViaItem(lastUsedItem)
     }
 }

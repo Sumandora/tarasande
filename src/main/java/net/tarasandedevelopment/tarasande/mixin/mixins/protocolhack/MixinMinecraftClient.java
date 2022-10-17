@@ -17,6 +17,7 @@ import net.minecraft.util.Hand;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol;
 import net.tarasandedevelopment.tarasande.module.movement.ModuleInventoryMove;
+import net.tarasandedevelopment.tarasande.protocol.util.ArmorUpdater1_8_0;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -69,6 +70,13 @@ public abstract class MixinMinecraftClient {
 
             clickStatus.write(Type.VAR_INT, 2); // Open Inventory Achievement
             clickStatus.sendToServer(Protocol1_12To1_11_1.class);
+        }
+    }
+
+    @Inject(method = "tick", at = @At("RETURN"))
+    public void injectTick(CallbackInfo ci) {
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
+            ArmorUpdater1_8_0.INSTANCE.update(); // Fixes Armor HUD
         }
     }
 }
