@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShapes
 import net.tarasandedevelopment.tarasande.base.module.Module
@@ -15,9 +16,12 @@ class ModuleJesus : Module("Jesus", "Lets you walk on liquids", ModuleCategory.M
 
     init {
         registerEvent(EventCollisionShape::class.java) { event ->
-            if (mc.player?.isSubmergedInWater == true || mc.player?.isInLava == true || mc.player?.input?.sneaking == true)
+            if (mc.player == null)
                 return@registerEvent
-            if (event.pos.y < (mc.player?.y ?: return@registerEvent))
+            val inLiquid = mc.world?.getBlockState(BlockPos(mc.player?.pos?.add(0.0, 0.5, 0.0)))?.fluidState?.isEmpty == false
+            if (inLiquid || mc.player?.input?.sneaking == true || mc.player?.fallDistance!! > 3.0)
+                return@registerEvent
+            if (event.pos.y < mc.player?.y!!)
                 if (mc.world?.getBlockState(event.pos)?.fluidState?.isEmpty == false) {
                     event.collisionShape = VoxelShapes.cuboid(0.0, 0.0, 0.0, 1.0, height.value * (mc.world?.getBlockState(event.pos)?.fluidState?.height?.toDouble() ?: 1.0), 1.0)
                 }
