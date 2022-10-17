@@ -40,7 +40,7 @@
    - Quality of life modules
 4. Multi-version support
 
-## TODO-List
+## TODO-List (Emily)
 - Inventory Cleaner & Auto Armor (Smart Stealer)
 - User configs
 - Crystal Aura
@@ -52,15 +52,29 @@
 - Settings for HypixelBedwarsOverlay
 - ViaLegacy texture pack using ProtocolPatcher
 
-### TODO-List (Click GUI)
-- Correctly save and calculate the positions of the panels when resizing ingame
-- Make block picker more beautiful with icons
-- Scaling for the whole GUI, so you can scale it for your MC Gui scale
-
-### TODO-List (florian)
+## TODO-List (Flori | General)
 
 - TPS Hud Element recode for Protocol Hack
 - placing blocks in localplayer
+- ForgeFaker
+- Notebot
+- Recode Mixins with AccessWidener and conventions
+- HA Proxy Hack
+
+## TODO-List (Flori | ViaLegacy)
+
+- Unknown: Mining Fast Checks
+- 1.8.x: MineMen Tablist
+- 1.7.10: Tablist rmeapping
+- 1.7.10: Entites spawning
+- 1.7.10: Recode Chunk Translation using RKs Chunk Base (Chunk1_8Type)
+- 1.6.4: Crafting Table CraftResult was clientside back in the time 
+- 1.6.4: Reciperemapper base with all versions
+
+## TODO-List (General)
+- ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
+- ClickGUI: Make block picker more beautiful with icons
+- ClickGUI: Scaling for the whole GUI, so you can scale it for your MC Gui scale
 
 ## Notes
 - AutoTool: Axes can set shields on cooldown. Maybe implement that if possible axes are being used to set shields on cooldown before actually attacking with sword
