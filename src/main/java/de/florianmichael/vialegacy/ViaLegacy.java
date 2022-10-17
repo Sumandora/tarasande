@@ -37,6 +37,7 @@ import java.util.logging.Logger;
  * TODO | 1.7.10
  *  - Fix Tablist remapping
  *  - Fix Entities on Minemen
+ *  - Recode Chunk translation using RKs Chunk base added back in 2020
 
  * TODO | 1.6.4
  *  - Crafting Table CraftResult was Clientside back in the time (invisible for us)
