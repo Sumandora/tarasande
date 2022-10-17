@@ -39,7 +39,6 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
     private var state = State.IDLE
     private var intendedSlot: Int? = null
     private var intendedItem: ItemStack? = null
-    private var wasOffHand = false
     private var targetRotation: Rotation? = null
 
     private val timer = TimeUtil()
@@ -61,7 +60,6 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
         prevSlot = null
         intendedSlot = null
         intendedItem = null
-        wasOffHand = false
     }
 
     init {
@@ -125,13 +123,11 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
                 state = State.THROW
                 timer.reset()
                 intendedItem = mc.player?.offHandStack
-                wasOffHand = true
+                intendedSlot = bestItem
                 if (bestItem != -1) {
                     prevSlot = mc.player?.inventory?.selectedSlot!!
-                    intendedSlot = bestItem
                     mc.player?.inventory?.selectedSlot = bestItem
                     intendedItem = mc.player?.inventory?.main?.get(bestItem)
-                    wasOffHand = false
                 }
             }
         }
@@ -143,7 +139,7 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
                         if (intendedItem?.item is SplashPotionItem && (mc.player as IClientPlayerEntity).tarasande_getLastPitch() != targetRotation?.pitch)
                             return@registerEvent
                         event.pressed = true
-                        if (wasOffHand) {
+                        if (intendedSlot == -1) {
                             if (mc.player?.offHandStack != intendedItem)
                                 state = State.SWITCH_BACK
                         } else if (mc.player?.mainHandStack != intendedItem)
