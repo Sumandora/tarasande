@@ -63,6 +63,8 @@
 - HA Proxy Hack
 - Anti vanish: Proxy
 - Iron bars & Cocoa Blocks 1.8 grim (false flag?)
+- SeedUtils and Shadow seed cracker 
+- OreSim
 
 ## TODO-List (Flori | ViaLegacy)
 

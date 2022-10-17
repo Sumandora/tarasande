@@ -10,6 +10,7 @@ import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import net.tarasandedevelopment.tarasande.value.ValueText
 import java.net.URL
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
@@ -20,6 +21,8 @@ import kotlin.math.roundToInt
  */
 class PanelHypixelBedwarsOverlay(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Hypixel Bedwars Overlay", x, y, 200.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), background = false, fixed = true) {
 
+    private val apiKey = ValueText(this, "API Key", "")
+
     private val blackList = ArrayList<GameProfile>()
     private val playerData = ConcurrentHashMap<GameProfile, Stats>()
     private val url = "https://api.hypixel.net/player?uuid=%s&key=%s"
@@ -29,13 +32,13 @@ class PanelHypixelBedwarsOverlay(x: Double, y: Double, screenCheatMenu: ScreenCh
         val t = Thread {
             while (true) {
                 try {
-                    if (TarasandeMain.get().clientValues.hypixelApiKey.value.isEmpty() || !opened) {
+                    if (apiKey.value.isEmpty() || !opened) {
                         Thread.sleep(1000L)
                     } else {
                         val entry = playerData.entries.firstOrNull { !it.value.requested } ?: continue
                         entry.value.requested = true
 
-                        val urlConnection = URL(String.format(url, entry.key.id.toString().replace("-", ""), TarasandeMain.get().clientValues.hypixelApiKey.value)).openConnection()
+                        val urlConnection = URL(String.format(url, entry.key.id.toString().replace("-", ""), apiKey.value)).openConnection()
                         val jsonStr = String(urlConnection.getInputStream().readAllBytes())
                         val jsonElement = TarasandeMain.get().gson.fromJson(jsonStr, JsonElement::class.java)
                         if (jsonElement != null && !jsonElement.isJsonNull) {
