@@ -7,6 +7,7 @@ import net.minecraft.util.math.MathHelper
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
@@ -31,7 +32,11 @@ class PanelArrayList(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : P
             val accent = TarasandeMain.get().clientValues.accentColor.getColor()
             val color = Color(accent.red, accent.green, accent.blue, (animation * 255).toInt())
             RenderSystem.enableBlend()
-            alignedString(matrices, it.name, accent.rgb, ((index + animation) * MinecraftClient.getInstance().textRenderer.fontHeight).toFloat())
+            when (alignment) {
+                Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it.name, (x - (MinecraftClient.getInstance().textRenderer.getWidth(it.name) * (1.0 - animation))).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
+                Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it.name, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it.name).toFloat() / 2.0f, (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
+                Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, it.name, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(it.name) * animation).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
+            }
             index += animation
         }
     }

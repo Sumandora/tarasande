@@ -386,7 +386,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         }
 
         registerEvent(EventHandleBlockBreaking::class.java) { event ->
-            event.parameter = event.parameter || clicked
+            if (!throughWalls.value)
+                event.parameter = event.parameter || clicked
         }
 
         registerEvent(EventPacket::class.java) { event ->

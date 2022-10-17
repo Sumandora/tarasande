@@ -6,7 +6,6 @@ import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.registry.Registry
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventAttack
@@ -21,7 +20,6 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import net.tarasandedevelopment.tarasande.value.ValueRegistry
-import java.util.function.Consumer
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
@@ -64,7 +62,13 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
     }
 
     private val timeUtil = TimeUtil()
-    
+
+    override fun onDisable() {
+        if (breaking)
+            mc.interactionManager?.cancelBlockBreaking()
+        breaking = false
+    }
+
     init {
         registerEvent(EventPollEvents::class.java) { event ->
             val rad = ceil(radius.value).toInt()
@@ -118,7 +122,6 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
         }
 
         registerEvent(EventAttack::class.java) { event ->
-            breaking = false
             if (event.dirty)
                 return@registerEvent
             when {
@@ -126,11 +129,13 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                     if (list.isNotEmpty()) {
                         val pair = list[0]
                         mc.crosshairTarget = if (pair.second.blockPos == pair.first) pair.second else pair.second.withBlockPos(pair.first)
-                        if ((mc as IMinecraftClient).tarasande_getAttackCooldown() == 0) {
+                        if (!breaking && (mc as IMinecraftClient).tarasande_getAttackCooldown() == 0) {
                             if (!(mc as IMinecraftClient).tarasande_invokeDoAttack())
                                 breaking = true
                             event.dirty = true
                         }
+                    } else {
+                        breaking = false
                     }
                 }
 

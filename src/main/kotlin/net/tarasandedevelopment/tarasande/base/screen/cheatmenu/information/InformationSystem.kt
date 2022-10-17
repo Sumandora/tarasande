@@ -40,6 +40,7 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
             // Server
             InformationServerBrand(),
             InformationOpenChannels(),
+            InformationVanishedPlayers(),
 
             // Features
             InformationFeaturesModules(),

@@ -158,10 +158,7 @@ object PlayerUtil {
                     0
     }
 
-    fun sendChatMessage(text: String) {
-        val prevBypassChat = (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_getBypassChat()
-        (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_setBypassChat(true)
-        // this method COULD be static, but Mojangs god tier coders didn't think of that
+    private fun createFakeChat(block: (ChatScreen) -> Unit) {
         object : ChatScreen("") {
             override fun narrateScreenIfNarrationEnabled(onlyChangedNarrations: Boolean) {
             }
@@ -178,6 +175,14 @@ object PlayerUtil {
             }
         }.also {
             it.init(MinecraftClient.getInstance(), MinecraftClient.getInstance().window.scaledWidth, MinecraftClient.getInstance().window.scaledHeight)
+            block.invoke(it)
+        }
+    }
+
+    fun sendChatMessage(text: String) {
+        val prevBypassChat = (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_getBypassChat()
+        (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_setBypassChat(true)
+        createFakeChat {
             for (c in text.toCharArray()) it.charTyped(c, 0)
             it.keyPressed(GLFW.GLFW_KEY_ENTER, 0, 0)
         }

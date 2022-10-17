@@ -41,6 +41,7 @@
 4. Multi-version support
 
 ## TODO-List (Emily)
+- AntiBot invalid gamemode
 - Inventory Cleaner & Auto Armor (Smart Stealer)
 - User configs
 - Crystal Aura
@@ -60,6 +61,8 @@
 - Notebot
 - Recode Mixins with AccessWidener and conventions
 - HA Proxy Hack
+- Anti vanish: Proxy
+- Iron bars & Cocoa Blocks 1.8 grim (false flag?)
 
 ## TODO-List (Flori | ViaLegacy)
 

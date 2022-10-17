@@ -3,20 +3,33 @@ package net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.Information
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueMode
 
 class PanelInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Information", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), background = false, resizable = false, fixed = true) {
 
-    var visible = ValueMode(this, "Elements", true, *screenCheatMenu.managerInformation.list.map { i -> i.owner + ": " + i.information }.toTypedArray())
+    val map = HashMap<Information, String>()
+
+    init {
+        screenCheatMenu.managerInformation.list.forEach {
+            map[it] = it.owner + ": " + it.information
+        }
+    }
+
+    val elements = ValueMode(this, "Elements", true, *screenCheatMenu.managerInformation.list.map { map[it]!! }.toTypedArray())
+
+    internal fun isSelected(information: Information) = elements.selected.contains(map[information])
 
     init {
         for (information in screenCheatMenu.managerInformation.list) {
             if (TarasandeMain.get().managerValue.getValues(information).isNotEmpty()) {
-                val name = information.owner + ": " + information.information
+                val name = map[information]!!
 
                 object : ValueButton(this, "$name settings") {
                     override fun onChange() {
@@ -34,7 +47,7 @@ class PanelInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) :
             val cache = ArrayList<String>()
             val informationList = TarasandeMain.get().screenCheatMenu.managerInformation.getAllInformation(owner)
             for (information in informationList) {
-                if (!visible.selected.contains(information.owner + ": " + information.information)) continue
+                if (!isSelected(information)) continue
 
                 val message = information.getMessage()
                 if (message != null) {
@@ -60,7 +73,11 @@ class PanelInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) :
         }
 
         for ((index, it) in text.withIndex()) {
-            alignedString(matrices, it, TarasandeMain.get().clientValues.accentColor.getColor().rgb, (index + 1) * MinecraftClient.getInstance().textRenderer.fontHeight.toFloat())
+            when (alignment) {
+                Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat(), y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
+                Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat() / 2.0f, y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
+                Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat(), y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
+            }
         }
     }
 
