@@ -95,10 +95,7 @@ class Rotation(var yaw: Float, var pitch: Float) {
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Rotation
+        if (other !is Rotation) return false
 
         if (yaw != other.yaw) return false
         if (pitch != other.pitch) return false

@@ -46,7 +46,7 @@ class ManagerModule : Manager<Module>() {
             ModuleWTap(),
             ModuleTrajectories(),
             ModuleAntiBot(),
-            ModuleNoFov(),
+            ModuleNoFOV(),
             ModuleKeepSprint(),
             ModuleMurderMystery(),
             ModuleNoSwing(),
@@ -117,7 +117,10 @@ class ManagerModule : Manager<Module>() {
             ModuleJesus(),
             ModuleFastClimb(),
             ModuleAntiAFK(),
-            ModuleEntityControl()
+            ModuleEntityControl(),
+            ModuleFastBreak(),
+            ModuleCivBreak(),
+            ModuleHealingBot()
         )
         TarasandeMain.get().eventDispatcher.add(EventTick::class.java) {
             if (it.state == EventTick.State.POST) {
