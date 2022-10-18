@@ -335,7 +335,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     }
 
                     if (distance > 6.0 * 6.0 && distance <= reach.minValue * reach.minValue) {
-                        println(distance)
                         (TarasandeMain.get().managerModule.get(ModuleClickTP::class.java).pathFinder.findPath(imaginaryPosition, target.pos, maxTeleportTime) ?: continue).forEach {
                             mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(it.x, it.y, it.z, mc.world?.getBlockState(BlockPos(it.add(0.0, -1.0, 0.0)))?.isAir == false))
                             teleportPath?.add(it)

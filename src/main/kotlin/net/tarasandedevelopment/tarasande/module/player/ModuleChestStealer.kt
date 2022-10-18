@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.module.player
 
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen
+import net.minecraft.screen.slot.Slot
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.text.LiteralTextContent
 import net.minecraft.util.math.Vec2f
@@ -14,6 +15,7 @@ import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import net.tarasandedevelopment.tarasande.value.ValueNumberRange
 import net.tarasandedevelopment.tarasande.value.ValueText
+import org.apache.commons.lang3.ArrayUtils
 import org.lwjgl.glfw.GLFW
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.sqrt
@@ -29,12 +31,19 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
         override fun isEnabled() = checkTitle.value
     }
     private val failChance = ValueNumber(this, "Fail chance", 0.0, 0.0, 100.0, 1.0)
+    private val intelligent = ValueBoolean(this, "Intelligent", true)
 
     private val timeUtil = TimeUtil()
 
     private var wasClosed = true
     private var mousePos: Vec2f? = null
     private var nextDelay: Long = 0
+
+    private fun intelligent(slot: Slot, list: List<Slot>): Boolean {
+        if (!intelligent.value)
+            return false
+        return ContainerUtil.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.toTypedArray(), *ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).toTypedArray()).filter { it != slot }.map { it.stack })
+    }
 
     init {
         registerEvent(EventPollEvents::class.java) { event ->
@@ -70,7 +79,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
             }
 
-            var nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { it.id < screenHandler.inventory.size() }
+            var nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list -> slot.id < screenHandler.inventory.size() && !intelligent(slot, list) }
 
             if (!timeUtil.hasReached(when {
                     wasClosed -> openDelay.value.toLong()
@@ -91,7 +100,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 ))
                 if (ThreadLocalRandom.current().nextInt(100) < failChance.value) {
                     val interp = mousePos?.add(displayPos?.add(mousePos?.negate())?.multiply(ThreadLocalRandom.current().nextDouble(0.0, 1.0).toFloat()))!!
-                    ContainerUtil.getClosestSlot(screenHandler, accessor, interp) { it.id < screenHandler.inventory.size() }?.also {
+                    ContainerUtil.getClosestSlot(screenHandler, accessor, interp) { slot, list -> slot.id < screenHandler.inventory.size() && !intelligent(slot, list) }?.also {
                         nextSlot = it
                     }
                 }

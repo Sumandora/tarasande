@@ -1,11 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.player
 
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen
-import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.item.ArmorItem
-import net.minecraft.item.ItemStack
-import net.minecraft.item.SwordItem
-import net.minecraft.item.ToolItem
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.base.module.Module
@@ -55,8 +50,7 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
                 mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
             }
 
-            val validSlots = ContainerUtil.getValidSlots(screenHandler)
-            val nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot -> shouldDrop(slot.stack, validSlots.filter { it != slot }.map { it.stack }) }
+            val nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list -> ContainerUtil.hasBetterEquivalent(slot.stack, list.filter { it != slot }.map { it.stack }) }
 
             if (!timeUtil.hasReached(
                     if (wasClosed)
@@ -80,24 +74,6 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
                 mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot.id, 1 /* 1 = all; 0 = single */, SlotActionType.THROW, mc.player)
             }
         }
-    }
-
-    private fun shouldDrop(stack: ItemStack, list: List<ItemStack>): Boolean {
-        if (stack.item !is SwordItem && stack.item !is ToolItem && stack.item !is ArmorItem)
-            return false
-
-        val enchantments = EnchantmentHelper.get(stack)
-
-        for (otherStack in list) {
-            if (stack.item == otherStack.item) {
-                val otherEnchantments = EnchantmentHelper.get(otherStack)
-
-                if (enchantments.all { otherEnchantments.containsKey(it.key) && enchantments[it.key]!! >= it.value })
-                    return true
-            }
-        }
-
-        return false
     }
 
 }

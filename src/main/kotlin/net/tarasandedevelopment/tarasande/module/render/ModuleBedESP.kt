@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.render
 
 import net.minecraft.block.BedBlock
-import net.minecraft.block.Blocks
 import net.minecraft.block.enums.BedPart
 import net.minecraft.client.MinecraftClient
 import net.minecraft.util.math.BlockPos
@@ -28,7 +27,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
     internal val calculateBestWay = ValueBoolean(this, "Calculate best way", true)
 
-    private val depth = object : ValueNumber(this, "Depth", 1.0, 512.0, 1024.0, 8.0) {
+    private val depth = object : ValueNumber(this, "Depth", 1.0, 24.0, 32.0, 1.0) {
         override fun isEnabled() = calculateBestWay.value
     }
 
@@ -60,28 +59,27 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         return list
     }
 
-    private fun addDefender(depth: Int, blockPos: BlockPos, prevList: ArrayList<BlockPos>): ArrayList<BlockPos>? {
-        if (depth > this.depth.value) return null
-        val surroundings = allSurroundings(blockPos)
-        surroundings.removeIf { prevList.contains(it) }
-        surroundings.removeIf { mc.world?.getBlockState(it)?.block == Blocks.AIR }
-        for (block in surroundings) {
-            if (!mc.world?.getBlockState(block)?.isAir!!) {
-                prevList.add(block)
-                addDefender(depth + 1, block, prevList) ?: return null
+    private fun calculateDefenses(beds: Array<BlockPos>): List<BlockPos> {
+        val list = HashSet<BlockPos>()
+        val open = ArrayList<BlockPos>()
+        open.addAll(beds)
+
+        while (open.isNotEmpty()) {
+            val block = open.removeFirst()
+            if (beds.minOf { it.getSquaredDistance(block) } > depth.value * depth.value)
+                continue
+
+            list.add(block)
+
+            for (newBlock in allSurroundings(block)) {
+
+                if (!list.contains(newBlock) && !mc.world?.getBlockState(newBlock)?.isAir!!) {
+                    open.add(newBlock)
+                }
             }
         }
-        return prevList
-    }
 
-    private fun calculateDefenses(blockPos: Array<BlockPos>): List<BlockPos>? {
-        val list = ArrayList<BlockPos>()
-
-        for (pos in blockPos) {
-            addDefender(0, pos, list) ?: return null
-        }
-
-        return list.distinct()
+        return list.toList()
     }
 
     override fun onDisable() {
@@ -121,23 +119,21 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                         continue // this is pointless
                     }
 
-                    val defenders = calculateDefenses(bedParts)?.let { ArrayList(it) }
-                    var solution: List<Node>? = null
-                    if (defenders != null) {
-                        val outstanders = defenders.filter {
-                            allSurroundings(it).any {
-                                mc.world?.getBlockState(it)?.let { state ->
-                                    state.isAir || state.getCollisionShape(MinecraftClient.getInstance().world, it).isEmpty
-                                }!!
-                            }
+                    val defenders = ArrayList(calculateDefenses(bedParts))
+                    var solution: List<Node>?
+                    val outstanders = defenders.filter {
+                        allSurroundings(it).any {
+                            mc.world?.getBlockState(it)?.let { state ->
+                                state.isAir || state.getCollisionShape(MinecraftClient.getInstance().world, it).isEmpty
+                            }!!
                         }
-
-                        if (outstanders.any { mc.world?.getBlockState(it)?.block is BedBlock }) continue // not a bedwars bed
-
-                        solution = Breaker.findSolution(outstanders, defenders, bedParts, maxProcessingTime.value.toLong())
-
-                        defenders.removeIf { bedParts.contains(it) }
                     }
+
+                    if (outstanders.any { mc.world?.getBlockState(it)?.block is BedBlock }) continue // not a bedwars bed
+
+                    solution = Breaker.findSolution(outstanders, defenders, bedParts, maxProcessingTime.value.toLong())
+
+                    defenders.removeIf { bedParts.contains(it) }
                     bedDatas.add(BedData(bedParts, defenders, solution))
                 }
             }

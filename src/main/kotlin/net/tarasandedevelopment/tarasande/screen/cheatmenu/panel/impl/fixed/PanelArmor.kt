@@ -34,7 +34,7 @@ class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
         for (i in MinecraftClient.getInstance().player!!.inventory.armor.size - 1 downTo 0) {
             val armor = MinecraftClient.getInstance().player!!.inventory.armor[i]
             if (armor == ItemStack.EMPTY && skipEmpty.value)
-                    return
+                    continue
 
             RenderSystem.enableCull()
             (MinecraftClient.getInstance().inGameHud as IInGameHud).tarasande_invokeRenderHotbarItem(x.toInt() + m, y.toInt() + titleBarHeight, delta, matrices, armor)

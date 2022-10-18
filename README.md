@@ -42,10 +42,8 @@
 
 ## TODO-List (Emily)
 - AntiBot invalid gamemode
-- Smart Stealer
 - User configs
 - Crystal Aura
-- Anti Vanish
 - Step: Calculate all motions; Prediction by LivingEntity#travel; Instantiate object and simulate
 - AutoTool: Auto Sword
 - Change Name/Skin/Cape in Account Manager

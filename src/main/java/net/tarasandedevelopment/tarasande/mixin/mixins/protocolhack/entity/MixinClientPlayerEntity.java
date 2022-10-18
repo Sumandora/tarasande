@@ -16,7 +16,6 @@ import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventSkipIdlePacket;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
-import net.tarasandedevelopment.tarasande.module.movement.ModuleNoSlowdown;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -53,17 +52,6 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     public MixinClientPlayerEntity(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
         super(world, profile, publicKey);
-    }
-
-    @Redirect(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tickMovement()V"))
-    public void doNothing(AbstractClientPlayerEntity instance) {
-        if ((instance.isUsingItem() || instance.isSneaking() || instance.isSubmergedInWater()) && VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
-            ModuleNoSlowdown moduleNoSlowdown = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSlowdown.class);
-            if (!moduleNoSlowdown.getEnabled() || !moduleNoSlowdown.getPreventUnsprint().getValue())
-                instance.setSprinting(false);
-        }
-
-        super.tickMovement();
     }
 
     @Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isCamera()Z"))
