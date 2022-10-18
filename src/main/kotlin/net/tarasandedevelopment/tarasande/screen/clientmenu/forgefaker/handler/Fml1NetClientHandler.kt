@@ -35,7 +35,6 @@ class Fml1NetClientHandler(val connection: ClientConnection) : IForgeNetClientHa
         this.sendClientHello(version)
 
         TarasandeMain.get().managerClientMenu.get(ElementMenuToggleForgeFaker::class.java).forgeInfoTracker[this.connection.address]?.also {
-            println(it.installedMods().size)
             this.sendModList(it.installedMods())
         }
     }
@@ -97,7 +96,6 @@ class Fml1NetClientHandler(val connection: ClientConnection) : IForgeNetClientHa
         }
 
         this.sendCustomPayload(forgeHS, buffer)
-        println(forgeHS + " " + buffer.writtenBytes.size)
     }
 
     private fun sendClientHello(fmlProtocolVersion: Byte) {
