@@ -10,13 +10,14 @@ import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
-open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, private val entryHeight: Int) : ScreenBetter(null) {
+open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, private val entryWidth: Int, private val entryHeight: Int) : ScreenBetter(null) {
 
     var slotList: ScreenBetterSlotListWidget? = null
     var listProvider: ScreenBetterSlotListWidget.ListProvider? = null
     var selected: Int = 0
 
-    constructor(top: Int, entryHeight: Int) : this(top, -10, entryHeight)
+    constructor(top: Int, entryWidth: Int, entryHeight: Int) : this(top, -10, entryWidth, entryHeight)
+    constructor(top: Int, entryHeight: Int) : this(top, 220, entryHeight)
 
     fun provideElements(provider: ScreenBetterSlotListWidget.ListProvider) {
         this.listProvider = provider
@@ -33,7 +34,7 @@ open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, p
     override fun init() {
         if (this.listProvider == null) return
 
-        this.addDrawableChild(ScreenBetterSlotListWidget(this, client!!, this.listProvider, width, height, top, height - bottom - top, entryHeight).also {
+        this.addDrawableChild(ScreenBetterSlotListWidget(this, client!!, this.listProvider, width, height, top, height - bottom - top, entryWidth, entryHeight).also {
             this.slotList = it
             this.slotList?.reload()
         })
@@ -42,7 +43,7 @@ open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, p
     }
 }
 
-class ScreenBetterSlotListWidget(val parent: ScreenBetterSlotList, minecraft: MinecraftClient, private val listProvider: ListProvider?, width: Int, height: Int, top: Int, bottom: Int, entryHeight: Int)
+class ScreenBetterSlotListWidget(val parent: ScreenBetterSlotList, minecraft: MinecraftClient, private val listProvider: ListProvider?, width: Int, height: Int, top: Int, bottom: Int, private val entryWidth: Int, entryHeight: Int)
     : AlwaysSelectedEntryListWidget<ScreenBetterSlotListEntry>(minecraft, width, height, top, bottom, entryHeight) {
 
     fun reload() {
@@ -58,6 +59,9 @@ class ScreenBetterSlotListWidget(val parent: ScreenBetterSlotList, minecraft: Mi
     interface ListProvider {
         fun get(): List<ScreenBetterSlotListEntry>
     }
+
+    override fun getRowWidth() = entryWidth
+    override fun getScrollbarPositionX() = this.width / 2 + (this.entryWidth / 2) + 14
 
     override fun appendNarrations(builder: NarrationMessageBuilder?) {
     }

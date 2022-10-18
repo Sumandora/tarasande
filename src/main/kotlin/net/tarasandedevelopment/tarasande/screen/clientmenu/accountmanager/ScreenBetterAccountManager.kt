@@ -26,7 +26,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import java.util.concurrent.ThreadLocalRandom
 
-class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, MinecraftClient.getInstance().textRenderer.fontHeight * 5) {
+class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, 240, MinecraftClient.getInstance().textRenderer.fontHeight * 5) {
 
     val accounts = ArrayList<Account>()
     var currentAccount: Account? = null

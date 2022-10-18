@@ -6,6 +6,7 @@ import com.viaversion.viaversion.api.protocol.version.VersionProvider
 import com.viaversion.viaversion.commands.ViaCommandHandler
 import com.viaversion.viaversion.libs.gson.JsonArray
 import com.viaversion.viaversion.libs.gson.JsonObject
+import com.viaversion.viaversion.protocols.protocol1_13to1_12_2.Protocol1_13To1_12_2
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.vialegacy.ViaLegacy
@@ -41,8 +42,16 @@ class TarasandeProtocolHack : INativeProvider {
 
     init {
         ViaProtocolHack.instance().init(this) {
+            this.createChannelMappings()
             ViaLegacy.init(viaLegacy, Logger.getLogger("ViaLegacy-Tarasande"))
         }
+    }
+
+    private fun createChannelMappings() {
+        Protocol1_13To1_12_2.MAPPINGS.channelMappings["FML|HS"] = "fml:hs"
+        Protocol1_13To1_12_2.MAPPINGS.channelMappings["FML|MP"] = "fml:mp"
+        Protocol1_13To1_12_2.MAPPINGS.channelMappings["FML"] = "minecraft:fml"
+        Protocol1_13To1_12_2.MAPPINGS.channelMappings["FORGE"] = "minecraft:forge"
     }
 
     override fun isSinglePlayer(): Boolean {

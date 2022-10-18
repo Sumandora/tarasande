@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.util.Util
+import net.tarasandedevelopment.eventsystem.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenu
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuScreen
@@ -13,13 +14,18 @@ import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.mixin.accessor.IHandshakeC2SPacket
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.ScreenBetterAccountManager
 import net.tarasandedevelopment.tarasande.screen.clientmenu.addon.ScreenBetterAddons
+import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.IForgeNetClientHandler
+import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.IForgePayload
 import net.tarasandedevelopment.tarasande.screen.clientmenu.protocol.ScreenBetterProtocolHack
 import net.tarasandedevelopment.tarasande.screen.clientmenu.proxy.ScreenBetterProxy
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueText
 import org.spongepowered.include.com.google.common.io.Files
 import java.io.File
+import java.net.InetSocketAddress
 import java.util.*
+import java.util.function.Consumer
+import kotlin.collections.HashMap
 
 class ElementMenuScreenAccountManager : ElementMenuScreen("Account Manager") {
 
@@ -84,6 +90,35 @@ class ElementMenuToggleBungeeHack : ElementMenuToggle("Bungee Hack") {
                     uuid = this.uuid.value
 
                 (event.packet as IHandshakeC2SPacket).tarasande_extendAddress(this.zero + this.endIP.value + this.zero + this.stripID(uuid))
+            }
+        }
+    }
+
+    override fun onToggle(state: Boolean) {
+        // state check in event listener
+    }
+}
+
+class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
+
+    val forgeInfoTracker = HashMap<InetSocketAddress, IForgePayload>()
+    var currentHandler: IForgeNetClientHandler? = null
+
+    val useFML1Cache = ValueBoolean(this, "Use FML1 cache", true)
+
+    init {
+        TarasandeMain.get().eventDispatcher.add(EventPacket::class.java) {
+            if (!state || currentHandler == null) return@add
+
+            if (it.type == EventPacket.Type.SEND && it.packet is HandshakeC2SPacket) {
+                println(currentHandler!!.handshakeMark())
+                (it.packet as IHandshakeC2SPacket).tarasande_extendAddress(currentHandler!!.handshakeMark())
+            }
+
+            if (it.type == EventPacket.Type.RECEIVE) {
+                if (currentHandler!!.onIncomingPacket(it.packet!!)) {
+                    it.cancelled = true
+                }
             }
         }
     }

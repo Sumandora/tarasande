@@ -35,6 +35,7 @@ class ManagerClientMenu : Manager<ElementMenu>() {
 
             ElementMenuTitle("Exploits"),
             ElementMenuToggleBungeeHack(),
+            ElementMenuToggleForgeFaker(),
 
             ElementMenuFritzBoxReconnect.SubTitle(fritzBox),
             fritzBox
