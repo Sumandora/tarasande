@@ -63,6 +63,7 @@
 - Iron bars & Cocoa Blocks 1.8 grim (false flag?)
 - SeedUtils and Shadow seed cracker 
 - OreSim
+- Forge Faker GUI auto calculation for width
 
 ## TODO-List (Flori | ViaLegacy)
 
