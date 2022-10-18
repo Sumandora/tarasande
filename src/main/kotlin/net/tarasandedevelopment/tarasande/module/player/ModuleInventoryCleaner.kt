@@ -1,43 +1,103 @@
 package net.tarasandedevelopment.tarasande.module.player
 
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen
-import net.minecraft.item.AirBlockItem
+import net.minecraft.enchantment.EnchantmentHelper
+import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
+import net.minecraft.item.SwordItem
+import net.minecraft.item.ToolItem
 import net.minecraft.screen.slot.SlotActionType
+import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.mixin.accessor.IHandledScreen
+import net.tarasandedevelopment.tarasande.util.math.TimeUtil
+import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.ValueNumberRange
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.sqrt
 
 class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your inventory", ModuleCategory.PLAYER) {
 
     private val openInventory = ValueBoolean(this, "Open inventory", true)
+    private val delay = ValueNumberRange(this, "Delay", 0.0, 100.0, 200.0, 500.0, 1.0)
+    private val openDelay = object : ValueNumber(this, "Open delay", 0.0, 100.0, 500.0, 1.0) {
+        override fun isEnabled() = openInventory.value
+    }
+    private val randomize = ValueNumber(this, "Randomize", 0.0, 0.0, 30.0, 1.0)
+
+    private val timeUtil = TimeUtil()
+
+    private var wasClosed = true
+    private var mousePos: Vec2f? = null
+    private var nextDelay: Long = 0
 
     init {
         registerEvent(EventPollEvents::class.java) { event ->
             if (event.fake)
                 return@registerEvent
 
-            if (openInventory.value && mc.currentScreen !is AbstractInventoryScreen<*>)
+            if (openInventory.value && mc.currentScreen !is AbstractInventoryScreen<*>) {
+                timeUtil.reset()
+                wasClosed = true
+                mousePos = null
+                return@registerEvent
+            }
+
+            val accessor = mc.currentScreen as IHandledScreen
+
+            val screenHandler = mc.player?.playerScreenHandler!!
+
+            if (mousePos == null) {
+                mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
+            }
+
+            val validSlots = ContainerUtil.getValidSlots(screenHandler)
+            val nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot -> shouldDrop(slot.stack, validSlots.filter { it != slot }.map { it.stack }) }
+
+            if (!timeUtil.hasReached(
+                    if (wasClosed)
+                        openDelay.value.toLong()
+                    else nextDelay
+                ))
                 return@registerEvent
 
-            val inventory = mc.player?.inventory?.main!!
-            val screenHandler = mc.player?.playerScreenHandler
+            wasClosed = false
+            timeUtil.reset()
 
-            for (slot in screenHandler?.slots!!) {
-                if (slot != null && slot.isEnabled && slot.hasStack())
-                    if (shouldDrop(slot.stack, inventory)) {
-                        println(mc.player?.inventory?.getSlotWithStack(slot.stack)!!)
-                        mc.interactionManager?.clickSlot(mc.player?.playerScreenHandler?.syncId!!, slot.id, 1 /* 1 = all; 0 = single */, SlotActionType.THROW, mc.player)
-                        return@registerEvent
-                    }
+            if (nextSlot != null) {
+                val displayPos = ContainerUtil.getDisplayPosition(accessor, nextSlot).add(Vec2f(
+                    if (randomize.value == 0.0) 0.0f else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat(),
+                    if (randomize.value == 0.0) 0.0f else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat()
+                ))
+                val distance = mousePos?.distanceSquared(displayPos)!!
+                mousePos = displayPos
+                val mapped = sqrt(distance).div(Vec2f(accessor.tarasande_getBackgroundWidth().toFloat(), accessor.tarasande_getBackgroundHeight().toFloat()).length())
+                nextDelay = (delay.minValue + (delay.maxValue - delay.minValue) * mapped).toLong()
+                mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot.id, 1 /* 1 = all; 0 = single */, SlotActionType.THROW, mc.player)
             }
         }
     }
 
     private fun shouldDrop(stack: ItemStack, list: List<ItemStack>): Boolean {
-        println(stack)
-        return stack.item !is AirBlockItem
+        if (stack.item !is SwordItem && stack.item !is ToolItem && stack.item !is ArmorItem)
+            return false
+
+        val enchantments = EnchantmentHelper.get(stack)
+
+        for (otherStack in list) {
+            if (stack.item == otherStack.item) {
+                val otherEnchantments = EnchantmentHelper.get(otherStack)
+
+                if (enchantments.all { otherEnchantments.containsKey(it.key) && enchantments[it.key]!! >= it.value })
+                    return true
+            }
+        }
+
+        return false
     }
 
 }

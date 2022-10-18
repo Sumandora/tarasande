@@ -42,7 +42,7 @@
 
 ## TODO-List (Emily)
 - AntiBot invalid gamemode
-- Inventory Cleaner & Auto Armor (Smart Stealer)
+- Smart Stealer
 - User configs
 - Crystal Aura
 - Anti Vanish

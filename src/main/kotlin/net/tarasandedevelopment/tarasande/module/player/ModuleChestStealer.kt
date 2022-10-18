@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.player
 
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen
-import net.minecraft.screen.slot.Slot
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.text.LiteralTextContent
 import net.minecraft.util.math.Vec2f
@@ -10,6 +9,7 @@ import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.mixin.accessor.IHandledScreen
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
+import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import net.tarasandedevelopment.tarasande.value.ValueNumberRange
@@ -35,10 +35,6 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
     private var wasClosed = true
     private var mousePos: Vec2f? = null
     private var nextDelay: Long = 0
-
-    private fun getDisplayPosition(accessor: IHandledScreen, slot: Slot): Vec2f {
-        return Vec2f(accessor.tarasande_getX() + slot.x.toFloat() + 8, accessor.tarasande_getY() + slot.y.toFloat() + 8)
-    }
 
     init {
         registerEvent(EventPollEvents::class.java) { event ->
@@ -74,9 +70,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
             }
 
-            var nextSlot = screenHandler.slots
-                .filter { it != null && it.isEnabled && it.hasStack() && it.id < screenHandler.inventory.size() }
-                .minByOrNull { mousePos?.distanceSquared(getDisplayPosition(accessor, it))!! }
+            var nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { it.id < screenHandler.inventory.size() }
 
             if (!timeUtil.hasReached(when {
                     wasClosed -> openDelay.value.toLong()
@@ -91,17 +85,15 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
             if (nextSlot == null)
                 mc.currentScreen?.close()
             else {
-                val displayPos = getDisplayPosition(accessor, nextSlot).add(Vec2f(
+                val displayPos = ContainerUtil.getDisplayPosition(accessor, nextSlot).add(Vec2f(
                     if (randomize.value == 0.0) 0.0f else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat(),
                     if (randomize.value == 0.0) 0.0f else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat()
                 ))
                 if (ThreadLocalRandom.current().nextInt(100) < failChance.value) {
-                    val interp = mousePos?.add(displayPos?.add(mousePos?.negate())?.multiply(ThreadLocalRandom.current().nextDouble(0.0, 1.0).toFloat()))
-                    screenHandler.slots
-                        .filter { it != null && it.isEnabled && it.id < screenHandler.inventory.size() }
-                        .minByOrNull { interp?.distanceSquared(getDisplayPosition(accessor, it))!! }?.also {
-                            nextSlot = it
-                        }
+                    val interp = mousePos?.add(displayPos?.add(mousePos?.negate())?.multiply(ThreadLocalRandom.current().nextDouble(0.0, 1.0).toFloat()))!!
+                    ContainerUtil.getClosestSlot(screenHandler, accessor, interp) { it.id < screenHandler.inventory.size() }?.also {
+                        nextSlot = it
+                    }
                 }
                 val distance = mousePos?.distanceSquared(displayPos)!!
                 mousePos = displayPos

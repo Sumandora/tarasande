@@ -21,7 +21,7 @@ public class MixinTitleScreen extends Screen {
 
     @Redirect(method = "initWidgetsNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;"))
     public <T extends Element & Drawable & Selectable> T hookedAddDrawableChild(TitleScreen titleScreen, T drawableElement) {
-        if (drawableElement instanceof ButtonWidget buttonWidget) {
+        if (!TarasandeMain.Companion.get().getDisabled() && drawableElement instanceof ButtonWidget buttonWidget) {
             if (buttonWidget.getMessage().getContent() instanceof TranslatableTextContent && ((TranslatableTextContent) buttonWidget.getMessage().getContent()).getKey().equals("menu.online")) {
                 buttonWidget.setWidth(buttonWidget.getWidth() / 2 - 2);
                 addDrawableChild(TarasandeMain.Companion.get().getManagerClientMenu().createButton(buttonWidget.x + buttonWidget.getWidth() + 4, buttonWidget.y, buttonWidget.getWidth(), buttonWidget.getHeight(), this));

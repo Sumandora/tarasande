@@ -28,7 +28,7 @@ public class MixinGameMenuScreen extends Screen {
 
     @Override
     protected <T extends Element & Drawable & Selectable> T addDrawableChild(T drawableElement) {
-        if (drawableElement instanceof ButtonWidget button) {
+        if (!TarasandeMain.Companion.get().getDisabled() && drawableElement instanceof ButtonWidget button) {
             if (button.y >= this.height / 4 - 16 + 24 * 4 - 1 && !(button.getMessage().equals(TarasandeMain.Companion.get().getManagerClientMenu().createButtonText()))) {
                 button.y += 24;
             }
