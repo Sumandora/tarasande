@@ -19,6 +19,7 @@
     "MixinMinecraftClient",
     "MixinMouse",
     "MixinParticleManager",
+    "MixinPlayerListS2CPacket",
     "MixinProjectileUtil",
     "MixinRenderSystem",
     "MixinRenderTickCounter",
