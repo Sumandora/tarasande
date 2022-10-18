@@ -54,7 +54,7 @@ class InformationPortage : Information("System", "Portage") {
     }
 
     override fun getMessage(): String? {
-        if (lastState.contains("no working merge found."))
+        if (lastState.contains("no working merge found.") || lastState.isEmpty())
             return null
         return "\n" + lastState
     }
