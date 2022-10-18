@@ -511,6 +511,10 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             // Human aim is slow
             aimPoint -= diff * 0.5
 
+            // Humans can't move their mouse in a straight line
+            val aimDelta = (RotationUtil.fakeRotation ?: Rotation(mc.player!!)).fov(RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint)) / Rotation.MAXIMUM_DELTA
+            aimPoint = aimPoint.add(0.0, -aimDelta * box.yLength, 0.0)
+
             // Don't aim through walls
             while (visible && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint) && rotations.isSelected(0)) {
                 aimPoint = Vec3d(MathUtil.bringCloser(aimPoint.x, best.x, precision.value), MathUtil.bringCloser(aimPoint.y, best.y, precision.value), MathUtil.bringCloser(aimPoint.z, best.z, precision.value))
