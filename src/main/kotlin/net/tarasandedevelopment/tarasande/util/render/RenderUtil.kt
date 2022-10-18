@@ -318,7 +318,7 @@ object RenderUtil {
         val dividableBy2 = MinecraftClient.getInstance().window.scaleFactor.mod(2.0) == 0.0
         val offset = if (dividableBy2) 0.5f else 0.75f
 
-        MinecraftClient.getInstance().textRenderer.draw(matrices, Formatting.strip(text), x + 0.5f, y + 0.5f, Color(color, true).darker().darker().darker().darker().rgb)
+        MinecraftClient.getInstance().textRenderer.draw(matrices, Formatting.strip(text), x + offset, y + offset, Color(color, true).darker().darker().darker().darker().rgb)
         MinecraftClient.getInstance().textRenderer.draw(matrices, text, x, y, color)
     }
 

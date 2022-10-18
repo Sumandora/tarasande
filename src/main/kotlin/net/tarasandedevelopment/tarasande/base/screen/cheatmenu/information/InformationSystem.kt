@@ -6,6 +6,13 @@ import net.tarasandedevelopment.tarasande.screen.cheatmenu.information.*
 
 class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Information>() {
 
+    private fun conditional(condition: Boolean, block: () -> Information): Array<Information> {
+        return (if (condition)
+            listOf(block.invoke())
+        else
+            listOf()).toTypedArray()
+    }
+
     init {
         add(
             // Player
@@ -25,9 +32,10 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
             InformationProtocolVersion(),
             InformationPlayTime(),
 
-            // Hardware
+            // System
             InformationCPU(),
             InformationGPU(),
+            *conditional(InformationPortage.isGenlopInstalled()) { InformationPortage() }, // hack
 
             // World
             InformationEntities(),
