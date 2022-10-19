@@ -12,7 +12,10 @@ import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.m
 
 object ForgeCreator {
 
-    fun createPayload(jsonObject: JsonObject): IForgePayload? {
+    fun createPayload(jsonObject: JsonObject?): IForgePayload? {
+        if (jsonObject == null) {
+            return null
+        }
         if (jsonObject.has("modinfo") && jsonObject.get("modinfo").isJsonObject) {
             return LegacyForgePayload(jsonObject.get("modinfo").asJsonObject)
         }
