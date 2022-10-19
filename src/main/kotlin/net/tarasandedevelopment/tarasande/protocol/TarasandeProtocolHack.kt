@@ -46,7 +46,7 @@ class TarasandeProtocolHack : INativeProvider {
             this.createChannelMappings()
             val config = ViaLegacyConfigImpl(File(ViaProtocolHack.instance().directory(), "vialegacy.yml"))
             config.reloadConfig()
-            ViaLegacy.init(viaLegacy, Logger.getLogger("ViaLegacy-Tarasande"), config)
+            ViaLegacy.init(viaLegacy, config, Logger.getLogger("ViaLegacy-Tarasande"))
         }
     }
 
