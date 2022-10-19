@@ -927,61 +927,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         packetWrapper.write(Type.UUID, entry.uuid);
                         packetWrapper.write(Type.VAR_INT, (int) ping);
                     }
-
-//                    if (!online && entry != null) {
-//                        packetWrapper.write(Type.VAR_INT, 4); // REMOVE
-//                        packetWrapper.write(Type.VAR_INT, 1);
-//                        packetWrapper.write(Type.UUID, entry.uuid);
-//                        tablist.remove(entry);
-//                    } else if (online && entry == null) {
-//                        final GameProfile gameProfile = ViaLegacy.getProvider().profile_1_7();
-//
-//                        if (gameProfile != null) {
-//                            entry = new TablistTracker.TabListEntry(name, gameProfile.getUuid());
-//                            for (Map.Entry<String, Property> propertyEntry : gameProfile.getSkinProperties().entries()) {
-//                                Property property = propertyEntry.getValue();
-//                                entry.properties.add(new TablistTracker.Property(property.getName(), property.getValue(), property.getSignature()));
-//                            }
-//                        } else entry = new TablistTracker.TabListEntry(name, UUID.randomUUID());
-//
-//                        entry.displayName = name;
-//                        tablist.add(entry);
-//                        packetWrapper.write(Type.VAR_INT, 0);
-//                        packetWrapper.write(Type.VAR_INT, 1);
-//                        packetWrapper.write(Type.UUID, entry.uuid);
-//                        packetWrapper.write(Type.STRING, entry.name);
-//                        packetWrapper.write(Type.VAR_INT, entry.properties.size());
-//                        for (TablistTracker.Property property : entry.properties) {
-//                            packetWrapper.write(Type.STRING, property.name);
-//                            packetWrapper.write(Type.STRING, property.value);
-//                            packetWrapper.write(Type.BOOLEAN, property.signature != null);
-//                            if (property.signature != null) packetWrapper.write(Type.STRING, property.signature);
-//                        }
-//                        packetWrapper.write(Type.VAR_INT, 0);
-//                        packetWrapper.write(Type.VAR_INT, (int) ping);
-//                        packetWrapper.write(Type.BOOLEAN, entry.displayName != null);
-//                        if (entry.displayName != null) {
-//                            packetWrapper.write(Type.STRING, entry.displayName);
-//                        }
-//                    } else if (online && TablistTracker.shouldUpdateDisplayName(entry.displayName, name)) {
-//                        entry.displayName = name;
-//                        packetWrapper.write(Type.VAR_INT, 3);
-//                        packetWrapper.write(Type.VAR_INT, 1);
-//                        packetWrapper.write(Type.UUID, entry.uuid);
-//                        packetWrapper.write(Type.BOOLEAN, entry.displayName != null);
-//                        if (entry.displayName != null) {
-//                            packetWrapper.write(Type.STRING, entry.displayName);
-//                        }
-//                    } else if (online) {
-//                        entry.ping = ping;
-//                        packetWrapper.write(Type.VAR_INT, 2);
-//                        packetWrapper.write(Type.VAR_INT, 1);
-//                        packetWrapper.write(Type.UUID, entry.uuid);
-//                        packetWrapper.write(Type.VAR_INT, (int) ping);
-//                    } else {
-//                        packetWrapper.write(Type.VAR_INT, 0);
-//                        packetWrapper.write(Type.VAR_INT, 0);
-//                    }
                 });
             }
         });
