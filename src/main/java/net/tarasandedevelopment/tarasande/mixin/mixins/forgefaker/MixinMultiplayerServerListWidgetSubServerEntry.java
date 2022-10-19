@@ -42,16 +42,21 @@ public class MixinMultiplayerServerListWidgetSubServerEntry {
 
         if (RenderUtil.INSTANCE.isHovered(mouseX, mouseY, x - textWidth, yPos, x - 2, yPos + fontHeight)) {
             assert MinecraftClient.getInstance().currentScreen != null;
-            final List<Text> tooltip = Arrays.asList(Text.of("Mods: " + payload.installedMods().size()));
+            final List<Text> tooltip = Arrays.asList(Text.of("Left mouse for Mods: " + payload.installedMods().size()));
 
-            if (payload instanceof ModernForgePayload) {
-                tooltip.add(Text.of("FML Network Version: " + ((ModernForgePayload) payload).getFmlNetworkVersion()));
+            if (payload instanceof ModernForgePayload modernForgePayload) {
+                tooltip.add(Text.of("FML Network Version: " + modernForgePayload.getFmlNetworkVersion()));
+                tooltip.add(Text.of("Right mouse for Channels: " + modernForgePayload.getChannels().size()));
+
+                if (modernForgePayload.getChannels().size() > 0 && GLFW.glfwGetMouseButton(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS) {
+                    MinecraftClient.getInstance().setScreen(new ScreenBetterForgeModList(MinecraftClient.getInstance().currentScreen, server.address + " (Channels: " + modernForgePayload.getChannels().size() + ")", ScreenBetterForgeModList.Type.CHANNEL_LIST, ((IServerInfo) server).getForgePayload()));
+                }
             }
 
             MinecraftClient.getInstance().currentScreen.renderTooltip(matrices, tooltip, mouseX, mouseY);
 
             if (payload.installedMods().size() > 0 && GLFW.glfwGetMouseButton(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS) {
-                MinecraftClient.getInstance().setScreen(new ScreenBetterForgeModList(MinecraftClient.getInstance().currentScreen, server.address + " (Mods: " + payload.installedMods().size() + ")", ((IServerInfo) server).getForgePayload()));
+                MinecraftClient.getInstance().setScreen(new ScreenBetterForgeModList(MinecraftClient.getInstance().currentScreen, server.address + " (Mods: " + payload.installedMods().size() + ")", ScreenBetterForgeModList.Type.MOD_LIST, ((IServerInfo) server).getForgePayload()));
             }
         }
     }
