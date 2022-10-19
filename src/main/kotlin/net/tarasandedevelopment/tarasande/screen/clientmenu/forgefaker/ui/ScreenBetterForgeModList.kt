@@ -10,16 +10,26 @@ import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.IForgePayload
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.legacy.ModStruct
+import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.modern.ChannelStruct
+import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.modern.ModernForgePayload
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
-class ScreenBetterForgeModList(parent: Screen, private val titleName: String, val struct: IForgePayload) : ScreenBetterSlotList(46, 400, MinecraftClient.getInstance().textRenderer.fontHeight * 2 + 5) {
+class ScreenBetterForgeModList(parent: Screen, private val titleName: String, val type: Type, val struct: IForgePayload) : ScreenBetterSlotList(46, 400, MinecraftClient.getInstance().textRenderer.fontHeight * 2 + 5) {
+
+    enum class Type {
+        MOD_LIST,
+        CHANNEL_LIST
+    }
 
     init {
         this.prevScreen = parent
 
         this.provideElements(object : ScreenBetterSlotListWidget.ListProvider {
-            override fun get(): List<ScreenBetterForgeModListEntry> {
-                return struct.installedMods().map { m -> ScreenBetterForgeModListEntry(m) }
+            override fun get(): List<AbstractScreenBetterForgeListEntry> {
+                return when (type) {
+                    Type.MOD_LIST -> struct.installedMods().map { m -> ScreenBetterForgeModListEntry(m) }
+                    Type.CHANNEL_LIST -> (struct as ModernForgePayload).channels.map { m -> ScreenBetterForgeChannelListEntry(m) }
+                }
             }
         })
     }
@@ -38,13 +48,22 @@ class ScreenBetterForgeModList(parent: Screen, private val titleName: String, va
         this.renderTitle(matrices, this.titleName)
     }
 
-    class ScreenBetterForgeModListEntry(private val modStruct: ModStruct) : ScreenBetterSlotListEntry() {
+    abstract class AbstractScreenBetterForgeListEntry : ScreenBetterSlotListEntry() {
+        abstract fun display(): String
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
             matrices.push()
             matrices.scale(2F, 2F, 2F)
-            RenderUtil.textCenter(matrices, this.modStruct.modId + " (" + this.modStruct.modVersion + ")", entryWidth.toFloat() / 2F, 1F, -1)
+            RenderUtil.textCenter(matrices, this.display(), entryWidth.toFloat() / 2F, 1F, -1)
             matrices.pop()
         }
+    }
+
+    class ScreenBetterForgeModListEntry(private val modStruct: ModStruct) : AbstractScreenBetterForgeListEntry() {
+        override fun display() = this.modStruct.modId + " (" + this.modStruct.modVersion + ")"
+    }
+
+    class ScreenBetterForgeChannelListEntry(private val channelStruct: ChannelStruct) : AbstractScreenBetterForgeListEntry() {
+        override fun display() = this.channelStruct.name + " (" + this.channelStruct.version + ")"
     }
 }

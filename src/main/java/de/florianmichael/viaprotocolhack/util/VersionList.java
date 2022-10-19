@@ -129,10 +129,6 @@ public class VersionList {
         return ViaProtocolHack.instance().provider().realClientsideVersion() >= protocolVersion.getVersion();
     }
 
-    public static boolean isSupported(int server, int client) {
-        return server == client || Via.getManager().getProtocolManager().getProtocolPath(client, server) != null;
-    }
-
     public static List<ProtocolVersion> getProtocols() {
         final List<ProtocolVersion> versions = new ArrayList<>(protocols);
         versions.addAll(ViaProtocolHack.instance().provider().optionalVersions());
