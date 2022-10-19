@@ -2,9 +2,7 @@ package net.tarasandedevelopment.tarasande.screen.cheatmenu.information
 
 import com.mojang.blaze3d.platform.GlDebugInfo
 import net.minecraft.util.Util
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.Information
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed.PanelInformation
 
 class InformationCPU : Information("System", "CPU") {
 
@@ -38,12 +36,6 @@ class InformationPortage : Information("System", "Portage") {
         Thread({
             while (true) {
                 Thread.sleep(100L)
-
-                @Suppress("SENSELESS_COMPARISON") // lateinit non-null/async thread
-                if (TarasandeMain.get().screenCheatMenu != null && !TarasandeMain.get().screenCheatMenu.panels.filterIsInstance<PanelInformation>().first().isSelected(this)) {
-                    lastState = ""
-                    continue
-                }
 
                 lastState = try {
                     String(Runtime.getRuntime().exec("genlop -c -n").inputStream.readAllBytes())
