@@ -10,8 +10,15 @@ version = "1.8.7"
 group = "net.tarasandedevelopment"
 
 repositories {
-	maven { url "https://oss.sonatype.org/content/repositories/snapshots"}
-	maven { url = "https://repo.viaversion.com" }
+	maven {
+		url = "https://oss.sonatype.org/content/repositories/snapshots"
+	}
+	maven {
+		url = "https://repo.viaversion.com"
+	}
+	maven {
+		url = "https://jitpack.io"
+	}
 	mavenCentral()
 }
 
@@ -26,7 +33,10 @@ var libs = [
 		"org.yaml:snakeyaml:1.29",
 
 		// BungeeCord Chat -> https://mvnrepository.com/artifact/net.md-5/bungeecord-api
-		"net.md-5:bungeecord-api:1.16-R0.4"
+		"net.md-5:bungeecord-api:1.16-R0.4",
+
+		// Packet Library -> https://github.com/FlorianMichael/PacketMinecraft
+		"com.github.FlorianMichael:PacketMinecraft:f594e5a6c0"
 ]
 
 dependencies {
