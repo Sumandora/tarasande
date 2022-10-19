@@ -39,7 +39,8 @@ class InformationPortage : Information("System", "Portage") {
             while (true) {
                 Thread.sleep(100L)
 
-                if (!TarasandeMain.get().screenCheatMenu.panels.filterIsInstance<PanelInformation>().first().isSelected(this)) {
+                @Suppress("SENSELESS_COMPARISON") // lateinit non-null/async thread
+                if (TarasandeMain.get().screenCheatMenu != null && !TarasandeMain.get().screenCheatMenu.panels.filterIsInstance<PanelInformation>().first().isSelected(this)) {
                     lastState = ""
                     continue
                 }

@@ -39,9 +39,6 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
     private val keepSameEnchantments = object : ValueBoolean(this, "Keep same enchantments", true) {
         override fun isEnabled() = intelligent.value
     }
-    private val durabilityThreshold = object : ValueNumber(this, "Durability threshold", 0.0, 90.0, 100.0, 1.0) {
-        override fun isEnabled() = intelligent.value
-    }
 
     private val timeUtil = TimeUtil()
 
@@ -52,7 +49,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
     private fun intelligent(slot: Slot, list: List<Slot>): Boolean {
         if (!intelligent.value)
             return false
-        return ContainerUtil.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.toTypedArray(), *ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).toTypedArray()).filter { it != slot }.map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value, durabilityThreshold.value / 100.0)
+        return ContainerUtil.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.toTypedArray(), *ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).toTypedArray()).filter { it != slot }.map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value)
     }
 
     init {

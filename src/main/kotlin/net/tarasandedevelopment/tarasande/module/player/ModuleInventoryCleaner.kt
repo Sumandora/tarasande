@@ -26,7 +26,6 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
 
     private val keepSameMaterial = ValueBoolean(this, "Keep same material", true)
     private val keepSameEnchantments = ValueBoolean(this, "Keep same enchantments", true)
-    private val durabilityThreshold = ValueNumber(this, "Durability threshold", 0.0, 90.0, 100.0, 1.0)
 
     private val timeUtil = TimeUtil()
 
@@ -54,7 +53,7 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
                 mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
             }
 
-            val nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list -> ContainerUtil.hasBetterEquivalent(slot.stack, list.filter { it != slot }.map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value, durabilityThreshold.value / 100.0) }
+            val nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list -> ContainerUtil.hasBetterEquivalent(slot.stack, list.filter { it != slot }.map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value) }
 
             if (!timeUtil.hasReached(
                     if (wasClosed)

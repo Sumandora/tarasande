@@ -11,6 +11,7 @@ import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import java.nio.charset.StandardCharsets
+import java.util.concurrent.CopyOnWriteArrayList
 
 class InformationServerBrand : Information("Server", "Server Brand") {
 
@@ -65,7 +66,7 @@ class InformationOpenChannels : Information("Server", "Open Channels") {
 
 class InformationVanishedPlayers : Information("Server", "Vanished players") {
 
-    private val vanishedPlayers = ArrayList<String>()
+    private val vanishedPlayers = CopyOnWriteArrayList<String>()
 
     init {
         TarasandeMain.get().eventDispatcher.also {
@@ -75,7 +76,7 @@ class InformationVanishedPlayers : Information("Server", "Vanished players") {
                         is PlayerListS2CPacket -> {
                             if (it.packet.action != PlayerListS2CPacket.Action.ADD_PLAYER && it.packet.action != PlayerListS2CPacket.Action.REMOVE_PLAYER)
                                 for (packetEntry in it.packet.entries)
-                                    if (MinecraftClient.getInstance().networkHandler?.playerList?.any { entry -> entry.profile?.id == packetEntry.profile.id } != true)
+                                    if (MinecraftClient.getInstance().networkHandler?.playerList?.none { entry -> entry.profile?.id == packetEntry.profile.id } == true)
                                         when (it.packet.action) {
                                             PlayerListS2CPacket.Action.UPDATE_GAME_MODE -> {
                                                 vanishedPlayers.add("Gamemode: " + packetEntry.profile.id + " -> " + StringUtil.formatEnumTypes(packetEntry.gameMode.name))

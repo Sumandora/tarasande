@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.util.pathfinder
+package net.tarasandedevelopment.tarasande.util.math.pathfinder
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld

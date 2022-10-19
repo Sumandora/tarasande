@@ -50,7 +50,7 @@ object ContainerUtil {
         }
     }
 
-    fun hasBetterEquivalent(stack: ItemStack, list: List<ItemStack>, keepSameMaterial: Boolean, keepSameEnchantments: Boolean, durability: Double): Boolean {
+    fun hasBetterEquivalent(stack: ItemStack, list: List<ItemStack>, keepSameMaterial: Boolean, keepSameEnchantments: Boolean): Boolean {
         if (stack.item !is ToolItem && stack.item !is ArmorItem && stack.item !is FishingRodItem && stack.item !is BowItem)
             return false
 
@@ -65,10 +65,10 @@ object ContainerUtil {
                 val otherMaterialScore = wrapMaterialScore(otherStack, false)
 
                 if (((materialScore == null || otherMaterialScore == null) || (if (keepSameMaterial) otherMaterialScore > materialScore else otherMaterialScore >= materialScore)) && ((enchantments.isEmpty() && otherEnchantments.isNotEmpty()) || enchantments.all { otherEnchantments.containsKey(it.key) && (if (keepSameEnchantments) otherEnchantments[it.key]!! > it.value else otherEnchantments[it.key]!! >= it.value) })) {
-                    if (otherStack.damage > stack.damage * durability)
-                        continue
+//                    if (otherStack.damage > stack.damage * durability)
+//                        continue
 
-                    println("$stack $otherStack $materialScore > $otherMaterialScore ${1.0f - stack.damage / stack.maxDamage.toFloat()} ${1.0f - otherStack.damage / otherStack.maxDamage.toFloat()} ${enchantments.isEmpty() && otherEnchantments.isNotEmpty()} ${((materialScore == null || otherMaterialScore == null) || (if (keepSameMaterial) otherMaterialScore > materialScore else otherMaterialScore >= materialScore))}")
+                    //println("$stack $otherStack $materialScore > $otherMaterialScore ${1.0f - stack.damage / stack.maxDamage.toFloat()} ${1.0f - otherStack.damage / otherStack.maxDamage.toFloat()} ${enchantments.isEmpty() && otherEnchantments.isNotEmpty()} ${((materialScore == null || otherMaterialScore == null) || (if (keepSameMaterial) otherMaterialScore > materialScore else otherMaterialScore >= materialScore))}")
                     return true
                 }
             }
