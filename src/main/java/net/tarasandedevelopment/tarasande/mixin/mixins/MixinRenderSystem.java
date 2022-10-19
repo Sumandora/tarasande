@@ -61,7 +61,6 @@ public class MixinRenderSystem {
                 shaderFogColor[0] = moduleFog.getColor().getColor().getRed() / 255.0f;
                 shaderFogColor[1] = moduleFog.getColor().getColor().getGreen() / 255.0f;
                 shaderFogColor[2] = moduleFog.getColor().getColor().getBlue() / 255.0f;
-                shaderFogEnd *= moduleFog.getDistance().getMaxValue();
             }
         }
     }

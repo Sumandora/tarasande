@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class MixinMultiplayerServerListWidgetSubServerEntry {
 
             MinecraftClient.getInstance().currentScreen.renderTooltip(matrices, tooltip, mouseX, mouseY);
 
-            if (GLFW.glfwGetMouseButton(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS) {
+            if (payload.installedMods().size() > 0 && GLFW.glfwGetMouseButton(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS) {
                 MinecraftClient.getInstance().setScreen(new ScreenBetterForgeModList(MinecraftClient.getInstance().currentScreen, server.address + " (Mods: " + payload.installedMods().size() + ")", ((IServerInfo) server).getForgePayload()));
             }
         }

@@ -24,6 +24,7 @@ import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import java.awt.Color
 import java.net.InetSocketAddress
+import java.util.*
 
 class EventChat(val chatMessage: String) : Event(true)
 class EventKey(val key: Int, val action: Int) : Event(true)
@@ -203,3 +204,4 @@ class EventConnectServer(val address: InetSocketAddress) : Event(false)
 class EventSkipIdlePacket : Event(false)
 class EventDisconnect : Event(false)
 class EventIsSaddled(var saddled: Boolean) : Event(false)
+class EventInvalidGameMode(val uuid: UUID) : Event(false)

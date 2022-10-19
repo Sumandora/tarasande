@@ -2,16 +2,14 @@ package net.tarasandedevelopment.tarasande.module.combat
 
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.network.packet.s2c.play.EntityAnimationS2CPacket
 import net.minecraft.network.packet.s2c.play.EntityS2CPacket
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
-import net.tarasandedevelopment.tarasande.event.EventEntityFlag
-import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
-import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
@@ -19,9 +17,10 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
+import java.util.*
 
 class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with bots", ModuleCategory.COMBAT) {
-    private val checks = ValueMode(this, "Checks", true, "Ticks existed", "Sound", "Ground", "Invisible", "Sneaked", "Movement", "Line of sight")
+    private val checks = ValueMode(this, "Checks", true, "Ticks existed", "Sound", "Ground", "Invisible", "Sneaked", "Movement", "Line of sight", "Invalid gamemode", "Swing")
     private val ticksExisted = object : ValueNumber(this, "Ticks existed", 0.0, 20.0, 100.0, 1.0) {
         override fun isEnabled() = checks.isSelected(0)
     }
@@ -44,6 +43,8 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
         }
     }
 
+    private val manualHit = HashSet<PlayerEntity>()
+
     private val passedSound = HashSet<PlayerEntity>()
     private val passedGround = HashSet<PlayerEntity>()
     private val passedInvisible = HashSet<PlayerEntity>()
@@ -51,13 +52,23 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
     private val passedMovement = HashSet<PlayerEntity>()
     private val passedLineOfSight = HashSet<PlayerEntity>()
 
+    private val invalidGameMode = HashSet<UUID>()
+
+    private val passedSwing = HashSet<PlayerEntity>()
+
     override fun onDisable() {
+        manualHit.clear()
+
         passedSound.clear()
         passedGround.clear()
         passedInvisible.clear()
         passedSneak.clear()
         passedMovement.clear()
         passedLineOfSight.clear()
+
+        invalidGameMode.clear()
+
+        passedSwing.clear()
     }
 
     init {
@@ -95,6 +106,14 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
                             }
                         }
                     }
+
+                    is EntityAnimationS2CPacket -> {
+                        if (event.packet.animationId == EntityAnimationS2CPacket.SWING_MAIN_HAND || event.packet.animationId == EntityAnimationS2CPacket.SWING_OFF_HAND) {
+                            val entity = mc.world?.getEntityById(event.packet.id)
+                            if (entity != null && entity is PlayerEntity)
+                                passedSwing.add(entity)
+                        }
+                    }
                 }
             }
         }
@@ -126,11 +145,23 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
                 if (isBot(event.entity))
                     event.attackable = false
         }
+
+        registerEvent(EventInvalidGameMode::class.java) { event ->
+            invalidGameMode.add(event.uuid)
+        }
+
+        registerEvent(EventAttackEntity::class.java) { event ->
+            if (event.state == EventAttackEntity.State.PRE && event.entity is PlayerEntity) {
+                manualHit.add(event.entity)
+            }
+        }
     }
 
     fun isBot(entity: Entity): Boolean {
         if (!enabled) return false
         if (entity is PlayerEntity) {
+            if (manualHit.contains(entity)) return false // The user did try to hit this entity, why would they try to attack a bot?
+
             if (checks.isSelected(0) && entity.age < ticksExisted.value) return true
             if (checks.isSelected(1) && !passedSound.contains(entity)) return true
             if (checks.isSelected(2) && !passedGround.contains(entity)) return true
@@ -138,6 +169,10 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
             if (checks.isSelected(4) && !passedSneak.contains(entity)) return true
             if (checks.isSelected(5) && !passedMovement.contains(entity)) return true
             if (checks.isSelected(6) && !passedLineOfSight.contains(entity)) return true
+
+            if (checks.isSelected(7) && invalidGameMode.contains(entity.gameProfile.id)) return true
+
+            if (checks.isSelected(8) && !passedSwing.contains(entity)) return true
         }
         return false
     }

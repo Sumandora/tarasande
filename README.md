@@ -41,11 +41,10 @@
 4. Multi-version support
 
 ## TODO-List (Emily)
-- AntiBot invalid gamemode
+- Trouble in terrorist town module
 - User configs
 - Crystal Aura
 - Step: Calculate all motions; Prediction by LivingEntity#travel; Instantiate object and simulate
-- AutoTool: Auto Sword
 - Change Name/Skin/Cape in Account Manager
 - (Banners in protocol selection)
 - Settings for HypixelBedwarsOverlay

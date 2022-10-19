@@ -1,10 +1,7 @@
 package net.tarasandedevelopment.tarasande.util.player.container
 
 import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.item.ArmorItem
-import net.minecraft.item.ItemStack
-import net.minecraft.item.SwordItem
-import net.minecraft.item.ToolItem
+import net.minecraft.item.*
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
 import net.minecraft.util.math.Vec2f
@@ -29,7 +26,7 @@ object ContainerUtil {
     }
 
     fun hasBetterEquivalent(stack: ItemStack, list: List<ItemStack>): Boolean {
-        if (stack.item !is SwordItem && stack.item !is ToolItem && stack.item !is ArmorItem)
+        if (stack.item !is SwordItem && stack.item !is ToolItem && stack.item !is ArmorItem && stack.item !is FishingRodItem && stack.item !is BowItem)
             return false
 
         val enchantments = EnchantmentHelper.get(stack)
