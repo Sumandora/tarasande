@@ -57,7 +57,9 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool for breaking a
                         }
                     }
                 }
-                mc.player?.inventory?.selectedSlot = best
+
+                if (best != null)
+                    mc.player?.inventory?.selectedSlot = best
             }
         }
     }

@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande.module.player
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen
 import net.minecraft.screen.slot.Slot
 import net.minecraft.screen.slot.SlotActionType
-import net.minecraft.text.LiteralTextContent
 import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
@@ -17,6 +16,7 @@ import net.tarasandedevelopment.tarasande.value.ValueNumberRange
 import net.tarasandedevelopment.tarasande.value.ValueText
 import org.apache.commons.lang3.ArrayUtils
 import org.lwjgl.glfw.GLFW
+import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.sqrt
 
@@ -31,7 +31,17 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
         override fun isEnabled() = checkTitle.value
     }
     private val failChance = ValueNumber(this, "Fail chance", 0.0, 0.0, 100.0, 1.0)
+
     private val intelligent = ValueBoolean(this, "Intelligent", true)
+    private val keepSameMaterial = object : ValueBoolean(this, "Keep same material", true) {
+        override fun isEnabled() = intelligent.value
+    }
+    private val keepSameEnchantments = object : ValueBoolean(this, "Keep same enchantments", true) {
+        override fun isEnabled() = intelligent.value
+    }
+    private val durabilityThreshold = object : ValueNumber(this, "Durability threshold", 0.0, 90.0, 100.0, 1.0) {
+        override fun isEnabled() = intelligent.value
+    }
 
     private val timeUtil = TimeUtil()
 
@@ -42,7 +52,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
     private fun intelligent(slot: Slot, list: List<Slot>): Boolean {
         if (!intelligent.value)
             return false
-        return ContainerUtil.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.toTypedArray(), *ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).toTypedArray()).filter { it != slot }.map { it.stack })
+        return ContainerUtil.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.toTypedArray(), *ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).toTypedArray()).filter { it != slot }.map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value, durabilityThreshold.value / 100.0)
     }
 
     init {
@@ -68,9 +78,13 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
             if (checkTitle.value) {
                 val title = accessor.tarasande_getTitle()
                 val content = title.content
-                if (content is LiteralTextContent)
-                    if (content.string?.contains(titleSubstring.value) == false)
-                        return@registerEvent
+                var string = ""
+                content.visit {
+                    string += it
+                    Optional.of(it)
+                }
+                if (!string.contains(titleSubstring.value))
+                    return@registerEvent
             }
 
             val screenHandler = (mc.currentScreen as GenericContainerScreen).screenHandler

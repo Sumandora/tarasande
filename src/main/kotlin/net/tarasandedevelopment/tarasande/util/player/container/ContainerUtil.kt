@@ -5,7 +5,6 @@ import net.minecraft.item.*
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
 import net.minecraft.util.math.Vec2f
-import net.tarasandedevelopment.tarasande.mixin.accessor.IArmorMaterials
 import net.tarasandedevelopment.tarasande.mixin.accessor.IHandledScreen
 
 object ContainerUtil {
@@ -26,28 +25,36 @@ object ContainerUtil {
             .minByOrNull { lastMouseClick.distanceSquared(getDisplayPosition(accessor, it)) }
     }
 
-    private fun wrapMaterialScore(stack: ItemStack): Float? {
+    private fun wrapMaterialScore(stack: ItemStack, durability: Boolean): Float? {
         return when (stack.item) {
             is SwordItem -> (stack.item as ToolItem).material.attackDamage
             is ToolItem -> (stack.item as ToolItem).material.durability.toFloat()
-            is ArmorItem -> ((stack.item as ArmorItem).material as IArmorMaterials).tarasande_getDurabilityMultiplier().toFloat()
-            else -> null
-        }
+            is ArmorItem -> (stack.item as ArmorItem).material.getDurability((stack.item as ArmorItem).slotType).toFloat()
+            else -> 0.0f
+        }.times(if (durability) (1.0f - stack.damage / stack.maxDamage.toFloat()) else 1.0f)
     }
 
     private fun isSameItemType(stack: ItemStack, otherStack: ItemStack): Boolean {
         return when {
-            stack.item is ToolItem && otherStack.item is ToolItem -> true
-            stack.item is ArmorItem && otherStack.item is ArmorItem -> true
+            stack.item is SwordItem && otherStack.item is SwordItem -> true
+
+            // There is no way to group them better
+            stack.item is AxeItem && otherStack.item is AxeItem -> true
+            stack.item is PickaxeItem && otherStack.item is PickaxeItem -> true
+            stack.item is HoeItem && otherStack.item is HoeItem -> true
+            stack.item is ShovelItem && otherStack.item is ShovelItem -> true
+
+            stack.item is ArmorItem && otherStack.item is ArmorItem -> (stack.item as ArmorItem).slotType == (otherStack.item as ArmorItem).slotType
+
             else -> stack.item == otherStack.item
         }
     }
 
-    fun hasBetterEquivalent(stack: ItemStack, list: List<ItemStack>): Boolean {
+    fun hasBetterEquivalent(stack: ItemStack, list: List<ItemStack>, keepSameMaterial: Boolean, keepSameEnchantments: Boolean, durability: Double): Boolean {
         if (stack.item !is ToolItem && stack.item !is ArmorItem && stack.item !is FishingRodItem && stack.item !is BowItem)
             return false
 
-        val materialScore = wrapMaterialScore(stack)
+        val materialScore = wrapMaterialScore(stack, false)
 
         val enchantments = EnchantmentHelper.get(stack)
 
@@ -55,10 +62,15 @@ object ContainerUtil {
             if (isSameItemType(stack, otherStack)) {
                 val otherEnchantments = EnchantmentHelper.get(otherStack)
 
-                val otherMaterialScore = wrapMaterialScore(otherStack)
+                val otherMaterialScore = wrapMaterialScore(otherStack, false)
 
-                if (((materialScore == null || otherMaterialScore == null) || otherMaterialScore > materialScore) && enchantments.all { otherEnchantments.containsKey(it.key) && otherEnchantments[it.key]!! > it.value })
+                if (((materialScore == null || otherMaterialScore == null) || (if (keepSameMaterial) otherMaterialScore > materialScore else otherMaterialScore >= materialScore)) && ((enchantments.isEmpty() && otherEnchantments.isNotEmpty()) || enchantments.all { otherEnchantments.containsKey(it.key) && (if (keepSameEnchantments) otherEnchantments[it.key]!! > it.value else otherEnchantments[it.key]!! >= it.value) })) {
+                    if (otherStack.damage > stack.damage * durability)
+                        continue
+
+                    println("$stack $otherStack $materialScore > $otherMaterialScore ${1.0f - stack.damage / stack.maxDamage.toFloat()} ${1.0f - otherStack.damage / otherStack.maxDamage.toFloat()} ${enchantments.isEmpty() && otherEnchantments.isNotEmpty()} ${((materialScore == null || otherMaterialScore == null) || (if (keepSameMaterial) otherMaterialScore > materialScore else otherMaterialScore >= materialScore))}")
                     return true
+                }
             }
         }
 
