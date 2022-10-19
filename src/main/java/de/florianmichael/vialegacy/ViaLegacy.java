@@ -5,7 +5,6 @@ import com.google.common.collect.Range;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.Protocol;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialegacy.api.via.config.ViaLegacyConfig;
 import de.florianmichael.vialegacy.exception.ViaLegacyException;
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.vialegacy.protocols.base.BaseProtocol1_6;
@@ -30,17 +29,18 @@ import java.util.logging.Logger;
 public class ViaLegacy {
 
     private static IViaLegacyProvider provider;
-    private static Logger logger;
-    private static ViaLegacyConfig viaLegacyConfig;
+    private static IViaLegacyConfig config;
 
-    public static void init(final IViaLegacyProvider provider, final Logger logger, final ViaLegacyConfig viaLegacyConfig) {
-        if (ViaLegacy.provider != null)
+    private static Logger logger;
+
+    public static void init(final IViaLegacyProvider provider, final IViaLegacyConfig config, final Logger logger) {
+        if (ViaLegacy.provider != null) {
             throw new ViaLegacyException("ViaLegacy is already loaded!");
+        }
 
         ViaLegacy.provider = provider;
+        ViaLegacy.config = config;
         ViaLegacy.setLogger(logger);
-
-        ViaLegacy.viaLegacyConfig = viaLegacyConfig;
 
         registerProtocol(ProtocolVersion.v1_8, LegacyProtocolVersion.R1_7_10, new Protocol1_8to1_7_10());
         registerProtocol(LegacyProtocolVersion.R1_7_10, LegacyProtocolVersion.R1_7_5, new Protocol1_7_10to1_7_5());
@@ -85,15 +85,15 @@ public class ViaLegacy {
         return provider;
     }
 
+    public static IViaLegacyConfig getConfig() {
+        return config;
+    }
+
     public static Logger getLogger() {
         return logger;
     }
 
     public static void setLogger(Logger logger) {
         ViaLegacy.logger = logger;
-    }
-
-    public static ViaLegacyConfig getViaLegacyConfig() {
-        return viaLegacyConfig;
     }
 }

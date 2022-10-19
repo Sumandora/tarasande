@@ -48,7 +48,7 @@ public class MixinMultiplayerServerListWidgetSubServerEntry {
                 tooltip.add(Text.of("FML Network Version: " + modernForgePayload.getFmlNetworkVersion()));
                 tooltip.add(Text.of("Right mouse for Channels: " + modernForgePayload.getChannels().size()));
 
-                if (modernForgePayload.getChannels().size() > 0 && GLFW.glfwGetMouseButton(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS) {
+                if (GLFW.glfwGetMouseButton(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS) {
                     MinecraftClient.getInstance().setScreen(new ScreenBetterForgeModList(MinecraftClient.getInstance().currentScreen, server.address + " (Channels: " + modernForgePayload.getChannels().size() + ")", ScreenBetterForgeModList.Type.CHANNEL_LIST, ((IServerInfo) server).getForgePayload()));
                 }
             }

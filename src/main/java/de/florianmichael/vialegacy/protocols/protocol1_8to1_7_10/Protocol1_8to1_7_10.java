@@ -900,7 +900,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         packetWrapper.write(Type.VAR_INT, 1);
 
                         packetWrapper.write(Type.UUID, entry.uuid);
-                        System.out.println(entry.name + " " + entry.displayName);
                         packetWrapper.write(Type.STRING, entry.name);
                         packetWrapper.write(Type.VAR_INT, entry.properties.size());
                         for (TablistTracker.Property property : entry.properties) {
