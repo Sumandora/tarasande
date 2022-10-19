@@ -34,8 +34,9 @@ public class ViaLegacy {
     private static Logger logger;
 
     public static void init(final IViaLegacyProvider provider, final IViaLegacyConfig config, final Logger logger) {
-        if (ViaLegacy.provider != null)
+        if (ViaLegacy.provider != null) {
             throw new ViaLegacyException("ViaLegacy is already loaded!");
+        }
 
         ViaLegacy.provider = provider;
         ViaLegacy.config = config;

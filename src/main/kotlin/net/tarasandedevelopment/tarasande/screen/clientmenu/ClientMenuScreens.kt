@@ -1,8 +1,11 @@
 package net.tarasandedevelopment.tarasande.screen.clientmenu
 
+import io.netty.buffer.Unpooled
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
+import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
 import net.minecraft.util.Util
 import net.tarasandedevelopment.eventsystem.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
@@ -11,6 +14,7 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuScre
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuTitle
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuToggle
 import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.mixin.accessor.ICustomPayloadC2SPacket
 import net.tarasandedevelopment.tarasande.mixin.accessor.IHandshakeC2SPacket
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.ScreenBetterAccountManager
 import net.tarasandedevelopment.tarasande.screen.clientmenu.addon.ScreenBetterAddons
@@ -107,12 +111,17 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
     val useFML1Cache = ValueBoolean(this, "Use FML1 cache", true)
 
     init {
-        TarasandeMain.get().eventDispatcher.add(EventPacket::class.java) {
+        TarasandeMain.get().eventDispatcher.add(EventPacket::class.java, 1) {
             if (!state || currentHandler == null) return@add
 
             if (it.type == EventPacket.Type.SEND && it.packet is HandshakeC2SPacket) {
-                println(currentHandler!!.handshakeMark())
                 (it.packet as IHandshakeC2SPacket).tarasande_extendAddress(currentHandler!!.handshakeMark())
+            }
+
+            if (it.type == EventPacket.Type.SEND && it.packet is CustomPayloadC2SPacket) {
+                if (it.packet.channel == CustomPayloadC2SPacket.BRAND) {
+                    (it.packet as ICustomPayloadC2SPacket).setData(PacketByteBuf(Unpooled.buffer()).writeString("fml,forge"))
+                }
             }
 
             if (it.type == EventPacket.Type.RECEIVE) {
