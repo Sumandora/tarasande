@@ -14,7 +14,8 @@ public class CustomViaConfig extends AbstractViaConfig {
     private static final List<String> UNSUPPORTED = Arrays.asList("anti-xray-patch", "bungee-ping-interval",
             "bungee-ping-save", "bungee-servers", "quick-move-action-fix", "nms-player-ticking",
             "velocity-ping-interval", "velocity-ping-save", "velocity-servers",
-            "blockconnection-method", "change-1_9-hitbox", "change-1_14-hitbox");
+            "blockconnection-method", "change-1_9-hitbox", "change-1_14-hitbox",
+            "show-shield-when-sword-in-hand", "left-handed-handling");
 
 
     public CustomViaConfig(File configFile) {

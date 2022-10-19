@@ -2,10 +2,12 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.connection;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventRespawn;
 import net.tarasandedevelopment.tarasande.event.EventRotationSet;
 import net.tarasandedevelopment.tarasande.event.EventVelocity;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayNetworkHandler;
@@ -54,6 +56,13 @@ public abstract class MixinClientPlayNetworkHandler implements IClientPlayNetwor
     @Inject(method = "onPlayerPositionLook", at = @At("TAIL"))
     public void injectOnPlayerPositionLook(PlayerPositionLookS2CPacket packet, CallbackInfo ci) {
         TarasandeMain.Companion.get().getEventDispatcher().call(new EventRotationSet(client.player.getYaw(), client.player.getPitch()));
+    }
+
+    @Redirect(method = "onDeathMessage", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;showsDeathScreen()Z"))
+    public boolean injectShowsDeathScreen(ClientPlayerEntity instance) {
+        EventRespawn eventRespawn = new EventRespawn(instance.showsDeathScreen());
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventRespawn);
+        return eventRespawn.getShowDeathScreen();
     }
 
     @ModifyVariable(method = "acknowledge", at = @At("HEAD"), argsOnly = true, index = 2)

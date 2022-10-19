@@ -230,6 +230,13 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
         return constant;
     }
 
+    @Redirect(method = "setScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;showsDeathScreen()Z"))
+    public boolean injectShowsDeathScreen(ClientPlayerEntity instance) {
+        EventRespawn eventRespawn = new EventRespawn(instance.showsDeathScreen());
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventRespawn);
+        return eventRespawn.getShowDeathScreen();
+    }
+
     @Override
     public void tarasande_setSession(Session session) {
         this.session = session;
