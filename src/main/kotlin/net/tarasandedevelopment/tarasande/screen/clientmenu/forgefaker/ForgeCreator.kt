@@ -10,16 +10,12 @@ import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.m
 object ForgeCreator {
 
     fun createPayload(jsonObject: JsonObject): IForgePayload? {
-        println(jsonObject.has("modinfo"))
-
         if (jsonObject.has("modinfo") && jsonObject.get("modinfo").isJsonObject) {
             return LegacyForgePayload(jsonObject.get("modinfo").asJsonObject)
         }
-
         if (jsonObject.has("forgeData") && jsonObject.get("forgeData").isJsonObject) {
             return ModernForgePayload(jsonObject.get("forgeData").asJsonObject)
         }
-
         return null
     }
 
