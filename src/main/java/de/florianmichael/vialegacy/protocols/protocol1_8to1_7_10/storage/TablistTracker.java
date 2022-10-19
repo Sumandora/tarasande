@@ -23,7 +23,9 @@ import java.util.UUID;
 
 public class TablistTracker extends StoredObject {
 
-	private ArrayList<TabListEntry> tablist = new ArrayList<>();
+	private final ArrayList<TabListEntry> tablist = new ArrayList<>();
+
+	private int gameMode;
 
 	public TablistTracker(UserConnection user) {
 		super(user);
@@ -39,12 +41,24 @@ public class TablistTracker extends StoredObject {
 		return null;
 	}
 
+	public int getGameMode() {
+		return gameMode;
+	}
+
+	public void setGameMode(int gameMode) {
+		this.gameMode = gameMode;
+	}
+
 	public void remove(TabListEntry entry) {
 		tablist.remove(entry);
 	}
 
 	public void add(TabListEntry entry) {
 		tablist.add(entry);
+	}
+
+	public int indexOf(TabListEntry entry) {
+		return tablist.indexOf(entry);
 	}
 
 	public static boolean shouldUpdateDisplayName(String oldName, String newName) {

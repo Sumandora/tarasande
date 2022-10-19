@@ -121,7 +121,10 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.UNSIGNED_BYTE); // Max Players
                 map(Type.STRING); // Level Type
 
-                handler((pw) -> pw.write(Type.BOOLEAN, false)); // Reduced Debug Info
+                handler((pw) -> {
+                    tablistTracker(pw.user()).setGameMode(pw.get(Type.UNSIGNED_BYTE, 0)); // Keep gamemode for tablist
+                    pw.write(Type.BOOLEAN, false); // Reduced Debug Info
+                });
             }
         });
 
@@ -816,59 +819,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(TypeRegistry1_7_6_10.PLUGIN_MESSAGE_CHANNEL_STRING);
                 handler(packetWrapper -> {
                     final String channel = packetWrapper.get(TypeRegistry1_7_6_10.PLUGIN_MESSAGE_CHANNEL_STRING, 0);
-                    if (channel.equals("MC|Brand")) {
-                        Via.getPlatform().runSync(() -> {
-                            final PacketWrapper add = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
-                            add.write(Type.VAR_INT, 0);
-                            add.write(Type.VAR_INT, 1);
-                            final GameProfile gameProfile = ViaLegacy.getProvider().profile_1_7();
-
-                            final TablistTracker tablist = tablistTracker(packetWrapper.user());
-                            final TablistTracker.TabListEntry oldEntry = tablist.getTabListEntry(gameProfile.getName());
-                            final TablistTracker.TabListEntry entry = new TablistTracker.TabListEntry(gameProfile.getName(), gameProfile.getUuid());
-
-                            if (oldEntry != null) {
-                                entry.displayName = oldEntry.displayName;
-                                final PacketWrapper remove = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
-                                remove.write(Type.VAR_INT, 4);
-                                remove.write(Type.VAR_INT, 1);
-                                remove.write(Type.UUID, oldEntry.uuid);
-                                try {
-                                    remove.send(Protocol1_8to1_7_10.class);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                tablist.remove(oldEntry);
-                            }
-                            add.write(Type.UUID, entry.uuid);
-                            add.write(Type.STRING, entry.name);
-
-                            add.write(Type.VAR_INT, gameProfile.getSkinProperties().entries().size());
-                            for (Map.Entry<String, Property> propertyEntry : gameProfile.getSkinProperties().entries()) {
-                                Property property = propertyEntry.getValue();
-                                entry.properties.add(new TablistTracker.Property(gameProfile.getName(), property.getValue(), property.getSignature()));
-                                add.write(Type.STRING, property.getName());
-                                add.write(Type.STRING, property.getValue());
-                                add.write(Type.BOOLEAN, property.getSignature() != null);
-                                if (property.getSignature() != null) {
-                                    add.write(Type.STRING, property.getSignature());
-                                }
-                            }
-                            add.write(Type.VAR_INT, 0);
-                            add.write(Type.VAR_INT, 0);
-                            add.write(Type.BOOLEAN, entry.displayName != null);
-                            if (entry.displayName != null) add.write(Type.STRING, entry.displayName);
-                            tablist.add(entry);
-                            try {
-                                add.send(Protocol1_8to1_7_10.class);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
-                    }
-                });
-                handler(packetWrapper -> {
-                    final String channel = packetWrapper.get(TypeRegistry1_7_6_10.PLUGIN_MESSAGE_CHANNEL_STRING, 0);
                     switch (channel) {
                         case "MC|Brand" -> {
                             byte[] data = packetWrapper.read(TypeRegistry1_7_6_10.BYTEARRAY);
@@ -916,72 +866,122 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             @Override
             public void registerMap() {
                 handler(packetWrapper -> {
-                    String displayName = packetWrapper.read(Type.STRING);
-                    final String name = ChatColorUtil.stripColor(displayName);
-
-                    if (displayName.equals(name)) displayName = null;
-
-                    final boolean online = packetWrapper.read(Type.BOOLEAN);
+                    // 1.7 Packet
+                    String name = packetWrapper.read(Type.STRING);
+                    final boolean add = packetWrapper.read(Type.BOOLEAN);
                     final short ping = packetWrapper.read(Type.SHORT);
 
                     final TablistTracker tablist = tablistTracker(packetWrapper.user());
 
-                    TablistTracker.TabListEntry entry = tablist.getTabListEntry(name);
+                    String normalizedName = ChatColorUtil.stripColor(name);
 
-                    if (!online && entry != null) {
-                        packetWrapper.write(Type.VAR_INT, 4);
-                        packetWrapper.write(Type.VAR_INT, 1);
-                        packetWrapper.write(Type.UUID, entry.uuid);
-                        tablist.remove(entry);
-                    } else if (online && entry == null) {
+                    TablistTracker.TabListEntry entry = tablist.getTabListEntry(normalizedName);
+
+                    if (entry == null && add) {
                         final GameProfile gameProfile = ViaLegacy.getProvider().profile_1_7();
 
-                        if (gameProfile != null) {
-                            entry = new TablistTracker.TabListEntry(name, gameProfile.getUuid());
+                        boolean selfPlayer = false;
+
+                        if (gameProfile != null && Objects.equals(normalizedName, gameProfile.getName())) {
+                            entry = new TablistTracker.TabListEntry(normalizedName, gameProfile.getUuid());
                             for (Map.Entry<String, Property> propertyEntry : gameProfile.getSkinProperties().entries()) {
                                 Property property = propertyEntry.getValue();
                                 entry.properties.add(new TablistTracker.Property(property.getName(), property.getValue(), property.getSignature()));
                             }
-                        } else entry = new TablistTracker.TabListEntry(name, UUID.randomUUID());
+                            selfPlayer = true;
+                        } else entry = new TablistTracker.TabListEntry(normalizedName, UUID.randomUUID());
 
-                        entry.displayName = displayName;
                         tablist.add(entry);
-                        packetWrapper.write(Type.VAR_INT, 0);
+
+                        int index = tablist.indexOf(entry);
+                        entry.displayName = name;
+
+                        packetWrapper.write(Type.VAR_INT, 0); // ADD
                         packetWrapper.write(Type.VAR_INT, 1);
+
                         packetWrapper.write(Type.UUID, entry.uuid);
+                        System.out.println(entry.name + " " + entry.displayName);
                         packetWrapper.write(Type.STRING, entry.name);
                         packetWrapper.write(Type.VAR_INT, entry.properties.size());
                         for (TablistTracker.Property property : entry.properties) {
                             packetWrapper.write(Type.STRING, property.name);
                             packetWrapper.write(Type.STRING, property.value);
                             packetWrapper.write(Type.BOOLEAN, property.signature != null);
-                            if (property.signature != null) packetWrapper.write(Type.STRING, property.signature);
+                            if (property.signature != null)
+                                packetWrapper.write(Type.STRING, property.signature);
                         }
-                        packetWrapper.write(Type.VAR_INT, 0);
+                        packetWrapper.write(Type.VAR_INT, selfPlayer ? tablist.getGameMode() : 0);
                         packetWrapper.write(Type.VAR_INT, (int) ping);
-                        packetWrapper.write(Type.BOOLEAN, entry.displayName != null);
+                        packetWrapper.write(Type.BOOLEAN, true);
                         if (entry.displayName != null) {
                             packetWrapper.write(Type.STRING, entry.displayName);
                         }
-                    } else if (online && TablistTracker.shouldUpdateDisplayName(entry.displayName, displayName)) {
-                        entry.displayName = displayName;
-                        packetWrapper.write(Type.VAR_INT, 3);
+                    } else if (entry != null && !add) {
+                        packetWrapper.write(Type.VAR_INT, 4); // REMOVE
                         packetWrapper.write(Type.VAR_INT, 1);
                         packetWrapper.write(Type.UUID, entry.uuid);
-                        packetWrapper.write(Type.BOOLEAN, entry.displayName != null);
-                        if (entry.displayName != null) {
-                            packetWrapper.write(Type.STRING, entry.displayName);
-                        }
-                    } else if (online) {
-                        entry.ping = ping;
-                        packetWrapper.write(Type.VAR_INT, 2);
+                        tablist.remove(entry);
+                    } else if (entry != null && add && ping > 0) {
+                        packetWrapper.write(Type.VAR_INT, 2); // UPDATE LATENCY
                         packetWrapper.write(Type.VAR_INT, 1);
                         packetWrapper.write(Type.UUID, entry.uuid);
                         packetWrapper.write(Type.VAR_INT, (int) ping);
-                    } else {
-                        packetWrapper.write(Type.VAR_INT, 0);
-                        packetWrapper.write(Type.VAR_INT, 0);
                     }
+
+//                    if (!online && entry != null) {
+//                        packetWrapper.write(Type.VAR_INT, 4); // REMOVE
+//                        packetWrapper.write(Type.VAR_INT, 1);
+//                        packetWrapper.write(Type.UUID, entry.uuid);
+//                        tablist.remove(entry);
+//                    } else if (online && entry == null) {
+//                        final GameProfile gameProfile = ViaLegacy.getProvider().profile_1_7();
+//
+//                        if (gameProfile != null) {
+//                            entry = new TablistTracker.TabListEntry(name, gameProfile.getUuid());
+//                            for (Map.Entry<String, Property> propertyEntry : gameProfile.getSkinProperties().entries()) {
+//                                Property property = propertyEntry.getValue();
+//                                entry.properties.add(new TablistTracker.Property(property.getName(), property.getValue(), property.getSignature()));
+//                            }
+//                        } else entry = new TablistTracker.TabListEntry(name, UUID.randomUUID());
+//
+//                        entry.displayName = name;
+//                        tablist.add(entry);
+//                        packetWrapper.write(Type.VAR_INT, 0);
+//                        packetWrapper.write(Type.VAR_INT, 1);
+//                        packetWrapper.write(Type.UUID, entry.uuid);
+//                        packetWrapper.write(Type.STRING, entry.name);
+//                        packetWrapper.write(Type.VAR_INT, entry.properties.size());
+//                        for (TablistTracker.Property property : entry.properties) {
+//                            packetWrapper.write(Type.STRING, property.name);
+//                            packetWrapper.write(Type.STRING, property.value);
+//                            packetWrapper.write(Type.BOOLEAN, property.signature != null);
+//                            if (property.signature != null) packetWrapper.write(Type.STRING, property.signature);
+//                        }
+//                        packetWrapper.write(Type.VAR_INT, 0);
+//                        packetWrapper.write(Type.VAR_INT, (int) ping);
+//                        packetWrapper.write(Type.BOOLEAN, entry.displayName != null);
+//                        if (entry.displayName != null) {
+//                            packetWrapper.write(Type.STRING, entry.displayName);
+//                        }
+//                    } else if (online && TablistTracker.shouldUpdateDisplayName(entry.displayName, name)) {
+//                        entry.displayName = name;
+//                        packetWrapper.write(Type.VAR_INT, 3);
+//                        packetWrapper.write(Type.VAR_INT, 1);
+//                        packetWrapper.write(Type.UUID, entry.uuid);
+//                        packetWrapper.write(Type.BOOLEAN, entry.displayName != null);
+//                        if (entry.displayName != null) {
+//                            packetWrapper.write(Type.STRING, entry.displayName);
+//                        }
+//                    } else if (online) {
+//                        entry.ping = ping;
+//                        packetWrapper.write(Type.VAR_INT, 2);
+//                        packetWrapper.write(Type.VAR_INT, 1);
+//                        packetWrapper.write(Type.UUID, entry.uuid);
+//                        packetWrapper.write(Type.VAR_INT, (int) ping);
+//                    } else {
+//                        packetWrapper.write(Type.VAR_INT, 0);
+//                        packetWrapper.write(Type.VAR_INT, 0);
+//                    }
                 });
             }
         });

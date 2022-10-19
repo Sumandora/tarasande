@@ -69,24 +69,23 @@ class InformationVanishedPlayers : Information("Server", "Vanished players") {
     private val vanishedPlayers = CopyOnWriteArrayList<String>()
 
     init {
-        TarasandeMain.get().eventDispatcher.also {
-            it.add(EventPacket::class.java) {
-                if (it.type == EventPacket.Type.RECEIVE) {
-                    when (it.packet) {
-                        is PlayerListS2CPacket -> {
-                            if (it.packet.action != PlayerListS2CPacket.Action.ADD_PLAYER && it.packet.action != PlayerListS2CPacket.Action.REMOVE_PLAYER)
-                                for (packetEntry in it.packet.entries)
-                                    if (MinecraftClient.getInstance().networkHandler?.playerList?.none { entry -> entry.profile?.id == packetEntry.profile.id } == true)
-                                        when (it.packet.action) {
-                                            PlayerListS2CPacket.Action.UPDATE_GAME_MODE -> {
-                                                vanishedPlayers.add("Gamemode: " + packetEntry.profile.id + " -> " + StringUtil.formatEnumTypes(packetEntry.gameMode.name))
-                                            }
+        TarasandeMain.get().eventDispatcher.add(EventPacket::class.java) {
+            if (it.type == EventPacket.Type.RECEIVE) {
+                when (it.packet) {
+                    is PlayerListS2CPacket -> {
+                        if (it.packet.action != PlayerListS2CPacket.Action.ADD_PLAYER && it.packet.action != PlayerListS2CPacket.Action.REMOVE_PLAYER)
+                            for (packetEntry in it.packet.entries)
+                                if (MinecraftClient.getInstance().networkHandler?.getPlayerListEntry(packetEntry.profile.id) == null)
+                                    when (it.packet.action) {
+                                        PlayerListS2CPacket.Action.UPDATE_GAME_MODE -> {
+                                            vanishedPlayers.add("Gamemode: " + packetEntry.profile.id + " -> " + StringUtil.formatEnumTypes(packetEntry.gameMode.name))
+                                        }
 
-                                            PlayerListS2CPacket.Action.UPDATE_DISPLAY_NAME -> {
-                                                vanishedPlayers.add("Name: " + packetEntry.profile.id + " -> " + packetEntry.displayName)
-                                            }
+                                        PlayerListS2CPacket.Action.UPDATE_DISPLAY_NAME -> {
+                                            vanishedPlayers.add("Name: " + packetEntry.profile.id + " -> " + packetEntry.displayName)
+                                        }
 
-                                            PlayerListS2CPacket.Action.UPDATE_LATENCY -> {
+                                        PlayerListS2CPacket.Action.UPDATE_LATENCY -> {
                                                 vanishedPlayers.add("Latency: " + packetEntry.profile.id + " -> " + packetEntry.latency)
                                             }
 
@@ -102,7 +101,6 @@ class InformationVanishedPlayers : Information("Server", "Vanished players") {
                     }
                 }
             }
-        }
     }
 
     override fun getMessage(): String? {
