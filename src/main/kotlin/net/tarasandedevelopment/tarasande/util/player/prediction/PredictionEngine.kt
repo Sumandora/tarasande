@@ -14,10 +14,7 @@ import net.minecraft.sound.SoundEvent
 import net.minecraft.stat.StatHandler
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
-import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
-import net.tarasandedevelopment.tarasande.mixin.accessor.ILivingEntity
-import net.tarasandedevelopment.tarasande.mixin.accessor.IParticleManager
+import net.tarasandedevelopment.tarasande.mixin.accessor.*
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 
 object PredictionEngine {
@@ -35,6 +32,9 @@ object PredictionEngine {
 
         val wasDevelopment = SharedConstants.isDevelopment
         SharedConstants.isDevelopment = true // prevent that telemetry sender to do any bs
+        val soundSystem = (MinecraftClient.getInstance().soundManager as ISoundManager).tarasande_getSoundSystem() as ISoundSystem
+        val wasSoundDisabled = soundSystem.tarasande_isDisabled()
+        soundSystem.tarasande_setDisabled(true)
         val playerEntity = object : ClientPlayerEntity(mc,
             mc.world,
             object : ClientPlayNetworkHandler(mc,
@@ -119,7 +119,6 @@ object PredictionEngine {
         (playerEntity as IEntity).tarasande_setTouchingWater(mc.player?.isTouchingWater == true)
         playerEntity.isSwimming = mc.player?.isSwimming == true
 
-
         val list = ArrayList<Vec3d>()
 
         val prevParticlesEnabled = (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_areParticlesEnabled() // race conditions :c
@@ -134,6 +133,8 @@ object PredictionEngine {
 
         // bruder also von einer Skala von Augustus bis Koks ist das hier schon safe Klientus
         mc.player?.velocity = selfVelocity
+
+        soundSystem.tarasande_setDisabled(wasSoundDisabled)
 
         return Pair(playerEntity, list)
     }

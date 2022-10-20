@@ -69,7 +69,11 @@ object ProjectileUtil {
 
     fun predict(itemStack: ItemStack, rotation: Rotation?, predictVelocity: Boolean): ArrayList<Vec3d> {
         val projectileItem = projectileItems.first { it.isSame(itemStack.item) }
+        val wasIsClient = MinecraftClient.getInstance().world?.isClient == true
         (MinecraftClient.getInstance().world as IWorld).tarasande_setIsClient(false)
+        val soundSystem = (MinecraftClient.getInstance().soundManager as ISoundManager).tarasande_getSoundSystem() as ISoundSystem
+        val wasSoundDisabled = soundSystem.tarasande_isDisabled()
+        soundSystem.tarasande_setDisabled(true)
         val path = ArrayList<Vec3d>()
         var collided = false
 
@@ -172,7 +176,8 @@ object ProjectileUtil {
             if (persistentProjectileEntity.pos.let { it.y < MinecraftClient.getInstance().world?.bottomY!! || it == path.lastOrNull() }) break
             path.add(persistentProjectileEntity.pos)
         }
-        (MinecraftClient.getInstance().world as IWorld).tarasande_setIsClient(true)
+        soundSystem.tarasande_setDisabled(wasSoundDisabled)
+        (MinecraftClient.getInstance().world as IWorld).tarasande_setIsClient(wasIsClient)
         return path
     }
 

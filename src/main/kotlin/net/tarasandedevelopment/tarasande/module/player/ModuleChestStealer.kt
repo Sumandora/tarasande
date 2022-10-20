@@ -6,7 +6,7 @@ import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
-import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.EventScreenInput
 import net.tarasandedevelopment.tarasande.mixin.accessor.IHandledScreen
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
@@ -53,16 +53,16 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
     }
 
     init {
-        registerEvent(EventPollEvents::class.java) { event ->
+        registerEvent(EventScreenInput::class.java) { event ->
             /*
              * Side story: <=1.12.2 does this in the tick method
              * We do it in the frame
              * Means we can steal faster and on top, we can steal with a low timer, without any issues
              * Maybe 1.8 isn't so good after all for cheating?
              */
-
-            if (event.fake)
+            if (event.doneInput)
                 return@registerEvent
+
             if (mc.currentScreen !is GenericContainerScreen) {
                 timeUtil.reset()
                 wasClosed = true
@@ -120,6 +120,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 val mapped = sqrt(distance).div(Vec2f(accessor.tarasande_getBackgroundWidth().toFloat(), accessor.tarasande_getBackgroundHeight().toFloat()).length())
                 nextDelay = (delay.minValue + (delay.maxValue - delay.minValue) * mapped).toLong()
                 mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot?.id!!, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.QUICK_MOVE, mc.player)
+                event.doneInput = true
             }
         }
     }

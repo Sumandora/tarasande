@@ -1,7 +1,9 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.input;
+package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.input;
 
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventScreenInput;
 import net.tarasandedevelopment.tarasande.protocol.util.InputTracker1_12_2;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,6 +18,9 @@ public class MixinMinecraftClient {
             ordinal = 4, shift = At.Shift.BEFORE))
     public void injectTick(CallbackInfo ci) {
         if (VersionList.isNewerTo(VersionList.R1_12_2)) return;
+
+        EventScreenInput eventScreenInput = new EventScreenInput(false);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventScreenInput);
 
         while (!InputTracker1_12_2.INSTANCE.getMouse().isEmpty()) {
             InputTracker1_12_2.INSTANCE.getMouse().poll().run();

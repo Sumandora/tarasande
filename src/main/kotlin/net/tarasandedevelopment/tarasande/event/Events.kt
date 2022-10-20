@@ -28,6 +28,7 @@ import java.util.*
 
 class EventChat(val chatMessage: String) : Event(true)
 class EventKey(val key: Int, val action: Int) : Event(true)
+
 class EventUpdate(val state: State) : Event(state == State.PRE) {
     enum class State {
         PRE, PRE_PACKET, POST
@@ -80,6 +81,7 @@ class EventVelocity(var velocityX: Double, var velocityY: Double, var velocityZ:
 }
 
 class EventInput(val input: Input, var movementForward: Float, var movementSideways: Float, var slowDown: Boolean, val slowdownAmount: Float) : Event(true)
+
 class EventJump(var yaw: Float, val state: State) : Event(state == State.PRE) {
     enum class State {
         PRE, POST
@@ -104,6 +106,7 @@ class EventAttackEntity(val entity: Entity, val state: State) : Event(false) {
 
 class EventMovementFovMultiplier(var movementFovMultiplier: Float) : Event(false)
 class EventKeepSprint(var sprinting: Boolean) : Event(false)
+
 class EventAttack : Event(false) {
     var dirty = false
         set(value) {
@@ -138,6 +141,7 @@ class EventGoalMovement : Event {
 class EventCameraOverride(val camera: Camera) : Event(false)
 class EventPlayerListName(val playerListEntry: PlayerListEntry, var displayName: Text) : Event(false)
 class EventRotationSet(val yaw: Float, val pitch: Float) : Event(false)
+
 class EventUpdateTargetedEntity(val state: State) : Event(false) {
     enum class State {
         PRE, POST
@@ -145,6 +149,7 @@ class EventUpdateTargetedEntity(val state: State) : Event(false) {
 }
 
 class EventRenderBlockModel(val state: BlockState, val pos: BlockPos) : Event(true)
+
 class EventStep : Event {
     var stepHeight: Float
         set(value) {
@@ -167,6 +172,7 @@ class EventStep : Event {
 class EventBlockCollision(val state: BlockState, val pos: BlockPos, val entity: Entity) : Event(true)
 class EventEntityFlag(val entity: Entity, val flag: Int, var enabled: Boolean) : Event(false)
 class EventBoundingBoxOverride(val entity: Entity, var boundingBox: Box) : Event(false)
+
 class EventPacketTransform(val type: Type, val buf: ByteBuf?) : Event(false) {
     enum class Type {
         DECODE, ENCODE
@@ -199,6 +205,7 @@ class EventChildren(val screen: Screen) : Event(false) {
 
     fun get() = children
 }
+
 class EventLoadManager(val manager: Manager<*>) : Event(false)
 class EventConnectServer(val address: InetSocketAddress) : Event(false)
 class EventSkipIdlePacket : Event(false)
@@ -206,3 +213,5 @@ class EventDisconnect : Event(false)
 class EventIsSaddled(var saddled: Boolean) : Event(false)
 class EventInvalidGameMode(val uuid: UUID) : Event(false)
 class EventRespawn(var showDeathScreen: Boolean) : Event(false)
+
+class EventScreenInput(var doneInput: Boolean) : Event(true)

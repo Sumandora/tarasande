@@ -2,7 +2,9 @@ package net.tarasandedevelopment.tarasande.mixin.mixins;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventScreenInput;
 import net.tarasandedevelopment.tarasande.module.render.ModuleFog;
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 import org.spongepowered.asm.mixin.Final;
@@ -28,6 +30,11 @@ public class MixinRenderSystem {
 
     @Inject(method = "flipFrame", at = @At("HEAD"), remap = false)
     private static void injectFlipFrame(long window, CallbackInfo ci) {
+        if (VersionList.isNewerOrEqualTo(VersionList.R1_13)) {
+            EventScreenInput eventScreenInput = new EventScreenInput(false);
+            TarasandeMain.Companion.get().getEventDispatcher().call(eventScreenInput);
+        }
+
         RotationUtil.INSTANCE.updateFakeRotation(false);
     }
 

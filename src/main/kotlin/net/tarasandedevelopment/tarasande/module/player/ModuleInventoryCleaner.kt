@@ -5,7 +5,7 @@ import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
-import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.EventScreenInput
 import net.tarasandedevelopment.tarasande.mixin.accessor.IHandledScreen
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
@@ -34,8 +34,8 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
     private var nextDelay: Long = 0
 
     init {
-        registerEvent(EventPollEvents::class.java) { event ->
-            if (event.fake)
+        registerEvent(EventScreenInput::class.java) { event ->
+            if (event.doneInput)
                 return@registerEvent
 
             if (openInventory.value && mc.currentScreen !is AbstractInventoryScreen<*>) {
@@ -75,6 +75,7 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
                 val mapped = sqrt(distance).div(Vec2f(accessor.tarasande_getBackgroundWidth().toFloat(), accessor.tarasande_getBackgroundHeight().toFloat()).length())
                 nextDelay = (delay.minValue + (delay.maxValue - delay.minValue) * mapped).toLong()
                 mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot.id, 1 /* 1 = all; 0 = single */, SlotActionType.THROW, mc.player)
+                event.doneInput = true
             }
         }
     }
