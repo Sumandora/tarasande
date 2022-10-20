@@ -13,8 +13,6 @@ import org.lwjgl.glfw.GLFW
 open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, var mouse: Boolean = true, manage: Boolean = true) : Value(owner, name, manage) {
 
     private var presses = 0
-    private var mousePressed = false
-    private var keyPressed = false
 
     init {
         TarasandeMain.get().eventDispatcher.also {
@@ -22,28 +20,18 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
                 if (type == Type.MOUSE)
                     if (MinecraftClient.getInstance().currentScreen == null)
                         if (button == it.button)
-                            when (it.action) {
-                                GLFW.GLFW_PRESS -> {
-                                    mousePressed = true
-                                    if (owner !is Module || this == owner.bind || owner.enabled)
-                                        presses++
-                                }
-
-                                GLFW.GLFW_RELEASE -> mousePressed = false
+                            if (it.action == GLFW.GLFW_PRESS) {
+                                if (owner !is Module || this == owner.bind || owner.enabled)
+                                    presses++
                             }
             }
             it.add(EventKey::class.java) {
                 if (type == Type.KEY)
                     if (MinecraftClient.getInstance().currentScreen == null)
                         if (it.key == button)
-                            when (it.action) {
-                                GLFW.GLFW_PRESS -> {
-                                    keyPressed = true
-                                    if (owner !is Module || this == owner.bind || owner.enabled)
-                                        presses++
-                                }
-
-                                GLFW.GLFW_RELEASE -> keyPressed = false
+                            if (it.action == GLFW.GLFW_PRESS) {
+                                if (owner !is Module || this == owner.bind || owner.enabled)
+                                    presses++
                             }
             }
         }
@@ -77,13 +65,8 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
         if (MinecraftClient.getInstance().currentScreen != null) return false
 
         return when (type) {
-            Type.KEY -> {
-                keyPressed
-            }
-
-            Type.MOUSE -> {
-                mousePressed
-            }
+            Type.KEY -> GLFW.glfwGetKey(MinecraftClient.getInstance().window.handle, button) == GLFW.GLFW_PRESS
+            Type.MOUSE -> GLFW.glfwGetMouseButton(MinecraftClient.getInstance().window.handle, button) == GLFW.GLFW_PRESS
         }
     }
 
