@@ -40,8 +40,9 @@ public class ViaProtocolHack {
 
             final ViaManagerImpl.ViaManagerBuilder builder = ViaManagerImpl.builder().injector(new CustomViaInjector()).loader(new CustomViaProviders()).platform(platform);
 
-            if (provider().commandHandler().isPresent())
+            if (provider().commandHandler().isPresent()) {
                 builder.commandHandler(provider().commandHandler().get());
+            }
 
             Via.init(builder.build());
             final ViaManagerImpl viaManager = (ViaManagerImpl) Via.getManager();
