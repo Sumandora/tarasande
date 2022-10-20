@@ -6,7 +6,7 @@ import com.viaversion.viaversion.protocols.base.BaseVersionProvider
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
 import net.minecraft.SharedConstants
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.protocol.util.ProtocolAutoDetector
+import net.tarasandedevelopment.tarasande.protocol.service.ProtocolAutoDetector
 import java.net.InetSocketAddress
 
 class FabricVersionProvider : BaseVersionProvider() {

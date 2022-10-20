@@ -67,6 +67,7 @@
     "protocolhack.MixinEntityIndex",
     "protocolhack.MixinEntityPredicates",
     "protocolhack.MixinItemCooldownManager",
+    "protocolhack.MixinItemGroup",
     "protocolhack.MixinItemPlacementContext",
     "protocolhack.MixinPacketByteBuf",
     "protocolhack.MixinUpdatePlayerAbilitiesC2SPacket",

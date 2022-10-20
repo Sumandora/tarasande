@@ -47,6 +47,7 @@ class ElementMenuScreenProxySystem : ElementMenuScreen("Proxy System") {
 
 class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack") {
 
+    val filterItemGroups = ValueBoolean(this, "Filter item groups", true)
     private val screenBetterProtocolHack = ScreenBetterProtocolHack()
 
     override fun getScreen(): Screen {
