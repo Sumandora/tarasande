@@ -12,7 +12,7 @@ class PanelButton(x: Int, y: Int, val width: Int, val height: Int, private val t
 
     companion object {
         fun createButton(x: Int, y: Int, width: Int, height: Int, text: String, pressAction: Runnable): ClickableWidgetPanel {
-            return ClickableWidgetPanel(PanelButton(x, y, width, height, text, pressAction))
+            return ClickableWidgetPanel(PanelButton(x, y, width, height, text, pressAction), true)
         }
     }
 

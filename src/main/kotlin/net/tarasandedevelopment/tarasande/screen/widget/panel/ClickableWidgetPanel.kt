@@ -7,7 +7,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 
-open class ClickableWidgetPanel(val panel: Panel) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelWidth.toInt(), Text.of(panel.title)), Element {
+open class ClickableWidgetPanel(val panel: Panel, val update: Boolean = false) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelWidth.toInt(), Text.of(panel.title)), Element {
 
     override fun appendNarrations(builder: NarrationMessageBuilder?) {
     }
@@ -19,6 +19,12 @@ open class ClickableWidgetPanel(val panel: Panel) : ClickableWidget(panel.x.toIn
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val opened = panel.opened
         panel.opened = true
+        if (update) {
+            panel.x = this.x.toDouble()
+            panel.y = this.y.toDouble()
+            panel.panelWidth = this.width.toDouble()
+            panel.panelHeight = this.height.toDouble()
+        }
         if (panel.isVisible())
             panel.render(matrices, mouseX, mouseY, delta)
         panel.opened = opened

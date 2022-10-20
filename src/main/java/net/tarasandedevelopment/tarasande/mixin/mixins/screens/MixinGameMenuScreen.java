@@ -1,9 +1,15 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.screens;
 
+import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.Text;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,7 +24,26 @@ public class MixinGameMenuScreen extends Screen {
 
     @Inject(method = "initWidgets()V", at = @At("RETURN"))
     public void drawMenuButton(CallbackInfo info) {
-        if (!TarasandeMain.Companion.get().getDisabled())
-            addDrawableChild(TarasandeMain.Companion.get().getManagerClientMenu().createClientMenuButton(3, 3, 100, 25, this));
+        if (!TarasandeMain.Companion.get().getDisabled()) {
+            for (Element child : this.children()) {
+                if (child instanceof ButtonWidget button) {
+                    if (button.getMessage().contains(Text.translatable("menu.options"))) {
+                        addDrawableChild(TarasandeMain.Companion.get().getManagerClientMenu().createClientMenuButton(this.width / 2 - 102, button.y - 24, 204, 20, this));
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    protected <T extends Element & Drawable & Selectable> T addDrawableChild(T drawableElement) {
+        if (!TarasandeMain.Companion.get().getDisabled() && drawableElement instanceof ButtonWidget button) {
+            if (button.y >= this.height / 4 - 16 + 24 * 4 - 1) {
+                button.y += 24;
+            }
+            button.y -= 12;
+        }
+        return super.addDrawableChild(drawableElement);
     }
 }
