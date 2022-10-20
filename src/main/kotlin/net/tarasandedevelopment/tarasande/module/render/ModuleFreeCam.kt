@@ -124,16 +124,12 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
             }
             if (keepMovement.value) {
                 if (event.input == MinecraftClient.getInstance().player?.input) {
-                    if (firstInput != null) {
-                        event.movementForward = firstInput?.first!!
-                        event.movementSideways = firstInput?.second!!
-                    }
+                    event.movementForward = firstInput?.first!!
+                    event.movementSideways = firstInput?.second!!
                 } else if (event.input == PlayerUtil.input) {
-                    if (firstRealInput != null) {
-                        event.movementForward = firstRealInput?.first!!
-                        event.movementSideways = firstRealInput?.second!!
-                        event.cancelled = false
-                    }
+                    event.movementForward = firstRealInput?.first!!
+                    event.movementSideways = firstRealInput?.second!!
+                    event.cancelled = false
                 }
             }
         }
