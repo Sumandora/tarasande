@@ -43,7 +43,7 @@ class EventTick(val state: State) : Event(false) {
 
 class EventResolutionUpdate(val prevWidth: Double, val prevHeight: Double, val width: Double, val height: Double) : Event(false)
 class EventRender2D(val matrices: MatrixStack) : Event(false)
-class EventScreenRender(val matrices: MatrixStack, val mouseX: Int, val mouseY: Int) : Event(false)
+class EventScreenRender(val matrices: MatrixStack, val screen: Screen, val mouseX: Int, val mouseY: Int) : Event(false)
 class EventRender3D(val matrices: MatrixStack, val positionMatrix: Matrix4f) : Event(false)
 
 class EventPacket(val type: Type, val packet: Packet<*>?) : Event(true) {
