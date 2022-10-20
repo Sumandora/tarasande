@@ -50,7 +50,7 @@ class ManagerClientMenu : Manager<ElementMenu>() {
         clientMenuFocusedEntry = ValueMode(this, "Focused entry", false, *entries.toTypedArray())
     }
 
-    fun byName(name: String): ElementMenu {
+    private fun byName(name: String): ElementMenu {
         return this.list.first { e ->
             e.name.equals(name, true)
         }
@@ -61,7 +61,7 @@ class ManagerClientMenu : Manager<ElementMenu>() {
         return clientMenuFocusedEntry.anySelected() && clientMenuFocusedEntry.selected[0] != "None"
     }
 
-    fun createButtonText(): String {
+    private fun createButtonText(): String {
         val selected = clientMenuFocusedEntry.selected[0]
 
         val buttonText = if (anySelected()) {
@@ -89,30 +89,22 @@ class ManagerClientMenu : Manager<ElementMenu>() {
     }
 }
 
-abstract class ElementMenu(val name: String) {
+abstract class ElementMenu(val name: String, val locked: Boolean = false) {
 
-    open fun buildWidget(x: Int, y: Int, width: Int, height: Int): ButtonWidget {
-        val widget = AllMouseButtonWidget(x, y, width, height, this.buttonText(), object : AllMousePressAction() {
-            override fun onPress(mouseButton: Int, button: ButtonWidget) {
-                if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-                    if (TarasandeMain.get().managerValue.getValues(this@ElementMenu).isNotEmpty()) {
-                        MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, this@ElementMenu))
-                        return
-                    }
-                }
-                onClick(mouseButton)
-                button.message = buttonText()
+    internal fun onClickInternal(mouseButton: Int) {
+        if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+            if (TarasandeMain.get().managerValue.getValues(this@ElementMenu).isNotEmpty()) {
+                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, this@ElementMenu))
+                return
             }
-        })
-        return widget
+        } else {
+            this.onClick(mouseButton)
+        }
     }
 
-    open fun buttonColor() : Int = Color.ORANGE.rgb
-    open fun buttonText() : Text = Text.literal(this.name).styled {
-        it.withColor(this.buttonColor())
-    }
+    open fun elementColor() : Int = Color.ORANGE.rgb
+    open fun elementTextSize() : Float = 1.0F
     open fun visible() = true
-
     abstract fun onClick(mouseButton: Int)
 }
 
@@ -122,7 +114,7 @@ abstract class ElementMenuScreen(name: String) : ElementMenu(name) {
         MinecraftClient.getInstance().setScreen(this.getScreen())
     }
 
-    override fun buttonColor() = -1
+    override fun elementColor() = -1
     abstract fun getScreen(): Screen
 }
 
@@ -139,20 +131,15 @@ abstract class ElementMenuToggle(name: String) : ElementMenu(name) {
         }
     }
 
-    override fun buttonColor() = if (state) Color.green.rgb else Color.red.rgb
+    override fun elementColor() = if (state) Color.green.rgb else Color.red.rgb
 
     abstract fun onToggle(state: Boolean)
 }
 
-open class ElementMenuTitle(name: String) : ElementMenu(name) {
+open class ElementMenuTitle(name: String) : ElementMenu(name, true) {
     override fun onClick(mouseButton: Int) {
     }
 
-    override fun buttonColor() = Color.gray.rgb
-
-    override fun buildWidget(x: Int, y: Int, width: Int, height: Int): ButtonWidget {
-        val widget = super.buildWidget(x, y, width, height)
-        (widget as IClickableWidget).tarasande_removeBackground()
-        return widget
-    }
+    override fun elementColor() = Color.gray.rgb
+    override fun elementTextSize() = 1.5F
 }

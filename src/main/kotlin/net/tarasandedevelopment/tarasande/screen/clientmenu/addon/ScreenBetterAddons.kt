@@ -53,7 +53,7 @@ class ScreenBetterAddons : ScreenBetterSlotList(46, MinecraftClient.getInstance(
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
             matrices.push()
             matrices.scale(2F, 2F, 2F)
-            RenderUtil.textCenter(matrices, this.addon.modId!! + " (" + this.addon.modVersion!! + ")", entryWidth.toFloat() / 2F, 1F, -1)
+            RenderUtil.textCenter(matrices, this.addon.modId!! + " (" + this.addon.modVersion!! + ")", entryWidth.toFloat() / 4F, 1F, -1)
             matrices.pop()
         }
     }

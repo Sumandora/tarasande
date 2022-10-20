@@ -54,7 +54,7 @@ class ScreenBetterForgeModList(parent: Screen, private val titleName: String, va
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
             matrices.push()
             matrices.scale(2F, 2F, 2F)
-            RenderUtil.textCenter(matrices, this.display(), entryWidth.toFloat() / 2F, 1F, -1)
+            RenderUtil.textCenter(matrices, this.display(), entryWidth.toFloat() / 4F, 1F, -1)
             matrices.pop()
         }
     }

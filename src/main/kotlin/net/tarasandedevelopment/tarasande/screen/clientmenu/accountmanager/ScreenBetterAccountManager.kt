@@ -144,14 +144,14 @@ class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, 240, MinecraftCl
             }
 
             matrices.push()
-            matrices.translate((entryWidth).toDouble(), (textRenderer.fontHeight - textRenderer.fontHeight / 2f).toDouble(), 0.0)
+            matrices.translate((entryWidth / 2F).toDouble(), (textRenderer.fontHeight - textRenderer.fontHeight / 2f).toDouble(), 0.0)
             matrices.scale(2.0f, 2.0f, 1.0f)
-            matrices.translate(-(entryWidth).toDouble(), (-(textRenderer.fontHeight - textRenderer.fontHeight / 2f)).toDouble(), 0.0)
+            matrices.translate(-(entryWidth / 2F).toDouble(), (-(textRenderer.fontHeight - textRenderer.fontHeight / 2f)).toDouble(), 0.0)
             RenderUtil.textCenter(matrices, Text.of(when {
                 client?.session?.equals(account.session) == true -> Formatting.GREEN.toString()
                 mainAccount == accounts.indexOf(account) -> Formatting.YELLOW.toString()
                 else -> ""
-            } + account.getDisplayName()).string, entryWidth.toFloat(), entryHeight / 4F - textRenderer.fontHeight / 4F, -1)
+            } + account.getDisplayName()).string, entryWidth / 2F, entryHeight / 4F - textRenderer.fontHeight / 4F, -1)
             matrices.pop()
 
             if (account.session != null) {
@@ -159,7 +159,7 @@ class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, 240, MinecraftCl
 
                 matrices.push()
                 matrices.scale(0.5F, 0.5F, 0.5F)
-                RenderUtil.text(matrices, string, (entryWidth.toFloat() * 4) - textRenderer.getWidth(string) - 10, (entryHeight * 2 - textRenderer.fontHeight).toFloat() - 1, -1)
+                RenderUtil.text(matrices, string, (entryWidth / 2F * 4) - textRenderer.getWidth(string) - 10, (entryHeight * 2 - textRenderer.fontHeight).toFloat() - 1, -1)
                 matrices.pop()
             }
         }

@@ -72,7 +72,14 @@ open class ScreenBetterSlotListEntry : AlwaysSelectedEntryListWidget.Entry<Scree
     private var lastClick: Long = 0
     private var index = 0
 
-    open fun isSelected() = (this.parentList!! as ScreenBetterSlotListWidget).parent.selected == index
+    open fun dontSelectAnything() = false
+
+    open fun isSelected(): Boolean {
+        if (this.dontSelectAnything()) {
+            return false
+        }
+        return (this.parentList!! as ScreenBetterSlotListWidget).parent.selected == index
+    }
 
     open fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
     }
@@ -83,8 +90,10 @@ open class ScreenBetterSlotListEntry : AlwaysSelectedEntryListWidget.Entry<Scree
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        (this.parentList!! as ScreenBetterSlotListWidget).parent.selected = this.index
-        this.parentList!!.setSelected(this)
+        if (!dontSelectAnything()) {
+            (this.parentList!! as ScreenBetterSlotListWidget).parent.selected = this.index
+            this.parentList!!.setSelected(this)
+        }
 
         this.onSingleClickEntry(mouseX, mouseY, button)
         if (System.currentTimeMillis() - lastClick < 300) {
@@ -99,7 +108,7 @@ open class ScreenBetterSlotListEntry : AlwaysSelectedEntryListWidget.Entry<Scree
 
         matrices?.push()
         matrices?.translate(x.toDouble(), y.toDouble(), 0.0)
-        this.renderEntry(matrices!!, index, entryWidth / 2, entryHeight, mouseX, mouseY, hovered)
+        this.renderEntry(matrices!!, index, entryWidth, entryHeight, mouseX, mouseY, hovered)
         matrices.pop()
 
         if (this.isSelected())
