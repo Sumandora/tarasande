@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 import kotlin.math.*
 
-class PanelRadar(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Radar", x, y, 100.0, 100.0, background = true, fixed = true) {
+class PanelRadar(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Radar", x, y, 100.0, 100.0, background = true, fixed = true, scissor = true) {
 
 	override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
 		if (MinecraftClient.getInstance().player == null)
