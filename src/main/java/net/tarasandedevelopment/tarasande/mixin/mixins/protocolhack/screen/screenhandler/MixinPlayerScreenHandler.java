@@ -12,7 +12,7 @@
  * The owner "Florian Michael" is free to change this license.
  */
 
-package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.screenhandler;
+package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.screen.screenhandler;
 
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.entity.EquipmentSlot;

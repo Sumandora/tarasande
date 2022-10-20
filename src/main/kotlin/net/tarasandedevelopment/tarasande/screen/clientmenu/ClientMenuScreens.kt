@@ -15,6 +15,7 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuTogg
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.mixin.accessor.ICustomPayloadC2SPacket
 import net.tarasandedevelopment.tarasande.mixin.accessor.IHandshakeC2SPacket
+import net.tarasandedevelopment.tarasande.protocol.platform.ViaLegacyValues
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.ScreenBetterAccountManager
 import net.tarasandedevelopment.tarasande.screen.clientmenu.addon.ScreenBetterAddons
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.IForgeNetClientHandler
@@ -47,8 +48,13 @@ class ElementMenuScreenProxySystem : ElementMenuScreen("Proxy System") {
 
 class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack") {
 
-    val filterItemGroups = ValueBoolean(this, "Filter item groups", true)
     private val screenBetterProtocolHack = ScreenBetterProtocolHack()
+
+    init {
+        TarasandeMain.get().managerValue.getValues(ViaLegacyValues).forEach {
+            it.owner = this
+        }
+    }
 
     override fun getScreen(): Screen {
         screenBetterProtocolHack.prevScreen = MinecraftClient.getInstance().currentScreen

@@ -24,11 +24,6 @@ public class MixinInventoryPackets1_13_2 extends ItemRewriter<Protocol1_14To1_13
             @Override
             public void registerMap() {
                 map(Type.VAR_INT);
-                handler(pw -> {
-                    int selectedTrade = pw.get(Type.VAR_INT, 0);
-                    System.out.println(selectedTrade);
-
-                });
             }
         });
     }

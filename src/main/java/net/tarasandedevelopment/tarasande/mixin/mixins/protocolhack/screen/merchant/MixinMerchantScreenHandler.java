@@ -1,6 +1,6 @@
 /*
  * Copyright (c) FlorianMichael as EnZaXD 2022
- * Created on 7/9/22, 1:46 AM
+ * Created on 7/9/22, 10:26 AM
  *
  * --FLORIAN MICHAEL PRIVATE LICENCE v1.0--
  *
@@ -12,34 +12,28 @@
  * The owner "Florian Michael" is free to change this license.
  */
 
-package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.screenhandler;
+package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.screen.merchant;
 
 import de.florianmichael.viaprotocolhack.util.VersionList;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.MerchantScreenHandler;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.SlotActionType;
-import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IScreenHandler_Protocol;
+import net.minecraft.screen.ScreenHandlerType;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ScreenHandler.class)
-public class MixinScreenHandler implements IScreenHandler_Protocol {
+@Mixin(MerchantScreenHandler.class)
+public abstract class MixinMerchantScreenHandler extends ScreenHandler {
 
-    @Unique
-    private short lastActionId = 0;
-
-    @Inject(method = "internalOnSlotClick", at = @At("HEAD"), cancellable = true)
-    private void injectInternalOnSlotClick(int slot, int clickData, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8) && actionType == SlotActionType.SWAP && clickData == 40) {
-            ci.cancel();
-        }
+    public MixinMerchantScreenHandler(@Nullable ScreenHandlerType<?> type, int syncId) {
+        super(type, syncId);
     }
 
-    @Override
-    public short tarasande_getAndIncrementLastActionId() {
-        return ++lastActionId;
+    @Inject(method = "switchTo", at = @At("HEAD"), cancellable = true)
+    private void injectSwitchTo(int recipeId, CallbackInfo ci) {
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2))
+            ci.cancel(); // no lmao?
     }
 }
