@@ -5,6 +5,7 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IServerInfo;
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.IForgePayload;
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.modern.ModernForgePayload;
@@ -38,7 +39,7 @@ public class MixinMultiplayerServerListWidgetSubServerEntry {
         final String text = MinecraftClient.getInstance().textRenderer.trimToWidth("Forge/FML Server", x);
         final int textWidth = MinecraftClient.getInstance().textRenderer.getWidth(text) + 2;
 
-        RenderUtil.INSTANCE.text(matrices, text, x - textWidth, yPos, Color.RED.getRGB());
+        RenderUtil.INSTANCE.text(matrices, text, x - textWidth, yPos, TarasandeMain.Companion.get().getClientValues().getAccentColor().getColor().getRGB());
 
         if (RenderUtil.INSTANCE.isHovered(mouseX, mouseY, x - textWidth, yPos, x - 2, yPos + fontHeight)) {
             assert MinecraftClient.getInstance().currentScreen != null;
