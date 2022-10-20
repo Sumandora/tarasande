@@ -108,9 +108,6 @@ open class Panel(
             matrices?.push()
             matrices?.translate(0.0, scrollOffset, 0.0)
             renderContent(matrices, mouseX, mouseY, delta)
-            if (fixed && background)
-                GlStateManager._disableScissorTest()
-
             matrices?.pop()
 
             if (scissor) {
