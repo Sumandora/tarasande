@@ -41,6 +41,8 @@ public class LegacyProtocolVersion extends ProtocolVersion {
 
     public static final LegacyProtocolVersion R1_1 = new LegacyProtocolVersion(23, "1.1");
 
+    public static final LegacyProtocolVersion R1_0 = new LegacyProtocolVersion(22, "1.0");
+
     public LegacyProtocolVersion(int version, String name) {
         super(-version, name);
 
