@@ -72,19 +72,19 @@ class ManagerClientMenu : Manager<ElementMenu>() {
         return buttonText
     }
 
-    fun createButton(x: Int, y: Int, width: Int, height: Int, parent: Screen): ClickableWidgetPanel {
+    fun createClientMenuButton(x: Int, y: Int, width: Int, height: Int, parent: Screen, updating: Boolean): ClickableWidgetPanel {
         val selected = clientMenuFocusedEntry.selected[0]
 
-        return ClickableWidgetPanel(PanelButton(x, y, width, height, this.createButtonText()) {
+        return PanelButton.createButton(x, y, width, height, this.createButtonText()) {
             if (this.anySelected() && !Screen.hasShiftDown()) {
                 val screen = byName(selected)
                 if (screen.visible()) {
                     screen.onClick(GLFW.GLFW_MOUSE_BUTTON_LEFT)
-                    return@PanelButton
+                    return@createButton
                 }
             }
             MinecraftClient.getInstance().setScreen(ScreenBetterClientMenu(parent))
-        })
+        }.also { it.updating = updating }
     }
 }
 

@@ -3,9 +3,16 @@ package net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.minecraft
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
+import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
 class PanelButton(x: Int, y: Int, val width: Int, val height: Int, private val text: String, private val pressAction: Runnable) : Panel("Button", x.toDouble(), y.toDouble(), width.toDouble(), height.toDouble(), scissor = true) {
+
+    companion object {
+        fun createButton(x: Int, y: Int, width: Int, height: Int, text: String, pressAction: Runnable): ClickableWidgetPanel {
+            return ClickableWidgetPanel(PanelButton(x, y, width, height, text, pressAction))
+        }
+    }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         panelWidth = width.toDouble()

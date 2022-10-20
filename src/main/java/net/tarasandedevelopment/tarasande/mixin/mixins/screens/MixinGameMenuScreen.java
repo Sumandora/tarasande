@@ -23,7 +23,7 @@ public class MixinGameMenuScreen extends Screen {
     @Inject(at = @At("RETURN"), method = "initWidgets()V")
     public void drawMenuButton(CallbackInfo info) {
         if (!TarasandeMain.Companion.get().getDisabled())
-            addDrawableChild(TarasandeMain.Companion.get().getManagerClientMenu().createButton(this.width / 2 - 102, this.height / 4 + 8 + 24 * 3, 204, 20, this));
+            addDrawableChild(TarasandeMain.Companion.get().getManagerClientMenu().createClientMenuButton(this.width / 2 - 102, this.height / 4 + 8 + 24 * 3, 204, 20, this, false));
     }
 
     @Override
