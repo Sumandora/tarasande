@@ -31,7 +31,7 @@ open class Panel(
     private val scissor: Boolean = false
 ) : IElement {
 
-    constructor(title: String, x: Double, y: Double, width: Double, height: Double, background: Boolean, resizable: Boolean, fixed: Boolean) : this(title, x, y, width, height, null, null, background, resizable, fixed, true)
+    constructor(title: String, x: Double, y: Double, width: Double, height: Double, background: Boolean, resizable: Boolean, fixed: Boolean) : this(title, x, y, width, height, null, null, background, resizable, fixed, background)
 
     private val dragInfo = DragInfo()
     private val resizeInfo = DragInfo()
