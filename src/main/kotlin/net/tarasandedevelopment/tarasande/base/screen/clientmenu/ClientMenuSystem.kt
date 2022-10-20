@@ -72,7 +72,7 @@ class ManagerClientMenu : Manager<ElementMenu>() {
         return buttonText
     }
 
-    fun createClientMenuButton(x: Int, y: Int, width: Int, height: Int, parent: Screen, updating: Boolean): ClickableWidgetPanel {
+    fun createClientMenuButton(x: Int, y: Int, width: Int, height: Int, parent: Screen): ClickableWidgetPanel {
         val selected = clientMenuFocusedEntry.selected[0]
 
         return PanelButton.createButton(x, y, width, height, this.createButtonText()) {
@@ -84,7 +84,7 @@ class ManagerClientMenu : Manager<ElementMenu>() {
                 }
             }
             MinecraftClient.getInstance().setScreen(ScreenBetterClientMenu(parent))
-        }.also { it.updating = updating }
+        }
     }
 }
 
