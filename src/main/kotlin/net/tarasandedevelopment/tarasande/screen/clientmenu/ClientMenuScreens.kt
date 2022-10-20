@@ -1,6 +1,13 @@
 package net.tarasandedevelopment.tarasande.screen.clientmenu
 
 import io.netty.buffer.Unpooled
+import io.netty.channel.ChannelHandlerAdapter
+import io.netty.channel.ChannelHandlerContext
+import io.netty.channel.ChannelInboundHandlerAdapter
+import io.netty.handler.codec.haproxy.HAProxyCommand
+import io.netty.handler.codec.haproxy.HAProxyMessage
+import io.netty.handler.codec.haproxy.HAProxyProtocolVersion
+import io.netty.handler.codec.haproxy.HAProxyProxiedProtocol
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.network.PacketByteBuf
@@ -23,6 +30,8 @@ import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.I
 import net.tarasandedevelopment.tarasande.screen.clientmenu.protocol.ScreenBetterProtocolHack
 import net.tarasandedevelopment.tarasande.screen.clientmenu.proxy.ScreenBetterProxy
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.ValueMode
+import net.tarasandedevelopment.tarasande.value.ValueNumber
 import net.tarasandedevelopment.tarasande.value.ValueText
 import org.spongepowered.include.com.google.common.io.Files
 import java.io.File
@@ -133,6 +142,54 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
                     it.cancelled = true
                 }
             }
+        }
+    }
+
+    override fun onToggle(state: Boolean) {
+        // state check in event listener
+    }
+}
+
+class ElementMenuToggleHAProxyHack : ElementMenuToggle("HA-Proxy Hack") {
+
+    val modifyIP = ValueBoolean(this, "Modify ip", true)
+    val ip = object : ValueText(this, "IP", "1.3.3.7") {
+        override fun isEnabled() = modifyIP.value
+    }
+
+    val modifyPort = ValueBoolean(this, "Modify port", false)
+    val port = object : ValueNumber(this, "Port", 1.0, 25565.0, 65535.0, 1E-2) {
+        override fun isEnabled() = modifyPort.value
+    }
+
+    val protocolVersion = ValueMode(this, "Protocol version", false, "V1 (16)", "V2 (32)")
+    val tcpVersion = ValueMode(this, "TCP version", false, "4 (17)", "6 (33)")
+
+    val handler = object : ChannelInboundHandlerAdapter() {
+        override fun channelActive(ctx: ChannelHandlerContext) {
+            val socketAddress = ctx.channel().remoteAddress() as InetSocketAddress
+            var destinationIP = socketAddress.address.hostAddress
+
+            if (modifyIP.value) {
+                destinationIP = ip.value
+            }
+
+            var destinationPort = socketAddress.port
+            if (modifyPort.value) {
+                destinationPort = port.value.toInt()
+            }
+
+            val payload = HAProxyMessage(
+                HAProxyProtocolVersion.values()[protocolVersion.settings.indexOf(protocolVersion.selected[0])],
+                HAProxyCommand.PROXY,
+                HAProxyProxiedProtocol.values()[tcpVersion.settings.indexOf(tcpVersion.selected[0]) + 1],
+                destinationIP,
+                socketAddress.address.hostAddress,
+                destinationPort,
+                socketAddress.port
+            )
+
+            ctx.writeAndFlush(payload)
         }
     }
 
