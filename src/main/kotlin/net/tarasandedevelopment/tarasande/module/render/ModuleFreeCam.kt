@@ -46,7 +46,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
             firstRealInput = PlayerUtil.input.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
             firstInput = mc.player?.input?.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
             for (keyBinding in mc.options.allKeys.filter { !PlayerUtil.movementKeys.contains(it) })
-                map[keyBinding] = keyBinding.isPressed
+                map[keyBinding] = (keyBinding as IKeyBinding).tarasande_forceIsPressed()
         }
     }
 
@@ -123,10 +123,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
                 event.cancelled = true
             }
             if (keepMovement.value) {
-                if (event.input == MinecraftClient.getInstance().player?.input) {
-                    event.movementForward = firstInput?.first!!
-                    event.movementSideways = firstInput?.second!!
-                } else if (event.input == PlayerUtil.input) {
+                if (event.input != input) {
                     event.movementForward = firstRealInput?.first!!
                     event.movementSideways = firstRealInput?.second!!
                     event.cancelled = false
@@ -134,7 +131,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
             }
         }
 
-        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
+        registerEvent(EventKeyBindingIsPressed::class.java, 1) { event ->
             if (map.isEmpty())
                 onEnable()
             if (!PlayerUtil.movementKeys.contains(event.keyBinding))
