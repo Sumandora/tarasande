@@ -65,13 +65,8 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
         if (MinecraftClient.getInstance().currentScreen != null) return false
 
         return when (type) {
-            Type.KEY -> {
-                GLFW.glfwGetKey(MinecraftClient.getInstance().window.handle, button) == GLFW.GLFW_PRESS
-            }
-
-            Type.MOUSE -> {
-                GLFW.glfwGetMouseButton(MinecraftClient.getInstance().window.handle, button) == GLFW.GLFW_PRESS
-            }
+            Type.KEY -> GLFW.glfwGetKey(MinecraftClient.getInstance().window.handle, button) == GLFW.GLFW_PRESS
+            Type.MOUSE -> GLFW.glfwGetMouseButton(MinecraftClient.getInstance().window.handle, button) == GLFW.GLFW_PRESS
         }
     }
 
