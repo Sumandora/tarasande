@@ -8,15 +8,13 @@ import net.minecraft.client.render.VertexFormat
 import net.minecraft.client.render.VertexFormats
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Hand
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
-import net.tarasandedevelopment.tarasande.util.player.projectile.ProjectileUtil
+import net.tarasandedevelopment.tarasande.util.player.prediction.projectile.ProjectileUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import org.lwjgl.opengl.GL11
-import java.util.function.Consumer
 
 class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories", ModuleCategory.RENDER) {
 

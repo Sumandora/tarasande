@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.util.player.projectile
+package net.tarasandedevelopment.tarasande.util.player.prediction.projectile
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.enchantment.EnchantmentHelper
