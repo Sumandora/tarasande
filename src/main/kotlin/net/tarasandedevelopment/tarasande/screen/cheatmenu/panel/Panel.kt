@@ -27,10 +27,11 @@ open class Panel(
     val maxHeight: Double? = null,
     private val background: Boolean = true,
     private val resizable: Boolean = true,
-    internal val fixed: Boolean = false
+    internal val fixed: Boolean = false,
+    private val scissor: Boolean = false
 ) : IElement {
 
-    constructor(title: String, x: Double, y: Double, width: Double, height: Double, background: Boolean, resizable: Boolean, fixed: Boolean) : this(title, x, y, width, height, null, null, background, resizable, fixed)
+    constructor(title: String, x: Double, y: Double, width: Double, height: Double, background: Boolean, resizable: Boolean, fixed: Boolean) : this(title, x, y, width, height, null, null, background, resizable, fixed, true)
 
     private val dragInfo = DragInfo()
     private val resizeInfo = DragInfo()
@@ -91,17 +92,17 @@ open class Panel(
                 val accent = TarasandeMain.get().clientValues.accentColor.getColor()
                 RenderUtil.fill(matrices, x, y + MinecraftClient.getInstance().textRenderer.fontHeight, x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).let { Color(it.red, it.green, it.blue, 0) }, 0.3, 0.3, 0.3, 0.7).rgb)
                 matrices?.pop()
+            }
 
-                if (fixed) {
-                    GlStateManager._enableScissorTest()
-                    val scaleFactor = MinecraftClient.getInstance().window?.scaleFactor!!.toInt()
-                    GlStateManager._scissorBox(
-                        (x * scaleFactor).toInt(),
-                        (MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight) * scaleFactor).toInt(),
-                        (panelWidth * scaleFactor).toInt(),
-                        (panelHeight * scaleFactor).toInt()
-                    )
-                }
+            if (scissor) {
+                GlStateManager._enableScissorTest()
+                val scaleFactor = MinecraftClient.getInstance().window?.scaleFactor!!.toInt()
+                GlStateManager._scissorBox(
+                    (x * scaleFactor).toInt(),
+                    (MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight) * scaleFactor).toInt(),
+                    (panelWidth * scaleFactor).toInt(),
+                    (panelHeight * scaleFactor).toInt()
+                )
             }
 
             matrices?.push()
@@ -111,6 +112,10 @@ open class Panel(
                 GlStateManager._disableScissorTest()
 
             matrices?.pop()
+
+            if (scissor) {
+                GlStateManager._disableScissorTest()
+            }
         }
 
         renderTitleBar(matrices, mouseX, mouseY, delta)

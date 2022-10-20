@@ -8,9 +8,11 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClickableWidget
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.minecraftbutton.PanelButton
 import net.tarasandedevelopment.tarasande.screen.clientmenu.*
 import net.tarasandedevelopment.tarasande.screen.widget.AllMouseButtonWidget
 import net.tarasandedevelopment.tarasande.screen.widget.AllMousePressAction
+import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import org.lwjgl.glfw.GLFW
@@ -58,30 +60,31 @@ class ManagerClientMenu : Manager<ElementMenu>() {
         return clientMenuFocusedEntry.anySelected() && clientMenuFocusedEntry.selected[0] != "None"
     }
 
-    fun createButtonText(): Text {
+    fun createButtonText(): String {
         val selected = clientMenuFocusedEntry.selected[0]
 
-        var buttonText = Text.of(TarasandeMain.get().name.let { it[0].uppercaseChar().toString() + it.substring(1) + " Menu" })
-        if (anySelected()) {
-            buttonText = Text.of(selected)
+        val buttonText = if (anySelected()) {
+            selected
+        } else {
+            TarasandeMain.get().name.let { it[0].uppercaseChar().toString() + it.substring(1) + " Menu" }
         }
 
         return buttonText
     }
 
-    fun createButton(x: Int, y: Int, width: Int, height: Int, parent: Screen): ButtonWidget {
+    fun createButton(x: Int, y: Int, width: Int, height: Int, parent: Screen): ClickableWidgetPanel {
         val selected = clientMenuFocusedEntry.selected[0]
 
-        return ButtonWidget(x, y, width, height, this.createButtonText()) {
+        return ClickableWidgetPanel(PanelButton(x, y, width, height, this.createButtonText()) {
             if (this.anySelected() && !Screen.hasShiftDown()) {
                 val screen = byName(selected)
                 if (screen.visible()) {
                     screen.onClick(GLFW.GLFW_MOUSE_BUTTON_LEFT)
-                    return@ButtonWidget
+                    return@PanelButton
                 }
             }
             MinecraftClient.getInstance().setScreen(ScreenBetterClientMenu(parent))
-        }
+        })
     }
 }
 
