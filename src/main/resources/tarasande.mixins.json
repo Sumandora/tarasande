@@ -122,6 +122,7 @@
     "protocolhack.viaversion.MixinAbstractProtocol",
     "protocolhack.viaversion.MixinBlockEntityProvider_1_12_2",
     "protocolhack.viaversion.MixinEntityPackets_1_8",
+    "protocolhack.viaversion.MixinInventoryPackets1_13_2",
     "protocolhack.viaversion.MixinInventoryPackets_1_11",
     "protocolhack.viaversion.MixinMetadataRewriter1_15To1_14_4",
     "protocolhack.viaversion.MixinMovementTracker",
