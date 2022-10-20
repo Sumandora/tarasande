@@ -431,7 +431,6 @@ object ItemSplitter {
         splitter[Items.SPRUCE_BUTTON] = VersionList.R1_13
         splitter[Items.BIRCH_BUTTON] = VersionList.R1_13
         splitter[Items.JUNGLE_BUTTON] = VersionList.R1_13
-        splitter[Items.ACACIA_BUTTON] = VersionList.R1_13
         splitter[Items.DARK_OAK_BUTTON] = VersionList.R1_13
         splitter[Items.PRISMARINE_STAIRS] = VersionList.R1_13
         splitter[Items.PRISMARINE_BRICK_STAIRS] = VersionList.R1_13
