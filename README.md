@@ -63,6 +63,7 @@
 - SeedUtils and Shadow seed cracker 
 - OreSim
 - Forge Faker GUI auto calculation for width
+- Remove cancel from all custom payloads 
 
 ## TODO-List (Flori | ViaLegacy)
 

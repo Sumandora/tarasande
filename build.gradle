@@ -26,8 +26,8 @@ var libs = [
 		// Proxy -> https://mvnrepository.com/artifact/io.netty/netty-handler-proxy
         "io.netty:netty-handler-proxy:4.1.82.Final",
 
-		// Protocol Hack -> https://github.com/ViaVersion/ViaVersion
-		"com.viaversion:viaversion:4.4.3-SNAPSHOT",
+		// Protocol Hack (-> older servers) -> https://github.com/ViaVersion/ViaVersion
+		"com.viaversion:viaversion:4.5.0-22w42a-SNAPSHOT",
 
 		// Snake YML -> https://github.com/snakeyaml/snakeyaml
 		"org.yaml:snakeyaml:1.29",
