@@ -141,9 +141,7 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
         }
 
         registerEvent(EventIsEntityAttackable::class.java) { event ->
-            if (event.attackable && event.entity != null)
-                if (isBot(event.entity))
-                    event.attackable = false
+            event.attackable = event.attackable && isBot(event.entity)
         }
 
         registerEvent(EventInvalidGameMode::class.java) { event ->

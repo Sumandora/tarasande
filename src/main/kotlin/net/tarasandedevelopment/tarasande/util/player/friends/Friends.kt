@@ -20,7 +20,7 @@ class Friends {
                 if (TarasandeMain.get().managerModule.get(ModuleNoFriends::class.java).enabled)
                     return@add
 
-                if (it.attackable && it.entity != null && it.entity is PlayerEntity)
+                if (it.attackable && it.entity is PlayerEntity)
                     if (friends.any { friend -> friend.first == it.entity.gameProfile })
                         it.attackable = false
             }

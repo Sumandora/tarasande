@@ -6,11 +6,6 @@ import net.minecraft.client.input.KeyboardInput
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.effect.StatusEffects
-import net.minecraft.entity.mob.MobEntity
-import net.minecraft.entity.mob.Monster
-import net.minecraft.entity.passive.AnimalEntity
-import net.minecraft.entity.passive.TameableEntity
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Items
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
@@ -52,18 +47,10 @@ object PlayerUtil {
     fun isPlayerMoving() = MinecraftClient.getInstance().player!!.input.movementInput.lengthSquared() != 0.0f
 
     fun isAttackable(entity: Entity?): Boolean {
-        var attackable = true
-        if (entity == null) attackable = false
-        else if (entity !is LivingEntity) attackable = false
-        else if (entity == MinecraftClient.getInstance().player) attackable = false
-        else if (entity == MinecraftClient.getInstance().player?.vehicle && !TarasandeMain.get().clientValues.attackRidingEntity.value) attackable = false
-        else if (!TarasandeMain.get().clientValues.targets.isSelected(0) && entity is PlayerEntity) attackable = false
-        else if (TarasandeMain.get().clientValues.dontAttackTamedEntities.value && entity is TameableEntity && entity.ownerUuid == MinecraftClient.getInstance().player?.uuid) attackable = false
-        else if (!TarasandeMain.get().clientValues.targets.isSelected(1) && entity is AnimalEntity) attackable = false
-        else if (!TarasandeMain.get().clientValues.targets.isSelected(2) && ((entity is MobEntity || entity is Monster) && entity !is AnimalEntity)) attackable = false
-        else if (!TarasandeMain.get().clientValues.targets.isSelected(3) && (entity !is PlayerEntity && entity !is AnimalEntity && entity !is MobEntity)) attackable = false
+        if (entity == null) return false
+        if (entity == MinecraftClient.getInstance().player) return false
 
-        val eventIsEntityAttackable = EventIsEntityAttackable(entity, attackable)
+        val eventIsEntityAttackable = EventIsEntityAttackable(entity, entity is LivingEntity)
         TarasandeMain.get().eventDispatcher.call(eventIsEntityAttackable)
         return eventIsEntityAttackable.attackable
     }

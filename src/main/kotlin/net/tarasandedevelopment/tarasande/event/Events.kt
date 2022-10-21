@@ -90,7 +90,7 @@ class EventJump(var yaw: Float, val state: State) : Event(state == State.PRE) {
 
 class EventGamma(val x: Int, val y: Int, var color: Int) : Event(false)
 class EventMovement(val entity: Entity, var velocity: Vec3d) : Event(false)
-class EventIsEntityAttackable(val entity: Entity?, var attackable: Boolean) : Event(false)
+class EventIsEntityAttackable(val entity: Entity, var attackable: Boolean) : Event(false)
 
 
 class EventMouse(val button: Int, val action: Int) : Event(true)

@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
@@ -18,6 +19,8 @@ class PanelRadar(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
 
 		val pos = MinecraftClient.getInstance().player?.getLerpedPos(MinecraftClient.getInstance().tickDelta)!!
 		for (entity in MinecraftClient.getInstance().world?.entities!!) {
+			if (!TarasandeMain.get().clientValues.isEntityDesired(entity))
+				continue
 			val otherPos = entity.getLerpedPos(MinecraftClient.getInstance().tickDelta)!!
 			val dist = sqrt((otherPos.x - pos.x).pow(2.0) + (otherPos.z - pos.z).pow(2.0))
 

@@ -49,21 +49,18 @@
 - (Banners in protocol selection)
 - Settings for HypixelBedwarsOverlay
 - ViaLegacy texture pack using ProtocolPatcher
+- Anti vanish: Tab completion
 
 ## TODO-List (Flori | General)
 
 - TPS Hud Element recode for Protocol Hack
 - placing blocks in localplayer
-- ForgeFaker
 - Notebot
 - Recode Mixins with AccessWidener and conventions
-- HA Proxy Hack
-- Anti vanish: Proxy
 - Iron bars & Cocoa Blocks 1.8 grim (false flag?)
 - SeedUtils and Shadow seed cracker 
 - OreSim
 - Forge Faker GUI auto calculation for width
-- Remove cancel from all custom payloads 
 
 ## TODO-List (Flori | ViaLegacy)
 
@@ -74,7 +71,6 @@
 - 1.7.10: Recode Chunk Translation using RKs Chunk Base (Chunk1_8Type)
 - 1.6.4: Crafting Table CraftResult was clientside back in the time 
 - 1.6.4: Reciperemapper base with all versions
-- 1.7 (?): Respawn
 
 ## TODO-List (General)
 - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
