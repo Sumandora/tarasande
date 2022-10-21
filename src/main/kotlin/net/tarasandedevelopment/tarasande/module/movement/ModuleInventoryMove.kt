@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
+import de.florianmichael.viaprotocolhack.util.VersionList
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.InputUtil
-import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
@@ -16,11 +16,13 @@ import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueC
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentText
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueMode
 
 class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
 
-    val canceledPackets = ValueMode(this, "Canceled packets", true, "Open", "Close")
+    val cancelOpenPacket = object : ValueBoolean(this, "Cancel open packets", false) {
+        override fun isEnabled() = VersionList.isOlderOrEqualTo(VersionList.R1_11_1)
+    }
+    val cancelClosePacket = ValueBoolean(this, "Cancel close packets", false)
     private val updateSneaking = ValueBoolean(this, "Update sneaking", false)
 
     private val movementKeys = ArrayList(PlayerUtil.movementKeys)
@@ -35,8 +37,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
     init {
         registerEvent(EventPacket::class.java) { event ->
             if (event.type == EventPacket.Type.SEND) {
-                if ((canceledPackets.isSelected(0) && event.packet is ClientCommandC2SPacket && event.packet.mode == ClientCommandC2SPacket.Mode.OPEN_INVENTORY) ||
-                    (canceledPackets.isSelected(1) && event.packet is CloseHandledScreenC2SPacket && event.packet.syncId == 0))
+                if (cancelClosePacket.value && event.packet is CloseHandledScreenC2SPacket && event.packet.syncId == 0)
                     event.cancelled = true
             }
         }

@@ -7,7 +7,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.packet.c2s.play.SelectMerchantTradeC2SPacket;
 import net.minecraft.screen.MerchantScreenHandler;
 import net.minecraft.text.Text;
-import net.tarasandedevelopment.tarasande.protocol.platform.ViaLegacyValues;
+import net.tarasandedevelopment.tarasande.protocol.platform.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -35,7 +35,7 @@ public abstract class MixinMerchantScreen extends HandledScreen<MerchantScreenHa
 
     @Inject(method = "syncRecipeIndex", at = @At("HEAD"))
     public void smoothOutRecipeIndex(CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2) && ViaLegacyValues.INSTANCE.getSmoothOutMerchantScreens().getValue()) {
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2) && ProtocolHackValues.INSTANCE.getSmoothOutMerchantScreens().getValue()) {
             if (previousRecipeIndex != selectedIndex) {
                 int direction = previousRecipeIndex < selectedIndex ? 1 : -1;
                 for (int smooth = previousRecipeIndex + direction /* don't send the page we already are on */; smooth != selectedIndex; smooth += direction) {

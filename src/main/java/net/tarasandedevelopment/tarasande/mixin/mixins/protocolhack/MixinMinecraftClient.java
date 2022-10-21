@@ -62,7 +62,7 @@ public abstract class MixinMinecraftClient {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_11_1) && viaConnection != null) {
             if (!TarasandeMain.Companion.get().getDisabled()) {
                 ModuleInventoryMove moduleInventoryMove = TarasandeMain.Companion.get().getManagerModule().get(ModuleInventoryMove.class);
-                if (moduleInventoryMove.isEnabled() && moduleInventoryMove.getCanceledPackets().isSelected(0))
+                if (moduleInventoryMove.isEnabled() && moduleInventoryMove.getCancelOpenPacket().getValue())
                     return;
             }
 

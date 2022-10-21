@@ -36,6 +36,7 @@ class ModuleResourcePackSpoofer : Module("Resource pack spoofer", "Changes the r
 
                     mode.isSelected(1) -> mc.networkHandler?.sendPacket(ResourcePackStatusC2SPacket(ResourcePackStatusC2SPacket.Status.DECLINED))
                 }
+                event.cancelled = true
             }
         }
     }

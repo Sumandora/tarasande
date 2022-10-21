@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.screen.clientmenu
 
 import io.netty.buffer.Unpooled
-import io.netty.channel.ChannelHandlerAdapter
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
 import io.netty.handler.codec.haproxy.HAProxyCommand
@@ -22,7 +21,7 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuTogg
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.mixin.accessor.ICustomPayloadC2SPacket
 import net.tarasandedevelopment.tarasande.mixin.accessor.IHandshakeC2SPacket
-import net.tarasandedevelopment.tarasande.protocol.platform.ViaLegacyValues
+import net.tarasandedevelopment.tarasande.protocol.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.ScreenBetterAccountManager
 import net.tarasandedevelopment.tarasande.screen.clientmenu.addon.ScreenBetterAddons
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.IForgeNetClientHandler
@@ -60,7 +59,7 @@ class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack") {
     private val screenBetterProtocolHack = ScreenBetterProtocolHack()
 
     init {
-        TarasandeMain.get().managerValue.getValues(ViaLegacyValues).forEach {
+        TarasandeMain.get().managerValue.getValues(ProtocolHackValues).forEach {
             it.owner = this
         }
     }

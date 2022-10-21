@@ -61,6 +61,16 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
         return super.mouseScrolled(mouseX, mouseY, amount)
     }
 
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        this.clickableWidgetPanel?.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(keyCode, scanCode, modifiers)
+    }
+
+    override fun charTyped(chr: Char, modifiers: Int): Boolean {
+        this.clickableWidgetPanel?.charTyped(chr, modifiers)
+        return super.charTyped(chr, modifiers)
+    }
+
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         this.renderBackground(matrices)
         if (MinecraftClient.getInstance().world != null) {
