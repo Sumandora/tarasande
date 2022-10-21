@@ -14,7 +14,6 @@
 
 package de.florianmichael.viaprotocolhack.util;
 
-import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.ViaProtocolHack;
 
@@ -23,14 +22,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * ######################################################################################################################
- * # Notes:                                                                                                             #
- * # As of 1.6.4 all protocol IDs are given in the negative range, this has something to do with the sorting algorithms #
- * # of ViaVersion, which pushes protocols with higher protocol IDs further up the protocol pipeline                    #
- * # (which would break the protocol hack).                                                                             #
- * ######################################################################################################################
- */
 public class VersionList {
 
     private static final List<ProtocolVersion> protocols = new LinkedList<>();

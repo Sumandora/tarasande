@@ -44,6 +44,14 @@ public class LegacyProtocolVersion extends ProtocolVersion {
     public static final LegacyProtocolVersion R1_0_1 = new LegacyProtocolVersion(22, "1.0.0-1.0.1");
 
     public LegacyProtocolVersion(int version, String name) {
+        /*
+         * ######################################################################################################################
+         * # Notes:                                                                                                             #
+         * # As of 1.6.4 all protocol IDs are given in the negative range, this has something to do with the sorting algorithms #
+         * # of ViaVersion, which pushes protocols with higher protocol IDs further up the protocol pipeline                    #
+         * # (which would break the protocol hack).                                                                             #
+         * ######################################################################################################################
+         */
         super(-version, name);
 
         PROTOCOL_VERSIONS.add(this);

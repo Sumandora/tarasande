@@ -61,6 +61,7 @@
 - SeedUtils and Shadow seed cracker 
 - OreSim
 - Forge Faker GUI auto calculation for width
+- Panel: Text Radar
 
 ## TODO-List (Flori | ViaLegacy)
 
