@@ -10,7 +10,6 @@ import net.minecraft.client.texture.MissingSprite
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.command.ManagerCommand
@@ -18,6 +17,7 @@ import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.creative.Manager
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.graph.ManagerGraph
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.ManagerInformation
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ManagerValueComponent
+import net.tarasandedevelopment.tarasande.event.EventChangeScreen
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.category.PanelElementsCategory
@@ -81,9 +81,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             PanelArmor::class.java,
             PanelMousepad::class.java
         )
-        if (Util.getOperatingSystem() == Util.OperatingSystem.LINUX) {
-            panels.add(PanelNowPlaying::class.java)
-        }
         for (panel in panels) {
             this.panels.add(panel.declaredConstructors[0].newInstance(5.0, y, this).also { y += (it as Panel).titleBarHeight + 5 } as Panel)
         }
@@ -91,10 +88,16 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             this.panels.add(PanelGraph(graph, 5.0, y).also { y += it.titleBarHeight + 5 })
         }
         passEvents = false
-        TarasandeMain.get().eventDispatcher.add(EventUpdate::class.java) { event ->
-            if (event.state == EventUpdate.State.PRE)
-                if (TarasandeMain.get().clientValues.menuHotkey.wasPressed().let { it > 0 && it % 2 != 0 })
-                    MinecraftClient.getInstance().setScreen(this)
+        TarasandeMain.get().eventDispatcher.also {
+            it.add(EventChangeScreen::class.java) { event ->
+                if (client?.currentScreen is ScreenCheatMenu && event.newScreen == null)
+                    this.panels.forEach { it.onClose() }
+            }
+            it.add(EventUpdate::class.java) { event ->
+                if (event.state == EventUpdate.State.PRE)
+                    if (TarasandeMain.get().clientValues.menuHotkey.wasPressed().let { it > 0 && it % 2 != 0 })
+                        MinecraftClient.getInstance().setScreen(this)
+            }
         }
     }
 
@@ -116,7 +119,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         if (isClosing) animation = 1.0 - animation
 
         if (isClosing && animation <= 0.0) {
-            panels.forEach { it.onClose() }
             RenderSystem.recordRenderCall {
                 super.close()
             }
