@@ -72,8 +72,6 @@ import java.util.zip.Inflater;
  * # code and are subject to the FMPL v1.0 License.                                                                    #
  * # Made by Florian Michael                                                                                           #
  * #####################################################################################################################
- * <p>
- * - CarpetBlock Bounding Box
  */
 public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, ClientboundPackets1_8, ServerboundPackets1_7_10, ServerboundPackets1_8> {
 
