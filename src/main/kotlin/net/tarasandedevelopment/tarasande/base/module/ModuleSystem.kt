@@ -122,7 +122,8 @@ class ManagerModule : Manager<Module>() {
             ModuleCivBreak(),
             ModuleHealingBot(),
             ModuleVehicleSpeed(),
-            ModuleIgnoreResourcePackHash()
+            ModuleIgnoreResourcePackHash(),
+            ModuleNoJumpCooldown()
         )
         TarasandeMain.get().eventDispatcher.add(EventTick::class.java) {
             if (it.state == EventTick.State.POST) {

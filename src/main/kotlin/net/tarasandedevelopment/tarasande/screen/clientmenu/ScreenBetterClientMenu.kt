@@ -56,7 +56,8 @@ class ScreenBetterClientMenu(parent: Screen) : ScreenBetterSlotList(46, Minecraf
 
         override fun onSingleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
             super.onSingleClickEntry(mouseX, mouseY, mouseButton)
-            MinecraftClient.getInstance().soundManager.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0f))
+            if (element !is ElementMenuTitle)
+                MinecraftClient.getInstance().soundManager.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0f))
             element.onClickInternal(mouseButton)
         }
 

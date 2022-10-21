@@ -21,10 +21,9 @@ class ClientValues {
     val menuBlurBackground = ValueBoolean(this, "Menu: blur background", true)
     val menuDrawImage = ValueBoolean(this, "Menu: draw image", true)
     val accentColor = ValueColor(this, "Accent color", 0.6f, 1.0f, 1.0f)
-    val entities =
-        object : ValueRegistry<EntityType<*>>(this, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
-            override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
-        }
+    val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
+        override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
+    }
     private val dontAttackTamedEntities = object : ValueBoolean(this, "Don't attack tamed entities", false) {
         override fun isEnabled() = entities.list.any { it.baseClass.isInstance(Tameable::class.java) }
     }

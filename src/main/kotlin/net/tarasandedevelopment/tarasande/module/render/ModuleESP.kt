@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.Vector4f
+import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
@@ -24,12 +25,16 @@ import net.tarasandedevelopment.tarasande.util.player.entitycolor.EntityColor
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueMode
+import net.tarasandedevelopment.tarasande.value.ValueRegistry
 
 class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCategory.RENDER) {
 
     val mode = ValueMode(this, "Mode", true, "Shader", "2D")
+    val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
+        override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
+    }
     private val hideBots = object : ValueBoolean(this, "Hide bots", false) {
-        override fun isEnabled() = TarasandeMain.get().clientValues.entities.list.contains(EntityType.PLAYER)
+        override fun isEnabled() = entities.list.contains(EntityType.PLAYER)
     }
 
     init {
@@ -52,7 +57,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
     val entityColor = EntityColor(this)
 
     fun filter(entity: Entity) =
-        TarasandeMain.get().clientValues.entities.list.contains(entity.type) &&
+        entities.list.contains(entity.type) &&
                 (!hideBots.value || entity !is PlayerEntity || entity == mc.player || !TarasandeMain.get().managerModule.get(ModuleAntiBot::class.java).isBot(entity))
 
     private val hashMap = HashMap<Entity, Rectangle>()
