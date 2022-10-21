@@ -8,6 +8,7 @@ import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.blur.BlurKawase
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.*
 import org.lwjgl.glfw.GLFW
 
@@ -20,6 +21,12 @@ class ClientValues {
     val menuAccentBackground = ValueBoolean(this, "Menu: accent background", true)
     val menuBlurBackground = ValueBoolean(this, "Menu: blur background", true)
     val menuDrawImage = ValueBoolean(this, "Menu: draw image", true)
+    val menuImage = object : ValueMode(this, "Menu: image", false, "Rimuru", "Shuya's girl", "Nanakusa", "Jannick") {
+        override fun isEnabled() = menuDrawImage.value
+        override fun onChange() {
+            TarasandeMain.get().screenCheatMenu.image = RenderUtil.createImage(selected[0].lowercase().replace(" ", "").replace("'", "") + ".png")
+        }
+    }
     val accentColor = ValueColor(this, "Accent color", 0.6f, 1.0f, 1.0f)
     val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
         override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey

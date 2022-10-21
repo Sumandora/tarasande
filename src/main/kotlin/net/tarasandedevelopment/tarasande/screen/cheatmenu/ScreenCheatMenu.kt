@@ -6,7 +6,9 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.render.GameRenderer
+import net.minecraft.client.texture.AbstractTexture
 import net.minecraft.client.texture.MissingSprite
+import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
@@ -40,7 +42,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
     val managerGraph = ManagerGraph()
 
-    private var image: Identifier? = Identifier(TarasandeMain.get().name, "textures/rimuru.png")
+    var image: NativeImageBackedTexture? = null
     private val particles = ArrayList<Particle>()
 
     // unused rn
@@ -54,12 +56,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     var popup = false
 
     init {
-        // @mojang, this code is garbage. delete life
-        MinecraftClient.getInstance().textureManager.getTexture(image)
-        val imageTex = MinecraftClient.getInstance().textureManager.getTexture(image)
-        if (imageTex == null || imageTex == MissingSprite.getMissingSpriteTexture())
-            image = null
-
         var y = 5.0
 
         for (moduleCategory in ModuleCategory.values()) {
@@ -141,18 +137,21 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
         matrices?.push()
 
-        if (image != null && TarasandeMain.get().clientValues.menuDrawImage.value) {
+        if (image != null && image!!.image != null && TarasandeMain.get().clientValues.menuDrawImage.value) {
             matrices?.push()
             RenderSystem.setShader { GameRenderer.getPositionTexShader() }
-            RenderSystem.setShaderTexture(0, image)
+            RenderSystem.setShaderTexture(0, image!!.glId)
             val color = color.brighter().brighter()
             RenderSystem.setShaderColor(color.red / 255f, color.green / 255f, color.blue / 255f, (animation * animation * animation).toFloat())
             RenderSystem.enableBlend()
             RenderSystem.defaultBlendFunc()
             RenderSystem.enableDepthTest()
-            val aspect = 1000.0 / 833.0
-            val width = height / aspect
-            val height = width / aspect
+
+            val aspect = image!!.image!!.width / image!!.image!!.height.toDouble()
+
+            val height = client?.window?.scaledHeight!! * 0.85
+            val width = height * aspect
+
             DrawableHelper.drawTexture(matrices, (client?.window?.scaledWidth!! - animation * width).toInt(), (client?.window?.scaledHeight!! - height).toInt(), 0, 0.0f, 0.0f, width.toInt(), height.toInt(), width.toInt(), height.toInt())
             matrices?.pop()
         }
