@@ -35,7 +35,8 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
             // System
             InformationCPU(),
             InformationGPU(),
-            *conditional(InformationPortage.isGenlopInstalled()) { InformationPortage() }, // hack
+            *conditional(InformationPortage.isGenlopInstalled()) { InformationPortage() },
+            *conditional(InformationNowPlaying.isDBusInstalled()) { InformationNowPlaying() },
 
             // World
             InformationEntities(),
