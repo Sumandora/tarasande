@@ -3,6 +3,8 @@ package net.tarasandedevelopment.tarasande.screen.cheatmenu.information
 import com.mojang.blaze3d.platform.GlDebugInfo
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.Information
+import net.tarasandedevelopment.tarasande.util.platform.DBus
+import net.tarasandedevelopment.tarasande.util.platform.Spotify
 
 class InformationCPU : Information("System", "CPU") {
 
@@ -55,46 +57,26 @@ class InformationPortage : Information("System", "Portage") {
 
 class InformationNowPlaying : Information("System", "Now playing") {
 
-    companion object {
-        fun isDBusInstalled(): Boolean {
-            if (Util.getOperatingSystem() != Util.OperatingSystem.LINUX)
-                return false
-
-            return try {
-                Runtime.getRuntime().exec("dbus-send")
-                true
-            } catch (t: Throwable) {
-                false
-            }
-        }
-    }
-
-    private var lastState = ""
+    private var lastState: String? = null
 
     init {
         Thread({
             while (true) {
-                Thread.sleep(100L)
+                Thread.sleep(1000L)
 
                 lastState = try {
-                    String(ProcessBuilder(
-                        "bash",
-                        "-c",
-                        "dbus-send --print-reply --dest=\$(dbus-send --session --dest=org.freedesktop.DBus --type=method_call --print-reply /org/freedesktop/DBus org.freedesktop.DBus.ListNames | grep org.mpris.MediaPlayer2 | sed -e 's/.*\\\"\\(.*\\)\\\"/\\1/' | head -n 1) /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata'"
-                    ).start().inputStream.readAllBytes())
+                    when (Util.getOperatingSystem()) {
+                        Util.OperatingSystem.WINDOWS -> Spotify.getTrack()
+                        Util.OperatingSystem.LINUX -> DBus.setTrack()
+                        else -> null // Uninstall whatever you are using at this point
+                    }
                 } catch (t: Throwable) {
-                    t.toString()
+                    null
                 }
             }
         }, "Now playing query thread").start()
     }
 
-    override fun getMessage(): String? {
-        val lines = lastState.split("\n")
-        val titleLine = lines.indexOfFirst { it.contains("string \"xesam:title\"") }
-        return if (titleLine == -1)
-            null
-        else
-            lines[lines.indexOfFirst { it.contains("string \"xesam:title\"") } + 1].split("string \"")[1].let { it.substring(0, it.length - 1) } // this calculation is the most retarded shit I've ever wrote bruh
-    }
+    override fun getMessage() = lastState
+
 }
