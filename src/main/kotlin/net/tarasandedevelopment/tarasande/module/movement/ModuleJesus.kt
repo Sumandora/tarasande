@@ -28,14 +28,17 @@ class ModuleJesus : Module("Jesus", "Lets you walk on liquids", ModuleCategory.M
         }
 
         registerEvent(EventUpdate::class.java) { event ->
-            if (event.state == EventUpdate.State.PRE)
-                if (mc.world?.getBlockState(mc.player?.blockPos?.add(0.0, mc.player?.stepHeight?.toDouble()?.times(-1)!!, 0.0))?.fluidState?.isEmpty == false && mc.player?.isOnGround == true) {
-                    if (jumpMotion.value > 0.0) {
-                        val prevVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)!!
-                        mc.player?.jump()
-                        mc.player?.velocity = prevVelocity.withAxis(Direction.Axis.Y, mc.player?.velocity?.y?.times(jumpMotion.value)!!)
-                    }
-                }
+            if (event.state == EventUpdate.State.PRE) {
+                if (mc.player?.input?.sneaking == true || mc.player?.fallDistance!! > 3.0)
+                    return@registerEvent
+                if (mc.player?.isTouchingWater == false && mc.player?.isInLava == false && mc.player?.isOnGround == true)
+                    if (mc.world?.getBlockState(BlockPos(mc.player?.pos?.add(0.0, -0.01, 0.0)))?.fluidState?.isEmpty == false)
+                        if (jumpMotion.value > 0.0) {
+                            val prevVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)!!
+                            mc.player?.jump()
+                            mc.player?.velocity = prevVelocity.withAxis(Direction.Axis.Y, mc.player?.velocity?.y?.times(jumpMotion.value)!!)
+                        }
+            }
         }
     }
 
