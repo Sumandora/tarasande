@@ -37,11 +37,11 @@ public class MixinMultiplayerServerListWidgetSubServerEntry {
 
         final float yPos = y + (entryHeight / 2F) - fontHeight / 2F;
         final String text = MinecraftClient.getInstance().textRenderer.trimToWidth("Forge/FML Server", x);
-        final int textWidth = MinecraftClient.getInstance().textRenderer.getWidth(text) + 2;
+        final int textWidth = MinecraftClient.getInstance().textRenderer.getWidth(text) + 4;
 
         RenderUtil.INSTANCE.text(matrices, text, x - textWidth, yPos, TarasandeMain.Companion.get().getClientValues().getAccentColor().getColor().getRGB());
 
-        if (RenderUtil.INSTANCE.isHovered(mouseX, mouseY, x - textWidth, yPos, x - 2, yPos + fontHeight)) {
+        if (RenderUtil.INSTANCE.isHovered(mouseX, mouseY, x - textWidth, yPos, x - 4, yPos + fontHeight)) {
             assert MinecraftClient.getInstance().currentScreen != null;
             final List<Text> tooltip = Arrays.asList(Text.of("Left mouse for Mods: " + payload.installedMods().size()));
 
