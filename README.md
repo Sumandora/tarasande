@@ -64,6 +64,7 @@
 - OreSim
 - Forge Faker GUI auto calculation for width
 - Remove cancel from all custom payloads 
+- Panel: Text Radar
 
 ## TODO-List (Flori | ViaLegacy)
 
@@ -74,7 +75,6 @@
 - 1.7.10: Recode Chunk Translation using RKs Chunk Base (Chunk1_8Type)
 - 1.6.4: Crafting Table CraftResult was clientside back in the time 
 - 1.6.4: Reciperemapper base with all versions
-- 1.7 (?): Respawn
 
 ## TODO-List (General)
 - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
