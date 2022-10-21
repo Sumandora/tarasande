@@ -35,6 +35,7 @@ public class VersionList {
 
     private static final List<ProtocolVersion> protocols = new LinkedList<>();
 
+    public static final ProtocolVersion S22w42a = new ProtocolVersion(761, 104, "22w42a", null);
     public static final ProtocolVersion R1_19_2 = new ProtocolVersion(760, "1.19.1-1.19.2");
     public static final ProtocolVersion R1_19 = new ProtocolVersion(759, "1.19");
 
