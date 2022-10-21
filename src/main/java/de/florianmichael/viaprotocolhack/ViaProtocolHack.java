@@ -47,16 +47,15 @@ public class ViaProtocolHack {
             }
 
             Via.init(builder.build());
+            MappingDataLoader.enableMappingsCache();
+
             final ViaManagerImpl viaManager = (ViaManagerImpl) Via.getManager();
 
             viaManager.getProtocolManager().setMaxProtocolPathSize(Integer.MAX_VALUE);
             viaManager.getProtocolManager().setMaxPathDeltaIncrease(-1);
-            platform.init();
-
-            MappingDataLoader.enableMappingsCache();
-            new ViaBackwardsPlatform();
-
             viaManager.init();
+
+            new ViaBackwardsPlatform();
         }).whenComplete((unused, throwable) -> whenComplete.run());
     }
 

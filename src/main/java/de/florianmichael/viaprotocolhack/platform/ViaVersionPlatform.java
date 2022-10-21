@@ -33,9 +33,6 @@ public class ViaVersionPlatform implements ViaPlatform<UUID> {
 
     public ViaVersionPlatform(final Logger logger) {
         this.logger = logger;
-    }
-
-    public void init() {
         config = new CustomViaConfig(ViaProtocolHack.instance().directory().toPath().resolve("viaversion.yml").toFile());
     }
 

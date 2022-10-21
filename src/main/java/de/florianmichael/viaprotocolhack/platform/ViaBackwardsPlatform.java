@@ -3,7 +3,6 @@ package de.florianmichael.viaprotocolhack.platform;
 import de.florianmichael.viaprotocolhack.ViaProtocolHack;
 
 import java.io.File;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class ViaBackwardsPlatform implements com.viaversion.viabackwards.api.ViaBackwardsPlatform {
@@ -15,7 +14,7 @@ public class ViaBackwardsPlatform implements com.viaversion.viabackwards.api.Via
 
     @Override
     public Logger getLogger() {
-        return LogManager.getLogManager().getLogger("ViaBackwards");
+        return ViaProtocolHack.instance().logger();
     }
 
     @Override
