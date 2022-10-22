@@ -847,7 +847,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                                 packetWrapper.write(Type.INT, 0); // Max uses
                                 packetWrapper.write(Type.INT, 0); // Max trades
                             }
-                            packetWrapper.clearInputBuffer(); // 1.7.x servers are sending garbage after the packet, and the via codebase doesn't allow it to skip all readable bytes
                         }
                         case "MC|RPack" -> {
                             final byte[] data = packetWrapper.read(TypeRegistry1_7_6_10.BYTEARRAY);
@@ -857,7 +856,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                             packetWrapper.write(Type.STRING, ""); // hash
                         }
                     }
-                    packetWrapper.clearInputBuffer();
+                    packetWrapper.clearInputBuffer(); // 1.7.x servers are sending garbage after the packet, and the via codebase doesn't allow it to skip all readable bytes
                 });
             }
         });
