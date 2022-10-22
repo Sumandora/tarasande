@@ -8,7 +8,6 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.Information
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.CopyOnWriteArrayList
@@ -68,39 +67,25 @@ class InformationVanishedPlayers : Information("Server", "Vanished players") {
 
     private val vanishedPlayers = CopyOnWriteArrayList<String>()
 
+
     init {
-        TarasandeMain.get().eventDispatcher.add(EventPacket::class.java) {
-            if (it.type == EventPacket.Type.RECEIVE) {
-                when (it.packet) {
+        TarasandeMain.get().eventDispatcher.add(EventPacket::class.java) { event ->
+            if (event.type == EventPacket.Type.RECEIVE) {
+                when (event.packet) {
                     is PlayerListS2CPacket -> {
-                        if (it.packet.action != PlayerListS2CPacket.Action.ADD_PLAYER && it.packet.action != PlayerListS2CPacket.Action.REMOVE_PLAYER)
-                            for (packetEntry in it.packet.entries)
+                        if (event.packet.action != PlayerListS2CPacket.Action.ADD_PLAYER && event.packet.action != PlayerListS2CPacket.Action.REMOVE_PLAYER)
+                            for (packetEntry in event.packet.entries)
                                 if (MinecraftClient.getInstance().networkHandler?.getPlayerListEntry(packetEntry.profile.id) == null)
-                                    when (it.packet.action) {
-                                        PlayerListS2CPacket.Action.UPDATE_GAME_MODE -> {
-                                            vanishedPlayers.add("Gamemode: " + packetEntry.profile.id + " -> " + StringUtil.formatEnumTypes(packetEntry.gameMode.name))
-                                        }
+                                    if (!vanishedPlayers.contains(packetEntry.profile.id.toString()))
+                                        vanishedPlayers.add(packetEntry.profile.id.toString())
+                    }
 
-                                        PlayerListS2CPacket.Action.UPDATE_DISPLAY_NAME -> {
-                                            vanishedPlayers.add("Name: " + packetEntry.profile.id + " -> " + packetEntry.displayName)
-                                        }
-
-                                        PlayerListS2CPacket.Action.UPDATE_LATENCY -> {
-                                                vanishedPlayers.add("Latency: " + packetEntry.profile.id + " -> " + packetEntry.latency)
-                                            }
-
-                                            else -> {
-                                                vanishedPlayers.add("Invalid: $packetEntry")
-                                            }
-                                        }
-                        }
-
-                        is PlayerRespawnS2CPacket -> {
-                            vanishedPlayers.clear()
-                        }
+                    is PlayerRespawnS2CPacket -> {
+                        vanishedPlayers.clear()
                     }
                 }
             }
+        }
     }
 
     override fun getMessage(): String? {

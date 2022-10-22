@@ -2,8 +2,6 @@ package net.tarasandedevelopment.tarasande.module.movement
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.PositionAndOnGround
 import net.minecraft.util.math.Direction
-import net.tarasandedevelopment.eventsystem.Event
-import net.tarasandedevelopment.eventsystem.Priority
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventMovement
@@ -13,7 +11,6 @@ import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.util.extension.times
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.util.function.Consumer
 
 class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory.MOVEMENT) {
 
@@ -46,7 +43,7 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
                 }
 
                 EventStep.State.POST -> {
-                    if (event.stepHeight > mc.player?.stepHeight!! && mc.player?.isOnGround == true) {
+                    if (event.stepHeight in mc.player?.stepHeight!!..stepHeight.value.toFloat() && mc.player?.isOnGround == true && mc.player?.velocity?.y!! < 0.0) {
                         if (mode.isSelected(1)) {
                             mc.networkHandler?.sendPacket(PositionAndOnGround(mc.player?.pos?.x!!, mc.player?.pos?.y?.plus(event.stepHeight * 0.42F)!!, mc.player?.pos?.z!!, false))
                             mc.networkHandler?.sendPacket(PositionAndOnGround(mc.player?.pos?.x!!, mc.player?.pos?.y?.plus(event.stepHeight * 0.75F)!!, mc.player?.pos?.z!!, false))
