@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinEntityPackets_1_8 {
 
     @Unique
-    private final static ValueTransformer<Short, Integer> transformer = new ValueTransformer<>(Type.VAR_INT) {
+    private final static ValueTransformer<Short, Integer> protocolhack_transformer = new ValueTransformer<>(Type.VAR_INT) {
         @Override
         public Integer transform(PacketWrapper wrapper, Short slot) throws Exception {
             int entityId = wrapper.get(Type.VAR_INT, 0);
@@ -45,7 +45,7 @@ public class MixinEntityPackets_1_8 {
             public void registerMap() {
                 map(Type.VAR_INT); // 0 - Entity ID
                 // 1 - Slot ID
-                map(Type.SHORT, transformer);
+                map(Type.SHORT, protocolhack_transformer);
 
                 // Checks if the packet is valid @author FlorianMichael
                 handler((pw) -> {

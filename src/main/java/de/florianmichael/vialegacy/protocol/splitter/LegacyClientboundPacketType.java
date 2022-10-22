@@ -1,11 +1,9 @@
 package de.florianmichael.vialegacy.protocol.splitter;
 
 import com.viaversion.viaversion.api.protocol.packet.ClientboundPacketType;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public interface LegacyClientboundPacketType extends ClientboundPacketType {

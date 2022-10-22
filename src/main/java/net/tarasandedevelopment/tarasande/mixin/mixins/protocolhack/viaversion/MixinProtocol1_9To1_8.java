@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.lang.reflect.Type;
 
 @Mixin(Protocol1_9To1_8.class)
-public abstract class MixinProtocol1_9To1_8 {
+public class MixinProtocol1_9To1_8 {
 
     @Shadow
     private static JsonElement constructJson(String par1) {

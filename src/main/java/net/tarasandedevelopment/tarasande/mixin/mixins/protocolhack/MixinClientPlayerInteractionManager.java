@@ -34,29 +34,31 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(ClientPlayerInteractionManager.class)
-public abstract class MixinClientPlayerInteractionManager {
+public class MixinClientPlayerInteractionManager {
 
-    @Shadow @Final private MinecraftClient client;
+    @Shadow
+    @Final
+    private MinecraftClient client;
 
     @Unique
-    private ItemStack oldCursorStack;
+    private ItemStack protocolhack_oldCursorStack;
 
     @Unique
-    private List<ItemStack> oldItems;
+    private List<ItemStack> protocolhack_oldItems;
 
     @Inject(method = "attackEntity", at = @At("HEAD"))
     private void injectAttackEntity(PlayerEntity player, Entity target, CallbackInfo ci) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_8) && player instanceof IClientPlayerEntity_Protocol) {
             player.swingHand(Hand.MAIN_HAND);
-            ((IClientPlayerEntity_Protocol) player).tarasande_cancelSwingOnce();
+            ((IClientPlayerEntity_Protocol) player).protocolhack_cancelSwingOnce();
         }
     }
 
     @ModifyVariable(method = "clickSlot", at = @At(value = "STORE"), ordinal = 0)
     private List<ItemStack> captureOldItems(List<ItemStack> oldItems) {
         assert client.player != null;
-        oldCursorStack = client.player.currentScreenHandler.getCursorStack().copy();
-        return this.oldItems = oldItems;
+        protocolhack_oldCursorStack = client.player.currentScreenHandler.getCursorStack().copy();
+        return this.protocolhack_oldItems = oldItems;
     }
 
     // Special Cases
@@ -80,25 +82,25 @@ public abstract class MixinClientPlayerInteractionManager {
 
                 if (this.shouldEmpty(clickSlot.getActionType(), clickSlot.getSlot()))
                     slotItemBeforeModification = ItemStack.EMPTY;
-                else if (clickSlot.getSlot() < 0 || clickSlot.getSlot() >= oldItems.size())
-                    slotItemBeforeModification = oldCursorStack;
+                else if (clickSlot.getSlot() < 0 || clickSlot.getSlot() >= protocolhack_oldItems.size())
+                    slotItemBeforeModification = protocolhack_oldCursorStack;
                 else
-                    slotItemBeforeModification = oldItems.get(clickSlot.getSlot());
+                    slotItemBeforeModification = protocolhack_oldItems.get(clickSlot.getSlot());
 
-                final PacketWrapper clickSlotPacket = PacketWrapper.create(ServerboundPackets1_16_2.CLICK_WINDOW, ((IClientConnection_Protocol) client.getNetworkHandler().getConnection()).tarasande_getViaConnection());
+                final PacketWrapper clickSlotPacket = PacketWrapper.create(ServerboundPackets1_16_2.CLICK_WINDOW, ((IClientConnection_Protocol) client.getNetworkHandler().getConnection()).protocolhack_getViaConnection());
 
                 clickSlotPacket.write(Type.UNSIGNED_BYTE, (short) clickSlot.getSyncId());
                 clickSlotPacket.write(Type.SHORT, (short) clickSlot.getSlot());
                 clickSlotPacket.write(Type.BYTE, (byte) clickSlot.getButton());
                 assert client.player != null;
-                clickSlotPacket.write(Type.SHORT, ((IScreenHandler_Protocol) client.player.currentScreenHandler).tarasande_getAndIncrementLastActionId());
+                clickSlotPacket.write(Type.SHORT, ((IScreenHandler_Protocol) client.player.currentScreenHandler).protocolhack_getAndIncrementLastActionId());
                 clickSlotPacket.write(Type.VAR_INT, clickSlot.getActionType().ordinal());
                 clickSlotPacket.write(Type.FLAT_VAR_INT_ITEM, MinecraftViaItemRewriter.INSTANCE.minecraftToViaItem(slotItemBeforeModification, VersionList.R1_16.getVersion()));
 
                 clickSlotPacket.sendToServer(Protocol1_17To1_16_4.class);
 
-                oldCursorStack = null;
-                oldItems = null;
+                protocolhack_oldCursorStack = null;
+                protocolhack_oldItems = null;
 
                 return;
             }

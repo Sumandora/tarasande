@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = PacketByteBuf.class, remap = false)
-public abstract class MixinPacketByteBuf {
+public class MixinPacketByteBuf {
 
     @Inject(method = "readText", at = @At(value = "INVOKE", target = "Lio/netty/handler/codec/DecoderException;<init>(Ljava/lang/String;)V", shift = At.Shift.BEFORE), cancellable = true)
     public void injectReadText(CallbackInfoReturnable<Text> cir) {

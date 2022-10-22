@@ -3,7 +3,6 @@ package de.florianmichael.viaprotocolhack;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.viaversion.viaversion.ViaManagerImpl;
 import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.ViaManager;
 import com.viaversion.viaversion.api.data.MappingDataLoader;
 import de.florianmichael.viaprotocolhack.platform.CustomViaProviders;
 import de.florianmichael.viaprotocolhack.platform.ViaBackwardsPlatform;

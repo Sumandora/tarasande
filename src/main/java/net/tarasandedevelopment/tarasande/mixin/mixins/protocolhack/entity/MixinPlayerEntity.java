@@ -25,7 +25,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
     @Shadow @Final private PlayerAbilities abilities;
 
     @Unique
-    private static final EntityDimensions SNEAKING_DIMENSIONS_1_13_2 = EntityDimensions.changing(0.6f, 1.65f);
+    private static final EntityDimensions protocolhack_SNEAKING_DIMENSIONS_1_13_2 = EntityDimensions.changing(0.6f, 1.65f);
 
     protected MixinPlayerEntity(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -61,7 +61,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
                 ci.setReturnValue(PlayerEntity.STANDING_DIMENSIONS);
 
             else if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2))
-                ci.setReturnValue(SNEAKING_DIMENSIONS_1_13_2);
+                ci.setReturnValue(protocolhack_SNEAKING_DIMENSIONS_1_13_2);
         }
     }
 

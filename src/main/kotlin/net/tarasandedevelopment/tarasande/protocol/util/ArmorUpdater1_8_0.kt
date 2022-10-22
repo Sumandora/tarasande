@@ -48,7 +48,7 @@ object ArmorUpdater1_8_0 {
         if (armor == oldArmor) return
         oldArmor = armor
 
-        val entityPropertiesPacket = PacketWrapper.create(ClientboundPackets1_9.ENTITY_PROPERTIES, (MinecraftClient.getInstance().networkHandler!!.connection as IClientConnection_Protocol).tarasande_getViaConnection())
+        val entityPropertiesPacket = PacketWrapper.create(ClientboundPackets1_9.ENTITY_PROPERTIES, (MinecraftClient.getInstance().networkHandler!!.connection as IClientConnection_Protocol).protocolhack_getViaConnection())
 
         entityPropertiesPacket.write(Type.VAR_INT, MinecraftClient.getInstance().player!!.id)
         entityPropertiesPacket.write(Type.INT, 1)

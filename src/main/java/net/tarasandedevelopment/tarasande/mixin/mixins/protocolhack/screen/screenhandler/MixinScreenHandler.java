@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinScreenHandler implements IScreenHandler_Protocol {
 
     @Unique
-    private short lastActionId = 0;
+    private short protocolhack_lastActionId = 0;
 
     @Inject(method = "internalOnSlotClick", at = @At("HEAD"), cancellable = true)
     private void injectInternalOnSlotClick(int slot, int clickData, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
@@ -39,7 +39,7 @@ public class MixinScreenHandler implements IScreenHandler_Protocol {
     }
 
     @Override
-    public short tarasande_getAndIncrementLastActionId() {
-        return ++lastActionId;
+    public short protocolhack_getAndIncrementLastActionId() {
+        return ++protocolhack_lastActionId;
     }
 }

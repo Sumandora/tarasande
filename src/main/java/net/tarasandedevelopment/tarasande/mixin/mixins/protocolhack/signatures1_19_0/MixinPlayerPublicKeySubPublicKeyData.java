@@ -28,12 +28,12 @@ public class MixinPlayerPublicKeySubPublicKeyData implements IPublicKeyData_Prot
     PublicKey key;
 
     @Unique
-    private byte[] _1_19_0Key;
+    private byte[] protocolhack_1_19_0Key;
 
     @Redirect(method = { "write", "verifyKey" }, at = @At(value = "FIELD", target = "Lnet/minecraft/network/encryption/PlayerPublicKey$PublicKeyData;keySignature:[B"))
     public byte[] replaceKeys(PlayerPublicKey.PublicKeyData instance) {
-        if (this._1_19_0Key != null && VersionList.isOlderOrEqualTo(VersionList.R1_19)) {
-            return this._1_19_0Key;
+        if (this.protocolhack_1_19_0Key != null && VersionList.isOlderOrEqualTo(VersionList.R1_19)) {
+            return this.protocolhack_1_19_0Key;
         }
 
         return instance.keySignature();
@@ -47,7 +47,7 @@ public class MixinPlayerPublicKeySubPublicKeyData implements IPublicKeyData_Prot
     }
 
     @Override
-    public void tarasande_set1_19_0Key(ByteBuffer byteBuffer) {
-        this._1_19_0Key = byteBuffer.array();
+    public void protocolhack_set1_19_0Key(ByteBuffer byteBuffer) {
+        this.protocolhack_1_19_0Key = byteBuffer.array();
     }
 }

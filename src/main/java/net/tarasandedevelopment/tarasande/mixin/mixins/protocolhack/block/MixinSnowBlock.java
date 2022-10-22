@@ -23,7 +23,7 @@ public class MixinSnowBlock {
     @Shadow @Final public static IntProperty LAYERS;
 
     @Unique
-    private static final VoxelShape[] LAYERS_TO_SHAPE_1_12 = new VoxelShape[] {
+    private static final VoxelShape[] protocolhack_LAYERS_TO_SHAPE_1_12 = new VoxelShape[]{
             Block.createCuboidShape(0, -0.00001 /* Bypass for Minecraft-Fixes */, 0, 16, 0, 16),
             Block.createCuboidShape(0, 0, 0, 16, 2, 16),
             Block.createCuboidShape(0, 0, 0, 16, 4, 16),
@@ -38,6 +38,6 @@ public class MixinSnowBlock {
     @Inject(method = "getCollisionShape", at = @At("HEAD"), cancellable = true)
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
-            cir.setReturnValue(LAYERS_TO_SHAPE_1_12[state.get(LAYERS) - 1]);
+            cir.setReturnValue(protocolhack_LAYERS_TO_SHAPE_1_12[state.get(LAYERS) - 1]);
     }
 }

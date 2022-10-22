@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinBrewingStandBlock {
 
     @Unique
-    private static final VoxelShape BASE_SHAPE_1122 = VoxelShapes.union(
+    private static final VoxelShape protocolhack_BASE_SHAPE_1122 = VoxelShapes.union(
             Block.createCuboidShape(0, 0, 0, 16, 2, 16) /* Base */,
             Block.createCuboidShape(7, 0, 7, 9, 14, 9) /* Stick */
     );
@@ -27,6 +27,6 @@ public class MixinBrewingStandBlock {
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
-            cir.setReturnValue(BASE_SHAPE_1122);
+            cir.setReturnValue(protocolhack_BASE_SHAPE_1122);
     }
 }

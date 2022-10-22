@@ -1,12 +1,8 @@
 package de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitterLogic;
 import de.florianmichael.vialegacy.protocol.splitter.LegacyClientboundPacketType;
-
-import java.util.Arrays;
-import java.util.List;
 
 public enum ClientboundPackets1_6_1 implements LegacyClientboundPacketType {
 

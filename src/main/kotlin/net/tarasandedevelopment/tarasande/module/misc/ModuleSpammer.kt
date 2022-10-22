@@ -55,7 +55,7 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
 
             if (timeUtil.hasReached(delay.value.toLong())) {
                 if (priorityMessages.isNotEmpty()) {
-                    PlayerUtil.sendChatMessage(priorityMessages.removeFirst())
+                    PlayerUtil.sendChatMessage(priorityMessages.removeFirst(), true)
                     timeUtil.reset()
                     return@registerEvent
                 }
@@ -103,7 +103,7 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
                         if (garbagePosition.isSelected(1))
                             text = text + " " + formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt()))
                     }
-                    PlayerUtil.sendChatMessage(text)
+                    PlayerUtil.sendChatMessage(text, true)
                 }
                 timeUtil.reset()
             }

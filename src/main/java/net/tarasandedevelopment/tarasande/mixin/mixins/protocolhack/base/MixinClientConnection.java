@@ -27,11 +27,13 @@ import java.util.logging.Level;
 @Mixin(ClientConnection.class)
 public class MixinClientConnection implements IClientConnection_Protocol {
 
-    @Shadow private Channel channel;
+    @Shadow
+    public Channel channel;
 
-    @Shadow private boolean encrypted;
+    @Shadow
+    private boolean encrypted;
     @Unique
-    private UserConnection viaConnection;
+    private UserConnection protocolhack_viaConnection;
 
     @Inject(method = "setCompressionThreshold", at = @At("RETURN"))
     private void reorderCompression(int compressionThreshold, boolean rejectBad, CallbackInfo ci) {
@@ -65,12 +67,12 @@ public class MixinClientConnection implements IClientConnection_Protocol {
     }
 
     @Override
-    public void tarasande_setViaConnection(UserConnection userConnection) {
-        this.viaConnection = userConnection;
+    public void protocolhack_setViaConnection(UserConnection userConnection) {
+        this.protocolhack_viaConnection = userConnection;
     }
 
     @Override
-    public UserConnection tarasande_getViaConnection() {
-        return this.viaConnection;
+    public UserConnection protocolhack_getViaConnection() {
+        return this.protocolhack_viaConnection;
     }
 }

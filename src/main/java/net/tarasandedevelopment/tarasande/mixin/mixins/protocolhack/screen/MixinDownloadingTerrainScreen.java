@@ -30,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinDownloadingTerrainScreen extends Screen {
 
     @Unique
-    private int tickCounter;
+    private int protocolhack_tickCounter;
 
     public MixinDownloadingTerrainScreen(Text title) {
         super(title);
@@ -39,9 +39,9 @@ public class MixinDownloadingTerrainScreen extends Screen {
     @Inject(method = "tick", at = @At("HEAD"))
     public void injectTick(CallbackInfo ci) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_12_1)) {
-            tickCounter++;
+            protocolhack_tickCounter++;
 
-            if (tickCounter % 20 == 0) {
+            if (protocolhack_tickCounter % 20 == 0) {
                 MinecraftClient.getInstance().getNetworkHandler().sendPacket(new KeepAliveC2SPacket(0));
             }
         }

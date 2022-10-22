@@ -4,6 +4,7 @@ import com.viaversion.viaversion.api.connection.UserConnection;
 
 public interface IClientConnection_Protocol {
 
-    void tarasande_setViaConnection(final UserConnection userConnection);
-    UserConnection tarasande_getViaConnection();
+    void protocolhack_setViaConnection(final UserConnection userConnection);
+
+    UserConnection protocolhack_getViaConnection();
 }

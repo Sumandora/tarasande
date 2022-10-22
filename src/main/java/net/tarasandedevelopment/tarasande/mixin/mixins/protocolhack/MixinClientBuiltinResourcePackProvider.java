@@ -31,7 +31,7 @@ import java.util.Map;
 public class MixinClientBuiltinResourcePackProvider {
 
     @Unique
-    private File trackedFile;
+    private File protocolhack_trackedFile;
 
     @Redirect(method = "getDownloadHeaders", at = @At(value = "INVOKE", target = "Lnet/minecraft/SharedConstants;getGameVersion()Lnet/minecraft/GameVersion;"))
     private static GameVersion editHeaders() {
@@ -91,9 +91,9 @@ public class MixinClientBuiltinResourcePackProvider {
         }
     }
 
-    @Inject(method = "verifyFile", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "verifyFile", at = @At("HEAD"))
     public void keepFile(String expectedSha1, File file, CallbackInfoReturnable<Boolean> cir) {
-        trackedFile = file;
+        protocolhack_trackedFile = file;
     }
 
     @Redirect(method = "verifyFile", at = @At(value = "INVOKE", target = "Lcom/google/common/hash/HashCode;toString()Ljava/lang/String;"))
@@ -101,9 +101,9 @@ public class MixinClientBuiltinResourcePackProvider {
         try {
             if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
                 //noinspection UnstableApiUsage,deprecation
-                return Hashing.sha1().hashBytes(Files.toByteArray(trackedFile)).toString();
+                return Hashing.sha1().hashBytes(Files.toByteArray(protocolhack_trackedFile)).toString();
             } else if (VersionList.isOlderTo(ProtocolVersion.v1_18)) {
-                return DigestUtils.sha1Hex(new FileInputStream(trackedFile));
+                return DigestUtils.sha1Hex(new FileInputStream(protocolhack_trackedFile));
             }
         } catch (IOException ignored) {
         }

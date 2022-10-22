@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface IProtocolManagerImpl_Protocol {
 
-    List<Pair<Integer, Protocol<?, ?, ?, ?>>> tarasande_getProtocols();
+    List<Pair<Integer, Protocol<?, ?, ?, ?>>> protocolhack_getProtocols();
 }

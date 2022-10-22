@@ -15,23 +15,15 @@
 package de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
-import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
-import com.viaversion.viaversion.protocol.packet.PacketWrapperImpl;
-import de.florianmichael.vialegacy.api.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.api.type.TypeRegistry_1_6_4;
 import de.florianmichael.vialegacy.api.via.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.storage.BlockPlaceTracker;
-import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.util.EnumFace;
 import de.florianmichael.vialegacy.protocols.protocol1_6_3to1_6_2.ClientboundPackets1_6_2;
 import de.florianmichael.vialegacy.protocols.protocol1_6_3to1_6_2.ServerboundPackets1_6_2;
-import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ClientboundPackets1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ServerboundPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.entity.EntityAttributeModifier;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.entity.EntityProperty;
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.ClientboundPackets1_7_10;
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.ServerboundPackets1_7_10;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -22,7 +22,7 @@ public abstract class MixinMerchantScreen extends HandledScreen<MerchantScreenHa
     private int selectedIndex;
 
     @Unique
-    private int previousRecipeIndex;
+    private int protocolhack_previousRecipeIndex;
 
     public MixinMerchantScreen(MerchantScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
@@ -30,19 +30,19 @@ public abstract class MixinMerchantScreen extends HandledScreen<MerchantScreenHa
 
     @Inject(method = "init", at = @At("HEAD"))
     public void reset(CallbackInfo ci) {
-        previousRecipeIndex = 0;
+        protocolhack_previousRecipeIndex = 0;
     }
 
     @Inject(method = "syncRecipeIndex", at = @At("HEAD"))
     public void smoothOutRecipeIndex(CallbackInfo ci) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2) && ProtocolHackValues.INSTANCE.getSmoothOutMerchantScreens().getValue()) {
-            if (previousRecipeIndex != selectedIndex) {
-                int direction = previousRecipeIndex < selectedIndex ? 1 : -1;
-                for (int smooth = previousRecipeIndex + direction /* don't send the page we already are on */; smooth != selectedIndex; smooth += direction) {
-                    System.out.println(previousRecipeIndex + " -> " + smooth + " -> " + selectedIndex);
+            if (protocolhack_previousRecipeIndex != selectedIndex) {
+                int direction = protocolhack_previousRecipeIndex < selectedIndex ? 1 : -1;
+                for (int smooth = protocolhack_previousRecipeIndex + direction /* don't send the page we already are on */; smooth != selectedIndex; smooth += direction) {
+                    System.out.println(protocolhack_previousRecipeIndex + " -> " + smooth + " -> " + selectedIndex);
                     client.getNetworkHandler().sendPacket(new SelectMerchantTradeC2SPacket(smooth));
                 }
-                previousRecipeIndex = selectedIndex;
+                protocolhack_previousRecipeIndex = selectedIndex;
             }
         }
     }

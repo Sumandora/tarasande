@@ -27,7 +27,6 @@ import de.florianmichael.vialegacy.api.via.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_4_7to1_4_5.storage.DimensionStorage;
 import de.florianmichael.vialegacy.protocols.protocol1_5_1to1_4_7.ClientboundPackets1_4_7;
 import de.florianmichael.vialegacy.protocols.protocol1_5_1to1_4_7.ServerboundPackets1_4_7;
-import net.minecraft.client.render.entity.HuskEntityRenderer;
 
 import java.util.ArrayList;
 import java.util.List;

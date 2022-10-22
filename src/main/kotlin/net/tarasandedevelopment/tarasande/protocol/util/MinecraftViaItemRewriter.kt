@@ -3,36 +3,14 @@ package net.tarasandedevelopment.tarasande.protocol.util
 import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.minecraft.item.DataItem
 import com.viaversion.viaversion.api.minecraft.item.Item
-import com.viaversion.viaversion.libs.opennbt.tag.builtin.ByteTag
-import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag
-import com.viaversion.viaversion.libs.opennbt.tag.builtin.DoubleTag
-import com.viaversion.viaversion.libs.opennbt.tag.builtin.FloatTag
-import com.viaversion.viaversion.libs.opennbt.tag.builtin.IntArrayTag
-import com.viaversion.viaversion.libs.opennbt.tag.builtin.IntTag
-import com.viaversion.viaversion.libs.opennbt.tag.builtin.ListTag
-import com.viaversion.viaversion.libs.opennbt.tag.builtin.LongArrayTag
-import com.viaversion.viaversion.libs.opennbt.tag.builtin.LongTag
-import com.viaversion.viaversion.libs.opennbt.tag.builtin.ShortTag
-import com.viaversion.viaversion.libs.opennbt.tag.builtin.StringTag
-import com.viaversion.viaversion.libs.opennbt.tag.builtin.Tag
+import com.viaversion.viaversion.libs.opennbt.tag.builtin.*
 import com.viaversion.viaversion.protocols.protocol1_10to1_9_3.Protocol1_10To1_9_3_4
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.item.ItemRewriter
 import de.florianmichael.viaprotocolhack.util.VersionList
 import net.minecraft.SharedConstants
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtByte
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.nbt.NbtDouble
-import net.minecraft.nbt.NbtElement
-import net.minecraft.nbt.NbtFloat
-import net.minecraft.nbt.NbtInt
-import net.minecraft.nbt.NbtIntArray
-import net.minecraft.nbt.NbtList
-import net.minecraft.nbt.NbtLong
-import net.minecraft.nbt.NbtLongArray
-import net.minecraft.nbt.NbtShort
-import net.minecraft.nbt.NbtString
+import net.minecraft.nbt.*
 import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IProtocolManagerImpl_Protocol
 
@@ -70,7 +48,7 @@ object MinecraftViaItemRewriter {
 
     private fun allItemMappings(): List<Pair<Int, ViaItemRewriterImpl>> {
         val list = ArrayList<Pair<Int, ViaItemRewriterImpl>>()
-        (Via.getManager().protocolManager as IProtocolManagerImpl_Protocol).tarasande_getProtocols().filter { p -> p.second.itemRewriter != null }.forEach {
+        (Via.getManager().protocolManager as IProtocolManagerImpl_Protocol).protocolhack_getProtocols().filter { p -> p.second.itemRewriter != null }.forEach {
             list.add(Pair(it.first, object : ViaItemRewriterImpl {
                 override fun remapItem(dataItem: Item): Item? {
                     return it.second.itemRewriter!!.handleItemToServer(dataItem)

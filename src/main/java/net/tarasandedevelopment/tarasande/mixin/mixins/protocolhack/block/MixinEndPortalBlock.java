@@ -17,12 +17,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EndPortalBlock.class)
 public abstract class MixinEndPortalBlock extends BlockWithEntity {
 
-    @Shadow @Final protected static VoxelShape SHAPE;
+    @Shadow
+    @Final
+    protected static VoxelShape SHAPE;
     @Unique
-    private final VoxelShape SHAPE_1_8 = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
+    private final VoxelShape protocolhack_SHAPE_1_8 = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
 
     @Unique
-    private final VoxelShape SHAPE_1_16_5 = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0);
+    private final VoxelShape protocolhack_SHAPE_1_16_5 = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0);
 
     protected MixinEndPortalBlock(Settings settings) {
         super(settings);
@@ -33,9 +35,9 @@ public abstract class MixinEndPortalBlock extends BlockWithEntity {
         if (MinecraftClient.getInstance().world == null) return;
 
         if (VersionList.isOlderOrEqualTo(VersionList.R1_8))
-            cir.setReturnValue(SHAPE_1_8);
+            cir.setReturnValue(protocolhack_SHAPE_1_8);
         else if (VersionList.isOlderOrEqualTo(VersionList.R1_16_5))
-            cir.setReturnValue(SHAPE_1_16_5);
+            cir.setReturnValue(protocolhack_SHAPE_1_16_5);
     }
 
     @Override

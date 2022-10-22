@@ -20,9 +20,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(FarmlandBlock.class)
 public class MixinFarmlandBlock extends Block {
 
-    @Shadow @Final protected static VoxelShape SHAPE;
+    @Shadow
+    @Final
+    protected static VoxelShape SHAPE;
     @Unique
-    private static final VoxelShape SHAPE_194 = VoxelShapes.fullCube();
+    private static final VoxelShape protocolhack_SHAPE_194 = VoxelShapes.fullCube();
 
     public MixinFarmlandBlock(Settings settings) {
         super(settings);
@@ -31,7 +33,7 @@ public class MixinFarmlandBlock extends Block {
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_9_4))
-            cir.setReturnValue(SHAPE_194);
+            cir.setReturnValue(protocolhack_SHAPE_194);
     }
 
     @Override

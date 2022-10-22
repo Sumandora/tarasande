@@ -5,17 +5,15 @@ import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.projectile.PersistentProjectileEntity
-import net.minecraft.item.BowItem
-import net.minecraft.item.CrossbowItem
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
+import net.minecraft.item.*
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.random.Random
 import net.minecraft.util.math.random.RandomSplitter
 import net.tarasandedevelopment.tarasande.mixin.accessor.*
+import net.tarasandedevelopment.tarasande.mixin.accessor.prediction.IParticleManager
+import net.tarasandedevelopment.tarasande.mixin.accessor.prediction.ISoundSystem
 import net.tarasandedevelopment.tarasande.util.extension.times
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
@@ -157,7 +155,7 @@ object ProjectileUtil {
         }
 
         val prevRotation = Rotation(MinecraftClient.getInstance().player!!)
-        val prevVelocity = Vec3d(0.0, 0.0, 0.0).also { (it as IVec3d).tarasande_copy(MinecraftClient.getInstance().player?.velocity) }
+        val prevVelocity = Vec3d(0.0, 0.0, 0.0).also { MinecraftClient.getInstance().player?.velocity = it }
         if (rotation != null) {
             MinecraftClient.getInstance().player?.yaw = rotation.yaw
             MinecraftClient.getInstance().player?.pitch = rotation.pitch

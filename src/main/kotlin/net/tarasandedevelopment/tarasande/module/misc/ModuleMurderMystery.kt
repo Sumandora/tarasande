@@ -147,7 +147,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     init {
         registerEvent(EventPollEvents::class.java) {
             if (messages.isNotEmpty())
-                PlayerUtil.sendChatMessage(SharedConstants.stripInvalidChars(messages.removeFirst()))
+                PlayerUtil.sendChatMessage(SharedConstants.stripInvalidChars(messages.removeFirst()), false)
         }
 
         registerEvent(EventUpdate::class.java) { event ->

@@ -33,22 +33,35 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Shadow private boolean lastOnGround;
 
-    @Shadow public Input input;
+    @Shadow
+    public Input input;
 
-    @Shadow private int ticksSinceLastPositionPacketSent;
+    @Shadow
+    private int ticksSinceLastPositionPacketSent;
 
-    @Shadow protected abstract boolean isCamera();
+    @Shadow
+    protected abstract boolean isCamera();
 
-    @Shadow private double lastX;
-    @Shadow private double lastBaseY;
-    @Shadow private double lastZ;
-    @Shadow private float lastYaw;
-    @Shadow private float lastPitch;
-    @Shadow @Final public ClientPlayNetworkHandler networkHandler;
-    @Shadow private boolean autoJumpEnabled;
-    @Shadow @Final protected MinecraftClient client;
+    @Shadow
+    private double lastX;
+    @Shadow
+    private double lastBaseY;
+    @Shadow
+    private double lastZ;
+    @Shadow
+    public float lastYaw;
+    @Shadow
+    public float lastPitch;
+    @Shadow
+    @Final
+    public ClientPlayNetworkHandler networkHandler;
+    @Shadow
+    public boolean autoJumpEnabled;
+    @Shadow
+    @Final
+    protected MinecraftClient client;
     @Unique
-    private boolean areSwingCanceledThisTick = false;
+    private boolean protocolhack_areSwingCanceledThisTick = false;
 
     public MixinClientPlayerEntity(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
         super(world, profile, publicKey);
@@ -106,9 +119,9 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Inject(method = "swingHand", at = @At("HEAD"), cancellable = true)
     public void injectSwingHand(Hand hand, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8) && areSwingCanceledThisTick)
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_8) && protocolhack_areSwingCanceledThisTick)
             ci.cancel();
-        areSwingCanceledThisTick = false;
+        protocolhack_areSwingCanceledThisTick = false;
     }
 
     @Inject(
@@ -155,7 +168,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     }
 
     @Override
-    public void tarasande_cancelSwingOnce() {
-        areSwingCanceledThisTick = true;
+    public void protocolhack_cancelSwingOnce() {
+        protocolhack_areSwingCanceledThisTick = true;
     }
 }

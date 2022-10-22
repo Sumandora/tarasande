@@ -9,7 +9,7 @@ import net.minecraft.world.BlockView;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(PaneBlock.class)
-public abstract class MixinPaneBlock extends HorizontalConnectingBlock {
+public class MixinPaneBlock extends HorizontalConnectingBlock {
 
     public MixinPaneBlock(float radius1, float radius2, float boundingHeight1, float boundingHeight2, float collisionHeight, Settings settings) {
         super(radius1, radius2, boundingHeight1, boundingHeight2, collisionHeight, settings);

@@ -23,26 +23,23 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
-import com.viaversion.viaversion.api.type.types.CustomByteType;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.IntTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.ShortTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.StringTag;
 import de.florianmichael.vialegacy.ViaLegacy;
+import de.florianmichael.vialegacy.api.type.TypeRegistry1_2_5;
 import de.florianmichael.vialegacy.api.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.api.type.TypeRegistry_1_4_2;
 import de.florianmichael.vialegacy.api.type.TypeRegistry_1_6_4;
-import de.florianmichael.vialegacy.api.type.TypeRegistry1_2_5;
 import de.florianmichael.vialegacy.api.via.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5.storage.LevelDataStorage;
 import de.florianmichael.vialegacy.protocols.protocol1_4_2to1_3_2.ClientboundPackets1_3_2;
 import de.florianmichael.vialegacy.protocols.protocol1_4_2to1_3_2.ServerboundPackets1_3_2;
 import de.florianmichael.vialegacy.protocols.protocol1_4_7to1_4_5.storage.DimensionStorage;
-import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.Protocol1_7_5to1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ServerboundLoginPackets1_6_4;
 
-import java.security.KeyPairGenerator;
 import java.util.ArrayList;
 import java.util.UUID;
 

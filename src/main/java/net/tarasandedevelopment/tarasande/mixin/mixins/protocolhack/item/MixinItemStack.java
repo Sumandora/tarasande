@@ -55,6 +55,7 @@ public abstract class MixinItemStack {
             return player.getAttributeBaseValue(attribute);
     }
 
+    @SuppressWarnings({"InvalidInjectorMethodSignature", "MixinAnnotationTarget"})
     @ModifyVariable(method = "getAttributeModifiers", ordinal = 0, at = @At(value = "STORE", ordinal = 1))
     private Multimap<EntityAttribute, EntityAttributeModifier> modifyVariableGetAttributeModifiers(Multimap<EntityAttribute, EntityAttributeModifier> modifiers) {
         if (VersionList.isNewerTo(VersionList.R1_8))

@@ -165,9 +165,10 @@ object PlayerUtil {
         }
     }
 
-    fun sendChatMessage(text: String) {
+    fun sendChatMessage(text: String, bypassEvent: Boolean) {
         val prevBypassChat = (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_getBypassChat()
-        (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_setBypassChat(true)
+        if (bypassEvent)
+            (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_setBypassChat(true)
         createFakeChat {
             for (c in text.toCharArray()) it.charTyped(c, 0)
             it.keyPressed(GLFW.GLFW_KEY_ENTER, 0, 0)

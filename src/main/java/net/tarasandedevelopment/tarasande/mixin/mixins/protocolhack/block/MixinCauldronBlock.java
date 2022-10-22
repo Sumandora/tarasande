@@ -18,7 +18,7 @@ import java.util.Map;
 public abstract class MixinCauldronBlock extends AbstractCauldronBlock {
 
     @Unique
-    private final static VoxelShape CAULDRON_SHAPE_1122 = VoxelShapes.combineAndSimplify(
+    private final static VoxelShape protocolhack_CAULDRON_SHAPE_1122 = VoxelShapes.combineAndSimplify(
             VoxelShapes.fullCube(),
             Block.createCuboidShape(2.0D, 5.0D, 2.0D, 14.0D, 16.0D, 14.0D),
             BooleanBiFunction.ONLY_FIRST);
@@ -30,7 +30,7 @@ public abstract class MixinCauldronBlock extends AbstractCauldronBlock {
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
-            return CAULDRON_SHAPE_1122;
+            return protocolhack_CAULDRON_SHAPE_1122;
 
         return super.getOutlineShape(state, world, pos, context);
     }

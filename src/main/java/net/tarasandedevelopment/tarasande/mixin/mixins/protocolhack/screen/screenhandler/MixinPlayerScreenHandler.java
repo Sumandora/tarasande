@@ -43,6 +43,7 @@ public abstract class MixinPlayerScreenHandler extends AbstractRecipeScreenHandl
         return addSlot(slot);
     }
 
+    @SuppressWarnings("InvalidInjectorMethodSignature")
     @ModifyVariable(method = "transferSlot", ordinal = 0, at = @At(value = "STORE", ordinal = 0))
     private EquipmentSlot injectTransferSlot(EquipmentSlot slot) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_8) && slot == EquipmentSlot.OFFHAND)

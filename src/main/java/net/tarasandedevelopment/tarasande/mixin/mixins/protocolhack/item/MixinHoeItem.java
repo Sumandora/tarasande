@@ -33,7 +33,7 @@ import java.util.Set;
 public abstract class MixinHoeItem extends MiningToolItem {
 
     @Unique
-    private static final Set<Block> EFFECTIVE_BLOCKS_1165 = ImmutableSet.of(
+    private static final Set<Block> protocolhack_EFFECTIVE_BLOCKS_1165 = ImmutableSet.of(
             Blocks.NETHER_WART_BLOCK,
             Blocks.WARPED_WART_BLOCK,
             Blocks.HAY_BLOCK,
@@ -67,7 +67,7 @@ public abstract class MixinHoeItem extends MiningToolItem {
             return 1.0F;
 
         if (VersionList.isOlderOrEqualTo(VersionList.R1_16_5))
-            return EFFECTIVE_BLOCKS_1165.contains(state.getBlock()) ? this.miningSpeed : 1.0F;
+            return protocolhack_EFFECTIVE_BLOCKS_1165.contains(state.getBlock()) ? this.miningSpeed : 1.0F;
 
         return super.getMiningSpeedMultiplier(stack, state);
     }

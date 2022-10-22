@@ -2,7 +2,6 @@ package de.florianmichael.vialegacy;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import de.florianmichael.vialegacy.api.profile.GameProfile;
-import de.florianmichael.vialegacy.protocols.base.BaseProtocol1_6;
 import io.netty.channel.Channel;
 
 public interface IViaLegacyProvider {

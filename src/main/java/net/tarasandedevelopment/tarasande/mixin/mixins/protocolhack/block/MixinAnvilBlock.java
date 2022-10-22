@@ -24,15 +24,15 @@ public class MixinAnvilBlock {
     @Shadow @Final public static DirectionProperty FACING;
 
     @Unique
-    private static final VoxelShape X_AXIS_SHAPE_112 = Block.createCuboidShape(0, 0, 2, 16, 16, 14);
+    private static final VoxelShape protocolhack_X_AXIS_SHAPE_112 = Block.createCuboidShape(0, 0, 2, 16, 16, 14);
 
     @Unique
-    private static final VoxelShape Z_AXIS_SHAPE_112 = Block.createCuboidShape(2, 0, 0, 14, 16, 16);
+    private static final VoxelShape protocolhack_Z_AXIS_SHAPE_112 = Block.createCuboidShape(2, 0, 0, 14, 16, 16);
 
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
         Direction direction = state.get(FACING);
         if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
-            cir.setReturnValue(direction.getAxis() == Direction.Axis.X ? X_AXIS_SHAPE_112 : Z_AXIS_SHAPE_112);
+            cir.setReturnValue(direction.getAxis() == Direction.Axis.X ? protocolhack_X_AXIS_SHAPE_112 : protocolhack_Z_AXIS_SHAPE_112);
     }
 }

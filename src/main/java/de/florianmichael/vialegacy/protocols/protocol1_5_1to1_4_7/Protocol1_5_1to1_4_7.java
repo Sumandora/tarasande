@@ -20,8 +20,6 @@ import de.florianmichael.vialegacy.api.type.TypeRegistry_1_6_4;
 import de.florianmichael.vialegacy.api.via.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_5_2to1_5_1.ClientboundPackets1_5_1;
 import de.florianmichael.vialegacy.protocols.protocol1_5_2to1_5_1.ServerboundPackets1_5_1;
-import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.ClientboundPackets1_5_2;
-import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.ServerboundPackets1_5_2;
 
 public class Protocol1_5_1to1_4_7 extends EnZaProtocol<ClientboundPackets1_4_7, ClientboundPackets1_5_1, ServerboundPackets1_4_7, ServerboundPackets1_5_1> {
 

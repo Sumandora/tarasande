@@ -13,24 +13,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ChatInputSuggestor.class)
 public class MixinChatInputSuggestor implements IChatInputSuggestor_Protocol {
 
-    @Shadow @Nullable private ChatInputSuggestor.@Nullable SuggestionWindow window;
+    @Shadow
+    @Nullable
+    private ChatInputSuggestor.@Nullable SuggestionWindow window;
     @Unique
-    private boolean isCustomCompletion = false;
+    private boolean protocolhack_isCustomCompletion = false;
 
     @Inject(method = "refresh", at = @At("HEAD"), cancellable = true)
     public void injectRefresh(CallbackInfo ci) {
-        if (this.isCustomCompletion) {
+        if (this.protocolhack_isCustomCompletion) {
             ci.cancel();
         }
     }
 
     @Override
-    public void tarasande_setNativeCompletion(boolean nativeCompletion) {
-        this.isCustomCompletion = nativeCompletion;
+    public void protocolhack_setNativeCompletion(boolean nativeCompletion) {
+        this.protocolhack_isCustomCompletion = nativeCompletion;
     }
 
     @Override
-    public int tarasande_getPendingSuggestionSize() {
+    public int protcolhack_getPendingSuggestionSize() {
         if (this.window == null) return 0;
 
         return this.window.suggestions.size();
