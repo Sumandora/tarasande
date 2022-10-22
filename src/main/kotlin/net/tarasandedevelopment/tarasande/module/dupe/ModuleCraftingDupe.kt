@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.mixin.accessor.IInventoryScreen
 import net.tarasandedevelopment.tarasande.util.exploit.ExploitInjector
 
-class ModuleCraftingDupe : Module("Crafting dupe", "dupe via crafting grid on 1.17.0", ModuleCategory.DUPE) {
+class ModuleCraftingDupe : Module("Crafting dupe", "Duplicate items using crafting grids on 1.17.0", ModuleCategory.DUPE) {
 
     init {
         ExploitInjector.hook(InventoryScreen::class.java, "Crafting Dupe 1.17.0", object : ExploitInjector.Action {
