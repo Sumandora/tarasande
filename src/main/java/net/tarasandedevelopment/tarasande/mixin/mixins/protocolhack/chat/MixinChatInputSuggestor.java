@@ -20,8 +20,9 @@ public class MixinChatInputSuggestor implements IChatInputSuggestor_Protocol {
 
     @Inject(method = "refresh", at = @At("HEAD"), cancellable = true)
     public void injectRefresh(CallbackInfo ci) {
-        if (this.isCustomCompletion)
+        if (this.isCustomCompletion) {
             ci.cancel();
+        }
     }
 
     @Override

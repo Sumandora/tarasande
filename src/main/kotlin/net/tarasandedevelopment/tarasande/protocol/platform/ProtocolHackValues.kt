@@ -22,4 +22,7 @@ object ProtocolHackValues {
 
     // 1.14 -> 1.13.2
     val smoothOutMerchantScreens = ValueBoolean(this, "Smooth out merchant screens (1.14 -> 1.13.2)", true)
+
+    // 1.13 -> 1.12.2
+    val removeNewTabCompletion = ValueBoolean(this, "Remove new tab completion (1.13 -> 1.12.2)", true)
 }
