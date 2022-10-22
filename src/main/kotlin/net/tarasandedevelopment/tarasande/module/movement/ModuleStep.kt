@@ -38,7 +38,7 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
         registerEvent(EventStep::class.java) { event ->
             when (event.state) {
                 EventStep.State.PRE -> {
-                    if (mc.player?.age!! - offGroundTick > onGroundTicks.value)
+                    if (mc.player?.age!! - offGroundTick > onGroundTicks.value && mc.player?.velocity?.y!! < 0.0)
                         event.stepHeight = stepHeight.value.toFloat()
                 }
 
