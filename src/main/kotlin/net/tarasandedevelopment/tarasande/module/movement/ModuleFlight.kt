@@ -9,8 +9,6 @@ import net.tarasandedevelopment.tarasande.event.EventCollisionShape
 import net.tarasandedevelopment.tarasande.event.EventJump
 import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.event.EventUpdate
-import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
-import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode

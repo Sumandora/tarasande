@@ -6,7 +6,6 @@ import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventJump
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventMovement
-import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber

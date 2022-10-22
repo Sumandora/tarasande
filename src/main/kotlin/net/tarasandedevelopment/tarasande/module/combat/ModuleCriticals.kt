@@ -4,7 +4,6 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
-import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 

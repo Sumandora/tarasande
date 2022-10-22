@@ -20,7 +20,7 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuTitl
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuToggle
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry
-import net.tarasandedevelopment.tarasande.mixin.accessor.IServerInfo
+import net.tarasandedevelopment.tarasande.mixin.accessor.forgefaker.IServerInfo
 import net.tarasandedevelopment.tarasande.protocol.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.ScreenBetterAccountManager
 import net.tarasandedevelopment.tarasande.screen.clientmenu.addon.ScreenBetterAddons
@@ -151,7 +151,7 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
 
             it.add(EventRenderMultiplayerEntry::class.java) { eventRenderMultiplayerEntry ->
                 (eventRenderMultiplayerEntry.server as IServerInfo).forgePayload?.also {
-
+                    // TODO
                 }
             }
         }

@@ -8,7 +8,6 @@ import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventUpdate
-import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber

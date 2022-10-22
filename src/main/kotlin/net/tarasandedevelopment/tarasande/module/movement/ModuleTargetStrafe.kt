@@ -10,7 +10,6 @@ import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.event.EventUpdate
-import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import net.tarasandedevelopment.tarasande.module.combat.ModuleKillAura
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil

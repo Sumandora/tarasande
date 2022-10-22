@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande.module.movement
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventMovement
-import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import kotlin.math.cos
