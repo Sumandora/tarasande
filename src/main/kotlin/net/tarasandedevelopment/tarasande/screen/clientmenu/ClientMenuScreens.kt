@@ -126,13 +126,15 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
         TarasandeMain.get().eventDispatcher.add(EventPacket::class.java, 1) {
             if (!state || currentHandler == null) return@add
 
-            if (it.type == EventPacket.Type.SEND && it.packet is HandshakeC2SPacket) {
-                (it.packet as IHandshakeC2SPacket).tarasande_extendAddress(currentHandler!!.handshakeMark())
-            }
+            if (it.type == EventPacket.Type.SEND) {
+                if (it.packet is HandshakeC2SPacket) {
+                    (it.packet as IHandshakeC2SPacket).tarasande_extendAddress(currentHandler!!.handshakeMark())
+                }
 
-            if (it.type == EventPacket.Type.SEND && it.packet is CustomPayloadC2SPacket) {
-                if (it.packet.channel == CustomPayloadC2SPacket.BRAND) {
-                    (it.packet as ICustomPayloadC2SPacket).setData(PacketByteBuf(Unpooled.buffer()).writeString("fml,forge"))
+                if (it.packet is CustomPayloadC2SPacket) {
+                    if (it.packet.channel == CustomPayloadC2SPacket.BRAND) {
+                        (it.packet as ICustomPayloadC2SPacket).setData(PacketByteBuf(Unpooled.buffer()).writeString("fml,forge"))
+                    }
                 }
             }
 
