@@ -21,7 +21,7 @@ class ClientValues {
     val menuAccentBackground = ValueBoolean(this, "Menu: accent background", true)
     val menuBlurBackground = ValueBoolean(this, "Menu: blur background", true)
     val menuDrawImage = ValueBoolean(this, "Menu: draw image", true)
-    val menuImage = object : ValueMode(this, "Menu: image", false, "Rimuru", "Shuya's girl", "Nanakusa", "Jannick") {
+    val menuImage = object : ValueMode(this, "Menu: image", false, "Rimuru", "Shuya's girl", "Nanakusa", "Jannick", "Azusa") {
         override fun isEnabled() = menuDrawImage.value
         override fun onChange() {
             TarasandeMain.get().screenCheatMenu.image = RenderUtil.createImage(selected[0].lowercase().replace(" ", "").replace("'", "") + ".png")

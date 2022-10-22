@@ -42,7 +42,10 @@ var libs = [
 		"com.github.FlorianMichael:PacketMinecraft:f594e5a6c0",
 
 		// HAProxy Protocol -> https://mvnrepository.com/artifact/io.netty/netty-codec-haproxy
-		"io.netty:netty-codec-haproxy:4.1.82.Final"
+		"io.netty:netty-codec-haproxy:4.1.82.Final",
+
+		// Via Protocol Hack -> https://github.com/FlorianMichael/ViaProtocolHack
+		"com.github.FlorianMichael:ViaProtocolHack:5ddb5c87c8"
 ]
 
 loom {
