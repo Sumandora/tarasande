@@ -13,7 +13,8 @@ public abstract class MixinPacketByteBuf {
 
     @Inject(method = "readText", at = @At(value = "INVOKE", target = "Lio/netty/handler/codec/DecoderException;<init>(Ljava/lang/String;)V", shift = At.Shift.BEFORE), cancellable = true)
     public void injectReadText(CallbackInfoReturnable<Text> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_18_1))
-            cir.setReturnValue(Text.empty());
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_18_1)) {
+            cir.setReturnValue(null);
+        }
     }
 }

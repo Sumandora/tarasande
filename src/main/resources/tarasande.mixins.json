@@ -132,18 +132,14 @@
     "protocolhack.viaversion.MixinProtocol1_13To1_12_2",
     "protocolhack.viaversion.MixinProtocol1_16To1_15_2",
     "protocolhack.viaversion.MixinProtocol1_19_1To1_19",
+    "protocolhack.viaversion.MixinProtocol1_9To1_8",
     "protocolhack.viaversion.MixinProtocolManagerImpl",
     "protocolhack.viaversion.MixinSkullHandler_1_12_2",
     "protocolhack.viaversion.MixinViaIdleThread",
     "screens.MixinScreen",
     "screens.MixinTitleScreen",
     "skin.MixinPlayerSkinProvider",
-    "widget.MixinTextFieldWidget"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "client": [
+    "widget.MixinTextFieldWidget",
     "MixinPendingUpdateManager",
     "MixinPlayerListHud",
     "MixinSoundManager",
@@ -186,5 +182,8 @@
     "skin.MixinPlayerEntityRenderer",
     "widget.MixinButtonWidget",
     "widget.MixinClickableWidget"
-  ]
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
