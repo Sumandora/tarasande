@@ -10,4 +10,6 @@ public interface IClientPlayerInteractionManager {
     void tarasande_setCurrentBreakingProgress(float currentBreakingProgress);
 
     void tarasande_invokeSendSequencedPacket(ClientWorld world, SequencedPacketCreator packetCreator);
+
+    void tarasande_setLastSelectedSlot(int lastSelectedSlot);
 }

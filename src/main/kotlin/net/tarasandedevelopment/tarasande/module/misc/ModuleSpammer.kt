@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.module.misc
 
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventChat
@@ -14,7 +13,6 @@ import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import net.tarasandedevelopment.tarasande.value.ValueText
 import org.apache.commons.lang3.RandomStringUtils
-import java.util.function.Consumer
 import kotlin.math.round
 import kotlin.math.sqrt
 
@@ -29,6 +27,9 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
         override fun isEnabled() = !noArbitraryTexts.value && garbage.value
     }
     private val garbageCase = object : ValueMode(this, "Garbage case", false, "Uppercase", "Random", "Lowercase") {
+        override fun isEnabled() = !noArbitraryTexts.value && garbage.value
+    }
+    private val garbagePosition = object : ValueMode(this, "Garbage position", true, "Before", "After") {
         override fun isEnabled() = !noArbitraryTexts.value && garbage.value
     }
     private val mode = object : ValueMode(this, "Mode", false, "Custom message", "Position broadcast") {
@@ -97,7 +98,10 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
                 }
                 if (text != null) {
                     if (garbage.value) {
-                        text = formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt())) + " $text " + formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt()))
+                        if (garbagePosition.isSelected(0))
+                            text = formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt())) + " " + text
+                        if (garbagePosition.isSelected(1))
+                            text = text + " " + formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt()))
                     }
                     PlayerUtil.sendChatMessage(text)
                 }

@@ -12,10 +12,10 @@ import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerInteractionManager
 import net.tarasandedevelopment.tarasande.module.combat.ModuleAntiBot
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
@@ -24,7 +24,6 @@ import net.tarasandedevelopment.tarasande.value.*
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadLocalRandom
-import java.util.function.Consumer
 
 class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on held items", ModuleCategory.MISC) {
 
@@ -174,10 +173,11 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
             }
         }
 
-        registerEvent(EventAttackEntity::class.java) { event ->
+        registerEvent(EventAttackEntity::class.java, 9999) { event ->
             if (murdererAssistance.value && isMurderer()) {
                 when (event.state) {
                     EventAttackEntity.State.PRE -> {
+                        (mc.interactionManager as IClientPlayerInteractionManager).tarasande_setLastSelectedSlot(mc.player?.inventory?.selectedSlot!!) // prevent other modules from interfering
                         var sword = 0
                         for (slot in 0 until PlayerInventory.getHotbarSize()) {
                             if (isIllegalItem(mc.player?.inventory?.main?.get(slot)?.item!!)) {
@@ -185,10 +185,16 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                                 break
                             }
                         }
-                        if ((mc.player?.inventory?.selectedSlot!! != sword).also { switchedSlot = it }) mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(sword))
+                        if ((mc.player?.inventory?.selectedSlot!! != sword).also { switchedSlot = it }) {
+                            println("$sword " + mc.player?.inventory?.selectedSlot!!)
+                            mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(sword))
+                        }
                     }
 
-                    EventAttackEntity.State.POST -> if (switchedSlot) mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))
+                    EventAttackEntity.State.POST -> if (switchedSlot) {
+                        mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))
+                        println(mc.player?.inventory?.selectedSlot!!)
+                    }
                 }
             }
         }

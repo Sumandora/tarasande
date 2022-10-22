@@ -23,6 +23,9 @@ public abstract class MixinClientPlayerInteractionManager implements IClientPlay
     @Shadow
     protected abstract void sendSequencedPacket(ClientWorld world, SequencedPacketCreator packetCreator);
 
+    @Shadow
+    private int lastSelectedSlot;
+
     @Inject(method = "attackEntity", at = @At("HEAD"))
     public void injectPreAttackEntity(PlayerEntity player, Entity target, CallbackInfo ci) {
         TarasandeMain.Companion.get().getEventDispatcher().call(new EventAttackEntity(target, EventAttackEntity.State.PRE));
@@ -46,5 +49,10 @@ public abstract class MixinClientPlayerInteractionManager implements IClientPlay
     @Override
     public void tarasande_invokeSendSequencedPacket(ClientWorld world, SequencedPacketCreator packetCreator) {
         sendSequencedPacket(world, packetCreator);
+    }
+
+    @Override
+    public void tarasande_setLastSelectedSlot(int lastSelectedSlot) {
+        this.lastSelectedSlot = lastSelectedSlot;
     }
 }

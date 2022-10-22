@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.module.render
 
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.minecraft.world.World
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPacket
@@ -11,11 +10,10 @@ import net.tarasandedevelopment.tarasande.mixin.accessor.IWorldTimeUpdateS2CPack
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.util.function.Consumer
 
 class ModuleWorldTime : Module("World time", "Changes the time of day", ModuleCategory.RENDER) {
 
-    val moonStates = arrayOf(
+    private val moonStates = arrayOf(
         "Full moon",
         "Warning gibbous",
         "Last quarter",
@@ -32,15 +30,12 @@ class ModuleWorldTime : Module("World time", "Changes the time of day", ModuleCa
         override fun isEnabled() = modifyTime.value
     }
 
-    private val modifyMoonPhase = ValueBoolean(this, "Modify moon phase", false)
-    private val moonPhase = object : ValueMode(this, "Moon phase", false, *moonStates) {
-        override fun isEnabled() = modifyMoonPhase.value
-    }
+    private val forceMoonPhase = ValueMode(this, "Force moon phase", false, "Off", *moonStates)
 
     fun moonPhase(): Int {
-        if (!enabled || !modifyMoonPhase.value || !moonPhase.anySelected()) return -1
+        if (!enabled || forceMoonPhase.isSelected(0)) return -1
 
-        return moonStates.indexOf(this.moonPhase.selected[0])
+        return moonStates.indexOf(forceMoonPhase.selected[0])
     }
 
     init {

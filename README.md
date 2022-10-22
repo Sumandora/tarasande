@@ -67,11 +67,17 @@
 
 - Unknown: Mining Fast Checks
 - 1.8.x: MineMen Tablist
-- 1.7.10: Tablist rmeapping
+- 1.7.10: Tablist (gamemode)
 - 1.7.10: Entites spawning
 - 1.7.10: Recode Chunk Translation using RKs Chunk Base (Chunk1_8Type)
-- 1.6.4: Crafting Table CraftResult was clientside back in the time 
+- 1.6.4: Crafting Table CraftResult was clientside back in the time
 - 1.6.4: Reciperemapper base with all versions
+- 1.7.5 (?): Minecart + Trading
+- 1.7.5 (?): Enchantment table duping
+- 1.7 (?): Redstone updating
+- 1.7.5 (?): Bed flag
+- 1.6.4 (?): Ender pearl
+- 1.6.4 (?): Book reading and writing
 
 ## TODO-List (General)
 - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
