@@ -19,6 +19,8 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuScre
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuTitle
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuToggle
 import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry
+import net.tarasandedevelopment.tarasande.mixin.accessor.IServerInfo
 import net.tarasandedevelopment.tarasande.protocol.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.ScreenBetterAccountManager
 import net.tarasandedevelopment.tarasande.screen.clientmenu.addon.ScreenBetterAddons
@@ -121,27 +123,35 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
     val useFML1Cache = ValueBoolean(this, "Use FML1 cache", true)
 
     init {
-        TarasandeMain.get().eventDispatcher.add(EventPacket::class.java, 1) {
-            if (!state || currentHandler == null) return@add
+        TarasandeMain.get().eventDispatcher.also {
+            it.add(EventPacket::class.java, 1) { eventPacket ->
+                if (!state || currentHandler == null) return@add
 
-            if (it.type == EventPacket.Type.SEND) {
-                if (it.packet is HandshakeC2SPacket) {
-                    it.packet.address += currentHandler!!.handshakeMark()
+                if (eventPacket.type == EventPacket.Type.SEND) {
+                    if (eventPacket.packet is HandshakeC2SPacket) {
+                        eventPacket.packet.address += currentHandler!!.handshakeMark()
+                    }
+
+                    if (eventPacket.packet is CustomPayloadC2SPacket) {
+                        if (eventPacket.packet.channel == CustomPayloadC2SPacket.BRAND) {
+                            val data = PacketByteBuf(Unpooled.buffer())
+                            data.writeString("fml,forge")
+
+                            eventPacket.packet.data = data
+                        }
+                    }
                 }
 
-                if (it.packet is CustomPayloadC2SPacket) {
-                    if (it.packet.channel == CustomPayloadC2SPacket.BRAND) {
-                        val data = PacketByteBuf(Unpooled.buffer())
-                        data.writeString("fml,forge")
-
-                        it.packet.data = data
+                if (eventPacket.type == EventPacket.Type.RECEIVE) {
+                    if (currentHandler!!.onIncomingPacket(eventPacket.packet!!)) {
+                        eventPacket.cancelled = true
                     }
                 }
             }
 
-            if (it.type == EventPacket.Type.RECEIVE) {
-                if (currentHandler!!.onIncomingPacket(it.packet!!)) {
-                    it.cancelled = true
+            it.add(EventRenderMultiplayerEntry::class.java) { eventRenderMultiplayerEntry ->
+                (eventRenderMultiplayerEntry.server as IServerInfo).forgePayload?.also {
+
                 }
             }
         }

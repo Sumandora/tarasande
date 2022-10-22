@@ -6,6 +6,7 @@ import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.input.Input
 import net.minecraft.client.network.PlayerListEntry
+import net.minecraft.client.network.ServerInfo
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.render.Camera
 import net.minecraft.client.util.math.MatrixStack
@@ -213,5 +214,5 @@ class EventDisconnect : Event(false)
 class EventIsSaddled(var saddled: Boolean) : Event(false)
 class EventInvalidGameMode(val uuid: UUID) : Event(false)
 class EventRespawn(var showDeathScreen: Boolean) : Event(false)
-
 class EventScreenInput(var doneInput: Boolean) : Event(true)
+class EventRenderMultiplayerEntry(val matrices: MatrixStack, val server: ServerInfo) : Event(false)

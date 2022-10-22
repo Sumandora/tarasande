@@ -65,7 +65,7 @@ class TarasandeProtocolHack : INativeProvider {
         this.version.value = version.toDouble()
     }
 
-    override fun clientsideVersion(): Int {
+    fun clientsideVersion(): Int {
         return this.version.value.toInt()
     }
 
