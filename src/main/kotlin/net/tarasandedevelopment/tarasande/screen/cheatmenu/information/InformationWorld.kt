@@ -2,12 +2,16 @@ package net.tarasandedevelopment.tarasande.screen.cheatmenu.information
 
 import com.google.common.collect.Iterables
 import net.minecraft.client.MinecraftClient
+import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket
+import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket
+import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.Information
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande.value.ValueNumber
+import java.util.concurrent.CopyOnWriteArrayList
 
 class InformationEntities : Information("World", "Entities") {
     override fun getMessage(): String? {
@@ -47,5 +51,37 @@ class InformationSpawnPoint : Information("World", "Spawn Point") {
         val pos = MinecraftClient.getInstance().world!!.spawnPos
 
         return StringUtil.round(pos.x.toDouble(), this.decimalPlacesX.value.toInt()) + " " + StringUtil.round(pos.y.toDouble(), this.decimalPlacesY.value.toInt()) + " " + StringUtil.round(pos.z.toDouble(), this.decimalPlacesZ.value.toInt())
+    }
+}
+
+class InformationVanishedPlayers : Information("World", "Vanished players") {
+
+    private val vanishedPlayers = CopyOnWriteArrayList<String>()
+
+
+    init {
+        TarasandeMain.get().eventDispatcher.add(EventPacket::class.java) { event ->
+            if (event.type == EventPacket.Type.RECEIVE) {
+                when (event.packet) {
+                    is PlayerListS2CPacket -> {
+                        if (event.packet.action != PlayerListS2CPacket.Action.ADD_PLAYER && event.packet.action != PlayerListS2CPacket.Action.REMOVE_PLAYER)
+                            for (packetEntry in event.packet.entries)
+                                if (MinecraftClient.getInstance().networkHandler?.getPlayerListEntry(packetEntry.profile.id) == null)
+                                    if (!vanishedPlayers.contains(packetEntry.profile.id.toString()))
+                                        vanishedPlayers.add(packetEntry.profile.id.toString())
+                    }
+
+                    is PlayerRespawnS2CPacket, is DisconnectS2CPacket -> {
+                        vanishedPlayers.clear()
+                    }
+                }
+            }
+        }
+    }
+
+    override fun getMessage(): String? {
+        if (vanishedPlayers.isEmpty()) return null
+
+        return "\n" + vanishedPlayers.joinToString("\n")
     }
 }
