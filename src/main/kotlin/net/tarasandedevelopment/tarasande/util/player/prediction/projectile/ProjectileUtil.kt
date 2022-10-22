@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.projectile.PersistentProjectileEntity
 import net.minecraft.item.BowItem
+import net.minecraft.item.CrossbowItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
@@ -50,7 +51,7 @@ object ProjectileUtil {
 
         var vec3d = Vec3d(-i.toDouble(), MathHelper.clamp(-(k / j), -5.0f, 5.0f).toDouble(), -h.toDouble())
         val m = vec3d.length()
-        vec3d = vec3d.multiply(0.6 / m + 0.5 + (persistentProjectileEntity as IEntity).tarasande_getRandom().nextGaussian() * 0.0045, 0.6 / m + 0.5 + (persistentProjectileEntity as IEntity).tarasande_getRandom().nextGaussian() * 0.0045, 0.6 / m + 0.5 + (persistentProjectileEntity as IEntity).tarasande_getRandom().nextGaussian() * 0.0045)
+        vec3d = vec3d.multiply(0.6 / m + 0.5 + persistentProjectileEntity.random.nextGaussian() * 0.0045, 0.6 / m + 0.5 + persistentProjectileEntity.random.nextGaussian() * 0.0045, 0.6 / m + 0.5 + persistentProjectileEntity.random.nextGaussian() * 0.0045)
 
         persistentProjectileEntity.velocity = vec3d
         val rotation = RotationUtil.getRotations(vec3d)
@@ -63,15 +64,15 @@ object ProjectileUtil {
             it.prevPitch = rotation.pitch
         }
     }, ProjectileItem(Items.CROSSBOW.javaClass, EntityType.ARROW, true) { stack, persistentProjectileEntity ->
-        persistentProjectileEntity.setVelocity(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.pitch!!, MinecraftClient.getInstance().player?.yaw!!, 0.0f, (stack.item as ICrossbowItem).tarasande_invokeGetSpeed(stack), 1.0f)
+        persistentProjectileEntity.setVelocity(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.pitch!!, MinecraftClient.getInstance().player?.yaw!!, 0.0f, CrossbowItem.getSpeed(stack), 1.0f)
 
     })
 
     fun predict(itemStack: ItemStack, rotation: Rotation?, predictVelocity: Boolean): ArrayList<Vec3d> {
         val projectileItem = projectileItems.first { it.isSame(itemStack.item) }
         val wasIsClient = MinecraftClient.getInstance().world?.isClient == true
-        (MinecraftClient.getInstance().world as IWorld).tarasande_setIsClient(false)
-        val soundSystem = (MinecraftClient.getInstance().soundManager as ISoundManager).tarasande_getSoundSystem() as ISoundSystem
+        MinecraftClient.getInstance().world?.isClient = false
+        val soundSystem = MinecraftClient.getInstance().soundManager.soundSystem as ISoundSystem
         val wasSoundDisabled = soundSystem.tarasande_isDisabled()
         soundSystem.tarasande_setDisabled(true)
         val path = ArrayList<Vec3d>()
@@ -96,13 +97,13 @@ object ProjectileUtil {
             }
 
             override fun checkBlockCollision() {
-                (MinecraftClient.getInstance().world as IWorld).tarasande_setIsClient(true)
+                MinecraftClient.getInstance().world?.isClient = true
                 super.checkBlockCollision()
-                (MinecraftClient.getInstance().world as IWorld).tarasande_setIsClient(false)
+                MinecraftClient.getInstance().world?.isClient = false
             }
         }
         persistentProjectileEntity.setPosition(MinecraftClient.getInstance().player?.getLerpedPos(MinecraftClient.getInstance().tickDelta)?.add(0.0, MinecraftClient.getInstance().player?.standingEyeHeight!! - 0.1, 0.0))
-        (persistentProjectileEntity as IEntity).tarasande_setRandom(object : Random {
+        persistentProjectileEntity.random = object : Random {
             override fun split(): Random {
                 return this
             }
@@ -153,7 +154,7 @@ object ProjectileUtil {
             override fun nextGaussian(): Double {
                 return 0.0
             }
-        })
+        }
 
         val prevRotation = Rotation(MinecraftClient.getInstance().player!!)
         val prevVelocity = Vec3d(0.0, 0.0, 0.0).also { (it as IVec3d).tarasande_copy(MinecraftClient.getInstance().player?.velocity) }
@@ -177,7 +178,7 @@ object ProjectileUtil {
             path.add(persistentProjectileEntity.pos)
         }
         soundSystem.tarasande_setDisabled(wasSoundDisabled)
-        (MinecraftClient.getInstance().world as IWorld).tarasande_setIsClient(wasIsClient)
+        MinecraftClient.getInstance().world?.isClient = wasIsClient
         return path
     }
 

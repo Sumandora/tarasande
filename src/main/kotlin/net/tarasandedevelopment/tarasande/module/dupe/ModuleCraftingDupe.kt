@@ -5,7 +5,6 @@ import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.screen.slot.SlotActionType
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
-import net.tarasandedevelopment.tarasande.mixin.accessor.IInventoryScreen
 import net.tarasandedevelopment.tarasande.util.exploit.ExploitInjector
 
 class ModuleCraftingDupe : Module("Crafting dupe", "Duplicate items using crafting grids on 1.17.0", ModuleCategory.DUPE) {
@@ -16,7 +15,7 @@ class ModuleCraftingDupe : Module("Crafting dupe", "Duplicate items using crafti
                 val inventoryScreen = MinecraftClient.getInstance().currentScreen!! as InventoryScreen
                 val outputSlot = inventoryScreen.screenHandler.getSlot(0)
 
-                (inventoryScreen as IInventoryScreen).tarasande_onMouseClick(outputSlot, outputSlot.id, 0, SlotActionType.THROW)
+                inventoryScreen.onMouseClick(outputSlot, outputSlot.id, 0, SlotActionType.THROW)
             }
         }, this)
     }

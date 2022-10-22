@@ -6,7 +6,6 @@ import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventJump
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventMovement
-import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
 import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
@@ -41,31 +40,28 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
             if (!PlayerUtil.isPlayerMoving()) return@registerEvent
 
-            val accessor = event.velocity as IVec3d
-
             val prevVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)!!
             if (mc.player?.isOnGround == true) {
                 if (jumpHeight.value > 0.0) {
 
                     mc.player?.jump()
 
-                    if (!(mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
+                    if (!mc.options.jumpKey.pressed)
                         mc.player?.velocity = mc.player?.velocity?.multiply(1.0, jumpHeight.value, 1.0)
 
-                    accessor.tarasande_setY(mc.player?.velocity?.y!!)
+                    event.velocity.y = mc.player?.velocity?.y!!
 
-                    val playerVelocityAccessor = mc.player?.velocity as IVec3d
-                    playerVelocityAccessor.tarasande_setX(prevVelocity.x)
+                    mc.player?.velocity?.x = prevVelocity.x
                     if (lowHop.value && mc.player?.horizontalCollision == false)
-                        playerVelocityAccessor.tarasande_setY(prevVelocity.y)
-                    playerVelocityAccessor.tarasande_setZ(prevVelocity.z)
+                        mc.player?.velocity?.y = prevVelocity.y
+                    mc.player?.velocity?.z = prevVelocity.z
 
                 } else {
                     speed = PlayerUtil.calcBaseSpeed(speedValue.value)
                 }
             }
             if (event.velocity.y < 0.0) {
-                accessor.tarasande_setY(event.velocity.y * gravity.value)
+                event.velocity.y = event.velocity.y * gravity.value
             }
 
             val baseSpeed = event.velocity.horizontalLength()
@@ -78,8 +74,9 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
             val moveSpeed = max(speed, baseSpeed)
             val rad = Math.toRadians(moveDir + 90)
-            accessor.tarasande_setX(cos(rad) * moveSpeed)
-            accessor.tarasande_setZ(sin(rad) * moveSpeed)
+
+            event.velocity.x = cos(rad) * moveSpeed
+            event.velocity.z = sin(rad) * moveSpeed
 
             if (mc.player?.isOnGround == false)
                 speed -= speed / speedDivider.value
@@ -95,5 +92,4 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                     event.pressed = true
         }
     }
-
 }

@@ -3,10 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.entity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MovementType;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventEntityFlag;
 import net.tarasandedevelopment.tarasande.event.EventMovement;
@@ -24,15 +21,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.awt.*;
-import java.util.List;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity implements IEntity {
-
-    @Mutable
-    @Shadow
-    @Final
-    protected Random random;
 
     @Shadow
     private static Vec3d movementInputToVelocity(Vec3d movementInput, float speed, float yaw) {
@@ -42,21 +33,6 @@ public abstract class MixinEntity implements IEntity {
     @Shadow
     protected abstract Vec3d getRotationVector(float pitch, float yaw);
 
-    @Shadow
-    private Vec3d pos;
-
-    @Shadow
-    private static Vec3d adjustMovementForCollisions(Vec3d movement, Box entityBoundingBox, List<VoxelShape> collisions) {
-        return null;
-    }
-
-    @Shadow
-    @Final
-    private static int SPRINTING_FLAG_INDEX;
-
-    @Shadow
-    @Final
-    private static int INVISIBLE_FLAG_INDEX;
     @Unique
     private boolean forceFlagRetrieval = false;
 
@@ -118,16 +94,6 @@ public abstract class MixinEntity implements IEntity {
     @Shadow
     protected abstract boolean getFlag(int index);
 
-    @Shadow
-    protected boolean submergedInWater;
-
-    @Shadow
-    protected boolean touchingWater;
-
-    @Shadow
-    @Final
-    private static int SNEAKING_FLAG_INDEX;
-
     @Inject(method = "getFlag", at = @At("RETURN"), cancellable = true)
     public void injectGetFlag(int index, CallbackInfoReturnable<Boolean> cir) {
         if (forceFlagRetrieval) {
@@ -140,53 +106,8 @@ public abstract class MixinEntity implements IEntity {
     }
 
     @Override
-    public Vec3d tarasande_invokeGetRotationVector(float pitch, float yaw) {
-        return getRotationVector(pitch, yaw);
-    }
-
-    @Override
-    public Random tarasande_getRandom() {
-        return random;
-    }
-
-    @Override
-    public void tarasande_setRandom(Random random) {
-        this.random = random;
-    }
-
-    @Override
-    public Vec3d tarasande_invokeMovementInputToVelocity(Vec3d movementInput, float speed, float yaw) {
-        return movementInputToVelocity(movementInput, speed, yaw);
-    }
-
-    @Override
-    public int tarasande_getSprintingFlagIndex() {
-        return SPRINTING_FLAG_INDEX;
-    }
-
-    @Override
-    public int tarasande_getInvisibleFlagIndex() {
-        return INVISIBLE_FLAG_INDEX;
-    }
-
-    @Override
-    public int tarasande_getSneakingFlagIndex() {
-        return SNEAKING_FLAG_INDEX;
-    }
-
-    @Override
     public boolean tarasande_forceGetFlag(int index) {
         forceFlagRetrieval = true;
         return getFlag(index);
-    }
-
-    @Override
-    public void tarasande_setSubmergedInWater(boolean submergedInWater) {
-        this.submergedInWater = submergedInWater;
-    }
-
-    @Override
-    public void tarasande_setTouchingWater(boolean touchingWater) {
-        this.touchingWater = touchingWater;
     }
 }

@@ -6,7 +6,6 @@ import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ValueComponent
 import net.tarasandedevelopment.tarasande.base.value.Value
-import net.tarasandedevelopment.tarasande.mixin.accessor.IInGameHud
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueButtonItem
 import java.awt.Color
@@ -24,14 +23,14 @@ class ValueComponentButtonItem(value: Value) : ValueComponent(value) {
         RenderUtil.fill(matrices, width - 4 - textWidth / 2, getHeight() / 2.0 - MinecraftClient.getInstance().textRenderer.fontHeight / 2, width, getHeight() / 2.0 + MinecraftClient.getInstance().textRenderer.fontHeight / 2, Int.MIN_VALUE)
 
         RenderSystem.enableCull()
-        (MinecraftClient.getInstance().inGameHud as IInGameHud).tarasande_invokeRenderHotbarItem(0, 0, delta, matrices, valueButton.icon)
+        RenderUtil.renderCorrectItem(matrices!!, 0, 0, delta, valueButton.icon)
 
-        matrices?.push()
-        matrices?.translate(width - 2 - textWidth / 2, getHeight() / 2.0, 0.0)
-        matrices?.scale(0.5F, 0.5F, 1.0F)
-        matrices?.translate(-(width - 2 - textWidth / 2), -getHeight() / 2.0, 0.0)
+        matrices.push()
+        matrices.translate(width - 2 - textWidth / 2, getHeight() / 2.0, 0.0)
+        matrices.scale(0.5F, 0.5F, 1.0F)
+        matrices.translate(-(width - 2 - textWidth / 2), -getHeight() / 2.0, 0.0)
         MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, (width - 2 - textWidth / 2).toFloat(), (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F + 1).toFloat(), if (valueButton.isEnabled()) if (RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), width - 4 - textWidth / 2, getHeight() / 2.0 - MinecraftClient.getInstance().textRenderer.fontHeight / 2, width, getHeight() / 2.0 + MinecraftClient.getInstance().textRenderer.fontHeight / 2)) TarasandeMain.get().clientValues.accentColor.getColor().rgb else -1 else Color.white.darker().darker().rgb)
-        matrices?.pop()
+        matrices.pop()
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

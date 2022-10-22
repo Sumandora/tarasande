@@ -1,14 +1,11 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventMovement
-import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import net.tarasandedevelopment.tarasande.value.ValueBind
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import org.lwjgl.glfw.GLFW
-import java.util.function.Consumer
 
 class ModuleVehicleFlight : Module("Vehicle flight", "Makes you fly with vehicles (e.g. boat, horses)", ModuleCategory.MOVEMENT) {
 
@@ -23,7 +20,8 @@ class ModuleVehicleFlight : Module("Vehicle flight", "Makes you fly with vehicle
                     var sign = 0.0
                     if (mc.options.jumpKey.isPressed) sign += 1.0
                     if (downwardsBind.isPressed()) sign -= 1.0
-                    (event.velocity as IVec3d).tarasande_setY(verticalSpeed.value * sign)
+
+                    event.velocity.y = verticalSpeed.value * sign
                 }
             }
         }

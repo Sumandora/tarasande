@@ -83,11 +83,11 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
             val rotation = RotationUtil.getRotations(curPos, newPos)
             val forward = rotation.forwardVector(selfSpeed)
             val moduleFlight = TarasandeMain.get().managerModule.get(ModuleFlight::class.java)
+
             if (moduleFlight.let { !it.enabled || !(it.mode.isSelected(0) || it.mode.isSelected(1)) })
-                (forward as IVec3d).tarasande_setY(event.velocity.y)
-            else {
-                (forward as IVec3d).tarasande_setY(MathHelper.clamp(forward.y, -moduleFlight.flightSpeed.value, moduleFlight.flightSpeed.value))
-            }
+                forward.y = event.velocity.y
+            else
+                forward.y = MathHelper.clamp(forward.y, -moduleFlight.flightSpeed.value, moduleFlight.flightSpeed.value)
 
             event.velocity = forward
         }

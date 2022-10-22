@@ -1,13 +1,13 @@
 package net.tarasandedevelopment.tarasande.module.player
 
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen
+import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.screen.slot.Slot
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventScreenInput
-import net.tarasandedevelopment.tarasande.mixin.accessor.IHandledScreen
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
@@ -70,10 +70,10 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 return@registerEvent
             }
 
-            val accessor = mc.currentScreen as IHandledScreen
+            val accessor = mc.currentScreen as HandledScreen<*>
 
             if (checkTitle.value) {
-                val title = accessor.tarasande_getTitle()
+                val title = accessor.title
                 val content = title.content
                 var string = ""
                 content.visit {
@@ -117,7 +117,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 }
                 val distance = mousePos?.distanceSquared(displayPos)!!
                 mousePos = displayPos
-                val mapped = sqrt(distance).div(Vec2f(accessor.tarasande_getBackgroundWidth().toFloat(), accessor.tarasande_getBackgroundHeight().toFloat()).length())
+                val mapped = sqrt(distance).div(Vec2f(accessor.backgroundWidth.toFloat(), accessor.backgroundHeight.toFloat()).length())
                 nextDelay = (delay.minValue + (delay.maxValue - delay.minValue) * mapped).toLong()
                 mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot?.id!!, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.QUICK_MOVE, mc.player)
                 event.doneInput = true

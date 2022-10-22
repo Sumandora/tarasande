@@ -70,7 +70,7 @@ object MinecraftViaItemRewriter {
 
     private fun allItemMappings(): List<Pair<Int, ViaItemRewriterImpl>> {
         val list = ArrayList<Pair<Int, ViaItemRewriterImpl>>()
-        (Via.getManager().protocolManager as IProtocolManagerImpl_Protocol).protocols.filter { p -> p.second.itemRewriter != null }.forEach {
+        (Via.getManager().protocolManager as IProtocolManagerImpl_Protocol).tarasande_getProtocols().filter { p -> p.second.itemRewriter != null }.forEach {
             list.add(Pair(it.first, object : ViaItemRewriterImpl {
                 override fun remapItem(dataItem: Item): Item? {
                     return it.second.itemRewriter!!.handleItemToServer(dataItem)

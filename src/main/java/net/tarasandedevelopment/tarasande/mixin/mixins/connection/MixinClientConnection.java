@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.connection;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkSide;
@@ -28,9 +27,6 @@ public abstract class MixinClientConnection implements IClientConnection {
 
     @Unique
     private static final ArrayList<Packet<?>> forced = new ArrayList<>();
-
-    @Shadow
-    private Channel channel;
 
     @Shadow
     public abstract void send(Packet<?> packet);
@@ -71,11 +67,6 @@ public abstract class MixinClientConnection implements IClientConnection {
     @Inject(method = "disconnect", at = @At("RETURN"))
     public void injectDisconnect(Text disconnectReason, CallbackInfo ci) {
         TarasandeMain.Companion.get().getEventDispatcher().call(new EventDisconnect());
-    }
-
-    @Override
-    public Channel tarasande_getChannel() {
-        return channel;
     }
 
     @Override

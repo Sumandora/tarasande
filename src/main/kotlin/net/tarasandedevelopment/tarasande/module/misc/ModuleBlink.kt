@@ -56,8 +56,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         registerEvent(EventPacket::class.java, 9999) { event ->
             if (event.cancelled) return@registerEvent
             if (event.packet != null) {
-                if (mc.networkHandler?.connection == null ||
-                    (mc.networkHandler?.connection as IClientConnection).tarasande_getChannel().attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY).get() != NetworkState.PLAY ||
+                if (mc.networkHandler?.connection == null || mc.networkHandler?.connection?.channel?.attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY)?.get() != NetworkState.PLAY ||
                     (event.type == EventPacket.Type.RECEIVE && event.packet is DisconnectS2CPacket) ||
                     (!mode.isSelected(1) && mc.currentScreen is DownloadingTerrainScreen)
                 ) {

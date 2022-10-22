@@ -17,6 +17,7 @@
   "mixins": [
     "tarasande.mixins.json"
   ],
+  "accessWidener": "tarasande.accesswidener",
   "depends": {
     "fabric-language-kotlin": "*"
   }

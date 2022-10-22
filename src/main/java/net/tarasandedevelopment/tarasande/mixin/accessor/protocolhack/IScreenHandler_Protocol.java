@@ -17,5 +17,4 @@ package net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack;
 public interface IScreenHandler_Protocol {
 
     short tarasande_getAndIncrementLastActionId();
-
 }

@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
+import net.minecraft.entity.Entity
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShapes
 import net.tarasandedevelopment.tarasande.base.module.Module
@@ -41,7 +42,7 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
                 yMotion -= flightSpeed.value
             if (yMotion == 0.0)
                 yMotion = baseYMotion.value
-            event.velocity = (mc.player as IEntity).tarasande_invokeMovementInputToVelocity(Vec3d(
+            event.velocity = Entity.movementInputToVelocity(Vec3d(
                 MathUtil.roundAwayFromZero(PlayerUtil.input.movementSideways.toDouble()),
                 0.0,
                 MathUtil.roundAwayFromZero(PlayerUtil.input.movementForward.toDouble())
@@ -71,8 +72,7 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
             if (event.state == EventUpdate.State.PRE)
                 if (mode.isSelected(3))
                     if (mc.player?.age?.mod(tickFrequency.value.toInt()) == 0)
-                        (mc.player?.velocity as IVec3d).tarasande_setY(0.0)
+                        mc.player?.velocity?.y = 0.0
         }
     }
-
 }

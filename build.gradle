@@ -45,6 +45,10 @@ var libs = [
 		"io.netty:netty-codec-haproxy:4.1.82.Final"
 ]
 
+loom {
+	accessWidenerPath = file("src/main/resources/tarasande.accesswidener")
+}
+
 dependencies {
 	// Fabric
     minecraft "com.mojang:minecraft:1.19.2"

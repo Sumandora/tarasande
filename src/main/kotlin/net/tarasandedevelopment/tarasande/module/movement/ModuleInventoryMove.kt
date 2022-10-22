@@ -10,7 +10,6 @@ import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventTick
-import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentRegistry
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentText
@@ -46,7 +45,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
             if (isPassingEvents())
                 if (movementKeys.contains(event.keyBinding))
                     if (event.keyBinding != mc.options.sneakKey || updateSneaking.value)
-                        event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, (event.keyBinding as IKeyBinding).tarasande_getBoundKey().code)
+                        event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, event.keyBinding.boundKey.code)
         }
 
         registerEvent(EventTick::class.java) { event ->

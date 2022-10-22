@@ -83,12 +83,11 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
             ModuleTrueSight moduleTrueSight = TarasandeMain.Companion.get().getManagerModule().get(ModuleTrueSight.class);
             if (moduleTrueSight.getEnabled()) {
                 IEntity accessor = (IEntity) livingEntity;
-                if (livingEntity.isInvisibleTo(MinecraftClient.getInstance().player) || accessor.tarasande_forceGetFlag(accessor.tarasande_getInvisibleFlagIndex()))
+                if (livingEntity.isInvisibleTo(MinecraftClient.getInstance().player) || accessor.tarasande_forceGetFlag(Entity.INVISIBLE_FLAG_INDEX))
                     f = (float) moduleTrueSight.getAlpha().getValue();
             }
         }
 
         instance.render(matrixStack, vertexConsumer, a, b, c, d, e, f);
     }
-
 }

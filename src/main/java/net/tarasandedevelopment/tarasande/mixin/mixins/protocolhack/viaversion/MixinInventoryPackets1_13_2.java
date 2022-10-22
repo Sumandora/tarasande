@@ -18,7 +18,7 @@ public class MixinInventoryPackets1_13_2 extends ItemRewriter<Protocol1_14To1_13
         super(protocol);
     }
 
-    @Inject(method = "registerPackets", at = @At("TAIL"))
+    @Inject(method = "registerPackets", at = @At("TAIL"), remap = false)
     public void removeUnnecessaryHandler(CallbackInfo ci) {
         protocol.registerServerbound(ServerboundPackets1_14.SELECT_TRADE, new PacketRemapper() {
             @Override

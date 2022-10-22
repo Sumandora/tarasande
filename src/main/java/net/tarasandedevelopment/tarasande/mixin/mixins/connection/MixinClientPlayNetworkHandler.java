@@ -10,9 +10,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventRespawn;
 import net.tarasandedevelopment.tarasande.event.EventRotationSet;
 import net.tarasandedevelopment.tarasande.event.EventVelocity;
-import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayNetworkHandler;
 import net.tarasandedevelopment.tarasande.module.exploit.ModuleNoChatContext;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -22,20 +20,12 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.net.URL;
-
 @Mixin(ClientPlayNetworkHandler.class)
-public abstract class MixinClientPlayNetworkHandler implements IClientPlayNetworkHandler {
+public abstract class MixinClientPlayNetworkHandler {
 
     @Shadow
     @Final
     private MinecraftClient client;
-
-    @Shadow
-    @Nullable
-    private static URL resolveUrl(String url) {
-        return null;
-    }
 
     @Redirect(method = "onEntityVelocityUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setVelocityClient(DDD)V"))
     public void hookedSetVelocityClient_onVelocityUpdate(Entity entity, double x, double y, double z) {
@@ -71,10 +61,5 @@ public abstract class MixinClientPlayNetworkHandler implements IClientPlayNetwor
             if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoChatContext.class).getEnabled())
                 return false;
         return value;
-    }
-
-    @Override
-    public URL tarasande_invokeResolveUrl(String url) {
-        return resolveUrl(url);
     }
 }

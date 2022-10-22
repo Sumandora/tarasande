@@ -18,18 +18,6 @@ import java.awt.*;
 @Mixin(TextFieldWidget.class)
 public abstract class MixinTextFieldWidget implements ITextFieldWidget {
 
-    @Shadow
-    private boolean selecting;
-
-    @Shadow
-    private String text;
-
-    @Shadow
-    protected abstract void erase(int offset);
-
-    @Shadow
-    protected abstract boolean isEditable();
-
     @Unique
     private Color color = null;
 
@@ -57,26 +45,6 @@ public abstract class MixinTextFieldWidget implements ITextFieldWidget {
     @ModifyConstant(method = "renderButton", constant = @Constant(intValue = -3092272))
     public int cursorColor(int original) {
         return this.color != null ? this.color.getRGB() : original;
-    }
-
-    @Override
-    public boolean tarasande_invokeIsEditable() {
-        return isEditable();
-    }
-
-    @Override
-    public void tarasande_setSelecting(boolean selecting) {
-        this.selecting = selecting;
-    }
-
-    @Override
-    public void tarasande_eraseOffset(int offset) {
-        this.erase(offset);
-    }
-
-    @Override
-    public void tarasande_setForceText(String text) {
-        this.text = text;
     }
 
     @Override

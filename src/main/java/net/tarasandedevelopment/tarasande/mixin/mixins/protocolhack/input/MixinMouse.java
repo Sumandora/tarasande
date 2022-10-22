@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(Mouse.class)
 public class MixinMouse {
 
-    @Redirect(method = { "method_29615", "method_22685", "method_22684" }, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;execute(Ljava/lang/Runnable;)V"))
+    @Redirect(method = { "method_29615", "method_22685", "method_22684" }, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;execute(Ljava/lang/Runnable;)V"), remap = false)
     public void redirectSync(MinecraftClient instance, Runnable runnable) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2)) {
             InputTracker1_12_2.INSTANCE.getMouse().add(runnable);

@@ -12,9 +12,11 @@ class TextFieldWidgetPassword(textRenderer: TextRenderer?, x: Int, y: Int, width
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val prevText = text
-        if (text.isNotEmpty()) (this as ITextFieldWidget).tarasande_setForceText(Strings.repeat("*", text.length))
+        if (text.isNotEmpty())
+            this.text = Strings.repeat("*", text.length)
+
         super.render(matrices, mouseX, mouseY, delta)
-        (this as ITextFieldWidget).tarasande_setForceText(prevText)
+        this.text = prevText
     }
 
     override fun eraseWords(wordOffset: Int) {
@@ -24,9 +26,10 @@ class TextFieldWidgetPassword(textRenderer: TextRenderer?, x: Int, y: Int, width
 
     override fun mouseClicked(p_mouseClicked_1_: Double, p_mouseClicked_3_: Double, p_mouseClicked_5_: Int): Boolean {
         val prevText = text
-        if (text.isNotEmpty()) (this as ITextFieldWidget).tarasande_setForceText(Strings.repeat("*", text.length))
+        if (text.isNotEmpty())
+            this.text = Strings.repeat("*", text.length)
         val b = super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_)
-        (this as ITextFieldWidget).tarasande_setForceText(prevText)
+        this.text = prevText
         return b
     }
 
@@ -34,7 +37,7 @@ class TextFieldWidgetPassword(textRenderer: TextRenderer?, x: Int, y: Int, width
         return if (!this.isActive) {
             false
         } else {
-            (this as ITextFieldWidget).tarasande_setSelecting(Screen.hasShiftDown())
+            this.selecting = Screen.hasShiftDown()
             if (Screen.isSelectAll(keyCode)) {
                 setCursorToEnd()
                 setSelectionEnd(0)
@@ -43,33 +46,33 @@ class TextFieldWidgetPassword(textRenderer: TextRenderer?, x: Int, y: Int, width
                 MinecraftClient.getInstance().keyboard.clipboard = this.selectedText
                 true
             } else if (Screen.isPaste(keyCode)) {
-                if ((this as ITextFieldWidget).tarasande_invokeIsEditable()) {
+                if (this.isEditable) {
                     write(MinecraftClient.getInstance().keyboard.clipboard)
                 }
                 true
             } else if (Screen.isCut(keyCode)) {
                 MinecraftClient.getInstance().keyboard.clipboard = this.selectedText
-                if ((this as ITextFieldWidget).tarasande_invokeIsEditable()) {
+                if (this.isEditable) {
                     write("")
                 }
                 true
             } else {
                 when (keyCode) {
                     259 -> {
-                        if ((this as ITextFieldWidget).tarasande_invokeIsEditable()) {
-                            (this as ITextFieldWidget).tarasande_setSelecting(false)
-                            (this as ITextFieldWidget).tarasande_eraseOffset(-1)
-                            (this as ITextFieldWidget).tarasande_setSelecting(Screen.hasShiftDown())
+                        if (this.isEditable) {
+                            this.selecting = false
+                            this.erase(-1)
+                            this.selecting = Screen.hasShiftDown()
                         }
                         true
                     }
 
                     260, 264, 265, 266, 267 -> false
                     261 -> {
-                        if ((this as ITextFieldWidget).tarasande_invokeIsEditable()) {
-                            (this as ITextFieldWidget).tarasande_setSelecting(false)
-                            (this as ITextFieldWidget).tarasande_eraseOffset(1)
-                            (this as ITextFieldWidget).tarasande_setSelecting(Screen.hasShiftDown())
+                        if (this.isEditable) {
+                            this.selecting = false
+                            this.erase(1)
+                            this.selecting = Screen.hasShiftDown()
                         }
                         true
                     }
@@ -107,5 +110,4 @@ class TextFieldWidgetPassword(textRenderer: TextRenderer?, x: Int, y: Int, width
             }
         }
     }
-
 }

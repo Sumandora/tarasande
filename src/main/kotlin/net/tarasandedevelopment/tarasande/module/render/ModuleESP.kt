@@ -13,8 +13,6 @@ import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventRender3D
-import net.tarasandedevelopment.tarasande.mixin.accessor.IMatrix4f
-import net.tarasandedevelopment.tarasande.mixin.accessor.IWorldRenderer
 import net.tarasandedevelopment.tarasande.module.combat.ModuleAntiBot
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.util.extension.minus
@@ -86,12 +84,11 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
     }
 
     private fun matrixVectorMultiply(matrix4f: Matrix4f, vector: Vector4f): Vector4f {
-        val accessor = matrix4f as IMatrix4f
         return Vector4f(
-            accessor.tarasande_getA00() * vector.x + accessor.tarasande_getA01() * vector.y + accessor.tarasande_getA02() * vector.z + accessor.tarasande_getA03() * vector.w,
-            accessor.tarasande_getA10() * vector.x + accessor.tarasande_getA11() * vector.y + accessor.tarasande_getA12() * vector.z + accessor.tarasande_getA13() * vector.w,
-            accessor.tarasande_getA20() * vector.x + accessor.tarasande_getA21() * vector.y + accessor.tarasande_getA22() * vector.z + accessor.tarasande_getA23() * vector.w,
-            accessor.tarasande_getA30() * vector.x + accessor.tarasande_getA31() * vector.y + accessor.tarasande_getA32() * vector.z + accessor.tarasande_getA33() * vector.w
+            matrix4f.a00 * vector.x + matrix4f.a01 * vector.y + matrix4f.a02 * vector.z + matrix4f.a03 * vector.w,
+            matrix4f.a10 * vector.x + matrix4f.a11 * vector.y + matrix4f.a12 * vector.z + matrix4f.a13 * vector.w,
+            matrix4f.a20 * vector.x + matrix4f.a21 * vector.y + matrix4f.a22 * vector.z + matrix4f.a23 * vector.w,
+            matrix4f.a30 * vector.x + matrix4f.a31 * vector.y + matrix4f.a32 * vector.z + matrix4f.a33 * vector.w
         )
     }
 
@@ -109,7 +106,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
                 val interp = prevPos + (entity.pos - prevPos) * mc.tickDelta.toDouble()
                 val boundingBox = entity.boundingBox.offset(interp - entity.pos)
 
-                if (!(mc.worldRenderer as IWorldRenderer).tarasande_getFrustum().isVisible(boundingBox)) continue
+                if (!mc.worldRenderer.frustum.isVisible(boundingBox)) continue
 
                 val corners = arrayOf(
                     Vec3d(boundingBox.minX, boundingBox.minY, boundingBox.minZ),

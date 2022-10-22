@@ -26,11 +26,13 @@ import java.util.function.Predicate;
 public class MixinGameRenderer implements IGameRenderer {
 
     @Unique
-    boolean allowThroughWalls = false;
+    private boolean allowThroughWalls = false;
+
     @Unique
-    boolean disableReachExtension = false;
+    private boolean disableReachExtension = false;
+
     @Unique
-    double reach = 3.0;
+    private double reach = 3.0;
 
     @Inject(method = "updateTargetedEntity", at = @At("HEAD"))
     public void injectPreUpdateTargetedEntity(float tickDelta, CallbackInfo ci) {

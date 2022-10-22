@@ -37,7 +37,7 @@ public class MixinEntityPackets_1_8 {
         }
     };
 
-    @Inject(method = "register", at = @At("RETURN"))
+    @Inject(method = "register", at = @At("RETURN"), remap = false)
     private static void fixEntityEquipment(Protocol1_9To1_8 protocol, CallbackInfo ci) {
         protocol.registerClientbound(ClientboundPackets1_8.ENTITY_EQUIPMENT, new PacketRemapper() {
 

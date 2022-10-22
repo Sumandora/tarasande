@@ -13,7 +13,7 @@ import java.util.UUID;
 public class MixinPlayerSkinProvider implements IPlayerSkinProvider {
 
     @Unique
-    boolean sessionCheck = true;
+    private boolean sessionCheck = true;
 
     @Redirect(method = "method_4653", at = @At(value = "INVOKE", target = "Ljava/util/UUID;equals(Ljava/lang/Object;)Z"))
     public boolean hookedEquals(UUID instance, Object obj) {

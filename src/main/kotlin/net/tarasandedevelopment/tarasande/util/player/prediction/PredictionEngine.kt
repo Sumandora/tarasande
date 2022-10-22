@@ -20,19 +20,13 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 object PredictionEngine {
 
     fun predictState(count: Int): Pair<ClientPlayerEntity, ArrayList<Vec3d>> {
-        /*
-         * Irgendwie funktioniert das hier ohne Minecraft code in den Utilklassen?
-         * Ich glaub, E-Sound ist einfach scheiße
-         *
-         * Darauf kracht das Crystal! :sunglasses:
-         */
         val mc = MinecraftClient.getInstance()
 
         val selfVelocity = mc.player?.velocity!!
 
         val wasDevelopment = SharedConstants.isDevelopment
-        SharedConstants.isDevelopment = true // prevent that telemetry sender to do any bs
-        val soundSystem = (MinecraftClient.getInstance().soundManager as ISoundManager).tarasande_getSoundSystem() as ISoundSystem
+        SharedConstants.isDevelopment = true
+        val soundSystem = MinecraftClient.getInstance().soundManager.soundSystem as ISoundSystem
         val wasSoundDisabled = soundSystem.tarasande_isDisabled()
         soundSystem.tarasande_setDisabled(true)
         val playerEntity = object : ClientPlayerEntity(mc,
@@ -43,12 +37,10 @@ object PredictionEngine {
                 mc.player?.gameProfile,
                 object : TelemetrySender(null, null, null, null, null) {
                     override fun send() {
-                        // lmao no
                     }
                 }
             ) {
                 override fun sendPacket(packet: Packet<*>?) {
-                    // lmao don't send packets
                 }
             },
             StatHandler(),
@@ -69,7 +61,7 @@ object PredictionEngine {
             }
 
             override fun isCamera(): Boolean {
-                return true // 1, 2 Polizei 3, 4 Crystal hier 5, 6 Alte Hex, 7, 8 Crystal kracht
+                return true
             }
 
             override fun playSound(sound: SoundEvent?, volume: Float, pitch: Float) {
@@ -102,9 +94,9 @@ object PredictionEngine {
         playerEntity.isOnGround = mc.player?.isOnGround == true
         playerEntity.velocity = mc.player?.velocity
         playerEntity.pose = mc.player?.pose
-        (playerEntity as IClientPlayerEntity).tarasande_setAutoJumpEnabled(mc.player?.isAutoJumpEnabled == true)
-        (playerEntity as IClientPlayerEntity).tarasande_setTicksToNextAutojump((mc.player as IClientPlayerEntity).tarasande_getTicksToNextAutojump())
-        (playerEntity as ILivingEntity).tarasande_setJumpingCooldown((mc.player as ILivingEntity).tarasande_getJumpingCooldown())
+        playerEntity.autoJumpEnabled = mc.player?.isAutoJumpEnabled == true
+        playerEntity.ticksToNextAutojump = mc.player!!.ticksToNextAutojump
+        playerEntity.jumpingCooldown = mc.player!!.jumpingCooldown
         playerEntity.horizontalCollision = mc.player?.horizontalCollision == true
         playerEntity.verticalCollision = mc.player?.verticalCollision == true
         playerEntity.collidedSoftly = mc.player?.collidedSoftly == true
@@ -115,8 +107,8 @@ object PredictionEngine {
         playerEntity.upwardSpeed = mc.player?.upwardSpeed!!
         playerEntity.speed = mc.player?.speed!!
         playerEntity.horizontalSpeed = mc.player?.horizontalSpeed!!
-        (playerEntity as IEntity).tarasande_setSubmergedInWater(mc.player?.isSubmergedInWater == true)
-        (playerEntity as IEntity).tarasande_setTouchingWater(mc.player?.isTouchingWater == true)
+        playerEntity.submergedInWater = mc.player?.isSubmergedInWater == true
+        playerEntity.touchingWater = mc.player?.isTouchingWater == true
         playerEntity.isSwimming = mc.player?.isSwimming == true
 
         val list = ArrayList<Vec3d>()
@@ -131,12 +123,10 @@ object PredictionEngine {
         }
         (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(prevParticlesEnabled)
 
-        // bruder also von einer Skala von Augustus bis Koks ist das hier schon safe Klientus
         mc.player?.velocity = selfVelocity
 
         soundSystem.tarasande_setDisabled(wasSoundDisabled)
 
         return Pair(playerEntity, list)
     }
-
 }

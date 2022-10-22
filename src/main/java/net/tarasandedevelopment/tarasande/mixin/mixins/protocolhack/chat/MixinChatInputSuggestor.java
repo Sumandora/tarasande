@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.chat;
 
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
-import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IChatInputSuggestorSubSuggestionWindow_Protocol;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IChatInputSuggestor_Protocol;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,6 +33,6 @@ public class MixinChatInputSuggestor implements IChatInputSuggestor_Protocol {
     public int tarasande_getPendingSuggestionSize() {
         if (this.window == null) return 0;
 
-        return ((IChatInputSuggestorSubSuggestionWindow_Protocol) this.window).tarasande_getSuggestions().size();
+        return this.window.suggestions.size();
     }
 }

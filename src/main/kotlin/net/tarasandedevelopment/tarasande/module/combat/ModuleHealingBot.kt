@@ -136,7 +136,7 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
             if (event.keyBinding == mc.options.useKey) {
                 if (state == State.THROW) {
                     if (mc.player?.inventory?.selectedSlot == intendedSlot) {
-                        if (intendedItem?.item is SplashPotionItem && (mc.player as IClientPlayerEntity).tarasande_getLastPitch() != targetRotation?.pitch)
+                        if (intendedItem?.item is SplashPotionItem && mc.player?.lastPitch != targetRotation?.pitch)
                             return@registerEvent
                         event.pressed = true
                         if (intendedSlot == -1) {

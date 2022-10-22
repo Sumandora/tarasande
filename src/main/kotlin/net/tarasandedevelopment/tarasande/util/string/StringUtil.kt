@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande.util.string
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.resource.language.LanguageDefinition
+import net.minecraft.client.resource.language.LanguageManager
 import net.minecraft.client.resource.language.TranslationStorage
-import net.tarasandedevelopment.tarasande.mixin.accessor.ILanguageManager
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -11,7 +11,7 @@ object StringUtil {
 
     private val languageCache = HashMap<LanguageDefinition, TranslationStorage>()
 
-    fun uncoverTranslation(key: String, languageDefinition: LanguageDefinition = (MinecraftClient.getInstance().languageManager as ILanguageManager).tarasande_getEnglishUS()): String {
+    fun uncoverTranslation(key: String, languageDefinition: LanguageDefinition = LanguageManager.ENGLISH_US): String {
         return languageCache.computeIfAbsent(languageDefinition) { TranslationStorage.load(MinecraftClient.getInstance().resourceManager, Collections.singletonList(languageDefinition)) }.get(key)
     }
 

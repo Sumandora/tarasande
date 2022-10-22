@@ -11,7 +11,6 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
-import net.tarasandedevelopment.tarasande.mixin.accessor.ICrossbowItem
 import net.tarasandedevelopment.tarasande.module.player.ModuleFastUse
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.extension.plus
@@ -58,7 +57,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
         registerEvent(EventPollEvents::class.java) { event ->
             if (!mc.player?.isUsingItem!!) return@registerEvent
             val stack = mc.player?.getStackInHand(mc.player?.activeHand) ?: return@registerEvent
-            if (stack.item !is BowItem && !(stack.item is CrossbowItem && (stack.item as ICrossbowItem).tarasande_invokeGetProjectiles(stack).any { it.item is ArrowItem })) return@registerEvent
+            if (stack.item !is BowItem && !(stack.item is CrossbowItem && CrossbowItem.getProjectiles(stack).any { it.item is ArrowItem })) return@registerEvent
 
             val entity = mc.world?.entities?.filter { PlayerUtil.isAttackable(it) && (throughWalls.value || PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.eyePos)) }?.minByOrNull { RotationUtil.getRotations(mc.player?.eyePos!!, it.eyePos).fov(Rotation(mc.player!!)) } ?: return@registerEvent
 

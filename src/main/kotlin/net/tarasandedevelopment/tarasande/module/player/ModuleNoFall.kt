@@ -2,19 +2,16 @@ package net.tarasandedevelopment.tarasande.module.player
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventUpdate
-import net.tarasandedevelopment.tarasande.mixin.accessor.IPlayerMoveC2SPacket
 import net.tarasandedevelopment.tarasande.mixin.accessor.IVec3d
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.util.function.Consumer
 
 class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", ModuleCategory.PLAYER) {
 
@@ -38,7 +35,7 @@ class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", Module
         registerEvent(EventPacket::class.java) { event ->
             if (event.type == EventPacket.Type.SEND && event.packet is PlayerMoveC2SPacket && mode.isSelected(0)) {
                 if (mc.player?.fallDistance!! >= fallDistance.value || groundSpoofMode.isSelected(1)) {
-                    (event.packet as IPlayerMoveC2SPacket).tarasande_setOnGround(groundSpoofMode.isSelected(0))
+                    event.packet.onGround = groundSpoofMode.isSelected(0)
                     if (resetFallDistance.value)
                         mc.player?.fallDistance = 0.0f
                 }
@@ -60,7 +57,7 @@ class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", Module
             if (event.entity != mc.player)
                 return@registerEvent
             if (mode.isSelected(2))
-                (event.velocity as IVec3d).tarasande_setY(-motion.value)
+                event.velocity.y = -motion.value
         }
 
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->

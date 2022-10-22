@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Vec3d.class)
 public class MixinVec3d implements IVec3d {
+
     @Mutable
     @Shadow
     @Final
@@ -23,21 +24,6 @@ public class MixinVec3d implements IVec3d {
     @Shadow
     @Final
     public double z;
-
-    @Override
-    public void tarasande_setX(double x) {
-        this.x = x;
-    }
-
-    @Override
-    public void tarasande_setY(double y) {
-        this.y = y;
-    }
-
-    @Override
-    public void tarasande_setZ(double z) {
-        this.z = z;
-    }
 
     @Override
     public void tarasande_copy(Vec3d other) {

@@ -1,11 +1,11 @@
 package net.tarasandedevelopment.tarasande.module.misc
 
+import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.packet.c2s.play.ResourcePackStatusC2SPacket
 import net.minecraft.network.packet.s2c.play.ResourcePackSendS2CPacket
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayNetworkHandler
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 
@@ -21,7 +21,7 @@ class ModuleResourcePackSpoofer : Module("Resource pack spoofer", "Changes the r
         registerEvent(EventPacket::class.java) { event ->
             if (event.type == EventPacket.Type.RECEIVE && event.packet is ResourcePackSendS2CPacket) {
                 if (ignoreInvalidProtocol.value) {
-                    if ((mc.networkHandler as IClientPlayNetworkHandler).tarasande_invokeResolveUrl(event.packet.url) == null)
+                    if (ClientPlayNetworkHandler.resolveUrl(event.packet.url) == null)
                         return@registerEvent
                 }
 
@@ -40,5 +40,4 @@ class ModuleResourcePackSpoofer : Module("Resource pack spoofer", "Changes the r
             }
         }
     }
-
 }

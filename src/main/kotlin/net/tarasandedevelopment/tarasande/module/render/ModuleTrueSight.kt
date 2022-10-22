@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.render
 
+import net.minecraft.entity.Entity
 import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
@@ -14,9 +15,8 @@ class ModuleTrueSight : Module("True sight", "Makes invisible players visible", 
 
     init {
         registerEvent(EventEntityFlag::class.java) { event ->
-            if (event.flag == (event.entity as IEntity).tarasande_getInvisibleFlagIndex())
+            if (event.flag == Entity.INVISIBLE_FLAG_INDEX)
                 event.enabled = false
         }
     }
-
 }

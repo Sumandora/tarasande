@@ -5,7 +5,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IChatInputSuggestor_Protocol;
-import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IKeyBinding_Protocol;
 import net.tarasandedevelopment.tarasande.protocol.platform.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,7 +22,7 @@ public class MixinChatScreen {
     public void reAddKeyBind(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (VersionList.isNewerTo(VersionList.R1_13) || !ProtocolHackValues.INSTANCE.getRemoveNewTabCompletion().getValue()) return;
 
-        if (keyCode == ((IKeyBinding_Protocol) MinecraftClient.getInstance().options.playerListKey).tarasande_getBoundKey().getCode() && ((IChatInputSuggestor_Protocol) this.chatInputSuggestor).tarasande_getPendingSuggestionSize() == 0) {
+        if (keyCode == MinecraftClient.getInstance().options.playerListKey.boundKey.getCode() && ((IChatInputSuggestor_Protocol) this.chatInputSuggestor).tarasande_getPendingSuggestionSize() == 0) {
             this.chatInputSuggestor.setWindowActive(true);
             ((IChatInputSuggestor_Protocol) this.chatInputSuggestor).tarasande_setNativeCompletion(false);
             this.chatInputSuggestor.refresh();

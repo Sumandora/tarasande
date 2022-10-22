@@ -4,8 +4,6 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.Information
-import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
-import net.tarasandedevelopment.tarasande.mixin.accessor.IRenderTickCounter
 import net.tarasandedevelopment.tarasande.module.exploit.ModuleTickBaseManipulation
 import net.tarasandedevelopment.tarasande.module.misc.ModuleMurderMystery
 import net.tarasandedevelopment.tarasande.module.player.ModuleAntiAFK
@@ -21,7 +19,7 @@ class InformationTimeShifted : Information("Tick base manipulation", "Time shift
     override fun getMessage(): String? {
         if (!moduleTickBaseManipulation.enabled) return null
         if (moduleTickBaseManipulation.shifted == 0L) return null
-        return moduleTickBaseManipulation.shifted.toString() + " (" + round(moduleTickBaseManipulation.shifted / ((MinecraftClient.getInstance() as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_getTickTime()).toInt() + ")"
+        return moduleTickBaseManipulation.shifted.toString() + " (" + round(moduleTickBaseManipulation.shifted / MinecraftClient.getInstance().renderTickCounter.tickTime).toInt() + ")"
     }
 }
 
