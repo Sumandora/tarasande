@@ -191,8 +191,8 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                     preferredSide = null
                                     true
                                 } else {
-                                    val rotationVector = mc.player!!.getRotationVector(lastRotation?.pitch!!, lastRotation?.yaw!!)
-                                    val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector * mc.interactionManager?.reachDistance?.toDouble()!!)
+                                    val rotationVector = lastRotation?.forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)!!
+                                    val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector)
                                     hitResult.type != HitResult.Type.BLOCK || hitResult.side != (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) || hitResult.blockPos != target?.first
                                 }
                             }) {
@@ -337,8 +337,8 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                         } else return@registerEvent
                     } else return@registerEvent
                 }
-                val rotationVector = mc.player!!.getRotationVector(RotationUtil.fakeRotation?.pitch!!, RotationUtil.fakeRotation?.yaw!!)
-                val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector * mc.interactionManager?.reachDistance?.toDouble()!!)
+                val rotationVector = RotationUtil.fakeRotation?.forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)!!
+                val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector)
                 if (hitResult.type == HitResult.Type.BLOCK && hitResult.side == (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) && hitResult.blockPos == target?.first) {
                     if (airBelow && (((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= newEdgeDist * newEdgeDist || target?.first?.y!! < mc.player?.y!!)) {
                         if (timeUtil.hasReached(delay.value.toLong())) {
