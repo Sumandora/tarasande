@@ -562,7 +562,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         }
         if (hasTarget) {
             blocking = true
-            mc.options.useKey.timesPressed = 1
+            mc.options.useKey.timesPressed++
         }
     }
 

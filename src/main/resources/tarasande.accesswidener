@@ -83,7 +83,6 @@ accessible method net/minecraft/client/network/ClientPlayNetworkHandler resolveU
 accessible method net/minecraft/item/CrossbowItem getSpeed (Lnet/minecraft/item/ItemStack;)F
 accessible method net/minecraft/item/CrossbowItem getProjectiles (Lnet/minecraft/item/ItemStack;)Ljava/util/List;
 accessible method net/minecraft/client/network/ClientPlayerInteractionManager sendSequencedPacket (Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V
-accessible method net/minecraft/entity/Entity getRotationVector (FF)Lnet/minecraft/util/math/Vec3d;
 accessible method net/minecraft/entity/Entity movementInputToVelocity (Lnet/minecraft/util/math/Vec3d;FF)Lnet/minecraft/util/math/Vec3d;
 accessible method net/minecraft/client/gui/hud/InGameHud renderHotbarItem (IIFLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;I)V
 accessible method net/minecraft/client/gui/screen/ingame/InventoryScreen onMouseClick (Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V

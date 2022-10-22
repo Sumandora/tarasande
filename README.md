@@ -50,7 +50,6 @@
 - Settings for HypixelBedwarsOverlay
 - ViaLegacy texture pack using ProtocolPatcher
 - Anti vanish: Tab completion
-- Auto Clicker: remove mixin getCloseVector() usage and AW
 
 ## TODO-List (Flori | General)
 
