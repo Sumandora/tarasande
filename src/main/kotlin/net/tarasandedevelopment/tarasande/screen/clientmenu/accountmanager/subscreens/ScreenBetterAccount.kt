@@ -10,7 +10,6 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.AccountInfo
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.ExtraInfo
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.TextFieldInfo
-import net.tarasandedevelopment.tarasande.mixin.accessor.IScreen
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAccountManager
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPassword
@@ -37,10 +36,8 @@ class ScreenBetterAccount(
         }
         textFields.clear()
         children().clear()
-        (this as IScreen).also {
-            it.tarasande_getDrawables().clear()
-            it.tarasande_getSelectables().clear()
-        }
+        this.drawables.clear()
+        this.selectables.clear()
 
         super.init()
 

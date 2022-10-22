@@ -7,14 +7,10 @@ import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.event.*
-import net.tarasandedevelopment.tarasande.mixin.accessor.ILivingEntity
-import net.tarasandedevelopment.tarasande.mixin.accessor.IPlayerMoveC2SPacket
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import java.util.function.Consumer
 import kotlin.math.*
 
 object RotationUtil {
@@ -101,9 +97,8 @@ object RotationUtil {
                             disableNextTeleport = false
                             return@add
                         }
-                        val accessor = it.packet as IPlayerMoveC2SPacket
-                        accessor.tarasande_setYaw(fakeRotation!!.yaw)
-                        accessor.tarasande_setPitch(fakeRotation!!.pitch)
+                        it.packet.yaw = fakeRotation!!.yaw
+                        it.packet.pitch = fakeRotation!!.pitch
                     }
                 }
             }
@@ -161,7 +156,7 @@ object RotationUtil {
             } else if (fakeRotation != null) {
                 val realRotation = Rotation(MinecraftClient.getInstance().player!!)
                 val rotation = Rotation(fakeRotation!!)
-                if ((MinecraftClient.getInstance().player as ILivingEntity).tarasande_getBodyTrackingIncrements() == 0)
+                if (MinecraftClient.getInstance().player?.bodyTrackingIncrements == 0)
                     rotation.smoothedTurn(realRotation, Pair(lastMinRotateToOriginSpeed, lastMaxRotateToOriginSpeed))
                 rotation.correctSensitivity()
                 val actualDist = fakeRotation!!.fov(rotation)

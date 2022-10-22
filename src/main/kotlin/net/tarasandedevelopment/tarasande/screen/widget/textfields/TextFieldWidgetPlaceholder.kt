@@ -12,11 +12,11 @@ open class TextFieldWidgetPlaceholder(textRenderer: TextRenderer?, x: Int, y: In
         val prevText = text
         val accessor = this as ITextFieldWidget
         if (text.isEmpty() && !isFocused) {
-            accessor.tarasande_setForceText(message.string)
+            this.text = message.string
             accessor.tarasande_setColor(Color.lightGray)
         }
         super.render(matrices, mouseX, mouseY, delta)
-        accessor.tarasande_setForceText(prevText)
+        this.text = prevText
         accessor.tarasande_setColor(null)
     }
 }

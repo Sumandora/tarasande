@@ -6,5 +6,4 @@ public interface IServerInfo {
 
     IForgePayload getForgePayload();
     void setForgePayload(final IForgePayload forgePayload);
-
 }

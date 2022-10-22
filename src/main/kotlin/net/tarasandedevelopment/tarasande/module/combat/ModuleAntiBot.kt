@@ -101,7 +101,8 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
                             }
                             if (!passedLineOfSight.contains(entity)) {
                                 val serverPosition = entity.trackedPosition.withDelta(event.packet.deltaX.toLong(), event.packet.deltaY.toLong(), event.packet.deltaZ.toLong())
-                                if ((mc.player as IClientPlayerEntity).let { Rotation(it.tarasande_getLastYaw(), it.tarasande_getLastPitch()) }.fov(RotationUtil.getRotations(mc.player?.eyePos!!, serverPosition)) <= fov.value)
+
+                                if (Rotation(mc.player!!.lastYaw, mc.player!!.lastPitch).fov(RotationUtil.getRotations(mc.player?.eyePos!!, serverPosition)) <= fov.value)
                                     passedLineOfSight.add(entity)
                             }
                         }
@@ -120,7 +121,7 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
 
         registerEvent(EventEntityFlag::class.java) { event ->
             if (event.entity is PlayerEntity && !passedSneak.contains(event.entity))
-                if (event.flag == (event.entity as IEntity).tarasande_getSneakingFlagIndex())
+                if (event.flag == Entity.SNEAKING_FLAG_INDEX)
                     if (event.enabled)
                         passedSneak.add(event.entity)
         }
@@ -132,7 +133,7 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
                         if (passedInvisible.contains(player))
                             continue
                         when {
-                            invisibleMode.isSelected(0) -> if (!(player as IEntity).tarasande_forceGetFlag((player as IEntity).tarasande_getInvisibleFlagIndex())) passedInvisible.add(player)
+                            invisibleMode.isSelected(0) -> if (!(player as IEntity).tarasande_forceGetFlag(Entity.INVISIBLE_FLAG_INDEX)) passedInvisible.add(player)
                             invisibleMode.isSelected(1) -> if (!player.isInvisibleTo(mc.player)) passedInvisible.add(player)
                         }
                     }

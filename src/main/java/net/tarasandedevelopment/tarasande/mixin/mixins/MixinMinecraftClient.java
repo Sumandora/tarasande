@@ -1,25 +1,17 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins;
 
 import com.mojang.authlib.minecraft.MinecraftSessionService;
-import com.mojang.authlib.minecraft.UserApiService;
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.network.SocialInteractionsManager;
 import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.client.util.ProfileKeys;
-import net.minecraft.client.util.Session;
 import net.minecraft.client.util.Window;
 import net.minecraft.entity.Entity;
-import net.minecraft.network.encryption.SignatureVerifier;
 import net.minecraft.util.Util;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.Account;
 import net.tarasandedevelopment.tarasande.event.*;
-import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient;
 import net.tarasandedevelopment.tarasande.module.render.ModuleESP;
 import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAccountManager;
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil;
@@ -30,10 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MinecraftClient.class)
-public abstract class MixinMinecraftClient implements IMinecraftClient {
-
-    @Shadow
-    private static int currentFps;
+public abstract class MixinMinecraftClient {
 
     @Shadow
     @Final
@@ -49,57 +38,6 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     @Shadow
     @Final
     private Window window;
-
-    @Mutable
-    @Shadow
-    @Final
-    private Session session;
-
-    @Mutable
-    @Shadow
-    @Final
-    private MinecraftSessionService sessionService;
-
-    @Shadow
-    @Final
-    private RenderTickCounter renderTickCounter;
-
-    @Mutable
-    @Shadow
-    @Final
-    private UserApiService userApiService;
-
-    @Mutable
-    @Shadow
-    @Final
-    private ProfileKeys profileKeys;
-
-    @Mutable
-    @Shadow
-    @Final
-    private YggdrasilAuthenticationService authenticationService;
-
-    @Mutable
-    @Shadow
-    @Final
-    private SignatureVerifier servicesSignatureVerifier;
-
-    @Mutable
-    @Shadow
-    @Final
-    private SocialInteractionsManager socialInteractionsManager;
-
-    @Shadow
-    protected abstract void doItemUse();
-
-    @Shadow
-    protected abstract void handleBlockBreaking(boolean bl);
-
-    @Shadow
-    protected abstract boolean doAttack();
-
-    @Shadow
-    private int itemUseCooldown;
 
     @Unique
     private long startTime = 0L;
@@ -186,7 +124,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
     public void hookedHandleBlockBreaking(MinecraftClient instance, boolean bl) {
         EventHandleBlockBreaking eventHandleBlockBreaking = new EventHandleBlockBreaking(bl);
         TarasandeMain.Companion.get().getEventDispatcher().call(eventHandleBlockBreaking);
-        ((IMinecraftClient) instance).tarasande_invokeHandleBlockBreaking(eventHandleBlockBreaking.getParameter());
+        instance.handleBlockBreaking(eventHandleBlockBreaking.getParameter());
     }
 
     @Inject(method = "getSessionService", at = @At("RETURN"), cancellable = true)
@@ -235,90 +173,5 @@ public abstract class MixinMinecraftClient implements IMinecraftClient {
         EventRespawn eventRespawn = new EventRespawn(instance.showsDeathScreen());
         TarasandeMain.Companion.get().getEventDispatcher().call(eventRespawn);
         return eventRespawn.getShowDeathScreen();
-    }
-
-    @Override
-    public void tarasande_setSession(Session session) {
-        this.session = session;
-    }
-
-    @Override
-    public int tarasande_getAttackCooldown() {
-        return this.attackCooldown;
-    }
-
-    @Override
-    public void tarasande_setAttackCooldown(int attackCooldown) {
-        this.attackCooldown = attackCooldown;
-    }
-
-    @Override
-    public void tarasande_invokeDoItemUse() {
-        this.doItemUse();
-    }
-
-    @Override
-    public boolean tarasande_invokeDoAttack() {
-        return this.doAttack();
-    }
-
-    @Override
-    public RenderTickCounter tarasande_getRenderTickCounter() {
-        return renderTickCounter;
-    }
-
-    @Override
-    public void tarasande_invokeHandleBlockBreaking(boolean bl) {
-        handleBlockBreaking(bl);
-    }
-
-    @Override
-    public int tarasande_getCurrentFPS() {
-        return currentFps;
-    }
-
-    @Override
-    public void tarasande_setAuthenticationService(YggdrasilAuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
-    }
-
-    @Override
-    public void tarasande_setSessionService(MinecraftSessionService sessionService) {
-        this.sessionService = sessionService;
-    }
-
-    @Override
-    public void tarasande_setUserApiService(UserApiService userApiService) {
-        this.userApiService = userApiService;
-    }
-
-    @Override
-    public void tarasande_setServicesSignatureVerifier(SignatureVerifier signatureVerifier) {
-        this.servicesSignatureVerifier = signatureVerifier;
-    }
-
-    @Override
-    public void tarasande_setSocialInteractionsManager(SocialInteractionsManager socialInteractionsManager) {
-        this.socialInteractionsManager = socialInteractionsManager;
-    }
-
-    @Override
-    public UserApiService tarasande_getUserApiService() {
-        return userApiService;
-    }
-
-    @Override
-    public void tarasande_setProfileKeys(ProfileKeys profileKeys) {
-        this.profileKeys = profileKeys;
-    }
-
-    @Override
-    public int tarasande_getItemUseCooldown() {
-        return itemUseCooldown;
-    }
-
-    @Override
-    public void tarasande_setItemUseCooldown(int itemUseCooldown) {
-        this.itemUseCooldown = itemUseCooldown;
     }
 }

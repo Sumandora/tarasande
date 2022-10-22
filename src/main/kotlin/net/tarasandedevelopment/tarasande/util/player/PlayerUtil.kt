@@ -21,7 +21,6 @@ import net.tarasandedevelopment.tarasande.event.EventInput
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.mixin.accessor.IGameRenderer
-import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
 import net.tarasandedevelopment.tarasande.module.player.ModuleAutoTool
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
@@ -58,7 +57,7 @@ object PlayerUtil {
     fun getTargetedEntity(reach: Double, rotation: Rotation, allowThroughWalls: Boolean = true): HitResult? {
         val gameRenderer = MinecraftClient.getInstance().gameRenderer
         val accessor = (gameRenderer as IGameRenderer)
-        val renderTickCounter = (MinecraftClient.getInstance() as IMinecraftClient).tarasande_getRenderTickCounter()
+        val renderTickCounter = MinecraftClient.getInstance().renderTickCounter
 
         val prevAllowThroughWalls = accessor.tarasande_isAllowThroughWalls()
         val prevReach = accessor.tarasande_getReach()

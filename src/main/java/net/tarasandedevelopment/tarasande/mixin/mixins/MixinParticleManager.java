@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinParticleManager implements IParticleManager {
 
     @Unique
-    boolean particlesEnabled = true;
+    private boolean particlesEnabled = true;
 
     @Inject(method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", at = @At("HEAD"), cancellable = true)
     public void injectAddParticle(Particle particle, CallbackInfo ci) {

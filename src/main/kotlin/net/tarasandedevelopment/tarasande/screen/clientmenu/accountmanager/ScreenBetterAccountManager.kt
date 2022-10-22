@@ -16,7 +16,6 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.ManagerAccount
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.azureapp.ManagerAzureApp
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.environment.ManagerEnvironment
-import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
@@ -197,21 +196,21 @@ class ScreenBetterAccountManager : ScreenBetterSlotList(46, 10, 240, MinecraftCl
                     return
                 // This can't be "client" because it is called from ClientMain means it's null at this point in time
                 var updatedUserApiService = true
-                (MinecraftClient.getInstance() as IMinecraftClient).also {
-                    it.tarasande_setSession(account.session)
+                MinecraftClient.getInstance().also {
+                    it.session = account.session
                     val authenticationService = YggdrasilAuthenticationService(java.net.Proxy.NO_PROXY, "", account.environment)
-                    it.tarasande_setAuthenticationService(authenticationService)
+                    it.authenticationService = authenticationService
                     val userApiService = try {
                         authenticationService.createUserApiService(account.session?.accessToken)
                     } catch (ignored: Exception) {
                         updatedUserApiService = false
                         UserApiService.OFFLINE
                     }
-                    it.tarasande_setUserApiService(userApiService)
-                    it.tarasande_setSessionService(account.getSessionService())
-                    it.tarasande_setServicesSignatureVerifier(SignatureVerifier.create(authenticationService.servicesKey))
-                    it.tarasande_setSocialInteractionsManager(SocialInteractionsManager(MinecraftClient.getInstance(), userApiService))
-                    it.tarasande_setProfileKeys(ProfileKeys(it.tarasande_getUserApiService(), account.session?.profile?.id, MinecraftClient.getInstance().runDirectory.toPath()))
+                    it.userApiService = userApiService
+                    it.sessionService = account.getSessionService()
+                    it.servicesSignatureVerifier = SignatureVerifier.create(authenticationService.servicesKey)
+                    it.socialInteractionsManager = SocialInteractionsManager(MinecraftClient.getInstance(), userApiService)
+                    it.profileKeys = ProfileKeys(it.userApiService, account.session?.profile?.id, MinecraftClient.getInstance().runDirectory.toPath())
                 }
                 status = Formatting.GREEN.toString() + "Logged in as \"" + account.getDisplayName() + "\"" + if (!updatedUserApiService) Formatting.RED.toString() + " (failed to update UserApiService)" else ""
 

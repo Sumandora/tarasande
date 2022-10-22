@@ -25,7 +25,7 @@ public abstract class MixinProtocol1_9To1_8 {
      * @author ViaVersion Team, FlorianMichael as EnZaXD
      * @reason fix json components
      */
-    @Overwrite
+    @Overwrite(remap = false)
     public static JsonElement fixJson(String line) {
         line = ComponentSerializer.toString(ComponentSerializer.parse(line));
 

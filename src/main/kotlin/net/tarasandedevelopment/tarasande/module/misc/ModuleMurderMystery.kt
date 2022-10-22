@@ -15,7 +15,6 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.*
-import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerInteractionManager
 import net.tarasandedevelopment.tarasande.module.combat.ModuleAntiBot
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
@@ -177,7 +176,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
             if (murdererAssistance.value && isMurderer()) {
                 when (event.state) {
                     EventAttackEntity.State.PRE -> {
-                        (mc.interactionManager as IClientPlayerInteractionManager).tarasande_setLastSelectedSlot(mc.player?.inventory?.selectedSlot!!) // prevent other modules from interfering
+                        mc.interactionManager?.lastSelectedSlot = mc.player?.inventory?.selectedSlot!! // prevent other modules from interfering
                         var sword = 0
                         for (slot in 0 until PlayerInventory.getHotbarSize()) {
                             if (isIllegalItem(mc.player?.inventory?.main?.get(slot)?.item!!)) {

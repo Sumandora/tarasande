@@ -7,10 +7,12 @@ import net.minecraft.client.render.*
 import net.minecraft.client.texture.NativeImage
 import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.item.ItemStack
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 import kotlin.math.*
@@ -290,6 +292,12 @@ object RenderUtil {
         val k = (color and 0xFF) / 255.0f
 
         return floatArrayOf(g, h, k, f)
+    }
+
+    fun renderCorrectItem(matrices: MatrixStack, x: Int, y: Int, tickDelta: Float, item: ItemStack) {
+        val position = MathUtil.fromMatrices(matrices)
+
+        MinecraftClient.getInstance().inGameHud.renderHotbarItem((position.x + x).toInt(), (position.y + y).toInt(), tickDelta, MinecraftClient.getInstance().player, item, 0)
     }
 
     fun colorInterpolate(a: Color, b: Color, t: Double) = colorInterpolate(a, b, t, t, t, t)

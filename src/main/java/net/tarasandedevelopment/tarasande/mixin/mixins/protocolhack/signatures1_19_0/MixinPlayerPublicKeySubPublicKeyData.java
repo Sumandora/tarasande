@@ -47,7 +47,7 @@ public class MixinPlayerPublicKeySubPublicKeyData implements IPublicKeyData_Prot
     }
 
     @Override
-    public void set1_19_0Key(ByteBuffer byteBuffer) {
+    public void tarasande_set1_19_0Key(ByteBuffer byteBuffer) {
         this._1_19_0Key = byteBuffer.array();
     }
 }

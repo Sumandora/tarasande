@@ -11,7 +11,6 @@ import net.minecraft.world.World;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventJump;
 import net.tarasandedevelopment.tarasande.event.EventSwing;
-import net.tarasandedevelopment.tarasande.mixin.accessor.ILivingEntity;
 import net.tarasandedevelopment.tarasande.module.movement.ModuleFastClimb;
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
@@ -22,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = LivingEntity.class, priority = 999 /* baritone fix */)
-public abstract class MixinLivingEntity extends Entity implements ILivingEntity {
+public abstract class MixinLivingEntity extends Entity {
 
     @Shadow
     protected int bodyTrackingIncrements;
@@ -33,32 +32,12 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     @Shadow
     protected double serverPitch;
 
-    @Shadow
-    protected double serverX;
-
-    @Shadow
-    protected double serverY;
-
-    @Shadow
-    protected double serverZ;
-
-    @Shadow
-    protected double serverHeadYaw;
-    @Shadow
-    protected int lastAttackedTicks;
-
     public MixinLivingEntity(EntityType<?> type, World world) {
         super(type, world);
     }
 
     @Shadow
     public abstract float getYaw(float tickDelta);
-
-    @Shadow
-    protected abstract void tickItemStackUsage(ItemStack stack);
-
-    @Shadow
-    private int jumpingCooldown;
 
     @Shadow
     public abstract boolean isClimbing();
@@ -115,65 +94,5 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
                 original *= moduleFastClimb.getMultiplier().getValue();
         }
         return original;
-    }
-
-    @Override
-    public double tarasande_getServerX() {
-        return serverX;
-    }
-
-    @Override
-    public double tarasande_getServerY() {
-        return serverY;
-    }
-
-    @Override
-    public double tarasande_getServerZ() {
-        return serverZ;
-    }
-
-    @Override
-    public double tarasande_getServerYaw() {
-        return serverYaw;
-    }
-
-    @Override
-    public double tarasande_getServerPitch() {
-        return serverPitch;
-    }
-
-    @Override
-    public int tarasande_getBodyTrackingIncrements() {
-        return bodyTrackingIncrements;
-    }
-
-    @Override
-    public void tarasande_setBodyTrackingIncrements(int bodyTrackingIncrements) {
-        this.bodyTrackingIncrements = bodyTrackingIncrements;
-    }
-
-    @Override
-    public int tarasande_getLastAttackedTicks() {
-        return lastAttackedTicks;
-    }
-
-    @Override
-    public void tarasande_setLastAttackedTicks(int lastAttackedTicks) {
-        this.lastAttackedTicks = lastAttackedTicks;
-    }
-
-    @Override
-    public void tarasande_invokeTickItemStackUsage(ItemStack itemStack) {
-        this.tickItemStackUsage(itemStack);
-    }
-
-    @Override
-    public int tarasande_getJumpingCooldown() {
-        return jumpingCooldown;
-    }
-
-    @Override
-    public void tarasande_setJumpingCooldown(int jumpingCooldown) {
-        this.jumpingCooldown = jumpingCooldown;
     }
 }

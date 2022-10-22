@@ -27,7 +27,7 @@ public class MixinProtocolManagerImpl implements IProtocolManagerImpl_Protocol {
     }
 
     @Override
-    public List<Pair<Integer, Protocol<?, ?, ?, ?>>> getProtocols() {
+    public List<Pair<Integer, Protocol<?, ?, ?, ?>>> tarasande_getProtocols() {
         if (this.sortedProtocols == null) {
             this.sortedProtocols = new ArrayList<>();
 

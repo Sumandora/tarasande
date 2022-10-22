@@ -4,13 +4,11 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.input.KeyboardInput
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.option.Perspective
+import net.minecraft.entity.Entity
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.*
-import net.tarasandedevelopment.tarasande.mixin.accessor.ICamera
-import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
-import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
@@ -46,7 +44,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
             firstRealInput = PlayerUtil.input.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
             firstInput = mc.player?.input?.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
             for (keyBinding in mc.options.allKeys.filter { !PlayerUtil.movementKeys.contains(it) })
-                map[keyBinding] = (keyBinding as IKeyBinding).tarasande_forceIsPressed()
+                map[keyBinding] = keyBinding.pressed
         }
     }
 
@@ -65,10 +63,8 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
             if (position == null || rotation == null)
                 onEnable()
             mc.options.perspective = Perspective.THIRD_PERSON_BACK
-            val accessor = event.camera as ICamera
-
-            accessor.tarasande_invokeSetPos((prevCameraPos ?: position)?.lerp(position, mc.tickDelta.toDouble()))
-            accessor.tarasande_invokeSetRotation(rotation?.yaw!!, rotation?.pitch!!)
+            event.camera.pos = (prevCameraPos ?: position)?.lerp(position, mc.tickDelta.toDouble())
+            event.camera.setRotation(rotation?.yaw!!, rotation?.pitch!!)
         }
 
         registerEvent(EventPollEvents::class.java, 1) { event ->
@@ -95,11 +91,11 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
                 if (position == null || rotation == null)
                     onEnable()
                 var yMotion = 0.0
-                if ((mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
+                if (mc.options.jumpKey.pressed)
                     yMotion += speed.value
-                if ((mc.options.sneakKey as IKeyBinding).tarasande_forceIsPressed())
+                if (mc.options.sneakKey.pressed)
                     yMotion -= speed.value
-                var velocity = (mc.player as IEntity).tarasande_invokeMovementInputToVelocity(Vec3d(
+                var velocity = Entity.movementInputToVelocity(Vec3d(
                     MathUtil.roundAwayFromZero(input.movementSideways.toDouble()),
                     0.0,
                     MathUtil.roundAwayFromZero(input.movementForward.toDouble())

@@ -1,16 +1,16 @@
 package net.tarasandedevelopment.tarasande.util.player.container
 
+import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.item.*
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
 import net.minecraft.util.math.Vec2f
-import net.tarasandedevelopment.tarasande.mixin.accessor.IHandledScreen
 
 object ContainerUtil {
 
-    fun getDisplayPosition(accessor: IHandledScreen, slot: Slot): Vec2f {
-        return Vec2f(accessor.tarasande_getX() + slot.x.toFloat() + 8, accessor.tarasande_getY() + slot.y.toFloat() + 8)
+    fun getDisplayPosition(original: HandledScreen<*>, slot: Slot): Vec2f {
+        return Vec2f(original.x + slot.x.toFloat() + 8, original.y + slot.y.toFloat() + 8)
     }
 
     fun getValidSlots(screenHandler: ScreenHandler): List<Slot> {
@@ -18,14 +18,14 @@ object ContainerUtil {
             .filter { it != null && it.isEnabled && it.hasStack() }
     }
 
-    fun getClosestSlot(screenHandler: ScreenHandler, accessor: IHandledScreen, lastMouseClick: Vec2f, block: (Slot, List<Slot>) -> Boolean): Slot? {
+    fun getClosestSlot(screenHandler: ScreenHandler, original: HandledScreen<*>, lastMouseClick: Vec2f, block: (Slot, List<Slot>) -> Boolean): Slot? {
         val list = getValidSlots(screenHandler)
         return list
             .filter { block.invoke(it, list) }
-            .minByOrNull { lastMouseClick.distanceSquared(getDisplayPosition(accessor, it)) }
+            .minByOrNull { lastMouseClick.distanceSquared(getDisplayPosition(original, it)) }
     }
 
-    private fun wrapMaterialScore(stack: ItemStack, durability: Boolean): Float? {
+    private fun wrapMaterialScore(stack: ItemStack, durability: Boolean): Float {
         return when (stack.item) {
             is SwordItem -> (stack.item as ToolItem).material.attackDamage
             is ToolItem -> (stack.item as ToolItem).material.durability.toFloat()

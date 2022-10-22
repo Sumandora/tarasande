@@ -6,7 +6,6 @@ import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventUpdate
-import net.tarasandedevelopment.tarasande.mixin.accessor.IWorldTimeUpdateS2CPacket
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
@@ -46,9 +45,8 @@ class ModuleWorldTime : Module("World time", "Changes the time of day", ModuleCa
         }
 
         registerEvent(EventPacket::class.java) { event ->
-            if (event.type == EventPacket.Type.RECEIVE && event.packet is WorldTimeUpdateS2CPacket) {
-                (event.packet as IWorldTimeUpdateS2CPacket).tarasande_setTimeOfDay(time.value.toLong())
-            }
+            if (event.type == EventPacket.Type.RECEIVE && event.packet is WorldTimeUpdateS2CPacket)
+                event.packet.timeOfDay = time.value.toLong()
         }
     }
 }

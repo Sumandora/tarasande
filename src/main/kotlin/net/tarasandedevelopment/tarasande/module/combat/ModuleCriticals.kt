@@ -38,7 +38,7 @@ class ModuleCriticals : Module("Criticals", "Forces critical hits", ModuleCatego
                     if(!mc.player?.isOnGround!!)
                         return@registerEvent
                     mc.player?.jump()
-                    (mc.player?.velocity as IVec3d).tarasande_setY(mc.player?.velocity?.y!! * motion.value)
+                    mc.player?.velocity?.y = mc.player?.velocity?.y!! * motion.value
                 }
                 mode.isSelected(2) -> {
                     if(!mc.player?.isOnGround!!)
@@ -54,5 +54,4 @@ class ModuleCriticals : Module("Criticals", "Forces critical hits", ModuleCatego
             }
         }
     }
-
 }

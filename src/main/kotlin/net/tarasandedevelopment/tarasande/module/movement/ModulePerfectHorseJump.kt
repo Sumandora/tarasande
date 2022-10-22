@@ -17,8 +17,10 @@ class ModulePerfectHorseJump : Module("Perfect horse jump", "Forces perfect hors
     init {
         registerEvent(EventUpdate::class.java) { event ->
             if (event.state == EventUpdate.State.PRE) {
-                (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_setMountJumpStrength(this.jumpPower.value.toFloat())
-                (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_setField_3938(this.jumpPowerCounter.value.toInt())
+                MinecraftClient.getInstance().player?.also {
+                    it.mountJumpStrength = this.jumpPower.value.toFloat()
+                    it.field_3938 = this.jumpPowerCounter.value.toInt()
+                }
             }
         }
     }

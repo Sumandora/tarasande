@@ -19,8 +19,6 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuScre
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuTitle
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuToggle
 import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.mixin.accessor.ICustomPayloadC2SPacket
-import net.tarasandedevelopment.tarasande.mixin.accessor.IHandshakeC2SPacket
 import net.tarasandedevelopment.tarasande.protocol.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.ScreenBetterAccountManager
 import net.tarasandedevelopment.tarasande.screen.clientmenu.addon.ScreenBetterAddons
@@ -105,7 +103,7 @@ class ElementMenuToggleBungeeHack : ElementMenuToggle("Bungee Hack") {
                 if (this.customUUID.value)
                     uuid = this.uuid.value
 
-                (event.packet as IHandshakeC2SPacket).tarasande_extendAddress(this.zero + this.endIP.value + this.zero + this.stripID(uuid))
+                event.packet.address += this.zero + this.endIP.value + this.zero + this.stripID(uuid)
             }
         }
     }
@@ -128,12 +126,15 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
 
             if (it.type == EventPacket.Type.SEND) {
                 if (it.packet is HandshakeC2SPacket) {
-                    (it.packet as IHandshakeC2SPacket).tarasande_extendAddress(currentHandler!!.handshakeMark())
+                    it.packet.address += currentHandler!!.handshakeMark()
                 }
 
                 if (it.packet is CustomPayloadC2SPacket) {
                     if (it.packet.channel == CustomPayloadC2SPacket.BRAND) {
-                        (it.packet as ICustomPayloadC2SPacket).setData(PacketByteBuf(Unpooled.buffer()).writeString("fml,forge"))
+                        val data = PacketByteBuf(Unpooled.buffer())
+                        data.writeString("fml,forge")
+
+                        it.packet.data = data
                     }
                 }
             }

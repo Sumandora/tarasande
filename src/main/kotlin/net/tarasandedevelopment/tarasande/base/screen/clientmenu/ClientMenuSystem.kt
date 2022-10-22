@@ -2,16 +2,11 @@ package net.tarasandedevelopment.tarasande.base.screen.clientmenu
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.gui.widget.ButtonWidget
-import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
-import net.tarasandedevelopment.tarasande.mixin.accessor.IClickableWidget
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.minecraftbutton.PanelButton
 import net.tarasandedevelopment.tarasande.screen.clientmenu.*
-import net.tarasandedevelopment.tarasande.screen.widget.AllMouseButtonWidget
-import net.tarasandedevelopment.tarasande.screen.widget.AllMousePressAction
 import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode

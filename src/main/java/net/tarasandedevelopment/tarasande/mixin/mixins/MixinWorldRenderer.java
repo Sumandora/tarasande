@@ -9,7 +9,6 @@ import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.biome.Biome;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventRender3D;
-import net.tarasandedevelopment.tarasande.mixin.accessor.IWorldRenderer;
 import net.tarasandedevelopment.tarasande.module.render.ModuleFog;
 import net.tarasandedevelopment.tarasande.module.render.ModuleRain;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,16 +20,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(WorldRenderer.class)
-public abstract class MixinWorldRenderer implements IWorldRenderer {
+public abstract class MixinWorldRenderer {
 
     @Shadow
     public static int getLightmapCoordinates(BlockRenderView world, BlockPos pos) {
         return 0;
     }
-
-    @Shadow
-    private Frustum frustum;
-
 
     @Inject(method = "render", at = @At("TAIL"))
     public void injectRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
@@ -72,10 +67,5 @@ public abstract class MixinWorldRenderer implements IWorldRenderer {
         if (forceRain)
             return -1;
         return getLightmapCoordinates(world, pos);
-    }
-
-    @Override
-    public Frustum tarasande_getFrustum() {
-        return frustum;
     }
 }

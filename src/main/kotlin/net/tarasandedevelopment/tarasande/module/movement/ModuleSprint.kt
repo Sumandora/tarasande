@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
+import net.minecraft.entity.Entity
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
@@ -24,7 +25,7 @@ class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MO
 
         registerEvent(EventEntityFlag::class.java) { event ->
             if (event.entity == mc.player && allowBackwards.isEnabled() && allowBackwards.value)
-                if (event.flag == (event.entity as IEntity).tarasande_getSprintingFlagIndex())
+                if (event.flag == Entity.SPRINTING_FLAG_INDEX)
                     if (PlayerUtil.isPlayerMoving()) {
                         mc.player?.isSprinting = true
                         if (mc.player?.input?.jumping == false)
@@ -39,5 +40,4 @@ class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MO
             }
         }
     }
-
 }

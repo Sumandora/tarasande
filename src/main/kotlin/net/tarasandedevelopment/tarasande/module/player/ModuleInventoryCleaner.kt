@@ -1,12 +1,12 @@
 package net.tarasandedevelopment.tarasande.module.player
 
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen
+import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventScreenInput
-import net.tarasandedevelopment.tarasande.mixin.accessor.IHandledScreen
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
@@ -45,7 +45,7 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
                 return@registerEvent
             }
 
-            val accessor = mc.currentScreen as IHandledScreen
+            val accessor = mc.currentScreen as HandledScreen<*>
 
             val screenHandler = mc.player?.playerScreenHandler!!
 
@@ -72,7 +72,7 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
                 ))
                 val distance = mousePos?.distanceSquared(displayPos)!!
                 mousePos = displayPos
-                val mapped = sqrt(distance).div(Vec2f(accessor.tarasande_getBackgroundWidth().toFloat(), accessor.tarasande_getBackgroundHeight().toFloat()).length())
+                val mapped = sqrt(distance).div(Vec2f(accessor.backgroundWidth.toFloat(), accessor.backgroundHeight.toFloat()).length())
                 nextDelay = (delay.minValue + (delay.maxValue - delay.minValue) * mapped).toLong()
                 mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot.id, 1 /* 1 = all; 0 = single */, SlotActionType.THROW, mc.player)
                 event.doneInput = true

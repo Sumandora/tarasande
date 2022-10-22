@@ -11,7 +11,6 @@ import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventUpdate
-import net.tarasandedevelopment.tarasande.mixin.accessor.IFishingBobberEntity
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
@@ -70,7 +69,7 @@ class ModuleAutoFish : Module("Auto fish", "Automates fishing", ModuleCategory.P
                         if (mc.world?.getBlockState(BlockPos(lastPos))?.fluidState?.isEmpty == false)
                             event.pressed = true
                     } else if (when {
-                            mode.isSelected(0) -> (mc.player?.fishHook as IFishingBobberEntity).tarasande_isCaughtFish()
+                            mode.isSelected(0) -> mc.player?.fishHook!!.caughtFish
                             mode.isSelected(1) -> hasCaught
                             else -> false
                         } || (mc.player?.fishHook?.isOnGround == true && mc.player?.fishHook?.isTouchingWater == false && mc.player?.fishHook?.age!! > 20 && abs(mc.player?.fishHook?.velocity?.y!!) <= 0.1)) {
@@ -81,5 +80,4 @@ class ModuleAutoFish : Module("Auto fish", "Automates fishing", ModuleCategory.P
             }
         }
     }
-
 }

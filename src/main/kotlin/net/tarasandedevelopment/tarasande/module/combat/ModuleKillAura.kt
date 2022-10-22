@@ -30,10 +30,6 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.*
-import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
-import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
-import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
-import net.tarasandedevelopment.tarasande.mixin.accessor.IRenderTickCounter
 import net.tarasandedevelopment.tarasande.module.movement.ModuleClickTP
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.extension.plus
@@ -300,7 +296,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 var attacked = false
                 var imaginaryPosition = mc.player?.pos!!
                 teleportPath = ArrayList()
-                val maxTeleportTime = (((mc as IMinecraftClient).tarasande_getRenderTickCounter() as IRenderTickCounter).tarasande_getTickTime() / targets.size.toDouble()).toLong()
+                val maxTeleportTime = (mc.renderTickCounter.tickTime / targets.size.toDouble()).toLong()
                 for (entry in targets) {
                     var target = entry.first
                     val aimPoint = entry.second
@@ -318,7 +314,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                                 reach.minValue,
                                 if (!mode.isSelected(1))
                                     if (simulateMouseDelay.value)
-                                        Rotation((mc.player as IClientPlayerEntity).tarasande_getLastYaw(), (mc.player as IClientPlayerEntity).tarasande_getLastPitch())
+                                        Rotation(mc.player!!.lastYaw, mc.player!!.lastPitch)
                                     else
                                         RotationUtil.fakeRotation!!
                                 else
@@ -440,7 +436,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         if (entity != null) {
             mc.crosshairTarget = EntityHitResult(entity)
             if (!attackCooldown.value) {
-                (mc as IMinecraftClient).tarasande_setAttackCooldown(0)
+                mc.attackCooldown = 0
             }
         } else {
             mc.crosshairTarget = object : HitResult(null) {
@@ -448,7 +444,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
         }
         for (i in 0 until repeat)
-            clicked = clicked or (mc as IMinecraftClient).tarasande_invokeDoAttack()
+            clicked = clicked or mc.doAttack()
         mc.crosshairTarget = original
     }
 
@@ -566,7 +562,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         }
         if (hasTarget) {
             blocking = true
-            (mc.options.useKey as IKeyBinding).tarasande_setTimesPressed(1)
+            mc.options.useKey.timesPressed = 1
         }
     }
 

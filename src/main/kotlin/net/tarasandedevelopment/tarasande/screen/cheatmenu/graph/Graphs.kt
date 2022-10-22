@@ -99,8 +99,8 @@ class GraphYawDelta : Graph("Yaw Delta", 200) {
 
     override fun supplyData(): Number? {
         if (MinecraftClient.getInstance().player == null) return null
-        val yawDelta = round(((MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_getLastYaw() - lastYaw) * 100) / 100.0
-        lastYaw = (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_getLastYaw()
+        val yawDelta = round(MinecraftClient.getInstance().player!!.lastYaw * 100) / 100.0
+        lastYaw = MinecraftClient.getInstance().player!!.lastYaw
         return yawDelta
     }
 }
@@ -110,8 +110,8 @@ class GraphPitchDelta : Graph("Pitch Delta", 200) {
 
     override fun supplyData(): Number? {
         if (MinecraftClient.getInstance().player == null) return null
-        val pitchDelta = round(((MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_getLastPitch() - lastPitch) * 100) / 100.0
-        lastPitch = (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_getLastPitch()
+        val pitchDelta = round(MinecraftClient.getInstance().player!!.lastPitch * 100) / 100.0
+        lastPitch = MinecraftClient.getInstance().player!!.lastPitch
         return pitchDelta
     }
 }

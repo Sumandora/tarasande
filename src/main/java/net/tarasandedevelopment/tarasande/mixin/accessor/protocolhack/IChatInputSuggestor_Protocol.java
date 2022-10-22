@@ -4,5 +4,4 @@ public interface IChatInputSuggestor_Protocol {
 
     void tarasande_setNativeCompletion(boolean nativeCompletion);
     int tarasande_getPendingSuggestionSize();
-
 }

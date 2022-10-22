@@ -9,14 +9,9 @@ import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.*
 import net.minecraft.util.registry.Registry
 import net.minecraft.util.shape.VoxelShapes
-import net.tarasandedevelopment.eventsystem.Event
-import net.tarasandedevelopment.eventsystem.Priority
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.*
-import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity
-import net.tarasandedevelopment.tarasande.mixin.accessor.IKeyBinding
-import net.tarasandedevelopment.tarasande.mixin.accessor.IMinecraftClient
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.extension.times
@@ -31,7 +26,6 @@ import net.tarasandedevelopment.tarasande.util.player.clickspeed.ClickSpeedUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.*
 import java.util.concurrent.ThreadLocalRandom
-import java.util.function.Consumer
 import kotlin.math.*
 
 class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you", ModuleCategory.PLAYER) {
@@ -132,7 +126,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private fun placeBlock(blockHitResult: BlockHitResult) {
         val original = mc.crosshairTarget
         mc.crosshairTarget = blockHitResult
-        (mc as IMinecraftClient).tarasande_invokeDoItemUse()
+        mc.doItemUse()
         mc.crosshairTarget = original
     }
 
@@ -154,7 +148,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         var dist = 0.0
         for (target in arrayList) {
             if (target.third.offsetY != 0) {
-                if ((mc.options.jumpKey as IKeyBinding).tarasande_forceIsPressed())
+                if (mc.options.jumpKey.pressed)
                     return Pair(target.second, target.third)
                 else if (best == null)
                     continue
@@ -197,7 +191,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                     preferredSide = null
                                     true
                                 } else {
-                                    val rotationVector = (mc.player as IEntity).tarasande_invokeGetRotationVector(lastRotation?.pitch!!, lastRotation?.yaw!!)
+                                    val rotationVector = mc.player!!.getRotationVector(lastRotation?.pitch!!, lastRotation?.yaw!!)
                                     val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector * mc.interactionManager?.reachDistance?.toDouble()!!)
                                     hitResult.type != HitResult.Type.BLOCK || hitResult.side != (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) || hitResult.blockPos != target?.first
                                 }
@@ -343,7 +337,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                         } else return@registerEvent
                     } else return@registerEvent
                 }
-                val rotationVector = (mc.player as IEntity).tarasande_invokeGetRotationVector(RotationUtil.fakeRotation?.pitch!!, RotationUtil.fakeRotation?.yaw!!)
+                val rotationVector = mc.player!!.getRotationVector(RotationUtil.fakeRotation?.pitch!!, RotationUtil.fakeRotation?.yaw!!)
                 val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector * mc.interactionManager?.reachDistance?.toDouble()!!)
                 if (hitResult.type == HitResult.Type.BLOCK && hitResult.side == (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) && hitResult.blockPos == target?.first) {
                     if (airBelow && (((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= newEdgeDist * newEdgeDist || target?.first?.y!! < mc.player?.y!!)) {

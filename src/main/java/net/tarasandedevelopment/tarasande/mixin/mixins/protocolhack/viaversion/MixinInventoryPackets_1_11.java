@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(InventoryPackets.class)
 public class MixinInventoryPackets_1_11 {
 
-    @Inject(method = "handleItemToServer", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "handleItemToServer", at = @At("HEAD"), cancellable = true, remap = false)
     public void fixBug(Item item, CallbackInfoReturnable<Item> cir) {
         cir.setReturnValue(item);
     }

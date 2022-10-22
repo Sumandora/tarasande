@@ -9,7 +9,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventChildren;
 import net.tarasandedevelopment.tarasande.event.EventScreenRender;
-import net.tarasandedevelopment.tarasande.mixin.accessor.IScreen;
 import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -22,19 +21,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(Screen.class)
-public abstract class MixinScreen implements IScreen {
+public abstract class MixinScreen {
 
     @Shadow
     @Nullable
     protected MinecraftClient client;
-
-    @Shadow
-    @Final
-    private List<Drawable> drawables;
-
-    @Shadow
-    @Final
-    private List<Selectable> selectables;
 
     @Shadow
     protected abstract <T extends Element> T addDrawableChild(T drawableElement);
@@ -60,15 +51,5 @@ public abstract class MixinScreen implements IScreen {
         for (Element child : this.children())
             if (child instanceof ClickableWidgetPanel clickableWidgetPanel)
                 clickableWidgetPanel.tick();
-    }
-
-    @Override
-    public List<Drawable> tarasande_getDrawables() {
-        return drawables;
-    }
-
-    @Override
-    public List<Selectable> tarasande_getSelectables() {
-        return selectables;
     }
 }

@@ -22,11 +22,9 @@ class ModuleVehicleSpeed : Module("Vehicle speed", "Modifies vehicle movement sp
                 return@registerEvent
 
             val rad = Math.toRadians(PlayerUtil.getMoveDirection() + 90)
-            val accessor = event.velocity as IVec3d
 
-            accessor.tarasande_setX(cos(rad) * speed.value)
-            accessor.tarasande_setZ(sin(rad) * speed.value)
+            event.velocity.x = cos(rad) * speed.value
+            event.velocity.z = sin(rad) * speed.value
         }
     }
-
 }

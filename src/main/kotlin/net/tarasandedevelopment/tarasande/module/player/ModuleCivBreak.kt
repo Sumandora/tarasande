@@ -5,7 +5,6 @@ import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientConnection
-import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerInteractionManager
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 
@@ -23,7 +22,7 @@ class ModuleCivBreak : Module("Civ break", "Breaks blocks multiple times", Modul
                     PlayerActionC2SPacket.Action.START_DESTROY_BLOCK -> {
                         if (packets.isSelected(0)) {
                             for (i in 0 until multiplier.value.toInt()) {
-                                (mc.interactionManager as IClientPlayerInteractionManager).tarasande_invokeSendSequencedPacket(mc.world) { sequence: Int ->
+                                mc.interactionManager!!.sendSequencedPacket(mc.world) { sequence: Int ->
                                     PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, event.packet.pos, event.packet.direction, sequence).also {
                                         (mc.networkHandler?.connection as IClientConnection).tarasande_addForcePacket(it)
                                     }
@@ -35,7 +34,7 @@ class ModuleCivBreak : Module("Civ break", "Breaks blocks multiple times", Modul
                     PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK -> {
                         if (packets.isSelected(1)) {
                             for (i in 0 until multiplier.value.toInt()) {
-                                (mc.interactionManager as IClientPlayerInteractionManager).tarasande_invokeSendSequencedPacket(mc.world) { sequence: Int ->
+                                mc.interactionManager!!.sendSequencedPacket(mc.world) { sequence: Int ->
                                     PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, event.packet.pos, event.packet.direction, sequence).also {
                                         (mc.networkHandler?.connection as IClientConnection).tarasande_addForcePacket(it)
                                     }
@@ -49,5 +48,4 @@ class ModuleCivBreak : Module("Civ break", "Breaks blocks multiple times", Modul
             }
         }
     }
-
 }

@@ -5,7 +5,6 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.item.ItemStack
-import net.tarasandedevelopment.tarasande.mixin.accessor.IInGameHud
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.player.items.ItemUtil
@@ -37,12 +36,12 @@ class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
                     continue
 
             RenderSystem.enableCull()
-            (MinecraftClient.getInstance().inGameHud as IInGameHud).tarasande_invokeRenderHotbarItem(x.toInt() + m, y.toInt() + titleBarHeight, delta, matrices, armor)
+            RenderUtil.renderCorrectItem(matrices!!, x.toInt() + m, y.toInt() + titleBarHeight, delta, armor)
 
             if (showEnchantments.value) {
-                matrices?.push()
-                matrices?.scale(enchantmentScale.value.toFloat(), enchantmentScale.value.toFloat(), 1F)
-                matrices?.translate(x / enchantmentScale.value.toFloat(), (y / enchantmentScale.value.toFloat()) + (titleBarHeight), 0.0)
+                matrices.push()
+                matrices.scale(enchantmentScale.value.toFloat(), enchantmentScale.value.toFloat(), 1F)
+                matrices.translate(x / enchantmentScale.value.toFloat(), (y / enchantmentScale.value.toFloat()) + (titleBarHeight), 0.0)
                 EnchantmentHelper.get(armor).onEachIndexed { index, entry ->
                     RenderUtil.textCenter(
                         matrices,
@@ -52,7 +51,7 @@ class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
                         -1
                     )
                 }
-                matrices?.pop()
+                matrices.pop()
             }
             m += itemDimension
         }

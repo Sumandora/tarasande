@@ -23,7 +23,6 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IItem_Protocol;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -67,7 +66,7 @@ public abstract class MixinItemStack {
         modifiers.removeAll(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         OptionalDouble defaultAttackDamage = getDefaultAttackDamage(getItem());
         if (defaultAttackDamage.isPresent()) {
-            modifiers.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(((IItem_Protocol) getItem()).tarasande_getAttackDamageModifierId(), "Weapon Modifier", defaultAttackDamage.getAsDouble(), EntityAttributeModifier.Operation.ADDITION));
+            modifiers.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(Item.ATTACK_DAMAGE_MODIFIER_ID, "Weapon Modifier", defaultAttackDamage.getAsDouble(), EntityAttributeModifier.Operation.ADDITION));
         }
         modifiers.removeAll(EntityAttributes.GENERIC_ATTACK_SPEED);
         modifiers.removeAll(EntityAttributes.GENERIC_ARMOR);

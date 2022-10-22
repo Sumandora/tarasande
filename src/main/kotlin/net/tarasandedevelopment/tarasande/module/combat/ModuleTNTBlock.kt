@@ -1,22 +1,15 @@
 package net.tarasandedevelopment.tarasande.module.combat
 
-import net.minecraft.entity.EntityType
 import net.minecraft.entity.TntEntity
-import net.tarasandedevelopment.eventsystem.Event
-import net.tarasandedevelopment.eventsystem.Priority
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
-import net.tarasandedevelopment.tarasande.mixin.accessor.ITntEntity
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.util.function.Consumer
 
 class ModuleTNTBlock : Module("TNT block", "Auto-blocks when nearby TNT is exploding", ModuleCategory.COMBAT) {
 
-    private val maxFuse = (TntEntity(EntityType.TNT, null) as ITntEntity).tarasande_getMaxFuse()
-
     private val reach = ValueNumber(this, "Reach", 0.0, 4.0, 8.0, 0.1)
-    private val fuse = ValueNumber(this, "Fuse", 0.0, 30.0, maxFuse.toDouble(), 1.0)
+    private val fuse = ValueNumber(this, "Fuse", 0.0, 30.0, TntEntity.DEFAULT_FUSE.toDouble(), 1.0)
 
     init {
         registerEvent(EventKeyBindingIsPressed::class.java, 1) { event ->
