@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.library.brigadier;
+package net.tarasandedevelopment.tarasande.mixin.mixins.module.brigadier;
 
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
@@ -18,7 +18,7 @@ public class MixinCommandNode<S> {
     @Shadow @Final private Map<String, LiteralCommandNode<S>> literals;
 
     @Redirect(method = "getRelevantNodes", at = @At(value = "INVOKE", target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;"), remap = false)
-    public Object fixIgnoreCase(Map instance, Object o) {
+    public Object ignoreCase(Map<?, ?> instance, Object o) {
         if (TarasandeMain.Companion.get().getManagerModule().get(ModuleBrigadierIgnoreCase.class).isValidCommand()) {
             for (Map.Entry<String, LiteralCommandNode<S>> entry : literals.entrySet()) {
                 if (((String) o).equalsIgnoreCase(entry.getKey())) {

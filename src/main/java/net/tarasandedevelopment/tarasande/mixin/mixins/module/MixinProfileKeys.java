@@ -16,21 +16,14 @@ import java.util.Optional;
 public class MixinProfileKeys {
 
     @Inject(method = "getSigner", at = @At("HEAD"), cancellable = true)
-    public void noSignatures_breakSigner(CallbackInfoReturnable<Signer> cir) {
+    public void hookNoSignatures_removeSigner(CallbackInfoReturnable<Signer> cir) {
         if (!TarasandeMain.Companion.get().getDisabled() && TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSignatures.class).getEnabled()) {
             cir.setReturnValue(null);
         }
     }
 
     @Inject(method = "getPublicKey", at = @At("HEAD"), cancellable = true)
-    public void noSignatures_breakPublicKey(CallbackInfoReturnable<Optional<PlayerPublicKey>> cir) {
-        if (!TarasandeMain.Companion.get().getDisabled() && TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSignatures.class).getEnabled()) {
-            cir.setReturnValue(Optional.empty());
-        }
-    }
-
-    @Inject(method = "getPublicKey", at = @At("HEAD"), cancellable = true)
-    public void noSignatures_breakPublicKey_ASM(CallbackInfoReturnable<Optional<PlayerPublicKey.PublicKeyData>> cir) {
+    public void hookNoSignatures_removePublicKey(CallbackInfoReturnable<Optional<PlayerPublicKey>> cir) {
         if (!TarasandeMain.Companion.get().getDisabled() && TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSignatures.class).getEnabled()) {
             cir.setReturnValue(Optional.empty());
         }

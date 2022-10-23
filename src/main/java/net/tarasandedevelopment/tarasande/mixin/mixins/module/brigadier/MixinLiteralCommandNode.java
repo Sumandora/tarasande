@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.library.brigadier;
+package net.tarasandedevelopment.tarasande.mixin.mixins.module.brigadier;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class MixinLiteralCommandNode {
 
     @Redirect(method = "parse(Lcom/mojang/brigadier/StringReader;)I", at = @At(value = "INVOKE", target = "Ljava/lang/String;equals(Ljava/lang/Object;)Z"), remap = false)
-    public boolean fixIgnoreCase(String input, Object nextInput) {
+    public boolean ignoreCase(String input, Object nextInput) {
         if (TarasandeMain.Companion.get().getManagerModule().get(ModuleBrigadierIgnoreCase.class).isValidCommand()) {
             return input.equalsIgnoreCase((String) nextInput);
         }
