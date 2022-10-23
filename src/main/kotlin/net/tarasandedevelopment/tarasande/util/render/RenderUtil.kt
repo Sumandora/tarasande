@@ -364,9 +364,6 @@ object RenderUtil {
         matrices?.push()
         val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
         matrices?.translate(-vec3d.x, -vec3d.y, -vec3d.z)
-
-        val colors = colorToRGBF(color)
-
         val bufferBuilder = Tessellator.getInstance().buffer
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
         val matrix = matrices?.peek()?.positionMatrix!!
