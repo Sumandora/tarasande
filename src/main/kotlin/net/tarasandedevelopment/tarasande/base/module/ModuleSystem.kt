@@ -124,7 +124,9 @@ class ManagerModule : Manager<Module>() {
             ModuleVehicleSpeed(),
             ModuleIgnoreResourcePackHash(),
             ModuleNoJumpCooldown(),
-            ModuleBrigadierIgnoreCase()
+            ModuleBrigadierIgnoreCase(),
+            ModuleNoSignatures(),
+            ModuleEveryItemOnArmor()
         )
         TarasandeMain.get().eventDispatcher.add(EventTick::class.java) {
             if (it.state == EventTick.State.POST) {

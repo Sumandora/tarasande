@@ -1,23 +1,29 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.module.entity;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.brigadier.ParseResults;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.network.encryption.PlayerPublicKey;
+import net.minecraft.network.message.*;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.module.exploit.ModulePortalScreen;
 import net.tarasandedevelopment.tarasande.module.movement.ModuleFlight;
 import net.tarasandedevelopment.tarasande.module.movement.ModuleNoSlowdown;
+import net.tarasandedevelopment.tarasande.module.qualityoflife.ModuleNoSignatures;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
@@ -109,5 +115,19 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
             if (TarasandeMain.Companion.get().getManagerModule().get(ModulePortalScreen.class).getEnabled())
                 return true;
         return instance.shouldPause();
+    }
+
+    @Inject(method = "signChatMessage", at = @At("HEAD"))
+    public void removeSignatureDAta(MessageMetadata metadata, DecoratedContents content, LastSeenMessageList lastSeenMessages, CallbackInfoReturnable<MessageSignatureData> cir) {
+        if (!TarasandeMain.Companion.get().getDisabled() && TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSignatures.class).getEnabled()) {
+            cir.cancel();
+        }
+    }
+
+    @Inject(method = "signArguments", at = @At("HEAD"))
+    public void removeArgumentMap(MessageMetadata signer, ParseResults<CommandSource> parseResults, @Nullable Text preview, LastSeenMessageList lastSeenMessages, CallbackInfoReturnable<ArgumentSignatureDataMap> cir) {
+        if (!TarasandeMain.Companion.get().getDisabled() && TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSignatures.class).getEnabled()) {
+            cir.cancel();
+        }
     }
 }

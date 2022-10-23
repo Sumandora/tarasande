@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.modcompat.baritone;
+package net.tarasandedevelopment.tarasande.mixin.mixins.library.baritone;
 
 import net.minecraft.client.MinecraftClient;
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
