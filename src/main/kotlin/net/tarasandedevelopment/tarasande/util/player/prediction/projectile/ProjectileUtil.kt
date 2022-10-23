@@ -95,9 +95,9 @@ object ProjectileUtil {
             }
 
             override fun checkBlockCollision() {
-                MinecraftClient.getInstance().world?.isClient = true
-                super.checkBlockCollision()
-                MinecraftClient.getInstance().world?.isClient = false
+//                MinecraftClient.getInstance().world?.isClient = true
+//                super.checkBlockCollision()
+//                MinecraftClient.getInstance().world?.isClient = false
             }
         }
         persistentProjectileEntity.setPosition(MinecraftClient.getInstance().player?.getLerpedPos(MinecraftClient.getInstance().tickDelta)?.add(0.0, MinecraftClient.getInstance().player?.standingEyeHeight!! - 0.1, 0.0))
@@ -155,7 +155,7 @@ object ProjectileUtil {
         }
 
         val prevRotation = Rotation(MinecraftClient.getInstance().player!!)
-        val prevVelocity = Vec3d(0.0, 0.0, 0.0).also { MinecraftClient.getInstance().player?.velocity = it }
+        val prevVelocity = MinecraftClient.getInstance().player?.velocity?.add(0.0, 0.0, 0.0)
         if (rotation != null) {
             MinecraftClient.getInstance().player?.yaw = rotation.yaw
             MinecraftClient.getInstance().player?.pitch = rotation.pitch

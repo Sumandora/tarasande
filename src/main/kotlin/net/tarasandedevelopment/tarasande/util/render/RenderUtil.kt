@@ -366,13 +366,12 @@ object RenderUtil {
         matrices?.translate(-vec3d.x, -vec3d.y, -vec3d.z)
 
         val colors = colorToRGBF(color)
-        RenderSystem.setShaderColor(colors[0], colors[1], colors[2], colors[3])
 
         val bufferBuilder = Tessellator.getInstance().buffer
-        bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION)
+        bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
         val matrix = matrices?.peek()?.positionMatrix!!
         for (vec in path) {
-            bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).next()
+            bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).color(color).next()
         }
         BufferRenderer.drawWithShader(bufferBuilder.end())
         matrices.pop()
