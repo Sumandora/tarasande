@@ -55,12 +55,6 @@ class ManagerCommand : Manager<Command>() {
                             it.withClickEvent(ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, reader.string))
                         }
 
-                        if (index > 0) {
-                            verbose.append("...")
-                        }
-
-                        verbose.append(e.input.substring(0.coerceAtLeast(index - 10)))
-
                         if (index < e.input.length) {
                             verbose.append(Text.literal(e.input.substring(index)).formatted(Formatting.RED, Formatting.UNDERLINE))
                         }
