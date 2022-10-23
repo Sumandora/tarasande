@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import java.lang.reflect.Type;
 
-@Mixin(Protocol1_9To1_8.class)
+@Mixin(value = Protocol1_9To1_8.class, remap = false)
 public class MixinProtocol1_9To1_8 {
 
     @Shadow
@@ -25,9 +25,13 @@ public class MixinProtocol1_9To1_8 {
      * @author ViaVersion Team, FlorianMichael as EnZaXD
      * @reason fix json components
      */
-    @Overwrite(remap = false)
+    @Overwrite
     public static JsonElement fixJson(String line) {
-        line = ComponentSerializer.toString(ComponentSerializer.parse(line));
+        try {
+            line = ComponentSerializer.toString(ComponentSerializer.parse(line));
+        } catch (Throwable throwable) { // this doesn't look like its valid
+            return constructJson(line);
+        }
 
         if (line == null || line.equalsIgnoreCase("null")) {
             return JsonNull.INSTANCE;

@@ -10,6 +10,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.Direction
+import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShape
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
@@ -352,5 +353,32 @@ object RenderUtil {
             }
         }
         return bestFormatting!!
+    }
+
+    fun renderPath(matrices: MatrixStack?, path: List<Vec3d>, color: Int) {
+        RenderSystem.enableBlend()
+        RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+        RenderSystem.disableCull()
+        glEnable(GL_LINE_SMOOTH)
+        RenderSystem.disableDepthTest()
+        matrices?.push()
+        val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
+        matrices?.translate(-vec3d.x, -vec3d.y, -vec3d.z)
+
+        val colors = colorToRGBF(color)
+        RenderSystem.setShaderColor(colors[0], colors[1], colors[2], colors[3])
+
+        val bufferBuilder = Tessellator.getInstance().buffer
+        bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION)
+        val matrix = matrices?.peek()?.positionMatrix!!
+        for (vec in path) {
+            bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).next()
+        }
+        BufferRenderer.drawWithShader(bufferBuilder.end())
+        matrices.pop()
+        RenderSystem.enableDepthTest()
+        glDisable(GL_LINE_SMOOTH)
+        RenderSystem.enableCull()
+        RenderSystem.disableBlend()
     }
 }
