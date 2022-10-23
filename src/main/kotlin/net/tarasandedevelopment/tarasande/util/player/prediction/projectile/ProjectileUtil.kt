@@ -95,9 +95,9 @@ object ProjectileUtil {
             }
 
             override fun checkBlockCollision() {
-//                MinecraftClient.getInstance().world?.isClient = true
-//                super.checkBlockCollision()
-//                MinecraftClient.getInstance().world?.isClient = false
+                MinecraftClient.getInstance().world?.isClient = true
+                super.checkBlockCollision()
+                MinecraftClient.getInstance().world?.isClient = false
             }
         }
         persistentProjectileEntity.setPosition(MinecraftClient.getInstance().player?.getLerpedPos(MinecraftClient.getInstance().tickDelta)?.add(0.0, MinecraftClient.getInstance().player?.standingEyeHeight!! - 0.1, 0.0))
