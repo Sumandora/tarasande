@@ -44,8 +44,8 @@ var libs = [
 		// HAProxy Protocol -> https://mvnrepository.com/artifact/io.netty/netty-codec-haproxy
 		"io.netty:netty-codec-haproxy:4.1.82.Final",
 
-		// Via Protocol Hack -> https://github.com/FlorianMichael/ViaProtocolHack
-		"com.github.FlorianMichael:ViaProtocolHack:5ddb5c87c8"
+		// Via Protocol Hack -> https://github.com/RejectedVia/ViaProtocolHack
+		"com.github.RejectedVia:ViaProtocolHack:5ddb5c87c8"
 ]
 
 loom {
