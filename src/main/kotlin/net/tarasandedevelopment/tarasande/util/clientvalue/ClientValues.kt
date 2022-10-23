@@ -56,6 +56,13 @@ class ClientValues {
         override fun isEnabled() = autoSaveConfig.value
     }
     val passEventsInScreens = ValueBoolean(this, "Pass events in screens", true)
+    val commands = ValueBoolean(this, "Commands", true)
+    val commandsPrefix = object : ValueText(this, "Commands: prefix", "$") {
+        override fun isEnabled() = commands.value
+    }
+    val commandsExceptions = object : ValueBoolean(this, "Commands: show exceptions", true) {
+        override fun isEnabled() = commands.value
+    }
 
     fun isEntityDesired(entity: Entity): Boolean {
         if (dontAttackRidingEntity.value && entity == MinecraftClient.getInstance().player?.vehicle) return false

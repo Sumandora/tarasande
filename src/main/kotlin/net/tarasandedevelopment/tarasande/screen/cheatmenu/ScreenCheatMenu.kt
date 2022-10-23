@@ -6,15 +6,11 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.render.GameRenderer
-import net.minecraft.client.texture.AbstractTexture
-import net.minecraft.client.texture.MissingSprite
 import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
-import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.command.ManagerCommand
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.creative.ManagerCreative
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.graph.ManagerGraph
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.ManagerInformation
@@ -26,7 +22,6 @@ import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.i
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.clientvalues.PanelElementsClientValues
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.creative.PanelElementsCreative
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.friends.PanelElementsFriends
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.terminal.PanelElementsTerminal
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed.*
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.particle.Particle
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
@@ -51,7 +46,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     val managerValueComponent = ManagerValueComponent()
     val managerInformation = ManagerInformation(this)
     val managerCreative = ManagerCreative()
-    val managerCommand = ManagerCommand()
 
     var popup = false
 
@@ -64,7 +58,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         panels.add(PanelElementsClientValues(this, 5.0, y).also { y += it.titleBarHeight + 5 })
         val panels = mutableListOf(
             PanelElementsFriends::class.java,
-            PanelElementsTerminal::class.java,
             PanelElementsCreative::class.java,
 
             PanelArrayList::class.java,

@@ -1,21 +1,28 @@
-package net.tarasandedevelopment.tarasande.screen.cheatmenu.command
+package net.tarasandedevelopment.tarasande.command
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.command.ViaCommandSender
 import net.minecraft.client.MinecraftClient
+import net.minecraft.command.CommandSource
+import net.minecraft.text.Text
 import net.minecraft.util.Formatting
-import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.command.Command
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.terminal.PanelElementsTerminal
+import net.tarasandedevelopment.tarasande.base.command.Command
+import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import java.util.*
 
-class CommandViaDump : Command("viadump") {
+class CommandViaDump : Command("ViaDump") {
 
-    override fun execute(args: Array<String>, panel: PanelElementsTerminal): Boolean {
-        Via.getManager().commandHandler.getSubCommand("dump")!!.execute(ViaDumpBypassSender(panel), arrayOf())
-        return true
+    private val sender = ViaDumpBypassSender()
+
+    override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
+        return builder.executes {
+            Via.getManager().commandHandler.getSubCommand("dump")!!.execute(sender, arrayOf())
+            return@executes 1
+        }
     }
 
-    class ViaDumpBypassSender(val panel: PanelElementsTerminal) : ViaCommandSender {
+    class ViaDumpBypassSender : ViaCommandSender {
         override fun hasPermission(permission: String?): Boolean {
             return true
         }
@@ -23,7 +30,7 @@ class CommandViaDump : Command("viadump") {
         override fun sendMessage(msg: String?) {
             if (msg == null) return
             Formatting.strip(msg)?.let {
-                panel.add(it)
+                CustomChat.print(Text.literal(it))
             }
 
             if (msg.contains("https://")) {
