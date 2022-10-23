@@ -9,9 +9,11 @@ import io.netty.handler.codec.haproxy.HAProxyProtocolVersion
 import io.netty.handler.codec.haproxy.HAProxyProxiedProtocol
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
+import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
+import net.minecraft.text.Text
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenu
@@ -26,13 +28,18 @@ import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.Scree
 import net.tarasandedevelopment.tarasande.screen.clientmenu.addon.ScreenBetterAddons
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.IForgeNetClientHandler
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.IForgePayload
+import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.modern.ModernForgePayload
+import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.ui.ScreenBetterForgeModList
 import net.tarasandedevelopment.tarasande.screen.clientmenu.protocol.ScreenBetterProtocolHack
 import net.tarasandedevelopment.tarasande.screen.clientmenu.proxy.ScreenBetterProxy
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import net.tarasandedevelopment.tarasande.value.ValueText
+import org.lwjgl.glfw.GLFW
 import org.spongepowered.include.com.google.common.io.Files
+import java.awt.Color
 import java.io.File
 import java.net.InetSocketAddress
 import java.util.*
@@ -124,34 +131,65 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
 
     init {
         TarasandeMain.get().eventDispatcher.also {
-            it.add(EventPacket::class.java, 1) { eventPacket ->
+            it.add(EventPacket::class.java, 1) {
                 if (!state || currentHandler == null) return@add
 
-                if (eventPacket.type == EventPacket.Type.SEND) {
-                    if (eventPacket.packet is HandshakeC2SPacket) {
-                        eventPacket.packet.address += currentHandler!!.handshakeMark()
+                if (it.type == EventPacket.Type.SEND) {
+                    if (it.packet is HandshakeC2SPacket) {
+                        it.packet.address += currentHandler!!.handshakeMark()
                     }
 
-                    if (eventPacket.packet is CustomPayloadC2SPacket) {
-                        if (eventPacket.packet.channel == CustomPayloadC2SPacket.BRAND) {
+                    if (it.packet is CustomPayloadC2SPacket) {
+                        if (it.packet.channel == CustomPayloadC2SPacket.BRAND) {
                             val data = PacketByteBuf(Unpooled.buffer())
                             data.writeString("fml,forge")
 
-                            eventPacket.packet.data = data
+                            it.packet.data = data
                         }
                     }
                 }
 
-                if (eventPacket.type == EventPacket.Type.RECEIVE) {
-                    if (currentHandler!!.onIncomingPacket(eventPacket.packet!!)) {
-                        eventPacket.cancelled = true
+                if (it.type == EventPacket.Type.RECEIVE) {
+                    if (currentHandler!!.onIncomingPacket(it.packet!!)) {
+                        it.cancelled = true
                     }
                 }
             }
 
-            it.add(EventRenderMultiplayerEntry::class.java) { eventRenderMultiplayerEntry ->
-                (eventRenderMultiplayerEntry.server as IServerInfo).forgePayload?.also {
-                    // TODO
+            it.add(EventRenderMultiplayerEntry::class.java) {
+                (it.server as IServerInfo).forgePayload?.also { payload ->
+                    val fontHeight = MinecraftClient.getInstance().textRenderer.fontHeight
+
+                    val yPos = (it.entryHeight / 2F) - fontHeight / 2
+                    val text = MinecraftClient.getInstance().textRenderer.trimToWidth("Forge/FML Server", it.x)
+                    val endWidth = MinecraftClient.getInstance().textRenderer.getWidth(text) + 4
+
+                    RenderUtil.text(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
+
+                    if (RenderUtil.isHovered(it.mouseX.toDouble(), it.mouseY.toDouble(), it.x - endWidth.toDouble(), it.y + yPos.toDouble(), it.x - 4.0, it.y + yPos + fontHeight.toDouble())) {
+                        val tooltip = ArrayList<Text>()
+
+                        if (payload.installedMods().isNotEmpty()) {
+                            tooltip.add(Text.of("Left mouse for Mods: " + payload.installedMods().size))
+                        } else {
+                            tooltip.add(Text.of("No mods available?"))
+                        }
+
+                        if (payload is ModernForgePayload) {
+                            tooltip.add(Text.of("FML Network Version: " + payload.fmlNetworkVersion))
+                            tooltip.add(Text.of("Right mouse for Channels: " + payload.channels.size))
+
+                            if (GLFW.glfwGetMouseButton(MinecraftClient.getInstance().window.handle, GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS) {
+                                MinecraftClient.getInstance().setScreen(ScreenBetterForgeModList(MinecraftClient.getInstance().currentScreen!!, it.server.address + " (Channels: " + payload.channels.size + ")", ScreenBetterForgeModList.Type.CHANNEL_LIST, payload))
+                            }
+                        }
+
+                        MinecraftClient.getInstance().currentScreen?.renderTooltip(it.matrices, tooltip, it.mouseX - it.x, it.mouseY - it.y)
+
+                        if (payload.installedMods().isNotEmpty() && GLFW.glfwGetMouseButton(MinecraftClient.getInstance().window.handle, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS) {
+                            MinecraftClient.getInstance().setScreen(ScreenBetterForgeModList(MinecraftClient.getInstance().currentScreen!!, it.server.address + " (Mods: " + payload.installedMods().size + ")", ScreenBetterForgeModList.Type.MOD_LIST, payload))
+                        }
+                    }
                 }
             }
         }
