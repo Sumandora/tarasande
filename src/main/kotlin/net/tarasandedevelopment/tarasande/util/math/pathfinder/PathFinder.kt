@@ -139,6 +139,9 @@ class Node(var x: Int, var y: Int, var z: Int) : Comparable<Node> {
     }
 
     override fun hashCode(): Int {
-        return x xor (x shr 32) xor y xor (y shr 32) xor z xor (z shr 32)
+        val cantor = { a: Int, b: Int ->
+            (a + b + 1) * (a + b) / 2 + b
+        }
+        return cantor(x, cantor(y, z))
     }
 }
