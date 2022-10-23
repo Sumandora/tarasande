@@ -139,9 +139,6 @@ class Node(var x: Int, var y: Int, var z: Int) : Comparable<Node> {
     }
 
     override fun hashCode(): Int {
-        var result = x
-        result = 31 * result + y
-        result = 31 * result + z
-        return result
+        return x xor (x shr 32) xor y xor (y shr 32) xor z xor (z shr 32)
     }
 }
