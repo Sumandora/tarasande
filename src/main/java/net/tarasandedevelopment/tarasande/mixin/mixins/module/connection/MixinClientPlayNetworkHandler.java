@@ -12,9 +12,9 @@ public class MixinClientPlayNetworkHandler {
 
     @ModifyVariable(method = "acknowledge", at = @At("HEAD"), argsOnly = true, index = 2)
     public boolean hookNoChatContext(boolean value) {
-        if (!TarasandeMain.Companion.get().getDisabled())
-            if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoChatContext.class).getEnabled())
-                return false;
+        // This bypasses TarasandeMain#disabled, because we don't want to get spied on...
+        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoChatContext.class).getEnabled())
+            return false;
         return value;
     }
 }

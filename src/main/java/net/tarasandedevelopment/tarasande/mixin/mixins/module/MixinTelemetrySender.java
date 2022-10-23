@@ -15,6 +15,7 @@ public class MixinTelemetrySender {
     @SuppressWarnings("InvalidInjectorMethodSignature") // Coerce is not supported cuz massive brain
     @Inject(method = "send(Lnet/minecraft/client/util/telemetry/TelemetrySender$PlayerGameMode;)V", at = @At("HEAD"), cancellable = true)
     public void hookDisableTelemetry(@Coerce Object gameMode, CallbackInfo ci) {
+        // This bypasses the TarasandeMain#disabled, because ms spying on us is a major problem
         if (TarasandeMain.Companion.get().getManagerModule().get(ModuleDisableTelemetry.class).getEnabled()) {
             TarasandeMain.Companion.get().getLogger().info("Blocked telemetry services");
             ci.cancel();

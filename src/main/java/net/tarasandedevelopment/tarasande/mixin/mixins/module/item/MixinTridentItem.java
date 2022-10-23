@@ -16,16 +16,18 @@ public class MixinTridentItem {
 
     @Unique
     private boolean tarasande_waterCheck() {
-        return TarasandeMain.Companion.get().getManagerModule().get(ModuleTridentBoost.class).allowOutOfWater();
+        return !TarasandeMain.Companion.get().getDisabled() && TarasandeMain.Companion.get().getManagerModule().get(ModuleTridentBoost.class).allowOutOfWater();
     }
 
     @ModifyArgs(method = "onStoppedUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addVelocity(DDD)V"))
     public void hookTridentBoost(Args args) {
-        final double multiplier = TarasandeMain.Companion.get().getManagerModule().get(ModuleTridentBoost.class).multiplier();
+        if (!TarasandeMain.Companion.get().getDisabled()) {
+            final double multiplier = TarasandeMain.Companion.get().getManagerModule().get(ModuleTridentBoost.class).multiplier();
 
-        args.set(0, (double) args.get(0) + multiplier);
-        args.set(1, (double) args.get(1) + multiplier);
-        args.set(2, (double) args.get(2) + multiplier);
+            args.set(0, (double) args.get(0) + multiplier);
+            args.set(1, (double) args.get(1) + multiplier);
+            args.set(2, (double) args.get(2) + multiplier);
+        }
     }
 
     @Redirect(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isTouchingWaterOrRain()Z"))
