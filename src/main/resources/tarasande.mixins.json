@@ -59,6 +59,8 @@
     "event.entity.MixinPlayerEntity",
     "event.item.MixinItemCooldownManager",
     "modcompat.baritone.MixinLookBehavior",
+    "module.MixinLiteralCommandNode",
+    "module.MixinCommandNode",
     "module.MixinEnchantmentHelper",
     "module.MixinPendingUpdateManager",
     "module.MixinRenderSystem",

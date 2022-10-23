@@ -13,6 +13,7 @@ import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentRegistry
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentText
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentTextList
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 
@@ -59,6 +60,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
             when (it) {
                 is ValueComponentText -> it.isFocused()
                 is ValueComponentRegistry -> it.isFocused()
+                is ValueComponentTextList -> it.isFocused()
                 else -> false
             }
         }
