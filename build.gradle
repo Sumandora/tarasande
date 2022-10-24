@@ -45,7 +45,10 @@ var libs = [
 		"io.netty:netty-codec-haproxy:4.1.82.Final",
 
 		// Via Protocol Hack -> https://github.com/RejectedVia/ViaProtocolHack
-		"com.github.RejectedVia:ViaProtocolHack:5ddb5c87c8"
+		"com.github.RejectedVia:ViaProtocolHack:5ddb5c87c8",
+
+		// NoteBot -> https://github.com/RaphiMC/NoteBlockLib
+		"com.github.RaphiMC:NoteBlockLib:6f2b0a5c73"
 ]
 
 loom {
