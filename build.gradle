@@ -48,7 +48,10 @@ var libs = [
 		"com.github.RejectedVia:ViaProtocolHack:5ddb5c87c8",
 
 		// NoteBot -> https://github.com/RaphiMC/NoteBlockLib
-		"com.github.RaphiMC:NoteBlockLib:6f2b0a5c73"
+		"com.github.RaphiMC:NoteBlockLib:6f2b0a5c73",
+
+		// Easing Functions -> https://github.com/FlorianMichael/eZEasing
+		"com.github.FlorianMichael:eZEasing:81601436ab"
 ]
 
 loom {
