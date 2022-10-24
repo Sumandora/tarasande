@@ -868,13 +868,10 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final boolean add = packetWrapper.read(Type.BOOLEAN);
                     final short ping = packetWrapper.read(Type.SHORT);
 
-                    final TablistTracker tablist = tablistTracker(packetWrapper.user());
-
                     String normalizedName = ChatColorUtil.stripColor(name);
 
+                    final TablistTracker tablist = tablistTracker(packetWrapper.user());
                     TablistTracker.TabListEntry entry = tablist.getTabListEntry(normalizedName);
-
-                    System.out.println(name + " -> " + normalizedName + " " + ping + " " + add);
 
                     if (entry == null && add) {
                         final GameProfile gameProfile = ViaLegacy.getProvider().profile_1_7();
@@ -892,8 +889,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
 
                         tablist.add(entry);
 
-                        int index = tablist.indexOf(entry);
-                        entry.displayName = name != normalizedName ? name : null;
+                        entry.displayName = !Objects.equals(name, normalizedName) ? name : null;
 
                         packetWrapper.write(Type.VAR_INT, 0); // ADD
                         packetWrapper.write(Type.VAR_INT, 1);
