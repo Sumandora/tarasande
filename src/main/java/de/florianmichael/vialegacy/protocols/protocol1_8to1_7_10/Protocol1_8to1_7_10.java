@@ -304,10 +304,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         }
                         packetPlayerListItem.write(Type.VAR_INT, 0);
                         packetPlayerListItem.write(Type.VAR_INT, 0);
-                        packetPlayerListItem.write(Type.BOOLEAN, newentry.displayName != null);
-                        if (newentry.displayName != null) {
-                            packetPlayerListItem.write(Type.STRING, newentry.displayName);
-                        }
+                        packetPlayerListItem.write(Type.OPTIONAL_STRING, newentry.displayName);
                         packetPlayerListItem.send(Protocol1_8to1_7_10.class);
 
                         packetWrapper.cancel();
