@@ -117,5 +117,4 @@ public class MixinClientBuiltinResourcePackProvider {
         }
         return instance.toLowerCase(locale);
     }
-
 }

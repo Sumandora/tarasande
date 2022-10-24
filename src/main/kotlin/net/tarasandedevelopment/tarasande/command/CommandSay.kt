@@ -10,7 +10,7 @@ class CommandSay : Command("Say") {
 
     override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
         return builder.then(this.argument("message", StringArgumentType.greedyString())?.executes {
-            val message = StringArgumentType.getString(it, "messsage")
+            val message = StringArgumentType.getString(it, "message")
             PlayerUtil.sendChatMessage(message, false)
             return@executes 1
         })
