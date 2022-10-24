@@ -15,7 +15,7 @@ import org.lwjgl.glfw.GLFW
 class ClientValues {
 
     val menuHotkey = object : ValueBind(this, "Menu: hotkey", Type.KEY, GLFW.GLFW_KEY_RIGHT_SHIFT) {
-        override fun filter(bind: Int) = bind != GLFW.GLFW_KEY_UNKNOWN
+        override fun filter(type: Type, bind: Int) = bind != GLFW.GLFW_KEY_UNKNOWN
     }
     val menuAnimationLength = ValueNumber(this, "Menu: animation length", 0.0, 100.0, 500.0, 1.0)
     val menuAccentBackground = ValueBoolean(this, "Menu: accent background", true)
@@ -62,6 +62,10 @@ class ClientValues {
     }
     val commandsExceptions = object : ValueBoolean(this, "Commands: show exceptions", true) {
         override fun isEnabled() = commands.value
+    }
+    val bypassCommands = object : ValueBind(this, "Bypass commands", Type.KEY, GLFW.GLFW_KEY_UNKNOWN) {
+        override fun isEnabled() = commands.value
+        override fun filter(type: Type, bind: Int) = bind >= GLFW.GLFW_KEY_ESCAPE || bind == GLFW.GLFW_KEY_UNKNOWN
     }
 
     fun isEntityDesired(entity: Entity): Boolean {

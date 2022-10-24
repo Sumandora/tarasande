@@ -16,7 +16,6 @@ import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.command.CommandClearChat
-import net.tarasandedevelopment.tarasande.command.CommandSay
 import net.tarasandedevelopment.tarasande.command.CommandViaDump
 import net.tarasandedevelopment.tarasande.event.EventChat
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
@@ -29,8 +28,7 @@ class ManagerCommand : Manager<Command>() {
     init {
         add(
             CommandViaDump(),
-            CommandClearChat(),
-            CommandSay()
+            CommandClearChat()
         )
 
         list.forEach {
@@ -38,7 +36,7 @@ class ManagerCommand : Manager<Command>() {
         }
 
         TarasandeMain.get().eventDispatcher.add(EventChat::class.java) {
-            if (!TarasandeMain.get().clientValues.commands.value) return@add
+            if (!TarasandeMain.get().clientValues.commands.value || TarasandeMain.get().clientValues.bypassCommands.isPressed(true)) return@add
 
             if (it.chatMessage.startsWith(TarasandeMain.get().clientValues.commandsPrefix.value)) {
                 it.cancelled = true

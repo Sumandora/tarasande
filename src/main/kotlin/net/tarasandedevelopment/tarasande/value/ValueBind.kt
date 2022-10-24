@@ -50,7 +50,7 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
         button = jsonArray.get(1).asInt
     }
 
-    open fun filter(bind: Int): Boolean {
+    open fun filter(type: Type, bind: Int): Boolean {
         return true
     }
 
@@ -60,9 +60,9 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
         return prev
     }
 
-    fun isPressed(): Boolean {
+    fun isPressed(ignoreScreen: Boolean = false): Boolean {
         if (button == GLFW.GLFW_KEY_UNKNOWN) return false
-        if (MinecraftClient.getInstance().currentScreen != null) return false
+        if (MinecraftClient.getInstance().currentScreen != null && !ignoreScreen) return false
 
         return when (type) {
             Type.KEY -> GLFW.glfwGetKey(MinecraftClient.getInstance().window.handle, button) == GLFW.GLFW_PRESS

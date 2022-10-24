@@ -52,9 +52,11 @@ class ValueComponentBind(value: Value) : ValueComponent(value) {
             return true
         } else {
             if (waitsForInput && valueBind.mouse) {
-                valueBind.type = ValueBind.Type.MOUSE
-                valueBind.button = button
-                valueBind.onChange()
+                if (valueBind.filter(ValueBind.Type.MOUSE, button)) {
+                    valueBind.type = ValueBind.Type.MOUSE
+                    valueBind.button = button
+                    valueBind.onChange()
+                }
                 waitsForInput = false
                 return true
             }
@@ -72,13 +74,11 @@ class ValueComponentBind(value: Value) : ValueComponent(value) {
         if (waitsForInput) {
             val valueBind = value as ValueBind
             val key = if (keyCode == GLFW.GLFW_KEY_ESCAPE) GLFW.GLFW_KEY_UNKNOWN else keyCode
-            if (!valueBind.filter(key)) {
-                waitsForInput = false
-                return true
+            if (valueBind.filter(ValueBind.Type.KEY, key)) {
+                valueBind.type = ValueBind.Type.KEY
+                valueBind.button = key
+                valueBind.onChange()
             }
-            valueBind.type = ValueBind.Type.KEY
-            valueBind.button = key
-            valueBind.onChange()
             waitsForInput = false
             return true
         }
