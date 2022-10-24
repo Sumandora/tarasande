@@ -1,5 +1,6 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.bossbar;
+package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
+import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.gui.hud.ClientBossBar;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,8 +11,10 @@ public class MixinBossBarHud {
 
     @Redirect(method = "updateProgress", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ClientBossBar;setPercent(F)V"))
     public void nullSafety(ClientBossBar instance, float percent) {
-        if (instance != null)
-            instance.setPercent(percent);
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
+            if (instance != null) {
+                instance.setPercent(percent);
+            }
+        }
     }
-
 }

@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.chat;
+package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IChatInputSuggestor_Protocol;

@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.chat;
+package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
