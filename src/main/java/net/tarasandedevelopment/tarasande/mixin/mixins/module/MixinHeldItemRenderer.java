@@ -1,5 +1,6 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.module.item;
+package net.tarasandedevelopment.tarasande.mixin.mixins.module;
 
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -29,6 +30,17 @@ public class MixinHeldItemRenderer {
             }
         }
         return ItemStack.areEqual(left, right);
+    }
+
+    @Redirect(method = "updateHeldItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getAttackCooldownProgress(F)F"))
+    public float hookNoSwing(ClientPlayerEntity instance, float v) {
+        if (!TarasandeMain.Companion.get().getDisabled()) {
+            ModuleNoSwing moduleNoSwing = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSwing.class);
+            if (moduleNoSwing.getEnabled() && moduleNoSwing.getDisableEquipProgress().getValue()) {
+                return 1.0f;
+            }
+        }
+        return instance.getAttackCooldownProgress(v);
     }
 
     @Inject(method = "resetEquipProgress", at = @At("HEAD"), cancellable = true)

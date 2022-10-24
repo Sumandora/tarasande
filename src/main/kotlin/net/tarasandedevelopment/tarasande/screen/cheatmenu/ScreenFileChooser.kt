@@ -6,13 +6,10 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ValueComponent
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.PanelElements
 import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
-import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 import java.io.File
@@ -60,7 +57,7 @@ class ScreenFileChooser(
             override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
                 val hovered = RenderUtil.isHovered(mouseX, mouseY, x, y + titleBarHeight, x + panelWidth, y + panelHeight)
                 if (hovered) {
-                    var mouseY = mouseY - scrollOffset
+                    val mouseY = mouseY - scrollOffset
 
                     var height = titleBarHeight.toDouble()
 
@@ -114,17 +111,12 @@ class ScreenFileChooser(
             }
 
             override fun getMaxScrollOffset(): Double {
-                return (((MinecraftClient.getInstance().textRenderer.fontHeight * 0.5) + 1) * this.files().size)
+                return (MinecraftClient.getInstance().textRenderer.fontHeight * 0.5 + 1) * (this.files().size - 1)
             }
 
             private fun createDimensions() {
-                this.files().forEach {
-                    val width = MinecraftClient.getInstance().textRenderer.getWidth(it.name) * 0.5
-                    if (this.panelWidth < width) {
-                        this.panelWidth = width + 6
-                    }
-                }
-                this.panelHeight = titleBarHeight + getMaxScrollOffset().coerceAtMost(MinecraftClient.getInstance().window.scaledHeight * 0.75)
+                this.panelWidth = this.files().maxOf { MinecraftClient.getInstance().textRenderer.getWidth(it.name) * 0.5 + 6.0 }.coerceAtLeast(MinecraftClient.getInstance().window?.scaledWidth!! * 0.4).coerceAtLeast(MinecraftClient.getInstance().textRenderer.getWidth(this.title) + 5.0)
+                this.panelHeight = titleBarHeight + ((MinecraftClient.getInstance().textRenderer.fontHeight * 0.5 + 1) * (this.files().size)).coerceAtMost(MinecraftClient.getInstance().window.scaledHeight * 0.75)
 
                 this.x = (MinecraftClient.getInstance().window.scaledWidth / 2) - (this.panelWidth / 2)
                 this.y = MinecraftClient.getInstance().window.scaledHeight / 2 - (this.panelHeight / 2)
