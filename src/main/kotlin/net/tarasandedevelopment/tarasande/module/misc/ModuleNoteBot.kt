@@ -10,7 +10,6 @@ import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenFileChooser
 import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueSpacer
 import java.io.File
-import java.lang.IllegalStateException
 
 class ModuleNoteBot : Module("Note bot", "", ModuleCategory.MISC) {
 
@@ -24,7 +23,7 @@ class ModuleNoteBot : Module("Note bot", "", ModuleCategory.MISC) {
         }
         object : ValueButton(this, "Select note bot song") {
             override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenFileChooser(MinecraftClient.getInstance().currentScreen!!, TarasandeMain.get().rootDirectory.parentFile) {
+                MinecraftClient.getInstance().setScreen(ScreenFileChooser(MinecraftClient.getInstance().currentScreen!!, folder) {
                     song = try {
                         SongParser.parseSong(it)
                     } catch (e: IllegalStateException) {
