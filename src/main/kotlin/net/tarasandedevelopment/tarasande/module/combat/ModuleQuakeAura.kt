@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.module.combat
 
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed

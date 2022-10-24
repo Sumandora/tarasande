@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
 import net.minecraft.util.shape.VoxelShapes
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventCollisionShape
@@ -12,7 +11,6 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.util.function.Consumer
 
 class ModulePhase : Module("Phase", "Allows you to move through blocks", ModuleCategory.MOVEMENT) {
 

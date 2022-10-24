@@ -1,7 +1,6 @@
-package net.tarasandedevelopment.eventsystem
+package net.tarasandedevelopment.tarasande.event
 
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.event.EventTick
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.function.Consumer
 

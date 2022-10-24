@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.base.module
 
 import net.minecraft.client.MinecraftClient
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.tarasande.event.Event
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.module.combat.*
 import net.tarasandedevelopment.tarasande.module.crasher.*

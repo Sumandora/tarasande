@@ -1,14 +1,12 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
 import net.minecraft.client.MinecraftClient
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventInput
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import java.util.function.Consumer
 
 class ModuleSneak : Module("Sneak", "Automatically sneaks", ModuleCategory.MOVEMENT) {
 
@@ -27,5 +25,4 @@ class ModuleSneak : Module("Sneak", "Automatically sneaks", ModuleCategory.MOVEM
                     event.slowDown = false
         }
     }
-
 }

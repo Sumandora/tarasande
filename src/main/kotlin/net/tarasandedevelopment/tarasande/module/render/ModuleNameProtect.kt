@@ -1,13 +1,11 @@
 package net.tarasandedevelopment.tarasande.module.render
 
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventTextVisit
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueText
-import java.util.function.Consumer
 
 class ModuleNameProtect : Module("Name protect", "Hides your in-game name", ModuleCategory.RENDER) {
 
@@ -55,5 +53,4 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
             event.string = replaceNames(event.string)
         }
     }
-
 }
