@@ -19,12 +19,12 @@ public class MixinMinecraftClient {
     public void injectTick(CallbackInfo ci) {
         if (VersionList.isNewerTo(VersionList.R1_12_2)) return;
 
-        EventScreenInput eventScreenInput = new EventScreenInput(false);
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventScreenInput);
-
         while (!InputTracker1_12_2.INSTANCE.getMouse().isEmpty()) {
             InputTracker1_12_2.INSTANCE.getMouse().poll().run();
         }
+
+        EventScreenInput eventScreenInput = new EventScreenInput(false);
+        TarasandeMain.Companion.get().getEventDispatcher().call(eventScreenInput);
 
         while (!InputTracker1_12_2.INSTANCE.getKeyboard().isEmpty()) {
             InputTracker1_12_2.INSTANCE.getKeyboard().poll().run();

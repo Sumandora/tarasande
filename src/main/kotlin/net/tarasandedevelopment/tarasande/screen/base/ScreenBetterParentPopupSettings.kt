@@ -35,12 +35,8 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
                     elementList.add(TarasandeMain.get().screenCheatMenu.managerValueComponent.newInstance(it)!!)
                 super.init()
 
-                var height = titleBarHeight.toDouble() + 2
-                for (valueComponent in this.elementList)
-                    height += valueComponent.getHeight() + 2
-
                 this.panelWidth = 300.0
-                this.panelHeight = height
+                this.panelHeight = getMaxScrollOffset() + titleBarHeight + 5 /* this is the padding for letting you scroll down a bit more than possible */
                 val max = MinecraftClient.getInstance().window.scaledHeight
                 if (this.panelHeight >= max)
                     this.panelHeight = max.toDouble()

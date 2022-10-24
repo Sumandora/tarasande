@@ -377,6 +377,7 @@ object RenderUtil {
         BufferRenderer.drawWithShader(bufferBuilder.end())
         matrices.pop()
         RenderSystem.enableDepthTest()
+        RenderSystem.enableCull()
         glDisable(GL_LINE_SMOOTH)
         RenderSystem.enableCull()
         RenderSystem.disableBlend()

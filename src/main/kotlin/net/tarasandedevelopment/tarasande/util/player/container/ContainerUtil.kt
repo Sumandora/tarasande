@@ -64,7 +64,7 @@ object ContainerUtil {
 
                 val otherMaterialScore = wrapMaterialScore(otherStack, false)
 
-                if (((materialScore == null || otherMaterialScore == null) || (if (keepSameMaterial) otherMaterialScore > materialScore else otherMaterialScore >= materialScore)) && ((enchantments.isEmpty() && otherEnchantments.isNotEmpty()) || enchantments.all { otherEnchantments.containsKey(it.key) && (if (keepSameEnchantments) otherEnchantments[it.key]!! > it.value else otherEnchantments[it.key]!! >= it.value) })) {
+                if ((if (keepSameMaterial) otherMaterialScore > materialScore else otherMaterialScore >= materialScore) && ((enchantments.isEmpty() && otherEnchantments.isNotEmpty()) || enchantments.all { otherEnchantments.containsKey(it.key) && (if (keepSameEnchantments) otherEnchantments[it.key]!! > it.value else otherEnchantments[it.key]!! >= it.value) })) {
 //                    if (otherStack.damage > stack.damage * durability)
 //                        continue
 
