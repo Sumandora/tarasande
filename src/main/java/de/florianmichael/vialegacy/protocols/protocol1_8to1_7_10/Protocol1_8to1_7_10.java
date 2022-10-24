@@ -266,10 +266,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     packetWrapper.write(Types1_8.METADATA_LIST, metadata);
 
                     TablistTracker.TabListEntry entryByName = tablistTracker.getTabListEntry(name);
-
-                    if (entryByName == null && name.length() > 14)
-                        entryByName = tablistTracker.getTabListEntry(name.substring(0, 14));
-
                     TablistTracker.TabListEntry entryByUUID = tablistTracker.getTabListEntry(uuid);
 
                     if (entryByName == null || entryByUUID == null) {
@@ -298,13 +294,11 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         for (TablistTracker.Property property : newentry.properties) {
                             packetPlayerListItem.write(Type.STRING, property.name);
                             packetPlayerListItem.write(Type.STRING, property.value);
-                            packetPlayerListItem.write(Type.BOOLEAN, property.signature != null);
-
-                            if (property.signature != null) packetPlayerListItem.write(Type.STRING, property.signature);
+                            packetPlayerListItem.write(Type.OPTIONAL_STRING, property.signature);
                         }
                         packetPlayerListItem.write(Type.VAR_INT, 0);
                         packetPlayerListItem.write(Type.VAR_INT, 0);
-                        packetPlayerListItem.write(Type.OPTIONAL_STRING, newentry.displayName);
+                        packetPlayerListItem.write(Type.OPTIONAL_STRING, name);
                         packetPlayerListItem.send(Protocol1_8to1_7_10.class);
 
                         packetWrapper.cancel();
@@ -860,7 +854,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             @Override
             public void registerMap() {
                 handler(packetWrapper -> {
-                    // 1.7 Packet
                     String name = packetWrapper.read(Type.STRING);
                     final boolean add = packetWrapper.read(Type.BOOLEAN);
                     final short ping = packetWrapper.read(Type.SHORT);
@@ -897,9 +890,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         for (TablistTracker.Property property : entry.properties) {
                             packetWrapper.write(Type.STRING, property.name);
                             packetWrapper.write(Type.STRING, property.value);
-                            packetWrapper.write(Type.BOOLEAN, property.signature != null);
-                            if (property.signature != null)
-                                packetWrapper.write(Type.STRING, property.signature);
+                            packetWrapper.write(Type.OPTIONAL_STRING, property.signature);
                         }
                         packetWrapper.write(Type.VAR_INT, selfPlayer ? tablist.getGameMode() : 0);
                         packetWrapper.write(Type.VAR_INT, (int) ping);
@@ -909,7 +900,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         packetWrapper.write(Type.VAR_INT, 1);
                         packetWrapper.write(Type.UUID, entry.uuid);
                         tablist.remove(entry);
-                    } else if (entry != null && add && ping > 0) {
+                    } else if (entry != null && add) {
                         packetWrapper.write(Type.VAR_INT, 2); // UPDATE LATENCY
                         packetWrapper.write(Type.VAR_INT, 1);
                         packetWrapper.write(Type.UUID, entry.uuid);
