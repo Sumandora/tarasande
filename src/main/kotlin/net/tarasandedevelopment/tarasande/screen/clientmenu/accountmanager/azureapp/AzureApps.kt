@@ -13,6 +13,7 @@ class AzureAppPresetBashAuth : AzureAppPreset(
     "Bash/Clamp Auth",
     UUID.fromString("841d89e4-7da3-438c-b2c6-8a269e142f69"),
     "XboxLive.signin offline_access",
+    redirectUri = "http://127.0.0.1:",
     clientSecret = "-1t5cM1-neTZw1aZ01.8uxz..xBC94tHE6"
 )
 
