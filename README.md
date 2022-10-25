@@ -62,7 +62,6 @@
 - OreSim
 - Forge Faker GUI auto calculation for width
 - Panel: Text Radar
-- Anti Packet Kick
 
 ## TODO-List (Flori | ViaLegacy)
 
