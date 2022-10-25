@@ -8,7 +8,8 @@
     "core.MixinMinecraftClient",
     "core.MixinWindow",
     "core.command.MixinChatInputSuggestor",
-    "core.connection.MixinClientConnection",
+    "core.command.MixinSharedConstants",
+    "module.connection.MixinClientConnection",
     "core.connection.MixinClientConnectionSubInitChannel",
     "core.entity.MixinEntity",
     "core.entity.MixinEntityRenderer",
@@ -189,5 +190,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "module.MixinChatHud"
+  ]
 }

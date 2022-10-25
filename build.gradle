@@ -25,31 +25,22 @@ repositories {
 var libs = [
 		// Proxy -> https://mvnrepository.com/artifact/io.netty/netty-handler-proxy
         "io.netty:netty-handler-proxy:4.1.82.Final",
-
 		// Protocol Hack (-> older servers) -> https://github.com/ViaVersion/ViaVersion
 		"com.viaversion:viaversion:4.5.0-22w42a-SNAPSHOT",
-
 		// Protocol Hack (-> newer servers) -> https://github.com/ViaVersion/ViaBackwards
 		"com.viaversion:viabackwards-common:4.5.0-22w42a-SNAPSHOT",
-
 		// Snake YML -> https://github.com/snakeyaml/snakeyaml
 		"org.yaml:snakeyaml:1.29",
-
 		// BungeeCord Chat -> https://mvnrepository.com/artifact/net.md-5/bungeecord-api
 		"net.md-5:bungeecord-api:1.16-R0.4",
-
 		// Packet Library -> https://github.com/FlorianMichael/PacketMinecraft
 		"com.github.FlorianMichael:PacketMinecraft:f594e5a6c0",
-
 		// HAProxy Protocol -> https://mvnrepository.com/artifact/io.netty/netty-codec-haproxy
 		"io.netty:netty-codec-haproxy:4.1.82.Final",
-
 		// Via Protocol Hack -> https://github.com/RejectedVia/ViaProtocolHack
 		"com.github.RejectedVia:ViaProtocolHack:5ddb5c87c8",
-
 		// NoteBot -> https://github.com/RaphiMC/NoteBlockLib
 		"com.github.RaphiMC:NoteBlockLib:6f2b0a5c73",
-
 		// Easing Functions -> https://github.com/FlorianMichael/eZEasing
 		"com.github.FlorianMichael:eZEasing:81601436ab"
 ]
@@ -61,8 +52,8 @@ loom {
 dependencies {
 	// Fabric
     minecraft "com.mojang:minecraft:1.19.2"
-    mappings "net.fabricmc:yarn:1.19.2+build.21:v2"
-    modImplementation "net.fabricmc:fabric-loader:0.14.9"
+    mappings "net.fabricmc:yarn:1.19.2+build.28:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.14.10"
 
 	// Kotlin
 	modImplementation "net.fabricmc:fabric-language-kotlin:1.8.4+kotlin.1.7.20"
