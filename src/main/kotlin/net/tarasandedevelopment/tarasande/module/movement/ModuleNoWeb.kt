@@ -2,12 +2,10 @@ package net.tarasandedevelopment.tarasande.module.movement
 
 import net.minecraft.block.CobwebBlock
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventBlockCollision
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.util.function.Consumer
 
 class ModuleNoWeb : Module("No web", "Prevents cobwebs' slowdown", ModuleCategory.MOVEMENT) {
 
@@ -25,5 +23,4 @@ class ModuleNoWeb : Module("No web", "Prevents cobwebs' slowdown", ModuleCategor
             mc.player?.slowMovement(event.state, Vec3d(horizontalSlowdown.value, verticalSlowdown.value, horizontalSlowdown.value))
         }
     }
-
 }

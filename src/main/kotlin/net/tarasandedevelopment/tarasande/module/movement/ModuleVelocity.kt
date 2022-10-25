@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
@@ -14,7 +13,6 @@ import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import java.util.concurrent.ThreadLocalRandom
-import java.util.function.Consumer
 import kotlin.math.sqrt
 
 class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MOVEMENT) {

@@ -1,8 +1,6 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
-import net.tarasandedevelopment.eventsystem.Event
-import net.tarasandedevelopment.eventsystem.Priority
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPacket
@@ -48,5 +46,4 @@ class ModuleNoRotate : Module("No rotate", "Prevents the server from rotating yo
             }
         }
     }
-
 }

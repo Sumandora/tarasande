@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.module.ghost
 
-import net.tarasandedevelopment.eventsystem.Event
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventUpdateTargetedEntity
@@ -28,5 +27,4 @@ class ModuleReach : Module("Reach", "Increases the hit reach", ModuleCategory.GH
             }
         }
     }
-
 }

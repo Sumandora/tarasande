@@ -4,7 +4,6 @@ import com.google.gson.GsonBuilder
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
-import net.tarasandedevelopment.eventsystem.EventDispatcher
 import net.tarasandedevelopment.tarasande.base.addon.ManagerAddon
 import net.tarasandedevelopment.tarasande.base.blur.ManagerBlur
 import net.tarasandedevelopment.tarasande.base.command.ManagerCommand
@@ -14,6 +13,7 @@ import net.tarasandedevelopment.tarasande.base.module.ManagerModule
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ManagerClientMenu
 import net.tarasandedevelopment.tarasande.base.util.player.clickspeed.ManagerClickMethod
 import net.tarasandedevelopment.tarasande.base.value.ManagerValue
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.protocol.TarasandeProtocolHack
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAccountManager

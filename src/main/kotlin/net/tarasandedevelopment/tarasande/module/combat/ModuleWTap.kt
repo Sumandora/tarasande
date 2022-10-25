@@ -1,11 +1,8 @@
 package net.tarasandedevelopment.tarasande.module.combat
 
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket
-import net.tarasandedevelopment.eventsystem.Event
-import net.tarasandedevelopment.eventsystem.Priority
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
-import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventUpdate
