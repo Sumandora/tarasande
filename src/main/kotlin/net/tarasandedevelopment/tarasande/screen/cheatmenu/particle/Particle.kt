@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.screen.cheatmenu.particle
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.Vec2f
+import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
@@ -39,7 +40,7 @@ class Particle(private var x: Double, private var y: Double) {
         xMotion *= 0.98 * deltaTime
         yMotion *= 0.98 * deltaTime
 
-        RenderUtil.fillCircle(matrices, x, y, MathUtil.getBias(animation, 0.95), Color(255, 255, 255, (animation * 255).toInt()).rgb)
+        RenderUtil.fillCircle(matrices, x, y, MathUtil.getBias(animation, 0.95), Color.white.withAlpha((animation * 255).toInt()).rgb)
     }
 
 }

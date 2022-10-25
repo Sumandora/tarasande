@@ -24,8 +24,8 @@ import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.i
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.friends.PanelElementsFriends
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed.*
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.particle.Particle
+import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import java.awt.Color
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.round
 
@@ -159,7 +159,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
         if (TarasandeMain.get().clientValues.menuAccentBackground.value) {
             matrices?.push()
-            DrawableHelper.fill(matrices, 0, 0, width, height, Color(color.red, color.green, color.blue, (animation * 255 * 0.66).toInt()).rgb)
+            DrawableHelper.fill(matrices, 0, 0, width, height, color.withAlpha((animation * 255 * 0.66).toInt()).rgb)
             matrices?.pop()
         }
 

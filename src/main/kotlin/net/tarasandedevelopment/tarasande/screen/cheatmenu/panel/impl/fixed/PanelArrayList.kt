@@ -10,10 +10,10 @@ import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
+import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.awt.Color
 
 class PanelArrayList(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Array List", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), background = false, resizable = false, fixed = true) {
 
@@ -45,7 +45,7 @@ class PanelArrayList(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : P
         enabledModules.sortedBy { MinecraftClient.getInstance().textRenderer.getWidth(it.name) }.reversed().forEach {
             val animation = animations[it]!!
             val accent = TarasandeMain.get().clientValues.accentColor.getColor()
-            val color = Color(accent.red, accent.green, accent.blue, (animation * 255).toInt())
+            val color = accent.withAlpha((animation * 255).toInt())
             RenderSystem.enableBlend()
             val animatedPosition = easing.ease(animation.toFloat())
             when (alignment) {

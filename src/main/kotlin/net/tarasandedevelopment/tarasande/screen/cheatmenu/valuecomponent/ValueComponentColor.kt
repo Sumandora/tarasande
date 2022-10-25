@@ -10,6 +10,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ValueComponent
 import net.tarasandedevelopment.tarasande.base.value.Value
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.utils.DragInfo
+import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil.fill
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil.fillCircle
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil.fillHorizontalGradient
@@ -45,6 +46,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         val valueColor = value as ValueColor
         val white = Color.white.let { if (valueColor.isEnabled() && !valueColor.locked) it else it.darker().darker() }
         val unblockedWhite = Color.white.let { if (valueColor.isEnabled()) it else it.darker().darker() }
+        val black = Color.black.let { if (valueColor.isEnabled()) it else it.darker().darker() }
 
         val x1 = width - (getPickerHeight() - 5) / 2.0 - sin(0.75) * ((getPickerHeight() - 5) / 2.0 - 5)
         val y1 = (getPickerHeight() - 5) / 2.0 - sin(0.75) * ((getPickerHeight() - 5) / 2.0 - 5)
@@ -85,8 +87,8 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         val nextHue = if (valueColor.locked) TarasandeMain.get().clientValues.accentColor.hue else valueColor.hue
         val hsb = Color.getHSBColor(nextHue, 1.0f, 1.0f).let { if (valueColor.isEnabled()) it else it.darker().darker() }
         fill(matrices, x1, y1, x2, y2, hsb.rgb)
-        fillHorizontalGradient(matrices, x1, y1, x2, y2, Color.white.let { Color(it.red, it.green, it.blue, 0) }.rgb, unblockedWhite.rgb)
-        fillVerticalGradient(matrices, x1, y1, x2, y2, Color.black.let { Color(it.red, it.green, it.blue, 0) }.rgb, Color.black.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+        fillHorizontalGradient(matrices, x1, y1, x2, y2, Color.white.withAlpha(0).rgb, unblockedWhite.rgb)
+        fillVerticalGradient(matrices, x1, y1, x2, y2, Color.black.withAlpha(0).rgb, black.rgb)
 
         if (!isAccent()) {
             matrices.push()
@@ -137,7 +139,7 @@ class ValueComponentColor(value: Value) : ValueComponent(value) {
         fillCircle(matrices, this.width - (getPickerHeight() - 5) / 2.0 - sin((valueColor.hue + 0.5f) * PI * 2) * middleRadius, (getPickerHeight() - 5) / 2.0 + cos((valueColor.hue + 0.5f) * PI * 2) * middleRadius, width / 2.0, Color.getHSBColor(valueColor.hue, 1.0f, 1.0f).let { if (valueColor.isEnabled() && !valueColor.locked) it else it.darker().darker() }.rgb)
         if (valueColor.alpha != null) {
             val alpha = valueColor.alpha!!
-            fillVerticalGradient(matrices, this.width - (getPickerHeight() - 5) - 10, 0.0, this.width - (getPickerHeight() - 5) - 5, getPickerHeight() - 5, unblockedWhite.rgb, Color.black.let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
+            fillVerticalGradient(matrices, this.width - (getPickerHeight() - 5) - 10, 0.0, this.width - (getPickerHeight() - 5) - 5, getPickerHeight() - 5, unblockedWhite.rgb, black.rgb)
             outlinedFill(matrices, this.width - (getPickerHeight() - 5) - 10, 0.0, this.width - (getPickerHeight() - 5) - 5, getPickerHeight() - 5, 2.0f, unblockedWhite.rgb)
             fillCircle(matrices, this.width - (getPickerHeight() - 5) - 7.5, (getPickerHeight() - 5) * (1.0 - alpha) + (alpha * 2 - 1) * 2.5, 2.5, Color(alpha, alpha, alpha).let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
             outlinedCircle(matrices, this.width - (getPickerHeight() - 5) - 7.5, (getPickerHeight() - 5) * (1.0 - alpha) + (alpha * 2 - 1) * 2.5, 2.5, 2.0f, unblockedWhite.rgb)

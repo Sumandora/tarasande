@@ -4,6 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.value.Value
+import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import java.awt.Color
 
 open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var bri: Float, var alpha: Float? = null, manage: Boolean = true) : Value(owner, name, manage) {
@@ -31,7 +32,7 @@ open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var 
             customHue = TarasandeMain.get().clientValues.accentColor.hue
 
         val hsb = Color.getHSBColor(customHue, sat, bri)
-        return Color(hsb.red, hsb.green, hsb.blue, if (alpha == null) 255 else (alpha!! * 255).toInt())
+        return hsb.withAlpha(if (alpha == null) 255 else (alpha!! * 255).toInt())
     }
 
     override fun save(): JsonElement {

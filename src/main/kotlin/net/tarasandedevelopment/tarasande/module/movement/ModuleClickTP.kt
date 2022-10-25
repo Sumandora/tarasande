@@ -9,6 +9,7 @@ import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventMouse
 import net.tarasandedevelopment.tarasande.event.EventRender3D
+import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.math.pathfinder.PathFinder
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
@@ -58,7 +59,7 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
 
         registerEvent(EventRender3D::class.java) { event ->
             if (goal != null) {
-                RenderUtil.blockOutline(event.matrices, VoxelShapes.fullCube().offset(goal?.x!!, goal?.y!!, goal?.z!!), Color(255, 255, 255, 50).rgb)
+                RenderUtil.blockOutline(event.matrices, VoxelShapes.fullCube().offset(goal?.x!!, goal?.y!!, goal?.z!!), Color.white.withAlpha(50).rgb)
             }
             RenderUtil.renderPath(event.matrices, path ?: return@registerEvent, -1)
         }

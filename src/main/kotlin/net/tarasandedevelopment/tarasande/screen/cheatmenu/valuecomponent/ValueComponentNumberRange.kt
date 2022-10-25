@@ -10,6 +10,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ValueComponent
 import net.tarasandedevelopment.tarasande.base.value.Value
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.utils.DragInfo
+import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueNumberRange
 import org.lwjgl.glfw.GLFW
@@ -86,7 +87,7 @@ class ValueComponentNumberRange(value: Value) : ValueComponent(value) {
 
         var white = Color.white
         var accentColor = TarasandeMain.get().clientValues.accentColor.getColor()
-        var color = Color(accentColor.red, accentColor.green, accentColor.blue, 255 / 4)
+        var color = accentColor.withAlpha(255 / 4)
         var otherColor = Color(255, 255, 255, 255 / 4)
 
         if (!value.isEnabled()) {

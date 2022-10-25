@@ -6,10 +6,10 @@ import net.minecraft.util.shape.VoxelShapes
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventRender3D
+import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueColor
 import net.tarasandedevelopment.tarasande.value.ValueNumber
-import java.awt.Color
 import java.util.concurrent.CopyOnWriteArrayList
 
 class ModuleBlockChangeTracker : Module("Block change tracker", "Tracks block changes", ModuleCategory.RENDER) {
@@ -26,7 +26,7 @@ class ModuleBlockChangeTracker : Module("Block change tracker", "Tracks block ch
                 if (timeDelta > time.value) {
                     changes.remove(change)
                 } else {
-                    RenderUtil.blockOutline(event.matrices, change.second.getOutlineShape(mc.world, change.first).let { if (it.isEmpty) VoxelShapes.fullCube() else it }.offset(change.first.x.toDouble(), change.first.y.toDouble(), change.first.z.toDouble()), color.getColor().let { Color(it.red, it.green, it.blue, (it.alpha * (1.0f - timeDelta / time.value)).toInt()) }.rgb)
+                    RenderUtil.blockOutline(event.matrices, change.second.getOutlineShape(mc.world, change.first).let { if (it.isEmpty) VoxelShapes.fullCube() else it }.offset(change.first.x.toDouble(), change.first.y.toDouble(), change.first.z.toDouble()), color.getColor().withAlpha((color.getColor().alpha * (1.0f - timeDelta / time.value)).toInt()).rgb)
                 }
             }
         }

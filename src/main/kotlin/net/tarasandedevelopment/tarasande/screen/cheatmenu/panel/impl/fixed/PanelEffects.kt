@@ -14,6 +14,7 @@ import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
+import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
@@ -59,7 +60,7 @@ class PanelEffects(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Pan
         var index = 0.0
         activeStatusEffects.sortedBy { MinecraftClient.getInstance().textRenderer.getWidth(it.second) }.reversed().forEach {
             val animation = animations[it.first]!!
-            val color = Color((it.third shr 16) and 0xFF, (it.third shr 8) and 0xFF, (it.third shr 0) and 0xFF, (animation * 255).toInt())
+            val color = Color(it.third).withAlpha((animation * 255).toInt())
             RenderSystem.enableBlend()
             val animatedPosition = easing.ease(animation.toFloat())
             when (alignment) {
