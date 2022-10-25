@@ -3,11 +3,13 @@ package net.tarasandedevelopment.tarasande.util.clientvalue
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.Tameable
 import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.blur.BlurKawase
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
+import net.tarasandedevelopment.tarasande.util.dummies.DummyWorld
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.*
 import org.lwjgl.glfw.GLFW
@@ -29,12 +31,37 @@ class ClientValues {
     }
     val accentColor = ValueColor(this, "Accent color", 0.6f, 1.0f, 1.0f)
     val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
+
+        val map = HashMap<EntityType<*>, Boolean>()
+
+        init {
+            val world = DummyWorld()
+            Registry.ENTITY_TYPE.forEach {
+                map[it] = it.create(world) is LivingEntity
+            }
+            world.close()
+        }
+
         override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
+        override fun filter(key: EntityType<*>) = map[key] == true
     }
     private val dontAttackTamedEntities = object : ValueBoolean(this, "Don't attack tamed entities", false) {
-        override fun isEnabled() = entities.list.any { it.baseClass.isInstance(Tameable::class.java) }
+
+        val map = HashMap<EntityType<*>, Boolean>()
+
+        init {
+            val world = DummyWorld()
+            Registry.ENTITY_TYPE.forEach {
+                map[it] = it.create(world) is Tameable
+            }
+            world.close()
+        }
+
+        override fun isEnabled() = entities.list.any { map[it] == true }
     }
-    private val dontAttackRidingEntity = ValueBoolean(this, "Don't attack riding entity", false)
+    private val dontAttackRidingEntity = object : ValueBoolean(this, "Don't attack riding entity", false) {
+        override fun isEnabled() = entities.list.isNotEmpty()
+    }
     val correctMovement = ValueMode(this, "Correct movement", false, "Off", "Prevent Backwards Sprinting", "Direct", "Silent")
     val blurMode = ValueMode(this, "Blur mode", false, *TarasandeMain.get().managerBlur.list.map { it.name }.toTypedArray())
     val blurStrength = object : ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0) {

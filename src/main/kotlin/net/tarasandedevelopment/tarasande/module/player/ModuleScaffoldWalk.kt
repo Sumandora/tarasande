@@ -279,8 +279,20 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, mc.player?.pos!! + Vec3d(cos(rad), 0.0, sin(rad)) * 0.3)
 
                 val diagonal = abs(round(mc.player?.yaw!! / 90) * 90 - mc.player?.yaw!!) > 22.5
-                if (!diagonal)
-                    targetRot.yaw += (-goalYaw.value * (45.0 / 60.0)).toFloat() // those are not triangles anymore :c
+                if (!diagonal) {
+                    val deltaRot = (-goalYaw.value * (45.0 / 60.0)).toFloat() // those are not triangles anymore :c
+                    val centerRot = RotationUtil.getRotations(mc.player?.eyePos!!, Vec3d.ofBottomCenter(mc.player?.blockPos))
+                    val rot = Rotation(targetRot)
+                    rot.yaw += deltaRot
+                    val firstFov = centerRot.fov(rot)
+                    rot.yaw -= deltaRot * 2.0f
+                    val secondFov = centerRot.fov(rot)
+
+                    if (firstFov > secondFov)
+                        targetRot.yaw -= deltaRot
+                    else
+                        targetRot.yaw += deltaRot
+                }
 
                 lastRotation = targetRot
             }

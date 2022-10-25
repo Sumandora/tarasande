@@ -22,4 +22,8 @@ class DummyWorld : ClientWorld(null, null, null, DynamicRegistryManager.BUILTIN.
     override fun getSpawnPos() = BlockPos(0, 0, 0)
 
     override fun getSpawnAngle() = 0F
+
+    override fun getTimeOfDay() = 0L
+
+    override fun getTime() = 0L
 }
