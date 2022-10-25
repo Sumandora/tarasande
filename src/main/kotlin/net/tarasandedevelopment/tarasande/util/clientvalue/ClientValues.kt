@@ -94,7 +94,6 @@ class ClientValues {
         override fun isEnabled() = commands.value
         override fun filter(type: Type, bind: Int) = bind >= GLFW.GLFW_KEY_ESCAPE || bind == GLFW.GLFW_KEY_UNKNOWN
     }
-    val allowEveryCharacter = ValueBoolean(this, "Allow every character", true)
 
     fun isEntityDesired(entity: Entity): Boolean {
         if (dontAttackRidingEntity.value && entity == MinecraftClient.getInstance().player?.vehicle) return false

@@ -128,7 +128,8 @@ class ManagerModule : Manager<Module>() {
             ModuleNoSignatures(),
             ModuleEveryItemOnArmor(),
             ModuleNoteBot(),
-            ModuleNoMessageSignatureIndicator()
+            ModuleNoMessageSignatureIndicator(),
+            ModuleAllowEveryCharacter()
         )
         TarasandeMain.get().eventDispatcher.add(EventTick::class.java) {
             if (it.state == EventTick.State.POST) {
