@@ -59,7 +59,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         return list
     }
 
-    private fun calculateDefenses(beds: Array<BlockPos>): List<BlockPos> {
+    private fun calculateDefenses(beds: Array<BlockPos>): List<BlockPos>? {
         val list = HashSet<BlockPos>()
         val open = ArrayList<BlockPos>()
         open.addAll(beds)
@@ -67,12 +67,11 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         while (open.isNotEmpty()) {
             val block = open.removeFirst()
             if (beds.minOf { it.getSquaredDistance(block) } > depth.value * depth.value)
-                continue
+                return null
 
             list.add(block)
 
             for (newBlock in allSurroundings(block)) {
-
                 if (!list.contains(newBlock) && !mc.world?.getBlockState(newBlock)?.isAir!!) {
                     open.add(newBlock)
                 }
@@ -119,21 +118,23 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                         continue // this is pointless
                     }
 
-                    val defenders = ArrayList(calculateDefenses(bedParts))
-                    var solution: List<Node>?
-                    val outstanders = defenders.filter {
-                        allSurroundings(it).any {
-                            mc.world?.getBlockState(it)?.let { state ->
-                                state.isAir || state.getCollisionShape(MinecraftClient.getInstance().world, it).isEmpty
-                            }!!
+                    val defenders = calculateDefenses(bedParts)?.let { ArrayList(it) }
+                    var solution: List<Node>? = null
+                    if (defenders != null) {
+                        val outstanders = defenders.filter {
+                            allSurroundings(it).any {
+                                mc.world?.getBlockState(it)?.let { state ->
+                                    state.isAir || state.getCollisionShape(MinecraftClient.getInstance().world, it).isEmpty
+                                }!!
+                            }
                         }
+
+                        if (outstanders.any { mc.world?.getBlockState(it)?.block is BedBlock }) continue // not a bedwars bed
+
+                        solution = Breaker.findSolution(outstanders, defenders, bedParts, maxProcessingTime.value.toLong())
+
+                        defenders.removeIf { bedParts.contains(it) }
                     }
-
-                    if (outstanders.any { mc.world?.getBlockState(it)?.block is BedBlock }) continue // not a bedwars bed
-
-                    solution = Breaker.findSolution(outstanders, defenders, bedParts, maxProcessingTime.value.toLong())
-
-                    defenders.removeIf { bedParts.contains(it) }
                     bedDatas.add(BedData(bedParts, defenders, solution))
                 }
             }

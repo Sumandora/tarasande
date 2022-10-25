@@ -14,18 +14,6 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
 
     private val border = "( |[^a-z]|\\b)"
 
-    private fun replaceNames(str: String): String {
-        var str = str
-
-        str = replaceName(str, mc.session.profile.name, protectedName.value)
-
-        for (pair in TarasandeMain.get().friends.friends) {
-            str = replaceName(str, pair.first.name, pair.second ?: continue)
-        }
-
-        return str
-    }
-
     private fun replaceName(str: String, substring: String, replacement: String): String {
         val regex = Regex(border + substring + border)
         return regex.replace(str) {
@@ -50,7 +38,11 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
 
     init {
         registerEvent(EventTextVisit::class.java) { event ->
-            event.string = replaceNames(event.string)
+            event.string = replaceName(event.string, mc.session.profile.name, protectedName.value)
+
+            for (pair in TarasandeMain.get().friends.friends) {
+                event.string = replaceName(event.string, pair.first.name, pair.second ?: continue)
+            }
         }
     }
 }

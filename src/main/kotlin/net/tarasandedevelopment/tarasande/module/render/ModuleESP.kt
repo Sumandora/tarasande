@@ -4,9 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec3d
-import net.minecraft.util.math.Vector4f
 import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
@@ -18,8 +16,8 @@ import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSet
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.extension.times
-import net.tarasandedevelopment.tarasande.util.extension.unaryMinus
 import net.tarasandedevelopment.tarasande.util.player.entitycolor.EntityColor
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueMode
@@ -60,38 +58,6 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 
     private val hashMap = HashMap<Entity, Rectangle>()
 
-    private fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Vec3d? {
-        val camPos = -mc.gameRenderer.camera.pos + vector
-        val vec1 = matrixVectorMultiply(modelView, Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1.0f))
-        val screenPos = matrixVectorMultiply(projection, vec1)
-
-        if (screenPos.w <= 0.0) return null
-
-        val newW = 1.0 / screenPos.w * 0.5
-
-        screenPos.set(
-            (screenPos.x * newW + 0.5).toFloat(),
-            (screenPos.y * newW + 0.5).toFloat(),
-            (screenPos.z * newW + 0.5).toFloat(),
-            newW.toFloat()
-        )
-
-        return Vec3d(
-            screenPos.x * mc.window?.framebufferWidth!! / mc.window?.scaleFactor!!,
-            (mc.window?.framebufferHeight!! - (screenPos.y * mc.window?.framebufferHeight!!)) / mc.window?.scaleFactor!!,
-            screenPos.z.toDouble()
-        )
-    }
-
-    private fun matrixVectorMultiply(matrix4f: Matrix4f, vector: Vector4f): Vector4f {
-        return Vector4f(
-            matrix4f.a00 * vector.x + matrix4f.a01 * vector.y + matrix4f.a02 * vector.z + matrix4f.a03 * vector.w,
-            matrix4f.a10 * vector.x + matrix4f.a11 * vector.y + matrix4f.a12 * vector.z + matrix4f.a13 * vector.w,
-            matrix4f.a20 * vector.x + matrix4f.a21 * vector.y + matrix4f.a22 * vector.z + matrix4f.a23 * vector.w,
-            matrix4f.a30 * vector.x + matrix4f.a31 * vector.y + matrix4f.a32 * vector.z + matrix4f.a33 * vector.w
-        )
-    }
-
     init {
         registerEvent(EventRender3D::class.java) { event ->
             hashMap.clear()
@@ -123,7 +89,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
                 var rectangle: Rectangle? = null
 
                 for (corner in corners) {
-                    val projected = project(event.matrices.peek().positionMatrix, event.positionMatrix, corner) ?: continue
+                    val projected = RenderUtil.project(event.matrices.peek().positionMatrix, event.positionMatrix, corner) ?: continue
                     if (rectangle == null)
                         rectangle = Rectangle(projected.x, projected.y, projected.x, projected.y)
                     else {

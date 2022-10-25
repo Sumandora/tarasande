@@ -10,9 +10,13 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.Direction
+import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec3d
+import net.minecraft.util.math.Vector4f
 import net.minecraft.util.shape.VoxelShape
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.util.extension.plus
+import net.tarasandedevelopment.tarasande.util.extension.unaryMinus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
@@ -381,5 +385,37 @@ object RenderUtil {
         glDisable(GL_LINE_SMOOTH)
         RenderSystem.enableCull()
         RenderSystem.disableBlend()
+    }
+
+    private fun matrixVectorMultiply(matrix4f: Matrix4f, vector: Vector4f): Vector4f {
+        return Vector4f(
+            matrix4f.a00 * vector.x + matrix4f.a01 * vector.y + matrix4f.a02 * vector.z + matrix4f.a03 * vector.w,
+            matrix4f.a10 * vector.x + matrix4f.a11 * vector.y + matrix4f.a12 * vector.z + matrix4f.a13 * vector.w,
+            matrix4f.a20 * vector.x + matrix4f.a21 * vector.y + matrix4f.a22 * vector.z + matrix4f.a23 * vector.w,
+            matrix4f.a30 * vector.x + matrix4f.a31 * vector.y + matrix4f.a32 * vector.z + matrix4f.a33 * vector.w
+        )
+    }
+
+    fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Vec3d? {
+        val camPos = -MinecraftClient.getInstance().gameRenderer.camera.pos + vector
+        val vec1 = matrixVectorMultiply(modelView, Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1.0f))
+        val screenPos = matrixVectorMultiply(projection, vec1)
+
+        if (screenPos.w <= 0.0) return null
+
+        val newW = 1.0 / screenPos.w * 0.5
+
+        screenPos.set(
+            (screenPos.x * newW + 0.5).toFloat(),
+            (screenPos.y * newW + 0.5).toFloat(),
+            (screenPos.z * newW + 0.5).toFloat(),
+            newW.toFloat()
+        )
+
+        return Vec3d(
+            screenPos.x * MinecraftClient.getInstance().window?.framebufferWidth!! / MinecraftClient.getInstance().window?.scaleFactor!!,
+            (MinecraftClient.getInstance().window?.framebufferHeight!! - (screenPos.y * MinecraftClient.getInstance().window?.framebufferHeight!!)) / MinecraftClient.getInstance().window?.scaleFactor!!,
+            screenPos.z.toDouble()
+        )
     }
 }
