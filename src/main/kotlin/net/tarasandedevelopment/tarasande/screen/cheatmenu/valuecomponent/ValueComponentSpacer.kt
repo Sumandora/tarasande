@@ -37,7 +37,7 @@ class ValueComponentSpacer(value: Value) : ValueComponent(value) {
         for ((index, line) in lines.withIndex()) {
             MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices,
                 line,
-                2.0f,
+                0.0f,
                 (getHeight() / 2.0F + (index - (lines.size - 1) / 2.0 + 0.5) * (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f) - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat() * 2.0f,
                 -1)
         }
@@ -63,5 +63,5 @@ class ValueComponentSpacer(value: Value) : ValueComponent(value) {
     override fun onClose() {
     }
 
-    override fun getHeight() = MinecraftClient.getInstance().textRenderer.fontHeight.toDouble() / 2.0f * lines.size
+    override fun getHeight() = MinecraftClient.getInstance().textRenderer.fontHeight.toDouble() / 2.0f * (lines.size + 1)
 }
