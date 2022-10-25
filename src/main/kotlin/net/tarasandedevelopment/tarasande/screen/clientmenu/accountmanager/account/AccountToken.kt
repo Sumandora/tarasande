@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.acco
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.mojang.authlib.Environment
 import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import net.minecraft.client.util.Session
@@ -16,7 +15,6 @@ import java.net.HttpURLConnection
 import java.net.Proxy
 import java.net.URL
 import java.util.*
-import kotlin.math.acos
 
 
 @AccountInfo(name = "Token")

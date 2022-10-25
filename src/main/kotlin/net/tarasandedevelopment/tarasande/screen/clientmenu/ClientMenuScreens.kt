@@ -9,7 +9,6 @@ import io.netty.handler.codec.haproxy.HAProxyProtocolVersion
 import io.netty.handler.codec.haproxy.HAProxyProxiedProtocol
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
@@ -39,7 +38,6 @@ import net.tarasandedevelopment.tarasande.value.ValueNumber
 import net.tarasandedevelopment.tarasande.value.ValueText
 import org.lwjgl.glfw.GLFW
 import org.spongepowered.include.com.google.common.io.Files
-import java.awt.Color
 import java.io.File
 import java.net.InetSocketAddress
 import java.util.*

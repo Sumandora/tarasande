@@ -11,7 +11,6 @@ import net.minecraft.entity.effect.StatusEffectUtil
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.registry.Registry
-import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel

@@ -11,7 +11,6 @@ import io.netty.channel.Channel
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.encryption.PacketDecryptor
 import net.minecraft.network.encryption.PacketEncryptor
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.protocol.TarasandeProtocolHack
 import java.util.AbstractMap.SimpleEntry
 import javax.crypto.Cipher

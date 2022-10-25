@@ -9,7 +9,6 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.TextFieldInfo
 import java.net.Proxy
 import java.util.*
-import kotlin.math.acos
 
 
 @AccountInfo(name = "Session")

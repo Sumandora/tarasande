@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.value
 
 import com.google.gson.JsonElement
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
 import net.tarasandedevelopment.tarasande.base.value.Value
 
