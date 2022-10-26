@@ -13,6 +13,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
 import net.minecraft.item.Item
 import net.minecraft.network.Packet
+import net.minecraft.particle.ParticleEffect
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.math.BlockPos
@@ -215,3 +216,5 @@ class EventInvalidGameMode(val uuid: UUID) : Event(false)
 class EventRespawn(var showDeathScreen: Boolean) : Event(false)
 class EventScreenInput(var doneInput: Boolean) : Event(true)
 class EventRenderMultiplayerEntry(val matrices: MatrixStack, val x: Int, val y: Int, val entryWidth: Int, val entryHeight: Int, val mouseX: Int, val mouseY: Int, val server: ServerInfo) : Event(false)
+class EventChunkOcclusion : Event(true)
+class EventParticle(val effect: ParticleEffect) : Event(true)

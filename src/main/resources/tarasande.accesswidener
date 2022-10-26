@@ -92,6 +92,9 @@ accessible method net/minecraft/client/MinecraftClient handleBlockBreaking (Z)V
 accessible method net/minecraft/client/gui/widget/TextFieldWidget isEditable ()Z
 accessible method net/minecraft/client/gui/widget/TextFieldWidget erase (I)V
 
+accessible class net/minecraft/client/render/MapRenderer$MapTexture
+accessible class net/minecraft/client/particle/FireworksSparkParticle$Explosion
+
 mutable field net/minecraft/network/packet/c2s/play/CustomPayloadC2SPacket data Lnet/minecraft/network/PacketByteBuf;
 mutable field net/minecraft/entity/Entity random Lnet/minecraft/util/math/random/Random;
 mutable field net/minecraft/network/packet/c2s/handshake/HandshakeC2SPacket address Ljava/lang/String;

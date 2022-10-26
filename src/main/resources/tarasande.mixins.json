@@ -187,13 +187,10 @@
     "protocolhack.viaversion.MixinProtocol1_9To1_8",
     "protocolhack.viaversion.MixinProtocolManagerImpl",
     "protocolhack.viaversion.MixinSkullHandler_1_12_2",
-    "protocolhack.viaversion.MixinViaIdleThread"
+    "protocolhack.viaversion.MixinViaIdleThread",
+    "features.module.MixinChatHud"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "features.clientvalues.MixinMinecraftClient",
-    "features.module.MixinChatHud"
-  ]
+  }
 }
