@@ -47,7 +47,7 @@ public class MixinClientConnectionSubInitChannel {
 
         final ElementMenuToggleHAProxyHack haProxyHack = TarasandeMain.Companion.get().getManagerClientMenu().get(ElementMenuToggleHAProxyHack.class);
 
-        if (haProxyHack.getState$tarasande()) {
+        if (haProxyHack.getState()) {
             channel.pipeline().addFirst("haproxy-encoder", HAProxyMessageEncoder.INSTANCE);
             channel.pipeline().addLast(haProxyHack.getHandler());
         }

@@ -11,9 +11,9 @@ import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentRegistry
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentText
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentTextList
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ElementValueComponentRegistry
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ElementValueComponentText
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ElementValueComponentTextList
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 
@@ -58,9 +58,9 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
     private fun isTextboxFocused(): Boolean {
         return TarasandeMain.get().screenCheatMenu.managerValueComponent.instances.any {
             when (it) {
-                is ValueComponentText -> it.isFocused()
-                is ValueComponentRegistry -> it.isFocused()
-                is ValueComponentTextList -> it.isFocused()
+                is ElementValueComponentText -> it.isFocused()
+                is ElementValueComponentRegistry -> it.isFocused()
+                is ElementValueComponentTextList -> it.isFocused()
                 else -> false
             }
         }

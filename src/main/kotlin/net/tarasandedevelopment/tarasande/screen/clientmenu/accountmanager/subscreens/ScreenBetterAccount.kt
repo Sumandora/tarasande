@@ -12,8 +12,8 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.TextFieldInfo
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAccountManager
-import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPassword
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder
+import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholderPassword
 import org.lwjgl.glfw.GLFW
 import java.util.function.Consumer
 
@@ -25,7 +25,7 @@ class ScreenBetterAccount(
 
     private val textFields: ArrayList<TextFieldWidget> = ArrayList()
 
-    private var implementationClass: Class<out Account> = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAccount.list[0]
+    private var implementationClass: Class<out Account> = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager.managerAccount.list[0]
     private var accountImplementation: Account? = null
 
     private var submitButton: ButtonWidget? = null
@@ -49,7 +49,7 @@ class ScreenBetterAccount(
                 20,
                 Text.of((implementationClass.annotations[0] as AccountInfo).name)
             ) { button ->
-                val accountManager = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager
+                val accountManager = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager
 
                 implementationClass = accountManager.managerAccount.list[(accountManager.managerAccount.list.indexOf(implementationClass) + 1) % accountManager.managerAccount.list.size]
                 accountImplementation = implementationClass.getDeclaredConstructor().newInstance()
@@ -84,7 +84,7 @@ class ScreenBetterAccount(
                 if (textFieldInfo.hidden) {
                     textFields.add(
                         addDrawableChild(
-                            TextFieldWidgetPassword(
+                            TextFieldWidgetPlaceholderPassword(
                                 textRenderer,
                                 width / 2 - 150,
                                 (height * 0.25f + i * 25).toInt(),

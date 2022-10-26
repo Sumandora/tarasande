@@ -6,7 +6,7 @@ import net.minecraft.client.gl.Framebuffer
 import net.minecraft.util.math.MathHelper
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.blur.Blur
-import net.tarasandedevelopment.tarasande.util.render.framebuffer.FramebufferWrapped
+import net.tarasandedevelopment.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import net.tarasandedevelopment.tarasande.util.render.shader.Program
 import net.tarasandedevelopment.tarasande.util.render.shader.Shader
 import org.lwjgl.opengl.GL11
@@ -17,8 +17,8 @@ class BlurKawase : Blur("Kawase") {
     private val upsample = Program(Shader("blur/kawase/upsample.frag", GL20.GL_FRAGMENT_SHADER), Shader("default.vert", GL20.GL_VERTEX_SHADER))
     private val downsample = Program(Shader("blur/kawase/downsample.frag", GL20.GL_FRAGMENT_SHADER), Shader("default.vert", GL20.GL_VERTEX_SHADER))
 
-    private val blurredFramebuffer = FramebufferWrapped()
-    private val alternativeFramebuffer = FramebufferWrapped()
+    private val blurredFramebuffer = SimpleFramebufferWrapped()
+    private val alternativeFramebuffer = SimpleFramebufferWrapped()
 
     var kawasePasses: ArrayList<Pair<Float, Float>>? = null
 

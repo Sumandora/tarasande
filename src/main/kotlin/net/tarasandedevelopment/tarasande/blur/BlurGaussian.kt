@@ -5,7 +5,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.blur.Blur
-import net.tarasandedevelopment.tarasande.util.render.framebuffer.FramebufferWrapped
+import net.tarasandedevelopment.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import net.tarasandedevelopment.tarasande.util.render.shader.Program
 import net.tarasandedevelopment.tarasande.util.render.shader.Shader
 import org.lwjgl.opengl.GL11
@@ -15,8 +15,8 @@ import org.lwjgl.opengl.GL20
 class BlurGaussian : Blur("Gaussian") {
     private val gaussian = Program(Shader("blur/gaussian/gaussian.frag", GL20.GL_FRAGMENT_SHADER), Shader("default.vert", GL20.GL_VERTEX_SHADER))
 
-    private val blurredFramebuffer = FramebufferWrapped()
-    private val alternativeFramebuffer = FramebufferWrapped()
+    private val blurredFramebuffer = SimpleFramebufferWrapped()
+    private val alternativeFramebuffer = SimpleFramebufferWrapped()
 
     override fun render(strength: Int?): Framebuffer {
         val strength = strength ?: TarasandeMain.get().clientValues.blurStrength.value.toInt()

@@ -7,7 +7,7 @@ import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.mixin.accessor.ITextFieldWidget
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.Element
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ValueComponentText
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ElementValueComponentText
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueText
 import java.awt.Color
@@ -20,7 +20,7 @@ class ElementPlayer(val gameProfile: GameProfile, width: Double) : Element(width
             TarasandeMain.get().friends.setAlias(gameProfile, value.ifEmpty { null })
         }
     }
-    private val textField = ValueComponentText(value).also { TarasandeMain.get().screenCheatMenu.managerValueComponent.instances.add(it) }
+    private val textField = ElementValueComponentText(value).also { TarasandeMain.get().screenCheatMenu.managerValueComponent.instances.add(it) }
 
     private val defaultHeight = MinecraftClient.getInstance().textRenderer.fontHeight * 1.5 + 2.0
     private var friendTime = 0L

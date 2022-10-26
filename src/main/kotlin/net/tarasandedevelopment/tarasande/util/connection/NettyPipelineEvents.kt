@@ -7,7 +7,7 @@ import io.netty.handler.codec.MessageToMessageEncoder
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventPacketTransform
 
-class EventDecoder : MessageToMessageDecoder<ByteBuf>() {
+class MessageToMessageDecoderEvent : MessageToMessageDecoder<ByteBuf>() {
 
     override fun decode(ctx: ChannelHandlerContext?, msg: ByteBuf?, out: MutableList<Any>?) {
         TarasandeMain.get().eventDispatcher.call(EventPacketTransform(EventPacketTransform.Type.DECODE, msg))
@@ -16,7 +16,7 @@ class EventDecoder : MessageToMessageDecoder<ByteBuf>() {
     }
 }
 
-class EventEncoder : MessageToMessageEncoder<ByteBuf>() {
+class MessageToMessageEncoderEvent : MessageToMessageEncoder<ByteBuf>() {
 
     override fun encode(ctx: ChannelHandlerContext?, msg: ByteBuf?, out: MutableList<Any>?) {
         TarasandeMain.get().eventDispatcher.call(EventPacketTransform(EventPacketTransform.Type.ENCODE, msg))

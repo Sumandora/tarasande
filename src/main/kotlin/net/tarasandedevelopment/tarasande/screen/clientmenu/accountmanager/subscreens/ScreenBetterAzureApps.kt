@@ -23,7 +23,7 @@ class ScreenBetterAzureApps(prevScreen: Screen?, private val azureApp: AzureAppP
     private var clientSecretTextField: TextFieldWidget? = null
 
     override fun init() {
-        val defaultApp = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAzureApp.get(AzureAppPresetInGameAccountSwitcher::class.java)
+        val defaultApp = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager.managerAzureApp.get(AzureAppPresetInGameAccountSwitcher::class.java)
 
         clientIdTextField = TextFieldWidgetPlaceholder(this.textRenderer, this.width / 2 - 100, this.height / 2 - 50 - 15, 200, 20, Text.of("Client ID")).also {
             it.setMaxLength(Int.MAX_VALUE)
@@ -52,7 +52,7 @@ class ScreenBetterAzureApps(prevScreen: Screen?, private val azureApp: AzureAppP
         var x = 5
         var y = 5
 
-        for (environmentPreset in TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAzureApp.list) {
+        for (environmentPreset in TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager.managerAzureApp.list) {
 
             this.addDrawableChild(ButtonWidget(x, y, 130, 20, Text.of(environmentPreset.name)) {
                 clientIdTextField?.text = environmentPreset.clientId.toString()

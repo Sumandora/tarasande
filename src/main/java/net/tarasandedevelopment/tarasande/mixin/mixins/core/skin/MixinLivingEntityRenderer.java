@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.core.skin;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.entity.LivingEntity;
-import net.tarasandedevelopment.tarasande.util.dummies.DummyPlayer;
+import net.tarasandedevelopment.tarasande.util.dummies.AbstractClientPlayerEntityDummy;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,7 +14,7 @@ public class MixinLivingEntityRenderer<T extends LivingEntity, M extends EntityM
 
     @Inject(method = "hasLabel(Lnet/minecraft/entity/LivingEntity;)Z", at = @At("HEAD"), cancellable = true)
     public void hideLabel(T livingEntity, CallbackInfoReturnable<Boolean> cir) {
-        if (livingEntity instanceof DummyPlayer)
+        if (livingEntity instanceof AbstractClientPlayerEntityDummy)
             cir.setReturnValue(false);
     }
 }
