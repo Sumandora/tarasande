@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.screen.cheatmenu
+package net.tarasandedevelopment.tarasande.screen.base
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
@@ -6,8 +6,7 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
-import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil

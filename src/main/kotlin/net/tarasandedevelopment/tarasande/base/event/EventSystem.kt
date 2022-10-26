@@ -35,17 +35,3 @@ open class Event(private val cancellable: Boolean) {
             error("Event is not cancellable")
         }
 }
-
-@Target(AnnotationTarget.FIELD)
-@Retention
-annotation class Priority(val value: Int)
-
-fun main() {
-    val eventDispatcher = EventDispatcher()
-    eventDispatcher.add(EventTick::class.java) {
-        println(it.state)
-    }
-
-    eventDispatcher.call(EventTick(EventTick.State.PRE))
-    eventDispatcher.call(EventTick(EventTick.State.POST))
-}

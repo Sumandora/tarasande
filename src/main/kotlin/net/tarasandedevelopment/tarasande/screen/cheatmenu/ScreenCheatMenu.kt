@@ -16,6 +16,7 @@ import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.graph.ManagerGra
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.ManagerInformation
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ManagerValueComponent
 import net.tarasandedevelopment.tarasande.event.EventChangeScreen
+import net.tarasandedevelopment.tarasande.event.EventPanels
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.category.PanelElementsCategory
@@ -76,6 +77,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         for (graph in managerGraph.list) {
             this.panels.add(PanelGraph(graph, 5.0, y).also { y += it.titleBarHeight + 5 })
         }
+        TarasandeMain.get().eventDispatcher.call(EventPanels(this.panels))
         passEvents = false
         TarasandeMain.get().eventDispatcher.also {
             it.add(EventChangeScreen::class.java) { event ->

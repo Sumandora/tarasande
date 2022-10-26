@@ -22,10 +22,12 @@ import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShape
 import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import java.awt.Color
 import java.net.InetSocketAddress
 import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 
 class EventChat(val chatMessage: String) : Event(true)
 class EventKey(val key: Int, val action: Int) : Event(true)
@@ -218,3 +220,4 @@ class EventScreenInput(var doneInput: Boolean) : Event(true)
 class EventRenderMultiplayerEntry(val matrices: MatrixStack, val x: Int, val y: Int, val entryWidth: Int, val entryHeight: Int, val mouseX: Int, val mouseY: Int, val server: ServerInfo) : Event(false)
 class EventChunkOcclusion : Event(true)
 class EventParticle(val effect: ParticleEffect) : Event(true)
+class EventPanels(val panels: CopyOnWriteArrayList<Panel>) : Event(false)
