@@ -173,8 +173,8 @@ tasks.named('build') {
 						if (classNode.superName == "java/lang/Object" || classNode.superName == "java/lang/Enum")
 							return // Ignore non-extending classes
 
-						if (classNode.superName.startsWith("net/tarasandedevelopment/tarasande/value/Value"))
-							return // Ignore values
+//						if (classNode.superName.startsWith("net/tarasandedevelopment/tarasande/value/Value"))
+//							return // Ignore values
 
 						String actualSuperName = classNode.superName.split("/").last().split('\\$').last()
 						if (!actualName.startsWith(actualSuperName))
