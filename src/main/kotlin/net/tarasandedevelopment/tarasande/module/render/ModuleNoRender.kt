@@ -18,7 +18,7 @@ import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueRegistry
 
-class ModuleNoRender : Module("No render", "", ModuleCategory.RENDER) {
+class ModuleNoRender : Module("No render", "Disables rendering of certain things.", ModuleCategory.RENDER) {
 
     inner class Overlay : NoRenderType("Overlay") {
 
