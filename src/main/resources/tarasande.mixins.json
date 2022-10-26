@@ -96,7 +96,6 @@
     "features.module.norender.MixinBackgroundRenderer",
     "features.module.norender.MixinBannerBlockEntityRenderer",
     "features.module.norender.MixinBossBarHud",
-    "features.module.norender.MixinChunkOcclusionDataBuilder",
     "features.module.norender.MixinChunkSkyLightProvider",
     "features.module.norender.MixinClientWorld",
     "features.module.norender.MixinEnchantingTableBlockEntityRenderer",
@@ -213,5 +212,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "features.module.norender.MixinChunkOcclusionDataBuilder"
+  ]
 }

@@ -108,6 +108,8 @@ shadowJar {
 	}
 }
 
+compileKotlin.kotlinOptions.jvmTarget = "17"
+
 tasks.named('build') {
 	doLast {
 		sourceSets.main.output.classesDirs.forEach {
@@ -186,4 +188,18 @@ tasks.named('build') {
 	}
 }
 
-compileKotlin.kotlinOptions.jvmTarget = "17"
+tasks.named('build') {
+	doLast {
+		String mixinsJson = new String(file("src/main/resources/${archivesBaseName}.mixins.json").readBytes())
+		sourceSets.main.output.classesDirs.forEach {
+			fileTree(it).forEach {
+				if (it.absolutePath.contains("net/tarasandedevelopment/tarasande/mixin/mixins")) {
+					String actualName = it.absolutePath.split("net/tarasandedevelopment/tarasande/mixin/mixins").last().replace('/', '.')
+					actualName = actualName.substring(1, actualName.length() - 6)
+					if (!mixinsJson.contains(actualName) && !it.name.contains('$'))
+						logger.warn(actualName + " seems to be an unregistered Mixin")
+				}
+			}
+		}
+	}
+}
