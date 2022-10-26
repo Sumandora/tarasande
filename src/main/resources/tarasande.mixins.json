@@ -66,6 +66,7 @@
     "event.entity.MixinLivingEntity",
     "event.entity.MixinPlayerEntity",
     "event.item.MixinItemCooldownManager",
+    "features.module.MixinChatHud",
     "features.module.MixinEnchantmentHelper",
     "features.module.MixinGameRenderer",
     "features.module.MixinHeldItemRenderer",
@@ -187,10 +188,12 @@
     "protocolhack.viaversion.MixinProtocol1_9To1_8",
     "protocolhack.viaversion.MixinProtocolManagerImpl",
     "protocolhack.viaversion.MixinSkullHandler_1_12_2",
-    "protocolhack.viaversion.MixinViaIdleThread",
-    "features.module.MixinChatHud"
+    "protocolhack.viaversion.MixinViaIdleThread"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "features.module.norender.MixinChunkOcclusionDataBuilder"
+  ]
 }
