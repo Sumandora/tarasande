@@ -72,7 +72,7 @@ class ManagerCommand : Manager<Command>() {
 
 abstract class Command(val name: String) {
 
-    open fun literal(name: String) = LiteralArgumentBuilder.literal<CommandSource>(name)
+    open fun literal(name: String): LiteralArgumentBuilder<CommandSource> = LiteralArgumentBuilder.literal(name)
     open fun argument(name: String?, type: ArgumentType<*>?): RequiredArgumentBuilder<CommandSource?, *>? = RequiredArgumentBuilder.argument(name, type)
 
     fun setup(dispatcher: CommandDispatcher<CommandSource>) {
