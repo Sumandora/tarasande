@@ -13,11 +13,11 @@ public class MixinGameRenderer {
 
     @Inject(method = "updateTargetedEntity", at = @At("HEAD"))
     public void hookEventUpdateTargetedEntityPre(float tickDelta, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getEventDispatcher().call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.PRE));
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.PRE));
     }
 
     @Inject(method = "updateTargetedEntity", at = @At("RETURN"))
     public void hookEventUpdateTargetedEntityPost(float tickDelta, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getEventDispatcher().call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.POST));
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.POST));
     }
 }

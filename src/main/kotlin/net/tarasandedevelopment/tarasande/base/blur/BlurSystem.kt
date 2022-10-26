@@ -33,7 +33,7 @@ class ManagerBlur : Manager<Blur>() {
             BlurKawase()
         )
 
-        TarasandeMain.get().eventDispatcher.also {
+        TarasandeMain.get().managerEvent.also {
             it.add(EventScreenRender::class.java) {
                 if ((MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenCheatMenu) && it.screen !is RealmsNotificationsScreen)
                     blurScene()

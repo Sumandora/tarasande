@@ -34,7 +34,7 @@ public abstract class MixinEntity implements IEntity {
     public Vec3d hookEventVelocityYaw(Vec3d movementInput, float speed, float yaw) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             EventVelocityYaw eventVelocityYaw = new EventVelocityYaw(yaw);
-            TarasandeMain.Companion.get().getEventDispatcher().call(eventVelocityYaw);
+            TarasandeMain.Companion.get().getManagerEvent().call(eventVelocityYaw);
             yaw = eventVelocityYaw.getYaw();
         }
         return movementInputToVelocity(movementInput, speed, yaw);
@@ -43,7 +43,7 @@ public abstract class MixinEntity implements IEntity {
     @Inject(method = "move", at = @At("HEAD"))
     public void hookEventMovement(MovementType movementType, Vec3d movement, CallbackInfo ci) {
         EventMovement eventMovement = new EventMovement((Entity) (Object) this, movement);
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventMovement);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventMovement);
         movement.x = eventMovement.getVelocity().x;
         movement.y = eventMovement.getVelocity().y;
         movement.z = eventMovement.getVelocity().z;
@@ -53,7 +53,7 @@ public abstract class MixinEntity implements IEntity {
     public float hookEventStepPre(Entity instance) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             EventStep eventStep = new EventStep(instance.stepHeight, EventStep.State.PRE);
-            TarasandeMain.Companion.get().getEventDispatcher().call(eventStep);
+            TarasandeMain.Companion.get().getManagerEvent().call(eventStep);
             return eventStep.getStepHeight();
         }
 
@@ -64,7 +64,7 @@ public abstract class MixinEntity implements IEntity {
     public void hookEventStepPost(Vec3d movement, CallbackInfoReturnable<Vec3d> cir) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             EventStep eventStep = new EventStep((float) cir.getReturnValue().y, EventStep.State.POST);
-            TarasandeMain.Companion.get().getEventDispatcher().call(eventStep);
+            TarasandeMain.Companion.get().getManagerEvent().call(eventStep);
         }
     }
 
@@ -78,7 +78,7 @@ public abstract class MixinEntity implements IEntity {
             return;
         }
         EventEntityFlag eventEntityFlag = new EventEntityFlag((Entity) (Object) this, index, cir.getReturnValue());
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventEntityFlag);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventEntityFlag);
         cir.setReturnValue(eventEntityFlag.getEnabled());
     }
 

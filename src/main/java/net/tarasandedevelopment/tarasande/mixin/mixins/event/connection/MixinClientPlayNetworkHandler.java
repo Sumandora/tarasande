@@ -29,7 +29,7 @@ public class MixinClientPlayNetworkHandler {
     public void hookEventVelocity(Entity entity, double x, double y, double z) {
         EventVelocity eventVelocity = new EventVelocity(x, y, z, EventVelocity.Packet.VELOCITY);
         if (entity == client.player)
-            TarasandeMain.Companion.get().getEventDispatcher().call(eventVelocity);
+            TarasandeMain.Companion.get().getManagerEvent().call(eventVelocity);
         if (!eventVelocity.getCancelled())
             entity.setVelocityClient(eventVelocity.getVelocityX(), eventVelocity.getVelocityY(), eventVelocity.getVelocityZ());
     }
@@ -37,19 +37,19 @@ public class MixinClientPlayNetworkHandler {
     @Redirect(method = "onExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;add(DDD)Lnet/minecraft/util/math/Vec3d;"))
     public Vec3d hookEventVelocityExplosion(Vec3d vec3d, double x, double y, double z) {
         EventVelocity eventVelocity = new EventVelocity(x, y, z, EventVelocity.Packet.EXPLOSION);
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventVelocity);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventVelocity);
         return eventVelocity.getCancelled() ? vec3d : vec3d.add(eventVelocity.getVelocityX(), eventVelocity.getVelocityY(), eventVelocity.getVelocityZ());
     }
 
     @Inject(method = "onPlayerPositionLook", at = @At("TAIL"))
     public void hookEventRotationSet(PlayerPositionLookS2CPacket packet, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getEventDispatcher().call(new EventRotationSet(client.player.getYaw(), client.player.getPitch()));
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventRotationSet(client.player.getYaw(), client.player.getPitch()));
     }
 
     @Redirect(method = "onDeathMessage", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;showsDeathScreen()Z"))
     public boolean hookEventRespawn(ClientPlayerEntity instance) {
         EventRespawn eventRespawn = new EventRespawn(instance.showsDeathScreen());
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventRespawn);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventRespawn);
         return eventRespawn.getShowDeathScreen();
     }
 }

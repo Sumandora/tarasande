@@ -15,7 +15,7 @@ class Friends {
     val friends = ArrayList<Pair<GameProfile, String?>>()
 
     init {
-        TarasandeMain.get().eventDispatcher.also {
+        TarasandeMain.get().managerEvent.also {
             it.add(EventIsEntityAttackable::class.java) {
                 if (TarasandeMain.get().managerModule.get(ModuleNoFriends::class.java).enabled)
                     return@add

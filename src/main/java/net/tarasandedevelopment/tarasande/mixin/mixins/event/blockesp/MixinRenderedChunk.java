@@ -17,7 +17,7 @@ public class MixinRenderedChunk {
     public void hookEventRenderBlockModel(BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
         BlockState state = cir.getReturnValue();
         EventRenderBlockModel eventRenderBlockModel = new EventRenderBlockModel(state, pos);
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventRenderBlockModel);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventRenderBlockModel);
         if (eventRenderBlockModel.getCancelled())
             cir.setReturnValue(Blocks.AIR.getDefaultState());
     }

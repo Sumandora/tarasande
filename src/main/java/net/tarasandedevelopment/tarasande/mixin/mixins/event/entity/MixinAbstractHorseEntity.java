@@ -14,7 +14,7 @@ public class MixinAbstractHorseEntity {
     @Inject(method = "isSaddled", at = @At("RETURN"), cancellable = true)
     public void hookEventIsSaddled(CallbackInfoReturnable<Boolean> cir) {
         EventIsSaddled eventIsSaddled = new EventIsSaddled(cir.getReturnValue());
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventIsSaddled);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventIsSaddled);
         cir.setReturnValue(eventIsSaddled.getSaddled());
     }
 

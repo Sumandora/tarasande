@@ -12,7 +12,7 @@ class TagName {
     private val hashMap = HashMap<Entity, Text>()
 
     init {
-        TarasandeMain.get().eventDispatcher.add(EventTick::class.java) {
+        TarasandeMain.get().managerEvent.add(EventTick::class.java) {
             if (it.state != EventTick.State.PRE) return@add
             if (MinecraftClient.getInstance().world == null) {
                 hashMap.clear()
@@ -21,7 +21,7 @@ class TagName {
             hashMap.entries.removeIf { !MinecraftClient.getInstance().world!!.entities.contains(it.key) }
             for (entity in MinecraftClient.getInstance().world!!.entities) {
                 val eventTagName = EventTagName(entity, entity.displayName)
-                TarasandeMain.get().eventDispatcher.call(eventTagName)
+                TarasandeMain.get().managerEvent.call(eventTagName)
                 hashMap[entity] = eventTagName.displayName
             }
         }

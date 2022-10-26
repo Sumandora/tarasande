@@ -77,9 +77,9 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         for (graph in managerGraph.list) {
             this.panels.add(PanelGraph(graph, 5.0, y).also { y += it.titleBarHeight + 5 })
         }
-        TarasandeMain.get().eventDispatcher.call(EventPanels(this.panels))
+        TarasandeMain.get().managerEvent.call(EventPanels(this.panels))
         passEvents = false
-        TarasandeMain.get().eventDispatcher.also {
+        TarasandeMain.get().managerEvent.also {
             it.add(EventChangeScreen::class.java) { event ->
                 if (client?.currentScreen is ScreenCheatMenu && event.newScreen == null)
                     this.panels.forEach { it.onClose() }

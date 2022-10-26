@@ -27,7 +27,7 @@ public class MixinPlayerListS2CPacketUpdateAddPlayer {
     public GameMode hookEventInvalidGameMode(int id) {
         if (GameMode.byId(id, null) == null) {
             EventInvalidGameMode eventInvalidGameMode = new EventInvalidGameMode(tarasande_trackedGameProfile.getId());
-            TarasandeMain.Companion.get().getEventDispatcher().call(eventInvalidGameMode);
+            TarasandeMain.Companion.get().getManagerEvent().call(eventInvalidGameMode);
         }
         return GameMode.byId(id);
     }

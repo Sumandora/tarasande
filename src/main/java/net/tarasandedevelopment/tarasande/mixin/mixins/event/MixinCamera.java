@@ -15,6 +15,6 @@ public class MixinCamera {
 
     @Inject(method = "update", at = @At("TAIL"))
     public void hookEventCameraOverride(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getEventDispatcher().call(new EventCameraOverride((Camera) (Object) this));
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventCameraOverride((Camera) (Object) this));
     }
 }

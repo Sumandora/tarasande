@@ -21,7 +21,7 @@ public class MixinWorldSlice {
     public void hookEventRenderBlockModel(int x, int y, int z, CallbackInfoReturnable<BlockState> cir) {
         BlockState state = cir.getReturnValue();
         EventRenderBlockModel eventRenderBlockModel = new EventRenderBlockModel(state, new BlockPos(x, y, z));
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventRenderBlockModel);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventRenderBlockModel);
         if (eventRenderBlockModel.getCancelled())
             cir.setReturnValue(Blocks.AIR.getDefaultState());
     }

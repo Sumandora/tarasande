@@ -1,15 +1,15 @@
-package net.tarasandedevelopment.tarasande.event
+package net.tarasandedevelopment.tarasande.base.event
 
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.function.Consumer
 
-class EventDispatcher {
+class ManagerEvent {
 
     private val eventListeners = HashMap<Class<*>, CopyOnWriteArrayList<Pair<Consumer<Event>, Int>>>()
 
     fun call(event: Event) {
-        if(TarasandeMain.get().disabled)
+        if (TarasandeMain.get().disabled)
             return
         eventListeners[event::class.java]?.forEach { it.first.accept(event) }
     }

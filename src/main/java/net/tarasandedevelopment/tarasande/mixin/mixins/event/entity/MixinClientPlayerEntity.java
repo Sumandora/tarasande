@@ -42,7 +42,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         if (tarasande_bypassChat)
             return;
         EventChat eventChat = new EventChat(message);
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventChat);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventChat);
         if (eventChat.getCancelled())
             ci.cancel();
     }
@@ -53,7 +53,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
             return;
 
         EventUpdate eventUpdate = new EventUpdate(EventUpdate.State.PRE);
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventUpdate);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventUpdate);
         if (eventUpdate.getCancelled())
             ci.cancel();
     }
@@ -63,7 +63,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         if ((Object) this != MinecraftClient.getInstance().player)
             return;
 
-        TarasandeMain.Companion.get().getEventDispatcher().call(new EventUpdate(EventUpdate.State.PRE_PACKET));
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdate(EventUpdate.State.PRE_PACKET));
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -71,13 +71,13 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         if ((Object) this != MinecraftClient.getInstance().player)
             return;
 
-        TarasandeMain.Companion.get().getEventDispatcher().call(new EventUpdate(EventUpdate.State.POST));
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventUpdate(EventUpdate.State.POST));
     }
 
     @Inject(method = "isWalking", at = @At("RETURN"), cancellable = true)
     public void hookEventIsWalking(CallbackInfoReturnable<Boolean> cir) {
         EventIsWalking eventIsWalking = new EventIsWalking(cir.getReturnValue());
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventIsWalking);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventIsWalking);
         cir.setReturnValue(eventIsWalking.getWalking());
     }
 

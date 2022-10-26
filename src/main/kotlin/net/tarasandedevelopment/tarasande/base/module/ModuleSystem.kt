@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.base.module
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
-import net.tarasandedevelopment.tarasande.event.Event
+import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.module.combat.*
 import net.tarasandedevelopment.tarasande.module.crasher.*
@@ -131,7 +131,7 @@ class ManagerModule : Manager<Module>() {
             ModuleAllowEveryCharacter(),
             ModuleNoRender()
         )
-        TarasandeMain.get().eventDispatcher.add(EventTick::class.java) {
+        TarasandeMain.get().managerEvent.add(EventTick::class.java) {
             if (it.state == EventTick.State.POST) {
                 for (module in list)
                     for (i in 0 until module.bind.wasPressed())
@@ -151,9 +151,9 @@ open class Module(val name: String, val description: String, val category: Modul
         set(value) {
             if (_enabled != value) if (value) {
                 onEnable()
-                eventListeners.forEach { TarasandeMain.get().eventDispatcher.add(it.first, it.second, it.third) }
+                eventListeners.forEach { TarasandeMain.get().managerEvent.add(it.first, it.second, it.third) }
             } else {
-                eventListeners.forEach { TarasandeMain.get().eventDispatcher.rem(it.first, it.third) }
+                eventListeners.forEach { TarasandeMain.get().managerEvent.rem(it.first, it.third) }
                 onDisable()
             }
 

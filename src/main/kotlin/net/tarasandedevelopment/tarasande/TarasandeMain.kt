@@ -4,16 +4,16 @@ import com.google.gson.GsonBuilder
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
-import net.tarasandedevelopment.tarasande.base.`package`.ManagerPackage
 import net.tarasandedevelopment.tarasande.base.blur.ManagerBlur
 import net.tarasandedevelopment.tarasande.base.command.ManagerCommand
 import net.tarasandedevelopment.tarasande.base.esp.ManagerESP
+import net.tarasandedevelopment.tarasande.base.event.ManagerEvent
 import net.tarasandedevelopment.tarasande.base.file.ManagerFile
 import net.tarasandedevelopment.tarasande.base.module.ManagerModule
+import net.tarasandedevelopment.tarasande.base.`package`.ManagerPackage
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ManagerClientMenu
 import net.tarasandedevelopment.tarasande.base.util.player.clickspeed.ManagerClickMethod
 import net.tarasandedevelopment.tarasande.base.value.ManagerValue
-import net.tarasandedevelopment.tarasande.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.protocol.TarasandeProtocolHack
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAccountManager
@@ -28,7 +28,7 @@ class TarasandeMain {
 
     val name = "tarasande" // "lowercase gang" ~kennytv
 
-    lateinit var eventDispatcher: EventDispatcher
+    lateinit var managerEvent: ManagerEvent
         private set
 
 
@@ -88,7 +88,7 @@ class TarasandeMain {
     }
 
     fun onPreLoad() {
-        eventDispatcher = EventDispatcher()
+        managerEvent = ManagerEvent()
     }
 
     fun onLateLoad() {

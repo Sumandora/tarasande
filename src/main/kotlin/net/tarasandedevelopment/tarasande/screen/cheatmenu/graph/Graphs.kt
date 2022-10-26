@@ -21,7 +21,7 @@ class GraphFPS : Graph("FPS", 200) {
     private val data = ArrayList<Double>()
 
     init {
-        TarasandeMain.get().eventDispatcher.add(EventPollEvents::class.java) {
+        TarasandeMain.get().managerEvent.add(EventPollEvents::class.java) {
             data.add(RenderUtil.deltaTime)
         }
     }
@@ -56,7 +56,7 @@ class GraphTPS : Graph("TPS", 200) {
     private var timeDelta = 0L
 
     init {
-        TarasandeMain.get().eventDispatcher.add(EventPacket::class.java) {
+        TarasandeMain.get().managerEvent.add(EventPacket::class.java) {
             if (it.type == EventPacket.Type.RECEIVE && it.packet is WorldTimeUpdateS2CPacket) {
                 if (lastWorldTimePacket > 0L) {
                     timeDelta = System.currentTimeMillis() - lastWorldTimePacket
@@ -75,7 +75,7 @@ class GraphCPS : Graph("CPS", 200) {
     private val clicks = ArrayList<Long>()
 
     init {
-        TarasandeMain.get().eventDispatcher.also {
+        TarasandeMain.get().managerEvent.also {
             it.add(EventSwing::class.java) {
                 if (clickMode.isSelected(0))
                     clicks.add(System.currentTimeMillis())
@@ -160,7 +160,7 @@ class GraphIncomingTraffic : Graph("Incoming Traffic", 200) {
     private val traffic = CopyOnWriteArrayList<Pair<Long, Int>>()
 
     init {
-        TarasandeMain.get().eventDispatcher.add(EventPacketTransform::class.java) {
+        TarasandeMain.get().managerEvent.add(EventPacketTransform::class.java) {
             if (it.type == EventPacketTransform.Type.DECODE) {
                 traffic.add(Pair(System.currentTimeMillis(), it.buf!!.readableBytes()))
             }
@@ -183,7 +183,7 @@ class GraphOutgoingTraffic : Graph("Outgoing Traffic", 200) {
     private val traffic = CopyOnWriteArrayList<Pair<Long, Int>>()
 
     init {
-        TarasandeMain.get().eventDispatcher.add(EventPacketTransform::class.java) {
+        TarasandeMain.get().managerEvent.add(EventPacketTransform::class.java) {
             if (it.type == EventPacketTransform.Type.ENCODE) {
                 traffic.add(Pair(System.currentTimeMillis(), it.buf!!.readableBytes()))
             }

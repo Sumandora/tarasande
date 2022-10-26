@@ -50,7 +50,7 @@ open class Panel(
 
     init {
         if (fixed)
-            TarasandeMain.get().eventDispatcher.also {
+            TarasandeMain.get().managerEvent.also {
                 it.add(EventRender2D::class.java) {
                     if (isVisible() && opened)
                         if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().screenCheatMenu) {

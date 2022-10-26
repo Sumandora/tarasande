@@ -13,7 +13,7 @@ public class MixinTextVisitFactory {
     @ModifyVariable(method = "visitFormatted(Ljava/lang/String;Lnet/minecraft/text/Style;Lnet/minecraft/text/CharacterVisitor;)Z", at = @At("LOAD"), argsOnly = true, ordinal = 0)
     private static String hookEventTextVisit(String value) {
         EventTextVisit eventTextVisit = new EventTextVisit(value);
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventTextVisit);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventTextVisit);
         return eventTextVisit.getString();
     }
 

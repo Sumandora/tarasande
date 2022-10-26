@@ -28,7 +28,7 @@ object RotationUtil {
     private var cachedRotation: Rotation? = null
 
     init {
-        TarasandeMain.get().eventDispatcher.also {
+        TarasandeMain.get().managerEvent.also {
             it.add(EventJump::class.java, 9999) {
                 if (it.state != EventJump.State.PRE) return@add
                 if (goalMovementYaw != null) it.yaw = goalMovementYaw!!
@@ -148,7 +148,7 @@ object RotationUtil {
     fun updateFakeRotation(fake: Boolean) {
         if (MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().interactionManager != null) {
             val eventPollEvents = EventPollEvents(Rotation(MinecraftClient.getInstance().player!!), fake)
-            TarasandeMain.get().eventDispatcher.call(eventPollEvents)
+            TarasandeMain.get().managerEvent.call(eventPollEvents)
             if (eventPollEvents.dirty) {
                 fakeRotation = eventPollEvents.rotation
                 lastMinRotateToOriginSpeed = eventPollEvents.minRotateToOriginSpeed
@@ -177,7 +177,7 @@ object RotationUtil {
             }
 
             val eventGoalMovement = EventGoalMovement(fakeRotation?.yaw ?: MinecraftClient.getInstance().player!!.yaw)
-            TarasandeMain.get().eventDispatcher.call(eventGoalMovement)
+            TarasandeMain.get().managerEvent.call(eventGoalMovement)
             goalMovementYaw = if (eventGoalMovement.dirty) eventGoalMovement.yaw
             else null
         }

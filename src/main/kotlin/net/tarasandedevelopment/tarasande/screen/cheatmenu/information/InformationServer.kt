@@ -31,7 +31,7 @@ class InformationOpenChannels : Information("Server", "Open Channels") {
     private val openChannels = ArrayList<String>()
 
     init {
-        TarasandeMain.get().eventDispatcher.also {
+        TarasandeMain.get().managerEvent.also {
             it.add(EventPacket::class.java) {
                 if (it.type == EventPacket.Type.RECEIVE && it.packet is CustomPayloadS2CPacket) {
                     if (it.packet.channel.toString() == "minecraft:register") {

@@ -34,7 +34,7 @@ public abstract class MixinClientConnection implements IClientConnection {
     private static <T extends PacketListener> void hookEventPacketReceive(Packet<T> packet, PacketListener listener, CallbackInfo ci) {
         if (listener.getConnection().getSide() == NetworkSide.CLIENTBOUND) {
             EventPacket eventPacket = new EventPacket(EventPacket.Type.RECEIVE, packet);
-            TarasandeMain.Companion.get().getEventDispatcher().call(eventPacket);
+            TarasandeMain.Companion.get().getManagerEvent().call(eventPacket);
             if (eventPacket.getCancelled())
                 ci.cancel();
         }
@@ -48,7 +48,7 @@ public abstract class MixinClientConnection implements IClientConnection {
         if (!tarasande_forced.contains(packet)) {
             if (side == NetworkSide.CLIENTBOUND) {
                 EventPacket eventPacket = new EventPacket(EventPacket.Type.SEND, packet);
-                TarasandeMain.Companion.get().getEventDispatcher().call(eventPacket);
+                TarasandeMain.Companion.get().getManagerEvent().call(eventPacket);
                 if (eventPacket.getCancelled())
                     ci.cancel();
             }
@@ -58,7 +58,7 @@ public abstract class MixinClientConnection implements IClientConnection {
 
     @Inject(method = "disconnect", at = @At("RETURN"))
     public void hookEventDisconnect(Text disconnectReason, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getEventDispatcher().call(new EventDisconnect());
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventDisconnect());
     }
 
     @Override

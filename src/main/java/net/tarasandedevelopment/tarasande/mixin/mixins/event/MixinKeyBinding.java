@@ -14,7 +14,7 @@ public class MixinKeyBinding {
     @Inject(method = "isPressed", at = @At("RETURN"), cancellable = true)
     public void hookEventKeyBindingIsPressed(CallbackInfoReturnable<Boolean> cir) {
         EventKeyBindingIsPressed eventKeyBindingIsPressed = new EventKeyBindingIsPressed((KeyBinding) (Object) this, cir.getReturnValue());
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventKeyBindingIsPressed);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventKeyBindingIsPressed);
         cir.setReturnValue(eventKeyBindingIsPressed.getPressed());
     }
 }

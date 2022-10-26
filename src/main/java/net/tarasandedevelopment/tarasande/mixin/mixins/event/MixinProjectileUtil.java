@@ -15,7 +15,7 @@ public class MixinProjectileUtil {
     @Redirect(method = "raycast", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getBoundingBox()Lnet/minecraft/util/math/Box;"))
     private static Box hookEventBoundingBoxOverride(Entity instance) {
         EventBoundingBoxOverride eventBoundingBoxOverride = new EventBoundingBoxOverride(instance, instance.getBoundingBox());
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventBoundingBoxOverride);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventBoundingBoxOverride);
         return eventBoundingBoxOverride.getBoundingBox();
     }
 

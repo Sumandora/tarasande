@@ -16,7 +16,7 @@ class InformationTimers : Information("Badlion", "Timers") {
     val list = CopyOnWriteArrayList<Timer>()
 
     init {
-        TarasandeMain.get().eventDispatcher.also {
+        TarasandeMain.get().managerEvent.also {
             it.add(EventPacket::class.java) {
                 if (it.type == EventPacket.Type.RECEIVE)
                     if (it.packet is CustomPayloadS2CPacket) {

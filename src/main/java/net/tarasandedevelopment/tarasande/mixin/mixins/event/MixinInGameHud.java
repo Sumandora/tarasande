@@ -14,6 +14,6 @@ public class MixinInGameHud {
 
     @Inject(method = "render", at = @At("TAIL"))
     public void hookEventRender2D(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getEventDispatcher().call(new EventRender2D(matrices));
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventRender2D(matrices));
     }
 }

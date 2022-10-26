@@ -26,7 +26,7 @@ class InformationWorldTime : Information("World", "World Time") {
     var lastUpdate: Pair<Long, Long>? = null
 
     init {
-        TarasandeMain.get().eventDispatcher.add(EventPacket::class.java, 1) {
+        TarasandeMain.get().managerEvent.add(EventPacket::class.java, 1) {
             if (it.type == EventPacket.Type.RECEIVE && it.packet is WorldTimeUpdateS2CPacket) {
                 lastUpdate = Pair(it.packet.timeOfDay, it.packet.time)
             }
@@ -60,7 +60,7 @@ class InformationVanishedPlayers : Information("World", "Vanished players") {
 
 
     init {
-        TarasandeMain.get().eventDispatcher.add(EventPacket::class.java) { event ->
+        TarasandeMain.get().managerEvent.add(EventPacket::class.java) { event ->
             if (event.type == EventPacket.Type.RECEIVE) {
                 when (event.packet) {
                     is PlayerListS2CPacket -> {

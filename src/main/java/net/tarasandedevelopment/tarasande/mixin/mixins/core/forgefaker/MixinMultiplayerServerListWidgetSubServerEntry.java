@@ -21,7 +21,7 @@ public class MixinMultiplayerServerListWidgetSubServerEntry {
     public void renderForgeInformation(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta, CallbackInfo ci) {
         matrices.push();
         matrices.translate(x, y, 0);
-        TarasandeMain.Companion.get().getEventDispatcher().call(new EventRenderMultiplayerEntry(matrices, x, y, entryWidth, entryHeight, mouseX, mouseY, this.server));
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventRenderMultiplayerEntry(matrices, x, y, entryWidth, entryHeight, mouseX, mouseY, this.server));
         matrices.pop();
     }
 }

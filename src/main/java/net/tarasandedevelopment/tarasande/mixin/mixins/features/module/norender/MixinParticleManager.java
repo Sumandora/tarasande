@@ -40,7 +40,7 @@ public abstract class MixinParticleManager {
     @Inject(method = "addParticle(Lnet/minecraft/particle/ParticleEffect;DDDDDD)Lnet/minecraft/client/particle/Particle;", at = @At("HEAD"), cancellable = true)
     public void noRender_addParticle(ParticleEffect parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ, CallbackInfoReturnable<Particle> cir) {
         final EventParticle eventParticle = new EventParticle(parameters);
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventParticle);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventParticle);
 
         if (eventParticle.getCancelled()) {
             if (parameters.getType() == ParticleTypes.FLASH) {

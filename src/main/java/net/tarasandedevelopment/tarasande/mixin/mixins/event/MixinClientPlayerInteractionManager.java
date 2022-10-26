@@ -15,11 +15,11 @@ public class MixinClientPlayerInteractionManager {
 
     @Inject(method = "attackEntity", at = @At("HEAD"))
     public void hookEventAttackEntityPre(PlayerEntity player, Entity target, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getEventDispatcher().call(new EventAttackEntity(target, EventAttackEntity.State.PRE));
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventAttackEntity(target, EventAttackEntity.State.PRE));
     }
 
     @Inject(method = "attackEntity", at = @At("TAIL"))
     public void hookEventAttackEntityPost(PlayerEntity player, Entity target, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getEventDispatcher().call(new EventAttackEntity(target, EventAttackEntity.State.POST));
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventAttackEntity(target, EventAttackEntity.State.POST));
     }
 }

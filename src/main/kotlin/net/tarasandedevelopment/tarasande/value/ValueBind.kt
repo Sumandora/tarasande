@@ -15,7 +15,7 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
     private var presses = 0
 
     init {
-        TarasandeMain.get().eventDispatcher.also {
+        TarasandeMain.get().managerEvent.also {
             it.add(EventMouse::class.java) {
                 if (type == Type.MOUSE)
                     if (MinecraftClient.getInstance().currentScreen == null)

@@ -17,7 +17,7 @@ open class Manager<T : Any> {
             add(obj)
         }
 
-        TarasandeMain.get().eventDispatcher.call(EventLoadManager(this))
+        TarasandeMain.get().managerEvent.call(EventLoadManager(this))
     }
 
     fun rem(vararg objects: T) = list.removeAll(objects.toSet())

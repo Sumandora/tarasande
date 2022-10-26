@@ -51,7 +51,7 @@ class EntityColor(val moduleESP: ModuleESP) {
         else if (entity is PlayerEntity && TarasandeMain.get().friends.isFriend(entity.gameProfile)) color = friendsColor.getColor()
 
         val eventEntityColor = EventEntityColor(entity, color)
-        TarasandeMain.get().eventDispatcher.call(eventEntityColor)
+        TarasandeMain.get().managerEvent.call(eventEntityColor)
         return eventEntityColor.color
     }
 

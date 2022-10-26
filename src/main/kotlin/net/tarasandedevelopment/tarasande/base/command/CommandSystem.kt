@@ -35,7 +35,7 @@ class ManagerCommand : Manager<Command>() {
             it.setup(dispatcher)
         }
 
-        TarasandeMain.get().eventDispatcher.add(EventChat::class.java) {
+        TarasandeMain.get().managerEvent.add(EventChat::class.java) {
             if (!TarasandeMain.get().clientValues.commands.value || TarasandeMain.get().clientValues.bypassCommands.isPressed(true)) return@add
 
             if (it.chatMessage.startsWith(TarasandeMain.get().clientValues.commandsPrefix.value)) {

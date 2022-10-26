@@ -23,11 +23,11 @@ import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry
 import net.tarasandedevelopment.tarasande.mixin.accessor.forgefaker.IServerInfo
 import net.tarasandedevelopment.tarasande.protocol.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.ScreenBetterSlotListAccountManager
-import net.tarasandedevelopment.tarasande.screen.clientmenu.`package`.ScreenBetterSlotListPackages
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.IForgeNetClientHandler
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.IForgePayload
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.modern.ModernForgePayload
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.ui.ScreenBetterSlotListForgeModList
+import net.tarasandedevelopment.tarasande.screen.clientmenu.`package`.ScreenBetterSlotListPackages
 import net.tarasandedevelopment.tarasande.screen.clientmenu.protocol.ScreenBetterSlotListProtocolHack
 import net.tarasandedevelopment.tarasande.screen.clientmenu.proxy.ScreenBetterProxy
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
@@ -101,10 +101,10 @@ class ElementMenuToggleBungeeHack : ElementMenuToggle("Bungee Hack") {
     private fun stripID(input: String) = input.replace("-", "")
 
     init {
-        TarasandeMain.get().eventDispatcher.add(EventPacket::class.java) { event ->
+        TarasandeMain.get().managerEvent.add(EventPacket::class.java) { event ->
             if (event.type != EventPacket.Type.SEND) return@add
             if (event.packet !is HandshakeC2SPacket) return@add
-            if(state) {
+            if (state) {
                 var uuid = MinecraftClient.getInstance().session.uuid
                 if (this.customUUID.value)
                     uuid = this.uuid.value
@@ -127,7 +127,7 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
     val useFML1Cache = ValueBoolean(this, "Use FML1 cache", true)
 
     init {
-        TarasandeMain.get().eventDispatcher.also {
+        TarasandeMain.get().managerEvent.also {
             it.add(EventPacket::class.java, 1) {
                 if (!state || currentHandler == null) return@add
 

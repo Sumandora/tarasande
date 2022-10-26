@@ -18,6 +18,6 @@ public class MixinWorldRenderer {
 
     @Inject(method = "render", at = @At("TAIL"))
     public void hookEventRender3D(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getEventDispatcher().call(new EventRender3D(matrices, positionMatrix));
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventRender3D(matrices, positionMatrix));
     }
 }

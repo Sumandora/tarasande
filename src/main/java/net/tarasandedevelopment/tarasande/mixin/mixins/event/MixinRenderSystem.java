@@ -17,7 +17,7 @@ public class MixinRenderSystem {
     private static void hookEventScreenInputAndPollEvents(long window, CallbackInfo ci) {
         if (VersionList.isNewerOrEqualTo(VersionList.R1_13)) {
             EventScreenInput eventScreenInput = new EventScreenInput(false);
-            TarasandeMain.Companion.get().getEventDispatcher().call(eventScreenInput);
+            TarasandeMain.Companion.get().getManagerEvent().call(eventScreenInput);
         }
 
         RotationUtil.INSTANCE.updateFakeRotation(false);

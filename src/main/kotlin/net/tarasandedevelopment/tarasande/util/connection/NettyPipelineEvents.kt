@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.event.EventPacketTransform
 class MessageToMessageDecoderEvent : MessageToMessageDecoder<ByteBuf>() {
 
     override fun decode(ctx: ChannelHandlerContext?, msg: ByteBuf?, out: MutableList<Any>?) {
-        TarasandeMain.get().eventDispatcher.call(EventPacketTransform(EventPacketTransform.Type.DECODE, msg))
+        TarasandeMain.get().managerEvent.call(EventPacketTransform(EventPacketTransform.Type.DECODE, msg))
 
         out?.add(msg!!.retain())
     }
@@ -19,7 +19,7 @@ class MessageToMessageDecoderEvent : MessageToMessageDecoder<ByteBuf>() {
 class MessageToMessageEncoderEvent : MessageToMessageEncoder<ByteBuf>() {
 
     override fun encode(ctx: ChannelHandlerContext?, msg: ByteBuf?, out: MutableList<Any>?) {
-        TarasandeMain.get().eventDispatcher.call(EventPacketTransform(EventPacketTransform.Type.ENCODE, msg))
+        TarasandeMain.get().managerEvent.call(EventPacketTransform(EventPacketTransform.Type.ENCODE, msg))
 
         out?.add(msg!!.retain())
     }

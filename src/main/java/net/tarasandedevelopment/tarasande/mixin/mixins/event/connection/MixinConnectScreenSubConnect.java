@@ -18,6 +18,6 @@ public class MixinConnectScreenSubConnect {
             shift = At.Shift.AFTER),
             locals = LocalCapture.CAPTURE_FAILHARD)
     public void hookEventConnectServer(CallbackInfo ci, InetSocketAddress inetSocketAddress) {
-        TarasandeMain.Companion.get().getEventDispatcher().call(new EventConnectServer(inetSocketAddress));
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventConnectServer(inetSocketAddress));
     }
 }

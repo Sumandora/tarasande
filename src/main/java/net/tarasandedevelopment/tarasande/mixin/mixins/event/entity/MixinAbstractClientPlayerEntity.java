@@ -14,7 +14,7 @@ public class MixinAbstractClientPlayerEntity {
     @Inject(method = "getFovMultiplier", at = @At("RETURN"), cancellable = true)
     public void hookEventMovementFovMultiplier(CallbackInfoReturnable<Float> cir) {
         EventMovementFovMultiplier eventMovementFovMultiplier = new EventMovementFovMultiplier(cir.getReturnValue());
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventMovementFovMultiplier);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventMovementFovMultiplier);
         cir.setReturnValue(eventMovementFovMultiplier.getMovementFovMultiplier());
     }
 }

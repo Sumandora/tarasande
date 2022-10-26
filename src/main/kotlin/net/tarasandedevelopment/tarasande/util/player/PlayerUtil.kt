@@ -37,7 +37,7 @@ object PlayerUtil {
     val input = KeyboardInput(MinecraftClient.getInstance().options)
 
     init {
-        TarasandeMain.get().eventDispatcher.add(EventInput::class.java) {
+        TarasandeMain.get().managerEvent.add(EventInput::class.java) {
             if (it.input == MinecraftClient.getInstance().player?.input)
                 input.tick(it.slowDown, it.slowdownAmount)
         }
@@ -50,7 +50,7 @@ object PlayerUtil {
         if (entity == MinecraftClient.getInstance().player) return false
 
         val eventIsEntityAttackable = EventIsEntityAttackable(entity, entity is LivingEntity)
-        TarasandeMain.get().eventDispatcher.call(eventIsEntityAttackable)
+        TarasandeMain.get().managerEvent.call(eventIsEntityAttackable)
         return eventIsEntityAttackable.attackable
     }
 

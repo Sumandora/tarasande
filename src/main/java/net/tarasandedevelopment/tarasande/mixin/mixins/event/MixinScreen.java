@@ -26,13 +26,13 @@ public abstract class MixinScreen {
 
     @Inject(method = "render", at = @At("HEAD"))
     public void hookEventScreenRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getEventDispatcher().call(new EventScreenRender(matrices, (Screen) (Object) this, mouseX, mouseY));
+        TarasandeMain.Companion.get().getManagerEvent().call(new EventScreenRender(matrices, (Screen) (Object) this, mouseX, mouseY));
     }
 
     @Inject(method = "init(Lnet/minecraft/client/MinecraftClient;II)V", at = @At("RETURN"))
     public void hookEventChildren(MinecraftClient client, int width, int height, CallbackInfo ci) {
         final EventChildren eventChildren = new EventChildren((Screen) (Object) this);
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventChildren);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventChildren);
 
         for (Element element : eventChildren.get())
             this.addDrawableChild(element);

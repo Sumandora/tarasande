@@ -24,7 +24,7 @@ public class MixinMinecraftClient {
         }
 
         EventScreenInput eventScreenInput = new EventScreenInput(false);
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventScreenInput);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventScreenInput);
 
         while (!InputTracker1_12_2.INSTANCE.getKeyboard().isEmpty()) {
             InputTracker1_12_2.INSTANCE.getKeyboard().poll().run();

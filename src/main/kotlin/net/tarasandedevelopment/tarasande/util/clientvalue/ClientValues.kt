@@ -104,7 +104,7 @@ class ClientValues {
     }
 
     init {
-        TarasandeMain.get().eventDispatcher.add(EventIsEntityAttackable::class.java) { event ->
+        TarasandeMain.get().managerEvent.add(EventIsEntityAttackable::class.java) { event ->
             event.attackable = event.attackable && isEntityDesired(event.entity)
         }
     }

@@ -28,7 +28,7 @@ class InformationPlayTime : Information("Connection", "Play Time") {
     private var time = 0L
 
     init {
-        TarasandeMain.get().eventDispatcher.add(EventConnectServer::class.java) {
+        TarasandeMain.get().managerEvent.add(EventConnectServer::class.java) {
             time = System.currentTimeMillis()
         }
     }

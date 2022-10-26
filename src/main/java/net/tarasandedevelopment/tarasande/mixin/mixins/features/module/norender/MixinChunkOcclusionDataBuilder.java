@@ -15,7 +15,7 @@ public class MixinChunkOcclusionDataBuilder {
     @Inject(method = "markClosed", at = @At("HEAD"), cancellable = true)
     public void noRender_MarkClosed(BlockPos pos, CallbackInfo ci) {
         final EventChunkOcclusion eventChunkOcclusion = new EventChunkOcclusion();
-        TarasandeMain.Companion.get().getEventDispatcher().call(eventChunkOcclusion);
+        TarasandeMain.Companion.get().getManagerEvent().call(eventChunkOcclusion);
 
         if (eventChunkOcclusion.getCancelled()) {
             ci.cancel();
