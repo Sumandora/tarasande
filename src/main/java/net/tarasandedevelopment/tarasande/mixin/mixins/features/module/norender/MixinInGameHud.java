@@ -18,8 +18,6 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(InGameHud.class)
 public class MixinInGameHud {
 
-    @Shadow @Final private MinecraftClient client;
-
     @Inject(method = "renderPortalOverlay", at = @At("HEAD"), cancellable = true)
     public void noRender_renderPortalOverlay(float nauseaStrength, CallbackInfo ci) {
         if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoRender.class).getOverlay().getPortalOverlay().should()) {
