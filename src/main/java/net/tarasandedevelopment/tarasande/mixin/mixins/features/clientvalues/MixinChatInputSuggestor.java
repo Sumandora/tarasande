@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.core.command;
+package net.tarasandedevelopment.tarasande.mixin.mixins.features.clientvalues;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
