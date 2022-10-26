@@ -96,7 +96,7 @@ public class MixinClientBuiltinResourcePackProvider {
         protocolhack_trackedFile = file;
     }
 
-    @Redirect(method = "verifyFile", at = @At(value = "INVOKE", target = "Lcom/google/common/hash/HashCode;toString()Ljava/lang/String;"))
+    @Redirect(method = "verifyFile", at = @At(value = "INVOKE", target = "Lcom/google/common/hash/HashCode;toString()Ljava/lang/String;", remap = false))
     public String revertHashAlgorithm(HashCode instance) {
         try {
             if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
