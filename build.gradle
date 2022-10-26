@@ -194,7 +194,8 @@ tasks.named('build') {
 		sourceSets.main.output.classesDirs.forEach {
 			fileTree(it).forEach {
 				if (it.absolutePath.contains("net/tarasandedevelopment/tarasande/mixin/mixins")) {
-					String actualName = it.name.substring(0, it.name.length() - 6)
+					String actualName = it.absolutePath.split("net/tarasandedevelopment/tarasande/mixin/mixins").last().replace('/', '.')
+					actualName = actualName.substring(1, actualName.length() - 6)
 					if (!mixinsJson.contains(actualName) && !it.name.contains('$'))
 						logger.warn(actualName + " seems to be an unregistered Mixin")
 				}
