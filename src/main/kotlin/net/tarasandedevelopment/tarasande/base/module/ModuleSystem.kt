@@ -127,7 +127,6 @@ class ManagerModule : Manager<Module>() {
             ModuleBrigadierIgnoreCase(),
             ModuleNoSignatures(),
             ModuleEveryItemOnArmor(),
-            ModuleNoteBot(),
             ModuleNoMessageSignatureIndicator(),
             ModuleAllowEveryCharacter(),
             ModuleNoRender()
