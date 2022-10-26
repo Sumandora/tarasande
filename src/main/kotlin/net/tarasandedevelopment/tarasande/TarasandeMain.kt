@@ -4,7 +4,7 @@ import com.google.gson.GsonBuilder
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
-import net.tarasandedevelopment.tarasande.base.addon.ManagerAddon
+import net.tarasandedevelopment.tarasande.base.`package`.ManagerPackage
 import net.tarasandedevelopment.tarasande.base.blur.ManagerBlur
 import net.tarasandedevelopment.tarasande.base.command.ManagerCommand
 import net.tarasandedevelopment.tarasande.base.esp.ManagerESP
@@ -35,7 +35,7 @@ class TarasandeMain {
     private lateinit var managerFile: ManagerFile
     lateinit var managerValue: ManagerValue
         private set
-    lateinit var managerAddon: ManagerAddon
+    lateinit var managerPackage: ManagerPackage
         private set
     lateinit var managerBlur: ManagerBlur
         private set
@@ -94,7 +94,7 @@ class TarasandeMain {
     fun onLateLoad() {
         managerFile = ManagerFile()
         managerValue = ManagerValue()
-        managerAddon = ManagerAddon()
+        managerPackage = ManagerPackage()
         managerClientMenu = ManagerClientMenu()
         managerBlur = ManagerBlur()
         clientValues = ClientValues()

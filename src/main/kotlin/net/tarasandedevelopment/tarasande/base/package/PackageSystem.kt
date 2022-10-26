@@ -1,13 +1,13 @@
-package net.tarasandedevelopment.tarasande.base.addon
+package net.tarasandedevelopment.tarasande.base.`package`
 
 import net.fabricmc.loader.api.FabricLoader
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 
-class ManagerAddon : Manager<Addon>() {
+class ManagerPackage : Manager<Package>() {
 
     init {
-        FabricLoader.getInstance().getEntrypointContainers("tarasande", Addon::class.java).forEach {
+        FabricLoader.getInstance().getEntrypointContainers("tarasande", Package::class.java).forEach {
             val metadata = it.provider.metadata
             val addon = it.entrypoint
 
@@ -21,11 +21,10 @@ class ManagerAddon : Manager<Addon>() {
     }
 }
 
-abstract class Addon {
+abstract class Package {
     var modId: String? = null
     var modAuthors: List<String>? = null
     var modVersion: String? = null
 
     abstract fun create(tarasandeMain: TarasandeMain?)
-    abstract fun onLoadManager(manager: Manager<*>?)
 }

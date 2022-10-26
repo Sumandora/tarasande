@@ -23,7 +23,7 @@ import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry
 import net.tarasandedevelopment.tarasande.mixin.accessor.forgefaker.IServerInfo
 import net.tarasandedevelopment.tarasande.protocol.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.ScreenBetterSlotListAccountManager
-import net.tarasandedevelopment.tarasande.screen.clientmenu.addon.ScreenBetterSlotListAddons
+import net.tarasandedevelopment.tarasande.screen.clientmenu.`package`.ScreenBetterSlotListPackages
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.IForgeNetClientHandler
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.IForgePayload
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.modern.ModernForgePayload
@@ -74,17 +74,17 @@ class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack") {
     }
 }
 
-class ElementMenuScreenAddons : ElementMenuScreen("Addons") {
+class ElementMenuScreenPackages : ElementMenuScreen("Packages") {
 
-    private val screenBetterSlotListAddons = ScreenBetterSlotListAddons()
+    private val screenBetterSlotListPackages = ScreenBetterSlotListPackages()
 
     override fun getScreen(): Screen {
-        screenBetterSlotListAddons.prevScreen = MinecraftClient.getInstance().currentScreen
-        return this.screenBetterSlotListAddons
+        screenBetterSlotListPackages.prevScreen = MinecraftClient.getInstance().currentScreen
+        return this.screenBetterSlotListPackages
     }
 
     override fun visible(): Boolean {
-        return TarasandeMain.get().managerAddon.list.isNotEmpty()
+        return TarasandeMain.get().managerPackage.list.isNotEmpty()
     }
 }
 
