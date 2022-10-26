@@ -91,6 +91,8 @@
     "module.entity.MixinLivingEntityRenderer",
     "module.entity.MixinPlayerEntity",
     "module.item.MixinTridentItem",
+    "module.norender.MixinChunkSkyLightProvider",
+    "module.norender.MixinLivingEntity",
     "module.screens.MixinEnchantmentScreen",
     "module.screens.MixinPlayerArmorSlot",
     "protocolhack.MixinBossBarHud",
@@ -193,6 +195,24 @@
     "defaultRequire": 1
   },
   "client": [
-    "module.MixinChatHud"
+    "module.MixinChatHud",
+    "module.norender.MixinArmorFeatureRenderer",
+    "module.norender.MixinBackgroundRenderer",
+    "module.norender.MixinBannerBlockEntityRenderer",
+    "module.norender.MixinBossBarHud",
+    "module.norender.MixinChunkOcclusionDataBuilder",
+    "module.norender.MixinClientWorld",
+    "module.norender.MixinEnchantingTableBlockEntityRenderer",
+    "module.norender.MixinEntityRenderDispatcher",
+    "module.norender.MixinEntityRenderer",
+    "module.norender.MixinFireworksSparkParticleSubExplosionAndFlash",
+    "module.norender.MixinGameRenderer",
+    "module.norender.MixinInGameHud",
+    "module.norender.MixinInGameOverlayRenderer",
+    "module.norender.MixinMapRendererSubMapTexture",
+    "module.norender.MixinMobSpawnerBlockEntityRenderer",
+    "module.norender.MixinParticleManager",
+    "module.norender.MixinSignBlockEntityRenderer",
+    "module.norender.MixinWorldRenderer"
   ]
 }
