@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.module.norender;
+package net.tarasandedevelopment.tarasande.mixin.mixins.features.module.norender;
 
 import net.minecraft.block.BannerBlock;
 import net.minecraft.block.BlockState;

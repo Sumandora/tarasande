@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.module.norender;
+package net.tarasandedevelopment.tarasande.mixin.mixins.features.module.norender;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.client.world.ClientWorld;

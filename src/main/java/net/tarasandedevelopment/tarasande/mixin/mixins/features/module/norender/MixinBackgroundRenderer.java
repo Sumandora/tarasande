@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.module.norender;
+package net.tarasandedevelopment.tarasande.mixin.mixins.features.module.norender;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.render.BackgroundRenderer;
