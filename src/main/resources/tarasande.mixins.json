@@ -7,7 +7,6 @@
     "core.MixinGameRenderer",
     "core.MixinMinecraftClient",
     "core.MixinWindow",
-    "core.command.MixinChatInputSuggestor",
     "core.connection.MixinClientConnection",
     "core.connection.MixinClientConnectionSubInitChannel",
     "core.entity.MixinEntity",
