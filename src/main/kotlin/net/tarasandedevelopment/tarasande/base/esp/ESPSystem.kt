@@ -7,8 +7,8 @@ import net.minecraft.util.math.Vec3f
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.esp.ESPElementBox
-import net.tarasandedevelopment.tarasande.esp.ESPElementHealthBar
-import net.tarasandedevelopment.tarasande.esp.ESPElementName
+import net.tarasandedevelopment.tarasande.esp.ESPElementRotatableHealthBar
+import net.tarasandedevelopment.tarasande.esp.ESPElementRotatableName
 import net.tarasandedevelopment.tarasande.module.render.ModuleESP
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
@@ -21,8 +21,8 @@ class ManagerESP : Manager<ESPElement>() {
     init {
         add(
             ESPElementBox(),
-            ESPElementName(),
-            ESPElementHealthBar()
+            ESPElementRotatableName(),
+            ESPElementRotatableHealthBar()
         )
 
         for (element in list)

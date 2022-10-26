@@ -8,7 +8,7 @@ import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3f
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
-import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ValueComponent
+import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ElementValueComponent
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.Element
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil.isHovered
@@ -23,7 +23,7 @@ class ElementModule(private val module: Module, width: Double) : Element(width) 
     private var expansionTime = 0L
     private var expanded = false
 
-    private val components = ArrayList<ValueComponent>()
+    private val components = ArrayList<ElementValueComponent>()
 
     override fun init() {
         if (components.isEmpty()) {
@@ -31,7 +31,7 @@ class ElementModule(private val module: Module, width: Double) : Element(width) 
                 components.add(TarasandeMain.get().screenCheatMenu.managerValueComponent.newInstance(value)!!)
             }
         }
-        components.forEach(ValueComponent::init)
+        components.forEach(ElementValueComponent::init)
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {

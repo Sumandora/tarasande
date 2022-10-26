@@ -18,7 +18,7 @@ class ManagerAccount : Manager<Class<out Account>>() {
             AccountSession::class.java,
             AccountYggdrasil::class.java,
             AccountMicrosoft::class.java,
-            AccountRefreshToken::class.java,
+            AccountMicrosoftRefreshToken::class.java,
             AccountToken::class.java
         )
     }

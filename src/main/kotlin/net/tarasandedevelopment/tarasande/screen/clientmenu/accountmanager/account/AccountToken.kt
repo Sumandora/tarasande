@@ -28,7 +28,7 @@ class AccountToken : Account() {
 
     private var service: MinecraftSessionService? = null
 
-    override fun defaultEnvironment() = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerEnvironment.get(EnvironmentPresetEasyMC::class.java).create()
+    override fun defaultEnvironment() = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager.managerEnvironment.get(EnvironmentPresetEasyMC::class.java).create()
 
     override fun logIn() {
         val http = URL(redeemUrl).openConnection() as HttpURLConnection

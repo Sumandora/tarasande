@@ -8,8 +8,8 @@ import net.minecraft.item.Items
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.creative.LightItems
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.creative.SpecialVanillaItems
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.creative.ExploitCreativeLightItems
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.creative.ExploitCreativeSpecialVanillaItems
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.creative.cicExploits
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.creative.spawnerExploits
 import net.tarasandedevelopment.tarasande.util.player.items.ItemUtil
@@ -35,8 +35,8 @@ class ManagerCreative : Manager<ExploitCreative>() {
     init {
         add(
             // Special Vanilla
-            SpecialVanillaItems(),
-            LightItems(),
+            ExploitCreativeSpecialVanillaItems(),
+            ExploitCreativeLightItems(),
 
             // Spawner Exploits
             *spawnerExploits.toTypedArray(),

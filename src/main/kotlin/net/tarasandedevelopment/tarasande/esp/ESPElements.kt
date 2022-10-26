@@ -36,7 +36,7 @@ class ESPElementBox : ESPElement("Box") {
     }
 }
 
-class ESPElementName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Orientation.RIGHT, Orientation.BOTTOM)) {
+class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Orientation.RIGHT, Orientation.BOTTOM)) {
     private val outlined = ValueBoolean(this, "Outlined", true)
     private val scale = ValueNumber(this, "Scale", 0.1, 1.0, 3.0, 0.1)
 
@@ -66,7 +66,7 @@ class ESPElementName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Ori
     }
 }
 
-class ESPElementHealthBar : ESPElementRotatable("Health bar", arrayOf(Orientation.TOP, Orientation.BOTTOM)) {
+class ESPElementRotatableHealthBar : ESPElementRotatable("Health bar", arrayOf(Orientation.TOP, Orientation.BOTTOM)) {
     private val outlined = ValueBoolean(this, "Outlined", true)
     private val fadeColorBegin = ValueColor(this, "Fade color begin", 0.33f /*green*/, 1.0f, 1.0f)
     private val fadeColorEnd = ValueColor(this, "Fade color end", 0.0f /*red*/, 1.0f, 1.0f)

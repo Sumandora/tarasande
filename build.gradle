@@ -1,3 +1,7 @@
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.tree.AnnotationNode
+import org.objectweb.asm.tree.ClassNode
+
 plugins {
 	id "fabric-loom"
 	id "org.jetbrains.kotlin.jvm"
@@ -95,12 +99,91 @@ shadowJar {
     archiveClassifier.set("shadow")
     compileJava.options.encoding = "UTF-8"
 	exclude "native-binaries/*"
+	exclude "su/*"
 
-    dependencies {
+	dependencies {
 		for (final def lib in libs) {
 			include(dependency(lib))
 		}
-    }
+	}
+}
+
+tasks.named('build') {
+	doLast {
+		sourceSets.main.output.classesDirs.forEach {
+			fileTree(it).forEach {
+				if (it.name.endsWith(".class")) {
+					ClassReader classReader = new ClassReader(it.readBytes())
+					ClassNode classNode = new ClassNode()
+					classReader.accept(classNode, ClassReader.EXPAND_FRAMES)
+
+					if (classNode.name.startsWith("de/florianmichael"))
+						return // Not my project
+					if (classNode.name.matches("[^*]*\\\$\\d+\$"))
+						return
+					// Lambdas don't have names duh (yes, even when kotlin adds some garbled bs, we couldn't care less)
+
+					String actualName = classNode.name.split("/").last().split('\\$').last() // packages don't matter
+
+					if (classNode.name.startsWith("net/tarasandedevelopment/tarasande/mixin/mixins")) {
+						// Mixins
+						if (classNode.invisibleAnnotations == null || classNode.invisibleAnnotations.isEmpty())
+							logger.warn("Are you sure that " + classNode.name + " is a Mixin class?")
+						else {
+							AnnotationNode pseudo = classNode.invisibleAnnotations.find { it.desc == "Lorg/spongepowered/asm/mixin/Pseudo;" }
+							AnnotationNode mixin = classNode.invisibleAnnotations.find { it.desc == "Lorg/spongepowered/asm/mixin/Mixin;" }
+
+							if (pseudo != null) {
+								int pseudoIndex = classNode.invisibleAnnotations.indexOf(pseudo);
+								if (pseudoIndex != 0 || pseudoIndex + 1 != classNode.invisibleAnnotations.indexOf(mixin))
+									logger.warn(classNode.name + " should first annotate @Pseudo following with @Mixin")
+							}
+
+							List<Object> values = mixin.values
+							if (values == null || values.isEmpty()) {
+								logger.warn(classNode.name + " has no target?")
+								return // We can't process an invalid class
+							}
+
+							String firstKey = values.first()
+
+							String targetClass
+							if (firstKey == "targets") {
+								targetClass = values.get(1).first().replace(".", "/")
+							} else if (firstKey == "value") {
+								targetClass = values.get(1).first()
+								targetClass = targetClass.substring(1, targetClass.length() - 1)
+							} else {
+								logger.warn(classNode.name + " has the target class not at first key")
+								return // This mixin is invalid...
+							}
+
+							targetClass = targetClass.split("/").last()
+
+							if (!targetClass.split('\\$').any {
+								return actualName.startsWith("Mixin" + it)
+							})
+								println(classNode.name + " has a invalid name")
+						}
+						//println("Mapping " + classNode.visibleAnnotations.first().values.first() + " to " + classNode.name)
+
+					} else {
+						// General
+
+						if (classNode.superName == "java/lang/Object" || classNode.superName == "java/lang/Enum")
+							return // Ignore non-extending classes
+
+						if (classNode.superName.startsWith("net/tarasandedevelopment/tarasande/value/Value"))
+							return // Ignore values
+
+						String actualSuperName = classNode.superName.split("/").last().split('\\$').last()
+						if (!actualName.startsWith(actualSuperName))
+							logger.warn(classNode.name + " has wrong naming conventions (Did you mean '" + actualSuperName + actualName.capitalize() + "'?)")
+					}
+				}
+			}
+		}
+	}
 }
 
 compileKotlin.kotlinOptions.jvmTarget = "17"

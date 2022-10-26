@@ -10,9 +10,9 @@ import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.creative.ExploitCreativeItem
 import net.tarasandedevelopment.tarasande.value.ValueRegistry
 
-val cicExploits = mutableListOf(Kick(), Clear())
+val cicExploits = mutableListOf(ExploitCreativeItemKick(), ExploitCreativeItemClear())
 
-class Kick : ExploitCreativeItem("CreativeItemControl: Kick", ItemStack(Items.DRAGON_EGG)) {
+class ExploitCreativeItemKick : ExploitCreativeItem("CreativeItemControl: Kick", ItemStack(Items.DRAGON_EGG)) {
 
     val item = object : ValueRegistry<Item>(this, "Item", Registry.ITEM, Items.DRAGON_EGG) {
         override fun filter(key: Item) = key != Items.AIR
@@ -32,7 +32,7 @@ class Kick : ExploitCreativeItem("CreativeItemControl: Kick", ItemStack(Items.DR
     }
 }
 
-class Clear : ExploitCreativeItem("CreativeItemControl: Clear", ItemStack(Items.DRAGON_EGG)) {
+class ExploitCreativeItemClear : ExploitCreativeItem("CreativeItemControl: Clear", ItemStack(Items.DRAGON_EGG)) {
 
     val item = object : ValueRegistry<Item>(this, "Item", Registry.ITEM, Items.DRAGON_EGG) {
         override fun filter(key: Item) = key != Items.AIR

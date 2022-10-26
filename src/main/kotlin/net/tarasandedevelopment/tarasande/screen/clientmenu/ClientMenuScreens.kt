@@ -17,19 +17,18 @@ import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenu
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuScreen
-import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuTitle
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuToggle
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry
 import net.tarasandedevelopment.tarasande.mixin.accessor.forgefaker.IServerInfo
 import net.tarasandedevelopment.tarasande.protocol.platform.ProtocolHackValues
-import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.ScreenBetterAccountManager
-import net.tarasandedevelopment.tarasande.screen.clientmenu.addon.ScreenBetterAddons
+import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.ScreenBetterSlotListAccountManager
+import net.tarasandedevelopment.tarasande.screen.clientmenu.addon.ScreenBetterSlotListAddons
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.IForgeNetClientHandler
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.IForgePayload
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.modern.ModernForgePayload
-import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.ui.ScreenBetterForgeModList
-import net.tarasandedevelopment.tarasande.screen.clientmenu.protocol.ScreenBetterProtocolHack
+import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.ui.ScreenBetterSlotListForgeModList
+import net.tarasandedevelopment.tarasande.screen.clientmenu.protocol.ScreenBetterSlotListProtocolHack
 import net.tarasandedevelopment.tarasande.screen.clientmenu.proxy.ScreenBetterProxy
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
@@ -44,11 +43,11 @@ import java.util.*
 
 class ElementMenuScreenAccountManager : ElementMenuScreen("Account Manager") {
 
-    val screenBetterAccountManager = ScreenBetterAccountManager()
+    val screenBetterSlotListAccountManager = ScreenBetterSlotListAccountManager()
 
     override fun getScreen(): Screen {
-        this.screenBetterAccountManager.prevScreen = MinecraftClient.getInstance().currentScreen
-        return this.screenBetterAccountManager
+        this.screenBetterSlotListAccountManager.prevScreen = MinecraftClient.getInstance().currentScreen
+        return this.screenBetterSlotListAccountManager
     }
 }
 
@@ -61,7 +60,7 @@ class ElementMenuScreenProxySystem : ElementMenuScreen("Proxy System") {
 
 class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack") {
 
-    private val screenBetterProtocolHack = ScreenBetterProtocolHack()
+    private val screenBetterSlotListProtocolHack = ScreenBetterSlotListProtocolHack()
 
     init {
         TarasandeMain.get().managerValue.getValues(ProtocolHackValues).forEach {
@@ -70,18 +69,18 @@ class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack") {
     }
 
     override fun getScreen(): Screen {
-        screenBetterProtocolHack.prevScreen = MinecraftClient.getInstance().currentScreen
-        return this.screenBetterProtocolHack
+        screenBetterSlotListProtocolHack.prevScreen = MinecraftClient.getInstance().currentScreen
+        return this.screenBetterSlotListProtocolHack
     }
 }
 
 class ElementMenuScreenAddons : ElementMenuScreen("Addons") {
 
-    private val screenBetterAddons = ScreenBetterAddons()
+    private val screenBetterSlotListAddons = ScreenBetterSlotListAddons()
 
     override fun getScreen(): Screen {
-        screenBetterAddons.prevScreen = MinecraftClient.getInstance().currentScreen
-        return this.screenBetterAddons
+        screenBetterSlotListAddons.prevScreen = MinecraftClient.getInstance().currentScreen
+        return this.screenBetterSlotListAddons
     }
 
     override fun visible(): Boolean {
@@ -178,14 +177,14 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
                             tooltip.add(Text.of("Right mouse for Channels: " + payload.channels.size))
 
                             if (GLFW.glfwGetMouseButton(MinecraftClient.getInstance().window.handle, GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS) {
-                                MinecraftClient.getInstance().setScreen(ScreenBetterForgeModList(MinecraftClient.getInstance().currentScreen!!, it.server.address + " (Channels: " + payload.channels.size + ")", ScreenBetterForgeModList.Type.CHANNEL_LIST, payload))
+                                MinecraftClient.getInstance().setScreen(ScreenBetterSlotListForgeModList(MinecraftClient.getInstance().currentScreen!!, it.server.address + " (Channels: " + payload.channels.size + ")", ScreenBetterSlotListForgeModList.Type.CHANNEL_LIST, payload))
                             }
                         }
 
                         MinecraftClient.getInstance().currentScreen?.renderTooltip(it.matrices, tooltip, it.mouseX - it.x, it.mouseY - it.y)
 
                         if (payload.installedMods().isNotEmpty() && GLFW.glfwGetMouseButton(MinecraftClient.getInstance().window.handle, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS) {
-                            MinecraftClient.getInstance().setScreen(ScreenBetterForgeModList(MinecraftClient.getInstance().currentScreen!!, it.server.address + " (Mods: " + payload.installedMods().size + ")", ScreenBetterForgeModList.Type.MOD_LIST, payload))
+                            MinecraftClient.getInstance().setScreen(ScreenBetterSlotListForgeModList(MinecraftClient.getInstance().currentScreen!!, it.server.address + " (Mods: " + payload.installedMods().size + ")", ScreenBetterSlotListForgeModList.Type.MOD_LIST, payload))
                         }
                     }
                 }
@@ -261,10 +260,6 @@ class ElementMenuFritzBoxReconnect : ElementMenu("Fritz!Box Reconnect") {
 
         builder.directory(TarasandeMain.get().rootDirectory)
         builder.start()
-    }
-
-    open class SubTitle(private val parent: ElementMenuFritzBoxReconnect) : ElementMenuTitle("Special") {
-        override fun visible() = parent.visible()
     }
 
     override fun visible() = Util.getOperatingSystem() == Util.OperatingSystem.WINDOWS

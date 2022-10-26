@@ -9,7 +9,7 @@ import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.blur.BlurKawase
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
-import net.tarasandedevelopment.tarasande.util.dummies.DummyWorld
+import net.tarasandedevelopment.tarasande.util.dummies.ClientWorldDummy
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.*
 import org.lwjgl.glfw.GLFW
@@ -35,7 +35,7 @@ class ClientValues {
         val map = HashMap<EntityType<*>, Boolean>()
 
         init {
-            val world = DummyWorld()
+            val world = ClientWorldDummy()
             Registry.ENTITY_TYPE.forEach {
                 map[it] = it.create(world) is LivingEntity
             }
@@ -50,7 +50,7 @@ class ClientValues {
         val map = HashMap<EntityType<*>, Boolean>()
 
         init {
-            val world = DummyWorld()
+            val world = ClientWorldDummy()
             Registry.ENTITY_TYPE.forEach {
                 map[it] = it.create(world) is Tameable
             }

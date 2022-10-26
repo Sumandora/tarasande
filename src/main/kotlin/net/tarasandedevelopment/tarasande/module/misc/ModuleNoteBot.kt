@@ -6,7 +6,7 @@ import net.raphimc.noteblocklib.parser.Song
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenFileChooser
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenBetterFileChooser
 import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueSpacer
 import java.io.File
@@ -23,7 +23,7 @@ class ModuleNoteBot : Module("Note bot", "", ModuleCategory.MISC) {
         }
         object : ValueButton(this, "Select note bot song") {
             override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenFileChooser(MinecraftClient.getInstance().currentScreen!!, folder) {
+                MinecraftClient.getInstance().setScreen(ScreenBetterFileChooser(MinecraftClient.getInstance().currentScreen!!, folder) {
                     song = try {
                         SongParser.parseSong(it)
                     } catch (e: IllegalStateException) {

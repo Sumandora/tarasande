@@ -7,7 +7,7 @@ import net.minecraft.screen.AbstractFurnaceScreenHandler
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
-import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ValueComponent
+import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ElementValueComponent
 import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.PanelElements
 import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
@@ -22,7 +22,7 @@ class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress
 
             val screenHandler = event.screen.screenHandler as AbstractFurnaceScreenHandler
 
-            event.add(ClickableWidgetPanel(object : PanelElements<ValueComponent>("Furnace progress", 5.0, 0.0, 100.0, 0.0) {
+            event.add(ClickableWidgetPanel(object : PanelElements<ElementValueComponent>("Furnace progress", 5.0, 0.0, 100.0, 0.0) {
                 private fun addText(input: String) = elementList.add(TarasandeMain.get().screenCheatMenu.managerValueComponent.newInstance(ValueSpacer(this, input)))
 
                 override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {

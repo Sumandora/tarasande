@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.blur.BlurKawase
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.util.render.framebuffer.FramebufferWrapped
+import net.tarasandedevelopment.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import net.tarasandedevelopment.tarasande.util.render.shader.Program
 import net.tarasandedevelopment.tarasande.util.render.shader.Shader
 import org.lwjgl.opengl.GL11
@@ -22,7 +22,7 @@ import org.lwjgl.opengl.GL20
 
 class ManagerBlur : Manager<Blur>() {
 
-    private val shapesFramebuffer = FramebufferWrapped()
+    private val shapesFramebuffer = SimpleFramebufferWrapped()
 
     private val cutoutShader = Program(Shader("cutout.frag", GL20.GL_FRAGMENT_SHADER), Shader("default.vert", GL20.GL_VERTEX_SHADER))
 

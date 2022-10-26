@@ -88,7 +88,7 @@ You can close this page now.""".toByteArray())
 
     override fun logIn() {
         if (azureApp == null) {
-            azureApp = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterAccountManager.managerAzureApp.get(AzureAppPresetInGameAccountSwitcher::class.java)
+            azureApp = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager.managerAzureApp.get(AzureAppPresetInGameAccountSwitcher::class.java)
         }
         code = null
         cancelled = false

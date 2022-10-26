@@ -9,8 +9,8 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
-import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPassword
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder
+import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholderPassword
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import net.tarasandedevelopment.tarasande.util.connection.ProxyAuthentication
 import net.tarasandedevelopment.tarasande.util.connection.ProxyType
@@ -71,7 +71,7 @@ class ScreenBetterProxy(prevScreen: Screen?) : ScreenBetter(prevScreen) {
                 it.text = proxy.proxyAuthentication?.username!!
             }
         })
-        addDrawableChild(TextFieldWidgetPassword(textRenderer, width / 2 - 100, height / 2 + 10, 200, 20, Text.of("Password")).also {
+        addDrawableChild(TextFieldWidgetPlaceholderPassword(textRenderer, width / 2 - 100, height / 2 + 10, 200, 20, Text.of("Password")).also {
             passwordTextField = it
             it.setMaxLength(Int.MAX_VALUE)
             if (proxy?.proxyAuthentication != null) {

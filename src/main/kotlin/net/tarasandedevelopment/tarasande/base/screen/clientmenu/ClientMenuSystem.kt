@@ -35,7 +35,7 @@ class ManagerClientMenu : Manager<ElementMenu>() {
             ElementMenuToggleForgeFaker(),
             ElementMenuToggleHAProxyHack(),
 
-            ElementMenuFritzBoxReconnect.SubTitle(fritzBox),
+            ElementMenuTitleConditional("Special") { fritzBox.visible() },
             fritzBox
         )
 
@@ -46,9 +46,7 @@ class ManagerClientMenu : Manager<ElementMenu>() {
     }
 
     private fun byName(name: String): ElementMenu {
-        return this.list.first { e ->
-            e.name.equals(name, true)
-        }
+        return this.list.first { it.name.equals(name, true) }
     }
 
     @Unique
@@ -79,7 +77,7 @@ class ManagerClientMenu : Manager<ElementMenu>() {
                     return@createButton
                 }
             }
-            MinecraftClient.getInstance().setScreen(ScreenBetterClientMenu(parent))
+            MinecraftClient.getInstance().setScreen(ScreenBetterSlotListClientMenu(parent))
         }
     }
 }
@@ -115,7 +113,7 @@ abstract class ElementMenuScreen(name: String) : ElementMenu(name) {
 
 abstract class ElementMenuToggle(name: String) : ElementMenu(name) {
 
-    internal var state = false
+    var state = false
 
     override fun onClick(mouseButton: Int) {
         if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
@@ -137,4 +135,14 @@ open class ElementMenuTitle(name: String) : ElementMenu(name, true) {
 
     override fun elementColor() = Color.gray.rgb
     override fun elementTextSize() = 1.5F
+}
+
+open class ElementMenuTitleConditional(name: String, private val conditional: () -> Boolean) : ElementMenu(name, true) {
+    override fun onClick(mouseButton: Int) {
+    }
+
+    override fun elementColor() = Color.gray.rgb
+    override fun elementTextSize() = 1.5F
+
+    override fun visible() = conditional.invoke()
 }

@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event.connection;
 import de.florianmichael.viaprotocolhack.netty.NettyConstants;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
-import net.tarasandedevelopment.tarasande.util.connection.EventDecoder;
-import net.tarasandedevelopment.tarasande.util.connection.EventEncoder;
+import net.tarasandedevelopment.tarasande.util.connection.MessageToMessageDecoderEvent;
+import net.tarasandedevelopment.tarasande.util.connection.MessageToMessageEncoderEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,8 +17,8 @@ public class MixinClientConnectionSubOne {
     public void hookEventEnDeCoder(Channel channel, CallbackInfo ci) {
         if (channel instanceof SocketChannel) {
             channel.pipeline()
-                    .addBefore(NettyConstants.HANDLER_ENCODER_NAME, "tarasande-encoder", new EventEncoder())
-                    .addBefore(NettyConstants.HANDLER_DECODER_NAME, "tarasande-decoder", new EventDecoder());
+                    .addBefore(NettyConstants.HANDLER_ENCODER_NAME, "tarasande-encoder", new MessageToMessageEncoderEvent())
+                    .addBefore(NettyConstants.HANDLER_DECODER_NAME, "tarasande-decoder", new MessageToMessageDecoderEvent());
         }
     }
 }
