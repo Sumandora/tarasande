@@ -26,5 +26,5 @@ abstract class Package {
     var modAuthors: List<String>? = null
     var modVersion: String? = null
 
-    abstract fun create(tarasandeMain: TarasandeMain?)
+    abstract fun create(tarasandeMain: TarasandeMain)
 }
