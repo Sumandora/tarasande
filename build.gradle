@@ -99,7 +99,6 @@ shadowJar {
     archiveClassifier.set("shadow")
     compileJava.options.encoding = "UTF-8"
 	exclude "native-binaries/*"
-	exclude "su/*"
 
 	dependencies {
 		for (final def lib in libs) {
