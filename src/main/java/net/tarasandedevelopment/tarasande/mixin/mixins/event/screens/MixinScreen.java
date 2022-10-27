@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.event;
+package net.tarasandedevelopment.tarasande.mixin.mixins.event.screens;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
