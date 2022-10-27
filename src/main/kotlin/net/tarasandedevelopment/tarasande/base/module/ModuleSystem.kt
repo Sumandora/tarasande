@@ -13,7 +13,6 @@ import net.tarasandedevelopment.tarasande.module.ghost.*
 import net.tarasandedevelopment.tarasande.module.misc.*
 import net.tarasandedevelopment.tarasande.module.movement.*
 import net.tarasandedevelopment.tarasande.module.player.*
-import net.tarasandedevelopment.tarasande.module.qualityoflife.*
 import net.tarasandedevelopment.tarasande.module.render.*
 import net.tarasandedevelopment.tarasande.value.ValueBind
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
@@ -33,7 +32,6 @@ class ManagerModule : Manager<Module>() {
             ModuleSafeWalk(),
             ModuleFullBright(),
             ModuleSpammer(),
-            ModuleDeadByDaylightEscape(),
             ModuleSpeed(),
             ModuleVehicleFlight(),
             ModuleNoSlowdown(),
@@ -95,13 +93,11 @@ class ManagerModule : Manager<Module>() {
             ModuleAntiParticleHide(),
             ModulePrivateMsgDetector(),
             ModuleNoChatContext(),
-            ModuleInstantWorld(),
             ModuleFurnaceProgress(),
             ModuleNoMiningTrace(),
             ModuleDisableTelemetry(),
             ModuleBlockChangeTracker(),
             ModuleTrueSight(),
-            ModuleEnchantmentTranslation(),
             ModulePhase(),
             ModuleInventoryCleaner(),
             ModuleLecternCrash(),
@@ -110,7 +106,6 @@ class ManagerModule : Manager<Module>() {
             ModuleClientBrandSpoofer(),
             ModulePerfectHorseJump(),
             ModuleTridentBoost(),
-            ModuleLiveOverflowMovement(),
             ModuleAutoRespawn(),
             ModulePortalScreen(),
             ModuleAutoFish(),
@@ -125,7 +120,6 @@ class ManagerModule : Manager<Module>() {
             ModuleIgnoreResourcePackHash(),
             ModuleNoJumpCooldown(),
             ModuleBrigadierIgnoreCase(),
-            ModuleNoSignatures(),
             ModuleEveryItemOnArmor(),
             ModuleNoMessageSignatureIndicator(),
             ModuleAllowEveryCharacter(),
@@ -182,5 +176,5 @@ open class Module(val name: String, val description: String, val category: Modul
 }
 
 enum class ModuleCategory {
-    COMBAT, MOVEMENT, PLAYER, RENDER, MISC, GHOST, EXPLOIT, QUALITY_OF_LIFE, CRASHER, DUPE
+    COMBAT, MOVEMENT, PLAYER, RENDER, MISC, GHOST, EXPLOIT, CRASHER, DUPE
 }

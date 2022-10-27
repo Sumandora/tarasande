@@ -66,7 +66,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             PanelEffects::class.java,
             PanelInventory::class.java,
             PanelWatermark::class.java,
-            PanelHypixelBedwarsOverlay::class.java,
             PanelRadar::class.java,
             PanelArmor::class.java,
             PanelMousepad::class.java
