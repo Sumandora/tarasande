@@ -18,7 +18,6 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.ExtraInfo
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.azureapp.AzureAppPreset
 import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAccountManager
-import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.azureapp.AzureAppPresetInGameAccountSwitcher
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.subscreens.ScreenBetterAzureApps
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -44,7 +43,7 @@ open class AccountMicrosoft : Account() {
     protected var redirectUri: String? = null
     private var code: String? = null
 
-    var azureApp: AzureAppPreset? = null
+    var azureApp: AzureAppPreset = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager.managerAzureApp.list.first()
 
     protected fun randomPort(): Int = ThreadLocalRandom.current().nextInt(0, Short.MAX_VALUE.toInt() * 2 /* unsigned */)
 
@@ -87,9 +86,6 @@ You can close this page now.""".toByteArray())
     }
 
     override fun logIn() {
-        if (azureApp == null) {
-            azureApp = TarasandeMain.get().managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager.managerAzureApp.get(AzureAppPresetInGameAccountSwitcher::class.java)
-        }
         code = null
         cancelled = false
         if (msAuthProfile != null &&
@@ -105,12 +101,12 @@ You can close this page now.""".toByteArray())
             RenderSystem.recordRenderCall {
                 MinecraftClient.getInstance().setScreen(NoticeScreen({ cancelled = true }, Text.of("Microsoft Login"), Text.of("Your webbrowser should've opened.\nPlease authorize yourself!\nClosing this screen will cancel the process!"), Text.of("Cancel"), false))
             }
-            redirectUri = azureApp!!.redirectUri + serverSocket.localPort
+            redirectUri = azureApp.redirectUri + serverSocket.localPort
             Util.getOperatingSystem().open(URI(oauthAuthorizeUrl + "?" +
                     "redirect_uri=" + redirectUri + "&" +
-                    "scope=" + URLEncoder.encode(this.azureApp!!.scope, StandardCharsets.UTF_8) + "&" +
+                    "scope=" + URLEncoder.encode(this.azureApp.scope, StandardCharsets.UTF_8) + "&" +
                     "response_type=code&" +
-                    "client_id=" + this.azureApp!!.clientId
+                    "client_id=" + this.azureApp.clientId
             ))
             while (code == null) {
                 Thread.sleep(100L)
@@ -137,13 +133,13 @@ You can close this page now.""".toByteArray())
 
     private fun buildFromCode(code: String): MSAuthProfile {
         val str = post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
-            it["client_id"] = this.azureApp!!.clientId.toString()
+            it["client_id"] = this.azureApp.clientId.toString()
             it["code"] = code
             it["grant_type"] = "authorization_code"
             it["redirect_uri"] = redirectUri!!
-            it["scope"] = this.azureApp!!.scope
-            if (this.azureApp!!.clientSecret != null) {
-                it["client_secret"] = this.azureApp!!.clientSecret!!
+            it["scope"] = this.azureApp.scope
+            if (this.azureApp.clientSecret != null) {
+                it["client_secret"] = this.azureApp.clientSecret!!
             }
         })
         val oAuthToken = TarasandeMain.get().gson.fromJson(str, JsonObject::class.java)
@@ -152,13 +148,13 @@ You can close this page now.""".toByteArray())
 
     protected fun buildFromRefreshToken(refreshToken: String): MSAuthProfile {
         val oAuthToken = TarasandeMain.get().gson.fromJson(post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
-            it["client_id"] = this.azureApp!!.clientId.toString()
+            it["client_id"] = this.azureApp.clientId.toString()
             it["refresh_token"] = refreshToken
             it["grant_type"] = "refresh_token"
             it["redirect_uri"] = redirectUri!!
-            it["scope"] = this.azureApp!!.scope
-            if (this.azureApp!!.clientSecret != null) {
-                it["client_secret"] = this.azureApp!!.clientSecret!!
+            it["scope"] = this.azureApp.scope
+            if (this.azureApp.clientSecret != null) {
+                it["client_secret"] = this.azureApp.clientSecret!!
             }
         }), JsonObject::class.java)
         return buildFromOAuthToken(oAuthToken)
@@ -202,7 +198,7 @@ You can close this page now.""".toByteArray())
         val minecraftProfile = TarasandeMain.get().gson.fromJson(get(minecraftProfileUrl, 60 * 1000, HashMap<String, String>().also {
             it["Authorization"] = "Bearer " + minecraftLogin["access_token"].asString
         }), JsonObject::class.java)
-        return MSAuthProfile(oAuthToken, xboxLiveAuth, xboxLiveSecurityTokens, minecraftLogin, minecraftProfile, azureApp!!)
+        return MSAuthProfile(oAuthToken, xboxLiveAuth, xboxLiveSecurityTokens, minecraftLogin, minecraftProfile, azureApp)
     }
 
     operator fun get(url: String, timeout: Int, headers: HashMap<String, String>): String {
@@ -238,6 +234,7 @@ You can close this page now.""".toByteArray())
         return String(urlConnection.inputStream.readAllBytes())
     }
 
+    @Suppress("unused")
     @ExtraInfo("Azure Apps")
     val azureAppsExtra = object : Extra {
         override fun click(prevScreen: Screen) {

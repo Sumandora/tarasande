@@ -45,7 +45,7 @@ class ScreenBetterAzureApps(prevScreen: Screen?, private val azureApp: AzureAppP
 
         clientSecretTextField = TextFieldWidgetPlaceholder(this.textRenderer, this.width / 2 - 100, this.height / 2 + 25 - 15, 200, 20, Text.of("Client Secret")).also {
             it.setMaxLength(Int.MAX_VALUE)
-            it.text = if (azureApp != null) azureApp.clientSecret else ""
+            it.text = azureApp?.clientSecret ?: ""
             addDrawableChild(it)
         }
 
@@ -58,7 +58,7 @@ class ScreenBetterAzureApps(prevScreen: Screen?, private val azureApp: AzureAppP
                 clientIdTextField?.text = environmentPreset.clientId.toString()
                 scopeTextField?.text = environmentPreset.scope
                 redirectUriTextField?.text = environmentPreset.redirectUri
-                clientSecretTextField?.text = environmentPreset.clientSecret
+                clientSecretTextField?.text = environmentPreset.clientSecret ?: ""
             })
 
             x += 135

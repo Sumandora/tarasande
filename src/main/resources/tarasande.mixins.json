@@ -110,7 +110,6 @@
     "features.module.norender.MixinSignBlockEntityRenderer",
     "features.module.norender.MixinWorldRenderer",
     "features.module.screens.MixinPlayerScreenHandler",
-    "features.module.text.MixinTextHandler",
     "library.baritone.MixinLookBehavior",
     "protocolhack.MixinBossBarHud",
     "protocolhack.MixinBrewingStandScreenHandler",
