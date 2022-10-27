@@ -13,19 +13,15 @@ public class MixinEntityStatusEffectS2CPacket {
 
     @Inject(method = "shouldShowIcon", at = @At("HEAD"), cancellable = true)
     public void hookAntiParticleHideHud(CallbackInfoReturnable<Boolean> cir) {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            ModuleAntiParticleHide moduleAntiParticleHide = TarasandeMain.Companion.get().getManagerModule().get(ModuleAntiParticleHide.class);
-            if (moduleAntiParticleHide.getEnabled() && moduleAntiParticleHide.getHud().isEnabled() && moduleAntiParticleHide.getHud().getValue())
-                cir.setReturnValue(true);
-        }
+        ModuleAntiParticleHide moduleAntiParticleHide = TarasandeMain.Companion.get().getManagerModule().get(ModuleAntiParticleHide.class);
+        if (moduleAntiParticleHide.getEnabled() && moduleAntiParticleHide.getHud().isEnabled() && moduleAntiParticleHide.getHud().getValue())
+            cir.setReturnValue(true);
     }
 
     @Inject(method = "shouldShowParticles", at = @At("HEAD"), cancellable = true)
     public void hookAntiParticleHideInventory(CallbackInfoReturnable<Boolean> cir) {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            ModuleAntiParticleHide moduleAntiParticleHide = TarasandeMain.Companion.get().getManagerModule().get(ModuleAntiParticleHide.class);
-            if (moduleAntiParticleHide.getEnabled() && moduleAntiParticleHide.getInventory().getValue())
-                cir.setReturnValue(true);
-        }
+        ModuleAntiParticleHide moduleAntiParticleHide = TarasandeMain.Companion.get().getManagerModule().get(ModuleAntiParticleHide.class);
+        if (moduleAntiParticleHide.getEnabled() && moduleAntiParticleHide.getInventory().getValue())
+            cir.setReturnValue(true);
     }
 }

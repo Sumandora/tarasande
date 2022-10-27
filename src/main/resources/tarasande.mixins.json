@@ -30,7 +30,6 @@
     "core.skin.MixinLivingEntityRenderer",
     "core.skin.MixinPlayerEntityRenderer",
     "core.skin.MixinPlayerSkinProvider",
-    "core.widget.MixinButtonWidget",
     "core.widget.MixinTextFieldWidget",
     "event.MixinCamera",
     "event.MixinClientPlayerInteractionManager",

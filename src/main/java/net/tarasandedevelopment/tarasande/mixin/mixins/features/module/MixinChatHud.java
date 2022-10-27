@@ -14,10 +14,8 @@ public class MixinChatHud {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHudLine$Visible;indicator()Lnet/minecraft/client/gui/hud/MessageIndicator;"))
     public MessageIndicator noMessageSignatureIndicator_Cancel(ChatHudLine.Visible instance) {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoMessageSignatureIndicator.class).getEnabled()) {
-                return null;
-            }
+        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoMessageSignatureIndicator.class).getEnabled()) {
+            return null;
         }
         return instance.indicator();
     }

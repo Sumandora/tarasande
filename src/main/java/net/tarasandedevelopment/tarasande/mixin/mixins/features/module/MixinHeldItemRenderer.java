@@ -17,39 +17,33 @@ public class MixinHeldItemRenderer {
 
     @Redirect(method = "updateHeldItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;areEqual(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z"))
     public boolean hookNoSwing(ItemStack left, ItemStack right) {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            ModuleNoSwing moduleNoSwing = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSwing.class);
-            if (moduleNoSwing.getEnabled() && moduleNoSwing.getDisableEquipProgress().getValue()) {
-                if (left.isEmpty() && right.isEmpty()) {
-                    return true;
-                }
-                if (left.isEmpty() || right.isEmpty()) {
-                    return false;
-                }
-                return left.isOf(right.getItem()); // Ignore count and nbt
+        ModuleNoSwing moduleNoSwing = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSwing.class);
+        if (moduleNoSwing.getEnabled() && moduleNoSwing.getDisableEquipProgress().getValue()) {
+            if (left.isEmpty() && right.isEmpty()) {
+                return true;
             }
+            if (left.isEmpty() || right.isEmpty()) {
+                return false;
+            }
+            return left.isOf(right.getItem()); // Ignore count and nbt
         }
         return ItemStack.areEqual(left, right);
     }
 
     @Redirect(method = "updateHeldItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getAttackCooldownProgress(F)F"))
     public float hookNoSwing(ClientPlayerEntity instance, float v) {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            ModuleNoSwing moduleNoSwing = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSwing.class);
-            if (moduleNoSwing.getEnabled() && moduleNoSwing.getDisableEquipProgress().getValue()) {
-                return 1.0f;
-            }
+        ModuleNoSwing moduleNoSwing = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSwing.class);
+        if (moduleNoSwing.getEnabled() && moduleNoSwing.getDisableEquipProgress().getValue()) {
+            return 1.0f;
         }
         return instance.getAttackCooldownProgress(v);
     }
 
     @Inject(method = "resetEquipProgress", at = @At("HEAD"), cancellable = true)
     public void hookNoSwing(Hand hand, CallbackInfo ci) {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            ModuleNoSwing moduleNoSwing = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSwing.class);
-            if (moduleNoSwing.getEnabled() && moduleNoSwing.getDisableEquipProgress().getValue()) {
-                ci.cancel();
-            }
+        ModuleNoSwing moduleNoSwing = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSwing.class);
+        if (moduleNoSwing.getEnabled() && moduleNoSwing.getDisableEquipProgress().getValue()) {
+            ci.cancel();
         }
     }
 }

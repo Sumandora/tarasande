@@ -13,9 +13,8 @@ public class MixinPendingUpdateManager {
 
     @Inject(method = "incrementSequence", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/PendingUpdateManager;pendingSequence:Z", shift = At.Shift.BEFORE), cancellable = true)
     public void hookDisableSequencePackets(CallbackInfoReturnable<PendingUpdateManager> cir) {
-        if (!TarasandeMain.Companion.get().getDisabled())
-            if (TarasandeMain.Companion.get().getManagerModule().get(ModuleDisableSequencePackets.class).getEnabled())
-                cir.setReturnValue((PendingUpdateManager) (Object) this);
+        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleDisableSequencePackets.class).getEnabled())
+            cir.setReturnValue((PendingUpdateManager) (Object) this);
     }
 
 

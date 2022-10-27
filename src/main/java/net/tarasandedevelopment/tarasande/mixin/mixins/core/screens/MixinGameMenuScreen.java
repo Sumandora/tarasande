@@ -22,19 +22,17 @@ public class MixinGameMenuScreen extends Screen {
 
     @Inject(method = "initWidgets()V", at = @At("RETURN"))
     public void addClientMenuButton(CallbackInfo info) {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            for (Element child : this.children())
-                if (child instanceof ButtonWidget button)
-                    if (button.getMessage().contains(Text.translatable("menu.options"))) {
-                        addDrawableChild(TarasandeMain.Companion.get().getManagerClientMenu().createClientMenuButton(this.width / 2 - 102, button.y - 24, 204, 20, this));
-                        break;
-                    }
-        }
+        for (Element child : this.children())
+            if (child instanceof ButtonWidget button)
+                if (button.getMessage().contains(Text.translatable("menu.options"))) {
+                    addDrawableChild(TarasandeMain.Companion.get().getManagerClientMenu().createClientMenuButton(this.width / 2 - 102, button.y - 24, 204, 20, this));
+                    break;
+                }
     }
 
     @Override
     protected <T extends Element & Drawable & Selectable> T addDrawableChild(T drawableElement) {
-        if (!TarasandeMain.Companion.get().getDisabled() && drawableElement instanceof ButtonWidget button) {
+        if (drawableElement instanceof ButtonWidget button) {
             if (button.y >= this.height / 4 - 16 + 24 * 4 - 1) {
                 button.y += 24;
             }

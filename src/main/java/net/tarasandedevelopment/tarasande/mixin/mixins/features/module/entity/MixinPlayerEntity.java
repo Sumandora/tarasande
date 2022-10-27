@@ -13,10 +13,8 @@ public class MixinPlayerEntity {
 
     @Inject(method = "clipAtLedge", at = @At("HEAD"), cancellable = true)
     public void hookSafeWalk(CallbackInfoReturnable<Boolean> cir) {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            ModuleSafeWalk moduleSafeWalk = TarasandeMain.Companion.get().getManagerModule().get(ModuleSafeWalk.class);
-            if (moduleSafeWalk.getEnabled() && !moduleSafeWalk.getSneak().getValue())
-                cir.setReturnValue(true);
-        }
+        ModuleSafeWalk moduleSafeWalk = TarasandeMain.Companion.get().getManagerModule().get(ModuleSafeWalk.class);
+        if (moduleSafeWalk.getEnabled() && !moduleSafeWalk.getSneak().getValue())
+            cir.setReturnValue(true);
     }
 }

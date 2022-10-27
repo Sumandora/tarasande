@@ -1,13 +1,10 @@
 package net.tarasandedevelopment.tarasande.module.render
 
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.particle.Particle
-import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.particle.ParticleType
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.util.registry.Registry
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventChunkOcclusion
@@ -77,7 +74,7 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
         val deadEntities = NoRenderBooleanValue(this, "Dead entities", false)
 
         fun noEntity(entity: net.minecraft.entity.Entity): Boolean {
-            return !TarasandeMain.get().disabled && isEnabled() && entities.list.contains(entity.type)
+            return isEnabled() && entities.list.contains(entity.type)
         }
     }
     val entity = Entity()
@@ -114,6 +111,6 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
 
     open class NoRenderType(val name: String)
     inner class NoRenderBooleanValue(owner: Any, name: String, value: Boolean) : ValueBoolean(owner, name, value) {
-        fun should() = value && this@ModuleNoRender.enabled && !TarasandeMain.get().disabled
+        fun should() = value && this@ModuleNoRender.enabled
     }
 }

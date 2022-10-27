@@ -32,20 +32,17 @@ public class MixinWorldRenderer {
 
     @Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At("HEAD"), cancellable = true)
     public void hookFog(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean bl, Runnable runnable, CallbackInfo ci) {
-        if (!TarasandeMain.Companion.get().getDisabled())
-            if (TarasandeMain.Companion.get().getManagerModule().get(ModuleFog.class).getEnabled())
-                ci.cancel();
+        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleFog.class).getEnabled())
+            ci.cancel();
     }
 
     @Redirect(method = "renderWeather", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getRainGradient(F)F"))
     public float hookRain(ClientWorld instance, float v) {
         tarasande_forceRain = false;
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            ModuleRain moduleRain = TarasandeMain.Companion.get().getManagerModule().get(ModuleRain.class);
-            if (moduleRain.getEnabled()) {
-                tarasande_forceRain = true;
-                return (float) moduleRain.getGradient().getValue();
-            }
+        ModuleRain moduleRain = TarasandeMain.Companion.get().getManagerModule().get(ModuleRain.class);
+        if (moduleRain.getEnabled()) {
+            tarasande_forceRain = true;
+            return (float) moduleRain.getGradient().getValue();
         }
         return instance.getRainGradient(v);
     }

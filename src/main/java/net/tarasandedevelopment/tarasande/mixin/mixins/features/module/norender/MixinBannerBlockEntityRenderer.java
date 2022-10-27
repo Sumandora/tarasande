@@ -37,25 +37,21 @@ public class MixinBannerBlockEntityRenderer {
     @Inject(method = "render(Lnet/minecraft/block/entity/BannerBlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V",
             at = @At("HEAD"), cancellable = true)
     public void noRender_render(BannerBlockEntity bannerBlockEntity, float f, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int j, CallbackInfo ci) {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            final ValueMode modeValue = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoRender.class).getWorld().getBanners();
+        final ValueMode modeValue = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoRender.class).getWorld().getBanners();
 
-            if (!modeValue.isSelected(0)) {
-                if (modeValue.isSelected(1)) {
-                    ci.cancel();
-                } else if (modeValue.isSelected(2)) {
-                    final BlockState blockState = bannerBlockEntity.getCachedState();
+        if (!modeValue.isSelected(0)) {
+            ci.cancel();
+            if (modeValue.isSelected(2)) {
+                final BlockState blockState = bannerBlockEntity.getCachedState();
 
-                    if (blockState.getBlock() instanceof BannerBlock) {
-                        this.pillar.visible = true;
-                        this.crossbar.visible = false;
-                        tarasande_renderPillar(bannerBlockEntity, matrixStack, vertexConsumerProvider, i, j);
-                    } else {
-                        this.pillar.visible = false;
-                        this.crossbar.visible = true;
-                        tarasande_renderCrossbar(bannerBlockEntity, matrixStack, vertexConsumerProvider, i, j);
-                    }
-                    ci.cancel();
+                if (blockState.getBlock() instanceof BannerBlock) {
+                    this.pillar.visible = true;
+                    this.crossbar.visible = false;
+                    tarasande_renderPillar(bannerBlockEntity, matrixStack, vertexConsumerProvider, i, j);
+                } else {
+                    this.pillar.visible = false;
+                    this.crossbar.visible = true;
+                    tarasande_renderCrossbar(bannerBlockEntity, matrixStack, vertexConsumerProvider, i, j);
                 }
             }
         }

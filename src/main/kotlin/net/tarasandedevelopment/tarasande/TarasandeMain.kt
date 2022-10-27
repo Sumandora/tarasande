@@ -77,7 +77,6 @@ class TarasandeMain {
     val rootDirectory = File(System.getProperty("user.home") + File.separator + name)
 
     var proxy: Proxy? = null
-    var disabled = false
 
     companion object {
         private val instance: TarasandeMain = TarasandeMain()

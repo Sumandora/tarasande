@@ -46,24 +46,20 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;getFoodLevel()I"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;hasForwardMovement()Z")))
     public boolean hookNoSlowdown(ClientPlayerEntity clientPlayerEntity) {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            ModuleNoSlowdown moduleNoSlowdown = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSlowdown.class);
-            if (moduleNoSlowdown.getEnabled()) {
-                if (moduleNoSlowdown.isActionEnabled(moduleNoSlowdown.getActions()))
-                    return false;
-            }
+        ModuleNoSlowdown moduleNoSlowdown = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSlowdown.class);
+        if (moduleNoSlowdown.getEnabled()) {
+            if (moduleNoSlowdown.isActionEnabled(moduleNoSlowdown.getActions()))
+                return false;
         }
         return clientPlayerEntity.isUsingItem();
     }
 
     @ModifyConstant(method = "tickMovement", constant = @Constant(floatValue = 0.2F))
     public float hookNoSlowdown(float original) {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            ModuleNoSlowdown moduleNoSlowdown = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSlowdown.class);
-            if (moduleNoSlowdown.getEnabled()) {
-                if (moduleNoSlowdown.isActionEnabled(moduleNoSlowdown.getActions()))
-                    return (float) moduleNoSlowdown.getSlowdown().getValue();
-            }
+        ModuleNoSlowdown moduleNoSlowdown = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSlowdown.class);
+        if (moduleNoSlowdown.getEnabled()) {
+            if (moduleNoSlowdown.isActionEnabled(moduleNoSlowdown.getActions()))
+                return (float) moduleNoSlowdown.getSlowdown().getValue();
         }
         return original;
     }
@@ -72,13 +68,11 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     public boolean hookFlight(PlayerAbilities instance) {
         tarasande_flight = false;
         tarasande_flightSpeed = 0.05f;
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            ModuleFlight moduleFlight = TarasandeMain.Companion.get().getManagerModule().get(ModuleFlight.class);
-            if (moduleFlight.getEnabled() && moduleFlight.getMode().isSelected(0)) {
-                tarasande_flight = true;
-                tarasande_flightSpeed = (float) moduleFlight.getFlightSpeed().getValue();
-                return true;
-            }
+        ModuleFlight moduleFlight = TarasandeMain.Companion.get().getManagerModule().get(ModuleFlight.class);
+        if (moduleFlight.getEnabled() && moduleFlight.getMode().isSelected(0)) {
+            tarasande_flight = true;
+            tarasande_flightSpeed = (float) moduleFlight.getFlightSpeed().getValue();
+            return true;
         }
         return instance.flying;
     }
@@ -111,22 +105,21 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;shouldPause()Z"))
     public boolean hookPortalScreen(Screen instance) {
-        if (!TarasandeMain.Companion.get().getDisabled())
-            if (TarasandeMain.Companion.get().getManagerModule().get(ModulePortalScreen.class).getEnabled())
-                return true;
+        if (TarasandeMain.Companion.get().getManagerModule().get(ModulePortalScreen.class).getEnabled())
+            return true;
         return instance.shouldPause();
     }
 
     @Inject(method = "signChatMessage", at = @At("HEAD"), cancellable = true)
     public void hookNoSignatures(MessageMetadata metadata, DecoratedContents content, LastSeenMessageList lastSeenMessages, CallbackInfoReturnable<MessageSignatureData> cir) {
-        if (!TarasandeMain.Companion.get().getDisabled() && TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSignatures.class).getEnabled()) {
+        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSignatures.class).getEnabled()) {
             cir.cancel();
         }
     }
 
     @Inject(method = "signArguments", at = @At("HEAD"), cancellable = true)
     public void hookNoSignatures(MessageMetadata signer, ParseResults<CommandSource> parseResults, @Nullable Text preview, LastSeenMessageList lastSeenMessages, CallbackInfoReturnable<ArgumentSignatureDataMap> cir) {
-        if (!TarasandeMain.Companion.get().getDisabled() && TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSignatures.class).getEnabled()) {
+        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSignatures.class).getEnabled()) {
             cir.cancel();
         }
     }

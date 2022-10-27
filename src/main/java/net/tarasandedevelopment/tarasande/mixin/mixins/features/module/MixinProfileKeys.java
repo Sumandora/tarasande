@@ -17,14 +17,14 @@ public class MixinProfileKeys {
 
     @Inject(method = "getSigner", at = @At("HEAD"), cancellable = true)
     public void hookNoSignatures_removeSigner(CallbackInfoReturnable<Signer> cir) {
-        if (!TarasandeMain.Companion.get().getDisabled() && TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSignatures.class).getEnabled()) {
+        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSignatures.class).getEnabled()) {
             cir.setReturnValue(null);
         }
     }
 
     @Inject(method = "getPublicKey", at = @At("HEAD"), cancellable = true)
     public void hookNoSignatures_removePublicKey(CallbackInfoReturnable<Optional<PlayerPublicKey>> cir) {
-        if (!TarasandeMain.Companion.get().getDisabled() && TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSignatures.class).getEnabled()) {
+        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSignatures.class).getEnabled()) {
             cir.setReturnValue(Optional.empty());
         }
     }

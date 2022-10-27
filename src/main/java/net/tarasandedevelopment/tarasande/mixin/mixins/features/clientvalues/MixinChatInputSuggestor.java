@@ -45,7 +45,6 @@ public abstract class MixinChatInputSuggestor {
             cancellable = true,
             locals = LocalCapture.CAPTURE_FAILHARD)
     public void hookCommandSystem(CallbackInfo ci, String string, StringReader reader) {
-        if (TarasandeMain.Companion.get().getDisabled()) return;
         if (!TarasandeMain.Companion.get().getClientValues().getCommands().getValue()) return;
 
         final String prefix = TarasandeMain.Companion.get().getClientValues().getCommandsPrefix().getValue();

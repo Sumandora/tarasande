@@ -21,12 +21,11 @@ public class MixinTitleScreen extends Screen {
 
     @Redirect(method = "initWidgetsNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;"))
     public <T extends Element & Drawable & Selectable> T addClientMenuButton(TitleScreen titleScreen, T drawableElement) {
-        if (!TarasandeMain.Companion.get().getDisabled())
-            if (drawableElement instanceof ButtonWidget buttonWidget)
-                if (buttonWidget.getMessage().getContent() instanceof TranslatableTextContent && ((TranslatableTextContent) buttonWidget.getMessage().getContent()).getKey().equals("menu.online")) {
-                    buttonWidget.setWidth(buttonWidget.getWidth() / 2 - 2);
-                    addDrawableChild(TarasandeMain.Companion.get().getManagerClientMenu().createClientMenuButton(buttonWidget.x + buttonWidget.getWidth() + 4, buttonWidget.y, buttonWidget.getWidth(), buttonWidget.getHeight(), this));
-                }
+        if (drawableElement instanceof ButtonWidget buttonWidget)
+            if (buttonWidget.getMessage().getContent() instanceof TranslatableTextContent && ((TranslatableTextContent) buttonWidget.getMessage().getContent()).getKey().equals("menu.online")) {
+                buttonWidget.setWidth(buttonWidget.getWidth() / 2 - 2);
+                addDrawableChild(TarasandeMain.Companion.get().getManagerClientMenu().createClientMenuButton(buttonWidget.x + buttonWidget.getWidth() + 4, buttonWidget.y, buttonWidget.getWidth(), buttonWidget.getHeight(), this));
+            }
         return addDrawableChild(drawableElement);
     }
 }

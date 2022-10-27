@@ -14,13 +14,11 @@ import java.awt.*;
 public class MixinEntity {
     @Inject(method = "getTeamColorValue", at = @At("RETURN"), cancellable = true)
     public void hookESP(CallbackInfoReturnable<Integer> cir) {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class);
-            if (moduleESP.getEnabled()) {
-                Color c = moduleESP.getEntityColor().getColor((Entity) (Object) this);
-                if (c != null)
-                    cir.setReturnValue(c.getRGB());
-            }
+        ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class);
+        if (moduleESP.getEnabled()) {
+            Color c = moduleESP.getEntityColor().getColor((Entity) (Object) this);
+            if (c != null)
+                cir.setReturnValue(c.getRGB());
         }
     }
 }

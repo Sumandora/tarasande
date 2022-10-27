@@ -14,11 +14,9 @@ public class MixinMinecraftClient {
     @Redirect(method = "hasOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isGlowing()Z"))
     public boolean hookESP(Entity entity) {
         boolean glowing = entity.isGlowing();
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class);
-            if (moduleESP.getEnabled())
-                return glowing || (moduleESP.getMode().isSelected(0) && moduleESP.filter(entity));
-        }
+        ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class);
+        if (moduleESP.getEnabled())
+            return glowing || (moduleESP.getMode().isSelected(0) && moduleESP.filter(entity));
         return glowing;
     }
 }

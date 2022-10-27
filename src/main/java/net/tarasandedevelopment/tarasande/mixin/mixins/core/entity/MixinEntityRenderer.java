@@ -13,12 +13,11 @@ public class MixinEntityRenderer {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getDisplayName()Lnet/minecraft/text/Text;"))
     public Text overwriteNameTag(Entity instance) {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            Text text = TarasandeMain.Companion.get().getTagName().getTagName(instance);
-            if (text != null)
-                return text;
-        }
-        return instance.getDisplayName();
+        Text text = TarasandeMain.Companion.get().getTagName().getTagName(instance);
+        if (text != null)
+            return text;
+        else
+            return instance.getDisplayName();
     }
 
 }

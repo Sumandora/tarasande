@@ -21,24 +21,20 @@ public abstract class MixinWorld implements WorldAccess {
 
     @Inject(method = "setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;II)Z", at = @At("HEAD"))
     public void hookBlockChangeTracker(BlockPos pos, BlockState state, int flags, int maxUpdateDepth, CallbackInfoReturnable<Boolean> cir) {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            final ModuleBlockChangeTracker moduleBlockChangeTracker = TarasandeMain.Companion.get().getManagerModule().get(ModuleBlockChangeTracker.class);
+        final ModuleBlockChangeTracker moduleBlockChangeTracker = TarasandeMain.Companion.get().getManagerModule().get(ModuleBlockChangeTracker.class);
 
-            if (moduleBlockChangeTracker.getEnabled())
-                if (!getBlockState(pos).getBlock().equals(state.getBlock()))
-                    moduleBlockChangeTracker.getChanges().add(new Triple<>(pos, state, System.currentTimeMillis()));
-        }
+        if (moduleBlockChangeTracker.getEnabled())
+            if (!getBlockState(pos).getBlock().equals(state.getBlock()))
+                moduleBlockChangeTracker.getChanges().add(new Triple<>(pos, state, System.currentTimeMillis()));
     }
 
     @Override
     public int getMoonPhase() {
-        if (!TarasandeMain.Companion.get().getDisabled()) {
-            final int moonPhase = TarasandeMain.Companion.get().getManagerModule().get(ModuleWorldTime.class).moonPhase();
-
-            if (moonPhase != 1) {
-                return moonPhase;
-            }
+        final int moonPhase = TarasandeMain.Companion.get().getManagerModule().get(ModuleWorldTime.class).moonPhase();
+        if (moonPhase != 1) {
+            return moonPhase;
         }
+
         return WorldAccess.super.getMoonPhase();
     }
 }
