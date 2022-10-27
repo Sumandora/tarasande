@@ -34,7 +34,7 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
         }
     }
 
-    private fun isAlphabetical(c: Char): Boolean = c in 'a'..'z' || c in 'A'..'Z'
+    private fun isAlphabetical(c: Char): Boolean = c in 'a'..'z' || c in 'A'..'Z' || c in '0' .. '9'
 
     init {
         registerEvent(EventTextVisit::class.java) { event ->
