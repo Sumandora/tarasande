@@ -60,8 +60,6 @@ accessible field net/minecraft/client/MinecraftClient servicesSignatureVerifier 
 accessible field net/minecraft/client/MinecraftClient socialInteractionsManager Lnet/minecraft/client/network/SocialInteractionsManager;
 accessible field net/minecraft/client/MinecraftClient profileKeys Lnet/minecraft/client/util/ProfileKeys;
 accessible field net/minecraft/client/MinecraftClient itemUseCooldown I
-accessible field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket x D
-accessible field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket z D
 accessible field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket yaw F
 accessible field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket pitch F
 accessible field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket onGround Z
@@ -109,8 +107,6 @@ mutable field net/minecraft/client/render/RenderTickCounter tickTime F
 mutable field net/minecraft/network/packet/s2c/play/ResourcePackSendS2CPacket hash Ljava/lang/String;
 mutable field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket onGround Z
 mutable field net/minecraft/client/render/RenderTickCounter tickTime F
-mutable field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket x D
-mutable field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket z D
 mutable field net/minecraft/util/math/Vec3d x D
 mutable field net/minecraft/util/math/Vec3d y D
 mutable field net/minecraft/util/math/Vec3d z D
