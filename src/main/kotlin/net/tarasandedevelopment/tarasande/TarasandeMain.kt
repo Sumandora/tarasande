@@ -55,8 +55,6 @@ class TarasandeMain {
         private set
     lateinit var managerClientMenu: ManagerClientMenu
         private set
-    lateinit var managerCommand: ManagerCommand
-        private set
     lateinit var tagName: TagName
         private set
 
@@ -100,7 +98,6 @@ class TarasandeMain {
         managerClickMethod = ManagerClickMethod()
         managerModule = ManagerModule()
         managerESP = ManagerESP()
-        managerCommand = ManagerCommand()
         protocolHack = TarasandeProtocolHack()
         screenCheatMenu = ScreenCheatMenu() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
         friends = Friends()

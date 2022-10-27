@@ -18,12 +18,12 @@ import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.command.CommandCredits
 import net.tarasandedevelopment.tarasande.command.CommandViaDump
 import net.tarasandedevelopment.tarasande.event.EventChat
+import net.tarasandedevelopment.tarasande.module.misc.ModuleCommands
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 
 class ManagerCommand : Manager<Command>() {
 
     val dispatcher = CommandDispatcher<CommandSource>()
-    val commandSource = ClientCommandSource(null, MinecraftClient.getInstance()) // yep, this works lmao
 
     init {
         add(
@@ -33,39 +33,6 @@ class ManagerCommand : Manager<Command>() {
 
         list.forEach {
             it.setup(dispatcher)
-        }
-
-        TarasandeMain.get().managerEvent.add(EventChat::class.java) {
-            if (!TarasandeMain.get().clientValues.commands.value || TarasandeMain.get().clientValues.bypassCommands.isPressed(true)) return@add
-
-            if (it.chatMessage.startsWith(TarasandeMain.get().clientValues.commandsPrefix.value)) {
-                it.cancelled = true
-
-                val reader = StringReader(it.chatMessage)
-                reader.cursor = TarasandeMain.get().clientValues.commandsPrefix.value.length
-
-                try {
-                    dispatcher.execute(reader, this.commandSource)
-                } catch (e: CommandSyntaxException) {
-                    if (!TarasandeMain.get().clientValues.commandsExceptions.value) return@add
-
-                    CustomChat.print(Text.literal("").formatted(Formatting.RED).append(Texts.toText(e.rawMessage)))
-
-                    if (e.cursor >= 0) {
-                        val index = e.input.length.coerceAtMost(e.cursor)
-                        val verbose = Text.literal("").formatted(Formatting.GRAY).styled {
-                            it.withClickEvent(ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, reader.string))
-                        }
-
-                        if (index < e.input.length) {
-                            verbose.append(Text.literal(e.input.substring(index)).formatted(Formatting.RED, Formatting.UNDERLINE))
-                        }
-
-                        verbose.append(Text.translatable("command.context.here").formatted(Formatting.RED, Formatting.ITALIC))
-                        CustomChat.print(Text.literal("").formatted(Formatting.RED).append(Texts.toText(verbose)))
-                    }
-                }
-            }
         }
     }
 }

@@ -1,5 +1,7 @@
 package net.tarasandedevelopment.tarasande.event
 
+import com.mojang.brigadier.CommandDispatcher
+import com.mojang.brigadier.StringReader
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.BlockState
 import net.minecraft.client.gui.Element
@@ -10,6 +12,7 @@ import net.minecraft.client.network.ServerInfo
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.render.Camera
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.command.CommandSource
 import net.minecraft.entity.Entity
 import net.minecraft.item.Item
 import net.minecraft.network.Packet
@@ -221,3 +224,8 @@ class EventRenderMultiplayerEntry(val matrices: MatrixStack, val x: Int, val y: 
 class EventChunkOcclusion : Event(true)
 class EventParticle(val effect: ParticleEffect) : Event(true)
 class EventPanels(val panels: MutableList<Class<out Panel>>) : Event(false)
+
+class EventInputSuggestions(val reader: StringReader) : Event(false) {
+    var dispatcher: CommandDispatcher<CommandSource>? = null
+    var commandSource: CommandSource? = null
+}

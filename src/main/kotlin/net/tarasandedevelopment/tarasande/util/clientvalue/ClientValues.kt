@@ -83,19 +83,9 @@ class ClientValues {
         override fun isEnabled() = autoSaveConfig.value
     }
     val passEventsInScreens = ValueBoolean(this, "Pass events in screens", true)
-    val commands = ValueBoolean(this, "Commands", true)
-    val commandsPrefix = object : ValueText(this, "Commands: prefix", "$") {
-        override fun isEnabled() = commands.value
-    }
-    val commandsExceptions = object : ValueBoolean(this, "Commands: show exceptions", true) {
-        override fun isEnabled() = commands.value
-    }
-    val bypassCommands = object : ValueBind(this, "Bypass commands", Type.KEY, GLFW.GLFW_KEY_UNKNOWN) {
-        override fun isEnabled() = commands.value
-        override fun filter(type: Type, bind: Int) = bind >= GLFW.GLFW_KEY_ESCAPE || bind == GLFW.GLFW_KEY_UNKNOWN
-    }
+    val allowEveryCharacterInChat = ValueBoolean(this, "Allow every character in chat", true)
 
-    fun isEntityDesired(entity: Entity): Boolean {
+    private fun isEntityDesired(entity: Entity): Boolean {
         if (dontAttackRidingEntity.value && entity == MinecraftClient.getInstance().player?.vehicle) return false
         if (dontAttackTamedEntities.value && entity is Tameable && entity.ownerUuid == MinecraftClient.getInstance().player?.uuid) return false
         if (!entities.list.contains(entity.type)) return false
