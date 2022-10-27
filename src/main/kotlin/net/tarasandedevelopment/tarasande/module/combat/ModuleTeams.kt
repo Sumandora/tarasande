@@ -5,7 +5,6 @@ import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.value.ValueMode
-import java.util.function.Consumer
 
 class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCategory.COMBAT) {
 

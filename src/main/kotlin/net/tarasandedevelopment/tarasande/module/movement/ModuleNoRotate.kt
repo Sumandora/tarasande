@@ -9,7 +9,6 @@ import net.tarasandedevelopment.tarasande.event.EventRotationSet
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.value.ValueNumberRange
-import java.util.function.Consumer
 
 class ModuleNoRotate : Module("No rotate", "Prevents the server from rotating you", ModuleCategory.MOVEMENT) {
 
