@@ -38,6 +38,7 @@ class ESPElementBox : ESPElement("Box") {
 
 class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Orientation.RIGHT, Orientation.BOTTOM)) {
     private val outlined = ValueBoolean(this, "Outlined", true)
+    private val fitBoxWidth = ValueBoolean(this, "Fit box width", false)
     private val scale = ValueNumber(this, "Scale", 0.1, 1.0, 3.0, 0.1)
 
     override fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double, orientation: Orientation) {
@@ -45,7 +46,11 @@ class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.
         val tagName = TarasandeMain.get().tagName.getTagName(entity)?.asOrderedText() ?: return
         matrices.push()
         val width = MinecraftClient.getInstance().textRenderer!!.getWidth(tagName)
-        var factor = (sideWidth / width).toFloat()
+        var factor =
+            if (fitBoxWidth.value)
+                (sideWidth / width).toFloat()
+            else
+                1.0f
         if (factor > 3.0f) factor = 3.0f
         factor *= scale.value.toFloat()
         matrices.translate(sideWidth / 2, 0.0, 0.0)

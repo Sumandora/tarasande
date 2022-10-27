@@ -66,18 +66,17 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             PanelEffects::class.java,
             PanelInventory::class.java,
             PanelWatermark::class.java,
-            PanelHypixelBedwarsOverlay::class.java,
             PanelRadar::class.java,
             PanelArmor::class.java,
             PanelMousepad::class.java
         )
+        TarasandeMain.get().managerEvent.call(EventPanels(panels))
         for (panel in panels) {
             this.panels.add(panel.declaredConstructors[0].newInstance(5.0, y, this).also { y += (it as Panel).titleBarHeight + 5 } as Panel)
         }
         for (graph in managerGraph.list) {
             this.panels.add(PanelGraph(graph, 5.0, y).also { y += it.titleBarHeight + 5 })
         }
-        TarasandeMain.get().managerEvent.call(EventPanels(this.panels))
         passEvents = false
         TarasandeMain.get().managerEvent.also {
             it.add(EventChangeScreen::class.java) { event ->

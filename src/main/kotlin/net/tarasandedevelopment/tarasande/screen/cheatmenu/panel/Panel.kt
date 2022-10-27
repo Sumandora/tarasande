@@ -40,13 +40,13 @@ open class Panel(
     var panelHeight = minHeight
 
     protected var scrollOffset = 0.0
-    protected var scrollSpeed = 0.0
+    private var scrollSpeed = 0.0
 
     protected var alignment: Alignment = Alignment.LEFT
-    internal var opened = false
-    internal var modifiable = true
+    var opened = false
+    var modifiable = true
 
-    internal val titleBarHeight = MinecraftClient.getInstance().textRenderer.fontHeight
+    val titleBarHeight = MinecraftClient.getInstance().textRenderer.fontHeight
 
     init {
         if (fixed)

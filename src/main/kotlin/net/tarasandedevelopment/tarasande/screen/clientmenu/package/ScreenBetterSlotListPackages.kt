@@ -52,8 +52,11 @@ class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, MinecraftClient.ge
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
             matrices.push()
+            matrices.translate(entryWidth / 2.0, entryHeight / 2.0, 0.0)
             matrices.scale(2F, 2F, 2F)
-            RenderUtil.textCenter(matrices, this.aPackage.modId!! + " (" + this.aPackage.modVersion!! + ")", entryWidth.toFloat() / 4F, 1F, -1)
+            matrices.translate(-entryWidth / 2.0, -entryHeight / 2.0, 0.0)
+            val text = this.aPackage.modId!! + " (" + this.aPackage.modVersion!! + ")"
+            RenderUtil.textCenter(matrices, text, entryWidth / 2.0f, entryHeight / 2.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f, -1)
             matrices.pop()
         }
     }
