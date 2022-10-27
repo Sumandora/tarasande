@@ -275,7 +275,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 }
             }
             if (lastRotation == null) {
-                val rad = Math.toRadians(PlayerUtil.getMoveDirection()) - PI / 2
+                val rad = Math.toRadians((PlayerUtil.getMoveDirection() / 90.0).roundToInt() * 90.0) - PI / 2
                 val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, mc.player?.pos!! + Vec3d(cos(rad), 0.0, sin(rad)) * 0.3)
 
                 val diagonal = abs(round(mc.player?.yaw!! / 90) * 90 - mc.player?.yaw!!) > 22.5
