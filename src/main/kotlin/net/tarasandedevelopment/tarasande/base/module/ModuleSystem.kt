@@ -93,7 +93,6 @@ class ManagerModule : Manager<Module>() {
             ModuleAntiParticleHide(),
             ModulePrivateMsgDetector(),
             ModuleNoChatContext(),
-            ModuleFurnaceProgress(),
             ModuleNoMiningTrace(),
             ModuleDisableTelemetry(),
             ModuleBlockChangeTracker(),

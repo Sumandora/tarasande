@@ -7,7 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 open class PanelElements<T : Element>(title: String, x: Double, y: Double, minWidth: Double, minHeight: Double, fixed: Boolean = false) : Panel(title, x, y, minWidth, minHeight, fixed = fixed) {
 
-    internal val elementList = CopyOnWriteArrayList<T>()
+    val elementList = CopyOnWriteArrayList<T>()
 
     override fun init() {
         for (it in elementList) {
