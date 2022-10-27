@@ -23,10 +23,6 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
             InformationRotation(),
             InformationFakeRotation(),
 
-            // Time
-            InformationDate(),
-            InformationTime(),
-
             // Connection
             InformationHandlers(),
             InformationProtocolVersion(),
@@ -44,20 +40,10 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
             InformationWorldTime(),
             InformationSpawnPoint(),
 
-            // Badlion
-            InformationTimers(),
-
             // Server
             InformationServerBrand(),
             InformationOpenChannels(),
             InformationVanishedPlayers(),
-
-            // Features
-            InformationFeaturesModules(),
-            InformationFeaturesProtocols(),
-            InformationFeaturesCreativeItems(),
-            InformationFeaturesValues(),
-            InformationFeaturesGraphs(),
 
             // Modules
             InformationTimeShifted(),

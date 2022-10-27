@@ -15,7 +15,7 @@ import net.minecraft.text.Texts
 import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
-import net.tarasandedevelopment.tarasande.command.CommandClearChat
+import net.tarasandedevelopment.tarasande.command.CommandCredits
 import net.tarasandedevelopment.tarasande.command.CommandViaDump
 import net.tarasandedevelopment.tarasande.event.EventChat
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
@@ -28,7 +28,7 @@ class ManagerCommand : Manager<Command>() {
     init {
         add(
             CommandViaDump(),
-            CommandClearChat()
+            CommandCredits()
         )
 
         list.forEach {

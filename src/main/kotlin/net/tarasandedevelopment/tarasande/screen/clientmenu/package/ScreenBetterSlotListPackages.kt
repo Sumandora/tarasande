@@ -12,9 +12,9 @@ import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
-class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, MinecraftClient.getInstance().textRenderer.fontHeight * 2 + 5) {
+class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, 400, MinecraftClient.getInstance().textRenderer.fontHeight * 2 + 5) {
 
-    private val list = TarasandeMain.get().managerPackage.list.map { p -> ScreenBetterSlotListEntryAddon(p) }
+    private val list = TarasandeMain.get().managerPackage.list.map { p -> ScreenBetterSlotListEntryPackage(p) }
 
     init {
         this.provideElements(object : ScreenBetterSlotListWidget.ListProvider {
@@ -38,16 +38,16 @@ class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, MinecraftClient.ge
         this.renderTitle(matrices, "Packages")
 
         if (this.list.isNotEmpty() && this.list.size >= this.selected)
-            RenderUtil.textCenter(matrices, "Developed by: " + this.list[this.selected].aPackage.modAuthors!!.joinToString(", "), this.width / 2F, height - 17F, -1)
+            RenderUtil.textCenter(matrices, "Developed by: " + this.list[this.selected].`package`.modAuthors!!.joinToString(", "), this.width / 2F, height - 17F, -1)
     }
 
-    class ScreenBetterSlotListEntryAddon(val aPackage: Package) : ScreenBetterSlotListEntry() {
+    class ScreenBetterSlotListEntryPackage(val `package`: Package) : ScreenBetterSlotListEntry() {
 
         override fun onDoubleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
             super.onDoubleClickEntry(mouseX, mouseY, mouseButton)
 
-            if (TarasandeMain.get().managerValue.getValues(aPackage).isNotEmpty())
-                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, aPackage.modId!!, aPackage))
+            if (TarasandeMain.get().managerValue.getValues(`package`).isNotEmpty())
+                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, `package`.modId!!, `package`))
         }
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
@@ -55,7 +55,7 @@ class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, MinecraftClient.ge
             matrices.translate(entryWidth / 2.0, entryHeight / 2.0, 0.0)
             matrices.scale(2F, 2F, 2F)
             matrices.translate(-entryWidth / 2.0, -entryHeight / 2.0, 0.0)
-            val text = this.aPackage.modId!! + " (" + this.aPackage.modVersion!! + ")"
+            val text = this.`package`.modId!! + " (" + this.`package`.modVersion!! + ")"
             RenderUtil.textCenter(matrices, text, entryWidth / 2.0f, entryHeight / 2.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f, -1)
             matrices.pop()
         }
