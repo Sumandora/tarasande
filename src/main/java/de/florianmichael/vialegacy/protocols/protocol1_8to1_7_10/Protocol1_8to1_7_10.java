@@ -402,7 +402,15 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             public void registerMap() {
                 intToVarInt(); // Entity ID
                 map(Type.BYTE, 3); // Position
-                handler((pw) -> pw.write(Type.BOOLEAN, true)); // On Ground
+                handler((pw) -> {
+                    final int entityId = pw.get(Type.VAR_INT, 0);
+                    final double y = pw.get(Type.BYTE, 1) / 32.0;
+
+                    boolean isGround = !(y < 0.0D);
+
+                    groundTracker(pw.user()).track(entityId, isGround);
+                    pw.write(Type.BOOLEAN, isGround);
+                }); // On Ground
             }
         });
 
@@ -411,7 +419,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             public void registerMap() {
                 intToVarInt(); // Entity ID
                 map(Type.BYTE, 2); // Yaw and Pitch
-                handler((pw) -> pw.write(Type.BOOLEAN, true)); // On Ground
+                handler((pw) -> pw.write(Type.BOOLEAN, groundTracker(pw.user()).isGround(pw.get(Type.VAR_INT, 0)))); // On Ground
             }
         });
 
@@ -422,7 +430,15 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
 
                 map(Type.BYTE, 5); // Position and Yaw, Pitch
 
-                handler((pw) -> pw.write(Type.BOOLEAN, true)); // On Ground
+                handler((pw) -> {
+                    final int entityId = pw.get(Type.VAR_INT, 0);
+                    final double y = pw.get(Type.BYTE, 1) / 32.0;
+
+                    boolean isGround = !(y < 0.0D);
+
+                    groundTracker(pw.user()).track(entityId, isGround);
+                    pw.write(Type.BOOLEAN, isGround);
+                }); // On Ground
             }
         });
 
@@ -435,11 +451,13 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.BYTE, 2); // Rotation
 
                 handler((pw) -> {
-                    System.out.println(pw.get(Type.INT, 1));
-                    // TODO The origin of the 56.28 is beyond me (https://gist.github.com/MrPowerGamerBR/fab8698da506d9e6f338ce88346f04fb#file-hologram-java-L173)
-                    // TOOD this is probably wrong
-                    pw.set(Type.INT, 1, (int) ((pw.get(Type.INT, 1) / 32.0 - 56.28) * 32));
-                    pw.write(Type.BOOLEAN, true);
+                    final int entityId = pw.get(Type.VAR_INT, 0);
+                    final double y = pw.get(Type.INT, 1) / 32.0;
+
+                    boolean isGround = !(y < 0.0D);
+
+                    groundTracker(pw.user()).track(entityId, isGround);
+                    pw.write(Type.BOOLEAN, isGround);
                 }); // On Ground
             }
         });
@@ -1566,6 +1584,10 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         return connection.get(EntityTracker.class);
     }
 
+    private GroundTracker groundTracker(final UserConnection connection) {
+        return connection.get(GroundTracker.class);
+    }
+
     @Override
     public void init(UserConnection userConnection) {
         super.init(userConnection);
@@ -1575,6 +1597,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         userConnection.put(new TablistTracker(userConnection));
         userConnection.put(new EntityTracker(userConnection));
         userConnection.put(new TeamsTracker(userConnection));
+        userConnection.put(new GroundTracker(userConnection));
     }
 
     public record ChatMessage(String text) {
