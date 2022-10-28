@@ -54,6 +54,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.unix.Buffer;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -189,26 +190,20 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         inflater.end();
                     }
 
-                    Chunk1_8to1_7_6_10 chunk = new Chunk1_8to1_7_6_10(uncompressedData, primaryBitMask, addBitMask, true, groundUp);
+                    final Chunk1_8to1_7_6_10 chunk = new Chunk1_8to1_7_6_10(uncompressedData, primaryBitMask, addBitMask, true, groundUp);
 
-                    Field field = PacketWrapperImpl.class.getDeclaredField("packetValues");
-                    field.setAccessible(true);
-                    ((List) field.get(pw)).clear();
-                    field = PacketWrapperImpl.class.getDeclaredField("readableObjects");
-                    field.setAccessible(true);
-                    ((ArrayDeque) field.get(pw)).clear();
-                    field = PacketWrapperImpl.class.getDeclaredField("inputBuffer");
-                    field.setAccessible(true);
-                    ByteBuf buffer = (ByteBuf) field.get(pw);
+                    final ByteBuf buffer = ((PacketWrapperImpl) pw).getInputBuffer();
+                    assert buffer != null;
                     buffer.clear();
 
                     buffer.writeInt(chunkX);
                     buffer.writeInt(chunkZ);
                     buffer.writeBoolean(groundUp);
                     buffer.writeShort(primaryBitMask);
-                    byte[] finaldata = chunk.get1_8Data();
-                    Type.VAR_INT.writePrimitive(buffer, finaldata.length);
-                    buffer.writeBytes(finaldata);
+
+                    final byte[] finalData = chunk.get1_8Data();
+                    Type.VAR_INT.writePrimitive(buffer, finalData.length);
+                    buffer.writeBytes(finalData);
                 });
             }
         });
@@ -268,10 +263,10 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         i += i1;
                     }
 
-                    Chunk1_8to1_7_6_10[] chunks = new Chunk1_8to1_7_6_10[columnCount];
+                    final Chunk1_8to1_7_6_10[] chunks = new Chunk1_8to1_7_6_10[columnCount];
+
                     for (i = 0; i < columnCount; i++) {
-                        chunks[i] = new Chunk1_8to1_7_6_10(inflatedBuffers[i], primaryBitMask[i], addBitMask[i], skyLightSent,
-                                true);
+                        chunks[i] = new Chunk1_8to1_7_6_10(inflatedBuffers[i], primaryBitMask[i], addBitMask[i], skyLightSent, true);
                     }
 
                     pw.write(Type.BOOLEAN, skyLightSent);
@@ -288,7 +283,8 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         customByteType = new CustomByteType(data.length);
                         pw.write(customByteType, data);
                     }
-                    ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer();
+
+                    final ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer();
                     try {
                         pw.writeToBuffer(buffer);
                         Type.VAR_INT.readPrimitive(buffer); // Remove Packet ID
