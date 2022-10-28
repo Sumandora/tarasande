@@ -201,20 +201,24 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                             var point = Vec3d.ofCenter(target?.first) + Vec3d.of(dirVec) * -0.5
                             val eye = mc.player?.eyePos!!
 
+                            val blockPos = target?.first
+                            val blockState = mc.world?.getBlockState(target?.first)
+                            val shape = blockState?.getOutlineShape(mc.world, blockPos)!!
+
                             val padding = 0.01
 
                             val finalPoint = if (target?.second?.offsetY != 0) {
                                 placeLine = null
-                                val blockPos = target?.first
-                                val blockState = mc.world?.getBlockState(target?.first)
-                                val shape = blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos?.x?.toDouble()!!, blockPos.y.toDouble(), blockPos.z.toDouble())!!
                                 if (shape.isEmpty)
                                     point
                                 else
-                                    MathUtil.closestPointToBox(aimTarget ?: eye, shape.boundingBox.expand(-padding))
+                                    MathUtil.closestPointToBox(aimTarget ?: eye, shape.offset(blockPos?.x?.toDouble()!!, blockPos.y.toDouble(), blockPos.z.toDouble()).boundingBox.expand(-padding))
                             } else {
+                                val randomizedAimHeight = aimHeight.value + ThreadLocalRandom.current().nextFloat() * 0.1 - 0.05
+                                val absoluteAimHeight = if (shape.isEmpty) randomizedAimHeight else shape.boundingBox.let { it.minY + (it.maxY - it.minY) * randomizedAimHeight }
+                                point = point.add(0.0, MathHelper.clamp(absoluteAimHeight, 0.0, 1.0) - 0.5, 0.0)
+
                                 val rotatedVec = dirVec.let { Vec3d(abs(it.x) - 1.0, 0.0, abs(it.z) - 1.0) }
-                                point = point.add(0.0, MathHelper.clamp(aimHeight.value + ThreadLocalRandom.current().nextFloat() * 0.1 - 0.05, 0.0, 1.0) - 0.5, 0.0)
 
                                 val sideBegin = point + rotatedVec * 0.5
                                 val sideEnd = point + rotatedVec * -0.5
