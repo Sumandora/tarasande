@@ -256,10 +256,11 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                         t = bestSolution
 
                                         preferredSide =
-                                            if (prevT > t)
-                                                1
-                                            else
-                                                -1
+                                            when {
+                                                prevT > t -> 1
+                                                prevT < t -> -1
+                                                else -> null
+                                            }
 
                                     } else {
                                         t += (a * preferredSide!!).toFloat()
