@@ -25,8 +25,6 @@ public class TablistTracker extends StoredObject {
 
 	private final ArrayList<TabListEntry> tablist = new ArrayList<>();
 
-	private int gameMode;
-
 	public TablistTracker(UserConnection user) {
 		super(user);
 	}
@@ -39,14 +37,6 @@ public class TablistTracker extends StoredObject {
 	public TabListEntry getTabListEntry(UUID uuid) {
 		for (TabListEntry entry : tablist) if (uuid.equals(entry.uuid)) return entry;
 		return null;
-	}
-
-	public int getGameMode() {
-		return gameMode;
-	}
-
-	public void setGameMode(int gameMode) {
-		this.gameMode = gameMode;
 	}
 
 	public void remove(TabListEntry entry) {

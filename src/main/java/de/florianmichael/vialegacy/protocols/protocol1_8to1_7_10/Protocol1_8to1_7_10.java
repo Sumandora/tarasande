@@ -14,7 +14,6 @@
 
 package de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10;
 
-import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.Position;
 import com.viaversion.viaversion.api.minecraft.entities.Entity1_10Types;
@@ -42,7 +41,6 @@ import com.viaversion.viaversion.util.GsonUtil;
 import de.florianmichael.vialegacy.ViaLegacy;
 import de.florianmichael.vialegacy.api.minecraft_util.ChatUtil;
 import de.florianmichael.vialegacy.api.profile.GameProfile;
-import de.florianmichael.vialegacy.api.profile.property.Property;
 import de.florianmichael.vialegacy.api.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.api.type._1_7_6_10.CustomStringType_1_7_6_10;
 import de.florianmichael.vialegacy.api.via.EnZaProtocol;
@@ -50,10 +48,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.chunk.Chunk1_8t
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.item.ItemRewriter;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.metadata.MetadataRewriter;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.particle.ParticleRegistry;
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.EntityTracker;
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.ScoreboardLineTracker;
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.TablistTracker;
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.WindowIDTracker;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
@@ -94,6 +89,19 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             }
         });
 
+        this.registerClientbound(State.LOGIN, ClientboundLoginPackets1_7_2.LOGIN_SUCCESS.getId(), ClientboundLoginPackets.GAME_PROFILE.getId(), new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                map(Type.STRING);
+                map(Type.STRING);
+                handler(pw -> {
+                    GameProfile gameProfile = ViaLegacy.getProvider().profile_1_7();
+                    if (Objects.equals(pw.get(Type.STRING, 1), gameProfile.getName()))
+                        pw.set(Type.STRING, 0, gameProfile.getUuid().toString()); // WHAT THE FUCK, HOW DOES THIS EVEN MANAGE TO BE SOMETHING COMPLETELY DIFFERENT, ARE YOU FUCKING RETARDED, THIS SHIT IS LIKE IMPORTANT FOR THE CLIENT YOU STUPID PIECE OF SHIT SERVER SOFTWARE
+                });
+            }
+        });
+
         this.registerServerbound(State.LOGIN, ServerboundLoginPackets1_7_2.ENCRYPTION_RESPONSE.getId(), ServerboundLoginPackets.ENCRYPTION_KEY.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
@@ -120,7 +128,19 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.STRING); // Level Type
 
                 handler((pw) -> {
-                    tablistTracker(pw.user()).setGameMode(pw.get(Type.UNSIGNED_BYTE, 0)); // Keep gamemode for tablist
+                    GameProfile gameProfile = ViaLegacy.getProvider().profile_1_7();
+                    PacketWrapper tablist = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, pw.user());
+                    tablist.write(Type.VAR_INT, 0);
+                    tablist.write(Type.VAR_INT, 1);
+                    tablist.write(Type.UUID, gameProfile.getUuid());
+                    tablist.write(Type.STRING, gameProfile.getName());
+                    tablist.write(Type.VAR_INT, 0);
+                    tablist.write(Type.VAR_INT, (int) pw.get(Type.UNSIGNED_BYTE, 0)); // gamemode
+                    tablist.write(Type.VAR_INT, 0); // ping
+                    tablist.write(Type.OPTIONAL_STRING, gameProfile.getName());
+                    tablist.send(Protocol1_8to1_7_10.class);
+                    tablistTracker(pw.user()).add(new TablistTracker.TabListEntry(gameProfile.getName(), gameProfile.getUuid()));
+
                     pw.write(Type.BOOLEAN, false); // Reduced Debug Info
                 });
             }
@@ -265,70 +285,32 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     MetadataRewriter.transform(Entity1_10Types.EntityType.PLAYER, metadata);
                     packetWrapper.write(Types1_8.METADATA_LIST, metadata);
 
-                    TablistTracker.TabListEntry entryByName = tablistTracker.getTabListEntry(name);
-                    TablistTracker.TabListEntry entryByUUID = tablistTracker.getTabListEntry(uuid);
+                    PacketWrapper addPlayerInfo = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
+                    addPlayerInfo.write(Type.VAR_INT, 0); // ADD
+                    addPlayerInfo.write(Type.VAR_INT, 1);
+                    addPlayerInfo.write(Type.UUID, uuid);
+                    addPlayerInfo.write(Type.STRING, name);
+                    addPlayerInfo.write(Type.VAR_INT, dataCount);
 
-                    if (entryByName == null || entryByUUID == null) {
-                        if (entryByName != null || entryByUUID != null) {
-                            PacketWrapper remove = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
-                            remove.write(Type.VAR_INT, 4);
-                            remove.write(Type.VAR_INT, 1);
-                            remove.write(Type.UUID, entryByName == null ? entryByUUID.uuid : entryByName.uuid);
-                            tablistTracker.remove(entryByName == null ? entryByUUID : entryByName);
-                            remove.send(Protocol1_8to1_7_10.class);
-                        }
+                    for (TablistTracker.Property property : properties) {
+                        addPlayerInfo.write(Type.STRING, property.name);
+                        addPlayerInfo.write(Type.STRING, property.value);
+                        addPlayerInfo.write(Type.OPTIONAL_STRING, property.signature);
+                    }
 
-                        PacketWrapper packetPlayerListItem = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
-                        TablistTracker.TabListEntry newentry = new TablistTracker.TabListEntry(name, uuid);
-                        if (entryByName != null || entryByUUID != null) {
-                            newentry.displayName = entryByUUID != null ? entryByUUID.displayName : entryByName.displayName;
-                        }
-                        newentry.properties = properties;
-                        tablistTracker.add(newentry);
-                        packetPlayerListItem.write(Type.VAR_INT, 0);
-                        packetPlayerListItem.write(Type.VAR_INT, 1);
-                        packetPlayerListItem.write(Type.UUID, newentry.uuid);
-                        packetPlayerListItem.write(Type.STRING, newentry.name);
-                        packetPlayerListItem.write(Type.VAR_INT, dataCount);
+                    addPlayerInfo.write(Type.VAR_INT, 0);
+                    addPlayerInfo.write(Type.VAR_INT, 0);
+                    addPlayerInfo.write(Type.OPTIONAL_STRING, name);
 
-                        for (TablistTracker.Property property : newentry.properties) {
-                            packetPlayerListItem.write(Type.STRING, property.name);
-                            packetPlayerListItem.write(Type.STRING, property.value);
-                            packetPlayerListItem.write(Type.OPTIONAL_STRING, property.signature);
-                        }
-                        packetPlayerListItem.write(Type.VAR_INT, 0);
-                        packetPlayerListItem.write(Type.VAR_INT, 0);
-                        packetPlayerListItem.write(Type.OPTIONAL_STRING, name);
-                        packetPlayerListItem.send(Protocol1_8to1_7_10.class);
+                    PacketWrapper removePlayerInfo = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
+                    removePlayerInfo.write(Type.VAR_INT, 4); // REMOVE
+                    removePlayerInfo.write(Type.VAR_INT, 1);
+                    removePlayerInfo.write(Type.UUID, uuid);
 
-                        packetWrapper.cancel();
-
-                        final PacketWrapper delayedPacket = PacketWrapper.create(ClientboundPackets1_7_10.SPAWN_PLAYER, packetWrapper.user());
-
-                        delayedPacket.write(Type.VAR_INT, entityId);
-
-                        delayedPacket.write(Type.UUID, uuid);
-
-                        delayedPacket.write(Type.INT, x);
-                        delayedPacket.write(Type.INT, y);
-                        delayedPacket.write(Type.INT, z);
-
-                        delayedPacket.write(Type.BYTE, yaw);
-                        delayedPacket.write(Type.BYTE, pitch);
-
-                        delayedPacket.write(Type.SHORT, item);
-
-                        delayedPacket.write(Types1_8.METADATA_LIST, metadata);
-
-                        Via.getPlatform().runSync(() -> {
-                            try {
-                                delayedPacket.send(Protocol1_8to1_7_10.class);
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-                        }, 1L);
-                    } else entryByUUID.properties = properties;
-
+                    addPlayerInfo.send(Protocol1_8to1_7_10.class);
+                    packetWrapper.send(Protocol1_8to1_7_10.class);
+                    removePlayerInfo.send(Protocol1_8to1_7_10.class);
+                    packetWrapper.cancel();
                 });
                 handler(packetWrapper -> {
                     final EntityTracker entityTracker = entityTracker(packetWrapper.user());
@@ -452,7 +434,13 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.INT, 3); // Position
                 map(Type.BYTE, 2); // Rotation
 
-                handler((pw) -> pw.write(Type.BOOLEAN, true)); // On Ground
+                handler((pw) -> {
+                    System.out.println(pw.get(Type.INT, 1));
+                    // TODO The origin of the 56.28 is beyond me (https://gist.github.com/MrPowerGamerBR/fab8698da506d9e6f338ce88346f04fb#file-hologram-java-L173)
+                    // TOOD this is probably wrong
+                    pw.set(Type.INT, 1, (int) ((pw.get(Type.INT, 1) / 32.0 - 56.28) * 32));
+                    pw.write(Type.BOOLEAN, true);
+                }); // On Ground
             }
         });
 
@@ -781,22 +769,74 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             public void registerMap() {
                 map(Type.STRING);
                 handler(packetWrapper -> {
-                    final byte mode = packetWrapper.read(Type.BYTE);
+                    String uniqueName = packetWrapper.get(Type.STRING, 0);
+                    final byte mode = packetWrapper.read(Type.BYTE); // unique name
                     packetWrapper.write(Type.BYTE, mode);
                     if (mode == 0 || mode == 2) {
-                        packetWrapper.passthrough(Type.STRING);
-                        packetWrapper.passthrough(Type.STRING);
-                        packetWrapper.passthrough(Type.STRING);
-                        packetWrapper.passthrough(Type.BYTE);
-                        packetWrapper.write(Type.STRING, "always");
-                        packetWrapper.write(Type.BYTE, (byte) 0);
+                        packetWrapper.passthrough(Type.STRING); // display name
+                        packetWrapper.passthrough(Type.STRING); // team prefix
+                        packetWrapper.passthrough(Type.STRING); // team suffix
+                        packetWrapper.passthrough(Type.BYTE); // friendly fire (lmao)
+                        packetWrapper.write(Type.STRING, "always"); // name tag visibility
+                        packetWrapper.write(Type.BYTE, (byte) 0); // color
                     }
+                    String[] entries = null;
                     if (mode == 0 || mode == 3 || mode == 4) {
-                        final int count = packetWrapper.read(Type.SHORT);
+                        final int count = packetWrapper.read(Type.SHORT); // player count
                         final CustomStringType_1_7_6_10 type = new CustomStringType_1_7_6_10(count);
-                        final String[] entries = packetWrapper.read(type);
+                        entries = packetWrapper.read(type); // players
 
                         packetWrapper.write(Type.STRING_ARRAY, entries);
+                    }
+
+                    TeamsTracker teamsTracker = teamsTracker(packetWrapper.user());
+
+                    if (mode == 1) {
+                        teamsTracker.removeTeamsEntryIf(e -> e.getKey().uniqueName == uniqueName);
+                    } else {
+                        TeamsTracker.TeamsEntry teamsEntry = null;
+                        if (mode == 0) {
+                            teamsEntry = new TeamsTracker.TeamsEntry(
+                                    uniqueName,
+                                    // nice order lmao
+                                    packetWrapper.get(Type.STRING, 2),
+                                    packetWrapper.get(Type.STRING, 1),
+                                    packetWrapper.get(Type.STRING, 3)
+                            );
+
+                        } else if (mode == 2) {
+                            teamsEntry = teamsTracker.getByUniqueName(uniqueName);
+                            teamsEntry.prefix = packetWrapper.get(Type.STRING, 2);
+                            teamsEntry.name = packetWrapper.get(Type.STRING, 1);
+                            teamsEntry.suffix = packetWrapper.get(Type.STRING, 3);
+                        } else if (mode == 3 || mode == 4) {
+                            teamsEntry = teamsTracker.getByUniqueName(uniqueName);
+                        }
+                        if (teamsEntry == null)
+                            return;
+                        ArrayList<String> prePlayers = teamsTracker.getPlayers(teamsEntry);
+                        if (prePlayers == null)
+                            prePlayers = new ArrayList<>();
+                        if (entries != null)
+                            for (String entry : entries)
+                                if (!prePlayers.contains(entry))
+                                    prePlayers.add(entry);
+                        teamsTracker.putTeamsEntry(teamsEntry, prePlayers);
+
+                        TablistTracker tablist = tablistTracker(packetWrapper.user());
+
+                        for (String player : prePlayers) {
+                            TablistTracker.TabListEntry tabListEntry = tablist.getTabListEntry(player);
+
+                            if (tabListEntry != null) {
+                                PacketWrapper updateNamePlayerInfo = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
+                                updateNamePlayerInfo.write(Type.VAR_INT, 3); // UPDATE DISPLAY NAME
+                                updateNamePlayerInfo.write(Type.VAR_INT, 1);
+                                updateNamePlayerInfo.write(Type.UUID, tabListEntry.uuid);
+                                updateNamePlayerInfo.write(Type.OPTIONAL_STRING, tabListEntry.displayName = teamsEntry.concat(player));
+                                updateNamePlayerInfo.send(Protocol1_8to1_7_10.class);
+                            }
+                        }
                     }
                 });
             }
@@ -861,25 +901,18 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     String normalizedName = ChatColorUtil.stripColor(name);
 
                     final TablistTracker tablist = tablistTracker(packetWrapper.user());
-                    TablistTracker.TabListEntry entry = tablist.getTabListEntry(normalizedName);
+                    TablistTracker.TabListEntry entry = tablist.getTabListEntry(name);
 
                     if (entry == null && add) {
-                        final GameProfile gameProfile = ViaLegacy.getProvider().profile_1_7();
-
-                        boolean selfPlayer = false;
-
-                        if (gameProfile != null && Objects.equals(normalizedName, gameProfile.getName())) {
-                            entry = new TablistTracker.TabListEntry(normalizedName, gameProfile.getUuid());
-                            for (Map.Entry<String, Property> propertyEntry : gameProfile.getSkinProperties().entries()) {
-                                Property property = propertyEntry.getValue();
-                                entry.properties.add(new TablistTracker.Property(property.getName(), property.getValue(), property.getSignature()));
-                            }
-                            selfPlayer = true;
-                        } else entry = new TablistTracker.TabListEntry(normalizedName, UUID.randomUUID());
+                        entry = new TablistTracker.TabListEntry(name, UUID.randomUUID());
 
                         tablist.add(entry);
 
                         entry.displayName = !Objects.equals(name, normalizedName) ? name : null;
+
+                        TeamsTracker.TeamsEntry teamsEntry = teamsTracker(packetWrapper.user()).getTeamsEntry(name);
+                        if (teamsEntry != null)
+                            entry.displayName = teamsEntry.concat(name);
 
                         packetWrapper.write(Type.VAR_INT, 0); // ADD
                         packetWrapper.write(Type.VAR_INT, 1);
@@ -892,7 +925,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                             packetWrapper.write(Type.STRING, property.value);
                             packetWrapper.write(Type.OPTIONAL_STRING, property.signature);
                         }
-                        packetWrapper.write(Type.VAR_INT, selfPlayer ? tablist.getGameMode() : 0);
+                        packetWrapper.write(Type.VAR_INT, 0);
                         packetWrapper.write(Type.VAR_INT, (int) ping);
                         packetWrapper.write(Type.OPTIONAL_STRING, entry.displayName);
                     } else if (entry != null && !add) {
@@ -905,7 +938,8 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         packetWrapper.write(Type.VAR_INT, 1);
                         packetWrapper.write(Type.UUID, entry.uuid);
                         packetWrapper.write(Type.VAR_INT, (int) ping);
-                    }
+                    } else
+                        packetWrapper.cancel();
                 });
             }
         });
@@ -961,12 +995,15 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.BYTE);
                 map(Type.INT);
                 handler(packetWrapper -> {
+
                     byte type = packetWrapper.get(Type.BYTE, 0);
                     int x = packetWrapper.get(Type.INT, 0);
                     int y = packetWrapper.get(Type.INT, 1);
                     int z = packetWrapper.get(Type.INT, 2);
                     byte yaw = packetWrapper.get(Type.BYTE, 2);
                     int data = packetWrapper.get(Type.INT, 3);
+
+                    y = -y;
 
                     if (type == 71) {
                         switch (data) {
@@ -1028,6 +1065,9 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 handler(packetWrapper -> {
                     final int entityID = packetWrapper.get(Type.VAR_INT, 0);
                     final int typeID = packetWrapper.get(Type.UNSIGNED_BYTE, 0);
+                    System.out.println(typeID + " " + packetWrapper.get(Type.INT, 1));
+
+                    packetWrapper.set(Type.INT, 1, -packetWrapper.get(Type.INT, 1));
 
                     final EntityTracker tracker = entityTracker(packetWrapper.user());
 
@@ -1082,6 +1122,26 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
 
                     for (int entityId : packetWrapper.get(Type.VAR_INT_ARRAY_PRIMITIVE, 0))
                         tracker.removeEntity(entityId);
+                });
+            }
+        });
+
+        this.registerClientbound(ClientboundPackets1_7_10.GAME_EVENT, new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                map(Type.UNSIGNED_BYTE);
+                map(Type.FLOAT);
+                handler(pw -> {
+                    int type = pw.get(Type.UNSIGNED_BYTE, 0);
+                    float value = pw.get(Type.FLOAT, 0);
+                    if (type == 3) { // Gamemode change
+                        PacketWrapper packetWrapper = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, pw.user());
+                        packetWrapper.write(Type.VAR_INT, 1); // UPDATE GAMEMODE
+                        packetWrapper.write(Type.VAR_INT, 1);
+                        packetWrapper.write(Type.UUID, ViaLegacy.getProvider().profile_1_7().getUuid());
+                        packetWrapper.write(Type.VAR_INT, (int) value);
+                        packetWrapper.send(Protocol1_8to1_7_10.class);
+                    }
                 });
             }
         });
@@ -1498,6 +1558,10 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         return connection.get(TablistTracker.class);
     }
 
+    private TeamsTracker teamsTracker(final UserConnection connection) {
+        return connection.get(TeamsTracker.class);
+    }
+
     private EntityTracker entityTracker(final UserConnection connection) {
         return connection.get(EntityTracker.class);
     }
@@ -1510,6 +1574,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         userConnection.put(new ScoreboardLineTracker(userConnection));
         userConnection.put(new TablistTracker(userConnection));
         userConnection.put(new EntityTracker(userConnection));
+        userConnection.put(new TeamsTracker(userConnection));
     }
 
     public record ChatMessage(String text) {
