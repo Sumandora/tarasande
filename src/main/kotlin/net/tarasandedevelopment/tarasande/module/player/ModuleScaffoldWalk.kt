@@ -255,11 +255,13 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                         val bestSolution = solutions.minBy { abs(it - 0.5) }
                                         t = bestSolution
 
-                                        preferredSide = when {
-                                            prevT < t -> 1
-                                            prevT > t -> -1
-                                            else -> null
-                                        }
+                                        preferredSide =
+                                            when {
+                                                prevT > t -> 1
+                                                prevT < t -> -1
+                                                else -> null
+                                            }
+
                                     } else {
                                         t += (a * preferredSide!!).toFloat()
                                     }
