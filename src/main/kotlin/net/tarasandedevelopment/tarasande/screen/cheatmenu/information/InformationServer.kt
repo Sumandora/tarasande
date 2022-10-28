@@ -16,10 +16,10 @@ class InformationServerBrand : Information("Server", "Server Brand") {
 
     override fun getMessage(): String? {
         if (!MinecraftClient.getInstance().isInSingleplayer) {
-            var brand: String? = MinecraftClient.getInstance().player!!.serverBrand ?: return null
+            var brand = MinecraftClient.getInstance().player?.serverBrand ?: return null
 
             if (regex.value)
-                brand = brand!!.replace(compiledRegex, "")
+                brand = brand.replace(compiledRegex, "")
             return brand
         }
         return null

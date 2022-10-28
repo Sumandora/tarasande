@@ -47,8 +47,8 @@ class InformationSpawnPoint : Information("World", "Spawn Point") {
     private val decimalPlacesY = ValueNumber(this, "Decimal places: y", 0.0, 1.0, 5.0, 1.0)
     private val decimalPlacesZ = ValueNumber(this, "Decimal places: z", 0.0, 1.0, 5.0, 1.0)
 
-    override fun getMessage(): String {
-        val pos = MinecraftClient.getInstance().world!!.spawnPos
+    override fun getMessage(): String? {
+        val pos = MinecraftClient.getInstance().world?.spawnPos ?: return null
 
         return StringUtil.round(pos.x.toDouble(), this.decimalPlacesX.value.toInt()) + " " + StringUtil.round(pos.y.toDouble(), this.decimalPlacesY.value.toInt()) + " " + StringUtil.round(pos.z.toDouble(), this.decimalPlacesZ.value.toInt())
     }
