@@ -111,7 +111,7 @@
     "features.module.screens.MixinPlayerScreenHandler",
     "library.baritone.MixinLookBehavior",
     "protocolhack.MixinBossBarHud",
-    "protocolhack.MixinBrewingStandScreenHandler",
+    "protocolhack.screen.screenhandler.MixinBrewingStandScreenHandler",
     "protocolhack.MixinChatInputSuggestor",
     "protocolhack.MixinChatScreen",
     "protocolhack.MixinClientBuiltinResourcePackProvider",

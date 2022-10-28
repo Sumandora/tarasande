@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
+package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.screen.screenhandler;
 
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.inventory.Inventory;
