@@ -34,10 +34,10 @@ public class MixinKeyboardInput extends Input {
                 this.pressingLeft = true;
             else if (movementSideways < 0)
                 this.pressingRight = true;
-        }
 
-        if (!eventInput.getSlowDown())
-            ci.cancel(); // This is awful, but I can't change the parameter, because Java doesn't support references
+            if (slowDown && !eventInput.getSlowDown())
+                ci.cancel(); // This is awful, but I can't change the parameter, because Java doesn't support references
+        }
     }
 
     @Override
