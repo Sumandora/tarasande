@@ -21,7 +21,7 @@ import org.lwjgl.glfw.GLFW
 
 class ModuleCommands : Module("Commands", "Client-sided commands for certain actions", ModuleCategory.MISC) {
 
-    private val prefix = ValueText(this, "Prefix", "$")
+    val prefix = ValueText(this, "Prefix", "$")
     private val exceptions = ValueBoolean(this, "Show exceptions", true)
     private val bypassCommands = object : ValueBind(this, "Bypass commands", Type.KEY, GLFW.GLFW_KEY_UNKNOWN) {
         override fun filter(type: Type, bind: Int) = bind >= GLFW.GLFW_KEY_ESCAPE || bind == GLFW.GLFW_KEY_UNKNOWN
