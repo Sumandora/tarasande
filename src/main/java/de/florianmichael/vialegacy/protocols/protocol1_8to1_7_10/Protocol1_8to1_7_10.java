@@ -100,9 +100,9 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.STRING);
                 map(Type.STRING);
                 handler(pw -> {
-                    GameProfile gameProfile = ViaLegacy.getProvider().profile_1_7();
-                    if (Objects.equals(pw.get(Type.STRING, 1), gameProfile.getName()))
-                        pw.set(Type.STRING, 0, gameProfile.getUuid().toString()); // WHAT THE FUCK, HOW DOES THIS EVEN MANAGE TO BE SOMETHING COMPLETELY DIFFERENT, ARE YOU FUCKING RETARDED, THIS SHIT IS LIKE IMPORTANT FOR THE CLIENT YOU STUPID PIECE OF SHIT SERVER SOFTWARE
+//                    GameProfile gameProfile = ViaLegacy.getProvider().profile_1_7();
+//                    if (Objects.equals(pw.get(Type.STRING, 1), gameProfile.getName()))
+//                        pw.set(Type.STRING, 0, gameProfile.getUuid().toString()); // WHAT THE FUCK, HOW DOES THIS EVEN MANAGE TO BE SOMETHING COMPLETELY DIFFERENT, ARE YOU FUCKING RETARDED, THIS SHIT IS LIKE IMPORTANT FOR THE CLIENT YOU STUPID PIECE OF SHIT SERVER SOFTWARE
                 });
             }
         });
@@ -368,8 +368,8 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             @Override
             public void registerMap() {
                 handler(packetWrapper -> {
-                    UUID uuid = UUID.fromString(packetWrapper.read(Type.STRING));
-                    packetWrapper.write(Type.UUID, uuid);
+                    packetWrapper.passthrough(Type.VAR_INT); // Entity ID
+                    final String uuid = packetWrapper.passthrough(Type.STRING);
 
                     final String name = ChatColorUtil.stripColor(packetWrapper.read(Type.STRING));
                     final int dataCount = packetWrapper.read(Type.VAR_INT);
@@ -377,20 +377,26 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final List<TablistTracker.Property> properties = new ArrayList<>();
 
                     for (int i = 0; i < dataCount; i++) {
-                        String key = packetWrapper.read(Type.STRING);  //Name
-                        String value = packetWrapper.read(Type.STRING);  //Value
-                        String signature = packetWrapper.read(Type.STRING);  //Signature
+                        String key = packetWrapper.read(Type.STRING); // Name
+                        String value = packetWrapper.read(Type.STRING); // Value
+                        String signature = packetWrapper.read(Type.STRING); // Signature
                         properties.add(new TablistTracker.Property(key, value, signature));
                     }
+                    packetWrapper.passthrough(Type.INT); // X
+                    packetWrapper.passthrough(Type.INT); // Y
+                    packetWrapper.passthrough(Type.INT); // Z
+                    packetWrapper.passthrough(Type.BYTE); // Yaw
+                    packetWrapper.passthrough(Type.BYTE); // Pitch
+                    packetWrapper.passthrough(Type.SHORT); // Item in hand
 
-                    List<Metadata> metadata = packetWrapper.read(TypeRegistry1_7_6_10.METADATA_LIST);  //Metadata
+                    List<Metadata> metadata = packetWrapper.read(TypeRegistry1_7_6_10.METADATA_LIST); // Metadata
                     MetadataRewriter.transform(Entity1_10Types.EntityType.PLAYER, metadata);
                     packetWrapper.write(Types1_8.METADATA_LIST, metadata);
 
                     PacketWrapper addPlayerInfo = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
                     addPlayerInfo.write(Type.VAR_INT, 0); // ADD
                     addPlayerInfo.write(Type.VAR_INT, 1);
-                    addPlayerInfo.write(Type.UUID, uuid);
+                    addPlayerInfo.write(Type.UUID, UUID.fromString(uuid));
                     addPlayerInfo.write(Type.STRING, name);
                     addPlayerInfo.write(Type.VAR_INT, dataCount);
 
@@ -407,7 +413,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     PacketWrapper removePlayerInfo = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
                     removePlayerInfo.write(Type.VAR_INT, 4); // REMOVE
                     removePlayerInfo.write(Type.VAR_INT, 1);
-                    removePlayerInfo.write(Type.UUID, uuid);
+                    removePlayerInfo.write(Type.UUID, UUID.fromString(uuid));
 
                     addPlayerInfo.send(Protocol1_8to1_7_10.class);
                     packetWrapper.send(Protocol1_8to1_7_10.class);
