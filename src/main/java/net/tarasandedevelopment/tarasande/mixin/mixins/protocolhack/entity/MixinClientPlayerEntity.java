@@ -123,8 +123,10 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Inject(method = "swingHand", at = @At("HEAD"), cancellable = true)
     public void injectSwingHand(Hand hand, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8) && protocolhack_areSwingCanceledThisTick)
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_8) && protocolhack_areSwingCanceledThisTick) {
             ci.cancel();
+        }
+
         protocolhack_areSwingCanceledThisTick = false;
     }
 
@@ -146,29 +148,35 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
             slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isWalking()Z")),
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isSwimming()Z", ordinal = 0))
     public boolean redirectIsSneakingWhileSwimming(ClientPlayerEntity _this) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_1))
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_1)) {
             return false;
-        else
+        } else {
             return _this.isSwimming();
+        }
     }
 
     @Inject(method = "isWalking", at = @At("HEAD"), cancellable = true)
     public void easierUnderwaterSprinting(CallbackInfoReturnable<Boolean> ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_1))
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_1)) {
             ci.setReturnValue(input.movementForward >= 0.8);
+        }
     }
 
     @Redirect(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;hasForwardMovement()Z", ordinal = 0))
     private boolean disableSprintSneak(Input input) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_1))
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_1)) {
             return input.movementForward >= 0.8F;
+        }
+
         return input.hasForwardMovement();
     }
 
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isTouchingWater()Z"))
     private boolean redirectTickMovement(ClientPlayerEntity self) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2)) {
             return false; // disable all water related movement
+        }
+
         return self.isTouchingWater();
     }
 
