@@ -257,10 +257,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             @Override
             public void registerMap() {
                 handler(packetWrapper -> {
-                    final TablistTracker tablistTracker = tablistTracker(packetWrapper.user());
-
-                    final int entityId = packetWrapper.passthrough(Type.VAR_INT);
-
                     UUID uuid = UUID.fromString(packetWrapper.read(Type.STRING));
                     packetWrapper.write(Type.UUID, uuid);
 
@@ -275,12 +271,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         String signature = packetWrapper.read(Type.STRING);  //Signature
                         properties.add(new TablistTracker.Property(key, value, signature));
                     }
-                    int x = packetWrapper.passthrough(Type.INT);  //x
-                    int y = packetWrapper.passthrough(Type.INT);  //y
-                    int z = packetWrapper.passthrough(Type.INT);  //z
-                    byte yaw = packetWrapper.passthrough(Type.BYTE);  //yaw
-                    byte pitch = packetWrapper.passthrough(Type.BYTE);  //pitch
-                    short item = packetWrapper.passthrough(Type.SHORT);  //Item in hand
+
                     List<Metadata> metadata = packetWrapper.read(TypeRegistry1_7_6_10.METADATA_LIST);  //Metadata
                     MetadataRewriter.transform(Entity1_10Types.EntityType.PLAYER, metadata);
                     packetWrapper.write(Types1_8.METADATA_LIST, metadata);
