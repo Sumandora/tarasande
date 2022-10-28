@@ -63,6 +63,12 @@
 - Forge Faker GUI auto calculation for width
 - Panel: Text Radar
 
+## TODO-List (Flori | TarasandeProtocolHack)
+
+- 1.8.x: Water movement
+- 1.8.x: Lava movement
+- 1.8.x: Horses
+
 ## TODO-List (Flori | ViaLegacy)
 
 - Unknown: Mining Fast Checks

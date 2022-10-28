@@ -377,9 +377,10 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final List<TablistTracker.Property> properties = new ArrayList<>();
 
                     for (int i = 0; i < dataCount; i++) {
-                        String key = packetWrapper.read(Type.STRING); // Name
-                        String value = packetWrapper.read(Type.STRING); // Value
-                        String signature = packetWrapper.read(Type.STRING); // Signature
+                        final String key = packetWrapper.read(Type.STRING); // Name
+                        final String value = packetWrapper.read(Type.STRING); // Value
+                        final String signature = packetWrapper.read(Type.STRING); // Signature
+
                         properties.add(new TablistTracker.Property(key, value, signature));
                     }
                     packetWrapper.passthrough(Type.INT); // X
