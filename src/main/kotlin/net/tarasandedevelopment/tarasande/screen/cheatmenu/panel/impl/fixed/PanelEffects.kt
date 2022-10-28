@@ -76,7 +76,7 @@ class PanelEffects(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Pan
         Registry.STATUS_EFFECT.forEach { statusEffect ->
             var animation = animations.putIfAbsent(statusEffect, 0.0)
             if (animation == null || animation.isNaN()) animation = 0.0 else {
-                if (MinecraftClient.getInstance().player?.hasStatusEffect(statusEffect)!!) {
+                if (MinecraftClient.getInstance().player?.hasStatusEffect(statusEffect) ?: return false) {
                     animation += speedIn.value * RenderUtil.deltaTime
                 } else {
                     animation -= speedOut.value * RenderUtil.deltaTime

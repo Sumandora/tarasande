@@ -22,7 +22,7 @@ class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
     private val enchantmentScale = ValueNumber(this, "Enchantments: scale", 0.1, 0.5, 2.0, 0.1)
 
     override fun isVisible(): Boolean {
-        for (itemStack in MinecraftClient.getInstance().player!!.inventory.armor)
+        for (itemStack in MinecraftClient.getInstance().player?.inventory?.armor ?: return false)
             if (itemStack != ItemStack.EMPTY && itemStack != null) return true
 
         return false

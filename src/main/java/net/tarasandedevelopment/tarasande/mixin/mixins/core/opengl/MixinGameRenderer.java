@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static org.lwjgl.opengl.GL11.*;
 
-@Mixin(GameRenderer.class)
+@Mixin(value = GameRenderer.class, priority = 1001)
 public class MixinGameRenderer {
     @Shadow
     @Final
