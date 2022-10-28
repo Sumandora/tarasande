@@ -24,7 +24,7 @@ class ModulePhase : Module("Phase", "Allows you to move through blocks", ModuleC
 
     init {
         registerEvent(EventUpdate::class.java) { event ->
-            if (event.state != EventUpdate.State.PRE)
+            if (event.state != EventUpdate.State.PRE_PACKET)
                 return@registerEvent
 
             if (mode.isSelected(0))

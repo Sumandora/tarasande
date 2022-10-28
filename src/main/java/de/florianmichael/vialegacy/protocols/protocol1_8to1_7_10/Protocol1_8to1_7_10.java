@@ -792,9 +792,9 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         this.registerClientbound(ClientboundPackets1_7_10.PLUGIN_MESSAGE, new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(TypeRegistry1_7_6_10.PLUGIN_MESSAGE_CHANNEL_STRING);
+                map(Type.STRING);
                 handler(packetWrapper -> {
-                    final String channel = packetWrapper.get(TypeRegistry1_7_6_10.PLUGIN_MESSAGE_CHANNEL_STRING, 0);
+                    final String channel = packetWrapper.get(Type.STRING, 0);
                     switch (channel) {
                         case "MC|Brand" -> {
                             byte[] data = packetWrapper.read(TypeRegistry1_7_6_10.BYTEARRAY);
