@@ -1,17 +1,31 @@
 package de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.chunk;
 
+import com.viaversion.viaversion.api.minecraft.blockentity.BlockEntity;
+import com.viaversion.viaversion.api.minecraft.chunks.Chunk;
+import com.viaversion.viaversion.api.minecraft.chunks.ChunkSection;
 import com.viaversion.viaversion.api.minecraft.chunks.NibbleArray;
+import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class Chunk1_8to1_7_6_10 {
+import java.util.BitSet;
+import java.util.List;
+
+public class Chunk1_8to1_7_6_10 implements Chunk {
 
 	public ExtendedBlockStorage[] storageArrays = new ExtendedBlockStorage[16];
 	public byte[] blockBiomeArray = new byte[256];
+
+	private final int chunkX;
+	private final int chunkZ;
 
 	private final boolean skyLight;
 	private final int primaryBitMask;
 	private final boolean groundUp;
 
-	public Chunk1_8to1_7_6_10(byte[] data, int primaryBitMask, int addBitMask, boolean skyLight, boolean groundUp) {
+	public Chunk1_8to1_7_6_10(int chunkX, int chunkZ, byte[] data, int primaryBitMask, int addBitMask, boolean skyLight, boolean groundUp) {
+		this.chunkX = chunkX;
+		this.chunkZ = chunkZ;
+
 		this.primaryBitMask = primaryBitMask;
 		this.skyLight = skyLight;
 		this.groundUp = groundUp;
@@ -123,5 +137,95 @@ public class Chunk1_8to1_7_6_10 {
 		System.arraycopy(buffer, 0, finaldata, 0, finalSize);
 
 		return finaldata;
+	}
+
+	@Override
+	public int getX() {
+		return chunkX;
+	}
+
+	@Override
+	public int getZ() {
+		return chunkZ;
+	}
+
+	@Override
+	public boolean isBiomeData() {
+		return false;
+	}
+
+	@Override
+	public boolean isFullChunk() {
+		return groundUp;
+	}
+
+	@Override
+	public boolean isIgnoreOldLightData() {
+		return skyLight;
+	}
+
+	@Override
+	public void setIgnoreOldLightData(boolean ignoreOldLightData) {
+
+	}
+
+	@Override
+	public int getBitmask() {
+		return primaryBitMask;
+	}
+
+	@Override
+	public void setBitmask(int bitmask) {
+
+	}
+
+	@Override
+	public @Nullable BitSet getChunkMask() {
+		return null;
+	}
+
+	@Override
+	public void setChunkMask(BitSet chunkSectionMask) {
+
+	}
+
+	@Override
+	public @Nullable ChunkSection[] getSections() {
+		return new ChunkSection[0];
+	}
+
+	@Override
+	public void setSections(ChunkSection[] sections) {
+
+	}
+
+	@Override
+	public int @Nullable [] getBiomeData() {
+		return new int[0];
+	}
+
+	@Override
+	public void setBiomeData(int @Nullable [] biomeData) {
+
+	}
+
+	@Override
+	public @Nullable CompoundTag getHeightMap() {
+		return null;
+	}
+
+	@Override
+	public void setHeightMap(@Nullable CompoundTag compoundTag) {
+
+	}
+
+	@Override
+	public List<CompoundTag> getBlockEntities() {
+		return null;
+	}
+
+	@Override
+	public List<BlockEntity> blockEntities() {
+		return null;
 	}
 }
