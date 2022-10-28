@@ -15,6 +15,7 @@
 package de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.minecraft.BlockChangeRecord;
 import com.viaversion.viaversion.api.minecraft.BlockChangeRecord1_8;
 import com.viaversion.viaversion.api.minecraft.Position;
 import com.viaversion.viaversion.api.minecraft.entities.Entity1_10Types;
@@ -53,13 +54,14 @@ import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.unix.Buffer;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -305,22 +307,25 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final int size = pw.read(Type.SHORT);
 
                     pw.read(Type.INT);
-                    final BlockChangeRecord1_8[] records = new BlockChangeRecord1_8[size];
+                    final short[] blocks = new short[size];
+                    final short[] positions = new short[size];
 
                     for (int i = 0; i < size; i++) {
-                        short pos = pw.read(Type.SHORT);
-
-                        records[i] = new BlockChangeRecord1_8(
-                                pos >>> 12 & 0xF,
-                                pos & 0xFF,
-                                pos >>> 8 & 0xF,
-                                pw.read(Type.SHORT)
-                        );
+                        positions[i] = pw.read(Type.SHORT);
+                        blocks[i] = pw.read(Type.SHORT);
                     }
 
                     pw.write(Type.INT, chunkX);
                     pw.write(Type.INT, chunkZ);
-                    pw.write(Type.BLOCK_CHANGE_RECORD_ARRAY, records);
+                    pw.write(Type.BLOCK_CHANGE_RECORD_ARRAY, IntStream.of(0, size).mapToObj(value -> {
+                        final short encodedPos = positions[value];
+
+                        final int x = encodedPos >>> 12 & 0xF;
+                        final int y = encodedPos & 0xFF;
+                        final int z = encodedPos >>> 8 & 0xF;
+
+                        return new BlockChangeRecord1_8(x, y, z, blocks[value]);
+                    }).toList().toArray(BlockChangeRecord[]::new));
                 });
             }
         });
@@ -363,8 +368,8 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             @Override
             public void registerMap() {
                 handler(packetWrapper -> {
-                    UUID uuid = UUID.fromString(packetWrapper.read(Type.STRING));
-                    packetWrapper.write(Type.UUID, uuid);
+                    packetWrapper.passthrough(Type.VAR_INT); // Entity ID
+                    final String uuid = packetWrapper.passthrough(Type.STRING);
 
                     final String name = ChatColorUtil.stripColor(packetWrapper.read(Type.STRING));
                     final int dataCount = packetWrapper.read(Type.VAR_INT);
@@ -372,16 +377,26 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final List<TablistTracker.Property> properties = new ArrayList<>();
 
                     for (int i = 0; i < dataCount; i++) {
-                        String key = packetWrapper.read(Type.STRING);  //Name
-                        String value = packetWrapper.read(Type.STRING);  //Value
-                        String signature = packetWrapper.read(Type.STRING);  //Signature
+                        String key = packetWrapper.read(Type.STRING); // Name
+                        String value = packetWrapper.read(Type.STRING); // Value
+                        String signature = packetWrapper.read(Type.STRING); // Signature
                         properties.add(new TablistTracker.Property(key, value, signature));
                     }
+                    packetWrapper.passthrough(Type.INT); // X
+                    packetWrapper.passthrough(Type.INT); // Y
+                    packetWrapper.passthrough(Type.INT); // Z
+                    packetWrapper.passthrough(Type.BYTE); // Yaw
+                    packetWrapper.passthrough(Type.BYTE); // Pitch
+                    packetWrapper.passthrough(Type.SHORT); // Item in hand
+
+                    List<Metadata> metadata = packetWrapper.read(TypeRegistry1_7_6_10.METADATA_LIST); // Metadata
+                    MetadataRewriter.transform(Entity1_10Types.EntityType.PLAYER, metadata);
+                    packetWrapper.write(Types1_8.METADATA_LIST, metadata);
 
                     PacketWrapper addPlayerInfo = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
                     addPlayerInfo.write(Type.VAR_INT, 0); // ADD
                     addPlayerInfo.write(Type.VAR_INT, 1);
-                    addPlayerInfo.write(Type.UUID, uuid);
+                    addPlayerInfo.write(Type.UUID, UUID.fromString(uuid));
                     addPlayerInfo.write(Type.STRING, name);
                     addPlayerInfo.write(Type.VAR_INT, dataCount);
 
