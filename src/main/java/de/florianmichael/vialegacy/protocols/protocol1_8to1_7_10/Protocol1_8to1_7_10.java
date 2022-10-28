@@ -100,9 +100,9 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.STRING);
                 map(Type.STRING);
                 handler(pw -> {
-//                    GameProfile gameProfile = ViaLegacy.getProvider().profile_1_7();
-//                    if (Objects.equals(pw.get(Type.STRING, 1), gameProfile.getName()))
-//                        pw.set(Type.STRING, 0, gameProfile.getUuid().toString()); // WHAT THE FUCK, HOW DOES THIS EVEN MANAGE TO BE SOMETHING COMPLETELY DIFFERENT, ARE YOU FUCKING RETARDED, THIS SHIT IS LIKE IMPORTANT FOR THE CLIENT YOU STUPID PIECE OF SHIT SERVER SOFTWARE
+                    GameProfile gameProfile = ViaLegacy.getProvider().profile_1_7();
+                    if (Objects.equals(pw.get(Type.STRING, 1), gameProfile.getName()))
+                        pw.set(Type.STRING, 0, gameProfile.getUuid().toString()); // WHAT THE FUCK, HOW DOES THIS EVEN MANAGE TO BE SOMETHING COMPLETELY DIFFERENT, ARE YOU FUCKING RETARDED, THIS SHIT IS LIKE IMPORTANT FOR THE CLIENT YOU STUPID PIECE OF SHIT SERVER SOFTWARE
                 });
             }
         });
@@ -414,7 +414,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     PacketWrapper removePlayerInfo = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
                     removePlayerInfo.write(Type.VAR_INT, 4); // REMOVE
                     removePlayerInfo.write(Type.VAR_INT, 1);
-                    removePlayerInfo.write(Type.UUID, UUID.fromString(uuid));
+                    removePlayerInfo.write(Type.UUID, uuid);
 
                     addPlayerInfo.send(Protocol1_8to1_7_10.class);
                     packetWrapper.send(Protocol1_8to1_7_10.class);
