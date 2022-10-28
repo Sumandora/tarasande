@@ -19,6 +19,6 @@ public class GroundTracker extends StoredObject {
     }
 
     public boolean isGround(final int entityId) {
-        return groundTracker.get(entityId);
+        return groundTracker.getOrDefault(entityId, true);
     }
 }
