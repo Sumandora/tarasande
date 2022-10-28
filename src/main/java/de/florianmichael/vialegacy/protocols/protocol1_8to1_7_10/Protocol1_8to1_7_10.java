@@ -414,7 +414,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     PacketWrapper removePlayerInfo = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
                     removePlayerInfo.write(Type.VAR_INT, 4); // REMOVE
                     removePlayerInfo.write(Type.VAR_INT, 1);
-                    removePlayerInfo.write(Type.UUID, uuid);
+                    removePlayerInfo.write(Type.UUID, UUID.fromString(uuid));
 
                     addPlayerInfo.send(Protocol1_8to1_7_10.class);
                     packetWrapper.send(Protocol1_8to1_7_10.class);
