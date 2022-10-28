@@ -1021,8 +1021,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     byte yaw = packetWrapper.get(Type.BYTE, 2);
                     int data = packetWrapper.get(Type.INT, 3);
 
-                    y = -y;
-
                     if (type == 71) {
                         switch (data) {
                             case 0 -> {
@@ -1083,9 +1081,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 handler(packetWrapper -> {
                     final int entityID = packetWrapper.get(Type.VAR_INT, 0);
                     final int typeID = packetWrapper.get(Type.UNSIGNED_BYTE, 0);
-                    System.out.println(typeID + " " + packetWrapper.get(Type.INT, 1));
-
-                    packetWrapper.set(Type.INT, 1, -packetWrapper.get(Type.INT, 1));
 
                     final EntityTracker tracker = entityTracker(packetWrapper.user());
 
