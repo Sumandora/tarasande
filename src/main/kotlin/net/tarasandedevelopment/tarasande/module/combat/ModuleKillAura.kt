@@ -82,6 +82,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         override fun isEnabled() = !autoBlock.isSelected(0)
     }
     private val counterBlocking = ValueBoolean(this, "Counter blocking", false)
+    private val counterImmediately = object : ValueBoolean(this, "Counter immediately", true) {
+        override fun isEnabled() = counterBlocking.value
+    }
     private val guaranteeHit = ValueBoolean(this, "Guarantee hit", false)
     private val rotations = ValueMode(this, "Rotations", true, "Around walls", "Randomized")
     private val precision = object : ValueNumber(this, "Precision", 0.0, 0.01, 1.0, 0.01) {
@@ -274,7 +277,11 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 return@registerEvent
             }
 
-            val clicks = clickSpeedUtil.getClicks()
+            var clicks = clickSpeedUtil.getClicks()
+
+            if (clicks == 0)
+                if (mc.player?.disablesShield() == true && (counterBlocking.value && counterImmediately.value))
+                    clicks = 1 // Axes can cancel out shields whenever they want, so lets force a hit
 
             if (!autoBlock.isSelected(0) && mc.player?.isUsingItem!! && clicks > 0) {
                 if (unblock())
