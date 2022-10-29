@@ -4,6 +4,7 @@ import com.mojang.authlib.Environment
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.environment.EnvironmentPresetEasyMC
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.environment.EnvironmentPresetMojang
+import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.environment.EnvironmentPresetShadowGen
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.environment.EnvironmentPresetTheAltening
 
 class ManagerEnvironment : Manager<EnvironmentPreset>() {
@@ -11,7 +12,8 @@ class ManagerEnvironment : Manager<EnvironmentPreset>() {
         add(
             EnvironmentPresetMojang(),
             EnvironmentPresetTheAltening(),
-            EnvironmentPresetEasyMC()
+            EnvironmentPresetEasyMC(),
+            EnvironmentPresetShadowGen()
         )
     }
 }

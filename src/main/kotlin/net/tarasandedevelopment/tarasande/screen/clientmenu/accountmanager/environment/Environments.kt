@@ -25,3 +25,11 @@ class EnvironmentPresetEasyMC : EnvironmentPreset(
     "https://sessionserver.easymc.io",
     "https://api.minecraftservices.com"
 )
+
+class EnvironmentPresetShadowGen : EnvironmentPreset(
+    "Shadow Gen",
+    "https://shadowgen.raphimc.net/mc/auth",
+    "https://api.mojang.com",
+    "https://shadowgen.raphimc.net/mc/session",
+    "https://api.minecraftservices.com"
+)
