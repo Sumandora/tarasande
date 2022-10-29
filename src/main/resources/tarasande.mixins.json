@@ -66,7 +66,7 @@
     "event.screens.MixinScreen",
     "features.clientvalues.MixinMinecraftClient",
     "features.clientvalues.MixinSharedConstants",
-    "features.module.MixinChatHud",
+    "protocolhack.screen.MixinChatHud",
     "features.module.MixinEnchantmentHelper",
     "features.module.MixinGameRenderer",
     "features.module.MixinHeldItemRenderer",

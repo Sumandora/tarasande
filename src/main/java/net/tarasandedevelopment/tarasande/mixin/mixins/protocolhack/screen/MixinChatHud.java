@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.features.module;
+package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.screen;
 
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudLine;
@@ -14,8 +14,8 @@ public class MixinChatHud {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHudLine$Visible;indicator()Lnet/minecraft/client/gui/hud/MessageIndicator;"))
     public MessageIndicator removeIndicators(ChatHudLine.Visible instance) {
-        ModuleNoMessageSignatureIndicator moduleNoMessageSignatureIndicator = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoMessageSignatureIndicator.class);
-        //TODO THIS IS A PROTOCOL FIX
+        final ModuleNoMessageSignatureIndicator moduleNoMessageSignatureIndicator = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoMessageSignatureIndicator.class);
+
         if (moduleNoMessageSignatureIndicator.getEnabled() || !moduleNoMessageSignatureIndicator.isEnabled()) {
             return null;
         }
