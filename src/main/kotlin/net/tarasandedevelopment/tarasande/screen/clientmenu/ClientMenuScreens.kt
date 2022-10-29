@@ -12,7 +12,9 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
+import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenu
@@ -237,6 +239,43 @@ class ElementMenuToggleHAProxyHack : ElementMenuToggle("HA-Proxy Hack") {
             )
 
             ctx.writeAndFlush(payload)
+        }
+    }
+
+    override fun onToggle(state: Boolean) {
+        // state check in event listener
+    }
+}
+
+// https://github.dev/QuiltMC/quilt-standard-libraries/tree/1.19/library/core/networking/src/main/java/org/quiltmc/qsl/networking
+class ElementMenuToggleQuiltFaker : ElementMenuToggle("Quilt Faker") {
+
+    private val quiltHandshake = Identifier("registry_sync/handshake")
+
+    init {
+        TarasandeMain.get().managerEvent.add(EventPacket::class.java) {
+            if (!state) return@add
+
+            if (it.type == EventPacket.Type.RECEIVE && it.packet is CustomPayloadS2CPacket) {
+                if (it.packet.channel == quiltHandshake) {
+                    val data = it.packet.data
+
+                    var count = data.readVarInt()
+                    var highestSupported = -1
+
+                    while (--count > 0) {
+                        val version = data.readVarInt()
+                        if (version > highestSupported) {
+                            highestSupported = version
+                        }
+                    }
+
+                    val buffer = PacketByteBuf(Unpooled.buffer())
+                    buffer.writeVarInt(highestSupported)
+
+                    MinecraftClient.getInstance().networkHandler!!.sendPacket(CustomPayloadC2SPacket(quiltHandshake, buffer))
+                }
+            }
         }
     }
 

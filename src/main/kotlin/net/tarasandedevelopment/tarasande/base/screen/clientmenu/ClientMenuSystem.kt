@@ -34,6 +34,7 @@ class ManagerClientMenu : Manager<ElementMenu>() {
             ElementMenuToggleBungeeHack(),
             ElementMenuToggleForgeFaker(),
             ElementMenuToggleHAProxyHack(),
+            ElementMenuToggleQuiltFaker(),
 
             ElementMenuTitleConditional("Special") { fritzBox.visible() },
             fritzBox

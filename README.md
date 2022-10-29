@@ -72,9 +72,6 @@
 ## TODO-List (Flori | ViaLegacy)
 
 - Unknown: Mining Fast Checks
-- 1.7.10: Tablist (gamemode)
-- 1.7.10: Entites spawning
-- 1.7.10: Recode Chunk Translation using RKs Chunk Base (Chunk1_8Type)
 - 1.6.4: Crafting Table CraftResult was clientside back in the time
 - 1.6.4: Reciperemapper base with all versions
 - 1.7.5 (?): Minecart + Trading
