@@ -52,6 +52,9 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
             InformationBeds(),
             InformationAntiAFKCountdown(),
 
+            // Badlion
+            InformationTimers(),
+
             // Graphs
             *screenCheatMenu.managerGraph.list.map { e -> InformationGraphValue(e) }.toTypedArray()
         )

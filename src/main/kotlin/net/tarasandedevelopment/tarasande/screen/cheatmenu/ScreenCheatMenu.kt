@@ -68,7 +68,9 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             PanelWatermark::class.java,
             PanelRadar::class.java,
             PanelArmor::class.java,
-            PanelMousepad::class.java
+            PanelMousepad::class.java,
+
+            PanelHypixelOverlay::class.java
         )
         TarasandeMain.get().managerEvent.call(EventPanels(panels))
         for (panel in panels) {
