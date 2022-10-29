@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.tag.TagKey;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -123,6 +124,14 @@ public abstract class MixinLivingEntity extends Entity {
             return 0.8F;
         }
         return constant;
+    }
+
+    @Redirect(method = "travel", at = @At(value = "INVOKE", target = "Ljava/lang/Math;cos(D)D"))
+    public double fixCosTable(double a) {
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_18_1)) {
+            return MathHelper.cos((float) a);
+        }
+        return Math.cos(a);
     }
 
 //    @Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getFluidHeight(Lnet/minecraft/tag/TagKey;)D"))
