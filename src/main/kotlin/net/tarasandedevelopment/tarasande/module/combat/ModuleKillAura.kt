@@ -62,7 +62,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val simulateShieldBlock = object : ValueBoolean(this, "Simulate shield block", false) {
         override fun isEnabled() = dontAttackWhenBlocking.value
     }
-    private val throughWalls = ValueBoolean(this, "Through walls", false)
+    private val throughWalls = ValueMode(this, "Through walls", false, "Off", "Continue aiming", "Hit and aim through walls")
     private val attackCooldown = ValueBoolean(this, "Attack cooldown", false)
     private val autoBlock = object : ValueMode(this, "Auto block", false, "Disabled", "Permanent", "Legit") {
         override fun onChange() {
@@ -141,7 +141,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
     private var blocking = false
     private var waitForHit = false
-    private var clicked = false
     private var performedTick = false
     private var lastFlex: Rotation? = null
     private var waitForDamage = true
@@ -154,7 +153,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
 
     override fun onDisable() {
-        clicked = false
         blocking = false
         lastFlex = null
         targets.clear()
@@ -177,6 +175,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
     init {
         registerEvent(EventPollEvents::class.java) { event ->
+            val prevTargets = ArrayList(targets)
             targets.clear()
             val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
             for (entity in mc.world?.entities!!) {
@@ -195,8 +194,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 }
                 // in case the eyepos is inside the boundingbox the next 2 checks will always succeed, but keeping them might prevent some retarded situation which is going to be added with an update
                 if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
-                if (!throughWalls.value && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint)) continue
-
+                if ((throughWalls.isSelected(0) || !prevTargets.any { it.first == entity }) && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint)) continue
                 targets.add(Pair(entity, aimPoint))
             }
             if (targets.isEmpty()) {
@@ -208,18 +206,16 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 return@registerEvent
             }
 
-            targets.sortWith(comparator)
-
-            targets.sortBy { it.first is LivingEntity && (it.first as LivingEntity).isDead }
-            targets.sortBy { it.second.squaredDistanceTo(mc.player?.eyePos!!) > reach.minValue * reach.minValue }
-            targets.sortBy { shouldAttackEntity(it.first) }
+            targets.sortWith(
+                comparator.thenBy { it.first is LivingEntity && (it.first as LivingEntity).isDead }.thenBy { it.second.squaredDistanceTo(mc.player?.eyePos!!) > reach.minValue * reach.minValue }.thenBy { PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.second) }.thenBy { shouldAttackEntity(it.first) }
+            )
 
             val target = targets[0]
 
             val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, target.second)
             var finalRot = targetRot
 
-            val lowestHurtTime = target.first.let { if(it is LivingEntity && it.maxHurtTime > 0) (it.hurtTime - mc.tickDelta).coerceAtLeast(0.0f) / it.maxHurtTime else null }
+            val lowestHurtTime = target.first.let { if (it is LivingEntity && it.maxHurtTime > 0) (it.hurtTime - mc.tickDelta).coerceAtLeast(0.0f) / it.maxHurtTime else null }
 
             if (!flex.value || lowestHurtTime == null || lowestHurtTime < flexHurtTime.value) {
                 finalRot = currentRot.smoothedTurn(targetRot, aimSpeed)
@@ -256,7 +252,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
         registerEvent(EventAttack::class.java) { event ->
             performedTick = false
-            clicked = false
 
             var canHit = true
 
@@ -313,7 +308,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                                         RotationUtil.fakeRotation!!
                                 else
                                     RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint),
-                                throughWalls.value)
+                                throughWalls.isSelected(2))
                             if (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null) {
                                 continue
                             } else {
@@ -374,11 +369,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
         }
 
-        registerEvent(EventHandleBlockBreaking::class.java) { event ->
-            if (!throughWalls.value)
-                event.parameter = event.parameter || clicked
-        }
-
         registerEvent(EventPacket::class.java) { event ->
             if (event.type == EventPacket.Type.RECEIVE) {
                 when (event.packet) {
@@ -416,7 +406,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
         }
         for (i in 0 until repeat)
-            clicked = clicked or mc.doAttack()
+            mc.doAttack()
         mc.crosshairTarget = original
     }
 
