@@ -17,9 +17,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientPlayNetworkHandler.class)
 public abstract class MixinClientPlayNetworkHandler {
 
-    @Shadow public abstract void onEntityStatus(EntityStatusS2CPacket packet);
+    @Shadow
+    @Final
+    private MinecraftClient client;
 
-    @Shadow @Final private MinecraftClient client;
+    @Shadow
+    public abstract void onEntityStatus(EntityStatusS2CPacket packet);
 
     @Inject(method = "onPing", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/util/thread/ThreadExecutor;)V", shift = At.Shift.AFTER), cancellable = true)
     private void onPing(PlayPingS2CPacket packet, CallbackInfo ci) {

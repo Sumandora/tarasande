@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.File;
 
-@Mixin(CustomViaConfig.class)
+@Mixin(value = CustomViaConfig.class, remap = false)
 public abstract class MixinCustomViaConfig extends AbstractViaConfig {
 
     protected MixinCustomViaConfig(File configFile) {

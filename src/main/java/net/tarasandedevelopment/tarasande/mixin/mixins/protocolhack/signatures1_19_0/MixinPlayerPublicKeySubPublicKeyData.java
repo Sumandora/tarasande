@@ -22,15 +22,16 @@ import java.util.UUID;
 @Mixin(PlayerPublicKey.PublicKeyData.class)
 public class MixinPlayerPublicKeySubPublicKeyData implements IPublicKeyData_Protocol {
 
-    @Shadow @Final private Instant expiresAt;
-
-    @Shadow @Final
+    @Shadow
+    @Final
     PublicKey key;
-
+    @Shadow
+    @Final
+    private Instant expiresAt;
     @Unique
     private byte[] protocolhack_1_19_0Key;
 
-    @Redirect(method = { "write", "verifyKey" }, at = @At(value = "FIELD", target = "Lnet/minecraft/network/encryption/PlayerPublicKey$PublicKeyData;keySignature:[B"))
+    @Redirect(method = {"write", "verifyKey"}, at = @At(value = "FIELD", target = "Lnet/minecraft/network/encryption/PlayerPublicKey$PublicKeyData;keySignature:[B"))
     public byte[] replaceKeys(PlayerPublicKey.PublicKeyData instance) {
         if (this.protocolhack_1_19_0Key != null && VersionList.isOlderOrEqualTo(VersionList.R1_19)) {
             return this.protocolhack_1_19_0Key;

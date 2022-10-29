@@ -4,6 +4,7 @@ import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.I
 
 public interface IServerInfo {
 
-    IForgePayload getForgePayload();
-    void setForgePayload(final IForgePayload forgePayload);
+    IForgePayload tarasande_getForgePayload();
+
+    void tarasande_setForgePayload(final IForgePayload forgePayload);
 }

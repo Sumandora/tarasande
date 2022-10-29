@@ -15,7 +15,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(MultiplayerServerListWidget.ServerEntry.class)
 public class MixinMultiplayerServerListWidgetSubServerEntry {
 
-    @Shadow @Final private ServerInfo server;
+    @Shadow
+    @Final
+    private ServerInfo server;
 
     @Inject(method = "render", at = @At("RETURN"))
     public void renderForgeInformation(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta, CallbackInfo ci) {

@@ -19,7 +19,7 @@ class SkinRenderer(val profile: GameProfile) {
         var skinImage = DefaultSkinHelper.getTexture(next.id)
         var capeImage = skinImage
 
-        (MinecraftClient.getInstance().skinProvider as IPlayerSkinProvider).disableSessionCheckOnce()
+        (MinecraftClient.getInstance().skinProvider as IPlayerSkinProvider).tarasande_disableSessionCheckOnce()
 
         MinecraftClient.getInstance().skinProvider.loadSkin(next, { type, id, texture ->
             when (type) {

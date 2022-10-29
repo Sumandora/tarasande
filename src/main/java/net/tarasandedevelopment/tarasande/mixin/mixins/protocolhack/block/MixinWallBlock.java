@@ -24,26 +24,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(WallBlock.class)
 public class MixinWallBlock extends Block {
 
-    @Shadow
-    @Final
-    public static EnumProperty<WallShape> EAST_SHAPE;
-
-    @Shadow
-    @Final
-    public static EnumProperty<WallShape> NORTH_SHAPE;
-
-    @Shadow
-    @Final
-    public static EnumProperty<WallShape> WEST_SHAPE;
-
-    @Shadow
-    @Final
-    public static EnumProperty<WallShape> SOUTH_SHAPE;
-
-    public MixinWallBlock(Settings settings) {
-        super(settings);
-    }
-
     @Unique
     private static final VoxelShape[] protocolhack_SHAPE_BY_INDEX_1122 = new VoxelShape[]{
             Block.createCuboidShape(4, 0, 4, 12, 16, 12),
@@ -90,6 +70,21 @@ public class MixinWallBlock extends Block {
             Block.createCuboidShape(0, 0, 0, 16, 24, 12),
             Block.createCuboidShape(0, 0, 0, 16, 24, 16)
     };
+    @Shadow
+    @Final
+    public static EnumProperty<WallShape> EAST_SHAPE;
+    @Shadow
+    @Final
+    public static EnumProperty<WallShape> NORTH_SHAPE;
+    @Shadow
+    @Final
+    public static EnumProperty<WallShape> WEST_SHAPE;
+    @Shadow
+    @Final
+    public static EnumProperty<WallShape> SOUTH_SHAPE;
+    public MixinWallBlock(Settings settings) {
+        super(settings);
+    }
 
     @Unique
     private static BlockState protocolhack_oldWallPlacementLogic(BlockState state) {

@@ -15,11 +15,14 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(EndPortalFrameBlock.class)
 public class MixinEndPortalFrameBlock {
 
+    @Shadow
+    @Final
+    protected static VoxelShape FRAME_SHAPE;
+    @Shadow
+    @Final
+    protected static VoxelShape FRAME_WITH_EYE_SHAPE;
     @Unique
     private final VoxelShape protocolhack_EYE_SHAPE_1_12_2 = Block.createCuboidShape(5.0, 13.0, 5.0, 11.0, 16.0, 11.0);
-
-    @Shadow @Final protected static VoxelShape FRAME_SHAPE;
-    @Shadow @Final protected static VoxelShape FRAME_WITH_EYE_SHAPE;
 
     @Redirect(method = "getOutlineShape", at = @At(value = "FIELD", target = "Lnet/minecraft/block/EndPortalFrameBlock;FRAME_WITH_EYE_SHAPE:Lnet/minecraft/util/shape/VoxelShape;"))
     public VoxelShape redirectGetOutlineShape() {

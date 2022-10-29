@@ -32,23 +32,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = ClientPlayerEntity.class, priority = 2000)
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IClientPlayerEntity_Protocol {
 
-    @Shadow private boolean lastOnGround;
-
     @Shadow
     public Input input;
-
-    @Shadow
-    private int ticksSinceLastPositionPacketSent;
-
-    @Shadow
-    protected abstract boolean isCamera();
-
-    @Shadow
-    private double lastX;
-    @Shadow
-    private double lastBaseY;
-    @Shadow
-    private double lastZ;
     @Shadow
     public float lastYaw;
     @Shadow
@@ -61,12 +46,24 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Shadow
     @Final
     protected MinecraftClient client;
+    @Shadow
+    private boolean lastOnGround;
+    @Shadow
+    private int ticksSinceLastPositionPacketSent;
+    @Shadow
+    private double lastX;
+    @Shadow
+    private double lastBaseY;
+    @Shadow
+    private double lastZ;
     @Unique
     private boolean protocolhack_areSwingCanceledThisTick = false;
-
     public MixinClientPlayerEntity(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
         super(world, profile, publicKey);
     }
+
+    @Shadow
+    protected abstract boolean isCamera();
 
     @Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isCamera()Z"))
     public boolean fixMovement(ClientPlayerEntity instance) {

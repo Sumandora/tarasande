@@ -16,7 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(AbstractBlock.AbstractBlockState.class)
 public abstract class MixinAbstractBlockSubAbstractBlockState {
 
-    @Shadow protected abstract BlockState asBlockState();
+    @Shadow
+    protected abstract BlockState asBlockState();
 
     @Inject(method = "getHardness", at = @At("RETURN"), cancellable = true)
     public void injectGetHardness(BlockView world, BlockPos pos, CallbackInfoReturnable<Float> cir) {

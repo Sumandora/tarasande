@@ -27,13 +27,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(CommandBlockScreen.class)
 public abstract class MixinCommandBlockScreen {
 
-    @Shadow private CyclingButtonWidget<CommandBlockBlockEntity.Type> modeButton;
+    @Shadow
+    private CyclingButtonWidget<CommandBlockBlockEntity.Type> modeButton;
 
-    @Shadow private CyclingButtonWidget<Boolean> conditionalModeButton;
+    @Shadow
+    private CyclingButtonWidget<Boolean> conditionalModeButton;
+    @Shadow
+    private CyclingButtonWidget<Boolean> redstoneTriggerButton;
 
-    @Shadow public abstract void updateCommandBlock();
-
-    @Shadow private CyclingButtonWidget<Boolean> redstoneTriggerButton;
+    @Shadow
+    public abstract void updateCommandBlock();
 
     @Inject(method = "init", at = @At("TAIL"))
     private void injectInit(CallbackInfo ci) {

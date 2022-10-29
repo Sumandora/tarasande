@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Entity.class)
 public abstract class MixinEntity {
     @Shadow
-    public abstract Vec3d getRotationVector(float pitch, float yaw);
+    protected abstract Vec3d getRotationVector(float pitch, float yaw);
 
     @Inject(method = "getRotationVec", at = @At("HEAD"), cancellable = true)
     public void injectFakeRotation(float tickDelta, CallbackInfoReturnable<Vec3d> cir) {

@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinClientConnectionSubOne {
 
     @Inject(method = "initChannel", at = @At("TAIL"))
-    public void hookEventEnDeCoder(Channel channel, CallbackInfo ci) {
+    public void hookEventEncoderAndEventDecoder(Channel channel, CallbackInfo ci) {
         if (channel instanceof SocketChannel) {
             channel.pipeline()
                     .addBefore(NettyConstants.HANDLER_ENCODER_NAME, "tarasande-encoder", new MessageToMessageEncoderEvent())

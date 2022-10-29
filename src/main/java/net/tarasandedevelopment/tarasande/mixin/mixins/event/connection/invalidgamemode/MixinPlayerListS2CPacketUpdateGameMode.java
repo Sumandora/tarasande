@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.UUID;
 
-@SuppressWarnings("UnresolvedMixinReference")
 @Mixin(targets = "net.minecraft.network.packet.s2c.play.PlayerListS2CPacket$Action$2")
 public class MixinPlayerListS2CPacketUpdateGameMode {
 

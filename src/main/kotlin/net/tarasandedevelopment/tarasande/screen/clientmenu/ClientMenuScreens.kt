@@ -153,7 +153,7 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
             }
 
             it.add(EventRenderMultiplayerEntry::class.java) {
-                (it.server as IServerInfo).forgePayload?.also { payload ->
+                (it.server as IServerInfo).tarasande_getForgePayload()?.also { payload ->
                     val fontHeight = MinecraftClient.getInstance().textRenderer.fontHeight
 
                     val yPos = (it.entryHeight / 2F) - fontHeight / 2

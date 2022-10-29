@@ -22,10 +22,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PlayerEntity.class)
 public abstract class MixinPlayerEntity extends LivingEntity {
 
-    @Shadow @Final private PlayerAbilities abilities;
-
     @Unique
     private static final EntityDimensions protocolhack_SNEAKING_DIMENSIONS_1_13_2 = EntityDimensions.changing(0.6f, 1.65f);
+    @Shadow
+    @Final
+    private PlayerAbilities abilities;
 
     protected MixinPlayerEntity(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);

@@ -21,7 +21,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ParticleManager.class)
 public abstract class MixinParticleManager {
 
-    @Shadow @Nullable protected abstract <T extends ParticleEffect> Particle createParticle(T parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ);
+    @Shadow
+    @Nullable
+    protected abstract <T extends ParticleEffect> Particle createParticle(T parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ);
 
     @Inject(method = "addBlockBreakParticles", at = @At("HEAD"), cancellable = true)
     public void noRender_addBlockBreakParticles(BlockPos pos, BlockState state, CallbackInfo ci) {

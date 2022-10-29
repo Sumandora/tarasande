@@ -13,12 +13,12 @@ public class MixinServerInfo implements IServerInfo {
     private IForgePayload tarasande_forgePayload;
 
     @Override
-    public IForgePayload getForgePayload() {
+    public IForgePayload tarasande_getForgePayload() {
         return this.tarasande_forgePayload;
     }
 
     @Override
-    public void setForgePayload(IForgePayload forgePayload) {
+    public void tarasande_setForgePayload(IForgePayload forgePayload) {
         this.tarasande_forgePayload = forgePayload;
     }
 }

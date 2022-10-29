@@ -22,7 +22,7 @@ public class MixinServerMetadataDeserializer {
     public void trackForgeData(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext, CallbackInfoReturnable<ServerMetadata> cir, JsonObject jsonObject, ServerMetadata serverMetadata) {
         final IForgePayload payload = ForgeCreator.INSTANCE.createPayload(jsonObject);
         if (payload != null) {
-            ((IServerMetadata) serverMetadata).setForgePayload(payload);
+            ((IServerMetadata) serverMetadata).tarasande_setForgePayload(payload);
         }
     }
 }

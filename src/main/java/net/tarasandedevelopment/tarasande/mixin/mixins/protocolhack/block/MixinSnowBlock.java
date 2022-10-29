@@ -20,8 +20,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(SnowBlock.class)
 public class MixinSnowBlock {
 
-    @Shadow @Final public static IntProperty LAYERS;
-
     @Unique
     private static final VoxelShape[] protocolhack_LAYERS_TO_SHAPE_1_12 = new VoxelShape[]{
             Block.createCuboidShape(0, -0.00001 /* Bypass for Minecraft-Fixes */, 0, 16, 0, 16),
@@ -34,6 +32,9 @@ public class MixinSnowBlock {
             Block.createCuboidShape(0, 0, 0, 16, 14, 16),
             Block.createCuboidShape(0, 0, 0, 16, 16, 16)
     };
+    @Shadow
+    @Final
+    public static IntProperty LAYERS;
 
     @Inject(method = "getCollisionShape", at = @At("HEAD"), cancellable = true)
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {

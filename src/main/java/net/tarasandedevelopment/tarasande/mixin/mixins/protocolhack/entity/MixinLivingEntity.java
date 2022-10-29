@@ -22,13 +22,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity extends Entity {
 
-    @Shadow protected boolean jumping;
-
-    @Shadow protected abstract float getBaseMovementSpeedMultiplier();
+    @Shadow
+    protected boolean jumping;
 
     public MixinLivingEntity(EntityType<?> type, World world) {
         super(type, world);
     }
+
+    @Inject(method = "getPreferredEquipmentSlot", at = @At("HEAD"), cancellable = true)
+    private static void removeShieldSlotPreference(ItemStack stack, CallbackInfoReturnable<EquipmentSlot> cir) {
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_9_4) && stack.isOf(Items.SHIELD)) {
+            cir.setReturnValue(EquipmentSlot.MAINHAND);
+        }
+    }
+
+    @Shadow
+    protected abstract float getBaseMovementSpeedMultiplier();
 
     @Redirect(method = "applyMovementInput", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;jumping:Z"))
     private boolean disableJumpOnLadder(LivingEntity self) {
@@ -90,13 +99,6 @@ public abstract class MixinLivingEntity extends Entity {
     private void modifySwimSprintFallSpeed(double gravity, boolean movingDown, Vec3d velocity, CallbackInfoReturnable<Vec3d> ci) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2) && !hasNoGravity()) {
             ci.setReturnValue(new Vec3d(velocity.x, velocity.y - 0.02, velocity.z));
-        }
-    }
-
-    @Inject(method = "getPreferredEquipmentSlot", at = @At("HEAD"), cancellable = true)
-    private static void removeShieldSlotPreference(ItemStack stack, CallbackInfoReturnable<EquipmentSlot> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_9_4) && stack.isOf(Items.SHIELD)) {
-            cir.setReturnValue(EquipmentSlot.MAINHAND);
         }
     }
 

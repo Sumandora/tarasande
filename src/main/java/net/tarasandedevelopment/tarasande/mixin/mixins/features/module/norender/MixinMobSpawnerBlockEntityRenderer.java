@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinMobSpawnerBlockEntityRenderer {
 
     @Inject(method = "render(Lnet/minecraft/block/entity/MobSpawnerBlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V",
-    at = @At("HEAD"), cancellable = true)
+            at = @At("HEAD"), cancellable = true)
     public void noRender_render(MobSpawnerBlockEntity mobSpawnerBlockEntity, float f, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int j, CallbackInfo ci) {
         if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoRender.class).getEntity().getMobInSpawner().should()) {
             ci.cancel();

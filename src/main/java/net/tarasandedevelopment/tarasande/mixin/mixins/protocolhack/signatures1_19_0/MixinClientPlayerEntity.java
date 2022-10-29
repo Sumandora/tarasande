@@ -32,7 +32,8 @@ public class MixinClientPlayerEntity {
 
                 if (signer != null)
                     cir.setReturnValue(MessageSigner1_19_0.INSTANCE.sign(signer, content.decorated(), metadata.sender(), metadata.timestamp(), metadata.salt()));
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
             cir.cancel();
         }
     }

@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(LiteralCommandNode.class)
+@Mixin(value = LiteralCommandNode.class, remap = false)
 public class MixinLiteralCommandNode {
 
     @Redirect(method = "parse(Lcom/mojang/brigadier/StringReader;)I", at = @At(value = "INVOKE", target = "Ljava/lang/String;equals(Ljava/lang/Object;)Z"), remap = false)

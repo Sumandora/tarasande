@@ -20,11 +20,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(FarmlandBlock.class)
 public class MixinFarmlandBlock extends Block {
 
+    @Unique
+    private static final VoxelShape protocolhack_SHAPE_194 = VoxelShapes.fullCube();
     @Shadow
     @Final
     protected static VoxelShape SHAPE;
-    @Unique
-    private static final VoxelShape protocolhack_SHAPE_194 = VoxelShapes.fullCube();
 
     public MixinFarmlandBlock(Settings settings) {
         super(settings);

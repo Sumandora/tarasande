@@ -22,19 +22,18 @@ import java.net.InetSocketAddress;
 @Mixin(targets = "net.minecraft.client.network.MultiplayerServerListPinger$1")
 public class MixinMultiplayerServerListPingerSubOnResponse {
 
-    @Unique
-    private ServerMetadata tarasande_metadata;
-
     @Final
     @Shadow
     ServerInfo field_3776;
+    @Unique
+    private ServerMetadata tarasande_metadata;
 
     @Redirect(method = "onResponse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/Packet;)V"))
     public void trackForgePayload(ClientConnection instance, Packet<?> packet) {
-        final IForgePayload payload = ((IServerMetadata) tarasande_metadata).getForgePayload();
+        final IForgePayload payload = ((IServerMetadata) tarasande_metadata).tarasande_getForgePayload();
 
         if (payload != null) {
-            ((IServerInfo) field_3776).setForgePayload(payload);
+            ((IServerInfo) field_3776).tarasande_setForgePayload(payload);
 
             TarasandeMain.Companion.get().getManagerClientMenu().get(ElementMenuToggleForgeFaker.class).getForgeInfoTracker().put((InetSocketAddress) instance.getAddress(), payload);
         }

@@ -30,7 +30,9 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(UpdatePlayerAbilitiesC2SPacket.class)
 public class MixinUpdatePlayerAbilitiesC2SPacket {
 
-    @Shadow @Final private boolean flying;
+    @Shadow
+    @Final
+    private boolean flying;
 
     @Inject(method = "write", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketByteBuf;writeByte(I)Lio/netty/buffer/ByteBuf;", shift = At.Shift.BEFORE), cancellable = true)
     public void injectWrite(PacketByteBuf buf, CallbackInfo ci) {
@@ -39,7 +41,7 @@ public class MixinUpdatePlayerAbilitiesC2SPacket {
         byte b = 0;
 
         if (VersionList.isOlderOrEqualTo(VersionList.R1_15_2)) {
-            if (this.flying) b = (byte)(b | 2); // Minecraft
+            if (this.flying) b = (byte) (b | 2); // Minecraft
 
             if (abilities.invulnerable) b |= 1;
             if (abilities.allowFlying) b |= 4;

@@ -32,11 +32,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(JigsawBlockScreen.class)
 public class MixinJigsawBlockScreen extends Screen {
 
-    @Shadow private TextFieldWidget nameField;
+    @Shadow
+    private TextFieldWidget nameField;
 
-    @Shadow private CyclingButtonWidget<JigsawBlockEntity.Joint> jointRotationButton;
+    @Shadow
+    private CyclingButtonWidget<JigsawBlockEntity.Joint> jointRotationButton;
 
-    @Shadow private TextFieldWidget targetField;
+    @Shadow
+    private TextFieldWidget targetField;
 
     public MixinJigsawBlockScreen(Text title) {
         super(title);

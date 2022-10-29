@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.suggestion.Suggestions;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.command.CommandSource;
@@ -25,27 +24,19 @@ public abstract class MixinChatInputSuggestor {
 
     @Shadow
     @Final
-    MinecraftClient client;
-
+    TextFieldWidget textField;
+    @Shadow
+    boolean completingSuggestions;
     @Shadow
     private @Nullable ParseResults<CommandSource> parse;
-
-    @Shadow
-    @Final
-    TextFieldWidget textField;
-
     @Shadow
     @Nullable
     private ChatInputSuggestor.@Nullable SuggestionWindow window;
-
     @Shadow
     private @Nullable CompletableFuture<Suggestions> pendingSuggestions;
 
     @Shadow
     protected abstract void showCommandSuggestions();
-
-    @Shadow
-    boolean completingSuggestions;
 
     @Inject(method = "refresh",
             at = @At(value = "INVOKE", target = "Lcom/mojang/brigadier/StringReader;canRead()Z", remap = false),

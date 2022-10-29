@@ -23,29 +23,33 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Entity.class)
 public abstract class MixinEntity {
 
-    @Shadow private Vec3d pos;
-
-    @Shadow public abstract Box getBoundingBox();
-
-    @Shadow public World world;
-
-    @Shadow public abstract void setVelocity(Vec3d velocity);
-
-    @Shadow public abstract Vec3d getVelocity();
-
-    @Shadow protected Object2DoubleMap<TagKey<Fluid>> fluidHeight;
-
-    @Inject(method = "getVelocityAffectingPos", at = @At("HEAD"), cancellable = true)
-    public void injectGetVelocityAffectingPos(CallbackInfoReturnable<BlockPos> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_4))
-            cir.setReturnValue(new BlockPos(pos.x, getBoundingBox().minY - 1, pos.z));
-    }
+    @Shadow
+    public World world;
+    @Shadow
+    protected Object2DoubleMap<TagKey<Fluid>> fluidHeight;
+    @Shadow
+    private Vec3d pos;
 
     @ModifyConstant(method = "movementInputToVelocity", constant = @Constant(doubleValue = 1E-7))
     private static double injectMovementInputToVelocity(double epsilon) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2))
             return 1E-4;
         return epsilon;
+    }
+
+    @Shadow
+    public abstract Box getBoundingBox();
+
+    @Shadow
+    public abstract Vec3d getVelocity();
+
+    @Shadow
+    public abstract void setVelocity(Vec3d velocity);
+
+    @Inject(method = "getVelocityAffectingPos", at = @At("HEAD"), cancellable = true)
+    public void injectGetVelocityAffectingPos(CallbackInfoReturnable<BlockPos> cir) {
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_4))
+            cir.setReturnValue(new BlockPos(pos.x, getBoundingBox().minY - 1, pos.z));
     }
 
     @Redirect(method = "getVelocityMultiplier", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getVelocityMultiplier()F"))
@@ -118,7 +122,7 @@ public abstract class MixinEntity {
             cir.setReturnValue(0.1F);
     }
 
-    @Redirect(method = { "setYaw", "setPitch" }, at = @At(value = "INVOKE", target = "Ljava/lang/Float;isFinite(F)Z"))
+    @Redirect(method = {"setYaw", "setPitch"}, at = @At(value = "INVOKE", target = "Ljava/lang/Float;isFinite(F)Z"))
     public boolean modifyIsFinite(float f) {
         //noinspection ConstantConditions
         return Float.isFinite(f) || (Object) this instanceof ClientPlayerEntity;

@@ -35,11 +35,6 @@ public class MixinClientConnection implements IClientConnection_Protocol {
     @Unique
     private UserConnection protocolhack_viaConnection;
 
-    @Inject(method = "setCompressionThreshold", at = @At("RETURN"))
-    private void reorderCompression(int compressionThreshold, boolean rejectBad, CallbackInfo ci) {
-        channel.pipeline().fireUserEventTriggered(new PipelineReorderEvent());
-    }
-
     @Inject(method = "connect", at = @At("HEAD"))
     private static void onConnect(InetSocketAddress address, boolean useEpoll, CallbackInfoReturnable<ClientConnection> cir) {
         if (TarasandeMain.Companion.get().getProtocolHack().isAuto())
@@ -48,6 +43,11 @@ public class MixinClientConnection implements IClientConnection_Protocol {
             } catch (Exception e) {
                 ViaProtocolHack.instance().logger().log(Level.WARNING, "Could not auto-detect protocol for " + address + " " + e);
             }
+    }
+
+    @Inject(method = "setCompressionThreshold", at = @At("RETURN"))
+    private void reorderCompression(int compressionThreshold, boolean rejectBad, CallbackInfo ci) {
+        channel.pipeline().fireUserEventTriggered(new PipelineReorderEvent());
     }
 
     @Inject(method = "disconnect", at = @At("RETURN"))

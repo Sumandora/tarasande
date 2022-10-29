@@ -18,7 +18,9 @@ import java.util.UUID;
 @Mixin(EntityIndex.class)
 public class MixinEntityIndex<T extends EntityLike> {
 
-    @Shadow @Final private Int2ObjectMap<T> idToEntity;
+    @Shadow
+    @Final
+    private Int2ObjectMap<T> idToEntity;
 
     @Redirect(method = "add", at = @At(value = "INVOKE", target = "Ljava/util/Map;containsKey(Ljava/lang/Object;)Z", remap = false))
     private boolean allowDuplicateUuid(Map<UUID, T> instance, Object o) {

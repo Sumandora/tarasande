@@ -15,7 +15,9 @@ import java.util.Map;
 @Mixin(value = CommandNode.class, remap = false)
 public class MixinCommandNode<S> {
 
-    @Shadow @Final private Map<String, LiteralCommandNode<S>> literals;
+    @Shadow
+    @Final
+    private Map<String, LiteralCommandNode<S>> literals;
 
     @Redirect(method = "getRelevantNodes", at = @At(value = "INVOKE", target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;"), remap = false)
     public Object ignoreCase(Map<?, ?> instance, Object o) {

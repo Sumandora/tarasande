@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@SuppressWarnings("UnresolvedMixinReference")
 @Mixin(targets = "net.minecraft.network.packet.s2c.play.PlayerListS2CPacket$Action$1")
 public class MixinPlayerListS2CPacketUpdateAddPlayer {
 
@@ -18,7 +17,7 @@ public class MixinPlayerListS2CPacketUpdateAddPlayer {
     private GameProfile tarasande_trackedGameProfile;
 
     @Redirect(method = "read", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketByteBuf;readGameProfile()Lcom/mojang/authlib/GameProfile;"))
-    public GameProfile trackUUID(PacketByteBuf instance) {
+    public GameProfile trackGameProfile(PacketByteBuf instance) {
         this.tarasande_trackedGameProfile = instance.readGameProfile();
         return this.tarasande_trackedGameProfile;
     }
