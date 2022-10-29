@@ -13,8 +13,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class MixinChatHud {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHudLine$Visible;indicator()Lnet/minecraft/client/gui/hud/MessageIndicator;"))
-    public MessageIndicator noMessageSignatureIndicator_Cancel(ChatHudLine.Visible instance) {
-        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoMessageSignatureIndicator.class).getEnabled()) {
+    public MessageIndicator removeIndicators(ChatHudLine.Visible instance) {
+        ModuleNoMessageSignatureIndicator moduleNoMessageSignatureIndicator = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoMessageSignatureIndicator.class);
+        //TODO THIS IS A PROTOCOL FIX
+        if (moduleNoMessageSignatureIndicator.getEnabled() || !moduleNoMessageSignatureIndicator.isEnabled()) {
             return null;
         }
         return instance.indicator();
