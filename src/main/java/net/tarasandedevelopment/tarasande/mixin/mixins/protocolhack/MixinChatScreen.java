@@ -21,7 +21,7 @@ public class MixinChatScreen {
 
     @Inject(method = "keyPressed", at = @At("HEAD"))
     public void reAddKeyBind(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (VersionList.isNewerTo(VersionList.R1_13) || !ProtocolHackValues.INSTANCE.getRemoveNewTabCompletion().getValue())
+        if (!ProtocolHackValues.INSTANCE.getRemoveNewTabCompletion().getValue())
             return;
 
         if (keyCode == MinecraftClient.getInstance().options.playerListKey.boundKey.getCode() && ((IChatInputSuggestor_Protocol) this.chatInputSuggestor).protcolhack_getPendingSuggestionSize() == 0) {

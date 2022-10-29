@@ -50,6 +50,7 @@
 - Settings for HypixelBedwarsOverlay
 - ViaLegacy texture pack using ProtocolPatcher
 - Anti vanish: Tab completion
+- Make a system for automatically enabling and disabling protocol fixes
 
 ## TODO-List (Flori | General)
 

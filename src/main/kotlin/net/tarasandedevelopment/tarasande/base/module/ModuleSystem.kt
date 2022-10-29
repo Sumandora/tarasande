@@ -6,8 +6,6 @@ import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.module.combat.*
-import net.tarasandedevelopment.tarasande.module.crasher.*
-import net.tarasandedevelopment.tarasande.module.dupe.ModuleCraftingDupe
 import net.tarasandedevelopment.tarasande.module.exploit.*
 import net.tarasandedevelopment.tarasande.module.ghost.*
 import net.tarasandedevelopment.tarasande.module.misc.*
@@ -40,7 +38,6 @@ class ManagerModule : Manager<Module>() {
             ModuleBlink(),
             ModuleFlight(),
             ModuleTickBaseManipulation(),
-            ModuleNoCooldown(),
             ModuleWTap(),
             ModuleTrajectories(),
             ModuleAntiBot(),
@@ -87,7 +84,6 @@ class ManagerModule : Manager<Module>() {
             ModuleHitBox(),
             ModuleFastPlace(),
             ModuleFastUse(),
-            ModuleDisableSequencePackets(),
             ModuleAntiBindingCurse(),
             ModuleCommandBlockBypass(),
             ModuleAntiParticleHide(),
@@ -120,7 +116,6 @@ class ManagerModule : Manager<Module>() {
             ModuleNoJumpCooldown(),
             ModuleBrigadierIgnoreCase(),
             ModuleEveryItemOnArmor(),
-            ModuleNoMessageSignatureIndicator(),
             ModuleNoRender(),
             ModuleCommands()
         )
@@ -175,5 +170,5 @@ open class Module(val name: String, val description: String, val category: Modul
 }
 
 enum class ModuleCategory {
-    COMBAT, MOVEMENT, PLAYER, RENDER, MISC, GHOST, EXPLOIT, CRASHER, DUPE
+    COMBAT, MOVEMENT, PLAYER, RENDER, MISC, GHOST, EXPLOIT
 }

@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.features.module.screens;
 
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.module.player.ModuleEveryItemOnArmor;
+import net.tarasandedevelopment.tarasande.module.exploit.ModuleEveryItemOnArmor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

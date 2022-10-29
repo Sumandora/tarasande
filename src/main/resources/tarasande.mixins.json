@@ -66,12 +66,10 @@
     "event.screens.MixinScreen",
     "features.clientvalues.MixinMinecraftClient",
     "features.clientvalues.MixinSharedConstants",
-    "protocolhack.screen.MixinChatHud",
     "features.module.MixinEnchantmentHelper",
     "features.module.MixinGameRenderer",
     "features.module.MixinHeldItemRenderer",
     "features.module.MixinMinecraftClient",
-    "features.module.MixinPendingUpdateManager",
     "features.module.MixinRenderSystem",
     "features.module.MixinTelemetrySender",
     "features.module.MixinWorld",
@@ -175,7 +173,8 @@
     "protocolhack.item.MixinMiningToolItem",
     "protocolhack.item.MixinPickaxeItem",
     "protocolhack.item.MixinShovelItem",
-    "protocolhack.item.MixinSwordItem",
+    "protocolhack.item.blocking.MixinSwordItem",
+    "protocolhack.screen.MixinChatHud",
     "protocolhack.screen.MixinCommandBlockScreen",
     "protocolhack.screen.MixinDownloadingTerrainScreen",
     "protocolhack.screen.MixinJigsawBlockScreen",
@@ -203,12 +202,14 @@
     "protocolhack.viaversion.MixinProtocol1_9To1_8",
     "protocolhack.viaversion.MixinProtocolManagerImpl",
     "protocolhack.viaversion.MixinSkullHandler_1_12_2",
-    "protocolhack.viaversion.MixinViaIdleThread"
+    "protocolhack.viaversion.MixinViaIdleThread",
+    "protocolhack.viaversion.viaprotocolhack.MixinCustomViaConfig"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-    "features.module.norender.MixinChunkOcclusionDataBuilder"
+    "features.module.norender.MixinChunkOcclusionDataBuilder",
+    "protocolhack.item.blocking.MixinHeldItemRenderer"
   ]
 }

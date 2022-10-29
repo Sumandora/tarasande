@@ -140,10 +140,7 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
 
                     if (it.packet is CustomPayloadC2SPacket) {
                         if (it.packet.channel == CustomPayloadC2SPacket.BRAND) {
-                            val data = PacketByteBuf(Unpooled.buffer())
-                            data.writeString("fml,forge")
-
-                            it.packet.data = data
+                            it.packet.data = PacketByteBuf(Unpooled.buffer()).writeString("fml,forge")
                         }
                     }
                 }
@@ -274,6 +271,27 @@ class ElementMenuToggleQuiltFaker : ElementMenuToggle("Quilt Faker") {
                     buffer.writeVarInt(highestSupported)
 
                     MinecraftClient.getInstance().networkHandler!!.sendPacket(CustomPayloadC2SPacket(quiltHandshake, buffer))
+                }
+            }
+        }
+    }
+
+    override fun onToggle(state: Boolean) {
+        // state check in event listener
+    }
+}
+
+class ElementMenuToggleClientBrandSpoofer : ElementMenuToggle("Client brand spoofer") {
+
+    private val clientBrand = ValueText(this, "Client brand", "vanilla")
+
+    init {
+        TarasandeMain.get().managerEvent.add(EventPacket::class.java) {
+            if (!state) return@add
+
+            if (it.type == EventPacket.Type.SEND && it.packet is CustomPayloadC2SPacket) {
+                if (it.packet.channel == CustomPayloadC2SPacket.BRAND) {
+                    it.packet.data = PacketByteBuf(Unpooled.buffer()).writeString("fml,forge")
                 }
             }
         }

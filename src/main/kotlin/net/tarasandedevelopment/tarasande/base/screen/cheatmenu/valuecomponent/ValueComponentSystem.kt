@@ -5,6 +5,9 @@ import net.tarasandedevelopment.tarasande.base.value.Value
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.Element
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.*
 import net.tarasandedevelopment.tarasande.value.*
+import net.tarasandedevelopment.tarasande.value.meta.ValueButton
+import net.tarasandedevelopment.tarasande.value.meta.ValueButtonItem
+import net.tarasandedevelopment.tarasande.value.meta.ValueSpacer
 
 class ManagerValueComponent : Manager<Pair<Class<out Value>, Class<out ElementValueComponent>>>() {
 

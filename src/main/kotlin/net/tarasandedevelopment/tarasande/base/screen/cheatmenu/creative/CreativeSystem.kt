@@ -14,8 +14,8 @@ import net.tarasandedevelopment.tarasande.screen.cheatmenu.creative.cicExploits
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.creative.spawnerExploits
 import net.tarasandedevelopment.tarasande.util.player.items.ItemUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
-import net.tarasandedevelopment.tarasande.value.ValueButtonItem
 import net.tarasandedevelopment.tarasande.value.ValueMode
+import net.tarasandedevelopment.tarasande.value.meta.ValueButtonItem
 
 class ManagerCreative : Manager<ExploitCreative>() {
 

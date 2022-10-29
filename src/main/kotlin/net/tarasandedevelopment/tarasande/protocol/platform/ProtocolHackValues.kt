@@ -12,6 +12,7 @@ object ProtocolHackValues {
 
     // General
     val filterItemGroups = ValueBoolean(this, "Filter item groups", true)
+
     val changeResourcePackDownloadHeaders = ValueBoolean(this, "Change resource pack download headers", false)
     val versionName = object : ValueText(this, "Version name", SharedConstants.getGameVersion().name) {
         override fun isEnabled() = changeResourcePackDownloadHeaders.value
@@ -20,9 +21,17 @@ object ProtocolHackValues {
         override fun isEnabled() = changeResourcePackDownloadHeaders.value
     }
 
+    // 1.19 -> 1.18.2
+    val hideSignatureIndicator = ValueBoolean(this, "Hide signature indicator (1.19 -> 1.18.2)", false)
+    val disableSequencing = ValueBoolean(this, "Disable sequencing (1.19 -> 1.18.2)", false)
+
     // 1.14 -> 1.13.2
     val smoothOutMerchantScreens = ValueBoolean(this, "Smooth out merchant screens (1.14 -> 1.13.2)", true)
 
     // 1.13 -> 1.12.2
     val removeNewTabCompletion = ValueBoolean(this, "Remove new tab completion (1.13 -> 1.12.2)", true)
+
+    // 1.9 -> 1.8.x
+    val removeCooldowns = ValueBoolean(this, "Remove cooldowns (1.9 -> 1.8.x)", false)
+
 }

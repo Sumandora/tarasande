@@ -6,7 +6,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ElementValueComponent
 import net.tarasandedevelopment.tarasande.base.value.Value
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import net.tarasandedevelopment.tarasande.value.ValueButton
+import net.tarasandedevelopment.tarasande.value.meta.ValueButton
 import java.awt.Color
 
 class ElementValueComponentButton(value: Value) : ElementValueComponent(value) {

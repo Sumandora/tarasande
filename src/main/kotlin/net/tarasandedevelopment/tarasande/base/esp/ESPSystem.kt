@@ -12,8 +12,8 @@ import net.tarasandedevelopment.tarasande.esp.ESPElementRotatableName
 import net.tarasandedevelopment.tarasande.module.render.ModuleESP
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueButton
 import net.tarasandedevelopment.tarasande.value.ValueMode
+import net.tarasandedevelopment.tarasande.value.meta.ValueButton
 import kotlin.math.abs
 
 class ManagerESP : Manager<ESPElement>() {

@@ -4,7 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ElementValueComponent
 import net.tarasandedevelopment.tarasande.base.value.Value
-import net.tarasandedevelopment.tarasande.value.ValueSpacer
+import net.tarasandedevelopment.tarasande.value.meta.ValueSpacer
 import kotlin.math.floor
 
 class ElementValueComponentSpacer(value: Value) : ElementValueComponent(value) {

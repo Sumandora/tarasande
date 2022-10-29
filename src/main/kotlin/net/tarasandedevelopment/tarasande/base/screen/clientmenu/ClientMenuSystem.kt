@@ -9,14 +9,11 @@ import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.minecraftb
 import net.tarasandedevelopment.tarasande.screen.clientmenu.*
 import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueMode
 import org.lwjgl.glfw.GLFW
-import org.spongepowered.asm.mixin.Unique
 import java.awt.Color
 
 class ManagerClientMenu : Manager<ElementMenu>() {
 
-    private val clientMenuFocusedEntry: ValueMode
     internal val clientMenuCategories = ValueBoolean(this, "Show categories", false)
 
     init {
@@ -35,49 +32,15 @@ class ManagerClientMenu : Manager<ElementMenu>() {
             ElementMenuToggleForgeFaker(),
             ElementMenuToggleHAProxyHack(),
             ElementMenuToggleQuiltFaker(),
+            ElementMenuToggleClientBrandSpoofer(),
 
             ElementMenuTitleConditional("Special") { fritzBox.visible() },
             fritzBox
         )
-
-        val entries = mutableListOf("None")
-        entries.addAll(list.filterIsInstance<ElementMenuScreen>().map { e -> e.name })
-
-        clientMenuFocusedEntry = ValueMode(this, "Focused entry", false, *entries.toTypedArray())
-    }
-
-    private fun byName(name: String): ElementMenu {
-        return this.list.first { it.name.equals(name, true) }
-    }
-
-    @Unique
-    private fun anySelected(): Boolean {
-        return clientMenuFocusedEntry.anySelected() && clientMenuFocusedEntry.selected[0] != "None"
-    }
-
-    private fun createButtonText(): String {
-        val selected = clientMenuFocusedEntry.selected[0]
-
-        val buttonText = if (anySelected()) {
-            selected
-        } else {
-            TarasandeMain.get().name.let { it[0].uppercaseChar().toString() + it.substring(1) + " Menu" }
-        }
-
-        return buttonText
     }
 
     fun createClientMenuButton(x: Int, y: Int, width: Int, height: Int, parent: Screen): ClickableWidgetPanel {
-        val selected = clientMenuFocusedEntry.selected[0]
-
-        return PanelButton.createButton(x, y, width, height, this.createButtonText()) {
-            if (this.anySelected() && !Screen.hasShiftDown()) {
-                val screen = byName(selected)
-                if (screen.visible()) {
-                    screen.onClick(GLFW.GLFW_MOUSE_BUTTON_LEFT)
-                    return@createButton
-                }
-            }
+        return PanelButton.createButton(x, y, width, height, TarasandeMain.get().name.let { it[0].uppercaseChar().toString() + it.substring(1) + " Menu" }) {
             MinecraftClient.getInstance().setScreen(ScreenBetterSlotListClientMenu(parent))
         }
     }

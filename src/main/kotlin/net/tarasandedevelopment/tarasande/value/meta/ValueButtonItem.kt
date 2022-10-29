@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.value
+package net.tarasandedevelopment.tarasande.value.meta
 
 import com.google.gson.JsonElement
 import net.minecraft.item.ItemStack
