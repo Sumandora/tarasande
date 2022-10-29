@@ -25,8 +25,10 @@ class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, 
     override fun init() {
         this.provideElements(object : ScreenBetterSlotListWidget.ListProvider {
             override fun get(): List<ScreenBetterSlotListEntry> {
-                return TarasandeMain.get().managerClientMenu.list.filter {
-                        e -> TarasandeMain.get().managerClientMenu.clientMenuCategories.value || e !is ElementMenuTitle
+                return TarasandeMain.get().managerClientMenu.list.filter { e ->
+                    e.visible()
+                }.filter { e ->
+                    TarasandeMain.get().managerClientMenu.clientMenuCategories.value || e !is ElementMenuTitle
                 }.map { e ->
                     ScreenBetterSlotListEntryClientMenu(e)
                 }
