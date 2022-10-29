@@ -513,8 +513,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private fun block() {
         when {
             blockItem.isSelected(0) -> {
-                val stack = mc.player?.getStackInHand(Hand.OFF_HAND)
-                if (stack?.item !is ShieldItem || mc.player?.itemCooldownManager?.isCoolingDown(stack.item)!! || mc.player?.getStackInHand(Hand.MAIN_HAND)?.useAction != UseAction.NONE)
+                val stack = mc.player?.getStackInHand(PlayerUtil.getUsedHand() ?: return)
+                if (stack?.item !is ShieldItem || mc.player?.itemCooldownManager?.isCoolingDown(stack.item)!!)
                     return
             }
 

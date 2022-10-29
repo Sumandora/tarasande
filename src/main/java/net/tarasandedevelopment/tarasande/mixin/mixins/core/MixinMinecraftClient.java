@@ -6,7 +6,6 @@ import net.minecraft.client.RunArgs;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.util.Window;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.Account;
 import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAccountManager;
@@ -31,13 +30,6 @@ public abstract class MixinMinecraftClient {
     @Shadow
     @Nullable
     public ClientPlayerEntity player;
-
-    @Shadow
-    public int attackCooldown;
-
-    @Shadow
-    @Final
-    private Window window;
 
     @Unique
     private long tarasande_startTime = 0L;

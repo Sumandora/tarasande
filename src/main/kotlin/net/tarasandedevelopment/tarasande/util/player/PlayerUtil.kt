@@ -6,7 +6,6 @@ import net.minecraft.client.input.KeyboardInput
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.effect.StatusEffects
-import net.minecraft.item.Items
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.BlockHitResult
@@ -125,7 +124,7 @@ object PlayerUtil {
     fun getUsedHand(): Hand? {
         for (hand in Hand.values()) {
             val stack = MinecraftClient.getInstance().player!!.getStackInHand(hand)
-            if (stack.item != Items.AIR) {
+            if (!stack.isEmpty) {
                 if (stack.useAction == UseAction.NONE)
                     continue
 
@@ -138,7 +137,7 @@ object PlayerUtil {
     const val walkSpeed = 0.28
     fun calcBaseSpeed(baseSpeed: Double = walkSpeed): Double {
         return baseSpeed + 0.03 *
-                if (MinecraftClient.getInstance().player?.hasStatusEffect(StatusEffects.SPEED)!!)
+                if (MinecraftClient.getInstance().player?.hasStatusEffect(StatusEffects.SPEED) == true)
                     MinecraftClient.getInstance().player?.getStatusEffect(StatusEffects.SPEED)?.amplifier!!
                 else
                     0
