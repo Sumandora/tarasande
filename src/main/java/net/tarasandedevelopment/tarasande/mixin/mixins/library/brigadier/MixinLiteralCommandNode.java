@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.features.module.brigadier;
+package net.tarasandedevelopment.tarasande.mixin.mixins.library.brigadier;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.tarasandedevelopment.tarasande.TarasandeMain;

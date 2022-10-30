@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.protocol
 
+import com.viaversion.viaversion.ViaManagerImpl
 import com.viaversion.viaversion.api.platform.providers.ViaProviders
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import com.viaversion.viaversion.api.protocol.version.VersionProvider
@@ -65,9 +66,11 @@ class TarasandeProtocolHack : INativeProvider {
         this.version.value = version.toDouble()
     }
 
+    override fun nativeVersion(): Int {
+        return SharedConstants.getProtocolVersion()
+    }
+
     fun clientsideVersion(): Int {
-        if (isSinglePlayer)
-            return SharedConstants.getProtocolVersion()
         return this.version.value.toInt()
     }
 
@@ -119,11 +122,13 @@ class TarasandeProtocolHack : INativeProvider {
         providers?.register(HandItemProvider::class.java, FabricHandItemProvider())
     }
 
-    override fun commandHandler(): Optional<ViaCommandHandler> {
-        return Optional.of(TarasandeCommandHandler())
+    override fun onBuildViaPlatform(builder: ViaManagerImpl.ViaManagerBuilder) {
+        builder.commandHandler(TarasandeCommandHandler())
     }
 
-    override fun optionalVersions(): MutableList<ProtocolVersion> = LegacyProtocolVersion.PROTOCOL_VERSIONS
+    override fun getOptionalProtocols(): MutableList<ProtocolVersion> {
+        return LegacyProtocolVersion.PROTOCOL_VERSIONS
+    }
 
     fun isAuto() = this.auto.value
 

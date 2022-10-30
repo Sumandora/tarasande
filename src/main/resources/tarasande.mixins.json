@@ -75,8 +75,8 @@
     "features.module.MixinWorld",
     "features.module.MixinWorldRenderer",
     "features.module.block.MixinCommandBlock",
-    "features.module.brigadier.MixinCommandNode",
-    "features.module.brigadier.MixinLiteralCommandNode",
+    "library.brigadier.MixinCommandNode",
+    "library.brigadier.MixinLiteralCommandNode",
     "features.module.connection.MixinClientConnection",
     "features.module.connection.MixinClientPlayNetworkHandler",
     "features.module.connection.MixinEntityStatusEffectS2CPacket",
@@ -203,8 +203,7 @@
     "protocolhack.viaversion.MixinProtocolManagerImpl",
     "protocolhack.viaversion.MixinSkullHandler_1_12_2",
     "protocolhack.viaversion.MixinViaIdleThread",
-    "protocolhack.viaversion.viaprotocolhack.MixinCustomViaConfig",
-    "protocolhack.viaversion.viaprotocolhack.MixinVersionList"
+    "library.viaprotocolhack.MixinCustomViaConfig"
   ],
   "injectors": {
     "defaultRequire": 1

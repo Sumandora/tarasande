@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.viaversion.viaprotocolhack;
+package net.tarasandedevelopment.tarasande.mixin.mixins.library.viaprotocolhack;
 
 import com.viaversion.viaversion.configuration.AbstractViaConfig;
 import de.florianmichael.viaprotocolhack.platform.viaversion.CustomViaConfig;
