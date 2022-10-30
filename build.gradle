@@ -46,7 +46,7 @@ var libs = [
 		// NoteBot -> https://github.com/RaphiMC/NoteBlockLib
 		"com.github.RaphiMC:NoteBlockLib:6f2b0a5c73",
 		// Easing Functions -> https://github.com/FlorianMichael/eZEasing
-		"com.github.FlorianMichael:eZEasing:81601436ab"
+		"com.github.FlorianMichael:eZEasing:846b9932ae"
 ]
 
 loom {
