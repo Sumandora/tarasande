@@ -33,7 +33,7 @@ import java.util.logging.Logger
 
 class TarasandeProtocolHack : INativeProvider {
 
-    private val version = ValueNumber(this, "Protocol", Double.MIN_VALUE, SharedConstants.getGameVersion().protocolVersion.toDouble(), Double.MAX_VALUE, 1.0, true)
+    private val version = ValueNumber(this, "Protocol", Double.MIN_VALUE, SharedConstants.getProtocolVersion().toDouble(), Double.MAX_VALUE, 1.0, true)
     private val auto = ValueBoolean(this, "Auto", false)
     private val compression = arrayOf("decompress", "compress")
 
@@ -66,6 +66,8 @@ class TarasandeProtocolHack : INativeProvider {
     }
 
     fun clientsideVersion(): Int {
+        if (isSinglePlayer)
+            return SharedConstants.getProtocolVersion()
         return this.version.value.toInt()
     }
 
