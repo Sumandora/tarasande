@@ -39,21 +39,18 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val offsetGoalYaw = ValueBoolean(this, "Offset goal yaw", true)
     private val edgeDistance = ValueNumber(this, "Edge distance", 0.0, 0.5, 1.0, 0.05)
     private val edgeIncrement = ValueBoolean(this, "Edge increment", true)
-    private val edgeIncrementValue = object : ValueNumber(this, "Edge increment value", 0.0, 0.15, 0.5, 0.05) {
+    private val increment = object : ValueNumber(this, "Increment", 0.0, 0.15, 0.5, 0.05) {
         override fun isEnabled() = edgeIncrement.value
     }
     private val preventImpossibleEdge = object : ValueBoolean(this, "Prevent impossible edge", true) {
         override fun isEnabled() = edgeIncrement.value
     }
-    private val rotateAtEdge = ValueBoolean(this, "Rotate at edge", false)
-    private val rotateAtEdgeMode = object : ValueMode(this, "Rotate at edge mode", false, "Distance", "Extrapolated position") {
-        override fun isEnabled() = rotateAtEdge.value
-    }
-    private val rotateAtEdgeDistance = object : ValueNumber(this, "Rotate at edge distance", 0.0, 0.5, 1.0, 0.05) {
-        override fun isEnabled() = rotateAtEdgeMode.isEnabled() && rotateAtEdgeMode.isSelected(0)
-    }
-    private val rotateAtEdgeExtrapolation = object : ValueNumber(this, "Rotate at edge extrapolation", 0.0, 1.0, 10.0, 1.0) {
+    private val rotateAtEdgeMode = ValueMode(this, "Rotate at edge mode", false, "Off", "Distance", "Extrapolated position")
+    private val distance = object : ValueNumber(this, "Distance", 0.0, 0.5, 1.0, 0.05) {
         override fun isEnabled() = rotateAtEdgeMode.isEnabled() && rotateAtEdgeMode.isSelected(1)
+    }
+    private val extrapolation = object : ValueNumber(this, "Extrapolation", 0.0, 1.0, 10.0, 1.0) {
+        override fun isEnabled() = rotateAtEdgeMode.isEnabled() && rotateAtEdgeMode.isSelected(2)
     }
     private val preventRerotation = ValueBoolean(this, "Prevent re-rotation", false)
     private val rerotateOnFacingChange = object : ValueBoolean(this, "Re-rotate on facing change", false) {
@@ -182,7 +179,9 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 val prevTarget = target
                 target = getAdjacentBlock(below)
                 if (target != null) {
-                    if (!rotateAtEdge.value || ((rotateAtEdgeMode.isSelected(0) && ((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= rotateAtEdgeDistance.value * rotateAtEdgeDistance.value || target?.second?.offsetY != 0) || (rotateAtEdgeMode.isSelected(1) && PlayerUtil.isOnEdge(rotateAtEdgeExtrapolation.value)))) {
+                    if (rotateAtEdgeMode.isSelected(0) ||
+                        ((rotateAtEdgeMode.isSelected(1) && ((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= distance.value * distance.value || target?.second?.offsetY != 0) ||
+                                (rotateAtEdgeMode.isSelected(2) && PlayerUtil.isOnEdge(extrapolation.value)))) {
 
                         if (lastRotation == null || run {
                                 if (!preventRerotation.value)
@@ -439,7 +438,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private fun getNewEdgeDist(): Double {
         return if (!edgeIncrement.value) edgeDistance.value
         else {
-            val newEdgeDist = prevEdgeDistance + edgeIncrementValue.value
+            val newEdgeDist = prevEdgeDistance + increment.value
             if (newEdgeDist > edgeDistance.value) 0.5 else newEdgeDist
         }
     }

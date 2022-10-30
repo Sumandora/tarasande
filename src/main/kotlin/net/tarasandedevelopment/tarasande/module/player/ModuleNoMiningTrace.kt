@@ -6,6 +6,6 @@ import net.tarasandedevelopment.tarasande.value.ValueBoolean
 
 class ModuleNoMiningTrace : Module("No mining trace", "Allows you to mine blocks through entities", ModuleCategory.PLAYER) {
 
-    val onlyWhenPickaxe = ValueBoolean(this, "Only when holding Pickaxe", true)
+    val onlyWhenPickaxe = ValueBoolean(this, "Only when holding pickaxe", true)
 
 }

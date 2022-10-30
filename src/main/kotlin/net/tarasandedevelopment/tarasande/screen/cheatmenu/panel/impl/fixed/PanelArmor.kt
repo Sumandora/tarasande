@@ -18,8 +18,8 @@ class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
 
     private val skipEmpty = ValueBoolean(this, "Skip empty", false)
     private val showEnchantments = ValueBoolean(this, "Enchantments", true)
-    private val maxEnchantmentLength = ValueNumber(this, "Enchantments: max length", 1.0, 3.0, 5.0, 1.0)
-    private val enchantmentScale = ValueNumber(this, "Enchantments: scale", 0.1, 0.5, 2.0, 0.1)
+    private val maxEnchantmentLength = ValueNumber(this, "Enchantments max length", 1.0, 3.0, 5.0, 1.0)
+    private val enchantmentScale = ValueNumber(this, "Enchantments scale", 0.1, 0.5, 2.0, 0.1)
 
     override fun isVisible(): Boolean {
         for (itemStack in MinecraftClient.getInstance().player?.inventory?.armor ?: return false)

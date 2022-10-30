@@ -23,13 +23,13 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
     private val garbage = object : ValueBoolean(this, "Garbage", false) {
         override fun isEnabled() = !noArbitraryTexts.value
     }
-    private val garbageAmount = object : ValueNumber(this, "Garbage amount", 0.0, 5.0, 10.0, 1.0) {
+    private val amount = object : ValueNumber(this, "Amount", 0.0, 5.0, 10.0, 1.0) {
         override fun isEnabled() = !noArbitraryTexts.value && garbage.value
     }
-    private val garbageCase = object : ValueMode(this, "Garbage case", false, "Uppercase", "Random", "Lowercase") {
+    private val case = object : ValueMode(this, "Case", false, "Uppercase", "Random", "Lowercase") {
         override fun isEnabled() = !noArbitraryTexts.value && garbage.value
     }
-    private val garbagePosition = object : ValueMode(this, "Garbage position", true, "Before", "After") {
+    private val position = object : ValueMode(this, "Position", true, "Before", "After") {
         override fun isEnabled() = !noArbitraryTexts.value && garbage.value
     }
     private val mode = object : ValueMode(this, "Mode", false, "Custom message", "Position broadcast") {
@@ -98,10 +98,10 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
                 }
                 if (text != null) {
                     if (garbage.value) {
-                        if (garbagePosition.isSelected(0))
-                            text = formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt())) + " " + text
-                        if (garbagePosition.isSelected(1))
-                            text = text + " " + formatGarbage(RandomStringUtils.randomAlphanumeric(garbageAmount.value.toInt()))
+                        if (position.isSelected(0))
+                            text = formatGarbage(RandomStringUtils.randomAlphanumeric(amount.value.toInt())) + " " + text
+                        if (position.isSelected(1))
+                            text = text + " " + formatGarbage(RandomStringUtils.randomAlphanumeric(amount.value.toInt()))
                     }
                     PlayerUtil.sendChatMessage(text, true)
                 }
@@ -117,9 +117,9 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
 
     private fun formatGarbage(string: String): String {
         return when {
-            garbageCase.isSelected(0) -> string.uppercase()
-            garbageCase.isSelected(1) -> string
-            garbageCase.isSelected(2) -> string.lowercase()
+            case.isSelected(0) -> string.uppercase()
+            case.isSelected(1) -> string
+            case.isSelected(2) -> string.lowercase()
             else -> string
         }
     }
