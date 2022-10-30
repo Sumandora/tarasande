@@ -24,6 +24,7 @@ open class Manager<T : Any> {
 
     open fun <T> get(clazz: Class<T>): T {
         for (t in list) {
+            @Suppress("UNCHECKED_CAST")
             if (t.javaClass == clazz)
                 return t as T
         }

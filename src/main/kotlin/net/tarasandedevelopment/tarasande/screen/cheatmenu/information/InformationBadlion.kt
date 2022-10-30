@@ -55,7 +55,7 @@ class InformationTimers : Information("Badlion", "Timers") {
                             }
                         }
                     } else if (it.packet is PlayerRespawnS2CPacket) {
-                        if (MinecraftClient.getInstance().world != null && (it.packet as PlayerRespawnS2CPacket).dimension != MinecraftClient.getInstance().world?.registryKey) {
+                        if (MinecraftClient.getInstance().world != null && it.packet.dimension != MinecraftClient.getInstance().world?.registryKey) {
                             list.clear()
                             enabled = false
                         }
