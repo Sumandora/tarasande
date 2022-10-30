@@ -98,7 +98,6 @@ class ManagerModule : Manager<Module>() {
             ModuleLecternCrash(),
             ModuleCraftingDupe(),
             ModulePrediction(),
-            ModuleClientBrandSpoofer(),
             ModulePerfectHorseJump(),
             ModuleTridentBoost(),
             ModuleAutoRespawn(),
