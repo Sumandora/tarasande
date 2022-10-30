@@ -197,7 +197,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 }
                 // in case the eyepos is inside the boundingbox the next 2 checks will always succeed, but keeping them might prevent some retarded situation which is going to be added with an update
                 if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
-                if ((throughWalls.isSelected(0) || !prevTargets.any { it.first == entity }) && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint)) continue
+                if (!throughWalls.isSelected(2))
+                    if ((throughWalls.isSelected(0) || !prevTargets.any { it.first == entity }) && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint)) continue
                 targets.add(Pair(entity, aimPoint))
             }
             if (targets.isEmpty()) {
@@ -209,9 +210,14 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 return@registerEvent
             }
 
+            //@formatter:off
             targets.sortWith(
-                comparator.thenBy { it.first is LivingEntity && (it.first as LivingEntity).isDead }.thenBy { it.second.squaredDistanceTo(mc.player?.eyePos!!) > reach.minValue * reach.minValue }.thenBy { PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.second) }.thenBy { shouldAttackEntity(it.first) }
+                comparator.
+                    thenBy { it.first is LivingEntity && (it.first as LivingEntity).isDead }.
+                    thenBy { PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.getRotations(mc.player?.eyePos!!, it.second).correctSensitivity(), throughWalls.isSelected(2))?.type != HitResult.Type.ENTITY }.
+                    thenBy { !shouldAttackEntity(it.first) }
             )
+            //@formatter:on
 
             val target = targets[0]
 
@@ -293,7 +299,10 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 var imaginaryPosition = mc.player?.pos!!
                 teleportPath = ArrayList()
                 val maxTeleportTime = (mc.renderTickCounter.tickTime / targets.size.toDouble()).toLong()
-                for (entry in targets) {
+                for ((index, entry) in targets.withIndex()) {
+                    if (mode.isSelected(0) && index > 0)
+                        break
+
                     var target = entry.first
                     val aimPoint = entry.second
 
@@ -339,9 +348,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     event.dirty = true
                     waitForHit = false
                     attacked = true
-
-                    if (!mode.isSelected(1))
-                        break
                 }
                 if (!attacked && swingInAir.value) {
                     attack(null, clicks)
@@ -419,6 +425,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
     private fun getAimPoint(box: Box, entity: LivingEntity): Vec3d {
         var best = MathUtil.getBestAimPoint(box)
+        return best
         var visible = PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, best)
 
         if (rotations.isSelected(0)) {

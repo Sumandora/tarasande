@@ -20,7 +20,7 @@ public class MixinGameRenderer {
     @Final
     private MinecraftClient client;
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getOverlay()Lnet/minecraft/client/gui/screen/Overlay;", ordinal = 0))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;applyModelViewMatrix()V", shift = At.Shift.AFTER, remap = false))
     public void hookEventRender2D(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         if (client.player != null)
             TarasandeMain.Companion.get().getManagerEvent().call(new EventRender2D(new MatrixStack()));

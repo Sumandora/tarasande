@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.module.movement
 
-import de.florianmichael.viaprotocolhack.util.VersionList
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket
 import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket
 import net.minecraft.util.UseAction
@@ -12,7 +11,6 @@ import net.tarasandedevelopment.tarasande.event.EventItemCooldown
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import java.util.concurrent.ThreadLocalRandom
@@ -26,7 +24,7 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
             useActions[useAction] = StringUtil.formatEnumTypes(useAction.name)
     }
 
-    val slowdown = ValueNumber(this, "Slowdown", 0.0, 1.0, 1.0, 0.1)
+    val slowdown = ValueNumber(this, "Slowdown", 0.0, 1.0, 1.0, 0.01)
     val actions = ValueMode(this, "Actions", true, *useActions.map { it.value }.toTypedArray())
     private val bypass = ValueMode(this, "Bypass", true, "Reuse", "Rehold")
     private val reuseMode = object : ValueMode(this, "Reuse mode", false, "Same slot", "Different slot") {
@@ -34,9 +32,6 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
     }
     private val bypassedActions = object : ValueMode(this, "Bypassed actions", true, *useActions.map { it.value }.toTypedArray()) {
         override fun isEnabled() = bypass.anySelected()
-    }
-    val preventUnsprint = object : ValueBoolean(this, "Prevent unsprint", false) {
-        override fun isEnabled() = VersionList.isOlderOrEqualTo(VersionList.R1_8)
     }
 
     fun isActionEnabled(setting: ValueMode): Boolean {

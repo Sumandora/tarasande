@@ -3,10 +3,12 @@ package net.tarasandedevelopment.tarasande.module.player
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.item.SwordItem
 import net.minecraft.util.hit.BlockHitResult
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.module.combat.ModuleHealingBot
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
 
@@ -43,6 +45,8 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool for breaking a
         registerEvent(EventAttackEntity::class.java) { event ->
             if (event.state == EventAttackEntity.State.PRE) {
                 if (!mode.isSelected(1))
+                    return@registerEvent
+                if (TarasandeMain.get().managerModule.get(ModuleHealingBot::class.java).let { it.enabled && it.state != ModuleHealingBot.State.IDLE })
                     return@registerEvent
 
                 var best: Int? = null
