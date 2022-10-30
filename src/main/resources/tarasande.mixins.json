@@ -203,7 +203,8 @@
     "protocolhack.viaversion.MixinProtocolManagerImpl",
     "protocolhack.viaversion.MixinSkullHandler_1_12_2",
     "protocolhack.viaversion.MixinViaIdleThread",
-    "protocolhack.viaversion.viaprotocolhack.MixinCustomViaConfig"
+    "protocolhack.viaversion.viaprotocolhack.MixinCustomViaConfig",
+    "protocolhack.viaversion.viaprotocolhack.MixinVersionList"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -3,9 +3,6 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.viaversion.
 import com.viaversion.viaversion.configuration.AbstractViaConfig;
 import de.florianmichael.viaprotocolhack.platform.viaversion.CustomViaConfig;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.File;
 
@@ -16,9 +13,9 @@ public abstract class MixinCustomViaConfig extends AbstractViaConfig {
         super(configFile);
     }
 
-    @Inject(method = "isShowShieldWhenSwordInHand", at = @At("HEAD"), cancellable = true)
-    public void disableShowShieldInHand(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(false);
+    @Override
+    public boolean isLeftHandedHandling() {
+        return false;
     }
 
     @Override
