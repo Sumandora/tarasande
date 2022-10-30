@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.event.screens;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -22,7 +23,7 @@ public abstract class MixinScreen {
     protected MinecraftClient client;
 
     @Shadow
-    protected abstract <T extends Element> T addDrawableChild(T drawableElement);
+    protected abstract <T extends Element & Drawable> T addDrawableChild(T drawableElement);
 
     @Inject(method = "render", at = @At("HEAD"))
     public void hookEventScreenRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
@@ -35,6 +36,6 @@ public abstract class MixinScreen {
         TarasandeMain.Companion.get().getManagerEvent().call(eventChildren);
 
         for (Element element : eventChildren.get())
-            this.addDrawableChild(element);
+            this.addDrawableChild((Element & Drawable) element);
     }
 }
