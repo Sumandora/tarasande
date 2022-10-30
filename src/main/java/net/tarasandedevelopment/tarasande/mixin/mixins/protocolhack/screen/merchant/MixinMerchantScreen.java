@@ -38,7 +38,6 @@ public abstract class MixinMerchantScreen extends HandledScreen<MerchantScreenHa
             if (protocolhack_previousRecipeIndex != selectedIndex) {
                 int direction = protocolhack_previousRecipeIndex < selectedIndex ? 1 : -1;
                 for (int smooth = protocolhack_previousRecipeIndex + direction /* don't send the page we already are on */; smooth != selectedIndex; smooth += direction) {
-                    System.out.println(protocolhack_previousRecipeIndex + " -> " + smooth + " -> " + selectedIndex);
                     client.getNetworkHandler().sendPacket(new SelectMerchantTradeC2SPacket(smooth));
                 }
                 protocolhack_previousRecipeIndex = selectedIndex;

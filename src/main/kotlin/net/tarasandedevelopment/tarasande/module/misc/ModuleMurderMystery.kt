@@ -185,14 +185,12 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                             }
                         }
                         if ((mc.player?.inventory?.selectedSlot!! != sword).also { switchedSlot = it }) {
-                            println("$sword " + mc.player?.inventory?.selectedSlot!!)
                             mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(sword))
                         }
                     }
 
                     EventAttackEntity.State.POST -> if (switchedSlot) {
                         mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))
-                        println(mc.player?.inventory?.selectedSlot!!)
                     }
                 }
             }

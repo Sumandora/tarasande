@@ -25,7 +25,7 @@ class PanelEffects(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Pan
     private val animations = HashMap<StatusEffect, Double>()
     private val prevInstances = HashMap<StatusEffect, StatusEffectInstance>()
 
-    private var easing = EzEasing.NONE
+    private var easing = EzEasing.LINEAR
 
     private val speedIn = ValueNumber(this, "Speed: in", 0.001, 0.005, 0.02, 0.001)
     private val speedOut = ValueNumber(this, "Speed: out", 0.001, 0.005, 0.02, 0.001)

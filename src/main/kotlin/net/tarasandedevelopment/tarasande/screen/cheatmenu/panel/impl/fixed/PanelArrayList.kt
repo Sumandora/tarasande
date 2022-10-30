@@ -18,7 +18,7 @@ import net.tarasandedevelopment.tarasande.value.ValueNumber
 class PanelArrayList(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Array List", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), background = false, resizable = false, fixed = true) {
 
     private val animations = HashMap<Module, Double>()
-    private var easing = EzEasing.NONE
+    private var easing = EzEasing.LINEAR
 
     private val speedIn = ValueNumber(this, "Speed: in", 0.001, 0.005, 0.02, 0.001)
     private val speedOut = ValueNumber(this, "Speed: out", 0.001, 0.005, 0.02, 0.001)

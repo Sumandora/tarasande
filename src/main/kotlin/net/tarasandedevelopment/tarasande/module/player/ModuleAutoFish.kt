@@ -47,7 +47,6 @@ class ModuleAutoFish : Module("Auto fish", "Automates fishing", ModuleCategory.P
                 if (event.packet.parameters.type == ParticleTypes.BUBBLE && mode.isSelected(1)) {
                     if (mc.player?.fishHook != null) {
                         if (mc.player?.fishHook?.velocity?.horizontalLengthSquared()!! == 0.0 && abs(mc.player?.fishHook?.velocity?.y!!) <= 0.1 && mc.player?.fishHook?.squaredDistanceTo(event.packet.x, event.packet.y, event.packet.z)!! <= sensitiveDistance.value * sensitiveDistance.value) {
-                            println("AAAA")
                             blocked = false
                             timer.reset()
                         }

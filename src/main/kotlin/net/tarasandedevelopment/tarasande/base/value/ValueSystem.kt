@@ -19,10 +19,6 @@ class ManagerValue : Manager<Value>() {
 abstract class Value(var owner: Any, var name: String, manage: Boolean = true) {
 
     init {
-        println(name)
-    }
-
-    init {
         if (manage)
             TarasandeMain.get().managerValue.add(this)
     }
