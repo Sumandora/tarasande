@@ -291,7 +291,7 @@ class ElementMenuToggleClientBrandSpoofer : ElementMenuToggle("Client brand spoo
 
             if (it.type == EventPacket.Type.SEND && it.packet is CustomPayloadC2SPacket) {
                 if (it.packet.channel == CustomPayloadC2SPacket.BRAND) {
-                    it.packet.data = PacketByteBuf(Unpooled.buffer()).writeString("fml,forge")
+                    it.packet.data = PacketByteBuf(Unpooled.buffer()).writeString(clientBrand.value)
                 }
             }
         }
