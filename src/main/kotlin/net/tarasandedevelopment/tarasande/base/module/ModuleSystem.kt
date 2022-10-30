@@ -128,7 +128,7 @@ class ManagerModule : Manager<Module>() {
     }
 }
 
-open class Module(val name: String, val description: String, val category: ModuleCategory) {
+open class Module(val name: String, val description: String, val category: String) {
     private val eventListeners = HashSet<Triple<Class<Event>, Int, Consumer<Event>>>()
 
     @Suppress("PropertyName")
@@ -168,6 +168,12 @@ open class Module(val name: String, val description: String, val category: Modul
     }
 }
 
-enum class ModuleCategory {
-    COMBAT, MOVEMENT, PLAYER, RENDER, MISC, GHOST, EXPLOIT
+object ModuleCategory {
+    const val COMBAT = "Combat"
+    const val MOVEMENT = "Movement"
+    const val PLAYER = "Player"
+    const val RENDER = "Render"
+    const val MISC = "Misc"
+    const val GHOST = "Ghost"
+    const val EXPLOIT = "Exploit"
 }

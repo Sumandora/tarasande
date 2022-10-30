@@ -36,8 +36,6 @@ object ArmorUpdater1_8_0 {
 
     fun update() {
         var armor = 0.0
-        if (MinecraftClient.getInstance().player == null) return
-        if (MinecraftClient.getInstance().isInSingleplayer) return
 
         MinecraftClient.getInstance().player!!.inventory.armor.forEach {
             ids[it.item]?.also { id ->

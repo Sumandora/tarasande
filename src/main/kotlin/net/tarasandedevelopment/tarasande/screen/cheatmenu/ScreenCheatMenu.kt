@@ -10,7 +10,6 @@ import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.creative.ManagerCreative
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.graph.ManagerGraph
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.ManagerInformation
@@ -53,7 +52,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     init {
         var y = 5.0
 
-        for (moduleCategory in ModuleCategory.values()) {
+        for (moduleCategory in TarasandeMain.get().managerModule.list.map { it.category }.distinct()) {
             panels.add(PanelElementsCategory(moduleCategory, 5.0, y).also { y += it.titleBarHeight + 5 })
         }
         panels.add(PanelElementsClientValues(this, 5.0, y).also { y += it.titleBarHeight + 5 })
