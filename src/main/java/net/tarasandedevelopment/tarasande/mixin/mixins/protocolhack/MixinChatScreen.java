@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
-import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -33,6 +32,6 @@ public class MixinChatScreen {
 
     @Inject(method = "onChatFieldUpdate", at = @At(value = "HEAD"))
     public void removePermanentRefreshing(String chatText, CallbackInfo ci) {
-        ((IChatInputSuggestor_Protocol) this.chatInputSuggestor).protocolhack_setNativeCompletion(VersionList.isOlderTo(VersionList.R1_13) && ProtocolHackValues.INSTANCE.getRemoveNewTabCompletion().getValue());
+        ((IChatInputSuggestor_Protocol) this.chatInputSuggestor).protocolhack_setNativeCompletion(ProtocolHackValues.INSTANCE.getRemoveNewTabCompletion().getValue());
     }
 }
