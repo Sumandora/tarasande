@@ -45,7 +45,7 @@ class Fml1NetClientHandler(val connection: ClientConnection) : IForgeNetClientHa
             }
         } else {
             val address = connection.address as InetSocketAddress
-            ServerPinger.get().ping(address.hostString, address.port, TarasandeMain.get().protocolHack.clientsideVersion()) {
+            ServerPinger.get().ping(address.hostString, address.port, TarasandeMain.get().protocolHack.clientsideVersion) {
                 val payload = ForgeCreator.createPayload(it.rawData)
                 if (payload == null) {
                     connection.disconnect(Text.of("[" + TarasandeMain.get().name + "] Failed to get mods, try to enable FML1 Cache in ForgeFaker"))

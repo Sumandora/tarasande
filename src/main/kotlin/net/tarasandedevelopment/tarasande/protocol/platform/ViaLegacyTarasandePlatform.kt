@@ -21,7 +21,7 @@ class ViaLegacyTarasandePlatform(private val protocolHack: TarasandeProtocolHack
     var encryptionKey: Cipher? = null
 
     override fun currentVersion(): Int {
-        return protocolHack.clientsideVersion()
+        return protocolHack.clientsideVersion
     }
 
     override fun profile_1_7(): GameProfile {

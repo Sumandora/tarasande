@@ -20,7 +20,7 @@ class InformationHandlers : Information("Connection", "Handlers") {
 
 class InformationProtocolVersion : Information("Connection", "Protocol Version") {
 
-    override fun getMessage() = VersionList.getProtocols().find { it.version == ViaProtocolHack.instance().provider().realClientsideVersion() }?.includedVersions?.last()
+    override fun getMessage() = VersionList.getProtocols().find { it.version == ViaProtocolHack.instance().provider().clientsideVersion }?.includedVersions?.last()
 }
 
 class InformationPlayTime : Information("Connection", "Play Time") {

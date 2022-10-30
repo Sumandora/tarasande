@@ -34,11 +34,8 @@ import java.util.logging.Logger
 
 class TarasandeProtocolHack : INativeProvider {
 
-    private val version = ValueNumber(this, "Protocol", Double.MIN_VALUE, SharedConstants.getProtocolVersion().toDouble(), Double.MAX_VALUE, 1.0, true)
-    private val auto = ValueBoolean(this, "Auto", false)
+    val version = ValueNumber(this, "Protocol", Double.MIN_VALUE, SharedConstants.getProtocolVersion().toDouble(), Double.MAX_VALUE, 1.0, true)
     private val compression = arrayOf("decompress", "compress")
-
-    var realClientsideVersion = this.clientsideVersion()
 
     val viaLegacy = ViaLegacyTarasandePlatform(this)
 
@@ -58,33 +55,11 @@ class TarasandeProtocolHack : INativeProvider {
         Protocol1_13To1_12_2.MAPPINGS.channelMappings["FORGE"] = "minecraft:forge"
     }
 
-    override fun isSinglePlayer(): Boolean {
-        return MinecraftClient.getInstance().isInSingleplayer
-    }
-
-    fun setVersion(version: Int) {
-        this.version.value = version.toDouble()
-    }
-
-    override fun nativeVersion(): Int {
-        return SharedConstants.getProtocolVersion()
-    }
-
-    fun clientsideVersion(): Int {
-        return this.version.value.toInt()
-    }
-
-    override fun realClientsideVersion(): Int {
-        return this.realClientsideVersion
-    }
-
-    override fun nettyOrder(): Array<String> {
-        return this.compression
-    }
-
-    override fun run(): File {
-        return TarasandeMain.get().rootDirectory
-    }
+    override fun isSinglePlayer() = MinecraftClient.getInstance().isInSingleplayer
+    override fun nativeVersion() = SharedConstants.getProtocolVersion()
+    override fun targetVersion() = this.version.value.toInt()
+    override fun nettyOrder() = this.compression
+    override fun run() = TarasandeMain.get().rootDirectory
 
     override fun createDump(): JsonObject {
         val platformSpecific = JsonObject()
@@ -126,13 +101,5 @@ class TarasandeProtocolHack : INativeProvider {
         builder.commandHandler(TarasandeCommandHandler())
     }
 
-    override fun getOptionalProtocols(): MutableList<ProtocolVersion> {
-        return LegacyProtocolVersion.PROTOCOL_VERSIONS
-    }
-
-    fun isAuto() = this.auto.value
-
-    fun toggleAuto() {
-        this.auto.value = !this.auto.value
-    }
+    override fun getOptionalProtocols(): MutableList<ProtocolVersion> = LegacyProtocolVersion.PROTOCOL_VERSIONS
 }

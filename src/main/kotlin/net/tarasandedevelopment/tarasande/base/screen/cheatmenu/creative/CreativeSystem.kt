@@ -81,7 +81,7 @@ abstract class ExploitCreative(val name: String, val icon: ItemStack, val versio
                 action.on()
             }
 
-            override fun isEnabled() = versions.map { p -> p.version }.contains(TarasandeMain.get().protocolHack.realClientsideVersion) || MinecraftClient.getInstance().isInSingleplayer
+            override fun isEnabled() = versions.map { p -> p.version }.contains(TarasandeMain.get().protocolHack.clientsideVersion) || MinecraftClient.getInstance().isInSingleplayer
         }
     }
 }

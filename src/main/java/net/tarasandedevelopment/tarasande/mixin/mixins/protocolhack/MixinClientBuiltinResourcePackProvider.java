@@ -59,7 +59,7 @@ public class MixinClientBuiltinResourcePackProvider {
 
                 @Override
                 public int getProtocolVersion() {
-                    return ViaProtocolHack.instance().provider().realClientsideVersion();
+                    return ViaProtocolHack.instance().provider().getClientsideVersion();
                 }
 
                 @Override

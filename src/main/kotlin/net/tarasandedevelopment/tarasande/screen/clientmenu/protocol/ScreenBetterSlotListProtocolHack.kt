@@ -28,7 +28,7 @@ class ScreenBetterSlotListProtocolHack : ScreenBetterSlotList(46, 12) {
 
         for (entry in providedList)
             if (entry is ScreenBetterSlotListEntryProtocol)
-                if (TarasandeMain.get().protocolHack.clientsideVersion() == entry.protocol.version)
+                if (TarasandeMain.get().protocolHack.clientsideVersion == entry.protocol.version)
                     selected = providedList.indexOf(entry)
 
         super.init()
@@ -36,14 +36,7 @@ class ScreenBetterSlotListProtocolHack : ScreenBetterSlotList(46, 12) {
         this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
             this.close()
         })
-
-        this.addDrawableChild(ButtonWidget(this.width / 2 - 49, this.height - 27, 98, 20, this.generateAutoDetectText()) {
-            TarasandeMain.get().protocolHack.toggleAuto()
-            it.message = this.generateAutoDetectText()
-        })
     }
-
-    private fun generateAutoDetectText() = Text.literal("Auto Detect").styled { it.withColor(TextColor.fromRgb((if (TarasandeMain.get().protocolHack.isAuto()) Color.green.rgb else Color.red.rgb))) }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
@@ -53,20 +46,12 @@ class ScreenBetterSlotListProtocolHack : ScreenBetterSlotList(46, 12) {
 
     class ScreenBetterSlotListEntryProtocol(val protocol: ProtocolVersion) : ScreenBetterSlotListEntry() {
 
-        private fun colorShift(input: Color): Int {
-            return if (TarasandeMain.get().protocolHack.isAuto()) input.darker().darker().darker().rgb else input.rgb
-        }
-
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            RenderUtil.textCenter(matrices, this.protocol.name, entryWidth / 2F, 0F, if (this.isSelected()) colorShift(Color.green) else colorShift(Color.red))
-        }
-
-        override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-            return !TarasandeMain.get().protocolHack.isAuto() && super.mouseClicked(mouseX, mouseY, button)
+            RenderUtil.textCenter(matrices, this.protocol.name, entryWidth / 2F, 0F, if (this.isSelected()) Color.green.rgb else Color.red.rgb)
         }
 
         override fun onSingleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
-            TarasandeMain.get().protocolHack.setVersion(this.protocol.version)
+            TarasandeMain.get().protocolHack.version.value = this.protocol.version.toDouble()
             super.onSingleClickEntry(mouseX, mouseY, mouseButton)
         }
     }
