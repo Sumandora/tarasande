@@ -64,7 +64,7 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
         registerEvent(EventMovement::class.java, 1001) { event ->
             if (event.entity != mc.player)
                 return@registerEvent
-            if (mc.player?.age!! - stepTick < slowdownTicks.value)
+            if (mc.player?.age!! - stepTick <= slowdownTicks.value)
                 event.velocity = (event.velocity * slowdown.value).let { if (slowdown.value != 0.0) it.withAxis(Direction.Axis.Y, event.velocity.y) else it }
         }
 
