@@ -134,7 +134,7 @@ class ElementValueComponentNumberRange(value: Value) : ElementValueComponent(val
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (button == 0 && RenderUtil.isHovered(mouseX, mouseY, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {
+        if (value.isEnabled() && button == 0 && RenderUtil.isHovered(mouseX, mouseY, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {
             val valueNumberRange = value as ValueNumberRange
 
             val minSliderPos = MathHelper.clamp((valueNumberRange.minValue - valueNumberRange.min) / (valueNumberRange.max - valueNumberRange.min), 0.0, 1.0)
@@ -168,7 +168,7 @@ class ElementValueComponentNumberRange(value: Value) : ElementValueComponent(val
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double) = false
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (lastMousePos != null && RenderUtil.isHovered(lastMousePos?.x?.toDouble()!!, lastMousePos?.y?.toDouble()!!, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {
+        if (value.isEnabled() && lastMousePos != null && RenderUtil.isHovered(lastMousePos?.x?.toDouble()!!, lastMousePos?.y?.toDouble()!!, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {
             val valueNumberRange = value as ValueNumberRange
             val mousePos = (lastMousePos?.x!! - (width - 50)) / 50.0
             val increment = valueNumberRange.increment *

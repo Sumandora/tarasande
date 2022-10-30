@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.screen.base
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.util.math.MatrixStack
@@ -10,6 +11,7 @@ import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.E
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.PanelElements
 import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
+import java.util.*
 
 class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val owner: Any) : ScreenBetter(parent) {
 
@@ -58,12 +60,10 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        this.clickableWidgetPanel?.keyPressed(keyCode, scanCode, modifiers)
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
     override fun charTyped(chr: Char, modifiers: Int): Boolean {
-        this.clickableWidgetPanel?.charTyped(chr, modifiers)
         return super.charTyped(chr, modifiers)
     }
 
@@ -78,4 +78,13 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
 
         super.render(matrices, mouseX, mouseY, delta)
     }
+
+    override fun hoveredElement(mouseX: Double, mouseY: Double): Optional<Element> {
+        return Optional.of(clickableWidgetPanel ?: return Optional.empty())
+    }
+
+    override fun getFocused(): Element? {
+        return clickableWidgetPanel
+    }
+
 }

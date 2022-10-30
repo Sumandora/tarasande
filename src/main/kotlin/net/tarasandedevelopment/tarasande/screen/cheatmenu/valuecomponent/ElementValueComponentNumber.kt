@@ -102,7 +102,7 @@ class ElementValueComponentNumber(value: Value) : ElementValueComponent(value) {
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (button == 0 && RenderUtil.isHovered(mouseX, mouseY, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {
+        if (value.isEnabled() && button == 0 && RenderUtil.isHovered(mouseX, mouseY, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {
             dragInfo.setDragInfo(true, mouseX - (width - 50), mouseY - getHeight() * 0.25)
             return true
         }
@@ -116,7 +116,7 @@ class ElementValueComponentNumber(value: Value) : ElementValueComponent(value) {
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double) = false
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (lastMousePos != null && RenderUtil.isHovered(lastMousePos?.x?.toDouble()!!, lastMousePos?.y?.toDouble()!!, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {
+        if (value.isEnabled() && lastMousePos != null && RenderUtil.isHovered(lastMousePos?.x?.toDouble()!!, lastMousePos?.y?.toDouble()!!, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {
             val valueNumber = value as ValueNumber
             val increment = valueNumber.increment *
                     when (keyCode) {

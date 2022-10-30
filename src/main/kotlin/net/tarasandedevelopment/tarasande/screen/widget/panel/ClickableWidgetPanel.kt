@@ -59,4 +59,8 @@ open class ClickableWidgetPanel(val panel: Panel, val update: Boolean = false) :
 
     fun tick() = panel.tick()
 
+    override fun isFocused() = true
+
+    override fun isHovered() = true
+
 }
