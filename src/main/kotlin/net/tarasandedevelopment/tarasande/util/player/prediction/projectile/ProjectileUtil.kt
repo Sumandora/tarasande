@@ -49,27 +49,27 @@ object ProjectileUtil {
 
         var vec3d = Vec3d(-i.toDouble(), MathHelper.clamp(-(k / j), -5.0f, 5.0f).toDouble(), -h.toDouble())
         val m = vec3d.length()
-        vec3d = vec3d.multiply(0.6 / m + 0.5 + persistentProjectileEntity.random.nextGaussian() * 0.0045, 0.6 / m + 0.5 + persistentProjectileEntity.random.nextGaussian() * 0.0045, 0.6 / m + 0.5 + persistentProjectileEntity.random.nextGaussian() * 0.0045)
+        vec3d = vec3d.multiply(0.6 / m + persistentProjectileEntity.random.nextTriangular(0.5, 0.0103365), 0.6 / m + persistentProjectileEntity.random.nextTriangular(0.5, 0.0103365), 0.6 / m + persistentProjectileEntity.random.nextTriangular(0.5, 0.0103365))
 
         persistentProjectileEntity.velocity = vec3d
         val rotation = RotationUtil.getRotations(vec3d)
         persistentProjectileEntity.also {
             it.yaw = rotation.yaw
             it.prevYaw = rotation.yaw
-        }
-        persistentProjectileEntity.also {
+
             it.pitch = rotation.pitch
             it.prevPitch = rotation.pitch
         }
     }, ProjectileItem(Items.CROSSBOW.javaClass, EntityType.ARROW, true) { stack, persistentProjectileEntity ->
         persistentProjectileEntity.setVelocity(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.pitch!!, MinecraftClient.getInstance().player?.yaw!!, 0.0f, CrossbowItem.getSpeed(stack), 1.0f)
-
     })
 
     fun predict(itemStack: ItemStack, rotation: Rotation?, predictVelocity: Boolean): ArrayList<Vec3d> {
         val projectileItem = projectileItems.first { it.isSame(itemStack.item) }
         val wasIsClient = MinecraftClient.getInstance().world?.isClient == true
         MinecraftClient.getInstance().world?.isClient = false
+        val prevParticlesEnabled = (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_areParticlesEnabled() // race conditions :c
+        (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(false)
         val soundSystem = MinecraftClient.getInstance().soundManager.soundSystem as ISoundSystem
         val wasSoundDisabled = soundSystem.tarasande_isDisabled()
         soundSystem.tarasande_setDisabled(true)
@@ -91,7 +91,7 @@ object ProjectileUtil {
                 super.tick()
                 if (!projectileItem.persistent) addVelocity(0.0, 0.02, 0.0)
                 if (projectileItem.entityType == EntityType.FISHING_BOBBER)
-                    velocity *= 0.92
+                    velocity *= 0.9375 // minecraft code says 0.92, but since we are using a PersistentProjectileEntity we have to approximate a FishingBobberEntity
             }
 
             override fun checkBlockCollision() {
@@ -168,14 +168,12 @@ object ProjectileUtil {
         MinecraftClient.getInstance().player?.yaw = prevRotation.yaw
         MinecraftClient.getInstance().player?.pitch = prevRotation.pitch
         while (!collided) {
-            val prevParticlesEnabled = (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_areParticlesEnabled() // race conditions :c
-            (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(false)
             persistentProjectileEntity.tick()
-            (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(prevParticlesEnabled)
             if (persistentProjectileEntity.pos.let { it.y < MinecraftClient.getInstance().world?.bottomY!! || it == path.lastOrNull() }) break
             path.add(persistentProjectileEntity.pos)
         }
         soundSystem.tarasande_setDisabled(wasSoundDisabled)
+        (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(prevParticlesEnabled)
         MinecraftClient.getInstance().world?.isClient = wasIsClient
         return path
     }
