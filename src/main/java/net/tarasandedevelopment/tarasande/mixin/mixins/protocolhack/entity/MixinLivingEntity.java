@@ -120,7 +120,8 @@ public abstract class MixinLivingEntity extends Entity {
     @ModifyConstant(method = "travel", constant = @Constant(floatValue = 0.9F))
     private float changeEntitySpeed(float constant) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2)) {
-            if ((Object) this instanceof SkeletonHorseEntity) {
+            //noinspection ConstantConditions
+            if ((Entity) this instanceof SkeletonHorseEntity) {
                 return this.getBaseMovementSpeedMultiplier(); // 0.96F
             }
             return 0.8F;
@@ -136,13 +137,13 @@ public abstract class MixinLivingEntity extends Entity {
         return Math.cos(a);
     }
 
-//    @Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getFluidHeight(Lnet/minecraft/tag/TagKey;)D"))
-//    public double fixLavaMovement(LivingEntity instance, TagKey tagKey) {
-//        double height = instance.getFluidHeight(tagKey);
-//
-////        if (VersionList.isOlderOrEqualTo(VersionList.R1_15_2)) {
-//            height += getSwimHeight() + 4;
-////        }
-//        return height;
-//    }
+    @Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getFluidHeight(Lnet/minecraft/tag/TagKey;)D"))
+    public double fixLavaMovement(LivingEntity instance, TagKey tagKey) {
+        double height = instance.getFluidHeight(tagKey);
+
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_15_2)) {
+            height += getSwimHeight() + 4;
+        }
+        return height;
+    }
 }

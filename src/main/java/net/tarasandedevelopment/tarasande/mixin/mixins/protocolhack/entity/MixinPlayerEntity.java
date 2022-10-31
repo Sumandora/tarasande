@@ -58,25 +58,27 @@ public abstract class MixinPlayerEntity extends LivingEntity {
     @Inject(method = "getDimensions", at = @At("HEAD"), cancellable = true)
     private void onGetDimensions(EntityPose pose, CallbackInfoReturnable<EntityDimensions> ci) {
         if (pose == EntityPose.CROUCHING) {
-            if (VersionList.isOlderOrEqualTo(VersionList.R1_8))
+            if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
                 ci.setReturnValue(PlayerEntity.STANDING_DIMENSIONS);
-
-            else if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2))
+            } else if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2)) {
                 ci.setReturnValue(protocolhack_SNEAKING_DIMENSIONS_1_13_2);
+            }
         }
     }
 
     @ModifyConstant(method = "getActiveEyeHeight", constant = @Constant(floatValue = 1.27f))
     private float modifySneakEyeHeight(float prevEyeHeight) {
-        if (VersionList.isNewerTo(VersionList.R1_13_2))
+        if (VersionList.isNewerTo(VersionList.R1_13_2)) {
             return prevEyeHeight;
-        else
+        } else {
             return 1.54f;
+        }
     }
 
     @Inject(method = "getAttackCooldownProgress", at = @At("HEAD"), cancellable = true)
     private void injectGetAttackCooldownProgress(CallbackInfoReturnable<Float> ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8))
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
             ci.setReturnValue(1f);
+        }
     }
 }

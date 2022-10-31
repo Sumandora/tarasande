@@ -12,8 +12,9 @@ public class MixinWolfEntity {
 
     @Redirect(method = "*", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/WolfEntity;getHealth()F"))
     public float rewriteHealth(WolfEntity instance) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_4))
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_4)) {
             return WolfHealthTracker1_14_4.INSTANCE.getHealth(instance.getId());
+        }
 
         return instance.getHealth();
     }
