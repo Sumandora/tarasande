@@ -1,14 +1,11 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.core;
 
-import com.mojang.authlib.minecraft.MinecraftSessionService;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.account.Account;
-import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAccountManager;
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -18,7 +15,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MinecraftClient.class)
 public abstract class MixinMinecraftClient {
@@ -60,12 +56,5 @@ public abstract class MixinMinecraftClient {
     @Inject(method = "render", at = @At("TAIL"))
     public void calculateDeltaTime(boolean tick, CallbackInfo ci) {
         RenderUtil.INSTANCE.setDeltaTime((System.nanoTime() - this.tarasande_startTime) / 1000000.0);
-    }
-
-    @Inject(method = "getSessionService", at = @At("RETURN"), cancellable = true)
-    public void hookAccountManager(CallbackInfoReturnable<MinecraftSessionService> cir) {
-        Account account = TarasandeMain.Companion.get().getManagerClientMenu().get(ElementMenuScreenAccountManager.class).getScreenBetterSlotListAccountManager().getCurrentAccount();
-        if (account != null)
-            cir.setReturnValue(account.getSessionService());
     }
 }

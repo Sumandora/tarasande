@@ -196,21 +196,19 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Min
                     return
                 // This can't be "client" because it is called from ClientMain means it's null at this point in time
                 var updatedUserApiService = true
-                MinecraftClient.getInstance().also {
-                    it.session = account.session
-                    val authenticationService = YggdrasilAuthenticationService(java.net.Proxy.NO_PROXY, "", account.environment)
-                    it.authenticationService = authenticationService
-                    val userApiService = try {
+                with(MinecraftClient.getInstance()) {
+                    session = account.session
+                    authenticationService = YggdrasilAuthenticationService(java.net.Proxy.NO_PROXY, "", account.environment)
+                    userApiService = try {
                         authenticationService.createUserApiService(account.session?.accessToken)
                     } catch (ignored: Exception) {
                         updatedUserApiService = false
                         UserApiService.OFFLINE
                     }
-                    it.userApiService = userApiService
-                    it.sessionService = account.getSessionService()
-                    it.servicesSignatureVerifier = SignatureVerifier.create(authenticationService.servicesKey)
-                    it.socialInteractionsManager = SocialInteractionsManager(MinecraftClient.getInstance(), userApiService)
-                    it.profileKeys = ProfileKeys(it.userApiService, account.session?.profile?.id, MinecraftClient.getInstance().runDirectory.toPath())
+                    sessionService = account.getSessionService()
+                    servicesSignatureVerifier = SignatureVerifier.create(authenticationService.servicesKey)
+                    socialInteractionsManager = SocialInteractionsManager(MinecraftClient.getInstance(), userApiService)
+                    profileKeys = ProfileKeys(userApiService, account.session?.profile?.id, MinecraftClient.getInstance().runDirectory.toPath())
                 }
                 status = Formatting.GREEN.toString() + "Logged in as \"" + account.getDisplayName() + "\"" + if (!updatedUserApiService) Formatting.RED.toString() + " (failed to update UserApiService)" else ""
 

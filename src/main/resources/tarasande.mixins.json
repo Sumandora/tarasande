@@ -75,8 +75,6 @@
     "features.module.MixinWorld",
     "features.module.MixinWorldRenderer",
     "features.module.block.MixinCommandBlock",
-    "library.brigadier.MixinCommandNode",
-    "library.brigadier.MixinLiteralCommandNode",
     "features.module.connection.MixinClientConnection",
     "features.module.connection.MixinClientPlayNetworkHandler",
     "features.module.connection.MixinEntityStatusEffectS2CPacket",
@@ -108,6 +106,9 @@
     "features.module.norender.MixinWorldRenderer",
     "features.module.screens.MixinPlayerScreenHandler",
     "library.baritone.MixinLookBehavior",
+    "library.brigadier.MixinCommandNode",
+    "library.brigadier.MixinLiteralCommandNode",
+    "library.viaprotocolhack.MixinCustomViaConfig",
     "protocolhack.MixinBossBarHud",
     "protocolhack.MixinChatInputSuggestor",
     "protocolhack.MixinChatScreen",
@@ -202,13 +203,13 @@
     "protocolhack.viaversion.MixinProtocol1_9To1_8",
     "protocolhack.viaversion.MixinProtocolManagerImpl",
     "protocolhack.viaversion.MixinSkullHandler_1_12_2",
-    "protocolhack.viaversion.MixinViaIdleThread",
-    "library.viaprotocolhack.MixinCustomViaConfig"
+    "protocolhack.viaversion.MixinViaIdleThread"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
+    "core.screens.accountmanager.MixinMinecraftClient",
     "features.module.norender.MixinChunkOcclusionDataBuilder",
     "protocolhack.item.blocking.MixinHeldItemRenderer"
   ]

@@ -5,12 +5,15 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.item.SplashPotionItem
 import net.minecraft.potion.PotionUtil
+import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.base.module.Module
 import net.tarasandedevelopment.tarasande.base.module.ModuleCategory
+import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
+import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
@@ -62,7 +65,10 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
     }
 
     init {
-        registerEvent(EventPollEvents::class.java) { event ->
+        registerEvent(EventPollEvents::class.java, 1) { event ->
+            if (event.dirty)
+                return@registerEvent
+
             when (state) {
                 State.THROW -> {
                     if (intendedItem?.item is SplashPotionItem) {
@@ -82,8 +88,6 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
 
                 else -> {}
             }
-            if (event.dirty)
-                return@registerEvent
 
             if (state != State.IDLE)
                 return@registerEvent
@@ -134,17 +138,20 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
             if (event.keyBinding == mc.options.useKey) {
                 if (state == State.THROW) {
-                    if (mc.player?.inventory?.selectedSlot == intendedSlot) {
-                        if (intendedItem?.item is SplashPotionItem && mc.player?.lastPitch != targetRotation?.pitch)
-                            return@registerEvent
-                        event.pressed = true
-                        if (intendedSlot == -1) {
-                            if (mc.player?.offHandStack != intendedItem)
-                                state = State.SWITCH_BACK
-                        } else if (mc.player?.mainHandStack != intendedItem)
-                            state = State.SWITCH_BACK
+                    if (intendedItem?.item is SplashPotionItem && mc.player?.lastPitch != targetRotation?.pitch)
+                        return@registerEvent
+                    event.pressed = true
+                    CustomChat.print(this, Text.literal(mc.player?.mainHandStack.toString() + " " + intendedItem.toString()))
+                    if ((intendedSlot == -1 && mc.player?.offHandStack?.item != intendedItem?.item) || mc.player?.mainHandStack?.item != intendedItem?.item) {
+                        state = State.SWITCH_BACK
                     }
                 }
+            }
+        }
+
+        registerEvent(EventAttack::class.java, 1) { event ->
+            if (state != State.IDLE) {
+                event.dirty = true
             }
         }
     }

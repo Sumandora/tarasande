@@ -184,6 +184,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             for (entity in mc.world?.entities!!) {
                 if (!PlayerUtil.isAttackable(entity)) continue
                 val entity = entity as LivingEntity
+                if (entity.deathTime > 0) continue
 
                 val boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())
                 val bestAimPoint = MathUtil.getBestAimPoint(boundingBox)
@@ -212,10 +213,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             //@formatter:off
             targets.sortWith(
-                comparator.
-                    thenBy { it.first is LivingEntity && (it.first as LivingEntity).isDead }.
-                    thenBy { PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.getRotations(mc.player?.eyePos!!, it.second).correctSensitivity(), throughWalls.isSelected(2))?.type != HitResult.Type.ENTITY }.
-                    thenBy { !shouldAttackEntity(it.first) }
+                Comparator.comparing { it: Pair<Entity, Vec3d> -> !shouldAttackEntity(it.first) }.
+                    thenBy { mc.player?.eyePos?.squaredDistanceTo(it.second)!! > reach.minValue * reach.minValue }.
+                    then(comparator)
             )
             //@formatter:on
 
@@ -369,7 +369,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
             if (event.keyBinding == mc.options.useKey) {
                 if (targets.isNotEmpty()) {
-                    event.pressed = blocking && (!preventBlockCooldown.value || allAttacked { !it.disablesShield() })
+                    event.pressed = event.pressed || blocking && (!preventBlockCooldown.value || allAttacked { !it.disablesShield() })
                 }
             }
             if (PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {
@@ -425,7 +425,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
     private fun getAimPoint(box: Box, entity: LivingEntity): Vec3d {
         var best = MathUtil.getBestAimPoint(box)
-        return best
         var visible = PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, best)
 
         if (rotations.isSelected(0)) {
@@ -464,7 +463,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             // Humans always try to get to the middle
             val center = box.center
-            val dist = 1.0 - MathUtil.getBias(mc.player?.eyePos?.distanceTo(aimPoint)!! / reach.maxValue, 0.65) // I have no idea why this works and looks like it does, but it's good, so why remove it then
+            val dist = 1.0 - MathUtil.getBias(mc.player?.eyePos?.distanceTo(aimPoint)!! / reach.maxValue.coerceAtLeast(reach.minValue + 0.1), 0.65) // I have no idea why this works and looks like it does, but it's good, so why remove it then
             aimPoint = aimPoint.add((center.x - aimPoint.x) * dist, (center.y - aimPoint.y) * (1.0 - dist) * 0.4 /* Humans dislike aiming up and down */, (center.z - aimPoint.z) * dist)
 
             // Humans can't hold their hands still
@@ -488,7 +487,10 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             // Don't aim through walls
             while (visible && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint) && rotations.isSelected(0)) {
-                aimPoint = Vec3d(MathUtil.bringCloser(aimPoint.x, best.x, precision.value), MathUtil.bringCloser(aimPoint.y, best.y, precision.value), MathUtil.bringCloser(aimPoint.z, best.z, precision.value))
+                aimPoint = Vec3d(MathUtil.bringCloser(aimPoint.x, best.x, precision.value),
+                    MathUtil.bringCloser(aimPoint.y, best.y, precision.value),
+                    MathUtil.bringCloser(aimPoint.z, best.z, precision.value)
+                )
             }
 
             var distToBest = mc.player?.eyePos?.squaredDistanceTo(best)!!
