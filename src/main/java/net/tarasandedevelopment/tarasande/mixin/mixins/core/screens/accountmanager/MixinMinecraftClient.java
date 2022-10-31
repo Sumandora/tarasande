@@ -15,7 +15,7 @@ public class MixinMinecraftClient {
 
 
     @Inject(method = "getSessionService", at = @At("RETURN"), cancellable = true)
-    public void hookAccountManager(CallbackInfoReturnable<MinecraftSessionService> cir) {
+    public void correctSessionService(CallbackInfoReturnable<MinecraftSessionService> cir) {
         Account account = TarasandeMain.Companion.get().getManagerClientMenu().get(ElementMenuScreenAccountManager.class).getScreenBetterSlotListAccountManager().getCurrentAccount();
         if (account != null)
             cir.setReturnValue(account.getSessionService());
