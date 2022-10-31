@@ -78,7 +78,7 @@ class ScreenBetterFileChooser(
             }
 
             override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-                RenderUtil.text(matrices, "Current path: " + currentDirectory.absolutePath, 1F, 1F, -1)
+                RenderUtil.font().text(matrices, "Current path: " + currentDirectory.absolutePath, 1F, 1F)
 
                 super.render(matrices, mouseX, mouseY, delta)
             }
@@ -95,14 +95,7 @@ class ScreenBetterFileChooser(
                             color = color.darker().darker()
                         }
 
-                        matrices?.push()
-                        matrices?.translate(x, y + height * 0.5, 0.0)
-                        matrices?.scale(0.5F, 0.5F, 1F)
-                        matrices?.translate(-x, -y + height * 0.5, 0.0)
-
-                        RenderUtil.text(matrices, if (file == currentDirectory.parentFile) ".." else file.name, x.toFloat() + 1, (y + height * 0.5).toFloat(), color.rgb)
-
-                        matrices?.pop()
+                        RenderUtil.font().text(matrices, if (file == currentDirectory.parentFile) ".." else file.name, x.toFloat() + 1, (y + height).toFloat(), color.rgb, 0.5F)
                     }
                     height += (MinecraftClient.getInstance().textRenderer.fontHeight * 0.5) + 1
                 }

@@ -12,7 +12,7 @@ import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
-class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, 400, MinecraftClient.getInstance().textRenderer.fontHeight * 2 + 5) {
+class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, 400, RenderUtil.font().fontHeight() * 2 + 5) {
 
     private val list = TarasandeMain.get().managerPackage.list.map { p -> ScreenBetterSlotListEntryPackage(p) }
 
@@ -38,7 +38,7 @@ class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, 400, MinecraftClie
         this.renderTitle(matrices, "Packages")
 
         if (this.list.isNotEmpty() && this.list.size >= this.selected)
-            RenderUtil.textCenter(matrices, "Developed by: " + this.list[this.selected].`package`.modAuthors!!.joinToString(", "), this.width / 2F, height - 17F, -1)
+            RenderUtil.font().text(matrices, "Developed by: " + this.list[this.selected].`package`.modAuthors!!.joinToString(", "), this.width / 2F, height - 17F, centered = true)
     }
 
     class ScreenBetterSlotListEntryPackage(val `package`: Package) : ScreenBetterSlotListEntry() {
@@ -51,13 +51,13 @@ class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, 400, MinecraftClie
         }
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            matrices.push()
-            matrices.translate(entryWidth / 2.0, entryHeight / 2.0, 0.0)
-            matrices.scale(2F, 2F, 2F)
-            matrices.translate(-entryWidth / 2.0, -entryHeight / 2.0, 0.0)
-            val text = this.`package`.modId!! + " (" + this.`package`.modVersion!! + ")"
-            RenderUtil.textCenter(matrices, text, entryWidth / 2.0f, entryHeight / 2.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f, -1)
-            matrices.pop()
+//            matrices.push()
+//            matrices.translate(entryWidth / 2.0, entryHeight / 2.0, 0.0)
+//            matrices.scale(2F, 2F, 2F)
+//            matrices.translate(-entryWidth / 2.0, -entryHeight / 2.0, 0.0)
+//            val text = this.`package`.modId!! + " (" + this.`package`.modVersion!! + ")"
+//            RenderUtil.font().textCenter(matrices, text, entryWidth / 2.0f, entryHeight / 2.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f, -1)
+//            matrices.pop()
         }
     }
 }

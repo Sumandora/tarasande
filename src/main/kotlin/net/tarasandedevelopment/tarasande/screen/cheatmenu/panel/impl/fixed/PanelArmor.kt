@@ -35,25 +35,23 @@ class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
             if (armor == ItemStack.EMPTY && skipEmpty.value)
                     continue
 
+            matrices?.push()
+            matrices?.translate(x, y, 0.0)
+
             RenderSystem.enableCull()
-            RenderUtil.renderCorrectItem(matrices!!, x.toInt() + m, y.toInt() + titleBarHeight, delta, armor)
+            RenderUtil.renderCorrectItem(matrices!!, m, titleBarHeight, delta, armor)
 
             if (showEnchantments.value) {
-                matrices.push()
-                matrices.scale(enchantmentScale.value.toFloat(), enchantmentScale.value.toFloat(), 1F)
-                matrices.translate(x / enchantmentScale.value.toFloat(), (y / enchantmentScale.value.toFloat()) + (titleBarHeight), 0.0)
                 EnchantmentHelper.get(armor).onEachIndexed { index, entry ->
-                    RenderUtil.textCenter(
-                        matrices,
+                    RenderUtil.font().textShadow(matrices,
                         ItemUtil.enchantSimpleName(entry.key, maxEnchantmentLength.value.toInt()) + " " + entry.value,
-                        (m.toFloat() + (itemDimension / 2)) / enchantmentScale.value.toFloat(),
-                        (itemDimension + (index * titleBarHeight / 2)) / enchantmentScale.value.toFloat(),
-                        -1
-                    )
+                        m.toFloat() + itemDimension / 2, (titleBarHeight / 2) + (itemDimension + (index * titleBarHeight / 2)).toFloat(),
+                        scale = enchantmentScale.value.toFloat(), centered = true)
                 }
-                matrices.pop()
             }
             m += itemDimension
+
+            matrices.pop()
         }
     }
 }

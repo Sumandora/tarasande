@@ -311,28 +311,7 @@ object RenderUtil {
         return Color((a.red + (b.red - a.red) * tR.toFloat()) / 255.0f, (a.green + (b.green - a.green) * tG.toFloat()) / 255.0f, (a.blue + (b.blue - a.blue) * tB.toFloat()) / 255.0f, (a.alpha + (b.alpha - a.alpha) * tA.toFloat()) / 255.0f)
     }
 
-    fun drawWithSmallShadow(matrices: MatrixStack?, text: String, x: Float, y: Float, color: Int) {
-        val dividableBy2 = MinecraftClient.getInstance().window.scaleFactor.mod(2.0) == 0.0
-        val offset = if (dividableBy2) 0.5f else 0.75f
-
-        MinecraftClient.getInstance().textRenderer.draw(matrices, Formatting.strip(text), x + offset, y + offset, Color(color, true).darker().darker().darker().darker().rgb)
-        MinecraftClient.getInstance().textRenderer.draw(matrices, text, x, y, color)
-    }
-
-    fun text(matrices: MatrixStack?, text: String, x: Float, y: Float) = text(matrices, text, x, y, -1)
-    fun text(matrices: MatrixStack?, text: String, x: Float, y: Float, color: Int): Int {
-        return font().drawWithShadow(matrices, text, x, y, color)
-    }
-
-    fun textCenter(matrices: MatrixStack?, text: String, x: Float, y: Float) = textCenter(matrices, text, x, y, -1)
-    fun textCenter(matrices: MatrixStack?, text: String, x: Float, y: Float, color: Int) {
-        font().drawWithShadow(matrices, text, (x - font().getWidth(text) / 2), y, color)
-    }
-
-    private fun font(): TextRenderer {
-        return MinecraftClient.getInstance().textRenderer
-    }
-
+    fun font() = TarasandeMain.get().managerFont.selected
     fun createImage(path: String) = NativeImageBackedTexture(NativeImage.read(javaClass.getResourceAsStream("/assets/" + TarasandeMain.get().name + "/textures/$path")))
 
     fun formattingByHex(hex: Int): Formatting {

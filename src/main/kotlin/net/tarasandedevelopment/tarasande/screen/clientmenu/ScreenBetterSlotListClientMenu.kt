@@ -16,7 +16,7 @@ import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
-class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, MinecraftClient.getInstance().textRenderer.fontHeight * 2 + 5) {
+class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, RenderUtil.font().fontHeight() * 2 + 5) {
 
     init {
         this.prevScreen = parent
@@ -63,10 +63,7 @@ class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, 
         }
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            matrices.push()
-            matrices.scale(element.elementTextSize(), element.elementTextSize(), element.elementTextSize())
-            RenderUtil.textCenter(matrices, element.name, (entryWidth.toFloat() / 2F) / element.elementTextSize(), ((entryHeight / 2F) / element.elementTextSize()) - (MinecraftClient.getInstance().textRenderer.fontHeight / 2F), this.element.elementColor())
-            matrices.pop()
+            RenderUtil.font().textShadow(matrices, element.name, entryWidth.toFloat() / 2F, entryHeight / 2 - (RenderUtil.font().fontHeight() / 2F), this.element.elementColor(), scale = element.elementTextSize(), centered = true)
         }
     }
 }

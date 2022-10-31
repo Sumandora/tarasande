@@ -49,9 +49,9 @@ class PanelArrayList(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : P
             RenderSystem.enableBlend()
             val animatedPosition = easing.ease(animation.toFloat())
             when (alignment) {
-                Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it.name, (x - (MinecraftClient.getInstance().textRenderer.getWidth(it.name) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
-                Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it.name, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it.name).toFloat() / 2.0f, (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
-                Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, it.name, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(it.name) * animatedPosition).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
+                Alignment.LEFT -> RenderUtil.font().textShadow(matrices, it.name, (x - (MinecraftClient.getInstance().textRenderer.getWidth(it.name) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb, offset = 0.5F)
+                Alignment.MIDDLE -> RenderUtil.font().textShadow(matrices, it.name, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it.name).toFloat() / 2.0f, (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb, offset = 0.5F)
+                Alignment.RIGHT -> RenderUtil.font().textShadow(matrices, it.name, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(it.name) * animatedPosition).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb, offset = 0.5F)
             }
             index += animatedPosition
         }

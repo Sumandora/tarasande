@@ -7,7 +7,7 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.Tameable
 import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.blur.BlurKawase
+import net.tarasandedevelopment.tarasande.render.blur.BlurKawase
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.util.dummies.ClientWorldDummy
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
@@ -84,6 +84,13 @@ class ClientValues {
     }
     val passEventsInScreens = ValueBoolean(this, "Pass events in screens", true)
     val allowEveryCharacterInChat = ValueBoolean(this, "Allow every character in chat", true)
+    val fontRenderer = object : ValueMode(this, "Font renderer", false, *TarasandeMain.get().managerFont.list.map { it.name }.toTypedArray()) {
+        override fun onChange() {
+            TarasandeMain.get().managerFont.also {
+                it.selected = it.list[settings.indexOf(selected[0])]
+            }
+        }
+    }
 
     private fun isEntityDesired(entity: Entity): Boolean {
         if (dontAttackRidingEntity.value && entity == MinecraftClient.getInstance().player?.vehicle) return false

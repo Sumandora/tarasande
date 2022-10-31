@@ -160,7 +160,7 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
                     val text = MinecraftClient.getInstance().textRenderer.trimToWidth("Forge/FML Server", it.x)
                     val endWidth = MinecraftClient.getInstance().textRenderer.getWidth(text) + 4
 
-                    RenderUtil.text(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
+                    RenderUtil.font().textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
 
                     if (RenderUtil.isHovered(it.mouseX.toDouble(), it.mouseY.toDouble(), it.x - endWidth.toDouble(), it.y + yPos.toDouble(), it.x - 4.0, it.y + yPos + fontHeight.toDouble())) {
                         val tooltip = ArrayList<Text>()

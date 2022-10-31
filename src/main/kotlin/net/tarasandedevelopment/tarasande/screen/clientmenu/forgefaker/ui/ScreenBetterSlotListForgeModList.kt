@@ -14,7 +14,7 @@ import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.m
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.modern.ModernForgePayload
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
-class ScreenBetterSlotListForgeModList(parent: Screen, private val titleName: String, val type: Type, val struct: IForgePayload) : ScreenBetterSlotList(46, 400, MinecraftClient.getInstance().textRenderer.fontHeight * 2 + 5) {
+class ScreenBetterSlotListForgeModList(parent: Screen, private val titleName: String, val type: Type, val struct: IForgePayload) : ScreenBetterSlotList(46, 400, RenderUtil.font().fontHeight() * 2 + 5) {
 
     enum class Type {
         MOD_LIST,
@@ -52,10 +52,7 @@ class ScreenBetterSlotListForgeModList(parent: Screen, private val titleName: St
         abstract fun display(): String
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            matrices.push()
-            matrices.scale(2F, 2F, 2F)
-            RenderUtil.textCenter(matrices, this.display(), entryWidth.toFloat() / 4F, 1F, -1)
-            matrices.pop()
+            RenderUtil.font().text(matrices, this.display(), entryWidth.toFloat() / 4F, 1F, scale = 2F, centered = true)
         }
     }
 

@@ -25,7 +25,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import java.util.concurrent.ThreadLocalRandom
 
-class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, MinecraftClient.getInstance().textRenderer.fontHeight * 5) {
+class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, RenderUtil.font().fontHeight() * 5) {
 
     val accounts = ArrayList<Account>()
     var currentAccount: Account? = null
@@ -142,25 +142,11 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Min
                 RenderSystem.applyModelViewMatrix()
             }
 
-            matrices.push()
-            matrices.translate((entryWidth / 2F).toDouble(), (textRenderer.fontHeight - textRenderer.fontHeight / 2f).toDouble(), 0.0)
-            matrices.scale(2.0f, 2.0f, 1.0f)
-            matrices.translate(-(entryWidth / 2F).toDouble(), (-(textRenderer.fontHeight - textRenderer.fontHeight / 2f)).toDouble(), 0.0)
-            RenderUtil.textCenter(matrices, Text.of(when {
+            RenderUtil.font().textShadow(matrices, Text.of(when {
                 client?.session?.equals(account.session) == true -> Formatting.GREEN.toString()
                 mainAccount == accounts.indexOf(account) -> Formatting.YELLOW.toString()
                 else -> ""
-            } + account.getDisplayName()).string, entryWidth / 2F, entryHeight / 4F - textRenderer.fontHeight / 4F, -1)
-            matrices.pop()
-
-            if (account.session != null) {
-                val string = account.session!!.uuid
-
-                matrices.push()
-                matrices.scale(0.5F, 0.5F, 0.5F)
-                RenderUtil.text(matrices, string, (entryWidth / 2F * 4) - textRenderer.getWidth(string) - 10, (entryHeight * 2 - textRenderer.fontHeight).toFloat() - 1, -1)
-                matrices.pop()
-            }
+            } + account.getDisplayName()).string, entryWidth / 2F, entryHeight / 4F + RenderUtil.font().fontHeight() / 4F, centered = true, scale = 2.0F)
         }
     }
 

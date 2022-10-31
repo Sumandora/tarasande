@@ -74,9 +74,9 @@ class PanelInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) :
 
         for ((index, it) in text.withIndex()) {
             when (alignment) {
-                Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat(), y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
-                Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat() / 2.0f, y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
-                Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, it, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat(), y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
+                Alignment.LEFT -> RenderUtil.font().textShadow(matrices, it, x.toFloat(), y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
+                Alignment.MIDDLE -> RenderUtil.font().textShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat() / 2.0f, y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
+                Alignment.RIGHT -> RenderUtil.font().textShadow(matrices, it, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat(), y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
             }
         }
     }

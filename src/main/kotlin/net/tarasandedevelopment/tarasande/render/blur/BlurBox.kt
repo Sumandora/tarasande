@@ -1,10 +1,10 @@
-package net.tarasandedevelopment.tarasande.blur
+package net.tarasandedevelopment.tarasande.render.blur
 
 import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.blur.Blur
+import net.tarasandedevelopment.tarasande.base.render.blur.Blur
 import net.tarasandedevelopment.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import net.tarasandedevelopment.tarasande.util.render.shader.Program
 import net.tarasandedevelopment.tarasande.util.render.shader.Shader

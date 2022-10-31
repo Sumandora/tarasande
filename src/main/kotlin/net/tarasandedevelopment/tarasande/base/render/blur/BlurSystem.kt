@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.base.blur
+package net.tarasandedevelopment.tarasande.base.render.blur
 
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
@@ -7,9 +7,9 @@ import net.minecraft.client.gl.Framebuffer
 import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
-import net.tarasandedevelopment.tarasande.blur.BlurBox
-import net.tarasandedevelopment.tarasande.blur.BlurGaussian
-import net.tarasandedevelopment.tarasande.blur.BlurKawase
+import net.tarasandedevelopment.tarasande.render.blur.BlurBox
+import net.tarasandedevelopment.tarasande.render.blur.BlurGaussian
+import net.tarasandedevelopment.tarasande.render.blur.BlurKawase
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu

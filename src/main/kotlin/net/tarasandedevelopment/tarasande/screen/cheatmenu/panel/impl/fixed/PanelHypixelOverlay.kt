@@ -65,11 +65,11 @@ class PanelHypixelOverlay(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu
         val titleBarHeight = titleBarHeight
         when (alignment) {
             Alignment.LEFT, Alignment.MIDDLE -> {
-                RenderUtil.drawWithSmallShadow(matrices, str, x.toFloat(), (y + titleBarHeight).toFloat(), accent.rgb)
+                RenderUtil.font().textShadow(matrices, str, x.toFloat(), (y + titleBarHeight).toFloat(), accent.rgb, offset = 0.5F)
             }
 
             Alignment.RIGHT -> {
-                RenderUtil.drawWithSmallShadow(matrices, str, (x + panelWidth - width).toFloat(), (y + titleBarHeight).toFloat(), accent.rgb)
+                RenderUtil.font().textShadow(matrices, str, (x + panelWidth - width).toFloat(), (y + titleBarHeight).toFloat(), accent.rgb, offset = 0.5F)
             }
         }
     }

@@ -47,7 +47,7 @@ class ScreenBetterSlotListProtocolHack : ScreenBetterSlotList(46, 12) {
     class ScreenBetterSlotListEntryProtocol(val protocol: ProtocolVersion) : ScreenBetterSlotListEntry() {
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            RenderUtil.textCenter(matrices, this.protocol.name, entryWidth / 2F, 0F, if (this.isSelected()) Color.green.rgb else Color.red.rgb)
+            RenderUtil.font().text(matrices, this.protocol.name, entryWidth / 2F, 0F, if (this.isSelected()) Color.green.rgb else Color.red.rgb, centered = true)
         }
 
         override fun onSingleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {

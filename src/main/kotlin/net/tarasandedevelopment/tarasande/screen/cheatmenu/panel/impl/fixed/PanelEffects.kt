@@ -64,9 +64,9 @@ class PanelEffects(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Pan
             RenderSystem.enableBlend()
             val animatedPosition = easing.ease(animation.toFloat())
             when (alignment) {
-                Alignment.LEFT -> RenderUtil.drawWithSmallShadow(matrices, it.second, (x - (MinecraftClient.getInstance().textRenderer.getWidth(it.second) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
-                Alignment.MIDDLE -> RenderUtil.drawWithSmallShadow(matrices, it.second, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it.second).toFloat() / 2.0f, (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
-                Alignment.RIGHT -> RenderUtil.drawWithSmallShadow(matrices, it.second, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(it.second) * animatedPosition).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb)
+                Alignment.LEFT -> RenderUtil.font().textShadow(matrices, it.second, (x - (MinecraftClient.getInstance().textRenderer.getWidth(it.second) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb, offset = 0.5F)
+                Alignment.MIDDLE -> RenderUtil.font().textShadow(matrices, it.second, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it.second).toFloat() / 2.0f, (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb, offset = 0.5F)
+                Alignment.RIGHT -> RenderUtil.font().textShadow(matrices, it.second, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(it.second) * animatedPosition).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb, offset = 0.5F)
             }
             index += animatedPosition
         }
