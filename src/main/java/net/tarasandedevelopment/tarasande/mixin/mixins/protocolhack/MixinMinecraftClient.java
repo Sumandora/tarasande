@@ -70,12 +70,4 @@ public abstract class MixinMinecraftClient {
             clickStatus.sendToServer(Protocol1_12To1_11_1.class);
         }
     }
-
-    @Inject(method = "tick", at = @At("RETURN"))
-    public void injectTick(CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
-            if (MinecraftClient.getInstance().player != null)
-                ArmorUpdater1_8_0.INSTANCE.update(); // Fixes Armor HUD
-        }
-    }
 }

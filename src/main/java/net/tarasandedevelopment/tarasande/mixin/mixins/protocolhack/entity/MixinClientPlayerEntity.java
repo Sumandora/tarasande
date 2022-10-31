@@ -9,6 +9,8 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
@@ -17,6 +19,7 @@ import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventSkipIdlePacket;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
+import net.tarasandedevelopment.tarasande.protocol.util.ArmorUpdater1_8_0;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -175,6 +178,17 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         }
 
         return self.isTouchingWater();
+    }
+
+    @Override
+    public void onEquipStack(EquipmentSlot slot, ItemStack oldStack, ItemStack newStack) {
+        super.onEquipStack(slot, oldStack, newStack);
+
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
+            if (MinecraftClient.getInstance().player != null) {
+                ArmorUpdater1_8_0.INSTANCE.update(); // Fixes Armor HUD
+            }
+        }
     }
 
     @Override
