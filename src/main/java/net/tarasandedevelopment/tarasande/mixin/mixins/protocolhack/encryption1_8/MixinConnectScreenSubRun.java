@@ -12,7 +12,7 @@
  * The owner "Florian Michael" is free to change this license.
  */
 
-package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.encryption_1_8;
+package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.encryption1_8;
 
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.network.encryption.PlayerPublicKey;

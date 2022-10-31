@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
+package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.screen.hud;
 
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.gui.hud.ClientBossBar;

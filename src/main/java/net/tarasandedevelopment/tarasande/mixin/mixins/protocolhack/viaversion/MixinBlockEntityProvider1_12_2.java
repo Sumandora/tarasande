@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BlockEntityProvider.class)
-public class MixinBlockEntityProvider_1_12_2 {
+public class MixinBlockEntityProvider1_12_2 {
 
     @Inject(method = "sendBlockChange", at = @At("HEAD"), cancellable = true, remap = false)
     public void injectSendBlockChange(UserConnection user, Position position, int blockId, CallbackInfo ci) {

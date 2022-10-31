@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
+package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.entity;
 
 import com.mojang.authlib.GameProfile;
 import de.florianmichael.viaprotocolhack.util.VersionList;
@@ -21,7 +21,8 @@ public class MixinOtherClientPlayerEntity extends AbstractClientPlayerEntity {
 
     @Inject(method = "updatePose", at = @At("HEAD"))
     public void injectUpdatePose(CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2))
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2)) {
             super.updatePose();
+        }
     }
 }

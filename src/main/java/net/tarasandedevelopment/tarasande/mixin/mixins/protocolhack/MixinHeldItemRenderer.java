@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.item.blocking;
+package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
@@ -35,5 +35,4 @@ public class MixinHeldItemRenderer {
             matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(78.05f));
         }
     }
-
 }
