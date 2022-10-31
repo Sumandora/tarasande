@@ -22,8 +22,8 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuScre
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuToggle
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry
+import net.tarasandedevelopment.tarasande.features.protocol.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.mixin.accessor.forgefaker.IServerInfo
-import net.tarasandedevelopment.tarasande.protocol.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.ScreenBetterSlotListAccountManager
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.IForgeNetClientHandler
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.IForgePayload

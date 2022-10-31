@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.features.module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.module.render.ModuleESP;
+import net.tarasandedevelopment.tarasande.features.module.render.ModuleESP;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

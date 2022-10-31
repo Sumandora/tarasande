@@ -11,7 +11,7 @@ import net.minecraft.GameVersion;
 import net.minecraft.SaveVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.resource.ClientBuiltinResourcePackProvider;
-import net.tarasandedevelopment.tarasande.protocol.platform.ProtocolHackValues;
+import net.tarasandedevelopment.tarasande.features.protocol.platform.ProtocolHackValues;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

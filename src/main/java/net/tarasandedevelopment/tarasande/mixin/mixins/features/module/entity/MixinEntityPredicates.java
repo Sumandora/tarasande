@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.features.module.entity;
 import net.minecraft.entity.Entity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.module.movement.ModuleNoCramming;
+import net.tarasandedevelopment.tarasande.features.module.movement.ModuleNoCramming;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

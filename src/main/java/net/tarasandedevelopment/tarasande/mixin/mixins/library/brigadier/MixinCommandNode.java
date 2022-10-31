@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.library.brigadier;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.module.misc.ModuleBrigadierIgnoreCase;
+import net.tarasandedevelopment.tarasande.features.module.misc.ModuleBrigadierIgnoreCase;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

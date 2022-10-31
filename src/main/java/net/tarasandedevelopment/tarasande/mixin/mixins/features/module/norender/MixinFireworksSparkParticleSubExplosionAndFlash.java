@@ -4,7 +4,7 @@ import net.minecraft.client.particle.FireworksSparkParticle;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.VertexConsumer;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.module.render.ModuleNoRender;
+import net.tarasandedevelopment.tarasande.features.module.render.ModuleNoRender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

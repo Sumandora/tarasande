@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.util.player.clickspeed
 
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.util.player.clickspeed.ClickMethod
+import net.tarasandedevelopment.tarasande.base.features.clickspeed.ClickMethod
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumberRange

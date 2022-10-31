@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.features.module;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.module.render.ModuleFog;
+import net.tarasandedevelopment.tarasande.features.module.render.ModuleFog;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

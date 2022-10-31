@@ -7,7 +7,7 @@ import net.minecraft.entity.passive.AnimalEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventEntityColor
-import net.tarasandedevelopment.tarasande.module.render.ModuleESP
+import net.tarasandedevelopment.tarasande.features.module.render.ModuleESP
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueColor
 import java.awt.Color

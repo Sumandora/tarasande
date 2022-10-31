@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.features.module.entity;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.module.movement.ModuleSafeWalk;
+import net.tarasandedevelopment.tarasande.features.module.movement.ModuleSafeWalk;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

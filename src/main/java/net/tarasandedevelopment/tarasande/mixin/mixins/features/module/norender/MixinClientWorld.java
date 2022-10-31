@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.features.module.norender
 import net.minecraft.block.Blocks;
 import net.minecraft.client.world.ClientWorld;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.module.render.ModuleNoRender;
+import net.tarasandedevelopment.tarasande.features.module.render.ModuleNoRender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;

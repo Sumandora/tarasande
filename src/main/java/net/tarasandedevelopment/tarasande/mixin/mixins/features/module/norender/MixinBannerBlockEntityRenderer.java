@@ -13,7 +13,7 @@ import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3f;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.module.render.ModuleNoRender;
+import net.tarasandedevelopment.tarasande.features.module.render.ModuleNoRender;
 import net.tarasandedevelopment.tarasande.value.ValueMode;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

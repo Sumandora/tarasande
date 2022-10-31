@@ -9,7 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventParticle;
-import net.tarasandedevelopment.tarasande.module.render.ModuleNoRender;
+import net.tarasandedevelopment.tarasande.features.module.render.ModuleNoRender;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

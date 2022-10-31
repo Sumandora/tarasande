@@ -4,7 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.module.render.ModuleESP
+import net.tarasandedevelopment.tarasande.features.module.render.ModuleESP
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil

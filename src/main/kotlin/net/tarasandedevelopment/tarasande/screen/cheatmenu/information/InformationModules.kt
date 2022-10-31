@@ -4,10 +4,10 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.Information
-import net.tarasandedevelopment.tarasande.module.exploit.ModuleTickBaseManipulation
-import net.tarasandedevelopment.tarasande.module.misc.ModuleMurderMystery
-import net.tarasandedevelopment.tarasande.module.player.ModuleAntiAFK
-import net.tarasandedevelopment.tarasande.module.render.ModuleBedESP
+import net.tarasandedevelopment.tarasande.features.module.exploit.ModuleTickBaseManipulation
+import net.tarasandedevelopment.tarasande.features.module.misc.ModuleMurderMystery
+import net.tarasandedevelopment.tarasande.features.module.player.ModuleAntiAFK
+import net.tarasandedevelopment.tarasande.features.module.render.ModuleBedESP
 import net.tarasandedevelopment.tarasande.util.extension.div
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import kotlin.math.round

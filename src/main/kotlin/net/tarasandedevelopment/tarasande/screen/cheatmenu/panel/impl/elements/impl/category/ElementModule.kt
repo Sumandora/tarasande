@@ -7,7 +7,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3f
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.module.Module
+import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ElementValueComponent
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.Element
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil

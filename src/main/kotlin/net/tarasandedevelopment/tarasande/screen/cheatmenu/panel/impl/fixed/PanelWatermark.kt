@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.module.render.ModuleNameProtect
+import net.tarasandedevelopment.tarasande.features.module.render.ModuleNameProtect
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 import java.net.InetAddress

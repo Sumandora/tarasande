@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.features.module;
 
 import net.minecraft.client.util.telemetry.TelemetrySender;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.module.misc.ModuleDisableTelemetry;
+import net.tarasandedevelopment.tarasande.features.module.misc.ModuleDisableTelemetry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;

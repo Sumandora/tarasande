@@ -5,7 +5,7 @@ import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.text.TextColor
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.module.Module
+import net.tarasandedevelopment.tarasande.base.features.module.Module
 
 object CustomChat {
 

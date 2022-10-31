@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.features.module.item;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.TridentItem;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.module.movement.ModuleTridentBoost;
+import net.tarasandedevelopment.tarasande.features.module.movement.ModuleTridentBoost;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;

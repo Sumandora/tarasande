@@ -6,7 +6,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.module.Module
+import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel

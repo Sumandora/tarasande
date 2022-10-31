@@ -7,8 +7,8 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.event.EventPlayerListName
 import net.tarasandedevelopment.tarasande.event.EventTagName
-import net.tarasandedevelopment.tarasande.module.misc.ModuleNoFriends
-import net.tarasandedevelopment.tarasande.module.render.ModuleNameProtect
+import net.tarasandedevelopment.tarasande.features.module.misc.ModuleNoFriends
+import net.tarasandedevelopment.tarasande.features.module.render.ModuleNameProtect
 
 class Friends {
 

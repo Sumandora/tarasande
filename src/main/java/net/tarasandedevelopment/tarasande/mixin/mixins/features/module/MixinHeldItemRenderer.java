@@ -5,7 +5,7 @@ import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.module.render.ModuleNoSwing;
+import net.tarasandedevelopment.tarasande.features.module.render.ModuleNoSwing;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

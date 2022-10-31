@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.item.Item;
-import net.tarasandedevelopment.tarasande.protocol.platform.ProtocolHackValues;
+import net.tarasandedevelopment.tarasande.features.protocol.platform.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

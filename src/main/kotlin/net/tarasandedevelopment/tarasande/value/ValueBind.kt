@@ -4,7 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.module.Module
+import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.value.Value
 import net.tarasandedevelopment.tarasande.event.EventKey
 import net.tarasandedevelopment.tarasande.event.EventMouse
