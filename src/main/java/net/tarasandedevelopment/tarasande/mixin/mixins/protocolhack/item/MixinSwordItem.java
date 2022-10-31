@@ -12,7 +12,7 @@
  * The owner "Florian Michael" is free to change this license.
  */
 
-package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.item.blocking;
+package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.item;
 
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.entity.player.PlayerEntity;

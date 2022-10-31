@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @SuppressWarnings("ConstantConditions")
 @Mixin(EntityPackets.class)
-public class MixinEntityPackets_1_8 {
+public class MixinEntityPackets1_8 {
 
     @Unique
     private final static ValueTransformer<Short, Integer> protocolhack_transformer = new ValueTransformer<>(Type.VAR_INT) {

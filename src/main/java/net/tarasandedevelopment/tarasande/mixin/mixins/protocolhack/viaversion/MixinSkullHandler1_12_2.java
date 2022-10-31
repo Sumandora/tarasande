@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.logging.Logger;
 
 @Mixin(SkullHandler.class)
-public class MixinSkullHandler_1_12_2 {
+public class MixinSkullHandler1_12_2 {
 
     @Redirect(method = "transform", at = @At(value = "INVOKE", target = "Ljava/util/logging/Logger;warning(Ljava/lang/String;)V"), remap = false)
     public void redirectTransform(Logger instance, String msg) {

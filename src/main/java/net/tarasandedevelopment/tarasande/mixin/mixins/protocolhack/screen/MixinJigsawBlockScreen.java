@@ -59,7 +59,8 @@ public class MixinJigsawBlockScreen extends Screen {
 
     @Inject(method = "render", at = @At("HEAD"))
     public void injectRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_15_2))
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_15_2)) {
             nameField.setText(targetField.getText());
+        }
     }
 }
