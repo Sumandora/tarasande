@@ -17,6 +17,7 @@ import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventSkipIdlePacket;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
+import net.tarasandedevelopment.tarasande.protocol.util.ArmorUpdater1_8_0;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -171,10 +172,18 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isTouchingWater()Z"))
     private boolean redirectTickMovement(ClientPlayerEntity self) {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2)) {
-            return false; // disable all water related movement
+            return false; // Disable all water related movement
         }
 
         return self.isTouchingWater();
+    }
+
+    @Override
+    public int getArmor() {
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
+            ArmorUpdater1_8_0.INSTANCE.update(); // Fixes Armor HUD
+        }
+        return super.getArmor();
     }
 
     @Override

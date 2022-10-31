@@ -75,8 +75,6 @@
     "features.module.MixinWorld",
     "features.module.MixinWorldRenderer",
     "features.module.block.MixinCommandBlock",
-    "library.brigadier.MixinCommandNode",
-    "library.brigadier.MixinLiteralCommandNode",
     "features.module.connection.MixinClientConnection",
     "features.module.connection.MixinClientPlayNetworkHandler",
     "features.module.connection.MixinEntityStatusEffectS2CPacket",
@@ -91,6 +89,7 @@
     "features.module.norender.MixinBackgroundRenderer",
     "features.module.norender.MixinBannerBlockEntityRenderer",
     "features.module.norender.MixinBossBarHud",
+    "features.module.norender.MixinChunkOcclusionDataBuilder",
     "features.module.norender.MixinChunkSkyLightProvider",
     "features.module.norender.MixinClientWorld",
     "features.module.norender.MixinEnchantingTableBlockEntityRenderer",
@@ -108,6 +107,9 @@
     "features.module.norender.MixinWorldRenderer",
     "features.module.screens.MixinPlayerScreenHandler",
     "library.baritone.MixinLookBehavior",
+    "library.brigadier.MixinCommandNode",
+    "library.brigadier.MixinLiteralCommandNode",
+    "library.viaprotocolhack.MixinCustomViaConfig",
     "protocolhack.MixinBossBarHud",
     "protocolhack.MixinChatInputSuggestor",
     "protocolhack.MixinChatScreen",
@@ -173,6 +175,7 @@
     "protocolhack.item.MixinMiningToolItem",
     "protocolhack.item.MixinPickaxeItem",
     "protocolhack.item.MixinShovelItem",
+    "protocolhack.item.blocking.MixinHeldItemRenderer",
     "protocolhack.item.blocking.MixinSwordItem",
     "protocolhack.screen.MixinChatHud",
     "protocolhack.screen.MixinCommandBlockScreen",
@@ -202,14 +205,9 @@
     "protocolhack.viaversion.MixinProtocol1_9To1_8",
     "protocolhack.viaversion.MixinProtocolManagerImpl",
     "protocolhack.viaversion.MixinSkullHandler_1_12_2",
-    "protocolhack.viaversion.MixinViaIdleThread",
-    "library.viaprotocolhack.MixinCustomViaConfig"
+    "protocolhack.viaversion.MixinViaIdleThread"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "features.module.norender.MixinChunkOcclusionDataBuilder",
-    "protocolhack.item.blocking.MixinHeldItemRenderer"
-  ]
+  }
 }
