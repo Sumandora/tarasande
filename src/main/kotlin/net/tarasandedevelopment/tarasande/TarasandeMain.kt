@@ -35,13 +35,13 @@ class TarasandeMain {
     private lateinit var managerFile: ManagerFile
     lateinit var managerValue: ManagerValue
         private set
+    lateinit var managerFont: ManagerFont
+        private set
     lateinit var managerPackage: ManagerPackage
         private set
     lateinit var managerClientMenu: ManagerClientMenu
         private set
     lateinit var managerBlur: ManagerBlur
-        private set
-    lateinit var managerFont: ManagerFont
         private set
     lateinit var clientValues: ClientValues
         private set
@@ -93,10 +93,10 @@ class TarasandeMain {
     fun onLateLoad() {
         managerFile = ManagerFile()
         managerValue = ManagerValue()
+        managerFont = ManagerFont()
         managerPackage = ManagerPackage()
         managerClientMenu = ManagerClientMenu()
         managerBlur = ManagerBlur()
-        managerFont = ManagerFont()
         clientValues = ClientValues()
         protocolHack = TarasandeProtocolHack()
         managerClickMethod = ManagerClickMethod()
