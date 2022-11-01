@@ -34,9 +34,11 @@ public abstract class MixinAbstractBlockState {
 
     @Inject(method = "getCollisionShape(Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/ShapeContext;)Lnet/minecraft/util/shape/VoxelShape;", at = @At("RETURN"), cancellable = true)
     public void hookEventCollisionShape(BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        EventCollisionShape eventCollisionShape = new EventCollisionShape(pos, cir.getReturnValue());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventCollisionShape);
-        cir.setReturnValue(eventCollisionShape.getCollisionShape());
+        if (pos != null && cir.getReturnValue() != null) {
+            EventCollisionShape eventCollisionShape = new EventCollisionShape(pos, cir.getReturnValue());
+            TarasandeMain.Companion.get().getManagerEvent().call(eventCollisionShape);
+            cir.setReturnValue(eventCollisionShape.getCollisionShape());
+        }
     }
 
 }
