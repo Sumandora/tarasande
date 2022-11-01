@@ -7,8 +7,8 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.Tameable
 import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.render.blur.BlurKawase
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
+import net.tarasandedevelopment.tarasande.render.blur.BlurKawase
 import net.tarasandedevelopment.tarasande.util.dummies.ClientWorldDummy
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.*

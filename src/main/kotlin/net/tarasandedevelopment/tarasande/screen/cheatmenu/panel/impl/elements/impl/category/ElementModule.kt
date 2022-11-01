@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.category
 
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.Vec2f
@@ -18,7 +17,7 @@ import kotlin.math.min
 
 class ElementModule(private val module: Module, width: Double) : Element(width) {
 
-    private val defaultHeight = MinecraftClient.getInstance().textRenderer.fontHeight * 1.5 + 2.0
+    private val defaultHeight = RenderUtil.font().fontHeight() * 1.5 + 2.0
     private var toggleTime = 0L
     private var expansionTime = 0L
     private var expanded = false
@@ -44,19 +43,20 @@ class ElementModule(private val module: Module, width: Double) : Element(width) 
             expanded = false
         }
 
-        matrices?.push()
-        matrices?.translate(2.0, this.defaultHeight / 4.0 + 1.0, 0.0)
-        matrices?.scale(0.75f, 0.75f, 1.0f)
-        matrices?.translate(-2.0, -(this.defaultHeight / 4.0 + 1.0f), 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, module.name, 2.0f, ((this.defaultHeight / 4.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f) + 1.0f).toFloat(), white.rgb)
-        matrices?.pop()
-
-        matrices?.push()
-        matrices?.translate(2.0, this.defaultHeight - this.defaultHeight / 4.0, 0.0)
-        matrices?.scale(0.5f, 0.5f, 1.0f)
-        matrices?.translate(-2.0, -(this.defaultHeight - this.defaultHeight / 4.0), 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, this.module.description, 2.0f, (this.defaultHeight - this.defaultHeight / 4.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f).toFloat(), Color.lightGray.let { if (module.isEnabled()) it else it.darker().darker() }.rgb)
-        matrices?.pop()
+        RenderUtil.font().textShadow(matrices,
+            module.name,
+            2.0f,
+            (this.defaultHeight * 0.25f - RenderUtil.font().fontHeight() * 0.25f).toFloat(),
+            white.rgb,
+            scale = 0.75f
+        )
+        RenderUtil.font().textShadow(matrices,
+            this.module.description,
+            2.0f,
+            (this.defaultHeight * 0.75f - RenderUtil.font().fontHeight() * 0.25f).toFloat(),
+            Color.lightGray.let { if (module.isEnabled()) it else it.darker().darker() }.rgb,
+            scale = 0.5f
+        )
 
         val toggleAnimation = min((System.currentTimeMillis() - toggleTime) / 100.0, 1.0)
         val radius = if (module.enabled) toggleAnimation else 1.0 - toggleAnimation

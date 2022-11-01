@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ElementValueComponent
@@ -17,24 +16,40 @@ class ElementValueComponentButton(value: Value) : ElementValueComponent(value) {
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val valueButton = value as ValueButton
 
-        val textWidth = MinecraftClient.getInstance().textRenderer.getWidth(valueButton.name)
+        val textWidth = RenderUtil.font().getWidth(valueButton.name)
 
-        RenderUtil.fill(matrices, width - 4 - textWidth / 2, getHeight() / 2.0 - MinecraftClient.getInstance().textRenderer.fontHeight / 2, width, getHeight() / 2.0 + MinecraftClient.getInstance().textRenderer.fontHeight / 2, Int.MIN_VALUE)
+        RenderUtil.fill(matrices, width - 4 - textWidth / 2, getHeight() / 2.0 - RenderUtil.font().fontHeight() / 2, width, getHeight() / 2.0 + RenderUtil.font().fontHeight() / 2, Int.MIN_VALUE)
 
-        matrices?.push()
-        matrices?.translate(width - 2 - textWidth / 2, getHeight() / 2.0, 0.0)
-        matrices?.scale(0.5F, 0.5F, 1.0F)
-        matrices?.translate(-(width - 2 - textWidth / 2), -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, (width - 2 - textWidth / 2).toFloat(), (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F + 1).toFloat(), if (valueButton.isEnabled()) if (RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), width - 4 - textWidth / 2, getHeight() / 2.0 - MinecraftClient.getInstance().textRenderer.fontHeight / 2, width, getHeight() / 2.0 + MinecraftClient.getInstance().textRenderer.fontHeight / 2)) TarasandeMain.get().clientValues.accentColor.getColor().rgb else -1 else Color.white.darker().darker().rgb)
-        matrices?.pop()
+        RenderUtil.font().textShadow(matrices,
+            value.name,
+            (width - 2 - textWidth / 2).toFloat(),
+            (getHeight() / 2.0F - RenderUtil.font().fontHeight() * 0.25f).toFloat(),
+            if (valueButton.isEnabled())
+                if (RenderUtil.isHovered(mouseX.toDouble(),
+                        mouseY.toDouble(),
+                        width - 4 - textWidth / 2,
+                        getHeight() / 2.0 - RenderUtil.font().fontHeight() / 2,
+                        width,
+                        getHeight() / 2.0 + RenderUtil.font().fontHeight() / 2))
+                    TarasandeMain.get().clientValues.accentColor.getColor().rgb
+                else
+                    -1
+            else
+                Color.white.darker().darker().rgb,
+            scale = 0.5F)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         val valueButton = value as ValueButton
 
-        val textWidth = MinecraftClient.getInstance().textRenderer.getWidth(valueButton.name)
+        val textWidth = RenderUtil.font().getWidth(valueButton.name)
 
-        if (button == 0 && RenderUtil.isHovered(mouseX, mouseY, width - 4 - textWidth / 2, getHeight() / 2.0 - MinecraftClient.getInstance().textRenderer.fontHeight / 2, width, getHeight() / 2.0 + MinecraftClient.getInstance().textRenderer.fontHeight / 2)) {
+        if (valueButton.isEnabled() && button == 0 && RenderUtil.isHovered(mouseX,
+                mouseY,
+                width - 4 - textWidth / 2,
+                getHeight() / 2.0 - RenderUtil.font().fontHeight() / 2,
+                width,
+                getHeight() / 2.0 + RenderUtil.font().fontHeight() / 2)) {
             valueButton.onChange()
             return true
         }
@@ -57,5 +72,5 @@ class ElementValueComponentButton(value: Value) : ElementValueComponent(value) {
     override fun onClose() {
     }
 
-    override fun getHeight() = MinecraftClient.getInstance().textRenderer.fontHeight * 1.5
+    override fun getHeight() = RenderUtil.font().fontHeight() * 1.5
 }

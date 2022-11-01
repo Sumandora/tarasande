@@ -154,11 +154,11 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
 
             it.add(EventRenderMultiplayerEntry::class.java) {
                 (it.server as IServerInfo).tarasande_getForgePayload()?.also { payload ->
-                    val fontHeight = MinecraftClient.getInstance().textRenderer.fontHeight
+                    val fontHeight = RenderUtil.font().fontHeight()
 
                     val yPos = (it.entryHeight / 2F) - fontHeight / 2
-                    val text = MinecraftClient.getInstance().textRenderer.trimToWidth("Forge/FML Server", it.x)
-                    val endWidth = MinecraftClient.getInstance().textRenderer.getWidth(text) + 4
+                    val text = RenderUtil.font().trimToWidth("Forge/FML Server", it.x)
+                    val endWidth = RenderUtil.font().getWidth(text) + 4
 
                     RenderUtil.font().textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
 

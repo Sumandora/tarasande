@@ -12,7 +12,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 
-class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Armor", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), background = false, resizable = false, fixed = true) {
+class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Armor", x, y, 75.0, RenderUtil.font().fontHeight().toDouble(), background = false, resizable = false, fixed = true) {
 
     private val itemDimension = 20
 

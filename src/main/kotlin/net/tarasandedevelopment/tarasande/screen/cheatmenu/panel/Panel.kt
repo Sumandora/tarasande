@@ -46,7 +46,7 @@ open class Panel(
     var opened = false
     var modifiable = true
 
-    val titleBarHeight = MinecraftClient.getInstance().textRenderer.fontHeight
+    val titleBarHeight = RenderUtil.font().fontHeight()
 
     init {
         if (fixed)
@@ -91,7 +91,7 @@ open class Panel(
                 MinecraftClient.getInstance().framebuffer.beginWrite(true)
 
                 val accent = TarasandeMain.get().clientValues.accentColor.getColor()
-                RenderUtil.fill(matrices, x, y + MinecraftClient.getInstance().textRenderer.fontHeight, x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).withAlpha(0), 0.3, 0.3, 0.3, 0.7).rgb)
+                RenderUtil.fill(matrices, x, y + RenderUtil.font().fontHeight(), x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).withAlpha(0), 0.3, 0.3, 0.3, 0.7).rgb)
                 matrices?.pop()
             }
 
@@ -139,9 +139,9 @@ open class Panel(
         matrices?.push()
         RenderUtil.fill(matrices, x, y, x + panelWidth, y + titleBarHeight, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
         when (alignment) {
-            Alignment.LEFT -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2f - MinecraftClient.getInstance().textRenderer.fontHeight / 2f, Color.white.rgb)
-            Alignment.MIDDLE -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(title).toFloat() / 2.0F, y.toFloat() + titleBarHeight / 2f - MinecraftClient.getInstance().textRenderer.fontHeight / 2f, Color.white.rgb)
-            Alignment.RIGHT -> MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, title, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(title).toFloat(), y.toFloat() + titleBarHeight / 2f - MinecraftClient.getInstance().textRenderer.fontHeight / 2f, Color.white.rgb)
+            Alignment.LEFT -> RenderUtil.font().textShadow(matrices, title, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2f - RenderUtil.font().fontHeight() / 2f, Color.white.rgb)
+            Alignment.MIDDLE -> RenderUtil.font().textShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0f - RenderUtil.font().getWidth(title).toFloat() / 2.0F, y.toFloat() + titleBarHeight / 2f - RenderUtil.font().fontHeight() / 2f, Color.white.rgb)
+            Alignment.RIGHT -> RenderUtil.font().textShadow(matrices, title, x.toFloat() + panelWidth.toFloat() - RenderUtil.font().getWidth(title).toFloat(), y.toFloat() + titleBarHeight / 2f - RenderUtil.font().fontHeight() / 2f, Color.white.rgb)
         }
         matrices?.pop()
     }

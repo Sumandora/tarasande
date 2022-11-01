@@ -1,16 +1,13 @@
 package net.tarasandedevelopment.tarasande.base.features.command
 
 import com.mojang.brigadier.CommandDispatcher
-import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import net.minecraft.command.CommandSource
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.features.command.CommandCredits
 import net.tarasandedevelopment.tarasande.features.command.CommandViaDump
-import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 
 class ManagerCommand : Manager<Command>() {
 

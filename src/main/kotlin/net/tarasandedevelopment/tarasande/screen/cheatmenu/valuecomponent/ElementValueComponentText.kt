@@ -14,13 +14,7 @@ import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
 class ElementValueComponentText(value: Value) : ElementValueComponent(value) {
-
-    var height: Double? = null
-
-    constructor(value: Value, height: Double) : this(value) {
-        this.height = height
-    }
-
+    //TODO
     val textFieldWidget = TextFieldWidgetPlaceholder(MinecraftClient.getInstance().textRenderer, 1, 1, 1, (getHeight() * 2).toInt() - 1, Text.of((value as ValueText).name))
 
     init {
@@ -97,5 +91,5 @@ class ElementValueComponentText(value: Value) : ElementValueComponent(value) {
 
     fun setFocused(focused: Boolean) = textFieldWidget.setTextFieldFocused(focused)
 
-    override fun getHeight() = height ?: MinecraftClient.getInstance().textRenderer.fontHeight.toDouble()
+    override fun getHeight() = RenderUtil.font().fontHeight().toDouble()
 }

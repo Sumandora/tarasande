@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ElementValueComponent
 import net.tarasandedevelopment.tarasande.base.value.Value
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.meta.ValueSpacer
 import kotlin.math.floor
 
@@ -18,7 +18,7 @@ class ElementValueComponentSpacer(value: Value) : ElementValueComponent(value) {
         lines.clear()
         var str = (value as ValueSpacer).name
         while (str.isNotEmpty()) {
-            var trimmed = MinecraftClient.getInstance().textRenderer.trimToWidth(str, floor(width * 2.0f).toInt())
+            var trimmed = RenderUtil.font().trimToWidth(str, floor(width * 2.0f).toInt())
             if (trimmed != str) {
                 val orig = trimmed
                 while (trimmed.isNotEmpty() && !trimmed.endsWith(" ")) {
@@ -31,18 +31,15 @@ class ElementValueComponentSpacer(value: Value) : ElementValueComponent(value) {
             str = str.substring(trimmed.length)
         }
 
-        matrices?.push()
-        matrices?.scale(0.5F, 0.5F, 1.0F)
-
         for ((index, line) in lines.withIndex()) {
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices,
+            RenderUtil.font().textShadow(matrices,
                 line,
                 0.0f,
-                (getHeight() / 2.0F + (index - (lines.size - 1) / 2.0 + 0.5) * (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f) - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat() * 2.0f,
-                -1)
+                (getHeight() / 2.0F + (index - (lines.size - 1) / 2.0 + 0.5) * (RenderUtil.font().fontHeight() / 2.0f) - RenderUtil.font().fontHeight() / 2.0F).toFloat(),
+                -1,
+                scale = 0.5F
+            )
         }
-
-        matrices?.pop()
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int) = false
@@ -63,5 +60,5 @@ class ElementValueComponentSpacer(value: Value) : ElementValueComponent(value) {
     override fun onClose() {
     }
 
-    override fun getHeight() = MinecraftClient.getInstance().textRenderer.fontHeight.toDouble() / 2.0f * (lines.size + 1)
+    override fun getHeight() = RenderUtil.font().fontHeight().toDouble() / 2.0f * (lines.size + 1)
 }

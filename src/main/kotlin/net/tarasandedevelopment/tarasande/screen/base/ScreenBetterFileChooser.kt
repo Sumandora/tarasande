@@ -41,27 +41,27 @@ class ScreenBetterFileChooser(
             private var cachedFiles = listOf<File>()
 
             fun files(): List<File> {
-                val files = ArrayList<File>()
+                val files = ArrayList<File?>()
                 files.add(currentDirectory.parentFile)
                 currentDirectory.listFiles()?.forEach {
                     files.add(it)
                 }
 
                 if (files.any { !cachedFiles.contains(it) }) {
-                    cachedFiles = files.sortedBy { !it.isDirectory }
+                    cachedFiles = files.filterNotNull().sortedBy { !it.isDirectory }
                 }
                 return cachedFiles
             }
 
             override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+                val mouseY = mouseY - scrollOffset
+
                 val hovered = RenderUtil.isHovered(mouseX, mouseY, x, y + titleBarHeight, x + panelWidth, y + panelHeight)
                 if (hovered) {
-                    val mouseY = mouseY - scrollOffset
-
                     var height = titleBarHeight.toDouble()
 
                     for (file in this.files()) {
-                        if (RenderUtil.isHovered(mouseX, mouseY, x, y + height, x + MinecraftClient.getInstance().textRenderer.getWidth(file.name) * 0.5, y + height + (MinecraftClient.getInstance().textRenderer.fontHeight * 0.5) + 1)) {
+                        if (RenderUtil.isHovered(mouseX, mouseY, x, y + height, x + panelWidth, y + height + RenderUtil.font().fontHeight() * 0.5)) {
                             if (file.isFile) {
                                 consumer.accept(file)
                             } else {
@@ -71,7 +71,7 @@ class ScreenBetterFileChooser(
                             }
                             break
                         }
-                        height += (MinecraftClient.getInstance().textRenderer.fontHeight * 0.5) + 1
+                        height += (RenderUtil.font().fontHeight() * 0.5) + 1
                     }
                 }
                 return super.mouseClicked(mouseX, mouseY, button)
@@ -87,7 +87,7 @@ class ScreenBetterFileChooser(
                 var height = titleBarHeight.toDouble() + 1
                 for (file in this.files()) {
                     if ( ((y + height + scrollOffset)) > y && (height + scrollOffset) < panelHeight) {
-                        var color = Color.WHITE
+                        var color = Color.white
                         if (file.isDirectory) {
                             color = TarasandeMain.get().clientValues.accentColor.getColor()
                         }
@@ -97,18 +97,18 @@ class ScreenBetterFileChooser(
 
                         RenderUtil.font().text(matrices, if (file == currentDirectory.parentFile) ".." else file.name, x.toFloat() + 1, (y + height).toFloat(), color.rgb, 0.5F)
                     }
-                    height += (MinecraftClient.getInstance().textRenderer.fontHeight * 0.5) + 1
+                    height += (RenderUtil.font().fontHeight() * 0.5) + 1
                 }
                 super.renderContent(matrices, mouseX, mouseY, delta)
             }
 
             override fun getMaxScrollOffset(): Double {
-                return (MinecraftClient.getInstance().textRenderer.fontHeight * 0.5 + 1) * (this.files().size - 1)
+                return (RenderUtil.font().fontHeight() * 0.5 + 1) * (this.files().size - 1)
             }
 
             private fun createDimensions() {
-                this.panelWidth = this.files().maxOf { MinecraftClient.getInstance().textRenderer.getWidth(it.name) * 0.5 + 6.0 }.coerceAtLeast(MinecraftClient.getInstance().window?.scaledWidth!! * 0.4).coerceAtLeast(MinecraftClient.getInstance().textRenderer.getWidth(this.title) + 5.0)
-                this.panelHeight = titleBarHeight + ((MinecraftClient.getInstance().textRenderer.fontHeight * 0.5 + 1) * (this.files().size)).coerceAtMost(MinecraftClient.getInstance().window.scaledHeight * 0.75)
+                this.panelWidth = this.files().maxOf { RenderUtil.font().getWidth(it.name) * 0.5 + 6.0 }.coerceAtLeast(MinecraftClient.getInstance().window?.scaledWidth!! * 0.4).coerceAtLeast(RenderUtil.font().getWidth(this.title) + 5.0)
+                this.panelHeight = titleBarHeight + ((RenderUtil.font().fontHeight() * 0.5 + 1) * (this.files().size)).coerceAtMost(MinecraftClient.getInstance().window.scaledHeight * 0.75)
 
                 this.x = (MinecraftClient.getInstance().window.scaledWidth / 2) - (this.panelWidth / 2)
                 this.y = MinecraftClient.getInstance().window.scaledHeight / 2 - (this.panelHeight / 2)

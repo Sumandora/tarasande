@@ -26,17 +26,13 @@ class PanelButton(x: Int, y: Int, val width: Int, val height: Int, private val t
         val middleX = x + panelWidth / 2.0
         val middleY = y + titleBarHeight + (panelHeight - titleBarHeight) / 2.0
 
-        matrices?.push()
-        matrices?.translate(middleX, middleY, 0.0)
-        matrices?.scale(0.75f, 0.75f, 1.0f)
-        matrices?.translate(-(middleX), -(middleY), 0.0)
-
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices,
+        RenderUtil.font().textShadow(matrices,
             text,
-            (middleX - MinecraftClient.getInstance().textRenderer.getWidth(text) / 2.0).toFloat(),
-            (middleY - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0).toFloat(),
-            -1)
-        matrices?.pop()
+            middleX.toFloat(),
+            (middleY - RenderUtil.font().fontHeight() * 0.25f).toFloat(),
+            -1,
+            centered = true,
+            scale = 0.75F)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

@@ -19,7 +19,7 @@ import kotlin.math.roundToInt
 /*
  * This code is probably worse than it has to be, but I just couldn't think of anything better (sleep deprivation :c)
  */
-class PanelHypixelOverlay(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Hypixel Overlay", x, y, 200.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), background = false, fixed = true) {
+class PanelHypixelOverlay(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Hypixel Overlay", x, y, 200.0, RenderUtil.font().fontHeight().toDouble(), background = false, fixed = true) {
 
     private val apiKey = ValueText(this, "API Key", "")
 
@@ -61,7 +61,7 @@ class PanelHypixelOverlay(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu
 
     private fun drawString(matrices: MatrixStack?, str: String, x: Double, y: Double) {
         val accent = TarasandeMain.get().clientValues.accentColor.getColor()
-        val width = MinecraftClient.getInstance().textRenderer.getWidth(str)
+        val width = RenderUtil.font().getWidth(str)
         val titleBarHeight = titleBarHeight
         when (alignment) {
             Alignment.LEFT, Alignment.MIDDLE -> {
@@ -104,10 +104,10 @@ class PanelHypixelOverlay(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu
         for (col in newList) {
             var maxWidth = 0
             for ((index, entry) in col.withIndex()) {
-                val width = MinecraftClient.getInstance().textRenderer.getWidth(entry)
+                val width = RenderUtil.font().getWidth(entry)
                 if (width > maxWidth)
                     maxWidth = width
-                drawString(matrices, entry, x + xOffset, y + index * MinecraftClient.getInstance().textRenderer.fontHeight)
+                drawString(matrices, entry, x + xOffset, y + index * RenderUtil.font().fontHeight())
             }
             if (alignment == Alignment.RIGHT)
                 xOffset -= maxWidth + 10

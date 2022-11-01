@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent
 
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
@@ -11,6 +10,7 @@ import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.E
 import net.tarasandedevelopment.tarasande.base.value.Value
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.utils.DragInfo
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil.fill
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil.fillCircle
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil.fillHorizontalGradient
@@ -71,12 +71,7 @@ class ElementValueComponentColor(value: Value) : ElementValueComponent(value) {
             valueColor.onChange()
         }
 
-        matrices?.push()
-        matrices?.translate(0.0, (getPickerHeight() - 5) / 2.0, 0.0)
-        matrices?.scale(0.5f, 0.5f, 1.0f)
-        matrices?.translate(0.0, -(getPickerHeight() - 5) / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0f, ((getPickerHeight() - 5) / 2.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f).toFloat(), white.rgb)
-        matrices?.pop()
+        RenderUtil.font().textShadow(matrices, value.name, 0.0f, ((getPickerHeight() - 5) / 2.0f - RenderUtil.font().fontHeight() / 2.0f).toFloat(), white.rgb, scale = 0.5f)
 
         val matrix4f = matrices?.peek()?.positionMatrix!!
         val bufferBuilder = Tessellator.getInstance().buffer
@@ -91,20 +86,17 @@ class ElementValueComponentColor(value: Value) : ElementValueComponent(value) {
         fillVerticalGradient(matrices, x1, y1, x2, y2, Color.black.withAlpha(0).rgb, black.rgb)
 
         if (!isAccent()) {
-            matrices.push()
-            matrices.scale(0.5f, 0.5f, 0.5f)
-
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices,
+            RenderUtil.font().textShadow(matrices,
                 lockToAccentColorText,
-                (width * 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(lockToAccentColorText)).toFloat(),
-                getPickerHeight().toFloat() * 2.0f,
+                (width - RenderUtil.font().getWidth(lockToAccentColorText) / 2f).toFloat(),
+                getPickerHeight().toFloat(),
                 (if (!valueColor.locked)
                     white
                 else if (valueColor.isEnabled())
                     TarasandeMain.get().clientValues.accentColor.getColor()
                 else
-                    TarasandeMain.get().clientValues.accentColor.getColor().darker().darker()).rgb)
-            matrices.pop()
+                    TarasandeMain.get().clientValues.accentColor.getColor().darker().darker()).rgb,
+                scale = 0.5F)
         }
 
         outlinedFill(matrices, x1, y1, x2, y2, 2.0f, unblockedWhite.rgb)
@@ -151,7 +143,7 @@ class ElementValueComponentColor(value: Value) : ElementValueComponent(value) {
 
         val valueColor = value as ValueColor
 
-        if (!this.isAccent() && isHovered(mouseX, mouseY, width - MinecraftClient.getInstance().textRenderer.getWidth(lockToAccentColorText) / 2.0f, getPickerHeight(), width, getPickerHeight() + MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f)) {
+        if (!this.isAccent() && isHovered(mouseX, mouseY, width - RenderUtil.font().getWidth(lockToAccentColorText) / 2.0f, getPickerHeight(), width, getPickerHeight() + RenderUtil.font().fontHeight() / 2.0f)) {
             if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                 val accent = TarasandeMain.get().clientValues.accentColor
 
@@ -220,5 +212,5 @@ class ElementValueComponentColor(value: Value) : ElementValueComponent(value) {
     }
 
     private fun getPickerHeight() = 55.0
-    override fun getHeight() = getPickerHeight() + if (!isAccent()) MinecraftClient.getInstance().textRenderer.fontHeight else 0
+    override fun getHeight() = getPickerHeight() + if (!isAccent()) RenderUtil.font().fontHeight() else 0
 }

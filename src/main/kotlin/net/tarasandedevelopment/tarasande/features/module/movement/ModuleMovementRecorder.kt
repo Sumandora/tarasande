@@ -12,6 +12,7 @@ import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueBind
 import org.apache.commons.lang3.ArrayUtils
 import org.lwjgl.glfw.GLFW
@@ -175,10 +176,10 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
         }
 
         registerEvent(EventRender2D::class.java) { event ->
-            val str = if (recording) "Recording" else if (playbackState != null) playbackState?.name?.let {
+            val str = if (recording) "Recording" else playbackState?.name?.let {
                 it.first() + it.substring(1).lowercase()
-            } else ""
-            mc.textRenderer?.drawWithShadow(event.matrices, str, mc.window?.scaledWidth!! / 2.0f - mc.textRenderer.getWidth(str) / 2.0f, mc.window?.scaledHeight!! / 2.0f - mc.textRenderer.fontHeight, -1)
+            } ?: return@registerEvent
+            RenderUtil.font().textShadow(event.matrices, str, mc.window?.scaledWidth!! / 2.0f - RenderUtil.font().getWidth(str) / 2.0f, mc.window?.scaledHeight!! / 2.0f - RenderUtil.font().fontHeight(), -1)
         }
 
         registerEvent(EventRender3D::class.java) { event ->

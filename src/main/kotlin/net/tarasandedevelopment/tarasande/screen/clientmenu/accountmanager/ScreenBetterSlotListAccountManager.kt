@@ -114,7 +114,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Ren
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         this.renderTitle(matrices, "Account Manager")
-        drawCenteredText(matrices, textRenderer, Text.of(status), width / 2, 2 * textRenderer.fontHeight * 2, -1)
+        RenderUtil.font().textShadow(matrices, status, width / 2.0f, 2 * RenderUtil.font().fontHeight() * 2.0f, -1, centered = true)
     }
 
     inner class ScreenBetterSlotListEntryAccount(var account: Account) : ScreenBetterSlotListEntry() {

@@ -7,11 +7,11 @@ import net.minecraft.client.gl.Framebuffer
 import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.tarasande.event.EventRender2D
+import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.render.blur.BlurBox
 import net.tarasandedevelopment.tarasande.render.blur.BlurGaussian
 import net.tarasandedevelopment.tarasande.render.blur.BlurKawase
-import net.tarasandedevelopment.tarasande.event.EventRender2D
-import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import net.tarasandedevelopment.tarasande.util.render.shader.Program

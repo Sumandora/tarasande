@@ -12,7 +12,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.meta.ValueButton
 
-class PanelInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Information", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), background = false, resizable = false, fixed = true) {
+class PanelInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Information", x, y, 75.0, RenderUtil.font().fontHeight().toDouble(), background = false, resizable = false, fixed = true) {
 
     val map = HashMap<Information, String>()
 
@@ -74,9 +74,9 @@ class PanelInformation(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) :
 
         for ((index, it) in text.withIndex()) {
             when (alignment) {
-                Alignment.LEFT -> RenderUtil.font().textShadow(matrices, it, x.toFloat(), y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
-                Alignment.MIDDLE -> RenderUtil.font().textShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat() / 2.0f, y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
-                Alignment.RIGHT -> RenderUtil.font().textShadow(matrices, it, x.toFloat() + panelWidth.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(it).toFloat(), y.toFloat() + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
+                Alignment.LEFT -> RenderUtil.font().textShadow(matrices, it, x.toFloat(), y.toFloat() + titleBarHeight + RenderUtil.font().fontHeight() * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
+                Alignment.MIDDLE -> RenderUtil.font().textShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0f - RenderUtil.font().getWidth(it).toFloat() / 2.0f, y.toFloat() + titleBarHeight + RenderUtil.font().fontHeight() * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
+                Alignment.RIGHT -> RenderUtil.font().textShadow(matrices, it, x.toFloat() + panelWidth.toFloat() - RenderUtil.font().getWidth(it).toFloat(), y.toFloat() + titleBarHeight + RenderUtil.font().fontHeight() * index, TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
             }
         }
     }

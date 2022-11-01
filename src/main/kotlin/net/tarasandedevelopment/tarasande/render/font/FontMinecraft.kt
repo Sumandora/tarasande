@@ -25,7 +25,7 @@ class FontMinecraft : Font("Minecraft") {
             matrices?.translate(-(x.toDouble()), -y.toDouble(), 0.0)
         }
 
-        mcInternal.drawWithOutline(Text.of(text).asOrderedText(), (if (centered) x - (getWidth(text)) / 2 else x), y, color, outlineColor, matrices?.peek()?.positionMatrix, immediate, LightmapTextureManager.MAX_LIGHT_COORDINATE)
+        mcInternal.drawWithOutline(Text.of(text).asOrderedText(), (if (centered) x - (getWidth(text)) * scale else x), y, color, outlineColor, matrices?.peek()?.positionMatrix, immediate, LightmapTextureManager.MAX_LIGHT_COORDINATE)
         matrices?.pop()
         
         immediate.draw()
@@ -45,7 +45,7 @@ class FontMinecraft : Font("Minecraft") {
             matrices?.translate(-(x.toDouble()), -y.toDouble(), 0.0)
         }
 
-        mcInternal.draw(matrices, text, (if (centered) x - (getWidth(text) / 2) else x), y, color)
+        mcInternal.draw(matrices, text, (if (centered) x - (getWidth(text) * scale) else x), y, color)
 
         matrices?.pop()
     }

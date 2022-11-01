@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.Formatting
@@ -97,12 +96,7 @@ class ElementValueComponentNumberRange(value: Value) : ElementValueComponent(val
             otherColor = otherColor.darker().darker()
         }
 
-        matrices?.push()
-        matrices?.translate(0.0, getHeight() / 2.0, 0.0)
-        matrices?.scale(0.5F, 0.5F, 1.0F)
-        matrices?.translate(0.0, -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), white.rgb)
-        matrices?.pop()
+        RenderUtil.font().textShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - RenderUtil.font().fontHeight() / 2.0F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F)
 
         if (minSliderPos == maxSliderPos) {
             RenderUtil.fillHorizontalGradient(matrices, max(width - (1.0 - minSliderPos) * 50 - 1, width - 50), getHeight() * 0.25, min(width - (1.0 - maxSliderPos) * 50 + 1, width), getHeight() * 0.75, otherColor.rgb, color.rgb)
@@ -111,11 +105,7 @@ class ElementValueComponentNumberRange(value: Value) : ElementValueComponent(val
         }
         RenderUtil.outlinedHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2.0F, white.rgb, accentColor.rgb)
 
-        matrices?.push()
-        matrices?.translate(width - 50 / 2, getHeight() / 2.0, 0.0)
-        matrices?.scale(0.5F, 0.5F, 1.0F)
-        matrices?.translate(-(width - 50 / 2), -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices,
+        RenderUtil.font().textShadow(matrices,
             (if (value.minValue !in valueNumberRange.min..valueNumberRange.max) (if (value.isEnabled()) {
                 Formatting.RED
             } else {
@@ -127,10 +117,12 @@ class ElementValueComponentNumberRange(value: Value) : ElementValueComponent(val
                     } else {
                         Formatting.DARK_RED
                     }).toString() else "") + value.maxValue.toString(),
-            (width - 50 / 2.0F - MinecraftClient.getInstance().textRenderer.getWidth(value.minValue.toString() + "-" + value.maxValue.toString()) / 2.0F).toFloat(),
-            (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(),
-            white.rgb)
-        matrices?.pop()
+            (width - 50 / 2.0F).toFloat(),
+            (getHeight() / 2.0F - RenderUtil.font().fontHeight() * 0.25f).toFloat(),
+            white.rgb,
+            centered = true,
+            scale = 0.5F
+        )
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
@@ -197,5 +189,5 @@ class ElementValueComponentNumberRange(value: Value) : ElementValueComponent(val
         maxDragInfo.setDragInfo(false, 0.0, 0.0)
     }
 
-    override fun getHeight() = MinecraftClient.getInstance().textRenderer.fontHeight * 2.0
+    override fun getHeight() = RenderUtil.font().fontHeight() * 2.0
 }

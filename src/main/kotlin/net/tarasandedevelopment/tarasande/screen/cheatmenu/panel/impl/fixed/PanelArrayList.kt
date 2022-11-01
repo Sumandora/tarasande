@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed
 
 import com.mojang.blaze3d.systems.RenderSystem
 import de.florianmichael.ezeasing.EzEasing
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
 import net.tarasandedevelopment.tarasande.TarasandeMain
@@ -15,7 +14,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 
-class PanelArrayList(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Array List", x, y, 75.0, MinecraftClient.getInstance().textRenderer.fontHeight.toDouble(), background = false, resizable = false, fixed = true) {
+class PanelArrayList(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Array List", x, y, 75.0, RenderUtil.font().fontHeight().toDouble(), background = false, resizable = false, fixed = true) {
 
     private val animations = HashMap<Module, Double>()
     private var easing = EzEasing.LINEAR
@@ -42,16 +41,16 @@ class PanelArrayList(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : P
         }
 
         var index = 0.0
-        enabledModules.sortedBy { MinecraftClient.getInstance().textRenderer.getWidth(it.name) }.reversed().forEach {
+        enabledModules.sortedBy { RenderUtil.font().getWidth(it.name) }.reversed().forEach {
             val animation = animations[it]!!
             val accent = TarasandeMain.get().clientValues.accentColor.getColor()
             val color = accent.withAlpha((animation * 255).toInt())
             RenderSystem.enableBlend()
             val animatedPosition = easing.ease(animation.toFloat())
             when (alignment) {
-                Alignment.LEFT -> RenderUtil.font().textShadow(matrices, it.name, (x - (MinecraftClient.getInstance().textRenderer.getWidth(it.name) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb, offset = 0.5F)
-                Alignment.MIDDLE -> RenderUtil.font().textShadow(matrices, it.name, x.toFloat() + panelWidth.toFloat() / 2.0f - MinecraftClient.getInstance().textRenderer.getWidth(it.name).toFloat() / 2.0f, (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb, offset = 0.5F)
-                Alignment.RIGHT -> RenderUtil.font().textShadow(matrices, it.name, (x + panelWidth - MinecraftClient.getInstance().textRenderer.getWidth(it.name) * animatedPosition).toFloat(), (y + titleBarHeight + MinecraftClient.getInstance().textRenderer.fontHeight * index).toFloat(), color.rgb, offset = 0.5F)
+                Alignment.LEFT -> RenderUtil.font().textShadow(matrices, it.name, (x - (RenderUtil.font().getWidth(it.name) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + RenderUtil.font().fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                Alignment.MIDDLE -> RenderUtil.font().textShadow(matrices, it.name, x.toFloat() + panelWidth.toFloat() / 2.0f - RenderUtil.font().getWidth(it.name).toFloat() / 2.0f, (y + titleBarHeight + RenderUtil.font().fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                Alignment.RIGHT -> RenderUtil.font().textShadow(matrices, it.name, (x + panelWidth - RenderUtil.font().getWidth(it.name) * animatedPosition).toFloat(), (y + titleBarHeight + RenderUtil.font().fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
             }
             index += animatedPosition
         }

@@ -40,9 +40,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     var image: NativeImageBackedTexture? = null
     private val particles = ArrayList<Particle>()
 
-    // unused rn
-    private var hoveringText: String? = null
-
     val managerValueComponent = ManagerValueComponent()
     val managerInformation = ManagerInformation(this)
     val managerCreative = ManagerCreative()
@@ -191,16 +188,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         }
 
         matrices?.pop()
-
-        if (hoveringText != null) {
-            matrices?.push()
-            val strWidth = textRenderer.getWidth(hoveringText)
-            matrices?.translate((mouseX + strWidth / 2).toDouble(), (mouseY + textRenderer.fontHeight / 2).toDouble(), 0.0)
-            matrices?.scale(0.5f, 0.5f, 1.0f)
-            matrices?.translate(-(mouseX + strWidth / 2).toDouble(), -(mouseY + textRenderer.fontHeight / 2).toDouble(), 0.0)
-            textRenderer.drawWithShadow(matrices, hoveringText, mouseX.toFloat(), mouseY.toFloat(), -1)
-            matrices?.pop()
-        }
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

@@ -14,7 +14,8 @@ import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
 class ElementValueComponentTextList(value: Value) : ElementValueComponent(value) {
-    private val textFieldWidget = TextFieldWidgetPlaceholder(MinecraftClient.getInstance().textRenderer, 0, 0, 40 * 2, MinecraftClient.getInstance().textRenderer.fontHeight * 2 - 1, Text.of("Input text"))
+    //TODO
+    private val textFieldWidget = TextFieldWidgetPlaceholder(MinecraftClient.getInstance().textRenderer, 0, 0, 40 * 2, RenderUtil.font().fontHeight() * 2 - 1, Text.of("Input text"))
 
     init {
         textFieldWidget.setMaxLength(Int.MAX_VALUE)
@@ -29,39 +30,33 @@ class ElementValueComponentTextList(value: Value) : ElementValueComponent(value)
 
         val white = Color.white.let { if (valueTextList.isEnabled()) it else it.darker().darker() }
 
-        matrices?.push()
-        matrices?.translate(0.0, getHeight() / 2.0, 0.0)
-        matrices?.scale(0.5F, 0.5F, 1.0F)
-        matrices?.translate(0.0, -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), white.rgb)
-        matrices?.pop()
+        RenderUtil.font().textShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - RenderUtil.font().fontHeight() / 2.0F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F)
 
         for ((index, key) in valueTextList.value.withIndex()) {
-            matrices?.push()
-            matrices?.scale(0.5F, 0.5F, 1.0F)
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices,
+            RenderUtil.font().textShadow(matrices,
                 key,
-                (width.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(key) / 2.0F) * 2.0F,
-                MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (index + 0.5F) * 2.0F,
+                (width.toFloat() - RenderUtil.font().getWidth(key) / 2.0F),
+                RenderUtil.font().fontHeight() / 2.0F * (index + 0.5F),
                 if (valueTextList.isEnabled())
                     if (RenderUtil.isHovered(
                             mouseX.toDouble(),
                             mouseY.toDouble(),
-                            (width.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(key) / 2.0F).toDouble(),
-                            (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (index + 0.5F)).toDouble(),
+                            (width.toFloat() - RenderUtil.font().getWidth(key) / 2.0F).toDouble(),
+                            (RenderUtil.font().fontHeight() / 2.0F * (index + 0.5F)).toDouble(),
                             width,
-                            (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * ((index + 1) + 0.5F)).toDouble()))
+                            (RenderUtil.font().fontHeight() / 2.0F * ((index + 1) + 0.5F)).toDouble()))
                         TarasandeMain.get().clientValues.accentColor.getColor().rgb
                     else
                         -1
                 else
-                    Color.white.darker().darker().rgb)
-            matrices?.pop()
+                    Color.white.darker().darker().rgb,
+                scale = 0.5F
+            )
         }
-        RenderUtil.fill(matrices, width.toFloat() - 25.0, (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (valueTextList.value.size + 0.5F)).toDouble() + 1.0, width, (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (valueTextList.value.size + 0.5F)).toDouble() + 1.5, white.rgb)
+        RenderUtil.fill(matrices, width.toFloat() - 25.0, (RenderUtil.font().fontHeight() / 2.0F * (valueTextList.value.size + 0.5F)).toDouble() + 1.0, width, (RenderUtil.font().fontHeight() / 2.0F * (valueTextList.value.size + 0.5F)).toDouble() + 1.5, white.rgb)
 
         matrices?.push()
-        matrices?.translate(width - 40, MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (valueTextList.value.size + 0.5F) + 2.0, 0.0)
+        matrices?.translate(width - 40, RenderUtil.font().fontHeight() / 2.0F * (valueTextList.value.size + 0.5F) + 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
         if (textFieldWidget.isFocused) (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.get().clientValues.accentColor.getColor())
         if (!value.isEnabled()) (textFieldWidget as ITextFieldWidget).tarasande_setColor(Color.white.darker().darker())
@@ -74,8 +69,8 @@ class ElementValueComponentTextList(value: Value) : ElementValueComponent(value)
         if (button != 0) return false
         val valueTextList = value as ValueTextList
 
-        if (RenderUtil.isHovered(mouseX, mouseY, width - 40, MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (valueTextList.value.size + 0.25) + 2.0, width, (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * valueTextList.value.size + MinecraftClient.getInstance().textRenderer.fontHeight).toDouble())) { // hacky fix for size hacks
-            textFieldWidget.mouseClicked(40.0 * 2 - 1.0, MinecraftClient.getInstance().textRenderer.fontHeight + 0.5, button)
+        if (RenderUtil.isHovered(mouseX, mouseY, width - 40, RenderUtil.font().fontHeight() / 2.0F * (valueTextList.value.size + 0.25) + 2.0, width, (RenderUtil.font().fontHeight() / 2.0F * valueTextList.value.size + RenderUtil.font().fontHeight()).toDouble())) { // hacky fix for size hacks
+            textFieldWidget.mouseClicked(40.0 * 2 - 1.0, RenderUtil.font().fontHeight() + 0.5, button)
             return true
         } else {
             textFieldWidget.mouseClicked(-1.0, -1.0, button)
@@ -83,7 +78,7 @@ class ElementValueComponentTextList(value: Value) : ElementValueComponent(value)
         }
 
         for ((index, key) in valueTextList.value.withIndex()) {
-            if (RenderUtil.isHovered(mouseX, mouseY, (width.toFloat() - MinecraftClient.getInstance().textRenderer.getWidth(key) / 2.0F).toDouble(), (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * (index + 0.5F)).toDouble(), width, (MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F * ((index + 1) + 0.5F)).toDouble())) {
+            if (RenderUtil.isHovered(mouseX, mouseY, (width.toFloat() - RenderUtil.font().getWidth(key) / 2.0F).toDouble(), (RenderUtil.font().fontHeight() / 2.0F * (index + 0.5F)).toDouble(), width, (RenderUtil.font().fontHeight() / 2.0F * ((index + 1) + 0.5F)).toDouble())) {
                 valueTextList.value.remove(key)
                 valueTextList.onChange()
                 return true
@@ -130,6 +125,6 @@ class ElementValueComponentTextList(value: Value) : ElementValueComponent(value)
 
     override fun getHeight(): Double {
         val valueTextList = value as ValueTextList
-        return MinecraftClient.getInstance().textRenderer.fontHeight / 2.0 * (valueTextList.value.size + 1 + 1.5)
+        return RenderUtil.font().fontHeight() / 2.0 * (valueTextList.value.size + 1 + 1.5)
     }
 }

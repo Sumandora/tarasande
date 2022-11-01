@@ -10,13 +10,13 @@ import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventScreenInput
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
+import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import net.tarasandedevelopment.tarasande.value.ValueNumberRange
 import net.tarasandedevelopment.tarasande.value.ValueText
 import org.apache.commons.lang3.ArrayUtils
 import org.lwjgl.glfw.GLFW
-import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.sqrt
 
@@ -75,11 +75,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
             if (checkTitle.value) {
                 val title = accessor.title
                 val content = title.content
-                var string = ""
-                content.visit {
-                    string += it
-                    Optional.of(it)
-                }
+                val string = StringUtil.extractContent(accessor.title)
                 if (!string.contains(titleSubstring.value))
                     return@registerEvent
             }

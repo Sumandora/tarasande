@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.resource.language.LanguageDefinition
 import net.minecraft.client.resource.language.LanguageManager
 import net.minecraft.client.resource.language.TranslationStorage
+import net.minecraft.text.Text
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -63,5 +64,14 @@ object StringUtil {
             builder.append(days).append(" days")
         }
         return builder.toString()
+    }
+
+    fun extractContent(text: Text): String {
+        var str = ""
+        text.visit {
+            str += it
+            Optional.of(it)
+        }
+        return str
     }
 }

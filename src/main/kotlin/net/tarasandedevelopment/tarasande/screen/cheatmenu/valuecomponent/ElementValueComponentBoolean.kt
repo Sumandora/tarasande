@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ElementValueComponent
@@ -18,12 +17,7 @@ class ElementValueComponentBoolean(value: Value) : ElementValueComponent(value) 
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        matrices?.push()
-        matrices?.translate(0.0, getHeight() / 2.0, 0.0)
-        matrices?.scale(0.5F, 0.5F, 1.0F)
-        matrices?.translate(0.0, -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb)
-        matrices?.pop()
+        RenderUtil.font().textShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - RenderUtil.font().fontHeight() / 2.0F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F)
 
         val expandedAnimation = min((System.currentTimeMillis() - toggleTime) / 100.0 /* length in ms */, 1.0)
         val fade = (if ((value as ValueBoolean).value) expandedAnimation else 1.0 - expandedAnimation)
@@ -67,5 +61,5 @@ class ElementValueComponentBoolean(value: Value) : ElementValueComponent(value) 
     override fun onClose() {
     }
 
-    override fun getHeight() = MinecraftClient.getInstance().textRenderer.fontHeight.toDouble()
+    override fun getHeight() = RenderUtil.font().fontHeight().toDouble()
 }

@@ -56,7 +56,7 @@ class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, 400, RenderUtil.fo
 //            matrices.scale(2F, 2F, 2F)
 //            matrices.translate(-entryWidth / 2.0, -entryHeight / 2.0, 0.0)
 //            val text = this.`package`.modId!! + " (" + this.`package`.modVersion!! + ")"
-//            RenderUtil.font().textCenter(matrices, text, entryWidth / 2.0f, entryHeight / 2.0f - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0f, -1)
+//            RenderUtil.font().textCenter(matrices, text, entryWidth / 2.0f, entryHeight / 2.0f - RenderUtil.font().fontHeight() / 2.0f, -1)
 //            matrices.pop()
         }
     }

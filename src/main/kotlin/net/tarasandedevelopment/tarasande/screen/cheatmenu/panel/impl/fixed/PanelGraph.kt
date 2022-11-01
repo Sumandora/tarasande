@@ -7,9 +7,10 @@ import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.graph.Graph
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import kotlin.math.max
 
-class PanelGraph(private val graph: Graph, x: Double, y: Double) : Panel(graph.name, x, y, max(100.0, MinecraftClient.getInstance().textRenderer.getWidth(graph.name) + 10.0), 50.0, fixed = true) {
+class PanelGraph(private val graph: Graph, x: Double, y: Double) : Panel(graph.name, x, y, max(100.0, RenderUtil.font().getWidth(graph.name) + 10.0), 50.0, fixed = true) {
 
     private val values = ArrayList<Number>()
 
@@ -53,29 +54,14 @@ class PanelGraph(private val graph: Graph, x: Double, y: Double) : Panel(graph.n
 
         val normalizedHeight = 1.0 - this.normalize(current, min, max)
         val height = (panelHeight - titleBarHeight) * normalizedHeight
-        val currentY = y + titleBarHeight + height - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0 * normalizedHeight
+        val currentY = y + titleBarHeight + height - RenderUtil.font().fontHeight() / 2.0 * normalizedHeight
 
-        matrices.push()
-        matrices.translate(x + panelWidth - currentWidth, currentY, 0.0)
-        matrices.scale(0.5f, 0.5f, 1.0f)
-        matrices.translate(-(x + panelWidth - currentWidth), -currentY, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, (if (ints) current.toInt() else current).toString(), (x + panelWidth - currentWidth).toFloat(), currentY.toFloat(), -1)
-        matrices.pop()
-        if (currentY < y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight) {
-            matrices.push()
-            matrices.translate(x + panelWidth - graphMinWidth, y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0, 0.0)
-            matrices.scale(0.5f, 0.5f, 1.0f)
-            matrices.translate(-(x + panelWidth - graphMinWidth), -(y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0), 0.0)
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, (if (ints) min.toInt() else min).toString(), (x + panelWidth - graphMinWidth).toFloat(), (y + panelHeight - MinecraftClient.getInstance().textRenderer.fontHeight / 2).toFloat(), -1)
-            matrices.pop()
+        RenderUtil.font().textOutline(matrices, (if (ints) current.toInt() else current).toString(), (x + panelWidth - currentWidth).toFloat(), currentY.toFloat(), -1, scale = 0.5F)
+        if (currentY < y + panelHeight - RenderUtil.font().fontHeight()) {
+            RenderUtil.font().textOutline(matrices, (if (ints) min.toInt() else min).toString(), (x + panelWidth - graphMinWidth).toFloat(), (y + panelHeight - RenderUtil.font().fontHeight() / 2).toFloat(), -1, scale = 0.5F)
         }
-        if (currentY >= y + MinecraftClient.getInstance().textRenderer.fontHeight * 1.5) {
-            matrices.push()
-            matrices.translate(x + panelWidth - graphMaxWidth, y + MinecraftClient.getInstance().textRenderer.fontHeight, 0.0)
-            matrices.scale(0.5f, 0.5f, 1.0f)
-            matrices.translate(-(x + panelWidth - graphMaxWidth), -(y + MinecraftClient.getInstance().textRenderer.fontHeight), 0.0)
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, (if (ints) max.toInt() else max).toString(), (x + panelWidth - graphMaxWidth).toFloat(), (y + MinecraftClient.getInstance().textRenderer.fontHeight).toFloat(), -1)
-            matrices.pop()
+        if (currentY >= y + RenderUtil.font().fontHeight() * 1.5) {
+            RenderUtil.font().textOutline(matrices, (if (ints) max.toInt() else max).toString(), (x + panelWidth - graphMaxWidth).toFloat(), (y + RenderUtil.font().fontHeight()).toFloat(), -1, scale = 0.5F)
         }
     }
 
@@ -117,9 +103,9 @@ class PanelGraph(private val graph: Graph, x: Double, y: Double) : Panel(graph.n
 
             ints = values.all { it is Int }
 
-            graphMinWidth = MinecraftClient.getInstance().textRenderer.getWidth((if (ints) min.toInt() else min).toString()) / 2.0
-            graphMaxWidth = MinecraftClient.getInstance().textRenderer.getWidth((if (ints) max.toInt() else max).toString()) / 2.0
-            currentWidth = MinecraftClient.getInstance().textRenderer.getWidth((if (ints) current.toInt() else current).toString()) / 2.0
+            graphMinWidth = RenderUtil.font().getWidth((if (ints) min.toInt() else min).toString()) / 2.0
+            graphMaxWidth = RenderUtil.font().getWidth((if (ints) max.toInt() else max).toString()) / 2.0
+            currentWidth = RenderUtil.font().getWidth((if (ints) current.toInt() else current).toString()) / 2.0
             finalWidth = panelWidth - max(graphMinWidth, max(graphMaxWidth, currentWidth))
         }
     }

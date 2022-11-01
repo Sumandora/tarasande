@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.friends
 
 import com.mojang.authlib.GameProfile
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.TarasandeMain
@@ -22,11 +21,11 @@ class ElementPlayer(val gameProfile: GameProfile, width: Double) : Element(width
     }
     private val textField = ElementValueComponentText(value).also { TarasandeMain.get().screenCheatMenu.managerValueComponent.instances.add(it) }
 
-    private val defaultHeight = MinecraftClient.getInstance().textRenderer.fontHeight * 1.5 + 2.0
+    private val defaultHeight = RenderUtil.font().fontHeight() * 1.5 + 2.0
     private var friendTime = 0L
 
     private val xOffset = 4.0
-    private val yOffset = this.defaultHeight / 2.0 - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0 + 1.0
+    private val yOffset = this.defaultHeight / 2.0 - RenderUtil.font().fontHeight() / 2.0 + 1.0
 
     override fun init() {
         textField.init()
@@ -47,7 +46,7 @@ class ElementPlayer(val gameProfile: GameProfile, width: Double) : Element(width
             matrices?.pop()
         } else {
             textField.setFocused(false)
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, gameProfile.name, xOffset.toFloat(), yOffset.toFloat(), -1)
+            RenderUtil.font().textShadow(matrices, gameProfile.name, xOffset.toFloat(), yOffset.toFloat(), -1)
         }
 
         val toggleAnimation = min((System.currentTimeMillis() - friendTime) / 100.0, 1.0)

@@ -37,6 +37,7 @@ class ESPElementBox : ESPElement("Box") {
 }
 
 class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.LEFT, Orientation.RIGHT, Orientation.BOTTOM)) {
+    //TODO
     private val outlined = ValueBoolean(this, "Outlined", true)
     private val fitBoxWidth = ValueBoolean(this, "Fit box width", false)
     private val scale = ValueNumber(this, "Scale", 0.1, 1.0, 3.0, 0.1)
@@ -67,7 +68,7 @@ class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.
     }
 
     override fun getHeight(entity: Entity, sideWidth: Double): Double {
-        return MinecraftClient.getInstance().textRenderer.fontHeight.toDouble() * min(sideWidth / MinecraftClient.getInstance().textRenderer!!.getWidth(TarasandeMain.get().tagName.getTagName(entity)?.asOrderedText() ?: return 0.0), 3.0) * scale.value
+        return RenderUtil.font().fontHeight().toDouble() * min(sideWidth / MinecraftClient.getInstance().textRenderer!!.getWidth(TarasandeMain.get().tagName.getTagName(entity)?.asOrderedText() ?: return 0.0), 3.0) * scale.value
     }
 }
 

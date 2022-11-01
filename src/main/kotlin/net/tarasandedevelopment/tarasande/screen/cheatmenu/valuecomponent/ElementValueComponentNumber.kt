@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.Formatting
@@ -69,21 +68,12 @@ class ElementValueComponentNumber(value: Value) : ElementValueComponent(value) {
             otherColor = otherColor.darker().darker()
         }
 
-        matrices?.push()
-        matrices?.translate(0.0, getHeight() / 2.0, 0.0)
-        matrices?.scale(0.5F, 0.5F, 1.0F)
-        matrices?.translate(0.0, -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(), white.rgb)
-        matrices?.pop()
+        RenderUtil.font().textShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - RenderUtil.font().fontHeight() / 2.0F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F)
 
         RenderUtil.fillHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width - (1.0 - sliderPos) * 50, getHeight() * 0.75, otherColor.rgb, color.rgb)
         RenderUtil.outlinedHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2.0F, white.rgb, accentColor.rgb)
 
-        matrices?.push()
-        matrices?.translate(width - 50 / 2, getHeight() / 2.0, 0.0)
-        matrices?.scale(0.5F, 0.5F, 1.0F)
-        matrices?.translate(-(width - 50 / 2), -getHeight() / 2.0, 0.0)
-        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices,
+        RenderUtil.font().textShadow(matrices,
             (
                     if (value.value !in valueNumber.min..valueNumber.max)
                         (if (value.isEnabled()) {
@@ -94,11 +84,12 @@ class ElementValueComponentNumber(value: Value) : ElementValueComponent(value) {
                     else
                         ""
                     ) + value.value.toString(),
-            (width - 50 / 2.0F - MinecraftClient.getInstance().textRenderer.getWidth(value.value.toString()) / 2.0F).toFloat(),
-            (getHeight() / 2.0F - MinecraftClient.getInstance().textRenderer.fontHeight / 2.0F).toFloat(),
-            white.rgb
+            (width - 50 / 2.0F).toFloat(),
+            (getHeight() / 2.0F - RenderUtil.font().fontHeight() * 0.25f).toFloat(),
+            white.rgb,
+            centered = true,
+            scale = 0.5F
         )
-        matrices?.pop()
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
@@ -140,5 +131,5 @@ class ElementValueComponentNumber(value: Value) : ElementValueComponent(value) {
         dragInfo.setDragInfo(false, 0.0, 0.0)
     }
 
-    override fun getHeight() = MinecraftClient.getInstance().textRenderer.fontHeight * 2.0
+    override fun getHeight() = RenderUtil.font().fontHeight() * 2.0
 }
