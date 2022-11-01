@@ -48,14 +48,16 @@ class ElementModule(private val module: Module, width: Double) : Element(width) 
             2.0f,
             (this.defaultHeight * 0.25f - RenderUtil.font().fontHeight() * 0.25f).toFloat(),
             white.rgb,
-            scale = 0.75f
+            scale = 0.75f,
+            offset = 0.5F
         )
         RenderUtil.font().textShadow(matrices,
             this.module.description,
             2.0f,
             (this.defaultHeight * 0.75f - RenderUtil.font().fontHeight() * 0.25f).toFloat(),
             Color.lightGray.let { if (module.isEnabled()) it else it.darker().darker() }.rgb,
-            scale = 0.5f
+            scale = 0.5f,
+            offset = 0.5F
         )
 
         val toggleAnimation = min((System.currentTimeMillis() - toggleTime) / 100.0, 1.0)

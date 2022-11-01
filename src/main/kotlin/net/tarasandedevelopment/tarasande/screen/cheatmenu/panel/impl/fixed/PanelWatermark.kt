@@ -22,7 +22,7 @@ class PanelWatermark(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : P
         matrices?.scale(xScale.toFloat(), yScale.toFloat(), 1.0f)
         matrices?.translate(-(x + 1), -(y + titleBarHeight + 1), 0.0)
 
-        RenderUtil.font().textShadow(matrices, text, (x + 1).toFloat(), (y + titleBarHeight + 1).toFloat(), TarasandeMain.get().clientValues.accentColor.getColor().rgb)
+        RenderUtil.font().textShadow(matrices, text, (x + 1).toFloat(), (y + titleBarHeight + 1).toFloat(), TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
         matrices?.pop()
 
         RenderUtil.font().textShadow(matrices, TarasandeMain.get().name, (x + 1).toFloat(), (y + panelHeight - titleBarHeight).toFloat(), TarasandeMain.get().clientValues.accentColor.getColor().rgb)
