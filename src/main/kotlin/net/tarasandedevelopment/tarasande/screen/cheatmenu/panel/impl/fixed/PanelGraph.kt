@@ -56,12 +56,12 @@ class PanelGraph(private val graph: Graph, x: Double, y: Double) : Panel(graph.n
         val height = (panelHeight - titleBarHeight) * normalizedHeight
         val currentY = y + titleBarHeight + height - RenderUtil.font().fontHeight() / 2.0 * normalizedHeight
 
-        RenderUtil.font().textOutline(matrices, (if (ints) current.toInt() else current).toString(), (x + panelWidth - currentWidth).toFloat(), currentY.toFloat(), -1, scale = 0.5F)
+        RenderUtil.font().textShadow(matrices, (if (ints) current.toInt() else current).toString(), (x + panelWidth - currentWidth).toFloat(), currentY.toFloat(), -1, scale = 0.5F, offset = 0.5F)
         if (currentY < y + panelHeight - RenderUtil.font().fontHeight()) {
-            RenderUtil.font().textOutline(matrices, (if (ints) min.toInt() else min).toString(), (x + panelWidth - graphMinWidth).toFloat(), (y + panelHeight - RenderUtil.font().fontHeight() / 2).toFloat(), -1, scale = 0.5F)
+            RenderUtil.font().textShadow(matrices, (if (ints) min.toInt() else min).toString(), (x + panelWidth - graphMinWidth).toFloat(), (y + panelHeight - RenderUtil.font().fontHeight() / 2).toFloat(), -1, scale = 0.5F, offset = 0.5F)
         }
         if (currentY >= y + RenderUtil.font().fontHeight() * 1.5) {
-            RenderUtil.font().textOutline(matrices, (if (ints) max.toInt() else max).toString(), (x + panelWidth - graphMaxWidth).toFloat(), (y + RenderUtil.font().fontHeight()).toFloat(), -1, scale = 0.5F)
+            RenderUtil.font().textShadow(matrices, (if (ints) max.toInt() else max).toString(), (x + panelWidth - graphMaxWidth).toFloat(), (y + RenderUtil.font().fontHeight()).toFloat(), -1, scale = 0.5F, offset = 0.5F)
         }
     }
 
