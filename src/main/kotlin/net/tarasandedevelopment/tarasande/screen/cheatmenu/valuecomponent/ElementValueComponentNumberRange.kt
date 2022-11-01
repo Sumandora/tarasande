@@ -96,7 +96,7 @@ class ElementValueComponentNumberRange(value: Value) : ElementValueComponent(val
             otherColor = otherColor.darker().darker()
         }
 
-        RenderUtil.font().textShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - RenderUtil.font().fontHeight() / 2.0F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F)
+        RenderUtil.font().textShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - RenderUtil.font().fontHeight() / 2.0F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F, offset = 0.5F)
 
         if (minSliderPos == maxSliderPos) {
             RenderUtil.fillHorizontalGradient(matrices, max(width - (1.0 - minSliderPos) * 50 - 1, width - 50), getHeight() * 0.25, min(width - (1.0 - maxSliderPos) * 50 + 1, width), getHeight() * 0.75, otherColor.rgb, color.rgb)
@@ -121,7 +121,8 @@ class ElementValueComponentNumberRange(value: Value) : ElementValueComponent(val
             (getHeight() / 2.0F - RenderUtil.font().fontHeight() * 0.25f).toFloat(),
             white.rgb,
             centered = true,
-            scale = 0.5F
+            scale = 0.5F,
+            offset = 0.5F
         )
     }
 

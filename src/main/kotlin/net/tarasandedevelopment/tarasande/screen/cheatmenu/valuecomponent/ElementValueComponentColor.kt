@@ -71,7 +71,7 @@ class ElementValueComponentColor(value: Value) : ElementValueComponent(value) {
             valueColor.onChange()
         }
 
-        RenderUtil.font().textShadow(matrices, value.name, 0.0f, ((getPickerHeight() - 5) / 2.0f - RenderUtil.font().fontHeight() / 2.0f).toFloat(), white.rgb, scale = 0.5f)
+        RenderUtil.font().textShadow(matrices, value.name, 0.0f, ((getPickerHeight() - 5) / 2.0f - RenderUtil.font().fontHeight() / 2.0f).toFloat(), white.rgb, scale = 0.5f, offset = 0.5F)
 
         val matrix4f = matrices?.peek()?.positionMatrix!!
         val bufferBuilder = Tessellator.getInstance().buffer
@@ -96,7 +96,8 @@ class ElementValueComponentColor(value: Value) : ElementValueComponent(value) {
                     TarasandeMain.get().clientValues.accentColor.getColor()
                 else
                     TarasandeMain.get().clientValues.accentColor.getColor().darker().darker()).rgb,
-                scale = 0.5F)
+                scale = 0.5F,
+                offset = 0.5F)
         }
 
         outlinedFill(matrices, x1, y1, x2, y2, 2.0f, unblockedWhite.rgb)

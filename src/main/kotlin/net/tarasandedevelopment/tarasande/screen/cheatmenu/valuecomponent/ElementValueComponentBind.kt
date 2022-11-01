@@ -21,13 +21,13 @@ class ElementValueComponentBind(value: Value) : ElementValueComponent(value) {
 
         val white = Color.white.let { if (valueBind.isEnabled()) it else it.darker().darker() }
 
-        RenderUtil.font().textShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - RenderUtil.font().fontHeight() / 2.0F).toFloat(), white.rgb, scale = 0.5F)
+        RenderUtil.font().textShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - RenderUtil.font().fontHeight() / 2.0F).toFloat(), white.rgb, scale = 0.5F, offset = 0.5F)
 
         val name = getName(valueBind.type, valueBind.button)
         val textWidth = RenderUtil.font().getWidth(name)
 
         RenderUtil.fill(matrices, width - textWidth / 2, getHeight() * 0.25, width, getHeight() * 0.75, Int.MIN_VALUE)
-        RenderUtil.font().textShadow(matrices, name, (width - textWidth / 2).toFloat(), (getHeight() * 0.25f).toFloat(), white.rgb, scale = 0.5F)
+        RenderUtil.font().textShadow(matrices, name, (width - textWidth / 2).toFloat(), (getHeight() * 0.25f).toFloat(), white.rgb, scale = 0.5F, offset = 0.5F)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

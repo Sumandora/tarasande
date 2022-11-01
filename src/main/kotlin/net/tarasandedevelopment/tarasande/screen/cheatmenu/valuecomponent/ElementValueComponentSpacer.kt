@@ -37,7 +37,8 @@ class ElementValueComponentSpacer(value: Value) : ElementValueComponent(value) {
                 0.0f,
                 (getHeight() / 2.0F + (index - (lines.size - 1) / 2.0 + 0.5) * (RenderUtil.font().fontHeight() / 2.0f) - RenderUtil.font().fontHeight() / 2.0F).toFloat(),
                 -1,
-                scale = 0.5F
+                scale = 0.5F,
+                offset = 0.5F
             )
         }
     }

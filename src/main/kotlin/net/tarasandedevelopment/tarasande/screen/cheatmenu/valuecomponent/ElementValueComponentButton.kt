@@ -36,7 +36,8 @@ class ElementValueComponentButton(value: Value) : ElementValueComponent(value) {
                     -1
             else
                 Color.white.darker().darker().rgb,
-            scale = 0.5F)
+            scale = 0.5F,
+            offset = 0.5F)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
