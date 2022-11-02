@@ -21,7 +21,8 @@ public class MixinFlowerPotBlock {
 
     @Inject(method = "onUse", at = @At(value = "FIELD", target = "Lnet/minecraft/block/FlowerPotBlock;content:Lnet/minecraft/block/Block;", ordinal = 0), cancellable = true)
     private void injectOnUse(CallbackInfoReturnable<ActionResult> ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_10) && content != Blocks.AIR)
+        if (VersionList.isOlderOrEqualTo(VersionList.R1_10) && content != Blocks.AIR) {
             ci.setReturnValue(ActionResult.CONSUME);
+        }
     }
 }
