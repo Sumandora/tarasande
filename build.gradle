@@ -53,9 +53,6 @@ var viaLibs = [
 		// ViaBackwards -> https://github.com/ViaVersion/ViaBackwards
 		"com.viaversion:viabackwards-common:4.5.0-22w44a-SNAPSHOT",
 
-		// ViaRewind -> https://github.com/ViaVersion/ViaRewind
-		"com.viaversion:viarewind-core:2.0.3-SNAPSHOT",
-
 		// ViaProtocolHack -> https://github.com/RejectedVia/ViaProtocolHack
 		"com.github.RejectedVia:ViaProtocolHack:22w44a"
 ]
