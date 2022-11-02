@@ -29,20 +29,32 @@ repositories {
 var libs = [
 		// Proxy -> https://mvnrepository.com/artifact/io.netty/netty-handler-proxy
 		"io.netty:netty-handler-proxy:4.1.82.Final",
-		// Snake YML -> https://github.com/snakeyaml/snakeyaml
-		"org.yaml:snakeyaml:1.29",
+
 		// BungeeCord Chat -> https://mvnrepository.com/artifact/net.md-5/bungeecord-api
 		"net.md-5:bungeecord-api:1.16-R0.4",
+
 		// Packet Library -> https://github.com/FlorianMichael/PacketMinecraft
-		"com.github.FlorianMichael:PacketMinecraft:f594e5a6c0",
+		"com.github.FlorianMichael:PacketMinecraft:main-SNAPSHOT",
+
 		// HAProxy Protocol -> https://mvnrepository.com/artifact/io.netty/netty-codec-haproxy
 		"io.netty:netty-codec-haproxy:4.1.82.Final",
-		// Via Protocol Hack -> https://github.com/RejectedVia/ViaProtocolHack
-		"com.github.RejectedVia:ViaProtocolHack:7092a1b190",
+
 		// NoteBot -> https://github.com/RaphiMC/NoteBlockLib
 		"com.github.RaphiMC:NoteBlockLib:6f2b0a5c73",
+
 		// Easing Functions -> https://github.com/FlorianMichael/eZEasing
-		"com.github.FlorianMichael:eZEasing:846b9932ae"
+		"com.github.FlorianMichael:eZEasing:main-SNAPSHOT"
+]
+
+var viaLibs = [
+		// ViaVersion -> https://github.com/ViaVersion/ViaVersion
+		"com.viaversion:viaversion:4.5.0-22w44a-SNAPSHOT",
+
+		// ViaBackwards -> https://github.com/ViaVersion/ViaBackwards
+		"com.viaversion:viabackwards-common:4.5.0-22w44a-SNAPSHOT",
+
+		// ViaProtocolHack -> https://github.com/RejectedVia/ViaProtocolHack
+		"com.github.RejectedVia:ViaProtocolHack:22w44a"
 ]
 
 loom {
@@ -60,6 +72,10 @@ dependencies {
 
 	for (final def lib in libs) {
 		implementation(lib)
+	}
+
+	for (final def via in viaLibs) {
+		implementation(via)
 	}
 }
 
