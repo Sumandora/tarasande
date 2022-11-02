@@ -60,17 +60,19 @@ public class MetadataRewriter {
 					case Byte -> {
 						if (metaIndex.getOldType() == MetaType_1_7_6_10.Int) {
 							entry.setValue(((Integer) value).byteValue());
-						}
-						if (metaIndex.getOldType() == MetaType_1_7_6_10.Byte) {
-							entry.setValue(value);
-						}
-						if (metaIndex == MetaIndex1_8to1_7_6_10.HUMAN_SKIN_FLAGS) {
-							byte flags = (byte) value;
-							boolean cape = flags == 2;
-							flags = (byte) (cape ? 127 : 125);
-							entry.setValue(flags);
-						}
-					}
+                        }
+                        if (metaIndex.getOldType() == MetaType_1_7_6_10.Byte) {
+                            entry.setValue(value);
+                        }
+                        if (metaIndex == MetaIndex1_8to1_7_6_10.HUMAN_SKIN_FLAGS) {
+                            byte flags = (byte) value;
+                            boolean cape = flags == 2;
+                            flags = (byte) (cape ? 127 : 125);
+                            entry.setValue(flags);
+                        }
+                        if (metaIndex == MetaIndex1_8to1_7_6_10.ENTITY_AGEABLE_AGE && metaIndex.getOldType() == MetaType_1_7_6_10.Int)
+                            entry.setValue((int) value < 0 ? -1 : value);
+                    }
 					case Slot -> {
 						entry.setValue(ItemRewriter.toClient((Item) value));
 					}

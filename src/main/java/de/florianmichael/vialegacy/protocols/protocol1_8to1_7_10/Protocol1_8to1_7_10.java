@@ -15,7 +15,6 @@
 package de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
-import com.viaversion.viaversion.api.minecraft.BlockChangeRecord;
 import com.viaversion.viaversion.api.minecraft.BlockChangeRecord1_8;
 import com.viaversion.viaversion.api.minecraft.Position;
 import com.viaversion.viaversion.api.minecraft.entities.Entity1_10Types;
@@ -61,7 +60,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.IntStream;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -307,25 +305,22 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final int size = pw.read(Type.SHORT);
 
                     pw.read(Type.INT);
-                    final short[] blocks = new short[size];
-                    final short[] positions = new short[size];
+                    final BlockChangeRecord1_8[] records = new BlockChangeRecord1_8[size];
 
                     for (int i = 0; i < size; i++) {
-                        positions[i] = pw.read(Type.SHORT);
-                        blocks[i] = pw.read(Type.SHORT);
+                        final short pos = pw.read(Type.SHORT);
+
+                        records[i] = new BlockChangeRecord1_8(
+                                pos >>> 12 & 0xF,
+                                pos & 0xFF,
+                                pos >>> 8 & 0xF,
+                                pw.read(Type.SHORT)
+                        );
                     }
 
                     pw.write(Type.INT, chunkX);
                     pw.write(Type.INT, chunkZ);
-                    pw.write(Type.BLOCK_CHANGE_RECORD_ARRAY, IntStream.of(0, size).mapToObj(value -> {
-                        final short encodedPos = positions[value];
-
-                        final int x = encodedPos >>> 12 & 0xF;
-                        final int y = encodedPos & 0xFF;
-                        final int z = encodedPos >>> 8 & 0xF;
-
-                        return new BlockChangeRecord1_8(x, y, z, blocks[value]);
-                    }).toList().toArray(BlockChangeRecord[]::new));
+                    pw.write(Type.BLOCK_CHANGE_RECORD_ARRAY, records);
                 });
             }
         });
@@ -369,7 +364,8 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             public void registerMap() {
                 handler(packetWrapper -> {
                     packetWrapper.passthrough(Type.VAR_INT); // Entity ID
-                    final String uuid = packetWrapper.passthrough(Type.STRING);
+                    final String uuid = packetWrapper.read(Type.STRING);
+                    packetWrapper.write(Type.UUID, UUID.fromString(uuid));
 
                     final String name = ChatColorUtil.stripColor(packetWrapper.read(Type.STRING));
                     final int dataCount = packetWrapper.read(Type.VAR_INT);
@@ -561,12 +557,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
 
                 handler((pw) -> {
                     final int entityId = pw.get(Type.VAR_INT, 0);
-                    final double y = pw.get(Type.INT, 1) / 32.0;
-
-                    boolean isGround = !(y < 0.0D);
-
-                    groundTracker(pw.user()).track(entityId, isGround);
-                    pw.write(Type.BOOLEAN, isGround);
+                    pw.write(Type.BOOLEAN, groundTracker(pw.user()).isGround(entityId));
                 }); // On Ground
             }
         });
@@ -693,8 +684,27 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
 
                     final boolean disableRelativeVolume = pw.read(Type.BOOLEAN);
 
-                    if (effectID == 2006) pw.cancel();
-                    else {
+                    if (effectID == 2006) { // Falling particles
+                        double d0 = Math.min(0.2F + data / 15.0F, 10.0F);
+
+                        if (d0 > 2.5D) {
+                            d0 = 2.5D;
+                        }
+
+                        int i = (int) (150.0D * d0);
+                        pw.setPacketType(ClientboundPackets1_7_10.SPAWN_PARTICLE);
+                        pw.write(Type.INT, ParticleRegistry.BLOCK_DUST.ordinal()); // BLOCK_DUST
+                        pw.write(Type.BOOLEAN, false); // Long Distance
+                        pw.write(Type.FLOAT, (float) x + 0.5f); // X
+                        pw.write(Type.FLOAT, (float) y + 1.8f / 2f + 0.2f); // Y
+                        pw.write(Type.FLOAT, (float) z + 0.5f); // Z
+                        pw.write(Type.FLOAT, 0f); // Offset X
+                        pw.write(Type.FLOAT, 0f); // Offset Y
+                        pw.write(Type.FLOAT, 0f); // Offset Z
+                        pw.write(Type.FLOAT, 0.15000000596046448f); // Speed
+                        pw.write(Type.INT, i); // Number of particles
+                        pw.write(Type.VAR_INT, 1); // force stone particles TODO: Track the world and set a proper id here
+                    } else {
                         pw.write(Type.INT, effectID);
                         pw.write(Type.POSITION, new Position(x, y, z));
                         pw.write(Type.INT, data);
@@ -786,10 +796,19 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 handler(pw -> pw.set(Type.ITEM, 0, ItemRewriter.toClient(pw.get(Type.ITEM, 0))));
                 handler(pw -> {
                     short windowId = pw.get(Type.UNSIGNED_BYTE, 0);
-                    if (windowId != 0) return;
                     short slot = pw.get(Type.SHORT, 0);
-                    if (slot < 5 || slot > 8) return;
+                    if (windowId == 0)
+                        if (slot < 5 || slot > 8)
+                            return;
                     Item item = pw.get(Type.ITEM, 0);
+
+                    if (item == null)
+                        return;
+
+                    if (windowTracker(pw.user()).get(windowId) == 4) { // enchantment table
+                        if (slot >= 1)
+                            pw.set(Type.SHORT, 0, ++slot);
+                    }
                 });
             }
         });
@@ -805,9 +824,12 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     if (windowType == 4) {
                         Item[] old = items;
                         items = new Item[old.length + 1];
-                        items[0] = old[0];
-                        System.arraycopy(old, 1, items, 2, old.length - 1);
-                        items[1] = new DataItem((short) 351, (byte) 3, (short) 4, null);
+                        items[1] = new DataItem((short) 351, (byte) 3, (short) 4, null); // lapis
+
+                        for (int oldIndex = 0; oldIndex < old.length; oldIndex++) {
+                            int newIndex = oldIndex > 0 ? oldIndex + 1 : oldIndex;
+                            items[newIndex] = old[oldIndex];
+                        }
                     }
                     packetWrapper.write(Type.ITEM_ARRAY, items);  // Items
                 });
@@ -1130,7 +1152,9 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     byte yaw = packetWrapper.get(Type.BYTE, 2);
                     int data = packetWrapper.get(Type.INT, 3);
 
-                    if (type == 71) {
+                    if (type == 2) { // Item
+                        y -= 4;
+                    } else if (type == 71) { // item frame
                         switch (data) {
                             case 0 -> {
                                 z += 32;
@@ -1149,9 +1173,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                                 yaw = (byte) 192;
                             }
                         }
-                    }
-
-                    if (type == 70) {
+                    } else if (type == 70) { // falling object
                         int id = data;
                         int metadata = data >> 16;
                         data = id | metadata << 12;
@@ -1263,6 +1285,70 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         packetWrapper.write(Type.UUID, ViaLegacy.getProvider().profile_1_7().getUuid());
                         packetWrapper.write(Type.VAR_INT, (int) value);
                         packetWrapper.send(Protocol1_8to1_7_10.class);
+                    }
+                });
+            }
+        });
+
+        this.registerClientbound(ClientboundPackets1_7_10.SPAWN_PAINTING, new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                map(Type.VAR_INT);
+                map(Type.STRING);
+                handler(pw -> {
+                    int x = pw.read(Type.INT);
+                    int y = pw.read(Type.INT);
+                    int z = pw.read(Type.INT);
+
+                    int direction = pw.read(Type.INT);
+
+                    switch (direction) {
+                        case 0:
+                            z += 1;
+                            break;
+                        case 1:
+                            x -= 1;
+                            break;
+                        case 2:
+                            z -= 1;
+                            break;
+                        case 3:
+                            x += 1;
+                            break;
+                    }
+
+                    pw.write(Type.POSITION, new Position(x, y, z));
+                    pw.write(Type.BYTE, (byte) direction);
+                });
+            }
+        });
+
+        this.registerClientbound(ClientboundPackets1_7_10.WINDOW_PROPERTY, new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                map(Type.UNSIGNED_BYTE);
+                map(Type.SHORT);
+                map(Type.SHORT);
+                handler(pw -> {
+                    int property = pw.get(Type.SHORT, 0);
+                    switch (property) {
+                        case 0: {
+                            pw.set(Type.SHORT, 0, (short) 2);
+                            PacketWrapper newPacket = PacketWrapper.create(ClientboundPackets1_7_10.WINDOW_PROPERTY, pw.user());
+                            newPacket.write(Type.UNSIGNED_BYTE, pw.get(Type.UNSIGNED_BYTE, 0));
+                            newPacket.write(Type.SHORT, (short) 3);
+                            newPacket.write(Type.SHORT, (short) 200);
+                            newPacket.send(Protocol1_8to1_7_10.class);
+                            break;
+                        }
+                        case 1: {
+                            pw.set(Type.SHORT, 0, (short) 0);
+                            break;
+                        }
+                        case 2: {
+                            pw.set(Type.SHORT, 0, (short) 1);
+                            break;
+                        }
                     }
                 });
             }
@@ -1440,7 +1526,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     short slot = packetWrapper.read(Type.SHORT);
 
                     if (windowType == 4) {
-                        if (slot == 1) packetWrapper.cancel();
+                        if (slot == 1) packetWrapper.cancel(); // lapis
                         else if (slot > 1) slot -= 1;
                     }
                     packetWrapper.write(Type.SHORT, slot); // Slot
