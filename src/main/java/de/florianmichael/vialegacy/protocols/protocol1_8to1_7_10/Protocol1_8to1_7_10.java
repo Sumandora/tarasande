@@ -450,7 +450,13 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             @Override
             public void registerMap() {
                 intToVarInt(); // Entity ID
-                xyzToPosition(); // Position
+                handler(pw -> {
+                    pw.write(Type.POSITION, new Position(
+                            pw.read(Type.INT), // X
+                            (int) pw.read(Type.BYTE), // Y
+                            pw.read(Type.INT) // Z
+                    ));
+                });
             }
         });
 
