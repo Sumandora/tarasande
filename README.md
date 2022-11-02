@@ -76,8 +76,7 @@
 - 1.6.4: Crafting Table CraftResult was clientside back in the time
 - 1.6.4: Reciperemapper base with all versions
 - 1.7.5 (?): Minecart + Trading
-- 1.7.5 (?): Enchantment table duping
-- 1.7 (?): Redstone updating
+- 1.7: OnGround State from Clientbound Position Packet to Serverbound
 - 1.7: Book reading
 - 1.7.5 (?): Bed flag
 - 1.6.4 (?): Ender pearl
