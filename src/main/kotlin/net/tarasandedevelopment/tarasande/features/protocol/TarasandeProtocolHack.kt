@@ -14,6 +14,7 @@ import de.florianmichael.vialegacy.api.via.config.ViaLegacyConfigImpl
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
 import de.florianmichael.viaprotocolhack.INativeProvider
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
+import io.netty.channel.DefaultEventLoop
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.ModContainer
 import net.fabricmc.loader.api.metadata.Person
@@ -27,6 +28,8 @@ import net.tarasandedevelopment.tarasande.features.protocol.provider.FabricMovem
 import net.tarasandedevelopment.tarasande.features.protocol.provider.FabricVersionProvider
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import java.io.File
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.ThreadFactory
 import java.util.logging.Logger
 
 class TarasandeProtocolHack : INativeProvider {
@@ -87,6 +90,8 @@ class TarasandeProtocolHack : INativeProvider {
 
         return platformSpecific
     }
+
+    override fun eventLoop(threadFactory: ThreadFactory?, executorService: ExecutorService?) = DefaultEventLoop(executorService)
 
     override fun createProviders(providers: ViaProviders?) {
         providers?.register(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
