@@ -16,7 +16,6 @@ public class ItemType_1_7_6_10 extends Type<Item> {
 
 	@Override
 	public Item read(ByteBuf buffer) throws Exception {
-		int readerIndex = buffer.readerIndex();
 		short id = buffer.readShort();
 		if (id < 0) {
 			return null;

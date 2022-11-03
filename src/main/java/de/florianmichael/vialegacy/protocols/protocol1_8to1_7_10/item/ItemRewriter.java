@@ -2,7 +2,7 @@ package de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.item;
 
 import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.*;
-import de.florianmichael.vialegacy.api.minecraft_util.ChatUtil;
+import com.viaversion.viaversion.protocols.protocol1_13to1_12_2.ChatRewriter;
 import de.florianmichael.vialegacy.api.minecraft_util.Enchantments;
 
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public class ItemRewriter {
 				StringTag page = pages.get(i);
 				String value = page.getValue();
 				oldPages.add(new StringTag(value));
-				value = ChatUtil.jsonToLegacy(value);
+				value = ChatRewriter.jsonToLegacyText(value);
 				page.setValue(value);
 			}
 		}

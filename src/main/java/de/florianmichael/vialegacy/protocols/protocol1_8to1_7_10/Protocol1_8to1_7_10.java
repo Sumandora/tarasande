@@ -14,6 +14,7 @@
 
 package de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10;
 
+import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.BlockChangeRecord1_8;
 import com.viaversion.viaversion.api.minecraft.Position;
@@ -38,9 +39,9 @@ import com.viaversion.viaversion.protocols.base.ClientboundLoginPackets;
 import com.viaversion.viaversion.protocols.base.ServerboundLoginPackets;
 import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
 import com.viaversion.viaversion.protocols.protocol1_8.ServerboundPackets1_8;
+import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider;
 import com.viaversion.viaversion.util.ChatColorUtil;
 import de.florianmichael.vialegacy.ViaLegacy;
-import de.florianmichael.vialegacy.api.minecraft_util.ChatUtil;
 import de.florianmichael.vialegacy.api.profile.GameProfile;
 import de.florianmichael.vialegacy.api.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.api.type._1_7_6_10.CustomStringType_1_7_6_10;
@@ -738,6 +739,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     pw.passthrough(Type.FLOAT);
                     pw.passthrough(Type.FLOAT);
                     pw.passthrough(Type.FLOAT);
+                    pw.passthrough(Type.FLOAT);
 
                     pw.passthrough(Type.INT);
 
@@ -1339,28 +1341,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.UNSIGNED_BYTE);
                 map(Type.SHORT);
                 map(Type.SHORT);
-                handler(pw -> {
-                    int property = pw.get(Type.SHORT, 0);
-                    switch (property) {
-                        case 0: {
-                            pw.set(Type.SHORT, 0, (short) 2);
-                            PacketWrapper newPacket = PacketWrapper.create(ClientboundPackets1_7_10.WINDOW_PROPERTY, pw.user());
-                            newPacket.write(Type.UNSIGNED_BYTE, pw.get(Type.UNSIGNED_BYTE, 0));
-                            newPacket.write(Type.SHORT, (short) 3);
-                            newPacket.write(Type.SHORT, (short) 200);
-                            newPacket.send(Protocol1_8to1_7_10.class);
-                            break;
-                        }
-                        case 1: {
-                            pw.set(Type.SHORT, 0, (short) 0);
-                            break;
-                        }
-                        case 2: {
-                            pw.set(Type.SHORT, 0, (short) 1);
-                            break;
-                        }
-                    }
-                });
             }
         });
 
@@ -1455,32 +1435,32 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         this.registerServerbound(ServerboundPackets1_8.PLUGIN_MESSAGE, new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(Type.STRING);
                 handler((pw) -> {
-                    final String channel = pw.get(Type.STRING, 0);
+                    pw.cancel();
+                    final String channel = pw.read(Type.STRING);
+                    System.out.println(channel);
+                    final ByteBuf buf = Unpooled.buffer();
                     switch (channel) {
                         case "MC|ItemName" -> {
                             final byte[] name = pw.read(Type.STRING).getBytes(StandardCharsets.UTF_8);
-                            pw.write(Type.REMAINING_BYTES, name);
+                            Type.REMAINING_BYTES.write(buf, name);
                         }
                         case "MC|BEdit", "MC|BSign" -> {
                             final Item item = pw.read(Type.ITEM);
                             final CompoundTag tag = item.tag();
+                            System.out.println(tag);
                             if (tag != null && tag.contains("pages")) {
                                 final ListTag pages = tag.get("pages");
                                 if (pages != null) {
                                     for (int i = 0; i < pages.size(); i++) {
                                         final StringTag page = pages.get(i);
-                                        page.setValue(ChatUtil.jsonToLegacy(page.getValue()));
+                                        page.setValue(page.getValue());
                                     }
                                 }
                             }
-                            pw.write(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, item);
+                            TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM.write(buf, item);
                         }
                     }
-                    pw.cancel();
-                    final ByteBuf buf = Unpooled.buffer();
-                    pw.writeToBuffer(buf);
                     final PacketWrapper wrapper = PacketWrapper.create(ServerboundPackets1_8.PLUGIN_MESSAGE, buf, pw.user());
                     wrapper.write(Type.STRING, channel);
                     wrapper.write(Type.SHORT, (short) buf.readableBytes());
@@ -1553,6 +1533,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             public void registerMap() {
                 map(Type.SHORT);  //Slot
                 map(Type.ITEM, TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM);  //Item
+                handler(pw -> pw.set(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0, ItemRewriter.toServer(pw.get(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0))));
             }
         });
 
@@ -1573,6 +1554,8 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                             if (textComponent != null)
                                 text = textComponent.getAsString();
                         }
+                        if (text.length() > 15)
+                            text = text.substring(0, 15);
                         packetWrapper.write(Type.STRING, text);
                     }
                 });
@@ -1583,6 +1566,19 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             @Override
             public void registerMap() {
                 handler(packetWrapper -> {
+                    {
+                        //TODO: Implement a provider which does provides the item translated down to a specified version rather than the entire pipeline
+                        HandItemProvider handItemProvider = Via.getManager().getProviders().get(HandItemProvider.class);
+                        Item item = handItemProvider.getHandItem(packetWrapper.user());
+                        System.out.println(item);
+                        if (item.identifier() == 387) { // Book
+                            PacketWrapper pluginMessage = PacketWrapper.create(ClientboundPackets1_8.PLUGIN_MESSAGE, packetWrapper.user());
+                            pluginMessage.write(Type.STRING, "MC|BOpen");
+                            pluginMessage.write(Type.REMAINING_BYTES, new byte[0]);
+                            pluginMessage.send(Protocol1_8to1_7_10.class);
+                        }
+                    }
+
                     int x;
                     int y;
                     int z;

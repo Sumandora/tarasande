@@ -1,106 +1,55 @@
 package net.tarasandedevelopment.tarasande.features.protocol.util
 
 import com.viaversion.viaversion.api.Via
-import com.viaversion.viaversion.api.minecraft.item.DataItem
 import com.viaversion.viaversion.api.minecraft.item.Item
-import com.viaversion.viaversion.libs.opennbt.tag.builtin.*
-import com.viaversion.viaversion.protocols.protocol1_10to1_9_3.Protocol1_10To1_9_3_4
-import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.item.ItemRewriter
-import de.florianmichael.viaprotocolhack.util.VersionList
+import com.viaversion.viaversion.api.protocol.packet.Direction
+import com.viaversion.viaversion.api.protocol.packet.State
+import com.viaversion.viaversion.connection.UserConnectionImpl
+import com.viaversion.viaversion.exception.CancelException
+import com.viaversion.viaversion.protocol.packet.PacketWrapperImpl
+import io.netty.buffer.Unpooled
 import net.minecraft.SharedConstants
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.*
-import net.minecraft.util.registry.Registry
-import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IProtocolManagerImpl_Protocol
+import net.minecraft.network.NetworkSide
+import net.minecraft.network.NetworkState
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket
+import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IPacketWrapperImpl_Protocol
 
 object MinecraftViaItemRewriter {
 
-    private val itemMappings = ArrayList<Pair<Int, ViaItemRewriterImpl>>()
+    private val userConnection = UserConnectionImpl(null, true)
 
-    fun minecraftToViaItem(stack: ItemStack) = minecraftToViaItem(stack, SharedConstants.getProtocolVersion())
+    fun minecraftToViaItem(stack: ItemStack) = minecraftToViaItem(stack, TarasandeMain.get().protocolHack.targetVersion())
 
-    fun minecraftToViaItem(stack: ItemStack, targetVersion: Int): DataItem? {
-        if (itemMappings.isEmpty()) {
-            itemMappings.addAll(this.allItemMappings()) // Generates the remapper for the first time
-        }
-        if (stack == ItemStack.EMPTY) return null
+    fun minecraftToViaItem(stack: ItemStack, targetVersion: Int): Item? {
+        // Generate protocol path
+        val path = Via.getManager().protocolManager.getProtocolPath(SharedConstants.getProtocolVersion(), targetVersion) ?: return null
 
-        var via = DataItem()
-        via.setIdentifier(Registry.ITEM.getRawId(stack.item))
-        via.setAmount(stack.count)
-        via.setData(stack.damage.toShort())
+        // Create a fake creative inventory action
+        val packet = CreativeInventoryActionC2SPacket(36, stack)
+        val buf = PacketByteBuf(Unpooled.buffer())
 
-        if (stack.nbt != null) {
-            val subNbt = CompoundTag()
+        packet.write(buf)
 
-            stack.nbt!!.keys.forEach { subNbt.put(it, minecraftToViaNBT(stack.nbt!!.get(it)!!)) }
-            via.setTag(subNbt)
-        }
+        val id = NetworkState.PLAY.getPacketId(NetworkSide.SERVERBOUND, packet) ?: return null
 
-        for (itemMapping in itemMappings) {
-            if (itemMapping.first < targetVersion) continue
-            via = itemMapping.second.remapItem(via) as DataItem
-        }
+        val wrapper = PacketWrapperImpl(id, buf, userConnection)
 
-        return via
-    }
-
-    private fun allItemMappings(): List<Pair<Int, ViaItemRewriterImpl>> {
-        val list = ArrayList<Pair<Int, ViaItemRewriterImpl>>()
-        (Via.getManager().protocolManager as IProtocolManagerImpl_Protocol).protocolhack_getProtocols().filter { p -> p.second.itemRewriter != null }.forEach {
-            list.add(Pair(it.first, object : ViaItemRewriterImpl {
-                override fun remapItem(dataItem: Item): Item? {
-                    return it.second.itemRewriter!!.handleItemToServer(dataItem)
-                }
-            }))
-        }
-        list.add(Pair(VersionList.R1_9_4.version, object : ViaItemRewriterImpl {
-            override fun remapItem(dataItem: Item): Item? {
-                return Via.getManager().protocolManager.getProtocol(Protocol1_10To1_9_3_4::class.java)!!.itemRewriter!!.handleItemToServer(dataItem)
+        try {
+            // Transform all packets according to UserConnectionImpl#transform
+            path.forEach {
+                it.protocol().transform(Direction.SERVERBOUND, State.PLAY, wrapper)
+                wrapper.resetReader()
             }
-        }))
-        list.add(Pair(VersionList.R1_8.version, object : ViaItemRewriterImpl {
-            override fun remapItem(dataItem: Item): Item {
-                com.viaversion.viaversion.protocols.protocol1_9to1_8.ItemRewriter.toServer(dataItem)
-                return dataItem
-            }
-        }))
-        list.add(Pair(LegacyProtocolVersion.R1_7_10.version, object : ViaItemRewriterImpl {
-            override fun remapItem(dataItem: Item): Item {
-                ItemRewriter.toServer(dataItem)
-                return dataItem
-            }
-        }))
-        return list
-    }
-
-    interface ViaItemRewriterImpl {
-        fun remapItem(dataItem: Item): Item?
-    }
-
-    private fun minecraftToViaNBT(minecraft: NbtElement): Tag {
-        when (minecraft) {
-            is NbtByte -> { return ByteTag(minecraft.byteValue()) }
-            is NbtDouble -> { return DoubleTag(minecraft.doubleValue()) }
-            is NbtInt -> { return IntTag(minecraft.intValue()) }
-            is NbtLong -> { return LongTag(minecraft.longValue()) }
-            is NbtShort -> { return ShortTag(minecraft.shortValue()) }
-            is NbtFloat -> { return FloatTag(minecraft.floatValue()) }
-            is NbtString -> { return StringTag(minecraft.asString()) }
-            is NbtIntArray -> { return IntArrayTag(minecraft.intArray) }
-            is NbtLongArray -> { return LongArrayTag(minecraft.longArray) }
-            is NbtList -> {
-                val tag = ListTag()
-                minecraft.forEach { tag.add(minecraftToViaNBT(it)) }
-                return tag
-            }
-            is NbtCompound -> {
-                val tag = CompoundTag()
-                minecraft.keys.forEach { tag.put(it, minecraftToViaNBT(minecraft.get(it)!!)) }
-                return tag
-            }
+        } catch (ignored: CancelException) {
+            IllegalStateException(ignored).printStackTrace()
+            // The item no longer exists?
+            return null
         }
-        return CompoundTag()
+
+        // Hack: get the first Item from the packet wrapper, sadly there is no method for that
+        return (wrapper as IPacketWrapperImpl_Protocol).protocolhack_getReadableObjects().first { Item::class.java.equals(it.key()!!.outputClass) }.value() as Item?
     }
 }

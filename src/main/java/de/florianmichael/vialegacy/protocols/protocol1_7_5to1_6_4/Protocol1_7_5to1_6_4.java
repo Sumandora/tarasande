@@ -234,10 +234,8 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 map(Type.STRING, TypeRegistry_1_6_4.STRING);
-                handler(pw -> {
-                    pw.cancel();
-                    System.out.println(Arrays.toString(pw.read(Type.REMAINING_BYTES)));
-                });
+                map(Type.SHORT);
+                map(Type.REMAINING_BYTES);
             }
         });
 
