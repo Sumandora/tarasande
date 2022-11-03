@@ -277,7 +277,6 @@ public class Protocol1_3_2to1_2_5 extends EnZaProtocol<ClientboundPackets1_2_5, 
 			}
 		});
 
-
 		this.registerClientbound(ClientboundPackets1_2_5.ENTITY_EQUIPMENT, new PacketRemapper() {
 			@Override
 			public void registerMap() {
