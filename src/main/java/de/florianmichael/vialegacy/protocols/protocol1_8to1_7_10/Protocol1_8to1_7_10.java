@@ -1540,6 +1540,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             public void registerMap() {
                 map(Type.SHORT);  //Slot
                 map(Type.ITEM, TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM);  //Item
+                handler(pw -> pw.set(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0, ItemRewriter.toServer(pw.get(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0))));
             }
         });
 
