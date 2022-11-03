@@ -29,6 +29,7 @@ import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.api.type.types.CustomByteType;
 import com.viaversion.viaversion.api.type.types.VoidType;
 import com.viaversion.viaversion.api.type.types.version.Types1_8;
+import com.viaversion.viaversion.libs.gson.JsonElement;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.ListTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.StringTag;
@@ -38,7 +39,6 @@ import com.viaversion.viaversion.protocols.base.ServerboundLoginPackets;
 import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
 import com.viaversion.viaversion.protocols.protocol1_8.ServerboundPackets1_8;
 import com.viaversion.viaversion.util.ChatColorUtil;
-import com.viaversion.viaversion.util.GsonUtil;
 import de.florianmichael.vialegacy.ViaLegacy;
 import de.florianmichael.vialegacy.api.minecraft_util.ChatUtil;
 import de.florianmichael.vialegacy.api.profile.GameProfile;
@@ -470,7 +470,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     pw.clearInputBuffer();
 
                     if (animation == 104 || animation == 105) {
-                        pw.setId(ClientboundPackets1_7_10.ENTITY_METADATA);
+                        pw.setPacketType(ClientboundPackets1_7_10.ENTITY_METADATA);
 
                         pw.write(Type.VAR_INT, entityID);
                         pw.write(Type.UNSIGNED_BYTE, (short) 0); // Index
@@ -947,7 +947,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     TeamsTracker teamsTracker = teamsTracker(packetWrapper.user());
 
                     if (mode == 1) {
-                        teamsTracker.removeTeamsEntryIf(e -> e.getKey().uniqueName == uniqueName);
+                        teamsTracker.removeTeamsEntryIf(e -> Objects.equals(e.getKey().uniqueName, uniqueName));
                     } else {
                         TeamsTracker.TeamsEntry teamsEntry = null;
                         if (mode == 0) {
@@ -1035,7 +1035,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         case "MC|RPack" -> {
                             final byte[] data = packetWrapper.read(TypeRegistry1_7_6_10.BYTEARRAY);
                             packetWrapper.clearPacket();
-                            packetWrapper.setId(ClientboundPackets1_8.RESOURCE_PACK);
+                            packetWrapper.setPacketType(ClientboundPackets1_8.RESOURCE_PACK);
                             packetWrapper.write(Type.STRING, new String(data)); // url
                             packetWrapper.write(Type.STRING, ""); // hash
                         }
@@ -1088,7 +1088,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         packetWrapper.write(Type.VAR_INT, 1);
                         packetWrapper.write(Type.UUID, entry.uuid);
                         tablist.remove(entry);
-                    } else if (entry != null && add) {
+                    } else if (entry != null) {
                         packetWrapper.write(Type.VAR_INT, 2); // UPDATE LATENCY
                         packetWrapper.write(Type.VAR_INT, 1);
                         packetWrapper.write(Type.UUID, entry.uuid);
@@ -1110,8 +1110,10 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 handler(packetWrapper -> {
                     int entityID = packetWrapper.get(Type.VAR_INT, 0);
                     EntityTracker tracker = packetWrapper.user().get(EntityTracker.class);
-                    tracker.getClientEntityTypes().put(entityID, Entity1_10Types.EntityType.LIGHTNING);
-                    tracker.sendMetadataBuffer(entityID);
+                    if (tracker != null) {
+                        tracker.getClientEntityTypes().put(entityID, Entity1_10Types.EntityType.LIGHTNING);
+                        tracker.sendMetadataBuffer(entityID);
+                    }
                 });
             }
         });
@@ -1271,7 +1273,9 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     EntityTracker tracker = packetWrapper.user().get(EntityTracker.class);
 
                     for (int entityId : packetWrapper.get(Type.VAR_INT_ARRAY_PRIMITIVE, 0))
-                        tracker.removeEntity(entityId);
+                        if (tracker != null) {
+                            tracker.removeEntity(entityId);
+                        }
                 });
             }
         });
@@ -1475,12 +1479,12 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         }
                     }
                     pw.cancel();
-                    pw.setPacketType(null);
                     final ByteBuf buf = Unpooled.buffer();
                     pw.writeToBuffer(buf);
                     final PacketWrapper wrapper = PacketWrapper.create(ServerboundPackets1_8.PLUGIN_MESSAGE, buf, pw.user());
-                    wrapper.passthrough(Type.STRING);
+                    wrapper.write(Type.STRING, channel);
                     wrapper.write(Type.SHORT, (short) buf.readableBytes());
+                    wrapper.passthrough(Type.REMAINING_BYTES);
                     wrapper.sendToServer(Protocol1_8to1_7_10.class);
                 });
             }
@@ -1561,8 +1565,16 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     packetWrapper.write(Type.SHORT, (short) pos.y());
                     packetWrapper.write(Type.INT, pos.z());
 
-                    for (int i = 0; i < 4; i++)
-                        packetWrapper.write(Type.STRING, GsonUtil.getGson().fromJson(packetWrapper.read(Type.STRING), ChatMessage.class).text);
+                    for (int i = 0; i < 4; i++) {
+                        String text = "";
+                        JsonElement jsonElement = packetWrapper.read(Type.COMPONENT);
+                        if (jsonElement != null && jsonElement.isJsonObject()) {
+                            JsonElement textComponent = jsonElement.getAsJsonObject().get("text");
+                            if (textComponent != null)
+                                text = textComponent.getAsString();
+                        }
+                        packetWrapper.write(Type.STRING, text);
+                    }
                 });
             }
         });
@@ -1589,7 +1601,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     packetWrapper.write(Type.UNSIGNED_BYTE, (short) y);
                     packetWrapper.write(Type.INT, z);
 
-                    final short direction = packetWrapper.passthrough(Type.UNSIGNED_BYTE); // Direction
+                    packetWrapper.passthrough(Type.UNSIGNED_BYTE); // Direction
 
                     VoidType voidType = new VoidType();
                     if (packetWrapper.isReadable(voidType, 0)) packetWrapper.read(voidType);

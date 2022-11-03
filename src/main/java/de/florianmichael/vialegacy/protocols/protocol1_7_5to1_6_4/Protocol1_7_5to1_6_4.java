@@ -86,6 +86,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
                     final String username = pw.read(Type.STRING);
                     info.setUsername(username);
+                    //noinspection deprecation
                     pw.setId(ServerboundLoginPackets1_6_4.CLIENT_PROTOCOL.getId());
                     pw.clearPacket();
 
@@ -93,26 +94,25 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     pw.write(TypeRegistry_1_6_4.STRING, username);
 
                     final HandshakeStorage handshakeStorage = pw.user().get(HandshakeStorage.class);
-                    pw.write(TypeRegistry_1_6_4.STRING, handshakeStorage.hostname);
-                    pw.write(Type.INT, handshakeStorage.port);
+                    if (handshakeStorage != null) {
+                        pw.write(TypeRegistry_1_6_4.STRING, handshakeStorage.hostname);
+                        pw.write(Type.INT, handshakeStorage.port);
+                    }
                 });
             }
         });
 
         // Status Request
-        this.registerServerbound(State.STATUS, 0x00, 0x00, new PacketRemapper() {
+        this.registerServerbound(State.STATUS, 0x00, 0xFE, new PacketRemapper() {
 
             @Override
             public void registerMap() {
                 handler((pw) -> {
-                    pw.cancel();
-
                     // Server List Ping
-                    PacketWrapper req = new PacketWrapperImpl(0xFE, null, pw.user());
-                    req.write(Type.BYTE, (byte) 0x01);
+                    pw.write(Type.BYTE, (byte) 0x01);
                     // Plugin Message
-                    req.write(Type.UNSIGNED_BYTE, (short) 0xFA);
-                    req.write(TypeRegistry_1_6_4.STRING, "MC|PingHost");
+                    pw.write(Type.UNSIGNED_BYTE, (short) 0xFA);
+                    pw.write(TypeRegistry_1_6_4.STRING, "MC|PingHost");
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     DataOutputStream out = new DataOutputStream(baos);
                     out.writeByte(pw.user().getProtocolInfo().getServerProtocolVersion());
@@ -125,8 +125,8 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     }
                     out.writeInt(port);
                     out.close();
-                    req.write(TypeRegistry1_7_6_10.BYTEARRAY, baos.toByteArray());
-                    req.sendToServer(Protocol1_7_5to1_6_4.class);
+                    pw.write(TypeRegistry1_7_6_10.BYTEARRAY, baos.toByteArray());
+                    pw.sendToServer(Protocol1_7_5to1_6_4.class);
                 });
             }
         });
@@ -234,6 +234,10 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 map(Type.STRING, TypeRegistry_1_6_4.STRING);
+                handler(pw -> {
+                    pw.cancel();
+                    System.out.println(Arrays.toString(pw.read(Type.REMAINING_BYTES)));
+                });
             }
         });
 
@@ -415,10 +419,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             public void registerMap() {
                 map(Type.INT); // Entity-Id
                 map(Type.INT); // Vehicle-Id
-                handler((pw) -> {
-                    short leash = pw.read(Type.UNSIGNED_BYTE);
-                    pw.write(Type.BOOLEAN, leash == 1);
-                });
+                map(Type.UNSIGNED_BYTE);
             }
         });
 
@@ -679,11 +680,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             public void registerMap() {
                 handler((pw) -> {
                     String text = pw.read(TypeRegistry_1_6_4.STRING);
-                    pw.clearPacket();
-                    String[] split = text.split("\u0000");
-                    pw.write(Type.VAR_INT, split.length);
-                    for (int i = 0; i < split.length; i++)
-                        pw.write(Type.STRING, split[i]);
+                    pw.write(Type.STRING_ARRAY, text.split("\u0000"));
                 });
             }
         });
@@ -808,7 +805,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 map(Type.INT, Type.VAR_INT); // Entity-Id
-                map(Type.BYTE, Type.UNSIGNED_BYTE); // Player-Name
+                map(Type.BYTE, Type.UNSIGNED_BYTE); // Type
                 map(Type.INT); // X-Position
                 map(Type.INT); // Y-Position
                 map(Type.INT); // Z-Position
@@ -877,7 +874,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 map(Type.INT); // X-Position
-                map(Type.UNSIGNED_BYTE); // Y-Position
+                map(Type.BYTE, Type.UNSIGNED_BYTE); // Y-Position
                 map(Type.INT); // Z-Position
                 map(Type.SHORT, Type.VAR_INT); // Block-Id
                 map(Type.BYTE, Type.UNSIGNED_BYTE); // Block Metadata
@@ -900,8 +897,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     int instrument = pw.get(Type.UNSIGNED_BYTE, 0);
                     if (instrument < 0 || instrument >= list.size())
                         instrument = 0;
-
-                    PacketWrapper sound = new PacketWrapperImpl(0x29, null, pw.user());
+                    PacketWrapper sound = PacketWrapper.create(ClientboundPackets1_6_4.ENTITY_EFFECT, pw.user());
                     sound.write(Type.STRING, "note." + list.get(instrument));
                     sound.write(Type.INT, pw.get(Type.INT, 0) * 8);
                     sound.write(Type.INT, pw.get(Type.SHORT, 0) * 8);
