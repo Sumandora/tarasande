@@ -1108,8 +1108,9 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.INT);
                 map(Type.INT);
                 handler(packetWrapper -> {
-                    int entityID = packetWrapper.get(Type.VAR_INT, 0);
+                    final int entityID = packetWrapper.get(Type.VAR_INT, 0);
                     EntityTracker tracker = packetWrapper.user().get(EntityTracker.class);
+
                     if (tracker != null) {
                         tracker.getClientEntityTypes().put(entityID, Entity1_10Types.EntityType.LIGHTNING);
                         tracker.sendMetadataBuffer(entityID);
@@ -1130,7 +1131,9 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
 
                     if (tracker.getClientEntityTypes().containsKey(entityID)) {
                         MetadataRewriter.transform(tracker.getClientEntityTypes().get(entityID), metadataList);
-                        if (metadataList.isEmpty()) wrapper.cancel();
+                        if (metadataList.isEmpty()) {
+                            wrapper.cancel();
+                        }
                     } else {
                         tracker.addMetadataToBuffer(entityID, metadataList);
                         wrapper.cancel();
@@ -1152,17 +1155,18 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.BYTE);
                 map(Type.INT);
                 handler(packetWrapper -> {
-
                     byte type = packetWrapper.get(Type.BYTE, 0);
+
                     int x = packetWrapper.get(Type.INT, 0);
                     int y = packetWrapper.get(Type.INT, 1);
                     int z = packetWrapper.get(Type.INT, 2);
+
                     byte yaw = packetWrapper.get(Type.BYTE, 2);
                     int data = packetWrapper.get(Type.INT, 3);
 
                     if (type == 2) { // Item
                         y -= 4;
-                    } else if (type == 71) { // item frame
+                    } else if (type == 71) { // Item frame
                         switch (data) {
                             case 0 -> {
                                 z += 32;
@@ -1181,7 +1185,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                                 yaw = (byte) 192;
                             }
                         }
-                    } else if (type == 70) { // falling object
+                    } else if (type == 70) { // Falling object
                         int id = data;
                         int metadata = data >> 16;
                         data = id | metadata << 12;
@@ -1264,18 +1268,20 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     int amount = packetWrapper.read(Type.UNSIGNED_BYTE);
                     int[] entityIds = new int[amount];
 
-                    for (int i = 0; i < amount; i++)
+                    for (int i = 0; i < amount; i++) {
                         entityIds[i] = packetWrapper.read(Type.INT);
+                    }
 
                     packetWrapper.write(Type.VAR_INT_ARRAY_PRIMITIVE, entityIds);
-                });  //Entity ID Array
+                }); // Entity ID Array
                 handler(packetWrapper -> {
                     EntityTracker tracker = packetWrapper.user().get(EntityTracker.class);
 
-                    for (int entityId : packetWrapper.get(Type.VAR_INT_ARRAY_PRIMITIVE, 0))
+                    for (int entityId : packetWrapper.get(Type.VAR_INT_ARRAY_PRIMITIVE, 0)) {
                         if (tracker != null) {
                             tracker.removeEntity(entityId);
                         }
+                    }
                 });
             }
         });
@@ -1286,11 +1292,13 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.UNSIGNED_BYTE);
                 map(Type.FLOAT);
                 handler(pw -> {
-                    int type = pw.get(Type.UNSIGNED_BYTE, 0);
-                    float value = pw.get(Type.FLOAT, 0);
-                    if (type == 3) { // Gamemode change
-                        PacketWrapper packetWrapper = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, pw.user());
-                        packetWrapper.write(Type.VAR_INT, 1); // UPDATE GAMEMODE
+                    final int type = pw.get(Type.UNSIGNED_BYTE, 0);
+                    final float value = pw.get(Type.FLOAT, 0);
+
+                    if (type == 3) {
+                        final PacketWrapper packetWrapper = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, pw.user());
+
+                        packetWrapper.write(Type.VAR_INT, 1);
                         packetWrapper.write(Type.VAR_INT, 1);
                         packetWrapper.write(Type.UUID, ViaLegacy.getProvider().profile_1_7().getUuid());
                         packetWrapper.write(Type.VAR_INT, (int) value);
@@ -1313,18 +1321,10 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     int direction = pw.read(Type.INT);
 
                     switch (direction) {
-                        case 0:
-                            z += 1;
-                            break;
-                        case 1:
-                            x -= 1;
-                            break;
-                        case 2:
-                            z -= 1;
-                            break;
-                        case 3:
-                            x += 1;
-                            break;
+                        case 0 -> z += 1;
+                        case 1 -> x -= 1;
+                        case 2 -> z -= 1;
+                        case 3 -> x += 1;
                     }
 
                     pw.write(Type.POSITION, new Position(x, y, z));
@@ -1340,9 +1340,10 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.SHORT);
                 map(Type.SHORT);
                 handler(pw -> {
-                    int property = pw.get(Type.SHORT, 0);
+                    final int property = pw.get(Type.SHORT, 0);
+
                     switch (property) {
-                        case 0: {
+                        case 0 -> {
                             pw.set(Type.SHORT, 0, (short) 2);
                             PacketWrapper newPacket = PacketWrapper.create(ClientboundPackets1_7_10.WINDOW_PROPERTY, pw.user());
                             newPacket.write(Type.UNSIGNED_BYTE, pw.get(Type.UNSIGNED_BYTE, 0));
@@ -1351,11 +1352,11 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                             newPacket.send(Protocol1_8to1_7_10.class);
                             break;
                         }
-                        case 1: {
+                        case 1 -> {
                             pw.set(Type.SHORT, 0, (short) 0);
                             break;
                         }
-                        case 2: {
+                        case 2 -> {
                             pw.set(Type.SHORT, 0, (short) 1);
                             break;
                         }
@@ -1378,13 +1379,16 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
 
                 handler((pw) -> {
                     final int mode = pw.read(Type.VAR_INT);
+
                     if (mode == 2) {
                         pw.write(Type.BYTE, (byte) 0);
 
                         pw.read(Type.FLOAT);
                         pw.read(Type.FLOAT);
                         pw.read(Type.FLOAT);
-                    } else pw.write(Type.BYTE, (byte) mode);
+                    } else {
+                        pw.write(Type.BYTE, (byte) mode);
+                    }
                 });
             }
         });
@@ -1446,7 +1450,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.BOOLEAN);
                 handler((pw) -> pw.write(Type.BYTE, (byte) 0));
                 handler(packetWrapper -> {
-                    short flags = packetWrapper.read(Type.UNSIGNED_BYTE);
+                    final short flags = packetWrapper.read(Type.UNSIGNED_BYTE);
                     packetWrapper.write(Type.BOOLEAN, (flags & 1) == 1);
                 });
             }
@@ -1466,8 +1470,10 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         case "MC|BEdit", "MC|BSign" -> {
                             final Item item = pw.read(Type.ITEM);
                             final CompoundTag tag = item.tag();
+
                             if (tag != null && tag.contains("pages")) {
                                 final ListTag pages = tag.get("pages");
+
                                 if (pages != null) {
                                     for (int i = 0; i < pages.size(); i++) {
                                         final StringTag page = pages.get(i);
@@ -1481,7 +1487,9 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     pw.cancel();
                     final ByteBuf buf = Unpooled.buffer();
                     pw.writeToBuffer(buf);
+
                     final PacketWrapper wrapper = PacketWrapper.create(ServerboundPackets1_8.PLUGIN_MESSAGE, buf, pw.user());
+
                     wrapper.write(Type.STRING, channel);
                     wrapper.write(Type.SHORT, (short) buf.readableBytes());
                     wrapper.passthrough(Type.REMAINING_BYTES);
@@ -1532,12 +1540,15 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
 
                     packetWrapper.write(Type.BYTE, (byte) windowId);
 
-                    short windowType = windowIDTracker.get(windowId);
+                    final short windowType = windowIDTracker.get(windowId);
                     short slot = packetWrapper.read(Type.SHORT);
 
                     if (windowType == 4) {
-                        if (slot == 1) packetWrapper.cancel(); // lapis
-                        else if (slot > 1) slot -= 1;
+                        if (slot == 1) {
+                            packetWrapper.cancel(); // lapis
+                        } else if (slot > 1) {
+                            slot -= 1;
+                        }
                     }
                     packetWrapper.write(Type.SHORT, slot); // Slot
                 });
@@ -1567,11 +1578,14 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
 
                     for (int i = 0; i < 4; i++) {
                         String text = "";
-                        JsonElement jsonElement = packetWrapper.read(Type.COMPONENT);
+                        final JsonElement jsonElement = packetWrapper.read(Type.COMPONENT);
+
                         if (jsonElement != null && jsonElement.isJsonObject()) {
-                            JsonElement textComponent = jsonElement.getAsJsonObject().get("text");
-                            if (textComponent != null)
+                            final JsonElement textComponent = jsonElement.getAsJsonObject().get("text");
+
+                            if (textComponent != null) {
                                 text = textComponent.getAsString();
+                            }
                         }
                         packetWrapper.write(Type.STRING, text);
                     }
@@ -1604,15 +1618,19 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     packetWrapper.passthrough(Type.UNSIGNED_BYTE); // Direction
 
                     VoidType voidType = new VoidType();
-                    if (packetWrapper.isReadable(voidType, 0)) packetWrapper.read(voidType);
+                    if (packetWrapper.isReadable(voidType, 0)) {
+                        packetWrapper.read(voidType);
+                    }
 
-                    Item item = packetWrapper.read(Type.ITEM);
+                    final Item item = packetWrapper.read(Type.ITEM);
                     packetWrapper.write(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, item);
 
                     for (int i = 0; i < 3; i++) {
-                        if (packetWrapper.isReadable(Type.BYTE, 0)) packetWrapper.passthrough(Type.BYTE);
-                        else {
-                            short cursor = packetWrapper.read(Type.UNSIGNED_BYTE);
+                        if (packetWrapper.isReadable(Type.BYTE, 0)) {
+                            packetWrapper.passthrough(Type.BYTE);
+                        } else {
+                            final short cursor = packetWrapper.read(Type.UNSIGNED_BYTE);
+
                             packetWrapper.write(Type.BYTE, (byte) cursor);
                         }
                     }
@@ -1624,7 +1642,8 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             @Override
             public void registerMap() {
                 handler(packetWrapper -> {
-                    String text = packetWrapper.read(Type.STRING);
+                    final String text = packetWrapper.read(Type.STRING);
+
                     packetWrapper.clearInputBuffer();
                     packetWrapper.write(Type.STRING, text);
                 });
