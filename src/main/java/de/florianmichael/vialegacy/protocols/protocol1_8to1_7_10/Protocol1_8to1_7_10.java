@@ -1677,7 +1677,4 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         userConnection.put(new TeamsTracker(userConnection));
         userConnection.put(new GroundTracker(userConnection));
     }
-
-    public record ChatMessage(String text) {
-    }
 }
