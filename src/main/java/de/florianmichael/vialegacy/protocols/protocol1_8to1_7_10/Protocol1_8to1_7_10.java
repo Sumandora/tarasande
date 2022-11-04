@@ -28,7 +28,6 @@ import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.protocol.remapper.TypeRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.api.type.types.CustomByteType;
-import com.viaversion.viaversion.api.type.types.VoidType;
 import com.viaversion.viaversion.api.type.types.version.Types1_8;
 import com.viaversion.viaversion.libs.gson.JsonElement;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;
@@ -392,30 +391,35 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     packetWrapper.write(Types1_8.METADATA_LIST, metadata);
 
                     PacketWrapper addPlayerInfo = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
-                    addPlayerInfo.write(Type.VAR_INT, 0); // ADD
-                    addPlayerInfo.write(Type.VAR_INT, 1);
-                    addPlayerInfo.write(Type.UUID, UUID.fromString(uuid));
-                    addPlayerInfo.write(Type.STRING, name);
-                    addPlayerInfo.write(Type.VAR_INT, dataCount);
+                    {
+                        addPlayerInfo.write(Type.VAR_INT, 0); // ADD
+                        addPlayerInfo.write(Type.VAR_INT, 1);
+                        addPlayerInfo.write(Type.UUID, UUID.fromString(uuid));
+                        addPlayerInfo.write(Type.STRING, name);
+                        addPlayerInfo.write(Type.VAR_INT, dataCount);
 
-                    for (TablistTracker.Property property : properties) {
-                        addPlayerInfo.write(Type.STRING, property.name);
-                        addPlayerInfo.write(Type.STRING, property.value);
-                        addPlayerInfo.write(Type.OPTIONAL_STRING, property.signature);
+                        for (TablistTracker.Property property : properties) {
+                            addPlayerInfo.write(Type.STRING, property.name);
+                            addPlayerInfo.write(Type.STRING, property.value);
+                            addPlayerInfo.write(Type.OPTIONAL_STRING, property.signature);
+                        }
+
+                        addPlayerInfo.write(Type.VAR_INT, 0);
+                        addPlayerInfo.write(Type.VAR_INT, 0);
+                        addPlayerInfo.write(Type.OPTIONAL_STRING, name);
                     }
 
-                    addPlayerInfo.write(Type.VAR_INT, 0);
-                    addPlayerInfo.write(Type.VAR_INT, 0);
-                    addPlayerInfo.write(Type.OPTIONAL_STRING, name);
-
                     PacketWrapper removePlayerInfo = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
-                    removePlayerInfo.write(Type.VAR_INT, 4); // REMOVE
-                    removePlayerInfo.write(Type.VAR_INT, 1);
-                    removePlayerInfo.write(Type.UUID, UUID.fromString(uuid));
+                    {
+                        removePlayerInfo.write(Type.VAR_INT, 4); // REMOVE
+                        removePlayerInfo.write(Type.VAR_INT, 1);
+                        removePlayerInfo.write(Type.UUID, UUID.fromString(uuid));
+                    }
 
                     addPlayerInfo.send(Protocol1_8to1_7_10.class);
                     packetWrapper.send(Protocol1_8to1_7_10.class);
                     removePlayerInfo.send(Protocol1_8to1_7_10.class);
+
                     packetWrapper.cancel();
                 });
                 handler(packetWrapper -> {
@@ -729,18 +733,20 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     ParticleRegistry particle = ParticleRegistry.find(parts[0]);
                     if (particle == null) particle = ParticleRegistry.CRIT;
 
-                    pw.write(Type.INT, particle.ordinal());
-                    pw.write(Type.BOOLEAN, false);
+                    pw.write(Type.INT, particle.ordinal()); // Type
+                    pw.write(Type.BOOLEAN, false); // Long Distance
 
-                    pw.passthrough(Type.FLOAT);
-                    pw.passthrough(Type.FLOAT);
-                    pw.passthrough(Type.FLOAT);
-                    pw.passthrough(Type.FLOAT);
-                    pw.passthrough(Type.FLOAT);
-                    pw.passthrough(Type.FLOAT);
-                    pw.passthrough(Type.FLOAT);
+                    pw.passthrough(Type.FLOAT); // X
+                    pw.passthrough(Type.FLOAT); // Y
+                    pw.passthrough(Type.FLOAT); // Z
 
-                    pw.passthrough(Type.INT);
+                    pw.passthrough(Type.FLOAT); // Offset X
+                    pw.passthrough(Type.FLOAT); // Offset Y
+                    pw.passthrough(Type.FLOAT); // Offset Z
+
+                    pw.passthrough(Type.FLOAT); // Speed
+
+                    pw.passthrough(Type.INT); // Number of particles
 
                     for (int i = 0; i < particle.extra; ++i) {
                         int toWrite = 0;
@@ -804,9 +810,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 handler(pw -> {
                     short windowId = pw.get(Type.UNSIGNED_BYTE, 0);
                     short slot = pw.get(Type.SHORT, 0);
-                    if (windowId == 0)
-                        if (slot < 5 || slot > 8)
-                            return;
                     Item item = pw.get(Type.ITEM, 0);
 
                     if (item == null)
@@ -1296,7 +1299,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final int type = pw.get(Type.UNSIGNED_BYTE, 0);
                     final float value = pw.get(Type.FLOAT, 0);
 
-                    if (type == 3) {
+                    if (type == 3) { // Update Gamemode
                         final PacketWrapper packetWrapper = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, pw.user());
 
                         packetWrapper.write(Type.VAR_INT, 1);
@@ -1564,7 +1567,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                                 text = textComponent.getAsString();
                             }
                         }
-                        if (text.length() > 15)
+                        if (text.length() > 15) // Notchian server kicks if the string is longer than this
                             text = text.substring(0, 15);
                         packetWrapper.write(Type.STRING, text);
                     }
@@ -1576,7 +1579,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             @Override
             public void registerMap() {
                 handler(packetWrapper -> {
-                    {
+                    { // Open Books when right clicking
                         //TODO: Implement a provider which does provides the item translated down to a specified version rather than the entire pipeline
                         HandItemProvider handItemProvider = Via.getManager().getProviders().get(HandItemProvider.class);
                         Item item = handItemProvider.getHandItem(packetWrapper.user());
@@ -1588,43 +1591,19 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         }
                     }
 
-                    int x;
-                    int y;
-                    int z;
-                    if (packetWrapper.isReadable(Type.POSITION, 0)) {
-                        Position pos = packetWrapper.read(Type.POSITION); // Position
-                        x = pos.x();
-                        y = pos.y();
-                        z = pos.z();
-                    } else {
-                        Long pos = packetWrapper.read(Type.LONG); // Position
-                        x = (int) (pos >> 38);
-                        y = (short) (pos >> 26 & 4095L);
-                        z = (int) (pos << 38 >> 38);
-                    }
-                    packetWrapper.write(Type.INT, x);
-                    packetWrapper.write(Type.UNSIGNED_BYTE, (short) y);
-                    packetWrapper.write(Type.INT, z);
+                    Position pos = packetWrapper.read(Type.POSITION); // Position
+                    packetWrapper.write(Type.INT, pos.x()); // X
+                    packetWrapper.write(Type.UNSIGNED_BYTE, (short) pos.y()); // Y
+                    packetWrapper.write(Type.INT, pos.z()); // Z
 
                     packetWrapper.passthrough(Type.UNSIGNED_BYTE); // Direction
 
-                    VoidType voidType = new VoidType();
-                    if (packetWrapper.isReadable(voidType, 0)) {
-                        packetWrapper.read(voidType);
-                    }
-
                     final Item item = packetWrapper.read(Type.ITEM);
-                    packetWrapper.write(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, item);
+                    packetWrapper.write(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, item); // Item
 
-                    for (int i = 0; i < 3; i++) {
-                        if (packetWrapper.isReadable(Type.BYTE, 0)) {
-                            packetWrapper.passthrough(Type.BYTE);
-                        } else {
-                            final short cursor = packetWrapper.read(Type.UNSIGNED_BYTE);
-
-                            packetWrapper.write(Type.BYTE, (byte) cursor);
-                        }
-                    }
+                    packetWrapper.passthrough(Type.UNSIGNED_BYTE); // Facing X
+                    packetWrapper.passthrough(Type.UNSIGNED_BYTE); // Facing Y
+                    packetWrapper.passthrough(Type.UNSIGNED_BYTE); // Facing Z
                 });
             }
         });
@@ -1635,7 +1614,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 handler(packetWrapper -> {
                     final String text = packetWrapper.read(Type.STRING);
 
-                    packetWrapper.clearInputBuffer();
+                    packetWrapper.clearPacket();
                     packetWrapper.write(Type.STRING, text);
                 });
             }
