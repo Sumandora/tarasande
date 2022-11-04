@@ -53,20 +53,27 @@ class GraphTPS : Graph("TPS", 200) {
      */
 
     private var lastWorldTimePacket = 0L
-    private var timeDelta = 0L
+    private var timeDeltas = ArrayList<Long>()
+
+    private var average = 0L
+
+    private val samples = ValueNumber(this, "Samples", 1.0, 2.0, 10.0, 1.0)
 
     init {
         TarasandeMain.get().managerEvent.add(EventPacket::class.java) {
             if (it.type == EventPacket.Type.RECEIVE && it.packet is WorldTimeUpdateS2CPacket) {
                 if (lastWorldTimePacket > 0L) {
-                    timeDelta = System.currentTimeMillis() - lastWorldTimePacket
+                    timeDeltas.add(System.currentTimeMillis() - lastWorldTimePacket)
+                    while (timeDeltas.size > samples.value)
+                        timeDeltas.removeAt(0)
+                    average = timeDeltas.average().toLong()
                 }
                 lastWorldTimePacket = System.currentTimeMillis()
             }
         }
     }
 
-    override fun supplyData() = if (timeDelta > 0L) round(timeDelta / 1000.0 * 20 * 100) / 100.0 else null
+    override fun supplyData() = if (average > 0L) round(average / 1000.0 * 20 * 100) / 100.0 else null
 }
 
 class GraphCPS : Graph("CPS", 200) {
