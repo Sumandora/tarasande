@@ -1580,8 +1580,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         //TODO: Implement a provider which does provides the item translated down to a specified version rather than the entire pipeline
                         HandItemProvider handItemProvider = Via.getManager().getProviders().get(HandItemProvider.class);
                         Item item = handItemProvider.getHandItem(packetWrapper.user());
-                        System.out.println(item);
-                        if (item.identifier() == 387) { // Book
+                        if (item != null && item.identifier() == 387) { // Book
                             PacketWrapper pluginMessage = PacketWrapper.create(ClientboundPackets1_8.PLUGIN_MESSAGE, packetWrapper.user());
                             pluginMessage.write(Type.STRING, "MC|BOpen");
                             pluginMessage.write(Type.REMAINING_BYTES, new byte[0]);
