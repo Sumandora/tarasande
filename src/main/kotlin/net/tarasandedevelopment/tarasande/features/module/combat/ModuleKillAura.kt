@@ -81,10 +81,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val preventBlockCooldown = object : ValueBoolean(this, "Prevent block cooldown", false) {
         override fun isEnabled() = !autoBlock.isSelected(0)
     }
-    private val counterBlocking = ValueBoolean(this, "Counter blocking", false)
-    private val counterImmediately = object : ValueBoolean(this, "Counter immediately", true) {
-        override fun isEnabled() = counterBlocking.value
-    }
+    private val counterBlocking = ValueMode(this, "Counter blocking", false, "Off", "Wait for block", "Immediately")
     private val guaranteeHit = ValueBoolean(this, "Guarantee hit", false)
     private val rotations = ValueMode(this, "Rotations", true, "Around walls", "Randomized")
     private val precision = object : ValueNumber(this, "Precision", 0.0, 0.01, 1.0, 0.01) {
@@ -286,7 +283,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             var clicks = clickSpeedUtil.getClicks()
 
             if (clicks == 0)
-                if (mc.player?.disablesShield() == true && (counterBlocking.value && counterImmediately.value))
+                if (mc.player?.disablesShield() == true && (counterBlocking.isSelected(2)))
                     clicks = 1 // Axes can cancel out shields whenever they want, so lets force a hit
 
             if (!autoBlock.isSelected(0) && mc.player?.isUsingItem!! && clicks > 0) {
@@ -517,6 +514,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
 
     private fun block() {
+        if (preventBlockCooldown.value && !allAttacked { !it.disablesShield() })
+            return
         when {
             blockItem.isSelected(0) -> {
                 val stack = mc.player?.getStackInHand(PlayerUtil.getUsedHand() ?: return)
@@ -575,7 +574,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             if (dontAttackWhenBlocking.value && entity is LivingEntity && entity.isBlocking)
                 if (!simulateShieldBlock.value || entity.blockedByShield(DamageSource.player(mc.player)))
                     return false
-        } else if (counterBlocking.value) {
+        } else if (counterBlocking.isSelected(1)) {
             if (entity is PlayerEntity) {
                 if (entity.offHandStack.item is ShieldItem && !entity.isBlocking)
                     return false

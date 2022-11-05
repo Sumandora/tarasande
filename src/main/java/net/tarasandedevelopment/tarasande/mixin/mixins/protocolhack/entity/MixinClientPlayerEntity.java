@@ -181,7 +181,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Override
     public int getArmor() {
         if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
-            ArmorUpdater1_8_0.INSTANCE.update(); // Fixes Armor HUD
+            return ArmorUpdater1_8_0.INSTANCE.armor(); // Fixes Armor HUD
         }
         return super.getArmor();
     }
