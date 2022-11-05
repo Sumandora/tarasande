@@ -14,6 +14,7 @@
 
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.item;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemUsageContext;
@@ -28,7 +29,7 @@ public class MixinAxeItem {
 
     @Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
     public void injectUseOnBlock(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2))
             cir.setReturnValue(ActionResult.PASS);
     }
 }

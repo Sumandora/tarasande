@@ -14,6 +14,7 @@
 
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.entity;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.entity.passive.SquidEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,7 +28,7 @@ public class MixinSquidEntity {
 
     @Inject(method = "canBeLeashedBy", at = @At("HEAD"), cancellable = true)
     public void injectCanBeLeashedBy(PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_16_5)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_16_4)) {
             cir.setReturnValue(false);
         }
     }

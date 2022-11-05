@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_12to1_11_1.Protocol1_12To1_11_1;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.ServerboundPackets1_9_3;
@@ -41,7 +42,7 @@ public abstract class MixinMinecraftClient {
             slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;interactItem(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;")),
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/HeldItemRenderer;resetEquipProgress(Lnet/minecraft/util/Hand;)V", ordinal = 0))
     private void redirectDoItemUse(HeldItemRenderer heldItemRenderer, Hand hand) {
-        if (VersionList.isNewerTo(VersionList.R1_8) || !(player.getStackInHand(hand).getItem() instanceof SwordItem))
+        if (VersionList.isNewerTo(ProtocolVersion.v1_8) || !(player.getStackInHand(hand).getItem() instanceof SwordItem))
             heldItemRenderer.resetEquipProgress(hand);
     }
 
@@ -58,7 +59,7 @@ public abstract class MixinMinecraftClient {
     private void onInventoryKeyPressed(CallbackInfo ci) throws Exception {
         final UserConnection viaConnection = ((IClientConnection_Protocol) getNetworkHandler().getConnection()).protocolhack_getViaConnection();
 
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_11_1) && viaConnection != null) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1) && viaConnection != null) {
             ModuleInventoryMove moduleInventoryMove = TarasandeMain.Companion.get().getManagerModule().get(ModuleInventoryMove.class);
             if (moduleInventoryMove.isEnabled() && moduleInventoryMove.getCancelOpenPacket().getValue())
                 return;

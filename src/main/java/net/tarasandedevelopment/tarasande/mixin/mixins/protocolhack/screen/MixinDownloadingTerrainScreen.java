@@ -14,6 +14,7 @@
 
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.screen;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
@@ -38,7 +39,7 @@ public class MixinDownloadingTerrainScreen extends Screen {
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void injectTick(CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_1)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_1)) {
             protocolhack_tickCounter++;
 
             if (protocolhack_tickCounter % 20 == 0) {

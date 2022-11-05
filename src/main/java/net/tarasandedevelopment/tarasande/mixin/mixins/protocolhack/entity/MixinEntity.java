@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.entity;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import net.minecraft.block.Block;
@@ -32,7 +33,7 @@ public abstract class MixinEntity {
 
     @ModifyConstant(method = "movementInputToVelocity", constant = @Constant(doubleValue = 1E-7))
     private static double injectMovementInputToVelocity(double epsilon) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_13_2))
             return 1E-4;
         return epsilon;
     }
@@ -48,13 +49,13 @@ public abstract class MixinEntity {
 
     @Inject(method = "getVelocityAffectingPos", at = @At("HEAD"), cancellable = true)
     public void injectGetVelocityAffectingPos(CallbackInfoReturnable<BlockPos> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_4))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_4))
             cir.setReturnValue(new BlockPos(pos.x, getBoundingBox().minY - 1, pos.z));
     }
 
     @Redirect(method = "getVelocityMultiplier", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getVelocityMultiplier()F"))
     public float redirectGetVelocityMultiplier(Block instance) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_4) && instance instanceof SoulSandBlock)
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_4) && instance instanceof SoulSandBlock)
             return 1.0F;
 
         return instance.getVelocityMultiplier();
@@ -62,14 +63,14 @@ public abstract class MixinEntity {
 
     @Inject(method = "setSwimming", at = @At("HEAD"), cancellable = true)
     private void onSetSwimming(boolean swimming, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2) && swimming)
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2) && swimming)
             ci.cancel();
     }
 
     @SuppressWarnings("deprecation")
     @Inject(method = "updateMovementInFluid", at = @At("HEAD"), cancellable = true)
     private void modifyFluidMovementBoundingBox(TagKey<Fluid> fluidTag, double d, CallbackInfoReturnable<Boolean> ci) {
-        if (VersionList.isNewerTo(VersionList.R1_12_2))
+        if (VersionList.isNewerTo(ProtocolVersion.v1_12_2))
             return;
 
         Box box = getBoundingBox().expand(0, -0.4, 0).contract(0.001);
@@ -118,7 +119,7 @@ public abstract class MixinEntity {
 
     @Inject(method = "getTargetingMargin", at = @At("HEAD"), cancellable = true)
     public void expandHitBox(CallbackInfoReturnable<Float> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
             cir.setReturnValue(0.1F);
     }
 

@@ -16,6 +16,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.item;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -41,7 +42,7 @@ public abstract class MixinItemStack {
     private void modifyMiningSpeedMultiplier(BlockState state, CallbackInfoReturnable<Float> ci) {
         final Item toolItem = ((ItemStack) (Object) this).getItem();
 
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_15_2) && toolItem instanceof HoeItem)
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2) && toolItem instanceof HoeItem)
             ci.setReturnValue(1F);
     }
 
@@ -49,7 +50,7 @@ public abstract class MixinItemStack {
             slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/entity/attribute/EntityAttributes;GENERIC_ATTACK_DAMAGE:Lnet/minecraft/entity/attribute/EntityAttribute;", ordinal = 0)),
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAttributeBaseValue(Lnet/minecraft/entity/attribute/EntityAttribute;)D", ordinal = 0))
     private double redirectGetTooltip(PlayerEntity player, EntityAttribute attribute) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
             return 0;
         else
             return player.getAttributeBaseValue(attribute);
@@ -58,7 +59,7 @@ public abstract class MixinItemStack {
     @SuppressWarnings({"InvalidInjectorMethodSignature", "MixinAnnotationTarget"})
     @ModifyVariable(method = "getAttributeModifiers", ordinal = 0, at = @At(value = "STORE", ordinal = 1))
     private Multimap<EntityAttribute, EntityAttributeModifier> modifyVariableGetAttributeModifiers(Multimap<EntityAttribute, EntityAttributeModifier> modifiers) {
-        if (VersionList.isNewerTo(VersionList.R1_8))
+        if (VersionList.isNewerTo(ProtocolVersion.v1_8))
             return modifiers;
         if (modifiers.isEmpty()) {
             return modifiers;

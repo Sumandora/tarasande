@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
@@ -14,9 +15,9 @@ public class MixinKeyboardInput extends Input {
 
     @ModifyVariable(method = "tick", at = @At(value = "LOAD", ordinal = 0), argsOnly = true)
     private boolean injectTick(boolean slowDown) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_13_2)) {
             return this.sneaking;
-        } else if (VersionList.isOlderOrEqualTo(VersionList.R1_14_4)) {
+        } else if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_4)) {
             MinecraftClient client = MinecraftClient.getInstance();
             ClientPlayerEntity player = client.player;
             assert player != null;

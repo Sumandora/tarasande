@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.screen.screenhandler;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.slot.Slot;
@@ -17,12 +18,12 @@ public class MixinBrewingStandScreenHandler extends Slot {
 
     @Inject(method = "matches(Lnet/minecraft/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)
     private static void removeFuelSlot(CallbackInfoReturnable<Boolean> ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
             ci.setReturnValue(false);
     }
 
     @Override
     public boolean isEnabled() {
-        return VersionList.isNewerTo(VersionList.R1_8);
+        return VersionList.isNewerTo(ProtocolVersion.v1_8);
     }
 }

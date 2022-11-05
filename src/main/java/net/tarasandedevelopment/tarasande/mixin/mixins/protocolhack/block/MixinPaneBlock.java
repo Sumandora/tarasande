@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.block;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.*;
 import net.minecraft.util.math.BlockPos;
@@ -17,7 +18,7 @@ public class MixinPaneBlock extends HorizontalConnectingBlock {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
             return correctShape(world, state);
 
         return super.getOutlineShape(state, world, pos, context);
@@ -25,7 +26,7 @@ public class MixinPaneBlock extends HorizontalConnectingBlock {
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
             return correctShape(world, state);
 
         return super.getCollisionShape(state, world, pos, context);

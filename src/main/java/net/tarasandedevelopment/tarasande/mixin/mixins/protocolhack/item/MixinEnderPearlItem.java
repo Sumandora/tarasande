@@ -14,6 +14,7 @@
 
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.item;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.EnderPearlItem;
@@ -31,7 +32,7 @@ public class MixinEnderPearlItem {
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     private void injectUse(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8) && user.getAbilities().creativeMode)
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8) && user.getAbilities().creativeMode)
             ci.setReturnValue(TypedActionResult.pass(user.getStackInHand(hand)));
     }
 }

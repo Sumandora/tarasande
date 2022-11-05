@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.block;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -21,7 +22,7 @@ public class MixinFlowerPotBlock {
 
     @Inject(method = "onUse", at = @At(value = "FIELD", target = "Lnet/minecraft/block/FlowerPotBlock;content:Lnet/minecraft/block/Block;", ordinal = 0), cancellable = true)
     private void injectOnUse(CallbackInfoReturnable<ActionResult> ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_10) && content != Blocks.AIR) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_10) && content != Blocks.AIR) {
             ci.setReturnValue(ActionResult.CONSUME);
         }
     }

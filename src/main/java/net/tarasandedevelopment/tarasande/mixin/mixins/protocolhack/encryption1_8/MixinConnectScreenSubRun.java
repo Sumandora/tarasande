@@ -14,6 +14,7 @@
 
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.encryption1_8;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.network.encryption.PlayerPublicKey;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,7 +29,7 @@ public class MixinConnectScreenSubRun {
 
     @Redirect(method = "run", at = @At(value = "INVOKE", target = "Ljava/util/concurrent/CompletableFuture;join()Ljava/lang/Object;"))
     public Object redirectRun(CompletableFuture<Optional<PlayerPublicKey.PublicKeyData>> instance) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_18_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2))
             return Optional.empty();
 
         return instance.join();

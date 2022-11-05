@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.signatures1_19_0;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.network.encryption.NetworkEncryptionUtils;
 import net.minecraft.network.encryption.PlayerPublicKey;
@@ -33,7 +34,7 @@ public class MixinPlayerPublicKeySubPublicKeyData implements IPublicKeyData_Prot
 
     @Redirect(method = {"write", "verifyKey"}, at = @At(value = "FIELD", target = "Lnet/minecraft/network/encryption/PlayerPublicKey$PublicKeyData;keySignature:[B"))
     public byte[] replaceKeys(PlayerPublicKey.PublicKeyData instance) {
-        if (this.protocolhack_1_19_0Key != null && VersionList.isOlderOrEqualTo(VersionList.R1_19)) {
+        if (this.protocolhack_1_19_0Key != null && VersionList.isOlderOrEqualTo(ProtocolVersion.v1_19)) {
             return this.protocolhack_1_19_0Key;
         }
 
@@ -42,7 +43,7 @@ public class MixinPlayerPublicKeySubPublicKeyData implements IPublicKeyData_Prot
 
     @Inject(method = "toSerializedString", at = @At(value = "HEAD"), cancellable = true)
     public void injectToSerializedString(UUID playerUuid, CallbackInfoReturnable<byte[]> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_19)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_19)) {
             cir.setReturnValue((this.expiresAt.toEpochMilli() + NetworkEncryptionUtils.encodeRsaPublicKey(this.key)).getBytes(StandardCharsets.UTF_8));
         }
     }

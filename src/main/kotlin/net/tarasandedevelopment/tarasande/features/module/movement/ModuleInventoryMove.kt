@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.features.module.movement
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.viaprotocolhack.util.VersionList
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.InputUtil
@@ -20,7 +21,7 @@ import net.tarasandedevelopment.tarasande.value.ValueBoolean
 class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
 
     val cancelOpenPacket = object : ValueBoolean(this, "Cancel open packets", false) {
-        override fun isEnabled() = VersionList.isOlderOrEqualTo(VersionList.R1_11_1)
+        override fun isEnabled() = VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1)
     }
     val cancelClosePacket = ValueBoolean(this, "Cancel close packets", false)
     private val updateSneaking = ValueBoolean(this, "Update sneaking", false)

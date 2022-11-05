@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.event;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventScreenInput;
@@ -15,7 +16,7 @@ public class MixinRenderSystem {
 
     @Inject(method = "flipFrame", at = @At("HEAD"))
     private static void hookEventScreenInputAndPollEvents(long window, CallbackInfo ci) {
-        if (VersionList.isNewerOrEqualTo(VersionList.R1_13)) {
+        if (VersionList.isNewerOrEqualTo(ProtocolVersion.v1_13)) {
             EventScreenInput eventScreenInput = new EventScreenInput(false);
             TarasandeMain.Companion.get().getManagerEvent().call(eventScreenInput);
         }

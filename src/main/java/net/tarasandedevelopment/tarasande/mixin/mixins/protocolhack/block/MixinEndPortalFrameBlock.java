@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.block;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.Block;
 import net.minecraft.block.EndPortalFrameBlock;
@@ -26,7 +27,7 @@ public class MixinEndPortalFrameBlock {
 
     @Redirect(method = "getOutlineShape", at = @At(value = "FIELD", target = "Lnet/minecraft/block/EndPortalFrameBlock;FRAME_WITH_EYE_SHAPE:Lnet/minecraft/util/shape/VoxelShape;"))
     public VoxelShape redirectGetOutlineShape() {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2))
             return VoxelShapes.union(FRAME_SHAPE, protocolhack_EYE_SHAPE_1_12_2);
 
         return FRAME_WITH_EYE_SHAPE;

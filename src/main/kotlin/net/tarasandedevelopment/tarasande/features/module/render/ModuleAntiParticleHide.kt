@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.features.module.render
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.viaprotocolhack.util.VersionList
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
@@ -9,6 +10,6 @@ class ModuleAntiParticleHide : Module("Anti particle hide", "Makes invisible eff
 
     val inventory = ValueBoolean(this, "Inventory", true)
     val hud = object : ValueBoolean(this, "HUD", true) {
-        override fun isEnabled() = VersionList.isNewerTo(VersionList.R1_12_2)
+        override fun isEnabled() = VersionList.isNewerTo(ProtocolVersion.v1_12_2)
     }
 }

@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.block;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -21,7 +22,7 @@ public class MixinSoulSandBlock extends Block {
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         super.onEntityCollision(state, world, pos, entity);
 
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_4)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_4)) {
             final Vec3d velocity = entity.getVelocity();
 
             entity.setVelocity(velocity.getX() * 0.4D, velocity.getY(), velocity.getZ() * 0.4D);

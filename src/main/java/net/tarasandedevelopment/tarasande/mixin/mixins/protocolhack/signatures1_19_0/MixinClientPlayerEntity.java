@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.signatures1_19_0;
 
 import com.mojang.brigadier.ParseResults;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -26,7 +27,7 @@ public class MixinClientPlayerEntity {
 
     @Inject(method = "signChatMessage", at = @At("HEAD"), cancellable = true)
     public void injectSignChatMessage(MessageMetadata metadata, DecoratedContents content, LastSeenMessageList lastSeenMessages, CallbackInfoReturnable<MessageSignatureData> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_19)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_19)) {
             try {
                 final Signer signer = this.client.getProfileKeys().getSigner();
 
@@ -40,7 +41,7 @@ public class MixinClientPlayerEntity {
 
     @Inject(method = "signArguments", at = @At(value = "HEAD"))
     public void injectSignArguments(MessageMetadata signer, ParseResults<CommandSource> parseResults, @Nullable Text preview, LastSeenMessageList lastSeenMessages, CallbackInfoReturnable<ArgumentSignatureDataMap> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_19)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_19)) {
             MessageSigner1_19_0.INSTANCE.track(signer);
         }
     }

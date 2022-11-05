@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.network.ServerAddress;
 import org.spongepowered.asm.mixin.Final;
@@ -19,7 +20,7 @@ public class MixinConnectScreenSubRun {
 
     @Redirect(method = "run", at = @At(value = "INVOKE", target = "Ljava/net/InetSocketAddress;getHostName()Ljava/lang/String;"))
     public String redirectRun(InetSocketAddress instance) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_17))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_17))
             return field_33737.getAddress();
 
         return instance.getHostString();
@@ -27,7 +28,7 @@ public class MixinConnectScreenSubRun {
 
     @Redirect(method = "run", at = @At(value = "INVOKE", target = "Ljava/net/InetSocketAddress;getPort()I"))
     public int redirectRun2(InetSocketAddress instance) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_17))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_17))
             return field_33737.getPort();
 
         return instance.getPort();

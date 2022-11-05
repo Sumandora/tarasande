@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.input;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
@@ -13,7 +14,7 @@ public class MixinKeyboard {
 
     @Redirect(method = "*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;execute(Ljava/lang/Runnable;)V"))
     public void redirectSync(MinecraftClient instance, Runnable runnable) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
             InputTracker1_12_2.INSTANCE.getKeyboard().add(runnable);
             return;
         }

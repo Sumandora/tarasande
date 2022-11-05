@@ -14,6 +14,7 @@
 
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.screen.screenhandler;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.ScreenHandler;
@@ -33,7 +34,7 @@ public class MixinScreenHandler implements IScreenHandler_Protocol {
 
     @Inject(method = "internalOnSlotClick", at = @At("HEAD"), cancellable = true)
     private void injectInternalOnSlotClick(int slot, int clickData, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8) && actionType == SlotActionType.SWAP && clickData == 40) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8) && actionType == SlotActionType.SWAP && clickData == 40) {
             ci.cancel();
         }
     }

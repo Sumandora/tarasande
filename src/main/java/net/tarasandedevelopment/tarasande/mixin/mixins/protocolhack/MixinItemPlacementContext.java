@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
@@ -18,10 +19,10 @@ public class MixinItemPlacementContext {
         ItemPlacementContext self = (ItemPlacementContext) (Object) this;
 
         PlayerEntity player = self.getPlayer();
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2) && player != null) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2) && player != null) {
             BlockPos placementPos = self.getBlockPos();
             // don't center the BlockPos on 1.10 and below
-            double blockPosCenterFactor = VersionList.isNewerTo(VersionList.R1_10) ? 0.5 : 0;
+            double blockPosCenterFactor = VersionList.isNewerTo(ProtocolVersion.v1_10) ? 0.5 : 0;
 
             if (Math.abs(player.getX() - (placementPos.getX() + blockPosCenterFactor)) < 2 && Math.abs(player.getZ() - (placementPos.getZ() + blockPosCenterFactor)) < 2) {
                 double eyeY = player.getY() + player.getEyeHeight(player.getPose());

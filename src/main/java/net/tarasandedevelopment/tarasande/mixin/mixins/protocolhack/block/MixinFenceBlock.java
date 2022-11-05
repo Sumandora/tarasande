@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.block;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.FenceBlock;
 import net.minecraft.util.ActionResult;
@@ -13,7 +14,7 @@ public class MixinFenceBlock {
 
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
     private void injectOnUse(CallbackInfoReturnable<ActionResult> ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_10))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_10))
             ci.setReturnValue(ActionResult.SUCCESS);
     }
 }

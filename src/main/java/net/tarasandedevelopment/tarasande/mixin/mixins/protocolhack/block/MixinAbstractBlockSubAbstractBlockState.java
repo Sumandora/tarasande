@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.block;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
@@ -23,12 +24,12 @@ public abstract class MixinAbstractBlockSubAbstractBlockState {
     public void injectGetHardness(BlockView world, BlockPos pos, CallbackInfoReturnable<Float> cir) {
         final BlockState state = this.asBlockState();
 
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2))
             if (state.getBlock() instanceof InfestedBlock)
                 cir.setReturnValue(0.75F);
 
 
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_4))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_4))
             if (state.getBlock() == Blocks.END_STONE_BRICKS ||
                     state.getBlock() == Blocks.END_STONE_BRICK_SLAB ||
                     state.getBlock() == Blocks.END_STONE_BRICK_STAIRS ||
@@ -36,11 +37,11 @@ public abstract class MixinAbstractBlockSubAbstractBlockState {
                 cir.setReturnValue(0.8F);
 
 
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_15_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2))
             if (state.getBlock() == Blocks.PISTON || state.getBlock() == Blocks.STICKY_PISTON || state.getBlock() == Blocks.PISTON_HEAD)
                 cir.setReturnValue(0.5F);
 
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_16_5))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_16_4))
             if (state.getBlock() instanceof InfestedBlock)
                 cir.setReturnValue(0F);
     }

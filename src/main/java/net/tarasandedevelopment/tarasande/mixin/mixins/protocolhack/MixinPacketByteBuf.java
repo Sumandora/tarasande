@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
@@ -13,7 +14,7 @@ public class MixinPacketByteBuf {
 
     @Inject(method = "readText", at = @At(value = "INVOKE", target = "Lio/netty/handler/codec/DecoderException;<init>(Ljava/lang/String;)V", shift = At.Shift.BEFORE), cancellable = true)
     public void injectReadText(CallbackInfoReturnable<Text> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_18_1)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18)) {
             cir.setReturnValue(null);
         }
     }

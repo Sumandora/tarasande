@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.entity;
 
 import com.mojang.authlib.GameProfile;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
@@ -75,11 +76,11 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
             double f = this.getZ() - this.lastZ;
             double g = this.getYaw() - this.lastYaw;
             double h = this.getPitch() - this.lastPitch;
-            if (VersionList.isNewerTo(VersionList.R1_8)) {
+            if (VersionList.isNewerTo(ProtocolVersion.v1_8)) {
                 ++this.ticksSinceLastPositionPacketSent;
             }
             double n = 2.05E-4;
-            if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
+            if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
                 n = 9.0E-4D;
             }
             boolean bl3 = MathHelper.squaredMagnitude(d, e, f) > MathHelper.square(n) || this.ticksSinceLastPositionPacketSent >= 20;
@@ -94,12 +95,12 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
                 this.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(this.getX(), this.getY(), this.getZ(), this.onGround));
             } else if (bl4) {
                 this.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(this.getYaw(), this.getPitch(), this.onGround));
-            } else if (this.lastOnGround != this.onGround || (VersionList.isOlderOrEqualTo(VersionList.R1_8) && VersionList.isNewerTo(LegacyProtocolVersion.R1_3_2))) {
+            } else if (this.lastOnGround != this.onGround || (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8) && VersionList.isNewerTo(LegacyProtocolVersion.R1_3_2))) {
                 this.networkHandler.sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(this.onGround));
             } else {
                 TarasandeMain.Companion.get().getManagerEvent().call(new EventSkipIdlePacket());
             }
-            if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
+            if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
                 ++this.ticksSinceLastPositionPacketSent;
             }
 
@@ -121,7 +122,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Inject(method = "swingHand", at = @At("HEAD"), cancellable = true)
     public void injectSwingHand(Hand hand, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8) && protocolhack_areSwingCanceledThisTick) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8) && protocolhack_areSwingCanceledThisTick) {
             ci.cancel();
         }
 
@@ -134,7 +135,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
             at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/Input;sneaking:Z", ordinal = 0)
     )
     private void injectTickMovement(CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_4)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_4)) {
             if (this.input.sneaking) {
                 this.input.movementSideways = (float) ((double) this.input.movementSideways / 0.3D);
                 this.input.movementForward = (float) ((double) this.input.movementForward / 0.3D);
@@ -146,7 +147,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
             slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isWalking()Z")),
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isSwimming()Z", ordinal = 0))
     public boolean redirectIsSneakingWhileSwimming(ClientPlayerEntity _this) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_1)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_1)) {
             return false;
         } else {
             return _this.isSwimming();
@@ -155,14 +156,14 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Inject(method = "isWalking", at = @At("HEAD"), cancellable = true)
     public void easierUnderwaterSprinting(CallbackInfoReturnable<Boolean> ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_1)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_1)) {
             ci.setReturnValue(input.movementForward >= 0.8);
         }
     }
 
     @Redirect(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;hasForwardMovement()Z", ordinal = 0))
     private boolean disableSprintSneak(Input input) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_14_1)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_1)) {
             return input.movementForward >= 0.8F;
         }
 
@@ -171,7 +172,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isTouchingWater()Z"))
     private boolean redirectTickMovement(ClientPlayerEntity self) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
             return false; // Disable all water related movement
         }
 
@@ -180,7 +181,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Override
     public int getArmor() {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
             return ArmorUpdater1_8_0.INSTANCE.armor(); // Fixes Armor HUD
         }
         return super.getArmor();

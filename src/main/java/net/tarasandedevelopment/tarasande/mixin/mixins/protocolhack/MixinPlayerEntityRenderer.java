@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
@@ -16,7 +17,7 @@ public class MixinPlayerEntityRenderer {
 
     @Inject(method = "getPositionOffset*", at = @At("RETURN"), cancellable = true)
     private void injectGetPositionOffset(AbstractClientPlayerEntity player, float delta, CallbackInfoReturnable<Vec3d> ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_13_2)) {
             Direction sleepingDir = player.getSleepingDirection();
 
             if (sleepingDir != null)
@@ -27,6 +28,6 @@ public class MixinPlayerEntityRenderer {
     @Redirect(method = "getPositionOffset(Lnet/minecraft/client/network/AbstractClientPlayerEntity;F)Lnet/minecraft/util/math/Vec3d;",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isInSneakingPose()Z"))
     private boolean redirectGetPositionOffset(AbstractClientPlayerEntity player) {
-        return (VersionList.isNewerTo(VersionList.R1_11_1)) && player.isInSneakingPose();
+        return (VersionList.isNewerTo(ProtocolVersion.v1_11_1)) && player.isInSneakingPose();
     }
 }

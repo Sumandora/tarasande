@@ -14,6 +14,7 @@
 
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.item;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.HoeItem;
@@ -29,7 +30,7 @@ public class MixinMiningToolItem {
 
     @Inject(method = "getMiningSpeedMultiplier", at = @At("RETURN"), cancellable = true)
     public void changeHoeEffectiveBlocks(ItemStack stack, BlockState state, CallbackInfoReturnable<Float> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_15_2) && (Object) this instanceof HoeItem)
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2) && (Object) this instanceof HoeItem)
             cir.setReturnValue(1.0F);
     }
 }

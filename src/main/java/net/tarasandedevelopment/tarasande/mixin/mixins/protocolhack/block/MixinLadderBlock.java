@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.block;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -31,7 +32,7 @@ public class MixinLadderBlock {
 
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     private void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
             switch (state.get(LadderBlock.FACING)) {
                 case NORTH -> ci.setReturnValue(protocolhack_NORTH_SHAPE_1_8);
                 case SOUTH -> ci.setReturnValue(protocolhack_SOUTH_SHAPE_1_8);

@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.input;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
@@ -13,7 +14,7 @@ public class MixinMouse {
 
     @Redirect(method = {"method_29615", "method_22685", "method_22684"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;execute(Ljava/lang/Runnable;)V"), remap = false)
     public void redirectSync(MinecraftClient instance, Runnable runnable) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
             InputTracker1_12_2.INSTANCE.getMouse().add(runnable);
             return;
         }

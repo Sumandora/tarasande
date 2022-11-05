@@ -15,6 +15,7 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.item;
 
 import com.google.common.collect.ImmutableSet;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -48,7 +49,7 @@ public abstract class MixinPickaxeItem extends MiningToolItem {
 
     @Override
     public boolean isSuitableFor(BlockState state) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_16_5)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_16_4)) {
             Block block = state.getBlock();
             int i = this.getMaterial().getMiningLevel();
             if (block == Blocks.OBSIDIAN) {
@@ -66,10 +67,10 @@ public abstract class MixinPickaxeItem extends MiningToolItem {
 
     @Override
     public float getMiningSpeedMultiplier(ItemStack stack, BlockState state) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_15_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2))
             return protocolhack_EFFECTIVE_MATERIALS.contains(state.getMaterial()) || protocolhack_EFFECTIVE_BLOCKS_1152.contains(state.getBlock()) ? this.miningSpeed : 1.0F;
 
-        else if (VersionList.isOlderOrEqualTo(VersionList.R1_16_5))
+        else if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_16_4))
             return protocolhack_EFFECTIVE_MATERIALS.contains(state.getMaterial()) || protocolhack_EFFECTIVE_BLOCKS_1165.contains(state.getBlock()) ? this.miningSpeed : 1.0F;
 
         return super.getMiningSpeedMultiplier(stack, state);

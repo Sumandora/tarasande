@@ -14,6 +14,7 @@
 
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.item;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -35,7 +36,7 @@ public class MixinSwordItem extends ToolItem {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
             ItemStack itemStack = user.getStackInHand(hand);
             user.setCurrentHand(hand);
             return TypedActionResult.consume(itemStack);
@@ -45,14 +46,14 @@ public class MixinSwordItem extends ToolItem {
 
     @Override
     public UseAction getUseAction(ItemStack stack) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
             return UseAction.BLOCK;
         return super.getUseAction(stack);
     }
 
     @Override
     public int getMaxUseTime(ItemStack stack) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
             return 72000;
         return super.getMaxUseTime(stack);
     }

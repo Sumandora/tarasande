@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.block;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.*;
 import net.minecraft.block.cauldron.CauldronBehavior;
@@ -29,7 +30,7 @@ public abstract class MixinCauldronBlock extends AbstractCauldronBlock {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2))
             return protocolhack_CAULDRON_SHAPE_1122;
 
         return super.getOutlineShape(state, world, pos, context);

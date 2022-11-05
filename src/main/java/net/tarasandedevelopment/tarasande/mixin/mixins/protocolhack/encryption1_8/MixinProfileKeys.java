@@ -14,6 +14,7 @@
 
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.encryption1_8;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.util.ProfileKeys;
 import net.minecraft.network.encryption.PlayerPublicKey;
@@ -30,7 +31,7 @@ public class MixinProfileKeys {
 
     @Inject(method = "refresh", at = @At("RETURN"))
     public void injectRefresh(CallbackInfoReturnable<CompletableFuture<Optional<PlayerPublicKey.PublicKeyData>>> cir) {
-        if (VersionList.isEqualTo(VersionList.R1_19))
+        if (VersionList.isEqualTo(ProtocolVersion.v1_19))
             cir.getReturnValue().join();
     }
 }

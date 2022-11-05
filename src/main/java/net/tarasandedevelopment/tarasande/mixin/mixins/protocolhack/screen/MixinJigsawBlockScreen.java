@@ -14,6 +14,7 @@
 
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.screen;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.entity.JigsawBlockEntity;
 import net.minecraft.client.gui.screen.Screen;
@@ -47,7 +48,7 @@ public class MixinJigsawBlockScreen extends Screen {
 
     @Inject(method = "init", at = @At("RETURN"))
     public void injectInit(CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_15_2)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2)) {
             nameField.active = false;
             jointRotationButton.active = false;
             int index = children().indexOf(jointRotationButton);
@@ -59,7 +60,7 @@ public class MixinJigsawBlockScreen extends Screen {
 
     @Inject(method = "render", at = @At("HEAD"))
     public void injectRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_15_2)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2)) {
             nameField.setText(targetField.getText());
         }
     }

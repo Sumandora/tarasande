@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.signatures1_19_0;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.command.argument.DecoratableArgumentList;
 import net.minecraft.network.encryption.Signer;
@@ -21,7 +22,7 @@ public class MixinArgumentSignatureDataMap {
 
     @Inject(method = "sign", at = @At("HEAD"), cancellable = true)
     private static void injectSign(DecoratableArgumentList<?> arguments, ArgumentSignatureDataMap.ArgumentSigner signer, CallbackInfoReturnable<ArgumentSignatureDataMap> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_19)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_19)) {
             final List<ArgumentSignatureDataMap.Entry> list = ArgumentSignatureDataMap.toNameValuePairs(arguments).stream().map(entry -> {
                 final MessageMetadata metadata = MessageSigner1_19_0.INSTANCE.get();
                 final MessageSignatureData messageSignatureData = MessageSigner1_19_0.INSTANCE.sign((Signer) signer, Text.of(entry.getFirst()), metadata.sender(), metadata.timestamp(), metadata.salt());

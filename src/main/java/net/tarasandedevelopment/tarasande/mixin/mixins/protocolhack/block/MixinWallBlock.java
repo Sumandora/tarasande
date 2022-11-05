@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.block;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -125,25 +126,25 @@ public class MixinWallBlock extends Block {
 
     @Inject(method = "getPlacementState", at = @At("RETURN"), cancellable = true)
     public void injectGetPlacementState(ItemPlacementContext ctx, CallbackInfoReturnable<BlockState> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_15_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2))
             cir.setReturnValue(protocolhack_oldWallPlacementLogic(cir.getReturnValue()));
     }
 
     @Inject(method = "getStateForNeighborUpdate", at = @At("RETURN"), cancellable = true)
     public void injectGetStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos, CallbackInfoReturnable<BlockState> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_15_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2))
             cir.setReturnValue(protocolhack_oldWallPlacementLogic(cir.getReturnValue()));
     }
 
     @Inject(method = "getCollisionShape", at = @At("HEAD"), cancellable = true)
     public void injectGetCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2))
             cir.setReturnValue(protocolhack_CLIP_SHAPE_BY_INDEX_1122[protocolhack_getShapeIndex_1122(state)]);
     }
 
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2))
             cir.setReturnValue(protocolhack_SHAPE_BY_INDEX_1122[protocolhack_getShapeIndex_1122(state)]);
     }
 }

@@ -14,6 +14,7 @@
 
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.screen;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.entity.CommandBlockBlockEntity;
 import net.minecraft.client.gui.screen.ingame.CommandBlockScreen;
@@ -40,7 +41,7 @@ public abstract class MixinCommandBlockScreen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void injectInit(CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
             modeButton.visible = false;
             conditionalModeButton.visible = false;
             redstoneTriggerButton.visible = false;

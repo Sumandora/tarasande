@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_16_2to1_16_1.ServerboundPackets1_16_2;
 import com.viaversion.viaversion.protocols.protocol1_17to1_16_4.Protocol1_17To1_16_4;
@@ -48,7 +49,7 @@ public class MixinClientPlayerInteractionManager {
 
     @Inject(method = "attackEntity", at = @At("HEAD"))
     private void injectAttackEntity(PlayerEntity player, Entity target, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8) && player instanceof IClientPlayerEntity_Protocol) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8) && player instanceof IClientPlayerEntity_Protocol) {
             player.swingHand(Hand.MAIN_HAND);
             ((IClientPlayerEntity_Protocol) player).protocolhack_cancelSwingOnce();
         }
@@ -68,7 +69,7 @@ public class MixinClientPlayerInteractionManager {
         if (type == SlotActionType.QUICK_CRAFT) return true;
 
         // quick move always uses empty stack for verification since 1.12
-        if (type == SlotActionType.QUICK_MOVE && VersionList.isNewerTo(VersionList.R1_11_1)) return true;
+        if (type == SlotActionType.QUICK_MOVE && VersionList.isNewerTo(ProtocolVersion.v1_11_1)) return true;
 
         // pickup with slot -999 (outside window) to throw items always uses empty stack for verification
         return type == SlotActionType.PICKUP && slot == -999;
@@ -77,7 +78,7 @@ public class MixinClientPlayerInteractionManager {
     @Redirect(method = "clickSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/Packet;)V"))
     private void modifySlotClickPacket(ClientPlayNetworkHandler instance, Packet<?> packet) {
         try {
-            if (VersionList.isOlderOrEqualTo(VersionList.R1_16_5) && packet instanceof ClickSlotC2SPacket clickSlot) {
+            if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_16_4) && packet instanceof ClickSlotC2SPacket clickSlot) {
                 ItemStack slotItemBeforeModification;
 
                 if (this.shouldEmpty(clickSlot.getActionType(), clickSlot.getSlot()))
@@ -95,7 +96,7 @@ public class MixinClientPlayerInteractionManager {
                 assert client.player != null;
                 clickSlotPacket.write(Type.SHORT, ((IScreenHandler_Protocol) client.player.currentScreenHandler).protocolhack_getAndIncrementLastActionId());
                 clickSlotPacket.write(Type.VAR_INT, clickSlot.getActionType().ordinal());
-                clickSlotPacket.write(Type.FLAT_VAR_INT_ITEM, MinecraftViaItemRewriter.INSTANCE.minecraftToViaItem(slotItemBeforeModification, VersionList.R1_16.getVersion()));
+                clickSlotPacket.write(Type.FLAT_VAR_INT_ITEM, MinecraftViaItemRewriter.INSTANCE.minecraftToViaItem(slotItemBeforeModification, ProtocolVersion.v1_16.getVersion()));
 
                 clickSlotPacket.sendToServer(Protocol1_17To1_16_4.class);
 
@@ -112,7 +113,7 @@ public class MixinClientPlayerInteractionManager {
 
     @Inject(method = "hasLimitedAttackSpeed", at = @At("HEAD"), cancellable = true)
     private void injectHasLimitedAttackSpeed(CallbackInfoReturnable<Boolean> ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
             ci.setReturnValue(false);
         }
     }
@@ -121,7 +122,7 @@ public class MixinClientPlayerInteractionManager {
             slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;syncSelectedSlot()V"),
                     to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;sendSequencedPacket(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V", ordinal = 0)))
     private void redirectInteractItem(ClientPlayNetworkHandler clientPlayNetworkHandler, Packet<?> packet) {
-        if (VersionList.isNewerOrEqualTo(VersionList.R1_17)) {
+        if (VersionList.isNewerOrEqualTo(ProtocolVersion.v1_17)) {
             clientPlayNetworkHandler.sendPacket(packet);
         }
     }

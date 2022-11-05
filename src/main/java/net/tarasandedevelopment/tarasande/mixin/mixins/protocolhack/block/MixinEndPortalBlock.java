@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.block;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.*;
 import net.minecraft.client.MinecraftClient;
@@ -34,9 +35,9 @@ public abstract class MixinEndPortalBlock extends BlockWithEntity {
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
         if (MinecraftClient.getInstance().world == null) return;
 
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
             cir.setReturnValue(protocolhack_SHAPE_1_8);
-        else if (VersionList.isOlderOrEqualTo(VersionList.R1_16_5))
+        else if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_16_4))
             cir.setReturnValue(protocolhack_SHAPE_1_16_5);
     }
 

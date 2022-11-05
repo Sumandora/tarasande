@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.block;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.Block;
@@ -32,7 +33,7 @@ public class MixinAnvilBlock {
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
         Direction direction = state.get(FACING);
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2))
             cir.setReturnValue(direction.getAxis() == Direction.Axis.X ? protocolhack_X_AXIS_SHAPE_112 : protocolhack_Z_AXIS_SHAPE_112);
     }
 }

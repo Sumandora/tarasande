@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.block;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
@@ -24,13 +25,13 @@ public class MixinBedBlock {
 
     @Inject(method = "bounceEntity", at = @At("HEAD"), cancellable = true)
     public void injectBounceEntity(Entity entity, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_11_1))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1))
             ci.cancel();
     }
 
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_13_2))
             cir.setReturnValue(protocolhack_BED_SHAPE_1132);
     }
 }

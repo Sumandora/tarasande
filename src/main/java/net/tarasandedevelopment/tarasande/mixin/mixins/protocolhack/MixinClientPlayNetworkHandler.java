@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -26,7 +27,7 @@ public abstract class MixinClientPlayNetworkHandler {
 
     @Inject(method = "onPing", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/util/thread/ThreadExecutor;)V", shift = At.Shift.AFTER), cancellable = true)
     private void onPing(PlayPingS2CPacket packet, CallbackInfo ci) {
-        if (VersionList.isNewerOrEqualTo(VersionList.R1_17))
+        if (VersionList.isNewerOrEqualTo(ProtocolVersion.v1_17))
             return;
 
         final int inventoryId = (packet.getParameter() >> 16) & 0xFF; // Fix Via Bug from 1.16.5 (Window Confirmation -> PlayPing) Usage for MiningFast Detection
@@ -43,7 +44,7 @@ public abstract class MixinClientPlayNetworkHandler {
 
     @Inject(method = {"onGameJoin", "onPlayerRespawn"}, at = @At("TAIL"))
     private void injectOnOnGameJoinOrRespawn(CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
             ClientPlayerEntity player = MinecraftClient.getInstance().player;
             assert player != null;
             onEntityStatus(new EntityStatusS2CPacket(player, (byte) 28));

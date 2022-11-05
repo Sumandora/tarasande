@@ -14,6 +14,7 @@
 
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerAbilities;
@@ -40,7 +41,7 @@ public class MixinUpdatePlayerAbilitiesC2SPacket {
 
         byte b = 0;
 
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_15_2)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2)) {
             if (this.flying) b = (byte) (b | 2); // Minecraft
 
             if (abilities.invulnerable) b |= 1;

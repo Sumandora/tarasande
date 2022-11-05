@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.entity;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
@@ -34,7 +35,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 
     @Inject(method = "updatePose", at = @At("HEAD"), cancellable = true)
     private void onUpdatePose(CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_13_2)) {
             EntityPose pose;
 
             if (isFallFlying())
@@ -58,9 +59,9 @@ public abstract class MixinPlayerEntity extends LivingEntity {
     @Inject(method = "getDimensions", at = @At("HEAD"), cancellable = true)
     private void onGetDimensions(EntityPose pose, CallbackInfoReturnable<EntityDimensions> ci) {
         if (pose == EntityPose.CROUCHING) {
-            if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
+            if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
                 ci.setReturnValue(PlayerEntity.STANDING_DIMENSIONS);
-            } else if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2)) {
+            } else if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_13_2)) {
                 ci.setReturnValue(protocolhack_SNEAKING_DIMENSIONS_1_13_2);
             }
         }
@@ -68,7 +69,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 
     @ModifyConstant(method = "getActiveEyeHeight", constant = @Constant(floatValue = 1.27f))
     private float modifySneakEyeHeight(float prevEyeHeight) {
-        if (VersionList.isNewerTo(VersionList.R1_13_2)) {
+        if (VersionList.isNewerTo(ProtocolVersion.v1_13_2)) {
             return prevEyeHeight;
         } else {
             return 1.54f;
@@ -77,7 +78,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 
     @Inject(method = "getAttackCooldownProgress", at = @At("HEAD"), cancellable = true)
     private void injectGetAttackCooldownProgress(CallbackInfoReturnable<Float> ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
             ci.setReturnValue(1f);
         }
     }

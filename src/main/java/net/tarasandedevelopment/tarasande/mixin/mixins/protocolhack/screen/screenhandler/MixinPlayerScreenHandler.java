@@ -14,6 +14,7 @@
 
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.screen.screenhandler;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.inventory.CraftingInventory;
@@ -38,7 +39,7 @@ public abstract class MixinPlayerScreenHandler extends AbstractRecipeScreenHandl
             slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/screen/PlayerScreenHandler$2;<init>(Lnet/minecraft/screen/PlayerScreenHandler;Lnet/minecraft/inventory/Inventory;III)V")),
             at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/PlayerScreenHandler;addSlot(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;", ordinal = 0))
     private Slot redirectAddOffhandSlot(PlayerScreenHandler screenHandler, Slot slot) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
             return null;
         return addSlot(slot);
     }
@@ -46,7 +47,7 @@ public abstract class MixinPlayerScreenHandler extends AbstractRecipeScreenHandl
     @SuppressWarnings("InvalidInjectorMethodSignature")
     @ModifyVariable(method = "transferSlot", ordinal = 0, at = @At(value = "STORE", ordinal = 0))
     private EquipmentSlot injectTransferSlot(EquipmentSlot slot) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_8) && slot == EquipmentSlot.OFFHAND)
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8) && slot == EquipmentSlot.OFFHAND)
             return EquipmentSlot.MAINHAND;
         else
             return slot;

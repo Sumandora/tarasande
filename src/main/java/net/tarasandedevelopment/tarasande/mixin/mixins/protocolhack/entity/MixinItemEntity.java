@@ -14,6 +14,7 @@
 
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.entity;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.entity.ItemEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,7 +27,7 @@ public class MixinItemEntity {
 
     @Inject(method = "applyWaterBuoyancy", at = @At("HEAD"), cancellable = true)
     public void injectApplyWaterBuoyancy(CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_12_2)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
             ci.cancel();
         }
     }

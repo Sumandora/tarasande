@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.world.entity.EntityIndex;
@@ -24,12 +25,12 @@ public class MixinEntityIndex<T extends EntityLike> {
 
     @Redirect(method = "add", at = @At(value = "INVOKE", target = "Ljava/util/Map;containsKey(Ljava/lang/Object;)Z", remap = false))
     private boolean allowDuplicateUuid(Map<UUID, T> instance, Object o) {
-        return instance.containsKey(o) && VersionList.isNewerTo(VersionList.R1_16_5);
+        return instance.containsKey(o) && VersionList.isNewerTo(ProtocolVersion.v1_16_4);
     }
 
     @Inject(method = "size", at = @At("HEAD"), cancellable = true)
     private void returnRealSize(CallbackInfoReturnable<Integer> cir) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_16_5))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_16_4))
             cir.setReturnValue(this.idToEntity.size());
     }
 }

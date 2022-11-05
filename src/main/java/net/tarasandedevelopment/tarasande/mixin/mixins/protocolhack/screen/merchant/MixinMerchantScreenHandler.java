@@ -14,6 +14,7 @@
 
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.screen.merchant;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.screen.MerchantScreenHandler;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,7 +27,7 @@ public class MixinMerchantScreenHandler {
 
     @Inject(method = "switchTo", at = @At("HEAD"), cancellable = true)
     private void injectSwitchTo(int recipeId, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(VersionList.R1_13_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_13_2))
             ci.cancel(); // no lmao?
     }
 }

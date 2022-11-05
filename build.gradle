@@ -48,13 +48,13 @@ var libs = [
 
 var viaLibs = [
 		// ViaVersion -> https://github.com/ViaVersion/ViaVersion
-		"com.viaversion:viaversion:4.5.0-22w44a-SNAPSHOT",
+		"com.viaversion:viaversion:latest.integration",
 
 		// ViaBackwards -> https://github.com/ViaVersion/ViaBackwards
-		"com.viaversion:viabackwards-common:4.5.0-22w44a-SNAPSHOT",
+		"com.viaversion:viabackwards-common:latest.integration",
 
 		// ViaProtocolHack -> https://github.com/RejectedVia/ViaProtocolHack
-		"com.github.RejectedVia:ViaProtocolHack:9d4985cb2f"
+		"com.github.RejectedVia:ViaProtocolHack:127835d110"
 ]
 
 loom {
