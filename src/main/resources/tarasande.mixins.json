@@ -26,6 +26,7 @@
     "core.screens.MixinGameMenuScreen",
     "core.screens.MixinScreen",
     "core.screens.MixinTitleScreen",
+    "core.screens.accountmanager.MixinMinecraftClient",
     "core.skin.MixinInventoryScreen",
     "core.skin.MixinLivingEntityRenderer",
     "core.skin.MixinPlayerEntityRenderer",
@@ -204,14 +205,9 @@
     "protocolhack.viaversion.MixinProtocol1_16To1_15_2",
     "protocolhack.viaversion.MixinProtocol1_19_1To1_19",
     "protocolhack.viaversion.MixinProtocol1_9To1_8",
-    "protocolhack.viaversion.MixinProtocolManagerImpl",
-    "protocolhack.viaversion.MixinSkullHandler1_12_2",
     "protocolhack.viaversion.MixinViaIdleThread"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "core.screens.accountmanager.MixinMinecraftClient"
-  ]
+  }
 }

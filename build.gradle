@@ -47,8 +47,8 @@ var libs = [
 ]
 
 var viaLibs = [
-		"com.viaversion:viaversion:latest.integration",
-		"com.viaversion:viabackwards-common:latest.integration",
+		"com.viaversion:viaversion:4.5.0-22w44a-SNAPSHOT",
+		"com.viaversion:viabackwards-common:4.5.0-22w44a-SNAPSHOT",
 
 		"com.github.RejectedVia:ViaProtocolHack:8eedaa7498"
 ]
@@ -110,6 +110,9 @@ shadowJar {
 
 	dependencies {
 		for (final def lib in libs) {
+			include(dependency(lib))
+		}
+		for (final def lib in viaLibs) {
 			include(dependency(lib))
 		}
 	}
