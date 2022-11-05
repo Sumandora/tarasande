@@ -50,7 +50,7 @@ var viaLibs = [
 		"com.viaversion:viaversion:latest.integration",
 		"com.viaversion:viabackwards-common:latest.integration",
 
-		"com.github.RejectedVia:ViaProtocolHack:127835d110"
+		"com.github.RejectedVia:ViaProtocolHack:4466f8ca0b"
 ]
 
 loom {
