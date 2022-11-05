@@ -66,7 +66,7 @@ object ItemSplitter {
         splitter[Items.VERDANT_FROGLIGHT] = ProtocolVersion.v1_19
         splitter[Items.WARDEN_SPAWN_EGG] = ProtocolVersion.v1_19
 
-        splitter[Items.MUSIC_DISC_OTHERSIDE] = ProtocolVersion.v1_18_2
+        splitter[Items.MUSIC_DISC_OTHERSIDE] = ProtocolVersion.v1_18
 
         splitter[Items.AMETHYST_SHARD] = ProtocolVersion.v1_17
         splitter[Items.SMALL_AMETHYST_BUD] = ProtocolVersion.v1_17
