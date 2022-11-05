@@ -54,7 +54,7 @@ var viaLibs = [
 		"com.viaversion:viabackwards-common:4.5.0-22w44a-SNAPSHOT",
 
 		// ViaProtocolHack -> https://github.com/RejectedVia/ViaProtocolHack
-		"com.github.RejectedVia:ViaProtocolHack:ac2c40ba18"
+		"com.github.RejectedVia:ViaProtocolHack:9d4985cb2f"
 ]
 
 loom {

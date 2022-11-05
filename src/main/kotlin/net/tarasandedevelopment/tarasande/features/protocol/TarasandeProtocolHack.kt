@@ -104,5 +104,4 @@ class TarasandeProtocolHack : INativeProvider {
     }
 
     override fun getOptionalProtocols(): MutableList<ProtocolVersion> = LegacyProtocolVersion.PROTOCOL_VERSIONS
-    override fun loadRewind() = false
 }
