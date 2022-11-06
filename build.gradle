@@ -108,7 +108,6 @@ shadowJar {
 
 	dependencies {
 		for (final def lib in shadowLibs) {
-			println(lib)
 			include(dependency(lib))
 		}
 	}
@@ -171,7 +170,7 @@ tasks.named('build') {
 							if (!targetClass.split('\\$').any {
 								return actualName.startsWith("Mixin" + it)
 							})
-								println(classNode.name + " has a invalid name")
+								logger.warn(classNode.name + " has a invalid name")
 						}
 						//println("Mapping " + classNode.visibleAnnotations.first().values.first() + " to " + classNode.name)
 
