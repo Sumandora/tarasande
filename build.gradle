@@ -26,7 +26,9 @@ repositories {
 	mavenCentral()
 }
 
-var libs = [
+var shadowLibs = new ArrayList<String>()
+
+def libs = [
 		// Proxy -> https://mvnrepository.com/artifact/io.netty/netty-handler-proxy
 		"io.netty:netty-handler-proxy:4.1.82.Final",
 
@@ -43,12 +45,10 @@ var libs = [
 		"com.github.RaphiMC:NoteBlockLib:6f2b0a5c73",
 
 		// Easing Functions -> https://github.com/FlorianMichael/eZEasing
-		"com.github.FlorianMichael:eZEasing:main-SNAPSHOT"
-]
+		"com.github.FlorianMichael:eZEasing:main-SNAPSHOT",
 
-var viaLibs = [
-		"com.viaversion:viaversion:4.5.0-22w44a-SNAPSHOT",
-		"com.viaversion:viabackwards-common:4.5.0-22w44a-SNAPSHOT",
+		"com.viaversion:viaversion:latest.integration",
+		"com.viaversion:viabackwards-common:latest.integration",
 
 		"com.github.RejectedVia:ViaProtocolHack:8eedaa7498"
 ]
@@ -67,11 +67,9 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-language-kotlin:1.8.4+kotlin.1.7.20"
 
 	for (final def lib in libs) {
-		implementation(lib)
-	}
-
-	for (final def via in viaLibs) {
-		implementation(via)
+		implementation(lib) {
+			shadowLibs.add(module.group + ":" + module.name)
+		}
 	}
 }
 
@@ -109,10 +107,8 @@ shadowJar {
 	exclude "native-binaries/*"
 
 	dependencies {
-		for (final def lib in libs) {
-			include(dependency(lib))
-		}
-		for (final def lib in viaLibs) {
+		for (final def lib in shadowLibs) {
+			println(lib)
 			include(dependency(lib))
 		}
 	}
@@ -197,7 +193,6 @@ tasks.named('build') {
 		}
 	}
 }
-
 tasks.named('build') {
 	doLast {
 		String mixinsJson = new String(file("src/main/resources/${archivesBaseName}.mixins.json").readBytes())
