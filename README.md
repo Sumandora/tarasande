@@ -55,28 +55,19 @@
 
 ## TODO-List (Flori | General)
 
-- TPS Hud Element recode for Protocol Hack
 - placing blocks in localplayer
 - Notebot
-- Recode Mixins with AccessWidener and conventions
-- Iron bars & Cocoa Blocks 1.8 grim (false flag?)
-- SeedUtils and Shadow seed cracker 
-- OreSim
 - Forge Faker GUI auto calculation for width
 - Panel: Text Radar
 
 ## TODO-List (Flori | TarasandeProtocolHack)
 
 - 1.8.x: Water movement
-- 1.8.x: Lava movement
-- 1.8.x: Horses
 
 ## TODO-List (Flori | ViaLegacy)
 
 - Unknown: Mining Fast Checks
 - 1.6.4: Crafting Table CraftResult was clientside back in the time
-- 1.6.4: Reciperemapper base with all versions
-- 1.7.5 (?): Minecart + Trading
 - 1.7: OnGround State from Clientbound Position Packet to Serverbound
 - 1.7: Book reading
 - 1.7.5 (?): Bed flag
