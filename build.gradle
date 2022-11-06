@@ -41,9 +41,6 @@ def libs = [
 		// HAProxy Protocol -> https://mvnrepository.com/artifact/io.netty/netty-codec-haproxy
 		"io.netty:netty-codec-haproxy:4.1.82.Final",
 
-		// NoteBot -> https://github.com/RaphiMC/NoteBlockLib
-		"com.github.RaphiMC:NoteBlockLib:6f2b0a5c73",
-
 		// Easing Functions -> https://github.com/FlorianMichael/eZEasing
 		"com.github.FlorianMichael:eZEasing:main-SNAPSHOT",
 
@@ -51,7 +48,7 @@ def libs = [
 		"com.viaversion:viabackwards-common:latest.integration",
 		"org.yaml:snakeyaml:1.29",
 
-		"com.github.RejectedVia:ViaProtocolHack:8eedaa7498"
+		"com.github.RejectedVia:ViaProtocolHack:c68753a53e"
 ]
 
 loom {

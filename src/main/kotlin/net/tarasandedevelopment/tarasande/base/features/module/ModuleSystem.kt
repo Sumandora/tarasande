@@ -5,7 +5,6 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.event.EventTick
-import net.tarasandedevelopment.tarasande.features.module.ModuleNoteBot
 import net.tarasandedevelopment.tarasande.features.module.combat.*
 import net.tarasandedevelopment.tarasande.features.module.exploit.*
 import net.tarasandedevelopment.tarasande.features.module.ghost.*
@@ -41,7 +40,7 @@ class ManagerModule : Manager<Module>() {
             ModuleTickBaseManipulation(),
             ModuleWTap(),
             ModuleTrajectories(),
-            net.tarasandedevelopment.tarasande.features.module.combat.ModuleAntiBot(),
+            ModuleAntiBot(),
             ModuleNoFOV(),
             ModuleKeepSprint(),
             ModuleMurderMystery(),
@@ -117,9 +116,7 @@ class ManagerModule : Manager<Module>() {
             ModuleBrigadierIgnoreCase(),
             ModuleEveryItemOnArmor(),
             ModuleNoRender(),
-            ModuleCommands(),
-
-            ModuleNoteBot()
+            ModuleCommands()
         )
         TarasandeMain.get().managerEvent.add(EventTick::class.java) {
             if (it.state == EventTick.State.POST) {
