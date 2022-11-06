@@ -8,9 +8,8 @@ plugins {
 	id "com.github.johnrengelman.shadow"
 }
 
-//noinspection GroovyUnusedAssignment
 archivesBaseName = "tarasande"
-version = "1.8.7"
+version = "1.19"
 group = "net.tarasandedevelopment"
 
 repositories {
