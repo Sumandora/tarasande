@@ -104,11 +104,11 @@ shadowJar {
 	compileJava.options.encoding = "UTF-8"
 	exclude "native-binaries/*"
 
-//	dependencies {
-//		for (final def lib in shadowLibs) {
-//			include(dependency(lib))
-//		}
-//	}
+	dependencies {
+		for (final def lib in shadowLibs) {
+			include(dependency(lib))
+		}
+	}
 }
 
 compileKotlin.kotlinOptions.jvmTarget = "17"
