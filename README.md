@@ -51,6 +51,7 @@
 - ViaLegacy texture pack using ProtocolPatcher
 - Anti vanish: Tab completion
 - Make a system for automatically enabling and disabling protocol fixes
+- Protocol fix: Sword blocking
 
 ## TODO-List (Flori | General)
 
