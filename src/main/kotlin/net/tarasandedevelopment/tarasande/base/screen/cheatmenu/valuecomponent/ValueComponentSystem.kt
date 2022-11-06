@@ -6,7 +6,6 @@ import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.E
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.*
 import net.tarasandedevelopment.tarasande.value.*
 import net.tarasandedevelopment.tarasande.value.meta.ValueButton
-import net.tarasandedevelopment.tarasande.value.meta.ValueButtonItem
 import net.tarasandedevelopment.tarasande.value.meta.ValueSpacer
 
 class ManagerValueComponent : Manager<Pair<Class<out Value>, Class<out ElementValueComponent>>>() {
@@ -25,8 +24,7 @@ class ManagerValueComponent : Manager<Pair<Class<out Value>, Class<out ElementVa
             Pair(ValueRegistry::class.java, ElementValueComponentRegistry::class.java),
             Pair(ValueTextList::class.java, ElementValueComponentTextList::class.java),
             Pair(ValueButton::class.java, ElementValueComponentButton::class.java),
-            Pair(ValueSpacer::class.java, ElementValueComponentSpacer::class.java),
-            Pair(ValueButtonItem::class.java, ElementValueComponentButtonItem::class.java)
+            Pair(ValueSpacer::class.java, ElementValueComponentSpacer::class.java)
         )
     }
 

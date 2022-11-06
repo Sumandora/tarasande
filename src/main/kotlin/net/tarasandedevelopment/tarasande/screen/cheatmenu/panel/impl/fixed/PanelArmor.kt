@@ -3,11 +3,11 @@ package net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.item.ItemStack
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
-import net.tarasandedevelopment.tarasande.util.player.items.ItemUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
@@ -28,6 +28,8 @@ class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
         return false
     }
 
+    private fun enchantSimpleName(enchantment: Enchantment, length: Int) = enchantment.getName(0).string.substring(0, length)
+
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         var m = 0
         for (i in MinecraftClient.getInstance().player!!.inventory.armor.size - 1 downTo 0) {
@@ -44,7 +46,7 @@ class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
             if (showEnchantments.value) {
                 EnchantmentHelper.get(armor).onEachIndexed { index, entry ->
                     RenderUtil.font().textShadow(matrices,
-                        ItemUtil.enchantSimpleName(entry.key, maxEnchantmentLength.value.toInt()) + " " + entry.value,
+                        enchantSimpleName(entry.key, maxEnchantmentLength.value.toInt()) + " " + entry.value,
                         m.toFloat() + itemDimension / 2, (titleBarHeight / 2) + (itemDimension + (index * titleBarHeight / 2)).toFloat(),
                         scale = enchantmentScale.value.toFloat(), centered = true)
                 }

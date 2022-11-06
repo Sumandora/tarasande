@@ -10,7 +10,6 @@ import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.creative.ManagerCreative
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.graph.ManagerGraph
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.ManagerInformation
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ManagerValueComponent
@@ -20,7 +19,6 @@ import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.category.PanelElementsCategory
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.clientvalues.PanelElementsClientValues
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.creative.PanelElementsCreative
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.friends.PanelElementsFriends
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed.*
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.particle.Particle
@@ -42,7 +40,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
     val managerValueComponent = ManagerValueComponent()
     val managerInformation = ManagerInformation(this)
-    val managerCreative = ManagerCreative()
 
     var popup = false
 
@@ -55,7 +52,6 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         panels.add(PanelElementsClientValues(this, 5.0, y).also { y += it.titleBarHeight + 5 })
         val panels = mutableListOf(
             PanelElementsFriends::class.java,
-            PanelElementsCreative::class.java,
 
             PanelArrayList::class.java,
             PanelInformation::class.java,
