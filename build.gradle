@@ -26,14 +26,12 @@ repositories {
 	mavenCentral()
 }
 
-var shadowLibs = new ArrayList<String>()
-
 def libs = [
 		// Proxy -> https://mvnrepository.com/artifact/io.netty/netty-handler-proxy
 		"io.netty:netty-handler-proxy:4.1.82.Final",
 
-		// BungeeCord Chat -> https://mvnrepository.com/artifact/net.md-5/bungeecord-api
-		"net.md-5:bungeecord-api:1.16-R0.4",
+		// BungeeCord Chat -> https://mvnrepository.com/artifact/net.md-5/bungeecord-chat
+		"net.md-5:bungeecord-chat:1.16-R0.4",
 
 		// Packet Library -> https://github.com/FlorianMichael/PacketMinecraft
 		"com.github.FlorianMichael:PacketMinecraft:main-SNAPSHOT",
@@ -44,11 +42,12 @@ def libs = [
 		// Easing Functions -> https://github.com/FlorianMichael/eZEasing
 		"com.github.FlorianMichael:eZEasing:main-SNAPSHOT",
 
-		"com.viaversion:viaversion:latest.integration",
-		"com.viaversion:viabackwards-common:latest.integration",
+		// Via Protocol Hack README
+		"com.viaversion:viaversion:4.5.0-22w44a-SNAPSHOT",
+		"com.viaversion:viabackwards-common:4.5.0-22w44a-SNAPSHOT",
 		"org.yaml:snakeyaml:1.29",
 
-		"com.github.RejectedVia:ViaProtocolHack:c68753a53e"
+		"com.github.RejectedVia:ViaProtocolHack:c598e00057"
 ]
 
 loom {
@@ -65,9 +64,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-language-kotlin:1.8.4+kotlin.1.7.20"
 
 	for (final def lib in libs) {
-		implementation(lib) {
-			shadowLibs.add(module.group + ":" + module.name)
-		}
+		implementation(lib)
 	}
 }
 
@@ -105,7 +102,7 @@ shadowJar {
 	exclude "native-binaries/*"
 
 	dependencies {
-		for (final def lib in shadowLibs) {
+		for (final def lib in libs) {
 			include(dependency(lib))
 		}
 	}
