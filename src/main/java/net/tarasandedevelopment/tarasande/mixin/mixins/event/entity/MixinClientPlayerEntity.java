@@ -5,12 +5,15 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.text.Text;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventChat;
 import net.tarasandedevelopment.tarasande.event.EventIsWalking;
 import net.tarasandedevelopment.tarasande.event.EventUpdate;
+import net.tarasandedevelopment.tarasande.features.module.player.ModuleNoStatusEffect;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,7 +28,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IClientPlayerEntity {
 
     @Unique
-    boolean tarasande_bypassChat;
+    private boolean tarasande_bypassChat;
+
+    @Unique
+    private boolean tarasande_forceHasStatusEffect;
+
+    @Unique
+    private boolean tarasande_forceGetStatusEffect;
 
     public MixinClientPlayerEntity(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
         super(world, profile, publicKey);
@@ -82,6 +91,36 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     }
 
     @Override
+    public boolean hasStatusEffect(StatusEffect effect) {
+        final boolean originalValue = super.hasStatusEffect(effect);
+
+        if (tarasande_forceHasStatusEffect) {
+            tarasande_forceHasStatusEffect = false;
+            return originalValue;
+        }
+        final ModuleNoStatusEffect moduleNoStatusEffect = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoStatusEffect.class);
+        if (moduleNoStatusEffect.getEnabled() && moduleNoStatusEffect.getEffects().getList().contains(effect)) {
+            return false;
+        }
+        return originalValue;
+    }
+
+    @Nullable
+    @Override
+    public StatusEffectInstance getStatusEffect(StatusEffect effect) {
+        final StatusEffectInstance originalValue = super.getStatusEffect(effect);
+        if (tarasande_forceGetStatusEffect) {
+            tarasande_forceGetStatusEffect = false;
+            return originalValue;
+        }
+        final ModuleNoStatusEffect moduleNoStatusEffect = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoStatusEffect.class);
+        if (moduleNoStatusEffect.getEnabled() && moduleNoStatusEffect.getEffects().getList().contains(effect)) {
+            return null;
+        }
+        return originalValue;
+    }
+
+    @Override
     public boolean tarasande_getBypassChat() {
         return tarasande_bypassChat;
     }
@@ -89,5 +128,17 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Override
     public void tarasande_setBypassChat(boolean bypassChat) {
         this.tarasande_bypassChat = bypassChat;
+    }
+
+    @Override
+    public boolean tarasande_forceHasStatusEffect(StatusEffect effect) {
+        tarasande_forceHasStatusEffect = true;
+        return hasStatusEffect(effect);
+    }
+
+    @Override
+    public StatusEffectInstance tarasande_forceGetStatusEffect(StatusEffect effect) {
+        tarasande_forceGetStatusEffect = true;
+        return getStatusEffect(effect);
     }
 }

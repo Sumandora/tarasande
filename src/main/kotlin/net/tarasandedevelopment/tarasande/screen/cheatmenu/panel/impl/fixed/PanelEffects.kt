@@ -11,6 +11,7 @@ import net.minecraft.entity.effect.StatusEffectUtil
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.registry.Registry
+import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
@@ -44,15 +45,17 @@ class PanelEffects(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Pan
         for (statusEffect in Registry.STATUS_EFFECT) {
             val animation = animations[statusEffect]!!
             if (animation > 0.0) {
-                val statusEffectInstance = if (MinecraftClient.getInstance().player?.hasStatusEffect(statusEffect)!!) MinecraftClient.getInstance().player?.getStatusEffect(statusEffect) else prevInstances.getOrDefault(statusEffect, null)
-                if (statusEffectInstance != null) prevInstances[statusEffect] = statusEffectInstance
-                if (statusEffect != null) {
-                    var string = I18n.translate(statusEffectInstance?.effectType?.translationKey!!)
-                    if (statusEffectInstance.amplifier in 1..9) {
-                        string += " " + I18n.translate("enchantment.level." + (statusEffectInstance.amplifier + 1))
+                (MinecraftClient.getInstance().player as IClientPlayerEntity).also {
+                    val statusEffectInstance = if (it.tarasande_forceHasStatusEffect(statusEffect)) it.tarasande_forceGetStatusEffect(statusEffect) else prevInstances.getOrDefault(statusEffect, null)
+                    if (statusEffectInstance != null) prevInstances[statusEffect] = statusEffectInstance
+                    if (statusEffect != null) {
+                        var string = I18n.translate(statusEffectInstance?.effectType?.translationKey!!)
+                        if (statusEffectInstance.amplifier in 1..9) {
+                            string += " " + I18n.translate("enchantment.level." + (statusEffectInstance.amplifier + 1))
+                        }
+                        string += ": " + Formatting.GRAY.toString() + StatusEffectUtil.durationToString(statusEffectInstance, 1.0f)
+                        activeStatusEffects.add(Triple(statusEffect, string, statusEffect.color))
                     }
-                    string += ": " + Formatting.GRAY.toString() + StatusEffectUtil.durationToString(statusEffectInstance, 1.0f)
-                    activeStatusEffects.add(Triple(statusEffect, string, statusEffect.color))
                 }
             }
         }
@@ -76,7 +79,7 @@ class PanelEffects(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Pan
         Registry.STATUS_EFFECT.forEach { statusEffect ->
             var animation = animations.putIfAbsent(statusEffect, 0.0)
             if (animation == null || animation.isNaN()) animation = 0.0 else {
-                if (MinecraftClient.getInstance().player?.hasStatusEffect(statusEffect) ?: return false) {
+                if ((MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_forceHasStatusEffect(statusEffect) ?: return false) {
                     animation += speedIn.value * RenderUtil.deltaTime
                 } else {
                     animation -= speedOut.value * RenderUtil.deltaTime

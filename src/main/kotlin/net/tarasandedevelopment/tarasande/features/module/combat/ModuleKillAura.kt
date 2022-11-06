@@ -25,6 +25,7 @@ import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.features.module.movement.ModuleClickTP
+import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.extension.times
@@ -262,7 +263,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             var canHit = true
 
             if (waitForCritical.value) if (!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) })
-                if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
+                if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !(mc.player as IClientPlayerEntity).tarasande_forceHasStatusEffect(StatusEffects.BLINDNESS) && !mc.player?.hasVehicle()!!)
                     if (!mc.player?.isOnGround!! && mc.player?.velocity?.y!! != 0.0 && (mc.player?.fallDistance == 0.0f || (criticalSprint.value && !mc.player?.isSprinting!!)))
                         canHit = false
 
@@ -372,7 +373,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             if (PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {
                 if (waitForCritical.value && criticalSprint.value && forceCritical.value)
                     if (!dontWaitWhenEnemyHasShield.value || ((mode.isSelected(0) && !hasShield(targets.first().first) || (mode.isSelected(1) && targets.none { hasShield(it.first) }))))
-                        if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !mc.player?.hasStatusEffect(StatusEffects.BLINDNESS)!! && !mc.player?.hasVehicle()!!)
+                        if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !(mc.player as IClientPlayerEntity).tarasande_forceHasStatusEffect(StatusEffects.BLINDNESS) && !mc.player?.hasVehicle()!!)
                             if (!mc.player?.isOnGround!! && mc.player?.fallDistance!! >= 0.0f)
                                 if (mc.player?.isSprinting!!)
                                     event.pressed = false

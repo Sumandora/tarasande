@@ -116,7 +116,8 @@ class ManagerModule : Manager<Module>() {
             ModuleBrigadierIgnoreCase(),
             ModuleEveryItemOnArmor(),
             ModuleNoRender(),
-            ModuleCommands()
+            ModuleCommands(),
+            ModuleNoStatusEffect()
         )
         TarasandeMain.get().managerEvent.add(EventTick::class.java) {
             if (it.state == EventTick.State.POST) {
