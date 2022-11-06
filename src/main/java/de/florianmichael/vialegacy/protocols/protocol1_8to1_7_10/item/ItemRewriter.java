@@ -68,10 +68,7 @@ public class ItemRewriter {
 				StringTag page = pages.get(i);
 				String value = page.getValue();
 				oldPages.add(new StringTag(value));
-				try {
-					value = ChatRewriter.jsonToLegacyText(value);
-				} catch (Throwable ignored) {
-				}
+				value = ChatRewriter.legacyTextToJson(value).toString();
 				page.setValue(value);
 			}
 		}
