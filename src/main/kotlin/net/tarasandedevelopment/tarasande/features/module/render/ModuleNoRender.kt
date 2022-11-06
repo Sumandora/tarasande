@@ -75,9 +75,8 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
         val armor = ValueBooleanNoRender(this, "Armor", false)
         val mobInSpawner = ValueBooleanNoRender(this, "Mob in spawner", false)
         val deadEntities = ValueBooleanNoRender(this, "Dead entities", false)
-
-        fun noEntity(entity: net.minecraft.entity.Entity): Boolean {
-            return isEnabled() && entities.list.contains(entity.type)
+        val entityNameTags = object : ValueRegistry<EntityType<*>>(this, "Entity Name tags", Registry.ENTITY_TYPE) {
+            override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
         }
     }
 

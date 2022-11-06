@@ -38,6 +38,7 @@ public class MixinBannerBlockEntityRenderer {
             at = @At("HEAD"), cancellable = true)
     public void noRender_render(BannerBlockEntity bannerBlockEntity, float f, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int j, CallbackInfo ci) {
         final ValueMode modeValue = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoRender.class).getWorld().getBanners();
+        if (!TarasandeMain.Companion.get().getManagerModule().get(ModuleNoRender.class).getEnabled()) return;
 
         if (!modeValue.isSelected(0)) {
             ci.cancel();
