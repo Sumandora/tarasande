@@ -8,7 +8,7 @@ import java.net.ServerSocket
 class AccountMicrosoftRefreshToken : AccountMicrosoft() {
 
     @TextFieldInfo("Refresh-Token", true)
-    private var token: String = ""
+    private var token = ""
 
     override fun setupHttpServer(): ServerSocket {
         error("Account is invalid")

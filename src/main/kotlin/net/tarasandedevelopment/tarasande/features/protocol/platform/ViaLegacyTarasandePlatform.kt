@@ -33,7 +33,7 @@ class ViaLegacyTarasandePlatform(private val protocolHack: TarasandeProtocolHack
             map.entries().add(SimpleEntry(it.key, viaProperty))
         }
 
-        return GameProfile(MinecraftClient.getInstance().session.username, MinecraftClient.getInstance().session.profile.id, map)
+        return MinecraftClient.getInstance().session.let { GameProfile(it.username, it.uuidOrNull, map) }
     }
 
     override fun fixPipelineOrder_1_6(channel: Channel, decoder: String, encoder: String) {

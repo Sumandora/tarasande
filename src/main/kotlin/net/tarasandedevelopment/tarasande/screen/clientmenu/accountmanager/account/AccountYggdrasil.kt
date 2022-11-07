@@ -16,10 +16,10 @@ import java.util.*
 class AccountYggdrasil : Account() {
 
     @TextFieldInfo("Username/E-Mail", false)
-    var username: String = ""
+    var username = ""
 
     @TextFieldInfo("Password", true)
-    var password: String = ""
+    var password = ""
 
     private var service: MinecraftSessionService? = null
 

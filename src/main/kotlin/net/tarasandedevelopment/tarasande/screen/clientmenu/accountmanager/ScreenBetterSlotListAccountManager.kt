@@ -19,10 +19,13 @@ import net.tarasandedevelopment.tarasande.base.screen.clientmenu.accountmanager.
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
+import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.account.AccountSession
 import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.subscreens.ScreenBetterAccount
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
+import org.apache.commons.lang3.RandomStringUtils
+import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, RenderUtil.font().fontHeight() * 5) {
@@ -94,11 +97,21 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Ren
                 this.slotList?.reload()
             })
         }.also { addButton = it })
+
+        addDrawableChild(ButtonWidget(5, 5, 100, 20, Text.of("Random cracked")) {
+            logIn(AccountSession().also {
+                it.username = RandomStringUtils.randomAlphanumeric(16)
+                it.uuid = UUID.randomUUID().toString()
+                it.environment = it.defaultEnvironment()
+            })
+        })
+
         addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
             RenderSystem.recordRenderCall {
                 close()
             }
         })
+
         tick()
     }
 

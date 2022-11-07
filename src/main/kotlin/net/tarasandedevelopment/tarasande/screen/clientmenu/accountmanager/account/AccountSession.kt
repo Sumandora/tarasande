@@ -15,25 +15,26 @@ import java.util.*
 class AccountSession : Account() {
 
     @TextFieldInfo("Username", false)
-    private var username: String = ""
+    var username = ""
 
     @TextFieldInfo("UUID", false)
-    private var uuid: String = ""
+    var uuid = ""
 
     @TextFieldInfo("Access Token", false)
-    private var accessToken: String = ""
+    private var accessToken = ""
 
     @TextFieldInfo("X Uid", false)
-    private var xUid: String = ""
+    private var xUid = ""
 
     @TextFieldInfo("Client Uid", false)
-    private var clientUid: String = ""
+    private var clientUid = ""
 
     private var service: MinecraftSessionService? = null
 
     override fun logIn() {
+        uuid = UUID.randomUUID().toString()
         service = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment).createMinecraftSessionService()
-        session = Session(username, uuid, accessToken, if (xUid.isEmpty()) Optional.empty() else Optional.of(xUid), if (clientUid.isEmpty()) Optional.empty() else Optional.of(clientUid), if (xUid.isNotEmpty() || clientUid.isNotEmpty()) Session.AccountType.MSA else Session.AccountType.MOJANG)
+        session = Session(username, uuid, accessToken, Optional.ofNullable(xUid), Optional.ofNullable(clientUid), if (xUid.isNotEmpty() || clientUid.isNotEmpty()) Session.AccountType.MSA else Session.AccountType.MOJANG)
     }
 
     override fun getDisplayName() = username
