@@ -16,14 +16,22 @@ import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import net.tarasandedevelopment.tarasande.util.render.shader.Program
 import net.tarasandedevelopment.tarasande.util.render.shader.Shader
+import net.tarasandedevelopment.tarasande.value.ValueMode
+import net.tarasandedevelopment.tarasande.value.ValueNumber
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL13
 import org.lwjgl.opengl.GL20
 
 class ManagerBlur : Manager<Blur>() {
 
-    private val shapesFramebuffer = SimpleFramebufferWrapped()
+    val mode: ValueMode
+    val strength = object : ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0) {
+        override fun onChange() {
+            get(BlurKawase::class.java).kawasePasses = null
+        }
+    }
 
+    private val shapesFramebuffer = SimpleFramebufferWrapped()
     private val cutoutShader = Program(Shader("cutout.frag", GL20.GL_FRAGMENT_SHADER), Shader("default.vert", GL20.GL_VERTEX_SHADER))
 
     init {
@@ -42,9 +50,11 @@ class ManagerBlur : Manager<Blur>() {
                 blurScene()
             }
         }
+
+        mode = ValueMode(this, "Blur mode", false, *list.map { it.name }.toTypedArray())
     }
 
-    fun selected(): Blur = list[TarasandeMain.get().clientValues.blurMode.let { it.settings.indexOf(it.selected[0]) }]
+    fun selected(): Blur = list[mode.let { it.settings.indexOf(it.selected[0]) }]
 
     fun bind(setViewport: Boolean) {
         shapesFramebuffer.beginWrite(setViewport)

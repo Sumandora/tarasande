@@ -54,7 +54,7 @@ class BlurKawase : Blur("Kawase") {
         var totalScale = 1.0f
 
         if (kawasePasses == null) {
-            kawasePasses = calculateKawasePasses(MathHelper.clamp(TarasandeMain.get().clientValues.blurStrength.value.toInt(), 1, 20))
+            kawasePasses = calculateKawasePasses(MathHelper.clamp(TarasandeMain.get().managerBlur.strength.value.toInt(), 1, 20))
         }
 
         for ((index, kawasePass) in (if (strength != null) calculateKawasePasses(MathHelper.clamp(strength, 1, 20)) else kawasePasses!!).withIndex()) {

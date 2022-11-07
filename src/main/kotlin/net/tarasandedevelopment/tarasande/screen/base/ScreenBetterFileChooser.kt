@@ -25,7 +25,7 @@ class ScreenBetterFileChooser(
 
     init {
         if (prevScreen is ScreenCheatMenu)
-            prevScreen.popup = true
+            prevScreen.disableAnimation = true
     }
 
     override fun init() {

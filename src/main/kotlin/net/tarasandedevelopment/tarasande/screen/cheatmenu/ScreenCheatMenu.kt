@@ -24,10 +24,28 @@ import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed.*
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.particle.Particle
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import net.tarasandedevelopment.tarasande.value.ValueBind
+import net.tarasandedevelopment.tarasande.value.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.ValueMode
+import net.tarasandedevelopment.tarasande.value.ValueNumber
+import org.lwjgl.glfw.GLFW
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.round
 
 class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
+
+    // Values
+    val hotkey = object : ValueBind(this, "Hotkey", Type.KEY, GLFW.GLFW_KEY_RIGHT_SHIFT) {
+        override fun filter(type: Type, bind: Int) = bind != GLFW.GLFW_KEY_UNKNOWN
+    }
+    val animationLength = ValueNumber(this, "Animation length", 0.0, 100.0, 500.0, 1.0)
+    val accentBackground = ValueBoolean(this, "Accent background", true)
+    val blurredBackground = ValueBoolean(this, "Blurred background", true)
+    val imageValue = object : ValueMode(this, "Image", false, "Off", "Rimuru", "Shuya's girl", "Nanakusa", "Jannick", "Azusa") {
+        override fun onChange() {
+            image = null
+        }
+    }
 
     val panels = CopyOnWriteArrayList<Panel>()
     private var screenChangeTime = System.currentTimeMillis()
@@ -41,7 +59,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     val managerValueComponent = ManagerValueComponent()
     val managerInformation = ManagerInformation(this)
 
-    var popup = false
+    var disableAnimation = false
 
     init {
         var y = 5.0
@@ -79,16 +97,15 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             }
             it.add(EventUpdate::class.java) { event ->
                 if (event.state == EventUpdate.State.PRE)
-                    if (TarasandeMain.get().clientValues.cheatMenuHotkey.wasPressed().let { it > 0 && it % 2 != 0 })
+                    if (hotkey.wasPressed().let { it > 0 && it % 2 != 0 })
                         MinecraftClient.getInstance().setScreen(this)
             }
         }
     }
 
     override fun init() {
-        createImage()
-        if (popup) {
-            popup = false
+        if (disableAnimation) {
+            disableAnimation = false
             return
         }
         screenChangeTime = System.currentTimeMillis()
@@ -100,7 +117,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        var animation = ((System.currentTimeMillis() - screenChangeTime) / TarasandeMain.get().clientValues.cheatMenuAnimationLength.value).coerceAtMost(1.0)
+        var animation = ((System.currentTimeMillis() - screenChangeTime) / animationLength.value).coerceAtMost(1.0)
         if (isClosing) animation = 1.0 - animation
 
         if (isClosing && animation <= 0.0) {
@@ -111,8 +128,8 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
         val color = TarasandeMain.get().clientValues.accentColor.getColor()
 
-        val strength = round(animation * TarasandeMain.get().clientValues.blurStrength.value).toInt()
-        if (strength > 0 && TarasandeMain.get().clientValues.cheatMenuBlurBackground.value) {
+        val strength = round(animation * TarasandeMain.get().managerBlur.strength.value).toInt()
+        if (strength > 0 && blurredBackground.value) {
             TarasandeMain.get().managerBlur.bind(true)
             RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
             client?.framebuffer?.beginWrite(true)
@@ -126,7 +143,10 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
         matrices?.push()
 
-        if (image != null && image!!.image != null) {
+        if (!imageValue.isSelected(0)) {
+            if (image == null)
+                image = RenderUtil.createImage(imageValue.selected[0].lowercase().replace(" ", "").replace("'", "") + ".png")
+
             matrices?.push()
             RenderSystem.setShader { GameRenderer.getPositionTexShader() }
             RenderSystem.setShaderTexture(0, image!!.glId)
@@ -153,7 +173,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
 
-        if (TarasandeMain.get().clientValues.cheatMenuAccentBackground.value) {
+        if (accentBackground.value) {
             matrices?.push()
             DrawableHelper.fill(matrices, 0, 0, width, height, color.withAlpha((animation * 255 * 0.66).toInt()).rgb)
             matrices?.pop()
@@ -188,7 +208,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        var animation = ((System.currentTimeMillis() - screenChangeTime) / TarasandeMain.get().clientValues.cheatMenuAnimationLength.value).coerceAtMost(1.0)
+        var animation = ((System.currentTimeMillis() - screenChangeTime) / animationLength.value).coerceAtMost(1.0)
         if (isClosing) animation = 1.0 - animation
 
         if (animation != 1.0) return true
@@ -221,7 +241,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
         panels.forEach {
             if (it.keyPressed(keyCode, scanCode, modifiers)) return false
         }
-        val animation = ((System.currentTimeMillis() - screenChangeTime) / TarasandeMain.get().clientValues.cheatMenuAnimationLength.value).coerceAtMost(1.0)
+        val animation = ((System.currentTimeMillis() - screenChangeTime) / animationLength.value).coerceAtMost(1.0)
         if (animation != 1.0) return false
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
@@ -237,7 +257,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     }
 
     override fun close() {
-        if (popup) {
+        if (disableAnimation) {
             return
         }
         if (!isClosing) {
@@ -247,12 +267,4 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     }
 
     override fun shouldPause() = false
-
-    private fun createImage() {
-        if (TarasandeMain.get().clientValues.cheatMenuImage.isSelected(0)) {
-            image = null
-        }
-        println(TarasandeMain.get().clientValues.cheatMenuImage.selected[0].lowercase().replace(" ", "").replace("'", ""))
-        image = RenderUtil.createImage(TarasandeMain.get().clientValues.cheatMenuImage.selected[0].lowercase().replace(" ", "").replace("'", "") + ".png")
-    }
 }

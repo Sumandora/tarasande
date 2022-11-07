@@ -19,7 +19,7 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
 
     init {
         if (parent is ScreenCheatMenu)
-            parent.popup = true
+            parent.disableAnimation = true
     }
 
     override fun init() {

@@ -8,11 +8,10 @@ import net.minecraft.entity.Tameable
 import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
-import net.tarasandedevelopment.tarasande.render.blur.BlurKawase
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.util.dummies.ClientWorldDummy
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.*
-import org.lwjgl.glfw.GLFW
+import net.tarasandedevelopment.tarasande.value.meta.ValueButton
 
 class ClientValues {
 
@@ -28,20 +27,24 @@ class ClientValues {
     }
     val passEventsInScreens = ValueBoolean(this, "Pass events in screens", true)
 
-    // Cheat menu
-    val cheatMenuHotkey = object : ValueBind(this, "Cheat menu: hotkey", Type.KEY, GLFW.GLFW_KEY_RIGHT_SHIFT) {
-        override fun filter(type: Type, bind: Int) = bind != GLFW.GLFW_KEY_UNKNOWN
+    init {
+        object : ValueButton(this, "Cheat menu values") {
+            override fun onChange() {
+                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Cheat menu values", TarasandeMain.get().screenCheatMenu))
+            }
+        }
     }
-    val cheatMenuAnimationLength = ValueNumber(this, "Cheat menu: animation length", 0.0, 100.0, 500.0, 1.0)
-    val cheatMenuAccentBackground = ValueBoolean(this, "Cheat menu: accent background", true)
-    val cheatMenuBlurBackground = ValueBoolean(this, "Cheat menu: blur background", true)
-    val cheatMenuImage = ValueMode(this, "Cheat menu: image", false, "Off", "Rimuru", "Shuya's girl", "Nanakusa", "Jannick", "Azusa")
 
     // Client menu
     val clientMenuShowCategories = ValueBoolean(this, "Client menu: show categories", true)
 
     // Combat
-    val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
+    val targetingOptions = object : ValueButton(this, "Targeting options") {
+        override fun onChange() {
+            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Targeting options", this))
+        }
+    }
+    val entities = object : ValueRegistry<EntityType<*>>(targetingOptions, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
 
         val map = HashMap<EntityType<*>, Boolean>()
 
@@ -56,7 +59,7 @@ class ClientValues {
         override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
         override fun filter(key: EntityType<*>) = map[key] == true
     }
-    private val dontAttackTamedEntities = object : ValueBoolean(this, "Don't attack tamed entities", false) {
+    private val dontAttackTamedEntities = object : ValueBoolean(targetingOptions, "Don't attack tamed entities", false) {
 
         val map = HashMap<EntityType<*>, Boolean>()
 
@@ -70,16 +73,18 @@ class ClientValues {
 
         override fun isEnabled() = entities.list.any { map[it] == true }
     }
-    private val dontAttackRidingEntity = object : ValueBoolean(this, "Don't attack riding entity", false) {
+    private val dontAttackRidingEntity = object : ValueBoolean(targetingOptions, "Don't attack riding entity", false) {
         override fun isEnabled() = entities.list.isNotEmpty()
     }
+
     val correctMovement = ValueMode(this, "Correct movement", false, "Off", "Prevent Backwards Sprinting", "Direct", "Silent")
 
     // Rendering
-    val blurMode = ValueMode(this, "Blur mode", false, *TarasandeMain.get().managerBlur.list.map { it.name }.toTypedArray())
-    val blurStrength = object : ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0) {
-        override fun onChange() {
-            TarasandeMain.get().managerBlur.get(BlurKawase::class.java).kawasePasses = null
+    init {
+        object : ValueButton(this, "Blur values") {
+            override fun onChange() {
+                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Blur values", TarasandeMain.get().managerBlur))
+            }
         }
     }
     val unlockTicksPerFrame = ValueBoolean(this, "Unlock ticks per frame", false)

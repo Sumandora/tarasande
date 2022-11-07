@@ -19,7 +19,7 @@ class BlurBox : Blur("Box") {
     private val alternativeFramebuffer = SimpleFramebufferWrapped()
 
     override fun render(strength: Int?): Framebuffer {
-        val strength = strength ?: TarasandeMain.get().clientValues.blurStrength.value.toInt()
+        val strength = strength ?: TarasandeMain.get().managerBlur.strength.value.toInt()
         sample(strength, MinecraftClient.getInstance().framebuffer, alternativeFramebuffer, Direction.HORIZONTAL)
         sample(strength, alternativeFramebuffer, blurredFramebuffer, Direction.VERTICAL)
         return blurredFramebuffer
