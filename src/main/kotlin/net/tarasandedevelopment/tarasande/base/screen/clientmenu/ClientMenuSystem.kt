@@ -14,28 +14,23 @@ import java.awt.Color
 
 class ManagerClientMenu : Manager<ElementMenu>() {
 
-    internal val clientMenuCategories = ValueBoolean(this, "Show categories", false)
-
     init {
-        val fritzBox = ElementMenuFritzBoxReconnect()
-
         this.add(
-            ElementMenuTitle("General"),
-
+            // GUIs
             ElementMenuScreenAccountManager(),
             ElementMenuScreenProxySystem(),
             ElementMenuScreenProtocolHack(),
             ElementMenuScreenPackages(),
 
-            ElementMenuTitle("Exploits"),
+            // Exploits
             ElementMenuToggleBungeeHack(),
             ElementMenuToggleForgeFaker(),
             ElementMenuToggleHAProxyHack(),
             ElementMenuToggleQuiltFaker(),
             ElementMenuToggleClientBrandSpoofer(),
 
-            ElementMenuTitleConditional("Special") { fritzBox.visible() },
-            fritzBox
+            // Special
+            ElementMenuFritzBoxReconnect()
         )
     }
 
@@ -46,7 +41,7 @@ class ManagerClientMenu : Manager<ElementMenu>() {
     }
 }
 
-abstract class ElementMenu(val name: String, val locked: Boolean = false) {
+abstract class ElementMenu(val name: String, val category: String) {
 
     internal fun onClickInternal(mouseButton: Int) {
         if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
@@ -60,12 +55,11 @@ abstract class ElementMenu(val name: String, val locked: Boolean = false) {
     }
 
     open fun elementColor() : Int = Color.ORANGE.rgb
-    open fun elementTextSize() : Float = 1.0F
     open fun visible() = true
     abstract fun onClick(mouseButton: Int)
 }
 
-abstract class ElementMenuScreen(name: String) : ElementMenu(name) {
+abstract class ElementMenuScreen(name: String, category: String) : ElementMenu(name, category) {
 
     override fun onClick(mouseButton: Int) {
         MinecraftClient.getInstance().setScreen(this.getScreen())
@@ -75,7 +69,7 @@ abstract class ElementMenuScreen(name: String) : ElementMenu(name) {
     abstract fun getScreen(): Screen
 }
 
-abstract class ElementMenuToggle(name: String) : ElementMenu(name) {
+abstract class ElementMenuToggle(name: String, category: String) : ElementMenu(name, category) {
 
     var state = false
 
@@ -89,24 +83,11 @@ abstract class ElementMenuToggle(name: String) : ElementMenu(name) {
     }
 
     override fun elementColor() = if (state) Color.green.rgb else Color.red.rgb
-
     abstract fun onToggle(state: Boolean)
 }
 
-open class ElementMenuTitle(name: String) : ElementMenu(name, true) {
-    override fun onClick(mouseButton: Int) {
-    }
-
-    override fun elementColor() = Color.gray.rgb
-    override fun elementTextSize() = 1.5F
-}
-
-open class ElementMenuTitleConditional(name: String, private val conditional: () -> Boolean) : ElementMenu(name, true) {
-    override fun onClick(mouseButton: Int) {
-    }
-
-    override fun elementColor() = Color.gray.rgb
-    override fun elementTextSize() = 1.5F
-
-    override fun visible() = conditional.invoke()
+object ElementCategory {
+    const val GENERAL = "General"
+    const val EXPLOITS = "Exploits"
+    const val SPECIAL = "Special"
 }

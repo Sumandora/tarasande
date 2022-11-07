@@ -17,6 +17,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementCategory
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenu
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuScreen
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuToggle
@@ -43,7 +44,7 @@ import java.io.File
 import java.net.InetSocketAddress
 import java.util.*
 
-class ElementMenuScreenAccountManager : ElementMenuScreen("Account Manager") {
+class ElementMenuScreenAccountManager : ElementMenuScreen("Account Manager", ElementCategory.GENERAL) {
 
     val screenBetterSlotListAccountManager = ScreenBetterSlotListAccountManager()
 
@@ -53,14 +54,14 @@ class ElementMenuScreenAccountManager : ElementMenuScreen("Account Manager") {
     }
 }
 
-class ElementMenuScreenProxySystem : ElementMenuScreen("Proxy System") {
+class ElementMenuScreenProxySystem : ElementMenuScreen("Proxy System", ElementCategory.GENERAL) {
 
     override fun getScreen(): Screen {
         return ScreenBetterProxy(MinecraftClient.getInstance().currentScreen)
     }
 }
 
-class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack") {
+class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack", ElementCategory.GENERAL) {
 
     private val screenBetterSlotListProtocolHack = ScreenBetterSlotListProtocolHack()
 
@@ -76,7 +77,7 @@ class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack") {
     }
 }
 
-class ElementMenuScreenPackages : ElementMenuScreen("Packages") {
+class ElementMenuScreenPackages : ElementMenuScreen("Packages", ElementCategory.GENERAL) {
 
     private val screenBetterSlotListPackages = ScreenBetterSlotListPackages()
 
@@ -90,7 +91,7 @@ class ElementMenuScreenPackages : ElementMenuScreen("Packages") {
     }
 }
 
-class ElementMenuToggleBungeeHack : ElementMenuToggle("Bungee Hack") {
+class ElementMenuToggleBungeeHack : ElementMenuToggle("Bungee Hack", ElementCategory.EXPLOITS) {
 
     private val endIP = ValueText(this, "End IP", "127.0.0.1")
     private val customUUID = ValueBoolean(this, "Custom UUID", false)
@@ -121,7 +122,7 @@ class ElementMenuToggleBungeeHack : ElementMenuToggle("Bungee Hack") {
     }
 }
 
-class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
+class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker", ElementCategory.EXPLOITS) {
 
     val forgeInfoTracker = HashMap<InetSocketAddress, IForgePayload>()
     var currentHandler: IForgeNetClientHandler? = null
@@ -196,7 +197,7 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker") {
     }
 }
 
-class ElementMenuToggleHAProxyHack : ElementMenuToggle("HA-Proxy Hack") {
+class ElementMenuToggleHAProxyHack : ElementMenuToggle("HA-Proxy Hack", ElementCategory.EXPLOITS) {
 
     val modifyIP = ValueBoolean(this, "Modify ip", true)
     val ip = object : ValueText(this, "IP", "1.3.3.7") {
@@ -245,7 +246,7 @@ class ElementMenuToggleHAProxyHack : ElementMenuToggle("HA-Proxy Hack") {
 }
 
 // https://github.dev/QuiltMC/quilt-standard-libraries/tree/1.19/library/core/networking/src/main/java/org/quiltmc/qsl/networking
-class ElementMenuToggleQuiltFaker : ElementMenuToggle("Quilt Faker") {
+class ElementMenuToggleQuiltFaker : ElementMenuToggle("Quilt Faker", ElementCategory.EXPLOITS) {
 
     private val quiltHandshake = Identifier("registry_sync/handshake")
 
@@ -281,7 +282,7 @@ class ElementMenuToggleQuiltFaker : ElementMenuToggle("Quilt Faker") {
     }
 }
 
-class ElementMenuToggleClientBrandSpoofer : ElementMenuToggle("Client brand spoofer") {
+class ElementMenuToggleClientBrandSpoofer : ElementMenuToggle("Client brand spoofer", ElementCategory.EXPLOITS) {
 
     private val clientBrand = ValueText(this, "Client brand", "vanilla")
 
@@ -302,7 +303,7 @@ class ElementMenuToggleClientBrandSpoofer : ElementMenuToggle("Client brand spoo
     }
 }
 
-class ElementMenuFritzBoxReconnect : ElementMenu("Fritz!Box Reconnect") {
+class ElementMenuFritzBoxReconnect : ElementMenu("Fritz!Box Reconnect", ElementCategory.SPECIAL) {
     private val scriptName = "ip_changer_fritzbox.vbs"
     private val script = File(TarasandeMain.get().rootDirectory, scriptName)
 

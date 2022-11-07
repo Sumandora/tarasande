@@ -16,20 +16,37 @@ import org.lwjgl.glfw.GLFW
 
 class ClientValues {
 
-    val menuHotkey = object : ValueBind(this, "Menu: hotkey", Type.KEY, GLFW.GLFW_KEY_RIGHT_SHIFT) {
+    // General
+    val accentColor = ValueColor(this, "Accent color", 0.6f, 1.0f, 1.0f)
+    val autoSaveConfig = object : ValueBoolean(this, "Auto save: config", true) {
+        override fun onChange() {
+            TarasandeMain.get().autoSaveDaemon.name = TarasandeMain.get().autoSaveDaemonName + if (!value) " (disabled)" else ""
+        }
+    }
+    val autoSaveDelay = object : ValueNumber(this, "Auto save: delay", 0.0, 10000.0, 60000.0, 1000.0) {
+        override fun isEnabled() = autoSaveConfig.value
+    }
+    val passEventsInScreens = ValueBoolean(this, "Pass events in screens", true)
+
+    // Cheat menu
+    val cheatMenuHotkey = object : ValueBind(this, "Cheat menu: hotkey", Type.KEY, GLFW.GLFW_KEY_RIGHT_SHIFT) {
         override fun filter(type: Type, bind: Int) = bind != GLFW.GLFW_KEY_UNKNOWN
     }
-    val menuAnimationLength = ValueNumber(this, "Menu: animation length", 0.0, 100.0, 500.0, 1.0)
-    val menuAccentBackground = ValueBoolean(this, "Menu: accent background", true)
-    val menuBlurBackground = ValueBoolean(this, "Menu: blur background", true)
-    val menuDrawImage = ValueBoolean(this, "Menu: draw image", true)
-    val menuImage = object : ValueMode(this, "Menu: image", false, "Rimuru", "Shuya's girl", "Nanakusa", "Jannick", "Azusa") {
-        override fun isEnabled() = menuDrawImage.value
+    val cheatMenuAnimationLength = ValueNumber(this, "Cheat menu: animation length", 0.0, 100.0, 500.0, 1.0)
+    val cheatMenuAccentBackground = ValueBoolean(this, "Cheat menu: accent background", true)
+    val cheatMenuBlurBackground = ValueBoolean(this, "Cheat menu: blur background", true)
+    val cheatMenuDrawImage = ValueBoolean(this, "Cheat menu: draw image", true)
+    val cheatMenuImage = object : ValueMode(this, "Cheat menu: image", false, "Rimuru", "Shuya's girl", "Nanakusa", "Jannick", "Azusa") {
+        override fun isEnabled() = cheatMenuDrawImage.value
         override fun onChange() {
             TarasandeMain.get().screenCheatMenu.image = RenderUtil.createImage(selected[0].lowercase().replace(" ", "").replace("'", "") + ".png")
         }
     }
-    val accentColor = ValueColor(this, "Accent color", 0.6f, 1.0f, 1.0f)
+
+    // Client menu
+    val clientMenuShowCategories = ValueBoolean(this, "Client menu: show categories", true)
+
+    // Combat
     val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
 
         val map = HashMap<EntityType<*>, Boolean>()
@@ -63,6 +80,8 @@ class ClientValues {
         override fun isEnabled() = entities.list.isNotEmpty()
     }
     val correctMovement = ValueMode(this, "Correct movement", false, "Off", "Prevent Backwards Sprinting", "Direct", "Silent")
+
+    // Rendering
     val blurMode = ValueMode(this, "Blur mode", false, *TarasandeMain.get().managerBlur.list.map { it.name }.toTypedArray())
     val blurStrength = object : ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0) {
         override fun onChange() {
@@ -74,15 +93,6 @@ class ClientValues {
     val updateRotationsAccurately = object : ValueBoolean(this, "Update rotations accurately", true) {
         override fun isEnabled() = updateRotationsWhenTickSkipping.value
     }
-    val autoSaveConfig = object : ValueBoolean(this, "Auto save: config", true) {
-        override fun onChange() {
-            TarasandeMain.get().autoSaveDaemon.name = TarasandeMain.get().autoSaveDaemonName + if (!value) " (disabled)" else ""
-        }
-    }
-    val autoSaveDelay = object : ValueNumber(this, "Auto save: delay", 0.0, 10000.0, 60000.0, 1000.0) {
-        override fun isEnabled() = autoSaveConfig.value
-    }
-    val passEventsInScreens = ValueBoolean(this, "Pass events in screens", true)
     val allowEveryCharacterInChat = ValueBoolean(this, "Allow every character in chat", true)
     val fontRenderer = object : ValueMode(this, "Font renderer", false, *TarasandeMain.get().managerFont.list.map { it.name }.toTypedArray()) {
         override fun onChange() {
