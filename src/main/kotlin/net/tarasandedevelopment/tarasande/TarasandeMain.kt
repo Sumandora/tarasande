@@ -37,13 +37,13 @@ class TarasandeMain {
         private set
     lateinit var managerFont: ManagerFont
         private set
-    lateinit var managerPackage: ManagerPackage
-        private set
-    lateinit var managerClientMenu: ManagerClientMenu
-        private set
     lateinit var managerBlur: ManagerBlur
         private set
+    lateinit var managerPackage: ManagerPackage
+        private set
     lateinit var clientValues: ClientValues
+        private set
+    lateinit var managerClientMenu: ManagerClientMenu
         private set
     lateinit var protocolHack: TarasandeProtocolHack
         private set
@@ -94,10 +94,10 @@ class TarasandeMain {
         managerFile = ManagerFile()
         managerValue = ManagerValue()
         managerFont = ManagerFont()
-        managerPackage = ManagerPackage()
-        managerClientMenu = ManagerClientMenu()
         managerBlur = ManagerBlur()
+        managerPackage = ManagerPackage()
         clientValues = ClientValues()
+        managerClientMenu = ManagerClientMenu()
         protocolHack = TarasandeProtocolHack()
         managerClickMethod = ManagerClickMethod()
         managerModule = ManagerModule()

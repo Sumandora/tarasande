@@ -1,21 +1,21 @@
 package net.tarasandedevelopment.tarasande.base.render.font
 
 import net.minecraft.client.util.math.MatrixStack
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.tarasande.base.render.blur.Blur
 import net.tarasandedevelopment.tarasande.render.font.FontMinecraft
 import java.awt.Color
 
 class ManagerFont : Manager<Font>() {
 
-    var selected: Font
-
     init {
         add(
             FontMinecraft()
         )
-
-        selected = list[0]
     }
+
+    fun selected(): Font = list[TarasandeMain.get().clientValues.fontRenderer.let { it.settings.indexOf(it.selected[0]) }]
 }
 
 abstract class Font(val name: String) {

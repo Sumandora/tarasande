@@ -86,6 +86,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     }
 
     override fun init() {
+        createImage()
         if (popup) {
             popup = false
             return
@@ -125,7 +126,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
         matrices?.push()
 
-        if (image != null && image!!.image != null && TarasandeMain.get().clientValues.cheatMenuDrawImage.value) {
+        if (image != null && image!!.image != null) {
             matrices?.push()
             RenderSystem.setShader { GameRenderer.getPositionTexShader() }
             RenderSystem.setShaderTexture(0, image!!.glId)
@@ -246,4 +247,12 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     }
 
     override fun shouldPause() = false
+
+    private fun createImage() {
+        if (TarasandeMain.get().clientValues.cheatMenuImage.isSelected(0)) {
+            image = null
+        }
+        println(TarasandeMain.get().clientValues.cheatMenuImage.selected[0].lowercase().replace(" ", "").replace("'", ""))
+        image = RenderUtil.createImage(TarasandeMain.get().clientValues.cheatMenuImage.selected[0].lowercase().replace(" ", "").replace("'", "") + ".png")
+    }
 }

@@ -35,13 +35,7 @@ class ClientValues {
     val cheatMenuAnimationLength = ValueNumber(this, "Cheat menu: animation length", 0.0, 100.0, 500.0, 1.0)
     val cheatMenuAccentBackground = ValueBoolean(this, "Cheat menu: accent background", true)
     val cheatMenuBlurBackground = ValueBoolean(this, "Cheat menu: blur background", true)
-    val cheatMenuDrawImage = ValueBoolean(this, "Cheat menu: draw image", true)
-    val cheatMenuImage = object : ValueMode(this, "Cheat menu: image", false, "Rimuru", "Shuya's girl", "Nanakusa", "Jannick", "Azusa") {
-        override fun isEnabled() = cheatMenuDrawImage.value
-        override fun onChange() {
-            TarasandeMain.get().screenCheatMenu.image = RenderUtil.createImage(selected[0].lowercase().replace(" ", "").replace("'", "") + ".png")
-        }
-    }
+    val cheatMenuImage = ValueMode(this, "Cheat menu: image", false, "Off", "Rimuru", "Shuya's girl", "Nanakusa", "Jannick", "Azusa")
 
     // Client menu
     val clientMenuShowCategories = ValueBoolean(this, "Client menu: show categories", true)
@@ -94,13 +88,7 @@ class ClientValues {
         override fun isEnabled() = updateRotationsWhenTickSkipping.value
     }
     val allowEveryCharacterInChat = ValueBoolean(this, "Allow every character in chat", true)
-    val fontRenderer = object : ValueMode(this, "Font renderer", false, *TarasandeMain.get().managerFont.list.map { it.name }.toTypedArray()) {
-        override fun onChange() {
-            TarasandeMain.get().managerFont.also {
-                it.selected = it.list[settings.indexOf(selected[0])]
-            }
-        }
-    }
+    val fontRenderer = ValueMode(this, "Font renderer", false, *TarasandeMain.get().managerFont.list.map { it.name }.toTypedArray())
 
     private fun isEntityDesired(entity: Entity): Boolean {
         if (dontAttackRidingEntity.value && entity == MinecraftClient.getInstance().player?.vehicle) return false
