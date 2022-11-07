@@ -8,6 +8,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementCategory
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenu
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
@@ -27,7 +28,9 @@ class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, 
             override fun get(): List<ScreenBetterSlotListEntry> {
                 val list = mutableListOf<ScreenBetterSlotListEntry>()
 
-                for (menu in TarasandeMain.get().managerClientMenu.list.sortedBy { e -> e.category }) {
+                val elements = TarasandeMain.get().managerClientMenu.list
+
+                for (menu in elements.sortedWith(Comparator.comparing<ElementMenu, Boolean> { it.category != ElementCategory.GENERAL }.thenBy { it.category })) {
                     if (!menu.visible()) continue
                     val titleEntry = ScreenBetterSlotListEntryClientMenuTitle(menu.category)
                     if (!list.contains(titleEntry) && TarasandeMain.get().clientValues.clientMenuShowCategories.value) {
