@@ -4,6 +4,9 @@ import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.base.event.Event
+import net.tarasandedevelopment.tarasande.event.EventDisconnect
+import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventRespawn
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.features.module.combat.*
 import net.tarasandedevelopment.tarasande.features.module.exploit.*
@@ -14,6 +17,7 @@ import net.tarasandedevelopment.tarasande.features.module.player.*
 import net.tarasandedevelopment.tarasande.features.module.render.*
 import net.tarasandedevelopment.tarasande.value.ValueBind
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.ValueMode
 import org.lwjgl.glfw.GLFW
 import java.util.function.Consumer
 
@@ -119,11 +123,23 @@ class ManagerModule : Manager<Module>() {
             ModuleCommands(),
             ModuleNoStatusEffect()
         )
-        TarasandeMain.get().managerEvent.add(EventTick::class.java) {
-            if (it.state == EventTick.State.POST) {
+        TarasandeMain.get().managerEvent.also {
+            it.add(EventTick::class.java) {
+                if (it.state == EventTick.State.POST) {
+                    for (module in list)
+                        for (i in 0 until module.bind.wasPressed())
+                            module.switchState()
+                }
+            }
+            it.add(EventRespawn::class.java) {
                 for (module in list)
-                    for (i in 0 until module.bind.wasPressed())
-                        module.switchState()
+                    if (module.disableWhen.isSelected(0) && module.enabled)
+                        module.enabled = false
+            }
+            it.add(EventDisconnect::class.java) {
+                for (module in list)
+                    if (module.disableWhen.isSelected(1) && module.enabled)
+                        module.enabled = false
             }
         }
     }
@@ -150,6 +166,7 @@ open class Module(val name: String, val description: String, val category: Strin
         get() = _enabled && isEnabled()
 
     val visible = ValueBoolean(this, "Visible in ArrayList", true)
+    val disableWhen = ValueMode(this, "Disable when", true, "Death", "Disconnect")
     val bind = ValueBind(this, "Bind", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN)
 
     val mc: MinecraftClient = MinecraftClient.getInstance()
