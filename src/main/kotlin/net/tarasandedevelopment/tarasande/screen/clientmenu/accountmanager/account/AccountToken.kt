@@ -21,10 +21,10 @@ import java.util.*
 class AccountToken : Account() {
 
     @TextFieldInfo("Redeem-Url", false, default = "https://api.easymc.io/v1/token/redeem")
-    private var redeemUrl: String = ""
+    private var redeemUrl = ""
 
     @TextFieldInfo("Token", false)
-    private var token: String = ""
+    private var token = ""
 
     private var service: MinecraftSessionService? = null
 
