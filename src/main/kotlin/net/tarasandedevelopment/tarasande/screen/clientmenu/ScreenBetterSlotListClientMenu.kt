@@ -27,7 +27,7 @@ class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, 
             override fun get(): List<ScreenBetterSlotListEntry> {
                 val list = mutableListOf<ScreenBetterSlotListEntry>()
 
-                for (menu in TarasandeMain.get().managerClientMenu.list) {
+                for (menu in TarasandeMain.get().managerClientMenu.list.sortedBy { e -> e.category }) {
                     if (!menu.visible()) continue
                     val titleEntry = ScreenBetterSlotListEntryClientMenuTitle(menu.category)
                     if (!list.contains(titleEntry) && TarasandeMain.get().clientValues.clientMenuShowCategories.value) {
