@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.screen.clientmenu
 
+import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
@@ -43,9 +44,9 @@ class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, 
             }
         })
         super.init()
-        this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
-            close()
-        })
+        if (TarasandeMain.get().clientValues.clientMenuBackButtons.value) {
+            addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { RenderSystem.recordRenderCall { close() } })
+        }
         this.addDrawableChild(ButtonWidget(this.width / 2 - 49, this.height - 27, 98, 20, Text.of("Client values")) {
             MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, "Client values", TarasandeMain.get().clientValues))
         })

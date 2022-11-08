@@ -37,6 +37,7 @@ class ClientValues {
 
     // Client menu
     val clientMenuShowCategories = ValueBoolean(this, "Client menu: show categories", true)
+    val clientMenuBackButtons = ValueBoolean(this, "Client menu: back buttons", false)
 
     // Combat
     val targetingOptions = object : ValueButton(this, "Targeting options") {

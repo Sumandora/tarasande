@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.screen.clientmenu.protocol
 
+import com.mojang.blaze3d.systems.RenderSystem
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.viaprotocolhack.util.VersionList
 import net.minecraft.client.gui.widget.ButtonWidget
@@ -41,9 +42,9 @@ class ScreenBetterSlotListProtocolHack : ScreenBetterSlotList(46, 12) {
 
         super.init()
 
-        this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
-            this.close()
-        })
+        if (TarasandeMain.get().clientValues.clientMenuBackButtons.value) {
+            addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { RenderSystem.recordRenderCall { close() } })
+        }
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {

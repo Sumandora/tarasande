@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.screen.clientmenu.`package`
 
+import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.util.math.MatrixStack
@@ -34,9 +35,9 @@ class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, -1, RenderUtil.fon
         }
         super.init()
 
-        this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
-            this.close()
-        })
+        if (TarasandeMain.get().clientValues.clientMenuBackButtons.value) {
+            addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { RenderSystem.recordRenderCall { close() } })
+        }
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {

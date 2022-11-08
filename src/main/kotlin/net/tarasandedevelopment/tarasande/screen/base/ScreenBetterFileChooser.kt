@@ -30,7 +30,7 @@ class ScreenBetterFileChooser(
 
     override fun init() {
         super.init()
-        if (MinecraftClient.getInstance().world == null) {
+        if (MinecraftClient.getInstance().world == null && TarasandeMain.get().clientValues.clientMenuBackButtons.value) {
             this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
                 close()
             })
