@@ -57,7 +57,6 @@
 
 - placing blocks in localplayer
 - Notebot
-- Forge Faker GUI auto calculation for width
 - Panel: Text Radar
 
 ## TODO-List (Flori | TarasandeProtocolHack)

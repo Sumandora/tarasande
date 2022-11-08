@@ -12,7 +12,7 @@ import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
-class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, 400, RenderUtil.font().fontHeight() * 2 + 5) {
+class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, -1, RenderUtil.font().fontHeight() * 2 + 5) {
 
     private val list = TarasandeMain.get().managerPackage.list.map { p -> ScreenBetterSlotListEntryPackage(p) }
 
@@ -25,6 +25,13 @@ class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, 400, RenderUtil.fo
     }
 
     override fun init() {
+        list.forEach {
+            val width = (RenderUtil.font().getWidth(it.text()) * 2) + 5
+
+            if (entryWidth <= width) {
+                entryWidth = width
+            }
+        }
         super.init()
 
         this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
@@ -50,9 +57,10 @@ class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, 400, RenderUtil.fo
                 MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, `package`.modId!!, `package`))
         }
 
+        fun text() = this.`package`.modId!! + " (" + this.`package`.modVersion!! + ")"
+
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            val text = this.`package`.modId!! + " (" + this.`package`.modVersion!! + ")"
-            RenderUtil.font().textShadow(matrices, text, entryWidth / 2.0f, entryHeight / 2.0f - RenderUtil.font().fontHeight(), -1, scale = 2.0f, centered = true)
+            RenderUtil.font().textShadow(matrices, text(), entryWidth / 2.0f, entryHeight / 2.0f - RenderUtil.font().fontHeight(), -1, scale = 2.0f, centered = true)
         }
     }
 }

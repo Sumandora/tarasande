@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.m
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.modern.ModernForgePayload
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
-class ScreenBetterSlotListForgeModList(parent: Screen, private val titleName: String, val type: Type, val struct: IForgePayload) : ScreenBetterSlotList(46, 400, RenderUtil.font().fontHeight() * 2 + 5) {
+class ScreenBetterSlotListForgeInformation(parent: Screen, private val titleName: String, val type: Type, val struct: IForgePayload) : ScreenBetterSlotList(46, -1, RenderUtil.font().fontHeight() * 2 + 5) {
 
     enum class Type {
         MOD_LIST,
@@ -25,10 +25,18 @@ class ScreenBetterSlotListForgeModList(parent: Screen, private val titleName: St
 
         this.provideElements(object : ScreenBetterSlotListWidget.ListProvider {
             override fun get(): List<ScreenBetterSlotListEntryForgeList> {
-                return when (type) {
+                val list = when (type) {
                     Type.MOD_LIST -> struct.installedMods().map { m -> ScreenBetterSlotListEntryForgeListMods(m) }
                     Type.CHANNEL_LIST -> (struct as ModernForgePayload).channels.map { m -> ScreenBetterSlotListEntryForgeListChannels(m) }
                 }
+                list.forEach {
+                    val width = (RenderUtil.font().getWidth(it.display()) * 2) + 5
+
+                    if (entryWidth <= width) {
+                        entryWidth = width
+                    }
+                }
+                return list
             }
         })
     }

@@ -29,7 +29,7 @@ import net.tarasandedevelopment.tarasande.screen.clientmenu.accountmanager.Scree
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.IForgeNetClientHandler
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.IForgePayload
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.modern.ModernForgePayload
-import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.ui.ScreenBetterSlotListForgeModList
+import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.ui.ScreenBetterSlotListForgeInformation
 import net.tarasandedevelopment.tarasande.screen.clientmenu.`package`.ScreenBetterSlotListPackages
 import net.tarasandedevelopment.tarasande.screen.clientmenu.protocol.ScreenBetterSlotListProtocolHack
 import net.tarasandedevelopment.tarasande.screen.clientmenu.proxy.ScreenBetterProxy
@@ -177,14 +177,14 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker", ElementCate
                             tooltip.add(Text.of("Right mouse for Channels: " + payload.channels.size))
 
                             if (GLFW.glfwGetMouseButton(MinecraftClient.getInstance().window.handle, GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS) {
-                                MinecraftClient.getInstance().setScreen(ScreenBetterSlotListForgeModList(MinecraftClient.getInstance().currentScreen!!, it.server.address + " (Channels: " + payload.channels.size + ")", ScreenBetterSlotListForgeModList.Type.CHANNEL_LIST, payload))
+                                MinecraftClient.getInstance().setScreen(ScreenBetterSlotListForgeInformation(MinecraftClient.getInstance().currentScreen!!, it.server.address + " (Channels: " + payload.channels.size + ")", ScreenBetterSlotListForgeInformation.Type.CHANNEL_LIST, payload))
                             }
                         }
 
                         MinecraftClient.getInstance().currentScreen?.renderTooltip(it.matrices, tooltip, it.mouseX - it.x, it.mouseY - it.y)
 
                         if (payload.installedMods().isNotEmpty() && GLFW.glfwGetMouseButton(MinecraftClient.getInstance().window.handle, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS) {
-                            MinecraftClient.getInstance().setScreen(ScreenBetterSlotListForgeModList(MinecraftClient.getInstance().currentScreen!!, it.server.address + " (Mods: " + payload.installedMods().size + ")", ScreenBetterSlotListForgeModList.Type.MOD_LIST, payload))
+                            MinecraftClient.getInstance().setScreen(ScreenBetterSlotListForgeInformation(MinecraftClient.getInstance().currentScreen!!, it.server.address + " (Mods: " + payload.installedMods().size + ")", ScreenBetterSlotListForgeInformation.Type.MOD_LIST, payload))
                         }
                     }
                 }

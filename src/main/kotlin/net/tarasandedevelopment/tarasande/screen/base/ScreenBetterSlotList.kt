@@ -9,7 +9,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
-open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, private val entryWidth: Int, private val entryHeight: Int) : ScreenBetter(null) {
+open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, var entryWidth: Int, private val entryHeight: Int) : ScreenBetter(null) {
 
     var slotList: ScreenBetterSlotListWidget? = null
     var listProvider: ScreenBetterSlotListWidget.ListProvider? = null
