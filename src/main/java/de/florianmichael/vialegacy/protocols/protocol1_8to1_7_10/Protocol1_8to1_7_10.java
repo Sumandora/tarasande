@@ -444,7 +444,9 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.FLOAT, 2); // Pitch and Yaw
 
                 handler((pw) -> {
-                    pw.read(Type.BOOLEAN); // On Ground
+                    boolean onGround = pw.read(Type.BOOLEAN); // On Ground
+                    teleportTracker(pw.user()).setPending(onGround);
+
                     pw.write(Type.BYTE, (byte) 0); // Bit Mask
                 });
             }
@@ -1401,6 +1403,11 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.FLOAT); // yaw
 
                 map(Type.BOOLEAN); // On Ground
+                handler(pw -> {
+                    Boolean pendingTeleport = teleportTracker(pw.user()).getPending();
+                    if (pendingTeleport != null)
+                        pw.set(Type.BOOLEAN, 0, pendingTeleport);
+                });
             }
         });
 
@@ -1644,6 +1651,10 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         return connection.get(GroundTracker.class);
     }
 
+    private TeleportTracker teleportTracker(final UserConnection connection) {
+        return connection.get(TeleportTracker.class);
+    }
+
     @Override
     public void init(UserConnection userConnection) {
         super.init(userConnection);
@@ -1654,5 +1665,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         userConnection.put(new EntityTracker(userConnection));
         userConnection.put(new TeamsTracker(userConnection));
         userConnection.put(new GroundTracker(userConnection));
+        userConnection.put(new TeleportTracker(userConnection));
     }
 }
