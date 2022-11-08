@@ -301,7 +301,10 @@ object RenderUtil {
     fun renderCorrectItem(matrices: MatrixStack, x: Int, y: Int, tickDelta: Float, item: ItemStack) {
         val position = MathUtil.fromMatrices(matrices)
 
+        RenderSystem.enableCull()
+        DiffuseLighting.enableGuiDepthLighting()
         MinecraftClient.getInstance().inGameHud.renderHotbarItem((position.x + x).toInt(), (position.y + y).toInt(), tickDelta, MinecraftClient.getInstance().player, item, 0)
+        DiffuseLighting.disableGuiDepthLighting()
     }
 
     fun colorInterpolate(a: Color, b: Color, t: Double) = colorInterpolate(a, b, t, t, t, t)

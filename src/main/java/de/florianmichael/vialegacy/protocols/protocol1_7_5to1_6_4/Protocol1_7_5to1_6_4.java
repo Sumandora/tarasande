@@ -20,12 +20,12 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
-import com.viaversion.viaversion.libs.gson.Gson;
 import com.viaversion.viaversion.libs.gson.JsonArray;
 import com.viaversion.viaversion.libs.gson.JsonObject;
 import com.viaversion.viaversion.protocol.packet.PacketWrapperImpl;
 import com.viaversion.viaversion.protocols.base.ServerboundLoginPackets;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
+import com.viaversion.viaversion.util.GsonUtil;
 import de.florianmichael.vialegacy.ViaLegacy;
 import de.florianmichael.vialegacy.api.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.api.type.TypeRegistry_1_6_4;
@@ -378,7 +378,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                         obj = new JsonObject();
                         obj.addProperty("text", motd);
                         main.add("description", obj);
-                        String json = new Gson().toJson(main);
+                        String json = GsonUtil.getGson().toJson(main);
                         pw.clearPacket();
                         pw.write(Type.STRING, json);
                     } catch (Throwable t) {

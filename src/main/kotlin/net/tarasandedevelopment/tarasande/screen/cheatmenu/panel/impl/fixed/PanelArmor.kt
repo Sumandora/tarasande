@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed
 
-import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.enchantment.Enchantment
@@ -40,7 +39,6 @@ class PanelArmor(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel
             matrices?.push()
             matrices?.translate(x, y, 0.0)
 
-            RenderSystem.enableCull()
             RenderUtil.renderCorrectItem(matrices!!, m, titleBarHeight, delta, armor)
 
             if (showEnchantments.value) {

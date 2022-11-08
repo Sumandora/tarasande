@@ -328,8 +328,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         this.registerClientbound(ClientboundPackets1_7_10.CHAT_MESSAGE, new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(Type.STRING); // Message
-
+                map(Type.STRING);
                 handler((pw) -> pw.write(Type.BYTE, (byte) 0)); // Chat Box position
             }
         });
