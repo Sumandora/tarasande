@@ -25,7 +25,7 @@ public class StringType_1_6_4 extends Type<String> {
 
 	@Override
 	public String read(ByteBuf buf) throws Exception {
-		char[] chars = new char[buf.readUnsignedShort()];
+		char[] chars = new char[buf.readShort()];
 		for(int i = 0; i < chars.length; i++) chars[i] = buf.readChar();
 		return new String(chars);
 	}
