@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.features.protocol.platform
 import com.viaversion.viaversion.api.connection.UserConnection
 import de.florianmichael.vialegacy.IViaLegacyProvider
 import de.florianmichael.vialegacy.api.profile.GameProfile
+import de.florianmichael.vialegacy.api.profile.property.Property
 import de.florianmichael.vialegacy.api.profile.property.PropertyMap
 import de.florianmichael.vialegacy.netty.ForwardMessageToByteEncoder
 import de.florianmichael.vialegacy.netty._1_6_4._1_6_4PacketDecoder
@@ -12,7 +13,6 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.network.encryption.PacketDecryptor
 import net.minecraft.network.encryption.PacketEncryptor
 import net.tarasandedevelopment.tarasande.features.protocol.TarasandeProtocolHack
-import java.util.AbstractMap.SimpleEntry
 import javax.crypto.Cipher
 
 class ViaLegacyTarasandePlatform(private val protocolHack: TarasandeProtocolHack) : IViaLegacyProvider {
@@ -24,16 +24,20 @@ class ViaLegacyTarasandePlatform(private val protocolHack: TarasandeProtocolHack
         return protocolHack.clientsideVersion
     }
 
-    override fun profile_1_7(): GameProfile {
-        val map = PropertyMap()
+    override fun profile_1_7(userConnection: UserConnection): GameProfile? {
+        val session = MinecraftClient.getInstance().session
+        if (userConnection.protocolInfo.let { it.username == session.username && it.uuid == session.uuidOrNull }) { // In case we ever decide to do weird things
+            val map = PropertyMap()
 
-        MinecraftClient.getInstance().session.profile.properties.entries().forEach {
-            val viaProperty = de.florianmichael.vialegacy.api.profile.property.Property(it.value.name, it.value.value, it.value.signature)
+            session.profile.properties.entries().forEach {
+                val viaProperty = Property(it.value.name, it.value.value, it.value.signature)
 
-            map.entries().add(SimpleEntry(it.key, viaProperty))
+                map.put(it.key, viaProperty)
+            }
+
+            return session.let { GameProfile(userConnection, it.username, it.uuidOrNull, map) }
         }
-
-        return MinecraftClient.getInstance().session.let { GameProfile(it.username, it.uuidOrNull, map) }
+        return null
     }
 
     override fun fixPipelineOrder_1_6(channel: Channel, decoder: String, encoder: String) {

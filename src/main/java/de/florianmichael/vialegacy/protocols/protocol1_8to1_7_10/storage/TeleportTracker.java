@@ -15,7 +15,7 @@ public class TeleportTracker extends StoredObject {
         return onGround;
     }
 
-    public void setPending(boolean onGround) {
+    public void setPending(Boolean onGround) {
         this.onGround = onGround;
     }
 

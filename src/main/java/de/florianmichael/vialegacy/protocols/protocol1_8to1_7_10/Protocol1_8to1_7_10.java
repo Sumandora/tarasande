@@ -98,9 +98,13 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.STRING);
                 map(Type.STRING);
                 handler(pw -> {
-                    GameProfile gameProfile = ViaLegacy.getProvider().profile_1_7();
-                    if (Objects.equals(pw.get(Type.STRING, 1), gameProfile.getName()))
-                        pw.set(Type.STRING, 0, gameProfile.getUuid().toString()); // WHAT THE FUCK, HOW DOES THIS EVEN MANAGE TO BE SOMETHING COMPLETELY DIFFERENT, ARE YOU FUCKING RETARDED, THIS SHIT IS LIKE IMPORTANT FOR THE CLIENT YOU STUPID PIECE OF SHIT SERVER SOFTWARE
+                    GameProfile gameProfile = pw.user().get(GameProfile.class);
+                    if (gameProfile != null)
+                        try {
+                            gameProfile.setUuid(UUID.fromString(pw.get(Type.STRING, 1)));
+                        } catch (IllegalArgumentException e) {
+                            // Don't crash if the uuid is invalid
+                        }
                 });
             }
         });
@@ -131,7 +135,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.STRING); // Level Type
 
                 handler((pw) -> {
-                    GameProfile gameProfile = ViaLegacy.getProvider().profile_1_7();
+                    GameProfile gameProfile = pw.user().get(GameProfile.class);
                     PacketWrapper tablist = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, pw.user());
                     tablist.write(Type.VAR_INT, 0);
                     tablist.write(Type.VAR_INT, 1);
@@ -1305,7 +1309,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
 
                         packetWrapper.write(Type.VAR_INT, 1);
                         packetWrapper.write(Type.VAR_INT, 1);
-                        packetWrapper.write(Type.UUID, ViaLegacy.getProvider().profile_1_7().getUuid());
+                        packetWrapper.write(Type.UUID, pw.user().get(GameProfile.class).getUuid());
                         packetWrapper.write(Type.VAR_INT, (int) value);
                         packetWrapper.send(Protocol1_8to1_7_10.class);
                     }
@@ -1404,9 +1408,12 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
 
                 map(Type.BOOLEAN); // On Ground
                 handler(pw -> {
-                    Boolean pendingTeleport = teleportTracker(pw.user()).getPending();
-                    if (pendingTeleport != null)
+                    TeleportTracker teleportTracker = teleportTracker(pw.user());
+                    Boolean pendingTeleport = teleportTracker.getPending();
+                    if (pendingTeleport != null) {
                         pw.set(Type.BOOLEAN, 0, pendingTeleport);
+                        teleportTracker.setPending(null);
+                    }
                 });
             }
         });
@@ -1666,5 +1673,9 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         userConnection.put(new TeamsTracker(userConnection));
         userConnection.put(new GroundTracker(userConnection));
         userConnection.put(new TeleportTracker(userConnection));
+
+        GameProfile gameProfile = ViaLegacy.getProvider().profile_1_7(userConnection);
+        if (gameProfile != null)
+            userConnection.put(gameProfile);
     }
 }

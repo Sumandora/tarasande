@@ -8,7 +8,7 @@ public interface IViaLegacyProvider {
 
     int currentVersion();
 
-    GameProfile profile_1_7();
+    GameProfile profile_1_7(UserConnection userConnection);
 
     void fixPipelineOrder_1_6(final Channel channel, final String decoder, final String encoder);
     void rewriteElements_1_6(final UserConnection connection, final Channel channel, final String decoder, final String encoder);
