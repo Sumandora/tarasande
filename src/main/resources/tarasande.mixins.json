@@ -113,6 +113,7 @@
     "protocolhack.MixinClientBuiltinResourcePackProvider",
     "protocolhack.MixinClientPlayerInteractionManager",
     "protocolhack.MixinClientPlayNetworkHandler",
+    "protocolhack.screen.screenhandler.MixinCraftingScreenHandler",
     "protocolhack.MixinEntityIndex",
     "protocolhack.MixinEntityPredicates",
     "protocolhack.MixinHeldItemRenderer",

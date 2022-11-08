@@ -3,6 +3,7 @@ accessWidener v1 named
 # protocol hack
 accessible field net/minecraft/client/gui/screen/ChatInputSuggestor$SuggestionWindow suggestions Ljava/util/List;
 accessible field net/minecraft/item/Item ATTACK_DAMAGE_MODIFIER_ID Ljava/util/UUID;
+accessible field net/minecraft/client/network/ClientPlayNetworkHandler recipeManager Lnet/minecraft/recipe/RecipeManager;
 
 # client
 accessible field net/minecraft/network/ClientConnection channel Lio/netty/channel/Channel;

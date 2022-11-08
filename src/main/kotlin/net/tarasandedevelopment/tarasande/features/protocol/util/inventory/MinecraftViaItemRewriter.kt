@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.features.protocol.util
+package net.tarasandedevelopment.tarasande.features.protocol.util.inventory
 
 import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.minecraft.item.Item

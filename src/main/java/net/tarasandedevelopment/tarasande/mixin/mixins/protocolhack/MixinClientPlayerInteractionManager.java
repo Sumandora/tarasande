@@ -20,7 +20,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.tarasandedevelopment.tarasande.features.protocol.provider.FabricHandItemProvider;
-import net.tarasandedevelopment.tarasande.features.protocol.util.MinecraftViaItemRewriter;
+import net.tarasandedevelopment.tarasande.features.protocol.util.inventory.MinecraftViaItemRewriter;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IScreenHandler_Protocol;
