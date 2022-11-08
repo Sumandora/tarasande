@@ -246,7 +246,7 @@ public enum ClientboundPackets1_6_4 implements LegacyClientboundPacketType {
 
 			buffer.readDouble();
 
-			final int s = buffer.readUnsignedShort();
+			final int s = buffer.readShort();
 
 			for (int k = 0; k < s; k++) {
 				buffer.readLong();
@@ -416,11 +416,6 @@ public enum ClientboundPackets1_6_4 implements LegacyClientboundPacketType {
 
 		transformer.read1_7_10_CompressedNbtItem(buffer);
 	})),
-	CREATIVE_INVENTORY_ACTION(0x6B, (buffer, transformer) -> {
-		buffer.readShort();
-
-		transformer.read1_7_10_CompressedNbtItem(buffer);
-	}),
 	WINDOW_ITEMS(0x68, ((buffer, transformer) -> {
 		buffer.readByte();
 
@@ -442,6 +437,11 @@ public enum ClientboundPackets1_6_4 implements LegacyClientboundPacketType {
 
 		buffer.readByte();
 	})),
+	CREATIVE_INVENTORY_ACTION(0x6B, (buffer, transformer) -> {
+		buffer.readShort();
+
+		transformer.read1_7_10_CompressedNbtItem(buffer);
+	}),
 	UPDATE_SIGN(0x82, ((buffer, transformer) -> {
 		buffer.readInt();
 
@@ -491,7 +491,7 @@ public enum ClientboundPackets1_6_4 implements LegacyClientboundPacketType {
 		buffer.readShort();
 	})),
 	PLAYER_ABILITIES(0xCA, ((buffer, transformer) -> {
-		buffer.readUnsignedByte();
+		buffer.readByte();
 
 		buffer.readFloat();
 		buffer.readFloat();

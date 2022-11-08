@@ -19,7 +19,7 @@ public class CompressedNBTType_1_7_6_10 extends Type<CompoundTag> {
 	@Override
 	public CompoundTag read(ByteBuf buffer) throws IOException {
 		short length = buffer.readShort();
-		if (length <= 0) {
+		if (length < 0) {
 			return null;
 		}
 
