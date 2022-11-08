@@ -103,11 +103,11 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
         });
 
         // Status Request
-        this.registerServerbound(State.STATUS, 0x00, 0xFE, new PacketRemapper() {
+        this.registerServerbound(State.STATUS, 0xFE, 0x00, new PacketRemapper() {
 
             @Override
             public void registerMap() {
-                handler((pw) -> {
+                handler(pw -> {
                     // Server List Ping
                     pw.write(Type.BYTE, (byte) 0x01);
                     // Plugin Message

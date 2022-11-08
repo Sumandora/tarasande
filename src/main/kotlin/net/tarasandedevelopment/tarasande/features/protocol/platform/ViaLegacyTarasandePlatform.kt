@@ -26,18 +26,15 @@ class ViaLegacyTarasandePlatform(private val protocolHack: TarasandeProtocolHack
 
     override fun profile_1_7(userConnection: UserConnection): GameProfile? {
         val session = MinecraftClient.getInstance().session
-        if (userConnection.protocolInfo.let { it.username == session.username && it.uuid == session.uuidOrNull }) { // In case we ever decide to do weird things
-            val map = PropertyMap()
+        val map = PropertyMap()
 
-            session.profile.properties.entries().forEach {
-                val viaProperty = Property(it.value.name, it.value.value, it.value.signature)
+        session.profile.properties.entries().forEach {
+            val viaProperty = Property(it.value.name, it.value.value, it.value.signature)
 
-                map.put(it.key, viaProperty)
-            }
-
-            return session.let { GameProfile(userConnection, it.username, it.uuidOrNull, map) }
+            map.put(it.key, viaProperty)
         }
-        return null
+
+        return session.let { GameProfile(userConnection, it.username, it.uuidOrNull, map) }
     }
 
     override fun fixPipelineOrder_1_6(channel: Channel, decoder: String, encoder: String) {
