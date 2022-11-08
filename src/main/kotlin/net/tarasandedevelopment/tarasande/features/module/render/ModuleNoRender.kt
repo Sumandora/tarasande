@@ -8,6 +8,7 @@ import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventChunkOcclusion
+import net.tarasandedevelopment.tarasande.event.EventFog
 import net.tarasandedevelopment.tarasande.event.EventParticle
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
@@ -108,6 +109,12 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
 
             if (world.particles.list.contains(it.effect.type)) {
                 it.cancelled = true
+            }
+        }
+
+        registerEvent(EventFog::class.java, 9999) {
+            if (world.fog.should() && (it.state == EventFog.State.FOG_START || it.state == EventFog.State.FOG_END)) {
+                it.values[0] *= 9999.0f
             }
         }
     }

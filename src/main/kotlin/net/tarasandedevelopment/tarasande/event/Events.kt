@@ -229,3 +229,9 @@ class EventInputSuggestions(val reader: StringReader) : Event(false) {
     var dispatcher: CommandDispatcher<CommandSource>? = null
     var commandSource: CommandSource? = null
 }
+
+class EventFog(val state: State, val values: FloatArray) : Event(false) {
+    enum class State {
+        FOG_START, FOG_END, FOG_COLOR
+    }
+}
