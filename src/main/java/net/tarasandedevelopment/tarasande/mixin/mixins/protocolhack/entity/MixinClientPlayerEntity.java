@@ -17,7 +17,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventSkipIdlePacket;
-import net.tarasandedevelopment.tarasande.features.protocol.util.ArmorUpdater1_8_0;
+import net.tarasandedevelopment.tarasande.features.protocol.util.inventory.ArmorUpdater1_8_0;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;

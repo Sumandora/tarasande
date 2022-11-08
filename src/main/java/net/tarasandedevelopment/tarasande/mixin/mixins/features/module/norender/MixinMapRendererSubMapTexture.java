@@ -5,7 +5,7 @@ import net.minecraft.item.map.MapIcon;
 import net.minecraft.item.map.MapState;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.features.module.render.ModuleNoRender;
-import net.tarasandedevelopment.tarasande.util.EmptyIterator;
+import net.tarasandedevelopment.tarasande.util.dummies.EmptyIterator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

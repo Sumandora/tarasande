@@ -4,7 +4,7 @@ import com.viaversion.viaversion.api.connection.UserConnection
 import com.viaversion.viaversion.api.minecraft.item.Item
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import net.minecraft.item.ItemStack
-import net.tarasandedevelopment.tarasande.features.protocol.util.MinecraftViaItemRewriter
+import net.tarasandedevelopment.tarasande.features.protocol.util.inventory.MinecraftViaItemRewriter
 
 class FabricHandItemProvider : HandItemProvider() {
 

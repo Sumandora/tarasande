@@ -5,15 +5,22 @@ import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
-import net.minecraft.network.packet.s2c.play.PlayPingS2CPacket;
+import net.minecraft.network.packet.s2c.play.*;
+import net.minecraft.recipe.Recipe;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.util.Identifier;
+import net.tarasandedevelopment.tarasande.util.protocol.RecipeInfo;
+import net.tarasandedevelopment.tarasande.util.protocol.Recipes_1_12_2;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public abstract class MixinClientPlayNetworkHandler {
@@ -24,6 +31,10 @@ public abstract class MixinClientPlayNetworkHandler {
 
     @Shadow
     public abstract void onEntityStatus(EntityStatusS2CPacket packet);
+
+    @Shadow public abstract void onSynchronizeTags(SynchronizeTagsS2CPacket packet);
+
+    @Shadow public abstract void onSynchronizeRecipes(SynchronizeRecipesS2CPacket packet);
 
     @Inject(method = "onPing", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/util/thread/ThreadExecutor;)V", shift = At.Shift.AFTER), cancellable = true)
     private void onPing(PlayPingS2CPacket packet, CallbackInfo ci) {
@@ -48,6 +59,20 @@ public abstract class MixinClientPlayNetworkHandler {
             ClientPlayerEntity player = MinecraftClient.getInstance().player;
             assert player != null;
             onEntityStatus(new EntityStatusS2CPacket(player, (byte) 28));
+        }
+    }
+
+    @Inject(method = "onGameJoin", at = @At("RETURN"))
+    private void onOnGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
+            onSynchronizeTags(new SynchronizeTagsS2CPacket(new HashMap<>()));
+
+            List<Recipe<?>> recipes = new ArrayList<>();
+            List<RecipeInfo<?>> recipeInfos = Recipes_1_12_2.getRecipes();
+            for (int i = 0; i < recipeInfos.size(); i++) {
+                recipes.add(recipeInfos.get(i).create(new Identifier(String.valueOf(i))));
+            }
+            onSynchronizeRecipes(new SynchronizeRecipesS2CPacket(recipes));
         }
     }
 }

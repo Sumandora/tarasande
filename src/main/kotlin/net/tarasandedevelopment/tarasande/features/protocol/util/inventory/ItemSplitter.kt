@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.features.protocol.util
+package net.tarasandedevelopment.tarasande.features.protocol.util.inventory
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
