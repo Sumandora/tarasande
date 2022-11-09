@@ -98,7 +98,6 @@ class ManagerModule : Manager<Module>() {
             ModulePrivateMsgDetector(),
             ModuleNoChatContext(),
             ModuleNoMiningTrace(),
-            ModuleDisableTelemetry(),
             ModuleBlockChangeTracker(),
             ModuleTrueSight(),
             ModulePhase(),
