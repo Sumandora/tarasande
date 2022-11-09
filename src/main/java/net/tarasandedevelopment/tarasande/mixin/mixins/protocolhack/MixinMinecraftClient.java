@@ -61,7 +61,7 @@ public abstract class MixinMinecraftClient {
 
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1) && viaConnection != null) {
             ModuleInventoryMove moduleInventoryMove = TarasandeMain.Companion.get().getManagerModule().get(ModuleInventoryMove.class);
-            if (moduleInventoryMove.isEnabled() && moduleInventoryMove.getCancelOpenPacket().getValue())
+            if (moduleInventoryMove.getEnabled() && moduleInventoryMove.getCancelOpenPacket().getValue())
                 return;
 
             final PacketWrapper clickStatus = PacketWrapper.create(ServerboundPackets1_9_3.CLIENT_STATUS, viaConnection);
