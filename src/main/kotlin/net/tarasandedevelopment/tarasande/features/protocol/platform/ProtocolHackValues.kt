@@ -3,6 +3,7 @@
 package net.tarasandedevelopment.tarasande.features.protocol.platform
 
 import com.mojang.bridge.game.PackType
+import com.viaversion.viaversion.api.Via
 import net.minecraft.SharedConstants
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
@@ -11,6 +12,11 @@ import net.tarasandedevelopment.tarasande.value.ValueText
 object ProtocolHackValues {
 
     // General
+    private val viaVersionDebug = object : ValueBoolean(this, "ViaVersion Debug", false) {
+        override fun onChange() {
+            Via.getManager().isDebug = value
+        }
+    }
     val filterItemGroups = ValueBoolean(this, "Filter item groups", true)
 
     val changeResourcePackDownloadHeaders = ValueBoolean(this, "Change resource pack download headers", false)
