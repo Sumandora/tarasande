@@ -14,6 +14,11 @@ import net.tarasandedevelopment.tarasande.value.meta.ValueButton
 object ProtocolHackValues {
 
     // General
+    private val viaVersionDebug = object : ValueBoolean(this, "ViaVersion Debug", false) {
+        override fun onChange() {
+            Via.getManager().isDebug = value
+        }
+    }
     val filterItemGroups = ValueBoolean(this, "Filter item groups", true)
 
     val changeResourcePackDownloadHeaders = ValueBoolean(this, "Change resource pack download headers", false)
