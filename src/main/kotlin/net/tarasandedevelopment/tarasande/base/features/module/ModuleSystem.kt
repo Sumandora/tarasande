@@ -151,12 +151,9 @@ class ManagerModule : Manager<Module>() {
 open class Module(val name: String, val description: String, val category: String) {
     private val eventListeners = HashSet<Triple<Class<Event>, Int, Consumer<Event>>>()
 
-    @Suppress("PropertyName")
-    var _enabled = false
-        protected set
-    var enabled: Boolean
+    var enabled = false
         set(value) {
-            if (_enabled != value) if (value) {
+            if (field != value) if (value) {
                 onEnable()
                 eventListeners.forEach { TarasandeMain.get().managerEvent.add(it.first, it.second, it.third) }
                 PanelNotifications.notify("$name is now enabled")
@@ -166,9 +163,8 @@ open class Module(val name: String, val description: String, val category: Strin
                 PanelNotifications.notify("$name is now disabled")
             }
 
-            _enabled = value
+            field = value
         }
-        get() = _enabled && isEnabled()
 
     val visible = ValueBoolean(this, "Visible in ArrayList", true)
     val disableWhen = ValueMode(this, "Disable when", true, "Death", "Disconnect")
@@ -182,8 +178,6 @@ open class Module(val name: String, val description: String, val category: Strin
 
     open fun onEnable() {}
     open fun onDisable() {}
-
-    open fun isEnabled() = true
 
     fun <T : Event> registerEvent(clazz: Class<T>, priority: Int = 1000, c: Consumer<T>) {
         @Suppress("UNCHECKED_CAST") // BYPASS GENERICS ONCE AGAIN $$$$$$$

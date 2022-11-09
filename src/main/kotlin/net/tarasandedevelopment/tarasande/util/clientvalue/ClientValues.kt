@@ -25,7 +25,7 @@ class ClientValues {
     val autoSaveDelay = object : ValueNumber(this, "Auto save: delay", 0.0, 10000.0, 60000.0, 1000.0) {
         override fun isEnabled() = autoSaveConfig.value
     }
-    val passEventsInScreens = ValueBoolean(this, "Pass events in screens", true)
+    val disableTelemetry = ValueBoolean(this, "Disable telemetry", true)
 
     init {
         object : ValueButton(this, "Cheat menu values") {
@@ -88,12 +88,16 @@ class ClientValues {
             }
         }
     }
+
+    val fontRenderer = ValueMode(this, "Font renderer", false, *TarasandeMain.get().managerFont.list.map { it.name }.toTypedArray())
+
+    // Rotations
+    val passEventsInScreens = ValueBoolean(this, "Pass events in screens", true)
     val unlockTicksPerFrame = ValueBoolean(this, "Unlock ticks per frame", false)
     val updateRotationsWhenTickSkipping = ValueBoolean(this, "Update rotations when tick skipping", false)
     val updateRotationsAccurately = object : ValueBoolean(this, "Update rotations accurately", true) {
         override fun isEnabled() = updateRotationsWhenTickSkipping.value
     }
-    val fontRenderer = ValueMode(this, "Font renderer", false, *TarasandeMain.get().managerFont.list.map { it.name }.toTypedArray())
 
     private fun isEntityDesired(entity: Entity): Boolean {
         if (dontAttackRidingEntity.value && entity == MinecraftClient.getInstance().player?.vehicle) return false

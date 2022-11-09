@@ -18,14 +18,14 @@ class Shader(private val source: String, type: Int) {
 
         glCompileShader(id)
         if (glGetShaderi(id, GL_COMPILE_STATUS) != GL_TRUE)
-            error("$source " + glGetShaderInfoLog(id))
+            error(source + " " + glGetShaderInfoLog(id))
 
     }
 
     fun delete() {
         glDeleteShader(id)
         if (glGetShaderi(id, GL_DELETE_STATUS) != GL_TRUE)
-            error("$source " + glGetShaderInfoLog(id))
+            error(source + " " + glGetShaderInfoLog(id))
     }
 
 }
