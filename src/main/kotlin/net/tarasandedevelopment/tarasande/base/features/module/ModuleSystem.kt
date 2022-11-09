@@ -18,6 +18,7 @@ import net.tarasandedevelopment.tarasande.features.module.misc.*
 import net.tarasandedevelopment.tarasande.features.module.movement.*
 import net.tarasandedevelopment.tarasande.features.module.player.*
 import net.tarasandedevelopment.tarasande.features.module.render.*
+import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed.PanelNotifications
 import net.tarasandedevelopment.tarasande.value.ValueBind
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
@@ -152,15 +153,17 @@ open class Module(val name: String, val description: String, val category: Strin
 
     @Suppress("PropertyName")
     var _enabled = false
-        private set
+        protected set
     var enabled: Boolean
         set(value) {
             if (_enabled != value) if (value) {
                 onEnable()
                 eventListeners.forEach { TarasandeMain.get().managerEvent.add(it.first, it.second, it.third) }
+                PanelNotifications.notify("$name is now enabled")
             } else {
                 eventListeners.forEach { TarasandeMain.get().managerEvent.rem(it.first, it.third) }
                 onDisable()
+                PanelNotifications.notify("$name is now disabled")
             }
 
             _enabled = value

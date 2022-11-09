@@ -74,6 +74,7 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
             PanelArrayList::class.java,
             PanelInformation::class.java,
             PanelEffects::class.java,
+            PanelNotifications::class.java,
             PanelInventory::class.java,
             PanelWatermark::class.java,
             PanelRadar::class.java,

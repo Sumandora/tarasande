@@ -79,7 +79,7 @@ class InformationAntiAFKCountdown : Information("Anti AFK", "Jump countdown") {
 class InformationDetectedMessages : Information("Private msg detector", "Detected messages") {
     override fun getMessage(): String? {
         val modulePrivateMsgDetector = TarasandeMain.get().managerModule.get(ModulePrivateMsgDetector::class.java)
-        if (modulePrivateMsgDetector.enabled)
+        if (modulePrivateMsgDetector.enabled && modulePrivateMsgDetector.conversation.isNotEmpty())
             return "\n" + modulePrivateMsgDetector.conversation.subList(0, modulePrivateMsgDetector.conversation.size - 1).joinToString("\n")
         return null
     }
