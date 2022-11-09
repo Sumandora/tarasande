@@ -10,11 +10,16 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Alignment
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
-import net.tarasandedevelopment.tarasande.util.communication.Notification
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
+
+class Notification(val text: String, val length: Long) {
+
+    val creationTime = System.currentTimeMillis()
+}
+
 
 class PanelNotifications(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Notifications", x, y, 100.0, RenderUtil.font().fontHeight().toDouble(), background = false, resizable = false, fixed = true) {
 
@@ -28,7 +33,7 @@ class PanelNotifications(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu)
                     Notification(text, notificationPanel.timeAbsoluteTime.value.toLong())
                 }
                 else -> { // mode 1
-                    Notification(text, text.chars().count() * notificationPanel.timeCharLength.value.toLong())
+                    Notification(text, text.length * notificationPanel.timeCharLength.value.toLong())
                 }
             }
             notifications.add(notification)
@@ -45,7 +50,7 @@ class PanelNotifications(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu)
     private val timeAbsoluteTime = object : ValueNumber(this, "Time: absolute time", 0.0, 10000.0, 60000.0, 500.0) {
         override fun isEnabled() = timeMode.isSelected(0)
     }
-    private val timeCharLength = object : ValueNumber(this, "Time: char length", 0.0, 50.0, 100.0, 10.0) {
+    private val timeCharLength = object : ValueNumber(this, "Time: char length", 0.0, 250.0, 500.0, 10.0) {
         override fun isEnabled() = timeMode.isSelected(1)
     }
 
