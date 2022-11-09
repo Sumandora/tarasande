@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.Information
+import net.tarasandedevelopment.tarasande.features.module.chat.ModulePrivateMsgDetector
 import net.tarasandedevelopment.tarasande.features.module.exploit.ModuleTickBaseManipulation
 import net.tarasandedevelopment.tarasande.features.module.misc.ModuleMurderMystery
 import net.tarasandedevelopment.tarasande.features.module.player.ModuleAntiAFK
@@ -71,6 +72,15 @@ class InformationAntiAFKCountdown : Information("Anti AFK", "Jump countdown") {
         if (moduleAntiAFK.enabled)
             return (((moduleAntiAFK.delay.value * 1000L) - (System.currentTimeMillis() - moduleAntiAFK.timer.time)) / 1000.0).roundToInt().toString()
 
+        return null
+    }
+}
+
+class InformationDetectedMessages : Information("Private msg detector", "Detected messages") {
+    override fun getMessage(): String? {
+        val modulePrivateMsgDetector = TarasandeMain.get().managerModule.get(ModulePrivateMsgDetector::class.java)
+        if (modulePrivateMsgDetector.enabled)
+            return "\n" + modulePrivateMsgDetector.conversation.subList(0, modulePrivateMsgDetector.conversation.size - 1).joinToString("\n")
         return null
     }
 }

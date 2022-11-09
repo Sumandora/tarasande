@@ -5,7 +5,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.item.SplashPotionItem
 import net.minecraft.potion.PotionUtil
-import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventAttack
@@ -14,7 +13,6 @@ import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
-import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
@@ -142,7 +140,6 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
                     if (intendedItem?.item is SplashPotionItem && mc.player?.lastPitch != targetRotation?.pitch)
                         return@registerEvent
                     event.pressed = true
-                    CustomChat.print(this, Text.literal(mc.player?.mainHandStack.toString() + " " + intendedItem.toString()))
                     if ((intendedSlot == -1 && mc.player?.offHandStack?.item != intendedItem?.item) || mc.player?.mainHandStack?.item != intendedItem?.item) {
                         state = State.SWITCH_BACK
                     }
@@ -160,5 +157,4 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
     enum class State {
         IDLE, THROW, SWITCH_BACK
     }
-
 }

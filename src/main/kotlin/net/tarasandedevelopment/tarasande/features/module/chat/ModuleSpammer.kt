@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.features.module.misc
+package net.tarasandedevelopment.tarasande.features.module.chat
 
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
@@ -16,7 +16,7 @@ import org.apache.commons.lang3.RandomStringUtils
 import kotlin.math.round
 import kotlin.math.sqrt
 
-class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleCategory.MISC) {
+class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleCategory.CHAT) {
 
     private val delay = ValueNumber(this, "Delay", 0.0, 2000.0, 10000.0, 500.0)
     private val noArbitraryTexts = ValueBoolean(this, "No arbitrary texts", false)

@@ -3,10 +3,13 @@
 package net.tarasandedevelopment.tarasande.features.protocol.platform
 
 import com.mojang.bridge.game.PackType
+import com.viaversion.viaversion.api.Via
 import net.minecraft.SharedConstants
+import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import net.tarasandedevelopment.tarasande.value.ValueText
+import net.tarasandedevelopment.tarasande.value.meta.ValueButton
 
 object ProtocolHackValues {
 
@@ -19,6 +22,12 @@ object ProtocolHackValues {
     }
     val packFormat = object : ValueNumber(this, "Pack format", 0.0, SharedConstants.getGameVersion().getPackVersion(PackType.RESOURCE).toDouble(), SharedConstants.getGameVersion().getPackVersion(PackType.RESOURCE).toDouble(), 1.0) {
         override fun isEnabled() = changeResourcePackDownloadHeaders.value
+    }
+    val createViaDump = object : ValueButton(this, "Create via dump") {
+        override fun isEnabled() = !MinecraftClient.getInstance().isInSingleplayer && MinecraftClient.getInstance().world != null
+        override fun onChange() {
+            Via.getManager().commandHandler.getSubCommand("dump")?.execute(ViaDumpBypassSender, arrayOf())
+        }
     }
 
     // 1.19 -> 1.18.2
@@ -33,5 +42,4 @@ object ProtocolHackValues {
 
     // 1.9 -> 1.8.x
     val removeCooldowns = ValueBoolean(this, "Remove cooldowns (1.9 -> 1.8.x)", false)
-
 }

@@ -73,8 +73,6 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
             val accessor = mc.currentScreen as HandledScreen<*>
 
             if (checkTitle.value) {
-                val title = accessor.title
-                val content = title.content
                 val string = StringUtil.extractContent(accessor.title)
                 if (!string.contains(titleSubstring.value))
                     return@registerEvent

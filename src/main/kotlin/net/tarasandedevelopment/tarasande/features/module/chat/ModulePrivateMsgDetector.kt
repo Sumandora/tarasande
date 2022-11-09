@@ -1,20 +1,21 @@
-package net.tarasandedevelopment.tarasande.features.module.exploit
+package net.tarasandedevelopment.tarasande.features.module.chat
 
 import com.google.common.collect.Multimap
 import com.google.common.collect.MultimapBuilder
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket
 import net.minecraft.network.packet.s2c.play.MessageHeaderS2CPacket
-import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
+import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import java.util.*
+import kotlin.collections.ArrayList
 
-class ModulePrivateMsgDetector : Module("Private msg detector", "Detects private conversations using signatures", ModuleCategory.EXPLOIT) {
+class ModulePrivateMsgDetector : Module("Private msg detector", "Detects private conversations using signatures", ModuleCategory.CHAT) {
 
     private val signatures: Multimap<UUID, ByteArray> = MultimapBuilder.hashKeys().hashSetValues().build()
+    val conversation = ArrayList<String>()
 
     init {
         registerEvent(EventPacket::class.java) { event ->
@@ -27,7 +28,7 @@ class ModulePrivateMsgDetector : Module("Private msg detector", "Detects private
 
                 if (sender != null) {
                     this.signatures.put(sender.uuid, signature)
-                    CustomChat.print(this, Text.literal("$senderName just sent a private message!"))
+                    conversation.add("$senderName just sent a private message!")
                 }
             }
 
@@ -44,12 +45,15 @@ class ModulePrivateMsgDetector : Module("Private msg detector", "Detects private
                             val sender = MinecraftClient.getInstance().world!!.getPlayerByUuid(entry.profileId)
 
                             if (sender != receiver) {
-                                CustomChat.print(this, Text.literal(receiver!!.name.string + " received a private message from " + sender!!.name.string + "!"))
+                                conversation.add(receiver!!.name.string + " received a private message from " + sender!!.name.string + "!")
                             }
                         }
                     }
                 }
             }
+        }
+        registerEvent(EventDisconnect::class.java) {
+            conversation.clear()
         }
     }
 }

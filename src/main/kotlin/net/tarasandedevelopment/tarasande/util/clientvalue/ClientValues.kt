@@ -93,7 +93,6 @@ class ClientValues {
     val updateRotationsAccurately = object : ValueBoolean(this, "Update rotations accurately", true) {
         override fun isEnabled() = updateRotationsWhenTickSkipping.value
     }
-    val allowEveryCharacterInChat = ValueBoolean(this, "Allow every character in chat", true)
     val fontRenderer = ValueMode(this, "Font renderer", false, *TarasandeMain.get().managerFont.list.map { it.name }.toTypedArray())
 
     private fun isEntityDesired(entity: Entity): Boolean {

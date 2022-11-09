@@ -51,6 +51,7 @@ class ManagerInformation(val screenCheatMenu: ScreenCheatMenu) : Manager<Informa
             InformationFakeNewsCountdown(),
             InformationBeds(),
             InformationAntiAFKCountdown(),
+            InformationDetectedMessages(),
 
             // Badlion
             InformationTimers(),

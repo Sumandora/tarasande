@@ -5,9 +5,12 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.base.event.Event
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
-import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventRespawn
 import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.features.module.chat.ModuleAllowAllCharacters
+import net.tarasandedevelopment.tarasande.features.module.chat.ModuleNoChatContext
+import net.tarasandedevelopment.tarasande.features.module.chat.ModulePrivateMsgDetector
+import net.tarasandedevelopment.tarasande.features.module.chat.ModuleSpammer
 import net.tarasandedevelopment.tarasande.features.module.combat.*
 import net.tarasandedevelopment.tarasande.features.module.exploit.*
 import net.tarasandedevelopment.tarasande.features.module.ghost.*
@@ -117,11 +120,10 @@ class ManagerModule : Manager<Module>() {
             ModuleVehicleSpeed(),
             ModuleIgnoreResourcePackHash(),
             ModuleNoJumpCooldown(),
-            ModuleBrigadierIgnoreCase(),
             ModuleEveryItemOnArmor(),
             ModuleNoRender(),
-            ModuleCommands(),
-            ModuleNoStatusEffect()
+            ModuleNoStatusEffect(),
+            ModuleAllowAllCharacters()
         )
         TarasandeMain.get().managerEvent.also {
             it.add(EventTick::class.java) {
@@ -194,4 +196,5 @@ object ModuleCategory {
     const val MISC = "Misc"
     const val GHOST = "Ghost"
     const val EXPLOIT = "Exploit"
+    const val CHAT = "Chat"
 }
