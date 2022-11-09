@@ -2,9 +2,6 @@ package net.tarasandedevelopment.tarasande.features.protocol.platform
 
 import com.viaversion.viaversion.api.connection.UserConnection
 import de.florianmichael.vialegacy.IViaLegacyProvider
-import de.florianmichael.vialegacy.api.profile.GameProfile
-import de.florianmichael.vialegacy.api.profile.property.Property
-import de.florianmichael.vialegacy.api.profile.property.PropertyMap
 import de.florianmichael.vialegacy.netty.ForwardMessageToByteEncoder
 import de.florianmichael.vialegacy.netty._1_6_4._1_6_4PacketDecoder
 import de.florianmichael.vialegacy.netty._1_6_4._1_6_4PacketEncoder
@@ -22,19 +19,6 @@ class ViaLegacyTarasandePlatform(private val protocolHack: TarasandeProtocolHack
 
     override fun currentVersion(): Int {
         return protocolHack.clientsideVersion
-    }
-
-    override fun profile_1_7(userConnection: UserConnection): GameProfile? {
-        val session = MinecraftClient.getInstance().session
-        val map = PropertyMap()
-
-        session.profile.properties.entries().forEach {
-            val viaProperty = Property(it.value.name, it.value.value, it.value.signature)
-
-            map.put(it.key, viaProperty)
-        }
-
-        return session.let { GameProfile(userConnection, it.username, it.uuidOrNull, map) }
     }
 
     override fun fixPipelineOrder_1_6(channel: Channel, decoder: String, encoder: String) {

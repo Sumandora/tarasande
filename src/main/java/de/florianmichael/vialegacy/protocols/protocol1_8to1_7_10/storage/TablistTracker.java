@@ -16,6 +16,7 @@ package de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage;
 
 import com.viaversion.viaversion.api.connection.StoredObject;
 import com.viaversion.viaversion.api.connection.UserConnection;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.profile.Property;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,18 +66,6 @@ public class TablistTracker extends StoredObject {
 		public TabListEntry(String name, UUID uuid) {
 			this.name = name;
 			this.uuid = uuid;
-		}
-	}
-
-	public static class Property {
-		public String name;
-		public String value;
-		public String signature;
-
-		public Property(String name, String value, String signature) {
-			this.name = name;
-			this.value = value;
-			this.signature = signature;
 		}
 	}
 }
