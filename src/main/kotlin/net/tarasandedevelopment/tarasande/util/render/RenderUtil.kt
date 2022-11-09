@@ -17,12 +17,15 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.extension.unaryMinus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
+import net.tarasandedevelopment.tarasande.value.ValueBind
+import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 import kotlin.math.*
 
 object RenderUtil {
 
+    private val escapeCharacters = listOf("\t", "\b", "\n", "\r")
     var deltaTime = 0.0
 
     fun isHovered(mouseX: Double, mouseY: Double, left: Double, up: Double, right: Double, bottom: Double): Boolean {
@@ -398,5 +401,37 @@ object RenderUtil {
             (MinecraftClient.getInstance().window?.framebufferHeight!! - (screenPos.y * MinecraftClient.getInstance().window?.framebufferHeight!!)) / MinecraftClient.getInstance().window?.scaleFactor!!,
             screenPos.z.toDouble()
         )
+    }
+
+    fun getBindName(type: ValueBind.Type, button: Int): String {
+        when (type) {
+            ValueBind.Type.KEY -> {
+                var keyName: String?
+                if (button == GLFW.GLFW_KEY_UNKNOWN) keyName = "none"
+                else {
+                    keyName = GLFW.glfwGetKeyName(button, -1)
+                    if (keyName == null) keyName = GLFW.glfwGetKeyName(GLFW.GLFW_KEY_UNKNOWN, GLFW.glfwGetKeyScancode(button))
+                }
+
+                if (keyName == null || keyName.trim().isEmpty() || escapeCharacters.contains(keyName)) {
+                    for (field in GLFW::class.java.declaredFields) {
+                        if (field.name.startsWith("GLFW_KEY_")) {
+                            val content = field.get(GLFW::class.java)
+                            if (content == button) {
+                                keyName = field.name.substring("GLFW_KEY_".length).replace("_", " ").lowercase()
+                            }
+                        }
+                    }
+                }
+
+                if (keyName.isNullOrEmpty()) {
+                    keyName = "Key#$button"
+                }
+                return keyName
+            }
+
+            ValueBind.Type.MOUSE -> return "Mouse#$button"
+            else -> return "Invalid type"
+        }
     }
 }

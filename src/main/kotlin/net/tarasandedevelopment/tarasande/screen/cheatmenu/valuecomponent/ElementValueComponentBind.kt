@@ -11,7 +11,6 @@ import java.awt.Color
 class ElementValueComponentBind(value: Value) : ElementValueComponent(value) {
 
     private var waitsForInput = false
-    private var escapeCharacters = listOf("\t", "\b", "\n", "\r")
 
     override fun init() {
     }
@@ -23,7 +22,10 @@ class ElementValueComponentBind(value: Value) : ElementValueComponent(value) {
 
         RenderUtil.font().textShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - RenderUtil.font().fontHeight() / 2.0F).toFloat(), white.rgb, scale = 0.5F, offset = 0.5F)
 
-        val name = getName(valueBind.type, valueBind.button)
+        var name = RenderUtil.getBindName(valueBind.type, valueBind.button)
+        if (waitsForInput) {
+            name = "_"
+        }
         val textWidth = RenderUtil.font().getWidth(name)
 
         RenderUtil.fill(matrices, width - textWidth / 2, getHeight() * 0.25, width, getHeight() * 0.75, Int.MIN_VALUE)
@@ -33,7 +35,10 @@ class ElementValueComponentBind(value: Value) : ElementValueComponent(value) {
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         val valueBind = value as ValueBind
 
-        val name = getName(valueBind.type, valueBind.button)
+        var name = RenderUtil.getBindName(valueBind.type, valueBind.button)
+        if (waitsForInput) {
+            name = "_"
+        }
         val textWidth = RenderUtil.font().getWidth(name)
 
         if (button == 0 && RenderUtil.isHovered(mouseX, mouseY, width - textWidth / 2, getHeight() * 0.25, width, getHeight() * 0.75)) {
@@ -85,37 +90,4 @@ class ElementValueComponentBind(value: Value) : ElementValueComponent(value) {
     }
 
     override fun getHeight() = RenderUtil.font().fontHeight().toDouble()
-
-    private fun getName(type: ValueBind.Type, button: Int): String {
-        if (waitsForInput) return "_"
-        when (type) {
-            ValueBind.Type.KEY -> {
-                var keyName: String?
-                if (button == GLFW.GLFW_KEY_UNKNOWN) keyName = "none"
-                else {
-                    keyName = GLFW.glfwGetKeyName(button, -1)
-                    if (keyName == null) keyName = GLFW.glfwGetKeyName(GLFW.GLFW_KEY_UNKNOWN, GLFW.glfwGetKeyScancode(button))
-                }
-
-                if (keyName == null || keyName.trim().isEmpty() || escapeCharacters.contains(keyName)) {
-                    for (field in GLFW::class.java.declaredFields) {
-                        if (field.name.startsWith("GLFW_KEY_")) {
-                            val content = field.get(GLFW::class.java)
-                            if (content == button) {
-                                keyName = field.name.substring("GLFW_KEY_".length).replace("_", " ").lowercase()
-                            }
-                        }
-                    }
-                }
-
-                if (keyName.isNullOrEmpty()) {
-                    keyName = "Key#$button"
-                }
-                return keyName
-            }
-
-            ValueBind.Type.MOUSE -> return "Mouse#$button"
-            else -> return "Invalid type"
-        }
-    }
 }
