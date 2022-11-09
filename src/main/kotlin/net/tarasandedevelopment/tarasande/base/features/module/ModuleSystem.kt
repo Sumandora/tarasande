@@ -9,7 +9,6 @@ import net.tarasandedevelopment.tarasande.event.EventRespawn
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.features.module.chat.ModuleAllowAllCharacters
 import net.tarasandedevelopment.tarasande.features.module.chat.ModuleNoChatContext
-import net.tarasandedevelopment.tarasande.features.module.chat.ModulePrivateMsgDetector
 import net.tarasandedevelopment.tarasande.features.module.chat.ModuleSpammer
 import net.tarasandedevelopment.tarasande.features.module.combat.*
 import net.tarasandedevelopment.tarasande.features.module.exploit.*
@@ -95,7 +94,6 @@ class ManagerModule : Manager<Module>() {
             ModuleAntiBindingCurse(),
             ModuleCommandBlockBypass(),
             ModuleAntiParticleHide(),
-            ModulePrivateMsgDetector(),
             ModuleNoChatContext(),
             ModuleNoMiningTrace(),
             ModuleBlockChangeTracker(),
