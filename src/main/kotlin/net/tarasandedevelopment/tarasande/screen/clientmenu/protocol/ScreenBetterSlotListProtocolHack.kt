@@ -29,7 +29,7 @@ class ScreenBetterSlotListProtocolHack : ScreenBetterSlotList(46, 12) {
         specialNames[ProtocolVersion.v1_16_4] = "1.16.4-1.16.5"
         specialNames[ProtocolVersion.v1_18] = "1.18-1.18.1"
         specialNames[ProtocolVersion.v1_19_1] = "1.19.1-1.19.2"
-        specialNames[ProtocolVersion.v1_19_3] = "22w44a"
+        specialNames[ProtocolVersion.v1_19_3] = "22w45a"
     }
 
     override fun init() {
