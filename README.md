@@ -92,9 +92,6 @@
   - XCarry
   - AntiSpawnPoint
   - Liquids
-  - Potion Saver (Rejects)
-  - Potion Spoof (Rejects)
-  - Speed Mine (Rejects)
 - Crasher:
   - SinglePacket
   - CustomPayload
@@ -114,6 +111,9 @@
   - ShutdownDura
   - WorldEdit
   - Sign Crasher
+  - KickAll
+  - Movement/Animation
+  - OpenBook
 - Multiplayer:
   - scroll offset caching
   - multi server list system
@@ -160,6 +160,10 @@
   - Lavacast
   - NewChunks
   - Obsidian
+  - Potion Saver
+  - Potion Spoof
+  - Speed Mine
+  - OreSim and DiamondSeedXRAY
 
 ## TODO-List (Flori | TnTHack)
 - Modules:
