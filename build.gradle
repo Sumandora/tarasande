@@ -38,8 +38,8 @@ def libs = [
         // HAProxy Protocol -> https://mvnrepository.com/artifact/io.netty/netty-codec-haproxy
         "io.netty:netty-codec-haproxy:4.1.82.Final",
 
-        // Easing Functions -> https://github.com/FlorianMichael/eZEasing
-        "com.github.FlorianMichael:eZEasing:f3794a93ae",
+		// Easing Functions -> https://github.com/FlorianMichael/eZEasing
+		"com.github.FlorianMichael:eZEasing:f3794a93ae",
 
         // Via Protocol Hack README
         "com.viaversion:viaversion:4.5.0-22w45a-SNAPSHOT",
