@@ -7,29 +7,23 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.features.protocol.extension.getSpecialName
+import net.tarasandedevelopment.tarasande.features.protocol.platform.ValueBooleanProtocol
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
+import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenProtocolHack
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 
 class ScreenBetterSlotListProtocolHack : ScreenBetterSlotList(46, 12) {
 
-    private val specialNames = HashMap<ProtocolVersion, String>()
-
     init {
         this.provideElements(object : ScreenBetterSlotListWidget.ListProvider {
             override fun get(): List<ScreenBetterSlotListEntry> {
-                return VersionList.getProtocols().map { p -> ScreenBetterSlotListEntryProtocol(p, this@ScreenBetterSlotListProtocolHack) }
+                return VersionList.getProtocols().map { p -> ScreenBetterSlotListEntryProtocol(p) }
             }
         })
-
-        specialNames[ProtocolVersion.v1_9_3] = "1.9.3-1.9.4"
-        specialNames[ProtocolVersion.v1_11_1] = "1.11.1-1.11.2"
-        specialNames[ProtocolVersion.v1_16_4] = "1.16.4-1.16.5"
-        specialNames[ProtocolVersion.v1_18] = "1.18-1.18.1"
-        specialNames[ProtocolVersion.v1_19_1] = "1.19.1-1.19.2"
-        specialNames[ProtocolVersion.v1_19_3] = "22w45a"
     }
 
     override fun init() {
@@ -53,14 +47,18 @@ class ScreenBetterSlotListProtocolHack : ScreenBetterSlotList(46, 12) {
         this.renderTitle(matrices, "Protocol Hack")
     }
 
-    class ScreenBetterSlotListEntryProtocol(val protocol: ProtocolVersion, private val parent: ScreenBetterSlotListProtocolHack) : ScreenBetterSlotListEntry() {
+    class ScreenBetterSlotListEntryProtocol(val protocol: ProtocolVersion) : ScreenBetterSlotListEntry() {
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            RenderUtil.font().textShadow(matrices, parent.specialNames.getOrDefault(protocol, protocol.name), entryWidth / 2F, 0F, if (this.isSelected()) Color.green.rgb else Color.red.rgb, centered = true)
+            RenderUtil.font().textShadow(matrices, protocol.getSpecialName(), entryWidth / 2F, 0F, if (this.isSelected()) Color.green.rgb else Color.red.rgb, centered = true)
         }
 
         override fun onSingleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
             TarasandeMain.get().protocolHack.version.value = this.protocol.version.toDouble()
+            TarasandeMain.get().let { it.managerValue.getValues(it.managerClientMenu.get(ElementMenuScreenProtocolHack::class.java)) }.forEach {
+                if (it is ValueBooleanProtocol)
+                    it.value = it.version.any { range -> this.protocol in range }
+            }
             super.onSingleClickEntry(mouseX, mouseY, mouseButton)
         }
     }

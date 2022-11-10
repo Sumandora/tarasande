@@ -23,6 +23,8 @@ class Notification(val text: String, val length: Long) {
 
 class PanelNotifications(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu) : Panel("Notifications", x, y, 100.0, RenderUtil.font().fontHeight().toDouble(), background = false, resizable = false, fixed = true) {
 
+    private var alert = false
+
     companion object {
         val notifications = ArrayList<Notification>()
 
@@ -32,11 +34,14 @@ class PanelNotifications(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu)
                 notificationPanel.timeMode.isSelected(0) -> {
                     Notification(text, notificationPanel.timeAbsoluteTime.value.toLong())
                 }
+
                 else -> { // mode 1
                     Notification(text, text.length * notificationPanel.timeCharLength.value.toLong())
                 }
             }
             notifications.add(notification)
+            if (!notificationPanel.opened)
+                notificationPanel.alert = true
         }
     }
 
@@ -64,6 +69,7 @@ class PanelNotifications(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu)
     }
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        alert = false
         var index = 0.0
         notifications.forEach {
             val animation = animations[it]!!
@@ -105,5 +111,10 @@ class PanelNotifications(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu)
         }
 
         return animations.any { it.value > 0.01 }
+    }
+
+    override fun renderTitleBar(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        super.renderTitleBar(matrices, mouseX, mouseY, delta)
+        RenderUtil.font().textShadow(matrices, "!", (x + panelWidth - 5.0).toFloat(), titleBarHeight / 2.0f - RenderUtil.font().fontHeight() / 2.0f, -1, centered = true, scale = 0.5F)
     }
 }

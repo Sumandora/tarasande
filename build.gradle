@@ -26,27 +26,27 @@ repositories {
 }
 
 def libs = [
-		// Proxy -> https://mvnrepository.com/artifact/io.netty/netty-handler-proxy
-		"io.netty:netty-handler-proxy:4.1.82.Final",
+        // Proxy -> https://mvnrepository.com/artifact/io.netty/netty-handler-proxy
+        "io.netty:netty-handler-proxy:4.1.82.Final",
 
-		// BungeeCord Chat -> https://mvnrepository.com/artifact/net.md-5/bungeecord-chat
-		"net.md-5:bungeecord-chat:1.16-R0.4",
+        // BungeeCord Chat -> https://mvnrepository.com/artifact/net.md-5/bungeecord-chat
+        "net.md-5:bungeecord-chat:1.16-R0.4",
 
-		// Packet Library -> https://github.com/FlorianMichael/PacketMinecraft
-		"com.github.FlorianMichael:PacketMinecraft:main-SNAPSHOT",
+        // Packet Library -> https://github.com/FlorianMichael/PacketMinecraft
+        "com.github.FlorianMichael:PacketMinecraft:main-SNAPSHOT",
 
-		// HAProxy Protocol -> https://mvnrepository.com/artifact/io.netty/netty-codec-haproxy
-		"io.netty:netty-codec-haproxy:4.1.82.Final",
+        // HAProxy Protocol -> https://mvnrepository.com/artifact/io.netty/netty-codec-haproxy
+        "io.netty:netty-codec-haproxy:4.1.82.Final",
 
-		// Easing Functions -> https://github.com/FlorianMichael/eZEasing
-		"com.github.FlorianMichael:eZEasing:main-SNAPSHOT",
+        // Easing Functions -> https://github.com/FlorianMichael/eZEasing
+        "com.github.FlorianMichael:eZEasing:f3794a93ae",
 
-		// Via Protocol Hack README
-		"com.viaversion:viaversion:4.5.0-22w45a-SNAPSHOT",
-		"com.viaversion:viabackwards-common:4.5.0-22w45a-SNAPSHOT",
-		"org.yaml:snakeyaml:1.29",
+        // Via Protocol Hack README
+        "com.viaversion:viaversion:4.5.0-22w45a-SNAPSHOT",
+        "com.viaversion:viabackwards-common:4.5.0-22w45a-SNAPSHOT",
+        "org.yaml:snakeyaml:1.29",
 
-		"com.github.RejectedVia:ViaProtocolHack:22w45a"
+        "com.github.RejectedVia:ViaProtocolHack:22w45a"
 ]
 
 loom {
