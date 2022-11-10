@@ -139,9 +139,9 @@ open class Panel(
         matrices?.push()
         RenderUtil.fill(matrices, x, y, x + panelWidth, y + titleBarHeight, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
         when (alignment) {
-            Alignment.LEFT -> RenderUtil.font().textShadow(matrices, title, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2f - RenderUtil.font().fontHeight() / 2f, Color.white.rgb)
-            Alignment.MIDDLE -> RenderUtil.font().textShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0f - RenderUtil.font().getWidth(title).toFloat() / 2.0F, y.toFloat() + titleBarHeight / 2f - RenderUtil.font().fontHeight() / 2f, Color.white.rgb)
-            Alignment.RIGHT -> RenderUtil.font().textShadow(matrices, title, x.toFloat() + panelWidth.toFloat() - RenderUtil.font().getWidth(title).toFloat(), y.toFloat() + titleBarHeight / 2f - RenderUtil.font().fontHeight() / 2f, Color.white.rgb)
+            Alignment.LEFT -> RenderUtil.font().textShadow(matrices, title, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2f - RenderUtil.font().fontHeight() / 2f, -1)
+            Alignment.MIDDLE -> RenderUtil.font().textShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0f - RenderUtil.font().getWidth(title).toFloat() / 2.0F, y.toFloat() + titleBarHeight / 2f - RenderUtil.font().fontHeight() / 2f, -1)
+            Alignment.RIGHT -> RenderUtil.font().textShadow(matrices, title, x.toFloat() + panelWidth.toFloat() - RenderUtil.font().getWidth(title).toFloat(), y.toFloat() + titleBarHeight / 2f - RenderUtil.font().fontHeight() / 2f, -1)
         }
         matrices?.pop()
     }

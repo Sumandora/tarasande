@@ -7,6 +7,7 @@ import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.features.protocol.extension.getSpecialName
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
@@ -54,6 +55,15 @@ object ProtocolHackValues {
 
     // 1.9 -> 1.8.x
     val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", ProtocolVersion.v1_8.andOlder())
+
+
+    fun update(protocol: ProtocolVersion) {
+        // Owners may change, orientate on one setting
+        TarasandeMain.get().managerValue.getValues(viaVersionDebug.owner).forEach {
+            if (it is ValueBooleanProtocol)
+                it.value = it.version.any { range -> protocol in range }
+        }
+    }
 }
 
 class ValueBooleanProtocol(name: String, vararg val version: ProtocolRange) : ValueBoolean(ProtocolHackValues, "$name (" + version.joinToString(", ") { it.toString() } + ")", false) {

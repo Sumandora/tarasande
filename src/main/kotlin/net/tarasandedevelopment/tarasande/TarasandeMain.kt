@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande
 
 import com.google.gson.GsonBuilder
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
@@ -15,6 +16,7 @@ import net.tarasandedevelopment.tarasande.base.render.font.ManagerFont
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ManagerClientMenu
 import net.tarasandedevelopment.tarasande.base.value.ManagerValue
 import net.tarasandedevelopment.tarasande.features.protocol.TarasandeProtocolHack
+import net.tarasandedevelopment.tarasande.features.protocol.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAccountManager
 import net.tarasandedevelopment.tarasande.util.clientvalue.ClientValues
@@ -107,6 +109,8 @@ class TarasandeMain {
         tagName = TagName()
 
         managerFile.load()
+
+        ProtocolHackValues.update(ProtocolVersion.getProtocol(protocolHack.version.value.toInt()))
 
         val accountManager = managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager
 

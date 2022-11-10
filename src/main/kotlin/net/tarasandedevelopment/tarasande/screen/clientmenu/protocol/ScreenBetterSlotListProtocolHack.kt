@@ -8,11 +8,10 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.features.protocol.extension.getSpecialName
-import net.tarasandedevelopment.tarasande.features.protocol.platform.ValueBooleanProtocol
+import net.tarasandedevelopment.tarasande.features.protocol.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
-import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenProtocolHack
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 
@@ -55,10 +54,7 @@ class ScreenBetterSlotListProtocolHack : ScreenBetterSlotList(46, 12) {
 
         override fun onSingleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
             TarasandeMain.get().protocolHack.version.value = this.protocol.version.toDouble()
-            TarasandeMain.get().let { it.managerValue.getValues(it.managerClientMenu.get(ElementMenuScreenProtocolHack::class.java)) }.forEach {
-                if (it is ValueBooleanProtocol)
-                    it.value = it.version.any { range -> this.protocol in range }
-            }
+            ProtocolHackValues.update(this.protocol)
             super.onSingleClickEntry(mouseX, mouseY, mouseButton)
         }
     }

@@ -14,6 +14,7 @@ import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.value.ValueMode
 import net.tarasandedevelopment.tarasande.value.ValueNumber
+import java.awt.Color
 
 class Notification(val text: String, val length: Long) {
 
@@ -48,9 +49,6 @@ class PanelNotifications(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu)
     private val animations = HashMap<Notification, Double>()
 
     private var easing = EzEasing.LINEAR
-
-    private val speedIn = ValueNumber(this, "Speed: in", 0.001, 0.005, 0.02, 0.001)
-    private val speedOut = ValueNumber(this, "Speed: out", 0.001, 0.005, 0.02, 0.001)
     private val timeMode = ValueMode(this, "Time: mode", false, "Absolute", "Length per char")
     private val timeAbsoluteTime = object : ValueNumber(this, "Time: absolute time", 0.0, 10000.0, 60000.0, 500.0) {
         override fun isEnabled() = timeMode.isSelected(0)
@@ -58,8 +56,11 @@ class PanelNotifications(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu)
     private val timeCharLength = object : ValueNumber(this, "Time: char length", 0.0, 250.0, 500.0, 10.0) {
         override fun isEnabled() = timeMode.isSelected(1)
     }
-
     private val timeAlignment = ValueMode(this, "Time alignment", false, "Before", "After", "None")
+
+    private val speedIn = ValueNumber(this, "Speed: in", 0.001, 0.005, 0.02, 0.001)
+    private val speedOut = ValueNumber(this, "Speed: out", 0.001, 0.005, 0.02, 0.001)
+
     init {
         object : ValueMode(this, "Easing function", false, *EzEasing.functionNames().toTypedArray()) {
             override fun onChange() {
@@ -110,11 +111,16 @@ class PanelNotifications(x: Double, y: Double, screenCheatMenu: ScreenCheatMenu)
             animations[notification] = MathHelper.clamp(animation, 0.0, 1.0)
         }
 
-        return animations.any { it.value > 0.01 }
+        return animations.any { it.value > 0.01 }.also { if (!it) alert = false }
     }
 
     override fun renderTitleBar(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.renderTitleBar(matrices, mouseX, mouseY, delta)
-        RenderUtil.font().textShadow(matrices, "!", (x + panelWidth - 5.0).toFloat(), titleBarHeight / 2.0f - RenderUtil.font().fontHeight() / 2.0f, -1, centered = true, scale = 0.5F)
+        var x = this.x + 5.0
+        if (alignment != Alignment.RIGHT)
+            x = this.x + panelWidth - 5.0
+
+        if (alert)
+            RenderUtil.font().textShadow(matrices, "!", x.toFloat(), y.toFloat() + titleBarHeight / 2.0f - RenderUtil.font().fontHeight() / 2.0f * 0.5F, Color.red.rgb, centered = true, scale = 0.5F)
     }
 }

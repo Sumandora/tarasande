@@ -27,7 +27,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
     internal val calculateBestWay = ValueBoolean(this, "Calculate best way", true)
 
-    private val depth = object : ValueNumber(this, "Depth", 1.0, 24.0, 32.0, 1.0) {
+    private val maxDefenders = object : ValueNumber(this, "Depth", 1.0, 128.0, 512.0, 1.0) {
         override fun isEnabled() = calculateBestWay.value
     }
 
@@ -66,10 +66,10 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
         while (open.isNotEmpty()) {
             val block = open.removeFirst()
-            if (beds.minOf { it.getSquaredDistance(block) } > depth.value * depth.value)
-                return null
 
             list.add(block)
+            if (list.size > maxDefenders.value)
+                return null
 
             for (newBlock in allSurroundings(block)) {
                 if (!list.contains(newBlock) && !mc.world?.getBlockState(newBlock)?.isAir!!) {
