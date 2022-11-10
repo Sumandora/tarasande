@@ -64,8 +64,8 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Ren
         })
         super.init()
 
-        addDrawableChild(ButtonWidget(width / 2 - 203, height - 46 - 3, 100, 20, Text.of("Login")) { logIn(this.selected()) }.also { loginButton = it })
-        addDrawableChild(ButtonWidget(width / 2 - 101, height - 46 - 3, 100, 20, Text.of("Remove")) {
+        addDrawableChild(ButtonWidget(width / 2 - 152, height - 46 - 3, 100, 20, Text.of("Login")) { logIn(this.selected()) }.also { loginButton = it })
+        addDrawableChild(ButtonWidget(width / 2 - 50, height - 46 - 3, 100, 20, Text.of("Remove")) {
             if (this.selected() == null) return@ButtonWidget
 
             if (accounts.indexOf(this.selected()!!) == mainAccount) mainAccount = null
@@ -73,7 +73,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Ren
             slotList?.reload()
             slotList?.setSelected(null)
         }.also { removeButton = it })
-        addDrawableChild(ButtonWidget(width / 2 + 1, height - 46 - 3, 100, 20, Text.of("Toggle main")) {
+        addDrawableChild(ButtonWidget(width / 2 + 52, height - 46 - 3, 100, 20, Text.of("Toggle main")) {
             val account = this.selected() ?: return@ButtonWidget
 
             if (account.session == null) {
@@ -90,29 +90,26 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Ren
             }
         }.also { toggleMainButton = it })
 
-        addDrawableChild(ButtonWidget(width / 2 - 203, height - 46 + 2 + 20 - 3, 100, 20, Text.of("Direct Login")) { client?.setScreen(ScreenBetterAccount(this, "Direct Login") { logIn(it) }) })
-        addDrawableChild(ButtonWidget(width / 2 - 101, height - 46 + 2 + 20 - 3, 100, 20, Text.of("Random Account")) { logIn(accounts[ThreadLocalRandom.current().nextInt(accounts.size)]) }.also { randomButton = it })
-        addDrawableChild(ButtonWidget(width / 2 + 1, height - 46 + 2 + 20 - 3, 100, 20, Text.of("Add")) {
+        addDrawableChild(ButtonWidget(width / 2 - 152, height - 46 + 2 + 20 - 3, 100, 20, Text.of("Direct Login")) { client?.setScreen(ScreenBetterAccount(this, "Direct Login") { logIn(it) }) })
+        addDrawableChild(ButtonWidget(width / 2 - 50, height - 46 + 2 + 20 - 3, 100, 20, Text.of("Random Account")) { logIn(accounts[ThreadLocalRandom.current().nextInt(accounts.size)]) }.also { randomButton = it })
+        addDrawableChild(ButtonWidget(width / 2 + 52, height - 46 + 2 + 20 - 3, 100, 20, Text.of("Add")) {
             client?.setScreen(ScreenBetterAccount(this, "Add Account") { account ->
                 accounts.add(account)
                 this.slotList?.reload()
             })
         }.also { addButton = it })
 
-        addDrawableChild(ButtonWidget(width / 2 + 103, height - 46 + 2 + 20 - 3, 100, 20, Text.of("Random cracked")) {
+        addDrawableChild(ButtonWidget(5, 5, 100, 20, Text.of("Random cracked")) {
             logIn(AccountSession().also {
                 it.username = RandomStringUtils.randomAlphanumeric(16)
                 it.uuid = UUID.randomUUID().toString()
                 it.environment = it.defaultEnvironment()
             })
         })
-        /*
-        addDrawableChild(ButtonWidget(width / 2 + 103, height - 46 - 3, 100, 20, Text.of("Special")) {
-        })
-        */
+
 
         if (TarasandeMain.get().clientValues.clientMenuBackButtons.value) {
-            addDrawableChild(ButtonWidget(5, 5, 20, 20, Text.of("<-")) { RenderSystem.recordRenderCall { close() } })
+            addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { RenderSystem.recordRenderCall { close() } })
         }
 
         tick()
