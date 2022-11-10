@@ -54,14 +54,139 @@
 - Notification panel: Render exclamation mark if unread notifications are present
 
 ## TODO-List (Flori | General)
+#### Recode
+- Exploit Injector
+#### Additions
+- Panel:
+  - Text Radar
+  - Custompayload tracker
+- Account Manager: 
+  - Change Name-Case
+  - WorldEdit-RCE
+  - WorldGuard-RCE
+  - Import
+  - Export
+- Proxy Recode: 
+  - Fav. System
+  - History System
+- Module: 
+  - AntiSpam
+  - ChatTranslator
+  - ChatCopy
+  - AntiAnnoying
+  - AutoLog
+  - Terrain Screen
+  - ElytraBoost
+  - SkinBlinker
+  - Tracers (2D, 3D)
+  - AntiCactus
+  - Build Height Interactions
+  - Shift Container Transfer
+  - NoteBot
+  - PlaceRandom
+  - OpenMods RCE
+  - Crayfish Nuker
+  - Death Coords
+  - Shop Saver
+  - AutoSwim
+  - XCarry
+  - AntiSpawnPoint
+  - Liquids
+  - Potion Saver (Rejects)
+  - Potion Spoof (Rejects)
+  - Speed Mine (Rejects)
+- Crasher:
+  - SinglePacket
+  - CustomPayload
+  - CustomPayloadBypass
+  - MainThread
+  - Velocity
+  - Instant 1-5
+  - Fly
+  - Skript
+  - SBookBypass
+  - ZeroSmasher
+  - Fawe
+  - ItemFrame
+  - Particle
+  - Pex
+  - NullPointing
+  - ShutdownDura
+  - WorldEdit
+  - Sign Crasher
+- Multiplayer:
+  - scroll offset caching
+  - multi server list system
+  - cache pinged servers
+  - PacketMinecraft Server-Pinger
+  - Reconnect and Auto-Reconnect
+  - Delete Actions and Favourite System
 
-- placing blocks in localplayer
-- Notebot
-- Panel: Text Radar
+## TODO-List (Flori | Rejects)
+- Panel:
+  - Locate
+  - Terrain-Export
+  - Skin downloader
+  - center actions
+- Module:
+  - Tablist Dimension Change 
+  - Sound Blocker
+  - Beacon Manipulation
+  - NoFriction
+  - VertexSmasher
+  - Auto GG
+  - Secure Login and Register
+  - ClientSettingsManipulation
+  - IntaveChecker
+  - eZSkript
+  - RandomItemGenerator
+  - AutoSwitch/HeadRoll
+  - CustomHandRendering
+  - AntiWaterGravity
+  - AntiWaterPush
+  - ItemThrow
+  - GH/CR
+  - Vanilla Coordination Logging and Event Logging
+  - BannerDumper
+  - BungeeChannelInjection
+  - Enderman Look
+  - MountBypass
+  - NoGhostBlocks
+  - StashFinder
+  - ChorusExploit
+  - Sign Utils
+  - Custom Packets
+  - Interaction Menu
+  - Lavacast
+  - NewChunks
+  - Obsidian
+
+## TODO-List (Flori | TnTHack)
+- Modules:
+   - Sign Exploits
+   - CheckCommandBlock
+- Creative Items:
+   - CommandBlock
+   - Command Book Collection (detailed and normal)
+   - Hologram system (pictures, dietrich bypass, text, spammer)
+   - Win2K and Petya Utils
+   - Zoom Item
+   - Crash and Bug Item
+   - Object loader
+
+## TODO-List (Flori | Minecraft Changes)
+- Modules:
+   - BlockOverlay
+   - Custom Scoreboard
+   - Custom Tablist
+   - Custom Hotbar
+   - Custom Buttons
+   - Custom Background with Selection
 
 ## TODO-List (Flori | TarasandeProtocolHack)
 
 - 1.8.x: Water movement
+- 1.12.x: Place/Block logic
 
 ## TODO-List (Flori | ViaLegacy)
 
