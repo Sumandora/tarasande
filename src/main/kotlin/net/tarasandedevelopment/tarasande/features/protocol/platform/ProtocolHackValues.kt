@@ -5,9 +5,13 @@ package net.tarasandedevelopment.tarasande.features.protocol.platform
 import com.mojang.bridge.game.PackType
 import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
+import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.features.protocol.extension.getSpecialName
+import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IFontStorage_Protocol
 import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import net.tarasandedevelopment.tarasande.value.ValueNumber
 import net.tarasandedevelopment.tarasande.value.ValueText
@@ -51,12 +55,25 @@ object ProtocolHackValues {
 
     // 1.13 -> 1.12.2
     val removeNewTabCompletion = ValueBooleanProtocol("Remove new tab completion", ProtocolVersion.v1_12_2.andOlder())
+    val fontCacheFix = object : ValueBooleanProtocol("Font cache fix", ProtocolVersion.v1_12_2.andOlder()) {
+        override fun isEnabled() = !FabricLoader.getInstance().isModLoaded("dashloader")
+
+        init {
+            TarasandeMain.get().managerEvent.add(EventConnectServer::class.java) {
+                if (value && isEnabled()) {
+                    MinecraftClient.getInstance().fontManager.fontStorages.values.forEach {
+                        (it as IFontStorage_Protocol).protocolhack_clearCaches()
+                    }
+                }
+            }
+        }
+    }
 
     // 1.9 -> 1.8.x
     val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", ProtocolVersion.v1_8.andOlder())
 }
 
-class ValueBooleanProtocol(name: String, vararg val version: ProtocolRange) : ValueBoolean(ProtocolHackValues, "$name (" + version.joinToString(", ") { it.toString() } + ")", false) {
+open class ValueBooleanProtocol(name: String, vararg val version: ProtocolRange) : ValueBoolean(ProtocolHackValues, "$name (" + version.joinToString(", ") { it.toString() } + ")", false) {
 }
 
 operator fun ProtocolVersion.rangeTo(protocolVersion: ProtocolVersion): ProtocolRange {
