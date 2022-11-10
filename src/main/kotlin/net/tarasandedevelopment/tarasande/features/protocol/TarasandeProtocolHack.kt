@@ -14,6 +14,7 @@ import de.florianmichael.vialegacy.api.via.config.ViaLegacyConfigImpl
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
 import de.florianmichael.viaprotocolhack.INativeProvider
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
+import de.florianmichael.viaprotocolhack.util.VersionList
 import io.netty.channel.DefaultEventLoop
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.ModContainer

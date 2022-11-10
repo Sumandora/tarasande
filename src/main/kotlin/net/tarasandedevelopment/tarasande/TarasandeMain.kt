@@ -90,11 +90,11 @@ class TarasandeMain {
 
     fun onPreLoad() {
         managerEvent = ManagerEvent()
+        managerValue = ManagerValue()
     }
 
     fun onLateLoad() {
         managerFile = ManagerFile()
-        managerValue = ManagerValue()
         managerFont = ManagerFont()
         managerBlur = ManagerBlur()
         managerPackage = ManagerPackage()
