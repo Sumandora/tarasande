@@ -27,10 +27,7 @@ class ManagerClientMenu : Manager<ElementMenu>() {
             ElementMenuToggleForgeFaker(),
             ElementMenuToggleHAProxyHack(),
             ElementMenuToggleQuiltFaker(),
-            ElementMenuToggleClientBrandSpoofer(),
-
-            // Special
-            ElementMenuFritzBoxReconnect()
+            ElementMenuToggleClientBrandSpoofer()
         )
     }
 
@@ -89,5 +86,4 @@ abstract class ElementMenuToggle(name: String, category: String) : ElementMenu(n
 object ElementCategory {
     const val GENERAL = "General"
     const val EXPLOITS = "Exploits"
-    const val SPECIAL = "Special"
 }

@@ -302,23 +302,3 @@ class ElementMenuToggleClientBrandSpoofer : ElementMenuToggle("Client brand spoo
         // state check in event listener
     }
 }
-
-class ElementMenuFritzBoxReconnect : ElementMenu("Fritz!Box Reconnect", ElementCategory.SPECIAL) {
-    private val scriptName = "ip_changer_fritzbox.vbs"
-    private val script = File(TarasandeMain.get().rootDirectory, scriptName)
-
-    init {
-        if (visible())
-            if (!script.exists())
-                Files.write(TarasandeMain::class.java.getResourceAsStream(scriptName)?.readAllBytes() ?: error("$scriptName not found"), script)
-    }
-
-    override fun onClick(mouseButton: Int) {
-        val builder = ProcessBuilder("wscript", this.script.absolutePath)
-
-        builder.directory(TarasandeMain.get().rootDirectory)
-        builder.start()
-    }
-
-    override fun visible() = Util.getOperatingSystem() == Util.OperatingSystem.WINDOWS
-}
