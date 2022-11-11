@@ -21,12 +21,15 @@ class ManagerScreenExtension : Manager<ScreenExtension>() {
             // Minecraft Menus,
             ScreenExtensionMinecraftMenusClientMenu(),
             ScreenExtensionMinecraftMenusSleepingChat(),
-            ScreenExtensionMinecraftMenusSignEdit(),
             ScreenExtensionMinecraftMenusDeath(),
 
             // Downloading Terrain
             ScreenExtensionDownloadingTerrainCancel(),
-            ScreenExtensionDownloadingTerrainCancelAndDisconnect()
+            ScreenExtensionDownloadingTerrainCancelAndDisconnect(),
+
+            // Handled Screens
+            ScreenExtensionHandledScreensClientsideClose(),
+            ScreenExtensionHandledScreensServersideClose()
         )
 
         TarasandeMain.get().managerEvent.add(EventChildren::class.java) { eventChildren ->
@@ -37,8 +40,8 @@ class ManagerScreenExtension : Manager<ScreenExtension>() {
                     Alignment.RIGHT -> MinecraftClient.getInstance().window.scaledWidth - 98 - 5
                 }
 
-                list.filter { it.alignment == alignment }.filter { it.screens.contains(eventChildren.screen.javaClass) }.forEachIndexed { index, screenExtension ->
-                    eventChildren.add(PanelButton.createButton(xPos, 5 + (index * 25), 98, 25, screenExtension.name + (if (screenExtension.version != null) " (" + screenExtension.version + ")" else "")) {
+                list.filter { it.alignment == alignment }.filter { it.screens.any { it.isAssignableFrom(eventChildren.screen.javaClass) } }.forEachIndexed { index, screenExtension ->
+                    eventChildren.add(PanelButton.createButton(xPos, 5 + (index * 27), 98, 25, screenExtension.name + (if (screenExtension.version != null) " (" + screenExtension.version + ")" else "")) {
                         screenExtension.onClick(MinecraftClient.getInstance().currentScreen!!)
                     })
                 }

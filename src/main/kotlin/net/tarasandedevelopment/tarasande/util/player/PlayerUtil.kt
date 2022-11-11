@@ -2,7 +2,10 @@ package net.tarasandedevelopment.tarasande.util.player
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ChatScreen
+import net.minecraft.client.gui.screen.TitleScreen
+import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.minecraft.client.input.KeyboardInput
+import net.minecraft.client.realms.gui.screen.RealmsMainScreen
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.effect.StatusEffects
@@ -212,5 +215,20 @@ object PlayerUtil {
             y++
         }
         return y
+    }
+
+    fun disconnect() {
+        MinecraftClient.getInstance().world?.disconnect()
+        MinecraftClient.getInstance().disconnect()
+
+        val title = TitleScreen()
+
+        if (MinecraftClient.getInstance().isInSingleplayer) {
+            MinecraftClient.getInstance().setScreen(title)
+        } else if (MinecraftClient.getInstance().isConnectedToRealms) {
+            MinecraftClient.getInstance().setScreen(RealmsMainScreen(title))
+        } else {
+            MinecraftClient.getInstance().setScreen(MultiplayerScreen(title))
+        }
     }
 }
