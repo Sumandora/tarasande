@@ -9,6 +9,7 @@ import net.tarasandedevelopment.tarasande.base.event.ManagerEvent
 import net.tarasandedevelopment.tarasande.base.features.clickspeed.ManagerClickMethod
 import net.tarasandedevelopment.tarasande.base.features.esp.ManagerESP
 import net.tarasandedevelopment.tarasande.base.features.module.ManagerModule
+import net.tarasandedevelopment.tarasande.base.features.screenexploit.ManagerScreenExploit
 import net.tarasandedevelopment.tarasande.base.file.ManagerFile
 import net.tarasandedevelopment.tarasande.base.`package`.ManagerPackage
 import net.tarasandedevelopment.tarasande.base.render.blur.ManagerBlur
@@ -54,6 +55,8 @@ class TarasandeMain {
     lateinit var managerModule: ManagerModule
         private set
     lateinit var managerESP: ManagerESP
+        private set
+    lateinit var managerScreenExploit: ManagerScreenExploit
         private set
     lateinit var screenCheatMenu: ScreenCheatMenu
         private set
@@ -104,6 +107,7 @@ class TarasandeMain {
         managerClickMethod = ManagerClickMethod()
         managerModule = ManagerModule()
         managerESP = ManagerESP()
+        managerScreenExploit = ManagerScreenExploit()
         screenCheatMenu = ScreenCheatMenu() // Initializes ClickGUI (Make sure that modules, values, blur etc... is initialized before)
         friends = Friends()
         tagName = TagName()
