@@ -278,7 +278,6 @@ You can close this page now.""".toByteArray())
     override fun create(credentials: List<String>) {
     }
 
-    @JvmRecord
     data class MSAuthProfile(val oAuthToken: OAuthToken, val xboxLiveAuth: XboxLiveAuth, val xboxLiveSecurityTokens: XboxLiveSecurityTokens, val minecraftLogin: MinecraftLogin, val minecraftProfile: MinecraftProfile, val azureApp: AzureAppPreset) {
 
         fun asSession() = Session(
@@ -297,20 +296,17 @@ You can close this page now.""".toByteArray())
             return microsoft.buildFromRefreshToken(oAuthToken.refreshToken)
         }
 
-        @JvmRecord
         data class DisplayClaim(
             @Suppress("ArrayInDataClass")
             @SerializedName("xui")
             val xui: Array<Xui>
         )
 
-        @JvmRecord
         data class Xui(
             @SerializedName("uhs")
             val uhs: String
         )
 
-        @JvmRecord
         data class OAuthToken(
             @SerializedName("token_type")
             val tokenType: String,
@@ -328,7 +324,6 @@ You can close this page now.""".toByteArray())
             val userId: String
         )
 
-        @JvmRecord
         data class XboxLiveAuth(
             @SerializedName("IssueInstant")
             val issueInstant: Timestamp,
@@ -340,7 +335,6 @@ You can close this page now.""".toByteArray())
             val displayClaims: DisplayClaim,
         )
 
-        @JvmRecord
         data class XboxLiveSecurityTokens(
             @SerializedName("IssueInstant")
             val issueInstant: Timestamp,
@@ -352,7 +346,6 @@ You can close this page now.""".toByteArray())
             val displayClaims: DisplayClaim
         )
 
-        @JvmRecord
         data class MinecraftLogin(
             @SerializedName("username")
             val username: String,
@@ -367,7 +360,6 @@ You can close this page now.""".toByteArray())
             val expiresIn: Int
         )
 
-        @JvmRecord
         data class Skin(
             @SerializedName("id")
             val id: String? = null,
@@ -379,7 +371,6 @@ You can close this page now.""".toByteArray())
             val variant: String? = null
         )
 
-        @JvmRecord
         data class Cape(
             @SerializedName("id")
             val id: String,
@@ -391,7 +382,6 @@ You can close this page now.""".toByteArray())
             val alias: String
         )
 
-        @JvmRecord
         data class MinecraftProfile(
             @SerializedName("id")
             val id: String,
