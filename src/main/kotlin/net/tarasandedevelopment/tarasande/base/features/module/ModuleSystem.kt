@@ -100,8 +100,6 @@ class ManagerModule : Manager<Module>() {
             ModuleTrueSight(),
             ModulePhase(),
             ModuleInventoryCleaner(),
-            ModuleLecternCrash(),
-            ModuleCraftingDupe(),
             ModulePrediction(),
             ModulePerfectHorseJump(),
             ModuleTridentBoost(),
