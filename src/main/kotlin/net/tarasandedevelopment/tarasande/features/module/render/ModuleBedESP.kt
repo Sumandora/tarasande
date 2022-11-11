@@ -27,7 +27,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
     internal val calculateBestWay = ValueBoolean(this, "Calculate best way", true)
 
-    private val maxDefenders = object : ValueNumber(this, "Depth", 1.0, 128.0, 512.0, 1.0) {
+    private val maxDefenders = object : ValueNumber(this, "Max defenders", 1.0, 128.0, 512.0, 64.0) {
         override fun isEnabled() = calculateBestWay.value
     }
 

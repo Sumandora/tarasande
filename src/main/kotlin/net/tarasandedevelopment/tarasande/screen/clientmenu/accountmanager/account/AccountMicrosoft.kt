@@ -58,24 +58,31 @@ open class AccountMicrosoft : Account() {
                     Thread.sleep(100L) // some browsers are slow for some reason
                     val bufferedReader = BufferedReader(InputStreamReader(socket.getInputStream()))
                     val content = StringBuilder()
-                    while (bufferedReader.ready())
-                        content.append(bufferedReader.read().toChar())
-                    code = try {
-                        content.toString().split("code=")[1].split(" ")[0].split("&")[0]
-                    } catch (t: Throwable) {
-                        t.printStackTrace()
-                        cancelled = true
-                        socket.getOutputStream().write(("""HTTP/2 200 OK
-content-type: text/plain
-
-It seems that you have cancelled the operation.
-""" + (content.split("&").map { it.split("=") }.firstOrNull { it[0].equals("error_description", true) }?.get(1) ?: "Couldn't parse error description")).toByteArray())
-                        return@Thread
-                    } // hack
-                    socket.getOutputStream().write("""HTTP/2 200 OK
+                    while (bufferedReader.ready()) {
+                        val next = bufferedReader.read().toChar()
+                        if (next == '\n') break
+                        content.append(next)
+                    }
+                    val path = content.split("\n").first().split(" ")[1]
+                    try {
+                        code = path.split("code=")[1].split(" ")[0].split("&")[0]
+                        socket.getOutputStream().write("""HTTP/2 200 OK
 content-type: text/plain
 
 You can close this page now.""".toByteArray())
+                    } catch (t: Throwable) {
+                        t.printStackTrace()
+                        cancelled = true
+                        var errorDescription = path.split("&").map { it.split("=") }.firstOrNull { it[0].equals("error_description", true) }?.get(1) ?: "Couldn't parse error description"
+                        errorDescription = URLDecoder.decode(errorDescription, StandardCharsets.UTF_8)
+                        socket.getOutputStream().write("""HTTP/2 200 OK
+content-type: text/plain
+
+It seems that you have cancelled the operation.
+
+ERROR:
+$errorDescription""".toByteArray())
+                    }
                     socket.close()
                     serverSocket.close()
                 } catch (t: Throwable) {
