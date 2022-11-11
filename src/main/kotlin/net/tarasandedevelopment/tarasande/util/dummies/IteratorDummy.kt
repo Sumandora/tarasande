@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.util.dummies
 
-class EmptyIterator<T> : Iterator<T?> {
+class IteratorDummy<T> : Iterator<T?> {
 
     override fun hasNext(): Boolean {
         return false

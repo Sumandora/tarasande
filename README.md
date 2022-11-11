@@ -61,8 +61,6 @@
 - Now playing for QDBus
 
 ## TODO-List (Flori | Tarasande)
-#### Recode
-- Exploit Injector
 #### Additions
 - Panel:
   - Text Radar
@@ -82,7 +80,6 @@
   - ChatCopy
   - AntiAnnoying
   - AutoLog
-  - Terrain Screen
   - ElytraBoost
   - SkinBlinker
   - Tracers (2D, 3D)
