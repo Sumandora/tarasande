@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.event;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
@@ -22,8 +23,9 @@ public class MixinGameRenderer {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;applyModelViewMatrix()V", shift = At.Shift.AFTER, remap = false))
     public void hookEventRender2D(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-        if (client.player != null)
+        if (client.player != null && !(MinecraftClient.getInstance().currentScreen instanceof DownloadingTerrainScreen)) {
             TarasandeMain.Companion.get().getManagerEvent().call(new EventRender2D(new MatrixStack()));
+        }
     }
 
     @Inject(method = "updateTargetedEntity", at = @At("HEAD"))

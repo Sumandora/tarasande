@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
+import net.minecraft.client.gui.screen.DownloadingTerrainScreen
 import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
@@ -43,7 +44,7 @@ class ManagerBlur : Manager<Blur>() {
 
         TarasandeMain.get().managerEvent.also {
             it.add(EventScreenRender::class.java) {
-                if ((MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenCheatMenu) && it.screen !is RealmsNotificationsScreen)
+                if ((MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenCheatMenu || MinecraftClient.getInstance().currentScreen is DownloadingTerrainScreen) && it.screen !is RealmsNotificationsScreen)
                     blurScene()
             }
             it.add(EventRender2D::class.java) {

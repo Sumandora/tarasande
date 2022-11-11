@@ -30,12 +30,6 @@ class ManagerClientMenu : Manager<ElementMenu>() {
             ElementMenuToggleClientBrandSpoofer()
         )
     }
-
-    fun createClientMenuButton(x: Int, y: Int, width: Int, height: Int, parent: Screen): ClickableWidgetPanel {
-        return PanelButton.createButton(x, y, width, height, TarasandeMain.get().name.let { it[0].uppercaseChar().toString() + it.substring(1) + " Menu" }) {
-            MinecraftClient.getInstance().setScreen(ScreenBetterSlotListClientMenu(parent))
-        }
-    }
 }
 
 abstract class ElementMenu(val name: String, val category: String) {

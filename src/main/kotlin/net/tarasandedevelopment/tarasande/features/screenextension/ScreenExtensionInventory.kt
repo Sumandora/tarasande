@@ -1,29 +1,30 @@
-package net.tarasandedevelopment.tarasande.features.screenexploit
+package net.tarasandedevelopment.tarasande.features.screenextension
 
 import com.google.common.collect.Lists
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.gui.screen.ingame.LecternScreen
 import net.minecraft.item.ItemStack
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket
 import net.minecraft.screen.slot.SlotActionType
-import net.tarasandedevelopment.tarasande.base.features.screenexploit.ScreenExploit
+import net.tarasandedevelopment.tarasande.base.features.screenextension.ScreenExtension
 import net.tarasandedevelopment.tarasande.util.extension.andNewer
 
-class ScreenExploitCraftingDupe : ScreenExploit("Crafting Dupe", ProtocolVersion.v1_17.andNewer(), InventoryScreen::class.java) {
+class ScreenExtensionInventoryCraftingDupe : ScreenExtension("Crafting Dupe", InventoryScreen::class.java, version = ProtocolVersion.v1_17.andNewer()) {
 
-    override fun onClick(inventory: InventoryScreen) {
-        inventory.screenHandler.getSlot(0).also {
-            inventory.onMouseClick(it, it.id, 0, SlotActionType.THROW)
+    override fun onClick(current: Screen) {
+        (current as InventoryScreen).screenHandler.getSlot(0).also {
+            current.onMouseClick(it, it.id, 0, SlotActionType.THROW)
         }
     }
 }
 
-class ScreenExploitLecternCrash : ScreenExploit("Lectern Crash", ProtocolVersion.v1_14.andNewer(), LecternScreen::class.java) {
+class ScreenExtensionInventoryLecternCrash : ScreenExtension("Lectern Crash", LecternScreen::class.java, version = ProtocolVersion.v1_14.andNewer()) {
 
-    override fun onClick(inventory: InventoryScreen) {
+    override fun onClick(current: Screen) {
         val screenHandler = MinecraftClient.getInstance().player!!.currentScreenHandler
 
         val defaultedList = screenHandler.slots
