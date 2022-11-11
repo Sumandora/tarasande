@@ -65,6 +65,11 @@ open class AccountMicrosoft : Account() {
                     } catch (t: Throwable) {
                         t.printStackTrace()
                         cancelled = true
+                        socket.getOutputStream().write(("""HTTP/2 200 OK
+content-type: text/plain
+
+It seems that you have cancelled the operation.
+""" + (content.split("&").map { it.split("=") }.firstOrNull { it[0].equals("error_description", true) }?.get(1) ?: "Couldn't parse error description")).toByteArray())
                         return@Thread
                     } // hack
                     socket.getOutputStream().write("""HTTP/2 200 OK
@@ -198,7 +203,16 @@ You can close this page now.""".toByteArray())
         val minecraftProfile = TarasandeMain.get().gson.fromJson(get(minecraftProfileUrl, 60 * 1000, HashMap<String, String>().also {
             it["Authorization"] = "Bearer " + minecraftLogin["access_token"].asString
         }), JsonObject::class.java)
-        return MSAuthProfile(oAuthToken, xboxLiveAuth, xboxLiveSecurityTokens, minecraftLogin, minecraftProfile, azureApp)
+        return TarasandeMain.get().gson.let {
+            MSAuthProfile(
+                it.fromJson(oAuthToken, MSAuthProfile.OAuthToken::class.java),
+                it.fromJson(xboxLiveAuth, MSAuthProfile.XboxLiveAuth::class.java),
+                it.fromJson(xboxLiveSecurityTokens, MSAuthProfile.XboxLiveSecurityTokens::class.java),
+                it.fromJson(minecraftLogin, MSAuthProfile.MinecraftLogin::class.java),
+                it.fromJson(minecraftProfile, MSAuthProfile.MinecraftProfile::class.java),
+                azureApp
+            )
+        }
     }
 
     operator fun get(url: String, timeout: Int, headers: HashMap<String, String>): String {
@@ -264,28 +278,14 @@ You can close this page now.""".toByteArray())
     override fun create(credentials: List<String>) {
     }
 
-    inner class MSAuthProfile(oAuthToken: JsonObject, xboxLiveAuth: JsonObject, xboxLiveSecurityTokens: JsonObject, minecraftLogin: JsonObject, minecraftProfile: JsonObject, private val azureApp: AzureAppPreset) {
-        private var oAuthToken: OAuthToken? = null
-        var xboxLiveAuth: XboxLiveAuth? = null
-        var xboxLiveSecurityTokens: XboxLiveSecurityTokens? = null
-        private var minecraftLogin: MinecraftLogin? = null
-        private var minecraftProfile: MinecraftProfile? = null
-
-        init {
-            val gson = TarasandeMain.get().gson
-            this.oAuthToken = gson.fromJson(oAuthToken, OAuthToken::class.java)
-            this.xboxLiveAuth = gson.fromJson(xboxLiveAuth, XboxLiveAuth::class.java)
-            this.xboxLiveSecurityTokens = gson.fromJson(xboxLiveSecurityTokens, XboxLiveSecurityTokens::class.java)
-            this.minecraftLogin = gson.fromJson(minecraftLogin, MinecraftLogin::class.java)
-            this.minecraftProfile = gson.fromJson(minecraftProfile, MinecraftProfile::class.java)
-
-        }
+    @JvmRecord
+    data class MSAuthProfile(val oAuthToken: OAuthToken, val xboxLiveAuth: XboxLiveAuth, val xboxLiveSecurityTokens: XboxLiveSecurityTokens, val minecraftLogin: MinecraftLogin, val minecraftProfile: MinecraftProfile, val azureApp: AzureAppPreset) {
 
         fun asSession() = Session(
-            minecraftProfile?.name,
-            minecraftProfile?.id,
-            minecraftLogin?.accessToken,
-            Optional.of(xboxLiveAuth?.token!!),
+            minecraftProfile.name,
+            minecraftProfile.id,
+            minecraftLogin.accessToken,
+            Optional.of(xboxLiveAuth.token),
             Optional.of(azureApp.clientId.toString()), // I hate the jvm, I hate the bytecode, I hate the language, I hate me, I hate everything!
             Session.AccountType.MSA
         )
@@ -294,187 +294,123 @@ You can close this page now.""".toByteArray())
             val microsoft = AccountMicrosoft()
             microsoft.redirectUri = azureApp.redirectUri + microsoft.randomPort()
             microsoft.azureApp = azureApp
-            return microsoft.buildFromRefreshToken(oAuthToken?.refreshToken!!)
+            return microsoft.buildFromRefreshToken(oAuthToken.refreshToken)
         }
 
-        override fun toString(): String {
-            return "MSAuthProfile(azureApp=$azureApp, oAuthToken=$oAuthToken, xboxLiveAuth=$xboxLiveAuth, xboxLiveSecurityTokens=$xboxLiveSecurityTokens, minecraftLogin=$minecraftLogin, minecraftProfile=$minecraftProfile)"
-        }
+        @JvmRecord
+        data class DisplayClaim(
+            @Suppress("ArrayInDataClass")
+            @SerializedName("xui")
+            val xui: Array<Xui>
+        )
 
+        @JvmRecord
+        data class Xui(
+            @SerializedName("uhs")
+            val uhs: String
+        )
 
-        inner class OAuthToken {
+        @JvmRecord
+        data class OAuthToken(
             @SerializedName("token_type")
-            var tokenType: String? = null
-
+            val tokenType: String,
             @SerializedName("expires_in")
-            var expiresIn = 0
-
+            val expiresIn: Int,
             @SerializedName("scope")
-            var scope: String? = null
-
+            val scope: String,
             @SerializedName("access_token")
-            var accessToken: String? = null
-
+            val accessToken: String,
             @SerializedName("refresh_token")
-            var refreshToken: String? = null
-
+            val refreshToken: String,
             @SerializedName("authentication_token")
-            var authenticationToken: String? = null
-
+            val authenticationToken: String,
             @SerializedName("user_id")
-            var userId: String? = null
+            val userId: String
+        )
 
-            override fun toString(): String {
-                return "OAuthToken(tokenType=$tokenType, expiresIn=$expiresIn, scope=$scope, accessToken=$accessToken, refreshToken=$refreshToken, authenticationToken=$authenticationToken, userId=$userId)"
-            }
-        }
-
-        inner class XboxLiveAuth {
+        @JvmRecord
+        data class XboxLiveAuth(
             @SerializedName("IssueInstant")
-            var issueInstant: Timestamp? = null
-
+            val issueInstant: Timestamp,
             @SerializedName("NotAfter")
-            var notAfter: Timestamp? = null
-
+            val notAfter: Timestamp,
             @SerializedName("Token")
-            var token: String? = null
-
+            val token: String,
             @SerializedName("DisplayClaims")
-            var displayClaims: DisplayClaim? = null
+            val displayClaims: DisplayClaim,
+        )
 
-            override fun toString(): String {
-                return "XboxLiveAuth(issueInstant=$issueInstant, notAfter=$notAfter, token=$token, displayClaims=$displayClaims)"
-            }
-
-            inner class DisplayClaim {
-                @SerializedName("xui")
-                var xui: Array<Xui>? = null
-
-                override fun toString(): String {
-                    return "DisplayClaim(xui=" + xui?.contentToString() + ")"
-                }
-
-                inner class Xui {
-                    @SerializedName("uhs")
-                    var uhs: String? = null
-
-                    override fun toString(): String {
-                        return "Xui(uhs=$uhs)"
-                    }
-                }
-            }
-        }
-
-        inner class XboxLiveSecurityTokens {
+        @JvmRecord
+        data class XboxLiveSecurityTokens(
             @SerializedName("IssueInstant")
-            var issueInstant: Timestamp? = null
-
+            val issueInstant: Timestamp,
             @SerializedName("NotAfter")
-            var notAfter: Timestamp? = null
-
+            val notAfter: Timestamp,
             @SerializedName("Token")
-            var token: String? = null
-
+            val token: String,
             @SerializedName("DisplayClaims")
-            var displayClaims: DisplayClaim? = null
+            val displayClaims: DisplayClaim
+        )
 
-            override fun toString(): String {
-                return "XboxLiveSecurityTokens(issueInstant=$issueInstant, notAfter=$notAfter, token=$token, displayClaims=$displayClaims)"
-            }
-
-            inner class DisplayClaim {
-                @SerializedName("xui")
-                var xui: Array<Xui>? = null
-
-                override fun toString(): String {
-                    return "DisplayClaim(xui=" + xui?.contentToString() + ")"
-                }
-
-                inner class Xui {
-                    @SerializedName("uhs")
-                    var uhs: String? = null
-
-                    override fun toString(): String {
-                        return "Xui(uhs=$uhs)"
-                    }
-                }
-            }
-        }
-
-        inner class MinecraftLogin {
+        @JvmRecord
+        data class MinecraftLogin(
             @SerializedName("username")
-            var username: String? = null
-
+            val username: String,
+            @Suppress("ArrayInDataClass")
             @SerializedName("roles")
-            var roles: Array<Any>? = null
-
+            val roles: Array<Any>,
             @SerializedName("access_token")
-            var accessToken: String? = null
-
+            val accessToken: String,
             @SerializedName("token_type")
-            var tokenType: String? = null
-
+            val tokenType: String,
             @SerializedName("expires_in")
-            var expiresIn = 0
+            val expiresIn: Int
+        )
 
-            override fun toString(): String {
-                return "MinecraftLogin(username=$username, roles=" + roles?.contentToString() + ", accessToken=$accessToken, tokenType=$tokenType, expiresIn=$expiresIn)"
-            }
-        }
-
-        inner class MinecraftProfile {
+        @JvmRecord
+        data class Skin(
             @SerializedName("id")
-            var id: String? = null
+            val id: String? = null,
+            @SerializedName("state")
+            val state: String? = null,
+            @SerializedName("url")
+            val url: String? = null,
+            @SerializedName("variant")
+            val variant: String? = null
+        )
 
+        @JvmRecord
+        data class Cape(
+            @SerializedName("id")
+            val id: String,
+            @SerializedName("state")
+            val state: String,
+            @SerializedName("url")
+            val url: String,
+            @SerializedName("alias")
+            val alias: String
+        )
+
+        @JvmRecord
+        data class MinecraftProfile(
+            @SerializedName("id")
+            val id: String,
             @SerializedName("name")
-            var name: String? = null
-
+            val name: String,
+            @Suppress("ArrayInDataClass")
             @SerializedName("skins")
-            var skins: Array<Skin>? = null
-
+            val skins: Array<Skin>,
+            @Suppress("ArrayInDataClass")
             @SerializedName("capes")
-            var capes: Array<Cape>? = null
-
-            override fun toString(): String {
-                return "MinecraftProfile(id=$id, name=$name, skins=" + skins?.contentToString() + ", capes=" + capes?.contentToString() + ")"
-            }
-
-            inner class Skin {
-                @SerializedName("id")
-                var id: String? = null
-
-                @SerializedName("state")
-                var state: String? = null
-
-                @SerializedName("url")
-                var url: String? = null
-
-                @SerializedName("variant")
-                var variant: String? = null
-
-                override fun toString(): String {
-                    return "Skin(id=$id, state=$state, url=$url, variant=$variant)"
-                }
-            }
-
-            inner class Cape {
-                @SerializedName("id")
-                var id: String? = null
-
-                @SerializedName("state")
-                var state: String? = null
-
-                @SerializedName("url")
-                var url: String? = null
-
-                @SerializedName("alias")
-                var alias: String? = null
-
-                override fun toString(): String {
-                    return "Cape(id=$id, state=$state, url=$url, alias=$alias)"
-                }
-            }
-        }
+            val capes: Array<Cape>
+        )
     }
 
+}
+
+fun main() {
+    AccountMicrosoft().apply {
+        logIn()
+        println(this)
+    }
 }
