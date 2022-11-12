@@ -40,7 +40,7 @@ public class ViaLegacy {
 
         ViaLegacy.provider = provider;
         ViaLegacy.config = config;
-        ViaLegacy.setLogger(logger);
+        ViaLegacy.logger = logger;
 
         registerProtocol(ProtocolVersion.v1_8, LegacyProtocolVersion.R1_7_10, new Protocol1_8to1_7_10());
         registerProtocol(LegacyProtocolVersion.R1_7_10, LegacyProtocolVersion.R1_7_5, new Protocol1_7_10to1_7_5());
@@ -91,9 +91,5 @@ public class ViaLegacy {
 
     public static Logger getLogger() {
         return logger;
-    }
-
-    public static void setLogger(Logger logger) {
-        ViaLegacy.logger = logger;
     }
 }
