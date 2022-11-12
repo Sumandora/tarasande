@@ -5,8 +5,8 @@ import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 
 class ModuleParkour : Module("Parkour", "Jumps when falling off ledges", ModuleCategory.MOVEMENT) {
 

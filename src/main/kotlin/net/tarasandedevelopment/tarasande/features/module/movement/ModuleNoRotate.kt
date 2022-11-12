@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.event.EventRotationSet
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
-import net.tarasandedevelopment.tarasande.value.ValueNumberRange
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumberRange
 
 class ModuleNoRotate : Module("No rotate", "Prevents the server from rotating you", ModuleCategory.MOVEMENT) {
 

@@ -9,8 +9,8 @@ import net.tarasandedevelopment.tarasande.event.EventStep
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.util.extension.times
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 
 class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory.MOVEMENT) {
 

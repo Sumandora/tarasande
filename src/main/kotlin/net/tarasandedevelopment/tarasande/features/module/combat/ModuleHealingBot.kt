@@ -13,9 +13,9 @@ import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 
 class ModuleHealingBot : Module("Healing bot", "Automates healing using items", ModuleCategory.COMBAT) {
 

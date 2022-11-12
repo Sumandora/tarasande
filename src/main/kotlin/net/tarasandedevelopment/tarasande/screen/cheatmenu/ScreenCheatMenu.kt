@@ -10,24 +10,22 @@ import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.graph.ManagerGraph
-import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.information.ManagerInformation
-import net.tarasandedevelopment.tarasande.base.screen.cheatmenu.valuecomponent.ManagerValueComponent
 import net.tarasandedevelopment.tarasande.event.EventChangeScreen
 import net.tarasandedevelopment.tarasande.event.EventPanels
 import net.tarasandedevelopment.tarasande.event.EventUpdate
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.category.PanelElementsCategory
+import net.tarasandedevelopment.tarasande.graphsystem.panel.PanelGraph
+import net.tarasandedevelopment.tarasande.panelsystem.Panel
+import net.tarasandedevelopment.tarasande.panelsystem.impl.elements.impl.category.PanelElementsCategory
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.clientvalues.PanelElementsClientValues
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.elements.impl.friends.PanelElementsFriends
+import net.tarasandedevelopment.tarasande.panelsystem.impl.elements.impl.friends.PanelElementsFriends
+import net.tarasandedevelopment.tarasande.panelsystem.impl.fixed.*
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed.*
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.particle.Particle
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import net.tarasandedevelopment.tarasande.value.ValueBind
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.util.render.RenderUtilimport net.tarasandedevelopment.tarasande.value.impl.ValueBind
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 import org.lwjgl.glfw.GLFW
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.round
@@ -35,13 +33,13 @@ import kotlin.math.round
 class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
 
     // Values
-    val hotkey = object : ValueBind(this, "Hotkey", Type.KEY, GLFW.GLFW_KEY_RIGHT_SHIFT) {
+    private val hotkey = object : ValueBind(this, "Hotkey", Type.KEY, GLFW.GLFW_KEY_RIGHT_SHIFT) {
         override fun filter(type: Type, bind: Int) = bind != GLFW.GLFW_KEY_UNKNOWN
     }
-    val animationLength = ValueNumber(this, "Animation length", 0.0, 100.0, 500.0, 1.0)
-    val accentBackground = ValueBoolean(this, "Accent background", true)
-    val blurredBackground = ValueBoolean(this, "Blurred background", true)
-    val imageValue = object : ValueMode(this, "Image", false, "Off", "Rimuru", "Shuya's girl", "Nanakusa", "Jannick", "Azusa") {
+    private val animationLength = ValueNumber(this, "Animation length", 0.0, 100.0, 500.0, 1.0)
+    private val accentBackground = ValueBoolean(this, "Accent background", true)
+    private val blurredBackground = ValueBoolean(this, "Blurred background", true)
+    private val imageValue = object : ValueMode(this, "Image", false, "Off", "Rimuru", "Shuya's girl", "Nanakusa", "Jannick", "Azusa") {
         override fun onChange() {
             image = null
         }
@@ -51,13 +49,8 @@ class ScreenCheatMenu : Screen(Text.of("Cheat Menu")) {
     private var screenChangeTime = System.currentTimeMillis()
     private var isClosing = false
 
-    val managerGraph = ManagerGraph()
-
     var image: NativeImageBackedTexture? = null
     private val particles = ArrayList<Particle>()
-
-    val managerValueComponent = ManagerValueComponent()
-    val managerInformation = ManagerInformation(this)
 
     var disableAnimation = false
 

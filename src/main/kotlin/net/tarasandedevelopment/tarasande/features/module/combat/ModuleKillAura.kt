@@ -34,11 +34,10 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.player.clickspeed.ClickSpeedUtil
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueNumber
-import net.tarasandedevelopment.tarasande.value.ValueNumberRange
+import net.tarasandedevelopment.tarasande.util.render.RenderUtilimport net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumberRange
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.cos
 import kotlin.math.sin

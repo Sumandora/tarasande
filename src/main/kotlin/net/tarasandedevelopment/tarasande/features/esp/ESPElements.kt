@@ -14,9 +14,9 @@ import net.tarasandedevelopment.tarasande.base.features.esp.ESPElementRotatable
 import net.tarasandedevelopment.tarasande.base.features.esp.Orientation
 import net.tarasandedevelopment.tarasande.features.module.render.ModuleESP
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueColor
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueColor
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 import java.awt.Color
 import kotlin.math.abs
 import kotlin.math.min
@@ -68,7 +68,7 @@ class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.
     }
 
     override fun getHeight(entity: Entity, sideWidth: Double): Double {
-        return RenderUtil.font().fontHeight().toDouble() * min(sideWidth / MinecraftClient.getInstance().textRenderer!!.getWidth(TarasandeMain.get().tagName.getTagName(entity)?.asOrderedText() ?: return 0.0), 3.0) * scale.value
+        return FontWrapper.fontHeight().toDouble() * min(sideWidth / MinecraftClient.getInstance().textRenderer!!.getWidth(TarasandeMain.get().tagName.getTagName(entity)?.asOrderedText() ?: return 0.0), 3.0) * scale.value
     }
 }
 

@@ -16,8 +16,8 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.player.prediction.projectile.ProjectileUtil
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 import kotlin.math.abs
 
 class ModuleAutoFish : Module("Auto fish", "Automates fishing", ModuleCategory.PLAYER) {

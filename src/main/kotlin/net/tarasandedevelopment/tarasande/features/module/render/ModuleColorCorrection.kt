@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.features.module.render
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventColorCorrection
-import net.tarasandedevelopment.tarasande.value.ValueColor
+import net.tarasandedevelopment.tarasande.value.impl.ValueColor
 
 class ModuleColorCorrection : Module("Color correction", "Corrects colors on the framebuffer", ModuleCategory.RENDER) {
 

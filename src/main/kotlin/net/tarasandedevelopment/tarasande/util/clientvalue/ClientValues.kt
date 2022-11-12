@@ -11,6 +11,9 @@ import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.util.dummies.ClientWorldDummy
 import net.tarasandedevelopment.tarasande.value.*
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueColor
+import net.tarasandedevelopment.tarasande.value.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.value.meta.ValueButton
 
 class ClientValues {

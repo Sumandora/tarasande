@@ -8,8 +8,8 @@ import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
-import net.tarasandedevelopment.tarasande.value.ValueNumber
-import net.tarasandedevelopment.tarasande.value.ValueNumberRange
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumberRange
 
 class ModuleAimAssist : Module("Aim assist", "Helps you aim at enemies", ModuleCategory.GHOST) {
 

@@ -19,9 +19,9 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.player.prediction.projectile.ProjectileUtil
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueNumber
-import net.tarasandedevelopment.tarasande.value.ValueNumberRange
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumberRange
 import kotlin.math.atan2
 import kotlin.math.sqrt
 

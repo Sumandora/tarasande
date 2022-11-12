@@ -4,17 +4,22 @@ import net.minecraft.block.BedBlock
 import net.minecraft.block.enums.BedPart
 import net.minecraft.client.MinecraftClient
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.informationsystem.Information
+import net.tarasandedevelopment.tarasande.util.extension.div
+import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.math.pathfinder.Node
 import net.tarasandedevelopment.tarasande.util.math.pathfinder.PathFinder
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueColor
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+
+net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueColor
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 import java.util.function.BiFunction
 
 /**
@@ -50,6 +55,24 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
     }
 
     internal var bedDatas = ArrayList<BedData>()
+
+    init {
+        TarasandeMain.get().informationSystem.add(object : Information("Bed ESP", "Beds") {
+            override fun getMessage(): String? {
+                if (enabled) if (calculateBestWay.value) if (bedDatas.isNotEmpty()) {
+                    return "\n" + bedDatas.sortedBy {
+                        mc.player?.squaredDistanceTo(it.bedParts.let {
+                            var vec = Vec3d.ZERO
+                            it.forEach { vec += Vec3d.ofCenter(it) }
+                            vec / it.size
+                        })
+                    }.joinToString("\n") { it.toString() }.let { it.substring(0, it.length - 1) }
+                }
+
+                return null
+            }
+        })
+    }
 
     private fun allSurroundings(blockPos: BlockPos): ArrayList<BlockPos> {
         val list = ArrayList<BlockPos>()

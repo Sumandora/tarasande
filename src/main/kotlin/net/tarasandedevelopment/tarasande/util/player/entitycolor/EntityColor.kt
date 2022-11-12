@@ -8,8 +8,8 @@ import net.minecraft.entity.player.PlayerEntity
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventEntityColor
 import net.tarasandedevelopment.tarasande.features.module.render.ModuleESP
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueColor
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueColor
 import java.awt.Color
 
 class EntityColor(val moduleESP: ModuleESP) {

@@ -1,14 +1,17 @@
 package net.tarasandedevelopment.tarasande.features.module.player
 
 import net.minecraft.client.gui.screen.ingame.HandledScreen
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventMouseDelta
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
+import kotlin.math.roundToInt
 
 class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PLAYER) {
 
@@ -23,6 +26,14 @@ class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PL
 
         movementKeys.add(mc.options.attackKey)
         movementKeys.add(mc.options.useKey)
+
+        TarasandeMain.get().informationSystem.add(object : Information("Anti AFK", "Jump countdown") {
+            override fun getMessage() =
+                if (enabled)
+                    ((delay.value * 1000L - (System.currentTimeMillis() - timer.time)) / 1000.0).roundToInt().toString()
+                else
+                    null
+        })
     }
 
     override fun onEnable() {

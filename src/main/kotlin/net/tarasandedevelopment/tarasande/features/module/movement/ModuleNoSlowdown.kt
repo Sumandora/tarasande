@@ -11,8 +11,8 @@ import net.tarasandedevelopment.tarasande.event.EventItemCooldown
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 import java.util.concurrent.ThreadLocalRandom
 
 class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking etc... slowdowns", ModuleCategory.MOVEMENT) {

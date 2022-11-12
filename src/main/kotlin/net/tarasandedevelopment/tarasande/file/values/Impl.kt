@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.file.values
 
-import net.tarasandedevelopment.tarasande.value.ValueBind
+import net.tarasandedevelopment.tarasande.value.impl.ValueBind
 import java.util.function.Function
 
 class FileValuesBinds : FileValues("Binds", Function { it is ValueBind })

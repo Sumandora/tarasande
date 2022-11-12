@@ -33,7 +33,7 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
         this.addDrawableChild(ClickableWidgetPanel(object : PanelElements<ElementValueComponent>(this.titleName, 0.0, 0.0, 0.0, 0.0) {
 
             override fun init() {
-                for (it in TarasandeMain.get().managerValue.getValues(owner))
+                for (it in TarasandeMain.get().valueSystem.getValues(owner))
                     elementList.add(TarasandeMain.get().screenCheatMenu.managerValueComponent.newInstance(it)!!)
                 super.init()
 

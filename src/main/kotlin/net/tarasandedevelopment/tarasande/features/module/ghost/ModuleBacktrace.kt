@@ -11,7 +11,7 @@ import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 
 class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit boxes", ModuleCategory.GHOST) {
 

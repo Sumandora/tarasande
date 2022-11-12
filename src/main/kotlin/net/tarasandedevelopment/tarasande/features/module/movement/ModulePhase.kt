@@ -8,9 +8,9 @@ import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 
 class ModulePhase : Module("Phase", "Allows you to move through blocks", ModuleCategory.MOVEMENT) {
 

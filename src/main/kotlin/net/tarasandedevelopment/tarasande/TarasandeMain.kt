@@ -12,12 +12,15 @@ import net.tarasandedevelopment.tarasande.base.features.module.ManagerModule
 import net.tarasandedevelopment.tarasande.base.features.screenextension.ManagerScreenExtension
 import net.tarasandedevelopment.tarasande.base.file.ManagerFile
 import net.tarasandedevelopment.tarasande.base.`package`.ManagerPackage
-import net.tarasandedevelopment.tarasande.base.render.blur.ManagerBlur
-import net.tarasandedevelopment.tarasande.base.render.font.ManagerFont
+import net.tarasandedevelopment.tarasande.base.blur.ManagerBlur
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ManagerClientMenu
-import net.tarasandedevelopment.tarasande.base.value.ManagerValue
+import net.tarasandedevelopment.tarasande.value.ManagerValue
 import net.tarasandedevelopment.tarasande.features.protocol.TarasandeProtocolHack
 import net.tarasandedevelopment.tarasande.features.protocol.platform.ProtocolHackValues
+import net.tarasandedevelopment.tarasande.graphsystem.ManagerGraph
+import net.tarasandedevelopment.tarasande.informationsystem.ManagerInformation
+import net.tarasandedevelopment.tarasande.panelsystem.ManagerInformation
+import net.tarasandedevelopment.tarasande.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.screen.clientmenu.ElementMenuScreenAccountManager
 import net.tarasandedevelopment.tarasande.util.clientvalue.ClientValues
@@ -31,15 +34,16 @@ class TarasandeMain {
 
     val name = "tarasande" // "lowercase gang" ~kennytv
 
-    lateinit var managerEvent: ManagerEvent
-        private set
+    val managerEvent        by lazy { ManagerEvent() }
+    val panelSystem         by lazy { ManagerPanel() }
+    val valueSystem         by lazy { ManagerValue() }
+    val informationSystem   by lazy { ManagerInformation() }
+    val graphSystem         by lazy { ManagerGraph() }
+    val protocolHack        by lazy { TarasandeProtocolHack() }
+    val blurSystem          by lazy { ManagerBlur() }
 
 
     private lateinit var managerFile: ManagerFile
-    lateinit var managerValue: ManagerValue
-        private set
-    lateinit var managerFont: ManagerFont
-        private set
     lateinit var managerBlur: ManagerBlur
         private set
     lateinit var managerPackage: ManagerPackage
@@ -47,8 +51,6 @@ class TarasandeMain {
     lateinit var clientValues: ClientValues
         private set
     lateinit var managerClientMenu: ManagerClientMenu
-        private set
-    lateinit var protocolHack: TarasandeProtocolHack
         private set
     lateinit var managerClickMethod: ManagerClickMethod
         private set
@@ -92,18 +94,14 @@ class TarasandeMain {
     }
 
     fun onPreLoad() {
-        managerEvent = ManagerEvent()
-        managerValue = ManagerValue()
     }
 
     fun onLateLoad() {
         managerFile = ManagerFile()
-        managerFont = ManagerFont()
         managerBlur = ManagerBlur()
         managerPackage = ManagerPackage()
         clientValues = ClientValues()
         managerClientMenu = ManagerClientMenu()
-        protocolHack = TarasandeProtocolHack()
         managerClickMethod = ManagerClickMethod()
         managerModule = ManagerModule()
         managerESP = ManagerESP()

@@ -4,8 +4,8 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventTextVisit
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueText
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueText
 
 class ModuleNameProtect : Module("Name protect", "Hides your in-game name", ModuleCategory.RENDER) {
 

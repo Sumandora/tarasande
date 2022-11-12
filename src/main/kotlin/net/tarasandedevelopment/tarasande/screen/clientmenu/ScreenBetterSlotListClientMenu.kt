@@ -18,7 +18,7 @@ import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 
-class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, RenderUtil.font().fontHeight() * 2 + 5) {
+class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, FontWrapper.fontHeight() * 2 + 5) {
 
     init {
         this.prevScreen = parent
@@ -71,7 +71,7 @@ class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, 
         }
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            RenderUtil.font().textShadow(matrices, element.name, entryWidth.toFloat() / 2F, entryHeight / 2 - (RenderUtil.font().fontHeight() / 2F), this.element.elementColor(), centered = true)
+            FontWrapper.textShadow(matrices, element.name, entryWidth.toFloat() / 2F, entryHeight / 2 - (FontWrapper.fontHeight() / 2F), this.element.elementColor(), centered = true)
         }
     }
 
@@ -80,7 +80,7 @@ class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, 
         override fun dontSelectAnything() = true
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            RenderUtil.font().textShadow(matrices, title, entryWidth.toFloat() / 2F, entryHeight / 2 - (RenderUtil.font().fontHeight() / 2F), Color.gray.rgb, scale = 1.5F, centered = true)
+            FontWrapper.textShadow(matrices, title, entryWidth.toFloat() / 2F, entryHeight / 2 - (FontWrapper.fontHeight() / 2F), Color.gray.rgb, scale = 1.5F, centered = true)
         }
 
         override fun equals(other: Any?): Boolean {

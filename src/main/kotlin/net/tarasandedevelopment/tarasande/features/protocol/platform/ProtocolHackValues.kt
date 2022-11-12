@@ -10,16 +10,13 @@ import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
-import net.tarasandedevelopment.tarasande.features.protocol.extension.getSpecialName
 import net.tarasandedevelopment.tarasande.features.protocol.util.ProtocolRange
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IFontStorage_Protocol
 import net.tarasandedevelopment.tarasande.util.extension.andOlder
-import net.tarasandedevelopment.tarasande.util.extension.compareTo
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueNumber
-import net.tarasandedevelopment.tarasande.value.ValueText
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueText
 import net.tarasandedevelopment.tarasande.value.meta.ValueButton
-import kotlin.math.abs
 
 object ProtocolHackValues {
 
@@ -78,7 +75,7 @@ object ProtocolHackValues {
 
     fun update(protocol: ProtocolVersion) {
         // Owners may change, orientate on one setting
-        TarasandeMain.get().managerValue.getValues(viaVersionDebug.owner).forEach {
+        TarasandeMain.get().valueSystem.getValues(viaVersionDebug.owner).forEach {
             if (it is ValueBooleanProtocol)
                 it.value = it.version.any { range -> protocol in range }
         }

@@ -5,7 +5,7 @@ import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.util.player.prediction.PredictionEngine
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 
 class ModulePrediction : Module("Prediction", "Predicts the local player", ModuleCategory.RENDER) {
 

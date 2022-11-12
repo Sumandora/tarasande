@@ -7,7 +7,7 @@ import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventCollisionShape
 import net.tarasandedevelopment.tarasande.event.EventUpdate
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 
 class ModuleJesus : Module("Jesus", "Lets you walk on liquids", ModuleCategory.MOVEMENT) {
 

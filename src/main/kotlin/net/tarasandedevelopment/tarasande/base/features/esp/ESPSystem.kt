@@ -11,8 +11,8 @@ import net.tarasandedevelopment.tarasande.features.esp.ESPElementRotatableHealth
 import net.tarasandedevelopment.tarasande.features.esp.ESPElementRotatableName
 import net.tarasandedevelopment.tarasande.features.module.render.ModuleESP
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
 import net.tarasandedevelopment.tarasande.value.meta.ValueButton
 import kotlin.math.abs
 

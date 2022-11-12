@@ -16,9 +16,9 @@ import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueNumber
-import net.tarasandedevelopment.tarasande.value.ValueRegistry
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueRegistry
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min

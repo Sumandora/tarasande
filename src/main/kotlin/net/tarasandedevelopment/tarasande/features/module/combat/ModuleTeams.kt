@@ -4,7 +4,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
-import net.tarasandedevelopment.tarasande.value.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
 
 class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCategory.COMBAT) {
 

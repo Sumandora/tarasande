@@ -4,7 +4,7 @@ import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventUpdateTargetedEntity
 import net.tarasandedevelopment.tarasande.mixin.accessor.IGameRenderer
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 
 class ModuleReach : Module("Reach", "Increases the hit reach", ModuleCategory.GHOST) {
 

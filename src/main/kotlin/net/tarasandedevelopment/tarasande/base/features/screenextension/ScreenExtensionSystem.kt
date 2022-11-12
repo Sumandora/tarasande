@@ -7,8 +7,8 @@ import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.features.protocol.util.ProtocolRange
 import net.tarasandedevelopment.tarasande.features.screenextension.*
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Alignment
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.minecraftbutton.PanelButton
+import net.tarasandedevelopment.tarasande.panelsystem.base.Alignment
+import net.tarasandedevelopment.tarasande.panelsystem.impl.button.PanelButton
 
 class ManagerScreenExtension : Manager<ScreenExtension>() {
 

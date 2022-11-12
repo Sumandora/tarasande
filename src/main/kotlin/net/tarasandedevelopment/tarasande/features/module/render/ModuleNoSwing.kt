@@ -5,8 +5,8 @@ import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventSwing
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
 
 class ModuleNoSwing : Module("No swing", "Hides the hand swing animation", ModuleCategory.RENDER) {
 

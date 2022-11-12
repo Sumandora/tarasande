@@ -14,7 +14,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3f;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.features.module.render.ModuleNoRender;
-import net.tarasandedevelopment.tarasande.value.ValueMode;
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

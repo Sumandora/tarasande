@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.util.player.clickspeed
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.features.clickspeed.ClickMethod
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueNumberRange
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumberRange
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Supplier
 import kotlin.math.min

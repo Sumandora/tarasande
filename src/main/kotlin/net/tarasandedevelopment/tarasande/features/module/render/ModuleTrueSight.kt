@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventEntityFlag
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 
 class ModuleTrueSight : Module("True sight", "Makes invisible players visible", ModuleCategory.RENDER) {
 

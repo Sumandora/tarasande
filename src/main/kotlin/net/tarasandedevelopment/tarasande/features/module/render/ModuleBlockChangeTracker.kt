@@ -7,9 +7,8 @@ import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import net.tarasandedevelopment.tarasande.value.ValueColor
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.util.render.RenderUtilimport net.tarasandedevelopment.tarasande.value.impl.ValueColor
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 import java.util.concurrent.CopyOnWriteArrayList
 
 class ModuleBlockChangeTracker : Module("Block change tracker", "Tracks block changes", ModuleCategory.RENDER) {

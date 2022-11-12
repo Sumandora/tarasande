@@ -12,11 +12,11 @@ import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ElementValueComponentRegistry
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ElementValueComponentText
+import net.tarasandedevelopment.tarasande.value.impl.Valuecomponent.impl.ElementValueComponentRegistry
+import net.tarasandedevelopment.tarasande.value.impl.Valuecomponent.impl.ElementValueComponentText
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.valuecomponent.ElementValueComponentTextList
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
 
 class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
 

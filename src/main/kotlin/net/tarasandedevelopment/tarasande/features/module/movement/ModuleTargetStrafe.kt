@@ -14,7 +14,7 @@ import net.tarasandedevelopment.tarasande.features.module.combat.ModuleKillAura
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin

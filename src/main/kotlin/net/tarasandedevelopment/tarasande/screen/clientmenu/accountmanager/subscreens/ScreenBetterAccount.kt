@@ -126,7 +126,7 @@ class ScreenBetterAccount(
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
-        RenderUtil.font().textShadow(matrices, name, width / 2.0f, 8 - RenderUtil.font().fontHeight() / 2.0f, -1, centered = true)
+        FontWrapper.textShadow(matrices, name, width / 2.0f, 8 - FontWrapper.fontHeight() / 2.0f, -1, centered = true)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {

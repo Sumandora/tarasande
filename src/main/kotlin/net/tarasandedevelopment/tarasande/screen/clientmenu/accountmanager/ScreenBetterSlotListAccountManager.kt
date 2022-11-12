@@ -29,7 +29,7 @@ import org.apache.commons.lang3.RandomStringUtils
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, RenderUtil.font().fontHeight() * 5) {
+class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, FontWrapper.fontHeight() * 5) {
 
     val accounts = ArrayList<Account>()
     var currentAccount: Account? = null
@@ -127,7 +127,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Ren
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         this.renderTitle(matrices, "Account Manager")
-        RenderUtil.font().textShadow(matrices, status, width / 2.0f, 2 * RenderUtil.font().fontHeight() * 2.0f, -1, centered = true)
+        FontWrapper.textShadow(matrices, status, width / 2.0f, 2 * FontWrapper.fontHeight() * 2.0f, -1, centered = true)
     }
 
     inner class ScreenBetterSlotListEntryAccount(var account: Account) : ScreenBetterSlotListEntry() {
@@ -155,11 +155,11 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Ren
                 RenderSystem.applyModelViewMatrix()
             }
 
-            RenderUtil.font().textShadow(matrices, Text.of(when {
+            FontWrapper.textShadow(matrices, Text.of(when {
                 client?.session?.equals(account.session) == true -> Formatting.GREEN.toString()
                 mainAccount == accounts.indexOf(account) -> Formatting.YELLOW.toString()
                 else -> ""
-            } + account.getDisplayName()).string, entryWidth / 2F, entryHeight / 4F + RenderUtil.font().fontHeight() / 4F, centered = true, scale = 2.0F)
+            } + account.getDisplayName()).string, entryWidth / 2F, entryHeight / 4F + FontWrapper.fontHeight() / 4F, centered = true, scale = 2.0F)
         }
     }
 

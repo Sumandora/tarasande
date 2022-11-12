@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.features.module.movement
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventMovement
-import net.tarasandedevelopment.tarasande.value.ValueBind
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueBind
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 import org.lwjgl.glfw.GLFW
 
 class ModuleVehicleFlight : Module("Vehicle flight", "Makes you fly with vehicles (e.g. boat, horses)", ModuleCategory.MOVEMENT) {

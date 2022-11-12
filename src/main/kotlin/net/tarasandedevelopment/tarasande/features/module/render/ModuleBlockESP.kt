@@ -9,10 +9,9 @@ import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.event.EventRenderBlockModel
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueColor
-import net.tarasandedevelopment.tarasande.value.ValueRegistry
+import net.tarasandedevelopment.tarasande.util.render.RenderUtilimport net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueColor
+import net.tarasandedevelopment.tarasande.value.impl.ValueRegistry
 import java.util.concurrent.CopyOnWriteArrayList
 
 class ModuleBlockESP : Module("Block ESP", "Highlights blocks through walls", ModuleCategory.RENDER) {

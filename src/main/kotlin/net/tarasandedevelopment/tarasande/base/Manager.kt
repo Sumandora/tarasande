@@ -1,7 +1,10 @@
 package net.tarasandedevelopment.tarasande.base
 
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventLoadManager
+import java.io.FileWriter
 import java.util.concurrent.CopyOnWriteArrayList
 
 open class Manager<T : Any> {
@@ -30,4 +33,5 @@ open class Manager<T : Any> {
         }
         error(clazz.name + " is not a member of list")
     }
+
 }

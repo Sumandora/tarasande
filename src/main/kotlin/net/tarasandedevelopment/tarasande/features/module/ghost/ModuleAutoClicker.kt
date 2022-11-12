@@ -7,7 +7,7 @@ import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.util.player.clickspeed.ClickSpeedUtil
-import net.tarasandedevelopment.tarasande.value.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
 
 class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you", ModuleCategory.GHOST) {
 

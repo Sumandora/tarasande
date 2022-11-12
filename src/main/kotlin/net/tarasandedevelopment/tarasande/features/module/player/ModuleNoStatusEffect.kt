@@ -4,7 +4,7 @@ import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
-import net.tarasandedevelopment.tarasande.value.ValueRegistry
+import net.tarasandedevelopment.tarasande.value.impl.ValueRegistry
 
 class ModuleNoStatusEffect : Module("No status effect", "Cancels certain status effects.", ModuleCategory.PLAYER) {
 

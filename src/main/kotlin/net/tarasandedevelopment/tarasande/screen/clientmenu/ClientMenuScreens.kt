@@ -15,10 +15,8 @@ import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementCategory
-import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenu
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuScreen
 import net.tarasandedevelopment.tarasande.base.screen.clientmenu.ElementMenuToggle
 import net.tarasandedevelopment.tarasande.event.EventPacket
@@ -34,13 +32,11 @@ import net.tarasandedevelopment.tarasande.screen.clientmenu.`package`.ScreenBett
 import net.tarasandedevelopment.tarasande.screen.clientmenu.protocol.ScreenBetterSlotListProtocolHack
 import net.tarasandedevelopment.tarasande.screen.clientmenu.proxy.ScreenBetterProxy
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueNumber
-import net.tarasandedevelopment.tarasande.value.ValueText
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueText
 import org.lwjgl.glfw.GLFW
-import org.spongepowered.include.com.google.common.io.Files
-import java.io.File
 import java.net.InetSocketAddress
 import java.util.*
 
@@ -66,7 +62,7 @@ class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack", Element
     private val screenBetterSlotListProtocolHack = ScreenBetterSlotListProtocolHack()
 
     init {
-        TarasandeMain.get().managerValue.getValues(ProtocolHackValues).forEach {
+        TarasandeMain.get().valueSystem.getValues(ProtocolHackValues).forEach {
             it.owner = this
         }
     }
@@ -155,13 +151,13 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker", ElementCate
 
             it.add(EventRenderMultiplayerEntry::class.java) {
                 (it.server as IServerInfo).tarasande_getForgePayload()?.also { payload ->
-                    val fontHeight = RenderUtil.font().fontHeight()
+                    val fontHeight = FontWrapper.fontHeight()
 
                     val yPos = (it.entryHeight / 2F) - fontHeight / 2
-                    val text = RenderUtil.font().trimToWidth("Forge/FML Server", it.x)
-                    val endWidth = RenderUtil.font().getWidth(text) + 4
+                    val text = FontWrapper.trimToWidth("Forge/FML Server", it.x)
+                    val endWidth = FontWrapper.getWidth(text) + 4
 
-                    RenderUtil.font().textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
+                    FontWrapper.textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
 
                     if (RenderUtil.isHovered(it.mouseX.toDouble(), it.mouseY.toDouble(), it.x - endWidth.toDouble(), it.y + yPos.toDouble(), it.x - 4.0, it.y + yPos + fontHeight.toDouble())) {
                         val tooltip = ArrayList<Text>()

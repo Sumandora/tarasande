@@ -27,7 +27,9 @@ import net.tarasandedevelopment.tarasande.features.protocol.platform.ViaLegacyTa
 import net.tarasandedevelopment.tarasande.features.protocol.provider.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande.features.protocol.provider.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande.features.protocol.provider.FabricVersionProvider
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.informationsystem.Information
+import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.ThreadFactory
@@ -46,6 +48,20 @@ class TarasandeProtocolHack : INativeProvider {
             val config = ViaLegacyConfigImpl(File(ViaProtocolHack.instance().directory(), "vialegacy.yml"))
             config.reloadConfig()
             ViaLegacy.init(viaLegacy, config, Logger.getLogger("ViaLegacy-Tarasande"))
+        }
+
+        TarasandeMain.get().informationSystem.apply {
+            add(object : Information("Connection", "Protocol Version") {
+                override fun getMessage() = VersionList.getProtocols().find { it.version == ViaProtocolHack.instance().provider().clientsideVersion }?.includedVersions?.last()
+            })
+
+            add(object : Information("Connection", "Via Pipeline") {
+                override fun getMessage(): String? {
+                    val names = (MinecraftClient.getInstance().networkHandler?.connection as? IClientConnection_Protocol)?.protocolhack_getViaConnection()?.protocolInfo?.pipeline?.pipes()?.map { p -> p.javaClass.simpleName } ?: return null
+                    if (names.isEmpty()) return null
+                    return "\n" + names.subList(0, names.size - 1).joinToString("\n")
+                }
+            })
         }
     }
 

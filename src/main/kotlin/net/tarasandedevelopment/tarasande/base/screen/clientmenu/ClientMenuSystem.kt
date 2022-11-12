@@ -5,10 +5,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.minecraftbutton.PanelButton
 import net.tarasandedevelopment.tarasande.screen.clientmenu.*
-import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
@@ -36,7 +33,7 @@ abstract class ElementMenu(val name: String, val category: String) {
 
     internal fun onClickInternal(mouseButton: Int) {
         if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-            if (TarasandeMain.get().managerValue.getValues(this@ElementMenu).isNotEmpty()) {
+            if (TarasandeMain.get().valueSystem.getValues(this@ElementMenu).isNotEmpty()) {
                 MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, this@ElementMenu))
                 return
             }

@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.features.module.render
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventFog
-import net.tarasandedevelopment.tarasande.value.ValueColor
-import net.tarasandedevelopment.tarasande.value.ValueNumberRange
+import net.tarasandedevelopment.tarasande.value.impl.ValueColor
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumberRange
 
 class ModuleFog : Module("Fog", "Changes the fog distance and color", ModuleCategory.RENDER) {
 

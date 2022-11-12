@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
-class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, -1, RenderUtil.font().fontHeight() * 2 + 5) {
+class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, -1, FontWrapper.fontHeight() * 2 + 5) {
 
     private val list = TarasandeMain.get().managerPackage.list.map { p -> ScreenBetterSlotListEntryPackage(p) }
 
@@ -27,7 +27,7 @@ class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, -1, RenderUtil.fon
 
     override fun init() {
         list.forEach {
-            val width = (RenderUtil.font().getWidth(it.text()) * 2) + 5
+            val width = (FontWrapper.getWidth(it.text()) * 2) + 5
 
             if (entryWidth <= width) {
                 entryWidth = width
@@ -46,7 +46,7 @@ class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, -1, RenderUtil.fon
         this.renderTitle(matrices, "Packages")
 
         if (this.list.isNotEmpty() && this.list.size >= this.selected)
-            RenderUtil.font().text(matrices, "Developed by: " + this.list[this.selected].`package`.modAuthors!!.joinToString(", "), this.width / 2F, height - 17F, centered = true)
+            FontWrapper.text(matrices, "Developed by: " + this.list[this.selected].`package`.modAuthors!!.joinToString(", "), this.width / 2F, height - 17F, centered = true)
     }
 
     class ScreenBetterSlotListEntryPackage(val `package`: Package) : ScreenBetterSlotListEntry() {
@@ -54,14 +54,14 @@ class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, -1, RenderUtil.fon
         override fun onDoubleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
             super.onDoubleClickEntry(mouseX, mouseY, mouseButton)
 
-            if (TarasandeMain.get().managerValue.getValues(`package`).isNotEmpty())
+            if (TarasandeMain.get().valueSystem.getValues(`package`).isNotEmpty())
                 MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, `package`.modId!!, `package`))
         }
 
         fun text() = this.`package`.modId!! + " (" + this.`package`.modVersion!! + ")"
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            RenderUtil.font().textShadow(matrices, text(), entryWidth / 2.0f, entryHeight / 2.0f - RenderUtil.font().fontHeight(), -1, scale = 2.0f, centered = true)
+            FontWrapper.textShadow(matrices, text(), entryWidth / 2.0f, entryHeight / 2.0f - FontWrapper.fontHeight(), -1, scale = 2.0f, centered = true)
         }
     }
 }

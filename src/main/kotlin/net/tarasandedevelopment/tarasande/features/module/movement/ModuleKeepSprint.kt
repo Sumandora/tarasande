@@ -7,9 +7,9 @@ import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.event.EventKeepSprint
 import net.tarasandedevelopment.tarasande.event.EventVelocity
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 
 class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attacking", ModuleCategory.MOVEMENT) {
 

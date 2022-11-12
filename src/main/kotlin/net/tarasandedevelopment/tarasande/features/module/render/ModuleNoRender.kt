@@ -11,9 +11,9 @@ import net.tarasandedevelopment.tarasande.event.EventChunkOcclusion
 import net.tarasandedevelopment.tarasande.event.EventFog
 import net.tarasandedevelopment.tarasande.event.EventParticle
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueRegistry
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.value.meta.ValueButton
 
 class ModuleNoRender : Module("No render", "Disables rendering of certain things.", ModuleCategory.RENDER) {

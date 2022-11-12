@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.features.module.render
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventGamma
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueColor
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueColor
 
 class ModuleFullBright : Module("Full bright", "Makes everything bright", ModuleCategory.RENDER) {
 

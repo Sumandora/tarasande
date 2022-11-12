@@ -14,10 +14,15 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande.value.*
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueColor
+import net.tarasandedevelopment.tarasande.value.impl.ValueRegistry
+import net.tarasandedevelopment.tarasande.value.impl.ValueText
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadLocalRandom
@@ -68,6 +73,36 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     private val messages = ArrayList<String>()
 
     private var prevItem = 0
+
+    init {
+
+
+
+        TarasandeMain.get().informationSystem.apply {
+            add(object : Information("Murder Mystery", "Suspected murderers") {
+                override fun getMessage(): String? {
+                    if (enabled)
+                        if (suspects.isNotEmpty()) {
+                            return "\n" + suspects.entries.joinToString("\n") {
+                                it.key.name + " (" + it.value.joinToString(" and ") { it.name.string } + "§r)"
+                            }
+                        }
+
+                    return null
+                }
+            })
+
+            add(object : Information("Murder Mystery", "Fake news countdown") {
+                override fun getMessage(): String? {
+                    if (enabled)
+                        if (!fakeNews.isSelected(0) && isMurderer() && murdererAssistance.value)
+                            return (fakeNewsTime - (System.currentTimeMillis() - fakeNewsTimer.time)).toString()
+
+                    return null
+                }
+            })
+        }
+    }
 
     // This method is a proof for my intellectual abilities
     private fun generateLegitSentence(suspect: String): String {

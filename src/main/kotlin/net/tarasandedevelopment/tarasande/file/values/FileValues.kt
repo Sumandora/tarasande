@@ -4,14 +4,14 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.file.File
-import net.tarasandedevelopment.tarasande.base.value.Value
+import net.tarasandedevelopment.tarasande.value.Value
 import java.util.function.Function
 
 open class FileValues(name: String, private val condition: Function<Value, Boolean>) : File(name) {
 
     override fun save(): JsonElement {
         val values = JsonObject()
-        for (value in TarasandeMain.get().managerValue.list) {
+        for (value in TarasandeMain.get().valueSystem.list) {
             if (!condition.apply(value))
                 continue
 
@@ -35,7 +35,7 @@ open class FileValues(name: String, private val condition: Function<Value, Boole
 
     override fun load(jsonElement: JsonElement) {
         val jsonObject = jsonElement as JsonObject
-        for (value in TarasandeMain.get().managerValue.list) {
+        for (value in TarasandeMain.get().valueSystem.list) {
             if (!condition.apply(value))
                 continue
 

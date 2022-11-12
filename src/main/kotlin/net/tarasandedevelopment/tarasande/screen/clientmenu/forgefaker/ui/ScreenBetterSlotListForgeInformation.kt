@@ -15,7 +15,7 @@ import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.m
 import net.tarasandedevelopment.tarasande.screen.clientmenu.forgefaker.payload.modern.ModernForgePayload
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
-class ScreenBetterSlotListForgeInformation(parent: Screen, private val titleName: String, val type: Type, val struct: IForgePayload) : ScreenBetterSlotList(46, -1, RenderUtil.font().fontHeight() * 2 + 5) {
+class ScreenBetterSlotListForgeInformation(parent: Screen, private val titleName: String, val type: Type, val struct: IForgePayload) : ScreenBetterSlotList(46, -1, FontWrapper.fontHeight() * 2 + 5) {
 
     enum class Type {
         MOD_LIST,
@@ -32,7 +32,7 @@ class ScreenBetterSlotListForgeInformation(parent: Screen, private val titleName
                     Type.CHANNEL_LIST -> (struct as ModernForgePayload).channels.map { m -> ScreenBetterSlotListEntryForgeListChannels(m) }
                 }
                 list.forEach {
-                    val width = (RenderUtil.font().getWidth(it.display()) * 2) + 5
+                    val width = (FontWrapper.getWidth(it.display()) * 2) + 5
 
                     if (entryWidth <= width) {
                         entryWidth = width
@@ -61,7 +61,7 @@ class ScreenBetterSlotListForgeInformation(parent: Screen, private val titleName
         abstract fun display(): String
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            RenderUtil.font().text(matrices, this.display(), entryWidth.toFloat() / 4F, 1F, scale = 2F, centered = true)
+            FontWrapper.text(matrices, this.display(), entryWidth.toFloat() / 4F, 1F, scale = 2F, centered = true)
         }
     }
 

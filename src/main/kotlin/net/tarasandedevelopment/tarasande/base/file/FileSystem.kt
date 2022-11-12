@@ -27,7 +27,7 @@ class ManagerFile : Manager<File>() {
 
     fun save(backup: Boolean) {
         for (file in list) {
-            val fileObj = java.io.File(System.getProperty("user.home") + java.io.File.separator + TarasandeMain.get().name + java.io.File.separator + file.name)
+            val fileObj = java.io.File(TarasandeMain.get().rootDirectory, file.name)
 
             if (!fileObj.parentFile.exists())
                 fileObj.parentFile.mkdirs()

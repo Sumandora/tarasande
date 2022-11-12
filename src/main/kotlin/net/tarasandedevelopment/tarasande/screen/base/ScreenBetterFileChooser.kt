@@ -7,7 +7,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
+import net.tarasandedevelopment.tarasande.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
@@ -61,7 +61,7 @@ class ScreenBetterFileChooser(
                     var height = titleBarHeight.toDouble()
 
                     for (file in this.files()) {
-                        if (RenderUtil.isHovered(mouseX, mouseY, x, y + height, x + panelWidth, y + height + RenderUtil.font().fontHeight() * 0.5)) {
+                        if (RenderUtil.isHovered(mouseX, mouseY, x, y + height, x + panelWidth, y + height + FontWrapper.fontHeight() * 0.5)) {
                             if (file.isFile) {
                                 consumer.accept(file)
                             } else {
@@ -71,14 +71,14 @@ class ScreenBetterFileChooser(
                             }
                             break
                         }
-                        height += (RenderUtil.font().fontHeight() * 0.5) + 1
+                        height += (FontWrapper.fontHeight() * 0.5) + 1
                     }
                 }
                 return super.mouseClicked(mouseX, mouseY, button)
             }
 
             override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-                RenderUtil.font().text(matrices, "Current path: " + currentDirectory.absolutePath, 1F, 1F)
+                FontWrapper.text(matrices, "Current path: " + currentDirectory.absolutePath, 1F, 1F)
 
                 super.render(matrices, mouseX, mouseY, delta)
             }
@@ -95,20 +95,20 @@ class ScreenBetterFileChooser(
                             color = color.darker().darker()
                         }
 
-                        RenderUtil.font().text(matrices, if (file == currentDirectory.parentFile) ".." else file.name, x.toFloat() + 1, (y + height).toFloat(), color.rgb, 0.5F)
+                        FontWrapper.text(matrices, if (file == currentDirectory.parentFile) ".." else file.name, x.toFloat() + 1, (y + height).toFloat(), color.rgb, 0.5F)
                     }
-                    height += (RenderUtil.font().fontHeight() * 0.5) + 1
+                    height += (FontWrapper.fontHeight() * 0.5) + 1
                 }
                 super.renderContent(matrices, mouseX, mouseY, delta)
             }
 
             override fun getMaxScrollOffset(): Double {
-                return (RenderUtil.font().fontHeight() * 0.5 + 1) * (this.files().size - 1)
+                return (FontWrapper.fontHeight() * 0.5 + 1) * (this.files().size - 1)
             }
 
             private fun createDimensions() {
-                this.panelWidth = this.files().maxOf { RenderUtil.font().getWidth(it.name) * 0.5 + 6.0 }.coerceAtLeast(MinecraftClient.getInstance().window?.scaledWidth!! * 0.4).coerceAtLeast(RenderUtil.font().getWidth(this.title) + 5.0)
-                this.panelHeight = titleBarHeight + ((RenderUtil.font().fontHeight() * 0.5 + 1) * (this.files().size)).coerceAtMost(MinecraftClient.getInstance().window.scaledHeight * 0.75)
+                this.panelWidth = this.files().maxOf { FontWrapper.getWidth(it.name) * 0.5 + 6.0 }.coerceAtLeast(MinecraftClient.getInstance().window?.scaledWidth!! * 0.4).coerceAtLeast(FontWrapper.getWidth(this.title) + 5.0)
+                this.panelHeight = titleBarHeight + ((FontWrapper.fontHeight() * 0.5 + 1) * (this.files().size)).coerceAtMost(MinecraftClient.getInstance().window.scaledHeight * 0.75)
 
                 this.x = (MinecraftClient.getInstance().window.scaledWidth / 2) - (this.panelWidth / 2)
                 this.y = MinecraftClient.getInstance().window.scaledHeight / 2 - (this.panelHeight / 2)

@@ -7,8 +7,8 @@ import net.tarasandedevelopment.tarasande.event.EventJump
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin

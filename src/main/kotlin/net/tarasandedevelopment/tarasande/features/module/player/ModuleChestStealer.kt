@@ -11,10 +11,10 @@ import net.tarasandedevelopment.tarasande.event.EventScreenInput
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueNumber
-import net.tarasandedevelopment.tarasande.value.ValueNumberRange
-import net.tarasandedevelopment.tarasande.value.ValueText
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumberRange
+import net.tarasandedevelopment.tarasande.value.impl.ValueText
 import org.apache.commons.lang3.ArrayUtils
 import org.lwjgl.glfw.GLFW
 import java.util.concurrent.ThreadLocalRandom

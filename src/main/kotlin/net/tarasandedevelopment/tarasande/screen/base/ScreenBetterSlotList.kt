@@ -24,7 +24,7 @@ open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, v
 
     @Beta
     fun renderTitle(matrices: MatrixStack?, title: String) {
-        RenderUtil.font().textShadow(matrices, title, width / 2F, top / 2 - (RenderUtil.font().fontHeight() / 2F), scale = 2F, centered = true)
+        FontWrapper.textShadow(matrices, title, width / 2F, top / 2 - (FontWrapper.fontHeight() / 2F), scale = 2F, centered = true)
     }
 
     override fun init() {

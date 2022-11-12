@@ -8,9 +8,9 @@ import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventUpdate
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 
 class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", ModuleCategory.PLAYER) {
 

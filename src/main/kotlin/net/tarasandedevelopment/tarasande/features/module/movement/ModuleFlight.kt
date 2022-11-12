@@ -11,8 +11,8 @@ import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 
 class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", ModuleCategory.MOVEMENT) {
 

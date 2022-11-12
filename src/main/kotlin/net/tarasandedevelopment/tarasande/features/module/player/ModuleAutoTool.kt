@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.features.module.combat.ModuleHealingBot
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
-import net.tarasandedevelopment.tarasande.value.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
 
 class ModuleAutoTool : Module("Auto tool", "Selects the best tool for breaking a block", ModuleCategory.PLAYER) {
 

@@ -16,10 +16,9 @@ import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.extension.times
 import net.tarasandedevelopment.tarasande.util.player.entitycolor.EntityColor
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueRegistry
+import net.tarasandedevelopment.tarasande.util.render.RenderUtilimport net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.value.meta.ValueButton
 
 class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCategory.RENDER) {

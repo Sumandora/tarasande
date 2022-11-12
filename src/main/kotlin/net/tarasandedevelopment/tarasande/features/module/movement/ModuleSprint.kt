@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.event.EventEntityFlag
 import net.tarasandedevelopment.tarasande.event.EventJump
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
 
 class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MOVEMENT) {
 

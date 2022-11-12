@@ -15,9 +15,9 @@ import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientConnection
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
-import net.tarasandedevelopment.tarasande.value.ValueBind
-import net.tarasandedevelopment.tarasande.value.ValueMode
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueBind
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 import org.lwjgl.glfw.GLFW
 import java.util.concurrent.CopyOnWriteArrayList
 

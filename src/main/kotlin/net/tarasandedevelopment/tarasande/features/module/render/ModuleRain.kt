@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.features.module.render
 
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
-import net.tarasandedevelopment.tarasande.value.ValueNumber
+import net.tarasandedevelopment.tarasande.value.impl.ValueNumber
 
 class ModuleRain : Module("Rain", "Forces rain at anytime", ModuleCategory.RENDER) {
 

@@ -6,8 +6,8 @@ import net.minecraft.network.packet.s2c.play.ResourcePackSendS2CPacket
 import net.tarasandedevelopment.tarasande.base.features.module.Module
 import net.tarasandedevelopment.tarasande.base.features.module.ModuleCategory
 import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueMode
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
 
 class ModuleResourcePackSpoofer : Module("Resource pack spoofer", "Changes the response to resource pack packets", ModuleCategory.MISC) {
 

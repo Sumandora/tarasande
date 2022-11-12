@@ -1,7 +1,5 @@
 package net.tarasandedevelopment.tarasande.event
 
-import com.mojang.brigadier.CommandDispatcher
-import com.mojang.brigadier.StringReader
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.BlockState
 import net.minecraft.client.gui.Element
@@ -12,7 +10,6 @@ import net.minecraft.client.network.ServerInfo
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.render.Camera
 import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.command.CommandSource
 import net.minecraft.entity.Entity
 import net.minecraft.item.Item
 import net.minecraft.network.Packet
@@ -26,7 +23,7 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShape
 import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.base.event.Event
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.Panel
+import net.tarasandedevelopment.tarasande.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import java.awt.Color
 import java.net.InetSocketAddress

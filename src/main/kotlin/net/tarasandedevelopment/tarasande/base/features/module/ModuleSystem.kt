@@ -17,10 +17,10 @@ import net.tarasandedevelopment.tarasande.features.module.misc.*
 import net.tarasandedevelopment.tarasande.features.module.movement.*
 import net.tarasandedevelopment.tarasande.features.module.player.*
 import net.tarasandedevelopment.tarasande.features.module.render.*
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.panel.impl.fixed.PanelNotifications
-import net.tarasandedevelopment.tarasande.value.ValueBind
-import net.tarasandedevelopment.tarasande.value.ValueBoolean
-import net.tarasandedevelopment.tarasande.value.ValueMode
+import net.tarasandedevelopment.tarasande.panelsystem.impl.fixed.PanelNotifications
+import net.tarasandedevelopment.tarasande.value.impl.ValueBind
+import net.tarasandedevelopment.tarasande.value.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.value.impl.ValueMode
 import org.lwjgl.glfw.GLFW
 import java.util.function.Consumer
 
