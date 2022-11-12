@@ -38,17 +38,17 @@ class Fml1NetClientHandler(val connection: ClientConnection) : IForgeNetClientHa
         this.sendCustomPayload("minecraft:register", newPacket)
         this.sendClientHello(version)
 
-        val forgeFakerElement = TarasandeMain.get().clientMenuSystem.get(ElementMenuToggleForgeFaker::class.java)
+        val forgeFakerElement = TarasandeMain.managerClientMenu.get(ElementMenuToggleForgeFaker::class.java)
         if (forgeFakerElement.useFML1Cache.value) {
             forgeFakerElement.forgeInfoTracker[this.connection.address]?.also {
                 this.sendModList(it.installedMods())
             }
         } else {
             val address = connection.address as InetSocketAddress
-            ServerPinger.get().ping(address.hostString, address.port, TarasandeMain.get().protocolHack.clientsideVersion) {
+            ServerPinger.get().ping(address.hostString, address.port, TarasandeMain.instance.protocolHack.clientsideVersion) {
                 val payload = ForgeCreator.createPayload(it.rawData)
                 if (payload == null) {
-                    connection.disconnect(Text.of("[" + TarasandeMain.get().name + "] Failed to get mods, try to enable FML1 Cache in ForgeFaker"))
+                    connection.disconnect(Text.of("[" + TarasandeMain.instance.name + "] Failed to get mods, try to enable FML1 Cache in ForgeFaker"))
                     return@ping
                 }
                 this.sendModList(payload.installedMods())

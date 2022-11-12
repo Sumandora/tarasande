@@ -2,10 +2,10 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.gho
 
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.Box
+import net.tarasandedevelopment.tarasande.events.EventBoundingBoxOverride
+import net.tarasandedevelopment.tarasande.events.EventUpdate
 import net.tarasandedevelopment.tarasande.mixin.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventBoundingBoxOverride
-import net.tarasandedevelopment.events.impl.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.plus

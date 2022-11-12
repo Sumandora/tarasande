@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.event.entity;
 
 import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.tarasandedevelopment.events.EventDispatcher;
-import net.tarasandedevelopment.events.impl.EventIsSaddled;
+import net.tarasandedevelopment.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.events.EventIsSaddled;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

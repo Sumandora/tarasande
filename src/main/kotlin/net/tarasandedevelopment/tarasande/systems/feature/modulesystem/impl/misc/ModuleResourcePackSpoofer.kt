@@ -3,9 +3,9 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.mis
 import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.packet.c2s.play.ResourcePackStatusC2SPacket
 import net.minecraft.network.packet.s2c.play.ResourcePackSendS2CPacket
+import net.tarasandedevelopment.tarasande.events.EventPacket
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
-import net.tarasandedevelopment.events.impl.EventPacket
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 

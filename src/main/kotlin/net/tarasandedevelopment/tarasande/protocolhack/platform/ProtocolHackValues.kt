@@ -8,14 +8,15 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
+import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.EventConnectServer
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IFontStorage_Protocol
 import net.tarasandedevelopment.tarasande.protocolhack.util.ProtocolRange
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueButton
-import net.tarasandedevelopment.events.impl.EventConnectServer
 import net.tarasandedevelopment.tarasande.util.extension.andOlder
 
 object ProtocolHackValues {
@@ -59,7 +60,7 @@ object ProtocolHackValues {
         override fun isEnabled() = !FabricLoader.getInstance().isModLoaded("dashloader")
 
         init {
-            TarasandeMain.get().eventSystem.add(EventConnectServer::class.java) {
+            EventDispatcher.add(EventConnectServer::class.java) {
                 if (value && isEnabled()) {
                     MinecraftClient.getInstance().fontManager.fontStorages.values.forEach {
                         (it as IFontStorage_Protocol).protocolhack_clearCaches()
@@ -75,7 +76,7 @@ object ProtocolHackValues {
 
     fun update(protocol: ProtocolVersion) {
         // Owners may change, orientate on one setting
-        TarasandeMain.get().valueSystem.getValues(viaVersionDebug.owner).forEach {
+        TarasandeMain.managerValue.getValues(viaVersionDebug.owner).forEach {
             if (it is ValueBooleanProtocol)
                 it.value = it.version.any { range -> protocol in range }
         }

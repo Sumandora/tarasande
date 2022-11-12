@@ -25,7 +25,7 @@ class ScreenBetterAccount(
 
     private val textFields: ArrayList<TextFieldWidget> = ArrayList()
 
-    private var implementationClass: Class<out Account> = TarasandeMain.get().accountSystem.list[0]
+    private var implementationClass: Class<out Account> = TarasandeMain.managerAccount.list[0]
     private var accountImplementation: Account? = null
 
     private var submitButton: ButtonWidget? = null
@@ -49,7 +49,7 @@ class ScreenBetterAccount(
                 20,
                 Text.of((implementationClass.annotations[0] as AccountInfo).name)
             ) { button ->
-                implementationClass = TarasandeMain.get().accountSystem.let { it.list[(it.list.indexOf(implementationClass) + 1) % it.list.size ] }
+                implementationClass = TarasandeMain.managerAccount.let { it.list[(it.list.indexOf(implementationClass) + 1) % it.list.size ] }
                 accountImplementation = implementationClass.getDeclaredConstructor().newInstance()
                 init()
                 button.message = Text.of(implementationClass.name)

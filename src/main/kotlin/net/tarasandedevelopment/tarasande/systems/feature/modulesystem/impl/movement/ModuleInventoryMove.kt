@@ -6,15 +6,15 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.InputUtil
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.events.EventPacket
+import net.tarasandedevelopment.tarasande.events.EventTick
 import net.tarasandedevelopment.tarasande.feature.friends.panel.PanelElementsFriends
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementValueComponentRegistry
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementValueComponentText
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementValueComponentTextList
-import net.tarasandedevelopment.events.impl.EventKeyBindingIsPressed
-import net.tarasandedevelopment.events.impl.EventPacket
-import net.tarasandedevelopment.events.impl.EventTick
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.panel.elements.PanelElementsCategory
@@ -67,7 +67,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
     }
 
     private fun isTextboxFocused(): Boolean {
-        return TarasandeMain.get().panelSystem.list.any {
+        return TarasandeMain.managerPanel.list.any {
             when (it) {
                 is PanelElementsCategory -> it.elementList.any { it.components.any { isFocused(it) } }
                 is PanelElementsFriends -> it.elementList.any { it.textField.isFocused() }

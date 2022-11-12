@@ -13,7 +13,7 @@ public class MixinSharedConstants {
 
     @Inject(method = "isValidChar", at = @At("HEAD"), cancellable = true)
     private static void hookAllowEveryCharacter(char chr, CallbackInfoReturnable<Boolean> cir) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleAllowAllCharacters.class).getEnabled()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleAllowAllCharacters.class).getEnabled()) {
             cir.setReturnValue(true);
         }
     }

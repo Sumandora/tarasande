@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.ghost
 
 import net.minecraft.util.math.MathHelper
+import net.tarasandedevelopment.tarasande.events.EventMouseDelta
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumberRange
-import net.tarasandedevelopment.events.impl.EventMouseDelta
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.math.MathUtil

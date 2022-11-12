@@ -18,7 +18,7 @@ public class MixinEntityRenderDispatcher {
 
     @Inject(method = "renderShadow", at = @At("HEAD"), cancellable = true)
     private static void noRender_renderShadow(MatrixStack matrices, VertexConsumerProvider vertexConsumers, Entity entity, float opacity, float tickDelta, WorldView world, float radius, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getEntity().getDeadEntities().should() && entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getEntity().getDeadEntities().should() && entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) {
             ci.cancel();
         }
     }

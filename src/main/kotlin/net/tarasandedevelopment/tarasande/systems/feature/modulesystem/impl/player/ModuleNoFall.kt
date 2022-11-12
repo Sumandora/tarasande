@@ -2,13 +2,13 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.pla
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
+import net.tarasandedevelopment.tarasande.events.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.events.EventMovement
+import net.tarasandedevelopment.tarasande.events.EventPacket
+import net.tarasandedevelopment.tarasande.events.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventKeyBindingIsPressed
-import net.tarasandedevelopment.events.impl.EventMovement
-import net.tarasandedevelopment.events.impl.EventPacket
-import net.tarasandedevelopment.events.impl.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 

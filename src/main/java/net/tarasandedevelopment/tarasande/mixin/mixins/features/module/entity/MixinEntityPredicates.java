@@ -16,7 +16,7 @@ public class MixinEntityPredicates {
 
     @Inject(method = "canBePushedBy", at = @At("RETURN"), cancellable = true)
     private static void hookNoCramming(Entity entity, CallbackInfoReturnable<Predicate<Entity>> cir) {
-        ModuleNoCramming moduleNoCramming = TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoCramming.class);
+        ModuleNoCramming moduleNoCramming = TarasandeMain.Companion.managerModule().get(ModuleNoCramming.class);
         if (moduleNoCramming.getEnabled())
             cir.setReturnValue(o -> moduleNoCramming.getMode().isSelected(0));
     }

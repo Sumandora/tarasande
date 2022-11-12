@@ -3,11 +3,11 @@ package net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import net.minecraft.client.MinecraftClient
-import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.events.EventKey
+import net.tarasandedevelopment.tarasande.events.EventMouse
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementValueComponentBind
-import net.tarasandedevelopment.events.impl.EventKey
-import net.tarasandedevelopment.events.impl.EventMouse
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import org.lwjgl.glfw.GLFW
 
@@ -16,22 +16,22 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
     private var presses = 0
 
     init {
-        TarasandeMain.get().eventSystem.also {
-            it.add(EventMouse::class.java) {
+        EventDispatcher.apply {
+            add(EventMouse::class.java) {
                 if (type == Type.MOUSE)
                     if (MinecraftClient.getInstance().currentScreen == null)
                         if (button == it.button)
                             if (it.action == GLFW.GLFW_PRESS) {
-                                if (owner !is Module || this == owner.bind || owner.enabled)
+                                if (owner !is Module || this@ValueBind == owner.bind || owner.enabled)
                                     presses++
                             }
             }
-            it.add(EventKey::class.java) {
+            add(EventKey::class.java) {
                 if (type == Type.KEY)
                     if (MinecraftClient.getInstance().currentScreen == null)
                         if (it.key == button)
                             if (it.action == GLFW.GLFW_PRESS) {
-                                if (owner !is Module || this == owner.bind || owner.enabled)
+                                if (owner !is Module || this@ValueBind == owner.bind || owner.enabled)
                                     presses++
                             }
             }

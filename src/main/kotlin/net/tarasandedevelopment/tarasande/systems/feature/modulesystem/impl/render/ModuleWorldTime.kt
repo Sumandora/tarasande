@@ -2,11 +2,11 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.ren
 
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.minecraft.world.World
+import net.tarasandedevelopment.tarasande.events.EventPacket
+import net.tarasandedevelopment.tarasande.events.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventPacket
-import net.tarasandedevelopment.events.impl.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 

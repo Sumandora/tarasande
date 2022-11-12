@@ -2,10 +2,10 @@ package net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
-import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.Manager
+import net.tarasandedevelopment.tarasande.events.EventChildren
 import net.tarasandedevelopment.tarasande.protocolhack.util.ProtocolRange
-import net.tarasandedevelopment.events.impl.EventChildren
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.impl.button.PanelButton
 import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
@@ -32,7 +32,7 @@ class ManagerScreenExtension : Manager<ScreenExtension>() {
             ScreenExtensionHandledScreensServersideClose()
         )
 
-        TarasandeMain.get().eventSystem.add(EventChildren::class.java) { eventChildren ->
+        EventDispatcher.add(EventChildren::class.java) { eventChildren ->
             for (alignment in Alignment.values()) {
                 val xPos = when (alignment) {
                     Alignment.LEFT -> 5

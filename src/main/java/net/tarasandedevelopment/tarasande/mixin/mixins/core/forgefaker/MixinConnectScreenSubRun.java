@@ -16,7 +16,7 @@ public class MixinConnectScreenSubRun {
     @Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;connect(Ljava/net/InetSocketAddress;Z)Lnet/minecraft/network/ClientConnection;"))
     public ClientConnection hookForgeHandler(InetSocketAddress address, boolean useEpoll) {
         final ClientConnection connection = ClientConnection.connect(address, useEpoll);
-        TarasandeMain.Companion.get().getClientMenuSystem().get(ElementMenuToggleForgeFaker.class).setCurrentHandler(ForgeCreator.INSTANCE.createNetHandler(connection));
+        TarasandeMain.Companion.managerClientMenu().get(ElementMenuToggleForgeFaker.class).setCurrentHandler(ForgeCreator.INSTANCE.createNetHandler(connection));
         return connection;
     }
 }

@@ -29,8 +29,8 @@ open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var 
     fun getColor(): Color {
         var customHue = this.hue
 
-        if (locked && this != TarasandeMain.get().clientValues.accentColor)
-            customHue = TarasandeMain.get().clientValues.accentColor.hue
+        if (locked && this != TarasandeMain.instance.clientValues.accentColor)
+            customHue = TarasandeMain.instance.clientValues.accentColor.hue
 
         val hsb = Color.getHSBColor(customHue, sat, bri)
         return hsb.withAlpha(if (alpha == null) 255 else (alpha!! * 255).toInt())

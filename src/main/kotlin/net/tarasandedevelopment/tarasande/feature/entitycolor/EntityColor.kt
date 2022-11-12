@@ -5,10 +5,11 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.mob.Monster
 import net.minecraft.entity.passive.AnimalEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.EventEntityColor
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueColor
-import net.tarasandedevelopment.events.impl.EventEntityColor
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleESP
 import java.awt.Color
 
@@ -48,10 +49,10 @@ class EntityColor(val moduleESP: ModuleESP) {
         }
 
         if (entity == MinecraftClient.getInstance().player) color = selfColor.getColor()
-        else if (entity is PlayerEntity && TarasandeMain.get().friends.isFriend(entity.gameProfile)) color = friendsColor.getColor()
+        else if (entity is PlayerEntity && TarasandeMain.instance.friends.isFriend(entity.gameProfile)) color = friendsColor.getColor()
 
         val eventEntityColor = EventEntityColor(entity, color)
-        TarasandeMain.get().eventSystem.call(eventEntityColor)
+        EventDispatcher.call(eventEntityColor)
         return eventEntityColor.color
     }
 

@@ -60,7 +60,7 @@ public abstract class MixinMinecraftClient {
         final UserConnection viaConnection = ((IClientConnection_Protocol) getNetworkHandler().getConnection()).protocolhack_getViaConnection();
 
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1) && viaConnection != null) {
-            ModuleInventoryMove moduleInventoryMove = TarasandeMain.Companion.get().getModuleSystem().get(ModuleInventoryMove.class);
+            ModuleInventoryMove moduleInventoryMove = TarasandeMain.Companion.managerModule().get(ModuleInventoryMove.class);
             if (moduleInventoryMove.getEnabled() && moduleInventoryMove.getCancelOpenPacket().getValue())
                 return;
 

@@ -2,10 +2,10 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.com
 
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.events.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.events.EventPollEvents
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventKeyBindingIsPressed
-import net.tarasandedevelopment.events.impl.EventPollEvents
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.minus

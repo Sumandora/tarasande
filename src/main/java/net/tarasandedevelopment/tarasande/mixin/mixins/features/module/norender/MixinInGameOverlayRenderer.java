@@ -16,21 +16,21 @@ public class MixinInGameOverlayRenderer {
 
     @Inject(method = "renderFireOverlay", at = @At("HEAD"), cancellable = true)
     private static void noRender_renderFireOverlay(MinecraftClient client, MatrixStack matrices, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getOverlay().getFireOverlay().should()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getOverlay().getFireOverlay().should()) {
             ci.cancel();
         }
     }
 
     @Inject(method = "renderUnderwaterOverlay", at = @At("HEAD"), cancellable = true)
     private static void noRender_renderUnderwaterOverlay(MinecraftClient client, MatrixStack matrices, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getOverlay().getWaterOverlay().should()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getOverlay().getWaterOverlay().should()) {
             ci.cancel();
         }
     }
 
     @Inject(method = "renderInWallOverlay", at = @At("HEAD"), cancellable = true)
     private static void noRender_renderInWallOverlay(Sprite sprite, MatrixStack matrices, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getOverlay().getInWallOverlay().should()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getOverlay().getInWallOverlay().should()) {
             ci.cancel();
         }
     }

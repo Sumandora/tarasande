@@ -44,7 +44,7 @@ class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array Lis
         var index = 0.0
         enabledModules.sortedBy { FontWrapper.getWidth(it.name) }.reversed().forEach {
             val animation = animations[it]!!
-            val accent = TarasandeMain.get().clientValues.accentColor.getColor()
+            val accent = TarasandeMain.instance.clientValues.accentColor.getColor()
             val color = accent.withAlpha((animation * 255).toInt())
             RenderSystem.enableBlend()
             val animatedPosition = easing.ease(animation.toFloat())

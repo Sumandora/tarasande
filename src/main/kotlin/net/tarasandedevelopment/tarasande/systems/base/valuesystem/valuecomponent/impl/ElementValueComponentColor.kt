@@ -34,7 +34,7 @@ class ElementValueComponentColor(value: Value) : ElementValueComponent(value) {
     }
 
     // Make sure Accent Color doesn't handle itself
-    private fun isAccent() = value == TarasandeMain.get().clientValues.accentColor
+    private fun isAccent() = value == TarasandeMain.instance.clientValues.accentColor
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val valueColor = value as ValueColor
@@ -73,7 +73,7 @@ class ElementValueComponentColor(value: Value) : ElementValueComponent(value) {
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
 
-        val nextHue = if (valueColor.locked) TarasandeMain.get().clientValues.accentColor.hue else valueColor.hue
+        val nextHue = if (valueColor.locked) TarasandeMain.instance.clientValues.accentColor.hue else valueColor.hue
         val hsb = Color.getHSBColor(nextHue, 1.0f, 1.0f).let { if (valueColor.isEnabled()) it else it.darker().darker() }
         RenderUtil.fill(matrices, x1, y1, x2, y2, hsb.rgb)
         RenderUtil.fillHorizontalGradient(matrices, x1, y1, x2, y2, Color.white.withAlpha(0).rgb, unblockedWhite.rgb)
@@ -87,9 +87,9 @@ class ElementValueComponentColor(value: Value) : ElementValueComponent(value) {
                 (if (!valueColor.locked)
                     white
                 else if (valueColor.isEnabled())
-                    TarasandeMain.get().clientValues.accentColor.getColor()
+                    TarasandeMain.instance.clientValues.accentColor.getColor()
                 else
-                    TarasandeMain.get().clientValues.accentColor.getColor().darker().darker()).rgb,
+                    TarasandeMain.instance.clientValues.accentColor.getColor().darker().darker()).rgb,
                 scale = 0.5F,
                 offset = 0.5F)
         }
@@ -140,7 +140,7 @@ class ElementValueComponentColor(value: Value) : ElementValueComponent(value) {
 
         if (!this.isAccent() && RenderUtil.isHovered(mouseX, mouseY, width - FontWrapper.getWidth(lockToAccentColorText) / 2.0f, getPickerHeight(), width, getPickerHeight() + FontWrapper.fontHeight() / 2.0f)) {
             if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-                val accent = TarasandeMain.get().clientValues.accentColor
+                val accent = TarasandeMain.instance.clientValues.accentColor
 
                 valueColor.hue = accent.hue
                 valueColor.bri = accent.bri

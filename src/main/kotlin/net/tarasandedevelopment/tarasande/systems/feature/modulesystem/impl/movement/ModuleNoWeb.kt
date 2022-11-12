@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.mov
 
 import net.minecraft.block.CobwebBlock
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.events.EventBlockCollision
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventBlockCollision
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 

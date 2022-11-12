@@ -2,10 +2,10 @@ package net.tarasandedevelopment.tarasande.systems.screen.informationsystem.impl
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
-import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.events.EventDisconnect
+import net.tarasandedevelopment.tarasande.events.EventPacket
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
-import net.tarasandedevelopment.events.impl.EventDisconnect
-import net.tarasandedevelopment.events.impl.EventPacket
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
 import java.nio.charset.StandardCharsets
 
@@ -31,8 +31,8 @@ class InformationOpenChannels : Information("Server", "Open Channels") {
     private val openChannels = ArrayList<String>()
 
     init {
-        TarasandeMain.get().eventSystem.also {
-            it.add(EventPacket::class.java) {
+        EventDispatcher.apply {
+            add(EventPacket::class.java) {
                 if (it.type == EventPacket.Type.RECEIVE && it.packet is CustomPayloadS2CPacket) {
                     if (it.packet.channel.toString() == "minecraft:register") {
                         it.packet.data.toString(StandardCharsets.UTF_8).split("\u0000").forEach { data ->
@@ -47,7 +47,7 @@ class InformationOpenChannels : Information("Server", "Open Channels") {
                     }
                 }
             }
-            it.add(EventDisconnect::class.java) {
+            add(EventDisconnect::class.java) {
                 openChannels.clear()
             }
         }

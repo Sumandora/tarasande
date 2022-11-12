@@ -1,11 +1,11 @@
 package net.tarasandedevelopment.tarasande.systems.screen.informationsystem
 
-import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.panel.PanelInformation
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
 
-class ManagerInformation : Manager<Information>() {
+class ManagerInformation(panelSystem: ManagerPanel) : Manager<Information>() {
 
     private fun conditional(condition: Boolean, block: () -> Information): Array<Information> {
         return (if (condition)
@@ -51,7 +51,7 @@ class ManagerInformation : Manager<Information>() {
             InformationTimers()
         )
 
-        TarasandeMain.get().panelSystem.add(PanelInformation(this))
+        panelSystem.add(PanelInformation(this))
     }
 
     fun getAllOwners(): List<String> {

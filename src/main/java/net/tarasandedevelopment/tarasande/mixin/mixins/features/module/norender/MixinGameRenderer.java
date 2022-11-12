@@ -17,14 +17,14 @@ public class MixinGameRenderer {
 
     @Inject(method = "bobViewWhenHurt", at = @At("HEAD"), cancellable = true)
     public void noRender_bobViewWhenHurt(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getOverlay().getHurtCam().should()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getOverlay().getHurtCam().should()) {
             ci.cancel();
         }
     }
 
     @Redirect(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F"))
     public float noRender_renderWorld(float delta, float start, float end) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getOverlay().getNoNausea().should()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getOverlay().getNoNausea().should()) {
             return 0;
         }
         return MathHelper.lerp(delta, start, end);
@@ -32,7 +32,7 @@ public class MixinGameRenderer {
 
     @Inject(method = "showFloatingItem", at = @At("HEAD"), cancellable = true)
     public void noRender_showFloatingItem(ItemStack floatingItem, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getOverlay().getTotemAnimation().should()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getOverlay().getTotemAnimation().should()) {
             ci.cancel();
         }
     }

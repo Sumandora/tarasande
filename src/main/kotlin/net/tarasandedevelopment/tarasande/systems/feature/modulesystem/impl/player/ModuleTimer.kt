@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.player
 
+import net.tarasandedevelopment.tarasande.events.EventTimeTravel
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventTimeTravel
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import java.util.concurrent.ThreadLocalRandom

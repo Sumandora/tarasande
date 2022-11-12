@@ -2,9 +2,9 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event;
 
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
-import net.tarasandedevelopment.events.EventDispatcher;
-import net.tarasandedevelopment.events.impl.EventHasForwardMovement;
-import net.tarasandedevelopment.events.impl.EventInput;
+import net.tarasandedevelopment.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.events.EventHasForwardMovement;
+import net.tarasandedevelopment.tarasande.events.EventInput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

@@ -6,11 +6,11 @@ import net.minecraft.item.Items
 import net.minecraft.network.packet.s2c.play.ParticleS2CPacket
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.util.math.BlockPos
+import net.tarasandedevelopment.tarasande.events.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.events.EventPacket
+import net.tarasandedevelopment.tarasande.events.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventKeyBindingIsPressed
-import net.tarasandedevelopment.events.impl.EventPacket
-import net.tarasandedevelopment.events.impl.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil

@@ -15,7 +15,7 @@ public class MixinFireworksSparkParticleSubExplosionAndFlash {
 
     @Inject(method = "buildGeometry", at = @At("HEAD"), cancellable = true)
     public void noRender_buildGeometry(VertexConsumer vertexConsumer, Camera camera, float tickDelta, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getWorld().getFireworkExplosions().should()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getWorld().getFireworkExplosions().should()) {
             ci.cancel();
         }
     }

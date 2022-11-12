@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.systems.feature.clickmethodsystem
 
-import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.systems.feature.clickmethodsystem.impl.ClickMethodConstant
 import net.tarasandedevelopment.tarasande.systems.feature.clickmethodsystem.impl.ClickMethodCooldown
 import net.tarasandedevelopment.tarasande.systems.feature.clickmethodsystem.impl.ClickMethodDynamic

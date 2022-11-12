@@ -1,16 +1,20 @@
-package net.tarasandedevelopment.tarasande.base
+package net.tarasandedevelopment.tarasande
 
 import java.util.concurrent.CopyOnWriteArrayList
 
 open class Manager<T : Any> {
     val list = CopyOnWriteArrayList<T>()
 
+    init {
+        println(javaClass.simpleName)
+    }
+
     open fun add(obj: T) {
         if (!list.contains(obj))
             list.add(obj)
     }
 
-    internal open fun add(vararg objects: T) {
+    fun add(vararg objects: T) {
         objects.forEach { add(it) }
     }
 
@@ -20,5 +24,4 @@ open class Manager<T : Any> {
         @Suppress("UNCHECKED_CAST")
         return list.first { it.javaClass == clazz } as T
     }
-
 }

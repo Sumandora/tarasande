@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.misc
 
 import com.mojang.authlib.GameProfile
-import eventsystem.impl.*
 import net.minecraft.SharedConstants
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.player.PlayerEntity
@@ -11,10 +10,9 @@ import net.minecraft.item.Items
 import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.util.registry.Registry
-import net.tarasandedevelopment.events.impl.*
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.*
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.*
-import net.tarasandedevelopment.tarasande.systems.eventsystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.combat.ModuleAntiBot
@@ -74,10 +72,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     private var prevItem = 0
 
     init {
-
-
-
-        TarasandeMain.get().informationSystem.apply {
+        TarasandeMain.managerInformation.apply {
             add(object : Information("Murder Mystery", "Suspected murderers") {
                 override fun getMessage(): String? {
                     if (enabled)
@@ -139,7 +134,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         }
         val message = when (broadCastMode) {
             1 -> {
-                TarasandeMain.get().name + " suspects " + player.gameProfile.name + (" because he held $itemMessage")
+                TarasandeMain.instance.name + " suspects " + player.gameProfile.name + (" because he held $itemMessage")
             }
 
             2 -> {
@@ -245,7 +240,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                     return@registerEvent
                 if (player !is PlayerEntity) return@registerEvent
                 if (suspects.containsKey(player.gameProfile)) return@registerEvent
-                if (TarasandeMain.get().moduleSystem.get(ModuleAntiBot::class.java).isBot(player)) return@registerEvent
+                if (TarasandeMain.managerModule.get(ModuleAntiBot::class.java).isBot(player)) return@registerEvent
 
                 var mainHand: Item? = null
                 var offHand: Item? = null

@@ -1,15 +1,13 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.movement
 
 import com.mojang.blaze3d.systems.RenderSystem
-import eventsystem.impl.*
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.*
 import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.events.impl.*
+import net.tarasandedevelopment.tarasande.events.*
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBind
-import net.tarasandedevelopment.tarasande.systems.eventsystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.minus

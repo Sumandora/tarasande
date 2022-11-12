@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.ghost
 
+import net.tarasandedevelopment.tarasande.events.EventUpdateTargetedEntity
 import net.tarasandedevelopment.tarasande.mixin.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventUpdateTargetedEntity
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 

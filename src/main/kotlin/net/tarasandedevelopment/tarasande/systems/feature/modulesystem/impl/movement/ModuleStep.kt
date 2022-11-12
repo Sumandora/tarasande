@@ -2,12 +2,12 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.mov
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.PositionAndOnGround
 import net.minecraft.util.math.Direction
+import net.tarasandedevelopment.tarasande.events.EventMovement
+import net.tarasandedevelopment.tarasande.events.EventStep
+import net.tarasandedevelopment.tarasande.events.EventTick
+import net.tarasandedevelopment.tarasande.events.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventMovement
-import net.tarasandedevelopment.events.impl.EventStep
-import net.tarasandedevelopment.events.impl.EventTick
-import net.tarasandedevelopment.events.impl.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.times

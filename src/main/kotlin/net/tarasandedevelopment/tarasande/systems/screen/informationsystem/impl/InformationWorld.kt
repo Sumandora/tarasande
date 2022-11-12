@@ -6,9 +6,9 @@ import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
-import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.events.EventPacket
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventPacket
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import java.util.concurrent.CopyOnWriteArrayList
@@ -26,7 +26,7 @@ class InformationWorldTime : Information("World", "World Time") {
     var lastUpdate: Pair<Long, Long>? = null
 
     init {
-        TarasandeMain.get().eventSystem.add(EventPacket::class.java, 1) {
+        EventDispatcher.add(EventPacket::class.java, 1) {
             if (it.type == EventPacket.Type.RECEIVE && it.packet is WorldTimeUpdateS2CPacket) {
                 lastUpdate = Pair(it.packet.timeOfDay, it.packet.time)
             }
@@ -60,7 +60,7 @@ class InformationVanishedPlayers : Information("World", "Vanished players") {
 
 
     init {
-        TarasandeMain.get().eventSystem.add(EventPacket::class.java) { event ->
+        EventDispatcher.add(EventPacket::class.java) { event ->
             if (event.type == EventPacket.Type.RECEIVE) {
                 when (event.packet) {
                     is PlayerListS2CPacket -> {

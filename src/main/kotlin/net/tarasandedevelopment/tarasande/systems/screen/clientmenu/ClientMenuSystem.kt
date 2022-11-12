@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande.systems.screen.clientmenu
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
+import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.*
 import org.lwjgl.glfw.GLFW
@@ -33,7 +33,7 @@ abstract class ElementMenu(val name: String, val category: String) {
 
     internal fun onClickInternal(mouseButton: Int) {
         if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-            if (TarasandeMain.get().valueSystem.getValues(this@ElementMenu).isNotEmpty()) {
+            if (TarasandeMain.managerValue.getValues(this@ElementMenu).isNotEmpty()) {
                 MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, this@ElementMenu))
                 return
             }

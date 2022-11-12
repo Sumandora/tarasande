@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.event;
 
 import net.minecraft.client.Mouse;
-import net.tarasandedevelopment.events.EventDispatcher;
-import net.tarasandedevelopment.events.impl.EventMouse;
-import net.tarasandedevelopment.events.impl.EventMouseDelta;
+import net.tarasandedevelopment.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.events.EventMouse;
+import net.tarasandedevelopment.tarasande.events.EventMouseDelta;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

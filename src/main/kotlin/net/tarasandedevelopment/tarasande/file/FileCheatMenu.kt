@@ -12,7 +12,7 @@ class FileCheatMenu : File("CheatMenu") {
 
     override fun save(): JsonElement {
         val jsonObject = JsonObject()
-        for (panel in TarasandeMain.get().panelSystem.list) {
+        for (panel in TarasandeMain.managerPanel.list) {
             val jsonArray2 = JsonArray()
             jsonArray2.add(panel.x)
             jsonArray2.add(panel.y)
@@ -26,7 +26,7 @@ class FileCheatMenu : File("CheatMenu") {
 
     override fun load(jsonElement: JsonElement) {
         val jsonObject = jsonElement.asJsonObject
-        for (panel in TarasandeMain.get().panelSystem.list) {
+        for (panel in TarasandeMain.managerPanel.list) {
             if (jsonObject.has(panel.title)) {
                 val jsonArray2 = jsonObject.get(panel.title).asJsonArray
                 panel.x = jsonArray2.get(0).asDouble

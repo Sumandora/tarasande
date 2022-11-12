@@ -7,7 +7,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.PanelEl
 
 class PanelElementsClientValues(clientValues: ClientValues) : PanelElements<ElementValueComponent>("Client values", 150.0, 100.0) {
     init {
-        for (it in TarasandeMain.get().valueSystem.getValues(clientValues)) {
+        for (it in TarasandeMain.managerValue.getValues(clientValues)) {
             elementList.add(it.createValueComponent())
         }
     }

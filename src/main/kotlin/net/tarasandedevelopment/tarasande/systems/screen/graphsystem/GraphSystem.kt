@@ -1,13 +1,15 @@
 package net.tarasandedevelopment.tarasande.systems.screen.graphsystem
 
-import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.Manager
-import net.tarasandedevelopment.events.impl.EventTick
+import net.tarasandedevelopment.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.Manager
+import net.tarasandedevelopment.tarasande.events.EventTick
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.information.InformationGraphValue
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.panel.PanelGraph
+import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.ManagerInformation
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
 
-class ManagerGraph : Manager<Graph>() {
+class ManagerGraph(informationSystem: ManagerInformation, panelSystem: ManagerPanel) : Manager<Graph>() {
 
     init {
         add(
@@ -26,10 +28,10 @@ class ManagerGraph : Manager<Graph>() {
             GraphRX()
         )
 
-        TarasandeMain.get().informationSystem.add(*list.map { e -> InformationGraphValue(e) }.toTypedArray())
-        TarasandeMain.get().panelSystem.add(*list.map { e -> PanelGraph(e) }.toTypedArray())
+        informationSystem.add(*list.map { e -> InformationGraphValue(e) }.toTypedArray())
+        panelSystem.add(*list.map { e -> PanelGraph(e) }.toTypedArray())
 
-        TarasandeMain.get().eventSystem.add(EventTick::class.java) {
+        EventDispatcher.add(EventTick::class.java) {
             if (it.state == EventTick.State.PRE)
                 for (graph in list)
                     graph.lastData = graph.supplyData()

@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render
 
+import net.tarasandedevelopment.tarasande.events.EventColorCorrection
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueColor
-import net.tarasandedevelopment.events.impl.EventColorCorrection
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 

@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.systems.base.valuesystem
 
 import com.google.gson.JsonElement
+import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
 
 class ManagerValue : Manager<Value>() {
@@ -14,14 +14,13 @@ class ManagerValue : Manager<Value>() {
                 arrayList.add(value)
         return arrayList
     }
-
 }
 
-abstract class Value(var owner: Any, var name: String, val valueComponent: Class<out ElementValueComponent>, manage: Boolean = true) {
+abstract class Value(var owner: Any, var name: String, private val valueComponent: Class<out ElementValueComponent>, manage: Boolean = true) {
 
     init {
         if (manage)
-            TarasandeMain.get().valueSystem.add(this)
+            TarasandeMain.managerValue.add(this)
     }
 
     open fun isEnabled() = true

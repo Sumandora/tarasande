@@ -8,10 +8,10 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.EventPollEvents
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumberRange
-import net.tarasandedevelopment.events.impl.EventPollEvents
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.player.ModuleFastUse
@@ -35,7 +35,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
     private val gravity = 0.006
 
     private fun calcVelocity(stack: ItemStack): Double {
-        return BowItem.getPullProgress(if (mc.player?.isUsingItem!! && !TarasandeMain.get().moduleSystem.get(ModuleFastUse::class.java).enabled) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
+        return BowItem.getPullProgress(if (mc.player?.isUsingItem!! && !TarasandeMain.managerModule.get(ModuleFastUse::class.java).enabled) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
     }
 
     // https://en.wikipedia.org/wiki/Projectile_motion#Angle_%CE%B8_required_to_hit_coordinate_(x,_y)

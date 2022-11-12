@@ -1,11 +1,15 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.event.entity;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.tarasandedevelopment.events.EventDispatcher;
-import net.tarasandedevelopment.events.impl.EventKeepSprint;
+import net.minecraft.text.Text;
+import net.tarasandedevelopment.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.events.EventKeepSprint;
+import net.tarasandedevelopment.tarasande.events.EventTagName;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerEntity.class)
 public class MixinPlayerEntity {
@@ -17,4 +21,12 @@ public class MixinPlayerEntity {
         if (!eventKeepSprint.getSprinting())
             instance.setSprinting(b);
     }
+
+    @Inject(method = "getDisplayName", at = @At("RETURN"), cancellable = true)
+    public void hookEventTagName(CallbackInfoReturnable<Text> cir) {
+        EventTagName eventTagName = new EventTagName((PlayerEntity) (Object) this, cir.getReturnValue());
+        EventDispatcher.INSTANCE.call(eventTagName);
+        cir.setReturnValue(eventTagName.getDisplayName());
+    }
+
 }

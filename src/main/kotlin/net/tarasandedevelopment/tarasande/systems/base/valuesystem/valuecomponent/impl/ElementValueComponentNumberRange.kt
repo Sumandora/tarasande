@@ -86,7 +86,7 @@ class ElementValueComponentNumberRange(value: Value) : ElementValueComponent(val
         val maxSliderPos = MathHelper.clamp((valueNumberRange.maxValue - valueNumberRange.min) / (valueNumberRange.max - valueNumberRange.min), 0.0, 1.0)
 
         var white = Color.white
-        var accentColor = TarasandeMain.get().clientValues.accentColor.getColor()
+        var accentColor = TarasandeMain.instance.clientValues.accentColor.getColor()
         var color = accentColor.withAlpha(255 / 4)
         var otherColor = Color(255, 255, 255, 255 / 4)
 

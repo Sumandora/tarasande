@@ -13,14 +13,14 @@ public class MixinEntityStatusEffectS2CPacket {
 
     @Inject(method = "shouldShowIcon", at = @At("HEAD"), cancellable = true)
     public void hookAntiParticleHideHud(CallbackInfoReturnable<Boolean> cir) {
-        ModuleAntiParticleHide moduleAntiParticleHide = TarasandeMain.Companion.get().getModuleSystem().get(ModuleAntiParticleHide.class);
+        ModuleAntiParticleHide moduleAntiParticleHide = TarasandeMain.Companion.managerModule().get(ModuleAntiParticleHide.class);
         if (moduleAntiParticleHide.getEnabled() && moduleAntiParticleHide.getHud().isEnabled() && moduleAntiParticleHide.getHud().getValue())
             cir.setReturnValue(true);
     }
 
     @Inject(method = "shouldShowParticles", at = @At("HEAD"), cancellable = true)
     public void hookAntiParticleHideInventory(CallbackInfoReturnable<Boolean> cir) {
-        ModuleAntiParticleHide moduleAntiParticleHide = TarasandeMain.Companion.get().getModuleSystem().get(ModuleAntiParticleHide.class);
+        ModuleAntiParticleHide moduleAntiParticleHide = TarasandeMain.Companion.managerModule().get(ModuleAntiParticleHide.class);
         if (moduleAntiParticleHide.getEnabled() && moduleAntiParticleHide.getInventory().getValue())
             cir.setReturnValue(true);
     }

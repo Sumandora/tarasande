@@ -6,16 +6,18 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.Tameable
 import net.minecraft.util.registry.Registry
+import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.feature.clientvalue.panel.PanelElementsClientValues
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueButton
-import net.tarasandedevelopment.events.impl.EventIsEntityAttackable
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.util.dummy.ClientWorldDummy
 import net.tarasandedevelopment.tarasande.util.extension.Thread
 
-class ClientValues {
+class ClientValues(name: String, panelSystem: ManagerPanel) {
 
     // General
     val accentColor = ValueColor(this, "Accent color", 0.6f, 1.0f, 1.0f)
@@ -32,7 +34,7 @@ class ClientValues {
     init {
         object : ValueButton(this, "Cheat menu values") {
             override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Cheat menu values", TarasandeMain.get().panelSystem.screenCheatMenu))
+                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Cheat menu values", panelSystem.screenCheatMenu))
             }
         }
     }
@@ -86,7 +88,7 @@ class ClientValues {
     init {
         object : ValueButton(this, "Blur values") {
             override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Blur values", TarasandeMain.get().blurSystem))
+                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Blur values", TarasandeMain.managerBlur))
             }
         }
     }
@@ -107,7 +109,7 @@ class ClientValues {
         return true
     }
 
-    val autoSaveDaemonName = TarasandeMain.get().name + " config auto save daemon"
+    val autoSaveDaemonName = "$name config auto save daemon"
     val autoSaveDaemon: Thread = Thread(autoSaveDaemonName) {
         while (true) {
             if (autoSaveConfig.value) {
@@ -121,8 +123,8 @@ class ClientValues {
     init {
         autoSaveDaemon.start()
 
-        TarasandeMain.get().panelSystem.add(PanelElementsClientValues(this))
-        TarasandeMain.get().eventSystem.add(EventIsEntityAttackable::class.java) { event ->
+        panelSystem.add(PanelElementsClientValues(this))
+        EventDispatcher.add(EventIsEntityAttackable::class.java) { event ->
             event.attackable = event.attackable && isEntityDesired(event.entity)
         }
     }

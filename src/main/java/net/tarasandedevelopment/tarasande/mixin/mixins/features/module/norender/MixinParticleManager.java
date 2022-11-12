@@ -7,9 +7,9 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.tarasandedevelopment.events.EventDispatcher;
-import net.tarasandedevelopment.events.impl.EventParticle;
+import net.tarasandedevelopment.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.events.EventParticle;
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleNoRender;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,14 +28,14 @@ public abstract class MixinParticleManager {
 
     @Inject(method = "addBlockBreakParticles", at = @At("HEAD"), cancellable = true)
     public void noRender_addBlockBreakParticles(BlockPos pos, BlockState state, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getWorld().getBlockBreakParticles().should()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getWorld().getBlockBreakParticles().should()) {
             ci.cancel();
         }
     }
 
     @Inject(method = "addBlockBreakingParticles", at = @At("HEAD"), cancellable = true)
     public void noRender_addBlockBreakingParticles(BlockPos pos, Direction direction, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getWorld().getBlockBreakParticles().should()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getWorld().getBlockBreakParticles().should()) {
             ci.cancel();
         }
     }

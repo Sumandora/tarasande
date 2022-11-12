@@ -6,12 +6,12 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen
 import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen
-import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.Manager
+import net.tarasandedevelopment.tarasande.events.EventRender2D
+import net.tarasandedevelopment.tarasande.events.EventScreenRender
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventRender2D
-import net.tarasandedevelopment.events.impl.EventScreenRender
 import net.tarasandedevelopment.tarasande.systems.screen.blursystem.impl.BlurBox
 import net.tarasandedevelopment.tarasande.systems.screen.blursystem.impl.BlurGaussian
 import net.tarasandedevelopment.tarasande.systems.screen.blursystem.impl.BlurKawase
@@ -38,12 +38,12 @@ class ManagerBlur : Manager<Blur>() {
             BlurKawase()
         )
 
-        TarasandeMain.get().eventSystem.also {
-            it.add(EventScreenRender::class.java) {
+        EventDispatcher.apply {
+            add(EventScreenRender::class.java) {
                 if ((MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenCheatMenu || MinecraftClient.getInstance().currentScreen is DownloadingTerrainScreen) && it.screen !is RealmsNotificationsScreen)
                     blurScene()
             }
-            it.add(EventRender2D::class.java) {
+            add(EventRender2D::class.java) {
                 blurScene()
             }
         }

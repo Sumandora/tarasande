@@ -35,7 +35,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.ThreadFactory
 import java.util.logging.Logger
 
-class TarasandeProtocolHack : INativeProvider {
+class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
 
     val version = ValueNumber(this, "Protocol", Double.MIN_VALUE, SharedConstants.getProtocolVersion().toDouble(), Double.MAX_VALUE, 1.0, true)
     private val compression = arrayOf("decompress", "compress")
@@ -50,7 +50,7 @@ class TarasandeProtocolHack : INativeProvider {
             ViaLegacy.init(viaLegacy, config, Logger.getLogger("ViaLegacy-Tarasande"))
         }
 
-        TarasandeMain.get().informationSystem.apply {
+        TarasandeMain.managerInformation.apply {
             add(object : Information("Connection", "Protocol Version") {
                 override fun getMessage() = VersionList.getProtocols().find { it.version == ViaProtocolHack.instance().provider().clientsideVersion }?.includedVersions?.last()
             })
@@ -76,7 +76,7 @@ class TarasandeProtocolHack : INativeProvider {
     override fun nativeVersion() = SharedConstants.getProtocolVersion()
     override fun targetVersion() = this.version.value.toInt()
     override fun nettyOrder() = this.compression
-    override fun run() = TarasandeMain.get().rootDirectory
+    override fun run() = rootDirectory
 
     override fun createDump(): JsonObject {
         val platformSpecific = JsonObject()

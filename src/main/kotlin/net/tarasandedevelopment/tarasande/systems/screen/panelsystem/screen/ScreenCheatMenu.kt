@@ -9,13 +9,14 @@ import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
+import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.EventChangeScreen
+import net.tarasandedevelopment.tarasande.events.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventChangeScreen
-import net.tarasandedevelopment.events.impl.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.particle.Particle
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
@@ -47,24 +48,16 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
     var disableAnimation = false
 
     init {
-        var y = 5.0
-
-        panelSystem.list.forEach {
-            it.x = 5.0
-            it.y = y
-            y += it.titleBarHeight + 5.0
-        }
-
         passEvents = false
-        TarasandeMain.get().eventSystem.also {
-            it.add(EventChangeScreen::class.java) { event ->
+        EventDispatcher.apply {
+            add(EventChangeScreen::class.java) { event ->
                 if (client?.currentScreen is ScreenCheatMenu && event.newScreen == null)
                     panelSystem.list.forEach { it.onClose() }
             }
-            it.add(EventUpdate::class.java) { event ->
+            add(EventUpdate::class.java) { event ->
                 if (event.state == EventUpdate.State.PRE)
                     if (hotkey.wasPressed().let { it > 0 && it % 2 != 0 })
-                        MinecraftClient.getInstance().setScreen(this)
+                        MinecraftClient.getInstance().setScreen(this@ScreenCheatMenu)
             }
         }
     }
@@ -92,16 +85,16 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
             }
         }
 
-        val color = TarasandeMain.get().clientValues.accentColor.getColor()
+        val color = TarasandeMain.instance.clientValues.accentColor.getColor()
 
-        val strength = round(animation * TarasandeMain.get().blurSystem.strength.value).toInt()
+        val strength = round(animation * TarasandeMain.managerBlur.strength.value).toInt()
         if (strength > 0 && blurredBackground.value) {
-            TarasandeMain.get().blurSystem.bind(true)
+            TarasandeMain.managerBlur.bind(true)
             RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
             client?.framebuffer?.beginWrite(true)
 
             if (animation != 1.0) { // Prevent it from recalculating every frame
-                TarasandeMain.get().blurSystem.blurScene(strength)
+                TarasandeMain.managerBlur.blurScene(strength)
             } else {
                 super.render(matrices, mouseX, mouseY, delta)
             }

@@ -1,8 +1,8 @@
-package net.tarasandedevelopment.events.impl
+package net.tarasandedevelopment.tarasande.events
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.Packet
-import net.tarasandedevelopment.events.Event
+import net.tarasandedevelopment.event.Event
 import java.net.InetSocketAddress
 
 class EventPacket(val type: Type, val packet: Packet<*>?) : Event(true) {

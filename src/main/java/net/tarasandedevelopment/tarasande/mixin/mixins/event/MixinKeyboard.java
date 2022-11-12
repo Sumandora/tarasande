@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.event;
 
 import net.minecraft.client.Keyboard;
-import net.tarasandedevelopment.events.EventDispatcher;
-import net.tarasandedevelopment.events.impl.EventKey;
+import net.tarasandedevelopment.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.events.EventKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

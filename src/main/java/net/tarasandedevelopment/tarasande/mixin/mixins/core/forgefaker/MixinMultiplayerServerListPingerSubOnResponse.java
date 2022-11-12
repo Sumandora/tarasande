@@ -35,7 +35,7 @@ public class MixinMultiplayerServerListPingerSubOnResponse {
         if (payload != null) {
             ((IServerInfo) field_3776).tarasande_setForgePayload(payload);
 
-            TarasandeMain.Companion.get().getClientMenuSystem().get(ElementMenuToggleForgeFaker.class).getForgeInfoTracker().put((InetSocketAddress) instance.getAddress(), payload);
+            TarasandeMain.Companion.managerClientMenu().get(ElementMenuToggleForgeFaker.class).getForgeInfoTracker().put((InetSocketAddress) instance.getAddress(), payload);
         }
 
         instance.send(packet); // Original Code

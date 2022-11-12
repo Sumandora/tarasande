@@ -46,7 +46,7 @@ class ScreenBetterSlotListForgeInformation(parent: Screen, private val titleName
     override fun init() {
         super.init()
 
-        if (TarasandeMain.get().clientValues.clientMenuBackButtons.value) {
+        if (TarasandeMain.instance.clientValues.clientMenuBackButtons.value) {
             addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { RenderSystem.recordRenderCall { close() } })
         }
     }

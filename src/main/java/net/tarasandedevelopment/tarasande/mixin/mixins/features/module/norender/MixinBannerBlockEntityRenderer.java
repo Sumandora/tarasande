@@ -37,8 +37,8 @@ public class MixinBannerBlockEntityRenderer {
     @Inject(method = "render(Lnet/minecraft/block/entity/BannerBlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V",
             at = @At("HEAD"), cancellable = true)
     public void noRender_render(BannerBlockEntity bannerBlockEntity, float f, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int j, CallbackInfo ci) {
-        final ValueMode modeValue = TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getWorld().getBanners();
-        if (!TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getEnabled()) return;
+        final ValueMode modeValue = TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getWorld().getBanners();
+        if (!TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getEnabled()) return;
 
         if (!modeValue.isSelected(0)) {
             ci.cancel();

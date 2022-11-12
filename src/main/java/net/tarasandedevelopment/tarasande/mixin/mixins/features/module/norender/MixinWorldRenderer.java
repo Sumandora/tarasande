@@ -14,7 +14,7 @@ public class MixinWorldRenderer {
 
     @Inject(method = "renderWeather", at = @At("HEAD"), cancellable = true)
     public void noRender_renderWeather(LightmapTextureManager manager, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getWorld().getWeather().should()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getWorld().getWeather().should()) {
             ci.cancel();
         }
     }

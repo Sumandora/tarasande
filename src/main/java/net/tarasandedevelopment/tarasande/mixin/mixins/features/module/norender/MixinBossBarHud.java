@@ -14,7 +14,7 @@ public class MixinBossBarHud {
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void noRender_render(MatrixStack matrices, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getHud().getBossBar().should()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getHud().getBossBar().should()) {
             ci.cancel();
         }
     }

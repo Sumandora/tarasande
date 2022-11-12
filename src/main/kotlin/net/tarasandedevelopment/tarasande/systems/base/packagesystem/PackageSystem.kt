@@ -1,12 +1,12 @@
 package net.tarasandedevelopment.tarasande.systems.base.packagesystem
 
 import net.fabricmc.loader.api.FabricLoader
-import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.tarasande.Manager
 
-internal class ManagerPackage : Manager<net.tarasandedevelopment.tarasande.systems.base.packagesystem.Package>() {
+internal class ManagerPackage : Manager<Package>() {
 
     init {
-        FabricLoader.getInstance().getEntrypointContainers("tarasande", net.tarasandedevelopment.tarasande.systems.base.packagesystem.Package::class.java).forEach {
+        FabricLoader.getInstance().getEntrypointContainers("tarasande", Package::class.java).forEach {
             val metadata = it.provider.metadata
             val addon = it.entrypoint
 

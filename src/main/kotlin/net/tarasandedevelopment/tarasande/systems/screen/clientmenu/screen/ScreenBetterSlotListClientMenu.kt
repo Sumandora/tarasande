@@ -29,12 +29,12 @@ class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, 
             override fun get(): List<ScreenBetterSlotListEntry> {
                 val list = mutableListOf<ScreenBetterSlotListEntry>()
 
-                val elements = TarasandeMain.get().clientMenuSystem.list
+                val elements = TarasandeMain.managerClientMenu.list
 
                 for (menu in elements.sortedWith(Comparator.comparing<ElementMenu, Boolean> { it.category != ElementCategory.GENERAL }.thenBy { it.category })) {
                     if (!menu.visible()) continue
                     val titleEntry = ScreenBetterSlotListEntryClientMenuTitle(menu.category)
-                    if (!list.contains(titleEntry) && TarasandeMain.get().clientValues.clientMenuShowCategories.value) {
+                    if (!list.contains(titleEntry) && TarasandeMain.instance.clientValues.clientMenuShowCategories.value) {
                         list.add(titleEntry)
                     }
                     list.add(ScreenBetterSlotListEntryClientMenu(menu))
@@ -44,18 +44,18 @@ class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, 
             }
         })
         super.init()
-        if (TarasandeMain.get().clientValues.clientMenuBackButtons.value) {
+        if (TarasandeMain.instance.clientValues.clientMenuBackButtons.value) {
             addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { RenderSystem.recordRenderCall { close() } })
         }
         this.addDrawableChild(ButtonWidget(this.width / 2 - 49, this.height - 27, 98, 20, Text.of("Client values")) {
-            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, "Client values", TarasandeMain.get().clientValues))
+            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, "Client values", TarasandeMain.instance.clientValues))
         })
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
 
-        this.renderTitle(matrices, TarasandeMain.get().name.let {
+        this.renderTitle(matrices, TarasandeMain.instance.name.let {
             it[0].uppercaseChar().toString() + it.substring(1) + " Menu"
         })
     }

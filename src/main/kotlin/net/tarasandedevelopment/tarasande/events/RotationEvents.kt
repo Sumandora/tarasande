@@ -1,7 +1,7 @@
-package net.tarasandedevelopment.events.impl
+package net.tarasandedevelopment.tarasande.events
 
 import net.minecraft.client.input.Input
-import net.tarasandedevelopment.events.Event
+import net.tarasandedevelopment.event.Event
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 
 class EventPollEvents : Event {

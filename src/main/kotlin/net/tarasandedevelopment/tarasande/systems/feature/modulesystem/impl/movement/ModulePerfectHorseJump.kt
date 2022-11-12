@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.movement
 
 import net.minecraft.client.MinecraftClient
+import net.tarasandedevelopment.tarasande.events.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 

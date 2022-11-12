@@ -9,7 +9,12 @@ import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.Clickab
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
-class PanelButton(x: Int, y: Int, val width: Int, val height: Int, private val text: String, private val pressAction: Runnable) : Panel("Button", x.toDouble(), y.toDouble(), width.toDouble(), height.toDouble(), scissor = true) {
+class PanelButton(x: Int, y: Int, val width: Int, val height: Int, private val text: String, private val pressAction: Runnable) : Panel("Button", width.toDouble(), height.toDouble(), scissor = true) {
+
+    init {
+        this.x = x.toDouble()
+        this.y = y.toDouble()
+    }
 
     companion object {
         fun createButton(x: Int, y: Int, width: Int, height: Int, text: String, pressAction: Runnable): ClickableWidgetPanel {

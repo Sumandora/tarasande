@@ -4,11 +4,12 @@ import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
+import net.tarasandedevelopment.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.tarasande.events.EventRender2D
+import net.tarasandedevelopment.tarasande.events.EventTick
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
-import net.tarasandedevelopment.events.impl.EventRender2D
-import net.tarasandedevelopment.events.impl.EventTick
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.impl.fixed.*
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
@@ -26,6 +27,7 @@ import kotlin.math.round
 class ManagerPanel : Manager<Panel>() {
 
     val screenCheatMenu: ScreenCheatMenu
+    var panelInsertY = 5.0
 
     init {
         add(
@@ -47,6 +49,13 @@ class ManagerPanel : Manager<Panel>() {
             return // Closeable panels (this was a feature, which got scrapped)
         list.remove(panel)
         list.add(index, panel)
+    }
+
+    override fun add(obj: Panel) {
+        obj.x = 5.0
+        obj.y = panelInsertY
+        panelInsertY += obj.titleBarHeight + 5.0
+        super.add(obj)
     }
 
 }
@@ -83,23 +92,24 @@ open class Panel(
     val titleBarHeight = FontWrapper.fontHeight()
 
     init {
-        if (fixed)
-            TarasandeMain.get().eventSystem.also {
-                it.add(EventRender2D::class.java) {
+        if (fixed) {
+            EventDispatcher.apply {
+                add(EventRender2D::class.java) {
                     if (isVisible() && opened)
-                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().panelSystem.screenCheatMenu) {
+                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.managerPanel.screenCheatMenu) {
                             it.matrices.push()
                             render(it.matrices, -1, -1, MinecraftClient.getInstance().tickDelta)
                             it.matrices.pop()
                         }
                 }
 
-                it.add(EventTick::class.java) {
+                add(EventTick::class.java) {
                     if (it.state == EventTick.State.PRE)
-                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.get().panelSystem.screenCheatMenu)
+                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.managerPanel.screenCheatMenu)
                             tick()
                 }
             }
+        }
     }
 
     override fun init() {
@@ -120,11 +130,11 @@ open class Panel(
         if (opened) {
             if (background) {
                 matrices?.push()
-                TarasandeMain.get().blurSystem.bind(true)
+                TarasandeMain.managerBlur.bind(true)
                 RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else titleBarHeight).toDouble(), -1)
                 MinecraftClient.getInstance().framebuffer.beginWrite(true)
 
-                val accent = TarasandeMain.get().clientValues.accentColor.getColor()
+                val accent = TarasandeMain.instance.clientValues.accentColor.getColor()
                 RenderUtil.fill(matrices, x, y + FontWrapper.fontHeight(), x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).withAlpha(0), 0.3, 0.3, 0.3, 0.7).rgb)
                 matrices?.pop()
             }
@@ -171,7 +181,7 @@ open class Panel(
 
     open fun renderTitleBar(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         matrices?.push()
-        RenderUtil.fill(matrices, x, y, x + panelWidth, y + titleBarHeight, TarasandeMain.get().clientValues.accentColor.getColor().rgb)
+        RenderUtil.fill(matrices, x, y, x + panelWidth, y + titleBarHeight, TarasandeMain.instance.clientValues.accentColor.getColor().rgb)
         when (alignment) {
             Alignment.LEFT -> FontWrapper.textShadow(matrices, title, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2f - FontWrapper.fontHeight() / 2f, -1)
             Alignment.MIDDLE -> FontWrapper.textShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0f - FontWrapper.getWidth(title).toFloat() / 2.0F, y.toFloat() + titleBarHeight / 2f - FontWrapper.fontHeight() / 2f, -1)
@@ -197,7 +207,7 @@ open class Panel(
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                 if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight.toDouble())) opened = !opened
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
-                if (TarasandeMain.get().valueSystem.getValues(this).isNotEmpty()) {
+                if (TarasandeMain.managerValue.getValues(this).isNotEmpty()) {
                     MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Settings of \"" + this.title + "\"", this))
                 }
             }

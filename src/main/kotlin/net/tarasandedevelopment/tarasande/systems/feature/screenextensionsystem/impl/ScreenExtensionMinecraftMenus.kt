@@ -6,7 +6,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ScreenExtension
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.screen.ScreenBetterSlotListClientMenu
 
-class ScreenExtensionMinecraftMenusClientMenu : ScreenExtension(TarasandeMain.get().name.let { it[0].uppercaseChar().toString() + it.substring(1) + " Menu" }, TitleScreen::class.java, GameMenuScreen::class.java) {
+class ScreenExtensionMinecraftMenusClientMenu : ScreenExtension(TarasandeMain.instance.name.let { it[0].uppercaseChar().toString() + it.substring(1) + " Menu" }, TitleScreen::class.java, GameMenuScreen::class.java) {
 
     override fun onClick(current: Screen) {
         MinecraftClient.getInstance().setScreen(ScreenBetterSlotListClientMenu(current))

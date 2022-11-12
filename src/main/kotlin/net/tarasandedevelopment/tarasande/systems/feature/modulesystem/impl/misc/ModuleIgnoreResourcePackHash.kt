@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.misc
 
 import net.minecraft.network.packet.s2c.play.ResourcePackSendS2CPacket
-import net.tarasandedevelopment.events.impl.EventPacket
+import net.tarasandedevelopment.tarasande.events.EventPacket
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 

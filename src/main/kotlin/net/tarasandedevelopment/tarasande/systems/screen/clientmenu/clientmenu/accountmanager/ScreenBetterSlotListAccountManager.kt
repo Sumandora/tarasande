@@ -101,7 +101,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         })
 
 
-        if (TarasandeMain.get().clientValues.clientMenuBackButtons.value) {
+        if (TarasandeMain.instance.clientValues.clientMenuBackButtons.value) {
             addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { RenderSystem.recordRenderCall { close() } })
         }
 

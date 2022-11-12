@@ -33,11 +33,6 @@ public abstract class MixinMinecraftClient {
     @Shadow
     public abstract void setScreen(@Nullable Screen screen);
 
-    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;createUserApiService(Lcom/mojang/authlib/yggdrasil/YggdrasilAuthenticationService;Lnet/minecraft/client/RunArgs;)Lcom/mojang/authlib/minecraft/UserApiService;"))
-    public void preLoadClient(RunArgs args, CallbackInfo ci) {
-        TarasandeMain.Companion.get().onPreLoad();
-    }
-
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setOverlay(Lnet/minecraft/client/gui/screen/Overlay;)V", shift = At.Shift.AFTER))
     public void lateLoadClient(RunArgs args, CallbackInfo ci) {
         TarasandeMain.Companion.get().onLateLoad();

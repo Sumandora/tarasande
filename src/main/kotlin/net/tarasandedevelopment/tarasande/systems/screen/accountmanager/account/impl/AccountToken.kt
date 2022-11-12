@@ -28,7 +28,7 @@ class AccountToken : Account() {
 
     private var service: MinecraftSessionService? = null
 
-    override fun defaultEnvironment(): Environment = TarasandeMain.get().environmentSystem.get(EnvironmentPresetEasyMC::class.java).create()
+    override fun defaultEnvironment(): Environment = TarasandeMain.managerEnvironment.get(EnvironmentPresetEasyMC::class.java).create()
 
     override fun logIn() {
         val http = URL(redeemUrl).openConnection() as HttpURLConnection
@@ -38,7 +38,7 @@ class AccountToken : Account() {
         http.connect()
         http.outputStream.write(JsonObject().also { it.addProperty("token", token) }.toString().toByteArray())
 
-        val json = TarasandeMain.get().gson.fromJson(String(http.inputStream.readAllBytes()), JsonObject::class.java)
+        val json = TarasandeMain.instance.gson.fromJson(String(http.inputStream.readAllBytes()), JsonObject::class.java)
 
         val authenticationService = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment)
 

@@ -30,12 +30,12 @@ class ScreenBetterSlotListProtocolHack : ScreenBetterSlotList(46, 12) {
 
         for (entry in providedList)
             if (entry is ScreenBetterSlotListEntryProtocol)
-                if (TarasandeMain.get().protocolHack.clientsideVersion == entry.protocol.version)
+                if (TarasandeMain.instance.protocolHack.clientsideVersion == entry.protocol.version)
                     selected = providedList.indexOf(entry)
 
         super.init()
 
-        if (TarasandeMain.get().clientValues.clientMenuBackButtons.value) {
+        if (TarasandeMain.instance.clientValues.clientMenuBackButtons.value) {
             addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { RenderSystem.recordRenderCall { close() } })
         }
     }
@@ -53,7 +53,7 @@ class ScreenBetterSlotListProtocolHack : ScreenBetterSlotList(46, 12) {
         }
 
         override fun onSingleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
-            TarasandeMain.get().protocolHack.version.value = this.protocol.version.toDouble()
+            TarasandeMain.instance.protocolHack.version.value = this.protocol.version.toDouble()
             ProtocolHackValues.update(this.protocol)
             super.onSingleClickEntry(mouseX, mouseY, mouseButton)
         }

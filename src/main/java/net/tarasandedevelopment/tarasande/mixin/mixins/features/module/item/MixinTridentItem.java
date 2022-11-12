@@ -16,12 +16,12 @@ public class MixinTridentItem {
 
     @Unique
     private boolean tarasande_waterCheck() {
-        return TarasandeMain.Companion.get().getModuleSystem().get(ModuleTridentBoost.class).allowOutOfWater();
+        return TarasandeMain.Companion.managerModule().get(ModuleTridentBoost.class).allowOutOfWater();
     }
 
     @ModifyArgs(method = "onStoppedUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addVelocity(DDD)V"))
     public void hookTridentBoost(Args args) {
-        final double multiplier = TarasandeMain.Companion.get().getModuleSystem().get(ModuleTridentBoost.class).multiplier();
+        final double multiplier = TarasandeMain.Companion.managerModule().get(ModuleTridentBoost.class).multiplier();
 
         args.set(0, (double) args.get(0) * multiplier);
         args.set(1, (double) args.get(1) * multiplier);

@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.combat
 
-import eventsystem.impl.*
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityStatuses
 import net.minecraft.entity.LivingEntity
@@ -21,14 +20,13 @@ import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.events.impl.*
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.*
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumberRange
-import net.tarasandedevelopment.tarasande.systems.eventsystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.feature.clickmethodsystem.api.ClickSpeedUtil
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
@@ -336,7 +334,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     }
 
                     if (distance > 6.0 * 6.0 && distance <= reach.minValue * reach.minValue) {
-                        (TarasandeMain.get().moduleSystem.get(ModuleClickTP::class.java).pathFinder.findPath(imaginaryPosition, target.pos, maxTeleportTime) ?: continue).forEach {
+                        (TarasandeMain.managerModule.get(ModuleClickTP::class.java).pathFinder.findPath(imaginaryPosition, target.pos, maxTeleportTime) ?: continue).forEach {
                             mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(it.x, it.y, it.z, mc.world?.getBlockState(BlockPos(it.add(0.0, -1.0, 0.0)))?.isAir == false))
                             teleportPath?.add(it)
                             imaginaryPosition = it
@@ -354,7 +352,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     event.dirty = true
                 }
                 if (mc.player?.pos != imaginaryPosition) {
-                    TarasandeMain.get().moduleSystem.get(ModuleClickTP::class.java).pathFinder.findPath(imaginaryPosition, mc.player?.pos!!, maxTeleportTime)?.forEach {
+                    TarasandeMain.managerModule.get(ModuleClickTP::class.java).pathFinder.findPath(imaginaryPosition, mc.player?.pos!!, maxTeleportTime)?.forEach {
                         mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(it.x, it.y, it.z, mc.world?.getBlockState(BlockPos(it.add(0.0, -1.0, 0.0)))?.isAir == false))
                         teleportPath?.add(it)
                     }

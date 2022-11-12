@@ -1,13 +1,13 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.movement
 
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.events.EventAttack
+import net.tarasandedevelopment.tarasande.events.EventAttackEntity
+import net.tarasandedevelopment.tarasande.events.EventKeepSprint
+import net.tarasandedevelopment.tarasande.events.EventVelocity
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventAttack
-import net.tarasandedevelopment.events.impl.EventAttackEntity
-import net.tarasandedevelopment.events.impl.EventKeepSprint
-import net.tarasandedevelopment.events.impl.EventVelocity
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 

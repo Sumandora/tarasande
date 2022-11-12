@@ -5,9 +5,10 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
+import net.tarasandedevelopment.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.events.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.feature.friends.Friends
-import net.tarasandedevelopment.tarasande.feature.tagname.TagName
 import net.tarasandedevelopment.tarasande.protocolhack.TarasandeProtocolHack
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.systems.base.packagesystem.ManagerPackage
@@ -33,60 +34,68 @@ class TarasandeMain {
 
     val name = "tarasande" // "lowercase gang" ~kennytv
 
-    //@formatter:off
-    // Base
-    internal    val packageSystem           by lazy { ManagerPackage() }
-                val valueSystem             by lazy { ManagerValue() }
-    // Screen
-        // Account Manager
-                val accountSystem           by lazy { ManagerAccount() }
-                val azureAppSystem          by lazy { ManagerAzureApp() }
-                val environmentSystem       by lazy { ManagerEnvironment() }
-        // Base
-                val blurSystem              by lazy { ManagerBlur() }
-                val graphSystem             by lazy { ManagerGraph() }
-                val informationSystem       by lazy { ManagerInformation() }
-                val panelSystem             by lazy { ManagerPanel() }
-    // Feature
-                val clickSpeedSystem        by lazy { ManagerClickMethod() }
-                val espSystem               by lazy { ManagerESP() }
-                val moduleSystem            by lazy { ManagerModule() }
-                val screenExtensionSystem   by lazy { ManagerScreenExtension() }
-
-    // Implemented features
-                val protocolHack            by lazy { TarasandeProtocolHack() }
-                val clientValues            by lazy { ClientValues() }
-                val friends                 by lazy { Friends() }
-                val tagName                 by lazy { TagName() }
-                val clientMenuSystem        by lazy { ManagerClientMenu() }
-    //@formatter:on
-
-
     val logger = LoggerFactory.getLogger(name)!!
-
     val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
-
     val rootDirectory = File(System.getProperty("user.home") + File.separator + name)
-
     var proxy: Proxy? = null
 
+    //@formatter:off
+    // Features
+    val protocolHack    by lazy { TarasandeProtocolHack(rootDirectory) }
+    val clientValues    = ClientValues(name, managerPanel)
+    val friends         = Friends()
+    //@formatter:on
+
     companion object {
-        private val instance: TarasandeMain = TarasandeMain()
+        //@formatter:off
 
-        fun get(): TarasandeMain {
-            return instance
-        }
-    }
+        // Manager (no dependencies)
+        val managerValue        = ManagerValue()
+            @JvmName("managerValue") get
+        internal val managerPackage = ManagerPackage()
+            @JvmName("managerPackage") get
+        val managerESP          by lazy { ManagerESP() }
+            @JvmName("managerESP") get
+        val managerClickMethod  = ManagerClickMethod()
+            @JvmName("managerClickMethod") get
+        val managerScreenExtension by lazy { ManagerScreenExtension() }
+            @JvmName("managerScreenExtension") get
+        val managerBlur         by lazy { ManagerBlur() }
+            @JvmName("managerScreenExtension") get
+        val managerClientMenu   by lazy { ManagerClientMenu() }
+            @JvmName("managerClientMenu") get
+        val managerPanel        by lazy { ManagerPanel() }
+            @JvmName("managerPanel") get
 
-    fun onPreLoad() {
+        // Manager (one dependency)
+        val managerInformation  by lazy { ManagerInformation(managerPanel) }
+            @JvmName("managerInformation") get
+        val managerModule       by lazy { ManagerModule(managerPanel) }
+            @JvmName("managerModule") get
+
+        // Manager (two dependencies)
+        val managerGraph        = ManagerGraph(managerInformation, managerPanel)
+            @JvmName("managerGraph") get
+
+        // Account Manager
+        val managerAccount      = ManagerAccount()
+            @JvmName("managerAccount") get
+        val managerEnvironment  = ManagerEnvironment()
+            @JvmName("managerEnvironment") get
+        val managerAzureApp     = ManagerAzureApp()
+            @JvmName("managerAzureApp") get
+
+        //@formatter:on
+
+        val instance by lazy { TarasandeMain() }
+            @JvmName("get") get
     }
 
     fun onLateLoad() {
-
+        EventDispatcher.call(EventSuccessfulLoad())
         ProtocolHackValues.update(ProtocolVersion.getProtocol(protocolHack.version.value.toInt()))
 
-        val accountManager = clientMenuSystem.get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager
-
+        val accountManager = managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager
         if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && accountManager.mainAccount != null) {
             accountManager.logIn(accountManager.accounts[accountManager.mainAccount!!])
 

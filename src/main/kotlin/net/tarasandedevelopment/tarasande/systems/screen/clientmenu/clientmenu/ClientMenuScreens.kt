@@ -15,15 +15,16 @@ import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
+import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.EventPacket
+import net.tarasandedevelopment.tarasande.events.EventRenderMultiplayerEntry
 import net.tarasandedevelopment.tarasande.mixin.accessor.forgefaker.IServerInfo
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueText
-import net.tarasandedevelopment.events.impl.EventPacket
-import net.tarasandedevelopment.events.impl.EventRenderMultiplayerEntry
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.ElementCategory
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.ElementMenuScreen
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.ElementMenuToggle
@@ -62,7 +63,7 @@ class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack", Element
     private val screenBetterSlotListProtocolHack = ScreenBetterSlotListProtocolHack()
 
     init {
-        TarasandeMain.get().valueSystem.getValues(ProtocolHackValues).forEach {
+        TarasandeMain.managerValue.getValues(ProtocolHackValues).forEach {
             it.owner = this
         }
     }
@@ -81,7 +82,7 @@ class ElementMenuScreenPackages : ElementMenuScreen("Packages", ElementCategory.
     }
 
     override fun visible(): Boolean {
-        return TarasandeMain.get().packageSystem.list.isNotEmpty()
+        return TarasandeMain.managerPackage.list.isNotEmpty()
     }
 }
 
@@ -98,7 +99,7 @@ class ElementMenuToggleBungeeHack : ElementMenuToggle("Bungee Hack", ElementCate
     private fun stripID(input: String) = input.replace("-", "")
 
     init {
-        TarasandeMain.get().eventSystem.add(EventPacket::class.java) { event ->
+        EventDispatcher.add(EventPacket::class.java) { event ->
             if (event.type != EventPacket.Type.SEND) return@add
             if (event.packet !is HandshakeC2SPacket) return@add
             if (state) {
@@ -124,8 +125,8 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker", ElementCate
     val useFML1Cache = ValueBoolean(this, "Use FML1 cache", true)
 
     init {
-        TarasandeMain.get().eventSystem.also {
-            it.add(EventPacket::class.java, 1) {
+        EventDispatcher.apply {
+            add(EventPacket::class.java, 1) {
                 if (!state || currentHandler == null) return@add
 
                 if (it.type == EventPacket.Type.SEND) {
@@ -147,7 +148,7 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker", ElementCate
                 }
             }
 
-            it.add(EventRenderMultiplayerEntry::class.java) {
+            add(EventRenderMultiplayerEntry::class.java) {
                 (it.server as IServerInfo).tarasande_getForgePayload()?.also { payload ->
                     val fontHeight = FontWrapper.fontHeight()
 
@@ -155,7 +156,7 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker", ElementCate
                     val text = FontWrapper.trimToWidth("Forge/FML Server", it.x)
                     val endWidth = FontWrapper.getWidth(text) + 4
 
-                    FontWrapper.textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
+                    FontWrapper.textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeMain.instance.clientValues.accentColor.getColor().rgb, offset = 0.5F)
 
                     if (RenderUtil.isHovered(it.mouseX.toDouble(), it.mouseY.toDouble(), it.x - endWidth.toDouble(), it.y + yPos.toDouble(), it.x - 4.0, it.y + yPos + fontHeight.toDouble())) {
                         val tooltip = ArrayList<Text>()
@@ -245,7 +246,7 @@ class ElementMenuToggleQuiltFaker : ElementMenuToggle("Quilt Faker", ElementCate
     private val quiltHandshake = Identifier("registry_sync/handshake")
 
     init {
-        TarasandeMain.get().eventSystem.add(EventPacket::class.java) {
+        EventDispatcher.add(EventPacket::class.java) {
             if (!state) return@add
 
             if (it.type == EventPacket.Type.RECEIVE && it.packet is CustomPayloadS2CPacket) {
@@ -281,7 +282,7 @@ class ElementMenuToggleClientBrandSpoofer : ElementMenuToggle("Client brand spoo
     private val clientBrand = ValueText(this, "Client brand", "vanilla")
 
     init {
-        TarasandeMain.get().eventSystem.add(EventPacket::class.java) {
+        EventDispatcher.add(EventPacket::class.java) {
             if (!state) return@add
 
             if (it.type == EventPacket.Type.SEND && it.packet is CustomPayloadC2SPacket) {

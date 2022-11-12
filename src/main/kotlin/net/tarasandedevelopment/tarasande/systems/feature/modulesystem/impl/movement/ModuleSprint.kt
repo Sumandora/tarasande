@@ -2,10 +2,10 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.mov
 
 import net.minecraft.entity.Entity
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.EventEntityFlag
+import net.tarasandedevelopment.tarasande.events.EventJump
+import net.tarasandedevelopment.tarasande.events.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
-import net.tarasandedevelopment.events.impl.EventEntityFlag
-import net.tarasandedevelopment.events.impl.EventJump
-import net.tarasandedevelopment.events.impl.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MOVEMENT) {
 
     private val allowBackwards = object : ValueBoolean(this, "Allow backwards", false) {
-        override fun isEnabled() = TarasandeMain.get().clientValues.correctMovement.isSelected(0)
+        override fun isEnabled() = TarasandeMain.instance.clientValues.correctMovement.isSelected(0)
     }
 
     init {

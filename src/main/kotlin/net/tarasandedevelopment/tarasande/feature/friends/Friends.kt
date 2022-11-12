@@ -3,11 +3,12 @@ package net.tarasandedevelopment.tarasande.feature.friends
 import com.mojang.authlib.GameProfile
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Formatting
+import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.EventIsEntityAttackable
+import net.tarasandedevelopment.tarasande.events.EventPlayerListName
+import net.tarasandedevelopment.tarasande.events.EventTagName
 import net.tarasandedevelopment.tarasande.feature.friends.panel.PanelElementsFriends
-import net.tarasandedevelopment.events.impl.EventIsEntityAttackable
-import net.tarasandedevelopment.events.impl.EventPlayerListName
-import net.tarasandedevelopment.events.impl.EventTagName
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.misc.ModuleNoFriends
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleNameProtect
 
@@ -16,17 +17,17 @@ class Friends {
     val friends = ArrayList<Pair<GameProfile, String?>>()
 
     init {
-        TarasandeMain.get().eventSystem.also {
-            it.add(EventIsEntityAttackable::class.java) {
-                if (TarasandeMain.get().moduleSystem.get(ModuleNoFriends::class.java).enabled)
+        EventDispatcher.apply {
+            add(EventIsEntityAttackable::class.java) {
+                if (TarasandeMain.managerModule.get(ModuleNoFriends::class.java).enabled)
                     return@add
 
                 if (it.attackable && it.entity is PlayerEntity)
                     if (friends.any { friend -> friend.first == it.entity.gameProfile })
                         it.attackable = false
             }
-            it.add(EventTagName::class.java) {
-                if (TarasandeMain.get().moduleSystem.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
+            add(EventTagName::class.java) {
+                if (TarasandeMain.managerModule.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
                     return@add
 
                 if (it.entity is PlayerEntity) {
@@ -36,8 +37,8 @@ class Friends {
                             it.displayName = it.displayName.copy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
                 }
             }
-            it.add(EventPlayerListName::class.java) {
-                if (TarasandeMain.get().moduleSystem.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
+            add(EventPlayerListName::class.java) {
+                if (TarasandeMain.managerModule.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
                     return@add
 
                 for (friend in friends)
@@ -47,7 +48,7 @@ class Friends {
             }
         }
 
-        TarasandeMain.get().panelSystem.add(PanelElementsFriends(this))
+        TarasandeMain.managerPanel.add(PanelElementsFriends(this))
     }
 
     private fun addFriend(gameProfile: GameProfile, alias: String? = null) {

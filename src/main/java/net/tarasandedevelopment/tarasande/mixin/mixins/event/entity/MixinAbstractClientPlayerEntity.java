@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.event.entity;
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.tarasandedevelopment.events.EventDispatcher;
-import net.tarasandedevelopment.events.impl.EventMovementFovMultiplier;
+import net.tarasandedevelopment.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.events.EventMovementFovMultiplier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

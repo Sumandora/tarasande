@@ -4,8 +4,8 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.Vec3f
+import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.Manager
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
@@ -64,7 +64,7 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
         }
         matrices.push()
         var padding = 2.0
-        for (espElement in TarasandeMain.get().espSystem.list) {
+        for (espElement in TarasandeMain.managerESP.list) {
             if (espElement == this) break
             if (espElement.enabled.value && espElement is ESPElementRotatable && espElement.orientations[espElement.orientation?.settings?.indexOf(espElement.orientation!!.selected[0]) ?: 0] == orientation)
                 padding += espElement.getHeight(entity, sideWidth)

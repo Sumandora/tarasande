@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.systems.screen.accountmanager.environment
 
 import com.mojang.authlib.Environment
-import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.environment.impl.EnvironmentPresetEasyMC
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.environment.impl.EnvironmentPresetMojang
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.environment.impl.EnvironmentPresetShadowGen

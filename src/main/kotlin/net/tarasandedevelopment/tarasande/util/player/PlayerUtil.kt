@@ -18,11 +18,12 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.RaycastContext
 import net.minecraft.world.RaycastContext.FluidHandling
 import net.minecraft.world.RaycastContext.ShapeType
+import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.EventInput
+import net.tarasandedevelopment.tarasande.events.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.mixin.accessor.IGameRenderer
-import net.tarasandedevelopment.events.impl.EventInput
-import net.tarasandedevelopment.events.impl.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.player.ModuleAutoTool
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
@@ -39,7 +40,7 @@ object PlayerUtil {
     val input = KeyboardInput(MinecraftClient.getInstance().options)
 
     init {
-        TarasandeMain.get().eventSystem.add(EventInput::class.java) {
+        EventDispatcher.add(EventInput::class.java) {
             if (it.input == MinecraftClient.getInstance().player?.input)
                 input.tick(it.slowDown, it.slowdownAmount)
         }
@@ -52,7 +53,7 @@ object PlayerUtil {
         if (entity == MinecraftClient.getInstance().player) return false
 
         val eventIsEntityAttackable = EventIsEntityAttackable(entity, entity is LivingEntity)
-        TarasandeMain.get().eventSystem.call(eventIsEntityAttackable)
+        EventDispatcher.call(eventIsEntityAttackable)
         return eventIsEntityAttackable.attackable
     }
 
@@ -179,7 +180,7 @@ object PlayerUtil {
     }
 
     fun getBreakSpeed(blockPos: BlockPos): Pair<Double, Int> {
-        if (!TarasandeMain.get().moduleSystem.get(ModuleAutoTool::class.java).enabled)
+        if (!TarasandeMain.managerBlur.get(ModuleAutoTool::class.java).enabled)
             return MinecraftClient.getInstance().player?.inventory?.selectedSlot!!.let { Pair(getBreakSpeed(blockPos, it), it) }
 
         val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot ?: return Pair(1.0, -1)

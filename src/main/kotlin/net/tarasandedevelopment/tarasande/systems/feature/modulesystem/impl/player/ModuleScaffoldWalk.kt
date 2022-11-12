@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.player
 
-import eventsystem.impl.*
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.util.Hand
@@ -10,9 +9,8 @@ import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.*
 import net.minecraft.util.registry.Registry
 import net.minecraft.util.shape.VoxelShapes
-import net.tarasandedevelopment.events.impl.*
+import net.tarasandedevelopment.tarasande.events.*
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.*
-import net.tarasandedevelopment.tarasande.systems.eventsystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.feature.clickmethodsystem.api.ClickSpeedUtil
 import net.tarasandedevelopment.tarasande.systems.feature.clickmethodsystem.impl.ClickMethodCooldown
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module

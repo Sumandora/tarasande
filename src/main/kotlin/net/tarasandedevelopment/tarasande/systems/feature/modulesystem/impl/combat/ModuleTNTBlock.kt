@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.combat
 
 import net.minecraft.entity.TntEntity
+import net.tarasandedevelopment.tarasande.events.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 

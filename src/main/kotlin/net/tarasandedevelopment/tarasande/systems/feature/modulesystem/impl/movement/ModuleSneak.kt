@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.movement
 
 import net.minecraft.client.MinecraftClient
+import net.tarasandedevelopment.tarasande.events.EventInput
+import net.tarasandedevelopment.tarasande.events.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
-import net.tarasandedevelopment.events.impl.EventInput
-import net.tarasandedevelopment.events.impl.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil

@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.systems.screen.accountmanager.azureapp
 
-import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.azureapp.impl.*
 import java.util.*
 

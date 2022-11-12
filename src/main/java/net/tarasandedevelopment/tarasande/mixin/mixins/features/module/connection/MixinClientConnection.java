@@ -14,7 +14,7 @@ public class MixinClientConnection {
 
     @Inject(method = "exceptionCaught", at = @At("HEAD"), cancellable = true)
     public void printException(ChannelHandlerContext context, Throwable ex, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleAntiPacketKick.class).getEnabled()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleAntiPacketKick.class).getEnabled()) {
             ci.cancel();
         }
     }

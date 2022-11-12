@@ -25,7 +25,7 @@ public abstract class MixinArmorFeatureRenderer<T extends LivingEntity, M extend
 
     @Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
     public void noRender_renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getEntity().getArmor().should() && entity instanceof PlayerEntity) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getEntity().getArmor().should() && entity instanceof PlayerEntity) {
             ci.cancel();
         }
     }

@@ -7,7 +7,7 @@ import com.mojang.authlib.yggdrasil.YggdrasilEnvironment
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.Session
-import net.tarasandedevelopment.tarasande.base.Manager
+import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.ExtraInfo
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.impl.AccountSession
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.impl.AccountToken

@@ -68,7 +68,7 @@ class BlurKawase : Blur("Kawase") {
 
         var totalScale = 1.0f
 
-        for ((index, kawasePass) in kawasePasses[strength]!!.withIndex()) {
+        for ((index, kawasePass) in kawasePasses[strength - 1]!!.withIndex()) {
             var read: Framebuffer? = null
             var write: Framebuffer? = null
 

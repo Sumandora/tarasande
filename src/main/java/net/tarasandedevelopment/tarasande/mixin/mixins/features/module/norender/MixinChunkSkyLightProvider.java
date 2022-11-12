@@ -13,7 +13,7 @@ public class MixinChunkSkyLightProvider {
 
     @Inject(method = "recalculateLevel", at = @At("HEAD"), cancellable = true)
     public void noRender_recalculateLevel(long id, long excludedId, int maxLevel, CallbackInfoReturnable<Integer> cir) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getWorld().getSkylightUpdates().should()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getWorld().getSkylightUpdates().should()) {
             cir.setReturnValue(15);
             cir.cancel();
         }

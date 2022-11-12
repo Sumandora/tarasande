@@ -20,7 +20,7 @@ public class MixinEntityRenderer<T extends Entity> {
 
     @Inject(method = "shouldRender", at = @At("HEAD"))
     public void noRender_shouldRender(T entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Boolean> cir) {
-        final ModuleNoRender moduleNoRender = TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class);
+        final ModuleNoRender moduleNoRender = TarasandeMain.Companion.managerModule().get(ModuleNoRender.class);
         if (!moduleNoRender.getEnabled()) return;
 
         if (moduleNoRender.getEntity().getEntities().getList().contains(entity.getType())) {
@@ -33,7 +33,7 @@ public class MixinEntityRenderer<T extends Entity> {
 
     @Inject(method = "renderLabelIfPresent", at = @At("HEAD"), cancellable = true)
     public void noRender_RenderLabelIfPresent(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        final ModuleNoRender moduleNoRender = TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class);
+        final ModuleNoRender moduleNoRender = TarasandeMain.Companion.managerModule().get(ModuleNoRender.class);
         if (!moduleNoRender.getEnabled()) return;
 
         if (moduleNoRender.getEntity().getEntityNameTags().getList().contains(entity.getType())) {

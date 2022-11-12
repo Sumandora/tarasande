@@ -3,9 +3,10 @@ package net.tarasandedevelopment.tarasande.systems.screen.informationsystem.impl
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
+import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.events.impl.EventDisconnect
-import net.tarasandedevelopment.events.impl.EventPacket
+import net.tarasandedevelopment.tarasande.events.EventDisconnect
+import net.tarasandedevelopment.tarasande.events.EventPacket
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
@@ -16,8 +17,8 @@ class InformationTimers : Information("Badlion", "Timers") {
     val list = CopyOnWriteArrayList<Timer>()
 
     init {
-        TarasandeMain.get().eventSystem.also {
-            it.add(EventPacket::class.java) {
+        EventDispatcher.apply {
+            add(EventPacket::class.java) {
                 if (it.type == EventPacket.Type.RECEIVE)
                     if (it.packet is CustomPayloadS2CPacket) {
                         val packet = it.packet
@@ -30,21 +31,21 @@ class InformationTimers : Information("Badlion", "Timers") {
                                     "REGISTER", "CHANGE_WORLD" -> enabled = true
                                     "REMOVE_ALL_TIMERS" -> list.clear()
                                     "ADD_TIMER" -> {
-                                        val timer = TarasandeMain.get().gson.fromJson(data, Timer::class.java)
+                                        val timer = TarasandeMain.instance.gson.fromJson(data, Timer::class.java)
                                         list.add(timer)
                                         timer.lastUpdated = System.currentTimeMillis()
                                     }
 
-                                    "REMOVE_TIMER" -> list.removeIf { it.id == TarasandeMain.get().gson.fromJson(data, RemoveRequest::class.java).id }
+                                    "REMOVE_TIMER" -> list.removeIf { it.id == TarasandeMain.instance.gson.fromJson(data, RemoveRequest::class.java).id }
                                     "UPDATE_TIMER" -> {
-                                        val newTimer = TarasandeMain.get().gson.fromJson(data, Timer::class.java)
+                                        val newTimer = TarasandeMain.instance.gson.fromJson(data, Timer::class.java)
                                         newTimer.lastUpdated = System.currentTimeMillis()
                                         list.removeIf { it.id == newTimer.id }
                                         list.add(newTimer)
                                     }
 
                                     "SYNC_TIMERS" -> {
-                                        val syncRequest = TarasandeMain.get().gson.fromJson(data, SyncRequest::class.java)
+                                        val syncRequest = TarasandeMain.instance.gson.fromJson(data, SyncRequest::class.java)
                                         val timer = list.firstOrNull { it.id == syncRequest.id }
                                         timer?.currentTime = syncRequest.time
                                         timer?.lastUpdated = System.currentTimeMillis()
@@ -61,7 +62,7 @@ class InformationTimers : Information("Badlion", "Timers") {
                         }
                     }
             }
-            it.add(EventDisconnect::class.java) {
+            add(EventDisconnect::class.java) {
                 list.clear()
                 enabled = false
             }

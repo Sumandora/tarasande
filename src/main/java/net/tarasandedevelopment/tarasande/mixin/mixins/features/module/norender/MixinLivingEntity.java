@@ -14,7 +14,7 @@ public class MixinLivingEntity {
 
     @Inject(method = "spawnItemParticles", at = @At("HEAD"), cancellable = true)
     public void noRender_spawnItemParticles(ItemStack stack, int count, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getOverlay().getEatParticles().should() && stack.isFood()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getOverlay().getEatParticles().should() && stack.isFood()) {
             ci.cancel();
         }
     }

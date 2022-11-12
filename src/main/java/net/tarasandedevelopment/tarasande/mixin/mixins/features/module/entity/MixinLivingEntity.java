@@ -28,7 +28,7 @@ public abstract class MixinLivingEntity extends Entity {
     @ModifyConstant(method = "applyMovementInput", constant = @Constant(doubleValue = 0.2))
     public double hookFastClimb(double original) {
         if (isClimbing()) {
-            ModuleFastClimb moduleFastClimb = TarasandeMain.Companion.get().getModuleSystem().get(ModuleFastClimb.class);
+            ModuleFastClimb moduleFastClimb = TarasandeMain.Companion.managerModule().get(ModuleFastClimb.class);
             if (moduleFastClimb.getEnabled())
                 original *= moduleFastClimb.getMultiplier().getValue();
         }

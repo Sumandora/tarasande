@@ -22,7 +22,7 @@ public abstract class MixinWorld implements WorldAccess {
 
     @Inject(method = "setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;II)Z", at = @At("HEAD"))
     public void hookBlockChangeTracker(BlockPos pos, BlockState state, int flags, int maxUpdateDepth, CallbackInfoReturnable<Boolean> cir) {
-        final ModuleBlockChangeTracker moduleBlockChangeTracker = TarasandeMain.Companion.get().getModuleSystem().get(ModuleBlockChangeTracker.class);
+        final ModuleBlockChangeTracker moduleBlockChangeTracker = TarasandeMain.Companion.managerModule().get(ModuleBlockChangeTracker.class);
 
         if (moduleBlockChangeTracker.getEnabled())
             if (!getBlockState(pos).getBlock().equals(state.getBlock()))
@@ -31,7 +31,7 @@ public abstract class MixinWorld implements WorldAccess {
 
     @Override
     public int getMoonPhase() {
-        final int moonPhase = TarasandeMain.Companion.get().getModuleSystem().get(ModuleWorldTime.class).moonPhase();
+        final int moonPhase = TarasandeMain.Companion.managerModule().get(ModuleWorldTime.class).moonPhase();
         if (moonPhase != 1) {
             return moonPhase;
         }

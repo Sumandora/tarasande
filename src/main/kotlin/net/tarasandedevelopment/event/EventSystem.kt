@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.events
+package net.tarasandedevelopment.event
 
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.function.Consumer

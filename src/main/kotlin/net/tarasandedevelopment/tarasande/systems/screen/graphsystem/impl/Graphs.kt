@@ -1,15 +1,13 @@
 package net.tarasandedevelopment.tarasande.systems.screen.graphsystem.impl
 
-import eventsystem.impl.*
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.PlayerListEntry
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.events.impl.*
-import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.events.*
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.tarasande.systems.eventsystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.Graph
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
@@ -23,7 +21,7 @@ class GraphFPS : Graph("FPS", 200) {
     private val data = ArrayList<Double>()
 
     init {
-        TarasandeMain.get().eventSystem.add(EventPollEvents::class.java) {
+        EventDispatcher.add(EventPollEvents::class.java) {
             data.add(RenderUtil.deltaTime)
         }
     }
@@ -62,8 +60,8 @@ class GraphTPS : Graph("TPS", 200) {
     private val samples = ValueNumber(this, "Samples", 1.0, 2.0, 10.0, 1.0)
 
     init {
-        TarasandeMain.get().eventSystem.also {
-            it.add(EventPacket::class.java) {
+        EventDispatcher.apply {
+            add(EventPacket::class.java) {
                 if (it.type == EventPacket.Type.RECEIVE && it.packet is WorldTimeUpdateS2CPacket) {
                     if (lastWorldTimePacket > 0L) {
                         timeDeltas.add(System.currentTimeMillis() - lastWorldTimePacket)
@@ -75,7 +73,7 @@ class GraphTPS : Graph("TPS", 200) {
                 }
             }
 
-            it.add(EventDisconnect::class.java) {
+            add(EventDisconnect::class.java) {
                 lastWorldTimePacket = 0L
                 timeDeltas.clear()
 
@@ -93,12 +91,12 @@ class GraphCPS : Graph("CPS", 200) {
     private val clicks = ArrayList<Long>()
 
     init {
-        TarasandeMain.get().eventSystem.also {
-            it.add(EventSwing::class.java) {
+        EventDispatcher.apply {
+            add(EventSwing::class.java) {
                 if (clickMode.isSelected(0))
                     clicks.add(System.currentTimeMillis())
             }
-            it.add(EventMouse::class.java) {
+            add(EventMouse::class.java) {
                 if (it.action == GLFW.GLFW_PRESS && clickMode.isSelected(1))
                     clicks.add(System.currentTimeMillis())
             }
@@ -178,7 +176,7 @@ class GraphIncomingTraffic : Graph("Incoming Traffic", 200) {
     private val traffic = CopyOnWriteArrayList<Pair<Long, Int>>()
 
     init {
-        TarasandeMain.get().eventSystem.add(EventPacketTransform::class.java) {
+        EventDispatcher.add(EventPacketTransform::class.java) {
             if (it.type == EventPacketTransform.Type.DECODE) {
                 traffic.add(Pair(System.currentTimeMillis(), it.buf!!.readableBytes()))
             }
@@ -201,7 +199,7 @@ class GraphOutgoingTraffic : Graph("Outgoing Traffic", 200) {
     private val traffic = CopyOnWriteArrayList<Pair<Long, Int>>()
 
     init {
-        TarasandeMain.get().eventSystem.add(EventPacketTransform::class.java) {
+        EventDispatcher.add(EventPacketTransform::class.java) {
             if (it.type == EventPacketTransform.Type.ENCODE) {
                 traffic.add(Pair(System.currentTimeMillis(), it.buf!!.readableBytes()))
             }

@@ -8,7 +8,6 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.util.math.MathHelper
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
@@ -45,7 +44,7 @@ class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.
 
     override fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double, orientation: Orientation) {
         val col = Color(entity.teamColorValue).rgb // ignore alpha
-        val tagName = TarasandeMain.get().tagName.getTagName(entity)?.asOrderedText() ?: return
+        val tagName = entity.displayName.asOrderedText()
         matrices.push()
         val width = MinecraftClient.getInstance().textRenderer!!.getWidth(tagName)
         var factor =
@@ -69,7 +68,7 @@ class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.
     }
 
     override fun getHeight(entity: Entity, sideWidth: Double): Double {
-        return FontWrapper.fontHeight().toDouble() * min(sideWidth / MinecraftClient.getInstance().textRenderer!!.getWidth(TarasandeMain.get().tagName.getTagName(entity)?.asOrderedText() ?: return 0.0), 3.0) * scale.value
+        return FontWrapper.fontHeight().toDouble() * min(sideWidth / MinecraftClient.getInstance().textRenderer!!.getWidth(entity.displayName.asOrderedText()), 3.0) * scale.value
     }
 }
 

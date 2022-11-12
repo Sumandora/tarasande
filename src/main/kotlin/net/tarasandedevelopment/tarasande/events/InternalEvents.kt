@@ -1,8 +1,8 @@
-package net.tarasandedevelopment.events.impl
+package net.tarasandedevelopment.tarasande.events
 
 import net.minecraft.entity.Entity
 import net.minecraft.text.Text
-import net.tarasandedevelopment.events.Event
+import net.tarasandedevelopment.event.Event
 import java.awt.Color
 
 class EventIsEntityAttackable(val entity: Entity, var attackable: Boolean) : Event(false)
@@ -22,3 +22,4 @@ class EventGoalMovement : Event {
 }
 
 class EventEntityColor(val entity: Entity, var color: Color?) : Event(false)
+class EventSuccessfulLoad : Event(false)

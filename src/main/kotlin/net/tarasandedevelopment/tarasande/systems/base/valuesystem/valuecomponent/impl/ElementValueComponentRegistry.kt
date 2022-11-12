@@ -53,7 +53,7 @@ class ElementValueComponentRegistry(value: Value) : ElementValueComponent(value)
                             (FontWrapper.fontHeight() / 2.0F * (index + 0.5F)).toDouble(),
                             width,
                             (FontWrapper.fontHeight() / 2.0F * ((index + 1) + 0.5F)).toDouble()))
-                        TarasandeMain.get().clientValues.accentColor.getColor().rgb
+                        TarasandeMain.instance.clientValues.accentColor.getColor().rgb
                     else
                         -1
                 else
@@ -67,7 +67,7 @@ class ElementValueComponentRegistry(value: Value) : ElementValueComponent(value)
         matrices?.push()
         matrices?.translate(width - 40, FontWrapper.fontHeight() / 2.0F * (valueRegistry.list.size + 0.5F) + 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
-        if (textFieldWidget.isFocused) (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.get().clientValues.accentColor.getColor())
+        if (textFieldWidget.isFocused) (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.instance.clientValues.accentColor.getColor())
         if (!value.isEnabled()) (textFieldWidget as ITextFieldWidget).tarasande_setColor(Color.white.darker().darker())
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
         (textFieldWidget as ITextFieldWidget).tarasande_setColor(null)
@@ -86,7 +86,7 @@ class ElementValueComponentRegistry(value: Value) : ElementValueComponent(value)
                             (FontWrapper.fontHeight() / 2.0F * ((valueRegistry.list.size + 1) + index + 0.5F) + 2.0F).toDouble(),
                             width,
                             (FontWrapper.fontHeight() / 2.0F * ((valueRegistry.list.size + 1) + index + 0.5F) + 2.0F + FontWrapper.fontHeight() / 2.0F).toDouble()))
-                        TarasandeMain.get().clientValues.accentColor.getColor()
+                        TarasandeMain.instance.clientValues.accentColor.getColor()
                     else
                         Color.white
                 else

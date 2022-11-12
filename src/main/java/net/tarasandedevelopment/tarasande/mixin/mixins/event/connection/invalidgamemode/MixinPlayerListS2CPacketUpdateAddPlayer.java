@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event.connection.invalid
 import com.mojang.authlib.GameProfile;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.world.GameMode;
-import net.tarasandedevelopment.events.EventDispatcher;
-import net.tarasandedevelopment.events.impl.EventInvalidGameMode;
+import net.tarasandedevelopment.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.events.EventInvalidGameMode;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;

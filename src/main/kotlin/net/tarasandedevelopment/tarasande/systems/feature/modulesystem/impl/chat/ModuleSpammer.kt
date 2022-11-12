@@ -2,12 +2,12 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.cha
 
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
+import net.tarasandedevelopment.tarasande.events.EventChat
+import net.tarasandedevelopment.tarasande.events.EventPollEvents
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueText
-import net.tarasandedevelopment.events.impl.EventChat
-import net.tarasandedevelopment.events.impl.EventPollEvents
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil

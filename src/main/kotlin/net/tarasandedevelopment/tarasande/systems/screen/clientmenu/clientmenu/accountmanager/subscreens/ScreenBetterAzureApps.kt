@@ -49,8 +49,7 @@ class ScreenBetterAzureApps(prevScreen: Screen?, private val azureApp: AzureAppP
         var x = 5
         var y = 5
 
-        for (environmentPreset in TarasandeMain.get().azureAppSystem.list) {
-
+        for (environmentPreset in TarasandeMain.managerAzureApp.list) {
             this.addDrawableChild(ButtonWidget(x, y, 130, 20, Text.of(environmentPreset.name)) {
                 clientIdTextField?.text = environmentPreset.clientId.toString()
                 scopeTextField?.text = environmentPreset.scope

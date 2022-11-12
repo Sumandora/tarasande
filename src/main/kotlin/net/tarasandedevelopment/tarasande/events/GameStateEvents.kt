@@ -1,9 +1,9 @@
-package net.tarasandedevelopment.events.impl
+package net.tarasandedevelopment.tarasande.events
 
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.item.Item
-import net.tarasandedevelopment.events.Event
+import net.tarasandedevelopment.event.Event
 import java.util.*
 
 class EventTick(val state: State) : Event(false) {

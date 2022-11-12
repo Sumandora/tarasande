@@ -5,11 +5,11 @@ import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
+import net.tarasandedevelopment.tarasande.events.EventRender3D
+import net.tarasandedevelopment.tarasande.events.EventRenderBlockModel
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueRegistry
-import net.tarasandedevelopment.events.impl.EventRender3D
-import net.tarasandedevelopment.events.impl.EventRenderBlockModel
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil

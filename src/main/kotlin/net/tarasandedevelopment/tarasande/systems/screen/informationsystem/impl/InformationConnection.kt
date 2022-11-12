@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.systems.screen.informationsystem.impl
 
 import net.minecraft.client.MinecraftClient
-import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.events.impl.EventConnectServer
+import net.tarasandedevelopment.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.events.EventConnectServer
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 
@@ -20,7 +20,7 @@ class InformationPlayTime : Information("Connection", "Play Time") {
     private var time = 0L
 
     init {
-        TarasandeMain.get().eventSystem.add(EventConnectServer::class.java) {
+        EventDispatcher.add(EventConnectServer::class.java) {
             time = System.currentTimeMillis()
         }
     }

@@ -21,17 +21,17 @@ class PanelWatermark : Panel("Watermark", FontWrapper.getWidth(text) * 5.0, Font
         matrices?.scale(xScale.toFloat(), yScale.toFloat(), 1.0f)
         matrices?.translate(-(x + 1), -(y + titleBarHeight + 1), 0.0)
 
-        FontWrapper.textShadow(matrices, text, (x + 1).toFloat(), (y + titleBarHeight + 1).toFloat(), TarasandeMain.get().clientValues.accentColor.getColor().rgb, offset = 0.5F)
+        FontWrapper.textShadow(matrices, text, (x + 1).toFloat(), (y + titleBarHeight + 1).toFloat(), TarasandeMain.instance.clientValues.accentColor.getColor().rgb, offset = 0.5F)
         matrices?.pop()
 
-        FontWrapper.textShadow(matrices, TarasandeMain.get().name, (x + 1).toFloat(), (y + panelHeight - titleBarHeight).toFloat(), TarasandeMain.get().clientValues.accentColor.getColor().rgb)
+        FontWrapper.textShadow(matrices, TarasandeMain.instance.name, (x + 1).toFloat(), (y + panelHeight - titleBarHeight).toFloat(), TarasandeMain.instance.clientValues.accentColor.getColor().rgb)
 
-        val moduleNameProtect = TarasandeMain.get().moduleSystem.get(ModuleNameProtect::class.java)
+        val moduleNameProtect = TarasandeMain.managerModule.get(ModuleNameProtect::class.java)
 
         if (moduleNameProtect.enabled && moduleNameProtect.hidePersonalName.value)
             return
 
         val userHost = System.getProperty("user.name") + "@" + InetAddress.getLocalHost().hostName
-        FontWrapper.textShadow(matrices, userHost, (x + panelWidth - FontWrapper.getWidth(userHost) - 1).toFloat(), (y + panelHeight - titleBarHeight).toFloat(), TarasandeMain.get().clientValues.accentColor.getColor().rgb)
+        FontWrapper.textShadow(matrices, userHost, (x + panelWidth - FontWrapper.getWidth(userHost) - 1).toFloat(), (y + panelHeight - titleBarHeight).toFloat(), TarasandeMain.instance.clientValues.accentColor.getColor().rgb)
     }
 }

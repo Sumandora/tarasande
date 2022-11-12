@@ -1,15 +1,15 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render
 
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.EventTextVisit
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueText
-import net.tarasandedevelopment.events.impl.EventTextVisit
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 
 class ModuleNameProtect : Module("Name protect", "Hides your in-game name", ModuleCategory.RENDER) {
 
-    private val protectedName = ValueText(this, "Protected name", TarasandeMain.get().name)
+    private val protectedName = ValueText(this, "Protected name", TarasandeMain.instance.name)
     val hidePersonalName = ValueBoolean(this, "Hide personal name", true)
 
     private val border = "( |[^a-z]|\\b)"
@@ -40,7 +40,7 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
         registerEvent(EventTextVisit::class.java) { event ->
             event.string = replaceName(event.string, mc.session.profile.name, protectedName.value)
 
-            for (pair in TarasandeMain.get().friends.friends) {
+            for (pair in TarasandeMain.instance.friends.friends) {
                 event.string = replaceName(event.string, pair.first.name, pair.second ?: continue)
             }
         }

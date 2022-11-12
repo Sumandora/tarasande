@@ -5,14 +5,14 @@ import net.minecraft.entity.EntityType
 import net.minecraft.particle.ParticleType
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.util.registry.Registry
+import net.tarasandedevelopment.tarasande.events.EventChunkOcclusion
+import net.tarasandedevelopment.tarasande.events.EventFog
+import net.tarasandedevelopment.tarasande.events.EventParticle
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueButton
-import net.tarasandedevelopment.events.impl.EventChunkOcclusion
-import net.tarasandedevelopment.events.impl.EventFog
-import net.tarasandedevelopment.events.impl.EventParticle
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 

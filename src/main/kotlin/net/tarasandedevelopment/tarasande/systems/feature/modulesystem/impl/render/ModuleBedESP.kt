@@ -6,11 +6,11 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.EventRender3D
+import net.tarasandedevelopment.tarasande.events.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.events.impl.EventRender3D
-import net.tarasandedevelopment.events.impl.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
@@ -57,7 +57,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
     internal var bedDatas = ArrayList<BedData>()
 
     init {
-        TarasandeMain.get().informationSystem.add(object : Information("Bed ESP", "Beds") {
+        TarasandeMain.managerInformation.add(object : Information("Bed ESP", "Beds") {
             override fun getMessage(): String? {
                 if (enabled) if (calculateBestWay.value) if (bedDatas.isNotEmpty()) {
                     return "\n" + bedDatas.sortedBy {
