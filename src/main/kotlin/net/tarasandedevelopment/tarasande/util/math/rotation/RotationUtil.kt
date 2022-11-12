@@ -1,13 +1,15 @@
 package net.tarasandedevelopment.tarasande.util.math.rotation
 
+import eventsystem.impl.*
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.events.impl.*
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.systems.eventsystem.impl.*
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
@@ -28,7 +30,7 @@ object RotationUtil {
     private var cachedRotation: Rotation? = null
 
     init {
-        TarasandeMain.get().managerEvent.also {
+        TarasandeMain.get().eventSystem.also {
             it.add(EventJump::class.java, 9999) {
                 if (it.state != EventJump.State.PRE) return@add
                 if (goalMovementYaw != null) it.yaw = goalMovementYaw!!
@@ -148,7 +150,7 @@ object RotationUtil {
     fun updateFakeRotation(fake: Boolean) {
         if (MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().interactionManager != null) {
             val eventPollEvents = EventPollEvents(Rotation(MinecraftClient.getInstance().player!!), fake)
-            TarasandeMain.get().managerEvent.call(eventPollEvents)
+            TarasandeMain.get().eventSystem.call(eventPollEvents)
             if (eventPollEvents.dirty) {
                 fakeRotation = eventPollEvents.rotation
                 lastMinRotateToOriginSpeed = eventPollEvents.minRotateToOriginSpeed
@@ -177,7 +179,7 @@ object RotationUtil {
             }
 
             val eventGoalMovement = EventGoalMovement(fakeRotation?.yaw ?: MinecraftClient.getInstance().player!!.yaw)
-            TarasandeMain.get().managerEvent.call(eventGoalMovement)
+            TarasandeMain.get().eventSystem.call(eventGoalMovement)
             goalMovementYaw = if (eventGoalMovement.dirty) eventGoalMovement.yaw
             else null
         }

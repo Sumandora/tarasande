@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event.connection.invalid
 
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.world.GameMode;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventInvalidGameMode;
+import net.tarasandedevelopment.events.EventDispatcher;
+import net.tarasandedevelopment.events.impl.EventInvalidGameMode;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +27,7 @@ public class MixinPlayerListS2CPacketUpdateGameMode {
     public GameMode hookEventInvalidGameMode(int id) {
         if (GameMode.byId(id, null) == null) {
             EventInvalidGameMode eventInvalidGameMode = new EventInvalidGameMode(tarasande_trackedUUID);
-            TarasandeMain.Companion.get().getManagerEvent().call(eventInvalidGameMode);
+            EventDispatcher.INSTANCE.call(eventInvalidGameMode);
         }
         return GameMode.byId(id);
     }

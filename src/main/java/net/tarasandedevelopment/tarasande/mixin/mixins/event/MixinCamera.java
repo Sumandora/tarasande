@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.BlockView;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventCameraOverride;
+import net.tarasandedevelopment.events.EventDispatcher;
+import net.tarasandedevelopment.events.impl.EventCameraOverride;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,6 +15,6 @@ public class MixinCamera {
 
     @Inject(method = "update", at = @At("TAIL"))
     public void hookEventCameraOverride(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventCameraOverride((Camera) (Object) this));
+        EventDispatcher.INSTANCE.call(new EventCameraOverride((Camera) (Object) this));
     }
 }

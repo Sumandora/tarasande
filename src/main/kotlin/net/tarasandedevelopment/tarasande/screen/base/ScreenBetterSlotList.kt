@@ -1,13 +1,12 @@
 package net.tarasandedevelopment.tarasande.screen.base
 
-import com.google.common.annotations.Beta
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget
 import net.minecraft.client.gui.widget.EntryListWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
 open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, var entryWidth: Int, private val entryHeight: Int) : ScreenBetter(null) {
 
@@ -22,7 +21,6 @@ open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, v
         this.listProvider = provider
     }
 
-    @Beta
     fun renderTitle(matrices: MatrixStack?, title: String) {
         FontWrapper.textShadow(matrices, title, width / 2F, top / 2 - (FontWrapper.fontHeight() / 2F), scale = 2F, centered = true)
     }

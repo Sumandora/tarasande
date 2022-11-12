@@ -2,9 +2,9 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event;
 
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventHasForwardMovement;
-import net.tarasandedevelopment.tarasande.event.EventInput;
+import net.tarasandedevelopment.events.EventDispatcher;
+import net.tarasandedevelopment.events.impl.EventHasForwardMovement;
+import net.tarasandedevelopment.events.impl.EventInput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,7 +16,7 @@ public class MixinKeyboardInput extends Input {
     @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/KeyboardInput;sneaking:Z", shift = At.Shift.AFTER), cancellable = true)
     public void hookEventInput(boolean slowDown, float f, CallbackInfo ci) {
         EventInput eventInput = new EventInput(this, this.movementForward, this.movementSideways, slowDown, f);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventInput);
+        EventDispatcher.INSTANCE.call(eventInput);
 
         this.pressingForward = this.pressingBack = this.pressingLeft = this.pressingRight = false;
         this.movementForward = this.movementSideways = 0.0f;
@@ -43,7 +43,7 @@ public class MixinKeyboardInput extends Input {
     @Override
     public boolean hasForwardMovement() {
         EventHasForwardMovement eventHasForwardMovement = new EventHasForwardMovement(super.hasForwardMovement());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventHasForwardMovement);
+        EventDispatcher.INSTANCE.call(eventHasForwardMovement);
         return eventHasForwardMovement.getHasForwardMovement();
     }
 }

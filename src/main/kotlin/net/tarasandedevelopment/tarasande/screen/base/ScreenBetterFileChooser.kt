@@ -6,10 +6,11 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.screen.cheatmenu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.panelsystem.Panel
-import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.Panel
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanel
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import java.awt.Color
 import java.io.File
 import java.util.function.Consumer

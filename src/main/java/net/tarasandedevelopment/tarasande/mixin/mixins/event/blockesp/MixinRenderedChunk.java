@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event.blockesp;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventRenderBlockModel;
+import net.tarasandedevelopment.events.EventDispatcher;
+import net.tarasandedevelopment.events.impl.EventRenderBlockModel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,7 +17,7 @@ public class MixinRenderedChunk {
     public void hookEventRenderBlockModel(BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
         BlockState state = cir.getReturnValue();
         EventRenderBlockModel eventRenderBlockModel = new EventRenderBlockModel(state, pos);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventRenderBlockModel);
+        EventDispatcher.INSTANCE.call(eventRenderBlockModel);
         if (eventRenderBlockModel.getCancelled())
             cir.setReturnValue(Blocks.AIR.getDefaultState());
     }

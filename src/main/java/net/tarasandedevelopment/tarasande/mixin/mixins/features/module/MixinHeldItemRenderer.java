@@ -5,7 +5,7 @@ import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.features.module.render.ModuleNoSwing;
+import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleNoSwing;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,7 +17,7 @@ public class MixinHeldItemRenderer {
 
     @Redirect(method = "updateHeldItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;areEqual(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z"))
     public boolean hookNoSwing(ItemStack left, ItemStack right) {
-        ModuleNoSwing moduleNoSwing = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSwing.class);
+        ModuleNoSwing moduleNoSwing = TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoSwing.class);
         if (moduleNoSwing.getEnabled() && moduleNoSwing.getDisableEquipProgress().getValue()) {
             if (left.isEmpty() && right.isEmpty()) {
                 return true;
@@ -32,7 +32,7 @@ public class MixinHeldItemRenderer {
 
     @Redirect(method = "updateHeldItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getAttackCooldownProgress(F)F"))
     public float hookNoSwing(ClientPlayerEntity instance, float v) {
-        ModuleNoSwing moduleNoSwing = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSwing.class);
+        ModuleNoSwing moduleNoSwing = TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoSwing.class);
         if (moduleNoSwing.getEnabled() && moduleNoSwing.getDisableEquipProgress().getValue()) {
             return 1.0f;
         }
@@ -41,7 +41,7 @@ public class MixinHeldItemRenderer {
 
     @Inject(method = "resetEquipProgress", at = @At("HEAD"), cancellable = true)
     public void hookNoSwing(Hand hand, CallbackInfo ci) {
-        ModuleNoSwing moduleNoSwing = TarasandeMain.Companion.get().getManagerModule().get(ModuleNoSwing.class);
+        ModuleNoSwing moduleNoSwing = TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoSwing.class);
         if (moduleNoSwing.getEnabled() && moduleNoSwing.getDisableEquipProgress().getValue()) {
             ci.cancel();
         }

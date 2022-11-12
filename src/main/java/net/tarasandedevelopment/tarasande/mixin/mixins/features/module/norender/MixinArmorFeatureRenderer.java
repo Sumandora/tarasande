@@ -10,7 +10,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.features.module.render.ModuleNoRender;
+import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleNoRender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,7 +25,7 @@ public abstract class MixinArmorFeatureRenderer<T extends LivingEntity, M extend
 
     @Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
     public void noRender_renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoRender.class).getEntity().getArmor().should() && entity instanceof PlayerEntity) {
+        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getEntity().getArmor().should() && entity instanceof PlayerEntity) {
             ci.cancel();
         }
     }

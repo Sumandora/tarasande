@@ -7,9 +7,10 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.tarasandedevelopment.events.EventDispatcher;
+import net.tarasandedevelopment.events.impl.EventParticle;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventParticle;
-import net.tarasandedevelopment.tarasande.features.module.render.ModuleNoRender;
+import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleNoRender;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,14 +28,14 @@ public abstract class MixinParticleManager {
 
     @Inject(method = "addBlockBreakParticles", at = @At("HEAD"), cancellable = true)
     public void noRender_addBlockBreakParticles(BlockPos pos, BlockState state, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoRender.class).getWorld().getBlockBreakParticles().should()) {
+        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getWorld().getBlockBreakParticles().should()) {
             ci.cancel();
         }
     }
 
     @Inject(method = "addBlockBreakingParticles", at = @At("HEAD"), cancellable = true)
     public void noRender_addBlockBreakingParticles(BlockPos pos, Direction direction, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoRender.class).getWorld().getBlockBreakParticles().should()) {
+        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getWorld().getBlockBreakParticles().should()) {
             ci.cancel();
         }
     }
@@ -42,7 +43,7 @@ public abstract class MixinParticleManager {
     @Inject(method = "addParticle(Lnet/minecraft/particle/ParticleEffect;DDDDDD)Lnet/minecraft/client/particle/Particle;", at = @At("HEAD"), cancellable = true)
     public void noRender_addParticle(ParticleEffect parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ, CallbackInfoReturnable<Particle> cir) {
         final EventParticle eventParticle = new EventParticle(parameters);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventParticle);
+        EventDispatcher.INSTANCE.call(eventParticle);
 
         if (eventParticle.getCancelled()) {
             if (parameters.getType() == ParticleTypes.FLASH) {

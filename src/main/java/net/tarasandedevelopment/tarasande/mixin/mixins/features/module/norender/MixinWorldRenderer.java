@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.features.module.norender
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.WorldRenderer;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.features.module.render.ModuleNoRender;
+import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleNoRender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,7 +14,7 @@ public class MixinWorldRenderer {
 
     @Inject(method = "renderWeather", at = @At("HEAD"), cancellable = true)
     public void noRender_renderWeather(LightmapTextureManager manager, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoRender.class).getWorld().getWeather().should()) {
+        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleNoRender.class).getWorld().getWeather().should()) {
             ci.cancel();
         }
     }

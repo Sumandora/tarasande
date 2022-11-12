@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.event;
 
 import net.minecraft.client.Mouse;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventMouse;
-import net.tarasandedevelopment.tarasande.event.EventMouseDelta;
+import net.tarasandedevelopment.events.EventDispatcher;
+import net.tarasandedevelopment.events.impl.EventMouse;
+import net.tarasandedevelopment.events.impl.EventMouseDelta;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,7 +22,7 @@ public class MixinMouse {
     @Inject(method = "onMouseButton", at = @At("HEAD"), cancellable = true)
     public void hookEventMouse(long window, int button, int action, int mods, CallbackInfo ci) {
         EventMouse eventMouse = new EventMouse(button, action);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventMouse);
+        EventDispatcher.INSTANCE.call(eventMouse);
         if (eventMouse.getCancelled())
             ci.cancel();
     }
@@ -30,7 +30,7 @@ public class MixinMouse {
     @Inject(method = "updateMouse", at = @At("HEAD"))
     public void hookEventMouseDelta(CallbackInfo ci) {
         EventMouseDelta eventMouseDelta = new EventMouseDelta(cursorDeltaX, cursorDeltaY);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventMouseDelta);
+        EventDispatcher.INSTANCE.call(eventMouseDelta);
         cursorDeltaX = eventMouseDelta.getDeltaX();
         cursorDeltaY = eventMouseDelta.getDeltaY();
     }

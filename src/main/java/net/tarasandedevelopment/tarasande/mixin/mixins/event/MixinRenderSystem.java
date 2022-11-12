@@ -3,9 +3,9 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventFog;
-import net.tarasandedevelopment.tarasande.event.EventScreenInput;
+import net.tarasandedevelopment.events.EventDispatcher;
+import net.tarasandedevelopment.events.impl.EventFog;
+import net.tarasandedevelopment.events.impl.EventScreenInput;
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,21 +33,21 @@ public class MixinRenderSystem {
     @Redirect(method = "_setShaderFogStart", at = @At(value = "FIELD", target = "Lcom/mojang/blaze3d/systems/RenderSystem;shaderFogStart:F"))
     private static void hookEventFogStart(float value) {
         EventFog eventFog = new EventFog(EventFog.State.FOG_START, new float[]{value});
-        TarasandeMain.Companion.get().getManagerEvent().call(eventFog);
+        EventDispatcher.INSTANCE.call(eventFog);
         shaderFogStart = eventFog.getValues()[0];
     }
 
     @Redirect(method = "_setShaderFogEnd", at = @At(value = "FIELD", target = "Lcom/mojang/blaze3d/systems/RenderSystem;shaderFogEnd:F"))
     private static void hookEventFogEnd(float value) {
         EventFog eventFog = new EventFog(EventFog.State.FOG_END, new float[]{value});
-        TarasandeMain.Companion.get().getManagerEvent().call(eventFog);
+        EventDispatcher.INSTANCE.call(eventFog);
         shaderFogEnd = eventFog.getValues()[0];
     }
 
     @Inject(method = "_setShaderFogColor", at = @At("TAIL"))
     private static void hookEventFogColor(float f, float g, float h, float i, CallbackInfo ci) {
         EventFog eventFog = new EventFog(EventFog.State.FOG_COLOR, new float[]{f, g, h, i});
-        TarasandeMain.Companion.get().getManagerEvent().call(eventFog);
+        EventDispatcher.INSTANCE.call(eventFog);
         shaderFogColor = eventFog.getValues();
     }
 
@@ -55,7 +55,7 @@ public class MixinRenderSystem {
     private static void hookEventScreenInputAndPollEvents(long window, CallbackInfo ci) {
         if (VersionList.isNewerOrEqualTo(ProtocolVersion.v1_13)) {
             EventScreenInput eventScreenInput = new EventScreenInput(false);
-            TarasandeMain.Companion.get().getManagerEvent().call(eventScreenInput);
+            EventDispatcher.INSTANCE.call(eventScreenInput);
         }
 
         RotationUtil.INSTANCE.updateFakeRotation(false);

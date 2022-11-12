@@ -4,7 +4,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.base.file.File
-import net.tarasandedevelopment.tarasande.value.Value
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
 import java.util.function.Function
 
 open class FileValues(name: String, private val condition: Function<Value, Boolean>) : File(name) {

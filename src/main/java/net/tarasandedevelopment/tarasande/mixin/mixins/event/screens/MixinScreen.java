@@ -5,9 +5,9 @@ import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventChildren;
-import net.tarasandedevelopment.tarasande.event.EventScreenRender;
+import net.tarasandedevelopment.events.EventDispatcher;
+import net.tarasandedevelopment.events.impl.EventChildren;
+import net.tarasandedevelopment.events.impl.EventScreenRender;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,13 +27,13 @@ public abstract class MixinScreen {
 
     @Inject(method = "render", at = @At("HEAD"))
     public void hookEventScreenRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventScreenRender(matrices, (Screen) (Object) this, mouseX, mouseY));
+        EventDispatcher.INSTANCE.call(new EventScreenRender(matrices, (Screen) (Object) this, mouseX, mouseY));
     }
 
     @Inject(method = "init(Lnet/minecraft/client/MinecraftClient;II)V", at = @At("RETURN"))
     public void hookEventChildren(MinecraftClient client, int width, int height, CallbackInfo ci) {
         final EventChildren eventChildren = new EventChildren((Screen) (Object) this);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventChildren);
+        EventDispatcher.INSTANCE.call(eventChildren);
 
         for (Element element : eventChildren.get())
             this.addDrawableChild((Element & Drawable) element);

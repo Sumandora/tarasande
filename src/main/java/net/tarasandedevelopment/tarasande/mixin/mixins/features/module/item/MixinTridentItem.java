@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.features.module.item;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.TridentItem;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.features.module.movement.ModuleTridentBoost;
+import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.movement.ModuleTridentBoost;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,16 +16,16 @@ public class MixinTridentItem {
 
     @Unique
     private boolean tarasande_waterCheck() {
-        return TarasandeMain.Companion.get().getManagerModule().get(ModuleTridentBoost.class).allowOutOfWater();
+        return TarasandeMain.Companion.get().getModuleSystem().get(ModuleTridentBoost.class).allowOutOfWater();
     }
 
     @ModifyArgs(method = "onStoppedUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addVelocity(DDD)V"))
     public void hookTridentBoost(Args args) {
-        final double multiplier = TarasandeMain.Companion.get().getManagerModule().get(ModuleTridentBoost.class).multiplier();
+        final double multiplier = TarasandeMain.Companion.get().getModuleSystem().get(ModuleTridentBoost.class).multiplier();
 
-        args.set(0, (double) args.get(0) + multiplier);
-        args.set(1, (double) args.get(1) + multiplier);
-        args.set(2, (double) args.get(2) + multiplier);
+        args.set(0, (double) args.get(0) * multiplier);
+        args.set(1, (double) args.get(1) * multiplier);
+        args.set(2, (double) args.get(2) * multiplier);
     }
 
     @Redirect(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isTouchingWaterOrRain()Z"))

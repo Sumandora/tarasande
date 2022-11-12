@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.event.connection;
 
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventConnectServer;
+import net.tarasandedevelopment.events.EventDispatcher;
+import net.tarasandedevelopment.events.impl.EventConnectServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,6 +18,6 @@ public class MixinConnectScreenSubConnect {
             shift = At.Shift.AFTER),
             locals = LocalCapture.CAPTURE_FAILHARD)
     public void hookEventConnectServer(CallbackInfo ci, InetSocketAddress inetSocketAddress) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventConnectServer(inetSocketAddress));
+        EventDispatcher.INSTANCE.call(new EventConnectServer(inetSocketAddress));
     }
 }

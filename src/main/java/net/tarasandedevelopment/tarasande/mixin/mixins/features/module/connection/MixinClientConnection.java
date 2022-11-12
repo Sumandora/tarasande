@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.features.module.connecti
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.network.ClientConnection;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.features.module.misc.ModuleAntiPacketKick;
+import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.misc.ModuleAntiPacketKick;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,7 +14,7 @@ public class MixinClientConnection {
 
     @Inject(method = "exceptionCaught", at = @At("HEAD"), cancellable = true)
     public void printException(ChannelHandlerContext context, Throwable ex, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleAntiPacketKick.class).getEnabled()) {
+        if (TarasandeMain.Companion.get().getModuleSystem().get(ModuleAntiPacketKick.class).getEnabled()) {
             ci.cancel();
         }
     }

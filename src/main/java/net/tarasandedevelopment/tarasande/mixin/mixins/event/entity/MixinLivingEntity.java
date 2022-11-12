@@ -6,9 +6,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventJump;
-import net.tarasandedevelopment.tarasande.event.EventSwing;
+import net.tarasandedevelopment.events.EventDispatcher;
+import net.tarasandedevelopment.events.impl.EventJump;
+import net.tarasandedevelopment.events.impl.EventSwing;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -33,7 +33,7 @@ public abstract class MixinLivingEntity extends Entity {
     public void hookEventJumpPre(CallbackInfo ci) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             EventJump eventJump = new EventJump(tarasande_originalYaw = getYaw(), EventJump.State.PRE);
-            TarasandeMain.Companion.get().getManagerEvent().call(eventJump);
+            EventDispatcher.INSTANCE.call(eventJump);
             setYaw(eventJump.getYaw());
             if (eventJump.getCancelled())
                 ci.cancel();
@@ -44,7 +44,7 @@ public abstract class MixinLivingEntity extends Entity {
     public void hookEventJumpPost(CallbackInfo ci) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             EventJump eventJump = new EventJump(tarasande_originalYaw, EventJump.State.POST);
-            TarasandeMain.Companion.get().getManagerEvent().call(eventJump);
+            EventDispatcher.INSTANCE.call(eventJump);
             setYaw(eventJump.getYaw());
         }
     }
@@ -53,7 +53,7 @@ public abstract class MixinLivingEntity extends Entity {
     public void hookEventSwing(Hand hand, CallbackInfo ci) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             EventSwing eventSwing = new EventSwing(hand);
-            TarasandeMain.Companion.get().getManagerEvent().call(eventSwing);
+            EventDispatcher.INSTANCE.call(eventSwing);
             if (eventSwing.getCancelled())
                 ci.cancel();
         }

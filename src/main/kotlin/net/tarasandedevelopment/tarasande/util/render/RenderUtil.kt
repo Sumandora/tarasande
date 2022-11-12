@@ -14,10 +14,10 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.Vector4f
 import net.minecraft.util.shape.VoxelShape
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.extension.unaryMinus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
-import net.tarasandedevelopment.tarasande.value.impl.ValueBind
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
