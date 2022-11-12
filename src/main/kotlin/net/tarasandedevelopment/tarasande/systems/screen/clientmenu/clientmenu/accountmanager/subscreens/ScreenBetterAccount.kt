@@ -13,6 +13,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.ExtraInfo
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.TextFieldInfo
+import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.ElementMenuScreenAccountManager
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
 import java.util.function.Consumer
@@ -25,7 +26,7 @@ class ScreenBetterAccount(
 
     private val textFields: ArrayList<TextFieldWidget> = ArrayList()
 
-    private var implementationClass: Class<out Account> = TarasandeMain.managerAccount.list[0]
+    private var implementationClass: Class<out Account> = TarasandeMain.managerClientMenu().get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager.managerAccount.list.first()
     private var accountImplementation: Account? = null
 
     private var submitButton: ButtonWidget? = null
@@ -49,7 +50,7 @@ class ScreenBetterAccount(
                 20,
                 Text.of((implementationClass.annotations[0] as AccountInfo).name)
             ) { button ->
-                implementationClass = TarasandeMain.managerAccount.let { it.list[(it.list.indexOf(implementationClass) + 1) % it.list.size ] }
+                implementationClass = TarasandeMain.managerClientMenu().get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager.managerAccount.let { it.list[(it.list.indexOf(implementationClass) + 1) % it.list.size ] }
                 accountImplementation = implementationClass.getDeclaredConstructor().newInstance()
                 init()
                 button.message = Text.of(implementationClass.name)

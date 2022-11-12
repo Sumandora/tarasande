@@ -64,7 +64,7 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
         }
         matrices.push()
         var padding = 2.0
-        for (espElement in TarasandeMain.managerESP.list) {
+        for (espElement in TarasandeMain.managerESP().list) {
             if (espElement == this) break
             if (espElement.enabled.value && espElement is ESPElementRotatable && espElement.orientations[espElement.orientation?.settings?.indexOf(espElement.orientation!!.selected[0]) ?: 0] == orientation)
                 padding += espElement.getHeight(entity, sideWidth)

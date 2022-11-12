@@ -10,6 +10,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.azureapp.AzureAppPreset
+import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.ElementMenuScreenAccountManager
 import java.util.*
 import java.util.function.Consumer
 
@@ -49,7 +50,7 @@ class ScreenBetterAzureApps(prevScreen: Screen?, private val azureApp: AzureAppP
         var x = 5
         var y = 5
 
-        for (environmentPreset in TarasandeMain.managerAzureApp.list) {
+        for (environmentPreset in TarasandeMain.managerClientMenu().get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager.managerAzureApp.list) {
             this.addDrawableChild(ButtonWidget(x, y, 130, 20, Text.of(environmentPreset.name)) {
                 clientIdTextField?.text = environmentPreset.clientId.toString()
                 scopeTextField?.text = environmentPreset.scope

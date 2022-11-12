@@ -27,7 +27,7 @@ class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PL
         movementKeys.add(mc.options.attackKey)
         movementKeys.add(mc.options.useKey)
 
-        TarasandeMain.managerInformation.add(object : Information("Anti AFK", "Jump countdown") {
+        TarasandeMain.managerInformation().add(object : Information("Anti AFK", "Jump countdown") {
             override fun getMessage() =
                 if (enabled)
                     ((delay.value * 1000L - (System.currentTimeMillis() - timer.time)) / 1000.0).roundToInt().toString()

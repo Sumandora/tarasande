@@ -96,7 +96,7 @@ open class Panel(
             EventDispatcher.apply {
                 add(EventRender2D::class.java) {
                     if (isVisible() && opened)
-                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.managerPanel.screenCheatMenu) {
+                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.managerPanel().screenCheatMenu) {
                             it.matrices.push()
                             render(it.matrices, -1, -1, MinecraftClient.getInstance().tickDelta)
                             it.matrices.pop()
@@ -105,7 +105,7 @@ open class Panel(
 
                 add(EventTick::class.java) {
                     if (it.state == EventTick.State.PRE)
-                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.managerPanel.screenCheatMenu)
+                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.managerPanel().screenCheatMenu)
                             tick()
                 }
             }
@@ -130,7 +130,7 @@ open class Panel(
         if (opened) {
             if (background) {
                 matrices?.push()
-                TarasandeMain.managerBlur.bind(true)
+                TarasandeMain.managerBlur().bind(true)
                 RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else titleBarHeight).toDouble(), -1)
                 MinecraftClient.getInstance().framebuffer.beginWrite(true)
 
@@ -207,7 +207,7 @@ open class Panel(
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                 if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight.toDouble())) opened = !opened
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
-                if (TarasandeMain.managerValue.getValues(this).isNotEmpty()) {
+                if (TarasandeMain.managerValue().getValues(this).isNotEmpty()) {
                     MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Settings of \"" + this.title + "\"", this))
                 }
             }

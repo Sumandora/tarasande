@@ -11,7 +11,7 @@ open class FileValues(name: String, private val condition: Function<Value, Boole
 
     override fun save(): JsonElement {
         val values = JsonObject()
-        for (value in TarasandeMain.managerValue.list) {
+        for (value in TarasandeMain.managerValue().list) {
             if (!condition.apply(value))
                 continue
 
@@ -35,7 +35,7 @@ open class FileValues(name: String, private val condition: Function<Value, Boole
 
     override fun load(jsonElement: JsonElement) {
         val jsonObject = jsonElement as JsonObject
-        for (value in TarasandeMain.managerValue.list) {
+        for (value in TarasandeMain.managerValue().list) {
             if (!condition.apply(value))
                 continue
 

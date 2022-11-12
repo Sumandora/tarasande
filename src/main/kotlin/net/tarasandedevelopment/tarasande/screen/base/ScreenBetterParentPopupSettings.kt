@@ -33,7 +33,7 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
         this.addDrawableChild(ClickableWidgetPanel(object : PanelElements<ElementValueComponent>(this.titleName, 300.0, 0.0) {
 
             init {
-                for (it in TarasandeMain.managerValue.getValues(owner))
+                for (it in TarasandeMain.managerValue().getValues(owner))
                     elementList.add(it.createValueComponent())
             }
 

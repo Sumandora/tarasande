@@ -38,7 +38,7 @@ class Fml1NetClientHandler(val connection: ClientConnection) : IForgeNetClientHa
         this.sendCustomPayload("minecraft:register", newPacket)
         this.sendClientHello(version)
 
-        val forgeFakerElement = TarasandeMain.managerClientMenu.get(ElementMenuToggleForgeFaker::class.java)
+        val forgeFakerElement = TarasandeMain.managerClientMenu().get(ElementMenuToggleForgeFaker::class.java)
         if (forgeFakerElement.useFML1Cache.value) {
             forgeFakerElement.forgeInfoTracker[this.connection.address]?.also {
                 this.sendModList(it.installedMods())

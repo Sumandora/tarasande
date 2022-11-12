@@ -15,7 +15,7 @@ import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
 class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, -1, FontWrapper.fontHeight() * 2 + 5) {
 
-    private val list = TarasandeMain.managerPackage.list.map { p -> ScreenBetterSlotListEntryPackage(p) }
+    private val list = TarasandeMain.managerPackage().list.map { p -> ScreenBetterSlotListEntryPackage(p) }
 
     init {
         this.provideElements(object : ScreenBetterSlotListWidget.ListProvider {
@@ -54,7 +54,7 @@ class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, -1, FontWrapper.fo
         override fun onDoubleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
             super.onDoubleClickEntry(mouseX, mouseY, mouseButton)
 
-            if (TarasandeMain.managerValue.getValues(`package`).isNotEmpty())
+            if (TarasandeMain.managerValue().getValues(`package`).isNotEmpty())
                 MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, `package`.modId, `package`))
         }
 

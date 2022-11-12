@@ -23,7 +23,7 @@ class PanelRadar : Panel("Radar", 100.0, 100.0, background = true, fixed = true,
 		val pos = MinecraftClient.getInstance().player?.getLerpedPos(MinecraftClient.getInstance().tickDelta)!!
 		val panelLength = sqrt(panelWidth * panelWidth + panelHeight * panelHeight)
 		for (entity in MinecraftClient.getInstance().world?.entities!!) {
-			if (!TarasandeMain.managerModule.get(ModuleESP::class.java).filter(entity))
+			if (!TarasandeMain.managerModule().get(ModuleESP::class.java).filter(entity))
 				continue
 			val otherPos = entity.getLerpedPos(MinecraftClient.getInstance().tickDelta)!!
 			val dist = sqrt((otherPos.x - pos.x).pow(2.0) + (otherPos.z - pos.z).pow(2.0)) * scale.value

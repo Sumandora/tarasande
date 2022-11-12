@@ -63,7 +63,7 @@ class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack", Element
     private val screenBetterSlotListProtocolHack = ScreenBetterSlotListProtocolHack()
 
     init {
-        TarasandeMain.managerValue.getValues(ProtocolHackValues).forEach {
+        TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
             it.owner = this
         }
     }
@@ -82,7 +82,7 @@ class ElementMenuScreenPackages : ElementMenuScreen("Packages", ElementCategory.
     }
 
     override fun visible(): Boolean {
-        return TarasandeMain.managerPackage.list.isNotEmpty()
+        return TarasandeMain.managerPackage().list.isNotEmpty()
     }
 }
 

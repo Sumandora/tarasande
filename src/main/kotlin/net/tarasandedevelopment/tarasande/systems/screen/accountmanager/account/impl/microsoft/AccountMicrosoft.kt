@@ -17,6 +17,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.ExtraInfo
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.azureapp.AzureAppPreset
+import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.ElementMenuScreenAccountManager
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.accountmanager.subscreens.ScreenBetterAzureApps
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -42,7 +43,7 @@ open class AccountMicrosoft : Account() {
     protected var redirectUri: String? = null
     private var code: String? = null
 
-    var azureApp: AzureAppPreset = TarasandeMain.managerAzureApp.list.first()
+    var azureApp: AzureAppPreset = TarasandeMain.managerClientMenu().get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager.managerAzureApp.list.first()
 
     protected fun randomPort(): Int = ThreadLocalRandom.current().nextInt(0, Short.MAX_VALUE.toInt() * 2 /* unsigned */)
 

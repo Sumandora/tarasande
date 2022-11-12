@@ -72,7 +72,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     private var prevItem = 0
 
     init {
-        TarasandeMain.managerInformation.apply {
+        TarasandeMain.managerInformation().apply {
             add(object : Information("Murder Mystery", "Suspected murderers") {
                 override fun getMessage(): String? {
                     if (enabled)
@@ -240,7 +240,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                     return@registerEvent
                 if (player !is PlayerEntity) return@registerEvent
                 if (suspects.containsKey(player.gameProfile)) return@registerEvent
-                if (TarasandeMain.managerModule.get(ModuleAntiBot::class.java).isBot(player)) return@registerEvent
+                if (TarasandeMain.managerModule().get(ModuleAntiBot::class.java).isBot(player)) return@registerEvent
 
                 var mainHand: Item? = null
                 var offHand: Item? = null

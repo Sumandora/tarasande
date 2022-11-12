@@ -10,6 +10,7 @@ import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder
+import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.ElementMenuScreenAccountManager
 import java.util.function.Consumer
 
 class ScreenBetterEnvironment(prevScreen: Screen?, private val environment: Environment?, private val environmentConsumer: Consumer<Environment>) : ScreenBetter(prevScreen) {
@@ -44,7 +45,7 @@ class ScreenBetterEnvironment(prevScreen: Screen?, private val environment: Envi
             addDrawableChild(it)
         }
 
-        for ((index, environmentPreset) in TarasandeMain.managerEnvironment.list.withIndex()) {
+        for ((index, environmentPreset) in TarasandeMain.managerClientMenu().get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager.managerEnvironment.list.withIndex()) {
             this.addDrawableChild(ButtonWidget(5 + (index * 105), 5, 100, 20, Text.of(environmentPreset.name)) {
                 authHostTextField?.text = environmentPreset.authHost
                 accountsHostTextField?.text = environmentPreset.accountsHost

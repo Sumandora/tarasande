@@ -33,7 +33,7 @@ abstract class ElementMenu(val name: String, val category: String) {
 
     internal fun onClickInternal(mouseButton: Int) {
         if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-            if (TarasandeMain.managerValue.getValues(this@ElementMenu).isNotEmpty()) {
+            if (TarasandeMain.managerValue().getValues(this@ElementMenu).isNotEmpty()) {
                 MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, this@ElementMenu))
                 return
             }

@@ -25,7 +25,7 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100.0, FontWr
     private var finalWidth = 0.0
 
     init {
-        TarasandeMain.managerValue.getValues(graph).forEach {
+        TarasandeMain.managerValue().getValues(graph).forEach {
             it.owner = this
         }
     }

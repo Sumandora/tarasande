@@ -17,7 +17,10 @@ import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.Account
+import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.ManagerAccount
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.impl.AccountSession
+import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.azureapp.ManagerAzureApp
+import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.environment.ManagerEnvironment
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.accountmanager.subscreens.ScreenBetterAccount
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
@@ -42,6 +45,12 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
     private var randomButton: ButtonWidget? = null
 
     var status = ""
+
+    // @formatter:off
+    val managerAccount      = ManagerAccount()
+    val managerEnvironment  = ManagerEnvironment()
+    val managerAzureApp     = ManagerAzureApp()
+    // @formatter:on
 
     fun selected(): Account? {
         if (this.slotList!!.selectedOrNull == null) return null

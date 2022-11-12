@@ -6,13 +6,17 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity;
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.exploit.ModulePortalScreen;
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.movement.ModuleFlight;
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.movement.ModuleNoSlowdown;
+import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.player.ModuleNoStatusEffect;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,7 +24,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 
 @Mixin(ClientPlayerEntity.class)
-public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
+public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IClientPlayerEntity {
 
     @Unique
     boolean tarasande_flight;
@@ -101,5 +105,52 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         if (TarasandeMain.Companion.managerModule().get(ModulePortalScreen.class).getEnabled())
             return true;
         return instance.shouldPause();
+    }
+
+    @Unique
+    private boolean tarasande_forceHasStatusEffect;
+
+    @Unique
+    private boolean tarasande_forceGetStatusEffect;
+
+    @Override
+    public boolean hasStatusEffect(StatusEffect effect) {
+        final boolean originalValue = super.hasStatusEffect(effect);
+        if (tarasande_forceHasStatusEffect) {
+            tarasande_forceHasStatusEffect = false;
+        } else {
+            final ModuleNoStatusEffect moduleNoStatusEffect = TarasandeMain.Companion.managerModule().get(ModuleNoStatusEffect.class);
+            if (moduleNoStatusEffect.getEnabled() && moduleNoStatusEffect.getEffects().getList().contains(effect)) {
+                return false;
+            }
+        }
+        return originalValue;
+    }
+
+    @Nullable
+    @Override
+    public StatusEffectInstance getStatusEffect(StatusEffect effect) {
+        final StatusEffectInstance originalValue = super.getStatusEffect(effect);
+        if (tarasande_forceGetStatusEffect) {
+            tarasande_forceGetStatusEffect = false;
+        } else {
+            final ModuleNoStatusEffect moduleNoStatusEffect = TarasandeMain.Companion.managerModule().get(ModuleNoStatusEffect.class);
+            if (moduleNoStatusEffect.getEnabled() && moduleNoStatusEffect.getEffects().getList().contains(effect)) {
+                return null;
+            }
+        }
+        return originalValue;
+    }
+
+    @Override
+    public boolean tarasande_forceHasStatusEffect(StatusEffect effect) {
+        tarasande_forceHasStatusEffect = true;
+        return hasStatusEffect(effect);
+    }
+
+    @Override
+    public StatusEffectInstance tarasande_forceGetStatusEffect(StatusEffect effect) {
+        tarasande_forceGetStatusEffect = true;
+        return getStatusEffect(effect);
     }
 }

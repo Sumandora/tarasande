@@ -57,7 +57,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
     internal var bedDatas = ArrayList<BedData>()
 
     init {
-        TarasandeMain.managerInformation.add(object : Information("Bed ESP", "Beds") {
+        TarasandeMain.managerInformation().add(object : Information("Bed ESP", "Beds") {
             override fun getMessage(): String? {
                 if (enabled) if (calculateBestWay.value) if (bedDatas.isNotEmpty()) {
                     return "\n" + bedDatas.sortedBy {

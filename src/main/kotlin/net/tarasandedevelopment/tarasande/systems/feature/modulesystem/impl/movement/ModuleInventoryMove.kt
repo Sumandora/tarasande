@@ -67,7 +67,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
     }
 
     private fun isTextboxFocused(): Boolean {
-        return TarasandeMain.managerPanel.list.any {
+        return TarasandeMain.managerPanel().list.any {
             when (it) {
                 is PanelElementsCategory -> it.elementList.any { it.components.any { isFocused(it) } }
                 is PanelElementsFriends -> it.elementList.any { it.textField.isFocused() }

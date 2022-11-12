@@ -180,7 +180,7 @@ object PlayerUtil {
     }
 
     fun getBreakSpeed(blockPos: BlockPos): Pair<Double, Int> {
-        if (!TarasandeMain.managerBlur.get(ModuleAutoTool::class.java).enabled)
+        if (!TarasandeMain.managerBlur().get(ModuleAutoTool::class.java).enabled)
             return MinecraftClient.getInstance().player?.inventory?.selectedSlot!!.let { Pair(getBreakSpeed(blockPos, it), it) }
 
         val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot ?: return Pair(1.0, -1)

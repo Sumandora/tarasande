@@ -26,7 +26,7 @@ class PanelWatermark : Panel("Watermark", FontWrapper.getWidth(text) * 5.0, Font
 
         FontWrapper.textShadow(matrices, TarasandeMain.instance.name, (x + 1).toFloat(), (y + panelHeight - titleBarHeight).toFloat(), TarasandeMain.instance.clientValues.accentColor.getColor().rgb)
 
-        val moduleNameProtect = TarasandeMain.managerModule.get(ModuleNameProtect::class.java)
+        val moduleNameProtect = TarasandeMain.managerModule().get(ModuleNameProtect::class.java)
 
         if (moduleNameProtect.enabled && moduleNameProtect.hidePersonalName.value)
             return

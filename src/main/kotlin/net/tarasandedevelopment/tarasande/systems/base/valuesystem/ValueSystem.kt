@@ -20,7 +20,7 @@ abstract class Value(var owner: Any, var name: String, private val valueComponen
 
     init {
         if (manage)
-            TarasandeMain.managerValue.add(this)
+            TarasandeMain.managerValue().add(this)
     }
 
     open fun isEnabled() = true

@@ -30,7 +30,7 @@ class PanelNotifications : Panel("Notifications", 100.0, FontWrapper.fontHeight(
         val notifications = ArrayList<Notification>()
 
         fun notify(text: String) {
-            val notificationPanel = TarasandeMain.managerPanel.get(PanelNotifications::class.java)
+            val notificationPanel = TarasandeMain.managerPanel().get(PanelNotifications::class.java)
             val notification = when {
                 notificationPanel.timeMode.isSelected(0) -> {
                     Notification(text, notificationPanel.timeAbsoluteTime.value.toLong())

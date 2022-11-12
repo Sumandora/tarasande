@@ -17,9 +17,6 @@ import net.tarasandedevelopment.tarasande.systems.feature.clickmethodsystem.Mana
 import net.tarasandedevelopment.tarasande.systems.feature.espsystem.ManagerESP
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ManagerScreenExtension
-import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.ManagerAccount
-import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.azureapp.ManagerAzureApp
-import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.environment.ManagerEnvironment
 import net.tarasandedevelopment.tarasande.systems.screen.blursystem.ManagerBlur
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.ManagerClientMenu
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.ElementMenuScreenAccountManager
@@ -38,60 +35,62 @@ class TarasandeMain {
     val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
     val rootDirectory = File(System.getProperty("user.home") + File.separator + name)
     var proxy: Proxy? = null
+    lateinit var protocolHack: TarasandeProtocolHack
 
     //@formatter:off
+    val managerValue = ManagerValue()
+    internal val managerPackage = ManagerPackage()
+    lateinit var managerESP: ManagerESP
+    lateinit var managerClickMethod: ManagerClickMethod
+    lateinit var managerScreenExtension: ManagerScreenExtension
+    lateinit var managerBlur: ManagerBlur
+    lateinit var managerClientMenu: ManagerClientMenu
+    lateinit var managerPanel: ManagerPanel
+
+    lateinit var managerInformation: ManagerInformation
+    lateinit var managerModule: ManagerModule
+
+    lateinit var managerGraph: ManagerGraph
+
     // Features
-    val protocolHack    by lazy { TarasandeProtocolHack(rootDirectory) }
-    val clientValues    = ClientValues(name, managerPanel)
-    val friends         = Friends()
+    lateinit var clientValues: ClientValues
+    lateinit var friends: Friends
     //@formatter:on
 
     companion object {
-        //@formatter:off
+        val instance = TarasandeMain()
+        fun get() = instance
 
-        // Manager (no dependencies)
-        val managerValue        = ManagerValue()
-            @JvmName("managerValue") get
-        internal val managerPackage = ManagerPackage()
-            @JvmName("managerPackage") get
-        val managerESP          by lazy { ManagerESP() }
-            @JvmName("managerESP") get
-        val managerClickMethod  = ManagerClickMethod()
-            @JvmName("managerClickMethod") get
-        val managerScreenExtension by lazy { ManagerScreenExtension() }
-            @JvmName("managerScreenExtension") get
-        val managerBlur         by lazy { ManagerBlur() }
-            @JvmName("managerScreenExtension") get
-        val managerClientMenu   by lazy { ManagerClientMenu() }
-            @JvmName("managerClientMenu") get
-        val managerPanel        by lazy { ManagerPanel() }
-            @JvmName("managerPanel") get
-
-        // Manager (one dependency)
-        val managerInformation  by lazy { ManagerInformation(managerPanel) }
-            @JvmName("managerInformation") get
-        val managerModule       by lazy { ManagerModule(managerPanel) }
-            @JvmName("managerModule") get
-
-        // Manager (two dependencies)
-        val managerGraph        = ManagerGraph(managerInformation, managerPanel)
-            @JvmName("managerGraph") get
-
-        // Account Manager
-        val managerAccount      = ManagerAccount()
-            @JvmName("managerAccount") get
-        val managerEnvironment  = ManagerEnvironment()
-            @JvmName("managerEnvironment") get
-        val managerAzureApp     = ManagerAzureApp()
-            @JvmName("managerAzureApp") get
-
-        //@formatter:on
-
-        val instance by lazy { TarasandeMain() }
-            @JvmName("get") get
+        fun managerBlur() = instance.managerBlur
+        fun managerValue() = instance.managerValue
+        fun managerModule() = instance.managerModule
+        fun managerPanel() = instance.managerPanel
+        fun managerClientMenu() = instance.managerClientMenu
+        fun managerInformation() = instance.managerInformation
+        fun managerClickMethod() = instance.managerClickMethod
+        fun managerESP() = instance.managerESP
+        internal fun managerPackage() = instance.managerPackage
     }
 
     fun onLateLoad() {
+        managerPanel = ManagerPanel()
+        managerInformation = ManagerInformation(managerPanel)
+
+        protocolHack = TarasandeProtocolHack(rootDirectory)
+
+        managerESP = ManagerESP()
+        managerClickMethod = ManagerClickMethod()
+        managerScreenExtension = ManagerScreenExtension()
+        managerBlur = ManagerBlur()
+        managerClientMenu = ManagerClientMenu()
+
+        managerModule = ManagerModule(managerPanel)
+
+        managerGraph = ManagerGraph(managerInformation, managerPanel)
+
+        clientValues = ClientValues(name, managerPanel)
+        friends = Friends()
+
         EventDispatcher.call(EventSuccessfulLoad())
         ProtocolHackValues.update(ProtocolVersion.getProtocol(protocolHack.version.value.toInt()))
 

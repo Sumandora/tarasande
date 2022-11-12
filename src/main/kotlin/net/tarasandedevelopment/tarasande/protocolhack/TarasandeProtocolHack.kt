@@ -50,7 +50,7 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
             ViaLegacy.init(viaLegacy, config, Logger.getLogger("ViaLegacy-Tarasande"))
         }
 
-        TarasandeMain.managerInformation.apply {
+        TarasandeMain.managerInformation().apply {
             add(object : Information("Connection", "Protocol Version") {
                 override fun getMessage() = VersionList.getProtocols().find { it.version == ViaProtocolHack.instance().provider().clientsideVersion }?.includedVersions?.last()
             })

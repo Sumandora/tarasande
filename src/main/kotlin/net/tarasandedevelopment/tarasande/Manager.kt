@@ -5,10 +5,6 @@ import java.util.concurrent.CopyOnWriteArrayList
 open class Manager<T : Any> {
     val list = CopyOnWriteArrayList<T>()
 
-    init {
-        println(javaClass.simpleName)
-    }
-
     open fun add(obj: T) {
         if (!list.contains(obj))
             list.add(obj)

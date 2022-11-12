@@ -87,14 +87,14 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
 
         val color = TarasandeMain.instance.clientValues.accentColor.getColor()
 
-        val strength = round(animation * TarasandeMain.managerBlur.strength.value).toInt()
+        val strength = round(animation * TarasandeMain.managerBlur().strength.value).toInt()
         if (strength > 0 && blurredBackground.value) {
-            TarasandeMain.managerBlur.bind(true)
+            TarasandeMain.managerBlur().bind(true)
             RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
             client?.framebuffer?.beginWrite(true)
 
             if (animation != 1.0) { // Prevent it from recalculating every frame
-                TarasandeMain.managerBlur.blurScene(strength)
+                TarasandeMain.managerBlur().blurScene(strength)
             } else {
                 super.render(matrices, mouseX, mouseY, delta)
             }

@@ -27,7 +27,7 @@ class ElementModule(private val module: Module, width: Double) : ElementWidth(wi
 
     override fun init() {
         if (components.isEmpty()) {
-            for (value in TarasandeMain.managerValue.getValues(module)) {
+            for (value in TarasandeMain.managerValue().getValues(module)) {
                 components.add(value.createValueComponent())
             }
         }

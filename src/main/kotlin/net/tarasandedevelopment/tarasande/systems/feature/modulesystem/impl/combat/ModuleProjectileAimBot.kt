@@ -35,7 +35,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
     private val gravity = 0.006
 
     private fun calcVelocity(stack: ItemStack): Double {
-        return BowItem.getPullProgress(if (mc.player?.isUsingItem!! && !TarasandeMain.managerModule.get(ModuleFastUse::class.java).enabled) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
+        return BowItem.getPullProgress(if (mc.player?.isUsingItem!! && !TarasandeMain.managerModule().get(ModuleFastUse::class.java).enabled) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
     }
 
     // https://en.wikipedia.org/wiki/Projectile_motion#Angle_%CE%B8_required_to_hit_coordinate_(x,_y)

@@ -28,7 +28,7 @@ class PanelInformation(private val informationSystem: ManagerInformation) : Pane
 
     init {
         for (information in informationSystem.list) {
-            if (TarasandeMain.managerValue.getValues(information).isNotEmpty()) {
+            if (TarasandeMain.managerValue().getValues(information).isNotEmpty()) {
                 val name = map[information]!!
 
                 object : ValueButton(this, "$name settings") {

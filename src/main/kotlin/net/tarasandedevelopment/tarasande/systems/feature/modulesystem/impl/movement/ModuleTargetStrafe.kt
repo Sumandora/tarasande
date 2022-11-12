@@ -52,7 +52,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
             if (PlayerUtil.input.movementInput?.lengthSquared() == 0.0f)
                 return@registerEvent
 
-            val moduleKillAura = TarasandeMain.managerModule.get(ModuleKillAura::class.java)
+            val moduleKillAura = TarasandeMain.managerModule().get(ModuleKillAura::class.java)
             val enemy =
                 if (moduleKillAura.enabled && moduleKillAura.targets.isNotEmpty())
                     moduleKillAura.targets[0].first
@@ -81,7 +81,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
 
             val rotation = RotationUtil.getRotations(curPos, newPos)
             val forward = rotation.forwardVector(selfSpeed)
-            val moduleFlight = TarasandeMain.managerModule.get(ModuleFlight::class.java)
+            val moduleFlight = TarasandeMain.managerModule().get(ModuleFlight::class.java)
 
             if (moduleFlight.let { !it.enabled || !(it.mode.isSelected(0) || it.mode.isSelected(1)) })
                 forward.y = event.velocity.y

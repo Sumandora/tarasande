@@ -41,7 +41,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
         }
         object : ValueButton(this, "2D ESP settings") {
             override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, TarasandeMain.managerESP))
+                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, TarasandeMain.managerESP()))
             }
 
             override fun isEnabled(): Boolean {
@@ -54,7 +54,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 
     fun filter(entity: Entity) =
         entities.list.contains(entity.type) &&
-                (!hideBots.value || entity !is PlayerEntity || entity == mc.player || !TarasandeMain.managerModule.get(ModuleAntiBot::class.java).isBot(entity))
+                (!hideBots.value || entity !is PlayerEntity || entity == mc.player || !TarasandeMain.managerModule().get(ModuleAntiBot::class.java).isBot(entity))
 
     private val hashMap = HashMap<Entity, Rectangle>()
 
@@ -114,7 +114,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 
         registerEvent(EventRender2D::class.java, 999) { event ->
             for (entry in hashMap.entries) {
-                TarasandeMain.managerESP.renderBox(event.matrices, entry.key, entry.value)
+                TarasandeMain.managerESP().renderBox(event.matrices, entry.key, entry.value)
             }
         }
     }

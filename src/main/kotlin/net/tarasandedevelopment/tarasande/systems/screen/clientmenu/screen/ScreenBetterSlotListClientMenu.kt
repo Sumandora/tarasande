@@ -29,7 +29,7 @@ class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, 
             override fun get(): List<ScreenBetterSlotListEntry> {
                 val list = mutableListOf<ScreenBetterSlotListEntry>()
 
-                val elements = TarasandeMain.managerClientMenu.list
+                val elements = TarasandeMain.managerClientMenu().list
 
                 for (menu in elements.sortedWith(Comparator.comparing<ElementMenu, Boolean> { it.category != ElementCategory.GENERAL }.thenBy { it.category })) {
                     if (!menu.visible()) continue

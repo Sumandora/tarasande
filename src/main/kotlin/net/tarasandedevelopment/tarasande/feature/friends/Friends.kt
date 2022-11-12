@@ -19,7 +19,7 @@ class Friends {
     init {
         EventDispatcher.apply {
             add(EventIsEntityAttackable::class.java) {
-                if (TarasandeMain.managerModule.get(ModuleNoFriends::class.java).enabled)
+                if (TarasandeMain.managerModule().get(ModuleNoFriends::class.java).enabled)
                     return@add
 
                 if (it.attackable && it.entity is PlayerEntity)
@@ -27,7 +27,7 @@ class Friends {
                         it.attackable = false
             }
             add(EventTagName::class.java) {
-                if (TarasandeMain.managerModule.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
+                if (TarasandeMain.managerModule().get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
                     return@add
 
                 if (it.entity is PlayerEntity) {
@@ -38,7 +38,7 @@ class Friends {
                 }
             }
             add(EventPlayerListName::class.java) {
-                if (TarasandeMain.managerModule.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
+                if (TarasandeMain.managerModule().get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
                     return@add
 
                 for (friend in friends)
@@ -48,7 +48,7 @@ class Friends {
             }
         }
 
-        TarasandeMain.managerPanel.add(PanelElementsFriends(this))
+        TarasandeMain.managerPanel().add(PanelElementsFriends(this))
     }
 
     private fun addFriend(gameProfile: GameProfile, alias: String? = null) {

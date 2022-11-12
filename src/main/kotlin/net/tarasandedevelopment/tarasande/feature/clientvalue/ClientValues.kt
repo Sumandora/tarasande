@@ -88,7 +88,7 @@ class ClientValues(name: String, panelSystem: ManagerPanel) {
     init {
         object : ValueButton(this, "Blur values") {
             override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Blur values", TarasandeMain.managerBlur))
+                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Blur values", TarasandeMain.managerBlur()))
             }
         }
     }

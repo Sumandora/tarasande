@@ -76,7 +76,7 @@ object ProtocolHackValues {
 
     fun update(protocol: ProtocolVersion) {
         // Owners may change, orientate on one setting
-        TarasandeMain.managerValue.getValues(viaVersionDebug.owner).forEach {
+        TarasandeMain.managerValue().getValues(viaVersionDebug.owner).forEach {
             if (it is ValueBooleanProtocol)
                 it.value = it.version.any { range -> protocol in range }
         }
