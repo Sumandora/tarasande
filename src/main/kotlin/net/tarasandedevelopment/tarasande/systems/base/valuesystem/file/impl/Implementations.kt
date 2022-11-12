@@ -1,5 +1,6 @@
-package net.tarasandedevelopment.tarasande.file.values
+package net.tarasandedevelopment.tarasande.systems.base.valuesystem.file.impl
 
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.file.FileValues
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBind
 import java.util.function.Function
 

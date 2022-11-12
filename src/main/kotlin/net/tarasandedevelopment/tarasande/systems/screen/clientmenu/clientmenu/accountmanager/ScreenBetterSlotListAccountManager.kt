@@ -21,6 +21,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.impl.AccountSession
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.azureapp.ManagerAzureApp
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.environment.ManagerEnvironment
+import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.accountmanager.file.FileAccounts
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.accountmanager.subscreens.ScreenBetterAccount
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
@@ -110,9 +111,11 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         })
 
 
-        if (TarasandeMain.instance.clientValues.clientMenuBackButtons.value) {
+        if (TarasandeMain.clientValues().clientMenuBackButtons.value) {
             addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { RenderSystem.recordRenderCall { close() } })
         }
+
+        TarasandeMain.managerFile().add(FileAccounts(this))
 
         tick()
     }

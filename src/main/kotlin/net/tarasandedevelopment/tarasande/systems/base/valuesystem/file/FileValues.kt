@@ -1,9 +1,9 @@
-package net.tarasandedevelopment.tarasande.file.values
+package net.tarasandedevelopment.tarasande.systems.base.valuesystem.file
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.file.File
+import net.tarasandedevelopment.tarasande.systems.base.filesystem.File
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
 import java.util.function.Function
 

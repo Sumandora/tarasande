@@ -58,8 +58,8 @@ class ElementModule(private val module: Module, width: Double) : ElementWidth(wi
 
         val toggleAnimation = min((System.currentTimeMillis() - toggleTime) / 100.0, 1.0)
         val radius = if (module.enabled) toggleAnimation else 1.0 - toggleAnimation
-        RenderUtil.fillCircle(matrices, width - 7, defaultHeight / 2, radius * 4.0, TarasandeMain.instance.clientValues.accentColor.getColor().rgb)
-        RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0f, RenderUtil.colorInterpolate(TarasandeMain.instance.clientValues.accentColor.getColor(), Color.white, radius).rgb)
+        RenderUtil.fillCircle(matrices, width - 7, defaultHeight / 2, radius * 4.0, TarasandeMain.clientValues().accentColor.getColor().rgb)
+        RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0f, RenderUtil.colorInterpolate(TarasandeMain.clientValues().accentColor.getColor(), Color.white, radius).rgb)
 
         if (components.isNotEmpty()) {
             val expansionAnimation = min((System.currentTimeMillis() - expansionTime) / 100.0, 1.0)
@@ -79,7 +79,7 @@ class ElementModule(private val module: Module, width: Double) : ElementWidth(wi
             matrices.translate(this.width - 16, this.defaultHeight / 2, 0.0)
             matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion((expansion * 90.0).toFloat()))
             matrices.translate(-(this.width - 16), -(this.defaultHeight / 2), 0.0)
-            val accentColor = TarasandeMain.instance.clientValues.accentColor.getColor()
+            val accentColor = TarasandeMain.clientValues().accentColor.getColor()
             bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
             bufferBuilder.vertex(matrix, (this.width - 16 - 1).toFloat(), (this.defaultHeight / 2 - 2).toFloat(), 0.0f).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
             bufferBuilder.vertex(matrix, (this.width - 16 + 1).toFloat(), (this.defaultHeight / 2).toFloat(), 0.0f).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()

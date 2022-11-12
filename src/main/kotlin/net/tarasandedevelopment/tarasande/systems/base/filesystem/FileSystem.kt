@@ -1,28 +1,16 @@
-package net.tarasandedevelopment.tarasande.base.file
+package net.tarasandedevelopment.tarasande.systems.base.filesystem
 
 import com.google.gson.JsonElement
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.file.FileAccounts
-import net.tarasandedevelopment.tarasande.file.FileCheatMenu
-import net.tarasandedevelopment.tarasande.file.FileClientMenu
-import net.tarasandedevelopment.tarasande.file.FileModules
-import net.tarasandedevelopment.tarasande.file.values.FileValuesBinds
-import net.tarasandedevelopment.tarasande.file.values.FileValuesNonBinds
 import java.io.FileWriter
 import java.nio.file.Files
 
 class ManagerFile : Manager<File>() {
 
-    init {
-        add(
-            FileModules(),
-            FileValuesBinds(),
-            FileValuesNonBinds(),
-            FileAccounts(),
-            FileCheatMenu(),
-            FileClientMenu()
-        )
+    override fun add(obj: File) {
+        super.add(obj)
+        load(obj)
     }
 
     fun save(backup: Boolean) {
@@ -41,18 +29,16 @@ class ManagerFile : Manager<File>() {
         }
     }
 
-    fun load() {
-        for (file in list) {
+    fun load(file: File) {
+        try {
+            internalLoad(file, false)
+        } catch (t: Throwable) {
+            t.printStackTrace()
             try {
-                internalLoad(file, false)
+                internalLoad(file, true)
             } catch (t: Throwable) {
                 t.printStackTrace()
-                try {
-                    internalLoad(file, true)
-                } catch (t: Throwable) {
-                    t.printStackTrace()
-                    TarasandeMain.instance.logger.error(file.name + " didn't load correctly!")
-                }
+                TarasandeMain.instance.logger.error(file.name + " didn't load correctly!")
             }
         }
     }

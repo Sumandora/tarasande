@@ -8,8 +8,11 @@ import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.events.EventRender2D
+import net.tarasandedevelopment.tarasande.events.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.events.EventTick
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.file.FileCheatMenu
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.impl.fixed.*
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
@@ -24,7 +27,7 @@ import kotlin.math.floor
 import kotlin.math.min
 import kotlin.math.round
 
-class ManagerPanel : Manager<Panel>() {
+class ManagerPanel(fileSystem: ManagerFile) : Manager<Panel>() {
 
     val screenCheatMenu: ScreenCheatMenu
     var panelInsertY = 5.0
@@ -42,6 +45,9 @@ class ManagerPanel : Manager<Panel>() {
         )
 
         screenCheatMenu = ScreenCheatMenu(this)
+        EventDispatcher.add(EventSuccessfulLoad::class.java) {
+            fileSystem.add(FileCheatMenu(this))
+        }
     }
 
     fun reorderPanels(panel: Panel, index: Int) {
@@ -134,7 +140,7 @@ open class Panel(
                 RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else titleBarHeight).toDouble(), -1)
                 MinecraftClient.getInstance().framebuffer.beginWrite(true)
 
-                val accent = TarasandeMain.instance.clientValues.accentColor.getColor()
+                val accent = TarasandeMain.clientValues().accentColor.getColor()
                 RenderUtil.fill(matrices, x, y + FontWrapper.fontHeight(), x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).withAlpha(0), 0.3, 0.3, 0.3, 0.7).rgb)
                 matrices?.pop()
             }
@@ -181,7 +187,7 @@ open class Panel(
 
     open fun renderTitleBar(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         matrices?.push()
-        RenderUtil.fill(matrices, x, y, x + panelWidth, y + titleBarHeight, TarasandeMain.instance.clientValues.accentColor.getColor().rgb)
+        RenderUtil.fill(matrices, x, y, x + panelWidth, y + titleBarHeight, TarasandeMain.clientValues().accentColor.getColor().rgb)
         when (alignment) {
             Alignment.LEFT -> FontWrapper.textShadow(matrices, title, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2f - FontWrapper.fontHeight() / 2f, -1)
             Alignment.MIDDLE -> FontWrapper.textShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0f - FontWrapper.getWidth(title).toFloat() / 2.0F, y.toFloat() + titleBarHeight / 2f - FontWrapper.fontHeight() / 2f, -1)

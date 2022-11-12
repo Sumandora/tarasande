@@ -31,7 +31,7 @@ class ScreenBetterFileChooser(
 
     override fun init() {
         super.init()
-        if (MinecraftClient.getInstance().world == null && TarasandeMain.instance.clientValues.clientMenuBackButtons.value) {
+        if (MinecraftClient.getInstance().world == null && TarasandeMain.clientValues().clientMenuBackButtons.value) {
             this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
                 close()
             })
@@ -90,7 +90,7 @@ class ScreenBetterFileChooser(
                     if ( ((y + height + scrollOffset)) > y && (height + scrollOffset) < panelHeight) {
                         var color = Color.white
                         if (file.isDirectory) {
-                            color = TarasandeMain.instance.clientValues.accentColor.getColor()
+                            color = TarasandeMain.clientValues().accentColor.getColor()
                         }
                         if (file.isHidden) {
                             color = color.darker().darker()

@@ -102,7 +102,7 @@ class ElementMenuToggleBungeeHack : ElementMenuToggle("Bungee Hack", ElementCate
         EventDispatcher.add(EventPacket::class.java) { event ->
             if (event.type != EventPacket.Type.SEND) return@add
             if (event.packet !is HandshakeC2SPacket) return@add
-            if (state) {
+            if (state.value) {
                 var uuid = MinecraftClient.getInstance().session.uuid
                 if (this.customUUID.value)
                     uuid = this.uuid.value
@@ -127,7 +127,7 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker", ElementCate
     init {
         EventDispatcher.apply {
             add(EventPacket::class.java, 1) {
-                if (!state || currentHandler == null) return@add
+                if (!state.value || currentHandler == null) return@add
 
                 if (it.type == EventPacket.Type.SEND) {
                     if (it.packet is HandshakeC2SPacket) {
@@ -156,7 +156,7 @@ class ElementMenuToggleForgeFaker : ElementMenuToggle("Forge Faker", ElementCate
                     val text = FontWrapper.trimToWidth("Forge/FML Server", it.x)
                     val endWidth = FontWrapper.getWidth(text) + 4
 
-                    FontWrapper.textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeMain.instance.clientValues.accentColor.getColor().rgb, offset = 0.5F)
+                    FontWrapper.textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
 
                     if (RenderUtil.isHovered(it.mouseX.toDouble(), it.mouseY.toDouble(), it.x - endWidth.toDouble(), it.y + yPos.toDouble(), it.x - 4.0, it.y + yPos + fontHeight.toDouble())) {
                         val tooltip = ArrayList<Text>()
@@ -247,7 +247,7 @@ class ElementMenuToggleQuiltFaker : ElementMenuToggle("Quilt Faker", ElementCate
 
     init {
         EventDispatcher.add(EventPacket::class.java) {
-            if (!state) return@add
+            if (!state.value) return@add
 
             if (it.type == EventPacket.Type.RECEIVE && it.packet is CustomPayloadS2CPacket) {
                 if (it.packet.channel == quiltHandshake) {
@@ -283,7 +283,7 @@ class ElementMenuToggleClientBrandSpoofer : ElementMenuToggle("Client brand spoo
 
     init {
         EventDispatcher.add(EventPacket::class.java) {
-            if (!state) return@add
+            if (!state.value) return@add
 
             if (it.type == EventPacket.Type.SEND && it.packet is CustomPayloadC2SPacket) {
                 if (it.packet.channel == CustomPayloadC2SPacket.BRAND) {

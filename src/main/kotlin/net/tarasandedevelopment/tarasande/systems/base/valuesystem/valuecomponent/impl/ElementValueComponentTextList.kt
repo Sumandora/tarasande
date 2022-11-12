@@ -46,7 +46,7 @@ class ElementValueComponentTextList(value: Value) : ElementValueComponent(value)
                             (FontWrapper.fontHeight() / 2.0F * (index + 0.5F)).toDouble(),
                             width,
                             (FontWrapper.fontHeight() / 2.0F * ((index + 1) + 0.5F)).toDouble()))
-                        TarasandeMain.instance.clientValues.accentColor.getColor().rgb
+                        TarasandeMain.clientValues().accentColor.getColor().rgb
                     else
                         -1
                 else
@@ -60,7 +60,7 @@ class ElementValueComponentTextList(value: Value) : ElementValueComponent(value)
         matrices?.push()
         matrices?.translate(width - 40, FontWrapper.fontHeight() / 2.0F * (valueTextList.value.size + 0.5F) + 2.0, 0.0)
         matrices?.scale(0.5F, 0.5F, 1.0F)
-        if (textFieldWidget.isFocused) (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.instance.clientValues.accentColor.getColor())
+        if (textFieldWidget.isFocused) (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.clientValues().accentColor.getColor())
         if (!value.isEnabled()) (textFieldWidget as ITextFieldWidget).tarasande_setColor(Color.white.darker().darker())
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
         (textFieldWidget as ITextFieldWidget).tarasande_setColor(null)

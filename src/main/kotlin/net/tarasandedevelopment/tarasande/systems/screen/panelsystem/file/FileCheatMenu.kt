@@ -1,18 +1,18 @@
-package net.tarasandedevelopment.tarasande.file
+package net.tarasandedevelopment.tarasande.systems.screen.panelsystem.file
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.file.File
+import net.tarasandedevelopment.tarasande.systems.base.filesystem.File
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
 import kotlin.math.max
 import kotlin.math.min
 
-class FileCheatMenu : File("CheatMenu") {
+class FileCheatMenu(private val panelSystem: ManagerPanel) : File("CheatMenu") {
 
     override fun save(): JsonElement {
         val jsonObject = JsonObject()
-        for (panel in TarasandeMain.managerPanel().list) {
+        for (panel in panelSystem.list) {
             val jsonArray2 = JsonArray()
             jsonArray2.add(panel.x)
             jsonArray2.add(panel.y)
@@ -26,7 +26,7 @@ class FileCheatMenu : File("CheatMenu") {
 
     override fun load(jsonElement: JsonElement) {
         val jsonObject = jsonElement.asJsonObject
-        for (panel in TarasandeMain.managerPanel().list) {
+        for (panel in panelSystem.list) {
             if (jsonObject.has(panel.title)) {
                 val jsonArray2 = jsonObject.get(panel.title).asJsonArray
                 panel.x = jsonArray2.get(0).asDouble

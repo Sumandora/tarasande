@@ -1,14 +1,13 @@
-package net.tarasandedevelopment.tarasande.file
+package net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.accountmanager.file
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.mojang.authlib.Environment
 import net.minecraft.client.util.Session
-import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.base.file.File
+import net.tarasandedevelopment.tarasande.systems.base.filesystem.File
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.AccountInfo
-import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.ElementMenuScreenAccountManager
+import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.accountmanager.ScreenBetterSlotListAccountManager
 import org.apache.commons.codec.binary.Hex
 import oshi.SystemInfo
 import java.util.*
@@ -16,9 +15,7 @@ import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
-class FileAccounts : File("Accounts") {
-
-    private val accountManager = TarasandeMain.managerClientMenu().get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager
+class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManager) : File("Accounts") {
 
     private var encryptCipher: Cipher? = null
     private var decryptCipher: Cipher? = null

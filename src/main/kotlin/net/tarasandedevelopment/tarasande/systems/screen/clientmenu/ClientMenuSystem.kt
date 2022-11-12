@@ -5,6 +5,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.*
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
@@ -59,18 +60,18 @@ abstract class ElementMenuScreen(name: String, category: String) : ElementMenu(n
 
 abstract class ElementMenuToggle(name: String, category: String) : ElementMenu(name, category) {
 
-    var state = false
+    val state = ValueBoolean(this, name, false)
 
     override fun onClick(mouseButton: Int) {
         if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
-            this.state = !this.state
-            this.onToggle(this.state)
+            this.state.value = !this.state.value
+            this.onToggle(this.state.value)
 
             return
         }
     }
 
-    override fun elementColor() = if (state) Color.green.rgb else Color.red.rgb
+    override fun elementColor() = if (this.state.value) Color.green.rgb else Color.red.rgb
     abstract fun onToggle(state: Boolean)
 }
 

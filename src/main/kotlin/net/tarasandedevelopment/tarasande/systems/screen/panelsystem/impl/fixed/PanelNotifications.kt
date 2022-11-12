@@ -75,7 +75,7 @@ class PanelNotifications : Panel("Notifications", 100.0, FontWrapper.fontHeight(
         notifications.forEach {
             val animation = animations[it]!!
             if (animation > 0.0) {
-                val color = TarasandeMain.instance.clientValues.accentColor.getColor().withAlpha((animation * 255).toInt())
+                val color = TarasandeMain.clientValues().accentColor.getColor().withAlpha((animation * 255).toInt())
                 RenderSystem.enableBlend()
                 val animatedPosition = easing.ease(animation.toFloat())
                 val formattedTime = StringHelper.formatTicks(((((it.length + 1000) - (System.currentTimeMillis() - it.creationTime)) / 1000) * 20).toInt())

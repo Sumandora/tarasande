@@ -8,9 +8,11 @@ import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.events.EventDisconnect
 import net.tarasandedevelopment.tarasande.events.EventPacket
 import net.tarasandedevelopment.tarasande.events.EventTick
+import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
+import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.file.FileModules
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.chat.*
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.combat.*
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.exploit.*
@@ -26,7 +28,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.impl.fixed.
 import org.lwjgl.glfw.GLFW
 import java.util.function.Consumer
 
-class ManagerModule(panelSystem: ManagerPanel) : Manager<Module>() {
+class ManagerModule(panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manager<Module>() {
 
     init {
         add(
@@ -149,6 +151,7 @@ class ManagerModule(panelSystem: ManagerPanel) : Manager<Module>() {
         this.list.distinctBy { it.category }.forEach {
             panelSystem.add(PanelElementsCategory(this, it.category))
         }
+        fileSystem.add(FileModules(this))
     }
 
 }

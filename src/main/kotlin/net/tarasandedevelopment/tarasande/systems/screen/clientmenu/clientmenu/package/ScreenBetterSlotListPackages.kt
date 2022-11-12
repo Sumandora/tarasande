@@ -35,7 +35,7 @@ class ScreenBetterSlotListPackages : ScreenBetterSlotList(46, -1, FontWrapper.fo
         }
         super.init()
 
-        if (TarasandeMain.instance.clientValues.clientMenuBackButtons.value) {
+        if (TarasandeMain.clientValues().clientMenuBackButtons.value) {
             addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { RenderSystem.recordRenderCall { close() } })
         }
     }

@@ -1,11 +1,24 @@
 package net.tarasandedevelopment.tarasande.systems.base.valuesystem
 
 import com.google.gson.JsonElement
+import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.file.impl.FileValuesBinds
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.file.impl.FileValuesNonBinds
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
 
-class ManagerValue : Manager<Value>() {
+class ManagerValue(fileSystem: ManagerFile) : Manager<Value>() {
+
+    init {
+        EventDispatcher.add(EventSuccessfulLoad::class.java) {
+            fileSystem.apply {
+                add(FileValuesBinds(), FileValuesNonBinds())
+            }
+        }
+    }
 
     fun getValues(owner: Any): ArrayList<Value> {
         val arrayList = ArrayList<Value>()

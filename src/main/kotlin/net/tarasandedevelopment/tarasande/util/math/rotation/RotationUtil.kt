@@ -34,19 +34,19 @@ object RotationUtil {
                 if (it.state != EventJump.State.PRE) return@add
                 if (goalMovementYaw != null) it.yaw = goalMovementYaw!!
                 if (fakeRotation != null)
-                    if (TarasandeMain.instance.clientValues.correctMovement.isSelected(2) || TarasandeMain.instance.clientValues.correctMovement.isSelected(3))
+                    if (TarasandeMain.clientValues().correctMovement.isSelected(2) || TarasandeMain.clientValues().correctMovement.isSelected(3))
                         it.yaw = fakeRotation!!.yaw
             }
             add(EventVelocityYaw::class.java, 9999) {
                 if (goalMovementYaw != null) it.yaw = goalMovementYaw!!
                 if (fakeRotation != null)
-                    if (TarasandeMain.instance.clientValues.correctMovement.isSelected(2) || TarasandeMain.instance.clientValues.correctMovement.isSelected(3))
+                    if (TarasandeMain.clientValues().correctMovement.isSelected(2) || TarasandeMain.clientValues().correctMovement.isSelected(3))
                         it.yaw = fakeRotation!!.yaw
             }
             add(EventInput::class.java, 9999) {
                 if (it.input == MinecraftClient.getInstance().player?.input)
                     if (fakeRotation != null)
-                        if (TarasandeMain.instance.clientValues.correctMovement.isSelected(3)) {
+                        if (TarasandeMain.clientValues().correctMovement.isSelected(3)) {
                             if (it.movementForward == 0.0f && it.movementSideways == 0.0f) return@add
 
                             val realYaw = goalMovementYaw ?: MinecraftClient.getInstance().player!!.yaw
@@ -78,12 +78,12 @@ object RotationUtil {
                         }
             }
             add(EventIsWalking::class.java, 9999) {
-                if (TarasandeMain.instance.clientValues.correctMovement.isSelected(1)) {
+                if (TarasandeMain.clientValues().correctMovement.isSelected(1)) {
                     it.walking = PlayerUtil.isPlayerMoving() && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (fakeRotation?.yaw ?: (goalMovementYaw ?: return@add)))) <= 45
                 }
             }
             add(EventHasForwardMovement::class.java, 9999) {
-                if (TarasandeMain.instance.clientValues.correctMovement.isSelected(1)) {
+                if (TarasandeMain.clientValues().correctMovement.isSelected(1)) {
                     it.hasForwardMovement = PlayerUtil.isPlayerMoving() && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (fakeRotation?.yaw ?: (goalMovementYaw ?: return@add)))) <= 45
                 }
             }
@@ -137,8 +137,8 @@ object RotationUtil {
     }
 
     private fun simulateFakeRotationUpdate() {
-        if (TarasandeMain.instance.clientValues.updateRotationsWhenTickSkipping.value)
-            if (TarasandeMain.instance.clientValues.updateRotationsAccurately.value) {
+        if (TarasandeMain.clientValues().updateRotationsWhenTickSkipping.value)
+            if (TarasandeMain.clientValues().updateRotationsAccurately.value) {
                 for (i in 0..(1000.0 / RenderUtil.deltaTime).roundToInt())
                     updateFakeRotation(true)
             } else {

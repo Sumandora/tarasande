@@ -11,13 +11,14 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.events.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.feature.clientvalue.panel.PanelElementsClientValues
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.util.dummy.ClientWorldDummy
 import net.tarasandedevelopment.tarasande.util.extension.Thread
 
-class ClientValues(name: String, panelSystem: ManagerPanel) {
+class ClientValues(name: String, panelSystem: ManagerPanel, fileSystem: ManagerFile) {
 
     // General
     val accentColor = ValueColor(this, "Accent color", 0.6f, 1.0f, 1.0f)
@@ -112,10 +113,9 @@ class ClientValues(name: String, panelSystem: ManagerPanel) {
     val autoSaveDaemonName = "$name config auto save daemon"
     val autoSaveDaemon: Thread = Thread(autoSaveDaemonName) {
         while (true) {
+            Thread.sleep(autoSaveDelay.value.toLong())
             if (autoSaveConfig.value) {
-                //TODO
-                //FileIO.saveAll()
-                Thread.sleep(autoSaveDelay.value.toLong())
+                fileSystem.save(false)
             }
         }
     }

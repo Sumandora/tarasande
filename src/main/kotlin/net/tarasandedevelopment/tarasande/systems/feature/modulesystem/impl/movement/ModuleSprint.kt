@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MOVEMENT) {
 
     private val allowBackwards = object : ValueBoolean(this, "Allow backwards", false) {
-        override fun isEnabled() = TarasandeMain.instance.clientValues.correctMovement.isSelected(0)
+        override fun isEnabled() = TarasandeMain.clientValues().correctMovement.isSelected(0)
     }
 
     init {

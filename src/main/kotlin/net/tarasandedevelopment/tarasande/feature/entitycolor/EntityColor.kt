@@ -49,7 +49,7 @@ class EntityColor(val moduleESP: ModuleESP) {
         }
 
         if (entity == MinecraftClient.getInstance().player) color = selfColor.getColor()
-        else if (entity is PlayerEntity && TarasandeMain.instance.friends.isFriend(entity.gameProfile)) color = friendsColor.getColor()
+        else if (entity is PlayerEntity && TarasandeMain.friends().isFriend(entity.gameProfile)) color = friendsColor.getColor()
 
         val eventEntityColor = EventEntityColor(entity, color)
         EventDispatcher.call(eventEntityColor)

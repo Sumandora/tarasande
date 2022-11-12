@@ -15,7 +15,7 @@ public class MixinTelemetrySender {
     @Inject(method = "send(Lnet/minecraft/client/util/telemetry/TelemetrySender$PlayerGameMode;)V", at = @At("HEAD"), cancellable = true)
     public void disableTelemetry(@Coerce Object gameMode, CallbackInfo ci) {
         // This bypasses the TarasandeMain#disabled, because ms spying on us is a major problem
-        if (TarasandeMain.Companion.get().getClientValues().getDisableTelemetry().getValue()) {
+        if (TarasandeMain.Companion.clientValues().getDisableTelemetry().getValue()) {
             TarasandeMain.Companion.get().getLogger().info("Blocked telemetry services");
             ci.cancel();
         }

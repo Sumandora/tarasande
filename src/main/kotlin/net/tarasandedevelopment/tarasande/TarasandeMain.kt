@@ -11,6 +11,7 @@ import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.feature.friends.Friends
 import net.tarasandedevelopment.tarasande.protocolhack.TarasandeProtocolHack
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
+import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.systems.base.packagesystem.ManagerPackage
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.systems.feature.clickmethodsystem.ManagerClickMethod
@@ -38,23 +39,25 @@ class TarasandeMain {
     lateinit var protocolHack: TarasandeProtocolHack
 
     //@formatter:off
-    val managerValue = ManagerValue()
-    internal val managerPackage = ManagerPackage()
-    lateinit var managerESP: ManagerESP
-    lateinit var managerClickMethod: ManagerClickMethod
-    lateinit var managerScreenExtension: ManagerScreenExtension
-    lateinit var managerBlur: ManagerBlur
-    lateinit var managerClientMenu: ManagerClientMenu
-    lateinit var managerPanel: ManagerPanel
+    private val managerFile = ManagerFile()
+    private val managerValue = ManagerValue(managerFile)
+    private val managerPackage = ManagerPackage()
 
-    lateinit var managerInformation: ManagerInformation
-    lateinit var managerModule: ManagerModule
+    private lateinit var managerESP: ManagerESP
+    private lateinit var managerClickMethod: ManagerClickMethod
+    private lateinit var managerScreenExtension: ManagerScreenExtension
+    private lateinit var managerBlur: ManagerBlur
+    private lateinit var managerClientMenu: ManagerClientMenu
+    private lateinit var managerPanel: ManagerPanel
 
-    lateinit var managerGraph: ManagerGraph
+    private lateinit var managerInformation: ManagerInformation
+    private lateinit var managerModule: ManagerModule
+
+    private lateinit var managerGraph: ManagerGraph
 
     // Features
-    lateinit var clientValues: ClientValues
-    lateinit var friends: Friends
+    private lateinit var clientValues: ClientValues
+    private lateinit var friends: Friends
     //@formatter:on
 
     companion object {
@@ -70,10 +73,13 @@ class TarasandeMain {
         fun managerClickMethod() = instance.managerClickMethod
         fun managerESP() = instance.managerESP
         internal fun managerPackage() = instance.managerPackage
+        fun managerFile() = instance.managerFile
+        fun clientValues() = instance.clientValues
+        fun friends() = instance.friends
     }
 
     fun onLateLoad() {
-        managerPanel = ManagerPanel()
+        managerPanel = ManagerPanel(managerFile)
         managerInformation = ManagerInformation(managerPanel)
 
         protocolHack = TarasandeProtocolHack(rootDirectory)
@@ -84,11 +90,11 @@ class TarasandeMain {
         managerBlur = ManagerBlur()
         managerClientMenu = ManagerClientMenu()
 
-        managerModule = ManagerModule(managerPanel)
+        managerModule = ManagerModule(managerPanel, managerFile)
 
         managerGraph = ManagerGraph(managerInformation, managerPanel)
 
-        clientValues = ClientValues(name, managerPanel)
+        clientValues = ClientValues(name, managerPanel, managerFile)
         friends = Friends()
 
         EventDispatcher.call(EventSuccessfulLoad())
@@ -119,8 +125,7 @@ class TarasandeMain {
                 Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor resume")
             } catch (ignored: Throwable) {
             }
-            //TODO
-            //FileIO.saveAll()
+            managerFile.save(true)
         }
     }
 }

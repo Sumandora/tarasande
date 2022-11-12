@@ -19,7 +19,7 @@ class ModuleMidClick : Module("Mid click", "Friends mid-clicked players", Module
                 val hitResult = PlayerUtil.getTargetedEntity(mc.options.viewDistance.value * 16.0, Rotation(mc.player!!), true)
                 if (hitResult != null && hitResult.type == HitResult.Type.ENTITY && hitResult is EntityHitResult)
                     if (hitResult.entity is PlayerEntity)
-                        TarasandeMain.instance.friends.changeFriendState((hitResult.entity as PlayerEntity).gameProfile)
+                        TarasandeMain.friends().changeFriendState((hitResult.entity as PlayerEntity).gameProfile)
             }
         }
     }

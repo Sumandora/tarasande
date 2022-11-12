@@ -59,7 +59,7 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
     }
 
     private fun drawString(matrices: MatrixStack?, str: String, x: Double, y: Double) {
-        val accent = TarasandeMain.instance.clientValues.accentColor.getColor()
+        val accent = TarasandeMain.clientValues().accentColor.getColor()
         val width = FontWrapper.getWidth(str)
         val titleBarHeight = titleBarHeight
         when (alignment) {

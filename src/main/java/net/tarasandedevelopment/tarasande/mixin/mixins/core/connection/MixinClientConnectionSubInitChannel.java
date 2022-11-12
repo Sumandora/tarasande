@@ -6,7 +6,6 @@ import io.netty.handler.proxy.HttpProxyHandler;
 import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.proxy.Socks5ProxyHandler;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.ManagerClientMenu;
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.ElementMenuToggleHAProxyHack;
 import net.tarasandedevelopment.tarasande.util.connection.Proxy;
 import org.spongepowered.asm.mixin.Mixin;
@@ -48,7 +47,7 @@ public class MixinClientConnectionSubInitChannel {
 
         final ElementMenuToggleHAProxyHack haProxyHack = TarasandeMain.Companion.managerClientMenu().get(ElementMenuToggleHAProxyHack.class);
 
-        if (haProxyHack.getState()) {
+        if (haProxyHack.getState().getValue()) {
             channel.pipeline().addFirst("haproxy-encoder", HAProxyMessageEncoder.INSTANCE);
             channel.pipeline().addLast(haProxyHack.getHandler());
         }

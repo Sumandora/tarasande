@@ -32,7 +32,7 @@ class ElementValueComponentButton(value: Value) : ElementValueComponent(value) {
                         getHeight() / 2.0 - FontWrapper.fontHeight() / 2,
                         width,
                         getHeight() / 2.0 + FontWrapper.fontHeight() / 2))
-                    TarasandeMain.instance.clientValues.accentColor.getColor().rgb
+                    TarasandeMain.clientValues().accentColor.getColor().rgb
                 else
                     -1
             else

@@ -34,7 +34,7 @@ class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, 
                 for (menu in elements.sortedWith(Comparator.comparing<ElementMenu, Boolean> { it.category != ElementCategory.GENERAL }.thenBy { it.category })) {
                     if (!menu.visible()) continue
                     val titleEntry = ScreenBetterSlotListEntryClientMenuTitle(menu.category)
-                    if (!list.contains(titleEntry) && TarasandeMain.instance.clientValues.clientMenuShowCategories.value) {
+                    if (!list.contains(titleEntry) && TarasandeMain.clientValues().clientMenuShowCategories.value) {
                         list.add(titleEntry)
                     }
                     list.add(ScreenBetterSlotListEntryClientMenu(menu))
@@ -44,11 +44,11 @@ class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, 
             }
         })
         super.init()
-        if (TarasandeMain.instance.clientValues.clientMenuBackButtons.value) {
+        if (TarasandeMain.clientValues().clientMenuBackButtons.value) {
             addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { RenderSystem.recordRenderCall { close() } })
         }
         this.addDrawableChild(ButtonWidget(this.width / 2 - 49, this.height - 27, 98, 20, Text.of("Client values")) {
-            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, "Client values", TarasandeMain.instance.clientValues))
+            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(this, "Client values", TarasandeMain.clientValues()))
         })
     }
 

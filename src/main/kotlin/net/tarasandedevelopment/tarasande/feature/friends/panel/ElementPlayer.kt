@@ -17,7 +17,7 @@ class ElementPlayer(val gameProfile: GameProfile, width: Double) : ElementWidth(
 
     private val value = object : ValueText(this, gameProfile.name, "", manage = false) {
         override fun onChange() {
-            TarasandeMain.instance.friends.setAlias(gameProfile, value.ifEmpty { null })
+            TarasandeMain.friends().setAlias(gameProfile, value.ifEmpty { null })
         }
     }
     val textField = ElementValueComponentText(value)
@@ -33,7 +33,7 @@ class ElementPlayer(val gameProfile: GameProfile, width: Double) : ElementWidth(
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        val friended = TarasandeMain.instance.friends.isFriend(gameProfile)
+        val friended = TarasandeMain.friends().isFriend(gameProfile)
         RenderUtil.fill(matrices, 0.0, 0.0, this.width, this.getHeight(), Int.MIN_VALUE)
         if (friended) {
             matrices?.push()
@@ -52,14 +52,14 @@ class ElementPlayer(val gameProfile: GameProfile, width: Double) : ElementWidth(
 
         val toggleAnimation = min((System.currentTimeMillis() - friendTime) / 100.0, 1.0)
         val radius = if (friended) toggleAnimation else 1.0 - toggleAnimation
-        RenderUtil.fillCircle(matrices, width - 7, defaultHeight / 2, radius * 4.0, TarasandeMain.instance.clientValues.accentColor.getColor().rgb)
-        RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0f, RenderUtil.colorInterpolate(TarasandeMain.instance.clientValues.accentColor.getColor(), Color.white, radius).rgb)
+        RenderUtil.fillCircle(matrices, width - 7, defaultHeight / 2, radius * 4.0, TarasandeMain.clientValues().accentColor.getColor().rgb)
+        RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0f, RenderUtil.colorInterpolate(TarasandeMain.clientValues().accentColor.getColor(), Color.white, radius).rgb)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (button == 0) {
             return if (RenderUtil.isHovered(mouseX, mouseY, 0.0, 0.0, width, getHeight()) && Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(Vec2f((width - 7).toFloat(), (defaultHeight / 2).toFloat())) < 16.0f) {
-                TarasandeMain.instance.friends.changeFriendState(gameProfile)
+                TarasandeMain.friends().changeFriendState(gameProfile)
                 textField.textFieldWidget.text = ""
                 friendTime = System.currentTimeMillis()
                 true

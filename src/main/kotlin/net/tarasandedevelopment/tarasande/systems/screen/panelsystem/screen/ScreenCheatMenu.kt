@@ -85,7 +85,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
             }
         }
 
-        val color = TarasandeMain.instance.clientValues.accentColor.getColor()
+        val color = TarasandeMain.clientValues().accentColor.getColor()
 
         val strength = round(animation * TarasandeMain.managerBlur().strength.value).toInt()
         if (strength > 0 && blurredBackground.value) {
