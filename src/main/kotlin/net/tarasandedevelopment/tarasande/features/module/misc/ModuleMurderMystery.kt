@@ -7,7 +7,6 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.Item
 import net.minecraft.item.Items
-import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket
 import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.util.registry.Registry
@@ -67,6 +66,8 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     private var switchedSlot = false
 
     private val messages = ArrayList<String>()
+
+    private var prevItem = 0
 
     // This method is a proof for my intellectual abilities
     private fun generateLegitSentence(suspect: String): String {
@@ -175,7 +176,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
             if (murdererAssistance.value && isMurderer()) {
                 when (event.state) {
                     EventAttackEntity.State.PRE -> {
-                        mc.interactionManager?.lastSelectedSlot = mc.player?.inventory?.selectedSlot!! // prevent other modules from interfering
+                        prevItem = mc.player?.inventory?.selectedSlot!!
                         var sword = 0
                         for (slot in 0 until PlayerInventory.getHotbarSize()) {
                             if (isIllegalItem(mc.player?.inventory?.main?.get(slot)?.item!!)) {
@@ -184,12 +185,12 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                             }
                         }
                         if ((mc.player?.inventory?.selectedSlot!! != sword).also { switchedSlot = it }) {
-                            mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(sword))
+                            mc.player?.inventory?.selectedSlot = sword
                         }
                     }
 
                     EventAttackEntity.State.POST -> if (switchedSlot) {
-                        mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))
+                        mc.player?.inventory?.selectedSlot = prevItem
                     }
                 }
             }
@@ -197,10 +198,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
 
         registerEvent(EventIsEntityAttackable::class.java) { event ->
             if (!isMurderer()) {
-                if (event.entity !is PlayerEntity) {
-                    return@registerEvent
-                }
-                event.attackable = event.attackable && suspects.containsKey(event.entity.gameProfile)
+                event.attackable = event.attackable && event.entity is PlayerEntity && suspects.containsKey(event.entity.gameProfile)
             }
         }
 

@@ -41,7 +41,7 @@ class ManagerScreenExtension : Manager<ScreenExtension>() {
                 }
 
                 list.filter { it.alignment == alignment }.filter { it.screens.any { it.isAssignableFrom(eventChildren.screen.javaClass) } }.forEachIndexed { index, screenExtension ->
-                    eventChildren.add(PanelButton.createButton(xPos, 5 + (index * 27), 98, 25, screenExtension.name + (if (screenExtension.version != null) " (" + screenExtension.version + ")" else "")) {
+                    eventChildren.add(PanelButton.createButton(xPos, 5 + (index * 30), 98, 25, screenExtension.name + (if (screenExtension.version != null) " (" + screenExtension.version + ")" else "")) {
                         screenExtension.onClick(MinecraftClient.getInstance().currentScreen!!)
                     })
                 }
