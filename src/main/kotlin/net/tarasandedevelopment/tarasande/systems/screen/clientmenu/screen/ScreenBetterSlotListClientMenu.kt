@@ -56,7 +56,7 @@ class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, 
         super.render(matrices, mouseX, mouseY, delta)
 
         this.renderTitle(matrices, TarasandeMain.instance.name.let {
-            it[0].uppercaseChar().toString() + it.substring(1) + " Menu"
+            it.first().uppercase() + it.substring(1) + " Menu"
         })
     }
 
@@ -66,8 +66,8 @@ class ScreenBetterSlotListClientMenu(parent: Screen) : ScreenBetterSlotList(46, 
 
         override fun onSingleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
             super.onSingleClickEntry(mouseX, mouseY, mouseButton)
-            MinecraftClient.getInstance().soundManager.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0f))
-            element.onClickInternal(mouseButton)
+            if(element.onClickInternal(mouseButton))
+                MinecraftClient.getInstance().soundManager.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0f))
         }
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {

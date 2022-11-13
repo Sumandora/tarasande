@@ -26,20 +26,26 @@ class ManagerClientMenu : Manager<ElementMenu>() {
             ElementMenuToggleQuiltFaker(),
             ElementMenuToggleClientBrandSpoofer()
         )
+
+        list.filterIsInstance<ElementMenuToggle>().forEach {
+            it.state.owner = this
+        }
     }
 }
 
 abstract class ElementMenu(val name: String, val category: String) {
 
-    internal fun onClickInternal(mouseButton: Int) {
+    internal fun onClickInternal(mouseButton: Int): Boolean {
         if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
             if (TarasandeMain.managerValue().getValues(this@ElementMenu).isNotEmpty()) {
                 MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, this@ElementMenu))
-                return
+                return true
             }
         } else {
             this.onClick(mouseButton)
+            return true
         }
+        return false
     }
 
     open fun elementColor() : Int = Color.ORANGE.rgb

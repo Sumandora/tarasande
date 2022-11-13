@@ -34,7 +34,7 @@ object ContainerUtil {
         }.times(if (durability) (1.0f - stack.damage / stack.maxDamage.toFloat()) else 1.0f)
     }
 
-    private fun isSameItemType(stack: ItemStack, otherStack: ItemStack): Boolean {
+    fun isSameItemType(stack: ItemStack, otherStack: ItemStack): Boolean {
         return when {
             stack.item is SwordItem && otherStack.item is SwordItem -> true
 

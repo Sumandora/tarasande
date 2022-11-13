@@ -49,7 +49,8 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
     private fun intelligent(slot: Slot, list: List<Slot>): Boolean {
         if (!intelligent.value)
             return false
-        return ContainerUtil.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.toTypedArray(), *ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).toTypedArray()).filter { it != slot }.map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value)
+
+        return ContainerUtil.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.distinctBy { it.stack.item }.toTypedArray(), *ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).toTypedArray()).filter { it != slot }.map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value)
     }
 
     init {
