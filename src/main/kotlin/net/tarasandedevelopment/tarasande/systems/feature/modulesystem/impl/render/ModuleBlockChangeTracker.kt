@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.ren
 import net.minecraft.block.BlockState
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.shape.VoxelShapes
-import net.tarasandedevelopment.tarasande.events.EventRender3D
+import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module

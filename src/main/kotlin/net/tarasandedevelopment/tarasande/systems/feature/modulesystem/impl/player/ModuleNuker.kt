@@ -6,9 +6,9 @@ import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.registry.Registry
-import net.tarasandedevelopment.tarasande.events.EventAttack
-import net.tarasandedevelopment.tarasande.events.EventHandleBlockBreaking
-import net.tarasandedevelopment.tarasande.events.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.EventAttack
+import net.tarasandedevelopment.tarasande.event.EventHandleBlockBreaking
+import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueRegistry

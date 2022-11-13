@@ -8,8 +8,8 @@ import net.minecraft.client.gui.screen.DownloadingTerrainScreen
 import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen
 import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.events.EventRender2D
-import net.tarasandedevelopment.tarasande.events.EventScreenRender
+import net.tarasandedevelopment.tarasande.event.EventRender2D
+import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.screen.blursystem.impl.BlurBox

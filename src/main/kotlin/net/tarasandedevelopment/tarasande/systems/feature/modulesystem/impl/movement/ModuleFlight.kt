@@ -3,10 +3,10 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.mov
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShapes
-import net.tarasandedevelopment.tarasande.events.EventCollisionShape
-import net.tarasandedevelopment.tarasande.events.EventJump
-import net.tarasandedevelopment.tarasande.events.EventMovement
-import net.tarasandedevelopment.tarasande.events.EventUpdate
+import net.tarasandedevelopment.tarasande.event.EventCollisionShape
+import net.tarasandedevelopment.tarasande.event.EventJump
+import net.tarasandedevelopment.tarasande.event.EventMovement
+import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module

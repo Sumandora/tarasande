@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.gho
 
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.util.hit.HitResult
-import net.tarasandedevelopment.tarasande.events.EventAttack
-import net.tarasandedevelopment.tarasande.events.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.event.EventAttack
+import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.feature.clickmethodsystem.api.ClickSpeedUtil
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module

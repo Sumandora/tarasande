@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.ren
 
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Hand
-import net.tarasandedevelopment.tarasande.events.EventRender3D
+import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory

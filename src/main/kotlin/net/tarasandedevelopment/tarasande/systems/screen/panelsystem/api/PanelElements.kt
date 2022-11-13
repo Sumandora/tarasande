@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import net.tarasandedevelopment.tarasande.util.render.helper.elements.ElementWidth
+import net.tarasandedevelopment.tarasande.util.render.helper.element.ElementWidth
 import java.util.concurrent.CopyOnWriteArrayList
 
 open class PanelElements<T : ElementWidth>(title: String, minWidth: Double, minHeight: Double, fixed: Boolean = false) : Panel(title, minWidth, minHeight, fixed = fixed) {

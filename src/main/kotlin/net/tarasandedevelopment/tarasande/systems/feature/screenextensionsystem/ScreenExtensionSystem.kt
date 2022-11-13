@@ -4,7 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.events.EventChildren
+import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.protocolhack.util.ProtocolRange
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.impl.button.PanelButton

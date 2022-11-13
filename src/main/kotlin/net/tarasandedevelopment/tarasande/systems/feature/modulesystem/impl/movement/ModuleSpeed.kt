@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.movement
 
 import net.minecraft.util.math.MathHelper
-import net.tarasandedevelopment.tarasande.events.EventJump
-import net.tarasandedevelopment.tarasande.events.EventKeyBindingIsPressed
-import net.tarasandedevelopment.tarasande.events.EventMovement
+import net.tarasandedevelopment.tarasande.event.EventJump
+import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module

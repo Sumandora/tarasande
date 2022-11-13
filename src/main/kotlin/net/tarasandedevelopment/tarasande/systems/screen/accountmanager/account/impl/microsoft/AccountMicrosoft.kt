@@ -18,7 +18,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.ExtraInfo
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.azureapp.AzureAppPreset
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.ElementMenuScreenAccountManager
-import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.accountmanager.subscreens.ScreenBetterAzureApps
+import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.accountmanager.subscreen.ScreenBetterAzureApps
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.*

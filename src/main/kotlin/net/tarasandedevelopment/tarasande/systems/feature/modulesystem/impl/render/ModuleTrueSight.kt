@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render
 
 import net.minecraft.entity.Entity
-import net.tarasandedevelopment.tarasande.events.EventEntityFlag
+import net.tarasandedevelopment.tarasande.event.EventEntityFlag
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory

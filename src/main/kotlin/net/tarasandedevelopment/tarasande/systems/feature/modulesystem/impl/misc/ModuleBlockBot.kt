@@ -1,10 +1,10 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.misc
 
 import net.minecraft.client.MinecraftClient
-import net.tarasandedevelopment.tarasande.events.EventGoalMovement
-import net.tarasandedevelopment.tarasande.events.EventInput
-import net.tarasandedevelopment.tarasande.events.EventKeyBindingIsPressed
-import net.tarasandedevelopment.tarasande.events.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.EventGoalMovement
+import net.tarasandedevelopment.tarasande.event.EventInput
+import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory

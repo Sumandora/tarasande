@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.movement
 
-import net.tarasandedevelopment.tarasande.events.EventIsSaddled
+import net.tarasandedevelopment.tarasande.event.EventIsSaddled
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 

@@ -7,9 +7,9 @@ import net.minecraft.util.math.MathHelper
 import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.events.EventRender2D
-import net.tarasandedevelopment.tarasande.events.EventSuccessfulLoad
-import net.tarasandedevelopment.tarasande.events.EventTick
+import net.tarasandedevelopment.tarasande.event.EventRender2D
+import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.file.FileCheatMenu

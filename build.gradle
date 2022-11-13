@@ -201,3 +201,16 @@ tasks.named('build') {
 		}
 	}
 }
+tasks.named('build') {
+	doLast {
+		sourceSets.main.output.classesDirs.forEach {
+			fileTree(it).collect {it.getParentFile() }.unique().forEach {
+
+				if (it.absolutePath.contains("net/tarasandedevelopment/tarasande/")) {
+					if(it.name.endsWith("s"))
+						logger.warn(it.path + " is plural isn't it?")
+				}
+			}
+		}
+	}
+}

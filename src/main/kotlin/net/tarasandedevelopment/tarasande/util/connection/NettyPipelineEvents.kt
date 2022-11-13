@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.MessageToMessageDecoder
 import io.netty.handler.codec.MessageToMessageEncoder
-import su.mandora.event.EventDispatcher
-import net.tarasandedevelopment.tarasande.events.EventPacketTransform
+import net.tarasandedevelopment.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.EventPacketTransform
 
 class MessageToMessageDecoderEvent : MessageToMessageDecoder<ByteBuf>() {
 

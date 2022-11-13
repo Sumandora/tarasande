@@ -2,9 +2,9 @@ package net.tarasandedevelopment.tarasande.systems.screen.informationsystem.impl
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
-import su.mandora.event.EventDispatcher
-import net.tarasandedevelopment.tarasande.events.EventDisconnect
-import net.tarasandedevelopment.tarasande.events.EventPacket
+import net.tarasandedevelopment.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.EventDisconnect
+import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
 import java.nio.charset.StandardCharsets
