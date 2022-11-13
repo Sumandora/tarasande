@@ -148,6 +148,7 @@
     "protocolhack.entity.MixinClientPlayerEntity",
     "protocolhack.entity.MixinCowEntity",
     "protocolhack.entity.MixinEntity",
+    "protocolhack.entity.MixinEntityType",
     "protocolhack.entity.MixinItemEntity",
     "protocolhack.entity.MixinLivingEntity",
     "protocolhack.entity.MixinOtherClientPlayerEntity",

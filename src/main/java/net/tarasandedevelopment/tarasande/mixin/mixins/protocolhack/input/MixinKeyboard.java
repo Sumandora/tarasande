@@ -4,7 +4,7 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
-import net.tarasandedevelopment.tarasande.protocolhack.util.InputTracker1_12_2;
+import net.tarasandedevelopment.tarasande.protocolhack.fixes.InputTracker1_12_2;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

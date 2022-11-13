@@ -9,7 +9,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.network.encryption.Signer;
 import net.minecraft.network.message.*;
 import net.minecraft.text.Text;
-import net.tarasandedevelopment.tarasande.protocolhack.util.MessageSigner1_19_0;
+import net.tarasandedevelopment.tarasande.protocolhack.fixes.MessageSigner1_19_0;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

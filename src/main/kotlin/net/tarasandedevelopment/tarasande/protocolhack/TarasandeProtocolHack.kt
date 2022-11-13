@@ -27,6 +27,7 @@ import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IFontStorage_Protocol
 import net.tarasandedevelopment.tarasande.protocolhack.command.TarasandeCommandHandler
+import net.tarasandedevelopment.tarasande.protocolhack.fixes.EntityDimensionReplacement
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ValueBooleanProtocol
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ViaLegacyTarasandePlatform
@@ -86,6 +87,8 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
                 (it as IFontStorage_Protocol).protocolhack_clearCaches()
             }
         }
+
+        EntityDimensionReplacement.reloadDimensions()
     }
 
     private fun createChannelMappings() {

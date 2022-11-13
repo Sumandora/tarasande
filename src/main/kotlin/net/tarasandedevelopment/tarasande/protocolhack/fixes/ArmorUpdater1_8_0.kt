@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.protocolhack.util.inventory
+package net.tarasandedevelopment.tarasande.protocolhack.fixes
 
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.ArmorType
 import net.minecraft.client.MinecraftClient
