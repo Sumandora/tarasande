@@ -19,6 +19,7 @@ class PanelElementsProtocols : PanelElements<ElementValueComponent>("Protocol Ha
             this.elementList.add(object : ValueSpacer(protocol, protocol.name, 1.0F) {
                 override fun onChange() {
                     TarasandeMain.protocolHack().version.value = protocol.version.toDouble()
+                    TarasandeMain.instance.protocolHack.update(protocol)
                 }
 
                 override fun getColor(): Color? {
