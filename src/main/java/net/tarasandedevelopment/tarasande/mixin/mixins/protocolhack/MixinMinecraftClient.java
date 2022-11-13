@@ -16,8 +16,8 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.features.module.movement.ModuleInventoryMove;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol;
+import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.movement.ModuleInventoryMove;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -60,7 +60,7 @@ public abstract class MixinMinecraftClient {
         final UserConnection viaConnection = ((IClientConnection_Protocol) getNetworkHandler().getConnection()).protocolhack_getViaConnection();
 
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1) && viaConnection != null) {
-            ModuleInventoryMove moduleInventoryMove = TarasandeMain.Companion.get().getManagerModule().get(ModuleInventoryMove.class);
+            ModuleInventoryMove moduleInventoryMove = TarasandeMain.Companion.managerModule().get(ModuleInventoryMove.class);
             if (moduleInventoryMove.getEnabled() && moduleInventoryMove.getCancelOpenPacket().getValue())
                 return;
 

@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.features.module.entity;
 
 import net.minecraft.entity.Entity;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.features.module.render.ModuleESP;
+import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleESP;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,7 +14,7 @@ import java.awt.*;
 public class MixinEntity {
     @Inject(method = "getTeamColorValue", at = @At("RETURN"), cancellable = true)
     public void hookESP(CallbackInfoReturnable<Integer> cir) {
-        ModuleESP moduleESP = TarasandeMain.Companion.get().getManagerModule().get(ModuleESP.class);
+        ModuleESP moduleESP = TarasandeMain.Companion.managerModule().get(ModuleESP.class);
         if (moduleESP.getEnabled()) {
             Color c = moduleESP.getEntityColor().getColor((Entity) (Object) this);
             if (c != null)

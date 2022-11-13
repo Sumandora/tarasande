@@ -8,9 +8,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventBlockCollision;
-import net.tarasandedevelopment.tarasande.event.EventCollisionShape;
+import net.tarasandedevelopment.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.events.EventBlockCollision;
+import net.tarasandedevelopment.tarasande.events.EventCollisionShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +27,7 @@ public abstract class MixinAbstractBlockState {
     @Inject(method = "onEntityCollision", at = @At("HEAD"), cancellable = true)
     public void hookEventBlockCollision(World world, BlockPos pos, Entity entity, CallbackInfo ci) {
         EventBlockCollision eventBlockCollision = new EventBlockCollision(this.asBlockState(), pos, entity);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventBlockCollision);
+        EventDispatcher.INSTANCE.call(eventBlockCollision);
         if (eventBlockCollision.getCancelled())
             ci.cancel();
     }
@@ -36,7 +36,7 @@ public abstract class MixinAbstractBlockState {
     public void hookEventCollisionShape(BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
         if (pos != null && cir.getReturnValue() != null) {
             EventCollisionShape eventCollisionShape = new EventCollisionShape(pos, cir.getReturnValue());
-            TarasandeMain.Companion.get().getManagerEvent().call(eventCollisionShape);
+            EventDispatcher.INSTANCE.call(eventCollisionShape);
             cir.setReturnValue(eventCollisionShape.getCollisionShape());
         }
     }

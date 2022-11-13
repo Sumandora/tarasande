@@ -5,7 +5,7 @@ import net.minecraft.client.render.block.entity.SignBlockEntityRenderer;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.features.module.render.ModuleNoRender;
+import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleNoRender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -20,7 +20,7 @@ public class MixinSignBlockEntityRenderer {
     @Redirect(method = "render(Lnet/minecraft/block/entity/SignBlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/block/entity/SignBlockEntity;updateSign(ZLjava/util/function/Function;)[Lnet/minecraft/text/OrderedText;"))
     public OrderedText[] noRender_render(SignBlockEntity instance, boolean filterText, Function<Text, OrderedText> textOrderingFunction) {
-        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoRender.class).getWorld().getSignText().should()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getWorld().getSignText().should()) {
             return null;
         }
         return instance.updateSign(filterText, textOrderingFunction);
@@ -29,7 +29,7 @@ public class MixinSignBlockEntityRenderer {
     @ModifyConstant(method = "render(Lnet/minecraft/block/entity/SignBlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V",
             constant = @Constant(intValue = 4))
     public int noRender_render_signLength(int constant) {
-        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoRender.class).getWorld().getSignText().should()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getWorld().getSignText().should()) {
             return 0;
         }
         return constant;

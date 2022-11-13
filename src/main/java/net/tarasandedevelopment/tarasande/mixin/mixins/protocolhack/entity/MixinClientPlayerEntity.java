@@ -15,10 +15,10 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventSkipIdlePacket;
-import net.tarasandedevelopment.tarasande.features.protocol.util.inventory.ArmorUpdater1_8_0;
+import net.tarasandedevelopment.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.events.EventSkipIdlePacket;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
+import net.tarasandedevelopment.tarasande.protocolhack.util.inventory.ArmorUpdater1_8_0;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -98,7 +98,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
             } else if (this.lastOnGround != this.onGround || (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8) && VersionList.isNewerTo(LegacyProtocolVersion.R1_3_2))) {
                 this.networkHandler.sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(this.onGround));
             } else {
-                TarasandeMain.Companion.get().getManagerEvent().call(new EventSkipIdlePacket());
+                EventDispatcher.INSTANCE.call(new EventSkipIdlePacket());
             }
             if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
                 ++this.ticksSinceLastPositionPacketSent;

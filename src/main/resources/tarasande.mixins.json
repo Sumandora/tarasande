@@ -10,7 +10,6 @@
     "core.connection.MixinClientConnection",
     "core.connection.MixinClientConnectionSubInitChannel",
     "core.entity.MixinEntity",
-    "core.entity.MixinEntityRenderer",
     "core.entity.MixinLivingEntity",
     "core.entity.MixinLivingEntityRenderer",
     "core.forgefaker.MixinConnectScreenSubRun",

@@ -4,7 +4,7 @@ import net.minecraft.client.particle.FireworksSparkParticle;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.VertexConsumer;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.features.module.render.ModuleNoRender;
+import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleNoRender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,7 +15,7 @@ public class MixinFireworksSparkParticleSubExplosionAndFlash {
 
     @Inject(method = "buildGeometry", at = @At("HEAD"), cancellable = true)
     public void noRender_buildGeometry(VertexConsumer vertexConsumer, Camera camera, float tickDelta, CallbackInfo ci) {
-        if (TarasandeMain.Companion.get().getManagerModule().get(ModuleNoRender.class).getWorld().getFireworkExplosions().should()) {
+        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getWorld().getFireworkExplosions().should()) {
             ci.cancel();
         }
     }

@@ -1,9 +1,7 @@
 package net.tarasandedevelopment.tarasande.util.render.shader
 
-import org.apache.commons.io.IOUtils
 import org.lwjgl.opengl.GL20.*
 import java.io.IOException
-import java.util.*
 
 class Shader(private val source: String, type: Int) {
 
@@ -11,7 +9,7 @@ class Shader(private val source: String, type: Int) {
 
     init {
         try {
-            glShaderSource(id, String(IOUtils.toByteArray(Objects.requireNonNull(Shader::class.java.getResourceAsStream(source)))))
+            glShaderSource(id, (Shader::class.java.getResourceAsStream(source) ?: error("Can't acquire shader source")).readAllBytes().decodeToString())
         } catch (e: IOException) {
             e.printStackTrace()
         }

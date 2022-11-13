@@ -6,9 +6,9 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.listener.PacketListener;
 import net.minecraft.text.Text;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventDisconnect;
-import net.tarasandedevelopment.tarasande.event.EventPacket;
+import net.tarasandedevelopment.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.events.EventDisconnect;
+import net.tarasandedevelopment.tarasande.events.EventPacket;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientConnection;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -34,7 +34,7 @@ public abstract class MixinClientConnection implements IClientConnection {
     private static <T extends PacketListener> void hookEventPacketReceive(Packet<T> packet, PacketListener listener, CallbackInfo ci) {
         if (listener.getConnection().getSide() == NetworkSide.CLIENTBOUND) {
             EventPacket eventPacket = new EventPacket(EventPacket.Type.RECEIVE, packet);
-            TarasandeMain.Companion.get().getManagerEvent().call(eventPacket);
+            EventDispatcher.INSTANCE.call(eventPacket);
             if (eventPacket.getCancelled())
                 ci.cancel();
         }
@@ -48,7 +48,7 @@ public abstract class MixinClientConnection implements IClientConnection {
         if (!tarasande_forced.contains(packet)) {
             if (side == NetworkSide.CLIENTBOUND) {
                 EventPacket eventPacket = new EventPacket(EventPacket.Type.SEND, packet);
-                TarasandeMain.Companion.get().getManagerEvent().call(eventPacket);
+                EventDispatcher.INSTANCE.call(eventPacket);
                 if (eventPacket.getCancelled())
                     ci.cancel();
             }
@@ -58,7 +58,7 @@ public abstract class MixinClientConnection implements IClientConnection {
 
     @Inject(method = "disconnect", at = @At("RETURN"))
     public void hookEventDisconnect(Text disconnectReason, CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventDisconnect());
+        EventDispatcher.INSTANCE.call(new EventDisconnect());
     }
 
     @Override

@@ -3,9 +3,9 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.input;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventScreenInput;
-import net.tarasandedevelopment.tarasande.features.protocol.util.InputTracker1_12_2;
+import net.tarasandedevelopment.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.events.EventScreenInput;
+import net.tarasandedevelopment.tarasande.protocolhack.util.InputTracker1_12_2;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,7 +25,7 @@ public class MixinMinecraftClient {
         }
 
         EventScreenInput eventScreenInput = new EventScreenInput(false);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventScreenInput);
+        EventDispatcher.INSTANCE.call(eventScreenInput);
 
         while (!InputTracker1_12_2.INSTANCE.getKeyboard().isEmpty()) {
             InputTracker1_12_2.INSTANCE.getKeyboard().poll().run();

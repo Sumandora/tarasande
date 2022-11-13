@@ -6,8 +6,8 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.Window;
 import net.minecraft.util.Util;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.*;
+import net.tarasandedevelopment.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.events.*;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,12 +38,12 @@ public abstract class MixinMinecraftClient {
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void hookEventTickPre(CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventTick(EventTick.State.PRE));
+        EventDispatcher.INSTANCE.call(new EventTick(EventTick.State.PRE));
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void hookEventTickPost(CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventTick(EventTick.State.POST));
+        EventDispatcher.INSTANCE.call(new EventTick(EventTick.State.POST));
     }
 
     @Redirect(method = "onResolutionChanged", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/Window;setScaleFactor(D)V"))
@@ -51,32 +51,32 @@ public abstract class MixinMinecraftClient {
         double prevWidth = instance.getScaledWidth();
         double prevHeight = instance.getScaledHeight();
         instance.setScaleFactor(scaleFactor);
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventResolutionUpdate(prevWidth, prevHeight, this.window.getScaledWidth(), this.window.getScaledHeight()));
+        EventDispatcher.INSTANCE.call(new EventResolutionUpdate(prevWidth, prevHeight, this.window.getScaledWidth(), this.window.getScaledHeight()));
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Util;getMeasuringTimeMs()J"), slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;tick()V")))
     public long hookEventTimeTravel() {
         EventTimeTravel eventTimeTravel = new EventTimeTravel(Util.getMeasuringTimeMs());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventTimeTravel);
+        EventDispatcher.INSTANCE.call(eventTimeTravel);
         return eventTimeTravel.getTime();
     }
 
     @Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z", shift = At.Shift.BEFORE), slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doAttack()Z")))
     public void hookEventAttack(CallbackInfo ci) {
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventAttack());
+        EventDispatcher.INSTANCE.call(new EventAttack());
     }
 
     @Redirect(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;handleBlockBreaking(Z)V"))
     public void hookEventHandleBlockBreaking(MinecraftClient instance, boolean bl) {
         EventHandleBlockBreaking eventHandleBlockBreaking = new EventHandleBlockBreaking(bl);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventHandleBlockBreaking);
+        EventDispatcher.INSTANCE.call(eventHandleBlockBreaking);
         instance.handleBlockBreaking(eventHandleBlockBreaking.getParameter());
     }
 
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     public void hookEventChangeScreen(Screen screen, CallbackInfo ci) {
         final EventChangeScreen eventChangeScreen = new EventChangeScreen(screen);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventChangeScreen);
+        EventDispatcher.INSTANCE.call(eventChangeScreen);
 
         if (eventChangeScreen.getCancelled()) {
             ci.cancel();
@@ -90,8 +90,8 @@ public abstract class MixinMinecraftClient {
 
     @Redirect(method = "setScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;showsDeathScreen()Z"))
     public boolean hookEventRespawn(ClientPlayerEntity instance) {
-        EventRespawn eventRespawn = new EventRespawn(instance.showsDeathScreen());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventRespawn);
-        return eventRespawn.getShowDeathScreen();
+        EventShowsDeathScreen eventShowsDeathScreen = new EventShowsDeathScreen(instance.showsDeathScreen());
+        EventDispatcher.INSTANCE.call(eventShowsDeathScreen);
+        return eventShowsDeathScreen.getShowsDeathScreen();
     }
 }

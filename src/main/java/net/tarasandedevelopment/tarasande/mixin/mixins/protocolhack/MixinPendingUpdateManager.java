@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack;
 
 import net.minecraft.client.network.PendingUpdateManager;
-import net.tarasandedevelopment.tarasande.features.protocol.platform.ProtocolHackValues;
+import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.screen.hud;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.client.gui.hud.MessageIndicator;
-import net.tarasandedevelopment.tarasande.features.protocol.platform.ProtocolHackValues;
+import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

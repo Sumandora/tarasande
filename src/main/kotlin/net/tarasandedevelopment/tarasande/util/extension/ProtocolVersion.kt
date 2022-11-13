@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.util.extension
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import net.tarasandedevelopment.tarasande.features.protocol.util.ProtocolRange
+import net.tarasandedevelopment.tarasande.protocolhack.util.ProtocolRange
 import kotlin.math.abs
 
 operator fun ProtocolVersion.rangeTo(protocolVersion: ProtocolVersion): ProtocolRange {

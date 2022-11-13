@@ -4,11 +4,11 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.util.math.Vec3d;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventEntityFlag;
-import net.tarasandedevelopment.tarasande.event.EventMovement;
-import net.tarasandedevelopment.tarasande.event.EventStep;
-import net.tarasandedevelopment.tarasande.event.EventVelocityYaw;
+import net.tarasandedevelopment.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.events.EventEntityFlag;
+import net.tarasandedevelopment.tarasande.events.EventMovement;
+import net.tarasandedevelopment.tarasande.events.EventStep;
+import net.tarasandedevelopment.tarasande.events.EventVelocityYaw;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,7 +34,7 @@ public abstract class MixinEntity implements IEntity {
     public Vec3d hookEventVelocityYaw(Vec3d movementInput, float speed, float yaw) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             EventVelocityYaw eventVelocityYaw = new EventVelocityYaw(yaw);
-            TarasandeMain.Companion.get().getManagerEvent().call(eventVelocityYaw);
+            EventDispatcher.INSTANCE.call(eventVelocityYaw);
             yaw = eventVelocityYaw.getYaw();
         }
         return movementInputToVelocity(movementInput, speed, yaw);
@@ -43,7 +43,7 @@ public abstract class MixinEntity implements IEntity {
     @Inject(method = "move", at = @At("HEAD"))
     public void hookEventMovement(MovementType movementType, Vec3d movement, CallbackInfo ci) {
         EventMovement eventMovement = new EventMovement((Entity) (Object) this, movement);
-        TarasandeMain.Companion.get().getManagerEvent().call(eventMovement);
+        EventDispatcher.INSTANCE.call(eventMovement);
         movement.x = eventMovement.getVelocity().x;
         movement.y = eventMovement.getVelocity().y;
         movement.z = eventMovement.getVelocity().z;
@@ -53,7 +53,7 @@ public abstract class MixinEntity implements IEntity {
     public float hookEventStepPre(Entity instance) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             EventStep eventStep = new EventStep(instance.stepHeight, EventStep.State.PRE);
-            TarasandeMain.Companion.get().getManagerEvent().call(eventStep);
+            EventDispatcher.INSTANCE.call(eventStep);
             return eventStep.getStepHeight();
         }
 
@@ -64,7 +64,7 @@ public abstract class MixinEntity implements IEntity {
     public void hookEventStepPost(Vec3d movement, CallbackInfoReturnable<Vec3d> cir) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             EventStep eventStep = new EventStep((float) cir.getReturnValue().y, EventStep.State.POST);
-            TarasandeMain.Companion.get().getManagerEvent().call(eventStep);
+            EventDispatcher.INSTANCE.call(eventStep);
         }
     }
 
@@ -78,7 +78,7 @@ public abstract class MixinEntity implements IEntity {
             return;
         }
         EventEntityFlag eventEntityFlag = new EventEntityFlag((Entity) (Object) this, index, cir.getReturnValue());
-        TarasandeMain.Companion.get().getManagerEvent().call(eventEntityFlag);
+        EventDispatcher.INSTANCE.call(eventEntityFlag);
         cir.setReturnValue(eventEntityFlag.getEnabled());
     }
 

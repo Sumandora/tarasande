@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.core.screens;
 
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
-import net.tarasandedevelopment.tarasande.screen.widget.panel.ClickableWidgetPanel;
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.core.forgefaker;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.math.MatrixStack;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry;
+import net.tarasandedevelopment.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.events.EventRenderMultiplayerEntry;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,7 +23,7 @@ public class MixinMultiplayerServerListWidgetSubServerEntry {
     public void renderForgeInformation(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta, CallbackInfo ci) {
         matrices.push();
         matrices.translate(x, y, 0);
-        TarasandeMain.Companion.get().getManagerEvent().call(new EventRenderMultiplayerEntry(matrices, x, y, entryWidth, entryHeight, mouseX, mouseY, this.server));
+        EventDispatcher.INSTANCE.call(new EventRenderMultiplayerEntry(matrices, x, y, entryWidth, entryHeight, mouseX, mouseY, this.server));
         matrices.pop();
     }
 }
