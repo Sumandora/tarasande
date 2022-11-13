@@ -51,9 +51,9 @@ class TarasandeMain {
     private lateinit var managerPanel: ManagerPanel
 
     private lateinit var managerInformation: ManagerInformation
-    private lateinit var managerModule: ManagerModule
-
     private lateinit var managerGraph: ManagerGraph
+
+    private lateinit var managerModule: ManagerModule
 
     // Features
     private lateinit var clientValues: ClientValues
@@ -81,6 +81,7 @@ class TarasandeMain {
     fun onLateLoad() {
         managerPanel = ManagerPanel(managerFile)
         managerInformation = ManagerInformation(managerPanel)
+        managerGraph = ManagerGraph(managerInformation, managerPanel)
 
         protocolHack = TarasandeProtocolHack(rootDirectory)
 
@@ -91,8 +92,6 @@ class TarasandeMain {
         managerClientMenu = ManagerClientMenu()
 
         managerModule = ManagerModule(managerPanel, managerFile)
-
-        managerGraph = ManagerGraph(managerInformation, managerPanel)
 
         clientValues = ClientValues(name, managerPanel, managerFile)
         friends = Friends()

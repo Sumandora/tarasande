@@ -39,11 +39,11 @@ class ManagerBlur : Manager<Blur>() {
         )
 
         EventDispatcher.apply {
-            add(EventScreenRender::class.java) {
+            add(EventScreenRender::class.java, 1) {
                 if ((MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenCheatMenu || MinecraftClient.getInstance().currentScreen is DownloadingTerrainScreen) && it.screen !is RealmsNotificationsScreen)
                     blurScene()
             }
-            add(EventRender2D::class.java) {
+            add(EventRender2D::class.java, 1) {
                 blurScene()
             }
         }
