@@ -16,6 +16,7 @@ package de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4;
 
 import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
@@ -36,6 +37,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_7_10to1_7_5.ClientboundPa
 import de.florianmichael.vialegacy.protocols.protocol1_7_10to1_7_5.ServerboundPackets1_7_5;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.entity.EntityAttributeModifier;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.entity.EntityProperty;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.item.ReplacementRegistry1_7_5to1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.string.DisconnectPacketRemapper;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -259,6 +261,42 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             public void registerMap() {
                 map(Type.SHORT_BYTE_ARRAY);
                 map(Type.SHORT_BYTE_ARRAY);
+            }
+        });
+
+        this.registerClientbound(ClientboundPackets1_6_4.ENTITY_EQUIPMENT, new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                map(Type.INT); // Entity ID
+                map(Type.SHORT); // Slot
+                map(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM); // Item
+                handler(wrapper -> wrapper.set(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0, ReplacementRegistry1_7_5to1_6_4.replace(wrapper.get(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0))));
+            }
+        });
+
+        this.registerClientbound(ClientboundPackets1_6_4.SET_SLOT, new PacketRemapper() {
+
+            @Override
+            public void registerMap() {
+                map(Type.BYTE);
+                map(Type.SHORT);
+                map(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM);
+                handler(wrapper -> wrapper.set(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0, ReplacementRegistry1_7_5to1_6_4.replace(wrapper.get(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0))));
+            }
+        });
+
+        this.registerClientbound(ClientboundPackets1_6_4.WINDOW_ITEMS, new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                handler(packetWrapper -> {
+                    packetWrapper.passthrough(Type.UNSIGNED_BYTE); // Window ID
+                    Item[] items = packetWrapper.read(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM_ARRAY);
+
+                    for (int i = 0; i < items.length; i++) {
+                        items[i] = ReplacementRegistry1_7_5to1_6_4.replace(items[i]);
+                    }
+                    packetWrapper.write(Type.ITEM_ARRAY, items);  // Items
+                });
             }
         });
 

@@ -339,6 +339,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.INT, Type.VAR_INT); // Entity ID
                 map(Type.SHORT); // Slot
                 map(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, Type.ITEM); // Item
+                handler(pw -> pw.set(Type.ITEM, 0, ItemRewriter.toClient(pw.get(Type.ITEM, 0))));
             }
         });
 
