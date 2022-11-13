@@ -63,6 +63,7 @@ class TarasandeMain {
         fun managerPanel() = instance.managerPanel
         fun managerClientMenu() = instance.managerClientMenu
         fun managerInformation() = instance.managerInformation
+        fun protocolHack() = instance.protocolHack
         fun managerClickMethod() = instance.managerClickMethod
         fun managerESP() = instance.managerESP
         internal fun managerPackage() = instance.managerPackage

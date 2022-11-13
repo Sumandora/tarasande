@@ -35,13 +35,13 @@ class ManagerScreenExtension : Manager<ScreenExtension>() {
         EventDispatcher.add(EventChildren::class.java) { eventChildren ->
             for (alignment in Alignment.values()) {
                 val xPos = when (alignment) {
-                    Alignment.LEFT -> 5
+                    Alignment.LEFT -> 3
                     Alignment.MIDDLE -> MinecraftClient.getInstance().window.scaledWidth / 2 - (98 / 2)
-                    Alignment.RIGHT -> MinecraftClient.getInstance().window.scaledWidth - 98 - 5
+                    Alignment.RIGHT -> MinecraftClient.getInstance().window.scaledWidth - 98 - 3
                 }
 
                 list.filter { it.alignment == alignment }.filter { it.screens.any { it.isAssignableFrom(eventChildren.screen.javaClass) } }.forEachIndexed { index, screenExtension ->
-                    eventChildren.add(PanelButton.createButton(xPos, 5 + (index * 30), 98, 25, screenExtension.name + (if (screenExtension.version != null) " (" + screenExtension.version + ")" else "")) {
+                    eventChildren.add(PanelButton.createButton(xPos, 3 + (index * 30), 98, 25, screenExtension.name + (if (screenExtension.version != null) " (" + screenExtension.version + ")" else "")) {
                         screenExtension.onClick(MinecraftClient.getInstance().currentScreen!!)
                     })
                 }

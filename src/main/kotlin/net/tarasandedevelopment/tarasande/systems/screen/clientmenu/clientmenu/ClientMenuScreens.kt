@@ -20,7 +20,6 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry
 import net.tarasandedevelopment.tarasande.mixin.accessor.forgefaker.IServerInfo
-import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
@@ -34,7 +33,6 @@ import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.f
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.forgefaker.payload.modern.ModernForgePayload
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.forgefaker.ui.ScreenBetterSlotListForgeInformation
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.`package`.ScreenBetterSlotListPackages
-import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.protocol.ScreenBetterSlotListProtocolHack
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.proxy.ScreenBetterProxy
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
@@ -55,21 +53,6 @@ class ElementMenuScreenProxySystem : ElementMenuScreen("Proxy System", ElementCa
 
     override fun getScreen(): Screen {
         return ScreenBetterProxy(MinecraftClient.getInstance().currentScreen)
-    }
-}
-
-class ElementMenuScreenProtocolHack : ElementMenuScreen("Protocol Hack", ElementCategory.GENERAL) {
-
-    private val screenBetterSlotListProtocolHack = ScreenBetterSlotListProtocolHack()
-
-    init {
-        TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
-            it.owner = this
-        }
-    }
-
-    override fun getScreen(): Screen {
-        return this.screenBetterSlotListProtocolHack.apply { prevScreen = MinecraftClient.getInstance().currentScreen }
     }
 }
 

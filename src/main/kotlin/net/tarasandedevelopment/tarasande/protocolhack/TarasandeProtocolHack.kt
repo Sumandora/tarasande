@@ -21,12 +21,15 @@ import net.fabricmc.loader.api.ModContainer
 import net.fabricmc.loader.api.metadata.Person
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IFontStorage_Protocol
 import net.tarasandedevelopment.tarasande.protocolhack.command.TarasandeCommandHandler
+import net.tarasandedevelopment.tarasande.protocolhack.panel.PanelElementsProtocols
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ValueBooleanProtocol
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ViaLegacyTarasandePlatform
@@ -35,6 +38,7 @@ import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricMovementTr
 import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricVersionProvider
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanelSidebar
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.ThreadFactory
@@ -46,6 +50,7 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
     private val compression = arrayOf("decompress", "compress")
 
     val viaLegacy = ViaLegacyTarasandePlatform(this)
+    lateinit var panelElementsProtocols: PanelElementsProtocols
 
     init {
         ViaProtocolHack.instance().init(this) {
@@ -57,6 +62,7 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
 
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
             update(ProtocolVersion.getProtocol(version.value.toInt()))
+            panelElementsProtocols = PanelElementsProtocols()
         }
 
         TarasandeMain.managerInformation().apply {
