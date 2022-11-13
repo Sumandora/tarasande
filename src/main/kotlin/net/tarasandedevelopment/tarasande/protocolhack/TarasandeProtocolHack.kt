@@ -65,6 +65,12 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
             panelElementsProtocols = PanelElementsProtocols()
         }
 
+        EventDispatcher.add(EventChildren::class.java) {
+            if (it.screen is MultiplayerScreen) {
+                it.add(ClickableWidgetPanelSidebar(panelElementsProtocols))
+            }
+        }
+
         TarasandeMain.managerInformation().apply {
             add(object : Information("Via Version", "Protocol Version") {
                 override fun getMessage() = VersionList.getProtocols().firstOrNull { it.version == ViaProtocolHack.instance().provider().clientsideVersion }?.name

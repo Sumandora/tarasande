@@ -154,7 +154,9 @@
     "protocolhack.entity.MixinPlayerEntity",
     "protocolhack.entity.MixinSquidEntity",
     "protocolhack.entity.MixinWolfEntity",
+    "protocolhack.font.MixinBuiltinEmptyGlyph",
     "protocolhack.font.MixinBuiltinEmptyGlyphSubMissing",
+    "protocolhack.font.MixinFontStorage",
     "protocolhack.input.MixinKeyboard",
     "protocolhack.input.MixinMinecraftClient",
     "protocolhack.input.MixinMouse",
@@ -204,10 +206,5 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "core.screen.MixinMultiplayerScreen",
-    "protocolhack.font.MixinBuiltinEmptyGlyph",
-    "protocolhack.font.MixinFontStorage"
-  ]
+  }
 }
