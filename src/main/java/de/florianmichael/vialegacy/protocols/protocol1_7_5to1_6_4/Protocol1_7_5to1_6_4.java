@@ -38,6 +38,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_7_10to1_7_5.ServerboundPa
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.entity.EntityAttributeModifier;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.entity.EntityProperty;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.item.ReplacementRegistry1_7_5to1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.sound.SoundMappings1_7_5to1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.string.DisconnectPacketRemapper;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -1064,6 +1065,13 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 map(TypeRegistry_1_6_4.STRING, Type.STRING); // Sound name
+                handler(wrapper -> {
+                    final String soundName = wrapper.get(Type.STRING, 0);
+
+                    if (SoundMappings1_7_5to1_6_4.soundDiff.containsKey(soundName)) {
+                        wrapper.set(Type.STRING, 0, SoundMappings1_7_5to1_6_4.soundDiff.get(soundName));
+                    }
+                });
                 map(Type.INT); // X-Position
                 map(Type.INT); // Y-Position
                 map(Type.INT); // Z-Position
