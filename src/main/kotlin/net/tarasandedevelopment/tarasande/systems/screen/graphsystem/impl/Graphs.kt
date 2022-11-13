@@ -4,7 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.PlayerListEntry
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.events.*
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber

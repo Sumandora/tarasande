@@ -5,7 +5,7 @@ import com.google.common.collect.MultimapBuilder
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket
 import net.minecraft.network.packet.s2c.play.MessageHeaderS2CPacket
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.events.EventDisconnect
 import net.tarasandedevelopment.tarasande.events.EventPacket
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information

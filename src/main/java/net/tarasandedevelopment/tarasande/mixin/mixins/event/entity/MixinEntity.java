@@ -4,7 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.util.math.Vec3d;
-import net.tarasandedevelopment.event.EventDispatcher;
+import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.events.EventEntityFlag;
 import net.tarasandedevelopment.tarasande.events.EventMovement;
 import net.tarasandedevelopment.tarasande.events.EventStep;

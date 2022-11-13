@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event.blockesp;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.tarasandedevelopment.event.EventDispatcher;
+import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.events.EventRenderBlockModel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;

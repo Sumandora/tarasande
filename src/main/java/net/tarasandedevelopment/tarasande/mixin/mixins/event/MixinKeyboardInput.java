@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event;
 
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
-import net.tarasandedevelopment.event.EventDispatcher;
+import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.events.EventHasForwardMovement;
 import net.tarasandedevelopment.tarasande.events.EventInput;
 import org.spongepowered.asm.mixin.Mixin;

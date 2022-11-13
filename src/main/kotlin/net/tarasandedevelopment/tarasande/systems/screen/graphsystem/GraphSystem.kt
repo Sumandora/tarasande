@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.systems.screen.graphsystem
 
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.events.EventTick
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.impl.*

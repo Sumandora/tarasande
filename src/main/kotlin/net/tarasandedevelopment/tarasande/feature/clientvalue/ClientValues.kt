@@ -6,7 +6,7 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.Tameable
 import net.minecraft.util.registry.Registry
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.events.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.feature.clientvalue.panel.PanelElementsClientValues

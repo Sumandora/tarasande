@@ -8,7 +8,7 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.events.EventConnectServer
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IFontStorage_Protocol

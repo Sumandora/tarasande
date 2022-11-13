@@ -18,7 +18,7 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.RaycastContext
 import net.minecraft.world.RaycastContext.FluidHandling
 import net.minecraft.world.RaycastContext.ShapeType
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.events.EventInput
 import net.tarasandedevelopment.tarasande.events.EventIsEntityAttackable

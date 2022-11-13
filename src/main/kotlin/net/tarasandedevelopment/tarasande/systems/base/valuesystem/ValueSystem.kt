@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.systems.base.valuesystem
 
 import com.google.gson.JsonElement
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.events.EventSuccessfulLoad

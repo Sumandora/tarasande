@@ -5,7 +5,7 @@ import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.tarasandedevelopment.event.EventDispatcher;
+import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.events.EventChildren;
 import net.tarasandedevelopment.tarasande.events.EventScreenRender;
 import org.jetbrains.annotations.Nullable;

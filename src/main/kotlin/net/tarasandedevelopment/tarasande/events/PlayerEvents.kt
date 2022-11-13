@@ -7,7 +7,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShape
-import net.tarasandedevelopment.event.Event
+import su.mandora.event.Event
 
 class EventUpdate(val state: State) : Event(state == State.PRE) {
     enum class State {

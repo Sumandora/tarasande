@@ -21,7 +21,7 @@ import net.fabricmc.loader.api.ModContainer
 import net.fabricmc.loader.api.metadata.Person
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.events.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol

@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.events.EventChildren
 import net.tarasandedevelopment.tarasande.protocolhack.util.ProtocolRange

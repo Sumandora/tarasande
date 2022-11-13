@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event;
 
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.render.VertexConsumer;
-import net.tarasandedevelopment.event.EventDispatcher;
+import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.events.EventColorCorrection;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

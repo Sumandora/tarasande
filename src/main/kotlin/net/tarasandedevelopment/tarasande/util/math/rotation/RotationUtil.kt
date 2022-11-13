@@ -6,7 +6,7 @@ import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.events.*
 import net.tarasandedevelopment.tarasande.util.extension.minus

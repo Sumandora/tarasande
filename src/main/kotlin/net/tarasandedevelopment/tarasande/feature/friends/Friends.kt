@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.feature.friends
 import com.mojang.authlib.GameProfile
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Formatting
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.events.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.events.EventPlayerListName

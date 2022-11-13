@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.systems.screen.informationsystem
 
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.events.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.impl.*

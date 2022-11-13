@@ -6,7 +6,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen
 import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.events.EventRender2D
 import net.tarasandedevelopment.tarasande.events.EventScreenRender

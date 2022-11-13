@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.core.forgefaker;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.math.MatrixStack;
-import net.tarasandedevelopment.event.EventDispatcher;
+import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.events.EventRenderMultiplayerEntry;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

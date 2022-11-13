@@ -6,7 +6,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.listener.PacketListener;
 import net.minecraft.text.Text;
-import net.tarasandedevelopment.event.EventDispatcher;
+import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.events.EventDisconnect;
 import net.tarasandedevelopment.tarasande.events.EventPacket;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IClientConnection;

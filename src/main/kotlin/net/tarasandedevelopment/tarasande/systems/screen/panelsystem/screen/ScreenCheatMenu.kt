@@ -9,7 +9,7 @@ import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.events.EventChangeScreen
 import net.tarasandedevelopment.tarasande.events.EventUpdate

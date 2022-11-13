@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
-import net.tarasandedevelopment.event.Event
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.Event
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.events.EventDisconnect
 import net.tarasandedevelopment.tarasande.events.EventPacket

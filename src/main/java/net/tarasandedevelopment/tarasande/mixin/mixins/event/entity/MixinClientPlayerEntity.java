@@ -7,7 +7,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.text.Text;
-import net.tarasandedevelopment.event.EventDispatcher;
+import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.events.EventChat;
 import net.tarasandedevelopment.tarasande.events.EventIsWalking;
 import net.tarasandedevelopment.tarasande.events.EventUpdate;

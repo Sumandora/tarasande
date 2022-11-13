@@ -13,7 +13,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.network.encryption.SignatureVerifier
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.events.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
