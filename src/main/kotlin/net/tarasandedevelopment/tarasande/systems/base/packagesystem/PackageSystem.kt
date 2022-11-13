@@ -6,15 +6,13 @@ import net.tarasandedevelopment.tarasande.Manager
 internal class ManagerPackage : Manager<Package>() {
 
     init {
-        FabricLoader.getInstance().getEntrypointContainers("tarasande", Package::class.java).forEach {
+        FabricLoader.getInstance().getEntrypointContainers("tarasande", java.lang.Object::class.java).forEach {
             val metadata = it.provider.metadata
-            val addon = it.entrypoint
-
-            addon.modId = metadata.id
-            addon.modAuthors = metadata.authors.map { p -> p.name }
-            addon.modVersion = metadata.version.friendlyString
-
-            this.add(addon)
+            this.add(Package(
+                metadata.id,
+                metadata.authors.map { p -> p.name },
+                metadata.version.friendlyString
+            ))
         }
     }
 }
