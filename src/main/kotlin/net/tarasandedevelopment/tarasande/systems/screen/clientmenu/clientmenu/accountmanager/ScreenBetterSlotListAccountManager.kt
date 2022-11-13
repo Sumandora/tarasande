@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.network.SocialInteractionsManager
 import net.minecraft.client.util.ProfileKeys
+import net.minecraft.client.util.Session
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.network.encryption.SignatureVerifier
 import net.minecraft.text.Text
@@ -58,6 +59,15 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
     init {
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
             TarasandeMain.managerFile().add(FileAccounts(this))
+
+            if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && mainAccount != null) {
+                logIn(accounts[mainAccount!!])
+
+                while (loginThread != null && loginThread!!.isAlive)
+                    Thread.sleep(50L) // synchronize
+
+                status = ""
+            }
         }
     }
 
