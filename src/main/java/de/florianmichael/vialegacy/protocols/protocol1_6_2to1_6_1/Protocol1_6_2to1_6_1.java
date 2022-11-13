@@ -14,12 +14,13 @@
 
 package de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1;
 
-import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.minecraft.item.Item;
+import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.vialegacy.api.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.api.type.TypeRegistry_1_6_4;
 import de.florianmichael.vialegacy.api.via.EnZaProtocol;
-import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.storage.BlockPlaceTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_6_3to1_6_2.ClientboundPackets1_6_2;
 import de.florianmichael.vialegacy.protocols.protocol1_6_3to1_6_2.ServerboundPackets1_6_2;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.entity.EntityAttributeModifier;
@@ -77,10 +78,48 @@ public class Protocol1_6_2to1_6_1 extends EnZaProtocol<ClientboundPackets1_6_1, 
 				});
 			}
 		});
-	}
-	
-	@Override
-	public void init(UserConnection userConnection) {
-		userConnection.put(new BlockPlaceTracker(userConnection));
+
+		this.registerServerbound(ServerboundPackets1_6_2.PLAYER_BLOCK_PLACEMENT, new PacketRemapper() {
+			@Override
+			public void registerMap() {
+				handler(wrapper -> {
+					int x = wrapper.get(Type.INT, 0);
+					int y = wrapper.get(Type.UNSIGNED_BYTE, 0);
+					int z = wrapper.get(Type.INT, 1);
+
+					final int direction = wrapper.get(Type.UNSIGNED_BYTE, 1);
+					final Item item = wrapper.get(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0);
+
+					if (item == null) {
+						return;
+					}
+
+					if (direction == 1) {
+						++y;
+					} else if (direction == 2) {
+						--z;
+					} else if (direction == 3) {
+						++z;
+					} else if (direction == 4) {
+						--x;
+					} else if (direction == 5) {
+						++x;
+					}
+
+					if (item.identifier() == 323 && wrapper.get(Type.UNSIGNED_BYTE, 2) > 5) { // Sign and Cursor X
+						wrapper.cancel();
+
+						final PacketWrapper openSignEditor = PacketWrapper.create(ClientboundPackets1_6_1.OPEN_SIGN_EDITOR, wrapper.user());
+						openSignEditor.write(Type.BYTE, (byte) 0);
+
+						openSignEditor.write(Type.INT, x);
+						openSignEditor.write(Type.INT, y);
+						openSignEditor.write(Type.INT, z);
+
+						openSignEditor.send(Protocol1_6_2to1_6_1.class);
+					}
+				});
+			}
+		});
 	}
 }
