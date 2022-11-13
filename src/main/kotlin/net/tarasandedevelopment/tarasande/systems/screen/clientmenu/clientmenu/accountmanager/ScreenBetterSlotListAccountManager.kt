@@ -12,7 +12,9 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.network.encryption.SignatureVerifier
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
@@ -52,6 +54,12 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
     val managerEnvironment  = ManagerEnvironment()
     val managerAzureApp     = ManagerAzureApp()
     // @formatter:on
+
+    init {
+        EventDispatcher.add(EventSuccessfulLoad::class.java) {
+            TarasandeMain.managerFile().add(FileAccounts(this))
+        }
+    }
 
     fun selected(): Account? {
         if (this.slotList!!.selectedOrNull == null) return null
@@ -114,8 +122,6 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         if (TarasandeMain.clientValues().clientMenuBackButtons.value) {
             addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { RenderSystem.recordRenderCall { close() } })
         }
-
-        TarasandeMain.managerFile().add(FileAccounts(this))
 
         tick()
     }
