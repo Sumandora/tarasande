@@ -6,8 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 
 public class ADGADGADGADG {
-    public static ValueSpacer provide(Object owner) {
-        return new ValueSpacer(owner, "Klick mich", 1.0F, true /* java */) {
+    public static ValueSpacer provide(Object owner, String name) {
+        return new ValueSpacer(owner, name, 1.0F, true /* java */) {
             boolean abc = false;
 
             @Override

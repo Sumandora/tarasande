@@ -1,12 +1,14 @@
 package net.tarasandedevelopment.tarasande.mixin.mixins.core.screen;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.text.Text;
+import net.tarasandedevelopment.tarasande.endme.ADGADGADGADG;
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent;
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanelSidebar;
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.PanelElements;
-import net.tarasandedevelopment.tarasande.endme.ADGADGADGADG;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,12 +25,9 @@ public class MixinMultiplayerScreen extends Screen {
     public void adoigjag(CallbackInfo ci) {
         addDrawableChild(new ClickableWidgetPanelSidebar(new PanelElements<ElementValueComponent>("Hello, World/Sidebar", 300.0) {
             {
-                this.getElementList().add(ADGADGADGADG.provide(this).createValueComponent());
-                this.getElementList().add(ADGADGADGADG.provide(this).createValueComponent());
-                this.getElementList().add(ADGADGADGADG.provide(this).createValueComponent());
-                this.getElementList().add(ADGADGADGADG.provide(this).createValueComponent());
-                this.getElementList().add(ADGADGADGADG.provide(this).createValueComponent());
-                this.getElementList().add(ADGADGADGADG.provide(this).createValueComponent());
+                for (ProtocolVersion protocol : VersionList.getProtocols()) {
+                    this.getElementList().add(ADGADGADGADG.provide(this, protocol.getName()).createValueComponent());
+                }
             }
         }));
     }

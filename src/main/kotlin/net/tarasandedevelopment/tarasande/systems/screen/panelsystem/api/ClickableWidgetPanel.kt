@@ -32,9 +32,9 @@ open class ClickableWidgetPanel(val panel: Panel, val update: Boolean = false) :
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         panel.modifiable = false
-        val returnType = panel.isVisible() && panel.mouseClicked(mouseX, mouseY, button)
+        val returnValue = panel.isVisible() && panel.mouseClicked(mouseX, mouseY, button)
         panel.modifiable = true
-        return returnType
+        return returnValue
     }
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
@@ -44,7 +44,11 @@ open class ClickableWidgetPanel(val panel: Panel, val update: Boolean = false) :
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
-        return panel.isVisible() && panel.mouseScrolled(mouseX, mouseY, amount)
+        val opened = panel.opened
+        panel.opened = true
+        val returnValue = panel.isVisible() && panel.mouseScrolled(mouseX, mouseY, amount)
+        panel.opened = opened
+        return returnValue
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
