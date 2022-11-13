@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande
 
 import com.google.gson.GsonBuilder
-import net.minecraft.util.Util
 import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
@@ -50,7 +49,6 @@ class TarasandeMain {
 
     private lateinit var managerModule: ManagerModule
 
-    // Features
     private lateinit var clientValues: ClientValues
     private lateinit var friends: Friends
     //@formatter:on
@@ -92,23 +90,9 @@ class TarasandeMain {
         friends = Friends()
 
         EventDispatcher.call(EventSuccessfulLoad())
-
-        // We can't guarantee that qdbus exists, nor can we guarantee that we are even using kde plasma, just hope for the best ^^
-        if (Util.getOperatingSystem() == Util.OperatingSystem.LINUX) {
-            try {
-                Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor suspend")
-            } catch (ignored: Throwable) {
-            }
-        }
     }
 
     fun onUnload() {
-        if (Util.getOperatingSystem() == Util.OperatingSystem.LINUX) {
-            try {
-                Runtime.getRuntime().exec("qdbus org.kde.KWin /Compositor resume")
-            } catch (ignored: Throwable) {
-            }
-            managerFile.save(true)
-        }
+        managerFile.save(true)
     }
 }

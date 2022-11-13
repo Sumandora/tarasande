@@ -9,13 +9,6 @@ import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPane
 
 class ManagerInformation(panelSystem: ManagerPanel) : Manager<Information>() {
 
-    private fun conditional(condition: Boolean, block: () -> Information): Array<Information> {
-        return (if (condition)
-            listOf(block.invoke())
-        else
-            listOf()).toTypedArray()
-    }
-
     init {
         add(
             // Player
@@ -33,8 +26,6 @@ class ManagerInformation(panelSystem: ManagerPanel) : Manager<Information>() {
             // System
             InformationCPU(),
             InformationGPU(),
-            *conditional(InformationPortage.isGenlopInstalled()) { InformationPortage() },
-            InformationNowPlaying(),
 
             // World
             InformationEntities(),
