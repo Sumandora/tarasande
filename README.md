@@ -54,11 +54,8 @@
 - Notification panel: Render exclamation mark if unread notifications are present
 - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
 - ClickGUI: Make block picker more beautiful with icons
-
-## TODO-List (Emily | Linux) (Package)
-- Portage
-- QDBus Compositor disabling
-- Now playing for QDBus
+- ClickGUI: mouse floor
+- Protocol Hack: Entity Dimensions
 
 ## TODO-List (Flori | Tarasande)
 #### Additions
