@@ -1,10 +1,8 @@
 package net.tarasandedevelopment.tarasande
 
 import com.google.gson.GsonBuilder
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.util.Session
 import net.minecraft.util.Util
-import net.tarasandedevelopment.event.EventDispatcher
+import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
@@ -18,7 +16,6 @@ import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ManagerMo
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ManagerScreenExtension
 import net.tarasandedevelopment.tarasande.systems.screen.blursystem.ManagerBlur
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.ManagerClientMenu
-import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.ElementMenuScreenAccountManager
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.ManagerGraph
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
