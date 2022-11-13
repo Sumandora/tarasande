@@ -57,6 +57,7 @@
 - ClickGUI: mouse floor
 - Protocol Hack: Entity Dimensions
 - Protocol Hack: Pack Formats
+- Chest Stealer: Improve shit fix for intelligent (same item twice in chest; ignores closer)
 
 ## TODO-List (Flori | Tarasande)
 #### Additions
