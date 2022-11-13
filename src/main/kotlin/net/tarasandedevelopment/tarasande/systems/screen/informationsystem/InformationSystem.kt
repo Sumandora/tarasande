@@ -54,6 +54,7 @@ class ManagerInformation(panelSystem: ManagerPanel) : Manager<Information>() {
         )
 
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
+            list.sortedBy { it.owner }
             panelSystem.add(PanelInformation(this))
         }
     }

@@ -51,11 +51,11 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
         }
 
         TarasandeMain.managerInformation().apply {
-            add(object : Information("Connection", "Protocol Version") {
-                override fun getMessage() = VersionList.getProtocols().find { it.version == ViaProtocolHack.instance().provider().clientsideVersion }?.includedVersions?.last()
+            add(object : Information("Via Version", "Protocol Version") {
+                override fun getMessage() = VersionList.getProtocols().firstOrNull { it.version == ViaProtocolHack.instance().provider().clientsideVersion }?.name
             })
 
-            add(object : Information("Connection", "Via Pipeline") {
+            add(object : Information("Via Version", "Via Pipeline") {
                 override fun getMessage(): String? {
                     val names = (MinecraftClient.getInstance().networkHandler?.connection as? IClientConnection_Protocol)?.protocolhack_getViaConnection()?.protocolInfo?.pipeline?.pipes()?.map { p -> p.javaClass.simpleName } ?: return null
                     if (names.isEmpty()) return null
