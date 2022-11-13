@@ -7,7 +7,7 @@ import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponen
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.PanelElements
 import java.awt.Color
 
-class PanelElementsProtocols : PanelElements<ElementValueComponent>("Protocol Hack", 100.0) {
+class PanelElementsProtocols : PanelElements<ElementValueComponent>("Protocol Hack", 100.0, 0.0) {
 
     init {
         for (protocol in VersionList.getProtocols()) {

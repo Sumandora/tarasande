@@ -5,12 +5,8 @@ import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.helper.element.ElementWidth
 import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.math.floor
 
-open class PanelElements<T : ElementWidth>(title: String, minWidth: Double, minHeight: Double, fixed: Boolean = false, scissor: Boolean = false) : Panel(title, minWidth, minHeight, fixed = fixed, scissor = scissor) {
-
-    // For sidebar panels
-    constructor(title: String, width: Double): this(title, width, 0.0, scissor = true)
+open class PanelElements<T : ElementWidth>(title: String, minWidth: Double, minHeight: Double, fixed: Boolean = false) : Panel(title, minWidth, minHeight, fixed = fixed) {
 
     val elementList = CopyOnWriteArrayList<T>()
 
@@ -25,11 +21,10 @@ open class PanelElements<T : ElementWidth>(title: String, minWidth: Double, minH
         val x = x + 2
         var y = y + titleBarHeight + 2
         matrices?.translate(x, y, 0.0)
-        val hovered = RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), x, y + titleBarHeight, x + panelWidth, y + panelHeight)
         for (it in elementList) {
             it.width = panelWidth - 4
             if (y + it.getHeight() + 2 >= this.y - scrollOffset)
-                it.render(matrices, (if (hovered) mouseX - x else -1.0).toInt(), (if (hovered) mouseY - y - scrollOffset else -1.0).toInt(), delta)
+                it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
 
             matrices?.translate(0.0, it.getHeight() + 2, 0.0)
             y += it.getHeight() + 2
@@ -40,8 +35,6 @@ open class PanelElements<T : ElementWidth>(title: String, minWidth: Double, minH
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        val mouseX = floor(mouseX) // fix for render only getting integer mouse position
-        val mouseY = floor(mouseY)
         val hovered = RenderUtil.isHovered(mouseX, mouseY, x, y + titleBarHeight, x + panelWidth, y + panelHeight)
         val x = x + 2
         var y = y + titleBarHeight + 2
