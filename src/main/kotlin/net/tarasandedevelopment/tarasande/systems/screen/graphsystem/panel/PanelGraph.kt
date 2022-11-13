@@ -90,7 +90,7 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100.0, FontWr
     }
 
     override fun tick() {
-        val data: Number? = graph.lastData
+        val data = graph.lastData
         if (data != null) {
             this.values.add(data)
             while (this.values.size > this.graph.bufferLength) {

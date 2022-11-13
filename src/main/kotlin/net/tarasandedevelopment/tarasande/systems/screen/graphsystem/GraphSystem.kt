@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.systems.screen.graphsystem
 
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.impl.*
@@ -8,6 +7,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.information
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.panel.PanelGraph
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
+import su.mandora.event.EventDispatcher
 
 class ManagerGraph(informationSystem: ManagerInformation, panelSystem: ManagerPanel) : Manager<Graph>() {
 

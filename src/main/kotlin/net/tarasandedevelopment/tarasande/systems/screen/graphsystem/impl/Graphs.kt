@@ -4,36 +4,30 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.PlayerListEntry
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.minecraft.util.math.Vec3d
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.Graph
 import net.tarasandedevelopment.tarasande.util.extension.minus
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import org.lwjgl.glfw.GLFW
+import su.mandora.event.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.round
 
 class GraphFPS : Graph("FPS", 200) {
 
-    private val data = ArrayList<Double>()
+    private val data = ArrayList<Long>()
 
     init {
         EventDispatcher.add(EventPollEvents::class.java) {
-            data.add(RenderUtil.deltaTime)
+            data.removeIf { System.currentTimeMillis() - it > 1000L }
+            data.add(System.currentTimeMillis())
         }
     }
 
-    override fun supplyData(): Double? {
-        if (data.isEmpty())
-            return null
-        val average = data.average()
-        data.clear()
-        if (average <= 0.0)
-            return null
-        return round(1000.0 / average * 10) / 10.0
+    override fun supplyData(): Double {
+        return data.size.toDouble()
     }
 }
 
