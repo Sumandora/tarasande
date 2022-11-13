@@ -56,6 +56,7 @@
 - ClickGUI: Make block picker more beautiful with icons
 - ClickGUI: mouse floor
 - Protocol Hack: Entity Dimensions
+- Protocol Hack: Pack Formats
 
 ## TODO-List (Flori | Tarasande)
 #### Additions
