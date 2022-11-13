@@ -17,7 +17,6 @@ class ManagerClientMenu : Manager<ElementMenu>() {
             // GUIs
             ElementMenuScreenAccountManager(),
             ElementMenuScreenProxySystem(),
-            ElementMenuScreenProtocolHack(),
             ElementMenuScreenPackages(),
 
             // Exploits

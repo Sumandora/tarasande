@@ -12,7 +12,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 import kotlin.math.*
 
-class PanelRadar : Panel("Radar", 100.0, 100.0, background = true, fixed = true, scissor = true) {
+class PanelRadar : Panel("Radar", 100.0, 100.0, true) {
 
 	private val scale = ValueNumber(this, "Scale", 0.0, 1.0, 3.0, 0.1)
 

@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import kotlin.math.abs
 import kotlin.math.max
 
-class PanelMousepad : Panel("Mousepad", 100.0, 50.0, background = true, fixed = true) {
+class PanelMousepad : Panel("Mousepad", 100.0, 50.0, true) {
 
     private val rotations = ArrayList<Rotation>()
     private var lastRotation: Rotation? = null

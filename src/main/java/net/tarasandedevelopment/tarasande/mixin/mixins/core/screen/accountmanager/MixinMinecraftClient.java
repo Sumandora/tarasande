@@ -13,12 +13,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(MinecraftClient.class)
 public class MixinMinecraftClient {
 
-
     @Inject(method = "getSessionService", at = @At("RETURN"), cancellable = true)
     public void correctSessionService(CallbackInfoReturnable<MinecraftSessionService> cir) {
-        Account account = TarasandeMain.Companion.managerClientMenu().get(ElementMenuScreenAccountManager.class).getScreenBetterSlotListAccountManager().getCurrentAccount();
-        if (account != null)
-            cir.setReturnValue(account.getSessionService());
-    }
+        final Account account = TarasandeMain.Companion.managerClientMenu().get(ElementMenuScreenAccountManager.class).getScreenBetterSlotListAccountManager().getCurrentAccount();
 
+        if (account != null) {
+            cir.setReturnValue(account.getSessionService());
+        }
+    }
 }

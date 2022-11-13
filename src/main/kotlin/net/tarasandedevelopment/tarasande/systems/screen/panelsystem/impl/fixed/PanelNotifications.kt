@@ -22,7 +22,7 @@ class Notification(val text: String, val length: Long) {
 }
 
 
-class PanelNotifications : Panel("Notifications", 100.0, FontWrapper.fontHeight().toDouble(), background = false, resizable = false, fixed = true) {
+class PanelNotifications : Panel("Notifications", 100.0, FontWrapper.fontHeight().toDouble()) {
 
     private var alert = false
 

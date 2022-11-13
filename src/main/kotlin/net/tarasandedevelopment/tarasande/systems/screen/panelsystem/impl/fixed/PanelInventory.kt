@@ -7,7 +7,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import kotlin.math.floor
 
-class PanelInventory : Panel("Inventory", 150.0, 66.0, resizable = false, fixed = true) {
+class PanelInventory : Panel("Inventory", 150.0, 66.0, true) {
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         for (q in 9..35) {

@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventRender2D
@@ -22,6 +21,7 @@ import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
 import net.tarasandedevelopment.tarasande.util.render.helper.DragInfo
 import net.tarasandedevelopment.tarasande.util.render.helper.IElement
 import org.lwjgl.glfw.GLFW
+import su.mandora.event.EventDispatcher
 import java.awt.Color
 import kotlin.math.floor
 import kotlin.math.min
@@ -78,7 +78,10 @@ open class Panel(
     private val scissor: Boolean = false
 ) : IElement {
 
-    constructor(title: String, width: Double, height: Double, background: Boolean, resizable: Boolean, fixed: Boolean) : this(title, width, height, null, null, background, resizable, fixed, background)
+    // Fixed panels
+    constructor(title: String, width: Double, height: Double, background: Boolean = false) : this(title, width, height, null, null, background, false, true, background)
+    // Sidebar panels
+    constructor(title: String, width: Double) : this(title, width, 0.0, null, null, true, false, false, true)
 
     var x = 0.0
     var y = 0.0
@@ -200,7 +203,7 @@ open class Panel(
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        val mouseX = floor(mouseX)
+        val mouseX = floor(mouseX) // fix for render only getting integer mouse position
         val mouseY = floor(mouseY)
         if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + (if (opened) panelHeight else titleBarHeight.toDouble()))) {
             if (modifiable && button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
@@ -230,6 +233,7 @@ open class Panel(
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+        println(opened)
         if (opened && RenderUtil.isHovered(mouseX, mouseY, x, y + titleBarHeight, x + panelWidth, y + panelHeight)) {
             scrollSpeed += amount * 3
             return true

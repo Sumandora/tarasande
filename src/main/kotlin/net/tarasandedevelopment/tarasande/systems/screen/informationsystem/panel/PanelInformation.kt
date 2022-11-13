@@ -12,7 +12,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
 
-class PanelInformation(private val informationSystem: ManagerInformation) : Panel("Information", 75.0, FontWrapper.fontHeight().toDouble(), background = false, resizable = false, fixed = true) {
+class PanelInformation(private val informationSystem: ManagerInformation) : Panel("Information", 75.0, FontWrapper.fontHeight().toDouble()) {
 
     val map = HashMap<Information, String>()
 

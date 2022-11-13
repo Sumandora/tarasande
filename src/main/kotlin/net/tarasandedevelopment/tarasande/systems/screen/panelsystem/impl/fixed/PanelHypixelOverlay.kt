@@ -18,7 +18,7 @@ import kotlin.math.roundToInt
 /*
  * This code is probably worse than it has to be, but I just couldn't think of anything better (sleep deprivation :c)
  */
-class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeight().toDouble(), background = false, fixed = true) {
+class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeight().toDouble(), true) {
 
     private val apiKey = ValueText(this, "API Key", "")
 

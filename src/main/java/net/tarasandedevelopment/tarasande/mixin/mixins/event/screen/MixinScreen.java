@@ -30,8 +30,8 @@ public abstract class MixinScreen {
         EventDispatcher.INSTANCE.call(new EventScreenRender(matrices, (Screen) (Object) this, mouseX, mouseY));
     }
 
-    @Inject(method = "init(Lnet/minecraft/client/MinecraftClient;II)V", at = @At("RETURN"))
-    public void hookEventChildren(MinecraftClient client, int width, int height, CallbackInfo ci) {
+    @Inject(method = "clearAndInit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;init()V", shift = At.Shift.BEFORE))
+    public void hookEventChildren(CallbackInfo ci) {
         final EventChildren eventChildren = new EventChildren((Screen) (Object) this);
         EventDispatcher.INSTANCE.call(eventChildren);
 
