@@ -45,7 +45,7 @@ class ManagerPanel(fileSystem: ManagerFile) : Manager<Panel>() {
         )
 
         screenCheatMenu = ScreenCheatMenu(this)
-        EventDispatcher.add(EventSuccessfulLoad::class.java) {
+        EventDispatcher.add(EventSuccessfulLoad::class.java, 9999) {
             fileSystem.add(FileCheatMenu(this))
         }
     }

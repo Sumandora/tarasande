@@ -1,11 +1,11 @@
 package net.tarasandedevelopment.tarasande.systems.screen.informationsystem
 
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.panel.PanelInformation
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
+import su.mandora.event.EventDispatcher
 
 class ManagerInformation(panelSystem: ManagerPanel) : Manager<Information>() {
 
@@ -44,7 +44,7 @@ class ManagerInformation(panelSystem: ManagerPanel) : Manager<Information>() {
             InformationTimers()
         )
 
-        EventDispatcher.add(EventSuccessfulLoad::class.java, 1) {
+        EventDispatcher.add(EventSuccessfulLoad::class.java, 1001) {
             list.sortedBy { it.owner }
             panelSystem.add(PanelInformation(this))
         }

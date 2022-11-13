@@ -13,7 +13,6 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.network.encryption.SignatureVerifier
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
@@ -30,6 +29,7 @@ import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import org.apache.commons.lang3.RandomStringUtils
+import su.mandora.event.EventDispatcher
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
@@ -57,7 +57,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
     // @formatter:on
 
     init {
-        EventDispatcher.add(EventSuccessfulLoad::class.java) {
+        EventDispatcher.add(EventSuccessfulLoad::class.java, 9999) {
             TarasandeMain.managerFile().add(FileAccounts(this))
 
             if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && mainAccount != null) {

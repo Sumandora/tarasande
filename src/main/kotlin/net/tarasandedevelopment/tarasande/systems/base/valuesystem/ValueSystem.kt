@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.systems.base.valuesystem
 
 import com.google.gson.JsonElement
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
@@ -9,14 +8,13 @@ import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.file.impl.FileValuesBinds
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.file.impl.FileValuesNonBinds
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
+import su.mandora.event.EventDispatcher
 
 class ManagerValue(fileSystem: ManagerFile) : Manager<Value>() {
 
     init {
-        EventDispatcher.add(EventSuccessfulLoad::class.java) {
-            fileSystem.apply {
-                add(FileValuesBinds(), FileValuesNonBinds())
-            }
+        EventDispatcher.add(EventSuccessfulLoad::class.java, 9999) {
+            fileSystem.add(FileValuesBinds(), FileValuesNonBinds())
         }
     }
 
