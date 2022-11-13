@@ -9,7 +9,7 @@ import java.net.InetAddress
 
 private const val text = "タラサンデ"
 
-class PanelWatermark : Panel("Watermark", FontWrapper.getWidth(text) * 5.0, FontWrapper.fontHeight() * 5.0, fixed = true) {
+class PanelWatermark : Panel("Watermark", FontWrapper.getWidth(text) * 5.0, FontWrapper.fontHeight() * 5.0, true) {
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         // Mind the shadows and leave some space

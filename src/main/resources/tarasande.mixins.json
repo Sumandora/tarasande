@@ -206,6 +206,7 @@
     "defaultRequire": 1
   },
   "client": [
+    "core.screen.MixinMultiplayerScreen",
     "protocolhack.font.MixinBuiltinEmptyGlyph",
     "protocolhack.font.MixinFontStorage"
   ]

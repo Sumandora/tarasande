@@ -21,7 +21,7 @@ import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
 import java.awt.Color
 
-class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble(), background = false, resizable = false, fixed = true) {
+class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble()) {
 
     private val animations = HashMap<StatusEffect, Double>()
     private val prevInstances = HashMap<StatusEffect, StatusEffectInstance>()

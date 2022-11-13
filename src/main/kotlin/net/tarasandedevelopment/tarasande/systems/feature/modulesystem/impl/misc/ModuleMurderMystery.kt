@@ -202,7 +202,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         }
 
         registerEvent(EventAttackEntity::class.java, 9999) { event ->
-            if (murdererAssistance.value && isMurderer()) {
+            if (murdererAssistance.value && isMurderer() && PlayerUtil.isAttackable(event.entity)) {
                 when (event.state) {
                     EventAttackEntity.State.PRE -> {
                         prevItem = mc.player?.inventory?.selectedSlot!!
@@ -226,9 +226,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         }
 
         registerEvent(EventIsEntityAttackable::class.java) { event ->
-            if (!isMurderer()) {
-                event.attackable = event.attackable && event.entity is PlayerEntity && suspects.containsKey(event.entity.gameProfile)
-            }
+            event.attackable = event.attackable && event.entity is PlayerEntity && suspects.containsKey(event.entity.gameProfile) != isMurderer()
         }
 
         registerEvent(EventPacket::class.java) { event ->

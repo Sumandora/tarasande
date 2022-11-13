@@ -15,7 +15,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
 
-class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array List", 75.0, FontWrapper.fontHeight().toDouble(), background = false, resizable = false, fixed = true) {
+class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array List", 75.0, FontWrapper.fontHeight().toDouble()) {
 
     private val animations = HashMap<Module, Double>()
     private var easing = EzEasing.LINEAR

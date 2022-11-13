@@ -11,7 +11,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
-class PanelArmor : Panel("Armor", 75.0, FontWrapper.fontHeight().toDouble(), background = false, resizable = false, fixed = true) {
+class PanelArmor : Panel("Armor", 75.0, FontWrapper.fontHeight().toDouble()) {
 
     private val itemDimension = 20
 
