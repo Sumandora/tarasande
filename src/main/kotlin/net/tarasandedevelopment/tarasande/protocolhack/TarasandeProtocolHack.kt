@@ -21,6 +21,7 @@ import net.fabricmc.loader.api.ModContainer
 import net.fabricmc.loader.api.metadata.Person
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.GameMenuScreen
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
@@ -67,7 +68,7 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
         }
 
         EventDispatcher.add(EventChildren::class.java) {
-            if (it.screen is MultiplayerScreen) {
+            if (it.screen is MultiplayerScreen || it.screen is GameMenuScreen) {
                 it.add(ClickableWidgetPanelSidebar(panelElementsProtocols))
             }
         }
