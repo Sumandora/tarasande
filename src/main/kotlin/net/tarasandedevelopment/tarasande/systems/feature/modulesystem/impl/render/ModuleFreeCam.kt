@@ -6,7 +6,7 @@ import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.option.Perspective
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.events.*
+import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module

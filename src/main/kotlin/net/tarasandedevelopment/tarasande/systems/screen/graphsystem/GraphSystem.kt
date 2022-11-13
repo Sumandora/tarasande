@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.systems.screen.graphsystem
 
 import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.events.EventTick
+import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.information.InformationGraphValue
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.panel.PanelGraph

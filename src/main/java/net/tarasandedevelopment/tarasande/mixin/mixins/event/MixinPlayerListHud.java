@@ -4,7 +4,7 @@ import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.text.Text;
 import net.tarasandedevelopment.event.EventDispatcher;
-import net.tarasandedevelopment.tarasande.events.EventPlayerListName;
+import net.tarasandedevelopment.tarasande.event.EventPlayerListName;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

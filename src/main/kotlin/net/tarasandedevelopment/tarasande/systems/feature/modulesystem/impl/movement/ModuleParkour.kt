@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.movement
 
-import net.tarasandedevelopment.tarasande.events.EventKeyBindingIsPressed
-import net.tarasandedevelopment.tarasande.events.EventUpdate
+import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module

@@ -8,7 +8,7 @@ import net.minecraft.entity.Tameable
 import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.events.EventIsEntityAttackable
+import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.feature.clientvalue.panel.PanelElementsClientValues
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile

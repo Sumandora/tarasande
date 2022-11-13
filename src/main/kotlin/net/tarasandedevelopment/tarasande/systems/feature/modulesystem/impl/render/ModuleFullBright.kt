@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render
 
-import net.tarasandedevelopment.tarasande.events.EventGamma
+import net.tarasandedevelopment.tarasande.event.EventGamma
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module

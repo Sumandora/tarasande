@@ -14,7 +14,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.events.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
@@ -24,7 +24,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.azureapp.ManagerAzureApp
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.environment.ManagerEnvironment
 import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.accountmanager.file.FileAccounts
-import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.accountmanager.subscreens.ScreenBetterAccount
+import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.accountmanager.subscreen.ScreenBetterAccount
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed

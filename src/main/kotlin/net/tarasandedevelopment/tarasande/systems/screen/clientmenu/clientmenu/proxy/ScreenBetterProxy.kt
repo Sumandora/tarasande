@@ -9,8 +9,8 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
-import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholder
-import net.tarasandedevelopment.tarasande.screen.widget.textfields.TextFieldWidgetPlaceholderPassword
+import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
+import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholderPassword
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import net.tarasandedevelopment.tarasande.util.connection.ProxyAuthentication
 import net.tarasandedevelopment.tarasande.util.connection.ProxyType

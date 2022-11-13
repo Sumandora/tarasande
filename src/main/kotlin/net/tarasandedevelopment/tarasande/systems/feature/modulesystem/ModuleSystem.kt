@@ -5,9 +5,9 @@ import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.tarasandedevelopment.event.Event
 import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.events.EventDisconnect
-import net.tarasandedevelopment.tarasande.events.EventPacket
-import net.tarasandedevelopment.tarasande.events.EventTick
+import net.tarasandedevelopment.tarasande.event.EventDisconnect
+import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
@@ -21,7 +21,7 @@ import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.misc
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.movement.*
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.player.*
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.*
-import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.panel.elements.PanelElementsCategory
+import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.panel.element.PanelElementsCategory
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.panel.fixed.PanelArrayList
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.impl.fixed.PanelNotifications

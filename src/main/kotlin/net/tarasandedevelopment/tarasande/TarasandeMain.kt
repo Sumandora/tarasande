@@ -1,16 +1,14 @@
 package net.tarasandedevelopment.tarasande
 
 import com.google.gson.GsonBuilder
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.Session
 import net.minecraft.util.Util
 import net.tarasandedevelopment.event.EventDispatcher
-import net.tarasandedevelopment.tarasande.events.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
-import net.tarasandedevelopment.tarasande.feature.friends.Friends
+import net.tarasandedevelopment.tarasande.feature.friend.Friends
 import net.tarasandedevelopment.tarasande.protocolhack.TarasandeProtocolHack
-import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.systems.base.packagesystem.ManagerPackage
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.ManagerValue

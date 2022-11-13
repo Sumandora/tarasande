@@ -4,7 +4,7 @@ import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.util.math.Vec2f
-import net.tarasandedevelopment.tarasande.events.EventScreenInput
+import net.tarasandedevelopment.tarasande.event.EventScreenInput
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumberRange

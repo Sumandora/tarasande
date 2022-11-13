@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event;
 
 import net.minecraft.client.font.TextVisitFactory;
 import net.tarasandedevelopment.event.EventDispatcher;
-import net.tarasandedevelopment.tarasande.events.EventTextVisit;
+import net.tarasandedevelopment.tarasande.event.EventTextVisit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;

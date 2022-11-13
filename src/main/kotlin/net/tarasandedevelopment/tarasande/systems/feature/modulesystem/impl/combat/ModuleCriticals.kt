@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.combat
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
-import net.tarasandedevelopment.tarasande.events.EventAttackEntity
+import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module

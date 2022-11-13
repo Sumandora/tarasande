@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.util.math.Box;
 import net.tarasandedevelopment.event.EventDispatcher;
-import net.tarasandedevelopment.tarasande.events.EventBoundingBoxOverride;
+import net.tarasandedevelopment.tarasande.event.EventBoundingBoxOverride;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

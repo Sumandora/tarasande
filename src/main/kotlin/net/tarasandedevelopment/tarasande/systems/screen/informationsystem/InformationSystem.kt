@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.systems.screen.informationsystem
 
 import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.events.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.panel.PanelInformation
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel

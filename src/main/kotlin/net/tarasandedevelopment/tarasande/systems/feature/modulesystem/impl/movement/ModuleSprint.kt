@@ -2,9 +2,9 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.mov
 
 import net.minecraft.entity.Entity
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.events.EventEntityFlag
-import net.tarasandedevelopment.tarasande.events.EventJump
-import net.tarasandedevelopment.tarasande.events.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.event.EventEntityFlag
+import net.tarasandedevelopment.tarasande.event.EventJump
+import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory

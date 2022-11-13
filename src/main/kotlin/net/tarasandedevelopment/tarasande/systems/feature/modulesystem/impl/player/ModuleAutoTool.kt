@@ -4,8 +4,8 @@ import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.item.SwordItem
 import net.minecraft.util.hit.BlockHitResult
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.events.EventAttackEntity
-import net.tarasandedevelopment.tarasande.events.EventUpdate
+import net.tarasandedevelopment.tarasande.event.EventAttackEntity
+import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory

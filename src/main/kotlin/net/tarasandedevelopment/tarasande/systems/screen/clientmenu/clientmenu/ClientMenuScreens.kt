@@ -17,8 +17,8 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.events.EventPacket
-import net.tarasandedevelopment.tarasande.events.EventRenderMultiplayerEntry
+import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry
 import net.tarasandedevelopment.tarasande.mixin.accessor.forgefaker.IServerInfo
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean

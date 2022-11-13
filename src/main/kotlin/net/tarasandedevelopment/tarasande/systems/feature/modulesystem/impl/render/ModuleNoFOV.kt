@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render
 
 import net.minecraft.util.math.MathHelper
-import net.tarasandedevelopment.tarasande.events.EventMovementFovMultiplier
+import net.tarasandedevelopment.tarasande.event.EventMovementFovMultiplier
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumberRange
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module

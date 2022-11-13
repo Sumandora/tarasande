@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.ghost
 
-import net.tarasandedevelopment.tarasande.events.EventTick
+import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 

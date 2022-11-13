@@ -7,7 +7,7 @@ import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.tarasandedevelopment.event.EventDispatcher
-import net.tarasandedevelopment.tarasande.events.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.string.StringUtil

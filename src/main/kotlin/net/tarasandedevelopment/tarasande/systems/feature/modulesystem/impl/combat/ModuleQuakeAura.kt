@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.com
 
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.events.EventKeyBindingIsPressed
-import net.tarasandedevelopment.tarasande.events.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module

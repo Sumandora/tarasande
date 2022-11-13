@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.ghost
 
-import net.tarasandedevelopment.tarasande.events.EventBoundingBoxOverride
+import net.tarasandedevelopment.tarasande.event.EventBoundingBoxOverride
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory

@@ -6,10 +6,10 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.InputUtil
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.events.EventKeyBindingIsPressed
-import net.tarasandedevelopment.tarasande.events.EventPacket
-import net.tarasandedevelopment.tarasande.events.EventTick
-import net.tarasandedevelopment.tarasande.feature.friends.panel.PanelElementsFriends
+import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.feature.friend.panel.PanelElementsFriends
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementValueComponentRegistry
@@ -17,7 +17,7 @@ import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponen
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementValueComponentTextList
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.panel.elements.PanelElementsCategory
+import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.panel.element.PanelElementsCategory
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
