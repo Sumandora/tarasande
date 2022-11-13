@@ -51,9 +51,6 @@ object ProtocolHackValues {
 
     // 1.13 -> 1.12.2
     val removeNewTabCompletion = ValueBooleanProtocol("Remove new tab completion", ProtocolVersion.v1_12_2.andOlder())
-    val fontCacheFix = object : ValueBooleanProtocol("Font cache fix", ProtocolVersion.v1_12_2.andOlder()) {
-        override fun isEnabled() = !FabricLoader.getInstance().isModLoaded("dashloader")
-    }
 
     // 1.9 -> 1.8.x
     val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", ProtocolVersion.v1_8.andOlder())

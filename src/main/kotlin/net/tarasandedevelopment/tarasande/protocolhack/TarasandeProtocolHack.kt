@@ -81,7 +81,7 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
                 it.value = it.version.any { range -> protocol in range }
         }
 
-        if (ProtocolHackValues.fontCacheFix.value && ProtocolHackValues.fontCacheFix.isEnabled()) {
+        if (!FabricLoader.getInstance().isModLoaded("dashloader")) {
             MinecraftClient.getInstance().fontManager.fontStorages.values.forEach {
                 (it as IFontStorage_Protocol).protocolhack_clearCaches()
             }
