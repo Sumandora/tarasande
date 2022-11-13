@@ -97,7 +97,6 @@ class TarasandeMain {
         friends = Friends()
 
         EventDispatcher.call(EventSuccessfulLoad())
-        ProtocolHackValues.update(ProtocolVersion.getProtocol(protocolHack.version.value.toInt()))
 
         val accountManager = managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager
         if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && accountManager.mainAccount != null) {

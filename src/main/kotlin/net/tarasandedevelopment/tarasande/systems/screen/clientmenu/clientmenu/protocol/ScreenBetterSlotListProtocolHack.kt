@@ -54,7 +54,7 @@ class ScreenBetterSlotListProtocolHack : ScreenBetterSlotList(46, 12) {
 
         override fun onSingleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
             TarasandeMain.instance.protocolHack.version.value = this.protocol.version.toDouble()
-            ProtocolHackValues.update(this.protocol)
+            TarasandeMain.instance.protocolHack.update(this.protocol)
             super.onSingleClickEntry(mouseX, mouseY, mouseButton)
         }
     }

@@ -21,9 +21,14 @@ import net.fabricmc.loader.api.ModContainer
 import net.fabricmc.loader.api.metadata.Person
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
+import net.tarasandedevelopment.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.events.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol
+import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IFontStorage_Protocol
 import net.tarasandedevelopment.tarasande.protocolhack.command.TarasandeCommandHandler
+import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
+import net.tarasandedevelopment.tarasande.protocolhack.platform.ValueBooleanProtocol
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ViaLegacyTarasandePlatform
 import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricMovementTransmitterProvider
@@ -50,6 +55,10 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
             ViaLegacy.init(viaLegacy, config, Logger.getLogger("ViaLegacy-Tarasande"))
         }
 
+        EventDispatcher.add(EventSuccessfulLoad::class.java) {
+            update(ProtocolVersion.getProtocol(version.value.toInt()))
+        }
+
         TarasandeMain.managerInformation().apply {
             add(object : Information("Via Version", "Protocol Version") {
                 override fun getMessage() = VersionList.getProtocols().firstOrNull { it.version == ViaProtocolHack.instance().provider().clientsideVersion }?.name
@@ -62,6 +71,20 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
                     return "\n" + names.subList(0, names.size - 1).joinToString("\n")
                 }
             })
+        }
+    }
+
+    fun update(protocol: ProtocolVersion) {
+        // Owners may change, orientate on one setting
+        TarasandeMain.managerValue().getValues(ProtocolHackValues.viaVersionDebug.owner).forEach {
+            if (it is ValueBooleanProtocol)
+                it.value = it.version.any { range -> protocol in range }
+        }
+
+        if (ProtocolHackValues.fontCacheFix.value && ProtocolHackValues.fontCacheFix.isEnabled()) {
+            MinecraftClient.getInstance().fontManager.fontStorages.values.forEach {
+                (it as IFontStorage_Protocol).protocolhack_clearCaches()
+            }
         }
     }
 

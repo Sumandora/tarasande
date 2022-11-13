@@ -22,8 +22,7 @@ import net.tarasandedevelopment.tarasande.util.extension.andOlder
 object ProtocolHackValues {
 
     // General
-    @Suppress("unused")
-    private val viaVersionDebug = object : ValueBoolean(this, "ViaVersion Debug", false) {
+    val viaVersionDebug = object : ValueBoolean(this, "ViaVersion Debug", false) {
         override fun onChange() {
             @Suppress("DEPRECATION")
             Via.getManager().isDebug = value
@@ -58,29 +57,10 @@ object ProtocolHackValues {
     val removeNewTabCompletion = ValueBooleanProtocol("Remove new tab completion", ProtocolVersion.v1_12_2.andOlder())
     val fontCacheFix = object : ValueBooleanProtocol("Font cache fix", ProtocolVersion.v1_12_2.andOlder()) {
         override fun isEnabled() = !FabricLoader.getInstance().isModLoaded("dashloader")
-
-        init {
-            EventDispatcher.add(EventConnectServer::class.java) {
-                if (value && isEnabled()) {
-                    MinecraftClient.getInstance().fontManager.fontStorages.values.forEach {
-                        (it as IFontStorage_Protocol).protocolhack_clearCaches()
-                    }
-                }
-            }
-        }
     }
 
     // 1.9 -> 1.8.x
     val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", ProtocolVersion.v1_8.andOlder())
-
-
-    fun update(protocol: ProtocolVersion) {
-        // Owners may change, orientate on one setting
-        TarasandeMain.managerValue().getValues(viaVersionDebug.owner).forEach {
-            if (it is ValueBooleanProtocol)
-                it.value = it.version.any { range -> protocol in range }
-        }
-    }
 }
 
 open class ValueBooleanProtocol(name: String, vararg val version: ProtocolRange) : ValueBoolean(ProtocolHackValues, "$name (" + version.joinToString(", ") { it.toString() } + ")", false)
