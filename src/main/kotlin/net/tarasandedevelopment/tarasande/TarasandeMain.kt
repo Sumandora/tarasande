@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande
 
 import com.google.gson.GsonBuilder
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
@@ -20,6 +19,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Manag
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import org.slf4j.LoggerFactory
+import su.mandora.event.EventDispatcher
 import java.io.File
 
 class TarasandeMain {
@@ -90,9 +90,5 @@ class TarasandeMain {
         friends = Friends()
 
         EventDispatcher.call(EventSuccessfulLoad())
-    }
-
-    fun onUnload() {
-        managerFile.save(true)
     }
 }

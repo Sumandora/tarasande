@@ -36,6 +36,11 @@ public abstract class MixinMinecraftClient {
     @Shadow
     public abstract void setScreen(@Nullable Screen screen);
 
+    @Inject(method = "stop", at = @At("HEAD"))
+    public void unloadClient(CallbackInfo ci) {
+        EventDispatcher.INSTANCE.call(new EventShutdown());
+    }
+
     @Inject(method = "tick", at = @At("HEAD"))
     public void hookEventTickPre(CallbackInfo ci) {
         EventDispatcher.INSTANCE.call(new EventTick(EventTick.State.PRE));

@@ -50,3 +50,4 @@ class EventChildren(val screen: Screen) : Event(false) {
 
 class EventShowsDeathScreen(var showsDeathScreen: Boolean) : Event(false)
 class EventTimeTravel(var time: Long) : Event(false)
+class EventShutdown : Event(false)

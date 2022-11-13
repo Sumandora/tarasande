@@ -38,11 +38,6 @@ public abstract class MixinMinecraftClient {
         TarasandeMain.Companion.get().onLateLoad();
     }
 
-    @Inject(method = "stop", at = @At("HEAD"))
-    public void unloadClient(CallbackInfo ci) {
-        TarasandeMain.Companion.get().onUnload();
-    }
-
     @Inject(method = "render", at = @At("HEAD"))
     public void trackRenderStart(boolean tick, CallbackInfo ci) {
         this.tarasande_startTime = System.nanoTime();

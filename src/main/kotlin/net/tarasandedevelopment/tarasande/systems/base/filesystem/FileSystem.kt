@@ -3,10 +3,18 @@ package net.tarasandedevelopment.tarasande.systems.base.filesystem
 import com.google.gson.JsonElement
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.event.EventShutdown
+import su.mandora.event.EventDispatcher
 import java.io.FileWriter
 import java.nio.file.Files
 
 class ManagerFile : Manager<File>() {
+
+    init {
+        EventDispatcher.add(EventShutdown::class.java) {
+            save(true)
+        }
+    }
 
     override fun add(obj: File) {
         super.add(obj)
