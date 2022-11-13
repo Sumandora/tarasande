@@ -98,16 +98,6 @@ class TarasandeMain {
 
         EventDispatcher.call(EventSuccessfulLoad())
 
-        val accountManager = managerClientMenu.get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager
-        if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && accountManager.mainAccount != null) {
-            accountManager.logIn(accountManager.accounts[accountManager.mainAccount!!])
-
-            while (accountManager.loginThread != null && accountManager.loginThread!!.isAlive)
-                Thread.sleep(50L) // synchronize
-
-            accountManager.status = ""
-        }
-
         // We can't guarantee that qdbus exists, nor can we guarantee that we are even using kde plasma, just hope for the best ^^
         if (Util.getOperatingSystem() == Util.OperatingSystem.LINUX) {
             try {
