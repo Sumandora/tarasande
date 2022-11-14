@@ -7,11 +7,11 @@ import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionAccountManager
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.TextFieldInfo
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.environment.impl.EnvironmentPresetEasyMC
-import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.ElementMenuScreenAccountManager
 import java.net.HttpURLConnection
 import java.net.Proxy
 import java.net.URL
@@ -29,7 +29,7 @@ class AccountToken : Account() {
 
     private var service: MinecraftSessionService? = null
 
-    override fun defaultEnvironment(): Environment = TarasandeMain.managerClientMenu().get(ElementMenuScreenAccountManager::class.java).screenBetterSlotListAccountManager.managerEnvironment.get(EnvironmentPresetEasyMC::class.java).create()
+    override fun defaultEnvironment(): Environment = TarasandeMain.managerScreenExtension().get(ScreenExtensionAccountManager::class.java).screenBetterSlotListAccountManager.managerEnvironment.get(EnvironmentPresetEasyMC::class.java).create()
 
     override fun logIn() {
         val http = URL(redeemUrl).openConnection() as HttpURLConnection

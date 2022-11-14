@@ -21,26 +21,23 @@ import net.fabricmc.loader.api.ModContainer
 import net.fabricmc.loader.api.metadata.Person
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.screen.GameMenuScreen
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IFontStorage_Protocol
 import net.tarasandedevelopment.tarasande.protocolhack.command.TarasandeCommandHandler
 import net.tarasandedevelopment.tarasande.protocolhack.fixes.EntityDimensionReplacement
 import net.tarasandedevelopment.tarasande.protocolhack.fixes.PackFormats
-import net.tarasandedevelopment.tarasande.protocolhack.panel.PanelElementsProtocols
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ValueBooleanProtocol
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ViaLegacyTarasandePlatform
+import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureProtocolHack
+import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureProtocolHackSettings
 import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricVersionProvider
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
-import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanelSidebar
 import su.mandora.event.EventDispatcher
 import java.io.File
 import java.util.concurrent.ExecutorService
@@ -53,7 +50,6 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
     private val compression = arrayOf("decompress", "compress")
 
     val viaLegacy = ViaLegacyTarasandePlatform(this)
-    lateinit var panelElementsProtocols: PanelElementsProtocols
 
     init {
         ViaProtocolHack.instance().init(this) {
@@ -65,14 +61,14 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
 
         PackFormats.checkOutdated(nativeVersion())
 
-        EventDispatcher.add(EventSuccessfulLoad::class.java) {
-            update(ProtocolVersion.getProtocol(version.value.toInt()))
-            panelElementsProtocols = PanelElementsProtocols()
-        }
-
-        EventDispatcher.add(EventChildren::class.java) {
-            if (it.screen is MultiplayerScreen || it.screen is GameMenuScreen) {
-                it.add(ClickableWidgetPanelSidebar(panelElementsProtocols))
+        EventDispatcher.apply {
+            add(EventSuccessfulLoad::class.java, 10000) {
+                update(ProtocolVersion.getProtocol(version.value.toInt()))
+                // Protocol Hack
+                TarasandeMain.managerMultiplayerFeature().apply {
+                    insert(MultiplayerFeatureProtocolHack(), 0)
+                    insert(MultiplayerFeatureProtocolHackSettings(), 1)
+                }
             }
         }
 
@@ -89,6 +85,7 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
                 }
             })
         }
+
     }
 
     fun update(protocol: ProtocolVersion) {

@@ -24,12 +24,6 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
 
     override fun init() {
         super.init()
-        if (MinecraftClient.getInstance().world == null && TarasandeMain.clientValues().clientMenuBackButtons.value) {
-            this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
-                close()
-            })
-        }
-
         this.addDrawableChild(ClickableWidgetPanel(object : PanelElements<ElementValueComponent>(this.titleName, 300.0, 0.0) {
 
             init {

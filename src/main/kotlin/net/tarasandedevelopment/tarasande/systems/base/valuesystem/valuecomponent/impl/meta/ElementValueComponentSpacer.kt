@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.meta
 
 import net.minecraft.client.util.math.MatrixStack
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueSpacer
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
@@ -39,7 +38,7 @@ class ElementValueComponentSpacer(value: Value) : ElementValueComponent(value) {
                 line,
                 0.0f,
                 (getHeight() / 2.0F + (index - (lines.size - 1) / 2.0 + 0.5) * (FontWrapper.fontHeight() / 2.0f) - FontWrapper.fontHeight() / 2.0F).toFloat(),
-                valueSpacer.getColor()?.rgb ?: (if(RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), 0.0, 0.0, width, getHeight())) TarasandeMain.clientValues().accentColor.getColor().rgb else -1),
+                valueSpacer.getColor(RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), 0.0, 0.0, width, getHeight())).rgb,
                 valueSpacer.scale,
                 0.5F
             )
@@ -48,7 +47,7 @@ class ElementValueComponentSpacer(value: Value) : ElementValueComponent(value) {
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if(RenderUtil.isHovered(mouseX, mouseY, 0.0, 0.0, width, getHeight())) {
-            value.onChange()
+            (value as ValueSpacer).onChange(button)
             return true
         }
         return false

@@ -56,11 +56,11 @@ class ManagerPanel(fileSystem: ManagerFile) : Manager<Panel>() {
         list.add(index, panel)
     }
 
-    override fun add(obj: Panel) {
+    override fun insert(obj: Panel, index: Int) {
         obj.x = 5.0
         obj.y = panelInsertY
         panelInsertY += obj.titleBarHeight + 5.0
-        super.add(obj)
+        super.insert(obj, index)
     }
 
 }

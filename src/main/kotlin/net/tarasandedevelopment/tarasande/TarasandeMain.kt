@@ -11,9 +11,9 @@ import net.tarasandedevelopment.tarasande.systems.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.systems.feature.clickmethodsystem.ManagerClickMethod
 import net.tarasandedevelopment.tarasande.systems.feature.espsystem.ManagerESP
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ManagerModule
+import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.ManagerMultiplayerFeature
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ManagerScreenExtension
 import net.tarasandedevelopment.tarasande.systems.screen.blursystem.ManagerBlur
-import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.ManagerClientMenu
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.ManagerGraph
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
@@ -41,7 +41,7 @@ class TarasandeMain {
     private lateinit var managerClickMethod: ManagerClickMethod
     private lateinit var managerScreenExtension: ManagerScreenExtension
     private lateinit var managerBlur: ManagerBlur
-    private lateinit var managerClientMenu: ManagerClientMenu
+    private lateinit var managerMultiplayerFeature: ManagerMultiplayerFeature
     private lateinit var managerPanel: ManagerPanel
 
     private lateinit var managerInformation: ManagerInformation
@@ -61,7 +61,8 @@ class TarasandeMain {
         fun managerValue() = instance.managerValue
         fun managerModule() = instance.managerModule
         fun managerPanel() = instance.managerPanel
-        fun managerClientMenu() = instance.managerClientMenu
+        fun managerScreenExtension() = instance.managerScreenExtension
+        fun managerMultiplayerFeature() = instance.managerMultiplayerFeature
         fun managerInformation() = instance.managerInformation
         fun protocolHack() = instance.protocolHack
         fun managerClickMethod() = instance.managerClickMethod
@@ -76,6 +77,7 @@ class TarasandeMain {
         managerPanel = ManagerPanel(managerFile)
         managerInformation = ManagerInformation(managerPanel)
         managerGraph = ManagerGraph(managerInformation, managerPanel)
+        managerMultiplayerFeature = ManagerMultiplayerFeature()
 
         protocolHack = TarasandeProtocolHack(rootDirectory)
 
@@ -83,7 +85,6 @@ class TarasandeMain {
         managerClickMethod = ManagerClickMethod()
         managerScreenExtension = ManagerScreenExtension()
         managerBlur = ManagerBlur()
-        managerClientMenu = ManagerClientMenu()
 
         managerModule = ManagerModule(managerPanel, managerFile)
 
