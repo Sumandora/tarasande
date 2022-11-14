@@ -44,19 +44,12 @@
 - Trouble in terrorist town module
 - User configs
 - Crystal Aura
-- Step: Calculate all motions; Prediction by LivingEntity#travel; Instantiate object and simulate
 - Change Name/Skin/Cape in Account Manager
-- (Banners in protocol selection)
 - Settings for HypixelBedwarsOverlay
 - ViaLegacy texture pack using ProtocolPatcher
 - Anti vanish: Tab completion
-- Make a system for automatically enabling and disabling protocol fixes
-- Notification panel: Render exclamation mark if unread notifications are present
 - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
-- ClickGUI: Make block picker more beautiful with icons
-- ClickGUI: mouse floor
 - Protocol Hack: Entity Dimensions
-- Protocol Hack: Pack Formats
 
 ## TODO-List (Flori | Tarasande)
 #### Additions
