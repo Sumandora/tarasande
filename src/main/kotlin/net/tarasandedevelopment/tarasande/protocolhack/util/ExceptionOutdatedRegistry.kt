@@ -1,7 +1,3 @@
-package net.tarasandedevelopment.tarasande.protocolhack.util;
+package net.tarasandedevelopment.tarasande.protocolhack.util
 
-public class ExceptionOutdatedRegistry extends Exception {
-    public ExceptionOutdatedRegistry(String message) {
-        super(message);
-    }
-}
+class ExceptionOutdatedRegistry(message: String) : Exception(message)
