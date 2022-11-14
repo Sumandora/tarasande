@@ -9,5 +9,11 @@ open class ValueSpacer(owner: Any, name: String, val scale: Float = 0.5F, manage
     override fun save(): JsonElement? = null
     override fun load(jsonElement: JsonElement) {}
 
+    override fun onChange() {
+        onChange(-1)
+    }
+
     open fun getColor(): Color? = null
+    open fun onChange(mouseButton: Int) {
+    }
 }

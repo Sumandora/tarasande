@@ -8,8 +8,8 @@ import net.minecraft.server.ServerMetadata;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.mixin.accessor.forgefaker.IServerInfo;
 import net.tarasandedevelopment.tarasande.mixin.accessor.forgefaker.IServerMetadata;
-import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.ElementMenuToggleForgeFaker;
-import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.forgefaker.payload.IForgePayload;
+import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.MultiplayerFeatureExploitsForgeFaker;
+import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.forgefaker.payload.IForgePayload;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,7 +35,7 @@ public class MixinMultiplayerServerListPingerSubOnResponse {
         if (payload != null) {
             ((IServerInfo) field_3776).tarasande_setForgePayload(payload);
 
-            TarasandeMain.Companion.managerClientMenu().get(ElementMenuToggleForgeFaker.class).getForgeInfoTracker().put((InetSocketAddress) instance.getAddress(), payload);
+            TarasandeMain.Companion.managerMultiplayerFeature().get(MultiplayerFeatureExploitsForgeFaker.class).getForgeInfoTracker().put((InetSocketAddress) instance.getAddress(), payload);
         }
 
         instance.send(packet); // Original Code

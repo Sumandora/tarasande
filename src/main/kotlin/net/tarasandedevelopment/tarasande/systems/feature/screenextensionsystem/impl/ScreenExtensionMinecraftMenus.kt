@@ -3,14 +3,23 @@ package net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.*
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ScreenExtension
-import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.screen.ScreenBetterSlotListClientMenu
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.minecraftmenus.accountmanager.ScreenBetterSlotListAccountManager
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.minecraftmenus.proxy.ScreenBetterProxy
 
-class ScreenExtensionMinecraftMenusClientMenu : ScreenExtension(TarasandeMain.instance.name.let { it[0].uppercaseChar().toString() + it.substring(1) + " Menu" }, TitleScreen::class.java, MultiplayerScreen::class.java, GameMenuScreen::class.java) {
+class ScreenExtensionMinecraftMenusAccountManager : ScreenExtension("Account manager", TitleScreen::class.java, MultiplayerScreen::class.java) {
+
+    val screenBetterSlotListAccountManager = ScreenBetterSlotListAccountManager()
 
     override fun onClick(current: Screen) {
-        MinecraftClient.getInstance().setScreen(ScreenBetterSlotListClientMenu(current))
+        MinecraftClient.getInstance().setScreen(this.screenBetterSlotListAccountManager.apply { prevScreen = MinecraftClient.getInstance().currentScreen })
+    }
+}
+
+class ScreenExtensionMinecraftMenusProxySystem : ScreenExtension("Proxy system", TitleScreen::class.java, MultiplayerScreen::class.java) {
+
+    override fun onClick(current: Screen) {
+        MinecraftClient.getInstance().setScreen(ScreenBetterProxy(MinecraftClient.getInstance().currentScreen))
     }
 }
 

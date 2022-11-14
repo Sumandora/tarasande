@@ -14,7 +14,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.impl.AccountYggdrasil
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.impl.microsoft.AccountMicrosoft
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.impl.microsoft.AccountMicrosoftRefreshToken
-import net.tarasandedevelopment.tarasande.systems.screen.clientmenu.clientmenu.accountmanager.subscreen.ScreenBetterEnvironment
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.minecraftmenus.accountmanager.subscreen.ScreenBetterEnvironment
 import net.tarasandedevelopment.tarasande.util.render.SkinRenderer
 
 class ManagerAccount : Manager<Class<out Account>>() {
