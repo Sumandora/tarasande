@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholderPassword
-import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.ScreenExtensionMinecraftMenusAccountManager
+import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.MultiplayerFeatureGeneralAccountManager
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.ExtraInfo
@@ -26,7 +26,7 @@ class ScreenBetterAccount(
 
     private val textFields: ArrayList<TextFieldWidget> = ArrayList()
 
-    private var implementationClass: Class<out Account> = TarasandeMain.managerMultiplayerFeature().get(ScreenExtensionMinecraftMenusAccountManager::class.java).screenBetterSlotListAccountManager.managerAccount.list.first()
+    private var implementationClass: Class<out Account> = TarasandeMain.managerMultiplayerFeature().get(MultiplayerFeatureGeneralAccountManager::class.java).screenBetterSlotListAccountManager.managerAccount.list.first()
     private var accountImplementation: Account? = null
 
     private var submitButton: ButtonWidget? = null
@@ -50,7 +50,7 @@ class ScreenBetterAccount(
                 20,
                 Text.of((implementationClass.annotations[0] as AccountInfo).name)
             ) { button ->
-                implementationClass = TarasandeMain.managerMultiplayerFeature().get(ScreenExtensionMinecraftMenusAccountManager::class.java).screenBetterSlotListAccountManager.managerAccount.let { it.list[(it.list.indexOf(implementationClass) + 1) % it.list.size ] }
+                implementationClass = TarasandeMain.managerMultiplayerFeature().get(MultiplayerFeatureGeneralAccountManager::class.java).screenBetterSlotListAccountManager.managerAccount.let { it.list[(it.list.indexOf(implementationClass) + 1) % it.list.size ] }
                 accountImplementation = implementationClass.getDeclaredConstructor().newInstance()
                 init()
                 button.message = Text.of(implementationClass.name)
@@ -119,8 +119,6 @@ class ScreenBetterAccount(
             accountConsumer.accept(accountImplementation!!)
             close()
         }.also { submitButton = it })
-
-        this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { this.close() })
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {

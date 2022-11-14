@@ -18,9 +18,7 @@ class ManagerScreenExtension : Manager<ScreenExtension>() {
             ScreenExtensionInventoryCraftingDupe(),
             ScreenExtensionInventoryLecternCrash(),
 
-            // Minecraft Menus,
-            ScreenExtensionMinecraftMenusAccountManager(),
-            ScreenExtensionMinecraftMenusProxySystem(),
+            // Minecraft Menus
             ScreenExtensionMinecraftMenusSleepingChat(),
             ScreenExtensionMinecraftMenusDeath(),
 
@@ -42,7 +40,7 @@ class ManagerScreenExtension : Manager<ScreenExtension>() {
                 }
 
                 list.filter { it.alignment == alignment }.filter { it.screens.any { it.isAssignableFrom(eventChildren.screen.javaClass) } }.forEachIndexed { index, screenExtension ->
-                    eventChildren.add(PanelButton.createButton(xPos + (index * 101), 3, 98, 25, screenExtension.name + (if (screenExtension.version != null) " (" + screenExtension.version + ")" else "")) {
+                    eventChildren.add(PanelButton.createButton(xPos, 3 + (index * 30), 98, 25, screenExtension.name + (if (screenExtension.version != null) " (" + screenExtension.version + ")" else "")) {
                         screenExtension.onClick(MinecraftClient.getInstance().currentScreen!!)
                     })
                 }

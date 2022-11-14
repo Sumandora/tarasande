@@ -31,10 +31,6 @@ class ScreenBetterFileChooser(
 
     override fun init() {
         super.init()
-        this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
-            close()
-        })
-
         this.addDrawableChild(ClickableWidgetPanel(object : Panel("File Chooser", 0.0, 0.0, 0.0, 0.0, background = true, scissor = true) {
 
             private var cachedFiles = listOf<File>()

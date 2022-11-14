@@ -9,7 +9,9 @@ import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesyst
 
 class MultiplayerFeatureProtocolHack : MultiplayerFeatureSelection("Protocol Hack", MultiplayerFeatureCategory.PROTOCOL_HACK, VersionList.getProtocols().map { it.getSpecialName() }, ProtocolVersion.getProtocol(TarasandeMain.protocolHack().version.value.toInt()).getSpecialName()) {
 
-    override fun onChange(newValue: String) {
+    override fun onClick(newValue: String) {
+        println("new: $newValue")
         TarasandeMain.instance.protocolHack.version.value = VersionList.getProtocols().first { it.getSpecialName() == newValue }.version.toDouble()
+        TarasandeMain.instance.protocolHack.update(ProtocolVersion.getProtocol(TarasandeMain.instance.protocolHack.version.value.toInt()))
     }
 }

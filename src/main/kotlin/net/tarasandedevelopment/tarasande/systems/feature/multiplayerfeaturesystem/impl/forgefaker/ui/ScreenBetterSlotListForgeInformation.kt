@@ -43,12 +43,6 @@ class ScreenBetterSlotListForgeInformation(parent: Screen, private val titleName
         })
     }
 
-    override fun init() {
-        super.init()
-
-        addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) { RenderSystem.recordRenderCall { close() } })
-    }
-
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
 

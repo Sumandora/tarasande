@@ -9,7 +9,7 @@ import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
-import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.ScreenExtensionMinecraftMenusAccountManager
+import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.MultiplayerFeatureGeneralAccountManager
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.azureapp.AzureAppPreset
 import java.util.*
 import java.util.function.Consumer
@@ -50,7 +50,7 @@ class ScreenBetterAzureApps(prevScreen: Screen?, private val azureApp: AzureAppP
         var x = 5
         var y = 5
 
-        for (environmentPreset in TarasandeMain.managerMultiplayerFeature().get(ScreenExtensionMinecraftMenusAccountManager::class.java).screenBetterSlotListAccountManager.managerAzureApp.list) {
+        for (environmentPreset in TarasandeMain.managerMultiplayerFeature().get(MultiplayerFeatureGeneralAccountManager::class.java).screenBetterSlotListAccountManager.managerAzureApp.list) {
             this.addDrawableChild(ButtonWidget(x, y, 130, 20, Text.of(environmentPreset.name)) {
                 clientIdTextField?.text = environmentPreset.clientId.toString()
                 scopeTextField?.text = environmentPreset.scope
@@ -64,10 +64,6 @@ class ScreenBetterAzureApps(prevScreen: Screen?, private val azureApp: AzureAppP
                 y += 20 + 3
             }
         }
-
-        this.addDrawableChild(ButtonWidget(5, this.height - 25, 20, 20, Text.of("<-")) {
-            RenderSystem.recordRenderCall { close() }
-        })
 
         this.addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50 + 25, 100, 20, Text.of("Done")) {
             environmentConsumer.accept(AzureAppPreset("Custom",

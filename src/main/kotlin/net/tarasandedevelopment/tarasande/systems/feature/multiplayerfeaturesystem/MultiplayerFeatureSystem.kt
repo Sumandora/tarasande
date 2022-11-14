@@ -24,6 +24,10 @@ class ManagerMultiplayerFeature : Manager<MultiplayerFeature>() {
 
     init {
         this.add(
+            // General
+            MultiplayerFeatureGeneralAccountManager(),
+            MultiplayerFeatureGeneralProxySystem(),
+
             // Exploits
             MultiplayerFeatureExploitsBungeeHack(),
             MultiplayerFeatureExploitsForgeFaker(),
@@ -44,7 +48,7 @@ class ManagerMultiplayerFeature : Manager<MultiplayerFeature>() {
 
         EventDispatcher.add(EventSuccessfulLoad::class.java, 10000) {
             // Protocol Hack
-            this.list.add(0, MultiplayerFeatureProtocolHack())
+            this.list.add(2, MultiplayerFeatureProtocolHack())
 
             panelElementsMultiplayerFeature = PanelElementsMultiplayerFeature(this)
         }
@@ -96,7 +100,7 @@ open class MultiplayerFeature(val name: String, val category: String) {
 }
 
 open class MultiplayerFeatureSelection(name: String, category: String, val list: List<String>, var selected: String) : MultiplayerFeature(name, category) {
-    open fun onChange(newValue: String) {
+    open fun onClick(newValue: String) {
     }
 
     override fun createElements(panel: PanelElements<ElementValueComponent>) {
@@ -104,8 +108,8 @@ open class MultiplayerFeatureSelection(name: String, category: String, val list:
             panel.elementList.add(object : ValueSpacer(panel, it, 1.0F) {
                 override fun onChange(mouseButton: Int) {
                     if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+                        onClick(it)
                         selected = it
-                        onChange(it)
                     } else {
                         openSettings()
                     }
@@ -124,7 +128,7 @@ open class MultiplayerFeatureSelection(name: String, category: String, val list:
 
 open class MultiplayerFeatureToggleable(name: String, category: String) : MultiplayerFeature(name, category) {
     val state = ValueBoolean(this, name, false)
-    open fun onToggle(state: Boolean) {
+    open fun onClick(state: Boolean) {
     }
 
     override fun createElements(panel: PanelElements<ElementValueComponent>) {
@@ -132,7 +136,7 @@ open class MultiplayerFeatureToggleable(name: String, category: String) : Multip
             override fun onChange(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     state.value = !state.value
-                    onToggle(state.value)
+                    onClick(state.value)
                 } else {
                     openSettings()
                 }
@@ -143,6 +147,8 @@ open class MultiplayerFeatureToggleable(name: String, category: String) : Multip
 }
 
 object MultiplayerFeatureCategory {
+
+    const val GENERAL = "General"
     const val PROTOCOL_HACK = "Protocol Hack"
     const val EXPLOITS = "Exploits"
 }
