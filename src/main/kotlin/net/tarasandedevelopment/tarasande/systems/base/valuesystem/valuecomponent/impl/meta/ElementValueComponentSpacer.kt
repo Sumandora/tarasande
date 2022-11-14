@@ -20,7 +20,7 @@ class ElementValueComponentSpacer(value: Value) : ElementValueComponent(value) {
         val valueSpacer = value as ValueSpacer
         var str = valueSpacer.name
         while (str.isNotEmpty()) {
-            var trimmed = FontWrapper.trimToWidth(str, floor(width * 2.0f).toInt())
+            var trimmed = FontWrapper.trimToWidth(str, floor(width / value.scale).toInt())
             if (trimmed != str) {
                 val orig = trimmed
                 while (trimmed.isNotEmpty() && !trimmed.endsWith(" ")) {
@@ -37,7 +37,7 @@ class ElementValueComponentSpacer(value: Value) : ElementValueComponent(value) {
             FontWrapper.textShadow(matrices,
                 line,
                 0.0f,
-                (getHeight() / 2.0F + (index - (lines.size - 1) / 2.0 + 0.5) * (FontWrapper.fontHeight() / 2.0f) - FontWrapper.fontHeight() / 2.0F).toFloat(),
+                (getHeight() / 2.0F + (index - (lines.size - 1) / 2.0 - 0.5) * (FontWrapper.fontHeight() * valueSpacer.scale / 2.0f)).toFloat(),
                 valueSpacer.getColor(RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), 0.0, 0.0, width, getHeight())).rgb,
                 valueSpacer.scale,
                 0.5F
@@ -69,5 +69,5 @@ class ElementValueComponentSpacer(value: Value) : ElementValueComponent(value) {
     override fun onClose() {
     }
 
-    override fun getHeight() = FontWrapper.fontHeight().toDouble() * (value as ValueSpacer).scale * (lines.size + 0.5)
+    override fun getHeight() = FontWrapper.fontHeight().toDouble() * (value as ValueSpacer).scale * (lines.size)
 }

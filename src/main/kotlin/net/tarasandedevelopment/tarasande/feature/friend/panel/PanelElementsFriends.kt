@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.feature.friend.panel
 
 import net.minecraft.client.MinecraftClient
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.PanelElements
 
@@ -10,6 +11,10 @@ class PanelElementsFriends(private val friends: Friends) : PanelElements<Element
         elementList.removeIf {
             if (MinecraftClient.getInstance().networkHandler?.playerList?.none { p -> p.profile == it.gameProfile }!!) {
                 it.onClose()
+                TarasandeMain.friends().apply {
+                    if(isFriend(it.gameProfile))
+                        changeFriendState(it.gameProfile)
+                }
                 return@removeIf true
             }
             false
