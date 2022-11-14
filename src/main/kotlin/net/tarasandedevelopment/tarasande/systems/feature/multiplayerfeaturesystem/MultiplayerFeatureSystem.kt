@@ -28,6 +28,9 @@ class ManagerMultiplayerFeature : Manager<MultiplayerFeature>() {
             MultiplayerFeatureGeneralAccountManager(),
             MultiplayerFeatureGeneralProxySystem(),
 
+            // Protocol Hack
+            MultiplayerFeatureProtocolHackSettings(),
+
             // Exploits
             MultiplayerFeatureExploitsBungeeHack(),
             MultiplayerFeatureExploitsForgeFaker(),
@@ -48,7 +51,7 @@ class ManagerMultiplayerFeature : Manager<MultiplayerFeature>() {
 
         EventDispatcher.add(EventSuccessfulLoad::class.java, 10000) {
             // Protocol Hack
-            this.list.add(2, MultiplayerFeatureProtocolHack())
+            this.list.add(3, MultiplayerFeatureProtocolHack())
 
             panelElementsMultiplayerFeature = PanelElementsMultiplayerFeature(this)
         }
@@ -64,11 +67,11 @@ class PanelElementsMultiplayerFeature(managerMultiplayerFeature: ManagerMultipla
         }
 
         categories.forEach { localEach ->
-            elementList.add(object : ValueSpacer(this, localEach, 1.0F) {
+            elementList.add(object : ValueSpacer(managerMultiplayerFeature, localEach, 1.0F) {
                 override fun getColor() = Color.gray
             }.createValueComponent())
             managerMultiplayerFeature.list.filter { it.category == localEach }.forEach {
-                it.createElements(this)
+                it.createElements(managerMultiplayerFeature, this)
             }
         }
     }
@@ -85,8 +88,8 @@ open class MultiplayerFeature(val name: String, val category: String) {
     open fun onClick(mouseButton: Int) {
     }
 
-    open fun createElements(panel: PanelElements<ElementValueComponent>) {
-        panel.elementList.add(object : ValueSpacer(panel, name, 1.0F) {
+    open fun createElements(managerMultiplayerFeature: ManagerMultiplayerFeature, panel: PanelElements<ElementValueComponent>) {
+        panel.elementList.add(object : ValueSpacer(managerMultiplayerFeature, name, 1.0F) {
             override fun onChange(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     openSettings()
@@ -103,9 +106,9 @@ open class MultiplayerFeatureSelection(name: String, category: String, val list:
     open fun onClick(newValue: String) {
     }
 
-    override fun createElements(panel: PanelElements<ElementValueComponent>) {
+    override fun createElements(managerMultiplayerFeature: ManagerMultiplayerFeature, panel: PanelElements<ElementValueComponent>) {
         list.forEach {
-            panel.elementList.add(object : ValueSpacer(panel, it, 1.0F) {
+            panel.elementList.add(object : ValueSpacer(managerMultiplayerFeature, it, 1.0F) {
                 override fun onChange(mouseButton: Int) {
                     if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                         onClick(it)
@@ -131,8 +134,8 @@ open class MultiplayerFeatureToggleable(name: String, category: String) : Multip
     open fun onClick(state: Boolean) {
     }
 
-    override fun createElements(panel: PanelElements<ElementValueComponent>) {
-        panel.elementList.add(object : ValueSpacer(panel, name, 1.0F) {
+    override fun createElements(managerMultiplayerFeature: ManagerMultiplayerFeature, panel: PanelElements<ElementValueComponent>) {
+        panel.elementList.add(object : ValueSpacer(managerMultiplayerFeature, name, 1.0F) {
             override fun onChange(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     state.value = !state.value
