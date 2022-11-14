@@ -40,8 +40,8 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
         registerEvent(EventTextVisit::class.java) { event ->
             event.string = replaceName(event.string, mc.session.profile.name, protectedName.value)
 
-            for (pair in TarasandeMain.friends().friends) {
-                event.string = replaceName(event.string, pair.first.name, pair.second ?: continue)
+            for (pair in TarasandeMain.friends().names()) {
+                event.string = replaceName(event.string, pair.first, pair.second)
             }
         }
     }

@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande.feature.friend
 import com.mojang.authlib.GameProfile
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Formatting
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.event.EventPlayerListName
@@ -11,6 +10,7 @@ import net.tarasandedevelopment.tarasande.event.EventTagName
 import net.tarasandedevelopment.tarasande.feature.friend.panel.PanelElementsFriends
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.misc.ModuleNoFriends
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleNameProtect
+import su.mandora.event.EventDispatcher
 
 class Friends {
 
@@ -75,5 +75,7 @@ class Friends {
             addFriend(gameProfile, newAlias)
         }
     }
+
+    fun names() = HashMap<String, String>().also { friends.forEach { pair -> it[pair.first.name] = pair.second ?: return@forEach } }
 
 }
