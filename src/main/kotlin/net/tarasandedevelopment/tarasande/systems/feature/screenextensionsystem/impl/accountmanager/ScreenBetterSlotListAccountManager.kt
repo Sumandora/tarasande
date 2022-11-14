@@ -121,11 +121,11 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
             })
         }.also { addButton = it })
 
-        addDrawableChild(ButtonWidget(5, 5, 100, 20, Text.of("Proxy")) {
+        addDrawableChild(ButtonWidget(3, 3, 100, 20, Text.of("Proxy")) {
             MinecraftClient.getInstance().setScreen(ScreenBetterProxy(MinecraftClient.getInstance().currentScreen))
         })
 
-        addDrawableChild(ButtonWidget(width - 105, 5, 100, 20, Text.of("Random session")) {
+        addDrawableChild(ButtonWidget(width - 103, 3, 100, 20, Text.of("Random session")) {
             logIn(AccountSession().also {
                 it.username = RandomStringUtils.randomAlphanumeric(16)
                 it.uuid = UUID.randomUUID().toString()
