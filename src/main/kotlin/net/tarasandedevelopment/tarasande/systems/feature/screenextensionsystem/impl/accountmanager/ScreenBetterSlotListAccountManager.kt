@@ -121,16 +121,16 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
             })
         }.also { addButton = it })
 
-        addDrawableChild(ButtonWidget(5, 5, 100, 20, Text.of("Random cracked")) {
+        addDrawableChild(ButtonWidget(5, 5, 100, 20, Text.of("Proxy")) {
+            MinecraftClient.getInstance().setScreen(ScreenBetterProxy(MinecraftClient.getInstance().currentScreen))
+        })
+
+        addDrawableChild(ButtonWidget(width - 105, 5, 100, 20, Text.of("Random cracked")) {
             logIn(AccountSession().also {
                 it.username = RandomStringUtils.randomAlphanumeric(16)
                 it.uuid = UUID.randomUUID().toString()
                 it.environment = it.defaultEnvironment()
             })
-        })
-
-        addDrawableChild(ButtonWidget(width - 105, 5, 100, 20, Text.of("Proxy")) {
-            MinecraftClient.getInstance().setScreen(ScreenBetterProxy(MinecraftClient.getInstance().currentScreen))
         })
 
         tick()
@@ -149,6 +149,10 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         super.render(matrices, mouseX, mouseY, delta)
         this.renderTitle(matrices, "Account Manager")
         FontWrapper.textShadow(matrices, status, width / 2.0f, 2 * FontWrapper.fontHeight() * 2.0f, -1, centered = true)
+
+        if (TarasandeMain.instance.proxy != null) {
+            FontWrapper.textShadow(matrices, TarasandeMain.instance.proxy!!.socketAddress.address.hostAddress + ":" + TarasandeMain.instance.proxy!!.socketAddress.port + " (" + TarasandeMain.instance.proxy!!.ping + "ms)", 6F, 27F, -1)
+        }
     }
 
     inner class ScreenBetterSlotListEntryAccount(var account: Account) : ScreenBetterSlotListEntry() {
