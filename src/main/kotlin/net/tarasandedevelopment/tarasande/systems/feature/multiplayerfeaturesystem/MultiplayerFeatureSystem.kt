@@ -15,6 +15,7 @@ import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesyst
 import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.proxy.multiplayerfeature.MultiplayerFeatureProxySystem
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanelSidebar
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.PanelElements
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 import java.awt.Color
@@ -62,7 +63,7 @@ class ManagerMultiplayerFeature : Manager<MultiplayerFeature>() {
 
             categories.forEach { localEach ->
                 elementList.add(object : ValueSpacer(this@ManagerMultiplayerFeature, localEach, 1.0F) {
-                    override fun getColor() = Color.gray
+                    override fun getColor(hovered: Boolean) = Color.gray
                 }.createValueComponent())
                 this@ManagerMultiplayerFeature.list.filter { it.category == localEach }.forEach {
                     panelElementsMultiplayerFeature.elementList.addAll(it.createElements().map { it.value.owner = this@ManagerMultiplayerFeature; it })
@@ -112,11 +113,11 @@ open class MultiplayerFeatureSelection(name: String, category: String, val list:
                     }
                 }
 
-                override fun getColor(): Color? {
+                override fun getColor(hovered: Boolean): Color? {
                     if (it == selected) {
                         return TarasandeMain.clientValues().accentColor.getColor()
                     }
-                    return super.getColor()
+                    return super.getColor(hovered)
                 }
             }.createValueComponent()
         }
@@ -138,7 +139,7 @@ open class MultiplayerFeatureToggleable(name: String, category: String) : Multip
                     openSettings()
                 }
             }
-            override fun getColor() = if (state.value) Color.green else Color.red
+            override fun getColor(hovered: Boolean) = (if (state.value) Color.green else Color.red).let { if(hovered) RenderUtil.colorInterpolate(it, TarasandeMain.clientValues().accentColor.getColor(), 0.4) else it }
         }.createValueComponent())
     }
 }
