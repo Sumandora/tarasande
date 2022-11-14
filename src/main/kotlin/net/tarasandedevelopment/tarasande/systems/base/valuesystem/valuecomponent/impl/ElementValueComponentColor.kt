@@ -65,7 +65,7 @@ class ElementValueComponentColor(value: Value) : ElementValueComponent(value) {
             valueColor.onChange()
         }
 
-        FontWrapper.textShadow(matrices, value.name, 0.0f, ((getPickerHeight() - 5) / 2.0f - FontWrapper.fontHeight() / 2.0f).toFloat(), white.rgb, scale = 0.5f, offset = 0.5F)
+        FontWrapper.textShadow(matrices, value.name, 0.0f, ((getPickerHeight() - 5) / 2.0f - FontWrapper.fontHeight() * 0.5F / 2.0f).toFloat(), white.rgb, scale = 0.5f, offset = 0.5F)
 
         val matrix4f = matrices?.peek()?.positionMatrix!!
         val bufferBuilder = Tessellator.getInstance().buffer

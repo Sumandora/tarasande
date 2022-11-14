@@ -18,7 +18,7 @@ class ElementValueComponentBoolean(value: Value) : ElementValueComponent(value) 
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        FontWrapper.textShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - FontWrapper.fontHeight() / 2.0F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F, offset = 0.5F)
+        FontWrapper.textShadow(matrices, value.name, 0.0F, (getHeight() * 0.5F - FontWrapper.fontHeight() * 0.5F * 0.5F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F, offset = 0.5F)
 
         val expandedAnimation = min((System.currentTimeMillis() - toggleTime) / 100.0 /* length in ms */, 1.0)
         val fade = (if ((value as ValueBoolean).value) expandedAnimation else 1.0 - expandedAnimation)

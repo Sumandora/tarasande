@@ -6,6 +6,7 @@ import net.minecraft.client.gui.widget.ClickableWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.Panel
+import kotlin.math.floor
 
 open class ClickableWidgetPanel(val panel: Panel, val update: Boolean = false) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelWidth.toInt(), Text.of(panel.title)), Element {
 
@@ -32,7 +33,7 @@ open class ClickableWidgetPanel(val panel: Panel, val update: Boolean = false) :
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         panel.modifiable = false
-        val returnValue = panel.isVisible() && panel.mouseClicked(mouseX, mouseY, button)
+        val returnValue = panel.isVisible() && panel.mouseClicked(floor(mouseX), floor(mouseY), button)
         panel.modifiable = true
         return returnValue
     }

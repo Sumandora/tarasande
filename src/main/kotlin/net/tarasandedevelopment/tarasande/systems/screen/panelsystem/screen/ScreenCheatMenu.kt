@@ -9,7 +9,6 @@ import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventChangeScreen
 import net.tarasandedevelopment.tarasande.event.EventUpdate
@@ -22,6 +21,8 @@ import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.part
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
+import su.mandora.event.EventDispatcher
+import kotlin.math.floor
 import kotlin.math.round
 
 class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("Cheat Menu")) {
@@ -173,7 +174,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
         if (animation != 1.0) return true
 
         for (it in panelSystem.list) {
-            if (it.mouseClicked(mouseX, mouseY, button)) {
+            if (it.mouseClicked(floor(mouseX), floor(mouseY), button)) {
                 panelSystem.reorderPanels(it, 0) // The panel was clicked, we should give it priority
                 break
             }

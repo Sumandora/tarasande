@@ -315,7 +315,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(TypeRegistry1_7_6_10.BYTEARRAY); // VerifyToken
                 handler((pw) -> {
                     String serverId = pw.get(Type.STRING, 0);
-                    // If server id is equal to '-' than the server is cracked.
+                    // If server id is equal to '-' than the server is offline.
                     byte[] publicKey = pw.get(TypeRegistry1_7_6_10.BYTEARRAY, 0);
                     byte[] verifyToken = pw.get(TypeRegistry1_7_6_10.BYTEARRAY, 1);
 

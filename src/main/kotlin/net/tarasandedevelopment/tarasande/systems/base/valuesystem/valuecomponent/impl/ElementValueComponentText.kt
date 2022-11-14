@@ -16,7 +16,7 @@ import java.awt.Color
 
 class ElementValueComponentText(value: Value) : ElementValueComponent(value) {
     //TODO
-    val textFieldWidget = TextFieldWidgetPlaceholder(MinecraftClient.getInstance().textRenderer, 1, 1, 1, (getHeight() * 2).toInt() - 1, Text.of((value as ValueText).name))
+    val textFieldWidget = TextFieldWidgetPlaceholder(MinecraftClient.getInstance().textRenderer, 0, 0, 0, getHeight().toInt(), Text.of((value as ValueText).name))
 
     init {
         textFieldWidget.setMaxLength(Int.MAX_VALUE)
@@ -34,9 +34,6 @@ class ElementValueComponentText(value: Value) : ElementValueComponent(value) {
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         textFieldWidget.width = (width * 2).toInt()
-        matrices?.push()
-        matrices?.scale(0.5F, 0.5F, 1.0F)
-
         if (textFieldWidget.isFocused)
             (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.clientValues().accentColor.getColor())
         else
@@ -45,9 +42,14 @@ class ElementValueComponentText(value: Value) : ElementValueComponent(value) {
         if (!value.isEnabled())
             (textFieldWidget as ITextFieldWidget).tarasande_setColor(Color.white.darker().darker())
 
+        matrices?.push()
+        matrices?.translate(0.0, getHeight() * 0.5 - textFieldWidget.height * 0.5 * 0.5, 0.0)
+        matrices?.scale(0.5F, 0.5F, 1.0F)
+        textFieldWidget.x = 0
+        textFieldWidget.y = 0
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
-        (textFieldWidget as ITextFieldWidget).tarasande_setColor(null)
         matrices?.pop()
+        (textFieldWidget as ITextFieldWidget).tarasande_setColor(null)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

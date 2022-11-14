@@ -120,7 +120,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
             })
         }.also { addButton = it })
 
-        addDrawableChild(ButtonWidget(5, 5, 100, 20, Text.of("Random cracked")) {
+        addDrawableChild(ButtonWidget(5, 5, 100, 20, Text.of("Random session")) {
             logIn(AccountSession().also {
                 it.username = RandomStringUtils.randomAlphanumeric(16)
                 it.uuid = UUID.randomUUID().toString()

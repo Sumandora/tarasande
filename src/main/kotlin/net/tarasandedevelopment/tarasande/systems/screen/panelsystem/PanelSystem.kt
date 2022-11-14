@@ -23,7 +23,6 @@ import net.tarasandedevelopment.tarasande.util.render.helper.IElement
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 import java.awt.Color
-import kotlin.math.floor
 import kotlin.math.min
 import kotlin.math.round
 
@@ -203,8 +202,6 @@ open class Panel(
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        val mouseX = floor(mouseX) // fix for render only getting integer mouse position
-        val mouseY = floor(mouseY)
         if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + (if (opened) panelHeight else titleBarHeight.toDouble()))) {
             if (modifiable && button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                 if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight.toDouble())) {

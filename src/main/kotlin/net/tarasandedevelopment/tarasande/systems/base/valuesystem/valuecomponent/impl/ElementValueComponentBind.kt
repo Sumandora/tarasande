@@ -21,7 +21,7 @@ class ElementValueComponentBind(value: Value) : ElementValueComponent(value) {
 
         val white = Color.white.let { if (valueBind.isEnabled()) it else it.darker().darker() }
 
-        FontWrapper.textShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - FontWrapper.fontHeight() / 2.0F).toFloat(), white.rgb, scale = 0.5F, offset = 0.5F)
+        FontWrapper.textShadow(matrices, value.name, 0.0F, (getHeight() * 0.5F - FontWrapper.fontHeight() * 0.5F * 0.5F).toFloat(), white.rgb, scale = 0.5F, offset = 0.5F)
 
         var name = RenderUtil.getBindName(valueBind.type, valueBind.button)
         if (waitsForInput) {

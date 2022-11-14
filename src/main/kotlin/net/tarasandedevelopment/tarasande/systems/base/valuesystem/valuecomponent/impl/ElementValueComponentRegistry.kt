@@ -37,7 +37,7 @@ class ElementValueComponentRegistry(value: Value) : ElementValueComponent(value)
 
         val white = Color.white.let { if (valueRegistry.isEnabled()) it else it.darker().darker() }
 
-        FontWrapper.textShadow(matrices, value.name, 0.0F, (getHeight() / 2.0F - FontWrapper.fontHeight() / 2.0F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F, offset = 0.5F)
+        FontWrapper.textShadow(matrices, value.name, 0.0F, (getHeight() * 0.5F - FontWrapper.fontHeight() * 0.5F * 0.5F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F, offset = 0.5F)
 
         for ((index, key) in valueRegistry.list.withIndex()) {
             val stringRepresentation = StringUtil.uncoverTranslation(valueRegistry.getTranslationKey(key))
