@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.proxy
+package net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.subscreen
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.screen.Screen

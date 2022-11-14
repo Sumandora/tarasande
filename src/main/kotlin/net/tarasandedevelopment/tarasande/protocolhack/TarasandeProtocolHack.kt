@@ -66,8 +66,8 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
                 update(ProtocolVersion.getProtocol(version.value.toInt()))
                 // Protocol Hack
                 TarasandeMain.managerMultiplayerFeature().apply {
-                    insert(MultiplayerFeatureProtocolHack(), 2)
-                    insert(MultiplayerFeatureProtocolHackSettings(), 3)
+                    insert(MultiplayerFeatureProtocolHack(), 0)
+                    insert(MultiplayerFeatureProtocolHackSettings(), 1)
                 }
             }
         }

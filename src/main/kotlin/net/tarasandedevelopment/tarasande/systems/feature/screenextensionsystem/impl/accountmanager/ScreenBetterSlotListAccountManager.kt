@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.accountmanager
+package net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager
 
 import com.mojang.authlib.minecraft.UserApiService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
@@ -18,8 +18,9 @@ import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
-import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.accountmanager.file.FileAccounts
-import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.accountmanager.subscreen.ScreenBetterAccount
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.file.FileAccounts
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterAccount
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterProxy
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.ManagerAccount
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.impl.AccountSession
@@ -126,6 +127,10 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
                 it.uuid = UUID.randomUUID().toString()
                 it.environment = it.defaultEnvironment()
             })
+        })
+
+        addDrawableChild(ButtonWidget(width - 105, 5, 100, 20, Text.of("Proxy")) {
+            MinecraftClient.getInstance().setScreen(ScreenBetterProxy(MinecraftClient.getInstance().currentScreen))
         })
 
         tick()

@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.accountmanager.file
+package net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.file
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
@@ -7,7 +7,7 @@ import com.mojang.authlib.Environment
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.systems.base.filesystem.File
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.AccountInfo
-import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.accountmanager.ScreenBetterSlotListAccountManager
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.ScreenBetterSlotListAccountManager
 import org.apache.commons.codec.binary.Hex
 import oshi.SystemInfo
 import java.util.*

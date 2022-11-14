@@ -7,6 +7,7 @@ import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.protocolhack.util.ProtocolRange
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.*
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionAccountManager
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.impl.button.PanelButton
 import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
 
@@ -14,6 +15,9 @@ class ManagerScreenExtension : Manager<ScreenExtension>() {
 
     init {
         add(
+            // Account Manager
+            ScreenExtensionAccountManager(),
+
             // Inventory
             ScreenExtensionInventoryCraftingDupe(),
             ScreenExtensionInventoryLecternCrash(),

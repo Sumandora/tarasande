@@ -11,8 +11,6 @@ import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoo
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueSpacer
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
 import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.*
-import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.accountmanager.multiplayerfeature.MultiplayerFeatureAccountManager
-import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.proxy.multiplayerfeature.MultiplayerFeatureProxySystem
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanelSidebar
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.PanelElements
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
@@ -26,10 +24,6 @@ class ManagerMultiplayerFeature : Manager<MultiplayerFeature>() {
 
     init {
         this.add(
-            // General
-            MultiplayerFeatureAccountManager(),
-            MultiplayerFeatureProxySystem(),
-
             // Exploits
             MultiplayerFeatureExploitsBungeeHack(),
             MultiplayerFeatureExploitsForgeFaker(),
