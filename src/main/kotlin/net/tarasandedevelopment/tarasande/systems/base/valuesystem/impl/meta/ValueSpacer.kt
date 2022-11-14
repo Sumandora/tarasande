@@ -14,7 +14,7 @@ open class ValueSpacer(owner: Any, name: String, val scale: Float = 0.5F, manage
         onChange(-1)
     }
 
-    open fun getColor(hovered: Boolean)  = if(hovered) TarasandeMain.clientValues().accentColor.getColor() else Color.white
+    open fun getColor(hovered: Boolean): Color = if(hovered) TarasandeMain.clientValues().accentColor.getColor() else Color.white
     open fun onChange(mouseButton: Int) {
     }
 }

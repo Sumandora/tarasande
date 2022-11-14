@@ -15,8 +15,15 @@ import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
 class ElementValueComponentText(value: Value) : ElementValueComponent(value) {
+
+    var scale = 0.5F
+
+    constructor(value: Value, scale: Float): this(value) {
+        this.scale = scale
+    }
+
     //TODO
-    val textFieldWidget = TextFieldWidgetPlaceholder(MinecraftClient.getInstance().textRenderer, 0, 0, 0, getHeight().toInt(), Text.of((value as ValueText).name))
+    val textFieldWidget = TextFieldWidgetPlaceholder(MinecraftClient.getInstance().textRenderer, 1, 1, 1, getHeight().toInt() - 1, Text.of((value as ValueText).name))
 
     init {
         textFieldWidget.setMaxLength(Int.MAX_VALUE)
@@ -33,7 +40,7 @@ class ElementValueComponentText(value: Value) : ElementValueComponent(value) {
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        textFieldWidget.width = (width * 2).toInt()
+        textFieldWidget.width = (width * 2 * scale).toInt()
         if (textFieldWidget.isFocused)
             (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.clientValues().accentColor.getColor())
         else
@@ -43,10 +50,8 @@ class ElementValueComponentText(value: Value) : ElementValueComponent(value) {
             (textFieldWidget as ITextFieldWidget).tarasande_setColor(Color.white.darker().darker())
 
         matrices?.push()
-        matrices?.translate(0.0, getHeight() * 0.5 - textFieldWidget.height * 0.5 * 0.5, 0.0)
-        matrices?.scale(0.5F, 0.5F, 1.0F)
-        textFieldWidget.x = 0
-        textFieldWidget.y = 0
+        matrices?.scale(scale, scale, 1.0F)
+        matrices?.translate(0.0, getHeight() * 0.5 - textFieldWidget.height * scale * 0.5, 0.0)
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
         matrices?.pop()
         (textFieldWidget as ITextFieldWidget).tarasande_setColor(null)
@@ -54,7 +59,7 @@ class ElementValueComponentText(value: Value) : ElementValueComponent(value) {
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (button != 0) return false
-        if (value.isEnabled() && RenderUtil.isHovered(mouseX, mouseY, 1.0, 1.0, width, getHeight())) { // hacky fix for size hacks
+        if (value.isEnabled() && RenderUtil.isHovered(mouseX, mouseY, 1.0, 1.0, width * scale, getHeight())) { // hacky fix for size hacks
             textFieldWidget.mouseClicked(width * 2, getHeight() / 2.0F, button)
         } else {
             textFieldWidget.mouseClicked(-1.0, -1.0, button)
@@ -94,5 +99,5 @@ class ElementValueComponentText(value: Value) : ElementValueComponent(value) {
 
     fun setFocused(focused: Boolean) = textFieldWidget.setTextFieldFocused(focused)
 
-    override fun getHeight() = FontWrapper.fontHeight().toDouble()
+    override fun getHeight() = FontWrapper.fontHeight().toDouble() * scale
 }

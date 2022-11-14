@@ -20,13 +20,18 @@ class ElementPlayer(val gameProfile: GameProfile, width: Double) : ElementWidth(
             TarasandeMain.friends().setAlias(gameProfile, value.ifEmpty { null })
         }
     }
-    val textField = ElementValueComponentText(value)
+    val textField = ElementValueComponentText(value, 1.0f)
 
     private val defaultHeight = FontWrapper.fontHeight() * 1.5 + 2.0
     private var friendTime = 0L
 
     private val xOffset = 4.0
     private val yOffset = this.defaultHeight / 2.0 - FontWrapper.fontHeight() / 2.0 + 1.0
+
+    init {
+        textField.textFieldWidget.x = xOffset.toInt()
+        textField.textFieldWidget.y = yOffset.toInt()
+    }
 
     override fun init() {
         textField.init()
@@ -36,15 +41,15 @@ class ElementPlayer(val gameProfile: GameProfile, width: Double) : ElementWidth(
         val friended = TarasandeMain.friends().isFriend(gameProfile)
         RenderUtil.fill(matrices, 0.0, 0.0, this.width, this.getHeight(), Int.MIN_VALUE)
         if (friended) {
-            matrices?.push()
-            matrices?.translate(xOffset - 1.0f, yOffset - 1.0f, 0.0)
-            matrices?.scale(2.0f, 2.0f, 1.0f)
-            textField.width = (width - 20) / 2.0
+            textField.width = width - 20
             val accessor = textField.textFieldWidget as ITextFieldWidget
             accessor.tarasande_setColor(Color.white)
-            textField.render(matrices, (mouseX - xOffset).toInt(), (mouseY - yOffset).toInt(), delta)
-            accessor.tarasande_setColor(null)
+            matrices?.push()
+            // Minecraft sets the y for the text down by (this.height - 8) / 2 (i have no clue where my calculation here comes from; bruh)
+            matrices?.translate(0.0, -(textField.textFieldWidget.height / 2.0) - 1.25, 0.0)
+            textField.render(matrices, mouseX, mouseY, delta)
             matrices?.pop()
+            accessor.tarasande_setColor(null)
         } else {
             textField.setFocused(false)
             FontWrapper.textShadow(matrices, gameProfile.name, xOffset.toFloat(), yOffset.toFloat(), -1)
@@ -64,7 +69,7 @@ class ElementPlayer(val gameProfile: GameProfile, width: Double) : ElementWidth(
                 friendTime = System.currentTimeMillis()
                 true
             } else {
-                textField.mouseClicked((mouseX - xOffset) / 2.0, (mouseY - yOffset) / 2.0, button)
+                textField.mouseClicked(mouseX, mouseY, button)
             }
         }
         return false

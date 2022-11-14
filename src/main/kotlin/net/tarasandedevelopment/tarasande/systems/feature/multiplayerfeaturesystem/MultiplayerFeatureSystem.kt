@@ -107,7 +107,7 @@ open class MultiplayerFeatureSelection(name: String, category: String, val list:
                     }
                 }
 
-                override fun getColor(hovered: Boolean): Color? {
+                override fun getColor(hovered: Boolean): Color {
                     if (it == selected) {
                         return TarasandeMain.clientValues().accentColor.getColor()
                     }
