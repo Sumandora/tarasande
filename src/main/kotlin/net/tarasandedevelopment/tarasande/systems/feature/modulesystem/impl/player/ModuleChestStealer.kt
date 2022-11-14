@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.pla
 
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen
 import net.minecraft.client.gui.screen.ingame.HandledScreen
+import net.minecraft.item.ItemStack
 import net.minecraft.screen.slot.Slot
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.util.math.Vec2f
@@ -50,7 +51,12 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
         if (!intelligent.value)
             return false
 
-        return ContainerUtil.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.distinctBy { it.stack.item }.toTypedArray(), *ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).toTypedArray()).filter { it != slot }.map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value)
+        val list = ArrayList(list)
+
+        list.remove(slot)
+        list.removeIf { ItemStack.canCombine(slot.stack, it.stack) /* nice name retard (in mcp this is called areItemStackTagsEqual)*/ }
+
+        return ContainerUtil.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.distinctBy { it.stack.item }.filter { it != slot }.toTypedArray(), *ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).toTypedArray()).map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value)
     }
 
     init {
