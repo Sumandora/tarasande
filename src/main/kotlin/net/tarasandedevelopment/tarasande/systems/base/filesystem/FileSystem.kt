@@ -16,8 +16,8 @@ class ManagerFile : Manager<File>() {
         }
     }
 
-    override fun add(obj: File) {
-        super.add(obj)
+    override fun insert(obj: File, index: Int) {
+        super.insert(obj, index)
         load(obj)
     }
 

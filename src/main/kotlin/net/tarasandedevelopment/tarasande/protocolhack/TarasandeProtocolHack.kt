@@ -26,12 +26,13 @@ import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IFontStorage_Protocol
 import net.tarasandedevelopment.tarasande.protocolhack.command.TarasandeCommandHandler
-import net.tarasandedevelopment.tarasande.protocolhack.extension.getSpecialName
 import net.tarasandedevelopment.tarasande.protocolhack.fixes.EntityDimensionReplacement
 import net.tarasandedevelopment.tarasande.protocolhack.fixes.PackFormats
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ValueBooleanProtocol
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ViaLegacyTarasandePlatform
+import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureProtocolHack
+import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureProtocolHackSettings
 import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricVersionProvider
@@ -60,8 +61,15 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
 
         PackFormats.checkOutdated(nativeVersion())
 
-        EventDispatcher.add(EventSuccessfulLoad::class.java) {
-            update(ProtocolVersion.getProtocol(version.value.toInt()))
+        EventDispatcher.apply {
+            add(EventSuccessfulLoad::class.java, 10000) {
+                update(ProtocolVersion.getProtocol(version.value.toInt()))
+                // Protocol Hack
+                TarasandeMain.managerMultiplayerFeature().apply {
+                    insert(MultiplayerFeatureProtocolHack(), 2)
+                    insert(MultiplayerFeatureProtocolHackSettings(), 3)
+                }
+            }
         }
 
         TarasandeMain.managerInformation().apply {
@@ -77,6 +85,7 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
                 }
             })
         }
+
     }
 
     fun update(protocol: ProtocolVersion) {
@@ -91,8 +100,6 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
                 (it as IFontStorage_Protocol).protocolhack_clearCaches()
             }
         }
-
-        println(protocol.getSpecialName())
 
         EntityDimensionReplacement.reloadDimensions()
     }

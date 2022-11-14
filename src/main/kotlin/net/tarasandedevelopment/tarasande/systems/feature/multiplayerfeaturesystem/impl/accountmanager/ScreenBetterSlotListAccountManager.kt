@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.minecraftmenus.accountmanager
+package net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.accountmanager
 
 import com.mojang.authlib.minecraft.UserApiService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
@@ -18,13 +18,13 @@ import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
+import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.accountmanager.file.FileAccounts
+import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.accountmanager.subscreen.ScreenBetterAccount
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.ManagerAccount
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.impl.AccountSession
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.azureapp.ManagerAzureApp
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.environment.ManagerEnvironment
-import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.minecraftmenus.accountmanager.file.FileAccounts
-import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.minecraftmenus.accountmanager.subscreen.ScreenBetterAccount
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed

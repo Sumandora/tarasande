@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl
+package net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.viaprotocolhack.util.VersionList
@@ -14,8 +14,13 @@ import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesyst
 class MultiplayerFeatureProtocolHack : MultiplayerFeatureSelection("Protocol Hack", MultiplayerFeatureCategory.PROTOCOL_HACK, VersionList.getProtocols().map { it.getSpecialName() }, ProtocolVersion.getProtocol(TarasandeMain.protocolHack().version.value.toInt()).getSpecialName()) {
 
     override fun onClick(newValue: String) {
-        TarasandeMain.instance.protocolHack.version.value = VersionList.getProtocols().first { it.getSpecialName() == newValue }.version.toDouble()
-        TarasandeMain.instance.protocolHack.update(ProtocolVersion.getProtocol(TarasandeMain.instance.protocolHack.version.value.toInt()))
+        TarasandeMain.instance.protocolHack.apply {
+            val newProtocol = VersionList.getProtocols().first { it.getSpecialName() == newValue }.version.toDouble()
+            if(version.value != newProtocol) {
+                version.value = newProtocol
+                update(ProtocolVersion.getProtocol(version.value.toInt()))
+            }
+        }
     }
 }
 

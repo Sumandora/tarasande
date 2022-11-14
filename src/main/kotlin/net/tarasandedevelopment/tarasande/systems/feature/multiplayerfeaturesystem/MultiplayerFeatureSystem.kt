@@ -6,12 +6,13 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventChildren
-import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueSpacer
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
 import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.*
+import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.accountmanager.multiplayerfeature.MultiplayerFeatureAccountManager
+import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.proxy.multiplayerfeature.MultiplayerFeatureProxySystem
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanelSidebar
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.PanelElements
 import org.lwjgl.glfw.GLFW
@@ -20,16 +21,13 @@ import java.awt.Color
 
 class ManagerMultiplayerFeature : Manager<MultiplayerFeature>() {
 
-    private lateinit var panelElementsMultiplayerFeature: PanelElementsMultiplayerFeature
+    private val panelElementsMultiplayerFeature = PanelElements<ElementValueComponent>("Sidebar", 120.0, 0.0)
 
     init {
         this.add(
             // General
-            MultiplayerFeatureGeneralAccountManager(),
-            MultiplayerFeatureGeneralProxySystem(),
-
-            // Protocol Hack
-            MultiplayerFeatureProtocolHackSettings(),
+            MultiplayerFeatureAccountManager(),
+            MultiplayerFeatureProxySystem(),
 
             // Exploits
             MultiplayerFeatureExploitsBungeeHack(),
@@ -43,35 +41,32 @@ class ManagerMultiplayerFeature : Manager<MultiplayerFeature>() {
             it.state.owner = this
         }
 
-        EventDispatcher.add(EventChildren::class.java) {
-            if (it.screen is MultiplayerScreen || it.screen is GameMenuScreen) {
-                it.add(ClickableWidgetPanelSidebar(panelElementsMultiplayerFeature))
+        EventDispatcher.apply {
+            add(EventChildren::class.java) {
+                if (it.screen is MultiplayerScreen || it.screen is GameMenuScreen) {
+                    it.add(ClickableWidgetPanelSidebar(panelElementsMultiplayerFeature))
+                }
             }
         }
-
-        EventDispatcher.add(EventSuccessfulLoad::class.java, 10000) {
-            // Protocol Hack
-            this.list.add(3, MultiplayerFeatureProtocolHack())
-
-            panelElementsMultiplayerFeature = PanelElementsMultiplayerFeature(this)
-        }
     }
-}
 
-class PanelElementsMultiplayerFeature(managerMultiplayerFeature: ManagerMultiplayerFeature) : PanelElements<ElementValueComponent>("Multiplayer Sidebar", 120.0, 0.0) {
-    init {
-        val categories = ArrayList<String>()
-        managerMultiplayerFeature.list.forEach {
-            if (!categories.contains(it.category))
-                categories.add(it.category)
-        }
+    override fun insert(obj: MultiplayerFeature, index: Int) {
+        super.insert(obj, index)
+        panelElementsMultiplayerFeature.apply {
+            elementList.clear()
+            val categories = ArrayList<String>()
+            this@ManagerMultiplayerFeature.list.forEach {
+                if (!categories.contains(it.category))
+                    categories.add(it.category)
+            }
 
-        categories.forEach { localEach ->
-            elementList.add(object : ValueSpacer(managerMultiplayerFeature, localEach, 1.0F) {
-                override fun getColor() = Color.gray
-            }.createValueComponent())
-            managerMultiplayerFeature.list.filter { it.category == localEach }.forEach {
-                it.createElements(managerMultiplayerFeature, this)
+            categories.forEach { localEach ->
+                elementList.add(object : ValueSpacer(this@ManagerMultiplayerFeature, localEach, 1.0F) {
+                    override fun getColor() = Color.gray
+                }.createValueComponent())
+                this@ManagerMultiplayerFeature.list.filter { it.category == localEach }.forEach {
+                    panelElementsMultiplayerFeature.elementList.addAll(it.createElements().map { it.value.owner = this@ManagerMultiplayerFeature; it })
+                }
             }
         }
     }
@@ -88,8 +83,8 @@ open class MultiplayerFeature(val name: String, val category: String) {
     open fun onClick(mouseButton: Int) {
     }
 
-    open fun createElements(managerMultiplayerFeature: ManagerMultiplayerFeature, panel: PanelElements<ElementValueComponent>) {
-        panel.elementList.add(object : ValueSpacer(managerMultiplayerFeature, name, 1.0F) {
+    open fun createElements(): List<ElementValueComponent> {
+        return listOf(object : ValueSpacer(this, name, 1.0F) {
             override fun onChange(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     openSettings()
@@ -97,7 +92,6 @@ open class MultiplayerFeature(val name: String, val category: String) {
                     onClick(mouseButton)
                 }
             }
-            override fun getColor() = Color.white
         }.createValueComponent())
     }
 }
@@ -106,9 +100,9 @@ open class MultiplayerFeatureSelection(name: String, category: String, val list:
     open fun onClick(newValue: String) {
     }
 
-    override fun createElements(managerMultiplayerFeature: ManagerMultiplayerFeature, panel: PanelElements<ElementValueComponent>) {
-        list.forEach {
-            panel.elementList.add(object : ValueSpacer(managerMultiplayerFeature, it, 1.0F) {
+    override fun createElements(): List<ElementValueComponent> {
+        return list.map {
+            object : ValueSpacer(this, it, 1.0F) {
                 override fun onChange(mouseButton: Int) {
                     if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                         onClick(it)
@@ -122,9 +116,9 @@ open class MultiplayerFeatureSelection(name: String, category: String, val list:
                     if (it == selected) {
                         return TarasandeMain.clientValues().accentColor.getColor()
                     }
-                    return Color.white
+                    return super.getColor()
                 }
-            }.createValueComponent())
+            }.createValueComponent()
         }
     }
 }
@@ -134,8 +128,8 @@ open class MultiplayerFeatureToggleable(name: String, category: String) : Multip
     open fun onClick(state: Boolean) {
     }
 
-    override fun createElements(managerMultiplayerFeature: ManagerMultiplayerFeature, panel: PanelElements<ElementValueComponent>) {
-        panel.elementList.add(object : ValueSpacer(managerMultiplayerFeature, name, 1.0F) {
+    override fun createElements(): List<ElementValueComponent> {
+        return listOf(object : ValueSpacer(this, name, 1.0F) {
             override fun onChange(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     state.value = !state.value

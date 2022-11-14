@@ -24,4 +24,10 @@ class ClickableWidgetPanelSidebar(panel: Panel) : ClickableWidgetPanel(panel, tr
         super.render(matrices, mouseX, mouseY, delta)
     }
 
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if(mouseX < MinecraftClient.getInstance().window.scaledWidth - (this.panel.panelWidth * animation))
+            return false
+        return super.mouseClicked(mouseX, mouseY, button)
+    }
+
 }

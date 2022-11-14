@@ -77,6 +77,7 @@ class TarasandeMain {
         managerPanel = ManagerPanel(managerFile)
         managerInformation = ManagerInformation(managerPanel)
         managerGraph = ManagerGraph(managerInformation, managerPanel)
+        managerMultiplayerFeature = ManagerMultiplayerFeature()
 
         protocolHack = TarasandeProtocolHack(rootDirectory)
 
@@ -84,7 +85,6 @@ class TarasandeMain {
         managerClickMethod = ManagerClickMethod()
         managerScreenExtension = ManagerScreenExtension()
         managerBlur = ManagerBlur()
-        managerMultiplayerFeature = ManagerMultiplayerFeature()
 
         managerModule = ManagerModule(managerPanel, managerFile)
 

@@ -7,7 +7,7 @@ import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.MultiplayerFeatureGeneralAccountManager
+import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.accountmanager.multiplayerfeature.MultiplayerFeatureAccountManager
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.TextFieldInfo
@@ -29,7 +29,7 @@ class AccountToken : Account() {
 
     private var service: MinecraftSessionService? = null
 
-    override fun defaultEnvironment(): Environment = TarasandeMain.managerMultiplayerFeature().get(MultiplayerFeatureGeneralAccountManager::class.java).screenBetterSlotListAccountManager.managerEnvironment.get(EnvironmentPresetEasyMC::class.java).create()
+    override fun defaultEnvironment(): Environment = TarasandeMain.managerMultiplayerFeature().get(MultiplayerFeatureAccountManager::class.java).screenBetterSlotListAccountManager.managerEnvironment.get(EnvironmentPresetEasyMC::class.java).create()
 
     override fun logIn() {
         val http = URL(redeemUrl).openConnection() as HttpURLConnection
