@@ -86,10 +86,10 @@ open class MultiplayerFeature(val name: String, val category: String) {
     open fun createElements(): List<ElementValueComponent> {
         return listOf(object : ValueSpacer(this, name, 1.0F) {
             override fun onChange(mouseButton: Int) {
-                if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-                    openSettings()
-                } else {
+                if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     onClick(mouseButton)
+                } else if(mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+                    openSettings()
                 }
             }
         }.createValueComponent())
@@ -107,7 +107,7 @@ open class MultiplayerFeatureSelection(name: String, category: String, val list:
                     if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                         onClick(it)
                         selected = it
-                    } else {
+                    } else if(mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                         openSettings()
                     }
                 }
@@ -134,7 +134,7 @@ open class MultiplayerFeatureToggleable(name: String, category: String) : Multip
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     state.value = !state.value
                     onClick(state.value)
-                } else {
+                } else if(mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     openSettings()
                 }
             }
