@@ -7,6 +7,7 @@ import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBind
@@ -123,9 +124,11 @@ class ManagerModule(panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manage
             ModuleEveryItemOnArmor(),
             ModuleNoRender(),
             ModuleNoStatusEffect(),
-            ModuleAllowAllCharacters()
+            ModuleAllowAllCharacters(),
+            ModuleAntiCactus()
         )
 
+        panelSystem.add(PanelArrayList(this@ManagerModule))
         EventDispatcher.apply {
             add(EventTick::class.java) {
                 if (it.state == EventTick.State.POST) {
@@ -145,12 +148,13 @@ class ManagerModule(panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manage
                     if (module.disableWhen.isSelected(1) && module.enabled)
                         module.enabled = false
             }
+            add(EventSuccessfulLoad::class.java, 1001) {
+                this@ManagerModule.list.distinctBy { it.category }.forEach {
+                    panelSystem.add(PanelElementsCategory(this@ManagerModule, it.category))
+                }
+            }
         }
 
-        panelSystem.add(PanelArrayList(this))
-        this.list.distinctBy { it.category }.forEach {
-            panelSystem.add(PanelElementsCategory(this, it.category))
-        }
         fileSystem.add(FileModules(this))
     }
 

@@ -74,7 +74,6 @@
   - ElytraBoost
   - SkinBlinker
   - Tracers (2D, 3D)
-  - AntiCactus
   - Build Height Interactions
   - Shift Container Transfer
   - NoteBot
