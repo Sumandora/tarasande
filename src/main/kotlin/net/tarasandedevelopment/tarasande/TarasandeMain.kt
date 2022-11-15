@@ -64,6 +64,7 @@ class TarasandeMain {
         fun managerScreenExtension() = instance.managerScreenExtension
         fun managerMultiplayerFeature() = instance.managerMultiplayerFeature
         fun managerInformation() = instance.managerInformation
+        fun managerGraph() = instance.managerGraph
         fun protocolHack() = instance.protocolHack
         fun managerClickMethod() = instance.managerClickMethod
         fun managerESP() = instance.managerESP
