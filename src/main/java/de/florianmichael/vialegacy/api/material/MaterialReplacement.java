@@ -35,6 +35,9 @@ public class MaterialReplacement {
 	}
 
 	public Item replace(Item item) {
+		if (item == null) {
+			return null;
+		}
 		RMaterial RMaterial = itemReplacements.get(combine(item.identifier(), item.data()));
 		if (RMaterial ==null) RMaterial = itemReplacements.get(combine(item.identifier(), -1));
 		return RMaterial ==null ? item : RMaterial.replace(item);
