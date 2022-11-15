@@ -163,7 +163,6 @@
   - Obsidian
   - Potion Saver
   - Potion Spoof
-  - Speed Mine
   - OreSim and DiamondSeedXRAY
   - ILikeParticles
 - Information:
@@ -181,7 +180,8 @@
    - Zoom Item
    - Crash and Bug Item
    - Object loader
-- NBT Edit with Item Tooltips
+   - NBT Edit with Item Tooltips
+   - Potion Generator (with preset for trolling potions?)
 
 ## TODO-List (Flori | Minecraft Changes) (Package)
 - Modules:
