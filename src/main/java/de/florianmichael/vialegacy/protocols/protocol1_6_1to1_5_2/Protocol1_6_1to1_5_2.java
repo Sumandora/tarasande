@@ -16,7 +16,7 @@ package de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2;
 
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
-import de.florianmichael.vialegacy.api.via.EnZaProtocol;
+import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.ClientboundPackets1_6_1;
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.ServerboundPackets1_6_1;
 

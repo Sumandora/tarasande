@@ -1,6 +1,6 @@
 /*
  * Copyright (c) FlorianMichael as EnZaXD 2022
- * Created on 24.06.22, 13:55
+ * Created on 6/24/22, 5:37 PM
  *
  * --FLORIAN MICHAEL PRIVATE LICENCE v1.0--
  *
@@ -12,15 +12,28 @@
  * The owner "Florian Michael" is free to change this license.
  */
 
-package de.florianmichael.vialegacy.protocols.protocol1_2_5to1_2_3;
+package de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.impl;
 
-import de.florianmichael.vialegacy.api.EnZaProtocol;
-import de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5.ClientboundPackets1_2_5;
-import de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5.ServerboundPackets1_2_5;
+import com.viaversion.viaversion.api.type.Type;
+import io.netty.buffer.ByteBuf;
 
-public class Protocol1_2_5to1_2_3 extends EnZaProtocol<ClientboundPackets1_2_3, ClientboundPackets1_2_5, ServerboundPackets1_2_3, ServerboundPackets1_2_5> {
+public class StringType_1_6_4 extends Type<String> {
+	
+	public StringType_1_6_4() {
+		super(String.class);
+	}
 
-	public Protocol1_2_5to1_2_3() {
-		super(ClientboundPackets1_2_3.class, ClientboundPackets1_2_5.class, ServerboundPackets1_2_3.class, ServerboundPackets1_2_5.class);
+	@Override
+	public String read(ByteBuf buf) throws Exception {
+		char[] chars = new char[buf.readShort()];
+		for(int i = 0; i < chars.length; i++) chars[i] = buf.readChar();
+		return new String(chars);
+	}
+
+	@Override
+	public void write(ByteBuf buf, String s) throws Exception {
+		char[] chars = s.toCharArray();
+		buf.writeShort(chars.length);
+		for(int i = 0; i < chars.length; i++) buf.writeChar(chars[i]);
 	}
 }

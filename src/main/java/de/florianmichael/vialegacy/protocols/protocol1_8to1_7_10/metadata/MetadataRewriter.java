@@ -18,15 +18,16 @@ import com.viaversion.viaversion.api.minecraft.entities.Entity1_10Types;
 import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
 import com.viaversion.viaversion.api.minecraft.metadata.types.MetaType1_8;
-import de.florianmichael.vialegacy.api.type.meta.MetaType_1_7_6_10;
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.item.ItemRewriter;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.Protocol1_8to1_7_10;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.MetaType_1_7_6_10;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.item.ItemRewriter1_8to1_7_10;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MetadataRewriter {
 
-	public static void transform(Entity1_10Types.EntityType type, List<Metadata> list) {
+	public static void transform(final Protocol1_8to1_7_10 protocol1_8to1_7_10, Entity1_10Types.EntityType type, List<Metadata> list) {
 		for (Metadata entry : new ArrayList<>(list)) {
 			MetaIndex1_8to1_7_6_10 metaIndex = MetaIndex1_8to1_7_6_10.searchIndex(type, entry.id());
 
@@ -66,7 +67,7 @@ public class MetadataRewriter {
 							entry.setValue((int) value < 0 ? -1 : value);
 					}
 					case Slot -> {
-						entry.setValue(ItemRewriter.toClient((Item) value));
+						entry.setValue(protocol1_8to1_7_10.getItemRewriter().handleItemToClient((Item) value));
 					}
 					case Float, Short, String, Position, Rotation -> entry.setValue(value);
 					default -> list.remove(entry);

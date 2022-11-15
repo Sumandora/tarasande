@@ -10,7 +10,6 @@ import com.viaversion.viaversion.protocols.protocol1_13to1_12_2.Protocol1_13To1_
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.vialegacy.ViaLegacy
-import de.florianmichael.vialegacy.api.via.config.ViaLegacyConfigImpl
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
 import de.florianmichael.viaprotocolhack.INativeProvider
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
@@ -54,9 +53,7 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
     init {
         ViaProtocolHack.instance().init(this) {
             this.createChannelMappings()
-            val config = ViaLegacyConfigImpl(File(ViaProtocolHack.instance().directory(), "vialegacy.yml"))
-            config.reloadConfig()
-            ViaLegacy.init(viaLegacy, config, Logger.getLogger("ViaLegacy-Tarasande"))
+            ViaLegacy.init(viaLegacy, Logger.getLogger("ViaLegacy-Tarasande"))
         }
 
         PackFormats.checkOutdated(nativeVersion())

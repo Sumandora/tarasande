@@ -3,7 +3,7 @@ package de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.metadata;
 import com.viaversion.viaversion.api.minecraft.entities.Entity1_10Types;
 import com.viaversion.viaversion.api.minecraft.metadata.types.MetaType1_8;
 import com.viaversion.viaversion.util.Pair;
-import de.florianmichael.vialegacy.api.type.meta.MetaType_1_7_6_10;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.MetaType_1_7_6_10;
 
 import java.util.HashMap;
 import java.util.Optional;

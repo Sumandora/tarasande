@@ -33,9 +33,11 @@ public class EntityTracker extends StoredObject {
 
 	private final Map<Integer, Entity1_10Types.EntityType> clientEntityTypes = new ConcurrentHashMap<>();
 	private final Map<Integer, List<Metadata>> metadataBuffer = new ConcurrentHashMap<>();
+	private final Protocol1_8to1_7_10 protocol1_8to1_7_10;
 
-	public EntityTracker(UserConnection user) {
+	public EntityTracker(final UserConnection user, final Protocol1_8to1_7_10 protocol1_8to1_7_10) {
 		super(user);
+		this.protocol1_8to1_7_10 = protocol1_8to1_7_10;
 	}
 
 	public void removeEntity(int entityId) {
@@ -63,7 +65,7 @@ public class EntityTracker extends StoredObject {
 		final PacketWrapper wrapper = PacketWrapper.create(ClientboundPackets1_7_10.ENTITY_METADATA, this.getUser());
 		wrapper.write(Type.VAR_INT, entityId);
 		wrapper.write(Types1_8.METADATA_LIST, this.metadataBuffer.get(entityId));
-		MetadataRewriter.transform(this.getClientEntityTypes().get(entityId), this.metadataBuffer.get(entityId));
+		MetadataRewriter.transform(this.protocol1_8to1_7_10, this.getClientEntityTypes().get(entityId), this.metadataBuffer.get(entityId));
 		if (!this.metadataBuffer.get(entityId).isEmpty()) {
 			try {
 				wrapper.send(Protocol1_8to1_7_10.class);

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) FlorianMichael as EnZaXD 2022
- * Created on 24.06.22, 13:55
+ * Created on 6/24/22, 5:37 PM
  *
  * --FLORIAN MICHAEL PRIVATE LICENCE v1.0--
  *
@@ -12,15 +12,27 @@
  * The owner "Florian Michael" is free to change this license.
  */
 
-package de.florianmichael.vialegacy.protocols.protocol1_2_5to1_2_3;
+package de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.impl;
 
-import de.florianmichael.vialegacy.api.EnZaProtocol;
-import de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5.ClientboundPackets1_2_5;
-import de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5.ServerboundPackets1_2_5;
+import com.viaversion.viaversion.api.type.Type;
+import io.netty.buffer.ByteBuf;
 
-public class Protocol1_2_5to1_2_3 extends EnZaProtocol<ClientboundPackets1_2_3, ClientboundPackets1_2_5, ServerboundPackets1_2_3, ServerboundPackets1_2_5> {
+public class ByteArrayType_1_7_6_10 extends Type<byte[]> {
 
-	public Protocol1_2_5to1_2_3() {
-		super(ClientboundPackets1_2_3.class, ClientboundPackets1_2_5.class, ServerboundPackets1_2_3.class, ServerboundPackets1_2_5.class);
+	public ByteArrayType_1_7_6_10() {
+		super(byte[].class);
+	}
+
+	@Override
+	public byte[] read(ByteBuf buf) throws Exception {
+		byte[] data = new byte[buf.readUnsignedShort()];
+		buf.readBytes(data, 0, data.length);
+		return data;
+	}
+
+	@Override
+	public void write(ByteBuf buf, byte[] data) throws Exception {
+		buf.writeShort(data.length);
+		buf.writeBytes(data);
 	}
 }

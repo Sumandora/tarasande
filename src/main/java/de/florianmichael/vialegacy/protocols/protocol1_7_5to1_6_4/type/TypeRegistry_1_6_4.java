@@ -12,15 +12,15 @@
  * The owner "Florian Michael" is free to change this license.
  */
 
-package de.florianmichael.vialegacy.protocols.protocol1_2_5to1_2_3;
+package de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type;
 
-import de.florianmichael.vialegacy.api.EnZaProtocol;
-import de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5.ClientboundPackets1_2_5;
-import de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5.ServerboundPackets1_2_5;
+import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.impl.MetadataListType_1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.impl.StringType_1_6_4;
 
-public class Protocol1_2_5to1_2_3 extends EnZaProtocol<ClientboundPackets1_2_3, ClientboundPackets1_2_5, ServerboundPackets1_2_3, ServerboundPackets1_2_5> {
+public class TypeRegistry_1_6_4 {
+	
+	public static final Type<String> STRING = new StringType_1_6_4();
+	public static final MetadataListType_1_6_4 METADATA_LIST = new MetadataListType_1_6_4();
 
-	public Protocol1_2_5to1_2_3() {
-		super(ClientboundPackets1_2_3.class, ClientboundPackets1_2_5.class, ServerboundPackets1_2_3.class, ServerboundPackets1_2_5.class);
-	}
 }

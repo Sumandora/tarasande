@@ -2,7 +2,7 @@ package de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.string;
 
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
-import de.florianmichael.vialegacy.api.type.TypeRegistry_1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.TypeRegistry_1_6_4;
 
 public class DisconnectPacketRemapper extends PacketRemapper {
 

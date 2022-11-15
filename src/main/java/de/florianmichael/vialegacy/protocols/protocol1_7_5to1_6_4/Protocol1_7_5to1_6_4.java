@@ -28,17 +28,19 @@ import com.viaversion.viaversion.protocols.base.ServerboundLoginPackets;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
 import com.viaversion.viaversion.util.GsonUtil;
 import de.florianmichael.vialegacy.ViaLegacy;
-import de.florianmichael.vialegacy.api.type.TypeRegistry1_7_6_10;
-import de.florianmichael.vialegacy.api.type.TypeRegistry_1_6_4;
-import de.florianmichael.vialegacy.api.via.EnZaProtocol;
+import de.florianmichael.vialegacy.api.material.MaterialReplacement;
+import de.florianmichael.vialegacy.api.sound.SoundRewriter;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.TypeRegistry1_7_6_10;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.TypeRegistry_1_6_4;
+import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.netty._1_6_4Transformer;
 import de.florianmichael.vialegacy.protocols.base.HandshakeStorage;
 import de.florianmichael.vialegacy.protocols.protocol1_7_10to1_7_5.ClientboundPackets1_7_5;
 import de.florianmichael.vialegacy.protocols.protocol1_7_10to1_7_5.ServerboundPackets1_7_5;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.entity.EntityAttributeModifier;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.entity.EntityProperty;
-import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.item.ReplacementRegistry1_7_5to1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.sound.SoundMappings1_7_5to1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.item.MaterialReplacement1_7_5to1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.sound.SoundRewriter1_7_5to1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.string.DisconnectPacketRemapper;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -70,6 +72,9 @@ import java.util.UUID;
  * ######################################################################################################################
  */
 public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, ClientboundPackets1_7_5, ServerboundPackets1_6_4, ServerboundPackets1_7_5> {
+
+    private final SoundRewriter soundRewriter = new SoundRewriter1_7_5to1_6_4();
+    private final MaterialReplacement materialReplacement = new MaterialReplacement1_7_5to1_6_4();
 
     public Protocol1_7_5to1_6_4() {
         super(ClientboundPackets1_6_4.class, ClientboundPackets1_7_5.class, ServerboundPackets1_6_4.class, ServerboundPackets1_7_5.class);
@@ -271,7 +276,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.INT); // Entity ID
                 map(Type.SHORT); // Slot
                 map(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM); // Item
-                handler(wrapper -> wrapper.set(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0, ReplacementRegistry1_7_5to1_6_4.replace(wrapper.get(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0))));
+                handler(wrapper -> wrapper.set(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0, materialReplacement().replace(wrapper.get(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0))));
             }
         });
 
@@ -282,7 +287,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.BYTE);
                 map(Type.SHORT);
                 map(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM);
-                handler(wrapper -> wrapper.set(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0, ReplacementRegistry1_7_5to1_6_4.replace(wrapper.get(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0))));
+                handler(wrapper -> wrapper.set(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0, materialReplacement().replace(wrapper.get(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0))));
             }
         });
 
@@ -294,7 +299,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     Item[] items = packetWrapper.read(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM_ARRAY);
 
                     for (int i = 0; i < items.length; i++) {
-                        items[i] = ReplacementRegistry1_7_5to1_6_4.replace(items[i]);
+                        items[i] = materialReplacement().replace(items[i]);
                     }
                     packetWrapper.write(Type.ITEM_ARRAY, items);  // Items
                 });
@@ -1065,13 +1070,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 map(TypeRegistry_1_6_4.STRING, Type.STRING); // Sound name
-                handler(wrapper -> {
-                    final String soundName = wrapper.get(Type.STRING, 0);
-
-                    if (SoundMappings1_7_5to1_6_4.soundDiff.containsKey(soundName)) {
-                        wrapper.set(Type.STRING, 0, SoundMappings1_7_5to1_6_4.soundDiff.get(soundName));
-                    }
-                });
+                handler(wrapper -> wrapper.set(Type.STRING, 0, soundRewriter().rewrite(wrapper.get(Type.STRING, 0))));
                 map(Type.INT); // X-Position
                 map(Type.INT); // Y-Position
                 map(Type.INT); // Z-Position
@@ -1126,6 +1125,16 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(TypeRegistry_1_6_4.STRING, Type.STRING); // Line-4
             }
         });
+    }
+
+    @Override
+    public SoundRewriter soundRewriter() {
+        return this.soundRewriter;
+    }
+
+    @Override
+    public MaterialReplacement materialReplacement() {
+        return this.materialReplacement;
     }
 
     @Override

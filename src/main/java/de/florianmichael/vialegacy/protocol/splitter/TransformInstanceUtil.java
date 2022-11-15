@@ -1,9 +1,9 @@
 package de.florianmichael.vialegacy.protocol.splitter;
 
-import de.florianmichael.vialegacy.api.type.TypeRegistry1_7_6_10;
-import de.florianmichael.vialegacy.api.type.TypeRegistry_1_4_2;
-import de.florianmichael.vialegacy.api.type.TypeRegistry_1_6_4;
-import de.florianmichael.vialegacy.api.type._1_2_5.NBTItems;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.TypeRegistry1_7_6_10;
+import de.florianmichael.vialegacy.protocols.protocol1_4_5to1_4_3_pre.type.TypeRegistry_1_4_2;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.TypeRegistry_1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5.type.impl.NBTItems;
 import io.netty.buffer.ByteBuf;
 
 public class TransformInstanceUtil {

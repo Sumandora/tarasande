@@ -26,6 +26,7 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.protocol.remapper.TypeRemapper;
+import com.viaversion.viaversion.api.rewriter.ItemRewriter;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.api.type.types.CustomByteType;
 import com.viaversion.viaversion.api.type.types.version.Types1_8;
@@ -40,11 +41,14 @@ import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
 import com.viaversion.viaversion.protocols.protocol1_8.ServerboundPackets1_8;
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider;
 import com.viaversion.viaversion.util.ChatColorUtil;
-import de.florianmichael.vialegacy.api.type.TypeRegistry1_7_6_10;
-import de.florianmichael.vialegacy.api.type._1_7_6_10.CustomStringType_1_7_6_10;
-import de.florianmichael.vialegacy.api.via.EnZaProtocol;
+import de.florianmichael.vialegacy.api.item.LegacyItemRewriter;
+import de.florianmichael.vialegacy.api.material.MaterialReplacement;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.item.MaterialReplacement1_8To1_7_10;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.TypeRegistry1_7_6_10;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.impl.CustomStringType_1_7_6_10;
+import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.chunk.Chunk1_8to1_7_6_10;
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.item.ItemRewriter;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.item.ItemRewriter1_8to1_7_10;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.metadata.MetadataRewriter;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.particle.ParticleRegistry;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.*;
@@ -53,6 +57,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.profile
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -72,6 +77,9 @@ import java.util.zip.Inflater;
  * #####################################################################################################################
  */
 public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, ClientboundPackets1_8, ServerboundPackets1_7_10, ServerboundPackets1_8> {
+
+    private final MaterialReplacement materialReplacement = new MaterialReplacement1_8To1_7_10();
+    private final LegacyItemRewriter<Protocol1_8to1_7_10> itemRewriter = new ItemRewriter1_8to1_7_10(this);
 
     public Protocol1_8to1_7_10() {
         super(ClientboundPackets1_7_10.class, ClientboundPackets1_8.class, ServerboundPackets1_7_10.class, ServerboundPackets1_8.class);
@@ -339,7 +347,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.INT, Type.VAR_INT); // Entity ID
                 map(Type.SHORT); // Slot
                 map(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, Type.ITEM); // Item
-                handler(pw -> pw.set(Type.ITEM, 0, ItemRewriter.toClient(pw.get(Type.ITEM, 0))));
+                handler(pw -> pw.set(Type.ITEM, 0, getItemRewriter().handleItemToClient(pw.get(Type.ITEM, 0))));
             }
         });
 
@@ -394,7 +402,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     packetWrapper.passthrough(Type.SHORT); // Item in hand
 
                     List<Metadata> metadata = packetWrapper.read(TypeRegistry1_7_6_10.METADATA_LIST); // Metadata
-                    MetadataRewriter.transform(Entity1_10Types.EntityType.PLAYER, metadata);
+                    MetadataRewriter.transform(Protocol1_8to1_7_10.this, Entity1_10Types.EntityType.PLAYER, metadata);
                     packetWrapper.write(Types1_8.METADATA_LIST, metadata);
 
                     PacketWrapper addPlayerInfo = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
@@ -815,7 +823,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.BYTE, Type.UNSIGNED_BYTE);
                 map(Type.SHORT);
                 map(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, Type.ITEM);
-                handler(pw -> pw.set(Type.ITEM, 0, ItemRewriter.toClient(pw.get(Type.ITEM, 0))));
+                handler(pw -> pw.set(Type.ITEM, 0, getItemRewriter().handleItemToClient(pw.get(Type.ITEM, 0))));
                 handler(pw -> {
                     short windowId = pw.get(Type.UNSIGNED_BYTE, 0);
                     short slot = pw.get(Type.SHORT, 0);
@@ -1143,7 +1151,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final EntityTracker tracker = entityTracker(wrapper.user());
 
                     if (tracker.getClientEntityTypes().containsKey(entityID)) {
-                        MetadataRewriter.transform(tracker.getClientEntityTypes().get(entityID), metadataList);
+                        MetadataRewriter.transform(Protocol1_8to1_7_10.this, tracker.getClientEntityTypes().get(entityID), metadataList);
                         if (metadataList.isEmpty()) {
                             wrapper.cancel();
                         }
@@ -1250,7 +1258,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final EntityTracker tracker = entityTracker(wrapper.user());
 
                     if (tracker.getClientEntityTypes().containsKey(entityID))
-                        MetadataRewriter.transform(tracker.getClientEntityTypes().get(entityID), metadataList);
+                        MetadataRewriter.transform(Protocol1_8to1_7_10.this, tracker.getClientEntityTypes().get(entityID), metadataList);
                     else wrapper.cancel();
                 });
             }
@@ -1560,7 +1568,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             public void registerMap() {
                 map(Type.SHORT);  //Slot
                 map(Type.ITEM, TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM);  //Item
-                handler(pw -> pw.set(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0, ItemRewriter.toServer(pw.get(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0))));
+                handler(pw -> pw.set(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0, getItemRewriter().handleItemToServer(pw.get(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0))));
             }
         });
 
@@ -1638,6 +1646,16 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         });
     }
 
+    @Override
+    public MaterialReplacement materialReplacement() {
+        return this.materialReplacement;
+    }
+
+    @Override
+    public @Nullable ItemRewriter getItemRewriter() {
+        return this.itemRewriter;
+    }
+
     private WindowIDTracker windowTracker(final UserConnection connection) {
         return connection.get(WindowIDTracker.class);
     }
@@ -1677,7 +1695,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         userConnection.put(new WindowIDTracker(userConnection));
         userConnection.put(new ScoreboardLineTracker(userConnection));
         userConnection.put(new TablistTracker(userConnection));
-        userConnection.put(new EntityTracker(userConnection));
+        userConnection.put(new EntityTracker(userConnection, this));
         userConnection.put(new TeamsTracker(userConnection));
         userConnection.put(new GroundTracker(userConnection));
         userConnection.put(new TeleportTracker(userConnection));

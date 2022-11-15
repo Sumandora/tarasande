@@ -14,7 +14,7 @@
 
 package de.florianmichael.vialegacy.protocols.protocol1_6_3to1_6_2;
 
-import de.florianmichael.vialegacy.api.via.EnZaProtocol;
+import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre.ClientboundPackets1_6_3_pre;
 import de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre.ServerboundPackets1_6_3_pre;
 
