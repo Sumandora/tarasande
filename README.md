@@ -191,10 +191,6 @@
    - Custom Buttons
    - Custom Background with Selection
 
-## TODO-List (Flori | Windows) (Package)
-- Add Fritz!Box Reconnect
-- Tor Proxy Implementation
-
 ## TODO-List (Together <3 | ViaLegacy)
 
 - Unknown: Mining Fast Checks
