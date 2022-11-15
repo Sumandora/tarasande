@@ -1,8 +1,8 @@
 package de.florianmichael.vialegacy.protocols.protocol1_2_5to1_2_3;
 
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
-import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitterLogic;
-import de.florianmichael.vialegacy.protocol.splitter.LegacyClientboundPacketType;
+import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitter;
+import de.florianmichael.vialegacy.api.LegacyClientboundPacketType;
 
 public enum ClientboundPackets1_2_3 implements LegacyClientboundPacketType {
 
@@ -493,13 +493,11 @@ public enum ClientboundPackets1_2_3 implements LegacyClientboundPacketType {
 	DISCONNECT(0xFF, ((buffer, transformer) -> transformer.readString(buffer)));
 
 	private final int id;
-	private final IPacketSplitterLogic splitter;
+	private final IPacketSplitter splitter;
 
-	ClientboundPackets1_2_3(final int id, final IPacketSplitterLogic splitter) {
+	ClientboundPackets1_2_3(final int id, final IPacketSplitter splitter) {
 		this.id = id;
 		this.splitter = splitter;
-
-		this.registerSplitter(LegacyProtocolVersion.R1_2_5);
 	}
 
 	@Override
@@ -513,7 +511,7 @@ public enum ClientboundPackets1_2_3 implements LegacyClientboundPacketType {
 	}
 
 	@Override
-	public IPacketSplitterLogic getSplitter() {
+	public IPacketSplitter getSplitter() {
 		return splitter;
 	}
 }

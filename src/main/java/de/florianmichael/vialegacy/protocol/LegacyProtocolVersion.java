@@ -1,7 +1,7 @@
 package de.florianmichael.vialegacy.protocol;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitterLogic;
+import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +10,6 @@ import java.util.Map;
 
 public class LegacyProtocolVersion extends ProtocolVersion {
 
-    public static final Map<Integer, Map<Integer, IPacketSplitterLogic>> SPLITTER_TRACKER = new HashMap<>();
     public static final List<ProtocolVersion> PROTOCOL_VERSIONS = new ArrayList<>();
     public static final List<ProtocolVersion> PRE_NETTY_VERSIONS = new ArrayList<>();
 

@@ -14,10 +14,12 @@
 
 package de.florianmichael.vialegacy.netty._1_6_4;
 
+import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.vialegacy.ViaLegacy;
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
-import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitterLogic;
+import de.florianmichael.vialegacy.protocol.SplitterTracker;
+import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitter;
 import de.florianmichael.vialegacy.protocol.splitter.TransformInstanceUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,7 +30,13 @@ import java.util.Map;
 
 public class _1_6_4PacketDecoder extends ByteToMessageDecoder {
 
-    private int readPacket(final IPacketSplitterLogic splitterLogic, final ByteBuf buf) {
+    private final UserConnection connection;
+
+    public _1_6_4PacketDecoder(final UserConnection connection) {
+        this.connection = connection;
+    }
+
+    private int readPacket(final IPacketSplitter splitterLogic, final ByteBuf buf) {
         buf.markReaderIndex();
         int start = buf.readerIndex();
 
@@ -43,7 +51,7 @@ public class _1_6_4PacketDecoder extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        final Map<Integer, IPacketSplitterLogic> splitterAdapter = LegacyProtocolVersion.SPLITTER_TRACKER.get(ViaLegacy.getProvider().currentVersion());
+        @SuppressWarnings("ConstantConditions") final Map<Integer, IPacketSplitter> splitterAdapter = connection.getProtocolInfo().getUser().get(SplitterTracker.class).splitter;
         while (in.readableBytes() > 0) {
             ByteBuf draft = null;
             int backupIdx = -1;

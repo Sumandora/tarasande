@@ -20,6 +20,8 @@ import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.vialegacy.protocol.SplitterTracker;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.TypeRegistry_1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.MetaType_1_6_4;
@@ -167,5 +169,6 @@ public class Protocol1_4_7to1_4_5 extends EnZaProtocol<ClientboundPackets1_4_5, 
 		super.init(connection);
 
 		connection.put(new DimensionStorage(connection));
+		connection.put(new SplitterTracker(connection, ClientboundPackets1_4_5.values(), ClientboundLoginPackets1_6_4.values()));
 	}
 }

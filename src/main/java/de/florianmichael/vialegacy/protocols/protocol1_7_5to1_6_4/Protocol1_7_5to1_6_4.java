@@ -30,6 +30,7 @@ import com.viaversion.viaversion.util.GsonUtil;
 import de.florianmichael.vialegacy.ViaLegacy;
 import de.florianmichael.vialegacy.api.material.MaterialReplacement;
 import de.florianmichael.vialegacy.api.sound.SoundRewriter;
+import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.TypeRegistry_1_6_4;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
@@ -1140,6 +1141,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
     @Override
     public void init(UserConnection userConnection) {
         userConnection.put(new ClientWorld(userConnection));
+        userConnection.put(new SplitterTracker(userConnection, ClientboundPackets1_6_4.values(), ClientboundLoginPackets1_6_4.values()));
 
         ViaLegacy.getProvider().rewriteElements_1_6(userConnection, userConnection.getChannel(), _1_6_4Transformer.DECODER, _1_6_4Transformer.ENCODER);
     }

@@ -27,7 +27,7 @@ class ViaLegacyTarasandePlatform(private val protocolHack: TarasandeProtocolHack
     }
 
     override fun rewriteElements_1_6(connection: UserConnection, channel: Channel, decoder: String, encoder: String) {
-        channel.pipeline().addBefore("splitter", decoder, _1_6_4PacketDecoder())
+        channel.pipeline().addBefore("splitter", decoder, _1_6_4PacketDecoder(connection))
         channel.pipeline().addBefore("prepender", encoder, _1_6_4PacketEncoder())
 
         channel.pipeline().replace("prepender", "prepender", ForwardMessageToByteEncoder())

@@ -14,11 +14,15 @@
 
 package de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2;
 
+import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
+import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.ClientboundPackets1_6_1;
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.ServerboundPackets1_6_1;
+import de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre.ClientboundPackets1_6_3_pre;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ClientboundLoginPackets1_6_4;
 
 public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, ClientboundPackets1_6_1, ServerboundPackets1_5_2, ServerboundPackets1_6_1> {
 
@@ -93,5 +97,12 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 				map(Type.BYTE, Type.INT); // Amount
 			}
 		});
+	}
+
+	@Override
+	public void init(UserConnection connection) {
+		super.init(connection);
+
+		connection.put(new SplitterTracker(connection, ClientboundPackets1_5_2.values(), ClientboundLoginPackets1_6_4.values()));
 	}
 }

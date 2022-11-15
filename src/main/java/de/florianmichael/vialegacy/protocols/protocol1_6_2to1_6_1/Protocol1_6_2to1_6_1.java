@@ -14,10 +14,14 @@
 
 package de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1;
 
+import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.vialegacy.protocol.SplitterTracker;
+import de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre.ClientboundPackets1_6_3_pre;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.TypeRegistry_1_6_4;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
@@ -121,5 +125,12 @@ public class Protocol1_6_2to1_6_1 extends EnZaProtocol<ClientboundPackets1_6_1, 
 				});
 			}
 		});
+	}
+
+	@Override
+	public void init(UserConnection connection) {
+		super.init(connection);
+
+		connection.put(new SplitterTracker(connection, ClientboundPackets1_6_1.values(), ClientboundLoginPackets1_6_4.values()));
 	}
 }

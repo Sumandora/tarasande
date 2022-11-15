@@ -14,7 +14,10 @@
 
 package de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre;
 
+import com.viaversion.viaversion.api.connection.UserConnection;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
+import de.florianmichael.vialegacy.protocol.SplitterTracker;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ClientboundPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ServerboundPackets1_6_4;
 
@@ -22,5 +25,12 @@ public class Protocol1_6_4to1_6_3_pre extends EnZaProtocol<ClientboundPackets1_6
 
     public Protocol1_6_4to1_6_3_pre() {
         super(ClientboundPackets1_6_3_pre.class, ClientboundPackets1_6_4.class, ServerboundPackets1_6_3_pre.class, ServerboundPackets1_6_4.class);
+    }
+
+    @Override
+    public void init(UserConnection connection) {
+        super.init(connection);
+
+        connection.put(new SplitterTracker(connection, ClientboundPackets1_6_3_pre.values(), ClientboundLoginPackets1_6_4.values()));
     }
 }

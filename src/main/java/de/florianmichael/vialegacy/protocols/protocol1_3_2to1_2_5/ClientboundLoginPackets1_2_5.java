@@ -1,8 +1,8 @@
 package de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5;
 
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
-import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitterLogic;
-import de.florianmichael.vialegacy.protocol.splitter.LegacyClientboundPacketType;
+import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitter;
+import de.florianmichael.vialegacy.api.LegacyClientboundPacketType;
 
 import java.util.Arrays;
 
@@ -13,15 +13,11 @@ public enum ClientboundLoginPackets1_2_5 implements LegacyClientboundPacketType 
 	});
 
 	private final int id;
-	private final IPacketSplitterLogic splitter;
+	private final IPacketSplitter splitter;
 
-	ClientboundLoginPackets1_2_5(final int id, final IPacketSplitterLogic splitter) {
+	ClientboundLoginPackets1_2_5(final int id, final IPacketSplitter splitter) {
 		this.id = id;
 		this.splitter = splitter;
-
-		for (LegacyProtocolVersion legacyProtocolVersion : Arrays.asList(LegacyProtocolVersion.R1_2_5, LegacyProtocolVersion.R1_2_3, LegacyProtocolVersion.R1_1)) {
-			this.registerSplitter(legacyProtocolVersion);
-		}
 	}
 
 	@Override
@@ -35,7 +31,7 @@ public enum ClientboundLoginPackets1_2_5 implements LegacyClientboundPacketType 
 	}
 
 	@Override
-	public IPacketSplitterLogic getSplitter() {
+	public IPacketSplitter getSplitter() {
 		return splitter;
 	}
 }
