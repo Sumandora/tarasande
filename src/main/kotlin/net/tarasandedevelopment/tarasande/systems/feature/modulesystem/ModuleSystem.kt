@@ -152,12 +152,10 @@ class ManagerModule(panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manage
                 this@ManagerModule.list.distinctBy { it.category }.forEach {
                     panelSystem.add(PanelElementsCategory(this@ManagerModule, it.category))
                 }
+                fileSystem.add(FileModules(this@ManagerModule))
             }
         }
-
-        fileSystem.add(FileModules(this))
     }
-
 }
 
 open class Module(val name: String, val description: String, val category: String) {
