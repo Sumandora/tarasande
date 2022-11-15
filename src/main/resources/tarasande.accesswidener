@@ -6,6 +6,7 @@ accessible field net/minecraft/item/Item ATTACK_DAMAGE_MODIFIER_ID Ljava/util/UU
 accessible field net/minecraft/client/network/ClientPlayNetworkHandler recipeManager Lnet/minecraft/recipe/RecipeManager;
 accessible field net/minecraft/client/font/FontManager fontStorages Ljava/util/Map;
 accessible field net/minecraft/client/MinecraftClient fontManager Lnet/minecraft/client/font/FontManager;
+accessible field net/minecraft/client/network/AllowedAddressResolver redirectResolver Lnet/minecraft/client/network/RedirectResolver;
 
 # client
 accessible field net/minecraft/network/ClientConnection channel Lio/netty/channel/Channel;
