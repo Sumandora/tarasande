@@ -87,12 +87,12 @@ public class Protocol1_6_2to1_6_1 extends EnZaProtocol<ClientboundPackets1_6_1, 
 			@Override
 			public void registerMap() {
 				handler(wrapper -> {
-					int x = wrapper.get(Type.INT, 0);
-					int y = wrapper.get(Type.UNSIGNED_BYTE, 0);
-					int z = wrapper.get(Type.INT, 1);
+					int x = wrapper.passthrough(Type.INT);
+					int y = wrapper.passthrough(Type.UNSIGNED_BYTE);
+					int z = wrapper.passthrough(Type.INT);
 
-					final int direction = wrapper.get(Type.UNSIGNED_BYTE, 1);
-					final Item item = wrapper.get(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, 0);
+					final int direction = wrapper.passthrough(Type.UNSIGNED_BYTE);
+					final Item item = wrapper.passthrough(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM);
 
 					if (item == null) {
 						return;
@@ -110,7 +110,7 @@ public class Protocol1_6_2to1_6_1 extends EnZaProtocol<ClientboundPackets1_6_1, 
 						++x;
 					}
 
-					if (item.identifier() == 323 && wrapper.get(Type.UNSIGNED_BYTE, 2) > 5) { // Sign and Cursor X
+					if (item.identifier() == 323 && wrapper.passthrough(Type.UNSIGNED_BYTE) > 5) { // Sign and Cursor X
 						wrapper.cancel();
 
 						final PacketWrapper openSignEditor = PacketWrapper.create(ClientboundPackets1_6_1.OPEN_SIGN_EDITOR, wrapper.user());
