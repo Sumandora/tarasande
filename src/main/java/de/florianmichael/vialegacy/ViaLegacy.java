@@ -28,16 +28,13 @@ import java.util.logging.Logger;
 
 public class ViaLegacy {
 
-    private static IViaLegacyProvider provider;
-
     private static Logger logger;
 
-    public static void init(final IViaLegacyProvider provider, final Logger logger) {
-        if (ViaLegacy.provider != null) {
+    public static void init(final Logger logger) {
+        if (ViaLegacy.logger != null) {
             throw new ViaLegacyException("ViaLegacy is already loaded!");
         }
 
-        ViaLegacy.provider = provider;
         ViaLegacy.logger = logger;
 
         registerProtocol(ProtocolVersion.v1_8, LegacyProtocolVersion.R1_7_10, new Protocol1_8to1_7_10());
@@ -77,10 +74,6 @@ public class ViaLegacy {
         }
 
         getLogger().info("Loading " + from.getName() + " -> " + to.getName() + " mappings...");
-    }
-
-    public static IViaLegacyProvider getProvider() {
-        return provider;
     }
 
     public static Logger getLogger() {

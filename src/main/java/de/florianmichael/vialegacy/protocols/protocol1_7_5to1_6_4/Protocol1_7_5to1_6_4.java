@@ -14,6 +14,7 @@
 
 package de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4;
 
+import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.item.Item;
@@ -27,10 +28,13 @@ import com.viaversion.viaversion.protocol.packet.PacketWrapperImpl;
 import com.viaversion.viaversion.protocols.base.ServerboundLoginPackets;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
 import com.viaversion.viaversion.util.GsonUtil;
-import de.florianmichael.vialegacy.ViaLegacy;
 import de.florianmichael.vialegacy.api.material.MaterialReplacement;
 import de.florianmichael.vialegacy.api.sound.SoundRewriter;
+import de.florianmichael.vialegacy.pre_netty.DummyPrepender;
+import de.florianmichael.vialegacy.pre_netty.PreNettyPacketDecoder;
+import de.florianmichael.vialegacy.pre_netty.PreNettyPacketEncoder;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.provider.PreNettyProvider;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.TypeRegistry_1_6_4;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
@@ -38,11 +42,12 @@ import de.florianmichael.vialegacy.pre_netty.PreNettyConstants;
 import de.florianmichael.vialegacy.protocols.base.HandshakeStorage;
 import de.florianmichael.vialegacy.protocols.protocol1_7_10to1_7_5.ClientboundPackets1_7_5;
 import de.florianmichael.vialegacy.protocols.protocol1_7_10to1_7_5.ServerboundPackets1_7_5;
-import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.entity.EntityAttributeModifier;
-import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.entity.EntityProperty;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.model.EntityAttributeModifier;
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.model.EntityProperty;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.item.MaterialReplacement1_7_5to1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.sound.SoundRewriter1_7_5to1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.string.DisconnectPacketRemapper;
+import io.netty.channel.ChannelPipeline;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -393,7 +398,12 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     packetWrapper.write(Type.STRING, UUID.nameUUIDFromBytes(("OfflinePlayer:" + info.getUsername()).getBytes()).toString().replace("-", ""));
                     packetWrapper.write(Type.STRING, info.getUsername());
 
-                    ViaLegacy.getProvider().fixPipelineOrder_1_6(packetWrapper.user().getChannel(), PreNettyConstants.DECODER, PreNettyConstants.ENCODER);
+                    final PreNettyProvider preNettyProvider = Via.getManager().getProviders().get(PreNettyProvider.class);
+                    if (preNettyProvider != null) {
+                        final ChannelPipeline pipeline = packetWrapper.user().getChannel().pipeline();
+                        pipeline.addBefore(PreNettyConstants.DECODER, preNettyProvider.decryptKey(), preNettyProvider.decryptor());
+                        pipeline.addBefore(PreNettyConstants.ENCODER, preNettyProvider.encryptKey(), preNettyProvider.encryptor());
+                    }
 
                     PacketWrapper add = new PacketWrapperImpl(205, null, packetWrapper.user()); //Packet205ClientCommand
                     add.write(Type.BYTE, (byte) 0);
@@ -1089,11 +1099,21 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
         return this.materialReplacement;
     }
 
+
     @Override
     public void init(UserConnection userConnection) {
         userConnection.put(new ClientWorld(userConnection));
         userConnection.put(new SplitterTracker(userConnection, ClientboundPackets1_6_4.values(), ClientboundLoginPackets1_6_4.values()));
 
-        ViaLegacy.getProvider().rewriteElements_1_6(userConnection, userConnection.getChannel(), PreNettyConstants.DECODER, PreNettyConstants.ENCODER);
+        final PreNettyProvider preNettyProvider = Via.getManager().getProviders().get(PreNettyProvider.class);
+        if (preNettyProvider != null) {
+            final ChannelPipeline pipeline = userConnection.getChannel().pipeline();
+
+            pipeline.addBefore(preNettyProvider.splitterKey(), PreNettyConstants.DECODER, new PreNettyPacketDecoder(userConnection));
+            pipeline.addBefore(preNettyProvider.prependerKey(), PreNettyConstants.ENCODER, new PreNettyPacketEncoder());
+
+            pipeline.replace(preNettyProvider.prependerKey(), preNettyProvider.prependerKey(), new DummyPrepender());
+            pipeline.remove(preNettyProvider.splitterKey());
+        }
     }
 }

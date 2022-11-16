@@ -11,6 +11,8 @@ import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemPr
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.vialegacy.ViaLegacy
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
+import de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5.provider.OldAuthProvider
+import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.provider.PreNettyProvider
 import de.florianmichael.viaprotocolhack.INativeProvider
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
 import de.florianmichael.viaprotocolhack.util.VersionList
@@ -29,12 +31,13 @@ import net.tarasandedevelopment.tarasande.protocolhack.fixes.EntityDimensionRepl
 import net.tarasandedevelopment.tarasande.protocolhack.fixes.PackFormats
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ValueBooleanProtocol
-import net.tarasandedevelopment.tarasande.protocolhack.platform.ViaLegacyTarasandePlatform
 import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureProtocolHack
 import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureProtocolHackSettings
-import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricHandItemProvider
-import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricMovementTransmitterProvider
-import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricVersionProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricHandItemProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricMovementTransmitterProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricVersionProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.FabricOldAuthProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.FabricPreNettyProvider
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
 import su.mandora.event.EventDispatcher
@@ -48,12 +51,10 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
     val version = ValueNumber(this, "Protocol", Double.MIN_VALUE, SharedConstants.getProtocolVersion().toDouble(), Double.MAX_VALUE, 1.0, true)
     private val compression = arrayOf("decompress", "compress")
 
-    val viaLegacy = ViaLegacyTarasandePlatform(this)
-
     init {
         ViaProtocolHack.instance().init(this) {
             this.createChannelMappings()
-            ViaLegacy.init(viaLegacy, Logger.getLogger("ViaLegacy-Tarasande"))
+            ViaLegacy.init(Logger.getLogger("ViaLegacy-Tarasande"))
         }
 
         PackFormats.checkOutdated(nativeVersion())
@@ -147,9 +148,14 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
     override fun eventLoop(threadFactory: ThreadFactory?, executorService: ExecutorService?) = DefaultEventLoop(executorService)
 
     override fun createProviders(providers: ViaProviders?) {
-        providers?.register(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
-        providers?.register(VersionProvider::class.java, FabricVersionProvider())
-        providers?.register(HandItemProvider::class.java, FabricHandItemProvider())
+        // Via Legacy
+        providers?.use(OldAuthProvider::class.java, FabricOldAuthProvider())
+        providers?.use(PreNettyProvider::class.java, FabricPreNettyProvider())
+
+        // Via Version
+        providers?.use(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
+        providers?.use(VersionProvider::class.java, FabricVersionProvider())
+        providers?.use(HandItemProvider::class.java, FabricHandItemProvider())
     }
 
     override fun onBuildViaPlatform(builder: ViaManagerImpl.ViaManagerBuilder) {

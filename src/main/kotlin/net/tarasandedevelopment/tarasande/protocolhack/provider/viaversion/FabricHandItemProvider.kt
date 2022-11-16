@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.protocolhack.provider
+package net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion
 
 import com.viaversion.viaversion.api.connection.UserConnection
 import com.viaversion.viaversion.api.minecraft.item.Item

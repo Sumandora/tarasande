@@ -45,6 +45,7 @@ import de.florianmichael.vialegacy.api.item.LegacyItemRewriter;
 import de.florianmichael.vialegacy.api.material.MaterialReplacement;
 import de.florianmichael.vialegacy.api.metadata.LegacyMetadataRewriter;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.item.MaterialReplacement1_8To1_7_10;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.model.TeamsEntry;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.impl.CustomStringType_1_7_6_10;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
@@ -53,8 +54,8 @@ import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.item.ItemRewrit
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.metadata.MetadataRewriter1_8to1_7_10;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.particle.ParticleRegistry;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.*;
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.profile.GameProfile;
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.profile.Property;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.GameProfileTracker;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.model.SkinProperty;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
@@ -92,30 +93,30 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         this.cancelServerbound(ServerboundPackets1_8.SPECTATE);
         this.cancelServerbound(ServerboundPackets1_8.RESOURCE_PACK_STATUS);
 
-        this.registerClientbound(State.LOGIN, ClientboundLoginPackets1_7_2.ENCRYPTION_REQUEST.getId(), ClientboundLoginPackets.HELLO.getId(), new PacketRemapper() {
+        this.registerClientbound(State.LOGIN, ClientboundLoginPackets.HELLO.getId(), ClientboundLoginPackets.HELLO.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(Type.STRING); //Server Hash
+                map(Type.STRING); // Server Hash
 
                 map(Type.SHORT_BYTE_ARRAY, Type.BYTE_ARRAY_PRIMITIVE);
                 map(Type.SHORT_BYTE_ARRAY, Type.BYTE_ARRAY_PRIMITIVE);
             }
         });
 
-        this.registerClientbound(State.LOGIN, ClientboundLoginPackets1_7_2.LOGIN_SUCCESS.getId(), ClientboundLoginPackets.GAME_PROFILE.getId(), new PacketRemapper() {
+        this.registerClientbound(State.LOGIN, ClientboundLoginPackets.GAME_PROFILE.getId(), ClientboundLoginPackets.GAME_PROFILE.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
                 map(Type.STRING);
                 map(Type.STRING);
                 handler(pw -> {
-                    GameProfile gameProfile = gameProfile(pw.user());
-                    gameProfile.setUuid(pw.get(Type.STRING, 0));
-                    gameProfile.setName(pw.get(Type.STRING, 1));
+                    GameProfileTracker gameProfileTracker = gameProfile(pw.user());
+                    gameProfileTracker.setUuid(pw.get(Type.STRING, 0));
+                    gameProfileTracker.setName(pw.get(Type.STRING, 1));
                 });
             }
         });
 
-        this.registerServerbound(State.LOGIN, ServerboundLoginPackets1_7_2.ENCRYPTION_RESPONSE.getId(), ServerboundLoginPackets.ENCRYPTION_KEY.getId(), new PacketRemapper() {
+        this.registerServerbound(State.LOGIN, ServerboundLoginPackets.ENCRYPTION_KEY.getId(), ServerboundLoginPackets.ENCRYPTION_KEY.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
                 map(Type.BYTE_ARRAY_PRIMITIVE, Type.SHORT_BYTE_ARRAY);
@@ -141,18 +142,21 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.STRING); // Level Type
 
                 handler((pw) -> {
-                    GameProfile gameProfile = gameProfile(pw.user());
-                    PacketWrapper tablist = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, pw.user());
-                    tablist.write(Type.VAR_INT, 0);
-                    tablist.write(Type.VAR_INT, 1);
-                    tablist.write(Type.UUID, UUID.fromString(gameProfile.getUuid()));
-                    tablist.write(Type.STRING, gameProfile.getName());
-                    tablist.write(Type.VAR_INT, 0);
-                    tablist.write(Type.VAR_INT, (int) pw.get(Type.UNSIGNED_BYTE, 0)); // gamemode
-                    tablist.write(Type.VAR_INT, 0); // ping
-                    tablist.write(Type.OPTIONAL_STRING, gameProfile.getName());
-                    tablist.send(Protocol1_8to1_7_10.class);
-                    tablistTracker(pw.user()).add(new TablistTracker.TabListEntry(gameProfile.getName(), UUID.fromString(gameProfile.getUuid())));
+                    final GameProfileTracker gameProfileTracker = gameProfile(pw.user());
+
+                    final PacketWrapper playerInfo = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, pw.user());
+
+                    playerInfo.write(Type.VAR_INT, 0);
+                    playerInfo.write(Type.VAR_INT, 1);
+                    playerInfo.write(Type.UUID, UUID.fromString(gameProfileTracker.getUuid()));
+                    playerInfo.write(Type.STRING, gameProfileTracker.getName());
+                    playerInfo.write(Type.VAR_INT, 0);
+                    playerInfo.write(Type.VAR_INT, (int) pw.get(Type.UNSIGNED_BYTE, 0)); // gamemode
+                    playerInfo.write(Type.VAR_INT, 0); // ping
+                    playerInfo.write(Type.OPTIONAL_STRING, gameProfileTracker.getName());
+
+                    playerInfo.send(Protocol1_8to1_7_10.class);
+                    tablistTracker(pw.user()).add(new TablistTracker.TabListEntry(gameProfileTracker.getName(), UUID.fromString(gameProfileTracker.getUuid())));
 
                     pw.write(Type.BOOLEAN, false); // Reduced Debug Info
                 });
@@ -380,20 +384,20 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final String name = ChatColorUtil.stripColor(packetWrapper.read(Type.STRING));
                     final int dataCount = packetWrapper.read(Type.VAR_INT);
 
-                    final List<Property> properties = new ArrayList<>();
+                    final List<SkinProperty> properties = new ArrayList<>();
 
                     for (int i = 0; i < dataCount; i++) {
                         final String key = packetWrapper.read(Type.STRING); // Name
                         final String value = packetWrapper.read(Type.STRING); // Value
                         final String signature = packetWrapper.read(Type.STRING); // Signature
 
-                        properties.add(new Property(key, value, signature));
+                        properties.add(new SkinProperty(key, value, signature));
                     }
 
-                    GameProfile gameProfile = gameProfile(packetWrapper.user());
-                    if (gameProfile.getUuid() == uuid) {
-                        gameProfile.getSkinProperties().clear();
-                        gameProfile.getSkinProperties().addAll(properties);
+                    final GameProfileTracker gameProfileTracker = gameProfile(packetWrapper.user());
+                    if (Objects.equals(gameProfileTracker.getUuid(), uuid)) {
+                        gameProfileTracker.getSkinProperties().clear();
+                        gameProfileTracker.getSkinProperties().addAll(properties);
                     }
 
                     packetWrapper.passthrough(Type.INT); // X
@@ -415,7 +419,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         addPlayerInfo.write(Type.STRING, name);
                         addPlayerInfo.write(Type.VAR_INT, dataCount);
 
-                        for (Property property : properties) {
+                        for (SkinProperty property : properties) {
                             addPlayerInfo.write(Type.STRING, property.name);
                             addPlayerInfo.write(Type.STRING, property.value);
                             addPlayerInfo.write(Type.OPTIONAL_STRING, property.signature);
@@ -438,13 +442,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     removePlayerInfo.send(Protocol1_8to1_7_10.class);
 
                     packetWrapper.cancel();
-                });
-                handler(packetWrapper -> {
-                    final EntityTracker entityTracker = entityTracker(packetWrapper.user());
-                    int entityID = packetWrapper.get(Type.VAR_INT, 0);
-
-                    entityTracker.getClientEntityTypes().put(entityID, Entity1_10Types.EntityType.PLAYER);
-                    entityTracker.sendMetadataBuffer(entityID);
                 });
             }
         });
@@ -541,9 +538,9 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final int entityId = pw.get(Type.VAR_INT, 0);
                     final double y = pw.get(Type.BYTE, 1) / 32.0;
 
-                    boolean isGround = !(y < 0.0D);
+                    final boolean isGround = !(y < 0.0D);
 
-                    groundTracker(pw.user()).track(entityId, isGround);
+                    entityTracker(pw.user()).getGroundTracker().put(entityId, isGround);
                     pw.write(Type.BOOLEAN, isGround);
                 }); // On Ground
             }
@@ -554,7 +551,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             public void registerMap() {
                 intToVarInt(); // Entity ID
                 map(Type.BYTE, 2); // Yaw and Pitch
-                handler((pw) -> pw.write(Type.BOOLEAN, groundTracker(pw.user()).isGround(pw.get(Type.VAR_INT, 0)))); // On Ground
+                handler((pw) -> pw.write(Type.BOOLEAN, entityTracker(pw.user()).isGround(pw.get(Type.VAR_INT, 0)))); // On Ground
             }
         });
 
@@ -569,9 +566,9 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final int entityId = pw.get(Type.VAR_INT, 0);
                     final double y = pw.get(Type.BYTE, 1) / 32.0;
 
-                    boolean isGround = !(y < 0.0D);
+                    final boolean isGround = !(y < 0.0D);
 
-                    groundTracker(pw.user()).track(entityId, isGround);
+                    entityTracker(pw.user()).getGroundTracker().put(entityId, isGround);
                     pw.write(Type.BOOLEAN, isGround);
                 }); // On Ground
             }
@@ -587,7 +584,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
 
                 handler((pw) -> {
                     final int entityId = pw.get(Type.VAR_INT, 0);
-                    pw.write(Type.BOOLEAN, groundTracker(pw.user()).isGround(entityId));
+                    pw.write(Type.BOOLEAN, entityTracker(pw.user()).isGround(entityId));
                 }); // On Ground
             }
         });
@@ -827,16 +824,18 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM, Type.ITEM);
                 handler(pw -> pw.set(Type.ITEM, 0, getItemRewriter().handleItemToClient(pw.get(Type.ITEM, 0))));
                 handler(pw -> {
-                    short windowId = pw.get(Type.UNSIGNED_BYTE, 0);
+                    final short windowId = pw.get(Type.UNSIGNED_BYTE, 0);
                     short slot = pw.get(Type.SHORT, 0);
-                    Item item = pw.get(Type.ITEM, 0);
+                    final Item item = pw.get(Type.ITEM, 0);
 
-                    if (item == null)
+                    if (item == null) {
                         return;
+                    }
 
                     if (windowTracker(pw.user()).get(windowId) == 4) { // enchantment table
-                        if (slot >= 1)
+                        if (slot >= 1) {
                             pw.set(Type.SHORT, 0, ++slot);
+                        }
                     }
                 });
             }
@@ -947,14 +946,15 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
             public void registerMap() {
                 map(Type.STRING);
                 handler(packetWrapper -> {
-                    String uniqueName = packetWrapper.get(Type.STRING, 0);
+                    final String uniqueName = packetWrapper.get(Type.STRING, 0);
                     final byte mode = packetWrapper.read(Type.BYTE); // unique name
                     packetWrapper.write(Type.BYTE, mode);
+
                     if (mode == 0 || mode == 2) {
                         packetWrapper.passthrough(Type.STRING); // display name
                         packetWrapper.passthrough(Type.STRING); // team prefix
                         packetWrapper.passthrough(Type.STRING); // team suffix
-                        packetWrapper.passthrough(Type.BYTE); // friendly fire (lmao)
+                        packetWrapper.passthrough(Type.BYTE); // friendly fire
                         packetWrapper.write(Type.STRING, "always"); // name tag visibility
                         packetWrapper.write(Type.BYTE, (byte) 0); // color
                     }
@@ -972,9 +972,9 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     if (mode == 1) {
                         teamsTracker.removeTeamsEntryIf(e -> Objects.equals(e.getKey().uniqueName, uniqueName));
                     } else {
-                        TeamsTracker.TeamsEntry teamsEntry = null;
+                        TeamsEntry teamsEntry = null;
                         if (mode == 0) {
-                            teamsEntry = new TeamsTracker.TeamsEntry(
+                            teamsEntry = new TeamsEntry(
                                     uniqueName,
                                     // nice order lmao
                                     packetWrapper.get(Type.STRING, 2),
@@ -1001,7 +1001,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                                     prePlayers.add(entry);
                         teamsTracker.putTeamsEntry(teamsEntry, prePlayers);
 
-                        TablistTracker tablist = tablistTracker(packetWrapper.user());
+                        final TablistTracker tablist = tablistTracker(packetWrapper.user());
 
                         for (String player : prePlayers) {
                             TablistTracker.TabListEntry tabListEntry = tablist.getTabListEntry(player);
@@ -1088,9 +1088,11 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
 
                         entry.displayName = !Objects.equals(name, normalizedName) ? name : null;
 
-                        TeamsTracker.TeamsEntry teamsEntry = teamsTracker(packetWrapper.user()).getTeamsEntry(name);
-                        if (teamsEntry != null)
+                        final TeamsEntry teamsEntry = teamsTracker(packetWrapper.user()).getTeamsEntry(name);
+
+                        if (teamsEntry != null) {
                             entry.displayName = teamsEntry.concat(name);
+                        }
 
                         packetWrapper.write(Type.VAR_INT, 0); // ADD
                         packetWrapper.write(Type.VAR_INT, 1);
@@ -1098,7 +1100,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                         packetWrapper.write(Type.UUID, entry.uuid);
                         packetWrapper.write(Type.STRING, entry.name);
                         packetWrapper.write(Type.VAR_INT, entry.properties.size());
-                        for (Property property : entry.properties) {
+                        for (SkinProperty property : entry.properties) {
                             packetWrapper.write(Type.STRING, property.name);
                             packetWrapper.write(Type.STRING, property.value);
                             packetWrapper.write(Type.OPTIONAL_STRING, property.signature);
@@ -1132,11 +1134,10 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.INT);
                 handler(packetWrapper -> {
                     final int entityID = packetWrapper.get(Type.VAR_INT, 0);
-                    EntityTracker tracker = packetWrapper.user().get(EntityTracker.class);
+                    final EntityTracker tracker = packetWrapper.user().get(EntityTracker.class);
 
                     if (tracker != null) {
                         tracker.getClientEntityTypes().put(entityID, Entity1_10Types.EntityType.LIGHTNING);
-                        tracker.sendMetadataBuffer(entityID);
                     }
                 });
             }
@@ -1148,19 +1149,15 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 intToVarInt(); // Entity ID
                 map(TypeRegistry1_7_6_10.METADATA_LIST, Types1_8.METADATA_LIST); // Metadata Type
                 handler(wrapper -> {
-                    List<Metadata> metadataList = wrapper.get(Types1_8.METADATA_LIST, 0);
+                    List<Metadata> metadataList = wrapper.read(Types1_8.METADATA_LIST);
+
                     final int entityID = wrapper.get(Type.VAR_INT, 0);
                     final EntityTracker tracker = entityTracker(wrapper.user());
 
                     if (tracker.getClientEntityTypes().containsKey(entityID)) {
                         metadataRewriter().rewrite(tracker.getClientEntityTypes().get(entityID), true, metadataList);
-                        if (metadataList.isEmpty()) {
-                            wrapper.cancel();
-                        }
-                    } else {
-                        tracker.addMetadataToBuffer(entityID, metadataList);
-                        wrapper.cancel();
                     }
+                    wrapper.write(Types1_8.METADATA_LIST, metadataList);
                 });
             }
         });
@@ -1228,9 +1225,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final EntityTracker tracker = entityTracker(packetWrapper.user());
                     final Entity1_10Types.EntityType type = Entity1_10Types.getTypeFromId(typeID, true);
 
-                    System.out.println(type);
                     tracker.getClientEntityTypes().put(entityID, type);
-                    tracker.sendMetadataBuffer(entityID);
                 });
             }
         });
@@ -1251,7 +1246,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final EntityTracker tracker = entityTracker(packetWrapper.user());
 
                     tracker.getClientEntityTypes().put(entityID, Entity1_10Types.getTypeFromId(typeID, false));
-                    tracker.sendMetadataBuffer(entityID);
                 });
                 handler(wrapper -> {
                     List<Metadata> metadataList = wrapper.get(Types1_8.METADATA_LIST, 0);
@@ -1279,7 +1273,6 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final EntityTracker tracker = entityTracker(packetWrapper.user());
 
                     tracker.getClientEntityTypes().put(entityID, Entity1_10Types.EntityType.EXPERIENCE_ORB);
-                    tracker.sendMetadataBuffer(entityID);
                 });
             }
         });
@@ -1683,16 +1676,12 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         return connection.get(EntityTracker.class);
     }
 
-    private GroundTracker groundTracker(final UserConnection connection) {
-        return connection.get(GroundTracker.class);
-    }
-
     private TeleportTracker teleportTracker(final UserConnection connection) {
         return connection.get(TeleportTracker.class);
     }
 
-    private GameProfile gameProfile(final UserConnection connection) {
-        return connection.get(GameProfile.class);
+    private GameProfileTracker gameProfile(final UserConnection connection) {
+        return connection.get(GameProfileTracker.class);
     }
 
     @Override
@@ -1702,10 +1691,9 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         userConnection.put(new WindowIDTracker(userConnection));
         userConnection.put(new ScoreboardLineTracker(userConnection));
         userConnection.put(new TablistTracker(userConnection));
-        userConnection.put(new EntityTracker(userConnection, this));
+        userConnection.put(new EntityTracker(userConnection));
         userConnection.put(new TeamsTracker(userConnection));
-        userConnection.put(new GroundTracker(userConnection));
         userConnection.put(new TeleportTracker(userConnection));
-        userConnection.put(new GameProfile(userConnection));
+        userConnection.put(new GameProfileTracker(userConnection));
     }
 }

@@ -1,18 +1,19 @@
-package de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.profile;
+package de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage;
 
 import com.viaversion.viaversion.api.connection.StoredObject;
 import com.viaversion.viaversion.api.connection.UserConnection;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.model.SkinProperty;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameProfile extends StoredObject {
+public class GameProfileTracker extends StoredObject {
 
-    private final List<Property> skinProperties = new ArrayList<>();
+    private final List<SkinProperty> skinProperties = new ArrayList<>();
     private String name;
     private String uuid;
 
-    public GameProfile(UserConnection userConnection) {
+    public GameProfileTracker(UserConnection userConnection) {
         super(userConnection);
     }
 
@@ -32,7 +33,7 @@ public class GameProfile extends StoredObject {
         this.uuid = uuid;
     }
 
-    public List<Property> getSkinProperties() {
+    public List<SkinProperty> getSkinProperties() {
         return skinProperties;
     }
 }

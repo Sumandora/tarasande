@@ -16,7 +16,7 @@ package de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage;
 
 import com.viaversion.viaversion.api.connection.StoredObject;
 import com.viaversion.viaversion.api.connection.UserConnection;
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.storage.profile.Property;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.model.SkinProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class TablistTracker extends StoredObject {
 		public String displayName;
 		public UUID uuid;
 		public int ping;
-		public List<Property> properties = new ArrayList<>();
+		public List<SkinProperty> properties = new ArrayList<>();
 
 		public TabListEntry(String name, UUID uuid) {
 			this.name = name;

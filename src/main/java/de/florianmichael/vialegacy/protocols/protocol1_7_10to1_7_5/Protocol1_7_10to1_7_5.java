@@ -14,19 +14,29 @@
 
 package de.florianmichael.vialegacy.protocols.protocol1_7_10to1_7_5;
 
+import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.ValueTransformer;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.base.ClientboundLoginPackets;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.ClientboundLoginPackets1_7_2;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.ClientboundPackets1_7_10;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.ServerboundPackets1_7_10;
 
 public class Protocol1_7_10to1_7_5 extends EnZaProtocol<ClientboundPackets1_7_5, ClientboundPackets1_7_10, ServerboundPackets1_7_5, ServerboundPackets1_7_10> {
 
-    public static final DashUuidAdder ADD_DASHES = new DashUuidAdder();
+    public static final ValueTransformer<String, String> ADD_DASHES = new ValueTransformer<>(Type.STRING) {
+        @Override
+        public String transform(PacketWrapper wrapper, String inputValue) {
+            return inputValue.substring(0, 8) + "-" +
+                    inputValue.substring(8, 12) + "-" +
+                    inputValue.substring(12, 16) + "-" +
+                    inputValue.substring(16, 20) + "-" +
+                    inputValue.substring(20);
+        }
+    };
 
     public Protocol1_7_10to1_7_5() {
         super(ClientboundPackets1_7_5.class, ClientboundPackets1_7_10.class, ServerboundPackets1_7_5.class, ServerboundPackets1_7_10.class);
@@ -35,7 +45,7 @@ public class Protocol1_7_10to1_7_5 extends EnZaProtocol<ClientboundPackets1_7_5,
     @Override
     protected void registerPackets() {
         super.registerPackets();
-        this.registerClientbound(State.LOGIN, ClientboundLoginPackets1_7_2.LOGIN_SUCCESS.getId(), ClientboundLoginPackets.GAME_PROFILE.getId(), new PacketRemapper() {
+        this.registerClientbound(State.LOGIN, ClientboundLoginPackets.GAME_PROFILE.getId(), ClientboundLoginPackets.GAME_PROFILE.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
                 map(Type.STRING, ADD_DASHES);

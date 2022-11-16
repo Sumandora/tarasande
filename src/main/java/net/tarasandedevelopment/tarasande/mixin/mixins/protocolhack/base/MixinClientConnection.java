@@ -9,6 +9,7 @@ import net.minecraft.text.Text;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol;
 import net.tarasandedevelopment.tarasande.protocolhack.fixes.WolfHealthTracker1_14_4;
+import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.FabricPreNettyProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -42,8 +43,8 @@ public class MixinClientConnection implements IClientConnection_Protocol {
     @Inject(method = "setupEncryption", at = @At("HEAD"), cancellable = true)
     public void injectSetupEncryption(Cipher decryptionCipher, Cipher encryptionCipher, CallbackInfo ci) {
         if (LegacyProtocolVersion.PRE_NETTY_VERSIONS.stream().anyMatch(p -> p.getVersion() == TarasandeMain.Companion.get().getProtocolHack().getClientsideVersion())) {
-            TarasandeMain.Companion.get().getProtocolHack().getViaLegacy().setDecryptionKey(decryptionCipher);
-            TarasandeMain.Companion.get().getProtocolHack().getViaLegacy().setEncryptionKey(encryptionCipher);
+            FabricPreNettyProvider.Companion.setDecryptionKey(decryptionCipher);
+            FabricPreNettyProvider.Companion.setEncryptionKey(encryptionCipher);
 
             this.encrypted = true;
             ci.cancel();

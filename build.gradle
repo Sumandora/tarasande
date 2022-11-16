@@ -42,11 +42,11 @@ def libs = [
 		"com.github.FlorianMichael:eZEasing:8d90aafa6e",
 
 		// Via Protocol Hack README
-		"com.viaversion:viaversion:4.5.0-22w45a-SNAPSHOT",
-		"com.viaversion:viabackwards-common:4.5.0-22w45a-SNAPSHOT",
+		"com.viaversion:viaversion:4.5.0-22w46a-SNAPSHOT",
+		"com.viaversion:viabackwards-common:4.5.0-22w46a-SNAPSHOT",
 		"org.yaml:snakeyaml:1.29",
 
-		"com.github.RejectedVia:ViaProtocolHack:22w45a"
+		"com.github.RejectedVia:ViaProtocolHack:8e4931b209"
 ]
 
 loom {

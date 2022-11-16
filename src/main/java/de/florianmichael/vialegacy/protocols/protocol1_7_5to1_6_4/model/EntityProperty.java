@@ -1,4 +1,4 @@
-package de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.entity;
+package de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.model;
 
 import java.util.List;
 

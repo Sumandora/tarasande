@@ -16,9 +16,11 @@ package de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.item.DataItem;
 import com.viaversion.viaversion.api.minecraft.item.Item;
+import com.viaversion.viaversion.api.platform.providers.ViaProviders;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
@@ -29,9 +31,8 @@ import com.viaversion.viaversion.libs.opennbt.tag.builtin.ShortTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.StringTag;
 import de.florianmichael.vialegacy.ViaLegacy;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
+import de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5.provider.OldAuthProvider;
 import de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5.type.TypeRegistry1_2_5;
-import de.florianmichael.vialegacy.protocols.protocol1_5_1to1_4_7.ClientboundPackets1_4_7;
-import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.protocols.protocol1_4_5to1_4_3_pre.type.TypeRegistry_1_4_2;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.TypeRegistry_1_6_4;
@@ -45,6 +46,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ServerboundLog
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.logging.Level;
 
 @SuppressWarnings("ConstantConditions")
 public class Protocol1_3_2to1_2_5 extends EnZaProtocol<ClientboundPackets1_2_5, ClientboundPackets1_3_2, ServerboundPackets1_2_5, ServerboundPackets1_3_2> {
@@ -252,7 +254,14 @@ public class Protocol1_3_2to1_2_5 extends EnZaProtocol<ClientboundPackets1_2_5, 
 					pw.cancel();
 
 					if (!serverId.equals("-")) {
-						ViaLegacy.getProvider().sendJoinServer_1_2_5(serverId);
+						final OldAuthProvider oldAuthProvider = Via.getManager().getProviders().get(OldAuthProvider.class);
+						if (oldAuthProvider != null) {
+							try {
+								oldAuthProvider.sendJoinServer(serverId);
+							} catch (Exception e) {
+								ViaLegacy.getLogger().log(Level.WARNING, "OldAuthProvider can't send the server auth");
+							}
+						}
 					}
 
 					final PacketWrapper loginSuccess = PacketWrapper.create(ClientboundLoginPackets1_2_5.HANDSHAKE, pw.user());

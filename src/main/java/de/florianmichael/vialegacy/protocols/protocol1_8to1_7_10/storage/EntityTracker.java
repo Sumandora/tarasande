@@ -25,6 +25,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.ClientboundPack
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.Protocol1_8to1_7_10;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.metadata.MetadataRewriter1_8to1_7_10;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,43 +33,25 @@ import java.util.concurrent.ConcurrentHashMap;
 public class EntityTracker extends StoredObject {
 
 	private final Map<Integer, Entity1_10Types.EntityType> clientEntityTypes = new ConcurrentHashMap<>();
-	private final Map<Integer, List<Metadata>> metadataBuffer = new ConcurrentHashMap<>();
-	private final Protocol1_8to1_7_10 protocol1_8to1_7_10;
+	private final Map<Integer, Boolean> groundTracker = new HashMap<>();
 
-	public EntityTracker(final UserConnection user, final Protocol1_8to1_7_10 protocol1_8to1_7_10) {
+	public EntityTracker(final UserConnection user) {
 		super(user);
-		this.protocol1_8to1_7_10 = protocol1_8to1_7_10;
 	}
 
 	public void removeEntity(int entityId) {
 		clientEntityTypes.remove(entityId);
 	}
 
+	public boolean isGround(final int entityId) {
+		return groundTracker.getOrDefault(entityId, true);
+	}
+
 	public Map<Integer, Entity1_10Types.EntityType> getClientEntityTypes() {
 		return this.clientEntityTypes;
 	}
 
-	public void addMetadataToBuffer(int entityID, List<Metadata> metadataList) {
-		if (this.metadataBuffer.containsKey(entityID)) {
-			this.metadataBuffer.get(entityID).addAll(metadataList);
-		} else if (!metadataList.isEmpty()) {
-			this.metadataBuffer.put(entityID, metadataList);
-		}
-	}
-
-	public void sendMetadataBuffer(int entityId) {
-		if (!this.metadataBuffer.containsKey(entityId)) return;
-		final PacketWrapper wrapper = PacketWrapper.create(ClientboundPackets1_7_10.ENTITY_METADATA, this.getUser());
-		wrapper.write(Type.VAR_INT, entityId);
-		wrapper.write(Types1_8.METADATA_LIST, this.metadataBuffer.get(entityId));
-		if (!this.metadataBuffer.get(entityId).isEmpty()) {
-			try {
-				wrapper.send(Protocol1_8to1_7_10.class);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-
-		this.metadataBuffer.remove(entityId);
+	public Map<Integer, Boolean> getGroundTracker() {
+		return groundTracker;
 	}
 }

@@ -22,7 +22,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IScreenHandler_Protocol;
-import net.tarasandedevelopment.tarasande.protocolhack.provider.FabricHandItemProvider;
+import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricHandItemProvider;
 import net.tarasandedevelopment.tarasande.protocolhack.util.inventory.MinecraftViaItemRewriter;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

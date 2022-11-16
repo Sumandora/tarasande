@@ -9,7 +9,7 @@ private val specialNames = object : HashMap<ProtocolVersion, String>() {
         this[ProtocolVersion.v1_16_4] = "1.16.4-1.16.5"
         this[ProtocolVersion.v1_18] = "1.18-1.18.1"
         this[ProtocolVersion.v1_19_1] = "1.19.1-1.19.2"
-        this[ProtocolVersion.v1_19_3] = "22w45a"
+        this[ProtocolVersion.v1_19_3] = "22w46a"
     }
 }
 

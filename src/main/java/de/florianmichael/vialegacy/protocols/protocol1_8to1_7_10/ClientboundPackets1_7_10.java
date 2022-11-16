@@ -79,5 +79,4 @@ public enum ClientboundPackets1_7_10 implements ClientboundPacketType {
 	public String getName() {
 		return name();
 	}
-
 }
