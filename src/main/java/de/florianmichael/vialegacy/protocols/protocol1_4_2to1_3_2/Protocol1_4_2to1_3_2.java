@@ -20,8 +20,11 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.vialegacy.api.sound.SoundRewriter;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
+import de.florianmichael.vialegacy.protocols.protocol1_4_2to1_3_2.sound.SoundRewriter1_4_2to1_3_2;
 import de.florianmichael.vialegacy.protocols.protocol1_5_1to1_4_7.ClientboundPackets1_4_7;
+import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.ClientboundPackets1_5_2;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.protocols.protocol1_4_5to1_4_3_pre.type.TypeRegistry_1_4_2;
@@ -31,6 +34,8 @@ import de.florianmichael.vialegacy.protocols.protocol1_4_3_preto1_4_2.Clientboun
 import de.florianmichael.vialegacy.protocols.protocol1_4_3_preto1_4_2.ServerboundPackets1_4_2;
 
 public class Protocol1_4_2to1_3_2 extends EnZaProtocol<ClientboundPackets1_3_2, ClientboundPackets1_4_2, ServerboundPackets1_3_2, ServerboundPackets1_4_2> {
+
+	private final SoundRewriter soundRewriter = new SoundRewriter1_4_2to1_3_2();
 
 	public Protocol1_4_2to1_3_2() {
 		super(ClientboundPackets1_3_2.class, ClientboundPackets1_4_2.class, ServerboundPackets1_3_2.class, ServerboundPackets1_4_2.class);
@@ -120,10 +125,45 @@ public class Protocol1_4_2to1_3_2 extends EnZaProtocol<ClientboundPackets1_3_2, 
 			}
 		});
 
-		this.registerServerbound(State.STATUS, ServerboundStatusPackets1_3_2.SERVER_LIST_PING.getId(), ServerboundStatusPackets1_3_2.SERVER_LIST_PING.getId(), new PacketRemapper() {
+		this.registerClientbound(ClientboundPackets1_3_2.MAP_DATA, new PacketRemapper() {
 			@Override
 			public void registerMap() {
-				handler(PacketWrapper::clearPacket);
+				map(Type.SHORT);
+				map(Type.SHORT);
+				handler(wrapper -> {
+					// TODO | Rewrite to own Type if needed
+					final byte length = wrapper.read(Type.BYTE);
+					final byte[] mapData = new byte[length];
+					for (int i = 0; i < length; i++) {
+						mapData[i] = wrapper.read(Type.BYTE);
+					}
+
+					if (mapData[0] == 1) {
+						for (int i = 0; i < (mapData.length - 1) / 3; ++i) {
+							final byte icon = (byte) (mapData[i * 3 + 1] % 16);
+							final byte centerX = mapData[i * 3 + 2];
+							final byte centerZ = mapData[i * 3 + 3];
+							final byte iconRotation = (byte) (mapData[i * 3 + 1] / 16);
+							mapData[i * 3 + 1] = (byte) (icon << 4 | iconRotation & 15);
+							mapData[i * 3 + 2] = centerX;
+							mapData[i * 3 + 3] = centerZ;
+						}
+					}
+				});
+			}
+		});
+
+		this.registerClientbound(ClientboundPackets1_3_2.NAMED_SOUND, new PacketRemapper() {
+			@Override
+			public void registerMap() {
+				handler(wrapper -> {
+					String soundName = wrapper.read(TypeRegistry_1_6_4.STRING);
+					soundRewriter().rewrite(soundName);
+					if (soundName == null || soundName.isEmpty()) {
+						wrapper.cancel();
+					}
+					wrapper.write(TypeRegistry_1_6_4.STRING, soundName);
+				});
 			}
 		});
 
@@ -139,6 +179,11 @@ public class Protocol1_4_2to1_3_2 extends EnZaProtocol<ClientboundPackets1_3_2, 
 				map(Type.BOOLEAN, Type.NOTHING); // Show Cape
 			}
 		});
+	}
+
+	@Override
+	public SoundRewriter soundRewriter() {
+		return this.soundRewriter;
 	}
 
 	@Override
