@@ -78,6 +78,7 @@ import java.util.zip.Inflater;
  * # Made by Florian Michael                                                                                           #
  * #####################################################################################################################
  */
+@SuppressWarnings("unchecked")
 public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, ClientboundPackets1_8, ServerboundPackets1_7_10, ServerboundPackets1_8> {
 
     private final MaterialReplacement materialReplacement = new MaterialReplacement1_8To1_7_10();
@@ -1149,7 +1150,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 intToVarInt(); // Entity ID
                 map(TypeRegistry1_7_6_10.METADATA_LIST, Types1_8.METADATA_LIST); // Metadata Type
                 handler(wrapper -> {
-                    List<Metadata> metadataList = wrapper.read(Types1_8.METADATA_LIST);
+                    List<Metadata> metadataList = wrapper.get(Types1_8.METADATA_LIST, 0);
 
                     final int entityID = wrapper.get(Type.VAR_INT, 0);
                     final EntityTracker tracker = entityTracker(wrapper.user());
@@ -1157,7 +1158,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     if (tracker.getClientEntityTypes().containsKey(entityID)) {
                         metadataRewriter().rewrite(tracker.getClientEntityTypes().get(entityID), true, metadataList);
                     }
-                    wrapper.write(Types1_8.METADATA_LIST, metadataList);
+                    wrapper.set(Types1_8.METADATA_LIST, 0, metadataList);
                 });
             }
         });
@@ -1166,57 +1167,58 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
         this.registerClientbound(ClientboundPackets1_7_10.SPAWN_ENTITY, new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(Type.VAR_INT);
-                map(Type.BYTE);
-                map(Type.INT);
-                map(Type.INT);
-                map(Type.INT);
-                map(Type.BYTE);
-                map(Type.BYTE);
-                map(Type.INT);
                 handler(packetWrapper -> {
-                    byte type = packetWrapper.get(Type.BYTE, 0);
-                    int x = packetWrapper.get(Type.INT, 0);
-                    int y = packetWrapper.get(Type.INT, 1);
-                    int z = packetWrapper.get(Type.INT, 2);
+                    packetWrapper.passthrough(Type.VAR_INT); // Entity Id
+                    byte type = packetWrapper.passthrough(Type.BYTE);
+                    int x = packetWrapper.passthrough(Type.INT);
+                    int y = packetWrapper.passthrough(Type.INT);
+                    int z = packetWrapper.passthrough(Type.INT);
 
-                    byte yaw = packetWrapper.get(Type.BYTE, 2);
-                    int data = packetWrapper.get(Type.INT, 3);
+                    byte yaw = packetWrapper.passthrough(Type.BYTE);
+                    packetWrapper.passthrough(Type.BYTE); // Pitch
 
-                    if (type == 2) { // Item
+                    if (type == Entity1_10Types.ObjectType.ITEM.getId()) {
                         y -= 4;
-                    } else if (type == 71) { // Item frame
-                        switch (data) {
-                            case 0 -> {
-                                z += 32;
-                                yaw = 0;
-                            }
-                            case 1 -> {
-                                x -= 32;
-                                yaw = (byte) 64;
-                            }
-                            case 2 -> {
-                                z -= 32;
-                                yaw = (byte) 128;
-                            }
-                            case 3 -> {
-                                x += 32;
-                                yaw = (byte) 192;
-                            }
-                        }
-                    } else if (type == 70) { // Falling object
-                        int id = data;
-                        int metadata = data >> 16;
-                        data = id | metadata << 12;
+                    }
+                    if (type == Entity1_10Types.ObjectType.TNT_PRIMED.getId()) {
+                        y -= 16;
                     }
 
-                    if (type == 50 || type == 70 || type == 74) y -= 16;
+                    int throwerId = packetWrapper.passthrough(Type.INT);
+
+                    if (throwerId > 0) {
+                        packetWrapper.passthrough(Type.SHORT); // Motion X
+                        packetWrapper.passthrough(Type.SHORT); // Motion Y
+                        packetWrapper.passthrough(Type.SHORT); // Motion Z
+
+                        if (type == Entity1_10Types.ObjectType.FALLING_BLOCK.getId()) {
+                            y -= 16;
+
+                            final int itemData = throwerId >> 16;
+                            throwerId = throwerId | itemData << 12;
+                        }
+
+                        if (type == Entity1_10Types.ObjectType.ITEM_FRAME.getId()) {
+                            if (throwerId == 0) {
+                                z += 32;
+                                yaw = 0;
+                            } else if (throwerId == 1) {
+                                x -= 32;
+                                yaw = 64;
+                            } else if (throwerId == 2) {
+                                z -= 32;
+                                yaw = -128;
+                            } else if (throwerId == 3) {
+                                x += 32;
+                                yaw -= -64;
+                            }
+                        }
+                    }
 
                     packetWrapper.set(Type.INT, 0, x);
                     packetWrapper.set(Type.INT, 1, y);
                     packetWrapper.set(Type.INT, 2, z);
                     packetWrapper.set(Type.BYTE, 2, yaw);
-                    packetWrapper.set(Type.INT, 3, data);
                 });
                 handler(packetWrapper -> {
                     final int entityID = packetWrapper.get(Type.VAR_INT, 0);
@@ -1239,23 +1241,18 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                 map(Type.BYTE, 3);
                 map(Type.SHORT, 3);
                 map(TypeRegistry1_7_6_10.METADATA_LIST, Types1_8.METADATA_LIST);
-                handler(packetWrapper -> {
-                    final int entityID = packetWrapper.get(Type.VAR_INT, 0);
-                    final int typeID = packetWrapper.get(Type.UNSIGNED_BYTE, 0);
-
-                    final EntityTracker tracker = entityTracker(packetWrapper.user());
-
-                    tracker.getClientEntityTypes().put(entityID, Entity1_10Types.getTypeFromId(typeID, false));
-                });
                 handler(wrapper -> {
-                    List<Metadata> metadataList = wrapper.get(Types1_8.METADATA_LIST, 0);
                     final int entityID = wrapper.get(Type.VAR_INT, 0);
+                    final int typeID = wrapper.get(Type.UNSIGNED_BYTE, 0);
 
                     final EntityTracker tracker = entityTracker(wrapper.user());
 
-                    if (tracker.getClientEntityTypes().containsKey(entityID))
-                        metadataRewriter().rewrite(tracker.getClientEntityTypes().get(entityID), false, metadataList);
-                    else wrapper.cancel();
+                    List<Metadata> metadataList = wrapper.get(Types1_8.METADATA_LIST, 0);
+
+                    tracker.getClientEntityTypes().put(entityID, Entity1_10Types.getTypeFromId(typeID, false));
+                    //noinspection unchecked
+                    metadataRewriter().rewrite(tracker.getClientEntityTypes().get(entityID), false, metadataList);
+                    wrapper.set(Types1_8.METADATA_LIST, 0, metadataList);
                 });
             }
         });
