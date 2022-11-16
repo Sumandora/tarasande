@@ -23,7 +23,7 @@ import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.api.type.types.version.Types1_8;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.ClientboundPackets1_7_10;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.Protocol1_8to1_7_10;
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.metadata.MetadataRewriter;
+import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.metadata.MetadataRewriter1_8to1_7_10;
 
 import java.util.List;
 import java.util.Map;
@@ -56,16 +56,12 @@ public class EntityTracker extends StoredObject {
 		}
 	}
 
-	public List<Metadata> getBufferedMetadata(int entityId) {
-		return metadataBuffer.get(entityId);
-	}
-
 	public void sendMetadataBuffer(int entityId) {
 		if (!this.metadataBuffer.containsKey(entityId)) return;
 		final PacketWrapper wrapper = PacketWrapper.create(ClientboundPackets1_7_10.ENTITY_METADATA, this.getUser());
 		wrapper.write(Type.VAR_INT, entityId);
 		wrapper.write(Types1_8.METADATA_LIST, this.metadataBuffer.get(entityId));
-		MetadataRewriter.transform(this.protocol1_8to1_7_10, this.getClientEntityTypes().get(entityId), this.metadataBuffer.get(entityId));
+		protocol1_8to1_7_10.metadataRewriter().rewrite(this.getClientEntityTypes().get(entityId), this.metadataBuffer.get(entityId));
 		if (!this.metadataBuffer.get(entityId).isEmpty()) {
 			try {
 				wrapper.send(Protocol1_8to1_7_10.class);

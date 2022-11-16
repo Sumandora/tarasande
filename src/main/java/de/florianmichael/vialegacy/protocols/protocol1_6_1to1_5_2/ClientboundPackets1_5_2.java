@@ -235,7 +235,14 @@ public enum ClientboundPackets1_5_2 implements LegacyClientboundPacketType {
 		buffer.readShort();
 	})),
 	ENTITY_PROPERTIES(0x2C, ((buffer, transformer) -> {
-		// Removed
+		buffer.readInt();
+
+		final int x = buffer.readInt();
+
+		for (int i = 0; i < x; i++) {
+			transformer.readString(buffer);
+			buffer.readDouble();
+		}
 	})),
 	CHUNK_DATA(0x33, ((buffer, transformer) -> {
 		buffer.readInt();

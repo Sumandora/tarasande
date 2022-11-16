@@ -52,7 +52,7 @@ public class _1_6_4PacketDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         @SuppressWarnings("ConstantConditions") final Map<Integer, IPacketSplitter> splitterAdapter = connection.getProtocolInfo().getUser().get(SplitterTracker.class).splitter;
-        while (in.readableBytes() > 0) {
+        if (in.readableBytes() != 0) {
             ByteBuf draft = null;
             int backupIdx = -1;
             try {
@@ -60,9 +60,15 @@ public class _1_6_4PacketDecoder extends ByteToMessageDecoder {
 
                 final int packetId = in.readUnsignedByte();
                 final int packetLength = readPacket(splitterAdapter.get(packetId), in);
+                System.out.println("Packet: " + packetId + ", read Length: " + packetLength);
 
                 final byte[] packet = new byte[packetLength];
                 in.readBytes(packet);
+                StringBuilder builder = new StringBuilder();
+                for (byte b : packet) {
+                    builder.append(b + ", ");
+                }
+                System.out.println("Packet: " + packetId + ", read Length: " + packetLength + ", bytes: " + builder);
 
                 draft = ctx.alloc().buffer();
                 Type.VAR_INT.writePrimitive(draft, packetId);

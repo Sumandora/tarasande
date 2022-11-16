@@ -23,6 +23,7 @@ import com.viaversion.viaversion.api.protocol.remapper.TypeRemapper;
 import com.viaversion.viaversion.api.protocol.remapper.ValueReader;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.vialegacy.api.material.MaterialReplacement;
+import de.florianmichael.vialegacy.api.metadata.LegacyMetadataRewriter;
 import de.florianmichael.vialegacy.api.sound.SoundRewriter;
 
 public class EnZaProtocol<C1 extends ClientboundPacketType, C2 extends ClientboundPacketType, S1 extends ServerboundPacketType, S2 extends ServerboundPacketType> extends AbstractProtocol<C1, C2, S1, S2> {
@@ -40,6 +41,10 @@ public class EnZaProtocol<C1 extends ClientboundPacketType, C2 extends Clientbou
     }
 
     public MaterialReplacement materialReplacement() {
+        return null;
+    }
+
+    public LegacyMetadataRewriter metadataRewriter() {
         return null;
     }
 

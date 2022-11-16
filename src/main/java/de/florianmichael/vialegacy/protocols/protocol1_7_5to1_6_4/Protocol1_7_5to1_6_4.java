@@ -50,10 +50,7 @@ import net.md_5.bungee.chat.ComponentSerializer;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * #####################################################################################################################
@@ -77,8 +74,36 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
     private final SoundRewriter soundRewriter = new SoundRewriter1_7_5to1_6_4();
     private final MaterialReplacement materialReplacement = new MaterialReplacement1_7_5to1_6_4();
 
+    public final Map<Short, Short> pitchList = new HashMap<>();
+
     public Protocol1_7_5to1_6_4() {
         super(ClientboundPackets1_6_4.class, ClientboundPackets1_7_5.class, ServerboundPackets1_6_4.class, ServerboundPackets1_7_5.class);
+
+        pitchList.put((short) 0, (short) 31);
+        pitchList.put((short) 1, (short) 33);
+        pitchList.put((short) 2, (short) 35);
+        pitchList.put((short) 3, (short) 37);
+        pitchList.put((short) 4, (short) 39);
+        pitchList.put((short) 5, (short) 42);
+        pitchList.put((short) 6, (short) 44);
+        pitchList.put((short) 7, (short) 47);
+        pitchList.put((short) 8, (short) 50);
+        pitchList.put((short) 9, (short) 52);
+        pitchList.put((short) 10, (short) 56);
+        pitchList.put((short) 11, (short) 59);
+        pitchList.put((short) 12, (short) 63);
+        pitchList.put((short) 13, (short) 66);
+        pitchList.put((short) 14, (short) 70);
+        pitchList.put((short) 15, (short) 74);
+        pitchList.put((short) 16, (short) 79);
+        pitchList.put((short) 17, (short) 84);
+        pitchList.put((short) 18, (short) 89);
+        pitchList.put((short) 19, (short) 94);
+        pitchList.put((short) 20, (short) 100);
+        pitchList.put((short) 21, (short) 105);
+        pitchList.put((short) 22, (short) 112);
+        pitchList.put((short) 23, (short) 118);
+        pitchList.put((short) 24, (short) 126);
     }
 
     @Override
@@ -947,82 +972,8 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     sound.write(Type.INT, pw.get(Type.INT, 1) * 8);
                     sound.write(Type.FLOAT, 3.0F);
                     short pitch = pw.get(Type.UNSIGNED_BYTE, 1);
-                    switch (pitch) {
-                        case 0:
-                            pitch = 31;
-                            break;
-                        case 1:
-                            pitch = 33;
-                            break;
-                        case 2:
-                            pitch = 35;
-                            break;
-                        case 3:
-                            pitch = 37;
-                            break;
-                        case 4:
-                            pitch = 39;
-                            break;
-                        case 5:
-                            pitch = 42;
-                            break;
-                        case 6:
-                            pitch = 44;
-                            break;
-                        case 7:
-                            pitch = 47;
-                            break;
-                        case 8:
-                            pitch = 50;
-                            break;
-                        case 9:
-                            pitch = 52;
-                            break;
-                        case 10:
-                            pitch = 56;
-                            break;
-                        case 11:
-                            pitch = 59;
-                            break;
-                        case 12:
-                            pitch = 63;
-                            break;
-                        case 13:
-                            pitch = 66;
-                            break;
-                        case 14:
-                            pitch = 70;
-                            break;
-                        case 15:
-                            pitch = 74;
-                            break;
-                        case 16:
-                            pitch = 79;
-                            break;
-                        case 17:
-                            pitch = 84;
-                            break;
-                        case 18:
-                            pitch = 89;
-                            break;
-                        case 19:
-                            pitch = 94;
-                            break;
-                        case 20:
-                            pitch = 100;
-                            break;
-                        case 21:
-                            pitch = 105;
-                            break;
-                        case 22:
-                            pitch = 112;
-                            break;
-                        case 23:
-                            pitch = 118;
-                            break;
-                        case 24:
-                            pitch = 126;
-                            break;
+                    if (pitchList.containsKey(pitch)) {
+                        pitch = pitchList.get(pitch);
                     }
                     sound.write(Type.UNSIGNED_BYTE, pitch);
                     sound.send(Protocol1_7_5to1_6_4.class);

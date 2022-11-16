@@ -18,23 +18,28 @@ import com.viaversion.viaversion.api.minecraft.entities.Entity1_10Types;
 import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
 import com.viaversion.viaversion.api.minecraft.metadata.types.MetaType1_8;
+import de.florianmichael.vialegacy.api.metadata.LegacyMetadataRewriter;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.Protocol1_8to1_7_10;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.MetaType_1_7_6_10;
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.item.ItemRewriter1_8to1_7_10;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MetadataRewriter {
+public class MetadataRewriter1_8to1_7_10 extends LegacyMetadataRewriter<Protocol1_8to1_7_10> {
 
-	public static void transform(final Protocol1_8to1_7_10 protocol1_8to1_7_10, Entity1_10Types.EntityType type, List<Metadata> list) {
-		for (Metadata entry : new ArrayList<>(list)) {
-			MetaIndex1_8to1_7_6_10 metaIndex = MetaIndex1_8to1_7_6_10.searchIndex(type, entry.id());
+	public MetadataRewriter1_8to1_7_10(Protocol1_8to1_7_10 protocol) {
+		super(protocol);
+	}
+
+	@Override
+	public void rewrite(Entity1_10Types.EntityType entityType, List<Metadata> metadata) {
+		for (Metadata entry : new ArrayList<>(metadata)) {
+			MetaIndex1_8to1_7_10 metaIndex = MetaIndex1_8to1_7_10.searchIndex(entityType, entry.id());
 
 			try {
 				if (metaIndex == null) throw new Exception("Could not find valid metadata");
 				if (metaIndex.getNewType() == MetaType1_8.NonExistent) {
-					list.remove(entry);
+					metadata.remove(entry);
 					return;
 				}
 				Object value = entry.getValue();
@@ -57,23 +62,24 @@ public class MetadataRewriter {
 						if (metaIndex.getOldType() == MetaType_1_7_6_10.Byte) {
 							entry.setValue(value);
 						}
-						if (metaIndex == MetaIndex1_8to1_7_6_10.HUMAN_SKIN_FLAGS) {
+						if (metaIndex == MetaIndex1_8to1_7_10.HUMAN_SKIN_FLAGS) {
 							byte flags = (byte) value;
 							boolean cape = flags == 2;
 							flags = (byte) (cape ? 127 : 125);
 							entry.setValue(flags);
 						}
-						if (metaIndex == MetaIndex1_8to1_7_6_10.ENTITY_AGEABLE_AGE && metaIndex.getOldType() == MetaType_1_7_6_10.Int)
+						if (metaIndex == MetaIndex1_8to1_7_10.ENTITY_AGEABLE_AGE && metaIndex.getOldType() == MetaType_1_7_6_10.Int) {
 							entry.setValue((int) value < 0 ? -1 : value);
+						}
 					}
 					case Slot -> {
-						entry.setValue(protocol1_8to1_7_10.getItemRewriter().handleItemToClient((Item) value));
+						entry.setValue(protocol.getItemRewriter().handleItemToClient((Item) value));
 					}
 					case Float, Short, String, Position, Rotation -> entry.setValue(value);
-					default -> list.remove(entry);
+					default -> metadata.remove(entry);
 				}
 			} catch (Exception e) {
-				list.remove(entry);
+				metadata.remove(entry);
 			}
 		}
 	}

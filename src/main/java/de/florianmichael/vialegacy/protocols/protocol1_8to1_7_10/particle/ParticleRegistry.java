@@ -64,12 +64,6 @@ public enum ParticleRegistry {
 		return particleMap.get(part);
 	}
 
-	public static ParticleRegistry find(int id) {
-		if (id<0) return null;
-		ParticleRegistry[] values = ParticleRegistry.values();
-		return id>=values.length ? null : values[id];
-	}
-
 	static {
 		ParticleRegistry[] particles = values();
 
