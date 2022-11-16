@@ -28,7 +28,7 @@ public enum ClientboundPackets1_4_5 implements LegacyClientboundPacketType {
 
 		buffer.readShort();
 
-		transformer.read1_7_10_CompressedNbtItem(buffer);
+		transformer.read1_7_10_ItemStack(buffer);
 	}),
 	SPAWN_POSITION(0x06, (buffer, transformer) -> {
 		buffer.readInt();
@@ -93,7 +93,7 @@ public enum ClientboundPackets1_4_5 implements LegacyClientboundPacketType {
 	PICKUP_ITEM(0x15, (buffer, transformer) -> {
 		buffer.readInt();
 
-		transformer.read1_7_10_CompressedNbtItem(buffer);
+		transformer.read1_7_10_ItemStack(buffer);
 
 		buffer.readInt();
 		buffer.readInt();
@@ -397,12 +397,12 @@ public enum ClientboundPackets1_4_5 implements LegacyClientboundPacketType {
 
 		buffer.readShort();
 
-		transformer.read1_7_10_CompressedNbtItem(buffer);
+		transformer.read1_7_10_ItemStack(buffer);
 	})),
 	CREATIVE_INVENTORY_ACTION(0x6B, (buffer, transformer) -> {
 		buffer.readShort();
 
-		transformer.read1_7_10_CompressedNbtItem(buffer);
+		transformer.read1_7_10_ItemStack(buffer);
 	}),
 	WINDOW_ITEMS(0x68, ((buffer, transformer) -> {
 		buffer.readByte();
@@ -410,7 +410,7 @@ public enum ClientboundPackets1_4_5 implements LegacyClientboundPacketType {
 		final int x = buffer.readShort();
 
 		for (int i = 0; i < x; i++)
-			transformer.read1_7_10_CompressedNbtItem(buffer);
+			transformer.read1_7_10_ItemStack(buffer);
 	})),
 	WINDOW_PROPERTY(0x69, ((buffer, transformer) -> {
 		buffer.readByte();
@@ -453,7 +453,7 @@ public enum ClientboundPackets1_4_5 implements LegacyClientboundPacketType {
 		buffer.readInt();
 		buffer.readByte();
 
-		transformer.read1_7_10_CompressedNbt(buffer);
+		transformer.readNbt(buffer);
 	})),
 	OPEN_SIGN_EDITOR(0x85, ((buffer, transformer) -> {
 		// Removed

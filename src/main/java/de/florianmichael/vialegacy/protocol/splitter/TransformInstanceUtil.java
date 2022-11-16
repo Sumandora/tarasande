@@ -1,28 +1,11 @@
 package de.florianmichael.vialegacy.protocol.splitter;
 
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.protocols.protocol1_4_5to1_4_3_pre.type.TypeRegistry_1_4_2;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.TypeRegistry_1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_3_2to1_2_5.type.impl.NBTItems;
 import io.netty.buffer.ByteBuf;
 
 public class TransformInstanceUtil {
-
-    public void read1_7_10_CompressedNbtItem(final ByteBuf buf) {
-        try {
-            TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM.read(buf);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void read1_7_10_CompressedNbt(final ByteBuf buf) {
-        try {
-            TypeRegistry1_7_6_10.COMPRESSED_NBT.read(buf);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public void read1_6_4_MetadataList(final ByteBuf buf) {
         try {
@@ -40,12 +23,23 @@ public class TransformInstanceUtil {
         }
     }
 
-    public void read1_2_5_NBT(final ByteBuf buffer) {
+    public void readNbt(final ByteBuf buffer) {
         int length = buffer.readShort();
-        if (length < 0)
+        if (length < 0) {
             return;
-        for (int i = 0; i < length; i++)
+        }
+        for (int i = 0; i < length; i++) {
             buffer.readByte();
+        }
+    }
+
+    public void read1_7_10_ItemStack(final ByteBuf buf) {
+        final short id = buf.readShort();
+        if (id >= 0) {
+            buf.readByte();
+            buf.readShort();
+            readNbt(buf);
+        }
     }
 
     public void read1_2_5_ItemStack(final ByteBuf buffer) {
@@ -54,7 +48,7 @@ public class TransformInstanceUtil {
             buffer.readByte();
             buffer.readShort();
             if (NBTItems.map.getOrDefault((int) x, false))
-                read1_2_5_NBT(buffer);
+                readNbt(buffer);
         }
     }
 

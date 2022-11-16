@@ -60,15 +60,9 @@ public class _1_6_4PacketDecoder extends ByteToMessageDecoder {
 
                 final int packetId = in.readUnsignedByte();
                 final int packetLength = readPacket(splitterAdapter.get(packetId), in);
-                System.out.println("Packet: " + packetId + ", read Length: " + packetLength);
 
                 final byte[] packet = new byte[packetLength];
                 in.readBytes(packet);
-                StringBuilder builder = new StringBuilder();
-                for (byte b : packet) {
-                    builder.append(b + ", ");
-                }
-                System.out.println("Packet: " + packetId + ", read Length: " + packetLength + ", bytes: " + builder);
 
                 draft = ctx.alloc().buffer();
                 Type.VAR_INT.writePrimitive(draft, packetId);
