@@ -34,7 +34,7 @@ import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.TypeRegistry_1_6_4;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
-import de.florianmichael.vialegacy.netty._1_6_4Transformer;
+import de.florianmichael.vialegacy.pre_netty.PreNettyConstants;
 import de.florianmichael.vialegacy.protocols.base.HandshakeStorage;
 import de.florianmichael.vialegacy.protocols.protocol1_7_10to1_7_5.ClientboundPackets1_7_5;
 import de.florianmichael.vialegacy.protocols.protocol1_7_10to1_7_5.ServerboundPackets1_7_5;
@@ -393,7 +393,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     packetWrapper.write(Type.STRING, UUID.nameUUIDFromBytes(("OfflinePlayer:" + info.getUsername()).getBytes()).toString().replace("-", ""));
                     packetWrapper.write(Type.STRING, info.getUsername());
 
-                    ViaLegacy.getProvider().fixPipelineOrder_1_6(packetWrapper.user().getChannel(), _1_6_4Transformer.DECODER, _1_6_4Transformer.ENCODER);
+                    ViaLegacy.getProvider().fixPipelineOrder_1_6(packetWrapper.user().getChannel(), PreNettyConstants.DECODER, PreNettyConstants.ENCODER);
 
                     PacketWrapper add = new PacketWrapperImpl(205, null, packetWrapper.user()); //Packet205ClientCommand
                     add.write(Type.BYTE, (byte) 0);
@@ -1094,6 +1094,6 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
         userConnection.put(new ClientWorld(userConnection));
         userConnection.put(new SplitterTracker(userConnection, ClientboundPackets1_6_4.values(), ClientboundLoginPackets1_6_4.values()));
 
-        ViaLegacy.getProvider().rewriteElements_1_6(userConnection, userConnection.getChannel(), _1_6_4Transformer.DECODER, _1_6_4Transformer.ENCODER);
+        ViaLegacy.getProvider().rewriteElements_1_6(userConnection, userConnection.getChannel(), PreNettyConstants.DECODER, PreNettyConstants.ENCODER);
     }
 }

@@ -12,7 +12,7 @@
  * The owner "Florian Michael" is free to change this license.
  */
 
-package de.florianmichael.vialegacy.netty._1_6_4;
+package de.florianmichael.vialegacy.pre_netty;
 
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.exception.CancelException;
@@ -21,7 +21,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
-public class _1_6_4PacketEncoder extends MessageToByteEncoder<ByteBuf> {
+public class PreNettyPacketEncoder extends MessageToByteEncoder<ByteBuf> {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {

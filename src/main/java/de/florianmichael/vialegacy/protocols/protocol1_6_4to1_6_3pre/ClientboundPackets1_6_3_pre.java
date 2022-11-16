@@ -460,8 +460,9 @@ public enum ClientboundPackets1_6_3_pre implements LegacyClientboundPacketType {
 
 		final int x = buffer.readUnsignedShort();
 
-		for (int i = 0; i < x; i++)
+		for (int i = 0; i < x; i++) {
 			buffer.readByte();
+		}
 	})),
 	BLOCK_ENTITY_DATA(0x84, ((buffer, transformer) -> {
 		buffer.readInt();

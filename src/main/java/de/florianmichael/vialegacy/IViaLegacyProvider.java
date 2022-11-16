@@ -5,8 +5,6 @@ import io.netty.channel.Channel;
 
 public interface IViaLegacyProvider {
 
-    int currentVersion();
-
     void fixPipelineOrder_1_6(final Channel channel, final String decoder, final String encoder);
     void rewriteElements_1_6(final UserConnection connection, final Channel channel, final String decoder, final String encoder);
 

@@ -12,12 +12,10 @@
  * The owner "Florian Michael" is free to change this license.
  */
 
-package de.florianmichael.vialegacy.netty._1_6_4;
+package de.florianmichael.vialegacy.pre_netty;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.type.Type;
-import de.florianmichael.vialegacy.ViaLegacy;
-import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitter;
 import de.florianmichael.vialegacy.protocol.splitter.TransformInstanceUtil;
@@ -28,11 +26,11 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import java.util.List;
 import java.util.Map;
 
-public class _1_6_4PacketDecoder extends ByteToMessageDecoder {
+public class PreNettyPacketDecoder extends ByteToMessageDecoder {
 
     private final UserConnection connection;
 
-    public _1_6_4PacketDecoder(final UserConnection connection) {
+    public PreNettyPacketDecoder(final UserConnection connection) {
         this.connection = connection;
     }
 

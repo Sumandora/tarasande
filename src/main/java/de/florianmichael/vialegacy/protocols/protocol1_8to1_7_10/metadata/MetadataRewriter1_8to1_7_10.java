@@ -32,7 +32,7 @@ public class MetadataRewriter1_8to1_7_10 extends LegacyMetadataRewriter<Protocol
 	}
 
 	@Override
-	public void rewrite(Entity1_10Types.EntityType entityType, List<Metadata> metadata) {
+	public void rewrite(Entity1_10Types.EntityType entityType, boolean isObject, List<Metadata> metadata) {
 		for (Metadata entry : new ArrayList<>(metadata)) {
 			MetaIndex1_8to1_7_10 metaIndex = MetaIndex1_8to1_7_10.searchIndex(entityType, entry.id());
 

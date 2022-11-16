@@ -404,7 +404,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     packetWrapper.passthrough(Type.SHORT); // Item in hand
 
                     List<Metadata> metadata = packetWrapper.read(TypeRegistry1_7_6_10.METADATA_LIST); // Metadata
-                    metadataRewriter().rewrite(Entity1_10Types.EntityType.PLAYER, metadata);
+                    metadataRewriter().rewrite(Entity1_10Types.EntityType.PLAYER, false, metadata);
                     packetWrapper.write(Types1_8.METADATA_LIST, metadata);
 
                     PacketWrapper addPlayerInfo = PacketWrapper.create(ClientboundPackets1_7_10.PLAYER_INFO, packetWrapper.user());
@@ -1153,7 +1153,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final EntityTracker tracker = entityTracker(wrapper.user());
 
                     if (tracker.getClientEntityTypes().containsKey(entityID)) {
-                        metadataRewriter().rewrite(tracker.getClientEntityTypes().get(entityID), metadataList);
+                        metadataRewriter().rewrite(tracker.getClientEntityTypes().get(entityID), true, metadataList);
                         if (metadataList.isEmpty()) {
                             wrapper.cancel();
                         }
@@ -1260,7 +1260,7 @@ public class Protocol1_8to1_7_10 extends EnZaProtocol<ClientboundPackets1_7_10, 
                     final EntityTracker tracker = entityTracker(wrapper.user());
 
                     if (tracker.getClientEntityTypes().containsKey(entityID))
-                        metadataRewriter().rewrite(tracker.getClientEntityTypes().get(entityID), metadataList);
+                        metadataRewriter().rewrite(tracker.getClientEntityTypes().get(entityID), false, metadataList);
                     else wrapper.cancel();
                 });
             }

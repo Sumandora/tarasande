@@ -61,7 +61,6 @@ public class EntityTracker extends StoredObject {
 		final PacketWrapper wrapper = PacketWrapper.create(ClientboundPackets1_7_10.ENTITY_METADATA, this.getUser());
 		wrapper.write(Type.VAR_INT, entityId);
 		wrapper.write(Types1_8.METADATA_LIST, this.metadataBuffer.get(entityId));
-		protocol1_8to1_7_10.metadataRewriter().rewrite(this.getClientEntityTypes().get(entityId), this.metadataBuffer.get(entityId));
 		if (!this.metadataBuffer.get(entityId).isEmpty()) {
 			try {
 				wrapper.send(Protocol1_8to1_7_10.class);

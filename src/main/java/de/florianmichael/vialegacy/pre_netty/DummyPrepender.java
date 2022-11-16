@@ -12,15 +12,15 @@
  * The owner "Florian Michael" is free to change this license.
  */
 
-package de.florianmichael.vialegacy.netty;
+package de.florianmichael.vialegacy.pre_netty;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
-public class ForwardMessageToByteEncoder extends MessageToByteEncoder<ByteBuf> {
+public class DummyPrepender extends MessageToByteEncoder<ByteBuf> {
 	
-	public ForwardMessageToByteEncoder() {
+	public DummyPrepender() {
 		super();
 	}
 

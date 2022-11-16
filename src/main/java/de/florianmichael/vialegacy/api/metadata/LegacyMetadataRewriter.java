@@ -13,5 +13,5 @@ public abstract class LegacyMetadataRewriter<T extends EnZaProtocol<?, ?, ?, ?>>
         super(protocol);
     }
 
-    public abstract void rewrite(final Entity1_10Types.EntityType entityType, final List<Metadata> metadata);
+    public abstract void rewrite(final Entity1_10Types.EntityType entityType, final boolean isObject, final List<Metadata> metadata);
 }

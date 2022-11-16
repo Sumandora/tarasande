@@ -10,14 +10,16 @@ import java.util.Map;
 public class EntityTracker extends StoredObject {
 
     private final Map<Integer, Entity1_10Types.EntityType> entities = new HashMap<>();
+    private final Map<Integer, Boolean> objectiveEntities = new HashMap<>();
     public int ownEntityId;
 
     public EntityTracker(UserConnection user) {
         super(user);
     }
 
-    public void track(final int entityId, final Entity1_10Types.EntityType entityType) {
+    public void track(final int entityId, final Entity1_10Types.EntityType entityType, boolean isObject) {
         entities.putIfAbsent(entityId, entityType);
+        objectiveEntities.putIfAbsent(entityId, isObject);
     }
 
     public Entity1_10Types.EntityType get(final int entityId) {
@@ -28,9 +30,16 @@ public class EntityTracker extends StoredObject {
         return null;
     }
 
+    public boolean isObjective(final int entityId) {
+        return objectiveEntities.containsKey(entityId);
+    }
+
     public void remove(final int entityId) {
         if (entities.containsKey(entityId)) {
             entities.remove(entityId);
+        }
+        if (objectiveEntities.containsKey(entityId)) {
+            objectiveEntities.remove(entityId);
         }
     }
 }

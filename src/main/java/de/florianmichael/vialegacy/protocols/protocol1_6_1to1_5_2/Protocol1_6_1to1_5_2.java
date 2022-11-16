@@ -95,11 +95,12 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 				handler(wrapper -> {
 					final VehicleTracker vehicleTracker = wrapper.user().get(VehicleTracker.class);
 					final boolean dismount = wrapper.read(Type.BOOLEAN);
+					final boolean unmount = wrapper.read(Type.BOOLEAN);
+					wrapper.cancel();
 
 					if (dismount && vehicleTracker.vehicleId != 999) {
 						final int cachedId = vehicleTracker.vehicleId;
 						vehicleTracker.vehicleId = -999;
-						wrapper.cancel();
 
 						final PacketWrapper interactEntity = PacketWrapper.create(ServerboundPackets1_6_1.INTERACT_ENTITY, wrapper.user());
 
@@ -108,6 +109,15 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 						interactEntity.write(Type.BYTE, (byte) 0);
 
 						interactEntity.send(Protocol1_6_1to1_5_2.class);
+					}
+
+					if (unmount) {
+						final PacketWrapper entityAction = PacketWrapper.create(ServerboundPackets1_6_1.ENTITY_ACTION, wrapper.user());
+
+						entityAction.write(Type.INT, wrapper.user().get(EntityTracker.class).ownEntityId);
+						entityAction.write(Type.BYTE, (byte) 5); // sneak
+
+						entityAction.sendToServer(Protocol1_6_1to1_5_2.class);
 					}
 				});
 			}
@@ -120,7 +130,7 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 					final int entityId = wrapper.passthrough(Type.INT);
 					final EntityTracker tracker = wrapper.user().get(EntityTracker.class);
 
-					tracker.track(entityId, Entity1_10Types.EntityType.ENTITY_HUMAN);
+					tracker.track(entityId, Entity1_10Types.EntityType.ENTITY_HUMAN, false);
 					tracker.ownEntityId = entityId;
 
 					resetPlayerSpeed(wrapper.user(), entityId);
@@ -158,9 +168,9 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 
 					final Entity1_10Types.EntityType entityType = Entity1_10Types.getTypeFromId(wrapper.get(Type.BYTE, 0), false);
 
-					tracker.track(entityId, entityType);
+					tracker.track(entityId, entityType, false);
 					final List<Metadata> oldMetadata = wrapper.read(TypeRegistry_1_4_2.METADATA_LIST);
-					metadataRewriter().rewrite(entityType, oldMetadata);
+					metadataRewriter().rewrite(entityType, tracker.isObjective(entityId), oldMetadata);
 					wrapper.write(TypeRegistry_1_4_2.METADATA_LIST, oldMetadata);
 				});
 			}
@@ -188,7 +198,7 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 					final int entityId = wrapper.passthrough(Type.INT);
 
 					final List<Metadata> oldMetadata = wrapper.read(TypeRegistry_1_6_4.METADATA_LIST);
-					metadataRewriter().rewrite(tracker.get(entityId), oldMetadata);
+					metadataRewriter().rewrite(tracker.get(entityId), tracker.isObjective(entityId), oldMetadata);
 					wrapper.write(TypeRegistry_1_6_4.METADATA_LIST, oldMetadata);
 				});
 			}
@@ -207,10 +217,10 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 					wrapper.passthrough(Type.BYTE); // Yaw
 					wrapper.passthrough(Type.BYTE); // Pitch
 					wrapper.passthrough(Type.SHORT); // Current Item
-					tracker.track(entityId, Entity1_10Types.EntityType.ENTITY_HUMAN);
+					tracker.track(entityId, Entity1_10Types.EntityType.ENTITY_HUMAN, false);
 
 					final List<Metadata> oldMetadata = wrapper.read(TypeRegistry_1_6_4.METADATA_LIST);
-					metadataRewriter().rewrite(tracker.get(entityId), oldMetadata);
+					metadataRewriter().rewrite(tracker.get(entityId), tracker.isObjective(entityId), oldMetadata);
 					wrapper.write(TypeRegistry_1_6_4.METADATA_LIST, oldMetadata);
 				});
 			}
@@ -223,41 +233,38 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 					final EntityTracker tracker = wrapper.user().get(EntityTracker.class);
 
 					final int entityId = wrapper.passthrough(Type.INT);
-					System.out.println(entityId);
 					final byte vehicleEntity = wrapper.passthrough(Type.BYTE);
-					System.out.println(entityId + " " + vehicleEntity);
-
 
 					switch (vehicleEntity) {
 						case 0x01:
-							tracker.track(entityId, Entity1_10Types.ObjectType.BOAT.getType());
+							tracker.track(entityId, Entity1_10Types.ObjectType.BOAT.getType(), true);
 							break;
 						case 0x02:
-							tracker.track(entityId, Entity1_10Types.ObjectType.ITEM.getType());
+							tracker.track(entityId, Entity1_10Types.ObjectType.ITEM.getType(), true);
 							break;
 						case 0x46:
-							tracker.track(entityId, Entity1_10Types.ObjectType.FALLING_BLOCK.getType());
+							tracker.track(entityId, Entity1_10Types.ObjectType.FALLING_BLOCK.getType(), true);
 							break;
 						case 0x0A:
-							tracker.track(entityId, Entity1_10Types.ObjectType.MINECART.getType());
+							tracker.track(entityId, Entity1_10Types.ObjectType.MINECART.getType(), true);
 							break;
 						case 0x3E:
-							tracker.track(entityId, Entity1_10Types.ObjectType.EGG.getType());
+							tracker.track(entityId, Entity1_10Types.ObjectType.EGG.getType(), true);
 							break;
 						case 0x3D:
-							tracker.track(entityId, Entity1_10Types.ObjectType.SNOWBALL.getType());
+							tracker.track(entityId, Entity1_10Types.ObjectType.SNOWBALL.getType(), true);
 							break;
 						case 0x3C:
-							tracker.track(entityId, Entity1_10Types.ObjectType.TIPPED_ARROW.getType());
+							tracker.track(entityId, Entity1_10Types.ObjectType.TIPPED_ARROW.getType(), true);
 							break;
 						case 0x41:
-							tracker.track(entityId, Entity1_10Types.ObjectType.ENDER_PEARL.getType());
+							tracker.track(entityId, Entity1_10Types.ObjectType.ENDER_PEARL.getType(), true);
 							break;
 						case 0x4B:
-							tracker.track(entityId, Entity1_10Types.ObjectType.THROWN_EXP_BOTTLE.getType());
+							tracker.track(entityId, Entity1_10Types.ObjectType.THROWN_EXP_BOTTLE.getType(), true);
 							break;
 						case 0x48:
-							tracker.track(entityId, Entity1_10Types.ObjectType.ENDER_SIGNAL.getType());
+							tracker.track(entityId, Entity1_10Types.ObjectType.ENDER_SIGNAL.getType(), true);
 							break;
 					}
 				});
