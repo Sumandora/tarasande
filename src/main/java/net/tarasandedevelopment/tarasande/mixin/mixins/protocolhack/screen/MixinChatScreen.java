@@ -36,14 +36,6 @@ public class MixinChatScreen extends Screen {
         }
     }
 
-    @Override
-    public boolean charTyped(char chr, int modifiers) {
-        if(chr == ' ') {
-            chatInputSuggestor.clearWindow();
-        }
-        return super.charTyped(chr, modifiers);
-    }
-
     @Inject(method = "onChatFieldUpdate", at = @At(value = "HEAD"))
     public void removePermanentRefreshing(String chatText, CallbackInfo ci) {
         ((IChatInputSuggestor_Protocol) this.chatInputSuggestor).protocolhack_setNativeCompletion(ProtocolHackValues.INSTANCE.getRemoveNewTabCompletion().getValue());
