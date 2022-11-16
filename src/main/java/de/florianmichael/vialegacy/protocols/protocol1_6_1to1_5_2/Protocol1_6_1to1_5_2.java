@@ -18,10 +18,8 @@ import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.entities.Entity1_10Types;
 import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
-import com.viaversion.viaversion.util.Pair;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.api.metadata.LegacyMetadataRewriter;
 import de.florianmichael.vialegacy.api.sound.SoundRewriter;
@@ -33,13 +31,10 @@ import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.storage.Entity
 import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.storage.VehicleTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.ClientboundPackets1_6_1;
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.ServerboundPackets1_6_1;
-import de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre.ClientboundPackets1_6_3_pre;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.TypeRegistry_1_6_4;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, ClientboundPackets1_6_1, ServerboundPackets1_5_2, ServerboundPackets1_6_1> {
@@ -210,6 +205,8 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 				handler(wrapper -> {
 					final EntityTracker tracker = wrapper.user().get(EntityTracker.class);
 					final int entityId = wrapper.passthrough(Type.INT);
+
+					wrapper.passthrough(TypeRegistry_1_6_4.STRING);
 
 					wrapper.passthrough(Type.INT); // X-Position
 					wrapper.passthrough(Type.INT); // Y-Position
