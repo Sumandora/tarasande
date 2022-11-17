@@ -87,7 +87,7 @@ public class Chunk1_8to1_7_6_10 {
 					int pz = ind >> 4 & 15;
 					int data = nibblearray.get(px, py, pz);
 
-					data = SpigotDebreakifier.getCorrectedData(id, data);
+					data = SpigotDataFixer.getCorrectedData(id, data);
 
 					char val = (char) (id << 4 | data);
 					buffer[finalSize++] = (byte) (val & 255);

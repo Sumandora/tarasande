@@ -15,10 +15,10 @@
 package de.florianmichael.vialegacy.protocols.protocol1_5_1to1_4_7;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
-import de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre.ClientboundPackets1_6_3_pre;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.TypeRegistry_1_6_4;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
@@ -53,6 +53,97 @@ public class Protocol1_5_1to1_4_7 extends EnZaProtocol<ClientboundPackets1_4_7, 
 
 				map(Type.BYTE); // Slot count
 				handler((pw) -> pw.write(Type.BOOLEAN, true));
+			}
+		});
+
+		this.registerClientbound(ClientboundPackets1_4_7.SPAWN_ENTITY, new PacketRemapper() {
+			@Override
+			public void registerMap() {
+				map(Type.INT); // Entity ID
+				map(Type.BYTE); // Vehicle Type
+				map(Type.INT); // X
+				map(Type.INT); // Y
+				map(Type.INT); // Z
+				map(Type.BYTE); // Yaw
+				map(Type.BYTE); // Pitch
+				map(Type.INT); // Thrower ID
+
+				handler(wrapper -> {
+					final byte vehicleType = wrapper.get(Type.BYTE, 0);
+
+					switch (vehicleType) {
+						case (byte) 10: // Rideable MineCart
+							wrapper.set(Type.INT, 4, 0); // Thrower ID
+							break;
+						case (byte) 11: // Chest MineCart
+							wrapper.set(Type.BYTE, 0, (byte) 10); // Vehicle Type
+							wrapper.set(Type.INT, 4, 1); // Thrower ID
+							break;
+						case (byte) 12: // Furnace MineCart
+							wrapper.set(Type.BYTE, 0, (byte) 10); // Vehicle Type
+							wrapper.set(Type.INT, 4, 2); // Thrower ID
+							break;
+					}
+				});
+			}
+		});
+
+		this.registerServerbound(ServerboundPackets1_5_1.CLICK_WINDOW, new PacketRemapper() {
+			@Override
+			public void registerMap() {
+				map(Type.BYTE); // Window ID
+				map(Type.SHORT); // Slot
+				map(Type.BYTE); // Button
+				map(Type.SHORT); // Action Number
+				map(Type.BYTE); // Inventory Action
+				handler(wrapper -> {
+					final short slot = wrapper.get(Type.SHORT, 0);
+					final byte button = wrapper.get(Type.BYTE, 1);
+					final byte inventoryAction = wrapper.get(Type.BYTE, 2);
+
+					boolean leftClickFlag = false;
+					boolean startDragging = false;
+					boolean endDragging = false;
+					boolean droppingUsingQ = false;
+					boolean addSlot = false;
+
+					switch (inventoryAction) {
+						case 0:
+							leftClickFlag = button == 0;
+							break;
+						case 4:
+							droppingUsingQ = button + (slot != -999 ? 2 : 0) == 2;
+							break;
+						case 5:
+							startDragging = button == 0;
+							endDragging = button == 2;
+							addSlot = button == 1;
+							break;
+					}
+
+					boolean leftClick = leftClickFlag || startDragging || addSlot || endDragging;
+					boolean clickingOutside = slot == -999 && inventoryAction != 5;
+					boolean usingShift = inventoryAction == 1;
+
+					int mouseClick = leftClick ? 0 : 1;
+
+					if (droppingUsingQ) {
+						final PacketWrapper closeWindow = PacketWrapper.create(ClientboundPackets1_4_7.CLOSE_WINDOW, wrapper.user());
+						closeWindow.write(Type.BYTE, (byte) 0);
+						closeWindow.send(Protocol1_5_1to1_4_7.class);
+
+						wrapper.cancel();
+						return;
+					}
+
+					if (slot < 0 && !clickingOutside) {
+						wrapper.cancel();
+						return;
+					}
+
+					wrapper.set(Type.BYTE, 1, (byte) mouseClick);
+					wrapper.set(Type.BYTE, 2, (byte) (usingShift ? 1 : 0));
+				});
 			}
 		});
 	}

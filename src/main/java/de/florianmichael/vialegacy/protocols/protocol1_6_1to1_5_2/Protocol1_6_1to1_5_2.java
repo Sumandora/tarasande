@@ -40,7 +40,7 @@ import java.util.List;
 public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, ClientboundPackets1_6_1, ServerboundPackets1_5_2, ServerboundPackets1_6_1> {
 
 	private final LegacyMetadataRewriter<Protocol1_6_1to1_5_2> metadataRewriter = new MetadataRewriter1_6_1to1_5_2(this);
-	private final SoundRewriter soundRewriter = new SoundRewriter1_6_1to1_5_2();
+	private final SoundRewriter<Protocol1_6_1to1_5_2> soundRewriter = new SoundRewriter1_6_1to1_5_2(this);
 
 	public Protocol1_6_1to1_5_2() {
 		super(ClientboundPackets1_5_2.class, ClientboundPackets1_6_1.class, ServerboundPackets1_5_2.class, ServerboundPackets1_6_1.class);
@@ -60,6 +60,8 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 
 	@Override
 	protected void registerPackets() {
+		this.soundRewriter().registerNamedSound(ClientboundPackets1_5_2.NAMED_SOUND);
+
 		this.registerServerbound(ServerboundPackets1_6_1.ENTITY_ACTION, new PacketRemapper() {
 
 			@Override

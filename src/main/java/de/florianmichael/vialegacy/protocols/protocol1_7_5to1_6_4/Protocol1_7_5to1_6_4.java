@@ -76,7 +76,7 @@ import java.util.*;
  */
 public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, ClientboundPackets1_7_5, ServerboundPackets1_6_4, ServerboundPackets1_7_5> {
 
-    private final SoundRewriter soundRewriter = new SoundRewriter1_7_5to1_6_4();
+    private final SoundRewriter<Protocol1_7_5to1_6_4> soundRewriter = new SoundRewriter1_7_5to1_6_4(this);
     private final MaterialReplacement materialReplacement = new MaterialReplacement1_7_5to1_6_4();
 
     public final Map<Short, Short> pitchList = new HashMap<>();
@@ -113,6 +113,8 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
     @Override
     protected void registerPackets() {
+        this.soundRewriter().register1_7_5NamedSound(ClientboundPackets1_6_4.NAMED_SOUND);
+
         // Login Start
         this.registerServerbound(State.LOGIN, ServerboundLoginPackets.HELLO.getId(), ServerboundLoginPackets.HELLO.getId(), new PacketRemapper() {
 
@@ -1024,20 +1026,6 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.FLOAT); // Player Motion X
                 map(Type.FLOAT); // Player Motion Y
                 map(Type.FLOAT); // Player Motion Z
-            }
-        });
-
-        this.registerClientbound(ClientboundPackets1_6_4.NAMED_SOUND, new PacketRemapper() {
-
-            @Override
-            public void registerMap() {
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // Sound name
-                handler(wrapper -> wrapper.set(Type.STRING, 0, soundRewriter().rewrite(wrapper.get(Type.STRING, 0))));
-                map(Type.INT); // X-Position
-                map(Type.INT); // Y-Position
-                map(Type.INT); // Z-Position
-                map(Type.FLOAT); // Volume
-                map(Type.UNSIGNED_BYTE); // Pitch
             }
         });
 

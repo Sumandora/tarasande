@@ -17,14 +17,11 @@ package de.florianmichael.vialegacy.protocols.protocol1_4_2to1_3_2;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.item.DataItem;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.vialegacy.api.sound.SoundRewriter;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_4_2to1_3_2.sound.SoundRewriter1_4_2to1_3_2;
-import de.florianmichael.vialegacy.protocols.protocol1_5_1to1_4_7.ClientboundPackets1_4_7;
-import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.ClientboundPackets1_5_2;
 import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.TypeRegistry1_7_6_10;
 import de.florianmichael.vialegacy.protocols.protocol1_4_5to1_4_3_pre.type.TypeRegistry_1_4_2;
@@ -35,7 +32,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_4_3_preto1_4_2.Serverboun
 
 public class Protocol1_4_2to1_3_2 extends EnZaProtocol<ClientboundPackets1_3_2, ClientboundPackets1_4_2, ServerboundPackets1_3_2, ServerboundPackets1_4_2> {
 
-	private final SoundRewriter soundRewriter = new SoundRewriter1_4_2to1_3_2();
+	private final SoundRewriter<Protocol1_4_2to1_3_2> soundRewriter = new SoundRewriter1_4_2to1_3_2(this);
 
 	public Protocol1_4_2to1_3_2() {
 		super(ClientboundPackets1_3_2.class, ClientboundPackets1_4_2.class, ServerboundPackets1_3_2.class, ServerboundPackets1_4_2.class);
@@ -44,6 +41,7 @@ public class Protocol1_4_2to1_3_2 extends EnZaProtocol<ClientboundPackets1_3_2, 
 	@Override
 	protected void registerPackets() {
 		super.registerPackets();
+		this.soundRewriter().registerNamedSound(ClientboundPackets1_3_2.NAMED_SOUND);
 
 		this.registerClientbound(ClientboundPackets1_3_2.PICKUP_ITEM, new PacketRemapper() {
 			@Override
@@ -153,20 +151,6 @@ public class Protocol1_4_2to1_3_2 extends EnZaProtocol<ClientboundPackets1_3_2, 
 			}
 		});
 
-		this.registerClientbound(ClientboundPackets1_3_2.NAMED_SOUND, new PacketRemapper() {
-			@Override
-			public void registerMap() {
-				handler(wrapper -> {
-					String soundName = wrapper.read(TypeRegistry_1_6_4.STRING);
-					soundRewriter().rewrite(soundName);
-					if (soundName == null || soundName.isEmpty()) {
-						wrapper.cancel();
-					}
-					wrapper.write(TypeRegistry_1_6_4.STRING, soundName);
-				});
-			}
-		});
-
 		this.registerServerbound(ServerboundPackets1_4_2.CLIENT_SETTINGS, new PacketRemapper() {
 			@Override
 			public void registerMap() {
@@ -182,7 +166,7 @@ public class Protocol1_4_2to1_3_2 extends EnZaProtocol<ClientboundPackets1_3_2, 
 	}
 
 	@Override
-	public SoundRewriter soundRewriter() {
+	public SoundRewriter<Protocol1_4_2to1_3_2> soundRewriter() {
 		return this.soundRewriter;
 	}
 
