@@ -6,7 +6,6 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.Tameable
 import net.minecraft.util.registry.Registry
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.feature.clientvalue.panel.PanelElementsClientValues
@@ -17,6 +16,7 @@ import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.Val
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.util.dummy.ClientWorldDummy
 import net.tarasandedevelopment.tarasande.util.extension.Thread
+import su.mandora.event.EventDispatcher
 
 class ClientValues(name: String, panelSystem: ManagerPanel, fileSystem: ManagerFile) {
 
@@ -53,7 +53,7 @@ class ClientValues(name: String, panelSystem: ManagerPanel, fileSystem: ManagerF
         init {
             val world = ClientWorldDummy()
             Registry.ENTITY_TYPE.forEach {
-                map[it] = it.create(world) is LivingEntity
+                map[it] = it.create(world).let { it == null || it is LivingEntity } // Players can't be created and result in null
             }
             world.close()
         }

@@ -6,12 +6,12 @@ import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import su.mandora.event.EventDispatcher
 import kotlin.math.*
 
 object RotationUtil {
@@ -34,8 +34,9 @@ object RotationUtil {
                 if (it.state != EventJump.State.PRE) return@add
                 if (goalMovementYaw != null) it.yaw = goalMovementYaw!!
                 if (fakeRotation != null)
-                    if (TarasandeMain.clientValues().correctMovement.isSelected(2) || TarasandeMain.clientValues().correctMovement.isSelected(3))
+                    if (TarasandeMain.clientValues().correctMovement.isSelected(2) || TarasandeMain.clientValues().correctMovement.isSelected(3)) {
                         it.yaw = fakeRotation!!.yaw
+                    }
             }
             add(EventVelocityYaw::class.java, 9999) {
                 if (goalMovementYaw != null) it.yaw = goalMovementYaw!!
@@ -78,13 +79,13 @@ object RotationUtil {
                         }
             }
             add(EventIsWalking::class.java, 9999) {
-                if (TarasandeMain.clientValues().correctMovement.isSelected(1)) {
-                    it.walking = PlayerUtil.isPlayerMoving() && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (fakeRotation?.yaw ?: (goalMovementYaw ?: return@add)))) <= 45
+                if (!TarasandeMain.clientValues().correctMovement.isSelected(0)) {
+                    it.walking = PlayerUtil.isPlayerMoving() && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (goalMovementYaw ?: (fakeRotation?.yaw ?: return@add)))) <= 45
                 }
             }
             add(EventHasForwardMovement::class.java, 9999) {
-                if (TarasandeMain.clientValues().correctMovement.isSelected(1)) {
-                    it.hasForwardMovement = PlayerUtil.isPlayerMoving() && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (fakeRotation?.yaw ?: (goalMovementYaw ?: return@add)))) <= 45
+                if (!TarasandeMain.clientValues().correctMovement.isSelected(0)) {
+                    it.hasForwardMovement = PlayerUtil.isPlayerMoving() && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (goalMovementYaw ?: (fakeRotation?.yaw ?: return@add)))) <= 45
                 }
             }
             add(EventPacket::class.java, 9999) {
@@ -179,8 +180,11 @@ object RotationUtil {
 
             val eventGoalMovement = EventGoalMovement(fakeRotation?.yaw ?: MinecraftClient.getInstance().player!!.yaw)
             EventDispatcher.call(eventGoalMovement)
-            goalMovementYaw = if (eventGoalMovement.dirty) eventGoalMovement.yaw
-            else null
+            goalMovementYaw =
+                if (eventGoalMovement.dirty)
+                    eventGoalMovement.yaw
+                else
+                    null
         }
     }
 

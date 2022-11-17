@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.combat
 
+import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityStatuses
 import net.minecraft.entity.LivingEntity
@@ -405,20 +406,12 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
 
     private fun attack(entity: Entity?, repeat: Int) {
-        val original = mc.crosshairTarget
-        if (entity != null) {
-            mc.crosshairTarget = EntityHitResult(entity)
+        for (i in 0 until repeat) {
             if (!attackCooldown.value) {
-                mc.attackCooldown = 0
+                MinecraftClient.getInstance().attackCooldown = 0
             }
-        } else {
-            mc.crosshairTarget = object : HitResult(null) {
-                override fun getType() = Type.MISS
-            }
+            PlayerUtil.attack(entity)
         }
-        for (i in 0 until repeat)
-            mc.doAttack()
-        mc.crosshairTarget = original
     }
 
     private fun getAimPoint(box: Box, entity: LivingEntity): Vec3d {

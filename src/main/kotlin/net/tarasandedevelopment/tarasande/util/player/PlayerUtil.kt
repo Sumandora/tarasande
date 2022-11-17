@@ -12,6 +12,7 @@ import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.BlockHitResult
+import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
@@ -231,5 +232,18 @@ object PlayerUtil {
         } else {
             MinecraftClient.getInstance().setScreen(MultiplayerScreen(title))
         }
+    }
+
+    fun attack(entity: Entity?) {
+        val original = MinecraftClient.getInstance().crosshairTarget
+        if (entity != null) {
+            MinecraftClient.getInstance().crosshairTarget = EntityHitResult(entity)
+        } else {
+            MinecraftClient.getInstance().crosshairTarget = object : HitResult(null) {
+                override fun getType() = Type.MISS
+            }
+        }
+        MinecraftClient.getInstance().doAttack()
+        MinecraftClient.getInstance().crosshairTarget = original
     }
 }
