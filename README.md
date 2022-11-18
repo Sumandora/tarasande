@@ -50,7 +50,6 @@
 - Anti vanish: Tab completion
 - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
 - Protocol Hack: Entity Dimensions
-- Freecam: Overwrite Raycast; ManagerInformation variable; Baritone #come inject
 - ManagerAccount Instantiation
 
 ## TODO-List (Flori | Tarasande)
