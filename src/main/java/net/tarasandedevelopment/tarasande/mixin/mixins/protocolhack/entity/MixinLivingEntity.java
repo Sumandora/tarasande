@@ -147,4 +147,11 @@ public abstract class MixinLivingEntity extends Entity {
         }
         return height;
     }
+
+    @ModifyConstant(method = "isBlocking", constant = @Constant(intValue = 5))
+    public int shieldBlockCounter(int constant) {
+        if(VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
+            return 0;
+        return constant;
+    }
 }
