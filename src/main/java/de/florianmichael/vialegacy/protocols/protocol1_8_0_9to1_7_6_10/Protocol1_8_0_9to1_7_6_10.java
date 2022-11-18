@@ -1060,6 +1060,10 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                         y -= 16;
                     }
 
+                    if (type == Entity1_10Types.ObjectType.MINECART.getId()) {
+                        y -= 11.2;
+                    }
+
                     int throwerId = packetWrapper.passthrough(Type.INT);
 
                     if (throwerId > 0) {
