@@ -107,14 +107,23 @@ public class Protocol1_4_0_2to1_3_1_2 extends EnZaProtocol<ClientboundPackets1_3
 
 				handler((pw) -> {
 					final int type = pw.get(Type.BYTE, 0);
+					int itemId = 0;
 
 					if (type == 51) {
-						final PacketWrapper equip = PacketWrapper.create(ClientboundPackets1_3_1_2.ENTITY_EQUIPMENT, pw.user());
+						itemId = 261; // Bow
+					}
+					if (type == 57) {
+						itemId = 283; // Golden Sword
+					}
 
-						equip.write(Type.INT, pw.get(Type.INT, 0));
-						equip.write(Type.SHORT, (short) 0);
-						equip.write(Types1_7_6_10.COMPRESSED_NBT_ITEM, new DataItem(261, (byte) 1, (short) 0, null));
-						equip.send(Protocol1_4_0_2to1_3_1_2.class);
+					if (itemId > 0) {
+						final PacketWrapper entityEquipment = PacketWrapper.create(ClientboundPackets1_3_1_2.ENTITY_EQUIPMENT, pw.user());
+
+						entityEquipment.write(Type.INT, pw.get(Type.INT, 0));
+						entityEquipment.write(Type.SHORT, (short) 0);
+						entityEquipment.write(Types1_7_6_10.COMPRESSED_NBT_ITEM, new DataItem(itemId, (byte) 1, (short) 0, null));
+
+						entityEquipment.send(Protocol1_4_0_2to1_3_1_2.class);
 					}
 				});
 			}
@@ -168,6 +177,18 @@ public class Protocol1_4_0_2to1_3_1_2 extends EnZaProtocol<ClientboundPackets1_3
 						}
 					}
 				});
+			}
+		});
+
+		this.registerClientbound(ClientboundPackets1_3_1_2.EFFECT, new PacketRemapper() {
+			@Override
+			public void registerMap() {
+				map(Type.INT); // Effect ID
+				map(Type.INT); // X
+				map(Type.UNSIGNED_BYTE); // Y
+				map(Type.INT); // Z
+				map(Type.INT); // data
+				handler(wrapper -> wrapper.write(Type.BOOLEAN, false)); // Disable Relative Volume
 			}
 		});
 
