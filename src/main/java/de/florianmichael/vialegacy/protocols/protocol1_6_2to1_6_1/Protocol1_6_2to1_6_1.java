@@ -11,6 +11,26 @@
  * cancelled by copying or removing the license and in case of violation a criminal consequence is to be expected.
  * The owner "Florian Michael" is free to change this license.
  */
+/**
+ * --FLORIAN MICHAEL PRIVATE LICENCE v1.2--
+ *
+ * This file / project is protected and is the intellectual property of Florian Michael (aka. EnZaXD),
+ * any use (be it private or public, be it copying or using for own use, be it publishing or modifying) of this
+ * file / project is prohibited. It requires in that use a written permission with official signature of the owner
+ * "Florian Michael". "Florian Michael" receives the right to control and manage this file / project. This right is not
+ * cancelled by copying or removing the license and in case of violation a criminal consequence is to be expected.
+ * The owner "Florian Michael" is free to change this license. The creator assumes no responsibility for any infringements
+ * that have arisen, are arising or will arise from this project / file. If this licence is used anywhere,
+ * the latest version published by the author Florian Michael (aka EnZaXD) always applies automatically.
+ *
+ * Changelog:
+ *     v1.0:
+ *         Added License
+ *     v1.1:
+ *         Ownership withdrawn
+ *     v1.2:
+ *         Version-independent validity and automatic renewal
+ */
 
 package de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1;
 
@@ -20,14 +40,14 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
-import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ClientboundLoginPackets1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_8to1_7_10.type.TypeRegistry1_7_6_10;
-import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.TypeRegistry_1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.ClientboundLoginPackets1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.TypeRegistry_1_6_4;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_6_3to1_6_2.ClientboundPackets1_6_2;
 import de.florianmichael.vialegacy.protocols.protocol1_6_3to1_6_2.ServerboundPackets1_6_2;
-import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.model.EntityAttributeModifier;
-import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.model.EntityProperty;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.model.EntityAttributeModifier;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.model.EntityProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +111,7 @@ public class Protocol1_6_2to1_6_1 extends EnZaProtocol<ClientboundPackets1_6_1, 
 					int z = wrapper.passthrough(Type.INT);
 
 					final int direction = wrapper.passthrough(Type.UNSIGNED_BYTE);
-					final Item item = wrapper.passthrough(TypeRegistry1_7_6_10.COMPRESSED_NBT_ITEM);
+					final Item item = wrapper.passthrough(Types1_7_6_10.COMPRESSED_NBT_ITEM);
 
 					if (item == null) {
 						return;

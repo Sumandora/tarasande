@@ -50,7 +50,7 @@ public abstract class MixinMinecraftClient {
             slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;interactEntity(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;")),
             at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ActionResult;isAccepted()Z", ordinal = 0))
     private boolean preventGenericInteract(ActionResult instance) {
-        if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.R1_7_10))
+        if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.r1_7_6_10))
             return true;
         return instance.isAccepted();
     }
