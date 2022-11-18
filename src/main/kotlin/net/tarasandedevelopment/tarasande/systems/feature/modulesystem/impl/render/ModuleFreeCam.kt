@@ -6,15 +6,18 @@ import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.option.Perspective
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
+import net.tarasandedevelopment.tarasande.util.string.StringUtil
 
 class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around freely", ModuleCategory.RENDER) {
 
@@ -34,6 +37,25 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
     private var map = HashMap<KeyBinding, Boolean>()
 
     private val input = KeyboardInput(mc.options)
+
+    init {
+        TarasandeMain.managerInformation().add(object : Information("Free cam", "Camera position") {
+            private val decimalPlacesX = ValueNumber(this, "Decimal places: x", 0.0, 1.0, 5.0, 1.0)
+            private val decimalPlacesY = ValueNumber(this, "Decimal places: y", 0.0, 1.0, 5.0, 1.0)
+            private val decimalPlacesZ = ValueNumber(this, "Decimal places: z", 0.0, 1.0, 5.0, 1.0)
+
+            override fun getMessage(): String? {
+                if(!enabled)
+                    return null
+
+                return position?.let {
+                    StringUtil.round(it.x, decimalPlacesX.value.toInt()) + " " +
+                            StringUtil.round(it.y, decimalPlacesY.value.toInt()) + " " +
+                            StringUtil.round(it.z, decimalPlacesZ.value.toInt())
+                }
+            }
+        })
+    }
 
     override fun onEnable() {
         if (mc.player != null) {

@@ -52,7 +52,6 @@
 - Protocol Hack: Entity Dimensions
 - Freecam: Overwrite Raycast; ManagerInformation variable; Baritone #come inject
 - ManagerAccount Instantiation
-- Textfield selection in ValueComponent is rendered at 0;0
 
 ## TODO-List (Flori | Tarasande)
 #### Additions
