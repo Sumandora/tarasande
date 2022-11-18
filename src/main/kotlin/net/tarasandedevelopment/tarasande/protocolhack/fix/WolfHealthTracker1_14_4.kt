@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.protocolhack.fixes
+package net.tarasandedevelopment.tarasande.protocolhack.fix
 
 object WolfHealthTracker1_14_4 {
 

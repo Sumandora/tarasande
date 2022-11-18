@@ -27,8 +27,8 @@ import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IFontStorage_Protocol
 import net.tarasandedevelopment.tarasande.protocolhack.command.TarasandeCommandHandler
-import net.tarasandedevelopment.tarasande.protocolhack.fixes.EntityDimensionReplacement
-import net.tarasandedevelopment.tarasande.protocolhack.fixes.PackFormats
+import net.tarasandedevelopment.tarasande.protocolhack.fix.EntityDimensionReplacement
+import net.tarasandedevelopment.tarasande.protocolhack.fix.PackFormats
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ValueBooleanProtocol
 import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureProtocolHack

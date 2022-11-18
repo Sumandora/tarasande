@@ -1,11 +1,13 @@
 package net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.combat
 
 import net.minecraft.entity.projectile.FireballEntity
+import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
@@ -28,11 +30,17 @@ class ModuleAntiFireball : Module("Anti fireball", "Hits fireballs to turn them"
         registerEvent(EventPollEvents::class.java) { event ->
             for(entity in mc.world?.entities?.filterIsInstance<FireballEntity>() ?: return@registerEvent) {
                 val aimPoint = MathUtil.getBestAimPoint(entity.boundingBox.expand(entity.targetingMargin.toDouble()))
-                if(aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.value)
+                if(aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.value * reach.value)
+                    continue
+                if((Vec3d(entity.prevX, entity.prevY, entity.prevZ) - mc.player?.eyePos!!).horizontalLengthSquared() <= (entity.pos - mc.player?.eyePos!!).horizontalLengthSquared())
                     continue
 
-                targets.add(entity)
+                if(!targets.contains(entity)) {
+                    targets.add(entity)
+                }
                 event.rotation = RotationUtil.getRotations(aimPoint).correctSensitivity()
+                event.minRotateToOriginSpeed = 1.0
+                event.maxRotateToOriginSpeed = 1.0
             }
         }
         registerEvent(EventAttack::class.java, 999) { event ->

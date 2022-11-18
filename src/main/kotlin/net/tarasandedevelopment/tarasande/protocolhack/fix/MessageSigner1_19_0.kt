@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.protocolhack.fixes
+package net.tarasandedevelopment.tarasande.protocolhack.fix
 
 import net.minecraft.network.encryption.Signer
 import net.minecraft.network.message.MessageMetadata

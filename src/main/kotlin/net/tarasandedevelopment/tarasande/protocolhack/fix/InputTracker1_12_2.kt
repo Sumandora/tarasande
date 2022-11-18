@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.protocolhack.fixes
+package net.tarasandedevelopment.tarasande.protocolhack.fix
 
 import java.util.concurrent.ConcurrentLinkedDeque
 

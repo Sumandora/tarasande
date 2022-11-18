@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.protocolhack.fixes
+package net.tarasandedevelopment.tarasande.protocolhack.fix
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import net.minecraft.entity.EntityDimensions

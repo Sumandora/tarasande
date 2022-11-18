@@ -172,7 +172,7 @@
     "protocolhack.item.MixinPickaxeItem",
     "protocolhack.item.MixinShovelItem",
     "protocolhack.item.MixinSwordItem",
-    "protocolhack.packets.MixinUpdatePlayerAbilitiesC2SPacket",
+    "protocolhack.packet.MixinUpdatePlayerAbilitiesC2SPacket",
     "protocolhack.screen.MixinChatScreen",
     "protocolhack.screen.MixinCommandBlockScreen",
     "protocolhack.screen.MixinConnectScreenSubRun",

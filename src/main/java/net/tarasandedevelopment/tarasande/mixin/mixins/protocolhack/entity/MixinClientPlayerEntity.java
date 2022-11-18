@@ -18,7 +18,7 @@ import net.minecraft.util.math.Vec3d;
 import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventSkipIdlePacket;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
-import net.tarasandedevelopment.tarasande.protocolhack.fixes.ArmorUpdater1_8_0;
+import net.tarasandedevelopment.tarasande.protocolhack.fix.ArmorUpdater1_8_0;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

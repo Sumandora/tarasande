@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.entity;
 
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
-import net.tarasandedevelopment.tarasande.protocolhack.fixes.EntityDimensionReplacement;
+import net.tarasandedevelopment.tarasande.protocolhack.fix.EntityDimensionReplacement;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

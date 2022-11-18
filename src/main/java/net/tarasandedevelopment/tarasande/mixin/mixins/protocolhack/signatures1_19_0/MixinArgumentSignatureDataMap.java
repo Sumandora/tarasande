@@ -8,7 +8,7 @@ import net.minecraft.network.message.ArgumentSignatureDataMap;
 import net.minecraft.network.message.MessageMetadata;
 import net.minecraft.network.message.MessageSignatureData;
 import net.minecraft.text.Text;
-import net.tarasandedevelopment.tarasande.protocolhack.fixes.MessageSigner1_19_0;
+import net.tarasandedevelopment.tarasande.protocolhack.fix.MessageSigner1_19_0;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

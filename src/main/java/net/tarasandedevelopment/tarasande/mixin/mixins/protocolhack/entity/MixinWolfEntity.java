@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.entity;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.entity.passive.WolfEntity;
-import net.tarasandedevelopment.tarasande.protocolhack.fixes.WolfHealthTracker1_14_4;
+import net.tarasandedevelopment.tarasande.protocolhack.fix.WolfHealthTracker1_14_4;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

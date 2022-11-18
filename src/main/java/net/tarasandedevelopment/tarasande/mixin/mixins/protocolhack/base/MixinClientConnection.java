@@ -8,7 +8,7 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.text.Text;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol;
-import net.tarasandedevelopment.tarasande.protocolhack.fixes.WolfHealthTracker1_14_4;
+import net.tarasandedevelopment.tarasande.protocolhack.fix.WolfHealthTracker1_14_4;
 import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.FabricPreNettyProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
