@@ -143,7 +143,7 @@ public class Chunk1_7_6_10Type extends PartialType<Chunk, ClientWorld> {
 
         for (int i = 0; i < storageArrays.length; ++i) {
             if (storageArrays[i] != null && (primaryBitMask & 1 << i) != 0 && (!groundUp || storageArrays[i].isEmpty())) {
-                byte[]  blockIds = storageArrays[i].getBlockLSBArray();
+                byte[] blockIds = storageArrays[i].getBlockLSBArray();
                 NibbleArray nibblearray = storageArrays[i].getMetadataArray();
 
                 for (int ind = 0; ind < blockIds.length; ++ind) {

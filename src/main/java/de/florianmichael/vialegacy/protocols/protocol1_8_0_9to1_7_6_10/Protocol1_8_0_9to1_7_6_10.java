@@ -1053,16 +1053,11 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                     byte yaw = packetWrapper.passthrough(Type.BYTE);
                     packetWrapper.passthrough(Type.BYTE); // Pitch
 
-                    if (type == Entity1_10Types.ObjectType.ITEM.getId()) {
-                        y -= 4;
-                    }
-                    if (type == Entity1_10Types.ObjectType.TNT_PRIMED.getId()) {
-                        y -= 16;
-                    }
-
-                    if (type == Entity1_10Types.ObjectType.MINECART.getId()) {
-                        y -= 11.2;
-                    }
+                    if (type == Entity1_10Types.ObjectType.ITEM.getId() || type == Entity1_10Types.ObjectType.THROWN_EXP_BOTTLE.getId()) y -= 4;
+                    if (type == Entity1_10Types.ObjectType.TNT_PRIMED.getId()) y -= 16;
+                    if (type == Entity1_10Types.ObjectType.MINECART.getId()) y -= 11.2;
+                    if (type == Entity1_10Types.ObjectType.BOAT.getId()) y -= 4.8;
+                    if (type == Entity1_10Types.ObjectType.AREA_EFFECT_CLOUD.getId()) y -= 1.6;
 
                     int throwerId = packetWrapper.passthrough(Type.INT);
 
