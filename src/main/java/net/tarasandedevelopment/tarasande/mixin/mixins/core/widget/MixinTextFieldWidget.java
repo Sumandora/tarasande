@@ -48,4 +48,9 @@ public class MixinTextFieldWidget implements ITextFieldWidget {
     public void tarasande_setColor(Color color) {
         this.tarasande_color = color;
     }
+
+    @Override
+    public Color tarasande_getColor() {
+        return tarasande_color;
+    }
 }

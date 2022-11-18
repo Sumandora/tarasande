@@ -20,17 +20,17 @@ class ElementPlayer(val gameProfile: GameProfile, width: Double) : ElementWidth(
             TarasandeMain.friends().setAlias(gameProfile, value.ifEmpty { null })
         }
     }
-    val textField = ElementValueComponentText(value, 1.0f)
+    val textField = ElementValueComponentText(value, 1.0f, false)
 
     private val defaultHeight = FontWrapper.fontHeight() * 1.5 + 2.0
     private var friendTime = 0L
 
-    private val xOffset = 4.0
-    private val yOffset = this.defaultHeight / 2.0 - FontWrapper.fontHeight() / 2.0 + 1.0
+    private val xOffset = 4
+    private val yOffset = (this.defaultHeight / 2.0 - FontWrapper.fontHeight() / 2.0 + 1.0).toInt()
 
     init {
-        textField.textFieldWidget.x = xOffset.toInt()
-        textField.textFieldWidget.y = yOffset.toInt()
+        textField.textFieldWidget.x = xOffset
+        textField.textFieldWidget.y = yOffset
     }
 
     override fun init() {
@@ -45,8 +45,6 @@ class ElementPlayer(val gameProfile: GameProfile, width: Double) : ElementWidth(
             val accessor = textField.textFieldWidget as ITextFieldWidget
             accessor.tarasande_setColor(Color.white)
             matrices?.push()
-            // Minecraft sets the y for the text down by (this.height - 8) / 2 (i have no clue where my calculation here comes from; bruh)
-            matrices?.translate(0.0, -(textField.textFieldWidget.height / 2.0) - 1.25, 0.0)
             textField.render(matrices, mouseX, mouseY, delta)
             matrices?.pop()
             accessor.tarasande_setColor(null)

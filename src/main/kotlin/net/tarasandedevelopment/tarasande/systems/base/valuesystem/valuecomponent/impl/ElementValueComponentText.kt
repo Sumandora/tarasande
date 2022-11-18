@@ -17,9 +17,11 @@ import java.awt.Color
 class ElementValueComponentText(value: Value) : ElementValueComponent(value) {
 
     var scale = 0.5F
+    var centered = false
 
-    constructor(value: Value, scale: Float): this(value) {
+    constructor(value: Value, scale: Float, centered: Boolean = true): this(value) {
         this.scale = scale
+        this.centered = centered
     }
 
     //TODO
@@ -41,17 +43,21 @@ class ElementValueComponentText(value: Value) : ElementValueComponent(value) {
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         textFieldWidget.width = (width * 2 * scale).toInt()
-        if (textFieldWidget.isFocused)
+        if (textFieldWidget.isFocused && value.isEnabled())
             (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.clientValues().accentColor.getColor())
         else
             textFieldWidget.setCursorToEnd()
 
-        if (!value.isEnabled())
+        if (!value.isEnabled()) {
             (textFieldWidget as ITextFieldWidget).tarasande_setColor(Color.white.darker().darker())
+            textFieldWidget.setTextFieldFocused(false)
+        }
 
         matrices?.push()
+        if(centered)
+            // scary multiplication
+            matrices?.translate(0.0, getHeight() * scale * scale * 0.5, 0.0)
         matrices?.scale(scale, scale, 1.0F)
-        matrices?.translate(0.0, getHeight() * 0.5 - textFieldWidget.height * scale * 0.5, 0.0)
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
         matrices?.pop()
         (textFieldWidget as ITextFieldWidget).tarasande_setColor(null)
@@ -59,11 +65,10 @@ class ElementValueComponentText(value: Value) : ElementValueComponent(value) {
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (button != 0) return false
-        if (value.isEnabled() && RenderUtil.isHovered(mouseX, mouseY, 1.0, 1.0, width * scale, getHeight())) { // hacky fix for size hacks
-            textFieldWidget.mouseClicked(width * 2, getHeight() / 2.0F, button)
+        if (value.isEnabled() && RenderUtil.isHovered(mouseX, mouseY, 0.0, 0.0, width, getHeight())) { // hacky fix for size hacks
+            textFieldWidget.setTextFieldFocused(true)
         } else {
-            textFieldWidget.mouseClicked(-1.0, -1.0, button)
-            textFieldWidget.setCursorToEnd()
+            textFieldWidget.setTextFieldFocused(false)
         }
         return false
     }
@@ -76,7 +81,6 @@ class ElementValueComponentText(value: Value) : ElementValueComponent(value) {
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         if (textFieldWidget.isFocused && (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)) {
             textFieldWidget.setTextFieldFocused(false)
-            textFieldWidget.setCursorToEnd()
             return true
         } else
             textFieldWidget.keyPressed(keyCode, scanCode, modifiers)
@@ -92,12 +96,11 @@ class ElementValueComponentText(value: Value) : ElementValueComponent(value) {
 
     override fun onClose() {
         textFieldWidget.setTextFieldFocused(false)
-        textFieldWidget.setCursorToEnd()
     }
 
     fun isFocused() = textFieldWidget.isFocused
 
     fun setFocused(focused: Boolean) = textFieldWidget.setTextFieldFocused(focused)
 
-    override fun getHeight() = FontWrapper.fontHeight().toDouble() * scale
+    override fun getHeight() = FontWrapper.fontHeight().toDouble() * (scale + 0.5)
 }
