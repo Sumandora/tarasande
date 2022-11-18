@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.base;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.viaprotocolhack.event.PipelineReorderEvent;
+import de.florianmichael.viaprotocolhack.util.VersionList;
 import io.netty.channel.Channel;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.text.Text;
@@ -42,7 +43,7 @@ public class MixinClientConnection implements IClientConnection_Protocol {
 
     @Inject(method = "setupEncryption", at = @At("HEAD"), cancellable = true)
     public void injectSetupEncryption(Cipher decryptionCipher, Cipher encryptionCipher, CallbackInfo ci) {
-        if (LegacyProtocolVersion.PRE_NETTY_VERSIONS.stream().anyMatch(p -> p.getVersion() == TarasandeMain.Companion.get().getProtocolHack().getClientsideVersion())) {
+        if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.r1_6_4)) {
             FabricPreNettyProvider.Companion.setDecryptionKey(decryptionCipher);
             FabricPreNettyProvider.Companion.setEncryptionKey(encryptionCipher);
 

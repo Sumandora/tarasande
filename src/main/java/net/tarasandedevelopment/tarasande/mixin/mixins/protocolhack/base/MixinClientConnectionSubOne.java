@@ -8,6 +8,7 @@ import de.florianmichael.vialegacy.protocols.base.BaseProtocol1_6;
 import de.florianmichael.viaprotocolhack.netty.CustomViaDecodeHandler;
 import de.florianmichael.viaprotocolhack.netty.CustomViaEncodeHandler;
 import de.florianmichael.viaprotocolhack.netty.NettyConstants;
+import de.florianmichael.viaprotocolhack.util.VersionList;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import net.minecraft.network.ClientConnection;
@@ -35,7 +36,7 @@ public class MixinClientConnectionSubOne {
             ((IClientConnection_Protocol) field_11663).protocolhack_setViaConnection(user);
             new ProtocolPipelineImpl(user);
 
-            if (LegacyProtocolVersion.PRE_NETTY_VERSIONS.stream().anyMatch(p -> p.getVersion() == TarasandeMain.Companion.get().getProtocolHack().getClientsideVersion())) {
+            if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.r1_6_4)) {
                 user.getProtocolInfo().getPipeline().add(BaseProtocol1_6.INSTANCE);
             }
 

@@ -46,7 +46,7 @@ def libs = [
 		"com.viaversion:viabackwards-common:4.5.0-22w46a-SNAPSHOT",
 		"org.yaml:snakeyaml:1.29",
 
-		"com.github.RejectedVia:ViaProtocolHack:8e4931b209"
+		"com.github.RejectedVia:ViaProtocolHack:2f45bc9149"
 ]
 
 loom {
