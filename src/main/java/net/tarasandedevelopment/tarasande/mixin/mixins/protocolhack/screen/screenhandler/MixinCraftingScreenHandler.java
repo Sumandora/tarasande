@@ -35,7 +35,7 @@ public abstract class MixinCraftingScreenHandler extends AbstractRecipeScreenHan
 
     @Inject(method = "onContentChanged", at = @At("HEAD"))
     public void emulateCrafting(Inventory inventory, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.R1_6_4)) {
+        if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.r1_6_4)) {
             ItemStack itemStack = ItemStack.EMPTY;
             final Optional<CraftingRecipe> optional = MinecraftClient.getInstance().getNetworkHandler().getRecipeManager().getFirstMatch(RecipeType.CRAFTING, this.input, MinecraftClient.getInstance().world);
             if (optional.isPresent()) {

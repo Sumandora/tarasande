@@ -11,6 +11,26 @@
  * cancelled by copying or removing the license and in case of violation a criminal consequence is to be expected.
  * The owner "Florian Michael" is free to change this license.
  */
+/**
+ * --FLORIAN MICHAEL PRIVATE LICENCE v1.2--
+ *
+ * This file / project is protected and is the intellectual property of Florian Michael (aka. EnZaXD),
+ * any use (be it private or public, be it copying or using for own use, be it publishing or modifying) of this
+ * file / project is prohibited. It requires in that use a written permission with official signature of the owner
+ * "Florian Michael". "Florian Michael" receives the right to control and manage this file / project. This right is not
+ * cancelled by copying or removing the license and in case of violation a criminal consequence is to be expected.
+ * The owner "Florian Michael" is free to change this license. The creator assumes no responsibility for any infringements
+ * that have arisen, are arising or will arise from this project / file. If this licence is used anywhere,
+ * the latest version published by the author Florian Michael (aka EnZaXD) always applies automatically.
+ *
+ * Changelog:
+ *     v1.0:
+ *         Added License
+ *     v1.1:
+ *         Ownership withdrawn
+ *     v1.2:
+ *         Version-independent validity and automatic renewal
+ */
 
 package de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2;
 
@@ -24,15 +44,15 @@ import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.api.metadata.LegacyMetadataRewriter;
 import de.florianmichael.vialegacy.api.sound.SoundRewriter;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
-import de.florianmichael.vialegacy.protocols.protocol1_4_5to1_4_3_pre.type.TypeRegistry_1_4_2;
+import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.TypeRegistry_1_4_2;
 import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.metadata.MetadataRewriter1_6_1to1_5_2;
 import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.sound.SoundRewriter1_6_1to1_5_2;
 import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.storage.EntityTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.storage.VehicleTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.ClientboundPackets1_6_1;
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.ServerboundPackets1_6_1;
-import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.ClientboundLoginPackets1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_5to1_6_4.type.TypeRegistry_1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.ClientboundLoginPackets1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.TypeRegistry_1_6_4;
 
 import java.util.List;
 
@@ -101,21 +121,21 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 
 						final PacketWrapper interactEntity = PacketWrapper.create(ServerboundPackets1_6_1.INTERACT_ENTITY, wrapper.user());
 
-						interactEntity.write(Type.INT, wrapper.user().get(EntityTracker.class).ownEntityId);
-						interactEntity.write(Type.INT, cachedId);
+						interactEntity.write(Type.UNSIGNED_BYTE, (short) wrapper.user().get(EntityTracker.class).ownEntityId);
+						interactEntity.write(Type.UNSIGNED_BYTE, (short) cachedId);
 						interactEntity.write(Type.BYTE, (byte) 0);
 
-						interactEntity.send(Protocol1_6_1to1_5_2.class);
+						interactEntity.sendToServer(Protocol1_6_1to1_5_2.class);
 					}
 
-					if (unmount) {
-						final PacketWrapper entityAction = PacketWrapper.create(ServerboundPackets1_6_1.ENTITY_ACTION, wrapper.user());
-
-						entityAction.write(Type.INT, wrapper.user().get(EntityTracker.class).ownEntityId);
-						entityAction.write(Type.BYTE, (byte) 5); // sneak
-
-						entityAction.sendToServer(Protocol1_6_1to1_5_2.class);
-					}
+//					if (unmount) {
+//						final PacketWrapper entityAction = PacketWrapper.create(ServerboundPackets1_6_1.ENTITY_ACTION, wrapper.user());
+//
+//						entityAction.write(Type.INT, wrapper.user().get(EntityTracker.class).ownEntityId);
+//						entityAction.write(Type.BYTE, (byte) 5); // sneak
+//
+//						entityAction.sendToServer(Protocol1_6_1to1_5_2.class);
+//					}
 				});
 			}
 		});
