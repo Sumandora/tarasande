@@ -19,6 +19,7 @@ class FileCheatMenu(private val panelSystem: ManagerPanel) : File("CheatMenu") {
             jsonArray2.add(panel.panelWidth)
             jsonArray2.add(panel.panelHeight)
             jsonArray2.add(panel.opened)
+            jsonArray2.add(panelSystem.list.indexOf(panel))
             jsonObject.add(panel.title, jsonArray2)
         }
         return jsonObject
@@ -41,6 +42,8 @@ class FileCheatMenu(private val panelSystem: ManagerPanel) : File("CheatMenu") {
                     panel.panelHeight = min(panel.panelHeight, panel.maxHeight)
 
                 panel.opened = jsonArray2.get(4).asBoolean
+
+                panelSystem.reorderPanels(panel, jsonArray2.get(5).asInt)
             }
         }
     }

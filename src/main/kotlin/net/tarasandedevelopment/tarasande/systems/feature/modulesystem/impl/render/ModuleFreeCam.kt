@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.mixin.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
@@ -24,6 +25,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
     private val speed = ValueNumber(this, "Speed", 0.1, 1.0, 5.0, 0.1)
     private val lockRotation = ValueBoolean(this, "Lock rotation", true)
     private val keepMovement = ValueBoolean(this, "Keep movement", false)
+    private val blockInteraction = ValueBoolean(this, "Block interaction", false)
 
     private var position: Vec3d? = null
     private var beginRotation: Rotation? = null
@@ -37,6 +39,8 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
     private var map = HashMap<KeyBinding, Boolean>()
 
     private val input = KeyboardInput(mc.options)
+
+    private val capturedKeys = arrayOf(mc.options.jumpKey, mc.options.sneakKey, mc.options.sprintKey)
 
     init {
         TarasandeMain.managerInformation().add(object : Information("Free cam", "Camera position") {
@@ -65,7 +69,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
             perspective = mc.options.perspective
             firstRealInput = PlayerUtil.input.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
             firstInput = mc.player?.input?.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
-            for (keyBinding in mc.options.allKeys.filter { !PlayerUtil.movementKeys.contains(it) })
+            for (keyBinding in mc.options.allKeys.filter { capturedKeys.contains(it) })
                 map[keyBinding] = keyBinding.pressed
         }
     }
@@ -152,8 +156,17 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
         registerEvent(EventKeyBindingIsPressed::class.java, 1) { event ->
             if (map.isEmpty())
                 onEnable()
-            if (!PlayerUtil.movementKeys.contains(event.keyBinding))
+            if (capturedKeys.contains(event.keyBinding))
                 event.pressed = keepMovement.value && map[event.keyBinding] ?: false
+        }
+
+        registerEvent(EventUpdateTargetedEntity::class.java, 1) { event ->
+            if(event.state == EventUpdateTargetedEntity.State.POST)
+                if(position != null && rotation != null)
+                    if(blockInteraction.value) {
+                        mc.targetedEntity = null
+                        mc.crosshairTarget = PlayerUtil.rayCast(position!!, position!!.add(rotation?.forwardVector((mc.gameRenderer as IGameRenderer).tarasande_getReach())))
+                    }
         }
     }
 }
