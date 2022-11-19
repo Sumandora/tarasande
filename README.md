@@ -194,7 +194,6 @@
 ## TODO-List (Together <3 | ViaLegacy)
 
 - Unknown: Mining Fast Checks
-- 1.6.4: Crafting Table CraftResult was clientside back in the time
 - 1.7: OnGround State from Clientbound Position Packet to Serverbound
 - 1.7.5 (?): Bed flag
 - 1.6.4 (?): Ender pearl
