@@ -3,13 +3,13 @@ package net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecompone
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBind
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
-class ElementValueComponentBind(value: Value) : ElementValueComponent(value) {
+class ElementWidthValueComponentBind(value: Value) : ElementWidthValueComponent(value) {
 
     private var waitsForInput = false
 

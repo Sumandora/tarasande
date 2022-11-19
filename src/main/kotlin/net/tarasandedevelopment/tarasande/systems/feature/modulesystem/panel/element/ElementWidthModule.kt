@@ -6,7 +6,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3f
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil.isHovered
@@ -16,14 +16,14 @@ import org.lwjgl.opengl.GL11
 import java.awt.Color
 import kotlin.math.min
 
-class ElementModule(private val module: Module, width: Double) : ElementWidth(width) {
+class ElementWidthModule(private val module: Module, width: Double) : ElementWidth(width) {
 
     private val defaultHeight = FontWrapper.fontHeight() * 1.5 + 2.0
     private var toggleTime = 0L
     private var expansionTime = 0L
     private var expanded = false
 
-    val components = ArrayList<ElementValueComponent>()
+    val components = ArrayList<ElementWidthValueComponent>()
 
     override fun init() {
         if (components.isEmpty()) {
@@ -31,7 +31,7 @@ class ElementModule(private val module: Module, width: Double) : ElementWidth(wi
                 components.add(value.createValueComponent())
             }
         }
-        components.forEach(ElementValueComponent::init)
+        components.forEach(ElementWidthValueComponent::init)
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {

@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.mixin.accessor.ITextFieldWidget
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueRegistry
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
@@ -16,7 +16,7 @@ import org.lwjgl.glfw.GLFW
 import java.awt.Color
 import java.util.concurrent.CopyOnWriteArrayList
 
-class ElementValueComponentRegistry(value: Value) : ElementValueComponent(value) {
+class ElementWidthValueComponentRegistry(value: Value) : ElementWidthValueComponent(value) {
     //TODO
     private val textFieldWidget = TextFieldWidgetPlaceholder(MinecraftClient.getInstance().textRenderer, 0, 0, 40 * 2, FontWrapper.fontHeight() * 2 - 1, Text.of("Search"))
 

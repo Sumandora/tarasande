@@ -11,7 +11,7 @@ import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.MultiplayerFeatureExploitsForgeFaker
+import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.MultiplayerFeatureToggleableExploitsForgeFaker
 import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.forgefaker.ForgeCreator
 import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.forgefaker.IForgeNetClientHandler
 import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.forgefaker.payload.legacy.ModStruct
@@ -38,7 +38,7 @@ class Fml1NetClientHandler(val connection: ClientConnection) : IForgeNetClientHa
         this.sendCustomPayload("minecraft:register", newPacket)
         this.sendClientHello(version)
 
-        val forgeFakerElement = TarasandeMain.managerMultiplayerFeature().get(MultiplayerFeatureExploitsForgeFaker::class.java)
+        val forgeFakerElement = TarasandeMain.managerMultiplayerFeature().get(MultiplayerFeatureToggleableExploitsForgeFaker::class.java)
         if (forgeFakerElement.useFML1Cache.value) {
             forgeFakerElement.forgeInfoTracker[this.connection.address]?.also {
                 this.sendModList(it.installedMods())

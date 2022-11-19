@@ -4,12 +4,12 @@ import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueButton
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import java.awt.Color
 
-class ElementValueComponentButton(value: Value) : ElementValueComponent(value) {
+class ElementWidthValueComponentButton(value: Value) : ElementWidthValueComponent(value) {
 
     override fun init() {
     }

@@ -7,7 +7,7 @@ import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.file.impl.FileValuesBinds
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.file.impl.FileValuesNonBinds
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import su.mandora.event.EventDispatcher
 
 class ManagerValue(fileSystem: ManagerFile) : Manager<Value>() {
@@ -27,7 +27,7 @@ class ManagerValue(fileSystem: ManagerFile) : Manager<Value>() {
     }
 }
 
-abstract class Value(var owner: Any, var name: String, private val valueComponent: Class<out ElementValueComponent>, manage: Boolean = true) {
+abstract class Value(var owner: Any, var name: String, private val valueComponent: Class<out ElementWidthValueComponent>, manage: Boolean = true) {
 
     init {
         if (manage)

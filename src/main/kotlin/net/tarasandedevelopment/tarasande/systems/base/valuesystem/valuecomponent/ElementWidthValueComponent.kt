@@ -3,4 +3,4 @@ package net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecompone
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.util.render.helper.element.ElementWidth
 
-abstract class ElementValueComponent(val value: Value) : ElementWidth(0.0)
+abstract class ElementWidthValueComponent(val value: Value) : ElementWidth(0.0)

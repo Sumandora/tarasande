@@ -3,9 +3,9 @@ package net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl
 import com.google.gson.JsonElement
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementValueComponentMode
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentMode
 
-open class ValueMode(owner: Any, name: String, private var multiSelection: Boolean, vararg val settings: String, manage: Boolean = true) : Value(owner, name, ElementValueComponentMode::class.java, manage) {
+open class ValueMode(owner: Any, name: String, private var multiSelection: Boolean, vararg val settings: String, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentMode::class.java, manage) {
     var selected = ArrayList<String>()
 
     init {

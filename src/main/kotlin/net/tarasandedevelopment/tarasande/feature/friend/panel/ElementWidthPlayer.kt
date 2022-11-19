@@ -6,21 +6,21 @@ import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.mixin.accessor.ITextFieldWidget
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueText
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementValueComponentText
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentText
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.render.helper.element.ElementWidth
 import java.awt.Color
 import kotlin.math.min
 
-class ElementPlayer(val gameProfile: GameProfile, width: Double) : ElementWidth(width) {
+class ElementWidthPlayer(val gameProfile: GameProfile, width: Double) : ElementWidth(width) {
 
     private val value = object : ValueText(this, gameProfile.name, "", manage = false) {
         override fun onChange() {
             TarasandeMain.friends().setAlias(gameProfile, value.ifEmpty { null })
         }
     }
-    val textField = ElementValueComponentText(value, 1.0f, false)
+    val textField = ElementWidthValueComponentText(value, 1.0f, false)
 
     private val defaultHeight = FontWrapper.fontHeight() * 1.5 + 2.0
     private var friendTime = 0L

@@ -4,11 +4,11 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementValueComponentRegistry
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentRegistry
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import java.util.concurrent.CopyOnWriteArrayList
 
-abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: Registry<T>, vararg keys: T, manage: Boolean = true) : Value(owner, name, ElementValueComponentRegistry::class.java, manage) {
+abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: Registry<T>, vararg keys: T, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentRegistry::class.java, manage) {
 
     var list = CopyOnWriteArrayList<T>()
 

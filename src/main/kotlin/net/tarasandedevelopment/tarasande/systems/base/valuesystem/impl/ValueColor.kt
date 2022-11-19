@@ -4,11 +4,11 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementValueComponentColor
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentColor
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import java.awt.Color
 
-open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var bri: Float, var alpha: Float? = null, manage: Boolean = true) : Value(owner, name, ElementValueComponentColor::class.java, manage) {
+open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var bri: Float, var alpha: Float? = null, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentColor::class.java, manage) {
     var hue: Float = hue
         get() {
             return if (rainbow) {

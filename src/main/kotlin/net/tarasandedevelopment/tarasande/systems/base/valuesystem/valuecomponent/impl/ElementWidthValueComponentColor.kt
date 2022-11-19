@@ -8,7 +8,7 @@ import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueColor
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
@@ -21,7 +21,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 
-class ElementValueComponentColor(value: Value) : ElementValueComponent(value) {
+class ElementWidthValueComponentColor(value: Value) : ElementWidthValueComponent(value) {
 
     private val wheelDragInfo = DragInfo()
     private val rectDragInfo = DragInfo()

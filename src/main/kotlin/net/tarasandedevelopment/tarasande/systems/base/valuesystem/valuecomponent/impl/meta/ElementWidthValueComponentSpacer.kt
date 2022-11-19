@@ -3,12 +3,12 @@ package net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecompone
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueSpacer
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import kotlin.math.floor
 
-class ElementValueComponentSpacer(value: Value) : ElementValueComponent(value) {
+class ElementWidthValueComponentSpacer(value: Value) : ElementWidthValueComponent(value) {
 
     private val lines = ArrayList<String>()
 

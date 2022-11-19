@@ -31,13 +31,13 @@ import net.tarasandedevelopment.tarasande.protocolhack.fix.EntityDimensionReplac
 import net.tarasandedevelopment.tarasande.protocolhack.fix.PackFormats
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ValueBooleanProtocol
-import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureProtocolHack
 import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureProtocolHackSettings
+import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureSelectionProtocolHack
+import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.FabricOldAuthProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.FabricPreNettyProvider
 import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricVersionProvider
-import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.FabricOldAuthProvider
-import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.FabricPreNettyProvider
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
 import su.mandora.event.EventDispatcher
@@ -64,7 +64,7 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
                 update(ProtocolVersion.getProtocol(version.value.toInt()))
                 // Protocol Hack
                 TarasandeMain.managerMultiplayerFeature().apply {
-                    insert(MultiplayerFeatureProtocolHack(), 0)
+                    insert(MultiplayerFeatureSelectionProtocolHack(), 0)
                     insert(MultiplayerFeatureProtocolHackSettings(), 1)
                 }
             }
@@ -72,7 +72,7 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
 
         TarasandeMain.managerInformation().apply {
             add(object : Information("Via Version", "Protocol Version") {
-                override fun getMessage() = VersionList.getProtocols().firstOrNull { it.version == ViaProtocolHack.instance().provider().clientsideVersion }?.name
+                override fun getMessage() = VersionList.PROTOCOLS.firstOrNull { it.version == ViaProtocolHack.instance().provider().clientsideVersion }?.name
             })
 
             add(object : Information("Via Version", "Via Pipeline") {

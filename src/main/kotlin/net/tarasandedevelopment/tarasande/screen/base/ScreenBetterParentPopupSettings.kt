@@ -3,11 +3,9 @@ package net.tarasandedevelopment.tarasande.screen.base
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.PanelElements
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.ScreenCheatMenu
@@ -24,7 +22,7 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
 
     override fun init() {
         super.init()
-        this.addDrawableChild(ClickableWidgetPanel(object : PanelElements<ElementValueComponent>(this.titleName, 300.0, 0.0) {
+        this.addDrawableChild(ClickableWidgetPanel(object : PanelElements<ElementWidthValueComponent>(this.titleName, 300.0, 0.0) {
 
             init {
                 for (it in TarasandeMain.managerValue().getValues(owner))

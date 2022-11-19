@@ -11,10 +11,10 @@ import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.feature.friend.panel.PanelElementsFriends
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementValueComponentRegistry
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementValueComponentText
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementValueComponentTextList
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentRegistry
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentText
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentTextList
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.panel.element.PanelElementsCategory
@@ -59,10 +59,10 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         }
     }
 
-    private fun isFocused(valueComponent: ElementValueComponent): Boolean = when (valueComponent) {
-        is ElementValueComponentText -> valueComponent.isFocused()
-        is ElementValueComponentRegistry -> valueComponent.isFocused()
-        is ElementValueComponentTextList -> valueComponent.isFocused()
+    private fun isFocused(valueComponent: ElementWidthValueComponent): Boolean = when (valueComponent) {
+        is ElementWidthValueComponentText -> valueComponent.isFocused()
+        is ElementWidthValueComponentRegistry -> valueComponent.isFocused()
+        is ElementWidthValueComponentTextList -> valueComponent.isFocused()
         else -> false
     }
 

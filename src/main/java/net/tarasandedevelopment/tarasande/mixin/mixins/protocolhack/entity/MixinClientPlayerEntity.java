@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.protocolhack.entity;
 
 import com.mojang.authlib.GameProfile;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
@@ -15,10 +14,10 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventSkipIdlePacket;
 import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientPlayerEntity_Protocol;
 import net.tarasandedevelopment.tarasande.protocolhack.fix.ArmorUpdater1_8_0;
+import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,6 +29,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import su.mandora.event.EventDispatcher;
 
 @Mixin(value = ClientPlayerEntity.class, priority = 2000)
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IClientPlayerEntity_Protocol {
@@ -95,7 +95,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
                 this.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(this.getX(), this.getY(), this.getZ(), this.onGround));
             } else if (bl4) {
                 this.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(this.getYaw(), this.getPitch(), this.onGround));
-            } else if (this.lastOnGround != this.onGround || (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8) && VersionList.isNewerTo(LegacyProtocolVersion.r1_3_1_2))) {
+            } else if (this.lastOnGround != this.onGround || ProtocolHackValues.INSTANCE.getSendIdlePacket().getValue()) {
                 this.networkHandler.sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(this.onGround));
             } else {
                 EventDispatcher.INSTANCE.call(new EventSkipIdlePacket());

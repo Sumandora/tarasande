@@ -8,7 +8,7 @@ import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
@@ -19,7 +19,7 @@ import java.math.BigDecimal
 import java.math.MathContext
 import kotlin.math.roundToInt
 
-class ElementValueComponentNumber(value: Value) : ElementValueComponent(value) {
+class ElementWidthValueComponentNumber(value: Value) : ElementWidthValueComponent(value) {
 
     private val dragInfo = DragInfo()
 

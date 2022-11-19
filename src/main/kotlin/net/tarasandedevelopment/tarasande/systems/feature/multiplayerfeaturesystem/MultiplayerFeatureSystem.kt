@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueSpacer
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanelSidebar
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.PanelElements
@@ -20,16 +20,16 @@ import java.awt.Color
 
 class ManagerMultiplayerFeature : Manager<MultiplayerFeature>() {
 
-    private val panelElementsMultiplayerFeature = PanelElements<ElementValueComponent>("Sidebar", 120.0, 0.0)
+    private val panelElementsMultiplayerFeature = PanelElements<ElementWidthValueComponent>("Sidebar", 120.0, 0.0)
 
     init {
         this.add(
             // Exploits
-            MultiplayerFeatureExploitsBungeeHack(),
-            MultiplayerFeatureExploitsForgeFaker(),
-            MultiplayerFeatureExploitsHAProxyHack(),
-            MultiplayerFeatureExploitsQuiltFaker(),
-            MultiplayerFeatureExploitsClientBrandSpoofer()
+            MultiplayerFeatureToggleableExploitsBungeeHack(),
+            MultiplayerFeatureToggleableExploitsForgeFaker(),
+            MultiplayerFeatureToggleableExploitsHAProxyHack(),
+            MultiplayerFeatureToggleableExploitsQuiltFaker(),
+            MultiplayerFeatureToggleableExploitsClientBrandSpoofer()
         )
 
         list.filterIsInstance<MultiplayerFeatureToggleable>().forEach {
@@ -78,7 +78,7 @@ open class MultiplayerFeature(val name: String, val category: String) {
     open fun onClick(mouseButton: Int) {
     }
 
-    open fun createElements(): List<ElementValueComponent> {
+    open fun createElements(): List<ElementWidthValueComponent> {
         return listOf(object : ValueSpacer(this, name, 1.0F) {
             override fun onChange(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
@@ -95,7 +95,7 @@ open class MultiplayerFeatureSelection(name: String, category: String, val list:
     open fun onClick(newValue: String) {
     }
 
-    override fun createElements(): List<ElementValueComponent> {
+    override fun createElements(): List<ElementWidthValueComponent> {
         return list.map {
             object : ValueSpacer(this, it, 1.0F) {
                 override fun onChange(mouseButton: Int) {
@@ -123,7 +123,7 @@ open class MultiplayerFeatureToggleable(name: String, category: String) : Multip
     open fun onClick(state: Boolean) {
     }
 
-    override fun createElements(): List<ElementValueComponent> {
+    override fun createElements(): List<ElementWidthValueComponent> {
         return listOf(object : ValueSpacer(this, name, 1.0F) {
             override fun onChange(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {

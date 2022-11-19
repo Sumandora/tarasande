@@ -2,11 +2,13 @@ package net.tarasandedevelopment.tarasande.protocolhack.platform
 
 import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
+import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.protocolhack.util.ProtocolRange
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.util.extension.andOlder
+import net.tarasandedevelopment.tarasande.util.extension.rangeTo
 
 object ProtocolHackValues {
 
@@ -39,6 +41,7 @@ object ProtocolHackValues {
 
     // 1.9 -> 1.8.x
     val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", ProtocolVersion.v1_8.andOlder())
+    val sendIdlePacket = ValueBooleanProtocol("Send idle packet", ProtocolVersion.v1_8..LegacyProtocolVersion.r1_3_1_2)
 }
 
 open class ValueBooleanProtocol(name: String, vararg val version: ProtocolRange) : ValueBoolean(ProtocolHackValues, "$name (" + version.joinToString(", ") { it.toString() } + ")", false)

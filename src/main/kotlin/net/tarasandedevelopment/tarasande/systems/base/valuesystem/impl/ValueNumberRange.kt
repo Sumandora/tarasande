@@ -3,9 +3,9 @@ package net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementValueComponentNumberRange
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentNumberRange
 
-open class ValueNumberRange(owner: Any, name: String, val min: Double, var minValue: Double, var maxValue: Double, val max: Double, val increment: Double, manage: Boolean = true) : Value(owner, name, ElementValueComponentNumberRange::class.java,  manage) {
+open class ValueNumberRange(owner: Any, name: String, val min: Double, var minValue: Double, var maxValue: Double, val max: Double, val increment: Double, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentNumberRange::class.java,  manage) {
 
     override fun save(): JsonElement {
         val jsonArray = JsonArray()

@@ -4,13 +4,13 @@ import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementValueComponent
+import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import java.awt.Color
 import kotlin.math.min
 
-class ElementValueComponentBoolean(value: Value) : ElementValueComponent(value) {
+class ElementWidthValueComponentBoolean(value: Value) : ElementWidthValueComponent(value) {
 
     private var toggleTime = 0L
 
