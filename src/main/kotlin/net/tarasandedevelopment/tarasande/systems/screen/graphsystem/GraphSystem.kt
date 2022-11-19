@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.systems.screen.graphsystem
 
 import net.tarasandedevelopment.tarasande.Manager
+import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.information.InformationGraphValue
@@ -28,13 +29,17 @@ class ManagerGraph(informationSystem: ManagerInformation, panelSystem: ManagerPa
             GraphRX()
         )
 
-        informationSystem.add(*list.map { e -> InformationGraphValue(e) }.toTypedArray())
-        panelSystem.add(*list.map { e -> PanelGraph(e) }.toTypedArray())
+        EventDispatcher.apply {
+            add(EventSuccessfulLoad::class.java) {
+                informationSystem.add(*list.map { e -> InformationGraphValue(e) }.toTypedArray())
+                panelSystem.add(*list.map { e -> PanelGraph(e) }.toTypedArray())
+            }
 
-        EventDispatcher.add(EventTick::class.java) {
-            if (it.state == EventTick.State.PRE)
-                for (graph in list)
-                    graph.lastData = graph.supplyData()
+            add(EventTick::class.java) {
+                if (it.state == EventTick.State.PRE)
+                    for (graph in list)
+                        graph.lastData = graph.supplyData()
+            }
         }
     }
 }
@@ -44,5 +49,5 @@ abstract class Graph(val name: String, val bufferLength: Int) {
 
     abstract fun supplyData(): Number?
 
-    open fun formatHud(): String? = lastData.toString()
+    open fun formatHud(): String? = lastData?.toString()
 }

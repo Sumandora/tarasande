@@ -55,6 +55,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val clickSpeedUtil = ClickSpeedUtil(this, { true }) // for setting order
     private val waitForDamageValue = ValueBoolean(this, "Wait for damage", false)
     private val rayTrace = ValueBoolean(this, "Ray trace", false)
+    private val dontAttackInvalidRaytraceEntities = ValueBoolean(this, "Don't attack invalid raytrace entities", false)
     private val simulateMouseDelay = object : ValueBoolean(this, "Simulate mouse delay", false) {
         override fun isEnabled() = rayTrace.value && !mode.isSelected(1)
     }
@@ -328,6 +329,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                                 continue
                             } else {
                                 target = hitResult.entity
+                                if(!PlayerUtil.isAttackable(target) && dontAttackInvalidRaytraceEntities.value)
+                                    continue
                             }
                         }
                     } else if (distance > reach.minValue * reach.minValue) {
@@ -349,8 +352,10 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     attacked = true
                 }
                 if (!attacked && swingInAir.value) {
-                    attack(null, clicks)
-                    event.dirty = true
+                    if(PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.fakeRotation ?: Rotation(mc.player!!), false)?.type == HitResult.Type.MISS) {
+                        attack(null, clicks)
+                        event.dirty = true
+                    }
                 }
                 if (mc.player?.pos != imaginaryPosition) {
                     TarasandeMain.managerModule().get(ModuleClickTP::class.java).pathFinder.findPath(imaginaryPosition, mc.player?.pos!!, maxTeleportTime)?.forEach {

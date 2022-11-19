@@ -5,8 +5,13 @@ import net.minecraft.network.ClientConnection
 import net.minecraft.network.NetworkState
 import net.minecraft.network.Packet
 import net.minecraft.network.listener.ClientPlayPacketListener
-import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket
+import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket
+import net.minecraft.network.packet.c2s.play.PlayPongC2SPacket
+import net.minecraft.network.packet.s2c.play.KeepAliveS2CPacket
+import net.minecraft.network.packet.s2c.play.PlayPingS2CPacket
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.event.EventTick
@@ -16,9 +21,11 @@ import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMod
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.Graph
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import org.lwjgl.glfw.GLFW
+import su.mandora.event.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
 
 class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
@@ -38,6 +45,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     private val cancelKey = object : ValueBind(this, "Cancel key", Type.KEY, GLFW.GLFW_KEY_UNKNOWN) {
         override fun isEnabled() = mode.isSelected(0) && affectedPackets.isSelected(0)
     }
+    private val deltaTickSimulation = ValueMode(this, "Delta tick simulation", true, "Keep alive", "Ping")
 
     private val packets = CopyOnWriteArrayList<Triple<Packet<*>, EventPacket.Type, Long>>()
     private val timeUtil = TimeUtil()
@@ -45,6 +53,27 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     private var pos: Vec3d? = null
     private var velocity: Vec3d? = null
     private var rotation: Rotation? = null
+
+    init {
+        TarasandeMain.managerGraph().add(object : Graph("Delta tick", 50) {
+
+            var lastTransaction: Int? = null
+
+            init {
+                EventDispatcher.apply {
+                    add(EventPacket::class.java) { event ->
+                        if(event.type == EventPacket.Type.RECEIVE && event.packet is PlayPingS2CPacket)
+                            lastTransaction = event.packet.parameter
+                    }
+                    add(EventDisconnect::class.java) {
+                        lastTransaction = null
+                    }
+                }
+            }
+
+            override fun supplyData() = lastTransaction
+        })
+    }
 
     override fun onEnable() {
         pos = mc.player?.pos
@@ -56,18 +85,18 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         registerEvent(EventPacket::class.java, 9999) { event ->
             if (event.cancelled) return@registerEvent
             if (event.packet != null) {
-                if (mc.networkHandler?.connection == null || mc.networkHandler?.connection?.channel?.attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY)?.get() != NetworkState.PLAY ||
-                    (event.type == EventPacket.Type.RECEIVE && event.packet is DisconnectS2CPacket) ||
-                    (!mode.isSelected(1) && mc.currentScreen is DownloadingTerrainScreen)
-                ) {
-                    this.switchState()
+                if (mc.networkHandler?.connection?.channel?.attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY)?.get() != NetworkState.PLAY) {
                     return@registerEvent
                 }
                 if (mode.isSelected(1) && mc.currentScreen is DownloadingTerrainScreen) {
                     onDisable()
-                    return@registerEvent
                 }
                 if (affectedPackets.isSelected(event.type.ordinal)) {
+                    if(deltaTickSimulation.anySelected() &&
+                        deltaTickSimulation.isSelected(0) && event.packet !is KeepAliveC2SPacket && event.packet !is KeepAliveS2CPacket &&
+                        deltaTickSimulation.isSelected(1) && event.packet !is PlayPongC2SPacket && event.packet !is PlayPingS2CPacket) {
+                        return@registerEvent
+                    }
                     packets.add(Triple(event.packet, event.type,
                         if (mode.isSelected(2))
                             System.currentTimeMillis() + latency.value.toLong()
