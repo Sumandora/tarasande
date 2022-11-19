@@ -1519,12 +1519,12 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
     }
 
     @Override
-    public @Nullable ItemRewriter getItemRewriter() {
+    public @Nullable ItemRewriter<Protocol1_8_0_9to1_7_6_10> getItemRewriter() {
         return this.itemRewriter;
     }
 
     @Override
-    public LegacyMetadataRewriter metadataRewriter() {
+    public LegacyMetadataRewriter<Protocol1_8_0_9to1_7_6_10> metadataRewriter() {
         return this.metadataRewriter;
     }
 

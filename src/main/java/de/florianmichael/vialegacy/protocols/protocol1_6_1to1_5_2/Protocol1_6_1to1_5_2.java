@@ -109,33 +109,23 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 			public void registerMap() {
 				map(Type.FLOAT); // Sideways
 				map(Type.FLOAT); // Forwards
+				map(Type.BOOLEAN); // Jump
 				handler(wrapper -> {
 					final VehicleTracker vehicleTracker = wrapper.user().get(VehicleTracker.class);
 					final boolean dismount = wrapper.read(Type.BOOLEAN);
-					final boolean unmount = wrapper.read(Type.BOOLEAN);
 					wrapper.cancel();
 
-					if (dismount && vehicleTracker.vehicleId != 999) {
-						final int cachedId = vehicleTracker.vehicleId;
+					if (dismount && vehicleTracker.vehicleId != -999) {
+						final int cached = vehicleTracker.vehicleId;
 						vehicleTracker.vehicleId = -999;
-
 						final PacketWrapper interactEntity = PacketWrapper.create(ServerboundPackets1_6_1.INTERACT_ENTITY, wrapper.user());
 
-						interactEntity.write(Type.UNSIGNED_BYTE, (short) wrapper.user().get(EntityTracker.class).ownEntityId);
-						interactEntity.write(Type.UNSIGNED_BYTE, (short) cachedId);
+						interactEntity.write(Type.INT, wrapper.user().get(EntityTracker.class).ownEntityId);
+						interactEntity.write(Type.INT, cached);
 						interactEntity.write(Type.BYTE, (byte) 0);
 
 						interactEntity.sendToServer(Protocol1_6_1to1_5_2.class);
 					}
-
-//					if (unmount) {
-//						final PacketWrapper entityAction = PacketWrapper.create(ServerboundPackets1_6_1.ENTITY_ACTION, wrapper.user());
-//
-//						entityAction.write(Type.INT, wrapper.user().get(EntityTracker.class).ownEntityId);
-//						entityAction.write(Type.BYTE, (byte) 5); // sneak
-//
-//						entityAction.sendToServer(Protocol1_6_1to1_5_2.class);
-//					}
 				});
 			}
 		});
@@ -317,6 +307,8 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 
 					if (vehicleId != 1) {
 						vehicleTracker.vehicleId = vehicleId;
+					} else {
+						vehicleTracker.vehicleId = -999;
 					}
 				});
 			}
