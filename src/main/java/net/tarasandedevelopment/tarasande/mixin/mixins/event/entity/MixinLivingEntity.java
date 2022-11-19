@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import net.tarasandedevelopment.tarasande.event.EventEntityHurt;
 import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventJump;
 import net.tarasandedevelopment.tarasande.event.EventSwing;
@@ -57,5 +58,15 @@ public abstract class MixinLivingEntity extends Entity {
             if (eventSwing.getCancelled())
                 ci.cancel();
         }
+    }
+
+    @Inject(method = "handleStatus", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
+    public void hookEventEntityHurtDamage(byte status, CallbackInfo ci) {
+        EventDispatcher.INSTANCE.call(new EventEntityHurt(this, false));
+    }
+
+    @Inject(method = "handleStatus", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setHealth(F)V"))
+    public void hookEventEntityHurtDeath(byte status, CallbackInfo ci) {
+        EventDispatcher.INSTANCE.call(new EventEntityHurt(this, true));
     }
 }

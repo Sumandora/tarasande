@@ -69,3 +69,4 @@ class EventCollisionShape(val pos: BlockPos, var collisionShape: VoxelShape) : E
 class EventBoundingBoxOverride(val entity: Entity, var boundingBox: Box) : Event(false)
 class EventChat(val chatMessage: String) : Event(true)
 class EventSwing(var hand: Hand) : Event(true)
+class EventEntityHurt(val entity: Entity, val death: Boolean) : Event(false)

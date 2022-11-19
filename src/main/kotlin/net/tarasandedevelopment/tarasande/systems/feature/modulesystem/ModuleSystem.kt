@@ -126,7 +126,8 @@ class ManagerModule(panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manage
             ModuleNoStatusEffect(),
             ModuleAllowAllCharacters(),
             ModuleAntiCactus(),
-            ModuleAntiFireball()
+            ModuleAntiFireball(),
+            ModuleTroubleInTerrioristTown()
         )
 
         panelSystem.add(PanelArrayList(this@ManagerModule))

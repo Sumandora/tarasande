@@ -41,7 +41,6 @@
 4. Multi-version support
 
 ## TODO-List (Emily | Tarasande)
-- Trouble in terrorist town module
 - User configs
 - Crystal Aura
 - Change Name/Skin/Cape in Account Manager

@@ -15,6 +15,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
 import java.awt.Color
+import java.util.concurrent.CopyOnWriteArrayList
 
 class Notification(val text: String, val length: Long) {
 
@@ -27,7 +28,7 @@ class PanelNotifications : Panel("Notifications", 100.0, FontWrapper.fontHeight(
     private var alert = false
 
     companion object {
-        val notifications = ArrayList<Notification>()
+        val notifications = CopyOnWriteArrayList<Notification>()
 
         fun notify(text: String) {
             val notificationPanel = TarasandeMain.managerPanel().get(PanelNotifications::class.java)
@@ -73,6 +74,8 @@ class PanelNotifications : Panel("Notifications", 100.0, FontWrapper.fontHeight(
         alert = false
         var index = 0.0
         notifications.forEach {
+            if(!animations.containsKey(it))
+                return
             val animation = animations[it]!!
             if (animation > 0.0) {
                 val color = TarasandeMain.clientValues().accentColor.getColor().withAlpha((animation * 255).toInt())
