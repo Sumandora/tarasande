@@ -4,7 +4,6 @@ import com.google.common.collect.Lists
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.gui.screen.ingame.LecternScreen
 import net.minecraft.item.ItemStack
@@ -13,18 +12,18 @@ import net.minecraft.screen.slot.SlotActionType
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ScreenExtension
 import net.tarasandedevelopment.tarasande.util.extension.andNewer
 
-class ScreenExtensionInventoryCraftingDupe : ScreenExtension("Crafting Dupe", InventoryScreen::class.java, version = ProtocolVersion.v1_17.andNewer()) {
+class ScreenExtensionInventoryCraftingDupe : ScreenExtension<InventoryScreen>("Crafting Dupe", InventoryScreen::class.java, version = ProtocolVersion.v1_17.andNewer()) {
 
-    override fun onClick(current: Screen) {
-        (current as InventoryScreen).screenHandler.getSlot(0).also {
+    override fun onClick(current: InventoryScreen) {
+        current.screenHandler.getSlot(0).also {
             current.onMouseClick(it, it.id, 0, SlotActionType.THROW)
         }
     }
 }
 
-class ScreenExtensionInventoryLecternCrash : ScreenExtension("Lectern Crash", LecternScreen::class.java, version = ProtocolVersion.v1_14.andNewer()) {
+class ScreenExtensionInventoryLecternCrash : ScreenExtension<LecternScreen>("Lectern Crash", LecternScreen::class.java, version = ProtocolVersion.v1_14.andNewer()) {
 
-    override fun onClick(current: Screen) {
+    override fun onClick(current: LecternScreen) {
         val screenHandler = MinecraftClient.getInstance().player!!.currentScreenHandler
 
         val defaultedList = screenHandler.slots

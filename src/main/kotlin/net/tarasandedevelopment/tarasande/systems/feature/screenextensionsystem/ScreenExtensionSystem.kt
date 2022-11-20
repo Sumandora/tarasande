@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.protocolhack.util.ProtocolRange
@@ -10,8 +9,9 @@ import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionAccountManager
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.impl.button.PanelButton
 import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
+import su.mandora.event.EventDispatcher
 
-class ManagerScreenExtension : Manager<ScreenExtension>() {
+class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
 
     init {
         add(
@@ -45,7 +45,7 @@ class ManagerScreenExtension : Manager<ScreenExtension>() {
 
                 list.filter { it.alignment == alignment }.filter { it.screens.any { it.isAssignableFrom(eventChildren.screen.javaClass) } }.forEachIndexed { index, screenExtension ->
                     eventChildren.add(PanelButton.createButton(xPos, 3 + (index * 30), 98, 25, screenExtension.name + (if (screenExtension.version != null) " (" + screenExtension.version + ")" else "")) {
-                        screenExtension.onClick(MinecraftClient.getInstance().currentScreen!!)
+                        screenExtension.invoker(MinecraftClient.getInstance().currentScreen ?: return@createButton)
                     })
                 }
             }
@@ -53,7 +53,11 @@ class ManagerScreenExtension : Manager<ScreenExtension>() {
     }
 }
 
-abstract class ScreenExtension(val name: String, vararg val screens: Class<out Screen>, val version: ProtocolRange? = null, val alignment: Alignment = Alignment.LEFT) {
+abstract class ScreenExtension<T : Screen>(val name: String, vararg val screens: Class<out T>, val version: ProtocolRange? = null, val alignment: Alignment = Alignment.LEFT) {
 
-    abstract fun onClick(current: Screen)
+    abstract fun onClick(current: T)
+
+    // Bypass generics
+    @Suppress("UNCHECKED_CAST")
+    fun invoker(screen: Screen) = onClick(screen as T)
 }
