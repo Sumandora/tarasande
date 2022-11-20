@@ -14,8 +14,6 @@ import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNum
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.minus
-import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
@@ -53,8 +51,8 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
 
     private val selector: (Pair<BlockPos, BlockHitResult>) -> Double? = {
         when {
-            priority.isSelected(0) -> mc.player?.squaredDistanceTo(Vec3d.ofCenter(it.first))?.times(-1)
-            priority.isSelected(1) -> mc.player?.squaredDistanceTo(Vec3d.ofCenter(it.first))
+            priority.isSelected(0) -> mc.player?.eyePos?.squaredDistanceTo(Vec3d.ofCenter(it.first))?.times(-1)
+            priority.isSelected(1) -> mc.player?.eyePos?.squaredDistanceTo(Vec3d.ofCenter(it.first))
             priority.isSelected(2) -> PlayerUtil.getBreakSpeed(it.first).first
             else -> 0.0
         }
@@ -75,10 +73,10 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
             list.clear()
 
             for (x in -rad..rad) for (y in -rad..rad) for (z in -rad..rad) {
-                var blockPos = BlockPos(mc.player?.eyePos).add(x, y, z)
+                val blockPos = BlockPos(mc.player?.eyePos).add(x, y, z)
                 val blockState = mc.world?.getBlockState(blockPos)
 
-                if (blockState?.calcBlockBreakingDelta(mc.player, mc.world, BlockPos.ORIGIN)!! <= 0.0)
+                if (blockState?.calcBlockBreakingDelta(mc.player, mc.world, blockPos)!! <= 0.0)
                     continue
                 if (!(selectionMode.isSelected(0) && includedBlocks.list.contains(blockState.block)) && !(selectionMode.isSelected(1) && !excludedBlocks.list.contains(blockState.block)))
                     continue
@@ -88,32 +86,24 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                 if (collisionShape != null && !collisionShape.isEmpty) {
                     val pos = collisionShape.boundingBox.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble()).center
                     if (pos.squaredDistanceTo(mc.player?.eyePos) <= radius.value * radius.value) {
-                        val blockVec = Vec3d.ofCenter(blockPos)
-                        val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, blockVec + (pos - blockVec))
+                        val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, pos)
                         if (hitResult.type != HitResult.Type.BLOCK)
                             continue
-                        if (!throughWalls.isSelected(1)) {
-                            when {
-                                throughWalls.isSelected(0) -> {
-                                    if (hitResult.blockPos != blockPos)
-                                        continue
-                                }
-
-                                throughWalls.isSelected(2) -> {
-                                    blockPos = hitResult.blockPos
-                                }
-                            }
-                        }
+                        if (throughWalls.isSelected(0) && hitResult.blockPos != blockPos)
+                            continue
                         list.add(Pair(blockPos, hitResult))
                     }
                 }
             }
 
             if (list.isNotEmpty()) {
-                val newList = ArrayList(list.distinct().sortedBy(selector).let { it.subList(0, min(maxDestructions.value.toInt(), it.size)) })
-                list = newList
+                list = ArrayList(list.distinct().sortedBy(selector).let { if(maxDestructions.isEnabled()) it.subList(0, min(maxDestructions.value.toInt(), it.size)) else it })
+                if(throughWalls.isSelected(2))
+                    list = ArrayList(list.map { Pair(it.second.blockPos, it.second) })
 
                 event.rotation = RotationUtil.getRotations(mc.player?.eyePos!!, list[0].second.pos).correctSensitivity()
+                mc.player?.yaw = event.rotation.yaw
+                mc.player?.pitch = event.rotation.pitch
 
                 event.minRotateToOriginSpeed = 1.0
                 event.maxRotateToOriginSpeed = 1.0

@@ -77,11 +77,11 @@ class PanelNotifications : Panel("Notifications", 100.0, FontWrapper.fontHeight(
             if(!animations.containsKey(it))
                 return
             val animation = animations[it]!!
-            if (animation > 0.0) {
+            if (animation > 0.05) { // hack
                 val color = TarasandeMain.clientValues().accentColor.getColor().withAlpha((animation * 255).toInt())
                 RenderSystem.enableBlend()
                 val animatedPosition = easing.ease(animation.toFloat())
-                val formattedTime = StringHelper.formatTicks(((((it.length + 1000) - (System.currentTimeMillis() - it.creationTime)) / 1000) * 20).toInt())
+                val formattedTime = StringHelper.formatTicks(((it.length + 1000 - (System.currentTimeMillis() - it.creationTime)) / 1000 * 20).toInt())
 
                 val text = when {
                     timeAlignment.isSelected(0) -> { Formatting.GRAY.toString() + formattedTime + " " + Formatting.RESET + it.text }
@@ -111,10 +111,12 @@ class PanelNotifications : Panel("Notifications", 100.0, FontWrapper.fontHeight(
                     animation += speedIn.value * RenderUtil.deltaTime
                 }
             }
+            if(animation < 0.0)
+                notifications.remove(notification)
             animations[notification] = MathHelper.clamp(animation, 0.0, 1.0)
         }
 
-        return animations.any { it.value > 0.01 }.also { if (!it) alert = false }
+        return animations.any { it.value > 0.0 }.also { if (!it) alert = false }
     }
 
     override fun renderTitleBar(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
