@@ -138,7 +138,7 @@ class ElementWidthValueComponentRegistry(value: Value) : ElementWidthValueCompon
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double) = false
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (textFieldWidget.isFocused && (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)) {
+        return if (textFieldWidget.isFocused && (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)) {
             if (searchResults.size == 1) {
                 val valueRegistry = value as ValueRegistry<*>
                 valueRegistry.add(searchResults[0])
@@ -148,11 +148,10 @@ class ElementWidthValueComponentRegistry(value: Value) : ElementWidthValueCompon
             }
             textFieldWidget.setTextFieldFocused(false)
             textFieldWidget.setCursorToEnd()
-            return true
+            true
         } else {
             textFieldWidget.keyPressed(keyCode, scanCode, modifiers)
         }
-        return false
     }
 
     override fun charTyped(chr: Char, modifiers: Int) {

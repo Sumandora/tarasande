@@ -79,12 +79,11 @@ class ElementWidthValueComponentText(value: Value) : ElementWidthValueComponent(
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double) = false
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (textFieldWidget.isFocused && (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)) {
+        return if (textFieldWidget.isFocused && (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)) {
             textFieldWidget.setTextFieldFocused(false)
-            return true
+            true
         } else
             textFieldWidget.keyPressed(keyCode, scanCode, modifiers)
-        return false
     }
 
     override fun charTyped(chr: Char, modifiers: Int) {
