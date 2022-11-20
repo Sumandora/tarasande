@@ -42,7 +42,7 @@ class ElementWidthValueComponentText(value: Value) : ElementWidthValueComponent(
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        textFieldWidget.width = (width * 2 * scale).toInt()
+        textFieldWidget.width = (width * (1.0 / scale)).toInt()
         if (textFieldWidget.isFocused && value.isEnabled())
             (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.clientValues().accentColor.getColor())
         else
