@@ -9,6 +9,7 @@ import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponen
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.PanelElements
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.ScreenCheatMenu
+import org.lwjgl.glfw.GLFW
 import java.util.*
 
 class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val owner: Any) : ScreenBetter(parent) {
@@ -71,6 +72,12 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
 
     override fun getFocused(): Element? {
         return clickableWidgetPanel
+    }
+
+    // Ultra 1337 hack because minecraft doesn't send escape key presses through to the widgets, means we have to ask our widgets here
+    override fun close() {
+        if(clickableWidgetPanel?.keyPressed(GLFW.GLFW_KEY_ESCAPE, 0, 0) == false)
+            super.close()
     }
 
 }

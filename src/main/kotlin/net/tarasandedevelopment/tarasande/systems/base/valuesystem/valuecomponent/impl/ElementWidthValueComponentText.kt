@@ -42,7 +42,7 @@ class ElementWidthValueComponentText(value: Value) : ElementWidthValueComponent(
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        textFieldWidget.width = (width * 2 * scale).toInt()
+        textFieldWidget.width = (width * (1.0 / scale)).toInt()
         if (textFieldWidget.isFocused && value.isEnabled())
             (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.clientValues().accentColor.getColor())
         else
@@ -79,12 +79,11 @@ class ElementWidthValueComponentText(value: Value) : ElementWidthValueComponent(
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double) = false
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (textFieldWidget.isFocused && (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)) {
+        return if (textFieldWidget.isFocused && (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)) {
             textFieldWidget.setTextFieldFocused(false)
-            return true
+            true
         } else
             textFieldWidget.keyPressed(keyCode, scanCode, modifiers)
-        return false
     }
 
     override fun charTyped(chr: Char, modifiers: Int) {

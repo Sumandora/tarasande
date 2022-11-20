@@ -18,7 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EntityRenderer.class)
 public class MixinEntityRenderer<T extends Entity> {
 
-    @Inject(method = "shouldRender", at = @At("HEAD"))
+    @SuppressWarnings("CancellableInjectionUsage") // This plugin is garbage
+    @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true)
     public void noRender_shouldRender(T entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Boolean> cir) {
         final ModuleNoRender moduleNoRender = TarasandeMain.Companion.managerModule().get(ModuleNoRender.class);
         if (!moduleNoRender.getEnabled()) return;

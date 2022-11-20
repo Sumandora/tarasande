@@ -16,6 +16,7 @@ import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.Val
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.util.dummy.ClientWorldDummy
 import net.tarasandedevelopment.tarasande.util.extension.Thread
+import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 
 class ClientValues(name: String, panelSystem: ManagerPanel, fileSystem: ManagerFile) {
@@ -31,6 +32,19 @@ class ClientValues(name: String, panelSystem: ManagerPanel, fileSystem: ManagerF
         override fun isEnabled() = autoSaveConfig.value
     }
     val disableTelemetry = ValueBoolean(this, "Disable telemetry", true)
+    init {
+        object : ValueButton(this, "Clear binds") {
+            override fun onChange() {
+                TarasandeMain.managerValue().list.forEach {
+                    if(it is ValueBind && it != TarasandeMain.managerPanel().screenCheatMenu.hotkey)
+                        it.apply {
+                            type = ValueBind.Type.KEY
+                            button = GLFW.GLFW_KEY_UNKNOWN
+                        }
+                }
+            }
+        }
+    }
 
     init {
         object : ValueButton(this, "Cheat menu values") {
