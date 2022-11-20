@@ -9,10 +9,10 @@ import net.minecraft.client.gui.screen.ingame.LecternScreen
 import net.minecraft.item.ItemStack
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket
 import net.minecraft.screen.slot.SlotActionType
-import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ScreenExtension
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ScreenExtensionButton
 import net.tarasandedevelopment.tarasande.util.extension.andNewer
 
-class ScreenExtensionInventoryCraftingDupe : ScreenExtension<InventoryScreen>("Crafting Dupe", InventoryScreen::class.java, version = ProtocolVersion.v1_17.andNewer()) {
+class ScreenExtensionInventoryCraftingDupe : ScreenExtensionButton<InventoryScreen>("Crafting Dupe", InventoryScreen::class.java, version = ProtocolVersion.v1_17.andNewer()) {
 
     override fun onClick(current: InventoryScreen) {
         current.screenHandler.getSlot(0).also {
@@ -21,7 +21,7 @@ class ScreenExtensionInventoryCraftingDupe : ScreenExtension<InventoryScreen>("C
     }
 }
 
-class ScreenExtensionInventoryLecternCrash : ScreenExtension<LecternScreen>("Lectern Crash", LecternScreen::class.java, version = ProtocolVersion.v1_14.andNewer()) {
+class ScreenExtensionInventoryLecternCrash : ScreenExtensionButton<LecternScreen>("Lectern Crash", LecternScreen::class.java, version = ProtocolVersion.v1_14.andNewer()) {
 
     override fun onClick(current: LecternScreen) {
         val screenHandler = MinecraftClient.getInstance().player!!.currentScreenHandler

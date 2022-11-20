@@ -3,9 +3,9 @@ package net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.DeathScreen
 import net.minecraft.client.gui.screen.SleepingChatScreen
-import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ScreenExtension
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ScreenExtensionButton
 
-class ScreenExtensionMinecraftMenusSleepingChat : ScreenExtension<SleepingChatScreen>("Client wakeup", SleepingChatScreen::class.java) {
+class ScreenExtensionMinecraftMenusSleepingChat : ScreenExtensionButton<SleepingChatScreen>("Client wakeup", SleepingChatScreen::class.java) {
 
     override fun onClick(current: SleepingChatScreen) {
         MinecraftClient.getInstance().player?.wakeUp()
@@ -13,7 +13,7 @@ class ScreenExtensionMinecraftMenusSleepingChat : ScreenExtension<SleepingChatSc
     }
 }
 
-class ScreenExtensionMinecraftMenusDeath : ScreenExtension<DeathScreen>("Force respawn", DeathScreen::class.java) {
+class ScreenExtensionMinecraftMenusDeath : ScreenExtensionButton<DeathScreen>("Force respawn", DeathScreen::class.java) {
 
     override fun onClick(current: DeathScreen) {
         MinecraftClient.getInstance().player?.requestRespawn()

@@ -35,6 +35,36 @@ class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
             ScreenExtensionHandledScreensServersideClose()
         )
 
+        list.distinctBy { it.javaClass.superclass }.forEach {
+            it.creator(list.filter { internal -> internal.javaClass.superclass == it.javaClass.superclass })
+        }
+    }
+}
+
+abstract class ScreenExtension<T : Screen>(val name: String, vararg val screens: Class<out T>) {
+
+    abstract fun callback(eventChildren: EventChildren)
+    open fun creator(elements: List<ScreenExtension<*>>) {
+        EventDispatcher.add(EventChildren::class.java) { eventChildren ->
+            elements.forEach {
+                it.callback(eventChildren)
+            }
+        }
+    }
+}
+
+abstract class ScreenExtensionButton<T : Screen>(name: String, vararg screens: Class<out T>, val version: ProtocolRange? = null, private val alignment: Alignment = Alignment.LEFT) : ScreenExtension<T>(name, *screens) {
+
+    abstract fun onClick(current: T)
+
+    // Callback -> onClick
+    override fun callback(eventChildren: EventChildren) {
+        // Bypass generics
+        @Suppress("UNCHECKED_CAST")
+        onClick(eventChildren.screen as T)
+    }
+
+    override fun creator(elements: List<ScreenExtension<*>>) {
         EventDispatcher.add(EventChildren::class.java) { eventChildren ->
             for (alignment in Alignment.values()) {
                 val xPos = when (alignment) {
@@ -43,21 +73,12 @@ class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
                     Alignment.RIGHT -> MinecraftClient.getInstance().window.scaledWidth - 98 - 3
                 }
 
-                list.filter { it.alignment == alignment }.filter { it.screens.any { it.isAssignableFrom(eventChildren.screen.javaClass) } }.forEachIndexed { index, screenExtension ->
+                elements.filterIsInstance<ScreenExtensionButton<*>>().filter { it.alignment == alignment }.filter { it.screens.any { it.isAssignableFrom(eventChildren.screen.javaClass) } }.forEachIndexed { index, screenExtension ->
                     eventChildren.add(PanelButton.createButton(xPos, 3 + (index * 30), 98, 25, screenExtension.name + (if (screenExtension.version != null) " (" + screenExtension.version + ")" else "")) {
-                        screenExtension.invoker(MinecraftClient.getInstance().currentScreen ?: return@createButton)
+                        screenExtension.callback(eventChildren)
                     })
                 }
             }
         }
     }
-}
-
-abstract class ScreenExtension<T : Screen>(val name: String, vararg val screens: Class<out T>, val version: ProtocolRange? = null, val alignment: Alignment = Alignment.LEFT) {
-
-    abstract fun onClick(current: T)
-
-    // Bypass generics
-    @Suppress("UNCHECKED_CAST")
-    fun invoker(screen: Screen) = onClick(screen as T)
 }
