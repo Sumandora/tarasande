@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventChildren
@@ -32,24 +33,41 @@ class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
 
             // Handled Screens
             ScreenExtensionHandledScreensClientsideClose(),
-            ScreenExtensionHandledScreensServersideClose()
+            ScreenExtensionHandledScreensServersideClose(),
+            ScreenExtensionServerPinger()
         )
 
-        list.distinctBy { it.javaClass.superclass }.forEach {
-            it.creator(list.filter { internal -> internal.javaClass.superclass == it.javaClass.superclass })
+        EventDispatcher.add(EventChildren::class.java) { eventChildren ->
+            list.distinctBy { it.javaClass.superclass }.forEach {
+                it.creator(eventChildren.screen, list.filter { internal -> internal.javaClass.superclass == it.javaClass.superclass }).forEach {
+                    eventChildren.add(it)
+                }
+            }
         }
     }
 }
 
 abstract class ScreenExtension<T : Screen>(val name: String, vararg val screens: Class<out T>) {
 
-    abstract fun callback(eventChildren: EventChildren)
-    open fun creator(elements: List<ScreenExtension<*>>) {
-        EventDispatcher.add(EventChildren::class.java) { eventChildren ->
-            elements.forEach {
-                it.callback(eventChildren)
+    abstract fun createElements(screen: Screen) : List<Element>
+    abstract fun creator(screen: Screen, elements: List<ScreenExtension<*>>) : List<Element>
+}
+
+abstract class ScreenExtensionCustom<T : Screen>(name: String, vararg screens: Class<out T>) : ScreenExtension<T>(name, *screens) {
+
+    override fun creator(screen: Screen, elements: List<ScreenExtension<*>>): List<Element> {
+        val widgets = ArrayList<Element>()
+        elements.forEach { element ->
+            element.screens.forEach {
+                println(it.simpleName)
+            }
+            println(screen)
+            println(element.screens.any { it.isAssignableFrom(screen.javaClass) })
+            if (element.screens.any { it.isAssignableFrom(screen.javaClass) }) {
+                widgets.addAll(element.createElements(screen))
             }
         }
+        return widgets
     }
 }
 
@@ -57,28 +75,24 @@ abstract class ScreenExtensionButton<T : Screen>(name: String, vararg screens: C
 
     abstract fun onClick(current: T)
 
-    // Callback -> onClick
-    override fun callback(eventChildren: EventChildren) {
-        // Bypass generics
-        @Suppress("UNCHECKED_CAST")
-        onClick(eventChildren.screen as T)
-    }
+    override fun createElements(screen: Screen) = listOf<Element>()
+    override fun creator(screen: Screen, elements: List<ScreenExtension<*>>): List<Element> {
+        val buttons = ArrayList<Element>()
 
-    override fun creator(elements: List<ScreenExtension<*>>) {
-        EventDispatcher.add(EventChildren::class.java) { eventChildren ->
-            for (alignment in Alignment.values()) {
-                val xPos = when (alignment) {
-                    Alignment.LEFT -> 3
-                    Alignment.MIDDLE -> MinecraftClient.getInstance().window.scaledWidth / 2 - (98 / 2)
-                    Alignment.RIGHT -> MinecraftClient.getInstance().window.scaledWidth - 98 - 3
-                }
+        for (alignment in Alignment.values()) {
+            val xPos = when (alignment) {
+                Alignment.LEFT -> 3
+                Alignment.MIDDLE -> MinecraftClient.getInstance().window.scaledWidth / 2 - (98 / 2)
+                Alignment.RIGHT -> MinecraftClient.getInstance().window.scaledWidth - 98 - 3
+            }
 
-                elements.filterIsInstance<ScreenExtensionButton<*>>().filter { it.alignment == alignment }.filter { it.screens.any { it.isAssignableFrom(eventChildren.screen.javaClass) } }.forEachIndexed { index, screenExtension ->
-                    eventChildren.add(PanelButton.createButton(xPos, 3 + (index * 30), 98, 25, screenExtension.name + (if (screenExtension.version != null) " (" + screenExtension.version + ")" else "")) {
-                        screenExtension.callback(eventChildren)
-                    })
-                }
+            elements.filterIsInstance<ScreenExtensionButton<*>>().filter { it.alignment == alignment }.filter { it.screens.any { it.isAssignableFrom(screen.javaClass) } }.forEachIndexed { index, screenExtension ->
+                buttons.add(PanelButton.createButton(xPos, 3 + (index * 30), 98, 25, screenExtension.name + (if (screenExtension.version != null) " (" + screenExtension.version + ")" else "")) {
+                    screenExtension.onClick(screen as Nothing)
+                })
             }
         }
+
+        return buttons
     }
 }

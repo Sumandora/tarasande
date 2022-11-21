@@ -5,8 +5,10 @@ import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.text.OrderedText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 
 object FontWrapper {
@@ -35,7 +37,7 @@ object FontWrapper {
         text(matrices, text, x, y, color, scale, centered)
     }
 
-    fun text(matrices: MatrixStack?, text: String, x: Float, y: Float, color: Int = -1, scale: Float = 1F, centered: Boolean = false) {
+    fun text(matrices: MatrixStack?, text: OrderedText, x: Float, y: Float, color: Int = -1, scale: Float = 1F, centered: Boolean = false) {
         matrices?.push()
 
         if (scale != 1.0F) {
@@ -49,8 +51,11 @@ object FontWrapper {
         matrices?.pop()
     }
 
-    fun getWidth(text: String) = mcInternal.getWidth(text)
+    fun text(matrices: MatrixStack?, text: String, x: Float, y: Float, color: Int = -1, scale: Float = 1F, centered: Boolean = false) = text(matrices, Text.literal(text).asOrderedText(), x, y, color, scale, centered)
+
+    fun wrapLines(text: Text?, maxWidth: Int) = mcInternal.wrapLines(text, maxWidth)
+    fun getWidth(text: OrderedText) = mcInternal.getWidth(text)
+    fun getWidth(text: String) = getWidth(Text.of(text).asOrderedText())
     fun trimToWidth(text: String, maxWidth: Int): String = mcInternal.trimToWidth(text, maxWidth)
     fun fontHeight() = mcInternal.fontHeight
-
 }
