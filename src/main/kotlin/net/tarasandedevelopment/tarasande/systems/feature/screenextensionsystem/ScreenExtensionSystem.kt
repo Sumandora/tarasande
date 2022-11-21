@@ -70,6 +70,9 @@ abstract class ScreenExtensionButton<T : Screen>(name: String, vararg screens: C
 
     abstract fun onClick(current: T)
 
+    @Suppress("UNCHECKED_CAST") // trashy bypass
+    private fun invoker(screen: Screen) = onClick(screen as T)
+
     override fun createElements(screen: Screen) = listOf<Element>()
     override fun creator(screen: Screen, elements: List<ScreenExtension<*>>): List<Element> {
         val buttons = ArrayList<Element>()
@@ -83,7 +86,7 @@ abstract class ScreenExtensionButton<T : Screen>(name: String, vararg screens: C
 
             elements.filterIsInstance<ScreenExtensionButton<*>>().filter { it.alignment == alignment }.filter { it.screens.any { it.isAssignableFrom(screen.javaClass) } }.forEachIndexed { index, screenExtension ->
                 buttons.add(PanelButton.createButton(xPos, 3 + (index * 30), 98, 25, screenExtension.name + (if (screenExtension.version != null) " (" + screenExtension.version + ")" else "")) {
-                    screenExtension.onClick(screen as Nothing)
+                    screenExtension.invoker(screen)
                 })
             }
         }
