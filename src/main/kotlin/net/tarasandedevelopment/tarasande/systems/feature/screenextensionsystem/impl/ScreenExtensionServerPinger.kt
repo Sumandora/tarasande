@@ -30,8 +30,8 @@ fun getAddress(): String {
         }
     }
     if (!MinecraftClient.getInstance().isInSingleplayer) {
-        (MinecraftClient.getInstance().networkHandler?.connection?.address as InetSocketAddress).also {
-            return it.hostString + ":" + it.port
+        MinecraftClient.getInstance().networkHandler?.connection?.address?.also {
+            return (it as InetSocketAddress).hostString + ":" + it.port
         }
     }
     return ""
@@ -42,17 +42,17 @@ class WidgetServerInformationPinging : WidgetServerInformation() {
     private val pingDelay = ValueNumber(this, "Ping delay", 100.0, 5000.0, 10000.0, 100.0)
 
     private val timer = TimeUtil()
-    private var pingTask: ThreadRunnableExposed? = null
+    private var pinger: MultiplayerServerListPinger? = null
 
     override fun init() {
         if (server == null) {
             getAddress().apply {
                 server = ServerInfo(this, this, false)
-            }
-            server?.apply {
-                ping = -2L
-                label = ScreenTexts.EMPTY
-                playerCountLabel = ScreenTexts.EMPTY
+                server?.apply {
+                    ping = -2L
+                    label = ScreenTexts.EMPTY
+                    playerCountLabel = ScreenTexts.EMPTY
+                }
             }
             timer.time = pingDelay.value.toLong()
         }
@@ -65,12 +65,16 @@ class WidgetServerInformationPinging : WidgetServerInformation() {
                 server?.address = this
             }
             try {
-                pingTask?.apply {
-                    if (isAlive) {
-                        (runnable as RunnablePing).cancel()
-                    }
+                pinger?.apply {
+                    cancel()
                 }
-                ThreadRunnableExposed { RunnablePing(server!!) }.also { pingTask = it }.start()
+                val pinger = MultiplayerServerListPinger()
+                ThreadRunnableExposed {
+                    pinger.add(server) {
+                        // this doesn't work right since Minecraft is to lazy to implement a good saving function
+                    }
+                }.start()
+                this.pinger = pinger
             } catch (e: UnknownHostException) {
                 server?.ping = -1L
                 server?.label = MultiplayerServerListWidget.CANNOT_RESOLVE_TEXT
@@ -80,20 +84,6 @@ class WidgetServerInformationPinging : WidgetServerInformation() {
             }
             recreateIcon(getAddress())
             timer.reset()
-        }
-    }
-
-    inner class RunnablePing(val server: ServerInfo) : Runnable {
-        var pinger = MultiplayerServerListPinger()
-
-        fun cancel() {
-            pinger.cancel()
-        }
-
-        override fun run() {
-            pinger.add(server) {
-                // this doesn't work right since Minecraft is to lazy to implement a good saving function
-            }
         }
     }
 
@@ -108,7 +98,7 @@ class WidgetServerInformationPinging : WidgetServerInformation() {
     }
 }
 
-class ScreenExtensionServerPingerDirectConnect : ScreenExtensionCustom<Screen>("Server Pinger", DirectConnectScreen::class.java) {
+class ScreenExtensionServerPingerDirectConnect : ScreenExtensionCustom<DirectConnectScreen>("Server Pinger", DirectConnectScreen::class.java) {
 
     private val serverPingerWidget = WidgetServerInformationPinging()
 
@@ -125,11 +115,11 @@ class ScreenExtensionServerPingerDirectConnect : ScreenExtensionCustom<Screen>("
 class ScreenExtensionServerPingerGameMenu : ScreenExtensionCustom<Screen>("Server Pinger", GameMenuScreen::class.java) {
 
     private val serverPingerWidget = WidgetServerInformationPinging()
-    private val pingWhenIngame = ValueBoolean(this, "Ping when in game", true)
+    private val pingWhenIngame = ValueBoolean(serverPingerWidget, "Ping when in game", true)
 
     init {
         EventDispatcher.add(EventTick::class.java) {
-            if (pingWhenIngame.value) {
+            if (pingWhenIngame.value && MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().world != null) {
                 serverPingerWidget.ping()
             }
         }
