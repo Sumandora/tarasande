@@ -34,7 +34,10 @@ class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
             // Handled Screens
             ScreenExtensionHandledScreensClientsideClose(),
             ScreenExtensionHandledScreensServersideClose(),
-            ScreenExtensionServerPinger()
+
+            // Server Pinger
+            ScreenExtensionServerPingerDirectConnect(),
+            ScreenExtensionServerPingerGameMenu()
         )
 
         EventDispatcher.add(EventChildren::class.java) { eventChildren ->
