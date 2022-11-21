@@ -17,45 +17,60 @@ import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNum
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ScreenExtensionCustom
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
+import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import su.mandora.event.EventDispatcher
-import java.awt.Color
 import java.net.InetSocketAddress
 import java.net.UnknownHostException
-import java.util.concurrent.CompletableFuture
-import kotlin.math.round
-import kotlin.math.roundToInt
 
-interface AddressProvider {
-    fun get(): String
+fun getAddress(): String {
+    MinecraftClient.getInstance().currentScreen.apply {
+        if (this is DirectConnectScreen && addressField != null) {
+            return addressField.text
+        }
+    }
+    if (!MinecraftClient.getInstance().isInSingleplayer) {
+        (MinecraftClient.getInstance().networkHandler?.connection?.address as InetSocketAddress).also {
+            return it.hostString + ":" + it.port
+        }
+    }
+    return ""
 }
 
-class WidgetServerInformationPinging(private val timer: TimeUtil, private val addressProvider: AddressProvider) : WidgetServerInformation() {
+class WidgetServerInformationPinging : WidgetServerInformation() {
 
     private val pingDelay = ValueNumber(this, "Ping delay", 100.0, 5000.0, 10000.0, 100.0)
 
-    override fun init() {
-        super.init()
+    private val timer = TimeUtil()
+    private var pingTask: ThreadRunnableExposed? = null
 
+    override fun init() {
         if (server == null) {
-            server = ServerInfo(addressProvider.get(), addressProvider.get(), false)
-            server!!.ping = -2L
-            server!!.label = ScreenTexts.EMPTY
-            server!!.playerCountLabel = ScreenTexts.EMPTY
+            getAddress().apply {
+                server = ServerInfo(this, this, false)
+            }
+            server?.apply {
+                ping = -2L
+                label = ScreenTexts.EMPTY
+                playerCountLabel = ScreenTexts.EMPTY
+            }
             timer.time = pingDelay.value.toLong()
         }
     }
 
     fun ping() {
         if (timer.hasReached(pingDelay.value.toLong())) {
-            server?.name = addressProvider.get()
-            server?.address = addressProvider.get()
+            getAddress().apply {
+                server?.name = this
+                server?.address = this
+            }
             try {
-                CompletableFuture.runAsync {
-                    MultiplayerServerListPinger().add(server) {
+                pingTask?.apply {
+                    if (isAlive) {
+                        (runnable as RunnablePing).cancel()
                     }
                 }
+                ThreadRunnableExposed { RunnablePing(server!!) }.also { pingTask = it }.start()
             } catch (e: UnknownHostException) {
                 server?.ping = -1L
                 server?.label = MultiplayerServerListWidget.CANNOT_RESOLVE_TEXT
@@ -63,14 +78,29 @@ class WidgetServerInformationPinging(private val timer: TimeUtil, private val ad
                 server?.ping = -1L
                 server?.label = MultiplayerServerListWidget.CANNOT_CONNECT_TEXT
             }
-            recreateIcon(addressProvider.get())
+            recreateIcon(getAddress())
             timer.reset()
+        }
+    }
+
+    inner class RunnablePing(val server: ServerInfo) : Runnable {
+        var pinger = MultiplayerServerListPinger()
+
+        fun cancel() {
+            pinger.cancel()
+        }
+
+        override fun run() {
+            pinger.add(server) {
+                // this doesn't work right since Minecraft is to lazy to implement a good saving function
+            }
         }
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         ping()
         super.render(matrices, mouseX, mouseY, delta)
+
 
         (((pingDelay.value + 1000) - (System.currentTimeMillis() - timer.time)) / 1000).toInt().toString().also {
             FontWrapper.textShadow(matrices, it, (x + panelWidth - FontWrapper.getWidth(it)).toFloat(), (y).toFloat())
@@ -80,16 +110,7 @@ class WidgetServerInformationPinging(private val timer: TimeUtil, private val ad
 
 class ScreenExtensionServerPingerDirectConnect : ScreenExtensionCustom<Screen>("Server Pinger", DirectConnectScreen::class.java) {
 
-    private val timer = TimeUtil()
-    private val serverPingerWidget = WidgetServerInformationPinging(timer, object : AddressProvider {
-        override fun get(): String {
-            return try {
-                (MinecraftClient.getInstance().currentScreen as DirectConnectScreen).addressField.text
-            } catch (e: Exception) {
-                ""
-            }
-        }
-    })
+    private val serverPingerWidget = WidgetServerInformationPinging()
 
     override fun createElements(screen: Screen): List<Element> {
         serverPingerWidget.x = MinecraftClient.getInstance().currentScreen!!.width / 2 - serverPingerWidget.panelWidth / 2
@@ -103,17 +124,7 @@ class ScreenExtensionServerPingerDirectConnect : ScreenExtensionCustom<Screen>("
 
 class ScreenExtensionServerPingerGameMenu : ScreenExtensionCustom<Screen>("Server Pinger", GameMenuScreen::class.java) {
 
-    private val timer = TimeUtil()
-    private val serverPingerWidget = WidgetServerInformationPinging(timer, object : AddressProvider {
-        override fun get(): String {
-            if (MinecraftClient.getInstance().networkHandler == null) {
-                return ""
-            }
-            (MinecraftClient.getInstance().networkHandler!!.connection.address as InetSocketAddress).also {
-                return it.hostString + ":" + it.port
-            }
-        }
-    })
+    private val serverPingerWidget = WidgetServerInformationPinging()
     private val pingWhenIngame = ValueBoolean(this, "Ping when in game", true)
 
     init {
