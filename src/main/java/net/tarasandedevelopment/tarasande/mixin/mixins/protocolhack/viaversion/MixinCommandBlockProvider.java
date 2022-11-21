@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(CommandBlockProvider.class)
 public class MixinCommandBlockProvider {
 
-    @ModifyConstant(method = "sendPermission", constant = @Constant(intValue = 26))
+    @ModifyConstant(method = "sendPermission", constant = @Constant(intValue = 26), remap = false)
     public int modifyPermissionLevel(int constant) {
         return 28;
     }
