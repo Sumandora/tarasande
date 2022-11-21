@@ -1,8 +1,9 @@
 package net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.forgefaker.handler
 
-import de.florianmichael.packetminecraft.ping.ServerPinger
 import io.netty.buffer.Unpooled
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
+import net.minecraft.client.network.MultiplayerServerListPinger
+import net.minecraft.client.network.ServerInfo
 import net.minecraft.network.ClientConnection
 import net.minecraft.network.Packet
 import net.minecraft.network.PacketByteBuf
@@ -11,6 +12,7 @@ import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.mixin.accessor.forgefaker.IServerInfo
 import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.MultiplayerFeatureToggleableExploitsForgeFaker
 import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.forgefaker.ForgeCreator
 import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.forgefaker.IForgeNetClientHandler
@@ -45,14 +47,15 @@ class Fml1NetClientHandler(val connection: ClientConnection) : IForgeNetClientHa
             }
         } else {
             val address = connection.address as InetSocketAddress
-            ServerPinger.get().ping(address.hostString, address.port, TarasandeMain.instance.protocolHack.clientsideVersion) {
-                val payload = ForgeCreator.createPayload(it.rawData)
-                if (payload == null) {
-                    connection.disconnect(Text.of("[" + TarasandeMain.instance.name + "] Failed to get mods, try to enable FML1 Cache in ForgeFaker"))
-                    return@ping
-                }
-                this.sendModList(payload.installedMods())
+            val serverInfo = ServerInfo(address.hostName + ":" + address.port, address.hostName + ":" + address.port, false)
+            MultiplayerServerListPinger().add(serverInfo) {
             }
+            val payload = (serverInfo as IServerInfo).tarasande_getForgePayload()
+            if (payload == null) {
+                connection.disconnect(Text.of("[" + TarasandeMain.instance.name + "] Failed to get mods, try to enable FML1 Cache in ForgeFaker"))
+                return
+            }
+            this.sendModList(payload.installedMods())
         }
     }
 

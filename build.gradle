@@ -32,9 +32,6 @@ def libs = [
 		// BungeeCord Chat -> https://mvnrepository.com/artifact/net.md-5/bungeecord-chat
 		"net.md-5:bungeecord-chat:1.16-R0.4",
 
-		// Packet Library -> https://github.com/FlorianMichael/PacketMinecraft
-		"com.github.FlorianMichael:PacketMinecraft:main-SNAPSHOT",
-
 		// HAProxy Protocol -> https://mvnrepository.com/artifact/io.netty/netty-codec-haproxy
 		"io.netty:netty-codec-haproxy:4.1.82.Final",
 
