@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.systems.screen.informationsystem.pane
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information

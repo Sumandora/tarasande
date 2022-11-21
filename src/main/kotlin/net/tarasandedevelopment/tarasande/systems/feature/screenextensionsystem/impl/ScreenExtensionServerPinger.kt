@@ -9,7 +9,7 @@ import net.minecraft.client.network.ServerInfo
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.screen.ScreenTexts
 import net.tarasandedevelopment.tarasande.event.EventTick
-import net.tarasandedevelopment.tarasande.screen.widget.serverpinger.WidgetServerInformation
+import net.tarasandedevelopment.tarasande.screen.widget.serverpinger.PanelServerInformation
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ScreenExtensionCustom
@@ -33,11 +33,11 @@ fun getAddress(): String {
     return ""
 }
 
-class WidgetServerInformationPinging : WidgetServerInformation() {
+class PanelServerInformationPinging : PanelServerInformation() {
 
     private val pingDelay = ValueNumber(this, "Ping delay", 100.0, 5000.0, 10000.0, 100.0)
 
-    private val timer = TimeUtil()
+    val timer = TimeUtil()
 
     override fun updateServerInfo() = getAddress().let {
         ServerInfo(it, it, false).apply {
@@ -79,7 +79,7 @@ class WidgetServerInformationPinging : WidgetServerInformation() {
 
 class ScreenExtensionServerPingerDirectConnect : ScreenExtensionCustom<DirectConnectScreen>("Server Pinger", DirectConnectScreen::class.java) {
 
-    private val serverPingerWidget = WidgetServerInformationPinging()
+    private val serverPingerWidget = PanelServerInformationPinging()
 
 
     var lastText: String? = null
@@ -111,13 +111,15 @@ class ScreenExtensionServerPingerDirectConnect : ScreenExtensionCustom<DirectCon
 
 class ScreenExtensionServerPingerGameMenu : ScreenExtensionCustom<Screen>("Server Pinger", GameMenuScreen::class.java) {
 
-    private val serverPingerWidget = WidgetServerInformationPinging()
-    private val pingWhenIngame = ValueBoolean(serverPingerWidget, "Ping when in game", true)
+    private val serverPingerWidget = PanelServerInformationPinging()
+    private val pingWhenInGame: ValueBoolean = ValueBoolean(serverPingerWidget, "Ping when in game", true)
 
     init {
-        EventDispatcher.add(EventTick::class.java) {
-            if (pingWhenIngame.value && MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().world != null) {
-                serverPingerWidget.ping()
+        EventDispatcher.add(EventTick::class.java) { event ->
+            if(event.state == EventTick.State.PRE) {
+                if(!pingWhenInGame.value && MinecraftClient.getInstance().currentScreen !is GameMenuScreen) {
+                    serverPingerWidget.timer.reset()
+                }
             }
         }
     }

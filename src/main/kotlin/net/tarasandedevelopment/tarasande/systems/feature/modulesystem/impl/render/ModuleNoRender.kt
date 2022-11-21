@@ -8,7 +8,7 @@ import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.event.EventChunkOcclusion
 import net.tarasandedevelopment.tarasande.event.EventFog
 import net.tarasandedevelopment.tarasande.event.EventParticle
-import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueRegistry

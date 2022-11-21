@@ -6,7 +6,6 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen
 import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
@@ -15,13 +14,14 @@ import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNum
 import net.tarasandedevelopment.tarasande.systems.screen.blursystem.impl.BlurBox
 import net.tarasandedevelopment.tarasande.systems.screen.blursystem.impl.BlurGaussian
 import net.tarasandedevelopment.tarasande.systems.screen.blursystem.impl.BlurKawase
-import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import net.tarasandedevelopment.tarasande.util.render.shader.Program
 import net.tarasandedevelopment.tarasande.util.render.shader.Shader
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL13
 import org.lwjgl.opengl.GL20
+import su.mandora.event.EventDispatcher
 
 class ManagerBlur : Manager<Blur>() {
 

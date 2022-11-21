@@ -11,7 +11,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
-abstract class WidgetServerInformation : Panel("Server Information", 300.0, FontWrapper.fontHeight() /* I can't access titleBarHeight yet TODO */ + 32.0, background = true, scissor = false) {
+abstract class PanelServerInformation : Panel("Server Information", 300.0, FontWrapper.fontHeight() /* I can't access titleBarHeight yet TODO */ + 32.0, background = true, scissor = false) {
 
     @Suppress("LeakingThis")
     var server = updateServerInfo()
@@ -25,7 +25,7 @@ abstract class WidgetServerInformation : Panel("Server Information", 300.0, Font
     protected fun createEntry() = emulatedWidget.ServerEntry(
         object : MultiplayerScreen(null) {
             override fun setTooltip(tooltip: MutableList<Text>?) {
-                this@WidgetServerInformation.tooltip = tooltip
+                this@PanelServerInformation.tooltip = tooltip
             }
 
             override fun getServerList(): ServerList {

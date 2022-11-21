@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.particle
+package net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.cheatmenu.particle
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack

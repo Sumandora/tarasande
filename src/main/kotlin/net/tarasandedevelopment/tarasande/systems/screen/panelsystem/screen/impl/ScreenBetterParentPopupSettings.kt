@@ -1,14 +1,15 @@
-package net.tarasandedevelopment.tarasande.screen.base
+package net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.PanelElements
-import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
 import org.lwjgl.glfw.GLFW
 import java.util.*
 

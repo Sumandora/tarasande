@@ -9,11 +9,11 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.event.EventTick
-import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.file.FileCheatMenu
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.impl.fixed.*
-import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper

@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen
+package net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.cheatmenu
 
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
@@ -17,7 +17,7 @@ import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoo
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
-import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.particle.Particle
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.cheatmenu.particle.Particle
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW

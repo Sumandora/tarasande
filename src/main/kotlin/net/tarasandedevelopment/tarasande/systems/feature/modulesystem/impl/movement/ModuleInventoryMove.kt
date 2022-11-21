@@ -18,7 +18,7 @@ import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponen
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.panel.element.PanelElementsCategory
-import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
