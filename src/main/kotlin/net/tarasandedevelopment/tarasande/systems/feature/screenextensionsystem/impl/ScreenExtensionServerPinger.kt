@@ -5,8 +5,6 @@ import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.DirectConnectScreen
 import net.minecraft.client.gui.screen.GameMenuScreen
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget
-import net.minecraft.client.network.MultiplayerServerListPinger
 import net.minecraft.client.network.ServerInfo
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.screen.ScreenTexts
@@ -18,10 +16,8 @@ import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
-import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import su.mandora.event.EventDispatcher
 import java.net.InetSocketAddress
-import java.net.UnknownHostException
 
 fun getAddress(): String {
     MinecraftClient.getInstance().currentScreen.apply {
@@ -42,47 +38,27 @@ class WidgetServerInformationPinging : WidgetServerInformation() {
     private val pingDelay = ValueNumber(this, "Ping delay", 100.0, 5000.0, 10000.0, 100.0)
 
     private val timer = TimeUtil()
-    private var pinger: MultiplayerServerListPinger? = null
 
-    override fun init() {
-        if (server == null) {
-            getAddress().apply {
-                server = ServerInfo(this, this, false)
-                server?.apply {
-                    ping = -2L
-                    label = ScreenTexts.EMPTY
-                    playerCountLabel = ScreenTexts.EMPTY
-                }
-            }
-            timer.time = pingDelay.value.toLong()
+    override fun updateServerInfo() = getAddress().let {
+        ServerInfo(it, it, false).apply {
+            ping = 0L
+            label = ScreenTexts.EMPTY
+            playerCountLabel = ScreenTexts.EMPTY
+            online = false
         }
     }
 
-    fun ping() {
-        if (timer.hasReached(pingDelay.value.toLong())) {
+    override fun init() {
+    }
+
+    fun ping(force: Boolean = false) {
+        if (force || timer.hasReached(pingDelay.value.toLong())) {
             getAddress().apply {
-                server?.name = this
-                server?.address = this
+                server.name = this
+                server.address = this
             }
-            try {
-                pinger?.apply {
-                    cancel()
-                }
-                val pinger = MultiplayerServerListPinger()
-                ThreadRunnableExposed {
-                    pinger.add(server) {
-                        // this doesn't work right since Minecraft is to lazy to implement a good saving function
-                    }
-                }.start()
-                this.pinger = pinger
-            } catch (e: UnknownHostException) {
-                server?.ping = -1L
-                server?.label = MultiplayerServerListWidget.CANNOT_RESOLVE_TEXT
-            } catch (e2: Exception) {
-                server?.ping = -1L
-                server?.label = MultiplayerServerListWidget.CANNOT_CONNECT_TEXT
-            }
-            recreateIcon(getAddress())
+            server.online = false
+            serverEntry = createEntry()
             timer.reset()
         }
     }
@@ -90,7 +66,10 @@ class WidgetServerInformationPinging : WidgetServerInformation() {
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         ping()
         super.render(matrices, mouseX, mouseY, delta)
+    }
 
+    override fun renderTitleBar(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        super.renderTitleBar(matrices, mouseX, mouseY, delta)
 
         (((pingDelay.value + 1000) - (System.currentTimeMillis() - timer.time)) / 1000).toInt().toString().also {
             FontWrapper.textShadow(matrices, it, (x + panelWidth - FontWrapper.getWidth(it)).toFloat(), (y).toFloat())
@@ -101,6 +80,24 @@ class WidgetServerInformationPinging : WidgetServerInformation() {
 class ScreenExtensionServerPingerDirectConnect : ScreenExtensionCustom<DirectConnectScreen>("Server Pinger", DirectConnectScreen::class.java) {
 
     private val serverPingerWidget = WidgetServerInformationPinging()
+
+
+    var lastText: String? = null
+
+    init {
+        EventDispatcher.add(EventTick::class.java) {
+            val screen = MinecraftClient.getInstance().currentScreen
+            if(screen is DirectConnectScreen) {
+                screen.addressField.text.apply {
+                    if(lastText != this) {
+                        serverPingerWidget.server = serverPingerWidget.updateServerInfo()
+                        serverPingerWidget.ping(true)
+                    }
+                    lastText = this
+                }
+            }
+        }
+    }
 
     override fun createElements(screen: Screen): List<Element> {
         serverPingerWidget.x = MinecraftClient.getInstance().currentScreen!!.width / 2 - serverPingerWidget.panelWidth / 2

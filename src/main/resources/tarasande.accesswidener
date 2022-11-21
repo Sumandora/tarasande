@@ -100,6 +100,9 @@ accessible method net/minecraft/client/MinecraftClient doAttack ()Z
 accessible method net/minecraft/client/MinecraftClient handleBlockBreaking (Z)V
 accessible method net/minecraft/client/gui/widget/TextFieldWidget isEditable ()Z
 accessible method net/minecraft/client/gui/widget/TextFieldWidget erase (I)V
+accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget$ServerEntry <init> (Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget;Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;Lnet/minecraft/client/network/ServerInfo;)V
+accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget$ServerEntry isNewIconValid (Ljava/lang/String;)Z
+accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget$ServerEntry draw (Lnet/minecraft/client/util/math/MatrixStack;IILnet/minecraft/util/Identifier;)V
 
 accessible class net/minecraft/client/render/MapRenderer$MapTexture
 accessible class net/minecraft/client/particle/FireworksSparkParticle$Explosion

@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.event
 
 import net.minecraft.block.BlockState
 import net.minecraft.client.gui.screen.Screen
+import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.minecraft.client.network.PlayerListEntry
 import net.minecraft.client.network.ServerInfo
 import net.minecraft.client.render.Camera
@@ -21,7 +22,7 @@ class EventColorCorrection(var red: Int, var green: Int, var blue: Int) : Event(
 class EventCameraOverride(val camera: Camera) : Event(false)
 class EventRenderBlockModel(val state: BlockState, val pos: BlockPos) : Event(true)
 class EventTextVisit(var string: String) : Event(false)
-class EventRenderMultiplayerEntry(val matrices: MatrixStack, val x: Int, val y: Int, val entryWidth: Int, val entryHeight: Int, val mouseX: Int, val mouseY: Int, val server: ServerInfo) : Event(false)
+class EventRenderMultiplayerEntry(val matrices: MatrixStack, val x: Int, val y: Int, val entryWidth: Int, val entryHeight: Int, val mouseX: Int, val mouseY: Int, val server: ServerInfo, val multiplayerScreen: MultiplayerScreen) : Event(false)
 class EventFog(val state: State, val values: FloatArray) : Event(false) {
     enum class State {
         FOG_START, FOG_END, FOG_COLOR
