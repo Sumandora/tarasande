@@ -61,8 +61,8 @@ class TarasandeMain {
         fun managerValue() = instance.managerValue
         fun managerModule() = instance.managerModule
         fun managerPanel() = instance.managerPanel
-        fun managerScreenExtension() = instance.managerScreenExtension
         fun managerMultiplayerFeature() = instance.managerMultiplayerFeature
+        fun managerScreenExtension() = instance.managerScreenExtension
         fun managerInformation() = instance.managerInformation
         fun managerGraph() = instance.managerGraph
         fun protocolHack() = instance.protocolHack
@@ -78,13 +78,13 @@ class TarasandeMain {
         managerPanel = ManagerPanel(managerFile)
         managerInformation = ManagerInformation(managerPanel)
         managerGraph = ManagerGraph(managerInformation, managerPanel)
-        managerMultiplayerFeature = ManagerMultiplayerFeature()
 
         protocolHack = TarasandeProtocolHack(rootDirectory)
 
         managerESP = ManagerESP()
         managerClickMethod = ManagerClickMethod()
         managerScreenExtension = ManagerScreenExtension()
+        managerMultiplayerFeature = ManagerMultiplayerFeature()
         managerBlur = ManagerBlur()
 
         managerModule = ManagerModule(managerPanel, managerFile)

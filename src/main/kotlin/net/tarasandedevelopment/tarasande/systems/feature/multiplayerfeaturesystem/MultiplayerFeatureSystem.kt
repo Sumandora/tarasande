@@ -1,21 +1,23 @@
 package net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.Element
+import net.minecraft.client.gui.screen.DirectConnectScreen
 import net.minecraft.client.gui.screen.GameMenuScreen
+import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueSpacer
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.*
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ScreenExtensionCustom
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanelSidebar
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.PanelElements
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
-import su.mandora.event.EventDispatcher
 import java.awt.Color
 
 class ManagerMultiplayerFeature : Manager<MultiplayerFeature>() {
@@ -36,13 +38,14 @@ class ManagerMultiplayerFeature : Manager<MultiplayerFeature>() {
             it.state.owner = this
         }
 
-        EventDispatcher.apply {
-            add(EventChildren::class.java) {
-                if (it.screen is MultiplayerScreen || it.screen is GameMenuScreen) {
-                    it.add(ClickableWidgetPanelSidebar(panelElementsMultiplayerFeature))
-                }
+        TarasandeMain.managerScreenExtension().add(object : ScreenExtensionCustom<Screen>("Multiplayer feature", MultiplayerScreen::class.java, DirectConnectScreen::class.java, GameMenuScreen::class.java) {
+
+            override fun createElements(screen: Screen): List<Element> {
+                return listOf(
+                    ClickableWidgetPanelSidebar(panelElementsMultiplayerFeature)
+                )
             }
-        }
+        })
     }
 
     override fun insert(obj: MultiplayerFeature, index: Int) {
