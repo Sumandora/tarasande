@@ -208,8 +208,5 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "core.screen.MixinMultiplayerServerListWidgetSubServerEntry"
-  ]
+  }
 }

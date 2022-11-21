@@ -58,11 +58,6 @@ abstract class ScreenExtensionCustom<T : Screen>(name: String, vararg screens: C
     override fun creator(screen: Screen, elements: List<ScreenExtension<*>>): List<Element> {
         val widgets = ArrayList<Element>()
         elements.forEach { element ->
-            element.screens.forEach {
-                println(it.simpleName)
-            }
-            println(screen)
-            println(element.screens.any { it.isAssignableFrom(screen.javaClass) })
             if (element.screens.any { it.isAssignableFrom(screen.javaClass) }) {
                 widgets.addAll(element.createElements(screen))
             }

@@ -44,7 +44,7 @@ class ScreenExtensionServerPinger : ScreenExtensionCustom<Screen>("Server Pinger
                 server!!.ping = -2L
                 server!!.label = ScreenTexts.EMPTY
                 server!!.playerCountLabel = ScreenTexts.EMPTY
-                timer.reset()
+                timer.time = pingDelay.value.toLong()
             }
         }
 
