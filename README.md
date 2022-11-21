@@ -50,6 +50,8 @@
 - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
 - Protocol Hack: Entity Dimensions
 - ManagerAccount Instantiation
+- Recode File Chooser
+- Wheel Menu
 
 ## TODO-List (Flori | Tarasande)
 #### Additions
