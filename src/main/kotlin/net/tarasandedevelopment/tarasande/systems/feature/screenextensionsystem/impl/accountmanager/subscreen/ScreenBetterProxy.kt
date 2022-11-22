@@ -42,7 +42,7 @@ class ScreenBetterProxy(prevScreen: Screen?) : ScreenBetter(prevScreen) {
     private var pingThread: ThreadRunnableExposed? = null
 
     override fun init() {
-        val proxy = TarasandeMain.instance.proxy
+        val proxy = TarasandeMain.get().proxy
         addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 - 100, height / 2 - 50 - 15, 143, 20, Text.of("IP-Address")).also {
             ipTextField = it
             it.setMaxLength(Int.MAX_VALUE)
@@ -103,7 +103,7 @@ class ScreenBetterProxy(prevScreen: Screen?) : ScreenBetter(prevScreen) {
                                 else null
                             )
                         else Proxy(inetSocketAddress, proxyType!!)
-                    TarasandeMain.instance.proxy = proxy
+                    TarasandeMain.get().proxy = proxy
                     if (pingThread != null && pingThread?.isAlive!!)
                         (pingThread?.runnable as RunnablePing).cancelled = true
                     ThreadRunnableExposed(RunnablePing(proxy)).also { pingThread = it }.start()
@@ -128,7 +128,7 @@ class ScreenBetterProxy(prevScreen: Screen?) : ScreenBetter(prevScreen) {
         })
 
         addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50 + 25 * 2, 100, 20, Text.of("Disable")) {
-            TarasandeMain.instance.proxy = null
+            TarasandeMain.get().proxy = null
             status = "Disabled"
         })
 
@@ -179,12 +179,12 @@ class ScreenBetterProxy(prevScreen: Screen?) : ScreenBetter(prevScreen) {
                 if (cancelled)
                     return
                 val timeDelta = System.currentTimeMillis() - beginTime
-                if (TarasandeMain.instance.proxy == proxy) {
+                if (TarasandeMain.get().proxy == proxy) {
                     status = RenderUtil.formattingByHex(RenderUtil.colorInterpolate(Color.green, Color.red.darker(), (timeDelta / 1000.0).coerceAtMost(1.0)).rgb).toString() + "Reached proxy in " + timeDelta + "ms"
                     proxy.ping = timeDelta
                 }
             } catch (throwable: Throwable) {
-                if (TarasandeMain.instance.proxy == proxy) {
+                if (TarasandeMain.get().proxy == proxy) {
                     status = when (throwable) {
                         is SocketTimeoutException -> Formatting.RED.toString() + "Timeout reached, unreachable"
                         is IOException -> Formatting.RED.toString() + "Failed to reach proxy"

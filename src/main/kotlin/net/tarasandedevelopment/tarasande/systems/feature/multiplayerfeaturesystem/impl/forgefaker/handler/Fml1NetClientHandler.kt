@@ -52,7 +52,7 @@ class Fml1NetClientHandler(val connection: ClientConnection) : IForgeNetClientHa
             }
             val payload = (serverInfo as IServerInfo).tarasande_getForgePayload()
             if (payload == null) {
-                connection.disconnect(Text.of("[" + TarasandeMain.instance.name + "] Failed to get mods, try to enable FML1 Cache in ForgeFaker"))
+                connection.disconnect(Text.of("[" + TarasandeMain.get().name + "] Failed to get mods, try to enable FML1 Cache in ForgeFaker"))
                 return
             }
             this.sendModList(payload.installedMods())

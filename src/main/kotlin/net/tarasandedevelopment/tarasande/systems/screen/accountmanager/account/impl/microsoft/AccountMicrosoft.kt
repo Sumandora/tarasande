@@ -154,12 +154,12 @@ $errorDescription""".toByteArray())
                 it["client_secret"] = this.azureApp.clientSecret!!
             }
         })
-        val oAuthToken = TarasandeMain.instance.gson.fromJson(str, JsonObject::class.java)
+        val oAuthToken = TarasandeMain.get().gson.fromJson(str, JsonObject::class.java)
         return buildFromOAuthToken(oAuthToken)
     }
 
     protected fun buildFromRefreshToken(refreshToken: String): MSAuthProfile {
-        val oAuthToken = TarasandeMain.instance.gson.fromJson(post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
+        val oAuthToken = TarasandeMain.get().gson.fromJson(post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
             it["client_id"] = this.azureApp.clientId.toString()
             it["refresh_token"] = refreshToken
             it["grant_type"] = "refresh_token"
@@ -181,7 +181,7 @@ $errorDescription""".toByteArray())
         req.add("Properties", reqProps)
         req.addProperty("RelyingParty", "http://auth.xboxlive.com")
         req.addProperty("TokenType", "JWT")
-        val xboxLiveAuth = TarasandeMain.instance.gson.fromJson(post(xboxAuthenticateUrl, 60 * 1000, "application/json", req.toString()), JsonObject::class.java)
+        val xboxLiveAuth = TarasandeMain.get().gson.fromJson(post(xboxAuthenticateUrl, 60 * 1000, "application/json", req.toString()), JsonObject::class.java)
         return buildFromXboxLive(oAuthToken, xboxLiveAuth)
     }
 
@@ -195,22 +195,22 @@ $errorDescription""".toByteArray())
         req.add("Properties", reqProps)
         req.addProperty("RelyingParty", "rp://api.minecraftservices.com/")
         req.addProperty("TokenType", "JWT")
-        val xboxLiveSecurityTokens = TarasandeMain.instance.gson.fromJson(post(xboxAuthorizeUrl, 60 * 1000, "application/json", req.toString()), JsonObject::class.java)
+        val xboxLiveSecurityTokens = TarasandeMain.get().gson.fromJson(post(xboxAuthorizeUrl, 60 * 1000, "application/json", req.toString()), JsonObject::class.java)
         return buildFromXboxLiveSecurityTokens(oAuthToken, xboxLiveAuth, xboxLiveSecurityTokens)
     }
 
     private fun buildFromXboxLiveSecurityTokens(oAuthToken: JsonObject, xboxLiveAuth: JsonObject, xboxLiveSecurityTokens: JsonObject): MSAuthProfile {
         val req = JsonObject()
         req.addProperty("identityToken", "XBL3.0 x=" + xboxLiveSecurityTokens.getAsJsonObject("DisplayClaims").getAsJsonArray("xui")[0].asJsonObject["uhs"].asString + ";" + xboxLiveSecurityTokens["Token"].asString)
-        val minecraftLogin = TarasandeMain.instance.gson.fromJson(post(minecraftLoginUrl, 60 * 1000, "application/json", req.toString()), JsonObject::class.java)
+        val minecraftLogin = TarasandeMain.get().gson.fromJson(post(minecraftLoginUrl, 60 * 1000, "application/json", req.toString()), JsonObject::class.java)
         return buildFromMinecraftLogin(oAuthToken, xboxLiveAuth, xboxLiveSecurityTokens, minecraftLogin)
     }
 
     private fun buildFromMinecraftLogin(oAuthToken: JsonObject, xboxLiveAuth: JsonObject, xboxLiveSecurityTokens: JsonObject, minecraftLogin: JsonObject): MSAuthProfile {
-        val minecraftProfile = TarasandeMain.instance.gson.fromJson(get(minecraftProfileUrl, 60 * 1000, HashMap<String, String>().also {
+        val minecraftProfile = TarasandeMain.get().gson.fromJson(get(minecraftProfileUrl, 60 * 1000, HashMap<String, String>().also {
             it["Authorization"] = "Bearer " + minecraftLogin["access_token"].asString
         }), JsonObject::class.java)
-        return TarasandeMain.instance.gson.let {
+        return TarasandeMain.get().gson.let {
             MSAuthProfile(
                 it.fromJson(oAuthToken, MSAuthProfile.OAuthToken::class.java),
                 it.fromJson(xboxLiveAuth, MSAuthProfile.XboxLiveAuth::class.java),
@@ -272,12 +272,12 @@ $errorDescription""".toByteArray())
     override fun save(): JsonArray {
         val jsonArray = JsonArray()
         if (msAuthProfile != null)
-            jsonArray.add(TarasandeMain.instance.gson.toJsonTree(msAuthProfile))
+            jsonArray.add(TarasandeMain.get().gson.toJsonTree(msAuthProfile))
         return jsonArray
     }
 
     override fun load(jsonArray: JsonArray): Account {
-        return AccountMicrosoft().also { if (!jsonArray.isEmpty) it.msAuthProfile = TarasandeMain.instance.gson.fromJson(jsonArray[0], MSAuthProfile::class.java) }
+        return AccountMicrosoft().also { if (!jsonArray.isEmpty) it.msAuthProfile = TarasandeMain.get().gson.fromJson(jsonArray[0], MSAuthProfile::class.java) }
     }
 
     override fun create(credentials: List<String>) {

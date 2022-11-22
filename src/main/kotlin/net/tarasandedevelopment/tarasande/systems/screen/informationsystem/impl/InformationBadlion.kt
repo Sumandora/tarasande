@@ -31,21 +31,21 @@ class InformationTimers : Information("Badlion", "Timers") {
                                     "REGISTER", "CHANGE_WORLD" -> enabled = true
                                     "REMOVE_ALL_TIMERS" -> list.clear()
                                     "ADD_TIMER" -> {
-                                        val timer = TarasandeMain.instance.gson.fromJson(data, Timer::class.java)
+                                        val timer = TarasandeMain.get().gson.fromJson(data, Timer::class.java)
                                         list.add(timer)
                                         timer.lastUpdated = System.currentTimeMillis()
                                     }
 
-                                    "REMOVE_TIMER" -> list.removeIf { it.id == TarasandeMain.instance.gson.fromJson(data, RemoveRequest::class.java).id }
+                                    "REMOVE_TIMER" -> list.removeIf { it.id == TarasandeMain.get().gson.fromJson(data, RemoveRequest::class.java).id }
                                     "UPDATE_TIMER" -> {
-                                        val newTimer = TarasandeMain.instance.gson.fromJson(data, Timer::class.java)
+                                        val newTimer = TarasandeMain.get().gson.fromJson(data, Timer::class.java)
                                         newTimer.lastUpdated = System.currentTimeMillis()
                                         list.removeIf { it.id == newTimer.id }
                                         list.add(newTimer)
                                     }
 
                                     "SYNC_TIMERS" -> {
-                                        val syncRequest = TarasandeMain.instance.gson.fromJson(data, SyncRequest::class.java)
+                                        val syncRequest = TarasandeMain.get().gson.fromJson(data, SyncRequest::class.java)
                                         val timer = list.firstOrNull { it.id == syncRequest.id }
                                         timer?.currentTime = syncRequest.time
                                         timer?.lastUpdated = System.currentTimeMillis()

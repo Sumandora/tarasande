@@ -85,6 +85,15 @@ accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerLi
 accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget PINGING_TEXT Lnet/minecraft/text/Text;
 accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget NO_CONNECTION_TEXT Lnet/minecraft/text/Text;
 accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget UNKNOWN_SERVER_TEXTURE Lnet/minecraft/util/Identifier;
+accessible field net/minecraft/client/gui/screen/pack/PackScreen organizer Lnet/minecraft/client/gui/screen/pack/ResourcePackOrganizer;
+accessible field net/minecraft/client/gui/screen/pack/ResourcePackOrganizer$AbstractPack profile Lnet/minecraft/resource/ResourcePackProfile;
+accessible field net/minecraft/resource/ResourcePackProfile packFactory Ljava/util/function/Supplier;
+accessible field net/minecraft/resource/AbstractFileResourcePack base Ljava/io/File;
+accessible field net/minecraft/resource/ResourcePackManager profiles Ljava/util/Map;
+accessible field net/minecraft/client/gui/screen/pack/ResourcePackOrganizer enabledPacks Ljava/util/List;
+accessible field net/minecraft/client/gui/screen/pack/ResourcePackOrganizer disabledPacks Ljava/util/List;
+accessible field net/minecraft/client/gui/screen/pack/ResourcePackOrganizer resourcePackManager Lnet/minecraft/resource/ResourcePackManager;
+accessible field net/minecraft/client/resource/ClientBuiltinResourcePackProvider serverContainer Lnet/minecraft/resource/ResourcePackProfile;
 
 accessible method net/minecraft/client/render/Camera setPos (Lnet/minecraft/util/math/Vec3d;)V
 accessible method net/minecraft/client/render/Camera setRotation (FF)V
@@ -106,6 +115,7 @@ accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerServerL
 
 accessible class net/minecraft/client/render/MapRenderer$MapTexture
 accessible class net/minecraft/client/particle/FireworksSparkParticle$Explosion
+accessible class net/minecraft/client/gui/screen/pack/ResourcePackOrganizer$AbstractPack
 
 mutable field net/minecraft/network/packet/c2s/play/CustomPayloadC2SPacket data Lnet/minecraft/network/PacketByteBuf;
 mutable field net/minecraft/entity/Entity random Lnet/minecraft/util/math/random/Random;

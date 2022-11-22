@@ -30,11 +30,11 @@ open class ValueMode(owner: Any, name: String, private var multiSelection: Boole
     fun anySelected() = selected.isNotEmpty()
 
     override fun save(): JsonElement? {
-        return TarasandeMain.instance.gson.toJsonTree(selected)
+        return TarasandeMain.get().gson.toJsonTree(selected)
     }
 
     override fun load(jsonElement: JsonElement) {
         selected.clear()
-        selected.addAll(TarasandeMain.instance.gson.fromJson(jsonElement, Array<String>::class.java)!!)
+        selected.addAll(TarasandeMain.get().gson.fromJson(jsonElement, Array<String>::class.java)!!)
     }
 }

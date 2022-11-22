@@ -134,7 +134,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         }
         val message = when (broadCastMode) {
             1 -> {
-                TarasandeMain.instance.name + " suspects " + player.gameProfile.name + (" because he held $itemMessage")
+                TarasandeMain.get().name + " suspects " + player.gameProfile.name + (" because he held $itemMessage")
             }
 
             2 -> {

@@ -41,7 +41,7 @@ class AccountToken : Account() {
         http.connect()
         http.outputStream.write(JsonObject().also { it.addProperty("token", token) }.toString().toByteArray())
 
-        val json = TarasandeMain.instance.gson.fromJson(String(http.inputStream.readAllBytes()), JsonObject::class.java)
+        val json = TarasandeMain.get().gson.fromJson(String(http.inputStream.readAllBytes()), JsonObject::class.java)
 
         val authenticationService = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment)
 

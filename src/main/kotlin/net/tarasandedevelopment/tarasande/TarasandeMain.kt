@@ -54,7 +54,7 @@ class TarasandeMain {
     //@formatter:on
 
     companion object {
-        val instance = TarasandeMain()
+        private val instance = TarasandeMain()
         fun get() = instance
 
         fun managerBlur() = instance.managerBlur

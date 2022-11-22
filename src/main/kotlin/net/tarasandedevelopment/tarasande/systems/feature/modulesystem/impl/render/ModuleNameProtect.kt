@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.ModuleCat
 
 class ModuleNameProtect : Module("Name protect", "Hides your in-game name", ModuleCategory.RENDER) {
 
-    private val protectedName = ValueText(this, "Protected name", TarasandeMain.instance.name)
+    private val protectedName = ValueText(this, "Protected name", TarasandeMain.get().name)
     val hidePersonalName = ValueBoolean(this, "Hide personal name", true)
 
     private val border = "( |[^a-z]|\\b)"

@@ -24,7 +24,7 @@ class PanelWatermark : Panel("Watermark", FontWrapper.getWidth(text) * 5.0, Font
         FontWrapper.textShadow(matrices, text, (x + 1).toFloat(), (y + titleBarHeight + 1).toFloat(), TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
         matrices?.pop()
 
-        FontWrapper.textShadow(matrices, TarasandeMain.instance.name, (x + 1).toFloat(), (y + panelHeight - titleBarHeight).toFloat(), TarasandeMain.clientValues().accentColor.getColor().rgb)
+        FontWrapper.textShadow(matrices, TarasandeMain.get().name, (x + 1).toFloat(), (y + panelHeight - titleBarHeight).toFloat(), TarasandeMain.clientValues().accentColor.getColor().rgb)
 
         val moduleNameProtect = TarasandeMain.managerModule().get(ModuleNameProtect::class.java)
 

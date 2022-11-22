@@ -149,8 +149,8 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         this.renderTitle(matrices, "Account Manager")
         FontWrapper.textShadow(matrices, status, width / 2.0f, 2 * FontWrapper.fontHeight() * 2.0f, -1, centered = true)
 
-        if (TarasandeMain.instance.proxy != null) {
-            FontWrapper.textShadow(matrices, TarasandeMain.instance.proxy!!.socketAddress.address.hostAddress + ":" + TarasandeMain.instance.proxy!!.socketAddress.port + " (" + TarasandeMain.instance.proxy!!.ping + "ms)", 6F, 27F, -1)
+        if (TarasandeMain.get().proxy != null) {
+            FontWrapper.textShadow(matrices, TarasandeMain.get().proxy!!.socketAddress.address.hostAddress + ":" + TarasandeMain.get().proxy!!.socketAddress.port + " (" + TarasandeMain.get().proxy!!.ping + "ms)", 6F, 27F, -1)
         }
     }
 
