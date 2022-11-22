@@ -105,7 +105,7 @@ class ScreenExtensionServerPingerGameMenu : ScreenExtensionCustom<Screen>("Serve
     init {
         EventDispatcher.add(EventTick::class.java) { event ->
             if (event.state == EventTick.State.PRE) {
-                if (pingWhenInGame.value && MinecraftClient.getInstance().currentScreen !is GameMenuScreen) {
+                if (pingWhenInGame.value && MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().world != null) {
                     serverPingerWidget.ping(false)
                 }
             }

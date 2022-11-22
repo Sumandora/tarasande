@@ -24,15 +24,13 @@ object AddressSaver {
     }
 
     fun getAddress(): String {
-        if (MinecraftClient.getInstance().world != null && MinecraftClient.getInstance().player != null && !MinecraftClient.getInstance().isInSingleplayer) {
-            return address
-        } else {
+        if (MinecraftClient.getInstance().world == null && MinecraftClient.getInstance().player == null) {
             MinecraftClient.getInstance().currentScreen.apply {
                 if (this is DirectConnectScreen && addressField != null) {
                     return addressField.text
                 }
             }
         }
-        return ""
+        return address
     }
 }
