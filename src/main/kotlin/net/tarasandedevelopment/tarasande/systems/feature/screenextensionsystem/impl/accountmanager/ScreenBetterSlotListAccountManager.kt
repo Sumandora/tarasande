@@ -52,9 +52,9 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
     var status = ""
 
     // @formatter:off
-    val managerAccount      = ManagerAccount()
     val managerEnvironment  = ManagerEnvironment()
     val managerAzureApp     = ManagerAzureApp()
+    val managerAccount      = ManagerAccount()
     // @formatter:on
 
     init {
@@ -129,7 +129,6 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
             logIn(AccountSession().also {
                 it.username = RandomStringUtils.randomAlphanumeric(16)
                 it.uuid = UUID.randomUUID().toString()
-                it.environment = it.defaultEnvironment()
             })
         })
 

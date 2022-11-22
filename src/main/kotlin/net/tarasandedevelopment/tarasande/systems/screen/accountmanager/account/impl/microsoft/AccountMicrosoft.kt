@@ -14,11 +14,11 @@ import net.minecraft.text.Text
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionAccountManager
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterAzureApps
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.ExtraInfo
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.azureapp.AzureAppPreset
-import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterAzureApps
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.*
@@ -257,12 +257,10 @@ $errorDescription""".toByteArray())
 
     @Suppress("unused")
     @ExtraInfo("Azure Apps")
-    val azureAppsExtra = object : Extra {
-        override fun click(prevScreen: Screen) {
-            MinecraftClient.getInstance().setScreen(ScreenBetterAzureApps(prevScreen, azureApp) {
-                azureApp = it
-            })
-        }
+    val azureAppsExtra: (Screen) -> Unit = {
+        MinecraftClient.getInstance().setScreen(ScreenBetterAzureApps(it, azureApp) {
+            azureApp = it
+        })
     }
 
     override fun getDisplayName(): String {

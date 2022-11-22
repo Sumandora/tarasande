@@ -24,17 +24,14 @@ class ScreenBetterAccount(
     private val accountConsumer: Consumer<Account>,
 ) : ScreenBetter(prevScreen) {
 
-    private val textFields: ArrayList<TextFieldWidget> = ArrayList()
+    private val textFields = ArrayList<TextFieldWidget>()
 
     private var implementationClass: Class<out Account> = TarasandeMain.managerScreenExtension().get(ScreenExtensionAccountManager::class.java).screenBetterSlotListAccountManager.managerAccount.list.first()
-    private var accountImplementation: Account? = null
+    private var accountImplementation = implementationClass.getDeclaredConstructor().newInstance()
 
     private var submitButton: ButtonWidget? = null
 
     override fun init() {
-        if (accountImplementation == null) {
-            accountImplementation = implementationClass.getDeclaredConstructor().newInstance()
-        }
         textFields.clear()
         children().clear()
         this.drawables.clear()
@@ -71,14 +68,12 @@ class ScreenBetterAccount(
         for (field in fields) {
             field.isAccessible = true
             if (field.isAnnotationPresent(ExtraInfo::class.java)) {
-                val anyField = field.get(accountImplementation)
-
-                if (anyField is Account.Extra) {
-                    addDrawableChild(ButtonWidget(width - 105, 5 + index * 23, 100, 20, Text.of(field.getAnnotation(ExtraInfo::class.java).name)) {
-                        anyField.click(this)
-                    })
-                    index++
-                }
+                @Suppress("UNCHECKED_CAST")
+                val anyField = field.get(accountImplementation) as Function1<Screen, *>
+                addDrawableChild(ButtonWidget(width - 105, 5 + index * 23, 100, 20, Text.of(field.getAnnotation(ExtraInfo::class.java).name)) {
+                    anyField.invoke(this)
+                })
+                index++
             } else if (field.isAnnotationPresent(TextFieldInfo::class.java)) {
                 val textFieldInfo: TextFieldInfo = field.getAnnotation(TextFieldInfo::class.java)
                 if (textFieldInfo.hidden) {
@@ -112,11 +107,8 @@ class ScreenBetterAccount(
         }
 
         addDrawableChild(ButtonWidget(width / 2 - 50, 25 + (height * 0.75f).toInt(), 100, 20, Text.of(name)) {
-            accountImplementation!!.create(textFields.map { it.text })
-            if (accountImplementation!!.environment == null)
-                accountImplementation!!.environment = accountImplementation!!.defaultEnvironment()
-
-            accountConsumer.accept(accountImplementation!!)
+            accountImplementation.create(textFields.map { it.text })
+            accountConsumer.accept(accountImplementation)
             close()
         }.also { submitButton = it })
     }

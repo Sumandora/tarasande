@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.mojang.authlib.Environment
 import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import net.minecraft.client.util.Session
@@ -29,7 +28,10 @@ class AccountToken : Account() {
 
     private var service: MinecraftSessionService? = null
 
-    override fun defaultEnvironment(): Environment = TarasandeMain.managerScreenExtension().get(ScreenExtensionAccountManager::class.java).screenBetterSlotListAccountManager.managerEnvironment.get(EnvironmentPresetEasyMC::class.java).create()
+    init {
+        // Default environment
+        environment = TarasandeMain.managerScreenExtension().get(ScreenExtensionAccountManager::class.java).screenBetterSlotListAccountManager.managerEnvironment.get(EnvironmentPresetEasyMC::class.java).create()
+    }
 
     override fun logIn() {
         val http = URL(redeemUrl).openConnection() as HttpURLConnection

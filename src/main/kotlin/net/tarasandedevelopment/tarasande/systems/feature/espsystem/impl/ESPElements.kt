@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.systems.feature.espsystem.impl
 
+import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.Tessellator
@@ -30,6 +31,7 @@ class ESPElementBox : ESPElement("Box") {
 
     override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
         val col = Color(entity.teamColorValue).rgb // ignore alpha
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
         if (outlined.value)
             RenderUtil.outlinedFill(matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, outlineWidth.value.toFloat(), Color.black.rgb)
         RenderUtil.outlinedFill(matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, width.value.toFloat(), col)
