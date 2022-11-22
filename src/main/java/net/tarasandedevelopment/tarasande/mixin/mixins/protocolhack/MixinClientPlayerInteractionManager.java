@@ -35,11 +35,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(ClientPlayerInteractionManager.class)
-public class MixinClientPlayerInteractionManager {
+public abstract class MixinClientPlayerInteractionManager {
 
     @Shadow
     @Final
     private MinecraftClient client;
+
+    @Shadow protected abstract ActionResult interactBlockInternal(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult);
 
     @Unique
     private ItemStack protocolhack_oldCursorStack;
@@ -136,4 +138,24 @@ public class MixinClientPlayerInteractionManager {
     public void injectInteractBlock(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
         FabricHandItemProvider.Companion.setLastUsedItem(player.getStackInHand(hand).copy());
     }
+
+    ActionResult actionResult;
+
+    @Inject(method = "interactBlock", at = @At("HEAD"), cancellable = true)
+    public void cacheActionResult(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
+        if(VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
+            this.actionResult = this.interactBlockInternal(player, hand, hitResult);
+            if(actionResult == ActionResult.FAIL)
+                cir.setReturnValue(actionResult);
+        }
+    }
+
+    @Redirect(method = "method_41933", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;interactBlockInternal(Lnet/minecraft/client/network/ClientPlayerEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/util/hit/BlockHitResult;)Lnet/minecraft/util/ActionResult;"))
+    public ActionResult proivdeCachedResult(ClientPlayerInteractionManager instance, ClientPlayerEntity player, Hand hand, BlockHitResult hitResult) {
+        if(VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
+            return actionResult;
+        }
+        return interactBlockInternal(player, hand, hitResult);
+    }
+
 }
