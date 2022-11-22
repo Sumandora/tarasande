@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesys
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.DirectConnectScreen
+import net.minecraft.client.gui.screen.DisconnectedScreen
 import net.minecraft.client.gui.screen.GameMenuScreen
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
@@ -38,7 +39,7 @@ class ManagerMultiplayerFeature : Manager<MultiplayerFeature>() {
             it.state.owner = this
         }
 
-        TarasandeMain.managerScreenExtension().add(object : ScreenExtensionCustom<Screen>("Multiplayer feature", MultiplayerScreen::class.java, DirectConnectScreen::class.java, GameMenuScreen::class.java) {
+        TarasandeMain.managerScreenExtension().add(object : ScreenExtensionCustom<Screen>("Multiplayer feature", MultiplayerScreen::class.java, DirectConnectScreen::class.java, GameMenuScreen::class.java, DisconnectedScreen::class.java) {
 
             override fun createElements(screen: Screen): List<Element> {
                 return listOf(
