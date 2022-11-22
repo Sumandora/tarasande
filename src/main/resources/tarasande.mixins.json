@@ -103,7 +103,7 @@
     "features.module.norender.MixinSignBlockEntityRenderer",
     "features.module.norender.MixinWorldRenderer",
     "features.module.screen.MixinPlayerScreenHandler",
-    "library.viaprotocolhack.MixinCustomViaConfig",
+    "protocolhack.viaprotocolhack.MixinCustomViaConfig",
     "protocolhack.MixinClientBuiltinResourcePackProvider",
     "protocolhack.MixinClientPlayerInteractionManager",
     "protocolhack.MixinClientPlayNetworkHandler",
