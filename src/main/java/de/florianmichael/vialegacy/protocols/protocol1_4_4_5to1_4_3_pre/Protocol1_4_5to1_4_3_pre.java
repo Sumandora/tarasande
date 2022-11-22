@@ -38,9 +38,9 @@ import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
-import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.TypeRegistry_1_4_2;
+import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.Types1_4_2;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.ClientboundLoginPackets1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.TypeRegistry_1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_4_6_7to1_4_4_5.ClientboundPackets1_4_4_5;
 import de.florianmichael.vialegacy.protocols.protocol1_4_6_7to1_4_4_5.ServerboundPackets1_4_4_5;
@@ -60,7 +60,7 @@ public class Protocol1_4_5to1_4_3_pre extends EnZaProtocol<ClientboundPackets1_4
 			public void registerMap() {
 				map(Type.INT); // Entity-Id
 
-				map(TypeRegistry_1_6_4.STRING); // Player name
+				map(Types1_6_4.STRING); // Player name
 
 				map(Type.INT); // X-Position
 				map(Type.INT); // Y-Position
@@ -71,7 +71,7 @@ public class Protocol1_4_5to1_4_3_pre extends EnZaProtocol<ClientboundPackets1_4
 
 				map(Type.SHORT); // Current item
 
-				map(TypeRegistry_1_4_2.METADATA_LIST, TypeRegistry_1_6_4.METADATA_LIST); // Metadata list
+				map(Types1_4_2.METADATA_LIST, Types1_6_4.METADATA_LIST); // Metadata list
 			}
 		});
 
@@ -94,7 +94,7 @@ public class Protocol1_4_5to1_4_3_pre extends EnZaProtocol<ClientboundPackets1_4
 				map(Type.SHORT); // Velocity-Y
 				map(Type.SHORT); // Velocity-Z
 
-				map(TypeRegistry_1_4_2.METADATA_LIST, TypeRegistry_1_6_4.METADATA_LIST); // Metadata list
+				map(Types1_4_2.METADATA_LIST, Types1_6_4.METADATA_LIST); // Metadata list
 			}
 		});
 
@@ -111,7 +111,7 @@ public class Protocol1_4_5to1_4_3_pre extends EnZaProtocol<ClientboundPackets1_4
 			@Override
 			public void registerMap() {
 				map(Type.INT); // Entity-Id
-				map(TypeRegistry_1_4_2.METADATA_LIST, TypeRegistry_1_6_4.METADATA_LIST); // Metadata list
+				map(Types1_4_2.METADATA_LIST, Types1_6_4.METADATA_LIST); // Metadata list
 			}
 		});
 	}

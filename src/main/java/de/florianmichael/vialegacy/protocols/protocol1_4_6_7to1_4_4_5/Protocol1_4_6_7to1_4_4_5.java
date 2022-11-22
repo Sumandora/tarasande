@@ -46,7 +46,7 @@ import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_4_6_7to1_4_4_5.type.impl.ChunkBulk1_4_4_5Type;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.TypeRegistry_1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.MetaType_1_6_4;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_4_6_7to1_4_4_5.storage.DimensionStorage;
@@ -71,7 +71,7 @@ public class Protocol1_4_6_7to1_4_4_5 extends EnZaProtocol<ClientboundPackets1_4
 			@Override
 			public void registerMap() {
 				map(Type.INT); // Entity-Id
-				map(TypeRegistry_1_6_4.STRING); // Level-Type
+				map(Types1_6_4.STRING); // Level-Type
 				map(Type.BYTE); // GameMode
 				map(Type.BYTE); // Dimension
 				map(Type.BYTE); // Difficulty
@@ -91,7 +91,7 @@ public class Protocol1_4_6_7to1_4_4_5 extends EnZaProtocol<ClientboundPackets1_4
 				map(Type.BYTE); // Difficulty
 				map(Type.BYTE); // GameMode
 				map(Type.SHORT); // WorldHeight
-				map(TypeRegistry_1_6_4.STRING); // Level-Type
+				map(Types1_6_4.STRING); // Level-Type
 				handler((pw) -> {
 					//noinspection ConstantConditions
 					pw.user().get(DimensionStorage.class).setDimension(pw.get(Type.INT, 0));
@@ -135,7 +135,7 @@ public class Protocol1_4_6_7to1_4_4_5 extends EnZaProtocol<ClientboundPackets1_4
 					metadataPacket.write(Type.INT, entityID);
 					List<Metadata> metas = new ArrayList<>();
 					metas.add(new Metadata(10, MetaType_1_6_4.Slot, item));
-					metadataPacket.write(TypeRegistry_1_6_4.METADATA_LIST, metas);
+					metadataPacket.write(Types1_6_4.METADATA_LIST, metas);
 					metadataPacket.send(Protocol1_4_6_7to1_4_4_5.class);
 				});
 			}

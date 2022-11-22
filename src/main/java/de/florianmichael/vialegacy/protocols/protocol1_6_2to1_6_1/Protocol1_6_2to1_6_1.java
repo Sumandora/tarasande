@@ -42,7 +42,7 @@ import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.TypeRegistry_1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_6_3to1_6_2.ClientboundPackets1_6_2;
 import de.florianmichael.vialegacy.protocols.protocol1_6_3to1_6_2.ServerboundPackets1_6_2;
@@ -73,7 +73,7 @@ public class Protocol1_6_2to1_6_1 extends EnZaProtocol<ClientboundPackets1_6_1, 
 					for (int i = 0; i < count; i++) {
 						final EntityProperty prop = new EntityProperty();
 
-						prop.key = pw.read(TypeRegistry_1_6_4.STRING);
+						prop.key = pw.read(Types1_6_4.STRING);
 						prop.value = pw.read(Type.DOUBLE); // Value
 						prop.modifiers = new ArrayList<>();
 
@@ -86,7 +86,7 @@ public class Protocol1_6_2to1_6_1 extends EnZaProtocol<ClientboundPackets1_6_1, 
 					pw.write(Type.INT, list.size());
 
 					for (EntityProperty prop : list) {
-						pw.write(TypeRegistry_1_6_4.STRING, prop.key);
+						pw.write(Types1_6_4.STRING, prop.key);
 						pw.write(Type.DOUBLE, prop.value);
 						pw.write(Type.SHORT, (short) prop.modifiers.size());
 

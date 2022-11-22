@@ -15,7 +15,7 @@ import net.minecraft.network.NetworkState
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IPacketWrapperImpl_Protocol
+import de.florianmichael.clampclient.injection.mixininterface.IPacketWrapperImpl_Protocol
 
 object MinecraftViaItemRewriter {
 

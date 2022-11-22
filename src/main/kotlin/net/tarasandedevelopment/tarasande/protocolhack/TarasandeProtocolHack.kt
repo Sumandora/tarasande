@@ -24,8 +24,8 @@ import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
-import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IClientConnection_Protocol
-import net.tarasandedevelopment.tarasande.mixin.accessor.protocolhack.IFontStorage_Protocol
+import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
+import de.florianmichael.clampclient.injection.mixininterface.IFontStorage_Protocol
 import net.tarasandedevelopment.tarasande.protocolhack.command.TarasandeCommandHandler
 import net.tarasandedevelopment.tarasande.protocolhack.fix.EntityDimensionReplacement
 import net.tarasandedevelopment.tarasande.protocolhack.fix.PackFormats

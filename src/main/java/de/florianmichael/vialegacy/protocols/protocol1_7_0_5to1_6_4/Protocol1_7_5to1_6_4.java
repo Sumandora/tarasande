@@ -56,7 +56,7 @@ import de.florianmichael.vialegacy.pre_netty.PreNettyPacketEncoder;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.provider.PreNettyProvider;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.TypeRegistry_1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.pre_netty.PreNettyConstants;
 import de.florianmichael.vialegacy.protocols.base.HandshakeStorage;
@@ -135,11 +135,11 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     pw.clearPacket();
 
                     pw.write(Type.UNSIGNED_BYTE, (short) protocol);
-                    pw.write(TypeRegistry_1_6_4.STRING, username);
+                    pw.write(Types1_6_4.STRING, username);
 
                     final HandshakeStorage handshakeStorage = pw.user().get(HandshakeStorage.class);
                     if (handshakeStorage != null) {
-                        pw.write(TypeRegistry_1_6_4.STRING, handshakeStorage.hostname);
+                        pw.write(Types1_6_4.STRING, handshakeStorage.hostname);
                         pw.write(Type.INT, handshakeStorage.port);
                     }
                 });
@@ -156,7 +156,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     pw.write(Type.BYTE, (byte) 0x01);
                     // Plugin Message
                     pw.write(Type.UNSIGNED_BYTE, (short) 0xFA);
-                    pw.write(TypeRegistry_1_6_4.STRING, "MC|PingHost");
+                    pw.write(Types1_6_4.STRING, "MC|PingHost");
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     DataOutputStream out = new DataOutputStream(baos);
                     out.writeByte(pw.user().getProtocolInfo().getServerProtocolVersion());
@@ -181,7 +181,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                map(Type.STRING, TypeRegistry_1_6_4.STRING);
+                map(Type.STRING, Types1_6_4.STRING);
             }
         });
 
@@ -241,7 +241,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                map(Type.STRING, TypeRegistry_1_6_4.STRING); // Locale
+                map(Type.STRING, Types1_6_4.STRING); // Locale
                 map(Type.BYTE); // View Distance
                 map(Type.BYTE); // Chat flags
                 handler((pw) -> {
@@ -277,7 +277,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                map(Type.STRING, TypeRegistry_1_6_4.STRING);
+                map(Type.STRING, Types1_6_4.STRING);
                 map(Type.SHORT);
                 map(Type.REMAINING_BYTES);
             }
@@ -291,10 +291,10 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.SHORT); // Y-Position
                 map(Type.INT); // Z-Position
 
-                map(Type.STRING, TypeRegistry_1_6_4.STRING); // Line-1
-                map(Type.STRING, TypeRegistry_1_6_4.STRING); // Line-2
-                map(Type.STRING, TypeRegistry_1_6_4.STRING); // Line-3
-                map(Type.STRING, TypeRegistry_1_6_4.STRING); // Line-4
+                map(Type.STRING, Types1_6_4.STRING); // Line-1
+                map(Type.STRING, Types1_6_4.STRING); // Line-2
+                map(Type.STRING, Types1_6_4.STRING); // Line-3
+                map(Type.STRING, Types1_6_4.STRING); // Line-4
             }
         });
 
@@ -351,7 +351,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // Server-Id
+                map(Types1_6_4.STRING, Type.STRING); // Server-Id
                 map(Types1_7_6_10.BYTEARRAY); // PublicKey
                 map(Types1_7_6_10.BYTEARRAY); // VerifyToken
                 handler((pw) -> {
@@ -431,7 +431,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 handler((pw) -> {
-                    String reason = pw.read(TypeRegistry_1_6_4.STRING);
+                    String reason = pw.read(Types1_6_4.STRING);
                     String[] split = reason.split("\0");
                     if (!split[0].equals("§1") || split.length != 6) {
                         pw.user().disconnect("Invalid response!");
@@ -511,7 +511,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 map(Type.INT); // Entity-Id
-                map(TypeRegistry_1_6_4.METADATA_LIST, Types1_7_6_10.METADATA_LIST);
+                map(Types1_6_4.METADATA_LIST, Types1_7_6_10.METADATA_LIST);
             }
         });
 
@@ -520,17 +520,21 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 handler((pw) -> {
-                    int entityId = pw.read(Type.INT);
-                    int count = pw.read(Type.INT);
-                    List<EntityProperty> list = new ArrayList<>(count);
+                    final int entityId = pw.read(Type.INT);
+                    final int count = pw.read(Type.INT);
+
+                    final List<EntityProperty> list = new ArrayList<>(count);
                     for (int i = 0; i < count; i++) {
-                        EntityProperty prop = new EntityProperty();
-                        prop.key = pw.read(TypeRegistry_1_6_4.STRING);
+                        final EntityProperty prop = new EntityProperty();
+                        prop.key = pw.read(Types1_6_4.STRING);
                         prop.value = pw.read(Type.DOUBLE); // Value
+
                         short modifierCount = pw.passthrough(Type.SHORT); // Modifier count
-                        List<EntityAttributeModifier> modifiers = new ArrayList<>(modifierCount);
+
+                        final List<EntityAttributeModifier> modifiers = new ArrayList<>(modifierCount);
+
                         for (int k = 0; k < modifierCount; k++) {
-                            EntityAttributeModifier mod = new EntityAttributeModifier();
+                            final EntityAttributeModifier mod = new EntityAttributeModifier();
                             mod.uuid = pw.read(Type.UUID);
                             mod.amount = pw.read(Type.DOUBLE);
                             mod.operation = pw.read(Type.BYTE);
@@ -543,13 +547,15 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
                     pw.write(Type.INT, entityId);
                     pw.write(Type.INT, list.size());
-                    for (int i = 0; i < list.size(); i++) {
-                        EntityProperty prop = list.get(i);
+
+                    for (EntityProperty prop : list) {
                         pw.write(Type.STRING, prop.key);
                         pw.write(Type.DOUBLE, prop.value);
                         pw.write(Type.SHORT, (short) prop.modifiers.size());
+
                         for (int k = 0; k < prop.modifiers.size(); k++) {
-                            EntityAttributeModifier mod = prop.modifiers.get(k);
+                            final EntityAttributeModifier mod = prop.modifiers.get(k);
+
                             pw.write(Type.UUID, mod.uuid);
                             pw.write(Type.DOUBLE, mod.amount);
                             pw.write(Type.BYTE, mod.operation);
@@ -565,7 +571,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             public void registerMap() {
                 handler((pw) -> {
                     int entityId = pw.read(Type.INT);
-                    String levelType = pw.read(TypeRegistry_1_6_4.STRING);
+                    String levelType = pw.read(Types1_6_4.STRING);
                     short gamemode = pw.read(Type.BYTE);
                     byte dimension = pw.read(Type.BYTE);
                     byte difficulty = pw.read(Type.BYTE);
@@ -587,7 +593,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                map(TypeRegistry_1_6_4.STRING, Type.STRING);
+                map(Types1_6_4.STRING, Type.STRING);
                 handler((pw) -> {
                     String message = pw.get(Type.STRING, 0);
                     try {
@@ -608,7 +614,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.BYTE, Type.UNSIGNED_BYTE); // Difficulty
                 map(Type.BYTE, Type.UNSIGNED_BYTE); // GameMode
                 handler((pw) -> pw.read(Type.SHORT)); // WorldHeight
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // LevelType
+                map(Types1_6_4.STRING, Type.STRING); // LevelType
             }
         });
 
@@ -616,7 +622,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                map(TypeRegistry_1_6_4.STRING, Type.STRING);
+                map(Types1_6_4.STRING, Type.STRING);
             }
         });
 
@@ -677,7 +683,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             public void registerMap() {
                 map(Type.BYTE, Type.UNSIGNED_BYTE); // Window id
                 map(Type.BYTE, Type.UNSIGNED_BYTE); // Inventory type
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // Window title
+                map(Types1_6_4.STRING, Type.STRING); // Window title
                 map(Type.BYTE, Type.UNSIGNED_BYTE); // Number of slots
                 map(Type.BOOLEAN); // Use window title
             }
@@ -751,7 +757,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // Player name
+                map(Types1_6_4.STRING, Type.STRING); // Player name
                 map(Type.BOOLEAN); // Online
                 map(Type.SHORT); // Ping
             }
@@ -762,7 +768,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 handler((pw) -> {
-                    String text = pw.read(TypeRegistry_1_6_4.STRING);
+                    String text = pw.read(Types1_6_4.STRING);
                     pw.write(Type.STRING_ARRAY, text.split("\u0000"));
                 });
             }
@@ -772,8 +778,8 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // name
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // value
+                map(Types1_6_4.STRING, Type.STRING); // name
+                map(Types1_6_4.STRING, Type.STRING); // value
                 map(Type.BYTE); // Create / remove
             }
         });
@@ -782,9 +788,9 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // Item Name
+                map(Types1_6_4.STRING, Type.STRING); // Item Name
                 map(Type.BYTE); // Update / Remove
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // Score name
+                map(Types1_6_4.STRING, Type.STRING); // Score name
                 map(Type.INT); // Value
             }
         });
@@ -794,7 +800,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 map(Type.BYTE); // Position
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // Score name
+                map(Types1_6_4.STRING, Type.STRING); // Score name
             }
         });
 
@@ -803,7 +809,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 handler((pw) -> {
-                    String name = pw.read(TypeRegistry_1_6_4.STRING);
+                    String name = pw.read(Types1_6_4.STRING);
                     byte mode = pw.read(Type.BYTE);
                     String displayName = null;
                     String prefix = null;
@@ -811,15 +817,15 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     byte friendlyFire = 0;
                     String[] players = null;
                     if (mode == 0 || mode == 2) {
-                        displayName = pw.read(TypeRegistry_1_6_4.STRING);
-                        prefix = pw.read(TypeRegistry_1_6_4.STRING);
-                        suffix = pw.read(TypeRegistry_1_6_4.STRING);
+                        displayName = pw.read(Types1_6_4.STRING);
+                        prefix = pw.read(Types1_6_4.STRING);
+                        suffix = pw.read(Types1_6_4.STRING);
                         friendlyFire = pw.read(Type.BYTE);
                     }
                     if (mode == 0 || mode == 3 || mode == 4) {
                         players = new String[pw.read(Type.SHORT)];
                         for (int i = 0; i < players.length; i++)
-                            players[i] = pw.read(TypeRegistry_1_6_4.STRING);
+                            players[i] = pw.read(Types1_6_4.STRING);
                     }
                     pw.clearPacket();
 
@@ -847,7 +853,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             public void registerMap() {
                 map(Type.INT, Type.VAR_INT); // Entity-Id
                 handler((pw) -> {
-                    String name = pw.read(TypeRegistry_1_6_4.STRING);
+                    String name = pw.read(Types1_6_4.STRING);
                     pw.write(Type.STRING, UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes()).toString().replace("-", ""));
                     pw.write(Type.STRING, name);
                 });
@@ -857,7 +863,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.BYTE); // Yaw
                 map(Type.BYTE); // Pitch
                 map(Type.SHORT); // Current Item
-                map(TypeRegistry_1_6_4.METADATA_LIST, Types1_7_6_10.METADATA_LIST);
+                map(Types1_6_4.METADATA_LIST, Types1_7_6_10.METADATA_LIST);
             }
         });
 
@@ -898,7 +904,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.SHORT); // Velocity X
                 map(Type.SHORT); // Velocity Y
                 map(Type.SHORT); // Velocity Z
-                map(TypeRegistry_1_6_4.METADATA_LIST, Types1_7_6_10.METADATA_LIST);
+                map(Types1_6_4.METADATA_LIST, Types1_7_6_10.METADATA_LIST);
             }
         });
 
@@ -907,7 +913,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 map(Type.INT, Type.VAR_INT); // Entity-Id
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // Name of painting
+                map(Types1_6_4.STRING, Type.STRING); // Name of painting
                 map(Type.INT); // X-Position
                 map(Type.INT); // Y-Position
                 map(Type.INT); // Z-Position
@@ -1036,7 +1042,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // Particle name
+                map(Types1_6_4.STRING, Type.STRING); // Particle name
                 map(Type.FLOAT); // X-Position
                 map(Type.FLOAT); // Y-Position
                 map(Type.FLOAT); // Z-Position
@@ -1072,10 +1078,10 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.SHORT); // Y-Position
                 map(Type.INT); // Z-Position
 
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // Line-1
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // Line-2
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // Line-3
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // Line-4
+                map(Types1_6_4.STRING, Type.STRING); // Line-1
+                map(Types1_6_4.STRING, Type.STRING); // Line-2
+                map(Types1_6_4.STRING, Type.STRING); // Line-3
+                map(Types1_6_4.STRING, Type.STRING); // Line-4
             }
         });
     }

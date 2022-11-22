@@ -21,16 +21,16 @@
 
 package de.florianmichael.vialegacy.protocol.splitter;
 
-import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.TypeRegistry_1_4_2;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.TypeRegistry_1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.impl.NBTItems;
+import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.Types1_4_2;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.data.NBTItems;
 import io.netty.buffer.ByteBuf;
 
 public class TransformInstanceUtil {
 
     public void read1_6_4_MetadataList(final ByteBuf buf) {
         try {
-            TypeRegistry_1_6_4.METADATA_LIST.read(buf);
+            Types1_6_4.METADATA_LIST.read(buf);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -38,7 +38,7 @@ public class TransformInstanceUtil {
 
     public void read1_4_2_MetadataList(final ByteBuf buf) {
         try {
-            TypeRegistry_1_4_2.METADATA_LIST.read(buf);
+            Types1_4_2.METADATA_LIST.read(buf);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

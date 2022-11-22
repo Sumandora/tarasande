@@ -26,7 +26,7 @@ import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.rewriter.RewriterBase;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.TypeRegistry_1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
 
 @SuppressWarnings("rawtypes")
 public class SoundRewriter<T extends EnZaProtocol> extends RewriterBase<T> {
@@ -41,7 +41,7 @@ public class SoundRewriter<T extends EnZaProtocol> extends RewriterBase<T> {
 
             @Override
             public void registerMap() {
-                map(TypeRegistry_1_6_4.STRING, Type.STRING); // Sound name
+                map(Types1_6_4.STRING, Type.STRING); // Sound name
                 handler(wrapper -> wrapper.set(Type.STRING, 0, rewrite(wrapper.get(Type.STRING, 0))));
             }
         });
@@ -53,9 +53,9 @@ public class SoundRewriter<T extends EnZaProtocol> extends RewriterBase<T> {
             @Override
             public void registerMap() {
                 handler(wrapper -> {
-                    final String sound = wrapper.read(TypeRegistry_1_6_4.STRING);
+                    final String sound = wrapper.read(Types1_6_4.STRING);
 
-                    wrapper.write(TypeRegistry_1_6_4.STRING, rewrite(sound));
+                    wrapper.write(Types1_6_4.STRING, rewrite(sound));
                 });
             }
         });
