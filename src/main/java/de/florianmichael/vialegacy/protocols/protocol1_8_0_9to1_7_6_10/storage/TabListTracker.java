@@ -1,6 +1,6 @@
 /*
  * Copyright (c) FlorianMichael as EnZaXD 2022
- * Created on 08.04.22, 20:42
+ * Created on 08.04.22, 17:47
  *
  * --FLORIAN MICHAEL PRIVATE LICENCE v1.0--
  *
@@ -36,34 +36,51 @@ package de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.storage;
 
 import com.viaversion.viaversion.api.connection.StoredObject;
 import com.viaversion.viaversion.api.connection.UserConnection;
-import com.viaversion.viaversion.api.minecraft.entities.Entity1_10Types;
+import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.model.SkinProperty;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-public class EntityTracker extends StoredObject {
+public class TabListTracker extends StoredObject {
 
-	private final Map<Integer, Entity1_10Types.EntityType> clientEntityTypes = new ConcurrentHashMap<>();
-	private final Map<Integer, Boolean> groundTracker = new HashMap<>();
+	private final ArrayList<TabListEntry> tabListEntries = new ArrayList<>();
 
-	public EntityTracker(final UserConnection user) {
+	public TabListTracker(UserConnection user) {
 		super(user);
 	}
 
-	public void removeEntity(int entityId) {
-		clientEntityTypes.remove(entityId);
+	public TabListEntry getTabListEntry(String name) {
+		for (TabListEntry entry : tabListEntries) {
+			if (name.equals(entry.name)) {
+				return entry;
+			}
+		}
+		return null;
 	}
 
-	public boolean isGround(final int entityId) {
-		return groundTracker.getOrDefault(entityId, true);
+	public void remove(TabListEntry entry) {
+		tabListEntries.remove(entry);
 	}
 
-	public Map<Integer, Entity1_10Types.EntityType> getClientEntityTypes() {
-		return this.clientEntityTypes;
+	public void add(TabListEntry entry) {
+		tabListEntries.add(entry);
 	}
 
-	public Map<Integer, Boolean> getGroundTracker() {
-		return groundTracker;
+	public int indexOf(TabListEntry entry) {
+		return tabListEntries.indexOf(entry);
+	}
+
+	public static class TabListEntry {
+		public String name;
+		public String displayName;
+		public UUID uuid;
+		public int ping;
+		public List<SkinProperty> properties = new ArrayList<>();
+
+		public TabListEntry(String name, UUID uuid) {
+			this.name = name;
+			this.uuid = uuid;
+		}
 	}
 }

@@ -43,8 +43,7 @@ import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.ClientboundLoginPackets1_2_4_5;
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.ClientboundPackets1_2_4_5;
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.ServerboundPackets1_2_4_5;
-import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.TypeRegistry1_2_5;
-import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
+import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.Types1_2_5;
 
 public class Protocol1_2_4_5to1_2_1_3 extends EnZaProtocol<ClientboundPackets1_2_1_3, ClientboundPackets1_2_4_5, ServerboundPackets1_2_1_3, ServerboundPackets1_2_4_5> {
 
@@ -66,18 +65,18 @@ public class Protocol1_2_4_5to1_2_1_3 extends EnZaProtocol<ClientboundPackets1_2
 				map(Type.BYTE); // Button
 				map(Type.SHORT); // Action
 				map(Type.BYTE); // Mode
-				map(TypeRegistry1_2_5.COMPRESSED_NBT_ITEM); // Item
+				map(Types1_2_5.COMPRESSED_NBT_ITEM); // Item
 
 				handler(wrapper -> {
 					final int windowId = wrapper.get(Type.BYTE, 0);
 					final boolean shiftClick = (wrapper.get(Type.BYTE, 2) == 1);
-					final Item item = wrapper.get(TypeRegistry1_2_5.COMPRESSED_NBT_ITEM, 0);
+					final Item item = wrapper.get(Types1_2_5.COMPRESSED_NBT_ITEM, 0);
 
 					if (shiftClick && windowId != 0) { // generic inventory
 						item.setIdentifier(34);
 					}
 
-					wrapper.set(TypeRegistry1_2_5.COMPRESSED_NBT_ITEM, 0, item);
+					wrapper.set(Types1_2_5.COMPRESSED_NBT_ITEM, 0, item);
 				});
 			}
 		});

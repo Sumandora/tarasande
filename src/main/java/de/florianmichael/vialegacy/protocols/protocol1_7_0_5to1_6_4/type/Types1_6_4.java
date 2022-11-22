@@ -1,6 +1,6 @@
 /*
  * Copyright (c) FlorianMichael as EnZaXD 2022
- * Created on 08.04.22, 17:47
+ * Created on 24.06.22, 13:55
  *
  * --FLORIAN MICHAEL PRIVATE LICENCE v1.0--
  *
@@ -32,60 +32,15 @@
  *         Version-independent validity and automatic renewal
  */
 
-package de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.storage;
+package de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type;
 
-import com.viaversion.viaversion.api.connection.StoredObject;
-import com.viaversion.viaversion.api.connection.UserConnection;
-import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.model.SkinProperty;
+import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.impl.MetadataList1_6_4Type;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.impl.String1_6_4Type;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+public class Types1_6_4 {
+	
+	public static final Type<String> STRING = new String1_6_4Type();
+	public static final MetadataList1_6_4Type METADATA_LIST = new MetadataList1_6_4Type();
 
-public class TablistTracker extends StoredObject {
-
-	private final ArrayList<TabListEntry> tablist = new ArrayList<>();
-
-	public TablistTracker(UserConnection user) {
-		super(user);
-	}
-
-	public TabListEntry getTabListEntry(String name) {
-		for (TabListEntry entry : tablist) if (name.equals(entry.name)) return entry;
-		return null;
-	}
-
-	public TabListEntry getTabListEntry(UUID uuid) {
-		for (TabListEntry entry : tablist) if (uuid.equals(entry.uuid)) return entry;
-		return null;
-	}
-
-	public void remove(TabListEntry entry) {
-		tablist.remove(entry);
-	}
-
-	public void add(TabListEntry entry) {
-		tablist.add(entry);
-	}
-
-	public int indexOf(TabListEntry entry) {
-		return tablist.indexOf(entry);
-	}
-
-	public static boolean shouldUpdateDisplayName(String oldName, String newName) {
-		return oldName == null && newName != null || oldName != null && newName == null || oldName != null && !oldName.equals(newName);
-	}
-
-	public static class TabListEntry {
-		public String name;
-		public String displayName;
-		public UUID uuid;
-		public int ping;
-		public List<SkinProperty> properties = new ArrayList<>();
-
-		public TabListEntry(String name, UUID uuid) {
-			this.name = name;
-			this.uuid = uuid;
-		}
-	}
 }

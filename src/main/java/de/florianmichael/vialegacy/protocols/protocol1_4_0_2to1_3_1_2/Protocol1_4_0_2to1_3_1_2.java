@@ -44,8 +44,8 @@ import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_4_0_2to1_3_1_2.sound.SoundRewriter1_4_0_2to1_3_1_2;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
-import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.TypeRegistry_1_4_2;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.TypeRegistry_1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.Types1_4_2;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_4_3_preto1_4_0_2.ClientboundPackets1_4_0_2;
 import de.florianmichael.vialegacy.protocols.protocol1_4_3_preto1_4_0_2.ServerboundPackets1_4_0_2;
@@ -103,7 +103,7 @@ public class Protocol1_4_0_2to1_3_1_2 extends EnZaProtocol<ClientboundPackets1_3
 				map(Type.SHORT); // Velocity-Y
 				map(Type.SHORT); // Velocity-Z
 
-				map(TypeRegistry_1_4_2.METADATA_LIST); // Metadata list
+				map(Types1_4_2.METADATA_LIST); // Metadata list
 
 				handler((pw) -> {
 					final int type = pw.get(Type.BYTE, 0);
@@ -195,7 +195,7 @@ public class Protocol1_4_0_2to1_3_1_2 extends EnZaProtocol<ClientboundPackets1_3
 		this.registerServerbound(ServerboundPackets1_4_0_2.CLIENT_SETTINGS, new PacketRemapper() {
 			@Override
 			public void registerMap() {
-				map(TypeRegistry_1_6_4.STRING); // Locale
+				map(Types1_6_4.STRING); // Locale
 
 				map(Type.BYTE); // View Distance
 				map(Type.BYTE); // Chat flags

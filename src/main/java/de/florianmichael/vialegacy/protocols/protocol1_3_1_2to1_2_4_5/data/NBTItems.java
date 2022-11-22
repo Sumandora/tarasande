@@ -19,7 +19,7 @@
  *         Version-independent validity and automatic renewal
  */
 
-package de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.impl;
+package de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.data;
 
 import java.util.HashMap;
 import java.util.Map;

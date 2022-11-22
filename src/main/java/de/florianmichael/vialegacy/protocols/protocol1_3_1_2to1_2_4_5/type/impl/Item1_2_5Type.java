@@ -24,13 +24,14 @@ package de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.impl
 import com.viaversion.viaversion.api.minecraft.item.DataItem;
 import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.data.NBTItems;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
 import io.netty.buffer.ByteBuf;
 
-public class ItemType1_2_5 extends Type<Item> {
+public class Item1_2_5Type extends Type<Item> {
 	private final boolean compressed;
 
-	public ItemType1_2_5(boolean compressed) {
+	public Item1_2_5Type(boolean compressed) {
 		super(Item.class);
 		this.compressed = compressed;
 	}

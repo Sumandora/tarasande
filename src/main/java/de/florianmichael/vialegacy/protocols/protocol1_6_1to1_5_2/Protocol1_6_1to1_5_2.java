@@ -44,7 +44,7 @@ import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.api.metadata.LegacyMetadataRewriter;
 import de.florianmichael.vialegacy.api.sound.SoundRewriter;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
-import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.TypeRegistry_1_4_2;
+import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.Types1_4_2;
 import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.metadata.MetadataRewriter1_6_1to1_5_2;
 import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.sound.SoundRewriter1_6_1to1_5_2;
 import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.storage.EntityTracker;
@@ -52,7 +52,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.storage.Vehicl
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.ClientboundPackets1_6_1;
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.ServerboundPackets1_6_1;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.ClientboundLoginPackets1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.TypeRegistry_1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
 
 import java.util.List;
 
@@ -72,7 +72,7 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 		entityProperties.write(Type.INT, entityId);
 		entityProperties.write(Type.INT, 1); // Count
 
-		entityProperties.write(TypeRegistry_1_6_4.STRING, "generic.movementSpeed");
+		entityProperties.write(Types1_6_4.STRING, "generic.movementSpeed");
 		entityProperties.write(Type.DOUBLE, 0.10000000149011612D);
 
 		entityProperties.send(Protocol1_6_1to1_5_2.class);
@@ -176,9 +176,9 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 					final Entity1_10Types.EntityType entityType = Entity1_10Types.getTypeFromId(wrapper.get(Type.BYTE, 0), false);
 
 					tracker.track(entityId, entityType, false);
-					final List<Metadata> oldMetadata = wrapper.read(TypeRegistry_1_4_2.METADATA_LIST);
+					final List<Metadata> oldMetadata = wrapper.read(Types1_4_2.METADATA_LIST);
 					metadataRewriter().rewrite(entityType, tracker.isObjective(entityId), oldMetadata);
-					wrapper.write(TypeRegistry_1_4_2.METADATA_LIST, oldMetadata);
+					wrapper.write(Types1_4_2.METADATA_LIST, oldMetadata);
 				});
 			}
 		});
@@ -204,9 +204,9 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 					final EntityTracker tracker = wrapper.user().get(EntityTracker.class);
 					final int entityId = wrapper.passthrough(Type.INT);
 
-					final List<Metadata> oldMetadata = wrapper.read(TypeRegistry_1_6_4.METADATA_LIST);
+					final List<Metadata> oldMetadata = wrapper.read(Types1_6_4.METADATA_LIST);
 					metadataRewriter().rewrite(tracker.get(entityId), tracker.isObjective(entityId), oldMetadata);
-					wrapper.write(TypeRegistry_1_6_4.METADATA_LIST, oldMetadata);
+					wrapper.write(Types1_6_4.METADATA_LIST, oldMetadata);
 				});
 			}
 		});
@@ -218,7 +218,7 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 					final EntityTracker tracker = wrapper.user().get(EntityTracker.class);
 					final int entityId = wrapper.passthrough(Type.INT);
 
-					wrapper.passthrough(TypeRegistry_1_6_4.STRING);
+					wrapper.passthrough(Types1_6_4.STRING);
 
 					wrapper.passthrough(Type.INT); // X-Position
 					wrapper.passthrough(Type.INT); // Y-Position
@@ -228,9 +228,9 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 					wrapper.passthrough(Type.SHORT); // Current Item
 					tracker.track(entityId, Entity1_10Types.EntityType.ENTITY_HUMAN, false);
 
-					final List<Metadata> oldMetadata = wrapper.read(TypeRegistry_1_6_4.METADATA_LIST);
+					final List<Metadata> oldMetadata = wrapper.read(Types1_6_4.METADATA_LIST);
 					metadataRewriter().rewrite(tracker.get(entityId), tracker.isObjective(entityId), oldMetadata);
-					wrapper.write(TypeRegistry_1_6_4.METADATA_LIST, oldMetadata);
+					wrapper.write(Types1_6_4.METADATA_LIST, oldMetadata);
 				});
 			}
 		});
@@ -284,12 +284,12 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 			@Override
 			public void registerMap() {
 				handler(wrapper -> {
-					String soundName = wrapper.read(TypeRegistry_1_6_4.STRING);
+					String soundName = wrapper.read(Types1_6_4.STRING);
 					soundRewriter().rewrite(soundName);
 					if (soundName == null || soundName.isEmpty()) {
 						wrapper.cancel();
 					}
-					wrapper.write(TypeRegistry_1_6_4.STRING, soundName);
+					wrapper.write(Types1_6_4.STRING, soundName);
 				});
 			}
 		});

@@ -1,3 +1,16 @@
+/*
+ * Copyright (c) FlorianMichael as EnZaXD 2022
+ * Created on 6/24/22, 5:37 PM
+ *
+ * --FLORIAN MICHAEL PRIVATE LICENCE v1.0--
+ *
+ * This file / project is protected and is the intellectual property of Florian Michael (aka. EnZaXD),
+ * any use (be it private or public, be it copying or using for own use, be it publishing or modifying) of this
+ * file / project is prohibited. It requires in that use a written permission with official signature of the owner
+ * "Florian Michael". "Florian Michael" receives the right to control and manage this file / project. This right is not
+ * cancelled by copying or removing the license and in case of violation a criminal consequence is to be expected.
+ * The owner "Florian Michael" is free to change this license.
+ */
 /**
  * --FLORIAN MICHAEL PRIVATE LICENCE v1.2--
  *
@@ -19,14 +32,14 @@
  *         Version-independent validity and automatic renewal
  */
 
-package de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.impl;
+package de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.impl;
 
 import com.viaversion.viaversion.api.minecraft.Position;
-import com.viaversion.viaversion.api.minecraft.item.DataItem;
 import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
 import com.viaversion.viaversion.api.type.types.minecraft.MetaListTypeTemplate;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.TypeRegistry_1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.MetaType_1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Meta1_7_6_10Type;
 import io.netty.buffer.ByteBuf;
@@ -35,7 +48,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class MetadataListType1_2_5 extends MetaListTypeTemplate {
+public class MetadataList1_6_4Type extends MetaListTypeTemplate {
 	
 	@Override
 	public List<Metadata> read(ByteBuf buf) throws Exception {
@@ -68,14 +81,11 @@ public class MetadataListType1_2_5 extends MetaListTypeTemplate {
 				break;
 
 			case 4:
-				metadata = new Metadata(key, MetaType_1_6_4.String, TypeRegistry_1_6_4.STRING.read(buf));
+				metadata = new Metadata(key, MetaType_1_6_4.String, Types1_6_4.STRING.read(buf));
 				break;
 
 			case 5:
-				int shiftedId = buf.readShort();
-				byte amount = buf.readByte();
-				short damage = buf.readShort();
-				metadata = new Metadata(key, Meta1_7_6_10Type.Slot, new DataItem(shiftedId - 256, amount, damage, null));
+				metadata = new Metadata(key, Meta1_7_6_10Type.Slot, Types1_7_6_10.COMPRESSED_NBT_ITEM.read(buf));
 				break;
 			case 6:
 				int x = buf.readInt();
@@ -95,10 +105,11 @@ public class MetadataListType1_2_5 extends MetaListTypeTemplate {
 		Iterator<Metadata> it = list.iterator();
 		while(it.hasNext()) {
 			Metadata obj = it.next();
-			int i = (obj.metaType().typeId() << 5 | obj.id() & 0x1f) & 0xff;
-			buf.writeByte(i);
+			int typeId = obj.metaType().typeId();
+			int var2 = (typeId << 5 | obj.id() & 31) & 255;
+			buf.writeByte(var2);
 	
-			switch (obj.metaType().typeId()) {
+			switch (typeId) {
 			case 0:
 				buf.writeByte(obj.value());
 				break;
@@ -116,14 +127,12 @@ public class MetadataListType1_2_5 extends MetaListTypeTemplate {
 				break;
 	
 			case 4:
-				TypeRegistry_1_6_4.STRING.write(buf, obj.value());
+				Types1_6_4.STRING.write(buf, obj.value());
 				break;
 	
 			case 5:
 				Item item = obj.value();
-				buf.writeShort(256 + item.identifier());
-				buf.writeByte(item.amount());
-				buf.writeShort(item.data());
+				Types1_7_6_10.COMPRESSED_NBT_ITEM.write(buf, item);
 				break;
 	
 			case 6:

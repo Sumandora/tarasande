@@ -1,6 +1,6 @@
 /*
  * Copyright (c) FlorianMichael as EnZaXD 2022
- * Created on 24.06.22, 13:55
+ * Created on 08.04.22, 20:42
  *
  * --FLORIAN MICHAEL PRIVATE LICENCE v1.0--
  *
@@ -32,15 +32,38 @@
  *         Version-independent validity and automatic renewal
  */
 
-package de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type;
+package de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.storage;
 
-import com.viaversion.viaversion.api.type.Type;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.impl.MetadataListType_1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.impl.StringType_1_6_4;
+import com.viaversion.viaversion.api.connection.StoredObject;
+import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.minecraft.entities.Entity1_10Types;
 
-public class TypeRegistry_1_6_4 {
-	
-	public static final Type<String> STRING = new StringType_1_6_4();
-	public static final MetadataListType_1_6_4 METADATA_LIST = new MetadataListType_1_6_4();
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+public class EntityTracker1_7_6_10 extends StoredObject {
+
+	private final Map<Integer, Entity1_10Types.EntityType> clientEntityTypes = new ConcurrentHashMap<>();
+	private final Map<Integer, Boolean> groundTracker = new HashMap<>();
+
+	public EntityTracker1_7_6_10(final UserConnection user) {
+		super(user);
+	}
+
+	public void removeEntity(int entityId) {
+		clientEntityTypes.remove(entityId);
+	}
+
+	public boolean isGround(final int entityId) {
+		return groundTracker.getOrDefault(entityId, true);
+	}
+
+	public Map<Integer, Entity1_10Types.EntityType> getClientEntityTypes() {
+		return this.clientEntityTypes;
+	}
+
+	public Map<Integer, Boolean> getGroundTracker() {
+		return groundTracker;
+	}
 }

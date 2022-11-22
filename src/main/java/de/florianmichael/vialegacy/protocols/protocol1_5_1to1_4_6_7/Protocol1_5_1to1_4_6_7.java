@@ -40,13 +40,10 @@ import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.ClientboundLoginPackets1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.TypeRegistry_1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_5_2to1_5_1.ClientboundPackets1_5_1;
 import de.florianmichael.vialegacy.protocols.protocol1_5_2to1_5_1.ServerboundPackets1_5_1;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Protocol1_5_1to1_4_6_7 extends EnZaProtocol<ClientboundPackets1_4_6_7, ClientboundPackets1_5_1, ServerboundPackets1_4_6_7, ServerboundPackets1_5_1> {
 
@@ -72,7 +69,7 @@ public class Protocol1_5_1to1_4_6_7 extends EnZaProtocol<ClientboundPackets1_4_6
 				map(Type.BYTE); // Window-Id
 				map(Type.BYTE); // Inventory-Type
 
-				map(TypeRegistry_1_6_4.STRING); // Window-Title
+				map(Types1_6_4.STRING); // Window-Title
 
 				map(Type.BYTE); // Slot count
 				handler((pw) -> pw.write(Type.BOOLEAN, false));

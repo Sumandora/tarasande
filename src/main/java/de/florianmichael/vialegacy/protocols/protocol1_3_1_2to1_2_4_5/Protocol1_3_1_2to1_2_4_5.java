@@ -51,10 +51,10 @@ import com.viaversion.viaversion.libs.opennbt.tag.builtin.StringTag;
 import de.florianmichael.vialegacy.ViaLegacy;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider;
-import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.TypeRegistry1_2_5;
+import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.Types1_2_5;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
-import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.TypeRegistry_1_4_2;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.TypeRegistry_1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.Types1_4_2;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.storage.LevelDataStorage;
 import de.florianmichael.vialegacy.protocols.protocol1_4_0_2to1_3_1_2.ClientboundPackets1_3_1_2;
@@ -134,12 +134,12 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 			public void registerMap() {
 				handler((pw) -> {
 					pw.read(Type.UNSIGNED_BYTE); // Protocol ID
-					final String username = pw.read(TypeRegistry_1_6_4.STRING);
-					final String host = pw.read(TypeRegistry_1_6_4.STRING);
+					final String username = pw.read(Types1_6_4.STRING);
+					final String host = pw.read(Types1_6_4.STRING);
 					final int port = pw.read(Type.INT);
 
 					pw.clearPacket();
-					pw.write(TypeRegistry_1_6_4.STRING, username + ";" + host + ":" + port);
+					pw.write(Types1_6_4.STRING, username + ";" + host + ":" + port);
 				});
 			}
 		});
@@ -164,7 +164,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 					pw.write(Type.BYTE, (byte) 1); // Client always send 1
 					pw.write(Type.BYTE, (byte) dataStorage.gameMode);
 					pw.write(Type.SHORT, (short) dataStorage.worldHeight);
-					pw.write(TypeRegistry_1_6_4.STRING, dataStorage.levelType);
+					pw.write(Types1_6_4.STRING, dataStorage.levelType);
 				});
 			}
 		});
@@ -174,8 +174,8 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 			public void registerMap() {
 				handler(pw -> {
 					final int entityId = pw.read(Type.INT);
-					pw.read(TypeRegistry_1_6_4.STRING); // Not documented
-					final String levelType = pw.read(TypeRegistry_1_6_4.STRING);
+					pw.read(Types1_6_4.STRING); // Not documented
+					final String levelType = pw.read(Types1_6_4.STRING);
 					final byte gamemode = pw.read(Type.INT).byteValue();
 					final byte dimension = pw.read(Type.INT).byteValue();
 					final byte difficulty = pw.read(Type.BYTE);
@@ -190,7 +190,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 					pw.clearPacket();
 
 					pw.write(Type.INT, entityId);
-					pw.write(TypeRegistry_1_6_4.STRING, levelType);
+					pw.write(Types1_6_4.STRING, levelType);
 					pw.write(Type.BYTE, gamemode);
 					pw.write(Type.BYTE, dimension);
 					pw.write(Type.BYTE, difficulty);
@@ -220,7 +220,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 				map(Type.BYTE); // Button
 				map(Type.SHORT); // Action
 				map(Type.BYTE); // Mode
-				map(Types1_7_6_10.COMPRESSED_NBT_ITEM, TypeRegistry1_2_5.COMPRESSED_NBT_ITEM); // Item
+				map(Types1_7_6_10.COMPRESSED_NBT_ITEM, Types1_2_5.COMPRESSED_NBT_ITEM); // Item
 			}
 		});
 
@@ -228,7 +228,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 			@Override
 			public void registerMap() {
 				map(Type.SHORT); // Slot
-				map(Types1_7_6_10.COMPRESSED_NBT_ITEM, TypeRegistry1_2_5.COMPRESSED_NBT_ITEM); // Item
+				map(Types1_7_6_10.COMPRESSED_NBT_ITEM, Types1_2_5.COMPRESSED_NBT_ITEM); // Item
 			}
 		});
 
@@ -239,7 +239,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 				map(Type.UNSIGNED_BYTE); // Y-Position
 				map(Type.INT); // Z-Position
 				map(Type.UNSIGNED_BYTE); // Direction
-				map(Types1_7_6_10.COMPRESSED_NBT_ITEM, TypeRegistry1_2_5.COMPRESSED_NBT_ITEM); // Slot
+				map(Types1_7_6_10.COMPRESSED_NBT_ITEM, Types1_2_5.COMPRESSED_NBT_ITEM); // Slot
 				map(Type.BYTE, Type.NOTHING); // Cursor-X
 				map(Type.BYTE, Type.NOTHING); // Cursor-Y
 				map(Type.BYTE, Type.NOTHING); // Cursor-Z
@@ -269,7 +269,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 			@Override
 			public void registerMap() {
 				handler((pw) -> {
-					final String serverId = pw.read(TypeRegistry_1_6_4.STRING);
+					final String serverId = pw.read(Types1_6_4.STRING);
 					pw.cancel();
 
 					if (!serverId.equals("-")) {
@@ -293,8 +293,8 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 					final PacketWrapper login = PacketWrapper.create(ServerboundPackets1_2_4_5.JOIN_GAME, pw.user());
 					login.write(Type.INT, Math.abs(pw.user().getProtocolInfo().getServerProtocolVersion()));
 
-					login.write(TypeRegistry_1_6_4.STRING, pw.user().getProtocolInfo().getUsername());
-					login.write(TypeRegistry_1_6_4.STRING, "");
+					login.write(Types1_6_4.STRING, pw.user().getProtocolInfo().getUsername());
+					login.write(Types1_6_4.STRING, "");
 
 					login.write(Type.INT, 0);
 					login.write(Type.INT, 0);
@@ -339,7 +339,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 			@Override
 			public void registerMap() {
 				map(Type.INT); // Entity-Id
-				map(TypeRegistry1_2_5.METADATA_LIST, TypeRegistry_1_4_2.METADATA_LIST); // Metadata list
+				map(Types1_2_5.METADATA_LIST, Types1_4_2.METADATA_LIST); // Metadata list
 			}
 		});
 
@@ -374,7 +374,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 			public void registerMap() {
 				map(Type.BYTE); // Window id
 				map(Type.SHORT); // Slot
-				map(TypeRegistry1_2_5.COMPRESSED_NBT_ITEM, Types1_7_6_10.COMPRESSED_NBT_ITEM); // Item
+				map(Types1_2_5.COMPRESSED_NBT_ITEM, Types1_7_6_10.COMPRESSED_NBT_ITEM); // Item
 			}
 		});
 
@@ -387,7 +387,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 					short itms = pw.read(Type.SHORT);
 					Item[] items = new Item[itms];
 					for (int i = 0; i < itms; i++) {
-						items[i] = pw.read(TypeRegistry1_2_5.COMPRESSED_NBT_ITEM);
+						items[i] = pw.read(Types1_2_5.COMPRESSED_NBT_ITEM);
 					}
 					pw.clearPacket();
 
@@ -401,7 +401,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 			@Override
 			public void registerMap() {
 				map(Type.SHORT); // Slot
-				map(TypeRegistry1_2_5.COMPRESSED_NBT_ITEM, Types1_7_6_10.COMPRESSED_NBT_ITEM); // Item
+				map(Types1_2_5.COMPRESSED_NBT_ITEM, Types1_7_6_10.COMPRESSED_NBT_ITEM); // Item
 			}
 		});
 
@@ -441,7 +441,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 			public void registerMap() {
 				map(Type.INT); // Entity-Id
 
-				map(TypeRegistry_1_6_4.STRING); // Player name
+				map(Types1_6_4.STRING); // Player name
 
 				map(Type.INT); // X-Position
 				map(Type.INT); // Y-Position
@@ -452,7 +452,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 
 				map(Type.SHORT); // Current item
 
-				handler((pw) -> pw.write(TypeRegistry_1_4_2.METADATA_LIST, new ArrayList<>()));
+				handler((pw) -> pw.write(Types1_4_2.METADATA_LIST, new ArrayList<>()));
 			}
 		});
 
@@ -472,7 +472,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 					pw.write(Type.SHORT, (short) 0); // Velocity-Y
 					pw.write(Type.SHORT, (short) 0); // Velocity-Z
 				});
-				map(TypeRegistry1_2_5.METADATA_LIST, TypeRegistry_1_4_2.METADATA_LIST); // Metadata list
+				map(Types1_2_5.METADATA_LIST, Types1_4_2.METADATA_LIST); // Metadata list
 			}
 		});
 

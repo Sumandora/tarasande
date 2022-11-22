@@ -40,40 +40,48 @@ import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.model.Tea
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
 public class TeamsTracker extends StoredObject {
 
-	private final HashMap<TeamsEntry, ArrayList<String>> teams = new HashMap<>();
+	private final HashMap<TeamsEntry, List<String>> teams = new HashMap<>();
 
 	public TeamsTracker(UserConnection user) {
 		super(user);
 	}
 
 	public TeamsEntry getTeamsEntry(String player) {
-		for (Map.Entry<TeamsEntry, ArrayList<String>> entry : teams.entrySet())
-			if (entry.getValue().contains(player))
+		for (Map.Entry<TeamsEntry, List<String>> entry : teams.entrySet()) {
+			if (entry.getValue().contains(player)) {
 				return entry.getKey();
+			}
+		}
 		return null;
 	}
 
-	public ArrayList<String> getPlayers(TeamsEntry entry) {
-		return teams.get(entry);
+	public List<String> getPlayers(TeamsEntry entry) {
+		if (teams.containsKey(entry)) {
+			return teams.get(entry);
+		}
+		return new ArrayList<>();
 	}
 
 	public TeamsEntry getByUniqueName(String uniqueName) {
-		for (Map.Entry<TeamsEntry, ArrayList<String>> entry : teams.entrySet())
-			if (entry.getKey().uniqueName.equals(uniqueName))
+		for (Map.Entry<TeamsEntry, List<String>> entry : teams.entrySet()) {
+			if (entry.getKey().uniqueName.equals(uniqueName)) {
 				return entry.getKey();
+			}
+		}
 		return null;
 	}
 
-	public void putTeamsEntry(TeamsEntry entry, ArrayList<String> players) {
+	public void putTeamsEntry(TeamsEntry entry, List<String> players) {
 		teams.put(entry, players);
 	}
 
-	public void removeTeamsEntryIf(Predicate<Map.Entry<TeamsEntry, ArrayList<String>>> predicate) {
+	public void removeTeamsEntryIf(Predicate<Map.Entry<TeamsEntry, List<String>>> predicate) {
 		teams.entrySet().removeIf(predicate);
 	}
 }

@@ -21,9 +21,9 @@
 
 package de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type;
 
-import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.impl.MetadataListType_1_4_2;
+import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.impl.MetadataList1_4_2Type;
 
-public class TypeRegistry_1_4_2 {
+public class Types1_4_2 {
 	
-	public static final MetadataListType_1_4_2 METADATA_LIST = new MetadataListType_1_4_2();
+	public static final MetadataList1_4_2Type METADATA_LIST = new MetadataList1_4_2Type();
 }

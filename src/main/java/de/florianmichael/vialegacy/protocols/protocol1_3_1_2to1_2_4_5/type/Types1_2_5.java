@@ -21,11 +21,11 @@
 
 package de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type;
 
-import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.impl.ItemType1_2_5;
-import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.impl.MetadataListType1_2_5;
+import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.impl.Item1_2_5Type;
+import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.impl.MetadataList1_2_5Type;
 
-public class TypeRegistry1_2_5 {
+public class Types1_2_5 {
 	
-	public static final ItemType1_2_5 COMPRESSED_NBT_ITEM = new ItemType1_2_5(true);
-	public static final MetadataListType1_2_5 METADATA_LIST = new MetadataListType1_2_5();
+	public static final Item1_2_5Type COMPRESSED_NBT_ITEM = new Item1_2_5Type(true);
+	public static final MetadataList1_2_5Type METADATA_LIST = new MetadataList1_2_5Type();
 }

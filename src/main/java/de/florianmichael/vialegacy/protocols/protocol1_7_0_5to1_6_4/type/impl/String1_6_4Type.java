@@ -37,9 +37,9 @@ package de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.impl;
 import com.viaversion.viaversion.api.type.Type;
 import io.netty.buffer.ByteBuf;
 
-public class StringType_1_6_4 extends Type<String> {
+public class String1_6_4Type extends Type<String> {
 	
-	public StringType_1_6_4() {
+	public String1_6_4Type() {
 		super(String.class);
 	}
 
