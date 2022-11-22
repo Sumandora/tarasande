@@ -58,7 +58,7 @@ public abstract class MixinClientConnection implements IClientConnection {
 
     @Inject(method = "disconnect", at = @At("RETURN"))
     public void hookEventDisconnect(Text disconnectReason, CallbackInfo ci) {
-        EventDispatcher.INSTANCE.call(new EventDisconnect());
+        EventDispatcher.INSTANCE.call(new EventDisconnect((ClientConnection) (Object) this));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.event
 
 import io.netty.buffer.ByteBuf
+import net.minecraft.network.ClientConnection
 import net.minecraft.network.Packet
 import su.mandora.event.Event
 import java.net.InetSocketAddress
@@ -18,4 +19,4 @@ class EventPacketTransform(val type: Type, val buf: ByteBuf?) : Event(false) {
 }
 
 class EventConnectServer(val address: InetSocketAddress) : Event(false)
-class EventDisconnect : Event(false)
+class EventDisconnect(val connection: ClientConnection) : Event(false)
