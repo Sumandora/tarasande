@@ -49,7 +49,7 @@ public class MixinClientConnectionSubInitChannel {
 
         if (haProxyHack.getState().getValue()) {
             channel.pipeline().addFirst("haproxy-encoder", HAProxyMessageEncoder.INSTANCE);
-            channel.pipeline().addLast(haProxyHack.getHandler());
+            channel.pipeline().addLast(haProxyHack.createHandler());
         }
     }
 }
