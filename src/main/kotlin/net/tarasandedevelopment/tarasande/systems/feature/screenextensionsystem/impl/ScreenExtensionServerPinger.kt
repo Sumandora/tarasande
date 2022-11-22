@@ -19,12 +19,11 @@ import net.tarasandedevelopment.tarasande.util.connection.AddressSaver
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import su.mandora.event.EventDispatcher
-import java.net.InetSocketAddress
 
 class PanelServerInformationPinging : PanelServerInformation() {
 
     private val pingDelay = ValueNumber(this, "Ping delay", 100.0, 5000.0, 10000.0, 100.0)
-
+    private val showPingProgress = ValueBoolean(this, "Show ping progress", true)
     private val timer = TimeUtil()
 
     override fun updateServerInfo() = AddressSaver.getAddress().let {
@@ -59,8 +58,10 @@ class PanelServerInformationPinging : PanelServerInformation() {
     override fun renderTitleBar(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.renderTitleBar(matrices, mouseX, mouseY, delta)
 
-        (((pingDelay.value + 1000) - (System.currentTimeMillis() - timer.time)) / 1000).toInt().toString().also {
-            FontWrapper.textShadow(matrices, it, (x + panelWidth - FontWrapper.getWidth(it)).toFloat(), (y).toFloat())
+        if (this.showPingProgress.value) {
+            (((pingDelay.value + 1000) - (System.currentTimeMillis() - timer.time)) / 1000).toInt().toString().also {
+                FontWrapper.textShadow(matrices, it, (x + panelWidth - FontWrapper.getWidth(it)).toFloat(), (y).toFloat())
+            }
         }
     }
 }
