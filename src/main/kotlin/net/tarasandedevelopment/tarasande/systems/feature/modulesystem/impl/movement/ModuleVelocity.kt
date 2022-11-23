@@ -29,7 +29,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
         override fun isEnabled() = mode.isSelected(1)
     }
     private val addition = object : ValueMode(this, "Addition", false, "Never", "Depending on packet", "Always") {
-        override fun isEnabled() = delay.value > 0.0
+        override fun isEnabled() = mode.isSelected(1) && delay.value > 0.0
     }
     private val changeDirection = object : ValueBoolean(this, "Change direction", false) {
         override fun isEnabled() = mode.isSelected(1)
