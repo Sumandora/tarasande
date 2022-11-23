@@ -10,14 +10,14 @@ import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
 open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, var entryWidth: Int, private val entryHeight: Int) : ScreenBetter(null) {
 
-    var slotList: ScreenBetterSlotListWidget? = null
-    var listProvider: ScreenBetterSlotListWidget.ListProvider? = null
+    var slotList: AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget? = null
+    var listProvider: AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget.ListProvider? = null
     var selected: Int = 0
 
     constructor(top: Int, entryWidth: Int, entryHeight: Int) : this(top, -10, entryWidth, entryHeight)
     constructor(top: Int, entryHeight: Int) : this(top, 220, entryHeight)
 
-    fun provideElements(provider: ScreenBetterSlotListWidget.ListProvider) {
+    fun provideElements(provider: AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget.ListProvider) {
         this.listProvider = provider
     }
 
@@ -28,7 +28,7 @@ open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, v
     override fun init() {
         if (this.listProvider == null) return
 
-        this.addDrawableChild(ScreenBetterSlotListWidget(this, client!!, this.listProvider, width, height, top, height - bottom - top, entryWidth, entryHeight).also {
+        this.addDrawableChild(AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget(this, client!!, this.listProvider, width, height, top, height - bottom - top, entryWidth, entryHeight).also {
             this.slotList = it
             this.slotList?.reload()
         })
@@ -37,8 +37,8 @@ open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, v
     }
 }
 
-class ScreenBetterSlotListWidget(val parent: ScreenBetterSlotList, minecraft: MinecraftClient, private val listProvider: ListProvider?, width: Int, height: Int, top: Int, bottom: Int, private val entryWidth: Int, entryHeight: Int)
-    : AlwaysSelectedEntryListWidget<ScreenBetterSlotListEntry>(minecraft, width, height, top, bottom, entryHeight) {
+class AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget(val parent: ScreenBetterSlotList, minecraft: MinecraftClient, private val listProvider: ListProvider?, width: Int, height: Int, top: Int, bottom: Int, private val entryWidth: Int, entryHeight: Int)
+    : AlwaysSelectedEntryListWidget<EntryScreenBetterSlotListEntry>(minecraft, width, height, top, bottom, entryHeight) {
 
     fun reload() {
         this.clearEntries()
@@ -51,7 +51,7 @@ class ScreenBetterSlotListWidget(val parent: ScreenBetterSlotList, minecraft: Mi
     }
 
     interface ListProvider {
-        fun get(): List<ScreenBetterSlotListEntry>
+        fun get(): List<EntryScreenBetterSlotListEntry>
     }
 
     override fun getRowWidth() = entryWidth
@@ -61,8 +61,8 @@ class ScreenBetterSlotListWidget(val parent: ScreenBetterSlotList, minecraft: Mi
     }
 }
 
-open class ScreenBetterSlotListEntry : AlwaysSelectedEntryListWidget.Entry<ScreenBetterSlotListEntry>() {
-    var parentList: EntryListWidget<ScreenBetterSlotListEntry>? = null
+open class EntryScreenBetterSlotListEntry : AlwaysSelectedEntryListWidget.Entry<EntryScreenBetterSlotListEntry>() {
+    var parentList: EntryListWidget<EntryScreenBetterSlotListEntry>? = null
     private var lastClick: Long = 0
     private var index = 0
 
@@ -72,7 +72,7 @@ open class ScreenBetterSlotListEntry : AlwaysSelectedEntryListWidget.Entry<Scree
         if (this.dontSelectAnything()) {
             return false
         }
-        return (this.parentList!! as ScreenBetterSlotListWidget).parent.selected == index
+        return (this.parentList!! as AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget).parent.selected == index
     }
 
     open fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
@@ -85,7 +85,7 @@ open class ScreenBetterSlotListEntry : AlwaysSelectedEntryListWidget.Entry<Scree
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (!dontSelectAnything()) {
-            (this.parentList!! as ScreenBetterSlotListWidget).parent.selected = this.index
+            (this.parentList!! as AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget).parent.selected = this.index
             this.parentList!!.setSelected(this)
         }
 

@@ -16,8 +16,8 @@ import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
-import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListEntry
-import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotListWidget
+import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListEntry
+import net.tarasandedevelopment.tarasande.screen.base.AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.file.FileAccounts
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterAccount
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterProxy
@@ -75,13 +75,13 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
     fun selected(): Account? {
         if (this.slotList!!.selectedOrNull == null) return null
 
-        return (this.slotList!!.selectedOrNull as ScreenBetterSlotListEntryAccount).account
+        return (this.slotList!!.selectedOrNull as EntryScreenBetterSlotListEntryAccount).account
     }
 
     override fun init() {
-        this.provideElements(object : ScreenBetterSlotListWidget.ListProvider {
-            override fun get(): List<ScreenBetterSlotListEntry> {
-                return accounts.map { a -> ScreenBetterSlotListEntryAccount(a) }
+        this.provideElements(object : AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget.ListProvider {
+            override fun get(): List<EntryScreenBetterSlotListEntry> {
+                return accounts.map { a -> EntryScreenBetterSlotListEntryAccount(a) }
             }
         })
         super.init()
@@ -154,7 +154,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         }
     }
 
-    inner class ScreenBetterSlotListEntryAccount(var account: Account) : ScreenBetterSlotListEntry() {
+    inner class EntryScreenBetterSlotListEntryAccount(var account: Account) : EntryScreenBetterSlotListEntry() {
 
         override fun onDoubleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
             logIn(account)

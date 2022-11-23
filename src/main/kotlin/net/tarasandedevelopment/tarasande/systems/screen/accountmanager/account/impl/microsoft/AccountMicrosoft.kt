@@ -13,7 +13,7 @@ import net.minecraft.client.util.Session
 import net.minecraft.text.Text
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionAccountManager
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionButtonScreenExtensionAccountManager
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterAzureApps
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.AccountInfo
@@ -43,7 +43,7 @@ open class AccountMicrosoft : Account() {
     protected var redirectUri: String? = null
     private var code: String? = null
 
-    var azureApp: AzureAppPreset = TarasandeMain.managerScreenExtension().get(ScreenExtensionAccountManager::class.java).screenBetterSlotListAccountManager.managerAzureApp.list.first()
+    var azureApp: AzureAppPreset = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonScreenExtensionAccountManager::class.java).screenBetterSlotListAccountManager.managerAzureApp.list.first()
 
     protected fun randomPort(): Int = ThreadLocalRandom.current().nextInt(0, Short.MAX_VALUE.toInt() * 2 /* unsigned */)
 

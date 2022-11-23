@@ -6,7 +6,7 @@ import com.viaversion.viaversion.protocols.base.BaseVersionProvider
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
 import net.minecraft.SharedConstants
 
-class FabricVersionProvider : BaseVersionProvider() {
+class BaseVersionProviderFabricVersionProvider : BaseVersionProvider() {
 
     override fun getClosestServerProtocol(connection: UserConnection?): Int {
         if (connection!!.isClientSide) {
