@@ -43,7 +43,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.IClientPlayerEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.IScreenHandler_Protocol;
-import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricHandItemProvider;
+import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.HandItemProviderFabricHandItemProvider;
 import net.tarasandedevelopment.tarasande.protocolhack.util.inventory.MinecraftViaItemRewriter;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -152,12 +152,12 @@ public abstract class MixinClientPlayerInteractionManager {
 
     @Inject(method = "interactItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/Packet;)V", ordinal = 0, shift = At.Shift.BEFORE))
     public void injectInteractItem(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
-        FabricHandItemProvider.Companion.setLastUsedItem(player.getStackInHand(hand).copy());
+        HandItemProviderFabricHandItemProvider.Companion.setLastUsedItem(player.getStackInHand(hand).copy());
     }
 
     @Inject(method = "interactBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;sendSequencedPacket(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V", shift = At.Shift.BEFORE))
     public void injectInteractBlock(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
-        FabricHandItemProvider.Companion.setLastUsedItem(player.getStackInHand(hand).copy());
+        HandItemProviderFabricHandItemProvider.Companion.setLastUsedItem(player.getStackInHand(hand).copy());
     }
 
     ActionResult actionResult;

@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.
 import java.io.File
 
 
-class ScreenExtensionResourcePackConvertServerPacksToFiles : ScreenExtensionButton<PackScreen>("Dump server pack", PackScreen::class.java) {
+class ScreenExtensionButtonScreenExtensionResourcePackConvertServerPacksToFiles : ScreenExtensionButton<PackScreen>("Dump server pack", PackScreen::class.java) {
     override fun onClick(current: PackScreen) {
         MinecraftClient.getInstance().resourcePackProvider?.apply {
             serverContainer?.apply {

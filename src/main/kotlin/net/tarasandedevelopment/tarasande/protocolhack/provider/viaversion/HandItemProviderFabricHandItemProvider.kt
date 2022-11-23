@@ -6,7 +6,7 @@ import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemPr
 import net.minecraft.item.ItemStack
 import net.tarasandedevelopment.tarasande.protocolhack.util.inventory.MinecraftViaItemRewriter
 
-class FabricHandItemProvider : HandItemProvider() {
+class HandItemProviderFabricHandItemProvider : HandItemProvider() {
 
     companion object {
         var lastUsedItem: ItemStack = ItemStack.EMPTY

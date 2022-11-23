@@ -26,18 +26,18 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
 import de.florianmichael.clampclient.injection.mixininterface.IFontStorage_Protocol
-import net.tarasandedevelopment.tarasande.protocolhack.command.TarasandeCommandHandler
+import net.tarasandedevelopment.tarasande.protocolhack.command.ViaCommandHandlerTarasandeCommandHandler
 import net.tarasandedevelopment.tarasande.protocolhack.fix.EntityDimensionReplacement
 import net.tarasandedevelopment.tarasande.protocolhack.fix.PackFormats
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ValueBooleanProtocol
 import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureProtocolHackSettings
 import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureSelectionProtocolHack
-import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.FabricOldAuthProvider
-import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.FabricPreNettyProvider
-import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricHandItemProvider
-import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricMovementTransmitterProvider
-import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricVersionProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.OldAuthProviderFabricOldAuthProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.PreNettyProviderFabricPreNettyProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.HandItemProviderFabricHandItemProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.MovementTransmitterProviderFabricMovementTransmitterProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.BaseVersionProviderFabricVersionProvider
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
 import su.mandora.event.EventDispatcher
@@ -149,17 +149,17 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
 
     override fun createProviders(providers: ViaProviders?) {
         // Via Legacy
-        providers?.use(OldAuthProvider::class.java, FabricOldAuthProvider())
-        providers?.use(PreNettyProvider::class.java, FabricPreNettyProvider())
+        providers?.use(OldAuthProvider::class.java, OldAuthProviderFabricOldAuthProvider())
+        providers?.use(PreNettyProvider::class.java, PreNettyProviderFabricPreNettyProvider())
 
         // Via Version
-        providers?.use(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
-        providers?.use(VersionProvider::class.java, FabricVersionProvider())
-        providers?.use(HandItemProvider::class.java, FabricHandItemProvider())
+        providers?.use(MovementTransmitterProvider::class.java, MovementTransmitterProviderFabricMovementTransmitterProvider())
+        providers?.use(VersionProvider::class.java, BaseVersionProviderFabricVersionProvider())
+        providers?.use(HandItemProvider::class.java, HandItemProviderFabricHandItemProvider())
     }
 
     override fun onBuildViaPlatform(builder: ViaManagerImpl.ViaManagerBuilder) {
-        builder.commandHandler(TarasandeCommandHandler())
+        builder.commandHandler(ViaCommandHandlerTarasandeCommandHandler())
     }
 
     override fun getOptionalProtocols(): MutableList<ProtocolVersion> = LegacyProtocolVersion.PROTOCOL_VERSIONS

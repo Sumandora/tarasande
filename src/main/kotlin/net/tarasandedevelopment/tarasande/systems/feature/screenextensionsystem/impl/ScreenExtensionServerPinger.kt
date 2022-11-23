@@ -8,7 +8,6 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.network.ServerInfo
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.screen.ScreenTexts
-import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.screen.widget.serverpinger.PanelServerInformation
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
@@ -66,10 +65,9 @@ class PanelServerInformationPinging : PanelServerInformation() {
     }
 }
 
-class ScreenExtensionServerPingerDirectConnect : ScreenExtensionCustom<DirectConnectScreen>("Server Pinger", DirectConnectScreen::class.java) {
+class ScreenExtensionCustomScreenExtensionServerPingerDirectConnect : ScreenExtensionCustom<DirectConnectScreen>("Server Pinger", DirectConnectScreen::class.java) {
 
     private val serverPingerWidget = PanelServerInformationPinging()
-
 
     var lastText: String? = null
 
@@ -98,7 +96,7 @@ class ScreenExtensionServerPingerDirectConnect : ScreenExtensionCustom<DirectCon
     }
 }
 
-class ScreenExtensionServerPingerGameMenu : ScreenExtensionCustom<Screen>("Server Pinger", GameMenuScreen::class.java) {
+class ScreenExtensionCustomScreenExtensionServerPingerGameMenu : ScreenExtensionCustom<Screen>("Server Pinger", GameMenuScreen::class.java) {
 
     private val serverPingerWidget = PanelServerInformationPinging()
     private val pingWhenInGame: ValueBoolean = ValueBoolean(serverPingerWidget, "Ping when in game", true)
