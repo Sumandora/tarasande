@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.systems.screen.graphsystem.impl
 
+import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
@@ -29,9 +30,11 @@ class GraphTPS : Graph("TPS", 10, false) {
             }
 
             add(EventDisconnect::class.java) {
-                lastWorldTimePacket = 0L
-                timeDeltas.clear()
-                clear()
+                if (it.connection == MinecraftClient.getInstance().networkHandler?.connection) {
+                    lastWorldTimePacket = 0L
+                    timeDeltas.clear()
+                    clear()
+                }
             }
         }
     }

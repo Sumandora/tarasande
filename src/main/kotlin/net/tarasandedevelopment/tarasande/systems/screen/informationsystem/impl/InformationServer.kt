@@ -2,11 +2,11 @@ package net.tarasandedevelopment.tarasande.systems.screen.informationsystem.impl
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
+import su.mandora.event.EventDispatcher
 import java.nio.charset.StandardCharsets
 
 class InformationServerBrand : Information("Server", "Server Brand") {
@@ -48,7 +48,9 @@ class InformationOpenChannels : Information("Server", "Open Channels") {
                 }
             }
             add(EventDisconnect::class.java) {
-                openChannels.clear()
+                if (it.connection == MinecraftClient.getInstance().networkHandler?.connection) {
+                    openChannels.clear()
+                }
             }
         }
     }

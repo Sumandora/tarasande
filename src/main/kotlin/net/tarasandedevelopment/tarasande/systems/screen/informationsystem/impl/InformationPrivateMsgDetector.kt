@@ -5,10 +5,10 @@ import com.google.common.collect.MultimapBuilder
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket
 import net.minecraft.network.packet.s2c.play.MessageHeaderS2CPacket
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
+import su.mandora.event.EventDispatcher
 import java.util.*
 
 class InformationDetectedMessages : Information("Private msg detector", "Detected messages") {
@@ -53,7 +53,9 @@ class InformationDetectedMessages : Information("Private msg detector", "Detecte
                 }
             }
             add(EventDisconnect::class.java) {
-                conversation.clear()
+                if (it.connection == MinecraftClient.getInstance().networkHandler?.connection) {
+                    conversation.clear()
+                }
             }
         }
     }

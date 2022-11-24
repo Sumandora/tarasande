@@ -60,7 +60,7 @@ class ManagerGraph(informationSystem: ManagerInformation, panelSystem: ManagerPa
     }
 }
 
-open class Graph(val name: String, val bufferLength: Int, val integer: Boolean) {
+open class Graph(val name: String, val bufferLength: Int, private val integer: Boolean) {
     var decimalPlaces = 0
 
     init {

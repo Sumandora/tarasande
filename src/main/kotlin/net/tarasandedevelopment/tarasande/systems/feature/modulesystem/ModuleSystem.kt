@@ -2,8 +2,6 @@ package net.tarasandedevelopment.tarasande.systems.feature.modulesystem
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
-import su.mandora.event.Event
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
@@ -27,6 +25,8 @@ import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.panel.fix
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.impl.fixed.PanelNotifications
 import org.lwjgl.glfw.GLFW
+import su.mandora.event.Event
+import su.mandora.event.EventDispatcher
 import java.util.function.Consumer
 
 class ManagerModule(panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manager<Module>() {
@@ -146,9 +146,11 @@ class ManagerModule(panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manage
                             module.enabled = false
             }
             add(EventDisconnect::class.java) {
-                for (module in list)
-                    if (module.disableWhen.isSelected(1) && module.enabled)
-                        module.enabled = false
+                if (it.connection == MinecraftClient.getInstance().networkHandler?.connection) {
+                    for (module in list)
+                        if (module.disableWhen.isSelected(1) && module.enabled)
+                            module.enabled = false
+                }
             }
             add(EventSuccessfulLoad::class.java, 1001) {
                 this@ManagerModule.list.distinctBy { it.category }.forEach {

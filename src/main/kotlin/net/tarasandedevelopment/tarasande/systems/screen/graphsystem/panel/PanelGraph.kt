@@ -57,7 +57,7 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100.0, FontWr
             bufferBuilder.vertex(matrix, (x + panelWidth - width).toFloat(), (y + panelHeight - onePixel - (panelHeight - titleBarHeight - onePixel) * 0.5).toFloat(), 0.0f).color(1.0f, 1.0f, 1.0f, 1.0f).next()
         } else {
             for ((index, value) in graph.values().withIndex()) {
-                bufferBuilder.vertex(matrix, (x + (panelWidth - width) * (index / (values.size - 1).toFloat())).toFloat(), (y + panelHeight - onePixel - (panelHeight - titleBarHeight - (1 / MinecraftClient.getInstance().window.scaleFactor)) * normalize(value.toDouble(), min, max)).toFloat(), 0.0f).color(1.0f, 1.0f, 1.0f, 1.0f).next()
+                bufferBuilder.vertex(matrix, (x + (panelWidth - width) * (index / graph.bufferLength.toFloat())).toFloat(), (y + panelHeight - onePixel - (panelHeight - titleBarHeight - (1 / MinecraftClient.getInstance().window.scaleFactor)) * normalize(value.toDouble(), min, max)).toFloat(), 0.0f).color(1.0f, 1.0f, 1.0f, 1.0f).next()
             }
         }
         BufferRenderer.drawWithShader(bufferBuilder.end())
