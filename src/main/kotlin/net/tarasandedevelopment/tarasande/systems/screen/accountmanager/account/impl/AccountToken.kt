@@ -6,7 +6,7 @@ import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionButtonScreenExtensionAccountManager
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionButtonAccountManager
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.TextFieldInfo
@@ -30,7 +30,7 @@ class AccountToken : Account() {
 
     init {
         // Default environment
-        environment = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonScreenExtensionAccountManager::class.java).screenBetterSlotListAccountManager.managerEnvironment.get(EnvironmentPresetEasyMC::class.java).create()
+        environment = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonAccountManager::class.java).screenBetterSlotListAccountManager.managerEnvironment.get(EnvironmentPresetEasyMC::class.java).create()
     }
 
     override fun logIn() {

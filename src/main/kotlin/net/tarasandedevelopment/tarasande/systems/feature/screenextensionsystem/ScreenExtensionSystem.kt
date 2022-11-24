@@ -7,7 +7,17 @@ import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.protocolhack.util.ProtocolRange
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.*
-import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionButtonScreenExtensionAccountManager
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionButtonAccountManager
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.downloadingterrain.ScreenExtensionButtonCancel
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.downloadingterrain.ScreenExtensionButtonCancelAndDisconnect
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.handled.ScreenExtensionButtonClientsideClose
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.handled.ScreenExtensionButtonServersideClose
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.inventory.ScreenExtensionButtonCraftingDupe
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.inventory.ScreenExtensionButtonLecternCrash
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.pack.ScreenExtensionButtonDumpServerPack
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.pack.ScreenExtensionButtonUnloadServerPack
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.serverpinger.ScreenExtensionCustomDirectConnect
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.serverpinger.ScreenExtensionCustomGameMenu
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.impl.button.PanelButton
 import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
 import su.mandora.event.EventDispatcher
@@ -17,30 +27,31 @@ class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
     init {
         add(
             // Account Manager
-            ScreenExtensionButtonScreenExtensionAccountManager(),
+            ScreenExtensionButtonAccountManager(),
 
             // Inventory
-            ScreenExtensionButtonScreenExtensionInventoryCraftingDupe(),
-            ScreenExtensionButtonScreenExtensionInventoryLecternCrash(),
+            ScreenExtensionButtonCraftingDupe(),
+            ScreenExtensionButtonLecternCrash(),
 
             // Minecraft Menus
-            ScreenExtensionButtonScreenExtensionMinecraftMenusSleepingChat(),
-            ScreenExtensionButtonScreenExtensionMinecraftMenusDeath(),
+            ScreenExtensionButtonSleepingChat(),
+            ScreenExtensionButtonDeath(),
 
             // Downloading Terrain
-            ScreenExtensionButtonScreenExtensionDownloadingTerrainCancel(),
-            ScreenExtensionButtonScreenExtensionDownloadingTerrainCancelAndDisconnect(),
+            ScreenExtensionButtonCancel(),
+            ScreenExtensionButtonCancelAndDisconnect(),
 
             // Handled Screens
-            ScreenExtensionButtonScreenExtensionHandledScreensClientsideClose(),
-            ScreenExtensionButtonScreenExtensionHandledScreensServersideClose(),
+            ScreenExtensionButtonClientsideClose(),
+            ScreenExtensionButtonServersideClose(),
 
             // Server Pinger
-            ScreenExtensionCustomScreenExtensionServerPingerDirectConnect(),
-            ScreenExtensionCustomScreenExtensionServerPingerGameMenu(),
+            ScreenExtensionCustomDirectConnect(),
+            ScreenExtensionCustomGameMenu(),
 
             // Resource Packs
-            ScreenExtensionButtonScreenExtensionResourcePackConvertServerPacksToFiles()
+            ScreenExtensionButtonDumpServerPack(),
+            ScreenExtensionButtonUnloadServerPack()
         )
 
         EventDispatcher.add(EventChildren::class.java) { eventChildren ->

@@ -7,7 +7,7 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ScreenExtensionButton
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.ScreenBetterSlotListAccountManager
 
-class ScreenExtensionButtonScreenExtensionAccountManager : ScreenExtensionButton<Screen>("Account Manager", MultiplayerScreen::class.java, DirectConnectScreen::class.java) {
+class ScreenExtensionButtonAccountManager : ScreenExtensionButton<Screen>("Account Manager", MultiplayerScreen::class.java, DirectConnectScreen::class.java) {
 
     val screenBetterSlotListAccountManager = ScreenBetterSlotListAccountManager()
 

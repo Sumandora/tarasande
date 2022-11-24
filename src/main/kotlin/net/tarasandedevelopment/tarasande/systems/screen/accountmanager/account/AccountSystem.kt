@@ -8,7 +8,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionButtonScreenExtensionAccountManager
+import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionButtonAccountManager
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterEnvironment
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.api.ExtraInfo
 import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.impl.AccountSession
@@ -31,7 +31,7 @@ class ManagerAccount : Manager<Class<out Account>>() {
 }
 
 abstract class Account {
-    var environment: Environment = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonScreenExtensionAccountManager::class.java).screenBetterSlotListAccountManager.managerEnvironment.list.first().create()
+    var environment: Environment = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonAccountManager::class.java).screenBetterSlotListAccountManager.managerEnvironment.list.first().create()
     var session: Session? = null
         set(value) {
             if (value != null)
