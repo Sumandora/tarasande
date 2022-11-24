@@ -22,7 +22,7 @@ object StringUtil {
 
     fun formatBytes(value: Long, count: Int): String {
         var value = value
-        value *= 8L
+//        value *= 8L
         val bytes = value.toDouble()
         return if (value < 1024L)
             "$value B"

@@ -11,7 +11,6 @@ import net.minecraft.network.packet.s2c.play.KeepAliveS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayPingS2CPacket
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.event.EventTick
@@ -55,23 +54,15 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     private var rotation: Rotation? = null
 
     init {
-        TarasandeMain.managerGraph().add(object : Graph("Delta tick", 50) {
-
-            var lastTransaction: Int? = null
-
+        TarasandeMain.managerGraph().add(object : Graph("Delta tick", 50, true) {
             init {
                 EventDispatcher.apply {
                     add(EventPacket::class.java) { event ->
                         if(event.type == EventPacket.Type.RECEIVE && event.packet is PlayPingS2CPacket)
-                            lastTransaction = event.packet.parameter
-                    }
-                    add(EventDisconnect::class.java) {
-                        lastTransaction = null
+                            add(event.packet.parameter)
                     }
                 }
             }
-
-            override fun supplyData() = lastTransaction
         })
     }
 

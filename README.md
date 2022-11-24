@@ -52,6 +52,7 @@
 - ManagerAccount Instantiation
 - Recode File Chooser
 - Wheel Menu
+- Projectile aim bot: Crossbows & Prediction
 
 ## TODO-List (Flori | Tarasande)
 #### Additions
