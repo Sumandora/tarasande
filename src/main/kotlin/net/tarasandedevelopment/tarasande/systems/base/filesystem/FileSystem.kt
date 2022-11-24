@@ -7,6 +7,7 @@ import net.tarasandedevelopment.tarasande.event.EventShutdown
 import su.mandora.event.EventDispatcher
 import java.io.FileWriter
 import java.nio.file.Files
+import java.util.logging.Level
 
 class ManagerFile : Manager<File>() {
 
@@ -46,7 +47,7 @@ class ManagerFile : Manager<File>() {
                 internalLoad(file, true)
             } catch (t: Throwable) {
                 t.printStackTrace()
-                TarasandeMain.get().logger.error(file.name + " didn't load correctly!")
+                TarasandeMain.get().logger.log(Level.CONFIG, file.name + " didn't load correctly!")
             }
         }
     }

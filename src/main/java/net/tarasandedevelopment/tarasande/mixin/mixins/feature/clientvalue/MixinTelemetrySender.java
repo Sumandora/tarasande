@@ -8,6 +8,8 @@ import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.logging.Level;
+
 @Mixin(TelemetrySender.class)
 public class MixinTelemetrySender {
 
@@ -16,7 +18,7 @@ public class MixinTelemetrySender {
     public void disableTelemetry(@Coerce Object gameMode, CallbackInfo ci) {
         // This bypasses the TarasandeMain#disabled, because ms spying on us is a major problem
         if (TarasandeMain.Companion.clientValues().getDisableTelemetry().getValue()) {
-            TarasandeMain.Companion.get().getLogger().info("Blocked telemetry services");
+            TarasandeMain.Companion.get().getLogger().log(Level.INFO, "Blocked telemetry services");
             ci.cancel();
         }
     }

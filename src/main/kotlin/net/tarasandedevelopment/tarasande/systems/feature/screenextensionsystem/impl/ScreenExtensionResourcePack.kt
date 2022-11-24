@@ -6,6 +6,7 @@ import net.minecraft.resource.ZipResourcePack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ScreenExtensionButton
 import java.io.File
+import java.util.logging.Level
 
 
 class ScreenExtensionButtonScreenExtensionResourcePackConvertServerPacksToFiles : ScreenExtensionButton<PackScreen>("Dump server pack", PackScreen::class.java) {
@@ -25,7 +26,7 @@ class ScreenExtensionButtonScreenExtensionResourcePackConvertServerPacksToFiles 
                     base.copyTo(target)
                 } catch (t: Throwable) {
                     t.printStackTrace()
-                    TarasandeMain.get().logger.error("Wasn't able to copy $name to " + target.absolutePath)
+                    TarasandeMain.get().logger.log(Level.WARNING, "Wasn't able to copy $name to " + target.absolutePath)
                 }
             }
             clear()

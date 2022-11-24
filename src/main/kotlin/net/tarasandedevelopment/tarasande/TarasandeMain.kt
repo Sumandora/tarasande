@@ -18,15 +18,15 @@ import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.ManagerGrap
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
-import org.slf4j.LoggerFactory
 import su.mandora.event.EventDispatcher
 import java.io.File
+import java.util.logging.Logger
 
 class TarasandeMain {
 
     val name = "tarasande" // "lowercase gang" ~kennytv
 
-    val logger = LoggerFactory.getLogger(name)!!
+    val logger = Logger.getLogger(name)!!
     val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
     val rootDirectory = File(System.getProperty("user.home") + File.separator + name)
     var proxy: Proxy? = null
