@@ -6,6 +6,6 @@ import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Infor
 class InformationGraphValue(private val graph: Graph) : Information("Graph", graph.name) {
 
     override fun getMessage(): String? {
-        return graph.formatHud()
+        return graph.format(graph.values().lastOrNull() ?: return null)
     }
 }
