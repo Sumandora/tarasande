@@ -37,7 +37,7 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100.0, FontWr
         val curWidth = FontWrapper.getWidth(curStr) * 0.5
         val maxWidth = FontWrapper.getWidth(maxStr) * 0.5
 
-        val width = maxOf(minWidth, curWidth, maxWidth)
+        val width = maxOf(minWidth, curWidth, maxWidth) + 1.0
 
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.disableCull()
@@ -47,7 +47,7 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100.0, FontWr
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
         for ((index, value) in graph.values().withIndex()) {
-            bufferBuilder.vertex(matrix, (x + (panelWidth - width) * (index / values.size.toFloat())).toFloat(), (y + panelHeight - (1 / MinecraftClient.getInstance().window.scaleFactor) - (panelHeight - titleBarHeight - (1 / MinecraftClient.getInstance().window.scaleFactor)) * normalize(value.toDouble(), min.toDouble(), max.toDouble())).toFloat(), 0.0f).color(1.0f, 1.0f, 1.0f, 1.0f).next()
+            bufferBuilder.vertex(matrix, (x + (panelWidth - width) * (index / (values.size - 1).toFloat())).toFloat(), (y + panelHeight - (1 / MinecraftClient.getInstance().window.scaleFactor) - (panelHeight - titleBarHeight - (1 / MinecraftClient.getInstance().window.scaleFactor)) * normalize(value.toDouble(), min.toDouble(), max.toDouble())).toFloat(), 0.0f).color(1.0f, 1.0f, 1.0f, 1.0f).next()
         }
         BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
