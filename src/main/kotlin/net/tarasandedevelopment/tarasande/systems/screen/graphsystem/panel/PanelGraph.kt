@@ -18,10 +18,13 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100.0, FontWr
         }
     }
 
+    override fun isVisible(): Boolean {
+        return !graph.isEmpty()
+    }
+
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        if(graph.isEmpty()) return
         val values = graph.values()
-        if(values.isEmpty())
-            return
 
         val matrix = matrices?.peek()?.positionMatrix!!
 
@@ -47,7 +50,7 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100.0, FontWr
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
         for ((index, value) in graph.values().withIndex()) {
-            bufferBuilder.vertex(matrix, (x + (panelWidth - width) * (index / (values.size - 1).toFloat())).toFloat(), (y + panelHeight - (1 / MinecraftClient.getInstance().window.scaleFactor) - (panelHeight - titleBarHeight - (1 / MinecraftClient.getInstance().window.scaleFactor)) * normalize(value.toDouble(), min.toDouble(), max.toDouble())).toFloat(), 0.0f).color(1.0f, 1.0f, 1.0f, 1.0f).next()
+            bufferBuilder.vertex(matrix, (x + (panelWidth - width) * (index / (values.size - 1).coerceAtLeast(1 /* prevent div by 0 */).toFloat())).toFloat(), (y + panelHeight - (1 / MinecraftClient.getInstance().window.scaleFactor) - (panelHeight - titleBarHeight - (1 / MinecraftClient.getInstance().window.scaleFactor)) * normalize(value.toDouble(), min, max)).toFloat(), 0.0f).color(1.0f, 1.0f, 1.0f, 1.0f).next()
         }
         BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
