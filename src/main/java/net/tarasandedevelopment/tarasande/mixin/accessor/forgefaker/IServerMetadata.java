@@ -5,6 +5,6 @@ import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesyst
 public interface IServerMetadata {
 
     IForgePayload tarasande_getForgePayload();
-
     void tarasande_setForgePayload(final IForgePayload forgePayload);
+
 }

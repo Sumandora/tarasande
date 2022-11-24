@@ -109,5 +109,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "core.screen.accountmanager.MixinRealmsPeriodicCheckers"
+  ]
 }

@@ -22,7 +22,7 @@ public class MixinParticleManager implements IParticleManager {
     }
 
     @Override
-    public boolean tarasande_areParticlesEnabled() {
+    public boolean tarasande_isParticlesEnabled() {
         return tarasande_particlesEnabled;
     }
 

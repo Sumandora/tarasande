@@ -15,9 +15,10 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
-import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
-import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListEntry
+import net.tarasandedevelopment.tarasande.mixin.accessor.IRealmsPeriodicCheckers
 import net.tarasandedevelopment.tarasande.screen.base.AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget
+import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListEntry
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.file.FileAccounts
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterAccount
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterProxy
@@ -232,6 +233,10 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
                     servicesSignatureVerifier = SignatureVerifier.create(authenticationService.servicesKey)
                     socialInteractionsManager = SocialInteractionsManager(MinecraftClient.getInstance(), userApiService)
                     profileKeys = ProfileKeys(userApiService, account.session?.profile?.id, MinecraftClient.getInstance().runDirectory.toPath())
+                    (realmsPeriodicCheckers as IRealmsPeriodicCheckers).tarasande_getClient().apply {
+                        username = account.session?.username
+                        sessionId = account.session?.sessionId
+                    }
                 }
                 status = Formatting.GREEN.toString() + "Logged in as \"" + account.getDisplayName() + "\"" + if (!updatedUserApiService) Formatting.RED.toString() + " (failed to update UserApiService)" else ""
 

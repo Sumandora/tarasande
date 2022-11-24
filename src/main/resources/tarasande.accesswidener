@@ -85,15 +85,11 @@ accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerLi
 accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget PINGING_TEXT Lnet/minecraft/text/Text;
 accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget NO_CONNECTION_TEXT Lnet/minecraft/text/Text;
 accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget UNKNOWN_SERVER_TEXTURE Lnet/minecraft/util/Identifier;
-accessible field net/minecraft/client/gui/screen/pack/PackScreen organizer Lnet/minecraft/client/gui/screen/pack/ResourcePackOrganizer;
-accessible field net/minecraft/client/gui/screen/pack/ResourcePackOrganizer$AbstractPack profile Lnet/minecraft/resource/ResourcePackProfile;
 accessible field net/minecraft/resource/ResourcePackProfile packFactory Ljava/util/function/Supplier;
 accessible field net/minecraft/resource/AbstractFileResourcePack base Ljava/io/File;
-accessible field net/minecraft/resource/ResourcePackManager profiles Ljava/util/Map;
-accessible field net/minecraft/client/gui/screen/pack/ResourcePackOrganizer enabledPacks Ljava/util/List;
-accessible field net/minecraft/client/gui/screen/pack/ResourcePackOrganizer disabledPacks Ljava/util/List;
-accessible field net/minecraft/client/gui/screen/pack/ResourcePackOrganizer resourcePackManager Lnet/minecraft/resource/ResourcePackManager;
 accessible field net/minecraft/client/resource/ClientBuiltinResourcePackProvider serverContainer Lnet/minecraft/resource/ResourcePackProfile;
+accessible field net/minecraft/client/realms/RealmsClient sessionId Ljava/lang/String;
+accessible field net/minecraft/client/realms/RealmsClient username Ljava/lang/String;
 
 accessible method net/minecraft/client/render/Camera setPos (Lnet/minecraft/util/math/Vec3d;)V
 accessible method net/minecraft/client/render/Camera setRotation (FF)V
@@ -138,3 +134,5 @@ mutable field net/minecraft/world/World isClient Z
 mutable field net/minecraft/network/packet/s2c/play/WorldTimeUpdateS2CPacket timeOfDay J
 mutable field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket yaw F
 mutable field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket pitch F
+mutable field net/minecraft/client/realms/RealmsClient sessionId Ljava/lang/String;
+mutable field net/minecraft/client/realms/RealmsClient username Ljava/lang/String;

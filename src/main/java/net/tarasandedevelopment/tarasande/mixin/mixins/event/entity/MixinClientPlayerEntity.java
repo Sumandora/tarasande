@@ -47,7 +47,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
             ci.cancel();
     }
 
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tick()V", shift = At.Shift.BEFORE), cancellable = true)
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tick()V"), cancellable = true)
     public void hookEventUpdatePre(CallbackInfo ci) {
         if ((Object) this != MinecraftClient.getInstance().player)
             return;

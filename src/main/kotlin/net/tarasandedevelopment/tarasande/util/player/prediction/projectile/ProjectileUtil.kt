@@ -68,7 +68,7 @@ object ProjectileUtil {
         val projectileItem = projectileItems.first { it.isSame(itemStack.item) }
         val wasIsClient = MinecraftClient.getInstance().world?.isClient == true
         MinecraftClient.getInstance().world?.isClient = false
-        val prevParticlesEnabled = (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_areParticlesEnabled() // race conditions :c
+        val prevParticlesEnabled = (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_isParticlesEnabled() // race conditions :c
         (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(false)
         val soundSystem = MinecraftClient.getInstance().soundManager.soundSystem as ISoundSystem
         val wasSoundDisabled = soundSystem.tarasande_isDisabled()

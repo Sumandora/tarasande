@@ -114,7 +114,7 @@ object PredictionEngine {
 
         val list = ArrayList<Vec3d>()
 
-        val prevParticlesEnabled = (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_areParticlesEnabled() // race conditions :c
+        val prevParticlesEnabled = (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_isParticlesEnabled() // race conditions :c
         (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(false)
         for (i in 0 until count) {
             playerEntity.resetPosition()
