@@ -9,7 +9,6 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueSpacer
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
@@ -17,6 +16,7 @@ import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesyst
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ScreenExtensionCustom
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanelSidebar
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.PanelElements
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl.ScreenBetterParentValues
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
@@ -73,9 +73,9 @@ class ManagerMultiplayerFeature : Manager<MultiplayerFeature>() {
 
 open class MultiplayerFeature(val name: String, val category: String) {
 
-    fun openSettings() {
+    fun openValues() {
         if (TarasandeMain.managerValue().getValues(this).isNotEmpty()) {
-            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, this))
+            MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, name, this))
         }
     }
 
@@ -88,7 +88,7 @@ open class MultiplayerFeature(val name: String, val category: String) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     onClick(mouseButton)
                 } else if(mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-                    openSettings()
+                    openValues()
                 }
             }
         }.createValueComponent())
@@ -107,7 +107,7 @@ open class MultiplayerFeatureSelection(name: String, category: String, val list:
                         onClick(it)
                         selected = it
                     } else if(mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-                        openSettings()
+                        openValues()
                     }
                 }
 
@@ -134,7 +134,7 @@ open class MultiplayerFeatureToggleable(name: String, category: String) : Multip
                     state.value = !state.value
                     onClick(state.value)
                 } else if(mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-                    openSettings()
+                    openValues()
                 }
             }
             override fun getColor(hovered: Boolean) = (if (state.value) Color.green else Color.red).let { if(hovered) RenderUtil.colorInterpolate(it, TarasandeMain.clientValues().accentColor.getColor(), 0.4) else it }

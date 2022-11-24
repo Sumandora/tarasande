@@ -31,7 +31,7 @@ import net.tarasandedevelopment.tarasande.protocolhack.fix.EntityDimensionReplac
 import net.tarasandedevelopment.tarasande.protocolhack.fix.PackFormats
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ValueBooleanProtocol
-import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureProtocolHackSettings
+import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureProtocolHackValues
 import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureSelectionProtocolHack
 import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.OldAuthProviderFabricOldAuthProvider
 import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.PreNettyProviderFabricPreNettyProvider
@@ -65,7 +65,7 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
                 // Protocol Hack
                 TarasandeMain.managerMultiplayerFeature().apply {
                     insert(MultiplayerFeatureSelectionProtocolHack(), 0)
-                    insert(MultiplayerFeatureProtocolHackSettings(), 1)
+                    insert(MultiplayerFeatureProtocolHackValues(), 1)
                 }
             }
         }

@@ -191,7 +191,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                             player = realPlayers[ThreadLocalRandom.current().nextInt(realPlayers.size)]
                         }
                         val randomIllegalItem = fakeNewsItems.list.randomOrNull()
-                        accuse(player, randomIllegalItem != null, false, randomIllegalItem ?: Items.AIR, Items.AIR, fakeNews.settings.indexOf(fakeNews.selected[0]), customFakeNewsMessage.value)
+                        accuse(player, randomIllegalItem != null, false, randomIllegalItem ?: Items.AIR, Items.AIR, fakeNews.values.indexOf(fakeNews.selected[0]), customFakeNewsMessage.value)
                         fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
                         fakeNewsTimer.reset()
                     }
@@ -259,7 +259,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                         else -> arrayOf()
                     }
                     if (!broadcast.isSelected(0)) {
-                        accuse(player, illegalMainHand, illegalOffHand, mainHand ?: Items.AIR, offHand ?: Items.AIR, broadcast.settings.indexOf(broadcast.selected[0]), customBroadcastMessage.value)
+                        accuse(player, illegalMainHand, illegalOffHand, mainHand ?: Items.AIR, offHand ?: Items.AIR, broadcast.values.indexOf(broadcast.selected[0]), customBroadcastMessage.value)
                     }
                 }
             }

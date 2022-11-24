@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.util.math.Vec3f
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl.ScreenBetterParentValues
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueButton
@@ -28,7 +28,7 @@ class ManagerESP : Manager<ESPElement>() {
         for (element in list)
             object : ValueButton(this, element.name) {
                 override fun onChange() {
-                    MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, name, element))
+                    MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, name, element))
                 }
             }
     }
@@ -55,7 +55,7 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
 
     override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
         val orientation = if (this.orientation != null)
-            orientations[this.orientation!!.settings.indexOf(this.orientation!!.selected.get(0))]
+            orientations[this.orientation!!.values.indexOf(this.orientation!!.selected.get(0))]
         else
             orientations[0]
         val sideWidth = when (orientation) {
@@ -66,7 +66,7 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
         var padding = 2.0
         for (espElement in TarasandeMain.managerESP().list) {
             if (espElement == this) break
-            if (espElement.enabled.value && espElement is ESPElementRotatable && espElement.orientations[espElement.orientation?.settings?.indexOf(espElement.orientation!!.selected[0]) ?: 0] == orientation)
+            if (espElement.enabled.value && espElement is ESPElementRotatable && espElement.orientations[espElement.orientation?.values?.indexOf(espElement.orientation!!.selected[0]) ?: 0] == orientation)
                 padding += espElement.getHeight(entity, sideWidth)
         }
         matrices.translate(rectangle.x, rectangle.y, 0.0)

@@ -17,7 +17,7 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
 
     private val useActions = arrayOf(UseAction.EAT, UseAction.DRINK, UseAction.BOW, UseAction.SPEAR, UseAction.CROSSBOW)
     private val actions: ValueMode
-    private val settings = HashMap<UseAction, ValueNumber>()
+    private val values = HashMap<UseAction, ValueNumber>()
 
     private val nameMap = HashMap<UseAction, String>()
 
@@ -53,7 +53,7 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
                     longest
                 }
             }
-            settings[useAction] = object : ValueNumber(this, nameMap[useAction] + ": Ticks", 0.0, longest.toDouble(), longest.toDouble(), 1.0) {
+            values[useAction] = object : ValueNumber(this, nameMap[useAction] + ": Ticks", 0.0, longest.toDouble(), longest.toDouble(), 1.0) {
                 override fun isEnabled() = actions.selected.contains(nameMap[useAction])
             }
         }
@@ -66,7 +66,7 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
                     val usedStack = mc.player?.getStackInHand(PlayerUtil.getUsedHand() ?: return@registerEvent)!!
                     if (useActions.contains(usedStack.useAction) && actions.selected.contains(nameMap[usedStack.useAction!!])) {
                         val useTime = mc.player?.itemUseTime!!
-                        if (useTime > settings[usedStack.useAction]?.value!!) {
+                        if (useTime > values[usedStack.useAction]?.value!!) {
                             for (i in 0..useTime) {
                                 mc.networkHandler?.sendPacket(OnGroundOnly(mc.player?.isOnGround!!))
                             }

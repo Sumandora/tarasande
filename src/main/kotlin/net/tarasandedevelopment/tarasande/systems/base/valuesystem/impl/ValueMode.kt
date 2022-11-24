@@ -5,27 +5,27 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentMode
 
-open class ValueMode(owner: Any, name: String, private var multiSelection: Boolean, vararg val settings: String, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentMode::class.java, manage) {
+open class ValueMode(owner: Any, name: String, private var multiSelection: Boolean, vararg val values: String, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentMode::class.java, manage) {
     var selected = ArrayList<String>()
 
     init {
-        if (!multiSelection) selected.add(settings[0])
+        if (!multiSelection) selected.add(values[0])
     }
 
     fun select(index: Int) {
         if (!multiSelection) {
             selected.clear()
-            selected.add(settings[index])
+            selected.add(values[index])
         } else {
-            if (selected.contains(settings[index])) {
-                selected.remove(settings[index])
+            if (selected.contains(values[index])) {
+                selected.remove(values[index])
             } else {
-                selected.add(settings[index])
+                selected.add(values[index])
             }
         }
     }
 
-    fun isSelected(index: Int) = selected.contains(settings[index])
+    fun isSelected(index: Int) = selected.contains(values[index])
 
     fun anySelected() = selected.isNotEmpty()
 

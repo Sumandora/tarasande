@@ -8,7 +8,7 @@ import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.event.EventChunkOcclusion
 import net.tarasandedevelopment.tarasande.event.EventFog
 import net.tarasandedevelopment.tarasande.event.EventParticle
-import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl.ScreenBetterParentPopupSettings
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl.ScreenBetterParentValues
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueRegistry
@@ -87,7 +87,7 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
         for (overlay in arrayOf(overlay, hud, world, entity)) {
             object : ValueButton(this, overlay.name) {
                 override fun onChange() {
-                    MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, overlay.name, overlay))
+                    MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, overlay.name, overlay))
                 }
             }
         }

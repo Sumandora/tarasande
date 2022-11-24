@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.chea
 import org.lwjgl.glfw.GLFW
 import java.util.*
 
-class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val owner: Any) : ScreenBetter(parent) {
+class ScreenBetterParentValues(parent: Screen, val titleName: String, val owner: Any) : ScreenBetter(parent) {
 
     private var clickableWidgetPanel: ClickableWidgetPanel? = null
 
@@ -59,7 +59,7 @@ class ScreenBetterParentPopupSettings(parent: Screen, val titleName: String, val
         this.renderBackground(matrices)
         if (MinecraftClient.getInstance().world != null) {
             var prevScreen = prevScreen
-            while (prevScreen is ScreenBetterParentPopupSettings)
+            while (prevScreen is ScreenBetterParentValues)
                 prevScreen = prevScreen.prevScreen
             prevScreen?.render(matrices, -1, -1, delta)
         }

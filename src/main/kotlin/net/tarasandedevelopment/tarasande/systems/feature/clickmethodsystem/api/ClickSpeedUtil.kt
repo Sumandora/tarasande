@@ -17,7 +17,7 @@ class ClickSpeedUtil(private val owner: Any, isVisible: Supplier<Boolean>, varar
     }
     private val cps = object : ValueNumberRange(owner, "CPS", 1.0, 8.0, 12.0, 20.0, 1.0) {
         override fun onChange() = reset()
-        override fun isEnabled() = clickMethods[cpsMode.settings.indexOf(cpsMode.selected[0])].cpsBased && isVisible.get()
+        override fun isEnabled() = clickMethods[cpsMode.values.indexOf(cpsMode.selected[0])].cpsBased && isVisible.get()
     }
 
     private val timeUtil = TimeUtil()
@@ -36,6 +36,6 @@ class ClickSpeedUtil(private val owner: Any, isVisible: Supplier<Boolean>, varar
             timeUtil.reset()
         }
 
-        return min(clickMethods[cpsMode.settings.indexOf(cpsMode.selected[0])].getClicks(targetedCPS), 10 /* safety */)
+        return min(clickMethods[cpsMode.values.indexOf(cpsMode.selected[0])].getClicks(targetedCPS), 10 /* safety */)
     }
 }

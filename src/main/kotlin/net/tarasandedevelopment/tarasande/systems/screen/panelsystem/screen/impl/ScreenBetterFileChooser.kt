@@ -140,7 +140,7 @@ class ScreenBetterFileChooser(
         this.renderBackground(matrices)
         if (MinecraftClient.getInstance().world != null) {
             var prevScreen = prevScreen
-            while (prevScreen is ScreenBetterParentPopupSettings)
+            while (prevScreen is ScreenBetterParentValues)
                 prevScreen = prevScreen.prevScreen
             prevScreen?.render(matrices, -1, -1, delta)
         }

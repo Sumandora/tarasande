@@ -6,10 +6,10 @@ import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.protocolhack.extension.getSpecialName
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
-import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.MultiplayerFeature
 import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.MultiplayerFeatureCategory
 import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.MultiplayerFeatureSelection
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl.ScreenBetterParentValues
 
 class MultiplayerFeatureSelectionProtocolHack : MultiplayerFeatureSelection("Protocol Hack", MultiplayerFeatureCategory.PROTOCOL_HACK, VersionList.PROTOCOLS.map { it.getSpecialName() }, ProtocolVersion.getProtocol(TarasandeMain.protocolHack().version.value.toInt()).getSpecialName()) {
 
@@ -24,9 +24,9 @@ class MultiplayerFeatureSelectionProtocolHack : MultiplayerFeatureSelection("Pro
     }
 }
 
-class MultiplayerFeatureProtocolHackSettings : MultiplayerFeature("Settings", MultiplayerFeatureCategory.PROTOCOL_HACK) {
+class MultiplayerFeatureProtocolHackValues : MultiplayerFeature("Values", MultiplayerFeatureCategory.PROTOCOL_HACK) {
 
     override fun onClick(mouseButton: Int) {
-        MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "ProtocolHackValues", ProtocolHackValues))
+        MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, "ProtocolHackValues", ProtocolHackValues))
     }
 }
