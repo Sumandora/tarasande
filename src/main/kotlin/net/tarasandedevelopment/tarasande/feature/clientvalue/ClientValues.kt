@@ -9,11 +9,11 @@ import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.feature.clientvalue.panel.PanelElementsClientValues
-import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
+import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl.ScreenBetterParentPopupSettings
 import net.tarasandedevelopment.tarasande.util.dummy.ClientWorldDummy
 import net.tarasandedevelopment.tarasande.util.extension.Thread
 import org.lwjgl.glfw.GLFW
@@ -31,7 +31,16 @@ class ClientValues(name: String, panelSystem: ManagerPanel, fileSystem: ManagerF
     private val autoSaveDelay = object : ValueNumber(this, "Auto save: delay", 0.0, 10000.0, 60000.0, 1000.0) {
         override fun isEnabled() = autoSaveConfig.value
     }
-    val disableTelemetry = ValueBoolean(this, "Disable telemetry", true)
+
+    private val privacy = object : ValueButton(this, "Privacy") {
+        override fun onChange() {
+            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, this.name, this))
+        }
+    }
+
+    val disableTelemetry = ValueBoolean(privacy, "Disable telemetry", true)
+    val disableRealmsRequests = ValueBoolean(privacy, "Disable realms requests", true)
+
     init {
         object : ValueButton(this, "Clear binds") {
             override fun onChange() {
@@ -44,23 +53,20 @@ class ClientValues(name: String, panelSystem: ManagerPanel, fileSystem: ManagerF
                 }
             }
         }
-    }
-
-    init {
         object : ValueButton(this, "Cheat menu values") {
             override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Cheat menu values", panelSystem.screenCheatMenu))
+                MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, this.name, panelSystem.screenCheatMenu))
             }
         }
     }
 
     // Combat
-    val targetingOptions = object : ValueButton(this, "Targeting options") {
+    val targetingValues = object : ValueButton(this, "Targeting values") {
         override fun onChange() {
-            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, "Targeting options", this))
+            MinecraftClient.getInstance().setScreen(ScreenBetterParentPopupSettings(MinecraftClient.getInstance().currentScreen!!, this.name, this))
         }
     }
-    val entities = object : ValueRegistry<EntityType<*>>(targetingOptions, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
+    val entities = object : ValueRegistry<EntityType<*>>(targetingValues, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
 
         val map = HashMap<EntityType<*>, Boolean>()
 
@@ -75,7 +81,7 @@ class ClientValues(name: String, panelSystem: ManagerPanel, fileSystem: ManagerF
         override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
         override fun filter(key: EntityType<*>) = map[key] == true
     }
-    private val dontAttackTamedEntities = object : ValueBoolean(targetingOptions, "Don't attack tamed entities", false) {
+    private val dontAttackTamedEntities = object : ValueBoolean(targetingValues, "Don't attack tamed entities", false) {
 
         val map = HashMap<EntityType<*>, Boolean>()
 
@@ -89,7 +95,7 @@ class ClientValues(name: String, panelSystem: ManagerPanel, fileSystem: ManagerF
 
         override fun isEnabled() = entities.list.any { map[it] == true }
     }
-    private val dontAttackRidingEntity = object : ValueBoolean(targetingOptions, "Don't attack riding entity", false) {
+    private val dontAttackRidingEntity = object : ValueBoolean(targetingValues, "Don't attack riding entity", false) {
         override fun isEnabled() = entities.list.isNotEmpty()
     }
 
