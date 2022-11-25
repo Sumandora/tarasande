@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.play
 
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket
 import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.mixin.accessor.IClientConnection
+import net.tarasandedevelopment.tarasande.injection.accessor.IClientConnection
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module

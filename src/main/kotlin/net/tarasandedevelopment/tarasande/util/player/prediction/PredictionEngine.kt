@@ -14,8 +14,8 @@ import net.minecraft.sound.SoundEvent
 import net.minecraft.stat.StatHandler
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.mixin.accessor.prediction.IParticleManager
-import net.tarasandedevelopment.tarasande.mixin.accessor.prediction.ISoundSystem
+import net.tarasandedevelopment.tarasande.injection.accessor.prediction.IParticleManager
+import net.tarasandedevelopment.tarasande.injection.accessor.prediction.ISoundSystem
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 
 object PredictionEngine {

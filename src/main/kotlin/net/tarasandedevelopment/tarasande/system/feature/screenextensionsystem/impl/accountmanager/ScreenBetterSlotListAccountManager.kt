@@ -15,7 +15,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
-import net.tarasandedevelopment.tarasande.mixin.accessor.IRealmsPeriodicCheckers
+import net.tarasandedevelopment.tarasande.injection.accessor.IRealmsPeriodicCheckers
 import net.tarasandedevelopment.tarasande.screen.base.AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList

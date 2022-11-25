@@ -8,7 +8,7 @@ import net.minecraft.potion.PotionUtil
 import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
-import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
+import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber

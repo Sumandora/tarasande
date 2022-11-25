@@ -11,7 +11,7 @@ import net.minecraft.entity.effect.StatusEffectUtil
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.registry.Registry
-import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
+import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel

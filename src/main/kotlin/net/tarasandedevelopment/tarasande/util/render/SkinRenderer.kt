@@ -6,7 +6,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.AbstractClientPlayerEntity
 import net.minecraft.client.util.DefaultSkinHelper
 import net.minecraft.util.dynamic.DynamicSerializableUuid
-import net.tarasandedevelopment.tarasande.mixin.accessor.IPlayerSkinProvider
+import net.tarasandedevelopment.tarasande.injection.accessor.IPlayerSkinProvider
 import net.tarasandedevelopment.tarasande.util.dummy.AbstractClientPlayerEntityDummy
 
 class SkinRenderer(val profile: GameProfile) {

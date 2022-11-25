@@ -12,7 +12,7 @@ import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.mixin.accessor.forgefaker.IServerInfo
+import net.tarasandedevelopment.tarasande.injection.accessor.forgefaker.IServerInfo
 import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.MultiplayerFeatureToggleableExploitsForgeFaker
 import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.forgefaker.IForgeNetClientHandler
 import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.forgefaker.payload.legacy.ModStruct

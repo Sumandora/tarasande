@@ -23,8 +23,8 @@ import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventInput
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
-import net.tarasandedevelopment.tarasande.mixin.accessor.IClientPlayerEntity
-import net.tarasandedevelopment.tarasande.mixin.accessor.IGameRenderer
+import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity
+import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil

@@ -4,7 +4,7 @@ import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.mixin.accessor.ITextFieldWidget
+import net.tarasandedevelopment.tarasande.injection.accessor.ITextFieldWidget
 import java.awt.Color
 
 open class TextFieldWidgetPlaceholder(textRenderer: TextRenderer?, x: Int, y: Int, width: Int, height: Int, text: Text?) : TextFieldWidget(textRenderer, x, y, width, height, text) {
