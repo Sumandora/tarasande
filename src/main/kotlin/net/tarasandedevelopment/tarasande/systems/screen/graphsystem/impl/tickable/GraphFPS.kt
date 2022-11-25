@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.systems.screen.graphsystem.impl.ticka
 
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.GraphTickable
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 
 class GraphFPS : GraphTickable("FPS", 200, true) {
 

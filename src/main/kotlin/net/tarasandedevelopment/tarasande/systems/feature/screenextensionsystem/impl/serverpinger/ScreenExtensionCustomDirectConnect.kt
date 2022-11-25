@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ScreenExtensionCustom
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.serverpinger.panel.PanelServerInformationPinging
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanel
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 
 class ScreenExtensionCustomDirectConnect : ScreenExtensionCustom<DirectConnectScreen>("Server Pinger", DirectConnectScreen::class.java) {
 

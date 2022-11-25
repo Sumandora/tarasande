@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.file.impl.FileValuesBinds
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.file.impl.FileValuesNonBinds
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.ElementWidthValueComponent
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 
 class ManagerValue(fileSystem: ManagerFile) : Manager<Value>() {
 

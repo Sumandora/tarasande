@@ -18,7 +18,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.ManagerGrap
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import java.io.File
 import java.util.logging.Logger
 

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation

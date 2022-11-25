@@ -1,4 +1,4 @@
-package su.mandora.event
+package su.mandora.events
 
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.function.Consumer

@@ -1,6 +1,4 @@
-import org.objectweb.asm.ClassReader
-import org.objectweb.asm.tree.AnnotationNode
-import org.objectweb.asm.tree.ClassNode
+import su.mandora.codechecker.CodeChecker
 
 plugins {
 	id "fabric-loom"
@@ -114,108 +112,14 @@ shadowJar {
 
 compileKotlin.kotlinOptions.jvmTarget = "17"
 
-tasks.named('build') {
+task checkCode {
+	group "Code checker"
 	doLast {
-		sourceSets.main.output.classesDirs.forEach {
-			fileTree(it).forEach {
-				if (it.name.endsWith(".class")) {
-					ClassReader classReader = new ClassReader(it.readBytes())
-					ClassNode classNode = new ClassNode()
-					classReader.accept(classNode, ClassReader.EXPAND_FRAMES)
+		CodeChecker codeChecker = new CodeChecker(sourceSets.main)
+		codeChecker.ignore("de/florianmichael")
+		codeChecker.ignore("clamp_protocolhack.mixins.json")
 
-					if (classNode.name.startsWith("de/florianmichael"))
-						return // Not my project
-					if (classNode.name.matches("[^*]*\\\$\\d+\$"))
-						return
-					// Lambdas don't have names duh (yes, even when kotlin adds some garbled bs, we couldn't care less)
-
-					String actualName = classNode.name.split("/").last().split('\\$').last() // packages don't matter
-
-					if (classNode.name.startsWith("net/tarasandedevelopment/tarasande/mixin/mixins")) {
-						// Mixins
-						if (classNode.invisibleAnnotations == null || classNode.invisibleAnnotations.isEmpty())
-							logger.warn("Are you sure that " + classNode.name + " is a Mixin class?")
-						else {
-							AnnotationNode pseudo = classNode.invisibleAnnotations.find { it.desc == "Lorg/spongepowered/asm/mixin/Pseudo;" }
-							AnnotationNode mixin = classNode.invisibleAnnotations.find { it.desc == "Lorg/spongepowered/asm/mixin/Mixin;" }
-
-							if (pseudo != null) {
-								int pseudoIndex = classNode.invisibleAnnotations.indexOf(pseudo);
-								if (pseudoIndex != 0 || pseudoIndex + 1 != classNode.invisibleAnnotations.indexOf(mixin))
-									logger.warn(classNode.name + " should first annotate @Pseudo following with @Mixin")
-							}
-
-							List<Object> values = mixin.values
-							if (values == null || values.isEmpty()) {
-								logger.warn(classNode.name + " has no target?")
-								return // We can't process an invalid class
-							}
-
-							String firstKey = values.first()
-
-							String targetClass
-							if (firstKey == "targets") {
-								targetClass = values.get(1).first().replace(".", "/")
-							} else if (firstKey == "value") {
-								targetClass = values.get(1).first()
-								targetClass = targetClass.substring(1, targetClass.length() - 1)
-							} else {
-								logger.warn(classNode.name + " has the target class not at first key")
-								return // This mixin is invalid...
-							}
-
-							targetClass = targetClass.split("/").last()
-
-							if (!targetClass.split('\\$').any {
-								return actualName.startsWith("Mixin" + it)
-							})
-								logger.warn(classNode.name + " has a invalid name")
-						}
-						//println("Mapping " + classNode.visibleAnnotations.first().values.first() + " to " + classNode.name)
-
-					} else {
-						// General
-
-						if (classNode.superName == "java/lang/Object" || classNode.superName == "java/lang/Enum")
-							return // Ignore non-extending classes
-
-//						if (classNode.superName.startsWith("net/tarasandedevelopment/tarasande/value/Value"))
-//							return // Ignore values
-
-						String actualSuperName = classNode.superName.split("/").last().split('\\$').last()
-						if (!actualName.startsWith(actualSuperName))
-							logger.warn(classNode.name + " has wrong naming conventions (Did you mean '" + actualSuperName + actualName.capitalize() + "'?)")
-					}
-				}
-			}
-		}
-	}
-}
-tasks.named('build') {
-	doLast {
-		String mixinsJson = new String(file("src/main/resources/${archivesBaseName}.mixins.json").readBytes())
-		sourceSets.main.output.classesDirs.forEach {
-			fileTree(it).forEach {
-				if (it.absolutePath.contains("net/tarasandedevelopment/tarasande/mixin/mixins")) {
-					String actualName = it.absolutePath.split("net/tarasandedevelopment/tarasande/mixin/mixins").last().replace('/', '.')
-					actualName = actualName.substring(1, actualName.length() - 6)
-					if (!mixinsJson.contains(actualName) && !it.name.contains('$'))
-						logger.warn(actualName + " seems to be an unregistered Mixin")
-				}
-			}
-		}
-	}
-}
-tasks.named('build') {
-	doLast {
-		sourceSets.main.output.classesDirs.forEach {
-			fileTree(it).collect {it.getParentFile() }.unique().forEach {
-
-				if (it.absolutePath.contains("net/tarasandedevelopment/tarasande/")) {
-					if(it.name.endsWith("s"))
-						logger.warn(it.path + " is plural isn't it?")
-				}
-			}
-		}
+		codeChecker.ignore("net/tarasandedevelopment/tarasande/protocolhack/provider")
+		codeChecker.check()
 	}
 }

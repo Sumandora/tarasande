@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.systems.screen.graphsystem.impl.ticka
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.Graph
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 
 class GraphYawDelta : Graph("Yaw Delta", 200, false) {
     private var lastYaw = 0.0f

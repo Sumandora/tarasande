@@ -31,7 +31,7 @@ import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import org.apache.commons.lang3.RandomStringUtils
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 

@@ -5,7 +5,7 @@ import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.impl.*
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.panel.PanelInformation
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 
 class ManagerInformation(panelSystem: ManagerPanel) : Manager<Information>() {
 

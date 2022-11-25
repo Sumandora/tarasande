@@ -21,7 +21,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.information
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.panel.PanelGraph
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import kotlin.math.pow
 import kotlin.math.roundToInt
 

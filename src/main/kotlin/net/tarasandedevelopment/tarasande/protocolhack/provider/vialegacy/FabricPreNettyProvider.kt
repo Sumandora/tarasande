@@ -5,7 +5,7 @@ import net.minecraft.network.encryption.PacketDecryptor
 import net.minecraft.network.encryption.PacketEncryptor
 import javax.crypto.Cipher
 
-class PreNettyProviderFabricPreNettyProvider : PreNettyProvider() {
+class FabricPreNettyProvider : PreNettyProvider() {
 
     companion object {
         var decryptionKey: Cipher? = null

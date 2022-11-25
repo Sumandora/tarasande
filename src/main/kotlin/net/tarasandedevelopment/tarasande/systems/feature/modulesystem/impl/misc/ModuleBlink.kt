@@ -24,7 +24,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.Graph
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import org.lwjgl.glfw.GLFW
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
 
 class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {

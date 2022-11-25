@@ -6,7 +6,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.Window;
 import net.minecraft.util.Util;
-import su.mandora.event.EventDispatcher;
+import su.mandora.events.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.*;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;

@@ -21,7 +21,7 @@ import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
 import net.tarasandedevelopment.tarasande.util.render.helper.DragInfo
 import net.tarasandedevelopment.tarasande.util.render.helper.IElement
 import org.lwjgl.glfw.GLFW
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import java.awt.Color
 import kotlin.math.min
 import kotlin.math.round

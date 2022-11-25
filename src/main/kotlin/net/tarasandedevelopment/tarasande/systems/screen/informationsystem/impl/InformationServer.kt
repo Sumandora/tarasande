@@ -6,7 +6,7 @@ import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import java.nio.charset.StandardCharsets
 
 class InformationServerBrand : Information("Server", "Server Brand") {

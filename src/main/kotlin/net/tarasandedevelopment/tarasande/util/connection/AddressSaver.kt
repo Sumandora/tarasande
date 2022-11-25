@@ -4,7 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.DirectConnectScreen
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 
 object AddressSaver {
 

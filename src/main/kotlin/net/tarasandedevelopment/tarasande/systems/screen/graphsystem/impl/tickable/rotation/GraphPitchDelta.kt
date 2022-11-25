@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.systems.screen.graphsystem.impl.ticka
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.Graph
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 
 class GraphPitchDelta : Graph("Pitch Delta", 200, false) {
     private var lastPitch = 0.0f

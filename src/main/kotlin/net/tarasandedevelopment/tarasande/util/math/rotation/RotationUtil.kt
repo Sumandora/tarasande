@@ -11,7 +11,7 @@ import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.util.extension.minus
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import kotlin.math.*
 
 object RotationUtil {

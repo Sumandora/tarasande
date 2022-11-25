@@ -25,8 +25,8 @@ import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.panel.fix
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.impl.fixed.PanelNotifications
 import org.lwjgl.glfw.GLFW
-import su.mandora.event.Event
-import su.mandora.event.EventDispatcher
+import su.mandora.events.Event
+import su.mandora.events.EventDispatcher
 import java.util.function.Consumer
 
 class ManagerModule(panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manager<Module>() {

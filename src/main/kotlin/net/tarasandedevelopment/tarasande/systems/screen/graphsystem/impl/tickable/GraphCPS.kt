@@ -5,7 +5,7 @@ import net.tarasandedevelopment.tarasande.event.EventSwing
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.GraphTickable
 import org.lwjgl.glfw.GLFW
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 
 class GraphCPS : GraphTickable("CPS", 200, true) {
 

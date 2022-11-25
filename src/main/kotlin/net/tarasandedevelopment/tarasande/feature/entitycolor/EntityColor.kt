@@ -5,7 +5,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.mob.Monster
 import net.minecraft.entity.passive.AnimalEntity
 import net.minecraft.entity.player.PlayerEntity
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventEntityColor
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean

@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.BlockView;
-import su.mandora.event.EventDispatcher;
+import su.mandora.events.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventCameraOverride;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

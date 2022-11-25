@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.systems.screen.informationsystem.impl
 
 import net.minecraft.client.MinecraftClient
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.string.StringUtil

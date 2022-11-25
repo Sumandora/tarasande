@@ -4,7 +4,7 @@ import com.google.gson.JsonElement
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventShutdown
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import java.io.FileWriter
 import java.nio.file.Files
 import java.util.logging.Level

@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.event
 
 import net.minecraft.client.option.KeyBinding
-import su.mandora.event.Event
+import su.mandora.events.Event
 
 class EventKey(val key: Int, val action: Int) : Event(true)
 class EventMouse(val button: Int, val action: Int) : Event(true)

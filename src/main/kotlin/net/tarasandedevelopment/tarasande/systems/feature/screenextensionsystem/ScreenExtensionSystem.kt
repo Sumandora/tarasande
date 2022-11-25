@@ -20,7 +20,7 @@ import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.serverpinger.ScreenExtensionCustomGameMenu
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.impl.button.PanelButton
 import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 
 class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
 

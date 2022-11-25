@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event.entity;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
-import su.mandora.event.EventDispatcher;
+import su.mandora.events.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventKeepSprint;
 import net.tarasandedevelopment.tarasande.event.EventTagName;
 import org.spongepowered.asm.mixin.Mixin;

@@ -17,7 +17,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl
 import net.tarasandedevelopment.tarasande.util.dummy.ClientWorldDummy
 import net.tarasandedevelopment.tarasande.util.extension.Thread
 import org.lwjgl.glfw.GLFW
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 
 class ClientValues(name: String, panelSystem: ManagerPanel, fileSystem: ManagerFile) {
 

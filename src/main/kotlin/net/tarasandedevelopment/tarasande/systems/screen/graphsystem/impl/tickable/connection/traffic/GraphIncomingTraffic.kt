@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.systems.screen.graphsystem.impl.ticka
 import net.tarasandedevelopment.tarasande.event.EventPacketTransform
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.GraphTickable
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
 
 class GraphIncomingTraffic : GraphTickable("Incoming Traffic", 200, true) {

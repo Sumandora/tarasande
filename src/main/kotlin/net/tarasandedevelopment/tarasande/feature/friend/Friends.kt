@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.event.EventTagName
 import net.tarasandedevelopment.tarasande.feature.friend.panel.PanelElementsFriends
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.misc.ModuleNoFriends
 import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleNameProtect
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 
 class Friends {
 

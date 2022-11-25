@@ -6,7 +6,7 @@ import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.Graph
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 
 class GraphTPS : Graph("TPS", 10, false) {
 

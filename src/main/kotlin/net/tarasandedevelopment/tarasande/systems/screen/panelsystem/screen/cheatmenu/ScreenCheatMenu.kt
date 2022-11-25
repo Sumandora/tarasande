@@ -21,7 +21,7 @@ import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.chea
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import kotlin.math.floor
 import kotlin.math.round
 

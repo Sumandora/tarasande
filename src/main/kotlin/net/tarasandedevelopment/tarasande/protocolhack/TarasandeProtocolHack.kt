@@ -9,6 +9,8 @@ import com.viaversion.viaversion.libs.gson.JsonObject
 import com.viaversion.viaversion.protocols.protocol1_13to1_12_2.Protocol1_13To1_12_2
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
+import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
+import de.florianmichael.clampclient.injection.mixininterface.IFontStorage_Protocol
 import de.florianmichael.vialegacy.ViaLegacy
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider
@@ -24,8 +26,6 @@ import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
-import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
-import de.florianmichael.clampclient.injection.mixininterface.IFontStorage_Protocol
 import net.tarasandedevelopment.tarasande.protocolhack.command.ViaCommandHandlerTarasandeCommandHandler
 import net.tarasandedevelopment.tarasande.protocolhack.fix.EntityDimensionReplacement
 import net.tarasandedevelopment.tarasande.protocolhack.fix.PackFormats
@@ -33,14 +33,14 @@ import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValu
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ValueBooleanProtocol
 import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureProtocolHackValues
 import net.tarasandedevelopment.tarasande.protocolhack.platform.multiplayerfeature.MultiplayerFeatureSelectionProtocolHack
-import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.OldAuthProviderFabricOldAuthProvider
-import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.PreNettyProviderFabricPreNettyProvider
-import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.HandItemProviderFabricHandItemProvider
-import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.MovementTransmitterProviderFabricMovementTransmitterProvider
-import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.BaseVersionProviderFabricVersionProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.FabricOldAuthProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.FabricPreNettyProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricHandItemProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricMovementTransmitterProvider
+import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricVersionProvider
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.ThreadFactory
@@ -149,13 +149,13 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
 
     override fun createProviders(providers: ViaProviders?) {
         // Via Legacy
-        providers?.use(OldAuthProvider::class.java, OldAuthProviderFabricOldAuthProvider())
-        providers?.use(PreNettyProvider::class.java, PreNettyProviderFabricPreNettyProvider())
+        providers?.use(OldAuthProvider::class.java, FabricOldAuthProvider())
+        providers?.use(PreNettyProvider::class.java, FabricPreNettyProvider())
 
         // Via Version
-        providers?.use(MovementTransmitterProvider::class.java, MovementTransmitterProviderFabricMovementTransmitterProvider())
-        providers?.use(VersionProvider::class.java, BaseVersionProviderFabricVersionProvider())
-        providers?.use(HandItemProvider::class.java, HandItemProviderFabricHandItemProvider())
+        providers?.use(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
+        providers?.use(VersionProvider::class.java, FabricVersionProvider())
+        providers?.use(HandItemProvider::class.java, FabricHandItemProvider())
     }
 
     override fun onBuildViaPlatform(builder: ViaManagerImpl.ViaManagerBuilder) {

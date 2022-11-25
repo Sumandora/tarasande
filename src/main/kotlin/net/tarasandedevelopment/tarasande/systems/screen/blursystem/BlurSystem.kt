@@ -21,7 +21,7 @@ import net.tarasandedevelopment.tarasande.util.render.shader.Shader
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL13
 import org.lwjgl.opengl.GL20
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 
 class ManagerBlur : Manager<Blur>() {
 

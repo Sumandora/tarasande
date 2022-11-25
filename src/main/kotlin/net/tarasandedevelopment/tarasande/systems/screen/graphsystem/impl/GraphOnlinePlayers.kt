@@ -5,7 +5,7 @@ import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.systems.screen.graphsystem.Graph
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import java.util.*
 
 class GraphOnlinePlayers : Graph("Online Players", 10, true) {

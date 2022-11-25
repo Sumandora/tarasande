@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import net.minecraft.client.MinecraftClient
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 import net.tarasandedevelopment.tarasande.event.EventKey
 import net.tarasandedevelopment.tarasande.event.EventMouse
 import net.tarasandedevelopment.tarasande.systems.base.valuesystem.Value

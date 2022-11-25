@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoo
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.ScreenExtensionCustom
 import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.serverpinger.panel.PanelServerInformationPinging
 import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.ClickableWidgetPanel
-import su.mandora.event.EventDispatcher
+import su.mandora.events.EventDispatcher
 
 class ScreenExtensionCustomGameMenu : ScreenExtensionCustom<Screen>("Server Pinger", GameMenuScreen::class.java) {
 
