@@ -86,10 +86,10 @@ open class Graph(val name: String, val bufferLength: Int, private val integer: B
 
     fun clear() = values.clear()
 
-    open fun format(num: Number?) = if (!integer) {
+    open fun format(num: Number?) = if (decimalPlaces > 0.0) {
         val rounding = 10.0.pow(decimalPlaces.toDouble())
         num?.toDouble()?.times(rounding)?.roundToInt()?.div(rounding)?.toString()
-    } else num?.toInt()?.toString()
+    } else num?.toDouble()?.roundToInt()?.toString()
 }
 
 abstract class GraphTickable(name: String, bufferLength: Int, integer: Boolean) : Graph(name, bufferLength, integer) {

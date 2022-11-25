@@ -32,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(targets = "net/minecraft/client/font/BuiltinEmptyGlyph$1")
 public class MixinBuiltinEmptyGlyphSubMissing {
 
-    @Inject(method = { "getWidth", "getHeight" }, at = @At("HEAD"), cancellable = true)
+    @Inject(method = {"getWidth", "getHeight"}, at = @At("HEAD"), cancellable = true)
     public void resetDimension(CallbackInfoReturnable<Integer> cir) {
         try {
             if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2) && !FabricLoader.getInstance().isModLoaded("dashloader")) {
