@@ -33,11 +33,6 @@ class ScreenBetterAccount(
 
     override fun init() {
         textFields.clear()
-        children().clear()
-        this.drawables.clear()
-        this.selectables.clear()
-
-        super.init()
 
         addDrawableChild(
             ButtonWidget(
@@ -49,7 +44,7 @@ class ScreenBetterAccount(
             ) { button ->
                 implementationClass = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonAccountManager::class.java).screenBetterSlotListAccountManager.managerAccount.let { it.list[(it.list.indexOf(implementationClass) + 1) % it.list.size] }
                 accountImplementation = implementationClass.getDeclaredConstructor().newInstance()
-                init()
+                clearAndInit()
                 button.message = Text.of(implementationClass.name)
             })
 

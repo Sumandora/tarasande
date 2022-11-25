@@ -1,4 +1,4 @@
-#version 120
+#version 400
 
 uniform float sigma;
 uniform sampler2D tex;

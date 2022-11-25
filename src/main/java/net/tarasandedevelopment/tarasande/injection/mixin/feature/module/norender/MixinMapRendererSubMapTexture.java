@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.feature.module.norender;
 
-import net.minecraft.client.render.MapRenderer;
 import net.minecraft.item.map.MapIcon;
 import net.minecraft.item.map.MapState;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
@@ -10,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(MapRenderer.MapTexture.class)
+@Mixin(targets = "net.minecraft.client.render.MapRenderer.MapTexture")
 public class MixinMapRendererSubMapTexture {
 
     @Redirect(method = "draw", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/map/MapState;getIcons()Ljava/lang/Iterable;"))

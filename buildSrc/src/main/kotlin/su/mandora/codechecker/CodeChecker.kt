@@ -21,7 +21,7 @@ class CodeChecker(private val sources: SourceSet) {
             }
         }
 
-        checkManager.checkSource(sources)
+        checkManager.provideSources(sources)
 
         val classNodes = ArrayList<ClassNode>()
         this.sources.output.classesDirs.forEach {
@@ -35,7 +35,9 @@ class CodeChecker(private val sources: SourceSet) {
             }
         }
 
-        checkManager.checkBytecode(classNodes)
+        checkManager.provideBytecode(classNodes)
+
+        checkManager.runChecks()
     }
 
     fun ignore(string: String) {

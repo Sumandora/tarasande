@@ -1,4 +1,4 @@
-#version 120
+#version 400
 
 uniform int size;
 uniform sampler2D tex;

@@ -15,7 +15,7 @@ class CheckNamingConvention : CheckBytecode("Naming convention") {
 
             val actualName = classNode.name.split("/").last().split("$").last() // packages don't matter
 
-            if (classNode.name.startsWith("net/tarasandedevelopment/tarasande/mixin/mixins")) {
+            if (classNode.name.startsWith("net/tarasandedevelopment/tarasande/injection/mixin")) {
                 // Mixins
                 if (classNode.invisibleAnnotations == null || classNode.invisibleAnnotations.isEmpty())
                     violation(classNode, "Is not a Mixin class")
@@ -30,10 +30,10 @@ class CheckNamingConvention : CheckBytecode("Naming convention") {
                     }
 
                     val values = mixin.values
-                            if (values == null || values.isEmpty()) {
-                                violation(classNode, "Mixin has no target")
-                                return@forEach // We can't process an invalid class
-                            }
+                    if (values == null || values.isEmpty()) {
+                        violation(classNode, "Mixin has no target")
+                        return@forEach // We can't process an invalid class
+                    }
 
                     @Suppress("UNCHECKED_CAST")
                     var targetClass =
@@ -41,9 +41,11 @@ class CheckNamingConvention : CheckBytecode("Naming convention") {
                             "targets" -> {
                                 (values[1] as List<String>).first().replace(".", "/")
                             }
+
                             "value" -> {
                                 (values[1] as List<Type>).first().internalName.let { it.substring(1, it.length - 1) }
                             }
+
                             else -> {
                                 violation(classNode, "Target class is not the first key")
                                 return@forEach // This mixin is invalid...

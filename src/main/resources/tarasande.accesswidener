@@ -1,12 +1,12 @@
 accessWidener v1 named
 
 # protocol hack
-accessible field net/minecraft/client/gui/screen/ChatInputSuggestor$SuggestionWindow suggestions Ljava/util/List;
+accessible field net/minecraft/client/gui/screen/ChatInputSuggestor$SuggestionWindow suggestions Ljava/util/List; # @optimizer:ignore
 accessible field net/minecraft/item/Item ATTACK_DAMAGE_MODIFIER_ID Ljava/util/UUID;
-accessible field net/minecraft/client/network/ClientPlayNetworkHandler recipeManager Lnet/minecraft/recipe/RecipeManager;
+accessible field net/minecraft/client/network/ClientPlayNetworkHandler recipeManager Lnet/minecraft/recipe/RecipeManager; # @optimizer:ignore
 accessible field net/minecraft/client/font/FontManager fontStorages Ljava/util/Map;
 accessible field net/minecraft/client/MinecraftClient fontManager Lnet/minecraft/client/font/FontManager;
-accessible field net/minecraft/client/network/AllowedAddressResolver redirectResolver Lnet/minecraft/client/network/RedirectResolver;
+accessible field net/minecraft/client/network/AllowedAddressResolver redirectResolver Lnet/minecraft/client/network/RedirectResolver; # @optimizer:ignore
 
 # client
 accessible field net/minecraft/network/ClientConnection channel Lio/netty/channel/Channel;
@@ -17,7 +17,6 @@ accessible field net/minecraft/client/network/ClientPlayerEntity field_3938 I
 accessible field net/minecraft/client/network/ClientPlayerEntity autoJumpEnabled Z
 accessible field net/minecraft/client/network/ClientPlayerEntity ticksToNextAutojump I
 accessible field net/minecraft/client/network/ClientPlayerInteractionManager currentBreakingProgress F
-accessible field net/minecraft/client/network/ClientPlayerInteractionManager lastSelectedSlot I
 accessible field net/minecraft/network/packet/c2s/play/CustomPayloadC2SPacket data Lnet/minecraft/network/PacketByteBuf;
 accessible field net/minecraft/entity/Entity random Lnet/minecraft/util/math/random/Random;
 accessible field net/minecraft/entity/Entity SNEAKING_FLAG_INDEX I
@@ -56,7 +55,6 @@ accessible field net/minecraft/util/math/Matrix4f a33 F
 accessible field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/util/Session;
 accessible field net/minecraft/client/MinecraftClient attackCooldown I
 accessible field net/minecraft/client/MinecraftClient renderTickCounter Lnet/minecraft/client/render/RenderTickCounter;
-accessible field net/minecraft/client/MinecraftClient currentFps I
 accessible field net/minecraft/client/MinecraftClient authenticationService Lcom/mojang/authlib/yggdrasil/YggdrasilAuthenticationService;
 accessible field net/minecraft/client/MinecraftClient sessionService Lcom/mojang/authlib/minecraft/MinecraftSessionService;
 accessible field net/minecraft/client/MinecraftClient userApiService Lcom/mojang/authlib/minecraft/UserApiService;
@@ -70,8 +68,6 @@ accessible field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket onGro
 accessible field net/minecraft/client/render/RenderTickCounter tickTime F
 accessible field net/minecraft/client/render/RenderTickCounter prevTimeMillis J
 accessible field net/minecraft/network/packet/s2c/play/ResourcePackSendS2CPacket hash Ljava/lang/String;
-accessible field net/minecraft/client/gui/screen/Screen drawables Ljava/util/List;
-accessible field net/minecraft/client/gui/screen/Screen selectables Ljava/util/List;
 accessible field net/minecraft/client/sound/SoundManager soundSystem Lnet/minecraft/client/sound/SoundSystem;
 accessible field net/minecraft/client/gui/widget/TextFieldWidget selecting Z
 accessible field net/minecraft/client/gui/widget/TextFieldWidget text Ljava/lang/String;
@@ -79,12 +75,6 @@ accessible field net/minecraft/entity/TntEntity DEFAULT_FUSE I
 accessible field net/minecraft/client/render/WorldRenderer frustum Lnet/minecraft/client/render/Frustum;
 accessible field net/minecraft/network/packet/s2c/play/WorldTimeUpdateS2CPacket timeOfDay J
 accessible field net/minecraft/client/gui/screen/DirectConnectScreen addressField Lnet/minecraft/client/gui/widget/TextFieldWidget;
-accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget CANNOT_RESOLVE_TEXT Lnet/minecraft/text/Text;
-accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget CANNOT_CONNECT_TEXT Lnet/minecraft/text/Text;
-accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget INCOMPATIBLE_TEXT Lnet/minecraft/text/Text;
-accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget PINGING_TEXT Lnet/minecraft/text/Text;
-accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget NO_CONNECTION_TEXT Lnet/minecraft/text/Text;
-accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget UNKNOWN_SERVER_TEXTURE Lnet/minecraft/util/Identifier;
 accessible field net/minecraft/resource/ResourcePackProfile packFactory Ljava/util/function/Supplier;
 accessible field net/minecraft/resource/AbstractFileResourcePack base Ljava/io/File;
 accessible field net/minecraft/client/resource/ClientBuiltinResourcePackProvider serverContainer Lnet/minecraft/resource/ResourcePackProfile;
@@ -106,12 +96,6 @@ accessible method net/minecraft/client/MinecraftClient handleBlockBreaking (Z)V
 accessible method net/minecraft/client/gui/widget/TextFieldWidget isEditable ()Z
 accessible method net/minecraft/client/gui/widget/TextFieldWidget erase (I)V
 accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget$ServerEntry <init> (Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget;Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;Lnet/minecraft/client/network/ServerInfo;)V
-accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget$ServerEntry isNewIconValid (Ljava/lang/String;)Z
-accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget$ServerEntry draw (Lnet/minecraft/client/util/math/MatrixStack;IILnet/minecraft/util/Identifier;)V
-
-accessible class net/minecraft/client/render/MapRenderer$MapTexture
-accessible class net/minecraft/client/particle/FireworksSparkParticle$Explosion
-accessible class net/minecraft/client/gui/screen/pack/ResourcePackOrganizer$AbstractPack
 
 mutable field net/minecraft/network/packet/c2s/play/CustomPayloadC2SPacket data Lnet/minecraft/network/PacketByteBuf;
 mutable field net/minecraft/entity/Entity random Lnet/minecraft/util/math/random/Random;
@@ -126,7 +110,6 @@ mutable field net/minecraft/client/MinecraftClient servicesSignatureVerifier Lne
 mutable field net/minecraft/client/render/RenderTickCounter tickTime F
 mutable field net/minecraft/network/packet/s2c/play/ResourcePackSendS2CPacket hash Ljava/lang/String;
 mutable field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket onGround Z
-mutable field net/minecraft/client/render/RenderTickCounter tickTime F
 mutable field net/minecraft/util/math/Vec3d x D
 mutable field net/minecraft/util/math/Vec3d y D
 mutable field net/minecraft/util/math/Vec3d z D

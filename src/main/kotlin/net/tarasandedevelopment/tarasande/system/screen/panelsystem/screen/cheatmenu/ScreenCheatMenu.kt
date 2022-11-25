@@ -28,7 +28,7 @@ import kotlin.math.round
 class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("Cheat Menu")) {
 
     // Values
-    val hotkey = object : ValueBind(this, "Hotkey", Type.KEY, GLFW.GLFW_KEY_RIGHT_SHIFT) {
+    private val hotkey = object : ValueBind(this, "Hotkey", Type.KEY, GLFW.GLFW_KEY_RIGHT_SHIFT) {
         override fun filter(type: Type, bind: Int) = bind != GLFW.GLFW_KEY_UNKNOWN
     }
     private val animationLength = ValueNumber(this, "Animation length", 0.0, 100.0, 500.0, 1.0)

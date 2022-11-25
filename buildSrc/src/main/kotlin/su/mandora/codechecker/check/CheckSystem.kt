@@ -1,6 +1,7 @@
 package su.mandora.codechecker.check
 
 import org.objectweb.asm.tree.ClassNode
+import su.mandora.codechecker.check.impl.bytecode.CheckAccessWidenerUsage
 import su.mandora.codechecker.check.impl.bytecode.CheckNamingConvention
 import su.mandora.codechecker.check.impl.source.CheckLowercaseNumberSuffix
 import su.mandora.codechecker.check.impl.source.CheckPluralPackage
@@ -10,30 +11,39 @@ import java.io.File
 
 class CheckManager {
 
+    private lateinit var sources: ArrayList<File>
+    private lateinit var nodes: ArrayList<ClassNode>
+
     private val checks: Array<Check> = arrayOf(
         CheckLowercaseNumberSuffix(),
         CheckUnnecessaryNumberSuffix(),
         CheckPluralPackage(),
         CheckUnregisteredMixin(),
 
-        CheckNamingConvention()
+        CheckNamingConvention(),
+        CheckAccessWidenerUsage()
     )
 
-    fun checkSource(list: ArrayList<File>) {
-        for(check in checks) {
-            if(check is CheckSource) {
-                check.setSources(list.associateWith { it.readBytes().decodeToString() })
-                check.run()
-            }
-        }
+    fun provideSources(list: ArrayList<File>) {
+        this.sources = list
     }
 
-    fun checkBytecode(list: ArrayList<ClassNode>) {
+    fun provideBytecode(list: ArrayList<ClassNode>) {
+        this.nodes = list
+    }
+
+    fun runChecks() {
         for(check in checks) {
-            if(check is CheckBytecode) {
-                check.setNodes(list)
-                check.run()
+            when (check) {
+                is CheckSource -> {
+                    check.setSources(sources.associateWith { it.readBytes().decodeToString() })
+                }
+
+                is CheckBytecode -> {
+                    check.setNodes(nodes)
+                }
             }
+            check.run()
         }
     }
 }
@@ -44,6 +54,10 @@ abstract class Check(private val name: String) {
     }
 
     abstract fun run()
+
+    protected fun violation(output: String) {
+        println("[$name] $output")
+    }
 }
 
 abstract class CheckBytecode(private val name: String) : Check(name) {
@@ -55,7 +69,7 @@ abstract class CheckBytecode(private val name: String) : Check(name) {
 
     protected fun allNodes() = nodes
 
-    protected open fun violation(classNode: ClassNode, output: String) {
+    protected fun violation(classNode: ClassNode, output: String) {
         println("[$name | " + classNode.name + "] $output")
     }
 }
@@ -77,7 +91,7 @@ abstract class CheckSource(private val name: String) : Check(name) {
         var comment = false
 
         var lineBeginIndex = index
-        while(lineBeginIndex > 0 && content[lineBeginIndex - 1] != '\n') {
+        while(lineBeginIndex > 0 && content[lineBeginIndex - 1] != "\n"[0]) {
             if(content[lineBeginIndex - 1] == '"')
                 qoutes++
             if(content[lineBeginIndex - 1] == '/') {
@@ -92,7 +106,7 @@ abstract class CheckSource(private val name: String) : Check(name) {
             return
 
         var lineEndIndex = index
-        while(content[lineEndIndex] != '\n')
+        while(content[lineEndIndex] != "\n"[0])
             lineEndIndex++
 
         println(file.path + ": $name")
