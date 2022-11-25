@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.feature.module;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleFog;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleFog;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

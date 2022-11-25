@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event.item;
 
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.item.Item;
-import su.mandora.events.EventDispatcher;
+import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventItemCooldown;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

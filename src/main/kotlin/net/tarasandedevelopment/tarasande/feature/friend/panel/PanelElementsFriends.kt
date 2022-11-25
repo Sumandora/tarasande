@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.feature.friend.panel
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
-import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.api.PanelElements
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelElements
 
 class PanelElementsFriends(private val friends: Friends) : PanelElements<ElementWidthPlayer>("Friends", 150.0, 100.0) {
 

@@ -50,7 +50,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import su.mandora.events.EventDispatcher;
+import su.mandora.event.EventDispatcher;
 
 @Mixin(value = ClientPlayerEntity.class, priority = 2000)
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IClientPlayerEntity_Protocol {

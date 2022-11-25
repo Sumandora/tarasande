@@ -5,8 +5,8 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.mixin.accessor.ITextFieldWidget
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueText
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentText
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentText
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.render.helper.element.ElementWidth

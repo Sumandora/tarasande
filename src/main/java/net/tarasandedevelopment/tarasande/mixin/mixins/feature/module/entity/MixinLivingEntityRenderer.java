@@ -13,7 +13,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.mixin.accessor.IEntity;
-import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleTrueSight;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleTrueSight;
 import net.tarasandedevelopment.tarasande.util.dummy.AbstractClientPlayerEntityDummy;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

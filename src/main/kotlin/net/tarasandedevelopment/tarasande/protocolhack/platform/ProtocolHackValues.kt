@@ -5,8 +5,8 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.protocolhack.util.ProtocolRange
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBoolean
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueButton
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.util.extension.andOlder
 import net.tarasandedevelopment.tarasande.util.extension.rangeTo
 

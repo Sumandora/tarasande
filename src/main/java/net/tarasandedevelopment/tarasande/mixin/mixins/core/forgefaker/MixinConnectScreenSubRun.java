@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.core.forgefaker;
 
 import net.minecraft.network.ClientConnection;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.MultiplayerFeatureToggleableExploitsForgeFaker;
-import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.forgefaker.ForgeCreator;
+import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.MultiplayerFeatureToggleableExploitsForgeFaker;
+import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.forgefaker.ForgeCreator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

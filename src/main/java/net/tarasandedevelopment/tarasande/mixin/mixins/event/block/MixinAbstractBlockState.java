@@ -8,7 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import su.mandora.events.EventDispatcher;
+import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventBlockCollision;
 import net.tarasandedevelopment.tarasande.event.EventCollisionShape;
 import org.spongepowered.asm.mixin.Mixin;

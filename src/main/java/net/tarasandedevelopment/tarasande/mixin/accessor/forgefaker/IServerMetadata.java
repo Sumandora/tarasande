@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.mixin.accessor.forgefaker;
 
-import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.forgefaker.payload.IForgePayload;
+import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.forgefaker.payload.IForgePayload;
 
 public interface IServerMetadata {
 

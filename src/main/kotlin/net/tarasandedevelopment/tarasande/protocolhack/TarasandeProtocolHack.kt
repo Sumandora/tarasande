@@ -38,9 +38,9 @@ import net.tarasandedevelopment.tarasande.protocolhack.provider.vialegacy.Fabric
 import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande.protocolhack.provider.viaversion.FabricVersionProvider
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.tarasande.systems.screen.informationsystem.Information
-import su.mandora.events.EventDispatcher
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import su.mandora.event.EventDispatcher
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.ThreadFactory

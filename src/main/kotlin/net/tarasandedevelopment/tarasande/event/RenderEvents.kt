@@ -11,7 +11,7 @@ import net.minecraft.particle.ParticleEffect
 import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Matrix4f
-import su.mandora.events.Event
+import su.mandora.event.Event
 
 class EventResolutionUpdate(val prevWidth: Double, val prevHeight: Double, val width: Double, val height: Double) : Event(false)
 class EventRender2D(val matrices: MatrixStack) : Event(false)

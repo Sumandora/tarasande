@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.feature.module.norender;
 
 import net.minecraft.client.render.chunk.ChunkOcclusionDataBuilder;
 import net.minecraft.util.math.BlockPos;
-import su.mandora.events.EventDispatcher;
+import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventChunkOcclusion;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

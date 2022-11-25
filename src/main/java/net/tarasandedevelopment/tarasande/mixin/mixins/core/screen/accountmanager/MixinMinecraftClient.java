@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.core.screen.accountmanag
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import net.minecraft.client.MinecraftClient;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.systems.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionButtonAccountManager;
-import net.tarasandedevelopment.tarasande.systems.screen.accountmanager.account.Account;
+import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionButtonAccountManager;
+import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.Account;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

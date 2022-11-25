@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.feature.module.norender;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleNoRender;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleNoRender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

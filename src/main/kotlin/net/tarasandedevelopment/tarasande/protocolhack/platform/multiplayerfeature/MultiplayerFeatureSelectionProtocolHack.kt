@@ -6,10 +6,10 @@ import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.protocolhack.extension.getSpecialName
 import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
-import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.MultiplayerFeature
-import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.MultiplayerFeatureCategory
-import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.MultiplayerFeatureSelection
-import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl.ScreenBetterParentValues
+import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.MultiplayerFeature
+import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.MultiplayerFeatureCategory
+import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.MultiplayerFeatureSelection
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
 
 class MultiplayerFeatureSelectionProtocolHack : MultiplayerFeatureSelection("Protocol Hack", MultiplayerFeatureCategory.PROTOCOL_HACK, VersionList.PROTOCOLS.map { it.getSpecialName() }, ProtocolVersion.getProtocol(TarasandeMain.protocolHack().version.value.toInt()).getSpecialName()) {
 

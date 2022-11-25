@@ -10,7 +10,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.player.ModuleNoMiningTrace;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoMiningTrace;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.feature.module.connectio
 
 import net.minecraft.network.packet.s2c.play.EntityStatusEffectS2CPacket;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.render.ModuleAntiParticleHide;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleAntiParticleHide;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

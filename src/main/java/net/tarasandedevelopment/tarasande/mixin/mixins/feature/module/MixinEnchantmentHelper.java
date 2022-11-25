@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.feature.module;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.exploit.ModuleAntiBindingCurse;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleAntiBindingCurse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

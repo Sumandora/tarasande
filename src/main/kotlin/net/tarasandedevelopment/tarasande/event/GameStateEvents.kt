@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.event
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.item.Item
-import su.mandora.events.Event
+import su.mandora.event.Event
 import java.util.*
 
 class EventTick(val state: State) : Event(false) {

@@ -38,7 +38,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
-import net.tarasandedevelopment.tarasande.systems.feature.modulesystem.impl.movement.ModuleInventoryMove;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleInventoryMove;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

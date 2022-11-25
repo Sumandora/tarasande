@@ -6,7 +6,7 @@ import io.netty.handler.proxy.HttpProxyHandler;
 import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.proxy.Socks5ProxyHandler;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.systems.feature.multiplayerfeaturesystem.impl.MultiplayerFeatureToggleableExploitsHAProxyHack;
+import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.MultiplayerFeatureToggleableExploitsHAProxyHack;
 import net.tarasandedevelopment.tarasande.util.connection.Proxy;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -7,7 +7,6 @@ import net.minecraft.client.texture.NativeImage
 import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
-import net.minecraft.text.OrderedText
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Matrix4f
@@ -15,7 +14,7 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.Vector4f
 import net.minecraft.util.shape.VoxelShape
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.ValueBind
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.extension.unaryMinus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil

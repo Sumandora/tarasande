@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.mixin.mixins.event;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
-import su.mandora.events.EventDispatcher;
+import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventFog;
 import net.tarasandedevelopment.tarasande.event.EventScreenInput;
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;

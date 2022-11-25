@@ -9,15 +9,15 @@ import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.feature.clientvalue.panel.PanelElementsClientValues
-import net.tarasandedevelopment.tarasande.systems.base.filesystem.ManagerFile
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.*
-import net.tarasandedevelopment.tarasande.systems.base.valuesystem.impl.meta.ValueButton
-import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.ManagerPanel
-import net.tarasandedevelopment.tarasande.systems.screen.panelsystem.screen.impl.ScreenBetterParentValues
+import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
 import net.tarasandedevelopment.tarasande.util.dummy.ClientWorldDummy
 import net.tarasandedevelopment.tarasande.util.extension.Thread
 import org.lwjgl.glfw.GLFW
-import su.mandora.events.EventDispatcher
+import su.mandora.event.EventDispatcher
 
 class ClientValues(name: String, panelSystem: ManagerPanel, fileSystem: ManagerFile) {
 
