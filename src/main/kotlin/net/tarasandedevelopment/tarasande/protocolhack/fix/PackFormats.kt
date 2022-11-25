@@ -39,7 +39,7 @@ object PackFormats {
         registerVersion(ProtocolVersion.v1_14_2, 4, "1.14.2", "1.14.2 / f647ba8dc371474797bee24b2b312ff4")
         registerVersion(ProtocolVersion.v1_14_1, 4, "1.14.1", "1.14.1 / a8f78b0d43c74598a199d6d80cda413f")
         registerVersion(ProtocolVersion.v1_14, 4, "1.14", "1.14 / 5dac5567e13e46bdb0c1d90aa8d8b3f7")
-        registerVersion(ProtocolVersion.v1_13_2, 4, "1.13.2")
+        registerVersion(ProtocolVersion.v1_13_2, 4, "1.13.2") // ids weren't sent over the http headers back then, why care...
         registerVersion(ProtocolVersion.v1_13_1, 4, "1.13.1")
         registerVersion(ProtocolVersion.v1_13, 4, "1.13")
         registerVersion(ProtocolVersion.v1_12_2, 3, "1.12.2")
