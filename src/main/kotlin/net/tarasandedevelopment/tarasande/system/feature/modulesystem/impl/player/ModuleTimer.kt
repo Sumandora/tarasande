@@ -25,7 +25,7 @@ class ModuleTimer : Module("Timer", "Changes the clientside ticks per second", M
     }
 
     override fun onDisable() {
-        mc.renderTickCounter.tickTime = (1000.0 / 20.0f).toFloat()
+        mc.renderTickCounter.tickTime = (1000.0 / 20.0F).toFloat()
     }
 
     init {

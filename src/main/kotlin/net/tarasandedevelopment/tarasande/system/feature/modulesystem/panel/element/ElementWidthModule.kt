@@ -41,25 +41,25 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
 
         FontWrapper.textShadow(matrices,
             module.name,
-            2.0f,
-            (this.defaultHeight * 0.25f - FontWrapper.fontHeight() * 0.25f).toFloat(),
+            2.0F,
+            (this.defaultHeight * 0.25F - FontWrapper.fontHeight() * 0.25F).toFloat(),
             white.rgb,
-            scale = 0.75f,
+            scale = 0.75F,
             offset = 0.5F
         )
         FontWrapper.textShadow(matrices,
             this.module.description,
-            2.0f,
-            (this.defaultHeight * 0.75f - FontWrapper.fontHeight() * 0.25f).toFloat(),
+            2.0F,
+            (this.defaultHeight * 0.75F - FontWrapper.fontHeight() * 0.25F).toFloat(),
             Color.lightGray.rgb,
-            scale = 0.5f,
+            scale = 0.5F,
             offset = 0.5F
         )
 
         val toggleAnimation = min((System.currentTimeMillis() - toggleTime) / 100.0, 1.0)
         val radius = if (module.enabled) toggleAnimation else 1.0 - toggleAnimation
         RenderUtil.fillCircle(matrices, width - 7, defaultHeight / 2, radius * 4.0, TarasandeMain.clientValues().accentColor.getColor().rgb)
-        RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0f, RenderUtil.colorInterpolate(TarasandeMain.clientValues().accentColor.getColor(), Color.white, radius).rgb)
+        RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0F, RenderUtil.colorInterpolate(TarasandeMain.clientValues().accentColor.getColor(), Color.white, radius).rgb)
 
         if (components.isNotEmpty()) {
             val expansionAnimation = min((System.currentTimeMillis() - expansionTime) / 100.0, 1.0)
@@ -69,7 +69,7 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
             GL11.glEnable(GL11.GL_LINE_SMOOTH)
             GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST)
             val lineWidth = GL11.glGetFloat(GL11.GL_LINE_WIDTH)
-            GL11.glLineWidth(2.0f)
+            GL11.glLineWidth(2.0F)
             val matrix = matrices?.peek()?.positionMatrix!!
             val bufferBuilder = Tessellator.getInstance().buffer
             RenderSystem.enableBlend()
@@ -81,9 +81,9 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
             matrices.translate(-(this.width - 16), -(this.defaultHeight / 2), 0.0)
             val accentColor = TarasandeMain.clientValues().accentColor.getColor()
             bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
-            bufferBuilder.vertex(matrix, (this.width - 16 - 1).toFloat(), (this.defaultHeight / 2 - 2).toFloat(), 0.0f).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
-            bufferBuilder.vertex(matrix, (this.width - 16 + 1).toFloat(), (this.defaultHeight / 2).toFloat(), 0.0f).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
-            bufferBuilder.vertex(matrix, (this.width - 16 - 1).toFloat(), (this.defaultHeight / 2 + 2).toFloat(), 0.0f).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
+            bufferBuilder.vertex(matrix, (this.width - 16 - 1).toFloat(), (this.defaultHeight / 2 - 2).toFloat(), 0.0F).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
+            bufferBuilder.vertex(matrix, (this.width - 16 + 1).toFloat(), (this.defaultHeight / 2).toFloat(), 0.0F).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
+            bufferBuilder.vertex(matrix, (this.width - 16 - 1).toFloat(), (this.defaultHeight / 2 + 2).toFloat(), 0.0F).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
             BufferRenderer.drawWithShader(bufferBuilder.end())
             RenderSystem.enableTexture()
             RenderSystem.disableBlend()
@@ -116,7 +116,7 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
         }
         if (button == 0) {
             if (isHovered(mouseX, mouseY, 0.0, 0.0, width, getHeight())) {
-                if (Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(Vec2f((width - 7).toFloat(), (defaultHeight / 2).toFloat())) < 16.0f) {
+                if (Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(Vec2f((width - 7).toFloat(), (defaultHeight / 2).toFloat())) < 16.0F) {
                     module.switchState()
                     toggleTime = System.currentTimeMillis()
                 }

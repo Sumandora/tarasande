@@ -22,7 +22,7 @@ import su.mandora.event.EventDispatcher
 class ClientValues(name: String, panelSystem: ManagerPanel, fileSystem: ManagerFile) {
 
     // General
-    val accentColor = ValueColor(this, "Accent color", 0.6f, 1.0f, 1.0f)
+    val accentColor = ValueColor(this, "Accent color", 0.6F, 1.0F, 1.0F)
     val autoSaveConfig = object : ValueBoolean(this, "Auto save: config", true) {
         override fun onChange() {
             autoSaveDaemon.name = autoSaveDaemonName + if (!value) " (disabled)" else ""

@@ -18,7 +18,7 @@ class PanelWatermark : Panel("Watermark", FontWrapper.getWidth(text) * 5.0, Font
 
         matrices?.push()
         matrices?.translate(x + 1, y + titleBarHeight + 1, 0.0)
-        matrices?.scale(xScale.toFloat(), yScale.toFloat(), 1.0f)
+        matrices?.scale(xScale.toFloat(), yScale.toFloat(), 1.0F)
         matrices?.translate(-(x + 1), -(y + titleBarHeight + 1), 0.0)
 
         FontWrapper.textShadow(matrices, text, (x + 1).toFloat(), (y + titleBarHeight + 1).toFloat(), TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)

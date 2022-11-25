@@ -64,7 +64,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;flying:Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;knockDownwards()V"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;hasJumpingMount()Z")))
     public boolean hookFlight(PlayerAbilities instance) {
         tarasande_flight = false;
-        tarasande_flightSpeed = 0.05f;
+        tarasande_flightSpeed = 0.05F;
         ModuleFlight moduleFlight = TarasandeMain.Companion.managerModule().get(ModuleFlight.class);
         if (moduleFlight.getEnabled() && moduleFlight.getMode().isSelected(0)) {
             tarasande_flight = true;

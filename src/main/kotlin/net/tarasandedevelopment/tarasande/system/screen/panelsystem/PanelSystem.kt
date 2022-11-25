@@ -192,7 +192,7 @@ open class Panel(
         RenderUtil.fill(matrices, x, y, x + panelWidth, y + titleBarHeight, TarasandeMain.clientValues().accentColor.getColor().rgb)
         when (alignment) {
             Alignment.LEFT -> FontWrapper.textShadow(matrices, title, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2f - FontWrapper.fontHeight() / 2f, -1)
-            Alignment.MIDDLE -> FontWrapper.textShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0f - FontWrapper.getWidth(title).toFloat() / 2.0F, y.toFloat() + titleBarHeight / 2f - FontWrapper.fontHeight() / 2f, -1)
+            Alignment.MIDDLE -> FontWrapper.textShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(title).toFloat() / 2.0F, y.toFloat() + titleBarHeight / 2f - FontWrapper.fontHeight() / 2f, -1)
             Alignment.RIGHT -> FontWrapper.textShadow(matrices, title, x.toFloat() + panelWidth.toFloat() - FontWrapper.getWidth(title).toFloat(), y.toFloat() + titleBarHeight / 2f - FontWrapper.fontHeight() / 2f, -1)
         }
         matrices?.pop()

@@ -49,23 +49,23 @@ class ElementWidthValueComponentColor(value: Value) : ElementWidthValueComponent
         val y2 = (getPickerHeight() - 5) / 2.0 + cos(0.75) * ((getPickerHeight() - 5) / 2.0 - 5)
 
         if (alphaDragInfo.dragging) {
-            valueColor.alpha = 1.0f - MathHelper.clamp((mouseY + (mouseY / (getPickerHeight() - 5) * 2 - 1) * 5) / (getPickerHeight() - 5), 0.0, 1.0).toFloat()
+            valueColor.alpha = 1.0F - MathHelper.clamp((mouseY + (mouseY / (getPickerHeight() - 5) * 2 - 1) * 5) / (getPickerHeight() - 5), 0.0, 1.0).toFloat()
             valueColor.onChange()
         }
         if (rectDragInfo.dragging) {
             valueColor.sat = MathHelper.clamp((mouseX - x1) / (x2 - x1), 0.0, 1.0).toFloat()
-            valueColor.bri = 1.0f - MathHelper.clamp((mouseY - y1) / (y2 - y1), 0.0, 1.0).toFloat()
+            valueColor.bri = 1.0F - MathHelper.clamp((mouseY - y1) / (y2 - y1), 0.0, 1.0).toFloat()
             valueColor.onChange()
         }
         if (wheelDragInfo.dragging) {
             val mousePos = Vec2f(mouseX.toFloat(), mouseY.toFloat())
             val middle = Vec2f((x1 + (x2 - x1) * 0.5).toFloat(), (y1 + (y2 - y1) * 0.5).toFloat())
-            val mouseDir = mousePos.add(middle.multiply(-1.0f)).normalize() // large subtraction
+            val mouseDir = mousePos.add(middle.multiply(-1.0F)).normalize() // large subtraction
             valueColor.hue = ((atan2(mouseDir.y, mouseDir.x) + PI - PI / 2) / (2 * PI)).toFloat()
             valueColor.onChange()
         }
 
-        FontWrapper.textShadow(matrices, value.name, 0.0f, ((getPickerHeight() - 5) / 2.0f - FontWrapper.fontHeight() * 0.5F / 2.0f).toFloat(), white.rgb, scale = 0.5f, offset = 0.5F)
+        FontWrapper.textShadow(matrices, value.name, 0.0F, ((getPickerHeight() - 5) / 2.0F - FontWrapper.fontHeight() * 0.5F / 2.0F).toFloat(), white.rgb, scale = 0.5F, offset = 0.5F)
 
         val matrix4f = matrices?.peek()?.positionMatrix!!
         val bufferBuilder = Tessellator.getInstance().buffer
@@ -74,7 +74,7 @@ class ElementWidthValueComponentColor(value: Value) : ElementWidthValueComponent
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
 
         val nextHue = if (valueColor.locked) TarasandeMain.clientValues().accentColor.hue else valueColor.hue
-        val hsb = Color.getHSBColor(nextHue, 1.0f, 1.0f).let { if (valueColor.isEnabled()) it else it.darker().darker() }
+        val hsb = Color.getHSBColor(nextHue, 1.0F, 1.0F).let { if (valueColor.isEnabled()) it else it.darker().darker() }
         RenderUtil.fill(matrices, x1, y1, x2, y2, hsb.rgb)
         RenderUtil.fillHorizontalGradient(matrices, x1, y1, x2, y2, Color.white.withAlpha(0).rgb, unblockedWhite.rgb)
         RenderUtil.fillVerticalGradient(matrices, x1, y1, x2, y2, Color.black.withAlpha(0).rgb, black.rgb)
@@ -94,11 +94,11 @@ class ElementWidthValueComponentColor(value: Value) : ElementWidthValueComponent
                 offset = 0.5F)
         }
 
-        RenderUtil.outlinedFill(matrices, x1, y1, x2, y2, 2.0f, unblockedWhite.rgb)
-        RenderUtil.outlinedCircle(matrices, x1 + (x2 - x1) * valueColor.sat, y1 + (y2 - y1) * (1.0 - valueColor.bri), 2.0, 2.0f, unblockedWhite.rgb)
+        RenderUtil.outlinedFill(matrices, x1, y1, x2, y2, 2.0F, unblockedWhite.rgb)
+        RenderUtil.outlinedCircle(matrices, x1 + (x2 - x1) * valueColor.sat, y1 + (y2 - y1) * (1.0 - valueColor.bri), 2.0, 2.0F, unblockedWhite.rgb)
         RenderUtil.fillCircle(matrices, x1 + (x2 - x1) * valueColor.sat, y1 + (y2 - y1) * (1.0 - valueColor.bri), 2.0, Color.getHSBColor(nextHue, valueColor.sat, valueColor.bri).let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
-        RenderUtil.outlinedCircle(matrices, width - (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0 - 5, 2.0f, white.rgb)
-        RenderUtil.outlinedCircle(matrices, width - (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0, 2.0f, white.rgb)
+        RenderUtil.outlinedCircle(matrices, width - (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0 - 5, 2.0F, white.rgb)
+        RenderUtil.outlinedCircle(matrices, width - (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0, (getPickerHeight() - 5) / 2.0, 2.0F, white.rgb)
 
         val innerRadius = (getPickerHeight() - 5) / 2.0 - 5
         val outerRadius = (getPickerHeight() - 5) / 2.0
@@ -109,27 +109,27 @@ class ElementWidthValueComponentColor(value: Value) : ElementWidthValueComponent
         run {
             var circle = 0.0
             while (circle <= 1.01) {
-                var hsb2 = Color.getHSBColor((circle.toFloat() + 0.5f) % 1.0f, 1.0f, 1.0f)
+                var hsb2 = Color.getHSBColor((circle.toFloat() + 0.5F) % 1.0F, 1.0F, 1.0F)
                 if (!valueColor.isEnabled() || valueColor.locked) hsb2 = hsb2.darker().darker()
-                val f2 = (hsb2.rgb shr 24 and 0xFF) / 255.0f
-                val g2 = (hsb2.rgb shr 16 and 0xFF) / 255.0f
-                val h2 = (hsb2.rgb shr 8 and 0xFF) / 255.0f
-                val i = (hsb2.rgb and 0xFF) / 255.0f
-                bufferBuilder.vertex(matrix4f, (this.width - (getPickerHeight() - 5) / 2.0 - sin(circle * PI * 2) * innerRadius).toFloat(), ((getPickerHeight() - 5) / 2.0 + cos(circle * PI * 2) * innerRadius).toFloat(), 0.0f).color(g2, h2, i, f2).next()
-                bufferBuilder.vertex(matrix4f, (this.width - (getPickerHeight() - 5) / 2.0 - sin(circle * PI * 2) * outerRadius).toFloat(), ((getPickerHeight() - 5) / 2.0 + cos(circle * PI * 2) * outerRadius).toFloat(), 0.0f).color(g2, h2, i, f2).next()
+                val f2 = (hsb2.rgb shr 24 and 0xFF) / 255.0F
+                val g2 = (hsb2.rgb shr 16 and 0xFF) / 255.0F
+                val h2 = (hsb2.rgb shr 8 and 0xFF) / 255.0F
+                val i = (hsb2.rgb and 0xFF) / 255.0F
+                bufferBuilder.vertex(matrix4f, (this.width - (getPickerHeight() - 5) / 2.0 - sin(circle * PI * 2) * innerRadius).toFloat(), ((getPickerHeight() - 5) / 2.0 + cos(circle * PI * 2) * innerRadius).toFloat(), 0.0F).color(g2, h2, i, f2).next()
+                bufferBuilder.vertex(matrix4f, (this.width - (getPickerHeight() - 5) / 2.0 - sin(circle * PI * 2) * outerRadius).toFloat(), ((getPickerHeight() - 5) / 2.0 + cos(circle * PI * 2) * outerRadius).toFloat(), 0.0F).color(g2, h2, i, f2).next()
                 circle += 0.01
             }
         }
         BufferRenderer.drawWithShader(bufferBuilder.end())
 
-        RenderUtil.outlinedCircle(matrices, this.width - (getPickerHeight() - 5) / 2.0 - sin((valueColor.hue + 0.5f) * PI * 2) * middleRadius, (getPickerHeight() - 5) / 2.0 + cos((valueColor.hue + 0.5f) * PI * 2) * middleRadius, width / 2.0, 3.0f, white.rgb)
-        RenderUtil.fillCircle(matrices, this.width - (getPickerHeight() - 5) / 2.0 - sin((valueColor.hue + 0.5f) * PI * 2) * middleRadius, (getPickerHeight() - 5) / 2.0 + cos((valueColor.hue + 0.5f) * PI * 2) * middleRadius, width / 2.0, Color.getHSBColor(valueColor.hue, 1.0f, 1.0f).let { if (valueColor.isEnabled() && !valueColor.locked) it else it.darker().darker() }.rgb)
+        RenderUtil.outlinedCircle(matrices, this.width - (getPickerHeight() - 5) / 2.0 - sin((valueColor.hue + 0.5F) * PI * 2) * middleRadius, (getPickerHeight() - 5) / 2.0 + cos((valueColor.hue + 0.5F) * PI * 2) * middleRadius, width / 2.0, 3.0F, white.rgb)
+        RenderUtil.fillCircle(matrices, this.width - (getPickerHeight() - 5) / 2.0 - sin((valueColor.hue + 0.5F) * PI * 2) * middleRadius, (getPickerHeight() - 5) / 2.0 + cos((valueColor.hue + 0.5F) * PI * 2) * middleRadius, width / 2.0, Color.getHSBColor(valueColor.hue, 1.0F, 1.0F).let { if (valueColor.isEnabled() && !valueColor.locked) it else it.darker().darker() }.rgb)
         if (valueColor.alpha != null) {
             val alpha = valueColor.alpha!!
             RenderUtil.fillVerticalGradient(matrices, this.width - (getPickerHeight() - 5) - 10, 0.0, this.width - (getPickerHeight() - 5) - 5, getPickerHeight() - 5, unblockedWhite.rgb, black.rgb)
-            RenderUtil.outlinedFill(matrices, this.width - (getPickerHeight() - 5) - 10, 0.0, this.width - (getPickerHeight() - 5) - 5, getPickerHeight() - 5, 2.0f, unblockedWhite.rgb)
+            RenderUtil.outlinedFill(matrices, this.width - (getPickerHeight() - 5) - 10, 0.0, this.width - (getPickerHeight() - 5) - 5, getPickerHeight() - 5, 2.0F, unblockedWhite.rgb)
             RenderUtil.fillCircle(matrices, this.width - (getPickerHeight() - 5) - 7.5, (getPickerHeight() - 5) * (1.0 - alpha) + (alpha * 2 - 1) * 2.5, 2.5, Color(alpha, alpha, alpha).let { if (valueColor.isEnabled()) it else it.darker().darker() }.rgb)
-            RenderUtil.outlinedCircle(matrices, this.width - (getPickerHeight() - 5) - 7.5, (getPickerHeight() - 5) * (1.0 - alpha) + (alpha * 2 - 1) * 2.5, 2.5, 2.0f, unblockedWhite.rgb)
+            RenderUtil.outlinedCircle(matrices, this.width - (getPickerHeight() - 5) - 7.5, (getPickerHeight() - 5) * (1.0 - alpha) + (alpha * 2 - 1) * 2.5, 2.5, 2.0F, unblockedWhite.rgb)
         }
     }
 
@@ -138,7 +138,7 @@ class ElementWidthValueComponentColor(value: Value) : ElementWidthValueComponent
 
         val valueColor = value as ValueColor
 
-        if (!this.isAccent() && RenderUtil.isHovered(mouseX, mouseY, width - FontWrapper.getWidth(lockToAccentColorText) / 2.0f, getPickerHeight(), width, getPickerHeight() + FontWrapper.fontHeight() / 2.0f)) {
+        if (!this.isAccent() && RenderUtil.isHovered(mouseX, mouseY, width - FontWrapper.getWidth(lockToAccentColorText) / 2.0F, getPickerHeight(), width, getPickerHeight() + FontWrapper.fontHeight() / 2.0F)) {
             if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                 val accent = TarasandeMain.clientValues().accentColor
 

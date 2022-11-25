@@ -7,7 +7,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 
 class ModuleColorCorrection : Module("Color correction", "Corrects colors on the framebuffer", ModuleCategory.RENDER) {
 
-    private val color = ValueColor(this, "Color", 0.0f, 1.0f, 1.0f)
+    private val color = ValueColor(this, "Color", 0.0F, 1.0F, 1.0F)
 
     init {
         registerEvent(EventColorCorrection::class.java) { event ->

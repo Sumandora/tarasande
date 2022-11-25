@@ -67,8 +67,8 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
 
             if (nextSlot != null) {
                 val displayPos = ContainerUtil.getDisplayPosition(accessor, nextSlot).add(Vec2f(
-                    if (randomize.value == 0.0) 0.0f else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat(),
-                    if (randomize.value == 0.0) 0.0f else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat()
+                    if (randomize.value == 0.0) 0.0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat(),
+                    if (randomize.value == 0.0) 0.0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat()
                 ))
                 val distance = mousePos?.distanceSquared(displayPos)!!
                 mousePos = displayPos

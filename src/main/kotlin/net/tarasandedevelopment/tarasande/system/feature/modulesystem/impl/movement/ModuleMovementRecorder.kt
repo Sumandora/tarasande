@@ -37,7 +37,7 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
         for (tick in record.ticks) {
             val vec = tick.pos
-            bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).color(1f, 1f, 1f, alpha).next()
+            bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).color(1F, 1F, 1F, alpha).next()
         }
         BufferRenderer.drawWithShader(bufferBuilder.end())
     }
@@ -179,7 +179,7 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
             val str = if (recording) "Recording" else playbackState?.name?.let {
                 it.first() + it.substring(1).lowercase()
             } ?: return@registerEvent
-            FontWrapper.textShadow(event.matrices, str, mc.window?.scaledWidth!! / 2.0f - FontWrapper.getWidth(str) / 2.0f, mc.window?.scaledHeight!! / 2.0f - FontWrapper.fontHeight(), -1)
+            FontWrapper.textShadow(event.matrices, str, mc.window?.scaledWidth!! / 2.0F - FontWrapper.getWidth(str) / 2.0F, mc.window?.scaledHeight!! / 2.0F - FontWrapper.fontHeight(), -1)
         }
 
         registerEvent(EventRender3D::class.java) { event ->
@@ -193,13 +193,13 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
             val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
             event.matrices.translate(-vec3d!!.x, -vec3d.y, -vec3d.z)
             val bufferBuilder = Tessellator.getInstance().buffer
-            RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
+            RenderSystem.setShaderColor(1F, 1F, 1F, 1f)
             val matrix = event.matrices.peek()?.positionMatrix!!
             if (playbackState != null && playedBack != null) {
-                drawPath(bufferBuilder, matrix, playedBack!!, 1.0f)
+                drawPath(bufferBuilder, matrix, playedBack!!, 1.0F)
             } else {
                 for (record in if (currentRecording != null) ArrayUtils.add(records.toTypedArray(), currentRecording!!) else records.toTypedArray()) {
-                    drawPath(bufferBuilder, matrix, record, 1f - (mc.player?.pos?.squaredDistanceTo(record.ticks.first().pos)!! / (16.0 * 16.0)).toFloat().coerceAtMost(1.0f))
+                    drawPath(bufferBuilder, matrix, record, 1f - (mc.player?.pos?.squaredDistanceTo(record.ticks.first().pos)!! / (16.0 * 16.0)).toFloat().coerceAtMost(1.0F))
                 }
             }
             event.matrices.pop()

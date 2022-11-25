@@ -28,7 +28,7 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
             val longest = when (useAction) {
                 UseAction.BOW -> {
                     var tick = 0
-                    var lastProgress = 0.0f // something lower than 0
+                    var lastProgress = 0.0F // something lower than 0
                     while (true) {
                         tick++
                         val progress = BowItem.getPullProgress(tick)

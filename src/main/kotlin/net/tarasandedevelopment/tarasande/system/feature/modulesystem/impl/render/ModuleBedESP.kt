@@ -36,13 +36,13 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         override fun isEnabled() = calculateBestWay.value
     }
 
-    private val bedColor = object : ValueColor(this, "Bed color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val bedColor = object : ValueColor(this, "Bed color", 0.0F, 1.0F, 1.0F, 1.0F) {
         override fun isEnabled() = calculateBestWay.value
     }
-    private val defenderColor = object : ValueColor(this, "Defender color", 0.0f, 1.0f, 1.0f, 0.0f) {
+    private val defenderColor = object : ValueColor(this, "Defender color", 0.0F, 1.0F, 1.0F, 0.0F) {
         override fun isEnabled() = calculateBestWay.value
     }
-    private val solutionColor = object : ValueColor(this, "Solution color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val solutionColor = object : ValueColor(this, "Solution color", 0.0F, 1.0F, 1.0F, 1.0F) {
         override fun isEnabled() = calculateBestWay.value
     }
 

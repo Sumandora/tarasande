@@ -35,10 +35,10 @@ class BlurBox : Blur("Box") {
         GL20.glUniform2f(box.getUniformLocation("resolution"), write.textureWidth.toFloat(), write.textureHeight.toFloat())
 
         GL11.glBegin(GL11.GL_QUADS)
-        GL11.glVertex2f(0f, 0f)
-        GL11.glVertex2f(write.textureWidth.toFloat(), 0f)
+        GL11.glVertex2f(0F, 0F)
+        GL11.glVertex2f(write.textureWidth.toFloat(), 0F)
         GL11.glVertex2f(write.textureWidth.toFloat(), write.textureHeight.toFloat())
-        GL11.glVertex2f(0f, write.textureHeight.toFloat())
+        GL11.glVertex2f(0F, write.textureHeight.toFloat())
         GL11.glEnd()
 
         GL20.glUseProgram(prevProgram)

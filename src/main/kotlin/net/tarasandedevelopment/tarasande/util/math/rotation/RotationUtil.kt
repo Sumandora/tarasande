@@ -48,7 +48,7 @@ object RotationUtil {
                 if (it.input == MinecraftClient.getInstance().player?.input)
                     if (fakeRotation != null)
                         if (TarasandeMain.clientValues().correctMovement.isSelected(3)) {
-                            if (it.movementForward == 0.0f && it.movementSideways == 0.0f) return@add
+                            if (it.movementForward == 0.0F && it.movementSideways == 0.0F) return@add
 
                             val realYaw = goalMovementYaw ?: MinecraftClient.getInstance().player!!.yaw
                             val fakeYaw = fakeRotation!!.yaw
@@ -162,7 +162,7 @@ object RotationUtil {
                     rotation.smoothedTurn(realRotation, Pair(lastMinRotateToOriginSpeed, lastMaxRotateToOriginSpeed))
                 rotation.correctSensitivity()
                 val actualDist = fakeRotation!!.fov(rotation)
-                val gcd = Rotation.getGcd() * 0.15f
+                val gcd = Rotation.getGcd() * 0.15F
                 if (actualDist <= gcd / 2 + 0.1 /* little more */) {
                     val actualRotation = Rotation(MinecraftClient.getInstance().player!!)
                     actualRotation.correctSensitivity()
@@ -215,8 +215,8 @@ object RotationUtil {
         }
         // The pitch calculation is literally mojang dev iq overload, kept for historic reasons
         val rot = Rotation(j, k)
-        rot.yaw %= 360.0f
-        rot.pitch = MathHelper.clamp(rot.pitch, -90.0f, 90.0f) % 360.0f
+        rot.yaw %= 360.0F
+        rot.pitch = MathHelper.clamp(rot.pitch, -90.0F, 90.0F) % 360.0F
         return rot
     }
 }

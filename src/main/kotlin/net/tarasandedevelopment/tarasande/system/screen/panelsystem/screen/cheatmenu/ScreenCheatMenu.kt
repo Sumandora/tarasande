@@ -121,7 +121,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
             val height = client?.window?.scaledHeight!! * 0.85
             val width = height * aspect
 
-            DrawableHelper.drawTexture(matrices, (client?.window?.scaledWidth!! - animation * width).toInt(), (client?.window?.scaledHeight!! - height).toInt(), 0, 0.0f, 0.0f, width.toInt(), height.toInt(), width.toInt(), height.toInt())
+            DrawableHelper.drawTexture(matrices, (client?.window?.scaledWidth!! - animation * width).toInt(), (client?.window?.scaledHeight!! - height).toInt(), 0, 0.0F, 0.0F, width.toInt(), height.toInt(), width.toInt(), height.toInt())
             matrices?.pop()
         }
 
@@ -131,7 +131,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
             particles.add(Particle(width / 2.0, height / 2.0))
         matrices?.pop()
 
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
 
         if (accentBackground.value) {
             matrices?.push()

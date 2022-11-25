@@ -19,7 +19,7 @@ public class MixinKeyboardInput extends Input {
         EventDispatcher.INSTANCE.call(eventInput);
 
         this.pressingForward = this.pressingBack = this.pressingLeft = this.pressingRight = false;
-        this.movementForward = this.movementSideways = 0.0f;
+        this.movementForward = this.movementSideways = 0.0F;
 
         if (!eventInput.getCancelled()) {
             this.movementForward = eventInput.getMovementForward();

@@ -37,9 +37,9 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         override fun filter(key: Item) = key != Items.AIR
         override fun getTranslationKey(key: Any?) = (key as Item).translationKey
     }
-    private val murdererColorOverride = ValueColor(this, "Murderer color override", 0.0f, 1.0f, 1.0f, 1.0f)
+    private val murdererColorOverride = ValueColor(this, "Murderer color override", 0.0F, 1.0F, 1.0F, 1.0F)
     private val highlightDetectives = ValueBoolean(this, "Highlight detectives", false)
-    private val detectiveColorOverride = object : ValueColor(this, "Bow color override", 0.66f, 1.0f, 1.0f, 1.0f) {
+    private val detectiveColorOverride = object : ValueColor(this, "Bow color override", 0.66F, 1.0F, 1.0F, 1.0F) {
         override fun isEnabled() = highlightDetectives.value
     }
     private val detectiveItems = object : ValueRegistry<Item>(this, "Detective items", Registry.ITEM, Items.BOW) {

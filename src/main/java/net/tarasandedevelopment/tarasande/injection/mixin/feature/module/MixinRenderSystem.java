@@ -15,9 +15,9 @@ public class MixinRenderSystem {
     private static void hookedFog_clearColor(float red, float green, float blue, float alpha) {
         ModuleFog moduleFog = TarasandeMain.Companion.managerModule().get(ModuleFog.class);
         if (moduleFog.getEnabled()) {
-            red = moduleFog.getColor().getColor().getRed() / 255.0f;
-            green = moduleFog.getColor().getColor().getGreen() / 255.0f;
-            blue = moduleFog.getColor().getColor().getBlue() / 255.0f;
+            red = moduleFog.getColor().getColor().getRed() / 255.0F;
+            green = moduleFog.getColor().getColor().getGreen() / 255.0F;
+            blue = moduleFog.getColor().getColor().getBlue() / 255.0F;
         }
         GlStateManager._clearColor(red, green, blue, alpha);
     }

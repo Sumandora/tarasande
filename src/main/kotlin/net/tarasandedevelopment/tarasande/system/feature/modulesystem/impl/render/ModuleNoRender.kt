@@ -114,7 +114,7 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
 
         registerEvent(EventFog::class.java, 9999) {
             if (world.fog.should() && (it.state == EventFog.State.FOG_START || it.state == EventFog.State.FOG_END)) {
-                it.values[0] *= 9999.0f
+                it.values[0] *= 9999.0F
             }
         }
     }

@@ -148,7 +148,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         this.renderTitle(matrices, "Account Manager")
-        FontWrapper.textShadow(matrices, status, width / 2.0f, 2 * FontWrapper.fontHeight() * 2.0f, -1, centered = true)
+        FontWrapper.textShadow(matrices, status, width / 2.0F, 2 * FontWrapper.fontHeight() * 2.0F, -1, centered = true)
 
         if (TarasandeMain.get().proxy != null) {
             FontWrapper.textShadow(matrices, TarasandeMain.get().proxy!!.socketAddress.address.hostAddress + ":" + TarasandeMain.get().proxy!!.socketAddress.port + " (" + TarasandeMain.get().proxy!!.ping + "ms)", 6F, 27F, -1)

@@ -30,7 +30,7 @@ class ElementWidthValueComponentBind(value: Value) : ElementWidthValueComponent(
         val textWidth = FontWrapper.getWidth(name)
 
         RenderUtil.fill(matrices, width - textWidth / 2, getHeight() * 0.25, width, getHeight() * 0.75, Int.MIN_VALUE)
-        FontWrapper.textShadow(matrices, name, (width - textWidth / 2).toFloat(), (getHeight() * 0.25f).toFloat(), white.rgb, scale = 0.5F, offset = 0.5F)
+        FontWrapper.textShadow(matrices, name, (width - textWidth / 2).toFloat(), (getHeight() * 0.25F).toFloat(), white.rgb, scale = 0.5F, offset = 0.5F)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

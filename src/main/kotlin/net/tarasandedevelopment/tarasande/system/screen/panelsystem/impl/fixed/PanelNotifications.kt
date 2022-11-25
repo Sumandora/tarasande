@@ -91,7 +91,7 @@ class PanelNotifications : Panel("Notifications", 100.0, FontWrapper.fontHeight(
 
                 when (alignment) {
                     Alignment.LEFT -> FontWrapper.textShadow(matrices, text, (x - (FontWrapper.getWidth(text) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
-                    Alignment.MIDDLE -> FontWrapper.textShadow(matrices, text, x.toFloat() + panelWidth.toFloat() / 2.0f - FontWrapper.getWidth(text).toFloat() / 2.0f, (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                    Alignment.MIDDLE -> FontWrapper.textShadow(matrices, text, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(text).toFloat() / 2.0F, (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
                     Alignment.RIGHT -> FontWrapper.textShadow(matrices, text, (x + panelWidth - FontWrapper.getWidth(text) * animatedPosition).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
                 }
                 index += animatedPosition
@@ -126,6 +126,6 @@ class PanelNotifications : Panel("Notifications", 100.0, FontWrapper.fontHeight(
             x = this.x + panelWidth - 5.0
 
         if (alert)
-            FontWrapper.textShadow(matrices, "!", x.toFloat(), y.toFloat() + titleBarHeight / 2.0f - FontWrapper.fontHeight() / 2.0f * 0.5F, Color.red.rgb, centered = true, scale = 0.5F)
+            FontWrapper.textShadow(matrices, "!", x.toFloat(), y.toFloat() + titleBarHeight / 2.0F - FontWrapper.fontHeight() / 2.0F * 0.5F, Color.red.rgb, centered = true, scale = 0.5F)
     }
 }

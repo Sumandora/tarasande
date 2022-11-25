@@ -20,7 +20,7 @@ class Rotation(var yaw: Float, var pitch: Float) {
         const val MAXIMUM_DELTA = 255.0 // sqrt(180 * 180 + 180 * 180)
 
         fun getGcd(): Double {
-            val sensitivity = MinecraftClient.getInstance().options.mouseSensitivity.value * 0.6f.toDouble() + 0.2f.toDouble()
+            val sensitivity = MinecraftClient.getInstance().options.mouseSensitivity.value * 0.6F.toDouble() + 0.2F.toDouble()
             val sensitivityPow3 = sensitivity * sensitivity * sensitivity
             val sensitivityPow3Mult8 = sensitivityPow3 * 8.0
 
@@ -32,11 +32,11 @@ class Rotation(var yaw: Float, var pitch: Float) {
 
         fun calculateRotationChange(cursorDeltaX: Double, cursorDeltaY: Double): Rotation {
             val gcd = getGcd()
-            return Rotation((-cursorDeltaX * gcd).toFloat() * 0.15f, (-cursorDeltaY * gcd).toFloat() * 0.15f)
+            return Rotation((-cursorDeltaX * gcd).toFloat() * 0.15F, (-cursorDeltaY * gcd).toFloat() * 0.15F)
         }
 
         fun approximateCursorDeltas(deltaRotation: Rotation): Pair<Double, Double> {
-            val gcd = getGcd() * 0.15f
+            val gcd = getGcd() * 0.15F
             return Pair(-round(deltaRotation.yaw / gcd), -round(deltaRotation.pitch / gcd))
         }
     }
@@ -57,7 +57,7 @@ class Rotation(var yaw: Float, var pitch: Float) {
 
         yaw = delta.yaw
         pitch = delta.pitch
-        pitch = MathHelper.clamp(pitch, -90.0f, 90.0f)
+        pitch = MathHelper.clamp(pitch, -90.0F, 90.0F)
 
         return this
     }

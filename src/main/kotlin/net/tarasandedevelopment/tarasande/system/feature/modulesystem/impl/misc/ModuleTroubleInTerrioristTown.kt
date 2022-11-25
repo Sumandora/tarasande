@@ -75,7 +75,7 @@ class ModuleTroubleInTerrioristTown : Module("Trouble in terrorist town", "Uses 
             if(event.type == EventPacket.Type.RECEIVE && event.packet is HealthUpdateS2CPacket) {
                 if(event.packet.health >= mc.player?.health!!)
                     return@registerEvent
-                val traitors = scanForTraitors(mc.player!!, event.packet.health <= 0.0f) ?: return@registerEvent
+                val traitors = scanForTraitors(mc.player!!, event.packet.health <= 0.0F) ?: return@registerEvent
 
                 if(traitors.isNotEmpty())
                     PanelNotifications.notify("You are being attacked by " + traitors.joinToString { it.gameProfile.name })

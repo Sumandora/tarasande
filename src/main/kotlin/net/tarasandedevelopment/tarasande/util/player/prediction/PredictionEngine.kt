@@ -54,7 +54,7 @@ object PredictionEngine {
             }
 
             override fun tickMovement() {
-                fallDistance = 0.0f
+                fallDistance = 0.0F
                 super.tickMovement()
             }
 

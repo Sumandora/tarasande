@@ -12,7 +12,7 @@ open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var 
     var hue: Float = hue
         get() {
             return if (rainbow) {
-                (field + (System.currentTimeMillis() - rainbowStart) % 2500f / 2500f) % 1.0f
+                (field + (System.currentTimeMillis() - rainbowStart) % 2500f / 2500F) % 1.0F
             } else {
                 field
             }

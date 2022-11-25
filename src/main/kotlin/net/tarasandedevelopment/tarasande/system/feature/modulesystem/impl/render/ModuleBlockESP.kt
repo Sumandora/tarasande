@@ -20,7 +20,7 @@ class ModuleBlockESP : Module("Block ESP", "Highlights blocks through walls", Mo
     private val hideBlocks = object : ValueBoolean(this, "Hide blocks", false) {
         override fun onChange() = onDisable()
     }
-    private val color = object : ValueColor(this, "Color", 0.0f, 1.0f, 1.0f, 1.0f) {
+    private val color = object : ValueColor(this, "Color", 0.0F, 1.0F, 1.0F, 1.0F) {
         override fun isEnabled() = !hideBlocks.value
     }
     private val blocks = object : ValueRegistry<Block>(this, "Blocks", Registry.BLOCK) {

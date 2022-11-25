@@ -82,7 +82,7 @@ class ScreenBetterAccount(
                             TextFieldWidgetPlaceholderPassword(
                                 textRenderer,
                                 width / 2 - 150,
-                                (height * 0.25f + i * 25).toInt(),
+                                (height * 0.25F + i * 25).toInt(),
                                 300,
                                 20,
                                 Text.of(textFieldInfo.name)
@@ -94,7 +94,7 @@ class ScreenBetterAccount(
                             TextFieldWidgetPlaceholder(
                                 textRenderer,
                                 width / 2 - 150,
-                                (height * 0.25f + i * 25).toInt(),
+                                (height * 0.25F + i * 25).toInt(),
                                 300,
                                 20,
                                 Text.of(textFieldInfo.name)
@@ -106,7 +106,7 @@ class ScreenBetterAccount(
             }
         }
 
-        addDrawableChild(ButtonWidget(width / 2 - 50, 25 + (height * 0.75f).toInt(), 100, 20, Text.of(name)) {
+        addDrawableChild(ButtonWidget(width / 2 - 50, 25 + (height * 0.75F).toInt(), 100, 20, Text.of(name)) {
             accountImplementation.create(textFields.map { it.text })
             accountConsumer.accept(accountImplementation)
             close()
@@ -115,7 +115,7 @@ class ScreenBetterAccount(
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
-        FontWrapper.textShadow(matrices, name, width / 2.0f, 8 - FontWrapper.fontHeight() / 2.0f, -1, centered = true)
+        FontWrapper.textShadow(matrices, name, width / 2.0F, 8 - FontWrapper.fontHeight() / 2.0F, -1, centered = true)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {

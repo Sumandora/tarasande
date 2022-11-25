@@ -24,7 +24,7 @@ class ElementWidthValueComponentButton(value: Value) : ElementWidthValueComponen
         FontWrapper.textShadow(matrices,
             value.name,
             (width - 2 - textWidth / 2).toFloat(),
-            (getHeight() / 2.0F - FontWrapper.fontHeight() * 0.25f).toFloat(),
+            (getHeight() / 2.0F - FontWrapper.fontHeight() * 0.25F).toFloat(),
             if (valueButton.isEnabled())
                 if (RenderUtil.isHovered(mouseX.toDouble(),
                         mouseY.toDouble(),

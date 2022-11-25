@@ -53,7 +53,7 @@ class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble())
                         if (statusEffectInstance.amplifier in 1..9) {
                             string += " " + I18n.translate("enchantment.level." + (statusEffectInstance.amplifier + 1))
                         }
-                        string += ": " + Formatting.GRAY.toString() + StatusEffectUtil.durationToString(statusEffectInstance, 1.0f)
+                        string += ": " + Formatting.GRAY.toString() + StatusEffectUtil.durationToString(statusEffectInstance, 1.0F)
                         activeStatusEffects.add(Triple(statusEffect, string, statusEffect.color))
                     }
                 }
@@ -68,7 +68,7 @@ class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble())
             val animatedPosition = easing.ease(animation.toFloat())
             when (alignment) {
                 Alignment.LEFT -> FontWrapper.textShadow(matrices, it.second, (x - (FontWrapper.getWidth(it.second) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
-                Alignment.MIDDLE -> FontWrapper.textShadow(matrices, it.second, x.toFloat() + panelWidth.toFloat() / 2.0f - FontWrapper.getWidth(it.second).toFloat() / 2.0f, (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                Alignment.MIDDLE -> FontWrapper.textShadow(matrices, it.second, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(it.second).toFloat() / 2.0F, (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
                 Alignment.RIGHT -> FontWrapper.textShadow(matrices, it.second, (x + panelWidth - FontWrapper.getWidth(it.second) * animatedPosition).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
             }
             index += animatedPosition

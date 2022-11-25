@@ -29,7 +29,7 @@ public class MixinGameRenderer {
         glClear(GL_DEPTH_BUFFER_BIT);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glOrtho(0.0D, client.getWindow().getScaledWidth(), client.getWindow().getScaledHeight(), 0.0D, 1000.0D, 3000.0D);
+        glOrtho(0.0, client.getWindow().getScaledWidth(), client.getWindow().getScaledHeight(), 0.0, 1000.0, 3000.0);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glTranslatef(0.0F, 0.0F, -2000.0F);

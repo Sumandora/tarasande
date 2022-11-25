@@ -41,10 +41,10 @@ object RenderUtil {
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR)
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0f).color(colors[0], colors[1], colors[2], colors[3]).next()
-        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0f).color(colors[0], colors[1], colors[2], colors[3]).next()
-        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0f).color(colors[0], colors[1], colors[2], colors[3]).next()
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0f).color(colors[0], colors[1], colors[2], colors[3]).next()
+        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
         BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
@@ -61,23 +61,23 @@ object RenderUtil {
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR)
-        var quarterCircle = 0.5f
-        while (quarterCircle <= 0.75f) {
-            bufferBuilder.vertex(matrix, (x1 + round + round * cos(quarterCircle * PI * 2)).toFloat(), (y1 + round + round * sin(quarterCircle * PI * 2)).toFloat(), 0.0f).color(colors[0], colors[1], colors[2], colors[3]).next()
-            quarterCircle += 0.025f
+        var quarterCircle = 0.5F
+        while (quarterCircle <= 0.75F) {
+            bufferBuilder.vertex(matrix, (x1 + round + round * cos(quarterCircle * PI * 2)).toFloat(), (y1 + round + round * sin(quarterCircle * PI * 2)).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+            quarterCircle += 0.025F
         }
-        while (quarterCircle <= 1.0f) {
-            bufferBuilder.vertex(matrix, (x2 - round + round * cos(quarterCircle * PI * 2)).toFloat(), (y1 + round + round * sin(quarterCircle * PI * 2)).toFloat(), 0.0f).color(colors[0], colors[1], colors[2], colors[3]).next()
-            quarterCircle += 0.025f
+        while (quarterCircle <= 1.0F) {
+            bufferBuilder.vertex(matrix, (x2 - round + round * cos(quarterCircle * PI * 2)).toFloat(), (y1 + round + round * sin(quarterCircle * PI * 2)).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+            quarterCircle += 0.025F
         }
-        quarterCircle = 0.0f
-        while (quarterCircle <= 0.25f) {
-            bufferBuilder.vertex(matrix, (x2 - round + round * cos(quarterCircle * PI * 2)).toFloat(), (y2 - round + round * sin(quarterCircle * PI * 2)).toFloat(), 0.0f).color(colors[0], colors[1], colors[2], colors[3]).next()
-            quarterCircle += 0.025f
+        quarterCircle = 0.0F
+        while (quarterCircle <= 0.25F) {
+            bufferBuilder.vertex(matrix, (x2 - round + round * cos(quarterCircle * PI * 2)).toFloat(), (y2 - round + round * sin(quarterCircle * PI * 2)).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+            quarterCircle += 0.025F
         }
-        while (quarterCircle <= 0.5f) {
-            bufferBuilder.vertex(matrix, (x1 + round + round * cos(quarterCircle * PI * 2)).toFloat(), (y2 - round + round * sin(quarterCircle * PI * 2)).toFloat(), 0.0f).color(colors[0], colors[1], colors[2], colors[3]).next()
-            quarterCircle += 0.025f
+        while (quarterCircle <= 0.5F) {
+            bufferBuilder.vertex(matrix, (x1 + round + round * cos(quarterCircle * PI * 2)).toFloat(), (y2 - round + round * sin(quarterCircle * PI * 2)).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+            quarterCircle += 0.025F
         }
         BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
@@ -98,11 +98,11 @@ object RenderUtil {
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0f).color(colors[0], colors[1], colors[2], colors[3]).next()
-        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0f).color(colors[0], colors[1], colors[2], colors[3]).next()
-        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0f).color(colors[0], colors[1], colors[2], colors[3]).next()
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0f).color(colors[0], colors[1], colors[2], colors[3]).next()
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0f).color(colors[0], colors[1], colors[2], colors[3]).next()
+        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
         BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
@@ -126,11 +126,11 @@ object RenderUtil {
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0f).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
-        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0f).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
-        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0f).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0f).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0f).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
+        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
+        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
+        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
+        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
+        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
         BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
@@ -150,10 +150,10 @@ object RenderUtil {
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR)
-        bufferBuilder.vertex(matrix, x1.toFloat(), y1.toFloat(), 0.0f).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
-        bufferBuilder.vertex(matrix, x1.toFloat(), y2.toFloat(), 0.0f).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
-        bufferBuilder.vertex(matrix, x2.toFloat(), y2.toFloat(), 0.0f).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
-        bufferBuilder.vertex(matrix, x2.toFloat(), y1.toFloat(), 0.0f).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
+        bufferBuilder.vertex(matrix, x1.toFloat(), y1.toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
+        bufferBuilder.vertex(matrix, x1.toFloat(), y2.toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
+        bufferBuilder.vertex(matrix, x2.toFloat(), y2.toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
+        bufferBuilder.vertex(matrix, x2.toFloat(), y1.toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
         BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
@@ -171,10 +171,10 @@ object RenderUtil {
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR)
-        bufferBuilder.vertex(matrix, x1.toFloat(), y1.toFloat(), 0.0f).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
-        bufferBuilder.vertex(matrix, x1.toFloat(), y2.toFloat(), 0.0f).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
-        bufferBuilder.vertex(matrix, x2.toFloat(), y2.toFloat(), 0.0f).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
-        bufferBuilder.vertex(matrix, x2.toFloat(), y1.toFloat(), 0.0f).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
+        bufferBuilder.vertex(matrix, x1.toFloat(), y1.toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
+        bufferBuilder.vertex(matrix, x1.toFloat(), y2.toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
+        bufferBuilder.vertex(matrix, x2.toFloat(), y2.toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
+        bufferBuilder.vertex(matrix, x2.toFloat(), y1.toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
         BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
@@ -195,7 +195,7 @@ object RenderUtil {
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
         var circle = 0.0
         while (circle <= 1.01) {
-            bufferBuilder.vertex(matrix, (x - sin(circle * PI * 2) * radius).toFloat(), (y + cos(circle * PI * 2) * radius).toFloat(), 0.0f).color(colors[0], colors[1], colors[2], colors[3]).next()
+            bufferBuilder.vertex(matrix, (x - sin(circle * PI * 2) * radius).toFloat(), (y + cos(circle * PI * 2) * radius).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
             circle += 0.01
         }
         BufferRenderer.drawWithShader(bufferBuilder.end())
@@ -218,7 +218,7 @@ object RenderUtil {
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR)
         var circle = 0.0
         while (circle <= 1.01) {
-            bufferBuilder.vertex(matrix, (x - sin(circle * PI * 2) * radius).toFloat(), (y + cos(circle * PI * 2) * radius).toFloat(), 0.0f).color(colors[0], colors[1], colors[2], colors[3]).next()
+            bufferBuilder.vertex(matrix, (x - sin(circle * PI * 2) * radius).toFloat(), (y + cos(circle * PI * 2) * radius).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
             circle += 0.01
         }
         BufferRenderer.drawWithShader(bufferBuilder.end())
@@ -293,10 +293,10 @@ object RenderUtil {
     }
 
     private fun colorToRGBF(color: Int): FloatArray {
-        val f = (color shr 24 and 0xFF) / 255.0f
-        val g = (color shr 16 and 0xFF) / 255.0f
-        val h = (color shr 8 and 0xFF) / 255.0f
-        val k = (color and 0xFF) / 255.0f
+        val f = (color shr 24 and 0xFF) / 255.0F
+        val g = (color shr 16 and 0xFF) / 255.0F
+        val h = (color shr 8 and 0xFF) / 255.0F
+        val k = (color and 0xFF) / 255.0F
 
         return floatArrayOf(g, h, k, f)
     }
@@ -313,7 +313,7 @@ object RenderUtil {
     fun colorInterpolate(a: Color, b: Color, t: Double) = colorInterpolate(a, b, t, t, t, t)
 
     fun colorInterpolate(a: Color, b: Color, tR: Double, tG: Double, tB: Double, tA: Double): Color {
-        return Color((a.red + (b.red - a.red) * tR.toFloat()) / 255.0f, (a.green + (b.green - a.green) * tG.toFloat()) / 255.0f, (a.blue + (b.blue - a.blue) * tB.toFloat()) / 255.0f, (a.alpha + (b.alpha - a.alpha) * tA.toFloat()) / 255.0f)
+        return Color((a.red + (b.red - a.red) * tR.toFloat()) / 255.0F, (a.green + (b.green - a.green) * tG.toFloat()) / 255.0F, (a.blue + (b.blue - a.blue) * tB.toFloat()) / 255.0F, (a.alpha + (b.alpha - a.alpha) * tA.toFloat()) / 255.0F)
     }
 
     fun createImage(path: String) = NativeImageBackedTexture(NativeImage.read(javaClass.getResourceAsStream("/assets/" + TarasandeMain.get().name + "/textures/$path")))
@@ -321,16 +321,16 @@ object RenderUtil {
     fun formattingByHex(hex: Int): Formatting {
         var bestFormatting: Formatting? = null
         var bestDiff = 0.0
-        val red = (hex shr 16 and 0xFF) / 255.0f
-        val green = (hex shr 8 and 0xFF) / 255.0f
-        val blue = (hex shr 0 and 0xFF) / 255.0f
+        val red = (hex shr 16 and 0xFF) / 255.0F
+        val green = (hex shr 8 and 0xFF) / 255.0F
+        val blue = (hex shr 0 and 0xFF) / 255.0F
 
         for (formatting in Formatting.values()) {
             if (formatting.colorValue == null) continue
 
-            val otherRed = (formatting.colorValue!! shr 16 and 0xFF) / 255.0f
-            val otherGreen = (formatting.colorValue!! shr 8 and 0xFF) / 255.0f
-            val otherBlue = (formatting.colorValue!! shr 0 and 0xFF) / 255.0f
+            val otherRed = (formatting.colorValue!! shr 16 and 0xFF) / 255.0F
+            val otherGreen = (formatting.colorValue!! shr 8 and 0xFF) / 255.0F
+            val otherBlue = (formatting.colorValue!! shr 0 and 0xFF) / 255.0F
 
             val diff = (otherRed - red).toDouble().pow(2.0) * 0.2126 + (otherGreen - green).toDouble().pow(2.0) * 0.7152 + (otherBlue - blue).toDouble().pow(2.0) * 0.0722
 
@@ -381,7 +381,7 @@ object RenderUtil {
 
     fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Vec3d? {
         val camPos = -MinecraftClient.getInstance().gameRenderer.camera.pos + vector
-        val vec1 = matrixVectorMultiply(modelView, Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1.0f))
+        val vec1 = matrixVectorMultiply(modelView, Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1.0F))
         val screenPos = matrixVectorMultiply(projection, vec1)
 
         if (screenPos.w <= 0.0) return null

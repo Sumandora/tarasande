@@ -22,7 +22,7 @@ class ElementWidthValueComponentMode(value: Value) : ElementWidthValueComponent(
         for ((index, setting) in valueMode.values.withIndex()) {
             var color = if (valueMode.selected.contains(setting)) TarasandeMain.clientValues().accentColor.getColor() else Color.white
             if (!valueMode.isEnabled()) color = color.darker().darker()
-            FontWrapper.textShadow(matrices, setting, (width - FontWrapper.getWidth(setting) / 2f).toFloat(), (getHeight() / 2.0F + (index - (valueMode.values.size - 1) / 2.0 + 0.5) * (FontWrapper.fontHeight() / 2.0f) - FontWrapper.fontHeight() / 2.0F).toFloat(), color.rgb, scale = 0.5F, offset = 0.5F)
+            FontWrapper.textShadow(matrices, setting, (width - FontWrapper.getWidth(setting) / 2f).toFloat(), (getHeight() / 2.0F + (index - (valueMode.values.size - 1) / 2.0 + 0.5) * (FontWrapper.fontHeight() / 2.0F) - FontWrapper.fontHeight() / 2.0F).toFloat(), color.rgb, scale = 0.5F, offset = 0.5F)
         }
     }
 
@@ -30,8 +30,8 @@ class ElementWidthValueComponentMode(value: Value) : ElementWidthValueComponent(
         if (button != 0) return false
         val valueMode = value as ValueMode
         for ((index, setting) in valueMode.values.withIndex()) {
-            val x = width - FontWrapper.getWidth(setting) / 2.0f
-            val y = getHeight() / 2.0F + (index - (valueMode.values.size - 1) / 2.0 + 0.5) * (FontWrapper.fontHeight() / 2.0f) - FontWrapper.fontHeight() / 2.0F
+            val x = width - FontWrapper.getWidth(setting) / 2.0F
+            val y = getHeight() / 2.0F + (index - (valueMode.values.size - 1) / 2.0 + 0.5) * (FontWrapper.fontHeight() / 2.0F) - FontWrapper.fontHeight() / 2.0F
             if (RenderUtil.isHovered(mouseX, mouseY, x, y, width, y + FontWrapper.fontHeight() / 2.0F)) {
                 valueMode.select(index)
                 valueMode.onChange()

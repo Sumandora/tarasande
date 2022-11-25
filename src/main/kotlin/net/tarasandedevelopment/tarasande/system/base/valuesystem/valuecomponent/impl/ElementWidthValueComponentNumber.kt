@@ -86,7 +86,7 @@ class ElementWidthValueComponentNumber(value: Value) : ElementWidthValueComponen
                         ""
                     ) + value.value.toString(),
             (width - 50 / 2.0F).toFloat(),
-            (getHeight() / 2.0F - FontWrapper.fontHeight() * 0.25f).toFloat(),
+            (getHeight() / 2.0F - FontWrapper.fontHeight() * 0.25F).toFloat(),
             white.rgb,
             centered = true,
             scale = 0.5F,

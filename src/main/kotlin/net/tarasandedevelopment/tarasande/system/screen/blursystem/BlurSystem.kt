@@ -84,10 +84,10 @@ class ManagerBlur : Manager<Blur>() {
         GL20.glUniform2f(cutoutShader.getUniformLocation("resolution"), shapesFramebuffer.textureWidth.toFloat(), shapesFramebuffer.textureHeight.toFloat())
 
         GL11.glBegin(GL11.GL_QUADS)
-        GL11.glVertex2f(0f, 0f)
-        GL11.glVertex2f(shapesFramebuffer.textureWidth.toFloat(), 0f)
+        GL11.glVertex2f(0F, 0F)
+        GL11.glVertex2f(shapesFramebuffer.textureWidth.toFloat(), 0F)
         GL11.glVertex2f(shapesFramebuffer.textureWidth.toFloat(), shapesFramebuffer.textureHeight.toFloat())
-        GL11.glVertex2f(0f, shapesFramebuffer.textureHeight.toFloat())
+        GL11.glVertex2f(0F, shapesFramebuffer.textureHeight.toFloat())
         GL11.glEnd()
 
         GL20.glUseProgram(prevShader)

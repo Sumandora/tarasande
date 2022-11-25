@@ -30,8 +30,8 @@ object ContainerUtil {
             is SwordItem -> (stack.item as ToolItem).material.attackDamage
             is ToolItem -> (stack.item as ToolItem).material.durability.toFloat()
             is ArmorItem -> (stack.item as ArmorItem).material.getDurability((stack.item as ArmorItem).slotType).toFloat()
-            else -> 0.0f
-        }.times(if (durability) (1.0f - stack.damage / stack.maxDamage.toFloat()) else 1.0f)
+            else -> 0.0F
+        }.times(if (durability) (1.0F - stack.damage / stack.maxDamage.toFloat()) else 1.0F)
     }
 
     fun isSameItemType(stack: ItemStack, otherStack: ItemStack): Boolean {
@@ -68,7 +68,7 @@ object ContainerUtil {
 //                    if (otherStack.damage > stack.damage * durability)
 //                        continue
 
-                    //println("$stack $otherStack $materialScore > $otherMaterialScore ${1.0f - stack.damage / stack.maxDamage.toFloat()} ${1.0f - otherStack.damage / otherStack.maxDamage.toFloat()} ${enchantments.isEmpty() && otherEnchantments.isNotEmpty()} ${((materialScore == null || otherMaterialScore == null) || (if (keepSameMaterial) otherMaterialScore > materialScore else otherMaterialScore >= materialScore))}")
+                    //println("$stack $otherStack $materialScore > $otherMaterialScore ${1.0F - stack.damage / stack.maxDamage.toFloat()} ${1.0F - otherStack.damage / otherStack.maxDamage.toFloat()} ${enchantments.isEmpty() && otherEnchantments.isNotEmpty()} ${((materialScore == null || otherMaterialScore == null) || (if (keepSameMaterial) otherMaterialScore > materialScore else otherMaterialScore >= materialScore))}")
                     return true
                 }
             }

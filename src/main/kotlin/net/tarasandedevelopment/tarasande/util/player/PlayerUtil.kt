@@ -47,7 +47,7 @@ object PlayerUtil {
         }
     }
 
-    fun isPlayerMoving() = MinecraftClient.getInstance().player!!.input.movementInput.lengthSquared() != 0.0f
+    fun isPlayerMoving() = MinecraftClient.getInstance().player!!.input.movementInput.lengthSquared() != 0.0F
 
     fun isAttackable(entity: Entity?): Boolean {
         if (entity == null) return false
@@ -87,9 +87,9 @@ object PlayerUtil {
         RotationUtil.fakeRotation = null // prevent rotationvec override by mixin
 
         val prevTickDelta = renderTickCounter.tickDelta
-        renderTickCounter.tickDelta = 1.0f
+        renderTickCounter.tickDelta = 1.0F
 
-        gameRenderer.updateTargetedEntity(1.0f)
+        gameRenderer.updateTargetedEntity(1.0F)
         val hitResult = MinecraftClient.getInstance().crosshairTarget
 
         renderTickCounter.tickDelta = prevTickDelta
@@ -119,7 +119,7 @@ object PlayerUtil {
     }
 
     fun getMoveDirection(): Double {
-        return RotationUtil.getYaw(input.movementInput) + (if (input.movementInput.lengthSquared() != 0.0f) 0.0 else 90.0) + MinecraftClient.getInstance().player!!.yaw
+        return RotationUtil.getYaw(input.movementInput) + (if (input.movementInput.lengthSquared() != 0.0F) 0.0 else 90.0) + MinecraftClient.getInstance().player!!.yaw
     }
 
     fun isOnEdge(extrapolation: Double) = MinecraftClient.getInstance().player!!.let {
@@ -202,11 +202,11 @@ object PlayerUtil {
         val state = MinecraftClient.getInstance().world?.getBlockState(blockPos)
         if (state?.isAir!! || state.getOutlineShape(MinecraftClient.getInstance().world, blockPos).isEmpty) return 1.0
         val hardness = state.getHardness(MinecraftClient.getInstance().world, blockPos)
-        if (hardness <= 0.0f) return 1.0
+        if (hardness <= 0.0F) return 1.0
         MinecraftClient.getInstance().player?.inventory?.selectedSlot = item
         var mult = MinecraftClient.getInstance().player?.getBlockBreakingSpeed(state)!!
         if (!MinecraftClient.getInstance().player?.isOnGround!!) {
-            mult *= 5.0f // bruh
+            mult *= 5.0F // bruh
         }
         return 1.0 - mult / hardness / 30.0
     }

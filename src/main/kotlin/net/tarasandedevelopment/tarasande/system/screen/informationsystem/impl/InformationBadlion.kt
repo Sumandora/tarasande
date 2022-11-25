@@ -92,7 +92,7 @@ class InformationTimers : Information("Badlion", "Timers") {
 
         private fun calcInterpolatedTime(): Long {
             val timeDelta = (System.currentTimeMillis() - lastUpdated!!) / 50f
-            return ((currentTime!! - timeDelta) / 20f * 1000f).toLong()
+            return ((currentTime!! - timeDelta) / 20f * 1000F).toLong()
         }
 
         internal fun isHidden(): Boolean {

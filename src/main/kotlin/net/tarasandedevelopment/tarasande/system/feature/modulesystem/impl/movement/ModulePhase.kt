@@ -29,7 +29,7 @@ class ModulePhase : Module("Phase", "Allows you to move through blocks", ModuleC
 
             if (mode.isSelected(0))
                 if (mc.player?.horizontalCollision == true) {
-                    mc.player?.setPosition(mc.player?.pos!! + Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0f).forwardVector(distance.value))
+                    mc.player?.setPosition(mc.player?.pos!! + Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0F).forwardVector(distance.value))
                 }
         }
 

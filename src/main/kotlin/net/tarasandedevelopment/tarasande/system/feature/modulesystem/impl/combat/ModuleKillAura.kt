@@ -190,7 +190,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 val bestAimPoint = MathUtil.getBestAimPoint(boundingBox)
                 if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
                 if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(fovRotation()) > fov.value) continue
-                val aimPoint = if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() != 0.0f) {
+                val aimPoint = if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() != 0.0F) {
                     mc.player?.eyePos!! + currentRot.forwardVector(0.01)
                 } else {
                     // aim point calculation maybe slower, only run it if the range check is actually able to succeed under best conditions
@@ -225,7 +225,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, target.second)
             var finalRot = targetRot
 
-            val lowestHurtTime = target.first.let { if (it is LivingEntity && it.maxHurtTime > 0) (it.hurtTime - mc.tickDelta).coerceAtLeast(0.0f) / it.maxHurtTime else null }
+            val lowestHurtTime = target.first.let { if (it is LivingEntity && it.maxHurtTime > 0) (it.hurtTime - mc.tickDelta).coerceAtLeast(0.0F) / it.maxHurtTime else null }
 
             if (!flex.value || lowestHurtTime == null || lowestHurtTime < flexHurtTime.value) {
                 finalRot = currentRot.smoothedTurn(targetRot, aimSpeed)
@@ -267,7 +267,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             if (waitForCritical.value) if (!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) })
                 if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !(mc.player as IClientPlayerEntity).tarasande_forceHasStatusEffect(StatusEffects.BLINDNESS) && !mc.player?.hasVehicle()!!)
-                    if (!mc.player?.isOnGround!! && mc.player?.velocity?.y!! != 0.0 && (mc.player?.fallDistance == 0.0f || (criticalSprint.value && !mc.player?.isSprinting!!)))
+                    if (!mc.player?.isOnGround!! && mc.player?.velocity?.y!! != 0.0 && (mc.player?.fallDistance == 0.0F || (criticalSprint.value && !mc.player?.isSprinting!!)))
                         canHit = false
 
             if (canHit && allAttacked { !shouldAttackEntity(it) })
@@ -381,7 +381,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 if (waitForCritical.value && criticalSprint.value && forceCritical.value)
                     if (!dontWaitWhenEnemyHasShield.value || ((mode.isSelected(0) && !hasShield(targets.first().first) || (mode.isSelected(1) && targets.none { hasShield(it.first) }))))
                         if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !(mc.player as IClientPlayerEntity).tarasande_forceHasStatusEffect(StatusEffects.BLINDNESS) && !mc.player?.hasVehicle()!!)
-                            if (!mc.player?.isOnGround!! && mc.player?.fallDistance!! >= 0.0f)
+                            if (!mc.player?.isOnGround!! && mc.player?.fallDistance!! >= 0.0F)
                                 if (mc.player?.isSprinting!!)
                                     event.pressed = false
             }

@@ -6,7 +6,7 @@ import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
 import su.mandora.event.EventDispatcher
 
 class GraphTickableYawDelta : Graph("Yaw Delta", 200, false) {
-    private var lastYaw = 0.0f
+    private var lastYaw = 0.0F
 
     init {
         EventDispatcher.add(EventUpdate::class.java) { event ->

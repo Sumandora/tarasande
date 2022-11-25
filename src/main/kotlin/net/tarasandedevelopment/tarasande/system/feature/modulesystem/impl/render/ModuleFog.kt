@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 class ModuleFog : Module("Fog", "Changes the fog distance and color", ModuleCategory.RENDER) {
 
     val distance = ValueNumberRange(this, "Distance", 0.1, 0.1, 1.0, 5.0, 0.1)
-    val color = ValueColor(this, "Color", 0.0f, 1.0f, 1.0f)
+    val color = ValueColor(this, "Color", 0.0F, 1.0F, 1.0F)
 
     init {
         registerEvent(EventFog::class.java) { event ->
@@ -18,9 +18,9 @@ class ModuleFog : Module("Fog", "Changes the fog distance and color", ModuleCate
                 EventFog.State.FOG_END -> event.values[0] *= distance.maxValue.toFloat()
                 EventFog.State.FOG_COLOR -> {
                     color.getColor().also {
-                        event.values[0] = it.red / 255.0f
-                        event.values[1] = it.green / 255.0f
-                        event.values[2] = it.blue / 255.0f
+                        event.values[0] = it.red / 255.0F
+                        event.values[1] = it.green / 255.0F
+                        event.values[2] = it.blue / 255.0F
                     }
                 }
             }

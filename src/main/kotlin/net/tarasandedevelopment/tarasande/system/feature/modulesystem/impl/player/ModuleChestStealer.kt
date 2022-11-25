@@ -107,8 +107,8 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 mc.currentScreen?.close()
             else {
                 val displayPos = ContainerUtil.getDisplayPosition(accessor, nextSlot).add(Vec2f(
-                    if (randomize.value == 0.0) 0.0f else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat(),
-                    if (randomize.value == 0.0) 0.0f else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat()
+                    if (randomize.value == 0.0) 0.0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat(),
+                    if (randomize.value == 0.0) 0.0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat()
                 ))
                 if (ThreadLocalRandom.current().nextInt(100) < failChance.value) {
                     val interp = mousePos?.add(displayPos?.add(mousePos?.negate())?.multiply(ThreadLocalRandom.current().nextDouble(0.0, 1.0).toFloat()))!!

@@ -31,7 +31,7 @@ class ESPElementBox : ESPElement("Box") {
 
     override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
         val col = Color(entity.teamColorValue).rgb // ignore alpha
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
         if (outlined.value)
             RenderUtil.outlinedFill(matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, outlineWidth.value.toFloat(), Color.black.rgb)
         RenderUtil.outlinedFill(matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, width.value.toFloat(), col)
@@ -53,18 +53,18 @@ class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.
             if (fitBoxWidth.value)
                 (sideWidth / width).toFloat()
             else
-                1.0f
-        if (factor > 3.0f) factor = 3.0f
+                1.0F
+        if (factor > 3.0F) factor = 3.0F
         factor *= scale.value.toFloat()
         matrices.translate(sideWidth / 2, 0.0, 0.0)
-        matrices.scale(factor, factor, 1.0f)
+        matrices.scale(factor, factor, 1.0F)
         matrices.translate(-sideWidth / 2, 0.0, 0.0)
         if (outlined.value) {
             val immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().buffer)
-            MinecraftClient.getInstance().textRenderer!!.drawWithOutline(tagName, (sideWidth / 2f - width / 2f).toFloat(), 0.0f, col, Color.black.rgb, matrices.peek().positionMatrix, immediate, LightmapTextureManager.MAX_LIGHT_COORDINATE)
+            MinecraftClient.getInstance().textRenderer!!.drawWithOutline(tagName, (sideWidth / 2f - width / 2f).toFloat(), 0.0F, col, Color.black.rgb, matrices.peek().positionMatrix, immediate, LightmapTextureManager.MAX_LIGHT_COORDINATE)
             immediate.draw()
         } else {
-            MinecraftClient.getInstance().textRenderer!!.drawWithShadow(matrices, tagName, (sideWidth / 2f - width / 2f).toFloat(), 0.0f, col)
+            MinecraftClient.getInstance().textRenderer!!.drawWithShadow(matrices, tagName, (sideWidth / 2f - width / 2f).toFloat(), 0.0F, col)
         }
         matrices.pop()
     }
@@ -76,15 +76,15 @@ class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.
 
 class ESPElementRotatableHealthBar : ESPElementRotatable("Health bar", arrayOf(Orientation.TOP, Orientation.BOTTOM)) {
     private val outlined = ValueBoolean(this, "Outlined", true)
-    private val fadeColorBegin = ValueColor(this, "Fade color begin", 0.33f /*green*/, 1.0f, 1.0f)
-    private val fadeColorEnd = ValueColor(this, "Fade color end", 0.0f /*red*/, 1.0f, 1.0f)
+    private val fadeColorBegin = ValueColor(this, "Fade color begin", 0.33F /*green*/, 1.0F, 1.0F)
+    private val fadeColorEnd = ValueColor(this, "Fade color end", 0.0F /*red*/, 1.0F, 1.0F)
 
     override fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double, orientation: Orientation) {
         val height = getHeight(entity, sideWidth)
         if (height <= 0.0) return
         entity as LivingEntity
         matrices.push()
-        val percentage = MathHelper.clamp(entity.health / entity.maxHealth, 0.0f, 1.0f)
+        val percentage = MathHelper.clamp(entity.health / entity.maxHealth, 0.0F, 1.0F)
         if (orientation == Orientation.RIGHT)
             RenderUtil.fillHorizontalGradient(matrices, 0.0, height, sideWidth * percentage, 0.0, RenderUtil.colorInterpolate(fadeColorBegin.getColor(), fadeColorEnd.getColor(), 1.0 - percentage).rgb, fadeColorEnd.getColor().rgb)
         else

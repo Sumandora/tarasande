@@ -34,7 +34,7 @@ public class MixinHeldItemRenderer {
     public float hookNoSwing(ClientPlayerEntity instance, float v) {
         ModuleNoSwing moduleNoSwing = TarasandeMain.Companion.managerModule().get(ModuleNoSwing.class);
         if (moduleNoSwing.getEnabled() && moduleNoSwing.getDisableEquipProgress().getValue()) {
-            return 1.0f;
+            return 1.0F;
         }
         return instance.getAttackCooldownProgress(v);
     }

@@ -75,7 +75,7 @@ class PanelInformation(private val informationSystem: ManagerInformation) : Pane
         for ((index, it) in text.withIndex()) {
             when (alignment) {
                 Alignment.LEFT -> FontWrapper.textShadow(matrices, it, x.toFloat(), y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
-                Alignment.MIDDLE -> FontWrapper.textShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0f - FontWrapper.getWidth(it).toFloat() / 2.0f, y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
+                Alignment.MIDDLE -> FontWrapper.textShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(it).toFloat() / 2.0F, y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
                 Alignment.RIGHT -> FontWrapper.textShadow(matrices, it, x.toFloat() + panelWidth.toFloat() - FontWrapper.getWidth(it).toFloat(), y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
             }
         }

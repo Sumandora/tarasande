@@ -36,8 +36,8 @@ class ElementWidthValueComponentSpacer(value: Value) : ElementWidthValueComponen
         for ((index, line) in lines.withIndex()) {
             FontWrapper.textShadow(matrices,
                 line,
-                0.0f,
-                (getHeight() / 2.0F + (index - (lines.size - 1) / 2.0 - 0.5) * (FontWrapper.fontHeight() * valueSpacer.scale / 2.0f)).toFloat(),
+                0.0F,
+                (getHeight() / 2.0F + (index - (lines.size - 1) / 2.0 - 0.5) * (FontWrapper.fontHeight() * valueSpacer.scale / 2.0F)).toFloat(),
                 valueSpacer.getColor(RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), 0.0, 0.0, width, getHeight())).rgb,
                 valueSpacer.scale,
                 0.5F

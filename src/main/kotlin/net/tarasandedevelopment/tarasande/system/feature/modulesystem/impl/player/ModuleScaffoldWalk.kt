@@ -66,10 +66,10 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     }
     private val cubeShape = ValueBoolean(this, "Cube shape", true)
     private val tower = ValueMode(this, "Tower", false, "Vanilla", "Motion", "Teleport")
-    private val blockColor = ValueColor(this, "Block color", 0.0f, 1.0f, 1.0f, 1.0f)
-    private val facingColor = ValueColor(this, "Facing color", 0.0f, 1.0f, 1.0f, 1.0f)
-    private val aimTargetColor = ValueColor(this, "Aim target color", 0.0f, 1.0f, 1.0f, 1.0f)
-    private val placeLineColor = ValueColor(this, "Place line color", 0.0f, 1.0f, 1.0f, 1.0f)
+    private val blockColor = ValueColor(this, "Block color", 0.0F, 1.0F, 1.0F, 1.0F)
+    private val facingColor = ValueColor(this, "Facing color", 0.0F, 1.0F, 1.0F, 1.0F)
+    private val aimTargetColor = ValueColor(this, "Aim target color", 0.0F, 1.0F, 1.0F, 1.0F)
+    private val placeLineColor = ValueColor(this, "Place line color", 0.0F, 1.0F, 1.0F, 1.0F)
 
     private val targets = ArrayList<Pair<BlockPos, Direction>>()
     private val timeUtil = TimeUtil()
@@ -231,7 +231,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                     val targetRot = mc.player?.yaw!! - 180
                                     goalAim = intersection( // adjust our target
                                         Vec2f(sideBegin.x.toFloat(), sideBegin.z.toFloat()), Vec2f(sideEnd.x.toFloat(), sideEnd.z.toFloat()),
-                                        Vec2f(eye.x.toFloat(), eye.z.toFloat()), (eye + Rotation(targetRot, 0.0f).forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)).let { Vec2f(it.x.toFloat(), it.z.toFloat()) }
+                                        Vec2f(eye.x.toFloat(), eye.z.toFloat()), (eye + Rotation(targetRot, 0.0F).forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)).let { Vec2f(it.x.toFloat(), it.z.toFloat()) }
                                     ).let { Vec3d(it.x.toDouble(), point.y, it.y.toDouble()) }
                                 }
 
@@ -246,7 +246,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
 
                                 val closest = sideBegin + (sideEnd - sideBegin) * MathHelper.clamp(t.toDouble(), padding, 1.0 - padding)
 
-                                if (t in padding..1.0f - padding) {
+                                if (t in padding..1.0F - padding) {
                                     val dist = (eye - closest).horizontalLength()
                                     val a = sin(Math.toRadians(-goalYaw.value * (60 / 45f /* those are triangles bitch */))) * dist
                                     if (preferredSide == null) {
@@ -266,7 +266,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                     }
                                 }
 
-                                sideBegin + (sideEnd - sideBegin) * MathHelper.clamp(t.toDouble(), padding, 1.0f - padding)
+                                sideBegin + (sideEnd - sideBegin) * MathHelper.clamp(t.toDouble(), padding, 1.0F - padding)
                             }
 
                             aimTarget = finalPoint
@@ -290,7 +290,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     val rot = Rotation(targetRot)
                     rot.yaw += deltaRot
                     val firstFov = centerRot.fov(rot)
-                    rot.yaw -= deltaRot * 2.0f
+                    rot.yaw -= deltaRot * 2.0F
                     val secondFov = centerRot.fov(rot)
 
                     if (firstFov > secondFov)

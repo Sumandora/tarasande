@@ -49,7 +49,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
         registerEvent(EventMovement::class.java, 2000) { event ->
             if (event.entity != mc.player)
                 return@registerEvent
-            if (PlayerUtil.input.movementInput?.lengthSquared() == 0.0f)
+            if (PlayerUtil.input.movementInput?.lengthSquared() == 0.0F)
                 return@registerEvent
 
             val moduleKillAura = TarasandeMain.managerModule().get(ModuleKillAura::class.java)

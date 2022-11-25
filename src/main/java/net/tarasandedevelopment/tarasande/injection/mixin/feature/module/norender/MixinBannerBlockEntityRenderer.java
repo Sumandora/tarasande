@@ -62,7 +62,7 @@ public class MixinBannerBlockEntityRenderer {
     private void tarasande_renderPillar(BannerBlockEntity bannerBlockEntity, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int j) {
         matrixStack.push();
         BlockState blockState = bannerBlockEntity.getCachedState();
-        matrixStack.translate(0.5D, 0.5D, 0.5D);
+        matrixStack.translate(0.5, 0.5, 0.5);
         float h = (float) (-(Integer) blockState.get(BannerBlock.ROTATION) * 360) / 16.0F;
         matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(h));
         matrixStack.push();
@@ -77,10 +77,10 @@ public class MixinBannerBlockEntityRenderer {
     private void tarasande_renderCrossbar(BannerBlockEntity bannerBlockEntity, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int j) {
         matrixStack.push();
         BlockState blockState = bannerBlockEntity.getCachedState();
-        matrixStack.translate(0.5D, -0.1666666716337204D, 0.5D);
+        matrixStack.translate(0.5, -0.1666666716337204, 0.5);
         float h = -blockState.get(WallBannerBlock.FACING).asRotation();
         matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(h));
-        matrixStack.translate(0.0D, -0.3125D, -0.4375D);
+        matrixStack.translate(0.0, -0.3125, -0.4375);
         matrixStack.push();
         matrixStack.scale(0.6666667F, -0.6666667F, -0.6666667F);
         final VertexConsumer vertexConsumer = ModelLoader.BANNER_BASE.getVertexConsumer(vertexConsumerProvider, RenderLayer::getEntitySolid);

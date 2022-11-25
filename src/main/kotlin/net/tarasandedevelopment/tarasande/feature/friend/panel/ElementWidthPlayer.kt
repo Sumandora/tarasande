@@ -20,7 +20,7 @@ class ElementWidthPlayer(val gameProfile: GameProfile, width: Double) : ElementW
             TarasandeMain.friends().setAlias(gameProfile, value.ifEmpty { null })
         }
     }
-    val textField = ElementWidthValueComponentText(value, 1.0f, false)
+    val textField = ElementWidthValueComponentText(value, 1.0F, false)
 
     private val defaultHeight = FontWrapper.fontHeight() * 1.5 + 2.0
     private var friendTime = 0L
@@ -56,12 +56,12 @@ class ElementWidthPlayer(val gameProfile: GameProfile, width: Double) : ElementW
         val toggleAnimation = min((System.currentTimeMillis() - friendTime) / 100.0, 1.0)
         val radius = if (friended) toggleAnimation else 1.0 - toggleAnimation
         RenderUtil.fillCircle(matrices, width - 7, defaultHeight / 2, radius * 4.0, TarasandeMain.clientValues().accentColor.getColor().rgb)
-        RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0f, RenderUtil.colorInterpolate(TarasandeMain.clientValues().accentColor.getColor(), Color.white, radius).rgb)
+        RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0F, RenderUtil.colorInterpolate(TarasandeMain.clientValues().accentColor.getColor(), Color.white, radius).rgb)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (button == 0) {
-            return if (RenderUtil.isHovered(mouseX, mouseY, 0.0, 0.0, width, getHeight()) && Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(Vec2f((width - 7).toFloat(), (defaultHeight / 2).toFloat())) < 16.0f) {
+            return if (RenderUtil.isHovered(mouseX, mouseY, 0.0, 0.0, width, getHeight()) && Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(Vec2f((width - 7).toFloat(), (defaultHeight / 2).toFloat())) < 16.0F) {
                 TarasandeMain.friends().changeFriendState(gameProfile)
                 textField.textFieldWidget.text = ""
                 friendTime = System.currentTimeMillis()

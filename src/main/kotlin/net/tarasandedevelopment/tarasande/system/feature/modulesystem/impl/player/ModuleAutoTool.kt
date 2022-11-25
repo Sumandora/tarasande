@@ -50,7 +50,7 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool for breaking a
                     return@registerEvent
 
                 var best: Int? = null
-                var score = 0.0f
+                var score = 0.0F
                 for (i in 0..8) {
                     val stack = mc.player?.inventory?.main?.get(i)
                     if (stack != null && !stack.isEmpty && stack.item is SwordItem) {

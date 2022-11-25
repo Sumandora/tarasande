@@ -72,16 +72,16 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
         matrices.translate(rectangle.x, rectangle.y, 0.0)
         if (orientation == Orientation.BOTTOM) {
             matrices.translate((rectangle.z - rectangle.x) * 0.5, -(rectangle.y - rectangle.w) * 0.5, 0.0)
-            matrices.scale(-1.0f, -1.0f, 1.0f)
+            matrices.scale(-1.0F, -1.0F, 1.0F)
             matrices.translate(-(rectangle.z - rectangle.x) * 0.5, (rectangle.y - rectangle.w) * 0.5, 0.0)
         } else if (orientation == Orientation.LEFT || orientation == Orientation.RIGHT) {
             matrices.translate(-(rectangle.y - rectangle.w) * 0.5, -(rectangle.y - rectangle.w) * 0.5, 0.0)
-            matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-90.0f))
+            matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-90.0F))
             matrices.translate((rectangle.y - rectangle.w) * 0.5, (rectangle.y - rectangle.w) * 0.5, 0.0)
 
             if (orientation == Orientation.RIGHT) {
                 matrices.translate(-(rectangle.y - rectangle.w) * 0.5, (rectangle.z - rectangle.x) * 0.5, 0.0)
-                matrices.scale(1.0f, -1.0f, 1.0f)
+                matrices.scale(1.0F, -1.0F, 1.0F)
                 matrices.translate((rectangle.y - rectangle.w) * 0.5, -(rectangle.z - rectangle.x) * 0.5, 0.0)
             }
         }
