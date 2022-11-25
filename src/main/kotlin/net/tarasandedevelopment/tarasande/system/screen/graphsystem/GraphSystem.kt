@@ -53,7 +53,7 @@ class ManagerGraph(informationSystem: ManagerInformation, panelSystem: ManagerPa
             add(EventTick::class.java) {
                 if (it.state == EventTick.State.PRE)
                     for (graph in list)
-                        if(graph is GraphTickable)
+                        if (graph is GraphTickable)
                             graph.add(graph.tick() ?: continue)
             }
         }
@@ -64,7 +64,7 @@ open class Graph(val name: String, val bufferLength: Int, private val integer: B
     var decimalPlaces = 0
 
     init {
-        if(!integer)
+        if (!integer)
             object : ValueNumber(this, "Decimal places", 0.0, 1.0, 5.0, 1.0) {
                 override fun onChange() {
                     decimalPlaces = value.toInt()
@@ -76,7 +76,7 @@ open class Graph(val name: String, val bufferLength: Int, private val integer: B
 
     fun add(num: Number) {
         values.add(num)
-        while(values.size > bufferLength)
+        while (values.size > bufferLength)
             values.removeAt(0)
     }
 
@@ -86,17 +86,17 @@ open class Graph(val name: String, val bufferLength: Int, private val integer: B
 
     fun clear() = values.clear()
 
-    open fun format(num: Number?) = if(!integer) {
-            val rounding = 10.0.pow(decimalPlaces.toDouble())
-            num?.toDouble()?.times(rounding)?.roundToInt()?.div(rounding)?.toString()
-        } else num?.toInt()?.toString()
+    open fun format(num: Number?) = if (!integer) {
+        val rounding = 10.0.pow(decimalPlaces.toDouble())
+        num?.toDouble()?.times(rounding)?.roundToInt()?.div(rounding)?.toString()
+    } else num?.toInt()?.toString()
 }
 
 abstract class GraphTickable(name: String, bufferLength: Int, integer: Boolean) : Graph(name, bufferLength, integer) {
 
     init {
         EventDispatcher.add(EventTick::class.java) {
-            if(it.state == EventTick.State.PRE)
+            if (it.state == EventTick.State.PRE)
                 add(tick() ?: return@add)
         }
     }

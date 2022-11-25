@@ -6,7 +6,6 @@ import net.minecraft.entity.Entity
 import net.minecraft.util.math.Vec3f
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
@@ -14,6 +13,7 @@ import net.tarasandedevelopment.tarasande.system.feature.espsystem.impl.ESPEleme
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.impl.ESPElementRotatableHealthBar
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.impl.ESPElementRotatableName
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleESP
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
 import kotlin.math.abs
 
 class ManagerESP : Manager<ESPElement>() {

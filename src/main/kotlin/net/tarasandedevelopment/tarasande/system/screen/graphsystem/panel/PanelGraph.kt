@@ -23,7 +23,7 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100.0, FontWr
     }
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        if(graph.isEmpty()) return
+        if (graph.isEmpty()) return
         val values = graph.values()
 
         val matrix = matrices?.peek()?.positionMatrix!!
@@ -52,7 +52,7 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100.0, FontWr
 
         val onePixel = 1 / MinecraftClient.getInstance().window.scaleFactor
 
-        if(values.size == 1) {
+        if (values.size == 1) {
             bufferBuilder.vertex(matrix, x.toFloat(), (y + panelHeight - onePixel - (panelHeight - titleBarHeight - onePixel) * 0.5).toFloat(), 0.0F).color(1.0F, 1.0F, 1.0F, 1.0F).next()
             bufferBuilder.vertex(matrix, (x + panelWidth - width).toFloat(), (y + panelHeight - onePixel - (panelHeight - titleBarHeight - onePixel) * 0.5).toFloat(), 0.0F).color(1.0F, 1.0F, 1.0F, 1.0F).next()
         } else {

@@ -19,7 +19,7 @@ class ElementWidthValueComponentText(value: Value) : ElementWidthValueComponent(
     var scale = 0.5F
     var centered = false
 
-    constructor(value: Value, scale: Float, centered: Boolean = true): this(value) {
+    constructor(value: Value, scale: Float, centered: Boolean = true) : this(value) {
         this.scale = scale
         this.centered = centered
     }
@@ -54,8 +54,8 @@ class ElementWidthValueComponentText(value: Value) : ElementWidthValueComponent(
         }
 
         matrices?.push()
-        if(centered)
-            // scary multiplication
+        if (centered)
+        // scary multiplication
             matrices?.translate(0.0, getHeight() * scale * scale * 0.5, 0.0)
         matrices?.scale(scale, scale, 1.0F)
         textFieldWidget.render(matrices, mouseX, mouseY, delta)

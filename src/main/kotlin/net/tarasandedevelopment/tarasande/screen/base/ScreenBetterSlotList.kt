@@ -80,6 +80,7 @@ open class EntryScreenBetterSlotListEntry : AlwaysSelectedEntryListWidget.Entry<
 
     open fun onDoubleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
     }
+
     open fun onSingleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
     }
 

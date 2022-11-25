@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande.injection.mixin.event;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
-import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventFog;
 import net.tarasandedevelopment.tarasande.event.EventScreenInput;
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
@@ -15,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.event.EventDispatcher;
 
 @Mixin(value = RenderSystem.class, remap = false)
 public class MixinRenderSystem {

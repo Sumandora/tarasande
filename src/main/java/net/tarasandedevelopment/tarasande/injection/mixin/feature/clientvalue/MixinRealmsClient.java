@@ -16,7 +16,7 @@ public class MixinRealmsClient {
 
     @Inject(method = "execute", at = @At("HEAD"))
     public void disableRequests(Request<?> r, CallbackInfoReturnable<String> cir) throws RealmsServiceException {
-        if(TarasandeMain.Companion.clientValues().getDisableRealmsRequests().getValue()) {
+        if (TarasandeMain.Companion.clientValues().getDisableRealmsRequests().getValue()) {
             TarasandeMain.Companion.get().getLogger().log(Level.INFO, "Blocked realms request");
             throw new RealmsServiceException(1337, "Request has been cancelled");
         }

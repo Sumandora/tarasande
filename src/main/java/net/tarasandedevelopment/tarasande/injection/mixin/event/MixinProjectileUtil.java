@@ -3,11 +3,11 @@ package net.tarasandedevelopment.tarasande.injection.mixin.event;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.util.math.Box;
-import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventBoundingBoxOverride;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import su.mandora.event.EventDispatcher;
 
 @Mixin(ProjectileUtil.class)
 public class MixinProjectileUtil {

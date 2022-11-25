@@ -45,12 +45,12 @@ class ModuleTroubleInTerrioristTown : Module("Trouble in terrorist town", "Uses 
     private fun scanForTraitors(entity: PlayerEntity, death: Boolean): ArrayList<PlayerEntity>? {
         val traitors = ArrayList<PlayerEntity>()
 
-        for(player in mc.world?.players?.filter { it != entity } ?: return null) {
-            if(player.distanceTo(entity) <= distance.value && RotationUtil.getRotations(player.eyePos, entity.eyePos).fov(Rotation(player)) <= Rotation.MAXIMUM_DELTA * rotationThreshold.value)
-                if(items.list.contains(player.mainHandStack.item)) {
+        for (player in mc.world?.players?.filter { it != entity } ?: return null) {
+            if (player.distanceTo(entity) <= distance.value && RotationUtil.getRotations(player.eyePos, entity.eyePos).fov(Rotation(player)) <= Rotation.MAXIMUM_DELTA * rotationThreshold.value)
+                if (items.list.contains(player.mainHandStack.item)) {
                     // This player is probably a traitor
-                    if(death) {
-                        map[player] = map.getOrDefault(player, ArrayList()).apply { if(!contains(entity)) add(entity) }
+                    if (death) {
+                        map[player] = map.getOrDefault(player, ArrayList()).apply { if (!contains(entity)) add(entity) }
                     }
 
                     traitors.add(player)
@@ -62,28 +62,28 @@ class ModuleTroubleInTerrioristTown : Module("Trouble in terrorist town", "Uses 
 
     init {
         registerEvent(EventEntityHurt::class.java) { event ->
-            if(event.entity !is PlayerEntity)
+            if (event.entity !is PlayerEntity)
                 return@registerEvent
 
             val traitors = scanForTraitors(event.entity, event.death) ?: return@registerEvent
 
-            if(traitors.isNotEmpty())
+            if (traitors.isNotEmpty())
                 PanelNotifications.notify(event.entity.gameProfile.name + " is being attacked by " + traitors.joinToString { it.gameProfile.name })
         }
 
         registerEvent(EventPacket::class.java) { event ->
-            if(event.type == EventPacket.Type.RECEIVE && event.packet is HealthUpdateS2CPacket) {
-                if(event.packet.health >= mc.player?.health!!)
+            if (event.type == EventPacket.Type.RECEIVE && event.packet is HealthUpdateS2CPacket) {
+                if (event.packet.health >= mc.player?.health!!)
                     return@registerEvent
                 val traitors = scanForTraitors(mc.player!!, event.packet.health <= 0.0F) ?: return@registerEvent
 
-                if(traitors.isNotEmpty())
+                if (traitors.isNotEmpty())
                     PanelNotifications.notify("You are being attacked by " + traitors.joinToString { it.gameProfile.name })
             }
         }
 
         registerEvent(EventEntityColor::class.java) { event ->
-            if(map.containsKey(event.entity))
+            if (map.containsKey(event.entity))
                 event.color = Color.red
         }
 

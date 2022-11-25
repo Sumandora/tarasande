@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.event
 
 import net.minecraft.client.input.Input
-import su.mandora.event.Event
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
+import su.mandora.event.Event
 
 class EventPollEvents : Event {
     var dirty = false

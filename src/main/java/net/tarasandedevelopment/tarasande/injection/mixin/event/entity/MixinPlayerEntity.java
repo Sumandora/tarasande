@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.injection.mixin.event.entity;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
-import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventKeepSprint;
 import net.tarasandedevelopment.tarasande.event.EventTagName;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import su.mandora.event.EventDispatcher;
 
 @Mixin(PlayerEntity.class)
 public class MixinPlayerEntity {

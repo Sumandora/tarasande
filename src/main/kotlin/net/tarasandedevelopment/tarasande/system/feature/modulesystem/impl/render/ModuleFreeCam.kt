@@ -49,7 +49,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
             private val decimalPlacesZ = ValueNumber(this, "Decimal places: z", 0.0, 1.0, 5.0, 1.0)
 
             override fun getMessage(): String? {
-                if(!enabled)
+                if (!enabled)
                     return null
 
                 return position?.let {
@@ -161,9 +161,9 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
         }
 
         registerEvent(EventUpdateTargetedEntity::class.java, 1) { event ->
-            if(event.state == EventUpdateTargetedEntity.State.POST)
-                if(position != null && rotation != null)
-                    if(blockInteraction.value) {
+            if (event.state == EventUpdateTargetedEntity.State.POST)
+                if (position != null && rotation != null)
+                    if (blockInteraction.value) {
                         mc.targetedEntity = null
                         mc.crosshairTarget = PlayerUtil.rayCast(position!!, position!!.add(rotation?.forwardVector((mc.gameRenderer as IGameRenderer).tarasande_getReach())))
                     }

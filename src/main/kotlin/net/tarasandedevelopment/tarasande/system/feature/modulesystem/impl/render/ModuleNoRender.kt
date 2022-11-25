@@ -8,13 +8,13 @@ import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.event.EventChunkOcclusion
 import net.tarasandedevelopment.tarasande.event.EventFog
 import net.tarasandedevelopment.tarasande.event.EventParticle
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
 
 class ModuleNoRender : Module("No render", "Disables rendering of certain things.", ModuleCategory.RENDER) {
 

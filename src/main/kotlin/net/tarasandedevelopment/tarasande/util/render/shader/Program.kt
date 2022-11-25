@@ -9,7 +9,7 @@ class Program(vararg shaders: Shader) {
 
     init {
         programId = GL20.glCreateProgram()
-        for(shader in shaders)
+        for (shader in shaders)
             GL20.glAttachShader(programId, shader.id)
         GL20.glLinkProgram(programId)
         if (GL20.glGetProgrami(programId, GL20.GL_LINK_STATUS) != GL20.GL_TRUE)
@@ -17,7 +17,7 @@ class Program(vararg shaders: Shader) {
         GL20.glValidateProgram(programId)
         if (GL20.glGetProgrami(programId, GL20.GL_VALIDATE_STATUS) != GL20.GL_TRUE)
             error(GL20.glGetProgramInfoLog(programId))
-        for(shader in shaders)
+        for (shader in shaders)
             shader.delete()
     }
 

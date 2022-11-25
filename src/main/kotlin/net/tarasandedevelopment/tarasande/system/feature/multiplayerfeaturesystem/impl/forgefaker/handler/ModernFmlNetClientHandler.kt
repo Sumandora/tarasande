@@ -46,7 +46,7 @@ class ModernFmlNetClientHandler(val state: ModernFmlState, val connection: Clien
     private fun onServerModList(queryId: Int, buffer: PacketByteBuf) {
         val mods = arrayOfNulls<String>(buffer.readVarInt())
 
-        for (i in 0 .. mods.size) {
+        for (i in 0..mods.size) {
             mods[i] = buffer.readString()
             modTracker.add(ModStruct(mods[i]!!, "not implemented in FML 2"))
         }

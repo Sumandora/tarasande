@@ -140,7 +140,7 @@ class ManagerModule(panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manage
                 }
             }
             add(EventPacket::class.java) {
-                if(it.type == EventPacket.Type.RECEIVE && it.packet is PlayerRespawnS2CPacket)
+                if (it.type == EventPacket.Type.RECEIVE && it.packet is PlayerRespawnS2CPacket)
                     for (module in list)
                         if (module.disableWhen.isSelected(0) && module.enabled)
                             module.enabled = false

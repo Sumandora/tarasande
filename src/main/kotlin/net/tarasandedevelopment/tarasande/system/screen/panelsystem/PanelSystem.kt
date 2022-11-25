@@ -50,7 +50,7 @@ class ManagerPanel(fileSystem: ManagerFile) : Manager<Panel>() {
     }
 
     fun reorderPanels(panel: Panel, index: Int) {
-        if(!list.contains(panel))
+        if (!list.contains(panel))
             return // Closeable panels (this was a feature, which got scrapped)
         list.remove(panel)
         list.add(index, panel)
@@ -79,6 +79,7 @@ open class Panel(
 
     // Fixed panels
     constructor(title: String, width: Double, height: Double, background: Boolean = false) : this(title, width, height, null, null, background, false, true, background)
+
     // Sidebar panels
     constructor(title: String, width: Double) : this(title, width, 0.0, null, null, true, false, false, true)
 

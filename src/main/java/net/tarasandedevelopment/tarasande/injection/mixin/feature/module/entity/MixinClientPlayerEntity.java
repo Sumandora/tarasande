@@ -30,6 +30,10 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     boolean tarasande_flight;
     @Unique
     float tarasande_flightSpeed;
+    @Unique
+    private boolean tarasande_forceHasStatusEffect;
+    @Unique
+    private boolean tarasande_forceGetStatusEffect;
 
     public MixinClientPlayerEntity(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
         super(world, profile, publicKey);
@@ -106,12 +110,6 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
             return true;
         return instance.shouldPause();
     }
-
-    @Unique
-    private boolean tarasande_forceHasStatusEffect;
-
-    @Unique
-    private boolean tarasande_forceGetStatusEffect;
 
     @Override
     public boolean hasStatusEffect(StatusEffect effect) {

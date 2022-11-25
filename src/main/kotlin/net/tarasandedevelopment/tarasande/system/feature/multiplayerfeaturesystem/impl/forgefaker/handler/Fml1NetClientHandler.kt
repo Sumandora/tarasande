@@ -66,7 +66,7 @@ class Fml1NetClientHandler(val connection: ClientConnection) : IForgeNetClientHa
     private fun handleHandshakeAck(buf: PacketByteBuf) {
         val state = buf.readByte()
 
-        if (state in 2 .. 3) {
+        if (state in 2..3) {
             this.sendHandshakeAck((state + 2).toByte())
         }
     }

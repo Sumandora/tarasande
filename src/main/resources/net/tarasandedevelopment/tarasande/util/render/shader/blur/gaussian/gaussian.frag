@@ -7,6 +7,8 @@ uniform vec2 resolution;
 
 #define M_PI 3.14
 
+layout (location = 0) out vec4 fragColor;
+
 float gaussian(float x) {
     return exp(-(x * x) / (2.0 * sigma * sigma)) / (sqrt(2.0 * M_PI) * sigma);
 }
@@ -20,5 +22,5 @@ void main() {
         color += texture2D(tex, (gl_FragCoord.xy + direction * x) / resolution).rgb * gaussian(x);
     }
 
-    gl_FragColor = vec4(color, 1.0);
+    fragColor = vec4(color, 1.0);
 }

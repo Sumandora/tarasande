@@ -6,11 +6,11 @@ import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
+import su.mandora.event.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
 
 class InformationEntities : Information("World", "Entities") {

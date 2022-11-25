@@ -6,7 +6,6 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.Window;
 import net.minecraft.util.Util;
-import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.*;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -17,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.event.EventDispatcher;
 
 @Mixin(MinecraftClient.class)
 public abstract class MixinMinecraftClient {

@@ -74,7 +74,7 @@ class PanelNotifications : Panel("Notifications", 100.0, FontWrapper.fontHeight(
         alert = false
         var index = 0.0
         notifications.forEach {
-            if(!animations.containsKey(it))
+            if (!animations.containsKey(it))
                 return
             val animation = animations[it]!!
             if (animation > 0.05) { // hack
@@ -84,9 +84,17 @@ class PanelNotifications : Panel("Notifications", 100.0, FontWrapper.fontHeight(
                 val formattedTime = StringHelper.formatTicks(((it.length + 1000 - (System.currentTimeMillis() - it.creationTime)) / 1000 * 20).toInt())
 
                 val text = when {
-                    timeAlignment.isSelected(0) -> { Formatting.GRAY.toString() + formattedTime + " " + Formatting.RESET + it.text }
-                    timeAlignment.isSelected(1) -> { it.text + " " + Formatting.GRAY + formattedTime }
-                    else -> { it.text } // mode 2
+                    timeAlignment.isSelected(0) -> {
+                        Formatting.GRAY.toString() + formattedTime + " " + Formatting.RESET + it.text
+                    }
+
+                    timeAlignment.isSelected(1) -> {
+                        it.text + " " + Formatting.GRAY + formattedTime
+                    }
+
+                    else -> {
+                        it.text
+                    } // mode 2
                 }
 
                 when (alignment) {
@@ -111,7 +119,7 @@ class PanelNotifications : Panel("Notifications", 100.0, FontWrapper.fontHeight(
                     animation += speedIn.value * RenderUtil.deltaTime
                 }
             }
-            if(animation < 0.0)
+            if (animation < 0.0)
                 notifications.remove(notification)
             animations[notification] = MathHelper.clamp(animation, 0.0, 1.0)
         }

@@ -48,7 +48,7 @@ abstract class PanelServerInformation : Panel("Server Information", 300.0, FontW
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
-        if(tooltip != null) {
+        if (tooltip != null) {
             MinecraftClient.getInstance().currentScreen?.renderTooltip(matrices, tooltip, mouseX, mouseY)
             tooltip = null
         }

@@ -5,10 +5,8 @@ import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.text.OrderedText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
-import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
 
 object FontWrapper {

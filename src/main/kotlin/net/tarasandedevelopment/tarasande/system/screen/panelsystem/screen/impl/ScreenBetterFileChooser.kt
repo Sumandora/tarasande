@@ -80,7 +80,7 @@ class ScreenBetterFileChooser(
             override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
                 var height = titleBarHeight.toDouble() + 1
                 for (file in this.files()) {
-                    if ( ((y + height + scrollOffset)) > y && (height + scrollOffset) < panelHeight) {
+                    if (((y + height + scrollOffset)) > y && (height + scrollOffset) < panelHeight) {
                         var color = Color.white
                         if (file.isDirectory) {
                             color = TarasandeMain.clientValues().accentColor.getColor()

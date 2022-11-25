@@ -47,7 +47,7 @@ class ScreenBetterAccount(
                 20,
                 Text.of((implementationClass.annotations[0] as AccountInfo).name)
             ) { button ->
-                implementationClass = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonAccountManager::class.java).screenBetterSlotListAccountManager.managerAccount.let { it.list[(it.list.indexOf(implementationClass) + 1) % it.list.size ] }
+                implementationClass = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonAccountManager::class.java).screenBetterSlotListAccountManager.managerAccount.let { it.list[(it.list.indexOf(implementationClass) + 1) % it.list.size] }
                 accountImplementation = implementationClass.getDeclaredConstructor().newInstance()
                 init()
                 button.message = Text.of(implementationClass.name)

@@ -4,12 +4,12 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import su.mandora.event.EventDispatcher
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -48,8 +48,7 @@ class PanelMousepad : Panel("Mousepad", 100.0, 50.0, true) {
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
 
         for (rotation in rotations)
-            bufferBuilder.vertex(matrix, (x + panelWidth / 2f + (rotation.yaw / xMax) * (panelWidth / 2f)).toFloat(), (y + (panelHeight + titleBarHeight) / 2f + (rotation.pitch / yMax) * ((panelHeight - titleBarHeight) / 2f)).toFloat(), 0.0F).color(1.0F, 1.0F, 1.0F, 1.0F).
-            next()
+            bufferBuilder.vertex(matrix, (x + panelWidth / 2f + (rotation.yaw / xMax) * (panelWidth / 2f)).toFloat(), (y + (panelHeight + titleBarHeight) / 2f + (rotation.pitch / yMax) * ((panelHeight - titleBarHeight) / 2f)).toFloat(), 0.0F).color(1.0F, 1.0F, 1.0F, 1.0F).next()
 
         BufferRenderer.drawWithShader(bufferBuilder.end())
         RenderSystem.enableTexture()

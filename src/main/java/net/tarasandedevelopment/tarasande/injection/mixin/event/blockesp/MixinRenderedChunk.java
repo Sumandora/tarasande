@@ -3,12 +3,12 @@ package net.tarasandedevelopment.tarasande.injection.mixin.event.blockesp;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventRenderBlockModel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import su.mandora.event.EventDispatcher;
 
 @Mixin(targets = "net.minecraft.client.render.chunk.RenderedChunk")
 public class MixinRenderedChunk {

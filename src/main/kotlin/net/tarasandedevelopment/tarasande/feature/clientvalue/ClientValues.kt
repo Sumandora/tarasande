@@ -45,7 +45,7 @@ class ClientValues(name: String, panelSystem: ManagerPanel, fileSystem: ManagerF
         object : ValueButton(this, "Clear binds") {
             override fun onChange() {
                 TarasandeMain.managerValue().list.forEach {
-                    if(it is ValueBind && it != TarasandeMain.managerPanel().screenCheatMenu.hotkey)
+                    if (it is ValueBind && it != TarasandeMain.managerPanel().screenCheatMenu.hotkey)
                         it.apply {
                             type = ValueBind.Type.KEY
                             button = GLFW.GLFW_KEY_UNKNOWN

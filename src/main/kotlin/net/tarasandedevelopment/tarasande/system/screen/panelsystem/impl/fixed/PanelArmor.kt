@@ -34,7 +34,7 @@ class PanelArmor : Panel("Armor", 75.0, FontWrapper.fontHeight().toDouble()) {
         for (i in MinecraftClient.getInstance().player!!.inventory.armor.size - 1 downTo 0) {
             val armor = MinecraftClient.getInstance().player!!.inventory.armor[i]
             if (armor == ItemStack.EMPTY && skipEmpty.value)
-                    continue
+                continue
 
             matrices?.push()
             matrices?.translate(x, y, 0.0)

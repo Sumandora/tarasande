@@ -218,6 +218,7 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
         constructor(ticks: ArrayList<TickMovement>) : this() {
             this.ticks.addAll(ticks)
         }
+
         fun copy() = Record(ticks)
     }
 

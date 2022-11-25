@@ -25,6 +25,7 @@
     "core.prediction.MixinSoundSystem",
     "core.screen.MixinScreen",
     "core.screen.accountmanager.MixinMinecraftClient",
+    "core.screen.accountmanager.MixinRealmsPeriodicCheckers",
     "core.skin.MixinInventoryScreen",
     "core.skin.MixinLivingEntityRenderer",
     "core.skin.MixinPlayerEntityRenderer",
@@ -63,6 +64,7 @@
     "event.item.MixinItemCooldownManager",
     "event.screen.MixinScreen",
     "feature.clientvalue.MixinMinecraftClient",
+    "feature.clientvalue.MixinRealmsClient",
     "feature.clientvalue.MixinTelemetrySender",
     "feature.module.MixinEnchantmentHelper",
     "feature.module.MixinGameRenderer",
@@ -109,9 +111,5 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "core.screen.accountmanager.MixinRealmsPeriodicCheckers",
-    "feature.clientvalue.MixinRealmsClient"
-  ]
+  }
 }

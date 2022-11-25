@@ -2,9 +2,9 @@ package net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesyst
 
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
-import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
-import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget
+import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListEntry
+import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.forgefaker.payload.IForgePayload
 import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.forgefaker.payload.legacy.ModStruct
 import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.forgefaker.payload.modern.ChannelStruct

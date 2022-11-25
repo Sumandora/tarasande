@@ -330,7 +330,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                                 continue
                             } else {
                                 target = hitResult.entity
-                                if(!PlayerUtil.isAttackable(target) && dontAttackInvalidRaytraceEntities.value)
+                                if (!PlayerUtil.isAttackable(target) && dontAttackInvalidRaytraceEntities.value)
                                     continue
                             }
                         }
@@ -353,7 +353,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     attacked = true
                 }
                 if (!attacked && swingInAir.value) {
-                    if(PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.fakeRotation ?: Rotation(mc.player!!), false)?.type == HitResult.Type.MISS) {
+                    if (PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.fakeRotation ?: Rotation(mc.player!!), false)?.type == HitResult.Type.MISS) {
                         attack(null, clicks)
                         event.dirty = true
                     }

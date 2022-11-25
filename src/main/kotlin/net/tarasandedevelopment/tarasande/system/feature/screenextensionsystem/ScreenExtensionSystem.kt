@@ -67,8 +67,8 @@ class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
 
 abstract class ScreenExtension<T : Screen>(val name: String, vararg val screens: Class<out T>) {
 
-    abstract fun createElements(screen: Screen) : List<Element>
-    abstract fun creator(screen: Screen, elements: List<ScreenExtension<*>>) : List<Element>
+    abstract fun createElements(screen: Screen): List<Element>
+    abstract fun creator(screen: Screen, elements: List<ScreenExtension<*>>): List<Element>
 
     // TODO Boilerplate; Doesn't work yet
     open fun isVisible() = true

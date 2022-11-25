@@ -269,8 +269,8 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
             if (event.entity is PlayerEntity)
                 if (suspects.containsKey(event.entity.gameProfile))
                     event.color = murdererColorOverride.getColor()
-            else if (highlightDetectives.value && detectiveItems.list.any { event.entity.inventory.mainHandStack.item == it || event.entity.inventory.offHand[0].item == it })
-                event.color = detectiveColorOverride.getColor()
+                else if (highlightDetectives.value && detectiveItems.list.any { event.entity.inventory.mainHandStack.item == it || event.entity.inventory.offHand[0].item == it })
+                    event.color = detectiveColorOverride.getColor()
         }
     }
 

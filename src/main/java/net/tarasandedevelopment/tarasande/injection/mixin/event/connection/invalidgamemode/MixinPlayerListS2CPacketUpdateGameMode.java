@@ -2,12 +2,12 @@ package net.tarasandedevelopment.tarasande.injection.mixin.event.connection.inva
 
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.world.GameMode;
-import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventInvalidGameMode;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import su.mandora.event.EventDispatcher;
 
 import java.util.UUID;
 

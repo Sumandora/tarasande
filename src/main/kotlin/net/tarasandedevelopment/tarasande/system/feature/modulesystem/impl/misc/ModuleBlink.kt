@@ -58,7 +58,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
             init {
                 EventDispatcher.apply {
                     add(EventPacket::class.java) { event ->
-                        if(event.type == EventPacket.Type.RECEIVE && event.packet is PlayPingS2CPacket)
+                        if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayPingS2CPacket)
                             add(event.packet.parameter)
                     }
                 }
@@ -83,7 +83,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                     onDisable()
                 }
                 if (affectedPackets.isSelected(event.type.ordinal)) {
-                    if(deltaTickSimulation.anySelected() &&
+                    if (deltaTickSimulation.anySelected() &&
                         deltaTickSimulation.isSelected(0) && event.packet !is KeepAliveC2SPacket && event.packet !is KeepAliveS2CPacket &&
                         deltaTickSimulation.isSelected(1) && event.packet !is PlayPongC2SPacket && event.packet !is PlayPingS2CPacket) {
                         return@registerEvent

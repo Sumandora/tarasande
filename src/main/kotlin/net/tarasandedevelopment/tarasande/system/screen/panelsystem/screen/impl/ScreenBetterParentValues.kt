@@ -77,7 +77,7 @@ class ScreenBetterParentValues(parent: Screen, val titleName: String, val owner:
 
     // Ultra 1337 hack because minecraft doesn't send escape key presses through to the widgets, means we have to ask our widgets here
     override fun close() {
-        if(clickableWidgetPanel?.keyPressed(GLFW.GLFW_KEY_ESCAPE, 0, 0) == false)
+        if (clickableWidgetPanel?.keyPressed(GLFW.GLFW_KEY_ESCAPE, 0, 0) == false)
             super.close()
     }
 

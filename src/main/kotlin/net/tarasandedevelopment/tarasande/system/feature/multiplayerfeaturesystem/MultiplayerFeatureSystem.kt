@@ -87,7 +87,7 @@ open class MultiplayerFeature(val name: String, val category: String) {
             override fun onChange(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     onClick(mouseButton)
-                } else if(mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+                } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     openValues()
                 }
             }
@@ -106,7 +106,7 @@ open class MultiplayerFeatureSelection(name: String, category: String, val list:
                     if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                         onClick(it)
                         selected = it
-                    } else if(mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+                    } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                         openValues()
                     }
                 }
@@ -133,11 +133,12 @@ open class MultiplayerFeatureToggleable(name: String, category: String) : Multip
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     state.value = !state.value
                     onClick(state.value)
-                } else if(mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+                } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     openValues()
                 }
             }
-            override fun getColor(hovered: Boolean) = (if (state.value) Color.green else Color.red).let { if(hovered) RenderUtil.colorInterpolate(it, TarasandeMain.clientValues().accentColor.getColor(), 0.4) else it }
+
+            override fun getColor(hovered: Boolean) = (if (state.value) Color.green else Color.red).let { if (hovered) RenderUtil.colorInterpolate(it, TarasandeMain.clientValues().accentColor.getColor(), 0.4) else it }
         }.createValueComponent())
     }
 }

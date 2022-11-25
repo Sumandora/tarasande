@@ -97,8 +97,8 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
             }
 
             if (list.isNotEmpty()) {
-                list = ArrayList(list.distinct().sortedBy(selector).let { if(maxDestructions.isEnabled()) it.subList(0, min(maxDestructions.value.toInt(), it.size)) else it })
-                if(throughWalls.isSelected(2))
+                list = ArrayList(list.distinct().sortedBy(selector).let { if (maxDestructions.isEnabled()) it.subList(0, min(maxDestructions.value.toInt(), it.size)) else it })
+                if (throughWalls.isSelected(2))
                     list = ArrayList(list.map { Pair(it.second.blockPos, it.second) })
 
                 event.rotation = RotationUtil.getRotations(mc.player?.eyePos!!, list[0].second.pos).correctSensitivity()

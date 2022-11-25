@@ -2,11 +2,11 @@ package net.tarasandedevelopment.tarasande.injection.mixin.event;
 
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.texture.NativeImage;
-import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventGamma;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import su.mandora.event.EventDispatcher;
 
 @Mixin(LightmapTextureManager.class)
 public class MixinLightmapTextureManager {

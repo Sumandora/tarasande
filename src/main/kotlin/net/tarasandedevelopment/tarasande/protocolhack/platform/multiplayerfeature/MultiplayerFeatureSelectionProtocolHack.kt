@@ -16,7 +16,7 @@ class MultiplayerFeatureSelectionProtocolHack : MultiplayerFeatureSelection("Pro
     override fun onClick(newValue: String) {
         TarasandeMain.get().protocolHack.apply {
             val newProtocol = VersionList.PROTOCOLS.first { it.getSpecialName() == newValue }.version.toDouble()
-            if(version.value != newProtocol) {
+            if (version.value != newProtocol) {
                 version.value = newProtocol
                 update(ProtocolVersion.getProtocol(version.value.toInt()))
             }

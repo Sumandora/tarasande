@@ -4,7 +4,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.util.math.Vec3d;
-import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventEntityFlag;
 import net.tarasandedevelopment.tarasande.event.EventMovement;
 import net.tarasandedevelopment.tarasande.event.EventStep;
@@ -18,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import su.mandora.event.EventDispatcher;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity implements IEntity {

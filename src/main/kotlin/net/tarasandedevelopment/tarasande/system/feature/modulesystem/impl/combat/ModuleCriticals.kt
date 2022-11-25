@@ -22,32 +22,35 @@ class ModuleCriticals : Module("Criticals", "Forces critical hits", ModuleCatego
 
     init {
         registerEvent(EventAttackEntity::class.java) { event ->
-            if(mc.player?.isInLava!! || mc.player?.isInSwimmingPose!!)
+            if (mc.player?.isInLava!! || mc.player?.isInSwimmingPose!!)
                 return@registerEvent
             when {
                 mode.isSelected(0) -> {
-                    if(mc.player?.isOnGround!!) {
+                    if (mc.player?.isOnGround!!) {
                         mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(mc.player?.x!!, mc.player?.y!! + offset.value, mc.player?.z!!, false))
                         mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(mc.player?.x!!, mc.player?.y!! + offset.value / 2, mc.player?.z!!, false))
                     } else {
                         mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(mc.player?.x!!, mc.player?.y!! - offset.value, mc.player?.z!!, false))
                     }
                 }
+
                 mode.isSelected(1) -> {
-                    if(!mc.player?.isOnGround!!)
+                    if (!mc.player?.isOnGround!!)
                         return@registerEvent
                     mc.player?.jump()
                     mc.player?.velocity?.y = mc.player?.velocity?.y!! * motion.value
                 }
+
                 mode.isSelected(2) -> {
-                    if(!mc.player?.isOnGround!!)
+                    if (!mc.player?.isOnGround!!)
                         return@registerEvent
                     mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.OnGroundOnly(false))
                 }
+
                 mode.isSelected(3) -> {
-                    if(particles.isSelected(0))
+                    if (particles.isSelected(0))
                         mc.player?.addCritParticles(event.entity)
-                    if(particles.isSelected(1))
+                    if (particles.isSelected(1))
                         mc.player?.addEnchantedHitParticles(event.entity)
                 }
             }

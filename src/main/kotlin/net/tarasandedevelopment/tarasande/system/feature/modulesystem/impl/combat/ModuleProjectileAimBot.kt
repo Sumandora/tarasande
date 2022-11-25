@@ -43,12 +43,12 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
         val velocity = calcVelocity(stack)
         val root = sqrt(velocity * velocity * velocity * velocity - gravity * (gravity * dist * dist + 2 * deltaY * velocity * velocity))
         // Use the negated one first, because it's usually better
-        return -Math.toDegrees(atan2(velocity * velocity /*+/-*/- root, gravity * dist))
+        return -Math.toDegrees(atan2(velocity * velocity /*+/-*/ - root, gravity * dist))
     }
 
     private fun deadReckoning(stack: ItemStack, entity: Entity, rotation: Rotation): Vec3d {
         val predicted = ProjectileUtil.predict(stack, rotation, false)
-        if(predicted.size <= 0) return entity.boundingBox.center
+        if (predicted.size <= 0) return entity.boundingBox.center
         val prev = Vec3d(entity.prevX, entity.prevY, entity.prevZ)
         return entity.boundingBox.center + (entity.pos!! - prev).withAxis(Direction.Axis.Y, 0.0) * (predicted.size.toDouble() * predictionAmount.value)
     }

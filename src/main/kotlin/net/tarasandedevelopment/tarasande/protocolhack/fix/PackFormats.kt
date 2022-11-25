@@ -58,7 +58,7 @@ object PackFormats {
     }
 
     fun checkOutdated(nativeVersion: Int) {
-        if(map[nativeVersion].let { it == null || it.name != SharedConstants.getGameVersion().name || it.id != SharedConstants.getGameVersion().id || it.getPackVersion(PackType.RESOURCE) != SharedConstants.getGameVersion().getPackVersion(PackType.RESOURCE) })
+        if (map[nativeVersion].let { it == null || it.name != SharedConstants.getGameVersion().name || it.id != SharedConstants.getGameVersion().id || it.getPackVersion(PackType.RESOURCE) != SharedConstants.getGameVersion().getPackVersion(PackType.RESOURCE) })
             throw ExceptionOutdatedRegistry("The current version has no pack format registered")
     }
 
@@ -81,7 +81,7 @@ object PackFormats {
             override fun getSaveVersion() = null
 
             override fun getPackVersion(packType: PackType?): Int {
-                if(packType == PackType.RESOURCE)
+                if (packType == PackType.RESOURCE)
                     return packFormat
                 return super.getPackVersion(packType)
             }
@@ -98,22 +98,22 @@ object PackFormats {
         launchermeta.getAsJsonArray("versions").forEach {
             it.asJsonObject.apply {
                 val id = get("id").asString
-                if(id.contains("w") || id.contains("a") || id.contains("rc") || id.contains("pre")) // who cares about snapshots lmao
+                if (id.contains("w") || id.contains("a") || id.contains("rc") || id.contains("pre")) // who cares about snapshots lmao
                     return@forEach
                 gson.fromJson(request(get("url").asString).decodeToString(), JsonObject::class.java).apply {
                     val bais = ByteArrayInputStream(request(getAsJsonObject("downloads").getAsJsonObject("client").get("url").asString))
                     val zis = ZipInputStream(bais)
 
                     var entry: ZipEntry?
-                    while(zis.nextEntry.also { entry = it } != null) {
-                        if(entry?.name?.equals("version.json") == true) {
+                    while (zis.nextEntry.also { entry = it } != null) {
+                        if (entry?.name?.equals("version.json") == true) {
                             gson.fromJson(zis.readAllBytes().decodeToString(), JsonObject::class.java)?.apply {
                                 val packVersion = get("pack_version")
                                 val name = get("name").asString
                                 val id = get("id").asString
-                                val packFormat = if(packVersion.isJsonObject) packVersion.asJsonObject.get("resource").asInt else packVersion.asInt
+                                val packFormat = if (packVersion.isJsonObject) packVersion.asJsonObject.get("resource").asInt else packVersion.asInt
 
-                                println("registerReplacement(" + packFormat + ", ProtocolVersion.v_" + name.replace(".", "_") + ", \"" + name + (if(name != id) "\", \"$id\")" else "\")"))
+                                println("registerReplacement(" + packFormat + ", ProtocolVersion.v_" + name.replace(".", "_") + ", \"" + name + (if (name != id) "\", \"$id\")" else "\")"))
                             }
                         }
                         zis.closeEntry()
@@ -121,7 +121,7 @@ object PackFormats {
 
                     zis.close()
                 }
-                if(id.equals("1.14"))
+                if (id.equals("1.14"))
                     exitProcess(1) // The versions below 1.14 don't have a version.json, we have to manually provide that :c
             }
         }

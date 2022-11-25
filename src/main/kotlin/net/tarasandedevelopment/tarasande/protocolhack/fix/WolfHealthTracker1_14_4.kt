@@ -7,7 +7,7 @@ object WolfHealthTracker1_14_4 {
     fun track(entityId: Int, health: Float) {
         healthData[entityId] = health
     }
-    
+
     fun clear() = healthData.clear()
 
     fun getHealth(entityId: Int): Float {

@@ -28,14 +28,14 @@ class ModuleAntiFireball : Module("Anti fireball", "Hits fireballs to turn them"
 
     init {
         registerEvent(EventPollEvents::class.java) { event ->
-            for(entity in mc.world?.entities?.filterIsInstance<FireballEntity>() ?: return@registerEvent) {
+            for (entity in mc.world?.entities?.filterIsInstance<FireballEntity>() ?: return@registerEvent) {
                 val aimPoint = MathUtil.getBestAimPoint(entity.boundingBox.expand(entity.targetingMargin.toDouble()))
-                if(aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.value * reach.value)
+                if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.value * reach.value)
                     continue
-                if((Vec3d(entity.prevX, entity.prevY, entity.prevZ) - mc.player?.eyePos!!).horizontalLengthSquared() <= (entity.pos - mc.player?.eyePos!!).horizontalLengthSquared())
+                if ((Vec3d(entity.prevX, entity.prevY, entity.prevZ) - mc.player?.eyePos!!).horizontalLengthSquared() <= (entity.pos - mc.player?.eyePos!!).horizontalLengthSquared())
                     continue
 
-                if(!targets.contains(entity)) {
+                if (!targets.contains(entity)) {
                     targets.add(entity)
                 }
                 event.rotation = RotationUtil.getRotations(aimPoint).correctSensitivity()
@@ -44,13 +44,13 @@ class ModuleAntiFireball : Module("Anti fireball", "Hits fireballs to turn them"
             }
         }
         registerEvent(EventAttack::class.java, 999) { event ->
-            if(event.dirty)
+            if (event.dirty)
                 return@registerEvent
             val iterator = targets.iterator()
 
-            while(iterator.hasNext()) {
+            while (iterator.hasNext()) {
                 val next = iterator.next()
-                if(timeUtil.hasReached(delay.value.toLong())) {
+                if (timeUtil.hasReached(delay.value.toLong())) {
                     PlayerUtil.attack(next)
                     timeUtil.reset()
                     iterator.remove()

@@ -6,8 +6,8 @@ import com.google.gson.JsonObject
 import com.mojang.authlib.Environment
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.system.base.filesystem.File
-import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.accountmanager.ScreenBetterSlotListAccountManager
+import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import org.apache.commons.codec.binary.Hex
 import oshi.SystemInfo
 import java.util.*
@@ -63,10 +63,10 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
                 accountObject.add("Session", sessionObject)
             }
             val environment = JsonObject()
-            environment.addProperty("Auth-Host", account.environment?.authHost)
-            environment.addProperty("Accounts-Host", account.environment?.accountsHost)
-            environment.addProperty("Session-Host", account.environment?.sessionHost)
-            environment.addProperty("Services-Host", account.environment?.servicesHost)
+            environment.addProperty("Auth-Host", account.environment.authHost)
+            environment.addProperty("Accounts-Host", account.environment.accountsHost)
+            environment.addProperty("Session-Host", account.environment.sessionHost)
+            environment.addProperty("Services-Host", account.environment.servicesHost)
             accountObject.add("Environment", environment)
             jsonArray.add(accountObject)
         }

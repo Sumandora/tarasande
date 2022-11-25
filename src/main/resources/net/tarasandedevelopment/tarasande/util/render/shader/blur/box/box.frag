@@ -5,6 +5,8 @@ uniform sampler2D tex;
 uniform vec2 direction;
 uniform vec2 resolution;
 
+layout (location = 0) out vec4 fragColor;
+
 void main() {
     vec3 color = vec3(0.0);
 
@@ -17,5 +19,5 @@ void main() {
         sum++;
     }
 
-    gl_FragColor = vec4(color / sum, 1.0);
+    fragColor = vec4(color / sum, 1.0);
 }

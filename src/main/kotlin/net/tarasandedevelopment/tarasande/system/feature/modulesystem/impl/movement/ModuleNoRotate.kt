@@ -20,7 +20,7 @@ class ModuleNoRotate : Module("No rotate", "Prevents the server from rotating yo
     init {
         registerEvent(EventPacket::class.java) { event ->
             if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerPositionLookS2CPacket) {
-                if(mc.player != null) {
+                if (mc.player != null) {
                     prevRotation = Rotation(mc.player!!)
                     if (RotationUtil.fakeRotation == null) // if this isn't the case the rotation is being handled by the RotationUtil
                         rotation = RotationUtil.evaluateNewRotation(event.packet)
@@ -39,7 +39,7 @@ class ModuleNoRotate : Module("No rotate", "Prevents the server from rotating yo
         }
 
         registerEvent(EventRotationSet::class.java) {
-            if(prevRotation != null) {
+            if (prevRotation != null) {
                 mc.player?.yaw = prevRotation?.yaw!!
                 mc.player?.pitch = prevRotation?.pitch!!
             }

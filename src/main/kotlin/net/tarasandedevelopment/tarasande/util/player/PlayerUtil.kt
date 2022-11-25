@@ -19,7 +19,6 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.RaycastContext
 import net.minecraft.world.RaycastContext.FluidHandling
 import net.minecraft.world.RaycastContext.ShapeType
-import su.mandora.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventInput
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
@@ -29,6 +28,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.playe
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import org.lwjgl.glfw.GLFW
+import su.mandora.event.EventDispatcher
 
 object PlayerUtil {
 

@@ -7,7 +7,6 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.text.Text;
-import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventChat;
 import net.tarasandedevelopment.tarasande.event.EventIsWalking;
 import net.tarasandedevelopment.tarasande.event.EventUpdate;
@@ -20,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import su.mandora.event.EventDispatcher;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IClientPlayerEntity {

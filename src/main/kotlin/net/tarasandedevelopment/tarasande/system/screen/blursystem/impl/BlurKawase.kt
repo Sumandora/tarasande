@@ -45,14 +45,14 @@ class BlurKawase : Blur("Kawase") {
         strengthLevels.add(Pair(5, 7.25F))
         strengthLevels.add(Pair(5, 8.50F))
 
-        for((index, pair) in strengthLevels.withIndex()) {
+        for ((index, pair) in strengthLevels.withIndex()) {
             val passes = Array(pair.first * 2) { Pair(pair.second, 1.0F) }
             for ((index, pass) in passes.withIndex()) {
                 passes[index] = Pair(pass.first,
                     if (index < passes.size / 2)
                         0.5F
                     else
-                       2.0F
+                        2.0F
                 )
             }
             if (passes.size % 2 != 0) {

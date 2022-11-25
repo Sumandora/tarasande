@@ -7,6 +7,7 @@ import com.viaversion.viaversion.api.protocol.packet.State
 import com.viaversion.viaversion.connection.UserConnectionImpl
 import com.viaversion.viaversion.exception.CancelException
 import com.viaversion.viaversion.protocol.packet.PacketWrapperImpl
+import de.florianmichael.clampclient.injection.mixininterface.IPacketWrapperImpl_Protocol
 import io.netty.buffer.Unpooled
 import net.minecraft.SharedConstants
 import net.minecraft.item.ItemStack
@@ -15,7 +16,6 @@ import net.minecraft.network.NetworkState
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import de.florianmichael.clampclient.injection.mixininterface.IPacketWrapperImpl_Protocol
 
 object MinecraftViaItemRewriter {
 

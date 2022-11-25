@@ -1,12 +1,12 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.event;
 
 import net.minecraft.client.Keyboard;
-import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.event.EventDispatcher;
 
 @Mixin(Keyboard.class)
 public class MixinKeyboard {

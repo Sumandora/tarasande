@@ -79,7 +79,7 @@ class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble())
         Registry.STATUS_EFFECT.forEach { statusEffect ->
             var animation = animations.putIfAbsent(statusEffect, 0.0)
             if (animation == null || animation.isNaN()) animation = 0.0 else {
-                if ((MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_forceHasStatusEffect(statusEffect) ?: return false) {
+                if ((MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_forceHasStatusEffect(statusEffect)) {
                     animation += speedIn.value * RenderUtil.deltaTime
                 } else {
                     animation -= speedOut.value * RenderUtil.deltaTime

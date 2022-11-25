@@ -122,7 +122,7 @@ $errorDescription""".toByteArray())
             ))
             while (code == null) {
                 Thread.sleep(100L)
-                if(cancelled) {
+                if (cancelled) {
                     RenderSystem.recordRenderCall {
                         MinecraftClient.getInstance().setScreen(prevScreen)
                     }

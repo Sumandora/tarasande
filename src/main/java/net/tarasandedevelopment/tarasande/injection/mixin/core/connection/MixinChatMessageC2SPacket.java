@@ -13,7 +13,7 @@ public class MixinChatMessageC2SPacket {
     @Redirect(method = "write", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/message/MessageSignatureData;write(Lnet/minecraft/network/PacketByteBuf;)V"))
     public void preventNullPointerException(MessageSignatureData instance, PacketByteBuf buf) {
         // The account manager allows this to be null (session login)
-        if(instance == null)
+        if (instance == null)
             buf.writeByteArray(new byte[0]);
         else
             instance.write(buf);

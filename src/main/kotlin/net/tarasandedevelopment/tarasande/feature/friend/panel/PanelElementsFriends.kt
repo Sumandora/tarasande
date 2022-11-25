@@ -12,7 +12,7 @@ class PanelElementsFriends(private val friends: Friends) : PanelElements<Element
             if (MinecraftClient.getInstance().networkHandler?.playerList?.none { p -> p.profile == it.gameProfile }!!) {
                 it.onClose()
                 TarasandeMain.friends().apply {
-                    if(isFriend(it.gameProfile))
+                    if (isFriend(it.gameProfile))
                         changeFriendState(it.gameProfile)
                 }
                 return@removeIf true

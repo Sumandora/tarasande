@@ -6,7 +6,6 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.util.math.Vec3d;
-import su.mandora.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.EventRotationSet;
 import net.tarasandedevelopment.tarasande.event.EventShowsDeathScreen;
 import net.tarasandedevelopment.tarasande.event.EventVelocity;
@@ -17,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.event.EventDispatcher;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class MixinClientPlayNetworkHandler {
