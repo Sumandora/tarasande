@@ -1,7 +1,5 @@
 package net.tarasandedevelopment.tarasande.protocolhack.fix
 
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.mojang.bridge.game.PackType
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
@@ -9,11 +7,6 @@ import de.florianmichael.viaprotocolhack.ViaProtocolHack
 import net.minecraft.GameVersion
 import net.minecraft.SharedConstants
 import net.tarasandedevelopment.tarasande.protocolhack.util.ExceptionOutdatedRegistry
-import java.io.ByteArrayInputStream
-import java.net.URL
-import java.util.zip.ZipEntry
-import java.util.zip.ZipInputStream
-import kotlin.system.exitProcess
 
 object PackFormats {
 
