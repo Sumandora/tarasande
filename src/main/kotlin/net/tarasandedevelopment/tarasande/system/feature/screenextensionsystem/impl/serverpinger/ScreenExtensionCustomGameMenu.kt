@@ -25,6 +25,7 @@ class ScreenExtensionCustomGameMenu : ScreenExtensionCustom<Screen>("Server Ping
             graphPlayers.graph.clear()
             graphPing.graph.clear()
         }
+        oldAddress = it.address
         Formatting.strip(it.playerCountLabel.string)?.apply {
             if (this.contains("/")) {
                 graphPlayers.graph.add(this.split("/")[0].toInt())
