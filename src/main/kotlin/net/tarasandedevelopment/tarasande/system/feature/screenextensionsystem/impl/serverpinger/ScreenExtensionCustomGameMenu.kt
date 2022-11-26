@@ -34,4 +34,6 @@ class ScreenExtensionCustomGameMenu : ScreenExtensionCustom<Screen>("Server Ping
             ClickableWidgetPanel(serverPingerWidget)
         )
     }
+
+    override fun isVisible() = !MinecraftClient.getInstance().isInSingleplayer
 }

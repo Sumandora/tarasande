@@ -39,4 +39,6 @@ class ScreenExtensionCustomDirectConnect : ScreenExtensionCustom<DirectConnectSc
             ClickableWidgetPanel(serverPingerWidget)
         )
     }
+
+    override fun isVisible() = !MinecraftClient.getInstance().isInSingleplayer
 }

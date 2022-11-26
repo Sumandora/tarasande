@@ -56,8 +56,8 @@ class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
 
         EventDispatcher.add(EventChildren::class.java) { eventChildren ->
 
-            list.distinctBy { it.javaClass.superclass }.filter { it.isVisible() }.forEach {
-                it.creator(eventChildren.screen, list.filter { internal -> internal.javaClass.superclass == it.javaClass.superclass }).forEach {
+            list.distinctBy { it.javaClass.superclass }.forEach {
+                it.creator(eventChildren.screen, list.filter { internal -> internal.isVisible() }.filter { internal -> internal.javaClass.superclass == it.javaClass.superclass }).forEach {
                     eventChildren.add(it)
                 }
             }
@@ -70,7 +70,6 @@ abstract class ScreenExtension<T : Screen>(val name: String, vararg val screens:
     abstract fun createElements(screen: Screen): List<Element>
     abstract fun creator(screen: Screen, elements: List<ScreenExtension<*>>): List<Element>
 
-    // TODO Boilerplate; Doesn't work yet
     open fun isVisible() = true
 }
 
