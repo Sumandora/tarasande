@@ -7,12 +7,18 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBool
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.util.connection.AddressSaver
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
 class PanelServerInformationPinging : PanelServerInformation() {
 
-    private val pingDelay = ValueNumber(this, "Ping delay", 100.0, 5000.0, 10000.0, 100.0)
-    private val showPingProgress = ValueBoolean(this, "Show ping progress", true)
+    private val autoPing = ValueBoolean(this, "Auto ping", false)
+    private val pingDelay = object : ValueNumber(this, "Ping delay", 100.0, 5000.0, 10000.0, 100.0) {
+        override fun isEnabled() = autoPing.value
+    }
+    private val showPingProgress = object : ValueBoolean(this, "Show ping progress", true) {
+        override fun isEnabled() = autoPing.value
+    }
     private val timer = TimeUtil()
 
     override fun updateServerInfo() = AddressSaver.getAddress().let {
@@ -28,7 +34,7 @@ class PanelServerInformationPinging : PanelServerInformation() {
     }
 
     fun ping(force: Boolean = false) {
-        if (force || timer.hasReached(pingDelay.value.toLong())) {
+        if (this.autoPing.value && (force || timer.hasReached(pingDelay.value.toLong()))) {
             AddressSaver.getAddress().apply {
                 server.name = this
                 server.address = this
@@ -40,18 +46,33 @@ class PanelServerInformationPinging : PanelServerInformation() {
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        ping()
+        if (this.autoPing.value) {
+            ping()
+        }
         super.render(matrices, mouseX, mouseY, delta)
+    }
+
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight + panelHeight)) {
+            val oldAutoPing = this.autoPing.value
+            this.autoPing.value = true
+            ping(true)
+            this.autoPing.value = oldAutoPing
+        }
+        return super.mouseClicked(mouseX, mouseY, button)
     }
 
     override fun renderTitleBar(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.renderTitleBar(matrices, mouseX, mouseY, delta)
 
-        if (this.showPingProgress.value) {
+        if (this.showPingProgress.value && this.autoPing.value) {
             (((pingDelay.value + 1000) - (System.currentTimeMillis() - timer.time)) / 1000).toInt().toString().also {
-                FontWrapper.textShadow(matrices, it, (x + panelWidth - FontWrapper.getWidth(it)).toFloat(), (y).toFloat())
+                FontWrapper.textShadow(matrices, it, (x + panelWidth - FontWrapper.getWidth(it)).toFloat(), y.toFloat())
+            }
+        } else {
+            "Click to reload".also {
+                FontWrapper.textShadow(matrices, it, (x + panelWidth - FontWrapper.getWidth(it)).toFloat(), y.toFloat())
             }
         }
     }
 }
-

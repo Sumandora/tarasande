@@ -215,7 +215,7 @@ open class Panel(
                 if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight.toDouble())) opened = !opened
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
                 if (TarasandeMain.managerValue().getValues(this).isNotEmpty()) {
-                    MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, "Values of \"" + this.title + "\"", this))
+                    MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, this.title, this))
                 }
             }
             return true
