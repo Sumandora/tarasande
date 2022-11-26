@@ -9,8 +9,9 @@ import net.tarasandedevelopment.tarasande.util.connection.AddressSaver
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
+import java.util.function.Consumer
 
-class PanelServerInformationPinging : PanelServerInformation() {
+class PanelServerInformationPinging(consumer: Consumer<ServerInfo>) : PanelServerInformation(consumer) {
 
     private val autoPing = ValueBoolean(this, "Auto ping", false)
     private val pingDelay = object : ValueNumber(this, "Ping delay", 100.0, 5000.0, 10000.0, 100.0) {
@@ -67,11 +68,7 @@ class PanelServerInformationPinging : PanelServerInformation() {
 
         if (this.showPingProgress.value && this.autoPing.value) {
             (((pingDelay.value + 1000) - (System.currentTimeMillis() - timer.time)) / 1000).toInt().toString().also {
-                FontWrapper.textShadow(matrices, it, (x + panelWidth - FontWrapper.getWidth(it)).toFloat(), y.toFloat())
-            }
-        } else {
-            "Click to reload".also {
-                FontWrapper.textShadow(matrices, it, (x + panelWidth - FontWrapper.getWidth(it)).toFloat(), y.toFloat())
+                FontWrapper.textShadow(matrices, it, (x + panelWidth - FontWrapper.getWidth(it)).toFloat(), y.toFloat() + 1, scale = 0.75F)
             }
         }
     }

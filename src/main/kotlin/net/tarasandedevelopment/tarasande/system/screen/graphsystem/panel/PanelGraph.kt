@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import kotlin.math.max
 
-class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100.0, FontWrapper.getWidth(graph.name) + 10.0), 50.0, fixed = true) {
+class PanelGraph(val graph: Graph) : Panel(graph.name, max(100.0, FontWrapper.getWidth(graph.name) + 10.0), 50.0, fixed = true) {
 
     init {
         TarasandeMain.managerValue().getValues(graph).forEach {
