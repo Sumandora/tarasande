@@ -5,6 +5,7 @@ import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.GameMenuScreen
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.util.Formatting
+import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.ScreenExtensionCustom
@@ -38,11 +39,16 @@ class ScreenExtensionCustomGameMenu : ScreenExtensionCustom<Screen>("Server Ping
     private val pingWhenInGame = ValueBoolean(serverPingerWidget, "Ping when in game", true)
 
     init {
-        EventDispatcher.add(EventTick::class.java) { event ->
-            if (event.state == EventTick.State.PRE) {
-                if (pingWhenInGame.value && MinecraftClient.getInstance().currentScreen !is GameMenuScreen && MinecraftClient.getInstance().player != null) {
-                    serverPingerWidget.ping(false)
+        EventDispatcher.apply {
+            add(EventTick::class.java) { event ->
+                if (event.state == EventTick.State.PRE) {
+                    if (pingWhenInGame.value && MinecraftClient.getInstance().currentScreen !is GameMenuScreen && MinecraftClient.getInstance().player != null) {
+                        serverPingerWidget.ping(false)
+                    }
                 }
+            }
+            add(EventDisconnect::class.java) {
+                oldAddress = ""
             }
         }
     }
