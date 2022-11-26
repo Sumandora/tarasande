@@ -11,7 +11,9 @@ import su.mandora.event.EventDispatcher
 import java.io.File
 import java.net.InetSocketAddress
 
-class MultiplayerFeatureWindowsFritzBoxReconnect : MultiplayerFeature("Fritz!Box Reconnect", "Windows") {
+const val NETWORK = "Network"
+
+class MultiplayerFeatureWindowsFritzBoxReconnect : MultiplayerFeature("Fritz!Box Reconnect", NETWORK) {
 
     private val scriptName = "ip_changer_fritzbox.vbs"
     private val script = File(TarasandeMain.get().rootDirectory, scriptName)
@@ -30,7 +32,7 @@ class MultiplayerFeatureWindowsFritzBoxReconnect : MultiplayerFeature("Fritz!Box
     }
 }
 
-class MultiplayerFeatureWindowsTorNetwork : MultiplayerFeatureToggleable("Tor Network", "Windows") {
+class MultiplayerFeatureWindowsTorNetwork : MultiplayerFeatureToggleable("Tor Network", NETWORK) {
 
     private val torFile = File(System.getProperty("user.home") + "/Desktop", "Tor Browser/Browser/TorBrowser/Tor/tor.exe")
     private var torProcess: Process? = null

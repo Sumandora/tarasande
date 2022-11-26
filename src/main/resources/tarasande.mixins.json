@@ -92,6 +92,7 @@
     "feature.module.norender.MixinChunkSkyLightProvider",
     "feature.module.norender.MixinClientWorld",
     "feature.module.norender.MixinEnchantingTableBlockEntityRenderer",
+    "feature.module.norender.MixinEnchantmentScreen",
     "feature.module.norender.MixinEntityRenderDispatcher",
     "feature.module.norender.MixinEntityRenderer",
     "feature.module.norender.MixinFireworksSparkParticleSubExplosionAndFlash",

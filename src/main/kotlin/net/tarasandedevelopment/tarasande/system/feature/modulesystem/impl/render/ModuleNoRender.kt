@@ -32,6 +32,7 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
         val vignette = ValueBooleanNoRender(this, "Vignette", false)
         val totemAnimation = ValueBooleanNoRender(this, "Totem animation", false)
         val eatParticles = ValueBooleanNoRender(this, "Eat particles", false)
+        val enchantmentTableText = ValueBooleanNoRender(this, "Enchantment table text", false)
     }
 
     val overlay = NoRenderTypeOverlay()

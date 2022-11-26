@@ -1,0 +1,31 @@
+plugins {
+    id "java"
+    id "fabric-loom"
+    id "org.jetbrains.kotlin.jvm"
+}
+
+group 'net.tarasandedevelopment'
+version '1.19'
+
+repositories {
+    mavenCentral()
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/tarasande-rejected-features.accesswidener")
+}
+
+dependencies {
+    // Fabric
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    // Kotlin
+    modImplementation "net.fabricmc:fabric-language-kotlin:${project.kotlin_wrapper_version}"
+
+    // Tarasande Source
+    implementation(project(":"))
+}
+
+compileKotlin.kotlinOptions.jvmTarget = "17"

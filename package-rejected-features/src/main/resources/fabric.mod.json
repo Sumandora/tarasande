@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "tarasande-rejected-features",
+  "version": "${version}",
+  "name": "tarasande rejected Features",
+  "description": "Things that don't come in Tarasande because you don't need them or they are from other clients.",
+  "authors": [
+    "EnZaXD/FlorianMichael",
+    "Sumandora/Johannes"
+  ],
+  "contact": {
+    "homepage": "https://github.com/tarasandeDevelopment/",
+    "sources": "https://github.com/tarasandeDevelopment/tarasande"
+  },
+  "license": "GPL-3.0",
+  "icon": "assets/tarasande-rejected-features/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "net.tarasandedevelopment.tarasande_rejected_features.TarasandeRejectedFeatures"
+    ]
+  },
+  "mixins": [
+    "tarasande-rejected-features.mixins.json"
+  ],
+  "accessWidener": "tarasande-rejected-features.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "minecraft": "~1.19",
+    "java": ">=17",
+    "tarasande": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": "tarasande"
+    }
+  }
+}

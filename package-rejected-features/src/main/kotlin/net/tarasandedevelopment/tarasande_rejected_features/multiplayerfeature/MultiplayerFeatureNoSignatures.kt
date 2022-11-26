@@ -1,0 +1,6 @@
+package net.tarasandedevelopment.tarasande_rejected_features.multiplayerfeature
+
+import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.MultiplayerFeatureCategory
+import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.MultiplayerFeatureToggleable
+
+class MultiplayerFeatureNoSignatures : MultiplayerFeatureToggleable("No Signatures", MultiplayerFeatureCategory.EXPLOITS)
