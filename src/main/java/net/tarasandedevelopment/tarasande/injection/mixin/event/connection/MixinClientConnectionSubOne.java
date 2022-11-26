@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(targets = "net/minecraft/network/ClientConnection$1", priority = 1001 /* after the protocol hack */)
+@Mixin(targets = "net.minecraft.network.ClientConnection$1", priority = 1001 /* after the protocol hack */)
 public class MixinClientConnectionSubOne {
 
     @Inject(method = "initChannel", at = @At("TAIL"))

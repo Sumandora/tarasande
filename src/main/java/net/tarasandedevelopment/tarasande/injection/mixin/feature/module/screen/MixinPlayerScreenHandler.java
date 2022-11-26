@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(targets = "net/minecraft/screen/PlayerScreenHandler$1")
+@Mixin(targets = "net.minecraft.screen.PlayerScreenHandler$1")
 public class MixinPlayerScreenHandler {
 
     @Inject(method = "getMaxItemCount", at = @At("HEAD"), cancellable = true)
