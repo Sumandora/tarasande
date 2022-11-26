@@ -17,4 +17,5 @@ pluginManagement {
 include 'package-windows-platform'
 include 'package-linux-platform'
 include 'package-mod-fixes'
+include 'tools'
 
