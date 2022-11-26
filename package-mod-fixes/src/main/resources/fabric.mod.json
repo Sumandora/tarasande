@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "tarasande-mod-fixes",
+  "version": "${version}",
+
+  "name": "tarasande Mod Fixes",
+  "description": "Some improvements and fixes to certain mods",
+  "authors": [
+    "EnZaXD/FlorianMichael"
+  ],
+  "contact": {
+    "homepage": "https://github.com/tarasandeDevelopment/",
+    "sources": "https://github.com/tarasandeDevelopment/tarasande-mod-fixes"
+  },
+
+  "license": "GPL-3.0",
+  "icon": "assets/tarasande-mod-fixes/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "net.tarasandedevelopment.tarasande_mod_fixes.TarasandeModFixes"
+    ]
+  },
+  "mixins": [
+    "tarasande-mod-fixes.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "minecraft": "~1.19",
+    "java": ">=17",
+    "tarasande": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": "tarasande"
+    }
+  }
+}

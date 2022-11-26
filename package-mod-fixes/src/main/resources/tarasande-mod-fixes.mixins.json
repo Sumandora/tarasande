@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.tarasandedevelopment.tarasande_mod_fixes.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "baritone.MixinLookBehavior"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "clientcommands.MixinMultiConnectAPI"
+  ]
+}
