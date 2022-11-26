@@ -66,6 +66,7 @@
     "feature.clientvalue.MixinMinecraftClient",
     "feature.clientvalue.MixinRealmsClient",
     "feature.clientvalue.MixinTelemetrySender",
+    "feature.module.MixinCamera",
     "feature.module.MixinEnchantmentHelper",
     "feature.module.MixinGameRenderer",
     "feature.module.MixinHeldItemRenderer",

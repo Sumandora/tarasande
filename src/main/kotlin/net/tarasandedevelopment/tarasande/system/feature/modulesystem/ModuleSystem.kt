@@ -127,7 +127,8 @@ class ManagerModule(panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manage
             ModuleAllowAllCharacters(),
             ModuleAntiCactus(),
             ModuleAntiFireball(),
-            ModuleTroubleInTerrioristTown()
+            ModuleTroubleInTerrioristTown(),
+            ModuleCameraNoClip()
         )
 
         panelSystem.add(PanelArrayList(this@ManagerModule))
