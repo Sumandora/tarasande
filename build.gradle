@@ -26,7 +26,7 @@ def libs = [
 
 // ViaProtocolHack READ-ME
 var viaLibs = [
-		"com.viaversion:viaversion:4.5.0-1.19.3-pre1-SNAPSHOT",
+		"com.viaversion:viaversion:4.5.0-1.19.3-pre2-SNAPSHOT",
 		"com.viaversion:viabackwards-common:4.5.0-22w46a-SNAPSHOT",
 		"org.yaml:snakeyaml:1.29",
 
