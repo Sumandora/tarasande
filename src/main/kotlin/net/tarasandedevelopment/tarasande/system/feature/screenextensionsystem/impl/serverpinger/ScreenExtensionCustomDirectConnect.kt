@@ -11,6 +11,7 @@ import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.i
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.panel.PanelGraph
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
+import net.tarasandedevelopment.tarasande.util.connection.AddressSaver
 import su.mandora.event.EventDispatcher
 
 class ScreenExtensionCustomDirectConnect : ScreenExtensionCustom<DirectConnectScreen>("Server Pinger", DirectConnectScreen::class.java) {
@@ -18,7 +19,13 @@ class ScreenExtensionCustomDirectConnect : ScreenExtensionCustom<DirectConnectSc
     private val graphPlayers = PanelGraph(Graph("Players", 10, true))
     private val graphPing = PanelGraph(Graph("Ping", 10, true))
 
+    private var oldAddress = ""
     private val serverPingerWidget = PanelServerInformationPinging {
+        if (it.address != oldAddress) {
+            graphPlayers.graph.clear()
+            graphPing.graph.clear()
+        }
+        oldAddress = it.address
         Formatting.strip(it.playerCountLabel.string)?.apply {
             if (this.contains("/")) {
                 graphPlayers.graph.add(this.split("/")[0].toInt())
