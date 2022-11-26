@@ -6,7 +6,6 @@ import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
 import net.tarasandedevelopment.tarasande.protocolhack.TarasandeProtocolHack
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
-import net.tarasandedevelopment.tarasande.system.base.packagesystem.ManagerPackage
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.ManagerClickMethod
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.ManagerESP
@@ -35,7 +34,6 @@ class TarasandeMain {
     //@formatter:off
     private val managerFile = ManagerFile()
     private val managerValue = ManagerValue(managerFile)
-    private val managerPackage = ManagerPackage()
 
     private lateinit var managerESP: ManagerESP
     private lateinit var managerClickMethod: ManagerClickMethod
@@ -68,7 +66,6 @@ class TarasandeMain {
         fun protocolHack() = instance.protocolHack
         fun managerClickMethod() = instance.managerClickMethod
         fun managerESP() = instance.managerESP
-        internal fun managerPackage() = instance.managerPackage
         fun managerFile() = instance.managerFile
         fun clientValues() = instance.clientValues
         fun friends() = instance.friends

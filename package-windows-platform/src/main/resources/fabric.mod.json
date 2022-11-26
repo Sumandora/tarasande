@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "tarasande-windows-platform",
+  "version": "${version}",
+
+  "name": "tarasande Windows Platform",
+  "description": "Tarasande package to provide windows platform specific enhancements",
+  "authors": [
+    "EnZaXD/FlorianMichael"
+  ],
+  "contact": {
+    "homepage": "https://github.com/tarasandeDevelopment/",
+    "sources": "https://github.com/tarasandeDevelopment/tarasande"
+  },
+
+  "license": "GPL-3.0",
+  "icon": "assets/tarasande-windows-platform/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "net.tarasandedevelopment.tarasande_windows_platform.TarasandeWindowsPlatform"
+    ]
+  },
+
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "minecraft": "~1.19",
+    "java": ">=17",
+    "tarasande": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": "tarasande"
+    }
+  }
+}
