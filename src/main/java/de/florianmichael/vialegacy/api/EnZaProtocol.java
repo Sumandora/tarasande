@@ -34,14 +34,9 @@
 
 package de.florianmichael.vialegacy.api;
 
-import com.viaversion.viaversion.api.minecraft.Position;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.ClientboundPacketType;
 import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
-import com.viaversion.viaversion.api.protocol.remapper.TypeRemapper;
-import com.viaversion.viaversion.api.protocol.remapper.ValueReader;
-import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.vialegacy.api.material.MaterialReplacement;
 import de.florianmichael.vialegacy.api.metadata.LegacyMetadataRewriter;
 import de.florianmichael.vialegacy.api.sound.SoundRewriter;
@@ -66,33 +61,5 @@ public class EnZaProtocol<C1 extends ClientboundPacketType, C2 extends Clientbou
 
     public LegacyMetadataRewriter metadataRewriter() {
         return null;
-    }
-
-    public static final ValueReader<Position> xyzToPosition = packetWrapper -> {
-        final int x = packetWrapper.read(Type.INT);
-        final int y = packetWrapper.read(Type.INT);
-        final int z = packetWrapper.read(Type.INT);
-
-        return new Position(x, y, z);
-    };
-
-    public static abstract class CustomPacketRemapper extends PacketRemapper {
-
-        public void intToVarInt() {
-            map(Type.INT, Type.VAR_INT);
-        }
-
-        public void varIntToInt() {
-            map(Type.VAR_INT, Type.INT);
-        }
-
-        public void xyzToPosition() {
-            map(xyzToPosition, new TypeRemapper<>(Type.POSITION));
-        }
-
-        public void map(final Type<?> type, final int j) {
-            for (int i = 0; i < j; i++)
-                map(type);
-        }
     }
 }

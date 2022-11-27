@@ -193,13 +193,5 @@
    - Custom Buttons
    - Custom Background with Selection
 
-## TODO-List (Together <3 | ViaLegacy)
-
-- Unknown: Mining Fast Checks
-- 1.7: OnGround State from Clientbound Position Packet to Serverbound
-- 1.7.5 (?): Bed flag
-- 1.6.4 (?): Ender pearl
-- 1.6.4 (?): Book writing
-
 ## Notes
 - AutoTool: Axes can set shields on cooldown. Maybe implement that if possible axes are being used to set shields on cooldown before actually attacking with sword

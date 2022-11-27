@@ -31,34 +31,37 @@ public class LegacyProtocolVersion extends ProtocolVersion {
     public static final List<ProtocolVersion> PROTOCOL_VERSIONS = new ArrayList<>();
     public static final List<ProtocolVersion> PRE_NETTY_VERSIONS = new ArrayList<>();
 
-    public static final ProtocolVersion r1_7_6_10 = new ProtocolVersion(5, "1.7.6-1.7.10") {
-        { PROTOCOL_VERSIONS.add(this); }
-    };
-    public static final ProtocolVersion r1_7_0_5 = new ProtocolVersion(4, "1.7-1.7.5") {
-        { PROTOCOL_VERSIONS.add(this); }
-    };
-
+    // Release Versions (1.8.x -> 1.0.0)
+    public static final ProtocolVersion r1_7_6_10 = new ProtocolVersion(5, "1.7.6-1.7.10") {{ PROTOCOL_VERSIONS.add(this); }};
+    public static final ProtocolVersion r1_7_0_5 = new ProtocolVersion(4, "1.7-1.7.5") {{ PROTOCOL_VERSIONS.add(this); }};
     public static final LegacyProtocolVersion r1_6_4 = new LegacyProtocolVersion(78, "1.6.4");
     public static final LegacyProtocolVersion r1_6_3_pre = new LegacyProtocolVersion(77, "1.6.3-pre");
     public static final LegacyProtocolVersion r1_6_2 = new LegacyProtocolVersion(74, "1.6.2");
     public static final LegacyProtocolVersion r1_6_1 = new LegacyProtocolVersion(73, "1.6.1");
-
     public static final LegacyProtocolVersion r1_5_2 = new LegacyProtocolVersion(61, "1.5.2");
     public static final LegacyProtocolVersion r1_5_1 = new LegacyProtocolVersion(60, "1.5.1");
-
     public static final LegacyProtocolVersion r1_4_6_7 = new LegacyProtocolVersion(51, "1.4.6-1.4.7");
     public static final LegacyProtocolVersion r1_4_4_5 = new LegacyProtocolVersion(49, "1.4.4-1.4.5");
     public static final LegacyProtocolVersion r1_4_3_pre = new LegacyProtocolVersion(48, "1.4.3-pre");
     public static final LegacyProtocolVersion r1_4_0_2 = new LegacyProtocolVersion(47, "1.4-1.4.2");
-
     public static final LegacyProtocolVersion r1_3_1_2 = new LegacyProtocolVersion(39, "1.3.1-1.3.2");
-
     public static final LegacyProtocolVersion r1_2_4_5 = new LegacyProtocolVersion(29, "1.2.4-1.2.5");
     public static final LegacyProtocolVersion r1_2_1_3 = new LegacyProtocolVersion(28, "1.2.1-1.2.3");
-
     public static final LegacyProtocolVersion r1_1 = new LegacyProtocolVersion(23, "1.1");
-
     public static final LegacyProtocolVersion r1_0_0_1 = new LegacyProtocolVersion(22, "1.0.0-1.0.1");
+
+    // Beta Versions (b1.8.1 - b1.0)
+    public static final LegacyProtocolVersion b1_8_0_1 = new LegacyProtocolVersion(17, "b1.8.0-b1.8.1");
+    public static final LegacyProtocolVersion b1_7_0_3 = new LegacyProtocolVersion(14, "b1.7.0-b1.7.3");
+    public static final LegacyProtocolVersion b1_6_0_6 = new LegacyProtocolVersion(13, "b1.6.0-b1.6.6");
+    public static final LegacyProtocolVersion b1_5_0_2 = new LegacyProtocolVersion(11, "b1.5.0-b1.5.2");
+    public static final LegacyProtocolVersion b1_4_0_1 = new LegacyProtocolVersion(10, "b1.4.0-b1.4.1");
+    public static final LegacyProtocolVersion b1_3_0_1 = new LegacyProtocolVersion(9, "b1.3.0-b1.3.1");
+    public static final LegacyProtocolVersion b1_1_2_2_2 = new LegacyProtocolVersion(8, "b1.1.2-b1.2.2");
+    public static final LegacyProtocolVersion b1_0_1_1 = new LegacyProtocolVersion(7, "b1.0-b1.1.1");
+
+    // Alpha Versions (a1.2.6 - a1.0.15)
+    public static final LegacyProtocolVersion a1_2_3_5_6 = new LegacyProtocolVersion(6, "a1.2.3.5-a1.2.6");
 
     public LegacyProtocolVersion(int version, String name) {
         super(-version, name); // Negative ID's since ViaVersion uses there value to order the pipeline

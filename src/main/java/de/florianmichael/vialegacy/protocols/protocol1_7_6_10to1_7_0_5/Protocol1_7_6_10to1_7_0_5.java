@@ -73,15 +73,18 @@ public class Protocol1_7_6_10to1_7_0_5 extends EnZaProtocol<ClientboundPackets1_
             }
         });
 
-        this.registerClientbound(ClientboundPackets1_7_0_5.SPAWN_PLAYER, new CustomPacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_7_0_5.SPAWN_PLAYER, new PacketRemapper() {
             @Override
             public void registerMap() {
                 map(Type.VAR_INT);
                 map(Type.STRING, ADD_DASHES);
                 map(Type.STRING);
                 handler((pw) -> pw.write(Type.VAR_INT, 0));
-                map(Type.INT, 3);
-                map(Type.BYTE, 2);
+                map(Type.INT);
+                map(Type.INT);
+                map(Type.INT);
+                map(Type.BYTE);
+                map(Type.BYTE);
                 map(Type.SHORT);
                 map(Types1_7_6_10.METADATA_LIST);
             }

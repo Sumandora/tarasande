@@ -6,6 +6,7 @@ import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesyste
 import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.MultiplayerFeatureToggleable
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import net.tarasandedevelopment.tarasande.util.connection.ProxyType
+import net.tarasandedevelopment.tarasande_windows_platform.TarasandeWindowsPlatform
 import org.spongepowered.include.com.google.common.io.Files
 import su.mandora.event.EventDispatcher
 import java.io.File
@@ -20,7 +21,7 @@ class MultiplayerFeatureWindowsFritzBoxReconnect : MultiplayerFeature("Fritz!Box
 
     init {
         if (!script.exists()) {
-            Files.write(TarasandeMain::class.java.getResourceAsStream(scriptName)?.readAllBytes() ?: error("$scriptName not found"), script)
+            Files.write(MultiplayerFeatureWindowsFritzBoxReconnect::class.java.getResourceAsStream(scriptName)?.readAllBytes() ?: error("$scriptName not found"), script)
         }
     }
 

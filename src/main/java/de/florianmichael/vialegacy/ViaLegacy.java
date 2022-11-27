@@ -27,8 +27,9 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.Protocol;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.vialegacy.exception.ViaLegacyException;
-import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.vialegacy.protocols.base.BaseProtocol1_6;
+import de.florianmichael.vialegacy.protocols.protocol1_1to1_0_0_1.Protocol1_1to1_0_0_1;
+import de.florianmichael.vialegacy.protocols.protocol1_2_1_3to1_1.Protocol1_2_1_3to1_1;
 import de.florianmichael.vialegacy.protocols.protocol1_2_4_5to1_2_1_3.Protocol1_2_4_5to1_2_1_3;
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.Protocol1_3_1_2to1_2_4_5;
 import de.florianmichael.vialegacy.protocols.protocol1_4_0_2to1_3_1_2.Protocol1_4_0_2to1_3_1_2;
@@ -47,6 +48,22 @@ import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.Protocol1
 
 import java.util.logging.Logger;
 
+import static com.viaversion.viaversion.api.protocol.version.ProtocolVersion.*;
+import static de.florianmichael.vialegacy.protocol.LegacyProtocolVersion.*;
+
+/**
+ * ViaLegacy is a rewrite of PrivateViaForge (2020 - 2021)
+ 
+ * BUG TRACKER:
+ *  - 1.1 Chunks needs a rewrite
+ *  - 1.6.4 Login is totally broken and unclear
+ *  - 1.5.2 Minecart logic is missing
+ *  - 1.0 Chat filtering is missing
+ *  - Biome data Remapping is missing (needs st. like AbstractChunkTracker)
+ *  - 1.7.5 (?): Bed flag
+ *  - 1.6.4 (?): Ender pearl
+ *  - 1.6.4 (?): Book writing
+ */
 public class ViaLegacy {
 
     private static Logger logger;
@@ -58,29 +75,34 @@ public class ViaLegacy {
 
         ViaLegacy.logger = logger;
 
-        registerProtocol(ProtocolVersion.v1_8, LegacyProtocolVersion.r1_7_6_10, new Protocol1_8_0_9to1_7_6_10());
-        registerProtocol(LegacyProtocolVersion.r1_7_6_10, LegacyProtocolVersion.r1_7_0_5, new Protocol1_7_6_10to1_7_0_5());
+        // Release Versions (1.8.x -> 1.0.0)
+        //               From           Target        Protocol Implementation
+        registerProtocol(v1_8,          r1_7_6_10,    new Protocol1_8_0_9to1_7_6_10());
+        registerProtocol(r1_7_6_10,     r1_7_0_5,     new Protocol1_7_6_10to1_7_0_5());
+        registerProtocol(r1_7_0_5,      r1_6_4,       new Protocol1_7_5to1_6_4());
+        registerProtocol(r1_6_4,        r1_6_3_pre,   new Protocol1_6_4to1_6_3_pre());
+        registerProtocol(r1_6_3_pre,    r1_6_2,       new Protocol1_6_3_preto1_6_2());
+        registerProtocol(r1_6_2,        r1_6_1,       new Protocol1_6_2to1_6_1());
+        registerProtocol(r1_6_1,        r1_5_2,       new Protocol1_6_1to1_5_2());
+        registerProtocol(r1_5_2,        r1_5_1,       new Protocol1_5_2to1_5_1());
+        registerProtocol(r1_5_1,        r1_4_6_7,     new Protocol1_5_1to1_4_6_7());
+        registerProtocol(r1_4_6_7,      r1_4_4_5,     new Protocol1_4_6_7to1_4_4_5());
+        registerProtocol(r1_4_4_5,      r1_4_3_pre,   new Protocol1_4_5to1_4_3_pre());
+        registerProtocol(r1_4_3_pre,    r1_4_0_2,     new Protocol1_4_3_preto1_4_0_2());
+        registerProtocol(r1_4_0_2,      r1_3_1_2,     new Protocol1_4_0_2to1_3_1_2());
+        registerProtocol(r1_3_1_2,      r1_2_4_5,     new Protocol1_3_1_2to1_2_4_5());
+        registerProtocol(r1_2_4_5,      r1_2_1_3,     new Protocol1_2_4_5to1_2_1_3());
+        registerProtocol(r1_2_1_3,      r1_1,         new Protocol1_2_1_3to1_1());
+        registerProtocol(r1_1,          r1_0_0_1,     new Protocol1_1to1_0_0_1());
 
-        registerProtocol(LegacyProtocolVersion.r1_7_0_5, LegacyProtocolVersion.r1_6_4, new Protocol1_7_5to1_6_4());
-        registerProtocol(LegacyProtocolVersion.r1_6_4, LegacyProtocolVersion.r1_6_3_pre, new Protocol1_6_4to1_6_3_pre());
-        registerProtocol(LegacyProtocolVersion.r1_6_3_pre, LegacyProtocolVersion.r1_6_2, new Protocol1_6_3_preto1_6_2());
-        registerProtocol(LegacyProtocolVersion.r1_6_2, LegacyProtocolVersion.r1_6_1, new Protocol1_6_2to1_6_1());
+        // Beta Versions (b1.8.1 - b1.0)
 
-        registerProtocol(LegacyProtocolVersion.r1_6_1, LegacyProtocolVersion.r1_5_2, new Protocol1_6_1to1_5_2());
-        registerProtocol(LegacyProtocolVersion.r1_5_2, LegacyProtocolVersion.r1_5_1, new Protocol1_5_2to1_5_1());
+        // Alpha Versions (a1.2.6 - a1.0.15)
 
-        registerProtocol(LegacyProtocolVersion.r1_5_1, LegacyProtocolVersion.r1_4_6_7, new Protocol1_5_1to1_4_6_7());
-        registerProtocol(LegacyProtocolVersion.r1_4_6_7, LegacyProtocolVersion.r1_4_4_5, new Protocol1_4_6_7to1_4_4_5());
-        registerProtocol(LegacyProtocolVersion.r1_4_4_5, LegacyProtocolVersion.r1_4_3_pre, new Protocol1_4_5to1_4_3_pre());
-        registerProtocol(LegacyProtocolVersion.r1_4_3_pre, LegacyProtocolVersion.r1_4_0_2, new Protocol1_4_3_preto1_4_0_2());
+        // Classic Versions (c0.30 - c0.0.15a-1)
 
-        registerProtocol(LegacyProtocolVersion.r1_4_0_2, LegacyProtocolVersion.r1_3_1_2, new Protocol1_4_0_2to1_3_1_2());
-
-        registerProtocol(LegacyProtocolVersion.r1_3_1_2, LegacyProtocolVersion.r1_2_4_5, new Protocol1_3_1_2to1_2_4_5());
-        registerProtocol(LegacyProtocolVersion.r1_2_4_5, LegacyProtocolVersion.r1_2_1_3, new Protocol1_2_4_5to1_2_1_3());
-
-        final int newestVersion = LegacyProtocolVersion.PROTOCOL_VERSIONS.get(2).getVersion();
-        final int lastVersion = LegacyProtocolVersion.PROTOCOL_VERSIONS.get(LegacyProtocolVersion.PROTOCOL_VERSIONS.size() - 1).getVersion();
+        final int newestVersion = PROTOCOL_VERSIONS.get(2).getVersion();
+        final int lastVersion = PROTOCOL_VERSIONS.get(PROTOCOL_VERSIONS.size() - 1).getVersion();
 
         getLogger().info("Base Protocol from " + newestVersion + " to " + lastVersion + "!");
 
