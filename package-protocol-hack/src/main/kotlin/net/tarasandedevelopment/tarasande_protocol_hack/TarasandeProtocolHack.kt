@@ -64,12 +64,6 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
             }
 
             PackFormats.checkOutdated(nativeVersion())
-            update(ProtocolVersion.getProtocol(version.value.toInt()))
-
-            TarasandeMain.managerMultiplayerFeature().apply {
-                insert(MultiplayerFeatureSelectionProtocolHack(this@TarasandeProtocolHack), 0)
-                insert(MultiplayerFeatureProtocolHackValues(), 1)
-            }
 
             TarasandeMain.managerInformation().apply {
                 add(object : Information("Via Version", "Protocol Version") {
@@ -112,6 +106,15 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
             }
 
             ProtocolHackValues /* Force-Load */
+        }
+
+        EventDispatcher.add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
+            update(ProtocolVersion.getProtocol(version.value.toInt()))
+
+            TarasandeMain.managerMultiplayerFeature().apply {
+                insert(MultiplayerFeatureSelectionProtocolHack(this@TarasandeProtocolHack), 0)
+                insert(MultiplayerFeatureProtocolHackValues(), 1)
+            }
         }
     }
 

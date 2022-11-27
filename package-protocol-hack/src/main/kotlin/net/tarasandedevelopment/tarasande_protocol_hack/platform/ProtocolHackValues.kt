@@ -4,21 +4,19 @@ import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
 import net.minecraft.client.MinecraftClient
-import net.tarasandedevelopment.tarasande_protocol_hack.util.ProtocolRange
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.andOlder
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.rangeTo
+import net.tarasandedevelopment.tarasande_protocol_hack.util.ProtocolRange
 
 object ProtocolHackValues {
 
     // General
-    init {
-        object : ValueBoolean(this, "ViaVersion Debug", false) {
-            override fun onChange() {
-                @Suppress("DEPRECATION")
-                Via.getManager().isDebug = value
-            }
+    val viaVersionDebug = object : ValueBoolean(this, "ViaVersion Debug", false) {
+        override fun onChange() {
+            @Suppress("DEPRECATION")
+            Via.getManager().isDebug = value
         }
     }
     val filterItemGroups = ValueBoolean(this, "Filter item groups", true)

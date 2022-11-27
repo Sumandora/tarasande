@@ -27,6 +27,6 @@ class MultiplayerFeatureSelectionProtocolHack(private val tarasandeProtocolHack:
 class MultiplayerFeatureProtocolHackValues : MultiplayerFeature("Values", MultiplayerFeatureCategory.PROTOCOL_HACK) {
 
     override fun onClick(mouseButton: Int) {
-        MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, "ProtocolHackValues", ProtocolHackValues))
+        MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, "Protocol Hack Values", ProtocolHackValues))
     }
 }

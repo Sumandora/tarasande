@@ -21,7 +21,7 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
 
-    val cancelClosePacket = ValueBoolean(this, "Cancel close packets", false)
+    private val cancelClosePacket = ValueBoolean(this, "Cancel close packets", false)
     private val updateSneaking = ValueBoolean(this, "Update sneaking", false)
 
     private val movementKeys = ArrayList(PlayerUtil.movementKeys)
