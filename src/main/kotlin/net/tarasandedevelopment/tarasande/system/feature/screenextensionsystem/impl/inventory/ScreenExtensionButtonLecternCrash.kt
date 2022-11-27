@@ -9,7 +9,7 @@ import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket
 import net.minecraft.screen.slot.SlotActionType
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.ScreenExtensionButton
 
-class ScreenExtensionButtonLecternCrash : ScreenExtensionButton<LecternScreen>("Lectern Crash (-1.14.0)", LecternScreen::class.java,) {
+class ScreenExtensionButtonLecternCrash : ScreenExtensionButton<LecternScreen>("Lectern Crash", LecternScreen::class.java) {
 
     override fun onClick(current: LecternScreen) {
         val screenHandler = MinecraftClient.getInstance().player!!.currentScreenHandler
