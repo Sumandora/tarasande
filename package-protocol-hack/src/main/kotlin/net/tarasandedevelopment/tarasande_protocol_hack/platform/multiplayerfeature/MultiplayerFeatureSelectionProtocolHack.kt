@@ -3,18 +3,18 @@ package net.tarasandedevelopment.tarasande_protocol_hack.platform.multiplayerfea
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.viaprotocolhack.util.VersionList
 import net.minecraft.client.MinecraftClient
-import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande_protocol_hack.extension.getSpecialName
-import net.tarasandedevelopment.tarasande.protocolhack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.MultiplayerFeature
 import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.MultiplayerFeatureCategory
 import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.MultiplayerFeatureSelection
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
+import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack
+import net.tarasandedevelopment.tarasande_protocol_hack.extension.getSpecialName
+import net.tarasandedevelopment.tarasande_protocol_hack.platform.ProtocolHackValues
 
-class MultiplayerFeatureSelectionProtocolHack : MultiplayerFeatureSelection("Protocol Hack", MultiplayerFeatureCategory.PROTOCOL_HACK, VersionList.PROTOCOLS.map { it.getSpecialName() }, ProtocolVersion.getProtocol(TarasandeMain.protocolHack().version.value.toInt()).getSpecialName()) {
+class MultiplayerFeatureSelectionProtocolHack : MultiplayerFeatureSelection("Protocol Hack", MultiplayerFeatureCategory.PROTOCOL_HACK, VersionList.PROTOCOLS.map { it.getSpecialName() }, ProtocolVersion.getProtocol(TarasandeProtocolHack.instance.targetVersion()).getSpecialName()) {
 
     override fun onClick(newValue: String) {
-        TarasandeMain.get().protocolHack.apply {
+        TarasandeProtocolHack.instance.apply {
             val newProtocol = VersionList.PROTOCOLS.first { it.getSpecialName() == newValue }.version.toDouble()
             if (version.value != newProtocol) {
                 version.value = newProtocol

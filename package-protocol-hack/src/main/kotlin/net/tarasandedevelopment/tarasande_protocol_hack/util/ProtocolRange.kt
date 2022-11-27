@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.util
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
+import net.tarasandedevelopment.tarasande_protocol_hack.extension.compareTo
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.getSpecialName
-import net.tarasandedevelopment.tarasande.util.extension.compareTo
 
 class ProtocolRange(private val lowerBound: ProtocolVersion?, private val upperBound: ProtocolVersion?) {
 

@@ -15,13 +15,13 @@ import net.minecraft.network.NetworkSide
 import net.minecraft.network.NetworkState
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket
-import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack
 
 object MinecraftViaItemRewriter {
 
     private val userConnection = UserConnectionImpl(null, true)
 
-    fun minecraftToViaItem(stack: ItemStack) = minecraftToViaItem(stack, TarasandeMain.get().protocolHack.targetVersion())
+    fun minecraftToViaItem(stack: ItemStack) = minecraftToViaItem(stack, TarasandeProtocolHack.instance.clientsideVersion)
 
     fun minecraftToViaItem(stack: ItemStack, targetVersion: Int): Item? {
         // Generate protocol path

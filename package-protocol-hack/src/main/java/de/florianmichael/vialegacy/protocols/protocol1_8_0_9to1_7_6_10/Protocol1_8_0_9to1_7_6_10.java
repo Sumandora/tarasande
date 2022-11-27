@@ -67,7 +67,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.impl
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.impl.CustomString1_7_6_10Type;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

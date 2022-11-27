@@ -29,7 +29,12 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleTickBaseManipulation
+import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande_protocol_hack.command.ViaCommandHandlerTarasandeCommandHandler
+import net.tarasandedevelopment.tarasande_protocol_hack.event.EventSkipIdlePacket
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.EntityDimensionReplacement
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.PackFormats
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ProtocolHackValues
@@ -41,10 +46,6 @@ import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.Fabri
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricVersionProvider
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleTickBaseManipulation
-import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
-import net.tarasandedevelopment.tarasande_protocol_hack.event.EventSkipIdlePacket
 import su.mandora.event.EventDispatcher
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.ThreadFactory
@@ -55,8 +56,12 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
     val version = ValueNumber(this, "Protocol", Double.MIN_VALUE, SharedConstants.getProtocolVersion().toDouble(), Double.MAX_VALUE, 1.0, true)
     private val compression = arrayOf("decompress", "compress")
 
+    companion object {
+        lateinit var instance: TarasandeProtocolHack
+    }
 
     override fun onInitializeClient() {
+        instance = this
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
             ViaProtocolHack.instance().init(this) {
                 this.createChannelMappings()
@@ -98,6 +103,17 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
                         return "\n" + names.subList(0, names.size - 1).joinToString("\n")
                     }
                 })
+            }
+
+            TarasandeMain.managerModule().get(ModuleTickBaseManipulation::class.java).apply {
+                val chargeOnIdlePacketSkip = object : ValueBoolean(this, "Charge on idle packet skip", false) {
+                    override fun isEnabled() = ProtocolHackValues.sendIdlePacket.isEnabled()
+                }
+
+                registerEvent(EventSkipIdlePacket::class.java) {
+                    if (chargeOnIdlePacketSkip.isEnabled() && chargeOnIdlePacketSkip.value)
+                        shifted += mc.renderTickCounter.tickTime.toLong()
+                }
             }
 
             ProtocolHackValues /* Force-Load */

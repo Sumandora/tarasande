@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "tarasande-protocol-hack",
   "version": "${version}",
-  "name": "tarasande protocol Hack",
+  "name": "tarasande protocol hack",
   "description": "Clientside ViaProtocolHack implementation with ClampClient fixes",
   "authors": [
     "EnZaXD/FlorianMichael"
@@ -20,6 +20,7 @@
     ]
   },
   "mixins": [
+    "clamp-protocol-hack.mixins.json",
     "tarasande-protocol-hack.mixins.json"
   ],
   "accessWidener": "tarasande-protocol-hack.accesswidener",

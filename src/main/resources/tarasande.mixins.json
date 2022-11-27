@@ -107,9 +107,6 @@
     "feature.module.norender.MixinSignBlockEntityRenderer",
     "feature.module.norender.MixinWorldRenderer",
     "feature.module.screen.MixinPlayerScreenHandler",
-    "protocolhack.MixinClientConnection",
-    "protocolhack.MixinClientConnectionSubOne",
-    "protocolhack.viaprotocolhack.MixinCustomViaConfig"
   ],
   "injectors": {
     "defaultRequire": 1
