@@ -82,7 +82,7 @@ class InformationNowPlaying : Information("Linux", "Now playing") {
                 Thread.sleep(1000L)
 
                 lastState = try {
-                    askDBus()
+                    askDBus()?.trim()
                 } catch (t: Throwable) {
                     null
                 }
