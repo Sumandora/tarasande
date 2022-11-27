@@ -214,8 +214,9 @@ open class Panel(
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                 if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight.toDouble())) opened = !opened
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
-                if (TarasandeMain.managerValue().getValues(this).isNotEmpty()) {
-                    MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, this.title, this))
+                val valueOwner = getValueOwner()
+                if (TarasandeMain.managerValue().getValues(valueOwner).isNotEmpty()) {
+                    MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, this.title, valueOwner))
                 }
             }
             return true
