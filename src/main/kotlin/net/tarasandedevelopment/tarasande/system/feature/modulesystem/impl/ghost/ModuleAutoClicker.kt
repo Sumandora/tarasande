@@ -22,7 +22,7 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
 
     init {
         for (pair in keyMap)
-            hashMap[pair.key] = ClickSpeedUtil(this, { buttons.selected.contains(pair.value) })
+            hashMap[pair.key] = ClickSpeedUtil(this, { buttons.selected.contains(pair.value) }, namePrefix = pair.value + ": ")
     }
 
     override fun onEnable() {

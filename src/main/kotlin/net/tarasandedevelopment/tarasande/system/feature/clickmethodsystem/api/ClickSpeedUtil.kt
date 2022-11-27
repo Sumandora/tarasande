@@ -3,19 +3,20 @@ package net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
+import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.ClickMethod
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Supplier
 import kotlin.math.min
 
-class ClickSpeedUtil(private val owner: Any, isVisible: Supplier<Boolean>, vararg excluded: Class<out net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.ClickMethod>) {
+class ClickSpeedUtil(private val owner: Any, isVisible: Supplier<Boolean>, vararg excluded: Class<out ClickMethod>, namePrefix: String = "") {
 
     private val clickMethods = TarasandeMain.managerClickMethod().getAllExcept(*excluded)
 
-    private val cpsMode = object : ValueMode(owner, "CPS mode", false, *clickMethods.map { it.name }.toTypedArray()) {
+    private val cpsMode = object : ValueMode(owner, namePrefix + "CPS mode", false, *clickMethods.map { it.name }.toTypedArray()) {
         override fun isEnabled() = isVisible.get()
     }
-    private val cps = object : ValueNumberRange(owner, "CPS", 1.0, 8.0, 12.0, 20.0, 1.0) {
+    private val cps = object : ValueNumberRange(owner, namePrefix + "CPS", 1.0, 8.0, 12.0, 20.0, 1.0) {
         override fun onChange() = reset()
         override fun isEnabled() = clickMethods[cpsMode.values.indexOf(cpsMode.selected[0])].cpsBased && isVisible.get()
     }

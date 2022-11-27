@@ -48,7 +48,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         override fun getTranslationKey(key: Any?) = (key as Item).translationKey
     }
     private val broadcast = ValueMode(this, "Broadcast", false, "Disabled", "Explanatory", "Legit", "Custom")
-    private val customBroadcastMessage = object : ValueText(this, "Custom fake news message", "I'm sure it is %s because he held %s") {
+    private val customBroadcastMessage = object : ValueText(this, "Custom broadcast message", "I'm sure it is %s because he held %s") {
         override fun isEnabled() = broadcast.isSelected(3)
     }
     internal val murdererAssistance = ValueBoolean(this, "Murderer assistance", true)

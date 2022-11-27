@@ -13,12 +13,14 @@ import java.util.function.Consumer
 
 class PanelServerInformationPinging(consumer: Consumer<ServerInfo>) : PanelServerInformation(consumer) {
 
-    private val autoPing = ValueBoolean(this, "Auto ping", false)
-    private val pingDelay = object : ValueNumber(this, "Ping delay", 100.0, 5000.0, 10000.0, 100.0) {
-        override fun isEnabled() = autoPing.value
-    }
-    private val showPingProgress = object : ValueBoolean(this, "Show ping progress", true) {
-        override fun isEnabled() = autoPing.value
+    companion object {
+        private val autoPing = ValueBoolean(this, "Auto ping", false)
+        private val pingDelay = object : ValueNumber(this, "Ping delay", 100.0, 5000.0, 10000.0, 100.0) {
+            override fun isEnabled() = autoPing.value
+        }
+        private val showPingProgress = object : ValueBoolean(this, "Show ping progress", true) {
+            override fun isEnabled() = autoPing.value
+        }
     }
     private val timer = TimeUtil()
 
@@ -35,7 +37,7 @@ class PanelServerInformationPinging(consumer: Consumer<ServerInfo>) : PanelServe
     }
 
     fun ping(force: Boolean = false) {
-        if (this.autoPing.value && (force || timer.hasReached(pingDelay.value.toLong()))) {
+        if (autoPing.value && (force || timer.hasReached(pingDelay.value.toLong()))) {
             AddressSaver.getAddress().apply {
                 server.name = this
                 server.address = this
@@ -47,7 +49,7 @@ class PanelServerInformationPinging(consumer: Consumer<ServerInfo>) : PanelServe
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        if (this.autoPing.value) {
+        if (autoPing.value) {
             ping()
         }
         super.render(matrices, mouseX, mouseY, delta)
@@ -55,10 +57,10 @@ class PanelServerInformationPinging(consumer: Consumer<ServerInfo>) : PanelServe
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight + panelHeight)) {
-            val oldAutoPing = this.autoPing.value
-            this.autoPing.value = true
+            val oldAutoPing = autoPing.value
+            autoPing.value = true
             ping(true)
-            this.autoPing.value = oldAutoPing
+            autoPing.value = oldAutoPing
         }
         return super.mouseClicked(mouseX, mouseY, button)
     }
@@ -66,7 +68,7 @@ class PanelServerInformationPinging(consumer: Consumer<ServerInfo>) : PanelServe
     override fun renderTitleBar(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         super.renderTitleBar(matrices, mouseX, mouseY, delta)
 
-        if (this.showPingProgress.value && this.autoPing.value) {
+        if (showPingProgress.value && autoPing.value) {
             (((pingDelay.value + 1000) - (System.currentTimeMillis() - timer.time)) / 1000).toInt().toString().also {
                 FontWrapper.textShadow(matrices, it, (x + panelWidth - FontWrapper.getWidth(it)).toFloat(), y.toFloat() + 1, scale = 0.75F)
             }

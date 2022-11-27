@@ -25,6 +25,8 @@ import net.fabricmc.loader.api.metadata.Person
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.event.EventConnectServer
+import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.protocolhack.command.ViaCommandHandlerTarasandeCommandHandler
 import net.tarasandedevelopment.tarasande.protocolhack.fix.EntityDimensionReplacement
@@ -72,7 +74,22 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
 
         TarasandeMain.managerInformation().apply {
             add(object : Information("Via Version", "Protocol Version") {
-                override fun getMessage() = VersionList.PROTOCOLS.firstOrNull { it.version == ViaProtocolHack.instance().provider().clientsideVersion }?.name
+
+                var version: ProtocolVersion? = null
+
+                init {
+                    EventDispatcher.apply {
+                        add(EventConnectServer::class.java) {
+                            version = VersionList.PROTOCOLS.firstOrNull { it.version == ViaProtocolHack.instance().provider().clientsideVersion } ?: ProtocolVersion.unknown
+                        }
+                        add(EventDisconnect::class.java) { event ->
+                            if(event.connection == MinecraftClient.getInstance().networkHandler?.connection)
+                                version = null
+                        }
+                    }
+                }
+
+                override fun getMessage() = version?.name
             })
 
             add(object : Information("Via Version", "Via Pipeline") {
@@ -84,6 +101,7 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
             })
         }
 
+        ProtocolHackValues /* Force-Load */
     }
 
     fun update(protocol: ProtocolVersion) {

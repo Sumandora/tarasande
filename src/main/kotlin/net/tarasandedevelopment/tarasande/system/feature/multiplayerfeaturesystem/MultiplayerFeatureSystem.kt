@@ -60,7 +60,7 @@ class ManagerMultiplayerFeature : Manager<MultiplayerFeature>() {
             }
 
             categories.forEach { localEach ->
-                elementList.add(object : ValueSpacer(this@ManagerMultiplayerFeature, localEach, 1.0F) {
+                elementList.add(object : ValueSpacer(this@ManagerMultiplayerFeature, localEach, 1.0F, manage = false) {
                     override fun getColor(hovered: Boolean) = Color.gray
                 }.createValueComponent())
                 this@ManagerMultiplayerFeature.list.filter { it.category == localEach }.forEach {
@@ -83,7 +83,7 @@ open class MultiplayerFeature(val name: String, val category: String) {
     }
 
     open fun createElements(): List<ElementWidthValueComponent> {
-        return listOf(object : ValueSpacer(this, name, 1.0F) {
+        return listOf(object : ValueSpacer(this, name, 1.0F, manage = false) {
             override fun onChange(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     onClick(mouseButton)
@@ -101,7 +101,7 @@ open class MultiplayerFeatureSelection(name: String, category: String, val list:
 
     override fun createElements(): List<ElementWidthValueComponent> {
         return list.map {
-            object : ValueSpacer(this, it, 1.0F) {
+            object : ValueSpacer(this, it, 1.0F, manage = false) {
                 override fun onChange(mouseButton: Int) {
                     if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                         onClick(it)
@@ -128,7 +128,7 @@ open class MultiplayerFeatureToggleable(name: String, category: String) : Multip
     }
 
     override fun createElements(): List<ElementWidthValueComponent> {
-        return listOf(object : ValueSpacer(this, name, 1.0F) {
+        return listOf(object : ValueSpacer(this, name, 1.0F, manage = false) {
             override fun onChange(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     state.value = !state.value
