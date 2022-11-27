@@ -258,4 +258,6 @@ open class Panel(
     override fun getHeight() = 0.0 // never used
 
     open fun isVisible() = true
+
+    open fun getValueOwner(): Any = this
 }

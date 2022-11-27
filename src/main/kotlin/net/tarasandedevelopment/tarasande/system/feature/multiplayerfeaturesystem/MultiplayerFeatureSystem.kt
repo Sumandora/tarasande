@@ -144,7 +144,6 @@ open class MultiplayerFeatureToggleable(name: String, category: String) : Multip
 }
 
 object MultiplayerFeatureCategory {
-
     const val PROTOCOL_HACK = "Protocol Hack"
     const val EXPLOITS = "Exploits"
 }

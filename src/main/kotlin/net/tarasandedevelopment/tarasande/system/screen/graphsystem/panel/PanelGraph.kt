@@ -4,19 +4,12 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import kotlin.math.max
 
 class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100.0, FontWrapper.getWidth(graph.name) + 10.0), 50.0, fixed = true) {
-
-    init {
-        TarasandeMain.managerValue().getValues(graph).forEach {
-            it.owner = this
-        }
-    }
 
     override fun isVisible(): Boolean {
         return graph.values().size > 1
@@ -79,5 +72,9 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100.0, FontWr
 
     private fun normalize(value: Double, min: Double, max: Double): Double {
         return if (min == max) 0.5 else (value - min) / (max - min)
+    }
+
+    override fun getValueOwner(): Any {
+        return graph
     }
 }

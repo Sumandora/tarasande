@@ -43,8 +43,8 @@ object MinecraftViaItemRewriter {
                 it.protocol().transform(Direction.SERVERBOUND, State.PLAY, wrapper)
                 wrapper.resetReader()
             }
-        } catch (ignored: CancelException) {
-            IllegalStateException(ignored).printStackTrace()
+        } catch (exception: CancelException) {
+            exception.printStackTrace()
             // The item no longer exists?
             return null
         }

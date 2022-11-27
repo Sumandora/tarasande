@@ -13,10 +13,12 @@ import net.tarasandedevelopment.tarasande.util.extension.rangeTo
 object ProtocolHackValues {
 
     // General
-    val viaVersionDebug = object : ValueBoolean(this, "ViaVersion Debug", false) {
-        override fun onChange() {
-            @Suppress("DEPRECATION")
-            Via.getManager().isDebug = value
+    init {
+        object : ValueBoolean(this, "ViaVersion Debug", false) {
+            override fun onChange() {
+                @Suppress("DEPRECATION")
+                Via.getManager().isDebug = value
+            }
         }
     }
     val filterItemGroups = ValueBoolean(this, "Filter item groups", true)

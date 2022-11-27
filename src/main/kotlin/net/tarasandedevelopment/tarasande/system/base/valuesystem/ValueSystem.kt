@@ -14,6 +14,10 @@ class ManagerValue(fileSystem: ManagerFile) : Manager<Value>() {
 
     init {
         EventDispatcher.add(EventSuccessfulLoad::class.java, 9999) {
+            for(value in list) {
+                if(list.filter { it != value }.any { it.name == value.name && it.owner == value.owner })
+                    error("Name-and-owner-clash value registered")
+            }
             fileSystem.add(FileValuesBinds(), FileValuesNonBinds())
         }
     }

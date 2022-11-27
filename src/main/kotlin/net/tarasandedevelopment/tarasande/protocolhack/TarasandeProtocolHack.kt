@@ -87,8 +87,7 @@ class TarasandeProtocolHack(private val rootDirectory: File) : INativeProvider {
     }
 
     fun update(protocol: ProtocolVersion) {
-        // Owners may change, orientate on one setting
-        TarasandeMain.managerValue().getValues(ProtocolHackValues.viaVersionDebug.owner).forEach {
+        TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
             if (it is ValueBooleanProtocol)
                 it.value = it.version.any { range -> protocol in range }
         }
