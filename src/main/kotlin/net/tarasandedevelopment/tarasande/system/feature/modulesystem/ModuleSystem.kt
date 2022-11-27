@@ -98,7 +98,6 @@ class ManagerModule(panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manage
             ModuleFastUse(),
             ModuleAntiBindingCurse(),
             ModuleCommandBlockBypass(),
-            ModuleAntiParticleHide(),
             ModuleNoChatContext(),
             ModuleNoMiningTrace(),
             ModuleBlockChangeTracker(),

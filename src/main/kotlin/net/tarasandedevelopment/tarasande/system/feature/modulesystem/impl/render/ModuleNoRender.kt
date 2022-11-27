@@ -43,7 +43,7 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
         val scoreboard = ValueBooleanNoRender(this, "Scoreboard", false)
         val crosshair = ValueBooleanNoRender(this, "Cross hair", false)
         val heldItemName = ValueBooleanNoRender(this, "Held item name", false)
-        val potionIcons = ValueBooleanNoRender(this, "Potion icons", false)
+        val potionIcons = ValueMode(this, "Potion icons", false, "Off", "Remove", "Force")
     }
 
     val hud = NoRenderTypeHUD()
@@ -121,7 +121,7 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
     }
 
     open class NoRenderType(val name: String)
-    inner class ValueBooleanNoRender(owner: Any, name: String, value: Boolean) : ValueBoolean(owner, name, value) {
+    open inner class ValueBooleanNoRender(owner: Any, name: String, value: Boolean) : ValueBoolean(owner, name, value) {
         fun should() = value && this@ModuleNoRender.enabled
     }
 }

@@ -65,13 +65,6 @@ public class MixinInGameHud {
         }
     }
 
-    @Inject(method = "renderStatusEffectOverlay", at = @At("HEAD"), cancellable = true)
-    public void noRender_renderStatusEffectOverlay(MatrixStack matrices, CallbackInfo ci) {
-        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getHud().getPotionIcons().should()) {
-            ci.cancel();
-        }
-    }
-
     @Inject(method = "renderScoreboardSidebar", at = @At("HEAD"), cancellable = true)
     public void noRender_renderScoreboardSidebar(MatrixStack matrices, ScoreboardObjective objective, CallbackInfo ci) {
         if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getHud().getScoreboard().should()) {
