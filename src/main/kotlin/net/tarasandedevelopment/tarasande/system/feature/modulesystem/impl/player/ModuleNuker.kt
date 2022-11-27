@@ -61,8 +61,6 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
     private val timeUtil = TimeUtil()
 
     override fun onDisable() {
-        if (breaking)
-            mc.interactionManager?.cancelBlockBreaking()
         breaking = false
     }
 
@@ -102,8 +100,6 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                     list = ArrayList(list.map { Pair(it.second.blockPos, it.second) })
 
                 event.rotation = RotationUtil.getRotations(mc.player?.eyePos!!, list[0].second.pos).correctSensitivity()
-                mc.player?.yaw = event.rotation.yaw
-                mc.player?.pitch = event.rotation.pitch
 
                 event.minRotateToOriginSpeed = 1.0
                 event.maxRotateToOriginSpeed = 1.0
