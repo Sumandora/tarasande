@@ -7,11 +7,13 @@ import net.minecraft.client.network.ServerInfo
 import net.minecraft.client.option.ServerList
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
+import net.tarasandedevelopment.tarasande.injection.accessor.IMultiplayerServerListWidgetSubServerEntry
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
+import java.util.function.Consumer
 
-abstract class PanelServerInformation : Panel("Server Information", 300.0, FontWrapper.fontHeight() /* I can't access titleBarHeight yet TODO */ + 32.0, background = true, scissor = false) {
+abstract class PanelServerInformation(var consumer: Consumer<ServerInfo>) : Panel("Server Information", 300.0, FontWrapper.fontHeight() /* I can't access titleBarHeight yet TODO */ + 32.0, background = true, scissor = false) {
 
     @Suppress("LeakingThis")
     var server = updateServerInfo()
@@ -39,7 +41,9 @@ abstract class PanelServerInformation : Panel("Server Information", 300.0, FontW
                     }
                 }
             }
-        }, server)
+        }, server).apply {
+        (this as IMultiplayerServerListWidgetSubServerEntry).tarasande_setCompletionConsumer(consumer)
+    }
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val hovered = RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), x, y + titleBarHeight, panelWidth, panelHeight - titleBarHeight)
