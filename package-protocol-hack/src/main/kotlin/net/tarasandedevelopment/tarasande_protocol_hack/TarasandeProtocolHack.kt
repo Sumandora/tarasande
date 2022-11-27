@@ -32,6 +32,7 @@ import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleTickBaseManipulation
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleInventoryMove
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande_protocol_hack.command.ViaCommandHandlerTarasandeCommandHandler
 import net.tarasandedevelopment.tarasande_protocol_hack.event.EventSkipIdlePacket
@@ -55,6 +56,12 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
 
     val version = ValueNumber(this, "Protocol", Double.MIN_VALUE, SharedConstants.getProtocolVersion().toDouble(), Double.MAX_VALUE, 1.0, true)
     private val compression = arrayOf("decompress", "compress")
+
+    companion object {
+        val cancelOpenPacket = object : ValueBoolean(TarasandeMain.managerModule().get(ModuleInventoryMove::class.java), "Cancel open packet (1.11.1-)", false) {
+            override fun isEnabled() = VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1)
+        }
+    }
 
     override fun onInitializeClient() {
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
