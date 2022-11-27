@@ -59,7 +59,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         }
     }
 
-    private fun isFocused(valueComponent: ElementWidthValueComponent): Boolean = when (valueComponent) {
+    private fun isFocused(valueComponent: ElementWidthValueComponent) = when (valueComponent) {
         is ElementWidthValueComponentText -> valueComponent.isFocused()
         is ElementWidthValueComponentRegistry -> valueComponent.isFocused()
         is ElementWidthValueComponentTextList -> valueComponent.isFocused()
@@ -76,7 +76,5 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         }
     }
 
-    private fun isPassingEvents(): Boolean {
-        return (enabled && (mc.currentScreen is HandledScreen<*> || (mc.currentScreen is ScreenCheatMenu && !textBoxFocused))) || (mc.currentScreen == null || mc.currentScreen?.passEvents == true)
-    }
+    private fun isPassingEvents() = (enabled && (mc.currentScreen is HandledScreen<*> || (mc.currentScreen is ScreenCheatMenu && !textBoxFocused))) || (mc.currentScreen == null || mc.currentScreen?.passEvents == true)
 }
