@@ -51,8 +51,7 @@ public class MixinProtocol1_9To1_8 {
         try {
             line = ComponentSerializer.toString(ComponentSerializer.parse(line));
         } catch (Throwable throwable) { // this doesn't look like its valid
-            if (Via.getManager().isDebug())
-                throwable.printStackTrace(); // In case there is some nasty protocol check, we should be notified
+            throwable.printStackTrace(); // In case there is some nasty protocol check, we should be notified
             return constructJson(line);
         }
 

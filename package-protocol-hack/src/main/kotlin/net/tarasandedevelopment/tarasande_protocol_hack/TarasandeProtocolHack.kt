@@ -58,9 +58,7 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
     private val compression = arrayOf("decompress", "compress")
 
     companion object {
-        val cancelOpenPacket = object : ValueBoolean(TarasandeMain.managerModule().get(ModuleInventoryMove::class.java), "Cancel open packet (1.11.1-)", false) {
-            override fun isEnabled() = VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1)
-        }
+        lateinit var cancelOpenPacket: ValueBoolean
     }
 
     override fun onInitializeClient() {
@@ -101,14 +99,20 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
                 })
             }
 
-            TarasandeMain.managerModule().get(ModuleTickBaseManipulation::class.java).apply {
-                val chargeOnIdlePacketSkip = object : ValueBoolean(this, "Charge on idle packet skip", false) {
-                    override fun isEnabled() = ProtocolHackValues.sendIdlePacket.isEnabled()
+            TarasandeMain.managerModule().apply {
+                object : ValueBoolean(get(ModuleInventoryMove::class.java), "Cancel open packet (1.11.1-)", false) {
+                    override fun isEnabled() = VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1)
                 }
 
-                registerEvent(EventSkipIdlePacket::class.java) {
-                    if (chargeOnIdlePacketSkip.isEnabled() && chargeOnIdlePacketSkip.value)
-                        shifted += mc.renderTickCounter.tickTime.toLong()
+                get(ModuleTickBaseManipulation::class.java).apply {
+                    val chargeOnIdlePacketSkip = object : ValueBoolean(this, "Charge on idle packet skip", false) {
+                        override fun isEnabled() = ProtocolHackValues.sendIdlePacket.isEnabled()
+                    }
+
+                    registerEvent(EventSkipIdlePacket::class.java) {
+                        if (chargeOnIdlePacketSkip.isEnabled() && chargeOnIdlePacketSkip.value)
+                            shifted += mc.renderTickCounter.tickTime.toLong()
+                    }
                 }
             }
 
