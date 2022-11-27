@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.rende
 import su.mandora.event.EventDispatcher
 import java.awt.Color
 
-class EntityColor(val moduleESP: ModuleESP) {
+class EntityColor(private val moduleESP: ModuleESP) {
 
     private val modifyTeamColor = ValueBoolean(this, "Modify team color", true)
     private val selfColor = object : ValueColor(this, "Self Color", 0.0F, 1.0F, 1.0F, 1.0F) {

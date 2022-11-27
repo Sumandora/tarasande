@@ -12,14 +12,23 @@ import su.mandora.event.EventDispatcher
 
 class ManagerValue(fileSystem: ManagerFile) : Manager<Value>() {
 
+    var closed = false
+
     init {
         EventDispatcher.add(EventSuccessfulLoad::class.java, 9999) {
             for(value in list) {
-                if(list.filter { it != value }.any { it.name == value.name && it.owner == value.owner })
-                    error("Name-and-owner-clash value registered")
+                if(list.filter { it != value }.any { it.name == value.name && it.owner.javaClass.name == value.owner.javaClass.name })
+                    error("Name-and-owner-clash value registered (" + value.owner.javaClass.name + " -> " + value.name + ")")
             }
             fileSystem.add(FileValuesBinds(), FileValuesNonBinds())
+            closed = true
         }
+    }
+
+    override fun insert(obj: Value, index: Int) {
+        if(closed)
+            error("ValueSystem is closed")
+        super.insert(obj, index)
     }
 
     fun getValues(owner: Any): ArrayList<Value> {
