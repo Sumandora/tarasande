@@ -4,7 +4,6 @@ import com.google.gson.GsonBuilder
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
-import net.tarasandedevelopment.tarasande.protocolhack.TarasandeProtocolHack
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.ManagerClickMethod
@@ -29,7 +28,6 @@ class TarasandeMain {
     val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
     val rootDirectory = File(System.getProperty("user.home") + File.separator + name)
     var proxy: Proxy? = null
-    lateinit var protocolHack: TarasandeProtocolHack
 
     //@formatter:off
     private val managerFile = ManagerFile()
@@ -63,7 +61,6 @@ class TarasandeMain {
         fun managerScreenExtension() = instance.managerScreenExtension
         fun managerInformation() = instance.managerInformation
         fun managerGraph() = instance.managerGraph
-        fun protocolHack() = instance.protocolHack
         fun managerClickMethod() = instance.managerClickMethod
         fun managerESP() = instance.managerESP
         fun managerFile() = instance.managerFile
@@ -75,8 +72,6 @@ class TarasandeMain {
         managerPanel = ManagerPanel(managerFile)
         managerInformation = ManagerInformation(managerPanel)
         managerGraph = ManagerGraph(managerInformation, managerPanel)
-
-        protocolHack = TarasandeProtocolHack(rootDirectory)
 
         managerESP = ManagerESP()
         managerClickMethod = ManagerClickMethod()

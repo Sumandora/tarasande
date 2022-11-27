@@ -1,7 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import de.florianmichael.viaprotocolhack.util.VersionList
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.InputUtil
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket
@@ -23,9 +21,6 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
 
-    val cancelOpenPacket = object : ValueBoolean(this, "Cancel open packets", false) {
-        override fun isEnabled() = VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1)
-    }
     val cancelClosePacket = ValueBoolean(this, "Cancel close packets", false)
     private val updateSneaking = ValueBoolean(this, "Update sneaking", false)
 

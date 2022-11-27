@@ -1,12 +1,10 @@
 package net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.inventory
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.screen.slot.SlotActionType
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.ScreenExtensionButton
-import net.tarasandedevelopment.tarasande.util.extension.andNewer
 
-class ScreenExtensionButtonCraftingDupe : ScreenExtensionButton<InventoryScreen>("Crafting Dupe", InventoryScreen::class.java, version = ProtocolVersion.v1_17.andNewer()) {
+class ScreenExtensionButtonCraftingDupe : ScreenExtensionButton<InventoryScreen>("Crafting Dupe (> 1.17.x)", InventoryScreen::class.java) {
 
     override fun onClick(current: InventoryScreen) {
         current.screenHandler.getSlot(0).also {

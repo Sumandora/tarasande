@@ -19,4 +19,5 @@ include 'package-linux-platform'
 include 'package-mod-fixes'
 include 'tools'
 include 'package-rejected-features'
+include 'package-protocol-hack'
 

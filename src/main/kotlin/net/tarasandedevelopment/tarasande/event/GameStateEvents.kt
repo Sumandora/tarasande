@@ -20,7 +20,6 @@ class EventUpdateTargetedEntity(val state: State) : Event(false) {
     }
 }
 
-class EventSkipIdlePacket : Event(false)
 class EventIsSaddled(var saddled: Boolean) : Event(false)
 class EventInvalidGameMode(val uuid: UUID) : Event(false)
 class EventScreenInput(var doneInput: Boolean) : Event(true)

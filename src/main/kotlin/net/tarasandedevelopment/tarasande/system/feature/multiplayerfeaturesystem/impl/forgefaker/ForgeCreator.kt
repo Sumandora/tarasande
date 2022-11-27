@@ -1,10 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.forgefaker
 
 import com.google.gson.JsonObject
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import de.florianmichael.viaprotocolhack.util.VersionList
 import net.minecraft.network.ClientConnection
-import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.forgefaker.handler.Fml1NetClientHandler
 import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.forgefaker.handler.ModernFmlNetClientHandler
 import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.forgefaker.handler.ModernFmlState
 import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.forgefaker.payload.IForgePayload
@@ -27,15 +24,6 @@ object ForgeCreator {
     }
 
     fun createNetHandler(connection: ClientConnection): IForgeNetClientHandler {
-        if (VersionList.isNewerTo(ProtocolVersion.v1_18_2)) {
-            return ModernFmlNetClientHandler(ModernFmlState.FML_4, connection)
-        }
-        if (VersionList.isNewerTo(ProtocolVersion.v1_17_1)) {
-            return ModernFmlNetClientHandler(ModernFmlState.FML_3, connection)
-        }
-        if (VersionList.isNewerTo(ProtocolVersion.v1_12_2)) {
-            return ModernFmlNetClientHandler(ModernFmlState.FML_2, connection)
-        }
-        return Fml1NetClientHandler(connection)
+        return ModernFmlNetClientHandler(ModernFmlState.FML_4, connection)
     }
 }

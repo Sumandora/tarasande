@@ -15,8 +15,7 @@
   "icon": "assets/tarasande/icon.png",
   "environment": "client",
   "mixins": [
-    "tarasande.mixins.json",
-    "clamp_protocolhack.mixins.json"
+    "tarasande.mixins.json"
   ],
   "accessWidener": "tarasande.accesswidener",
   "depends": {

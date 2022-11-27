@@ -24,15 +24,6 @@ def libs = [
 		"com.github.FlorianMichael:eZEasing:8d90aafa6e"
 ]
 
-// ViaProtocolHack READ-ME
-var viaLibs = [
-		"com.viaversion:viaversion:4.5.0-1.19.3-pre2-SNAPSHOT",
-		"com.viaversion:viabackwards-common:4.5.0-22w46a-SNAPSHOT",
-		"org.yaml:snakeyaml:1.29",
-
-		"com.github.RejectedVia:ViaProtocolHack:ea6ccc49e2"
-]
-
 loom {
 	accessWidenerPath = file("src/main/resources/tarasande.accesswidener")
 }
@@ -60,11 +51,6 @@ subprojects {
 				transitive = false
 			}
 		}
-		for (final def via in viaLibs) {
-			implementation(via) {
-				transitive = false
-			}
-		}
 	}
 }
 
@@ -79,9 +65,6 @@ dependencies {
 
 	for (final def lib in libs) {
 		implementation(lib)
-	}
-	for (final def via in viaLibs) {
-		implementation(via)
 	}
 }
 
@@ -120,9 +103,6 @@ shadowJar {
 
 	dependencies {
 		for (final def lib in libs) {
-			include(dependency(lib))
-		}
-		for (final def lib in viaLibs) {
 			include(dependency(lib))
 		}
 	}

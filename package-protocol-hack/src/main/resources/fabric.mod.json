@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "tarasande-protocol-hack",
+  "version": "${version}",
+  "name": "tarasande protocol Hack",
+  "description": "Clientside ViaProtocolHack implementation with ClampClient fixes",
+  "authors": [
+    "EnZaXD/FlorianMichael"
+  ],
+  "contact": {
+    "homepage": "https://github.com/FlorianMichael/",
+    "sources": "https://github.com/FlorianMichael/ClampClient"
+  },
+  "license": "GPL-3.0",
+  "icon": "assets/tarasande-protocol-hack/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack"
+    ]
+  },
+  "mixins": [
+    "tarasande-protocol-hack.mixins.json"
+  ],
+  "accessWidener": "tarasande-protocol-hack.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "minecraft": "~1.19",
+    "java": ">=17",
+    "tarasande": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": "tarasande"
+    }
+  }
+}

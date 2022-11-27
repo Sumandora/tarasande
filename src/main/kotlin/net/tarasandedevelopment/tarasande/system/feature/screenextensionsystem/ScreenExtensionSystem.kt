@@ -5,7 +5,6 @@ import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventChildren
-import net.tarasandedevelopment.tarasande.protocolhack.util.ProtocolRange
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.*
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionButtonAccountManager
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.downloadingterrain.ScreenExtensionButtonCancel
@@ -86,7 +85,7 @@ abstract class ScreenExtensionCustom<T : Screen>(name: String, vararg screens: C
     }
 }
 
-abstract class ScreenExtensionButton<T : Screen>(name: String, vararg screens: Class<out T>, val version: ProtocolRange? = null, private val alignment: Alignment = Alignment.LEFT) : ScreenExtension<T>(name, *screens) {
+abstract class ScreenExtensionButton<T : Screen>(name: String, vararg screens: Class<out T>, private val alignment: Alignment = Alignment.LEFT) : ScreenExtension<T>(name, *screens) {
 
     abstract fun onClick(current: T)
 
@@ -105,7 +104,7 @@ abstract class ScreenExtensionButton<T : Screen>(name: String, vararg screens: C
             }
 
             elements.filterIsInstance<ScreenExtensionButton<*>>().filter { it.alignment == alignment }.filter { it.screens.any { it.isAssignableFrom(screen.javaClass) } }.forEachIndexed { index, screenExtension ->
-                buttons.add(PanelButton.createButton(xPos, 3 + (index * 30), 98, 25, screenExtension.name + (if (screenExtension.version != null) " (" + screenExtension.version + ")" else "")) {
+                buttons.add(PanelButton.createButton(xPos, 3 + (index * 30), 98, 25, screenExtension.name) {
                     screenExtension.invoker(screen)
                 })
             }

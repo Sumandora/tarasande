@@ -1,5 +1,6 @@
-import com.viaversion.viaversion.libs.gson.Gson
-import com.viaversion.viaversion.libs.gson.JsonObject
+
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import java.io.ByteArrayInputStream
 import java.net.URL
 import java.util.zip.ZipEntry
@@ -42,5 +43,4 @@ fun main(args: Array<String>) {
                 exitProcess(1) // The versions below 1.14 don't have a version.json, we have to manually provide that :c
         }
     }
-
 }
