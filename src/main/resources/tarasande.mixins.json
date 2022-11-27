@@ -23,6 +23,7 @@
     "core.opengl.MixinWindow",
     "core.prediction.MixinParticleManager",
     "core.prediction.MixinSoundSystem",
+    "core.screen.MixinMultiplayerServerListWidgetSubServerEntry",
     "core.screen.MixinScreen",
     "core.screen.accountmanager.MixinMinecraftClient",
     "core.screen.accountmanager.MixinRealmsPeriodicCheckers",
@@ -106,15 +107,9 @@
     "feature.module.norender.MixinParticleManager",
     "feature.module.norender.MixinSignBlockEntityRenderer",
     "feature.module.norender.MixinWorldRenderer",
-    "feature.module.screen.MixinPlayerScreenHandler",
-    "protocolhack.MixinClientConnection",
-    "protocolhack.MixinClientConnectionSubOne",
-    "protocolhack.viaprotocolhack.MixinCustomViaConfig"
+    "feature.module.screen.MixinPlayerScreenHandler"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "core.screen.MixinMultiplayerServerListWidgetSubServerEntry"
-  ]
+  }
 }
