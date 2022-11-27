@@ -61,8 +61,6 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
     private val timeUtil = TimeUtil()
 
     override fun onDisable() {
-        if (breaking)
-            mc.interactionManager?.cancelBlockBreaking()
         breaking = false
     }
 
