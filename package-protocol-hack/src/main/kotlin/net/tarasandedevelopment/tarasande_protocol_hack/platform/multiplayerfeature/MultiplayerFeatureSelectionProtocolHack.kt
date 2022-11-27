@@ -11,10 +11,10 @@ import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.getSpecialName
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ProtocolHackValues
 
-class MultiplayerFeatureSelectionProtocolHack : MultiplayerFeatureSelection("Protocol Hack", MultiplayerFeatureCategory.PROTOCOL_HACK, VersionList.PROTOCOLS.map { it.getSpecialName() }, ProtocolVersion.getProtocol(TarasandeProtocolHack.instance.targetVersion()).getSpecialName()) {
+class MultiplayerFeatureSelectionProtocolHack(private val tarasandeProtocolHack: TarasandeProtocolHack) : MultiplayerFeatureSelection("Protocol Hack", MultiplayerFeatureCategory.PROTOCOL_HACK, VersionList.PROTOCOLS.map { it.getSpecialName() }, ProtocolVersion.getProtocol(tarasandeProtocolHack.targetVersion()).getSpecialName()) {
 
     override fun onClick(newValue: String) {
-        TarasandeProtocolHack.instance.apply {
+        tarasandeProtocolHack.apply {
             val newProtocol = VersionList.PROTOCOLS.first { it.getSpecialName() == newValue }.version.toDouble()
             if (version.value != newProtocol) {
                 version.value = newProtocol

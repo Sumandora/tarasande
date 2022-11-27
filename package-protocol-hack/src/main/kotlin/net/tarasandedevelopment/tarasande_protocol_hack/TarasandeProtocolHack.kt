@@ -56,12 +56,7 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
     val version = ValueNumber(this, "Protocol", Double.MIN_VALUE, SharedConstants.getProtocolVersion().toDouble(), Double.MAX_VALUE, 1.0, true)
     private val compression = arrayOf("decompress", "compress")
 
-    companion object {
-        lateinit var instance: TarasandeProtocolHack
-    }
-
     override fun onInitializeClient() {
-        instance = this
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
             ViaProtocolHack.instance().init(this) {
                 this.createChannelMappings()
@@ -72,7 +67,7 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
             update(ProtocolVersion.getProtocol(version.value.toInt()))
 
             TarasandeMain.managerMultiplayerFeature().apply {
-                insert(MultiplayerFeatureSelectionProtocolHack(), 0)
+                insert(MultiplayerFeatureSelectionProtocolHack(this@TarasandeProtocolHack), 0)
                 insert(MultiplayerFeatureProtocolHackValues(), 1)
             }
 

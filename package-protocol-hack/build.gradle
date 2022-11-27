@@ -2,6 +2,7 @@ plugins {
     id "java"
     id "fabric-loom"
     id "org.jetbrains.kotlin.jvm"
+    id "com.github.johnrengelman.shadow"
 }
 
 group 'net.tarasandedevelopment'
@@ -25,6 +26,25 @@ var viaLibs = [
         "com.github.RejectedVia:ViaProtocolHack:ea6ccc49e2"
 ]
 
+this.remapJar {
+    dependsOn shadowJar
+    //noinspection GrDeprecatedAPIUsage
+    input.set(shadowJar.archiveFile)
+}
+
+this.shadowJar {
+    archiveClassifier.set("shadow")
+    compileJava.options.encoding = "UTF-8"
+    exclude "native-binaries/*"
+
+    dependencies {
+        for (final def lib in viaLibs) {
+            include(dependency(lib))
+        }
+    }
+}
+
+
 dependencies {
     // Fabric
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -39,7 +59,7 @@ dependencies {
     }
 
     // Tarasande Source
-    implementation(project(":"))
+    implementation(project(path: ":", configuration: "shadow"))
 }
 
 compileKotlin.kotlinOptions.jvmTarget = "17"

@@ -21,8 +21,6 @@ object MinecraftViaItemRewriter {
 
     private val userConnection = UserConnectionImpl(null, true)
 
-    fun minecraftToViaItem(stack: ItemStack) = minecraftToViaItem(stack, TarasandeProtocolHack.instance.clientsideVersion)
-
     fun minecraftToViaItem(stack: ItemStack, targetVersion: Int): Item? {
         // Generate protocol path
         val path = Via.getManager().protocolManager.getProtocolPath(SharedConstants.getProtocolVersion(), targetVersion) ?: return null
