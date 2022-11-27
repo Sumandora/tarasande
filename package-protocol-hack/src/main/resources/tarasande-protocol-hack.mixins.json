@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.tarasandedevelopment.tarasande_protocol_hack.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixinPriority": 1,
+  "mixins": [
+    "MixinClientConnection",
+    "MixinClientConnectionSubOne",
+    "input.MixinEventDispatcher",
+    "input.MixinEventScreenInput",
+    "viaprotocolhack.MixinCustomViaConfig"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

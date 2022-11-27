@@ -25,7 +25,6 @@ class TarasandeRejectedFeatures : ClientModInitializer {
 
                 // Features
                 InformationFeaturesModules(),
-                InformationFeaturesProtocols(),
                 InformationFeaturesValues(),
                 InformationFeaturesGraphs(),
 

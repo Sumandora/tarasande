@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.inventory
 
 import com.google.common.collect.Lists
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.LecternScreen
@@ -9,9 +8,8 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket
 import net.minecraft.screen.slot.SlotActionType
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.ScreenExtensionButton
-import net.tarasandedevelopment.tarasande.util.extension.andNewer
 
-class ScreenExtensionButtonLecternCrash : ScreenExtensionButton<LecternScreen>("Lectern Crash", LecternScreen::class.java, version = ProtocolVersion.v1_14.andNewer()) {
+class ScreenExtensionButtonLecternCrash : ScreenExtensionButton<LecternScreen>("Lectern Crash (> 1.14.x)", LecternScreen::class.java,) {
 
     override fun onClick(current: LecternScreen) {
         val screenHandler = MinecraftClient.getInstance().player!!.currentScreenHandler
