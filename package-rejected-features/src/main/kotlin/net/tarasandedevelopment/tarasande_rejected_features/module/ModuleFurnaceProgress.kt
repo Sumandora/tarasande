@@ -22,7 +22,7 @@ class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress
             val screenHandler = (event.screen as HandledScreen<*>).screenHandler as AbstractFurnaceScreenHandler
 
             event.add(ClickableWidgetPanel(object : PanelElements<ElementWidthValueComponent>("Furnace progress", 100.0, 0.0) {
-                private fun addText(input: String) = elementList.add(ValueSpacer(this, input).createValueComponent())
+                private fun addText(input: String) = elementList.add(ValueSpacer(this, input, manage = false).createValueComponent())
 
                 override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
                     elementList.clear()
