@@ -77,7 +77,7 @@ class PanelNotifications : Panel("Notifications", 100.0, FontWrapper.fontHeight(
             if (!animations.containsKey(it))
                 return
             val animation = animations[it]!!
-            if (animation > 0.05) { // hack
+            if (animation > speedIn.min) { // hack
                 val color = TarasandeMain.clientValues().accentColor.getColor().withAlpha((animation * 255).toInt())
                 RenderSystem.enableBlend()
                 val animatedPosition = easing.ease(animation.toFloat())
