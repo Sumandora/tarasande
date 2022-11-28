@@ -56,7 +56,7 @@ class PanelServerInformationPinging(consumer: Consumer<ServerInfo>) : PanelServe
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight + panelHeight)) {
+        if (button == 0 && RenderUtil.isHovered(mouseX, mouseY, x, y + titleBarHeight, x + panelWidth, y + titleBarHeight + panelHeight)) {
             val oldAutoPing = autoPing.value
             autoPing.value = true
             ping(true)
@@ -73,5 +73,9 @@ class PanelServerInformationPinging(consumer: Consumer<ServerInfo>) : PanelServe
                 FontWrapper.textShadow(matrices, it, (x + panelWidth - FontWrapper.getWidth(it)).toFloat(), y.toFloat() + 1, scale = 0.75F)
             }
         }
+    }
+
+    override fun getValueOwner(): Any {
+        return Companion
     }
 }

@@ -60,8 +60,9 @@ class ManagerGraph(informationSystem: ManagerInformation, panelSystem: ManagerPa
     }
 }
 
-open class Graph(val name: String, val bufferLength: Int, private val integer: Boolean) {
+open class Graph(val name: String, bufferLength: Int, integer: Boolean) {
     var decimalPlaces = 0
+    var bufferLength = 0
 
     init {
         if (!integer)
@@ -70,6 +71,12 @@ open class Graph(val name: String, val bufferLength: Int, private val integer: B
                     decimalPlaces = value.toInt()
                 }
             }
+
+        object : ValueNumber(this, "Buffer length", 0.0, bufferLength / 2.0, bufferLength.toDouble(), 1.0) {
+            override fun onChange() {
+                this@Graph.bufferLength = value.toInt()
+            }
+        }
     }
 
     private val values = ArrayList<Number>()

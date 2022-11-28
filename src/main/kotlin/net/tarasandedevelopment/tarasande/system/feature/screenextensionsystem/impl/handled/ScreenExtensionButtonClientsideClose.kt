@@ -10,6 +10,8 @@ import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.S
 class ScreenExtensionButtonClientsideClose : ScreenExtensionButton<Screen>("Clientside close", HandledScreen::class.java, LecternScreen::class.java, DeathScreen::class.java) {
 
     override fun onClick(current: Screen) {
+        if(current is DeathScreen)
+            MinecraftClient.getInstance().player?.apply { init() }
         MinecraftClient.getInstance().setScreen(null)
     }
 }

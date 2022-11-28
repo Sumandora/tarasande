@@ -9,16 +9,17 @@ import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.ScreenExtensionCustom
+import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.serverpinger.graph.GraphPing
+import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.serverpinger.graph.GraphPlayers
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.serverpinger.panel.PanelServerInformationPinging
-import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.panel.PanelGraph
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import su.mandora.event.EventDispatcher
 
 class ScreenExtensionCustomGameMenu : ScreenExtensionCustom<Screen>("Server Pinger", GameMenuScreen::class.java) {
 
-    private val graphPlayers = PanelGraph(Graph("Players", 10, true))
-    private val graphPing = PanelGraph(Graph("Ping", 10, true))
+    private val graphPlayers = PanelGraph(GraphPlayers)
+    private val graphPing = PanelGraph(GraphPing)
 
     private var oldAddress = ""
     private val serverPingerWidget = PanelServerInformationPinging {
@@ -29,7 +30,7 @@ class ScreenExtensionCustomGameMenu : ScreenExtensionCustom<Screen>("Server Ping
         oldAddress = it.address
         Formatting.strip(it.playerCountLabel.string)?.apply {
             if (this.contains("/")) {
-                graphPlayers.graph.add(this.split("/")[0].toInt())
+                graphPlayers.graph.add(this.split("/")[0].toIntOrNull() ?: return@apply)
             }
         }
         it.ping.apply {
@@ -48,7 +49,9 @@ class ScreenExtensionCustomGameMenu : ScreenExtensionCustom<Screen>("Server Ping
                 }
             }
             add(EventDisconnect::class.java) {
-                oldAddress = ""
+                if(it.connection == MinecraftClient.getInstance().networkHandler?.connection) {
+                    oldAddress = ""
+                }
             }
         }
     }
@@ -62,6 +65,9 @@ class ScreenExtensionCustomGameMenu : ScreenExtensionCustom<Screen>("Server Ping
 
         graphPing.x = 5.0
         graphPing.y = graphPlayers.y - graphPing.panelHeight - 5.0
+
+        GraphPlayers.clear()
+        GraphPing.clear()
 
         return listOf(
             ClickableWidgetPanel(serverPingerWidget),
