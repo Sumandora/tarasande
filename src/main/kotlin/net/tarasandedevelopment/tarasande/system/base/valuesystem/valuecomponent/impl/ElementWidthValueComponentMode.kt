@@ -27,7 +27,7 @@ class ElementWidthValueComponentMode(value: Value) : ElementWidthValueComponent(
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (button != 0) return false
+        if (button != 0 || !value.isEnabled()) return false
         val valueMode = value as ValueMode
         for ((index, setting) in valueMode.values.withIndex()) {
             val x = width - FontWrapper.getWidth(setting) / 2.0F

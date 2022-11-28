@@ -11,18 +11,18 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import java.util.function.Consumer
 
-class PanelServerInformationPinging(consumer: Consumer<ServerInfo>) : PanelServerInformation(consumer) {
+class PanelServerInformationPinging(private val valueOwner: Any, consumer: Consumer<ServerInfo>) : PanelServerInformation(consumer) {
 
-    companion object {
-        private val autoPing = ValueBoolean(this, "Auto ping", false)
-        private val pingDelay = object : ValueNumber(this, "Ping delay", 100.0, 5000.0, 10000.0, 100.0) {
-            override fun isEnabled() = autoPing.value
-        }
-        private val showPingProgress = object : ValueBoolean(this, "Show ping progress", true) {
-            override fun isEnabled() = autoPing.value
-        }
+    private val autoPing = ValueBoolean(valueOwner, "Auto ping", false)
+    private val pingDelay = object : ValueNumber(valueOwner, "Ping delay", 100.0, 5000.0, 10000.0, 100.0) {
+        override fun isEnabled() = autoPing.value
+    }
+    private val showPingProgress = object : ValueBoolean(valueOwner, "Show ping progress", true) {
+        override fun isEnabled() = autoPing.value
     }
     private val timer = TimeUtil()
+
+    override fun getValueOwner() = valueOwner
 
     override fun updateServerInfo() = AddressSaver.getAddress().let {
         ServerInfo(it, it, false).apply {
@@ -73,9 +73,5 @@ class PanelServerInformationPinging(consumer: Consumer<ServerInfo>) : PanelServe
                 FontWrapper.textShadow(matrices, it, (x + panelWidth - FontWrapper.getWidth(it)).toFloat(), y.toFloat() + 1, scale = 0.75F)
             }
         }
-    }
-
-    override fun getValueOwner(): Any {
-        return Companion
     }
 }

@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.tarasandedevelopment.tarasande.Manager
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
@@ -23,7 +24,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.rende
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.element.PanelElementsCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.fixed.PanelArrayList
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.fixed.PanelNotifications
+import net.tarasandedevelopment.tarasande.feature.notification.panel.PanelNotifications
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.Event
 import su.mandora.event.EventDispatcher
@@ -170,11 +171,11 @@ open class Module(val name: String, val description: String, val category: Strin
             if (field != value) if (value) {
                 onEnable()
                 eventListeners.forEach { EventDispatcher.add(it.first, it.second, it.third) }
-                PanelNotifications.notify("$name is now enabled")
+                TarasandeMain.notifications().notify("$name is now enabled")
             } else {
                 eventListeners.forEach { EventDispatcher.rem(it.first, it.third) }
                 onDisable()
-                PanelNotifications.notify("$name is now disabled")
+                TarasandeMain.notifications().notify("$name is now disabled")
             }
 
             field = value

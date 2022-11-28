@@ -49,13 +49,6 @@ class ManagerGraph(informationSystem: ManagerInformation, panelSystem: ManagerPa
                 informationSystem.add(*list.map { e -> InformationGraphValue(e) }.toTypedArray())
                 panelSystem.add(*list.map { e -> PanelGraph(e) }.toTypedArray())
             }
-
-            add(EventTick::class.java) {
-                if (it.state == EventTick.State.PRE)
-                    for (graph in list)
-                        if (graph is GraphTickable)
-                            graph.add(graph.tick() ?: continue)
-            }
         }
     }
 }
