@@ -26,6 +26,7 @@ import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.screen.ScreenHandler;
@@ -37,7 +38,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,12 +77,26 @@ public abstract class MixinClientPlayNetworkHandler {
     }
 
 
-    @Inject(method = {"onGameJoin", "onPlayerRespawn"}, at = @At("TAIL"))
+    @Inject(method = { "onGameJoin", "onPlayerRespawn" }, at = @At("TAIL"))
     private void injectOnOnGameJoinOrRespawn(CallbackInfo ci) {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
             ClientPlayerEntity player = MinecraftClient.getInstance().player;
             assert player != null;
             onEntityStatus(new EntityStatusS2CPacket(player, (byte) 28));
+        }
+    }
+
+    @Inject(method = "onEntityPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;updateTrackedPositionAndAngles(DDDFFIZ)V", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
+    public void fixThreshold(EntityPositionS2CPacket packet, CallbackInfo ci, Entity entity) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2)) {
+            if (Math.abs(entity.getX() - packet.getX()) < 0.03125D && Math.abs(entity.getY() - packet.getY()) < 0.015625D && Math.abs(entity.getZ() - packet.getZ()) < 0.03125D) {
+                ci.cancel();
+                float g = (float)(packet.getYaw() * 360) / 256.0F;
+                float h = (float)(packet.getPitch() * 360) / 256.0F;
+
+                entity.updateTrackedPositionAndAngles(entity.getX(), entity.getY(), entity.getZ(), g, h, 3, true);
+                entity.setOnGround(packet.isOnGround());
+            }
         }
     }
 
