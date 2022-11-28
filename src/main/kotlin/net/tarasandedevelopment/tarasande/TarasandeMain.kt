@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
+import net.tarasandedevelopment.tarasande.feature.notification.Notifications
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.ManagerClickMethod
@@ -47,6 +48,7 @@ class TarasandeMain {
 
     private lateinit var clientValues: ClientValues
     private lateinit var friends: Friends
+    private lateinit var notifications: Notifications
     //@formatter:on
 
     companion object {
@@ -66,6 +68,7 @@ class TarasandeMain {
         fun managerFile() = instance.managerFile
         fun clientValues() = instance.clientValues
         fun friends() = instance.friends
+        fun notifications() = instance.notifications
     }
 
     fun onLateLoad() {
@@ -83,6 +86,7 @@ class TarasandeMain {
 
         clientValues = ClientValues(name, managerPanel, managerFile)
         friends = Friends()
+        notifications = Notifications()
 
         EventDispatcher.call(EventSuccessfulLoad())
     }

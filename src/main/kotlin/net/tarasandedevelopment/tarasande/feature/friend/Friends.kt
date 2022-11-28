@@ -14,7 +14,7 @@ import su.mandora.event.EventDispatcher
 
 class Friends {
 
-    val friends = ArrayList<Pair<GameProfile, String?>>()
+    private val friends = ArrayList<Pair<GameProfile, String?>>()
 
     init {
         EventDispatcher.apply {

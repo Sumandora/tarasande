@@ -38,7 +38,6 @@ class ManagerPanel(fileSystem: ManagerFile) : Manager<Panel>() {
             PanelHypixelOverlay(),
             PanelInventory(),
             PanelMousepad(),
-            PanelNotifications(),
             PanelRadar(),
             PanelWatermark()
         )

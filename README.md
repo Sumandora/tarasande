@@ -68,6 +68,9 @@
   - Fav. System
   - History System
 - Module: 
+  - Vanilla1120Dupe
+  - LagSign
+  - NCO
   - AntiSpam
   - ChatTranslator
   - ChatCopy

@@ -15,7 +15,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegi
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.fixed.PanelNotifications
+import net.tarasandedevelopment.tarasande.feature.notification.panel.PanelNotifications
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import java.awt.Color
@@ -68,7 +68,7 @@ class ModuleTroubleInTerrioristTown : Module("Trouble in terrorist town", "Uses 
             val traitors = scanForTraitors(event.entity, event.death) ?: return@registerEvent
 
             if (traitors.isNotEmpty())
-                PanelNotifications.notify(event.entity.gameProfile.name + " is being attacked by " + traitors.joinToString { it.gameProfile.name })
+                TarasandeMain.notifications().notify(event.entity.gameProfile.name + " is being attacked by " + traitors.joinToString { it.gameProfile.name })
         }
 
         registerEvent(EventPacket::class.java) { event ->
@@ -78,7 +78,7 @@ class ModuleTroubleInTerrioristTown : Module("Trouble in terrorist town", "Uses 
                 val traitors = scanForTraitors(mc.player!!, event.packet.health <= 0.0F) ?: return@registerEvent
 
                 if (traitors.isNotEmpty())
-                    PanelNotifications.notify("You are being attacked by " + traitors.joinToString { it.gameProfile.name })
+                    TarasandeMain.notifications().notify("You are being attacked by " + traitors.joinToString { it.gameProfile.name })
             }
         }
 
