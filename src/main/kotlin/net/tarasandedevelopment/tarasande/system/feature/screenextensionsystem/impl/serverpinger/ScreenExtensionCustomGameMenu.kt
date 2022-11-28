@@ -24,8 +24,8 @@ class ScreenExtensionCustomGameMenu : ScreenExtensionCustom<Screen>("Server Ping
     private var oldAddress = ""
     private val serverPingerWidget = PanelServerInformationPinging {
         if (it.address != oldAddress) {
-            graphPlayers.graph.clear()
-            graphPing.graph.clear()
+            GraphPlayers.clear()
+            GraphPing.clear()
         }
         oldAddress = it.address
         Formatting.strip(it.playerCountLabel.string)?.apply {
@@ -51,6 +51,8 @@ class ScreenExtensionCustomGameMenu : ScreenExtensionCustom<Screen>("Server Ping
             add(EventDisconnect::class.java) {
                 if(it.connection == MinecraftClient.getInstance().networkHandler?.connection) {
                     oldAddress = ""
+                    GraphPlayers.clear()
+                    GraphPing.clear()
                 }
             }
         }
@@ -65,9 +67,6 @@ class ScreenExtensionCustomGameMenu : ScreenExtensionCustom<Screen>("Server Ping
 
         graphPing.x = 5.0
         graphPing.y = graphPlayers.y - graphPing.panelHeight - 5.0
-
-        GraphPlayers.clear()
-        GraphPing.clear()
 
         return listOf(
             ClickableWidgetPanel(serverPingerWidget),

@@ -22,8 +22,8 @@ class ScreenExtensionCustomDirectConnect : ScreenExtensionCustom<DirectConnectSc
     private var oldAddress = ""
     private val serverPingerWidget = PanelServerInformationPinging {
         if (it.address != oldAddress) {
-            graphPlayers.graph.clear()
-            graphPing.graph.clear()
+            GraphPlayers.clear()
+            GraphPing.clear()
         }
         oldAddress = it.address
         Formatting.strip(it.playerCountLabel.string)?.apply {
@@ -62,9 +62,6 @@ class ScreenExtensionCustomDirectConnect : ScreenExtensionCustom<DirectConnectSc
 
         graphPing.x = 5.0
         graphPing.y = graphPlayers.y - graphPing.panelHeight - 5.0
-
-        GraphPlayers.clear()
-        GraphPing.clear()
 
         return listOf(
             ClickableWidgetPanel(serverPingerWidget),
