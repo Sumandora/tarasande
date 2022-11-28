@@ -20,7 +20,7 @@ class ScreenExtensionCustomDirectConnect : ScreenExtensionCustom<DirectConnectSc
     private val graphPing = PanelGraph(GraphPing)
 
     private var oldAddress = ""
-    private val serverPingerWidget = PanelServerInformationPinging {
+    private val serverPingerWidget = PanelServerInformationPinging(this) {
         if (it.address != oldAddress) {
             GraphPlayers.clear()
             GraphPing.clear()

@@ -22,7 +22,7 @@ class ScreenExtensionCustomGameMenu : ScreenExtensionCustom<Screen>("Server Ping
     private val graphPing = PanelGraph(GraphPing)
 
     private var oldAddress = ""
-    private val serverPingerWidget = PanelServerInformationPinging {
+    private val serverPingerWidget = PanelServerInformationPinging(this) {
         if (it.address != oldAddress) {
             GraphPlayers.clear()
             GraphPing.clear()
@@ -37,7 +37,7 @@ class ScreenExtensionCustomGameMenu : ScreenExtensionCustom<Screen>("Server Ping
             graphPing.graph.add(this)
         }
     }
-    private val pingWhenInGame = ValueBoolean(serverPingerWidget, "Ping when in game", true)
+    private val pingWhenInGame = ValueBoolean(this, "Ping when in game", true)
 
     init {
         EventDispatcher.apply {
