@@ -29,7 +29,6 @@ class TarasandeMain {
     val rootDirectory = File(System.getProperty("user.home") + File.separator + name)
     var proxy: Proxy? = null
 
-    //@formatter:off
     private val managerFile = ManagerFile()
     private val managerValue = ManagerValue(managerFile)
 
@@ -47,7 +46,6 @@ class TarasandeMain {
     private lateinit var clientValues: ClientValues
     private lateinit var friends: Friends
     private lateinit var notifications: Notifications
-    //@formatter:on
 
     companion object {
         private val instance = TarasandeMain()

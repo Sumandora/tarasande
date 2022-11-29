@@ -17,7 +17,6 @@ pluginManagement {
 include 'package-windows-platform'
 include 'package-linux-platform'
 include 'package-mod-fixes'
-include 'tools'
 include 'package-rejected-features'
 include 'package-protocol-hack'
 include 'package-third-party'
