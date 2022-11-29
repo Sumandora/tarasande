@@ -78,28 +78,28 @@ public class ViaLegacy {
 
         // Post-Netty
         // Release Versions (1.8.x - 1.7.5)
-        //                  From           Target        Protocol Implementation
-        registerProtocol(   v1_8,          r1_7_6_10,    new Protocol1_8_0_9to1_7_6_10()   );
-        registerProtocol(   r1_7_6_10,     r1_7_0_5,     new Protocol1_7_6_10to1_7_0_5()   );
+        //                   From           Target        Protocol Implementation
+        registerProtocol(    v1_8,          r1_7_6_10,    new Protocol1_8_0_9to1_7_6_10()    );
+        registerProtocol(    r1_7_6_10,     r1_7_0_5,     new Protocol1_7_6_10to1_7_0_5()    );
 
         // Pre-Netty
         // Release Versions (1.6.4 - 1.0)
-        //                  From           Target        Protocol Implementation               Notes
-        registerProtocol(   r1_7_0_5,      r1_6_4,       new Protocol1_7_5to1_6_4()        );
-        registerProtocol(   r1_6_4,        r1_6_3_pre,   new Protocol1_6_4to1_6_3_pre()    );  // snapshot version
-        registerProtocol(   r1_6_3_pre,    r1_6_2,       new Protocol1_6_3_preto1_6_2()    );
-        registerProtocol(   r1_6_2,        r1_6_1,       new Protocol1_6_2to1_6_1()        );
-        registerProtocol(   r1_6_1,        r1_5_2,       new Protocol1_6_1to1_5_2()        );
-        registerProtocol(   r1_5_2,        r1_5_1,       new Protocol1_5_2to1_5_1()        );
-        registerProtocol(   r1_5_1,        r1_4_6_7,     new Protocol1_5_1to1_4_6_7()      );
-        registerProtocol(   r1_4_6_7,      r1_4_4_5,     new Protocol1_4_6_7to1_4_4_5()    );
-        registerProtocol(   r1_4_4_5,      r1_4_3_pre,   new Protocol1_4_5to1_4_3_pre()    );  // snapshot version
-        registerProtocol(   r1_4_3_pre,    r1_4_0_2,     new Protocol1_4_3_preto1_4_0_2()  );
-        registerProtocol(   r1_4_0_2,      r1_3_1_2,     new Protocol1_4_0_2to1_3_1_2()    );
-        registerProtocol(   r1_3_1_2,      r1_2_4_5,     new Protocol1_3_1_2to1_2_4_5()    );
-        registerProtocol(   r1_2_4_5,      r1_2_1_3,     new Protocol1_2_4_5to1_2_1_3()    );
-        registerProtocol(   r1_2_1_3,      r1_1,         new Protocol1_2_1_3to1_1()        );
-        registerProtocol(   r1_1,          r1_0_0_1,     new Protocol1_1to1_0_0_1()        );
+        //                   From           Target        Protocol Implementation                Notes
+        registerProtocol(    r1_7_0_5,      r1_6_4,       new Protocol1_7_5to1_6_4()         );
+        registerProtocol(    r1_6_4,        r1_6_3_pre,   new Protocol1_6_4to1_6_3_pre()     );  // snapshot version
+        registerProtocol(    r1_6_3_pre,    r1_6_2,       new Protocol1_6_3_preto1_6_2()     );
+        registerProtocol(    r1_6_2,        r1_6_1,       new Protocol1_6_2to1_6_1()         );
+        registerProtocol(    r1_6_1,        r1_5_2,       new Protocol1_6_1to1_5_2()         );
+        registerProtocol(    r1_5_2,        r1_5_1,       new Protocol1_5_2to1_5_1()         );
+        registerProtocol(    r1_5_1,        r1_4_6_7,     new Protocol1_5_1to1_4_6_7()       );
+        registerProtocol(    r1_4_6_7,      r1_4_4_5,     new Protocol1_4_6_7to1_4_4_5()     );
+        registerProtocol(    r1_4_4_5,      r1_4_3_pre,   new Protocol1_4_5to1_4_3_pre()     );  // snapshot version
+        registerProtocol(    r1_4_3_pre,    r1_4_0_2,     new Protocol1_4_3_preto1_4_0_2()   );
+        registerProtocol(    r1_4_0_2,      r1_3_1_2,     new Protocol1_4_0_2to1_3_1_2()     );
+        registerProtocol(    r1_3_1_2,      r1_2_4_5,     new Protocol1_3_1_2to1_2_4_5()     );
+        registerProtocol(    r1_2_4_5,      r1_2_1_3,     new Protocol1_2_4_5to1_2_1_3()     );
+        registerProtocol(    r1_2_1_3,      r1_1,         new Protocol1_2_1_3to1_1()         );
+        registerProtocol(    r1_1,          r1_0_0_1,     new Protocol1_1to1_0_0_1()         );
 
         // Beta Versions (b1.8.1 - b1.0)
 
