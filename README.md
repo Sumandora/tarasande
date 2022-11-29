@@ -52,6 +52,7 @@
 - Recode File Chooser
 - Wheel Menu
 - Projectile aim bot: Crossbows & Prediction
+- Killaura: Closed Inventory
 
 ## TODO-List (Flori | Tarasande)
 #### Additions
