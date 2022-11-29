@@ -54,6 +54,7 @@
 - Projectile aim bot: Crossbows & Prediction
 - Killaura: Closed Inventory
 - Blink: Auto Disable on Death Default = true
+- Tick base manipulation: Improve auto uncharge / Full recode
 
 ## TODO-List (Flori | Tarasande)
 #### Additions
