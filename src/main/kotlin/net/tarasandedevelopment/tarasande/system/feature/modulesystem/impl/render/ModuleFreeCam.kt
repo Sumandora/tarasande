@@ -64,8 +64,8 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
     override fun onEnable() {
         if (mc.player != null) {
             position = mc.gameRenderer.camera.pos
-            rotation = Rotation(mc.player!!)
-            beginRotation = rotation
+            rotation = Rotation(mc.gameRenderer.camera.yaw, mc.gameRenderer.camera.pitch)
+            beginRotation = Rotation(mc.player!!)
             perspective = mc.options.perspective
             firstRealInput = PlayerUtil.input.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
             firstInput = mc.player?.input?.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
