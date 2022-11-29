@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.injection.mixin.feature.module;
 
 import net.minecraft.SharedConstants;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.chat.ModuleAllowAllCharacters;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc.ModuleAllowAllCharacters;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

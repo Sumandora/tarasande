@@ -13,11 +13,12 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.file.FileModules
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.chat.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.ghost.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc.*
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc.ModuleAllowAllCharacters
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoChatContext
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.*
@@ -207,5 +208,4 @@ object ModuleCategory {
     const val MISC = "Misc"
     const val GHOST = "Ghost"
     const val EXPLOIT = "Exploit"
-    const val CHAT = "Chat"
 }

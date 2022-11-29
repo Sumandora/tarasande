@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.injection.mixin.feature.module.connec
 
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.chat.ModuleNoChatContext;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoChatContext;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
