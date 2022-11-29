@@ -146,8 +146,12 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                     when (triple.second) {
                         EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).tarasande_forceSend(triple.first)
                         EventPacket.Type.RECEIVE ->
-                            if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener)
-                                (triple.first as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
+                            if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener) {
+                                try {
+                                    (triple.first as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
+                                } catch (_: Exception) {
+                                }
+                            }
                     }
                 }
             }
