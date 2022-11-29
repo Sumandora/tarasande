@@ -8,7 +8,7 @@ import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import kotlin.math.floor
 
-open class ClickableWidgetPanel(val panel: Panel, val update: Boolean = false) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelWidth.toInt(), Text.of(panel.title)), Element {
+open class ClickableWidgetPanel(val panel: Panel, private val update: Boolean = false) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelHeight.toInt(), Text.of(panel.title)), Element {
 
     override fun appendNarrations(builder: NarrationMessageBuilder?) {
     }
