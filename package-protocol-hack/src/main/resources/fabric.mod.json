@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "tarasande-protocol-hack",
   "version": "${version}",
-  "name": "tarasande protocol hack",
+  "name": "tarasande Protocol Hack",
   "description": "Clientside ViaProtocolHack implementation with ClampClient fixes",
   "authors": [
     "EnZaXD/FlorianMichael"

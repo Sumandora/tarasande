@@ -36,6 +36,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movem
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande_protocol_hack.command.ViaCommandHandlerTarasandeCommandHandler
 import net.tarasandedevelopment.tarasande_protocol_hack.event.EventSkipIdlePacket
+import net.tarasandedevelopment.tarasande_protocol_hack.extension.andOlder
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.EntityDimensionReplacement
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.PackFormats
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ProtocolHackValues
@@ -47,6 +48,7 @@ import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.Fabri
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricVersionProvider
+import net.tarasandedevelopment.tarasande_protocol_hack.util.formatRange
 import su.mandora.event.EventDispatcher
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.ThreadFactory
@@ -100,12 +102,12 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
             }
 
             TarasandeMain.managerModule().apply {
-                object : ValueBoolean(get(ModuleInventoryMove::class.java), "Cancel open packet (1.11.1-)", false) {
+                object : ValueBoolean(get(ModuleInventoryMove::class.java), "Cancel open packet (" + ProtocolVersion.v1_11_1.andOlder() + ")", false) {
                     override fun isEnabled() = VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1)
                 }
 
                 get(ModuleTickBaseManipulation::class.java).apply {
-                    val chargeOnIdlePacketSkip = object : ValueBoolean(this, "Charge on idle packet skip", false) {
+                    val chargeOnIdlePacketSkip = object : ValueBoolean(this, "Charge on idle packet skip (" + formatRange(*ProtocolHackValues.sendIdlePacket.version) + ")", false) {
                         override fun isEnabled() = ProtocolHackValues.sendIdlePacket.isEnabled()
                     }
 
@@ -130,6 +132,8 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
     }
 
     fun update(protocol: ProtocolVersion) {
+        System.setProperty("target-version", protocol.version.toString()) // this provides the current clientside version to all other packages
+
         TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
             if (it is ValueBooleanProtocol)
                 it.value = it.version.any { range -> protocol in range }

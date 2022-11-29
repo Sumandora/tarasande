@@ -1,12 +1,10 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.core.connection;
 
 import io.netty.channel.Channel;
-import io.netty.handler.codec.haproxy.HAProxyMessageEncoder;
 import io.netty.handler.proxy.HttpProxyHandler;
 import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.proxy.Socks5ProxyHandler;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.MultiplayerFeatureToggleableExploitsHAProxyHack;
 import net.tarasandedevelopment.tarasande.util.connection.Proxy;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -43,13 +41,6 @@ public class MixinClientConnectionSubInitChannel {
                         )
                 );
             }
-        }
-
-        final MultiplayerFeatureToggleableExploitsHAProxyHack haProxyHack = TarasandeMain.Companion.managerMultiplayerFeature().get(MultiplayerFeatureToggleableExploitsHAProxyHack.class);
-
-        if (haProxyHack.getState().getValue()) {
-            channel.pipeline().addFirst("haproxy-encoder", HAProxyMessageEncoder.INSTANCE);
-            channel.pipeline().addLast(haProxyHack.createHandler());
         }
     }
 }

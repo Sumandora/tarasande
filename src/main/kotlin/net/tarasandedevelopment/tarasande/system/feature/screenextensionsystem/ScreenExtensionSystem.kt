@@ -11,8 +11,6 @@ import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.i
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.downloadingterrain.ScreenExtensionButtonCancelAndDisconnect
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.handled.ScreenExtensionButtonClientsideClose
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.handled.ScreenExtensionButtonServersideClose
-import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.inventory.ScreenExtensionButtonCraftingDupe
-import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.inventory.ScreenExtensionButtonLecternCrash
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.pack.ScreenExtensionButtonDumpServerPack
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.pack.ScreenExtensionButtonUnloadServerPack
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.serverpinger.ScreenExtensionCustomDirectConnect
@@ -27,10 +25,6 @@ class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
         add(
             // Account Manager
             ScreenExtensionButtonAccountManager(),
-
-            // Inventory
-            ScreenExtensionButtonCraftingDupe(),
-            ScreenExtensionButtonLecternCrash(),
 
             // Minecraft Menus
             ScreenExtensionButtonSleepingChat(),

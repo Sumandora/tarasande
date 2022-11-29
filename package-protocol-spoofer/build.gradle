@@ -1,0 +1,51 @@
+plugins {
+    id "java"
+    id "fabric-loom"
+    id "org.jetbrains.kotlin.jvm"
+    id "com.github.johnrengelman.shadow"
+}
+
+group 'net.tarasandedevelopment'
+version '1.19'
+
+repositories {
+    mavenCentral()
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/tarasande-protocol-spoofer.accesswidener")
+}
+
+this.remapJar {
+    dependsOn shadowJar
+    //noinspection GrDeprecatedAPIUsage
+    input.set(shadowJar.archiveFile)
+}
+
+this.shadowJar {
+    archiveClassifier.set("shadow")
+    compileJava.options.encoding = "UTF-8"
+    exclude "native-binaries/*"
+
+    dependencies {
+        include(dependency("io.netty:netty-codec-haproxy:4.1.82.Final"))
+    }
+}
+
+dependencies {
+    // Fabric
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    // Kotlin
+    modImplementation "net.fabricmc:fabric-language-kotlin:${project.kotlin_wrapper_version}"
+
+    // Tarasande Source
+    implementation(project(path: ":", configuration: "shadow"))
+
+    // HAProxy Protocol -> https://mvnrepository.com/artifact/io.netty/netty-codec-haproxy
+    implementation("io.netty:netty-codec-haproxy:4.1.82.Final")
+}
+
+compileKotlin.kotlinOptions.jvmTarget = "17"

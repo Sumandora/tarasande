@@ -35,7 +35,6 @@ class ManagerPanel(fileSystem: ManagerFile) : Manager<Panel>() {
         add(
             PanelArmor(),
             PanelEffects(),
-            PanelHypixelOverlay(),
             PanelInventory(),
             PanelMousepad(),
             PanelRadar(),

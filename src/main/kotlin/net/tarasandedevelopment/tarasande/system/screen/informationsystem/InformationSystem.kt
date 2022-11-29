@@ -38,10 +38,7 @@ class ManagerInformation(panelSystem: ManagerPanel) : Manager<Information>() {
             InformationVanishedPlayers(),
 
             // Private message detector
-            InformationDetectedMessages(),
-
-            // Badlion
-            InformationTimers()
+            InformationDetectedMessages()
         )
 
         EventDispatcher.add(EventSuccessfulLoad::class.java, 1001) {

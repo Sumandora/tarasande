@@ -20,7 +20,6 @@ accessible field net/minecraft/client/gui/screen/ingame/HandledScreen x I
 accessible field net/minecraft/client/gui/screen/ingame/HandledScreen y I
 accessible field net/minecraft/client/gui/screen/ingame/HandledScreen backgroundWidth I
 accessible field net/minecraft/client/gui/screen/ingame/HandledScreen backgroundHeight I
-accessible field net/minecraft/network/packet/c2s/handshake/HandshakeC2SPacket address Ljava/lang/String;
 accessible field net/minecraft/client/option/KeyBinding timesPressed I
 accessible field net/minecraft/client/option/KeyBinding pressed Z
 accessible field net/minecraft/client/option/KeyBinding boundKey Lnet/minecraft/client/util/InputUtil$Key;
@@ -80,7 +79,6 @@ accessible method net/minecraft/item/CrossbowItem getProjectiles (Lnet/minecraft
 accessible method net/minecraft/client/network/ClientPlayerInteractionManager sendSequencedPacket (Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V
 accessible method net/minecraft/entity/Entity movementInputToVelocity (Lnet/minecraft/util/math/Vec3d;FF)Lnet/minecraft/util/math/Vec3d;
 accessible method net/minecraft/client/gui/hud/InGameHud renderHotbarItem (IIFLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;I)V
-accessible method net/minecraft/client/gui/screen/ingame/InventoryScreen onMouseClick (Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
 accessible method net/minecraft/client/MinecraftClient doItemUse ()V
 accessible method net/minecraft/client/MinecraftClient doAttack ()Z
 accessible method net/minecraft/client/MinecraftClient handleBlockBreaking (Z)V
@@ -90,7 +88,6 @@ accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerServerL
 
 mutable field net/minecraft/network/packet/c2s/play/CustomPayloadC2SPacket data Lnet/minecraft/network/PacketByteBuf;
 mutable field net/minecraft/entity/Entity random Lnet/minecraft/util/math/random/Random;
-mutable field net/minecraft/network/packet/c2s/handshake/HandshakeC2SPacket address Ljava/lang/String;
 mutable field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/util/Session;
 mutable field net/minecraft/client/MinecraftClient socialInteractionsManager Lnet/minecraft/client/network/SocialInteractionsManager;
 mutable field net/minecraft/client/MinecraftClient profileKeys Lnet/minecraft/client/util/ProfileKeys;

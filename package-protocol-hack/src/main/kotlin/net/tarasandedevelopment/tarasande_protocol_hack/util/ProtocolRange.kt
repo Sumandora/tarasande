@@ -4,6 +4,8 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.compareTo
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.getSpecialName
 
+fun formatRange(vararg version: ProtocolRange) = version.joinToString(", ") { it.toString() }
+
 class ProtocolRange(private val lowerBound: ProtocolVersion?, private val upperBound: ProtocolVersion?) {
 
     init {

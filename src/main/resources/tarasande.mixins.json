@@ -13,12 +13,6 @@
     "core.entity.MixinEntity",
     "core.entity.MixinLivingEntity",
     "core.entity.MixinLivingEntityRenderer",
-    "core.forgefaker.MixinConnectScreenSubRun",
-    "core.forgefaker.MixinMultiplayerServerListPingerSubOnResponse",
-    "core.forgefaker.MixinMultiplayerServerListWidgetSubServerEntry",
-    "core.forgefaker.MixinServerInfo",
-    "core.forgefaker.MixinServerMetadata",
-    "core.forgefaker.MixinServerMetadataDeserializer",
     "core.opengl.MixinGameRenderer",
     "core.opengl.MixinWindow",
     "core.prediction.MixinParticleManager",
@@ -111,5 +105,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "event.screen.MixinMultiplayerServerListWidgetSubServerEntry"
+  ]
 }

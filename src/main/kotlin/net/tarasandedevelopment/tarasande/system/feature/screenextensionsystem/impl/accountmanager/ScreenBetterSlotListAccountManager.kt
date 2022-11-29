@@ -35,7 +35,7 @@ import su.mandora.event.EventDispatcher
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, FontWrapper.fontHeight() * 5) {
+class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, FontWrapper.fontHeight() * 5, null) { // set else where
 
     val accounts = ArrayList<Account>()
     var currentAccount: Account? = null

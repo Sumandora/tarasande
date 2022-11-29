@@ -28,10 +28,6 @@ class ManagerMultiplayerFeature : Manager<MultiplayerFeature>() {
     init {
         this.add(
             // Exploits
-            MultiplayerFeatureToggleableExploitsBungeeHack(),
-            MultiplayerFeatureToggleableExploitsForgeFaker(),
-            MultiplayerFeatureToggleableExploitsHAProxyHack(),
-            MultiplayerFeatureToggleableExploitsQuiltFaker(),
             MultiplayerFeatureToggleableExploitsClientBrandSpoofer()
         )
 

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "tarasande-third-party",
+  "version": "${version}",
+
+  "name": "tarasande Third Party",
+  "description": "Third Party features for certain servers and platforms",
+  "authors": [
+    "Sumandora/Johannes"
+  ],
+  "contact": {
+    "homepage": "https://github.com/tarasandeDevelopment/",
+    "sources": "https://github.com/tarasandeDevelopment/tarasande"
+  },
+
+  "license": "GPL-3.0",
+  "icon": "assets/tarasande-third-party/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "net.tarasandedevelopment.tarasande_third_party.TarasandeThirdParty"
+    ]
+  },
+
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "minecraft": "~1.19",
+    "java": ">=17",
+    "tarasande": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": "tarasande"
+    }
+  }
+}

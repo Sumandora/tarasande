@@ -9,6 +9,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.Valu
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.andOlder
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.rangeTo
 import net.tarasandedevelopment.tarasande_protocol_hack.util.ProtocolRange
+import net.tarasandedevelopment.tarasande_protocol_hack.util.formatRange
 
 object ProtocolHackValues {
 
@@ -38,4 +39,4 @@ object ProtocolHackValues {
     val sendIdlePacket = ValueBooleanProtocol("Send idle packet", ProtocolVersion.v1_8 .. LegacyProtocolVersion.r1_3_1_2)
 }
 
-open class ValueBooleanProtocol(name: String, vararg val version: ProtocolRange) : ValueBoolean(ProtocolHackValues, "$name (" + version.joinToString(", ") { it.toString() } + ")", false)
+open class ValueBooleanProtocol(name: String, vararg val version: ProtocolRange) : ValueBoolean(ProtocolHackValues, "$name (" + formatRange(*version) + ")", false)

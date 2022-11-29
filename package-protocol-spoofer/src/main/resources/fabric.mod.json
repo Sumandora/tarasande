@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "tarasande-protocol-spoofer",
+  "version": "${version}",
+
+  "name": "tarasande Protocol Spoofer",
+  "description": "Protocol spoofer for Forge, Quilt, ha-proxy protocol and BungeeCord ip forwarding",
+  "authors": [
+    "EnZaXD/FlorianMichael"
+  ],
+  "contact": {
+    "homepage": "https://github.com/tarasandeDevelopment/",
+    "sources": "https://github.com/tarasandeDevelopment/tarasande"
+  },
+
+  "license": "GPL-3.0",
+  "icon": "assets/tarasande-protocol-spoofer/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "de.florianmichael.tarasande_protocol_spoofer.TarasandeProtocolSpoofer"
+    ]
+  },
+  "mixins": [
+    "tarasande-protocol-spoofer.mixins.json"
+  ],
+  "accessWidener": "tarasande-protocol-spoofer.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "minecraft": "~1.19",
+    "java": ">=17",
+    "tarasande": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": "tarasande"
+    }
+  }
+}

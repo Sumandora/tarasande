@@ -19,11 +19,11 @@ loom {
 
 // ViaProtocolHack READ-ME
 var viaLibs = [
-        "com.viaversion:viaversion:4.5.0-1.19.3-pre2-SNAPSHOT",
-        "com.viaversion:viabackwards-common:4.5.0-22w46a-SNAPSHOT",
+        "com.viaversion:viaversion:${project.viaversion_version}",
+        "com.viaversion:viabackwards-common:${project.viabackwards_version}",
         "org.yaml:snakeyaml:1.29",
 
-        "com.github.RejectedVia:ViaProtocolHack:ea6ccc49e2"
+        "com.github.RejectedVia:ViaProtocolHack:${project.viaprotocolhack_version}"
 ]
 
 this.remapJar {
@@ -43,7 +43,6 @@ this.shadowJar {
         }
     }
 }
-
 
 dependencies {
     // Fabric

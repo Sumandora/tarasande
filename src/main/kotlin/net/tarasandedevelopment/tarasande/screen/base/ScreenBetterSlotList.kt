@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.screen.base
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget
 import net.minecraft.client.gui.widget.EntryListWidget
@@ -8,14 +9,11 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
-open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, var entryWidth: Int, private val entryHeight: Int) : ScreenBetter(null) {
+open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, var entryWidth: Int, private val entryHeight: Int, prevScreen: Screen?) : ScreenBetter(prevScreen) {
 
+    private var listProvider: AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget.ListProvider? = null
     var slotList: AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget? = null
-    var listProvider: AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget.ListProvider? = null
     var selected: Int = 0
-
-    constructor(top: Int, entryWidth: Int, entryHeight: Int) : this(top, -10, entryWidth, entryHeight)
-    constructor(top: Int, entryHeight: Int) : this(top, 220, entryHeight)
 
     fun provideElements(provider: AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget.ListProvider) {
         this.listProvider = provider
