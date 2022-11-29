@@ -17,7 +17,6 @@
     "core.opengl.MixinWindow",
     "core.prediction.MixinParticleManager",
     "core.prediction.MixinSoundSystem",
-    "core.screen.MixinMultiplayerServerListWidgetSubServerEntry",
     "core.screen.MixinScreen",
     "core.screen.accountmanager.MixinMinecraftClient",
     "core.screen.accountmanager.MixinRealmsPeriodicCheckers",
