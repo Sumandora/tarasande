@@ -61,5 +61,4 @@ class ScreenBetterEnvironment(prevScreen: Screen?, private val environment: Envi
 
         super.init()
     }
-
 }
