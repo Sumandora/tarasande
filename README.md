@@ -53,6 +53,7 @@
 - Wheel Menu
 - Projectile aim bot: Crossbows & Prediction
 - Killaura: Closed Inventory
+- Blink: Auto Disable on Death Default = true
 
 ## TODO-List (Flori | Tarasande)
 #### Additions
