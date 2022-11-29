@@ -28,8 +28,8 @@ object ForgeCreator {
     fun createNetHandler(connection: ClientConnection): IForgeNetClientHandler {
         var clientsideVersion = SharedConstants.getGameVersion().protocolVersion
 
-        if (System.getProperty("target-version") != null) {
-            clientsideVersion = Integer.parseInt(System.getProperty("target-version"))
+        if (System.getProperty("tarasande-target-version") != null) {
+            clientsideVersion = Integer.parseInt(System.getProperty("tarasande-target-version"))
         }
 
         if (clientsideVersion > 758 /* 1.18.2 */) {
