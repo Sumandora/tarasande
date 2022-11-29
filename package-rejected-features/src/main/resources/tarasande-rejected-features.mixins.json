@@ -4,8 +4,6 @@
   "package": "net.tarasandedevelopment.tarasande_rejected_features.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "MixinClientPlayerEntity",
-    "MixinProfileKeys"
   ],
   "injectors": {
     "defaultRequire": 1

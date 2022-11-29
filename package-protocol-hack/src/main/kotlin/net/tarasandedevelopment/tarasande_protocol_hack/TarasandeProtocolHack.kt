@@ -34,15 +34,18 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleTickBaseManipulation
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleInventoryMove
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanel
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanelSelection
 import net.tarasandedevelopment.tarasande_protocol_hack.command.ViaCommandHandlerTarasandeCommandHandler
 import net.tarasandedevelopment.tarasande_protocol_hack.event.EventSkipIdlePacket
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.andOlder
+import net.tarasandedevelopment.tarasande_protocol_hack.extension.getSpecialName
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.EntityDimensionReplacement
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.PackFormats
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ValueBooleanProtocol
-import net.tarasandedevelopment.tarasande_protocol_hack.platform.multiplayerfeature.MultiplayerFeatureProtocolHackValues
-import net.tarasandedevelopment.tarasande_protocol_hack.platform.multiplayerfeature.MultiplayerFeatureSelectionProtocolHack
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricOldAuthProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricPreNettyProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
@@ -124,9 +127,22 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
         EventDispatcher.add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
             update(ProtocolVersion.getProtocol(version.value.toInt()))
 
-            TarasandeMain.managerMultiplayerFeature().apply {
-                insert(MultiplayerFeatureSelectionProtocolHack(this@TarasandeProtocolHack), 0)
-                insert(MultiplayerFeatureProtocolHackValues(), 1)
+            TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.apply {
+                insert(object : EntrySidebarPanelSelection("Protocol Hack", "Protocol Hack", VersionList.PROTOCOLS.map { it.getSpecialName() }, ProtocolVersion.getProtocol(targetVersion()).getSpecialName()) {
+                    override fun onClick(newValue: String) {
+                        val newProtocol = VersionList.PROTOCOLS.first { it.getSpecialName() == newValue }.version.toDouble()
+                        if (version.value != newProtocol) {
+                            version.value = newProtocol
+                            update(ProtocolVersion.getProtocol(version.value.toInt()))
+                        }
+                    }
+                }, 0)
+
+                insert(object : EntrySidebarPanel("Protocol Hack Values", "Protocol Hack") {
+                    override fun onClick(mouseButton: Int) {
+                        MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, name, ProtocolHackValues))
+                    }
+                }, 1)
             }
         }
     }

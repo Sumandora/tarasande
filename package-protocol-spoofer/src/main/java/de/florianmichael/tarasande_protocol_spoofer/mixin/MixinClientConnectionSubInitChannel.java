@@ -1,9 +1,10 @@
 package de.florianmichael.tarasande_protocol_spoofer.mixin;
 
-import de.florianmichael.tarasande_protocol_spoofer.multiplayerfeature.MultiplayerFeatureToggleableExploitsHAProxyHack;
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelToggleableHAProxyHack;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.haproxy.HAProxyMessageEncoder;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,7 +15,7 @@ public class MixinClientConnectionSubInitChannel {
 
     @Inject(method = "initChannel", at = @At("TAIL"))
     public void addChannelHandlers(Channel channel, CallbackInfo ci) {
-        final MultiplayerFeatureToggleableExploitsHAProxyHack haProxyHack = TarasandeMain.Companion.managerMultiplayerFeature().get(MultiplayerFeatureToggleableExploitsHAProxyHack.class);
+        final EntrySidebarPanelToggleableHAProxyHack haProxyHack = TarasandeMain.Companion.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen.class).getSidebar().get(EntrySidebarPanelToggleableHAProxyHack.class);
 
         if (haProxyHack.getState().getValue()) {
             channel.pipeline().addFirst("haproxy-encoder", HAProxyMessageEncoder.INSTANCE);

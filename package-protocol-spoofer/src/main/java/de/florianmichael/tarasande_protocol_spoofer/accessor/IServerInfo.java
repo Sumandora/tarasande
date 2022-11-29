@@ -1,6 +1,6 @@
 package de.florianmichael.tarasande_protocol_spoofer.accessor;
 
-import de.florianmichael.tarasande_protocol_spoofer.multiplayerfeature.forgefaker.payload.IForgePayload;
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.IForgePayload;
 
 public interface IServerInfo {
 

@@ -5,6 +5,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.item.Item
 import su.mandora.event.Event
 import java.util.*
+import kotlin.collections.ArrayList
 
 class EventTick(val state: State) : Event(false) {
     enum class State {
@@ -37,16 +38,7 @@ class EventChangeScreen : Event {
     }
 }
 
-class EventChildren(val screen: Screen) : Event(false) {
-    private val children = ArrayList<Element>()
-
-    fun add(element: Element) {
-        children.add(element)
-    }
-
-    fun get() = children
-}
-
+class EventChildren(val screen: Screen, val elements: ArrayList<Element>) : Event(false)
 class EventShowsDeathScreen(var showsDeathScreen: Boolean) : Event(false)
 class EventTimeTravel(var time: Long) : Event(false)
 class EventShutdown : Event(false)

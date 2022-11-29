@@ -13,12 +13,12 @@ import net.minecraft.client.util.Session
 import net.minecraft.text.Text
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionButtonAccountManager
-import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterAzureApps
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.ExtraInfo
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.AzureAppPreset
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterAzureApps
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.*
@@ -43,7 +43,7 @@ open class AccountMicrosoft : Account() {
     protected var redirectUri: String? = null
     private var code: String? = null
 
-    var azureApp: AzureAppPreset = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonAccountManager::class.java).screenBetterSlotListAccountManager.managerAzureApp.list.first()
+    var azureApp: AzureAppPreset = TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).screenBetterSlotListAccountManager.managerAzureApp.list.first()
 
     protected fun randomPort(): Int = ThreadLocalRandom.current().nextInt(0, Short.MAX_VALUE.toInt() * 2 /* unsigned */)
 

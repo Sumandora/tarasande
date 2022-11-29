@@ -10,12 +10,11 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.ManagerClickMethod
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.ManagerESP
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
-import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.ManagerMultiplayerFeature
-import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.ManagerScreenExtension
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.ManagerBlur
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.ManagerGraph
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import su.mandora.event.EventDispatcher
 import java.io.File
@@ -38,7 +37,6 @@ class TarasandeMain {
     private lateinit var managerClickMethod: ManagerClickMethod
     private lateinit var managerScreenExtension: ManagerScreenExtension
     private lateinit var managerBlur: ManagerBlur
-    private lateinit var managerMultiplayerFeature: ManagerMultiplayerFeature
     private lateinit var managerPanel: ManagerPanel
 
     private lateinit var managerInformation: ManagerInformation
@@ -59,7 +57,6 @@ class TarasandeMain {
         fun managerValue() = instance.managerValue
         fun managerModule() = instance.managerModule
         fun managerPanel() = instance.managerPanel
-        fun managerMultiplayerFeature() = instance.managerMultiplayerFeature
         fun managerScreenExtension() = instance.managerScreenExtension
         fun managerInformation() = instance.managerInformation
         fun managerGraph() = instance.managerGraph
@@ -79,7 +76,6 @@ class TarasandeMain {
         managerESP = ManagerESP()
         managerClickMethod = ManagerClickMethod()
         managerScreenExtension = ManagerScreenExtension()
-        managerMultiplayerFeature = ManagerMultiplayerFeature()
         managerBlur = ManagerBlur()
 
         managerModule = ManagerModule(managerPanel, managerFile)

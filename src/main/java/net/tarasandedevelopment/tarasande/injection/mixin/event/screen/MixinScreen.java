@@ -15,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.event.EventDispatcher;
 
+import java.util.ArrayList;
+
 @Mixin(Screen.class)
 public abstract class MixinScreen {
 
@@ -32,10 +34,8 @@ public abstract class MixinScreen {
 
     @Inject(method = "clearAndInit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;init()V"))
     public void hookEventChildren(CallbackInfo ci) {
-        final EventChildren eventChildren = new EventChildren((Screen) (Object) this);
+        final EventChildren eventChildren = new EventChildren((Screen) (Object) this, new ArrayList<>());
         EventDispatcher.INSTANCE.call(eventChildren);
-
-        for (Element element : eventChildren.get())
-            this.addDrawableChild((Element & Drawable) element);
+        eventChildren.getElements().forEach(element -> addDrawableChild((Element & Drawable) element));
     }
 }

@@ -1,15 +1,16 @@
 package de.florianmichael.tarasande_protocol_spoofer.mixin;
 
-import de.florianmichael.tarasande_protocol_spoofer.multiplayerfeature.MultiplayerFeatureToggleableExploitsForgeFaker;
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelToggleableForgeFaker;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
 import net.minecraft.server.ServerMetadata;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import de.florianmichael.tarasande_protocol_spoofer.multiplayerfeature.forgefaker.payload.IForgePayload;
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.IForgePayload;
 import de.florianmichael.tarasande_protocol_spoofer.accessor.IServerInfo;
 import de.florianmichael.tarasande_protocol_spoofer.accessor.IServerMetadata;
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,7 +36,7 @@ public class MixinMultiplayerServerListPingerSubOnResponse {
         if (payload != null) {
             ((IServerInfo) field_3776).tarasande_setForgePayload(payload);
 
-            TarasandeMain.Companion.managerMultiplayerFeature().get(MultiplayerFeatureToggleableExploitsForgeFaker.class).getForgeInfoTracker().put((InetSocketAddress) instance.getAddress(), payload);
+            TarasandeMain.Companion.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen.class).getSidebar().get(EntrySidebarPanelToggleableForgeFaker.class).getForgeInfoTracker().put((InetSocketAddress) instance.getAddress(), payload);
         }
 
         instance.send(packet); // Original Code

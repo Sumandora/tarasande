@@ -57,6 +57,7 @@
     "event.entity.MixinLivingEntity",
     "event.entity.MixinPlayerEntity",
     "event.item.MixinItemCooldownManager",
+    "event.screen.MixinMultiplayerServerListWidgetSubServerEntry",
     "event.screen.MixinScreen",
     "feature.clientvalue.MixinMinecraftClient",
     "feature.clientvalue.MixinRealmsClient",
@@ -101,12 +102,11 @@
     "feature.module.norender.MixinSignBlockEntityRenderer",
     "feature.module.norender.MixinStatusEffectInstance",
     "feature.module.norender.MixinWorldRenderer",
-    "feature.module.screen.MixinPlayerScreenHandler"
+    "feature.module.screen.MixinPlayerScreenHandler",
+    "feature.screenextension.MixinClientPlayerEntity",
+    "feature.screenextension.MixinProfileKeys"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "event.screen.MixinMultiplayerServerListWidgetSubServerEntry"
-  ]
+  }
 }

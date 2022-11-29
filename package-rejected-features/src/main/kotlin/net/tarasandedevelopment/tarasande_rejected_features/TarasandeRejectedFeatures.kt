@@ -5,7 +5,6 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande_rejected_features.information.*
 import net.tarasandedevelopment.tarasande_rejected_features.module.*
-import net.tarasandedevelopment.tarasande_rejected_features.multiplayerfeature.MultiplayerFeatureNoSignatures
 import su.mandora.event.EventDispatcher
 
 class TarasandeRejectedFeatures : ClientModInitializer {
@@ -30,10 +29,6 @@ class TarasandeRejectedFeatures : ClientModInitializer {
 
                 // KeyBinds
                 InformationKeyBinds()
-            )
-
-            TarasandeMain.managerMultiplayerFeature().add(
-                MultiplayerFeatureNoSignatures()
             )
         }
     }

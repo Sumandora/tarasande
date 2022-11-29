@@ -8,14 +8,14 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.accountmanager.screenextension.ScreenExtensionButtonAccountManager
-import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterEnvironment
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.ExtraInfo
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.AccountSession
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.AccountToken
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.AccountYggdrasil
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.microsoft.AccountMicrosoft
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.microsoft.AccountMicrosoftRefreshToken
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterEnvironment
 import net.tarasandedevelopment.tarasande.util.render.SkinRenderer
 
 class ManagerAccount : Manager<Class<out Account>>() {
@@ -31,7 +31,7 @@ class ManagerAccount : Manager<Class<out Account>>() {
 }
 
 abstract class Account {
-    var environment: Environment = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonAccountManager::class.java).screenBetterSlotListAccountManager.managerEnvironment.list.first().create()
+    var environment: Environment = TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).screenBetterSlotListAccountManager.managerEnvironment.list.first().create()
     var session: Session? = null
         set(value) {
             if (value != null)
