@@ -12,7 +12,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueSpacer
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
-import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.*
+import net.tarasandedevelopment.tarasande.system.feature.multiplayerfeaturesystem.impl.MultiplayerFeatureToggleableExploitsClientBrandSpoofer
 import net.tarasandedevelopment.tarasande.system.feature.screenextensionsystem.ScreenExtensionCustom
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanelSidebar
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelElements

@@ -24,7 +24,6 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.rende
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.element.PanelElementsCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.fixed.PanelArrayList
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
-import net.tarasandedevelopment.tarasande.feature.notification.panel.PanelNotifications
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.Event
 import su.mandora.event.EventDispatcher

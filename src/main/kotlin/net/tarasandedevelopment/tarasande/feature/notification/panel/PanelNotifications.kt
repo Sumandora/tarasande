@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.feature.notification.panel
 
 import com.mojang.blaze3d.systems.RenderSystem
-import de.florianmichael.ezeasing.EzEasing
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.Formatting
 import net.minecraft.util.StringHelper
@@ -9,8 +8,6 @@ import net.minecraft.util.math.MathHelper
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.feature.notification.Notification
 import net.tarasandedevelopment.tarasande.feature.notification.Notifications
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil

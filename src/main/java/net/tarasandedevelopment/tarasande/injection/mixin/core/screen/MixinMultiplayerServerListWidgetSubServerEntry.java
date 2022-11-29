@@ -17,7 +17,9 @@ import java.util.function.Consumer;
 @Mixin(MultiplayerServerListWidget.ServerEntry.class)
 public class MixinMultiplayerServerListWidgetSubServerEntry implements IMultiplayerServerListWidgetSubServerEntry {
 
-    @Shadow @Final private ServerInfo server;
+    @Shadow
+    @Final
+    private ServerInfo server;
 
     @Unique
     private Consumer<ServerInfo> tarasande_completionConsumer;

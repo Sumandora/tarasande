@@ -49,7 +49,7 @@ class ScreenExtensionCustomGameMenu : ScreenExtensionCustom<Screen>("Server Ping
                 }
             }
             add(EventDisconnect::class.java) {
-                if(it.connection == MinecraftClient.getInstance().networkHandler?.connection) {
+                if (it.connection == MinecraftClient.getInstance().networkHandler?.connection) {
                     oldAddress = ""
                     GraphPlayers.clear()
                     GraphPing.clear()

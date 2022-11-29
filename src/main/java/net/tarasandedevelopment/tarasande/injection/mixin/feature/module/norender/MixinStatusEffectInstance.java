@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(StatusEffectInstance.class)
 public class MixinStatusEffectInstance {
 
-    @Inject(method = { "shouldShowParticles", "shouldShowIcon" }, at = @At("HEAD"), cancellable = true)
+    @Inject(method = {"shouldShowParticles", "shouldShowIcon"}, at = @At("HEAD"), cancellable = true)
     public void hookNoRender(CallbackInfoReturnable<Boolean> cir) {
         final ModuleNoRender moduleNoRender = TarasandeMain.Companion.managerModule().get(ModuleNoRender.class);
         if (!moduleNoRender.getEnabled() || !moduleNoRender.getHud().getPotionIcons().anySelected()) return;

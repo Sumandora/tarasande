@@ -14,7 +14,7 @@ class GraphTickablePitchDelta : Graph("Pitch Delta", 200, false) {
             add(EventUpdate::class.java) { event ->
                 if (event.state == EventUpdate.State.POST) {
                     val lastPitch = MinecraftClient.getInstance().player?.lastPitch ?: return@add
-                    if(this@GraphTickablePitchDelta.lastPitch != null)
+                    if (this@GraphTickablePitchDelta.lastPitch != null)
                         add(this@GraphTickablePitchDelta.lastPitch!! - lastPitch)
                     this@GraphTickablePitchDelta.lastPitch = lastPitch
                 }

@@ -16,8 +16,8 @@ class ManagerValue(fileSystem: ManagerFile) : Manager<Value>() {
 
     init {
         EventDispatcher.add(EventSuccessfulLoad::class.java, 9999) {
-            for(value in list) {
-                if(list.filter { it != value }.any { it.name == value.name && it.owner.javaClass.name == value.owner.javaClass.name })
+            for (value in list) {
+                if (list.filter { it != value }.any { it.name == value.name && it.owner.javaClass.name == value.owner.javaClass.name })
                     error("Name-and-owner-clash value registered (" + value.owner.javaClass.name + " -> " + value.name + ")")
             }
             fileSystem.add(FileValuesBinds(), FileValuesNonBinds())
@@ -26,7 +26,7 @@ class ManagerValue(fileSystem: ManagerFile) : Manager<Value>() {
     }
 
     override fun insert(obj: Value, index: Int) {
-        if(closed)
+        if (closed)
             error("ValueSystem is closed")
         super.insert(obj, index)
     }

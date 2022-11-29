@@ -14,7 +14,7 @@ class GraphTickableYawDelta : Graph("Yaw Delta", 200, false) {
             add(EventUpdate::class.java) { event ->
                 if (event.state == EventUpdate.State.POST) {
                     val lastYaw = MinecraftClient.getInstance().player?.lastPitch ?: return@add
-                    if(this@GraphTickableYawDelta.lastYaw != null)
+                    if (this@GraphTickableYawDelta.lastYaw != null)
                         add(this@GraphTickableYawDelta.lastYaw!! - lastYaw)
                     this@GraphTickableYawDelta.lastYaw = lastYaw
                 }

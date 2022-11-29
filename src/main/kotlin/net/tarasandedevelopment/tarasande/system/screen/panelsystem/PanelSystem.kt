@@ -50,7 +50,7 @@ class ManagerPanel(fileSystem: ManagerFile) : Manager<Panel>() {
     fun reorderPanels(panel: Panel, index: Int) {
         if (!list.contains(panel))
             return // Closeable panels (this was a feature, which got scrapped)
-        if(index >= list.size)
+        if (index >= list.size)
             return // Panels have been removed?
         list.remove(panel)
         list.add(index, panel)
