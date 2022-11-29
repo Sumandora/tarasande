@@ -61,7 +61,9 @@ class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
             ScreenExtensionButtonListDeathScreen(),
             ScreenExtensionPackScreen(),
             ScreenExtensionButtonListHandledScreen(),
-            ScreenExtensionButtonListSleepingChatScreen()
+            ScreenExtensionButtonListSleepingChatScreen(),
+            ScreenExtensionDirectConnectScreen(),
+            ScreenExtensionGameMenuScreen()
         )
 
         EventDispatcher.add(EventChildren::class.java) { eventChildren ->
