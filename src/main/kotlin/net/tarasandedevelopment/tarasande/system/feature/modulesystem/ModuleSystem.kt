@@ -1,7 +1,8 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem
 
 import net.minecraft.client.MinecraftClient
-import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
+import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket
+import net.minecraft.network.packet.s2c.play.HealthUpdateS2CPacket
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
@@ -17,8 +18,6 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.comba
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.ghost.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc.*
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc.ModuleAllowAllCharacters
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoChatContext
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.*
@@ -141,16 +140,17 @@ class ManagerModule(panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manage
                 }
             }
             add(EventPacket::class.java) {
-                if (it.type == EventPacket.Type.RECEIVE && it.packet is PlayerRespawnS2CPacket)
+                if (it.type == EventPacket.Type.RECEIVE && it.packet is HealthUpdateS2CPacket && it.packet.health <= 0) {
                     for (module in list)
-                        if (module.disableWhen.isSelected(0) && module.enabled)
-                            module.enabled = false
+                        if (module.autoDisable.isSelected(0) && module.enabled)
+                            module.switchState()
+                }
             }
             add(EventDisconnect::class.java) {
                 if (it.connection == MinecraftClient.getInstance().networkHandler?.connection) {
                     for (module in list)
-                        if (module.disableWhen.isSelected(1) && module.enabled)
-                            module.enabled = false
+                        if (module.autoDisable.isSelected(1) && module.enabled)
+                            module.switchState()
                 }
             }
             add(EventSuccessfulLoad::class.java, 1001) {
@@ -182,7 +182,7 @@ open class Module(val name: String, val description: String, val category: Strin
         }
 
     val visible = ValueBoolean(this, "Visible in ArrayList", true)
-    val disableWhen = ValueMode(this, "Auto disable", true, "Death", "Disconnect")
+    val autoDisable = ValueMode(this, "Auto disable", true, "Death", "Disconnect")
     val bind = ValueBind(this, "Bind", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN)
 
     val mc: MinecraftClient = MinecraftClient.getInstance()

@@ -5,10 +5,12 @@ import net.minecraft.network.ClientConnection
 import net.minecraft.network.NetworkState
 import net.minecraft.network.Packet
 import net.minecraft.network.listener.ClientPlayPacketListener
+import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket
 import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket
 import net.minecraft.network.packet.c2s.play.PlayPongC2SPacket
 import net.minecraft.network.packet.s2c.play.KeepAliveS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayPingS2CPacket
+import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventPacket
@@ -44,7 +46,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     private val cancelKey = object : ValueBind(this, "Cancel key", Type.KEY, GLFW.GLFW_KEY_UNKNOWN) {
         override fun isEnabled() = mode.isSelected(0) && affectedPackets.isSelected(0)
     }
-    private val deltaTickSimulation = ValueMode(this, "Delta tick simulation", true, "Keep alive", "Ping")
+    private val restrictPackets = ValueMode(this, "Restrict packets", true, "Keep alive", "Ping")
 
     private val packets = CopyOnWriteArrayList<Triple<Packet<*>, EventPacket.Type, Long>>()
     private val timeUtil = TimeUtil()
@@ -54,13 +56,15 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     private var rotation: Rotation? = null
 
     init {
-        TarasandeMain.managerGraph().add(object : Graph("Delta tick", 50, true) {
+        // Enable both by default
+        autoDisable.select(0)
+        autoDisable.select(1)
+
+        TarasandeMain.managerGraph().add(object : Graph("Last transaction", 50, true) {
             init {
-                EventDispatcher.apply {
-                    add(EventPacket::class.java) { event ->
-                        if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayPingS2CPacket)
-                            add(event.packet.parameter)
-                    }
+                EventDispatcher.add(EventPacket::class.java) { event ->
+                    if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayPingS2CPacket)
+                        add(event.packet.parameter)
                 }
             }
         })
@@ -77,15 +81,23 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
             if (event.cancelled) return@registerEvent
             if (event.packet != null) {
                 if (mc.networkHandler?.connection?.channel?.attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY)?.get() != NetworkState.PLAY) {
+                    packets.clear() // Packets don't matter anymore
                     return@registerEvent
                 }
                 if (mode.isSelected(1) && mc.currentScreen is DownloadingTerrainScreen) {
                     onDisable()
                 }
+                if(
+                    (event.type == EventPacket.Type.SEND && event.packet is ClientStatusC2SPacket && event.packet.mode == ClientStatusC2SPacket.Mode.PERFORM_RESPAWN) ||
+                    (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerRespawnS2CPacket)
+                ) {
+                    onDisable()
+                    return@registerEvent
+                }
                 if (affectedPackets.isSelected(event.type.ordinal)) {
-                    if (deltaTickSimulation.anySelected() &&
-                        deltaTickSimulation.isSelected(0) && event.packet !is KeepAliveC2SPacket && event.packet !is KeepAliveS2CPacket &&
-                        deltaTickSimulation.isSelected(1) && event.packet !is PlayPongC2SPacket && event.packet !is PlayPingS2CPacket) {
+                    if (restrictPackets.anySelected() &&
+                        restrictPackets.isSelected(0) && event.packet !is KeepAliveC2SPacket && event.packet !is KeepAliveS2CPacket &&
+                        restrictPackets.isSelected(1) && event.packet !is PlayPongC2SPacket && event.packet !is PlayPingS2CPacket) {
                         return@registerEvent
                     }
                     packets.add(Triple(event.packet, event.type,
