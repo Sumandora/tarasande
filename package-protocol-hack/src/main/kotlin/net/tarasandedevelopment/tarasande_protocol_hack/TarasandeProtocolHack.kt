@@ -105,7 +105,7 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
             }
 
             TarasandeMain.managerModule().apply {
-                object : ValueBoolean(get(ModuleInventoryMove::class.java), "Cancel open packet (" + ProtocolVersion.v1_11_1.andOlder() + ")", false) {
+                cancelOpenPacket = object : ValueBoolean(get(ModuleInventoryMove::class.java), "Cancel open packet (" + ProtocolVersion.v1_11_1.andOlder() + ")", false) {
                     override fun isEnabled() = VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1)
                 }
 
