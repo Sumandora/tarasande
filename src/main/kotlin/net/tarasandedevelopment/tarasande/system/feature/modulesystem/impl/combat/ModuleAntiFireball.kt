@@ -4,6 +4,7 @@ import net.minecraft.entity.projectile.FireballEntity
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
@@ -17,6 +18,8 @@ class ModuleAntiFireball : Module("Anti fireball", "Hits fireballs to turn them"
 
     private val reach = ValueNumber(this, "Reach", 0.1, 3.0, 6.0, 0.1)
     private val delay = ValueNumber(this, "Delay", 0.0, 200.0, 1000.0, 50.0)
+    private val rotate = ValueBoolean(this, "Rotate", true)
+    private val throughWalls = ValueBoolean(this, "Through walls", false)
 
     private val targets = ArrayList<FireballEntity>()
 
@@ -38,9 +41,15 @@ class ModuleAntiFireball : Module("Anti fireball", "Hits fireballs to turn them"
                 if (!targets.contains(entity)) {
                     targets.add(entity)
                 }
-                event.rotation = RotationUtil.getRotations(aimPoint).correctSensitivity()
-                event.minRotateToOriginSpeed = 1.0
-                event.maxRotateToOriginSpeed = 1.0
+
+                if(!throughWalls.value && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint))
+                    continue
+
+                if(rotate.value) {
+                    event.rotation = RotationUtil.getRotations(aimPoint).correctSensitivity()
+                    event.minRotateToOriginSpeed = 1.0
+                    event.maxRotateToOriginSpeed = 1.0
+                }
             }
         }
         registerEvent(EventAttack::class.java, 999) { event ->
