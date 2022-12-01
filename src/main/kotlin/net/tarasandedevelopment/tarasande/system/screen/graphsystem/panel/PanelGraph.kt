@@ -46,6 +46,8 @@ class PanelGraph(val graph: Graph) : Panel(graph.name, max(100.0, FontWrapper.ge
         val onePixel = 1 / MinecraftClient.getInstance().window.scaleFactor
 
         for ((index, value) in graph.values().withIndex()) {
+            if(value == null)
+                println(graph.name)
             bufferBuilder.vertex(matrix, (x + (panelWidth - width) * (index / (graph.bufferLength - 1).toFloat())).toFloat(), (y + panelHeight - onePixel - (panelHeight - titleBarHeight - (1 / MinecraftClient.getInstance().window.scaleFactor)) * normalize(value.toDouble(), min, max)).toFloat(), 0.0F).color(1.0F, 1.0F, 1.0F, 1.0F).next()
         }
         BufferRenderer.drawWithShader(bufferBuilder.end())
