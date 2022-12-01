@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = LivingEntity.class, priority = 999 /* baritone fix */)
+@Mixin(value = LivingEntity.class)
 public abstract class MixinLivingEntity extends Entity {
 
     @Shadow
@@ -34,7 +34,7 @@ public abstract class MixinLivingEntity extends Entity {
     @Shadow
     public abstract float getYaw(float tickDelta);
 
-    @Inject(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;bodyTrackingIncrements:I"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateTrackedPosition(DDD)V"), to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setYaw(F)V")))
+    @Inject(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;bodyTrackingIncrements:I"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateTrackedPosition(DDD)V"), to = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;serverX:D")))
     public void preventRotationLeak(CallbackInfo ci) {
         if (this.bodyTrackingIncrements > 0 && (Object) this == MinecraftClient.getInstance().player && RotationUtil.INSTANCE.getFakeRotation() != null) {
             Rotation rotation = RotationUtil.INSTANCE.getFakeRotation();

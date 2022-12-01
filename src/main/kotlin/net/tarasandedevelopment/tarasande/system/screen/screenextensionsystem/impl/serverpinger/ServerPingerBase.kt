@@ -8,7 +8,10 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtension
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.panel.PanelServerInformation
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.panel.copy
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.panel.emptyServer
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import su.mandora.event.EventDispatcher
 import kotlin.math.ceil
@@ -18,7 +21,6 @@ class ServerPingerBase(val parent: ScreenExtension<*>, private val addressProvid
     val pingTask = TimeUtil()
 
     private val clickableWidgetPanel = ClickableWidgetPanel(object : PanelServerInformation(parent) {
-
         override fun renderTitleBar(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
             super.renderTitleBar(matrices, mouseX, mouseY, delta)
             if (showProgress.value && autoPing.value) {
@@ -32,6 +34,14 @@ class ServerPingerBase(val parent: ScreenExtension<*>, private val addressProvid
                     )
                 }
             }
+        }
+
+        override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+            if(RenderUtil.isHovered(mouseX, mouseY, x, y + titleBarHeight, x + panelWidth, y + panelHeight)) {
+                ping(true)
+                return true
+            }
+            return super.mouseClicked(mouseX, mouseY, button)
         }
     }, true)
 
@@ -56,10 +66,9 @@ class ServerPingerBase(val parent: ScreenExtension<*>, private val addressProvid
     private fun ping(force: Boolean = false) {
         if (force || (autoPing.value && pingTask.hasReached(delay.value.toLong()))) {
             (clickableWidgetPanel.panel as PanelServerInformation).apply {
-                server.apply {
+                server = emptyServer.copy().apply {
                     name = addressProvider.invoke()
                     address = name
-                    online = false
                 }
                 createEntry()
             }

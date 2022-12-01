@@ -5,6 +5,9 @@ import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.GameMenuScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtension
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.ServerPingerBase
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.panel.PanelServerInformation
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.panel.copy
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.panel.emptyServer
 
 class ScreenExtensionGameMenuScreen : ScreenExtension<GameMenuScreen>(GameMenuScreen::class.java) {
 
@@ -15,6 +18,7 @@ class ScreenExtensionGameMenuScreen : ScreenExtension<GameMenuScreen>(GameMenuSc
     override fun createElements(screen: GameMenuScreen): MutableList<Element> {
         return mutableListOf(
             serverPingerBase.widget().apply {
+                (panel as PanelServerInformation).server = emptyServer.copy()
                 x = (screen.width / 2 - panel.panelWidth / 2).toInt()
                 y = 50
             }

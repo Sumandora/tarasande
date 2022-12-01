@@ -25,6 +25,9 @@ accessible field net/minecraft/client/option/KeyBinding pressed Z
 accessible field net/minecraft/client/option/KeyBinding boundKey Lnet/minecraft/client/util/InputUtil$Key;
 accessible field net/minecraft/client/resource/language/LanguageManager ENGLISH_US Lnet/minecraft/client/resource/language/LanguageDefinition;
 accessible field net/minecraft/entity/LivingEntity bodyTrackingIncrements I
+accessible field net/minecraft/entity/LivingEntity serverX D
+accessible field net/minecraft/entity/LivingEntity serverY D
+accessible field net/minecraft/entity/LivingEntity serverZ D
 accessible field net/minecraft/entity/LivingEntity jumpingCooldown I
 accessible field net/minecraft/util/math/Matrix4f a00 F
 accessible field net/minecraft/util/math/Matrix4f a01 F
@@ -65,6 +68,7 @@ accessible field net/minecraft/entity/TntEntity DEFAULT_FUSE I
 accessible field net/minecraft/client/render/WorldRenderer frustum Lnet/minecraft/client/render/Frustum;
 accessible field net/minecraft/network/packet/s2c/play/WorldTimeUpdateS2CPacket timeOfDay J
 accessible field net/minecraft/client/gui/screen/DirectConnectScreen addressField Lnet/minecraft/client/gui/widget/TextFieldWidget;
+accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget$ServerEntry iconTextureId Lnet/minecraft/util/Identifier;
 accessible field net/minecraft/resource/ResourcePackProfile packFactory Ljava/util/function/Supplier;
 accessible field net/minecraft/resource/AbstractFileResourcePack base Ljava/io/File;
 accessible field net/minecraft/client/resource/ClientBuiltinResourcePackProvider serverContainer Lnet/minecraft/resource/ResourcePackProfile;

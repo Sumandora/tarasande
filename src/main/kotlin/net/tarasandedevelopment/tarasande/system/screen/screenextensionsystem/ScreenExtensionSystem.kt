@@ -7,9 +7,31 @@ import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.button.PanelButton
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.*
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.panel.ClickableWidgetPanelSidebar
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.ManagerEntrySidebarPanel
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.panel.ClickableWidgetPanelSidebar
 import su.mandora.event.EventDispatcher
+
+class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
+
+    init {
+        add(
+            ScreenExtensionSidebarMultiplayerScreen(),
+            ScreenExtensionDownloadingTerrainScreen(),
+            ScreenExtensionButtonListDeathScreen(),
+            ScreenExtensionPackScreen(),
+            ScreenExtensionButtonListHandledScreen(),
+            ScreenExtensionButtonListSleepingChatScreen(),
+            ScreenExtensionDirectConnectScreen(),
+            ScreenExtensionGameMenuScreen()
+        )
+
+        EventDispatcher.add(EventChildren::class.java) { eventChildren ->
+            list.filter { it.screen.isAssignableFrom(eventChildren.screen.javaClass) }.forEach {
+                eventChildren.elements.addAll(it.invoker(eventChildren.screen))
+            }
+        }
+    }
+}
 
 abstract class ScreenExtension<T : Screen>(val screen: Class<out T>) {
 
@@ -49,27 +71,5 @@ open class ScreenExtensionButtonList<T : Screen>(screen: Class<out T>) : ScreenE
             }
         }
         return list
-    }
-}
-
-class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
-
-    init {
-        add(
-            ScreenExtensionSidebarMultiplayerScreen(),
-            ScreenExtensionDownloadingTerrainScreen(),
-            ScreenExtensionButtonListDeathScreen(),
-            ScreenExtensionPackScreen(),
-            ScreenExtensionButtonListHandledScreen(),
-            ScreenExtensionButtonListSleepingChatScreen(),
-            ScreenExtensionDirectConnectScreen(),
-            ScreenExtensionGameMenuScreen()
-        )
-
-        EventDispatcher.add(EventChildren::class.java) { eventChildren ->
-            list.filter { it.screen.isAssignableFrom(eventChildren.screen.javaClass) }.forEach {
-                eventChildren.elements.addAll(it.invoker(eventChildren.screen))
-            }
-        }
     }
 }

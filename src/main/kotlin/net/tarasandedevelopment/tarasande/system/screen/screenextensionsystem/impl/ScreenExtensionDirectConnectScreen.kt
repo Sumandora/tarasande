@@ -6,6 +6,9 @@ import net.minecraft.client.gui.screen.DirectConnectScreen
 import net.tarasandedevelopment.tarasande.event.EventKey
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtension
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.ServerPingerBase
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.panel.PanelServerInformation
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.panel.copy
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.panel.emptyServer
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 
@@ -35,6 +38,7 @@ class ScreenExtensionDirectConnectScreen : ScreenExtension<DirectConnectScreen>(
     override fun createElements(screen: DirectConnectScreen): MutableList<Element> {
         return mutableListOf(
             serverPingerBase.widget().apply {
+                (panel as PanelServerInformation).server = emptyServer.copy()
                 x = (screen.width / 2 - panel.panelWidth / 2).toInt()
                 y = 30
             }
