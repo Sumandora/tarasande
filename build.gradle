@@ -111,10 +111,6 @@ tasks.register('checkCode') {
 	group "Code checker"
 	doLast {
 		CodeChecker codeChecker = new CodeChecker(sourceSets.main)
-		codeChecker.ignore("de/florianmichael")
-		codeChecker.ignore("clamp_protocolhack.mixins.json")
-
-		codeChecker.ignore("net/tarasandedevelopment/tarasande/protocolhack/provider")
 		codeChecker.check()
 	}
 }
