@@ -7,7 +7,7 @@ import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
 import su.mandora.event.EventDispatcher
 
-class GraphPing : Graph("Ping", 25, true) {
+class GraphPing : Graph("Connection", "Ping", 25, true) {
 
     init {
         EventDispatcher.apply {

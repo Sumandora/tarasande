@@ -4,7 +4,7 @@ import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.GraphTickable
 import su.mandora.event.EventDispatcher
 
-class GraphTickableFPS : GraphTickable("FPS", 200, true) {
+class GraphTickableFPS : GraphTickable("Game", "FPS", 200, true) {
 
     private val data = ArrayList<Long>()
 

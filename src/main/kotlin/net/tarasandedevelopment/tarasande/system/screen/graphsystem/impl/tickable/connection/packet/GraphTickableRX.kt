@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickab
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.GraphTickable
 
-class GraphTickableRX : GraphTickable("RX", 200, true) {
+class GraphTickableRX : GraphTickable("Connection", "RX", 200, true) {
 
     override fun tick(): Number? {
         if (MinecraftClient.getInstance().world == null) return null

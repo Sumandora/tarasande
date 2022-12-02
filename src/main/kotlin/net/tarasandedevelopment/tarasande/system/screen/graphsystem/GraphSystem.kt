@@ -53,7 +53,7 @@ class ManagerGraph(informationSystem: ManagerInformation, panelSystem: ManagerPa
     }
 }
 
-open class Graph(val name: String, bufferLength: Int, integer: Boolean) {
+open class Graph(val category: String, val name: String, bufferLength: Int, integer: Boolean) {
     var decimalPlaces = 0
     var bufferLength = 0
 
@@ -92,7 +92,7 @@ open class Graph(val name: String, bufferLength: Int, integer: Boolean) {
     } else num?.toDouble()?.roundToInt()?.toString()
 }
 
-abstract class GraphTickable(name: String, bufferLength: Int, integer: Boolean) : Graph(name, bufferLength, integer) {
+abstract class GraphTickable(category: String, name: String, bufferLength: Int, integer: Boolean) : Graph(category, name, bufferLength, integer) {
 
     init {
         EventDispatcher.add(EventTick::class.java) {
