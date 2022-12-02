@@ -54,6 +54,7 @@
 - Projectile aim bot: Crossbows & Prediction
 - Killaura: Closed Inventory
 - Tick base manipulation: Improve auto uncharge / Full recode
+- Velocity: Explosion Packet Distance Check (Do they affect the player?)
 
 ## TODO-List (Flori | Tarasande)
 #### Additions
