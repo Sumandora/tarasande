@@ -58,6 +58,8 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
     val managerAccount      = ManagerAccount()
     // @formatter:on
 
+    val screenBetterProxy = ScreenBetterProxy()
+
     init {
         EventDispatcher.add(EventSuccessfulLoad::class.java, 9999) {
             TarasandeMain.managerFile().add(FileAccounts(this))
@@ -123,7 +125,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         }.also { addButton = it })
 
         addDrawableChild(ButtonWidget(3, 3, 100, 20, Text.of("Proxy")) {
-            MinecraftClient.getInstance().setScreen(ScreenBetterProxy(MinecraftClient.getInstance().currentScreen))
+            MinecraftClient.getInstance().setScreen(screenBetterProxy.apply { prevScreen = MinecraftClient.getInstance().currentScreen })
         })
 
         addDrawableChild(ButtonWidget(width - 103, 3, 100, 20, Text.of("Random session")) {
@@ -150,8 +152,8 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         this.renderTitle(matrices, "Account Manager")
         FontWrapper.textShadow(matrices, status, width / 2.0F, 2 * FontWrapper.fontHeight() * 2.0F, -1, centered = true)
 
-        if (TarasandeMain.get().proxy != null) {
-            FontWrapper.textShadow(matrices, TarasandeMain.get().proxy!!.socketAddress.address.hostAddress + ":" + TarasandeMain.get().proxy!!.socketAddress.port + " (" + TarasandeMain.get().proxy!!.ping + "ms)", 6F, 27F, -1)
+        screenBetterProxy.proxy?.apply {
+            FontWrapper.textShadow(matrices, socketAddress.address.hostAddress + ":" + socketAddress.port + " (" + ping + "ms)", 6F, 27F)
         }
     }
 
