@@ -26,11 +26,8 @@
 
 ## Roadmap
 1. Base
-2. Tarasande Menu (client menu) 
-   - Account Management (with encrypted files)
+2. Account Management (with encrypted files) 
    - Proxy System
-   - Protocol Translation
-   - Basic exploits (bungee hack)
 3. ClickGUI (cheat menu)
    - Basic combat modules
    - Basic movement modules
@@ -38,7 +35,6 @@
    - More advanced modules
    - Anarchy modules
    - Quality of life modules
-4. Multi-version support
 
 ## TODO-List (Emily | Tarasande)
 - User configs
