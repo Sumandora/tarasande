@@ -22,6 +22,7 @@ import net.tarasandedevelopment.tarasande.system.screen.graphsystem.panel.PanelG
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import su.mandora.event.EventDispatcher
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
@@ -72,7 +73,7 @@ open class Graph(val category: String, val name: String, bufferLength: Int, inte
         }
     }
 
-    private val values = ArrayList<Number>()
+    private val values = CopyOnWriteArrayList<Number>()
 
     fun add(num: Number) {
         values.add(num)
