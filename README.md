@@ -53,7 +53,7 @@
 - Wheel Menu
 - Projectile aim bot: Crossbows & Prediction
 - Trajectory: Prediction
-- Tick base manipulation: Improve auto uncharge / Full recode
+- Tick base manipulation: Improve auto uncharge
 
 ## TODO-List (Flori | Tarasande)
 #### Additions

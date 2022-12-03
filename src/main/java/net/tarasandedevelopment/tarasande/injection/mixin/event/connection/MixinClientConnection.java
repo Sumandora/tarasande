@@ -45,15 +45,15 @@ public abstract class MixinClientConnection implements IClientConnection {
 
     @Inject(method = "send(Lnet/minecraft/network/Packet;Lnet/minecraft/network/PacketCallbacks;)V", at = @At("HEAD"), cancellable = true)
     public void hookEventPacketSend(Packet<?> packet, @Nullable PacketCallbacks callbacks, CallbackInfo ci) {
-        if (!tarasande_forced.contains(packet)) {
-            if (side == NetworkSide.CLIENTBOUND) {
+        if (side == NetworkSide.CLIENTBOUND) {
+            if (!tarasande_forced.contains(packet)) {
                 EventPacket eventPacket = new EventPacket(EventPacket.Type.SEND, packet);
                 EventDispatcher.INSTANCE.call(eventPacket);
                 if (eventPacket.getCancelled())
                     ci.cancel();
-            }
-        } else
-            tarasande_forced.remove(packet);
+            } else
+                tarasande_forced.remove(packet);
+        }
     }
 
     @Inject(method = "disconnect", at = @At("RETURN"))

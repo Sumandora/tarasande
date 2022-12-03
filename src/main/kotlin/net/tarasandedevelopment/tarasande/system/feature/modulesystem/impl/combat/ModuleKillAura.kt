@@ -199,12 +199,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 val bestAimPoint = MathUtil.getBestAimPoint(boundingBox)
                 if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
                 if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(fovRotation()) > fov.value) continue
-                val aimPoint = if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() != 0.0F) {
-                    mc.player?.eyePos!! + currentRot.forwardVector(0.01)
-                } else {
-                    // aim point calculation maybe slower, only run it if the range check is actually able to succeed under best conditions
-                    getAimPoint(boundingBox, entity)
-                }
+                val aimPoint =
+                    if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() != 0.0F) {
+                        mc.player?.eyePos!! + currentRot.forwardVector(0.01)
+                    } else {
+                        // aim point calculation maybe slower, only run it if the range check is actually able to succeed under best conditions
+                        getAimPoint(boundingBox, entity)
+                    }
                 // in case the eyepos is inside the boundingbox the next 2 checks will always succeed, but keeping them might prevent some retarded situation which is going to be added with an update
                 if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
                 if (!throughWalls.isSelected(2))

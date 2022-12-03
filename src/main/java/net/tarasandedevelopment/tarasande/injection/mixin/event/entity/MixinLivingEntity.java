@@ -62,11 +62,6 @@ public abstract class MixinLivingEntity extends Entity {
 
     @Inject(method = "handleStatus", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
     public void hookEventEntityHurtDamage(byte status, CallbackInfo ci) {
-        EventDispatcher.INSTANCE.call(new EventEntityHurt(this, false));
-    }
-
-    @Inject(method = "handleStatus", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setHealth(F)V"))
-    public void hookEventEntityHurtDeath(byte status, CallbackInfo ci) {
-        EventDispatcher.INSTANCE.call(new EventEntityHurt(this, true));
+        EventDispatcher.INSTANCE.call(new EventEntityHurt(this));
     }
 }
