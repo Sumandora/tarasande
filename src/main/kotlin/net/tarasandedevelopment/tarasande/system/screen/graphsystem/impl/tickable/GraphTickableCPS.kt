@@ -7,7 +7,7 @@ import net.tarasandedevelopment.tarasande.system.screen.graphsystem.GraphTickabl
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 
-class GraphTickableCPS : GraphTickable("CPS", 200, true) {
+class GraphTickableCPS : GraphTickable("Player", "CPS", 200, true) {
 
     private var clickMode = ValueMode(this, "Click mode", false, "Hand swing", "Mouse click")
     private val clicks = ArrayList<Long>()

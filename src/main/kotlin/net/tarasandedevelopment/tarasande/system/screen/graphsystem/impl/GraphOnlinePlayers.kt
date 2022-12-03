@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
 import su.mandora.event.EventDispatcher
 import java.util.*
 
-class GraphOnlinePlayers : Graph("Online Players", 25, true) {
+class GraphOnlinePlayers : Graph("Server", "Online Players", 25, true) {
 
     val players = ArrayList<UUID>()
 

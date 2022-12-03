@@ -60,7 +60,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         autoDisable.select(0)
         autoDisable.select(1)
 
-        TarasandeMain.managerGraph().add(object : Graph("Last transaction", 50, true) {
+        TarasandeMain.managerGraph().add(object : Graph("Blink", "Last transaction", 50, true) {
             init {
                 EventDispatcher.add(EventPacket::class.java) { event ->
                     if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayPingS2CPacket)

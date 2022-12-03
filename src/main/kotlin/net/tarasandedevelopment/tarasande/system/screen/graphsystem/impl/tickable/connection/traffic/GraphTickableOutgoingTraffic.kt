@@ -6,7 +6,7 @@ import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import su.mandora.event.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
 
-class GraphTickableOutgoingTraffic : GraphTickable("Outgoing Traffic", 200, true) {
+class GraphTickableOutgoingTraffic : GraphTickable("Connection", "Outgoing Traffic", 200, true) {
 
     private val traffic = CopyOnWriteArrayList<Pair<Long, Int>>()
 

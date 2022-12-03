@@ -22,6 +22,7 @@ import net.tarasandedevelopment.tarasande.system.screen.graphsystem.panel.PanelG
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import su.mandora.event.EventDispatcher
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
@@ -53,7 +54,7 @@ class ManagerGraph(informationSystem: ManagerInformation, panelSystem: ManagerPa
     }
 }
 
-open class Graph(val name: String, bufferLength: Int, integer: Boolean) {
+open class Graph(val category: String, val name: String, bufferLength: Int, integer: Boolean) {
     var decimalPlaces = 0
     var bufferLength = 0
 
@@ -72,7 +73,7 @@ open class Graph(val name: String, bufferLength: Int, integer: Boolean) {
         }
     }
 
-    private val values = ArrayList<Number>()
+    private val values = CopyOnWriteArrayList<Number>()
 
     fun add(num: Number) {
         values.add(num)
@@ -92,7 +93,7 @@ open class Graph(val name: String, bufferLength: Int, integer: Boolean) {
     } else num?.toDouble()?.roundToInt()?.toString()
 }
 
-abstract class GraphTickable(name: String, bufferLength: Int, integer: Boolean) : Graph(name, bufferLength, integer) {
+abstract class GraphTickable(category: String, name: String, bufferLength: Int, integer: Boolean) : Graph(category, name, bufferLength, integer) {
 
     init {
         EventDispatcher.add(EventTick::class.java) {

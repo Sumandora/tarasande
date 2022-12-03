@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
 import su.mandora.event.EventDispatcher
 
-class GraphTPS : Graph("TPS", 25, false) {
+class GraphTPS : Graph("Server", "TPS", 25, false) {
 
     private var lastWorldTimePacket = 0L
     private var timeDeltas = ArrayList<Long>()

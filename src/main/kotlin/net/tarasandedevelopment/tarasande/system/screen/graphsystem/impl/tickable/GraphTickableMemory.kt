@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickab
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.GraphTickable
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 
-class GraphTickableMemory : GraphTickable("Memory", 200, false) {
+class GraphTickableMemory : GraphTickable("Game", "Memory", 200, false) {
     override fun tick() = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()
 
     override fun format(num: Number?): String? {
