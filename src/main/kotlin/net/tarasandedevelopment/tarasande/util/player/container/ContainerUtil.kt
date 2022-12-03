@@ -21,7 +21,7 @@ object ContainerUtil {
     fun getClosestSlot(screenHandler: ScreenHandler, original: HandledScreen<*>, lastMouseClick: Vec2f, block: (Slot, List<Slot>) -> Boolean): Slot? {
         val list = getValidSlots(screenHandler)
         return list
-            .filter { block.invoke(it, list) }
+            .filter { block(it, list) }
             .minByOrNull { lastMouseClick.distanceSquared(getDisplayPosition(original, it)) }
     }
 

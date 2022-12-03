@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityStatuses
 import net.minecraft.entity.LivingEntity
@@ -109,6 +110,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val forceCritical = object : ValueBoolean(this, "Force critical", true) {
         override fun isEnabled() = waitForCritical.value && criticalSprint.value
     }
+    private val closedInventory = ValueBoolean(this, "Closed inventory", false)
 
     val targets = CopyOnWriteArrayList<Pair<Entity, Vec3d>>()
     private val comparator: Comparator<Pair<Entity, Vec3d>> = Comparator.comparing {
@@ -182,8 +184,15 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             val prevTargets = ArrayList(targets)
             targets.clear()
             val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
+            if(closedInventory.value && mc.currentScreen is HandledScreen<*>) {
+                event.rotation = currentRot
+                event.minRotateToOriginSpeed = aimSpeed.minValue
+                event.maxRotateToOriginSpeed = aimSpeed.maxValue
+                return@registerEvent
+            }
             for (entity in mc.world?.entities!!) {
                 if (!PlayerUtil.isAttackable(entity)) continue
+                @Suppress("NAME_SHADOWING")
                 val entity = entity as LivingEntity
 
                 val boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())
@@ -264,6 +273,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             performedTick = false
 
             var canHit = true
+            if(closedInventory.value && mc.currentScreen is HandledScreen<*>)
+                canHit = false
 
             if (waitForCritical.value) if (!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) })
                 if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !(mc.player as IClientPlayerEntity).tarasande_forceHasStatusEffect(StatusEffects.BLINDNESS) && !mc.player?.hasVehicle()!!)
@@ -277,7 +288,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 canHit = false
 
             if (targets.isEmpty() || event.dirty || !canHit) {
-                if (targets.isNotEmpty())
+                if (targets.isNotEmpty()) // TODO is this important
                     block() // This is a rare case of us, only being able to hit the enemy the first tick and later becoming unable to.
                 clickSpeedUtil.reset()
                 waitForHit = false
@@ -295,8 +306,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     return@registerEvent
             }
 
+            var attacked = false
+
             if (!mc.player?.isUsingItem!! || (autoBlock.isSelected(1) && !needUnblock.value)) {
-                var attacked = false
                 var imaginaryPosition = mc.player?.pos!!
                 teleportPath = ArrayList()
                 val maxTeleportTime = (mc.renderTickCounter.tickTime / targets.size.toDouble()).toLong()
@@ -366,7 +378,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 }
             }
 
-            if (targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && !waitForHit && !mc.player?.isUsingItem!! && !autoBlock.isSelected(0)) {
+            if (targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && attacked && !waitForHit && !mc.player?.isUsingItem!! && !autoBlock.isSelected(0)) {
                 block()
             }
         }

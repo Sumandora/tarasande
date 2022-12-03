@@ -67,7 +67,7 @@ class ServerPingerBase(val parent: ScreenExtension<*>, private val addressProvid
         if (force || (autoPing.value && pingTask.hasReached(delay.value.toLong()))) {
             (clickableWidgetPanel.panel as PanelServerInformation).apply {
                 server = emptyServer.copy().apply {
-                    name = addressProvider.invoke()
+                    name = addressProvider()
                     address = name
                 }
                 createEntry()

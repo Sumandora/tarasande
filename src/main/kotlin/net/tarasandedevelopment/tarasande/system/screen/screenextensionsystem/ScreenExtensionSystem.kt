@@ -61,7 +61,7 @@ open class ScreenExtensionButtonList<T : Screen>(screen: Class<out T>) : ScreenE
         var x = 3
         var y = 3
         for (button in buttons) {
-            if (!button.value.first.invoke()) continue
+            if (!button.value.first()) continue
 
             list.add(PanelButton.createButton(x, y, 98, 25, button.key, button.value.second))
             x += 98 + 3

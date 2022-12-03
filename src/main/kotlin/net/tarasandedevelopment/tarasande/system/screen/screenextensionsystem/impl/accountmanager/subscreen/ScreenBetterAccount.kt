@@ -66,7 +66,7 @@ class ScreenBetterAccount(
                 @Suppress("UNCHECKED_CAST")
                 val anyField = field.get(accountImplementation) as Function1<Screen, *>
                 addDrawableChild(ButtonWidget(width - 105, 5 + index * 23, 100, 20, Text.of(field.getAnnotation(ExtraInfo::class.java).name)) {
-                    anyField.invoke(this)
+                    anyField(this)
                 })
                 index++
             } else if (field.isAnnotationPresent(TextFieldInfo::class.java)) {

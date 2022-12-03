@@ -52,7 +52,7 @@
 - Recode File Chooser
 - Wheel Menu
 - Projectile aim bot: Crossbows & Prediction
-- Killaura: Closed Inventory
+- Trajectory: Prediction
 - Tick base manipulation: Improve auto uncharge / Full recode
 - Velocity: Explosion Packet Distance Check (Do they affect the player?)
 

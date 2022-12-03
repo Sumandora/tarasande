@@ -45,11 +45,11 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
     private val timer = TimeUtil()
 
     private fun findItem(block: (ItemStack) -> Boolean): Int? {
-        if (block.invoke(mc.player?.offHandStack!!))
+        if (block(mc.player?.offHandStack!!))
             return -1
         for (slot in 0..8) {
             val stack = mc.player?.inventory?.main?.get(slot)
-            if (stack != null && block.invoke(stack)) {
+            if (stack != null && block(stack)) {
                 return slot
             }
         }

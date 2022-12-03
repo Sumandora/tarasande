@@ -165,7 +165,7 @@ object PlayerUtil {
             }
         }.also {
             it.init(MinecraftClient.getInstance(), MinecraftClient.getInstance().window.scaledWidth, MinecraftClient.getInstance().window.scaledHeight)
-            block.invoke(it)
+            block(it)
         }
     }
 
