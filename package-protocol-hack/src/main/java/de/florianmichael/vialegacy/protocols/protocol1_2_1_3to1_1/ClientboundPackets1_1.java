@@ -348,11 +348,11 @@ public enum ClientboundPackets1_1 implements LegacyClientboundPacketType {
     })),
     EFFECT(0x3D, ((buffer, transformer) -> {
         buffer.readInt();
-        buffer.readInt();
 
+        buffer.readInt();
         buffer.readByte();
-
         buffer.readInt();
+
         buffer.readInt();
     })),
     NAMED_SOUND(0x3E, ((buffer, transformer) -> {
