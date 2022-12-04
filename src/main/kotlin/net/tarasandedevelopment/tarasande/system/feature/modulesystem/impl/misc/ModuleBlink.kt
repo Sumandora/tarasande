@@ -143,7 +143,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         onDisable(true)
     }
 
-    fun onDisable(all: Boolean, cancelled: Boolean = false) {
+    fun onDisable(all: Boolean, cancelled: Boolean = false, timeOffset: Long = 0L) {
         if (mc.networkHandler?.connection?.isOpen == true) {
             val copy = ArrayList<Triple<Packet<*>, EventPacket.Type, Long>>()
             packets.removeIf {
@@ -154,7 +154,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                     false
             }
             for (triple in copy) {
-                if (all || System.currentTimeMillis() >= triple.third) {
+                if (all || System.currentTimeMillis() + timeOffset >= triple.third) {
                     when (triple.second) {
                         EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).tarasande_forceSend(triple.first)
                         EventPacket.Type.RECEIVE ->
