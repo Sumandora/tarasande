@@ -4,11 +4,8 @@ import net.minecraft.SharedConstants
 import net.minecraft.block.BlockState
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.input.Input
-import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.client.recipebook.ClientRecipeBook
-import net.minecraft.client.util.telemetry.TelemetrySender
-import net.minecraft.network.Packet
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvent
 import net.minecraft.stat.StatHandler
@@ -16,6 +13,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.injection.accessor.prediction.IParticleManager
 import net.tarasandedevelopment.tarasande.injection.accessor.prediction.ISoundSystem
+import net.tarasandedevelopment.tarasande.util.dummy.ClientPlayNetworkHandlerDummy
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 
 object PredictionEngine {
@@ -32,18 +30,7 @@ object PredictionEngine {
         soundSystem.tarasande_setDisabled(true)
         val playerEntity = object : ClientPlayerEntity(mc,
             mc.world,
-            object : ClientPlayNetworkHandler(mc,
-                mc.currentScreen,
-                mc.networkHandler?.connection,
-                mc.player?.gameProfile,
-                object : TelemetrySender(null, null, null, null, null) {
-                    override fun send() {
-                    }
-                }
-            ) {
-                override fun sendPacket(packet: Packet<*>?) {
-                }
-            },
+            ClientPlayNetworkHandlerDummy.create(),
             StatHandler(),
             ClientRecipeBook(),
             false,
