@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande_windows_platform
 
 import net.fabricmc.api.ClientModInitializer
+import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventShutdown
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
@@ -14,13 +15,19 @@ import org.spongepowered.include.com.google.common.io.Files
 import su.mandora.event.EventDispatcher
 import java.io.File
 import java.net.InetSocketAddress
+import java.util.logging.Logger
 
 const val NETWORK = "Network"
 class TarasandeWindowsPlatform : ClientModInitializer {
+    private val logger = Logger.getLogger("tarasande-windows-platform")!!
 
     override fun onInitializeClient() {
+        val operatingSystem = Util.getOperatingSystem()
+        if(operatingSystem != Util.OperatingSystem.WINDOWS) {
+            logger.warning("tarasande Windows Platform is not designed to run on '" + operatingSystem.getName() + "' systems")
+            return
+        }
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
-
             TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.apply {
                 add(object : EntrySidebarPanel("Fritz!Box Reconnect", NETWORK) {
 
