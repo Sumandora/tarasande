@@ -71,8 +71,11 @@ class PanelNotifications(private val notifications: Notifications) : Panel("Noti
                     animation += notifications.speedIn.value * RenderUtil.deltaTime
                 }
             }
-            if (animation < 0.0)
+            if (animation < 0.0) {
                 notifications.list.remove(notification)
+                animations.remove(notification)
+                continue
+            }
             animations[notification] = MathHelper.clamp(animation, 0.0, 1.0)
         }
 
