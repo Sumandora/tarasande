@@ -209,7 +209,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 // in case the eyepos is inside the boundingbox the next 2 checks will always succeed, but keeping them might prevent some retarded situation which is going to be added with an update
                 if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) {
                     System.err.println("Noised aimpoint wasn't in range anymore, this shouldn't happen")
-                    continue
+                    aimPoint = bestAimPoint
                 }
                 if (!throughWalls.isSelected(2))
                     if ((throughWalls.isSelected(0) || !prevTargets.any { it.first == entity }) && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint)) continue
