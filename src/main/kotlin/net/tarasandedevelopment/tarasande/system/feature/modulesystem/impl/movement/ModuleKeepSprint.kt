@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 
 class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attacking", ModuleCategory.MOVEMENT) {
 
-    private val horizontalSlowdown = ValueNumber(this, "Horizontal slowdown", 0.0, 1.0, 1.0, 0.1)
+    private val speedMultiplier = ValueNumber(this, "Speed multiplier", 0.0, 1.0, 1.0, 0.1)
     private val unsprint = ValueBoolean(this, "Unsprint", false)
 
     private val knockbackAware = ValueBoolean(this, "Knockback-aware", false)
@@ -33,7 +33,7 @@ class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attackin
         registerEvent(EventKeepSprint::class.java) { event ->
             if (!disabled) {
                 if (!unsprint.value) event.sprinting = true
-                mc.player?.velocity = prevVelocity?.multiply(horizontalSlowdown.value, 1.0, horizontalSlowdown.value)
+                mc.player?.velocity = prevVelocity?.multiply(speedMultiplier.value, 1.0, speedMultiplier.value)
             }
         }
 

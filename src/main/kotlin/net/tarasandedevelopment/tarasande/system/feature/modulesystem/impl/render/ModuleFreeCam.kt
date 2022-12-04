@@ -136,7 +136,6 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
             if (firstInput == null || firstRealInput == null)
                 onEnable()
             if (event.input == MinecraftClient.getInstance().player?.input) {
-                input.tick(event.slowDown, event.slowdownAmount)
                 if (!keepMovement.value) {
                     event.movementForward = 0.0F
                     event.movementSideways = 0.0F
@@ -167,6 +166,11 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
                         mc.targetedEntity = null
                         mc.crosshairTarget = PlayerUtil.rayCast(position!!, position!!.add(rotation?.forwardVector((mc.gameRenderer as IGameRenderer).tarasande_getReach())))
                     }
+        }
+
+        registerEvent(EventTick::class.java) { event ->
+            if(event.state == EventTick.State.PRE)
+                input.tick(false, 1.0f)
         }
     }
 }
