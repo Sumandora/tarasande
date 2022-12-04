@@ -72,7 +72,6 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
             val list = boundingBoxes[event.entity] ?: return@registerEvent
             val index = list.size - list.indexOf(box)
             val time = (index - 1) * mc.renderTickCounter.tickTime
-            println(time)
 
             val moduleBlink = TarasandeMain.managerModule().get(ModuleBlink::class.java)
             if(moduleBlink.enabled)

@@ -50,7 +50,7 @@ open class ScreenExtensionSidebar<T : Screen>(screen: Class<out T>) : ScreenExte
 }
 
 open class ScreenExtensionButtonList<T : Screen>(screen: Class<out T>) : ScreenExtension<T>(screen) {
-    private val buttons = HashMap<String, Pair<() -> Boolean, () -> Unit>>()
+    private val buttons = LinkedHashMap<String, Pair<() -> Boolean, () -> Unit>>()
 
     fun add(text: String, visible: () -> Boolean = { true }, pressAction: () -> Unit) {
         buttons[text] = Pair(visible, pressAction)
