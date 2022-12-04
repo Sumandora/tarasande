@@ -70,7 +70,7 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
             ViaProtocolHack.instance().init(this) {
                 this.createChannelMappings()
-                ViaLegacy.init(Logger.getLogger("ViaLegacy-Tarasande"))
+                ViaLegacy.init(Logger.getLogger("ViaLegacy-tarasande"))
             }
 
             PackFormats.checkOutdated(nativeVersion())
@@ -125,7 +125,7 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
         }
 
         EventDispatcher.add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
-            update(ProtocolVersion.getProtocol(version.value.toInt()))
+            update(ProtocolVersion.getProtocol(version.value.toInt()), false)
 
             TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.apply {
                 insert(object : EntrySidebarPanelSelection("Protocol Hack", "Protocol Hack", VersionList.PROTOCOLS.map { it.getSpecialName() }, ProtocolVersion.getProtocol(targetVersion()).getSpecialName()) {
@@ -147,13 +147,14 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
         }
     }
 
-    fun update(protocol: ProtocolVersion) {
+    fun update(protocol: ProtocolVersion, reloadProtocolHackValues: Boolean = true) {
         System.setProperty("tarasande-target-version", protocol.version.toString()) // this provides the current clientside version to all other packages
 
-        TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
-            if (it is ValueBooleanProtocol)
-                it.value = it.version.any { range -> protocol in range }
-        }
+        if(reloadProtocolHackValues)
+            TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
+                if (it is ValueBooleanProtocol)
+                    it.value = it.version.any { range -> protocol in range }
+            }
 
         if (!FabricLoader.getInstance().isModLoaded("dashloader")) {
             MinecraftClient.getInstance().fontManager.fontStorages.values.forEach {
