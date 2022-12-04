@@ -56,13 +56,15 @@ class TarasandeWindowsPlatform : ClientModInitializer {
                     override fun onClick(state: Boolean) {
                         super.onClick(state)
 
+                        val screenBetterProxy = TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).screenBetterSlotListAccountManager.screenBetterProxy
+
                         if (torProcess == null) {
                             torProcess = ProcessBuilder(torFile.absolutePath).start()
-                            TarasandeMain.get().proxy = Proxy(InetSocketAddress("127.0.0.1", 9050), ProxyType.SOCKS5)
+                            screenBetterProxy.proxy = Proxy(InetSocketAddress("127.0.0.1", 9050), ProxyType.SOCKS5)
                         } else {
                             torProcess!!.destroy()
                             torProcess = null
-                            TarasandeMain.get().proxy = null
+                            screenBetterProxy.proxy = null
                         }
                     }
                 })
