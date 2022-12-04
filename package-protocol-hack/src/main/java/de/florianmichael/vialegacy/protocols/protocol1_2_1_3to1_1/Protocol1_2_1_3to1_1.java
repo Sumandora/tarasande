@@ -292,6 +292,33 @@ public class Protocol1_2_1_3to1_1 extends EnZaProtocol<ClientboundPackets1_1, Cl
                 });
             }
         });
+
+        this.registerClientbound(ClientboundPackets1_1.EFFECT, new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                map(Type.INT); // Effect-ID
+
+                map(Type.INT); // X-Position
+                map(Type.BYTE); // Y-Position
+                map(Type.INT); // Z-Position
+
+                map(Type.INT); // Data
+
+                handler(wrapper -> {
+                    final int effectId = wrapper.get(Type.INT, 0);
+                    int effectData = wrapper.get(Type.INT, 3);
+
+                    if (effectId == 2001) {
+                        final int blockId = effectId & 255;
+                        final int blockData = effectData >> 8 & 255;
+
+                        effectData = blockId + (blockData << 12);
+                    }
+
+                    wrapper.set(Type.INT, 3, effectData);
+                });
+            }
+        });
     }
 
     @Override

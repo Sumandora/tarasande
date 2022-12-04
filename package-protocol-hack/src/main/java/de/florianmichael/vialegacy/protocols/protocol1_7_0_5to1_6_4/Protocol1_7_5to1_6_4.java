@@ -67,6 +67,8 @@ import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.model.Entity
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.item.MaterialReplacement1_7_0_5to1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.sound.SoundRewriter1_7_0_5to1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.string.DisconnectPacketRemapper;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelPipeline;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -280,6 +282,18 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.STRING, Types1_6_4.STRING);
                 map(Type.SHORT);
                 map(Type.REMAINING_BYTES);
+
+                handler(wrapper -> {
+                    final String channel = wrapper.get(Types1_6_4.STRING, 0);
+                    final byte[] payload = wrapper.get(Type.REMAINING_BYTES, 0);
+
+                    if (channel.equals("MC|BEdit") || channel.equals("MC|BSign")) {
+                        final ByteBuf payloadBuffer = Unpooled.wrappedBuffer(payload);
+                        final Item item = Type.ITEM.read(payloadBuffer);
+                        Types1_7_6_10.COMPRESSED_NBT_ITEM.write(payloadBuffer, getItemRewriter().handleItemToServer(item));
+                        wrapper.set(Type.REMAINING_BYTES, 0, payloadBuffer.array());
+                    }
+                });
             }
         });
 
