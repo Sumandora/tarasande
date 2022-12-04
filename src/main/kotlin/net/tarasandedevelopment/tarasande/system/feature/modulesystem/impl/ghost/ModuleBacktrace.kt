@@ -18,6 +18,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc.
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
+import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
@@ -31,7 +32,7 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
     private val boundingBoxes = HashMap<Entity, ArrayList<Box>>()
 
     private fun computeSelectedBox(entity: Entity): Box? {
-        val playerRotation = Rotation(mc.player!!)
+        val playerRotation = RotationUtil.fakeRotation ?: Rotation(mc.player!!)
         val playerEye = mc.player?.eyePos
         val rotationVec = mc.player?.eyePos!! + playerRotation.forwardVector((mc.gameRenderer as IGameRenderer).tarasande_getReach())
         return boundingBoxes[entity]?.filter { it.raycast(playerEye, rotationVec).isPresent }?.minByOrNull { playerEye?.squaredDistanceTo(MathUtil.closestPointToBox(playerEye, it))!! }
@@ -44,6 +45,7 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
 
         registerEvent(EventUpdate::class.java) { event ->
             if (event.state == EventUpdate.State.PRE) {
+                boundingBoxes.entries.removeIf { mc.world?.entities?.contains(it.key) != true }
                 for (entity in mc.world?.entities!!)
                     if (PlayerUtil.isAttackable(entity))
                         boundingBoxes.computeIfAbsent(entity) { ArrayList() }.also {
@@ -74,7 +76,7 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
 
             val moduleBlink = TarasandeMain.managerModule().get(ModuleBlink::class.java)
             if(moduleBlink.enabled)
-                moduleBlink.onDisable(all = false, cancelled = false, timeOffset = time.toLong())
+                moduleBlink.onDisable(false, cancelled = false, timeOffset = time.toLong())
         }
     }
 

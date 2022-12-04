@@ -147,7 +147,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         if (mc.networkHandler?.connection?.isOpen == true) {
             val copy = ArrayList<Triple<Packet<*>, EventPacket.Type, Long>>()
             packets.removeIf {
-                if (all || System.currentTimeMillis() >= it.third) {
+                if (all || System.currentTimeMillis() + timeOffset >= it.third) {
                     copy.add(it)
                     true
                 } else
@@ -160,6 +160,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                         EventPacket.Type.RECEIVE ->
                             if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener) {
                                 try {
+                                    @Suppress("UNCHECKED_CAST") // generics are so cool
                                     (triple.first as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
                                 } catch (_: Exception) {
                                 }
