@@ -28,6 +28,7 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
     private val defaultColor = ValueColor(this, "Default color", 0.0f, 1.0f, 1.0f, 1.0f)
     private val selectedColor = ValueColor(this, "Selected color", 0.0f, 1.0f, 1.0f, 1.0f)
     private val blinkResync = ValueBoolean(this, "Blink resync", true)
+    private val removeInvalidRecords = ValueBoolean(this, "Remove invalid records", true)
 
     private val boundingBoxes = HashMap<Entity, ArrayList<Box>>()
 
@@ -66,16 +67,19 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
         }
 
         registerEvent(EventAttackEntity::class.java) { event ->
-            if(!blinkResync.value) return@registerEvent
-
             val box = computeSelectedBox(event.entity) ?: return@registerEvent
             val list = boundingBoxes[event.entity] ?: return@registerEvent
-            val index = list.size - list.indexOf(box)
-            val time = (index - 1) * mc.renderTickCounter.tickTime
 
             val moduleBlink = TarasandeMain.managerModule().get(ModuleBlink::class.java)
-            if(moduleBlink.enabled)
+            if(blinkResync.value && moduleBlink.enabled) {
+                val index = list.size - list.indexOf(box)
+                val time = (index - 1) * mc.renderTickCounter.tickTime
                 moduleBlink.onDisable(false, cancelled = false, timeOffset = time.toLong())
+            }
+
+            if(removeInvalidRecords.value) {
+                list.removeIf { list.indexOf(it) <= list.indexOf(box) }
+            }
         }
     }
 
