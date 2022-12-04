@@ -15,7 +15,6 @@ import net.tarasandedevelopment.tarasande.system.screen.graphsystem.ManagerGraph
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
-import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import su.mandora.event.EventDispatcher
 import java.io.File
 import java.util.logging.Logger
@@ -27,7 +26,6 @@ class TarasandeMain {
     val logger = Logger.getLogger(name)!!
     val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
     val rootDirectory = File(System.getProperty("user.home") + File.separator + name)
-    var proxy: Proxy? = null
 
     private val managerFile = ManagerFile()
     private val managerValue = ManagerValue(managerFile)

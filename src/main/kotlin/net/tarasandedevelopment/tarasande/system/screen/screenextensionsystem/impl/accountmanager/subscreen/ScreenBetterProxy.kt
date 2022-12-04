@@ -26,7 +26,9 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.nio.channels.IllegalBlockingModeException
 
-class ScreenBetterProxy(prevScreen: Screen?) : ScreenBetter(prevScreen) {
+class ScreenBetterProxy() : ScreenBetter(null) {
+
+    var proxy: Proxy? = null
     private var ipTextField: TextFieldWidget? = null
     private var portTextField: TextFieldWidget? = null
     private var usernameTextField: TextFieldWidget? = null
@@ -42,19 +44,18 @@ class ScreenBetterProxy(prevScreen: Screen?) : ScreenBetter(prevScreen) {
     private var pingThread: ThreadRunnableExposed? = null
 
     override fun init() {
-        val proxy = TarasandeMain.get().proxy
         addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 - 100, height / 2 - 50 - 15, 143, 20, Text.of("IP-Address")).also {
             ipTextField = it
             it.setMaxLength(Int.MAX_VALUE)
             if (proxy?.socketAddress != null) {
-                it.text = proxy.socketAddress.address.hostAddress
+                it.text = proxy!!.socketAddress.address.hostAddress
             }
         })
         addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 + 47, height / 2 - 50 - 15, 53, 20, Text.of("Port")).also {
             portTextField = it
             it.setMaxLength(Int.MAX_VALUE)
             if (proxy != null) {
-                it.text = proxy.socketAddress.port.toString()
+                it.text = proxy!!.socketAddress.port.toString()
             }
         })
         addDrawableChild(ButtonWidget(width / 2 - 75, height / 2 - 40, 150, 20, Text.of("Proxy Type: ")) {
@@ -69,14 +70,14 @@ class ScreenBetterProxy(prevScreen: Screen?) : ScreenBetter(prevScreen) {
             usernameTextField = it
             it.setMaxLength(Int.MAX_VALUE)
             if (proxy?.proxyAuthentication != null) {
-                it.text = proxy.proxyAuthentication?.username!!
+                it.text = proxy?.proxyAuthentication?.username!!
             }
         })
         addDrawableChild(TextFieldWidgetPlaceholderPassword(textRenderer, width / 2 - 100, height / 2 + 10, 200, 20, Text.of("Password")).also {
             passwordTextField = it
             it.setMaxLength(Int.MAX_VALUE)
             if (proxy?.proxyAuthentication != null) {
-                it.text = proxy.proxyAuthentication?.password!!
+                it.text = proxy?.proxyAuthentication?.password!!
             }
         })
 
@@ -103,7 +104,7 @@ class ScreenBetterProxy(prevScreen: Screen?) : ScreenBetter(prevScreen) {
                                 else null
                             )
                         else Proxy(inetSocketAddress, proxyType!!)
-                    TarasandeMain.get().proxy = proxy
+                    this.proxy = proxy
                     if (pingThread != null && pingThread?.isAlive!!)
                         (pingThread?.runnable as RunnablePing).cancelled = true
                     ThreadRunnableExposed(RunnablePing(proxy)).also { pingThread = it }.start()
@@ -119,21 +120,22 @@ class ScreenBetterProxy(prevScreen: Screen?) : ScreenBetter(prevScreen) {
             }
         }.also { doneButton = it })
 
-        addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50 + 25, 100, 20, Text.of("Back")) {
-            RenderSystem.recordRenderCall {
-                close()
-                if (pingThread != null && pingThread?.isAlive!!)
-                    (pingThread?.runnable as RunnablePing).cancelled = true
-            }
-        })
-
-        addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50 + 25 * 2, 100, 20, Text.of("Disable")) {
-            TarasandeMain.get().proxy = null
+        addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50 + 25, 100, 20, Text.of("Disable")) {
+            this.proxy = null
             status = "Disabled"
         })
 
         tick()
         super.init()
+    }
+
+    override fun close() {
+        super.close()
+
+        RenderSystem.recordRenderCall {
+            if (pingThread != null && pingThread?.isAlive!!)
+                (pingThread?.runnable as RunnablePing).cancelled = true
+        }
     }
 
     override fun tick() {
@@ -179,12 +181,12 @@ class ScreenBetterProxy(prevScreen: Screen?) : ScreenBetter(prevScreen) {
                 if (cancelled)
                     return
                 val timeDelta = System.currentTimeMillis() - beginTime
-                if (TarasandeMain.get().proxy == proxy) {
+                if (this.proxy == proxy) {
                     status = RenderUtil.formattingByHex(RenderUtil.colorInterpolate(Color.green, Color.red.darker(), (timeDelta / 1000.0).coerceAtMost(1.0)).rgb).toString() + "Reached proxy in " + timeDelta + "ms"
                     proxy.ping = timeDelta
                 }
             } catch (throwable: Throwable) {
-                if (TarasandeMain.get().proxy == proxy) {
+                if (this.proxy == proxy) {
                     status = when (throwable) {
                         is SocketTimeoutException -> Formatting.RED.toString() + "Timeout reached, unreachable"
                         is IOException -> Formatting.RED.toString() + "Failed to reach proxy"

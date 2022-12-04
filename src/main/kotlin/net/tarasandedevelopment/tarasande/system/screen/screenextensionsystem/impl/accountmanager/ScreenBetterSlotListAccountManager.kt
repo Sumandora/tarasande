@@ -3,9 +3,12 @@ package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.i
 import com.mojang.authlib.minecraft.UserApiService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import com.mojang.blaze3d.systems.RenderSystem
+import it.unimi.dsi.fastutil.booleans.BooleanConsumer
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.TitleScreen
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.gui.widget.ButtonWidget
+import net.minecraft.client.network.Bans
 import net.minecraft.client.network.SocialInteractionsManager
 import net.minecraft.client.util.ProfileKeys
 import net.minecraft.client.util.Session
@@ -13,6 +16,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.network.encryption.SignatureVerifier
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.injection.accessor.IRealmsPeriodicCheckers
@@ -57,6 +61,8 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
     val managerAzureApp     = ManagerAzureApp()
     val managerAccount      = ManagerAccount()
     // @formatter:on
+
+    val screenBetterProxy = ScreenBetterProxy()
 
     init {
         EventDispatcher.add(EventSuccessfulLoad::class.java, 9999) {
@@ -123,7 +129,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         }.also { addButton = it })
 
         addDrawableChild(ButtonWidget(3, 3, 100, 20, Text.of("Proxy")) {
-            MinecraftClient.getInstance().setScreen(ScreenBetterProxy(MinecraftClient.getInstance().currentScreen))
+            MinecraftClient.getInstance().setScreen(screenBetterProxy.apply { prevScreen = MinecraftClient.getInstance().currentScreen })
         })
 
         addDrawableChild(ButtonWidget(width - 103, 3, 100, 20, Text.of("Random session")) {
@@ -150,8 +156,8 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         this.renderTitle(matrices, "Account Manager")
         FontWrapper.textShadow(matrices, status, width / 2.0F, 2 * FontWrapper.fontHeight() * 2.0F, -1, centered = true)
 
-        if (TarasandeMain.get().proxy != null) {
-            FontWrapper.textShadow(matrices, TarasandeMain.get().proxy!!.socketAddress.address.hostAddress + ":" + TarasandeMain.get().proxy!!.socketAddress.port + " (" + TarasandeMain.get().proxy!!.ping + "ms)", 6F, 27F, -1)
+        screenBetterProxy.proxy?.apply {
+            FontWrapper.textShadow(matrices, socketAddress.address.hostAddress + ":" + socketAddress.port + " (" + ping + "ms)", 6F, 27F)
         }
     }
 
@@ -236,6 +242,17 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
                     (realmsPeriodicCheckers as IRealmsPeriodicCheckers).tarasande_getClient().apply {
                         username = account.session?.username
                         sessionId = account.session?.sessionId
+                    }
+
+                    if (isMultiplayerBanned) {
+                        setScreen(Bans.createBanScreen(object : BooleanConsumer {
+                            override fun accept(confirmed: Boolean) {
+                                if (confirmed) {
+                                    Util.getOperatingSystem().open("https://aka.ms/mcjavamoderation")
+                                }
+                                setScreen(TitleScreen(true))
+                            }
+                        }, multiplayerBanDetails))
                     }
                 }
                 status = Formatting.GREEN.toString() + "Logged in as \"" + account.getDisplayName() + "\"" + if (!updatedUserApiService) Formatting.RED.toString() + " (failed to update UserApiService)" else ""
