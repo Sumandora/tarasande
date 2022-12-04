@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "tarasande Linux Platform",
-  "description": "Tarasande package to provide linux platform specific enhancements",
+  "description": "tarasande package to provide linux platform specific enhancements",
   "authors": [
     "Sumandora/Johannes"
   ],

@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "tarasande Windows Platform",
-  "description": "Tarasande package to provide windows platform specific enhancements",
+  "description": "tarasande package to provide windows platform specific enhancements",
   "authors": [
     "EnZaXD/FlorianMichael"
   ],
