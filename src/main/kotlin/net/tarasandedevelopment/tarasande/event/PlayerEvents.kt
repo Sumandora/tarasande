@@ -1,7 +1,11 @@
 package net.tarasandedevelopment.tarasande.event
 
+import com.mojang.brigadier.CommandDispatcher
+import com.mojang.brigadier.StringReader
 import net.minecraft.block.BlockState
+import net.minecraft.command.CommandSource
 import net.minecraft.entity.Entity
+import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.util.Hand
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
@@ -70,3 +74,7 @@ class EventBoundingBoxOverride(val entity: Entity, var boundingBox: Box) : Event
 class EventChat(val chatMessage: String) : Event(true)
 class EventSwing(var hand: Hand) : Event(true)
 class EventEntityHurt(val entity: Entity) : Event(false)
+class EventInputSuggestions(val reader: StringReader) : Event(false) {
+    var dispatcher: CommandDispatcher<CommandSource>? = null
+    var commandSource: CommandSource? = null
+}

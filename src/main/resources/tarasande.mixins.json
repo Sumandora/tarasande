@@ -107,5 +107,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "event.MixinChatInputSuggestor"
+  ]
 }

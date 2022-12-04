@@ -8,6 +8,7 @@ import net.tarasandedevelopment.tarasande.feature.notification.Notifications
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.ManagerClickMethod
+import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.ManagerESP
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.ManagerBlur
@@ -39,6 +40,7 @@ class TarasandeMain {
     private lateinit var managerInformation: ManagerInformation
     private lateinit var managerGraph: ManagerGraph
 
+    private lateinit var managerCommand: ManagerCommand
     private lateinit var managerModule: ManagerModule
 
     private lateinit var clientValues: ClientValues
@@ -51,6 +53,7 @@ class TarasandeMain {
 
         fun managerBlur() = instance.managerBlur
         fun managerValue() = instance.managerValue
+        fun managerCommand() = instance.managerCommand
         fun managerModule() = instance.managerModule
         fun managerPanel() = instance.managerPanel
         fun managerScreenExtension() = instance.managerScreenExtension
@@ -74,9 +77,10 @@ class TarasandeMain {
         managerScreenExtension = ManagerScreenExtension()
         managerBlur = ManagerBlur()
 
-        managerModule = ManagerModule(managerPanel, managerFile)
+        managerCommand = ManagerCommand()
+        managerModule = ManagerModule(managerCommand, managerPanel, managerFile)
 
-        clientValues = ClientValues(name, managerPanel, managerFile)
+        clientValues = ClientValues(name, managerCommand, managerPanel, managerFile)
         friends = Friends()
         notifications = Notifications()
 

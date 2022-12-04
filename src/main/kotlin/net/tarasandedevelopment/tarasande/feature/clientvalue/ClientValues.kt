@@ -12,6 +12,7 @@ import net.tarasandedevelopment.tarasande.feature.clientvalue.panel.PanelElement
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
+import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
 import net.tarasandedevelopment.tarasande.util.dummy.ClientWorldDummy
@@ -19,7 +20,7 @@ import net.tarasandedevelopment.tarasande.util.extension.Thread
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 
-class ClientValues(name: String, panelSystem: ManagerPanel, fileSystem: ManagerFile) {
+class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: ManagerPanel, fileSystem: ManagerFile) {
 
     // General
     val accentColor = ValueColor(this, "Accent color", 0.6F, 1.0F, 1.0F)
@@ -56,6 +57,11 @@ class ClientValues(name: String, panelSystem: ManagerPanel, fileSystem: ManagerF
         object : ValueButton(this, "Cheat menu values") {
             override fun onChange() {
                 MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, this.name, panelSystem.screenCheatMenu))
+            }
+        }
+        object : ValueButton(this, "Command values") {
+            override fun onChange() {
+                MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, this.name, commandSystem))
             }
         }
     }

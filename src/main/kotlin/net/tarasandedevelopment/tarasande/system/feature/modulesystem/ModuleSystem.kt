@@ -13,6 +13,8 @@ import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
+import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.command.CommandToggle
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.file.FileModules
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.*
@@ -29,7 +31,7 @@ import su.mandora.event.Event
 import su.mandora.event.EventDispatcher
 import java.util.function.Consumer
 
-class ManagerModule(panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manager<Module>() {
+class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manager<Module>() {
 
     init {
         add(
@@ -158,6 +160,9 @@ class ManagerModule(panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manage
                     panelSystem.add(PanelElementsCategory(this@ManagerModule, it.category))
                 }
                 fileSystem.add(FileModules(this@ManagerModule))
+                commandSystem.add(
+                    CommandToggle(this@ManagerModule)
+                )
             }
         }
     }
