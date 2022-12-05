@@ -7,7 +7,7 @@ import org.objectweb.asm.tree.FieldInsnNode
 import org.objectweb.asm.tree.MethodInsnNode
 import su.mandora.codechecker.check.CheckBytecode
 
-class CheckAccessWidenerUsage : CheckBytecode("Access Widener Usage") {
+class CheckBytecodeAccessWidenerUsage : CheckBytecode("Access Widener Usage") {
 
     private val gson = Gson()
 

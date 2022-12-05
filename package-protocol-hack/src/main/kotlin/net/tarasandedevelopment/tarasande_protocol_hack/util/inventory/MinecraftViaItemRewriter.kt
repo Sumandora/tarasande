@@ -15,7 +15,6 @@ import net.minecraft.network.NetworkSide
 import net.minecraft.network.NetworkState
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket
-import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack
 
 object MinecraftViaItemRewriter {
 
@@ -48,6 +47,7 @@ object MinecraftViaItemRewriter {
         }
 
         // Hack: get the first Item from the packet wrapper, sadly there is no method for that
+        @Suppress("KotlinConstantConditions")
         return (wrapper as IPacketWrapperImpl_Protocol).protocolhack_getReadableObjects().first { Item::class.java.equals(it.key()!!.outputClass) }.value() as Item?
     }
 }

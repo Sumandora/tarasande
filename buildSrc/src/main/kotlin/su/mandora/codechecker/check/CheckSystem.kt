@@ -1,12 +1,13 @@
 package su.mandora.codechecker.check
 
 import org.objectweb.asm.tree.ClassNode
-import su.mandora.codechecker.check.impl.bytecode.CheckAccessWidenerUsage
-import su.mandora.codechecker.check.impl.bytecode.CheckNamingConvention
-import su.mandora.codechecker.check.impl.source.CheckLowercaseNumberSuffix
-import su.mandora.codechecker.check.impl.source.CheckPluralPackage
-import su.mandora.codechecker.check.impl.source.CheckUnnecessaryNumberSuffix
-import su.mandora.codechecker.check.impl.source.CheckUnregisteredMixin
+import su.mandora.codechecker.check.impl.bytecode.CheckBytecodeAccessWidenerUsage
+import su.mandora.codechecker.check.impl.bytecode.CheckBytecodeNamingConvention
+import su.mandora.codechecker.check.impl.bytecode.CheckBytecodeUnnecessaryMainCall
+import su.mandora.codechecker.check.impl.source.CheckSourceLowercaseNumberSuffix
+import su.mandora.codechecker.check.impl.source.CheckSourcePluralPackage
+import su.mandora.codechecker.check.impl.source.CheckSourceUnnecessaryNumberSuffix
+import su.mandora.codechecker.check.impl.source.CheckSourceUnregisteredMixin
 import java.io.File
 
 class CheckManager {
@@ -15,13 +16,14 @@ class CheckManager {
     private lateinit var nodes: ArrayList<ClassNode>
 
     private val checks: Array<Check> = arrayOf(
-        CheckLowercaseNumberSuffix(),
-        CheckUnnecessaryNumberSuffix(),
-        CheckPluralPackage(),
-        CheckUnregisteredMixin(),
+        CheckSourceLowercaseNumberSuffix(),
+        CheckSourceUnnecessaryNumberSuffix(),
+        CheckSourcePluralPackage(),
+        CheckSourceUnregisteredMixin(),
 
-        CheckNamingConvention(),
-        CheckAccessWidenerUsage()
+        CheckBytecodeNamingConvention(),
+        CheckBytecodeAccessWidenerUsage(),
+        CheckBytecodeUnnecessaryMainCall()
     )
 
     fun provideSources(list: ArrayList<File>) {

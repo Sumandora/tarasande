@@ -7,13 +7,13 @@ import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import java.net.InetAddress
 
-private const val text = "タラサンデ"
+private const val JAPANESE_NAME = "タラサンデ"
 
-class PanelWatermark : Panel("Watermark", FontWrapper.getWidth(text) * 5.0, FontWrapper.fontHeight() * 5.0, true) {
+class PanelWatermark : Panel("Watermark", FontWrapper.getWidth(JAPANESE_NAME) * 5.0, FontWrapper.fontHeight() * 5.0, true) {
 
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         // Mind the shadows and leave some space
-        val xScale = (panelWidth - 4) / (FontWrapper.getWidth(text) + 1.0)
+        val xScale = (panelWidth - 4) / (FontWrapper.getWidth(JAPANESE_NAME) + 1.0)
         val yScale = (panelHeight - 4) / (FontWrapper.fontHeight() + 3.0)
 
         matrices?.push()
@@ -21,7 +21,7 @@ class PanelWatermark : Panel("Watermark", FontWrapper.getWidth(text) * 5.0, Font
         matrices?.scale(xScale.toFloat(), yScale.toFloat(), 1.0F)
         matrices?.translate(-(x + 1), -(y + titleBarHeight + 1), 0.0)
 
-        FontWrapper.textShadow(matrices, text, (x + 1).toFloat(), (y + titleBarHeight + 1).toFloat(), TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
+        FontWrapper.textShadow(matrices, JAPANESE_NAME, (x + 1).toFloat(), (y + titleBarHeight + 1).toFloat(), TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
         matrices?.pop()
 
         FontWrapper.textShadow(matrices, TarasandeMain.get().name, (x + 1).toFloat(), (y + panelHeight - titleBarHeight).toFloat(), TarasandeMain.clientValues().accentColor.getColor().rgb)

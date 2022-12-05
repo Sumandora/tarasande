@@ -6,7 +6,9 @@ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget
 import net.minecraft.client.gui.widget.EntryListWidget
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.text.MutableText
 import net.minecraft.text.Text
+import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
 open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, var entryWidth: Int, private val entryHeight: Int, prevScreen: Screen?) : ScreenBetter(prevScreen) {
@@ -59,15 +61,13 @@ class AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget(val parent: Screen
     }
 }
 
-open class EntryScreenBetterSlotListEntry : AlwaysSelectedEntryListWidget.Entry<EntryScreenBetterSlotListEntry>() {
+open class EntryScreenBetterSlotListEntry(private val selectable: Boolean = true) : AlwaysSelectedEntryListWidget.Entry<EntryScreenBetterSlotListEntry>() {
     var parentList: EntryListWidget<EntryScreenBetterSlotListEntry>? = null
-    private var lastClick: Long = 0
+    private val clickTimer = TimeUtil()
     private var index = 0
 
-    open fun dontSelectAnything() = false
-
     open fun isSelected(): Boolean {
-        if (this.dontSelectAnything()) {
+        if (!selectable) {
             return false
         }
         return (this.parentList!! as AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget).parent.selected == index
@@ -83,16 +83,17 @@ open class EntryScreenBetterSlotListEntry : AlwaysSelectedEntryListWidget.Entry<
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (!dontSelectAnything()) {
+        if (selectable) {
             (this.parentList!! as AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget).parent.selected = this.index
             this.parentList!!.setSelected(this)
         }
 
-        this.onSingleClickEntry(mouseX, mouseY, button)
-        if (System.currentTimeMillis() - lastClick < 300) {
+        if (!clickTimer.hasReached(300)) {
             onDoubleClickEntry(mouseX, mouseY, button)
+        } else {
+            onSingleClickEntry(mouseX, mouseY, button)
         }
-        lastClick = System.currentTimeMillis()
+        clickTimer.reset()
         return super.mouseClicked(mouseX, mouseY, button)
     }
 
@@ -108,5 +109,5 @@ open class EntryScreenBetterSlotListEntry : AlwaysSelectedEntryListWidget.Entry<
             this.parentList!!.setSelected(this)
     }
 
-    override fun getNarration() = Text.empty()
+    override fun getNarration(): MutableText = Text.empty()
 }

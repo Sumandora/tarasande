@@ -1,13 +1,11 @@
 package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen
 
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholderPassword
@@ -26,7 +24,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.nio.channels.IllegalBlockingModeException
 
-class ScreenBetterProxy() : ScreenBetter(null) {
+class ScreenBetterProxy : ScreenBetter(null) {
 
     var proxy: Proxy? = null
     private var ipTextField: TextFieldWidget? = null
@@ -169,7 +167,7 @@ class ScreenBetterProxy() : ScreenBetter(null) {
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
-    inner class RunnablePing(val proxy: Proxy) : Runnable {
+    inner class RunnablePing(private val proxy: Proxy) : Runnable {
         var cancelled = false
 
         override fun run() {

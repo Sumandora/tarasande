@@ -110,6 +110,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
             matrices?.push()
             RenderSystem.setShader { GameRenderer.getPositionTexShader() }
             RenderSystem.setShaderTexture(0, image!!.glId)
+            @Suppress("NAME_SHADOWING")
             val color = color.brighter().brighter()
             RenderSystem.setShaderColor(color.red / 255f, color.green / 255f, color.blue / 255f, (animation * animation * animation).toFloat())
             RenderSystem.enableBlend()

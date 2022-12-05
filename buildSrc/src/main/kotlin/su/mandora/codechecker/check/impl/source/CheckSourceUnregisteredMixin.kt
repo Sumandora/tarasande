@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import su.mandora.codechecker.check.CheckSource
 
-class CheckUnregisteredMixin : CheckSource("Unregistered Mixin") {
+class CheckSourceUnregisteredMixin : CheckSource("Unregistered Mixin") {
 
     private val gson = Gson()
 

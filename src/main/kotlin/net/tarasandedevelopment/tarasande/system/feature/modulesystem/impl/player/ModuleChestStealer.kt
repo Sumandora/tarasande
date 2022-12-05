@@ -47,10 +47,11 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
     private var mousePos: Vec2f? = null
     private var nextDelay: Long = 0
 
-    private fun intelligent(slot: Slot, list: List<Slot>): Boolean {
+    private fun hasBetterEquivalent(slot: Slot, list: List<Slot>): Boolean {
         if (!intelligent.value)
             return false
 
+        @Suppress("NAME_SHADOWING")
         val list = ArrayList(list)
 
         list.remove(slot)
@@ -91,7 +92,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
             }
 
-            var nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list -> slot.id < screenHandler.inventory.size() && !intelligent(slot, list) }
+            var nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list -> slot.id < screenHandler.inventory.size() && !hasBetterEquivalent(slot, list) }
 
             if (!timeUtil.hasReached(when {
                     wasClosed -> openDelay.value.toLong()
@@ -112,7 +113,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 ))
                 if (ThreadLocalRandom.current().nextInt(100) < failChance.value) {
                     val interp = mousePos?.add(displayPos?.add(mousePos?.negate())?.multiply(ThreadLocalRandom.current().nextDouble(0.0, 1.0).toFloat()))!!
-                    ContainerUtil.getClosestSlot(screenHandler, accessor, interp) { slot, list -> slot.id < screenHandler.inventory.size() && !intelligent(slot, list) }?.also {
+                    ContainerUtil.getClosestSlot(screenHandler, accessor, interp) { slot, list -> slot.id < screenHandler.inventory.size() && !hasBetterEquivalent(slot, list) }?.also {
                         nextSlot = it
                     }
                 }

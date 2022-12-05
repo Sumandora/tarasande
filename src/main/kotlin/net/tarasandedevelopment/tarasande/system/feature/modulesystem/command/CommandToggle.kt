@@ -8,6 +8,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerMod
 
 class CommandToggle(private val moduleSystem: ManagerModule) : Command("toggle") {
 
+    @Suppress("NAME_SHADOWING")
     override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
         return builder.then(this.argument("module", StringArgumentType.greedyString())?.suggests { _, builder ->
             moduleSystem.list.forEach {

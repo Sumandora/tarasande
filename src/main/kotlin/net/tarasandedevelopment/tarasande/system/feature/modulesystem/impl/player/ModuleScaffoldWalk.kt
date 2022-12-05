@@ -66,10 +66,10 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     }
     private val cubeShape = ValueBoolean(this, "Cube shape", true)
     private val tower = ValueMode(this, "Tower", false, "Vanilla", "Motion", "Teleport")
-    private val blockColor = ValueColor(this, "Block color", 0.0F, 1.0F, 1.0F, 1.0F)
-    private val facingColor = ValueColor(this, "Facing color", 0.0F, 1.0F, 1.0F, 1.0F)
-    private val aimTargetColor = ValueColor(this, "Aim target color", 0.0F, 1.0F, 1.0F, 1.0F)
-    private val placeLineColor = ValueColor(this, "Place line color", 0.0F, 1.0F, 1.0F, 1.0F)
+    private val blockColor = ValueColor(this, "Block color", 0.0, 1.0, 1.0, 1.0)
+    private val facingColor = ValueColor(this, "Facing color", 0.0, 1.0, 1.0, 1.0)
+    private val aimTargetColor = ValueColor(this, "Aim target color", 0.0, 1.0, 1.0, 1.0)
+    private val placeLineColor = ValueColor(this, "Place line color", 0.0, 1.0, 1.0, 1.0)
 
     private val targets = ArrayList<Pair<BlockPos, Direction>>()
     private val timeUtil = TimeUtil()

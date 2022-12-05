@@ -11,9 +11,7 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.im
 
 class ScreenExtensionGameMenuScreen : ScreenExtension<GameMenuScreen>(GameMenuScreen::class.java) {
 
-    private val serverPingerBase = ServerPingerBase(this) {
-        return@ServerPingerBase MinecraftClient.getInstance().currentServerEntry?.address?: ""
-    }
+    private val serverPingerBase = ServerPingerBase(this) { MinecraftClient.getInstance().currentServerEntry?.address ?: "" }
 
     override fun createElements(screen: GameMenuScreen): MutableList<Element> {
         return mutableListOf(

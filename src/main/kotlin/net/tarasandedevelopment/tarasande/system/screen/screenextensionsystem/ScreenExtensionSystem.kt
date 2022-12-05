@@ -18,7 +18,7 @@ class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
             ScreenExtensionSidebarMultiplayerScreen(),
             ScreenExtensionDownloadingTerrainScreen(),
             ScreenExtensionButtonListDeathScreen(),
-            ScreenExtensionPackScreen(),
+            ScreenExtensionButtonListPackScreen(),
             ScreenExtensionButtonListHandledScreen(),
             ScreenExtensionButtonListSleepingChatScreen(),
             ScreenExtensionDirectConnectScreen(),

@@ -52,7 +52,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 
     val entityColor = EntityColor(this)
 
-    fun filter(entity: Entity) =
+    fun shouldRender(entity: Entity) =
         entities.list.contains(entity.type) &&
                 (!hideBots.value || entity !is PlayerEntity || entity == mc.player || !TarasandeMain.managerModule().get(ModuleAntiBot::class.java).isBot(entity))
 
@@ -64,7 +64,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
             if (!mode.isSelected(1))
                 return@registerEvent
             for (entity in mc.world?.entities!!) {
-                if (!filter(entity)) continue
+                if (!shouldRender(entity)) continue
 
                 if (mc.options.perspective.isFirstPerson && entity == mc.player) continue
 

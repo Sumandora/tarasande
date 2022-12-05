@@ -4,7 +4,6 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.andOlder
 import net.tarasandedevelopment.tarasande_protocol_hack.util.ProtocolRange
 

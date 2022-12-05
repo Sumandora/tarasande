@@ -8,7 +8,7 @@ import java.util.zip.ZipInputStream
 import kotlin.system.exitProcess
 
 // Generate all pack formats
-fun main(args: Array<String>) {
+fun main() {
     fun request(url: String) = URL(url).openConnection().getInputStream().readAllBytes()
     val gson = Gson()
     val launchermeta = gson.fromJson(request("https://launchermeta.mojang.com/mc/game/version_manifest.json").decodeToString(), JsonObject::class.java)
@@ -28,6 +28,7 @@ fun main(args: Array<String>) {
                         gson.fromJson(zis.readAllBytes().decodeToString(), JsonObject::class.java)?.apply {
                             val packVersion = get("pack_version")
                             val name = get("name").asString
+                            @Suppress("NAME_SHADOWING")
                             val id = get("id").asString
                             val packFormat = if (packVersion.isJsonObject) packVersion.asJsonObject.get("resource").asInt else packVersion.asInt
 

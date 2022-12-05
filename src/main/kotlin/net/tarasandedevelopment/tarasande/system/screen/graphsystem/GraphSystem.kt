@@ -54,6 +54,7 @@ class ManagerGraph(informationSystem: ManagerInformation, panelSystem: ManagerPa
     }
 }
 
+@Suppress("LeakingThis")
 open class Graph(val category: String, val name: String, bufferLength: Int, integer: Boolean) {
     var decimalPlaces = 0
     var bufferLength = 0

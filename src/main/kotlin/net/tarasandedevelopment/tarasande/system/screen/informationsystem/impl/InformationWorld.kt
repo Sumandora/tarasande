@@ -2,10 +2,10 @@ package net.tarasandedevelopment.tarasande.system.screen.informationsystem.impl
 
 import com.google.common.collect.Iterables
 import net.minecraft.client.MinecraftClient
-import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
+import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
@@ -23,12 +23,18 @@ class InformationEntities : Information("World", "Entities") {
 
 class InformationWorldTime : Information("World", "World Time") {
 
-    var lastUpdate: Pair<Long, Long>? = null
+    private var lastUpdate: Pair<Long, Long>? = null
 
     init {
-        EventDispatcher.add(EventPacket::class.java, 1) {
-            if (it.type == EventPacket.Type.RECEIVE && it.packet is WorldTimeUpdateS2CPacket) {
-                lastUpdate = Pair(it.packet.timeOfDay, it.packet.time)
+        EventDispatcher.apply {
+            add(EventPacket::class.java, 1) {
+                if (it.type == EventPacket.Type.RECEIVE && it.packet is WorldTimeUpdateS2CPacket) {
+                    lastUpdate = Pair(it.packet.timeOfDay, it.packet.time)
+                }
+            }
+            add(EventDisconnect::class.java) {
+                if(it.connection == MinecraftClient.getInstance().networkHandler?.connection)
+                    lastUpdate = null
             }
         }
     }
@@ -60,21 +66,27 @@ class InformationVanishedPlayers : Information("World", "Vanished players") {
 
 
     init {
-        EventDispatcher.add(EventPacket::class.java) { event ->
-            if (event.type == EventPacket.Type.RECEIVE) {
-                when (event.packet) {
-                    is PlayerListS2CPacket -> {
-                        if (event.packet.action != PlayerListS2CPacket.Action.ADD_PLAYER && event.packet.action != PlayerListS2CPacket.Action.REMOVE_PLAYER)
-                            for (packetEntry in event.packet.entries)
-                                if (MinecraftClient.getInstance().networkHandler?.getPlayerListEntry(packetEntry.profile.id) == null)
-                                    if (!vanishedPlayers.contains(packetEntry.profile.id.toString()))
-                                        vanishedPlayers.add(packetEntry.profile.id.toString())
-                    }
+        EventDispatcher.apply {
+            add(EventPacket::class.java) { event ->
+                if (event.type == EventPacket.Type.RECEIVE) {
+                    when (event.packet) {
+                        is PlayerListS2CPacket -> {
+                            if (event.packet.action != PlayerListS2CPacket.Action.ADD_PLAYER && event.packet.action != PlayerListS2CPacket.Action.REMOVE_PLAYER)
+                                for (packetEntry in event.packet.entries)
+                                    if (MinecraftClient.getInstance().networkHandler?.getPlayerListEntry(packetEntry.profile.id) == null)
+                                        if (!vanishedPlayers.contains(packetEntry.profile.id.toString()))
+                                            vanishedPlayers.add(packetEntry.profile.id.toString())
+                        }
 
-                    is PlayerRespawnS2CPacket, is DisconnectS2CPacket -> {
-                        vanishedPlayers.clear()
+                        is PlayerRespawnS2CPacket -> {
+                            vanishedPlayers.clear()
+                        }
                     }
                 }
+            }
+            add(EventDisconnect::class.java) {
+                if(it.connection == MinecraftClient.getInstance().networkHandler?.connection)
+                    vanishedPlayers.clear()
             }
         }
     }

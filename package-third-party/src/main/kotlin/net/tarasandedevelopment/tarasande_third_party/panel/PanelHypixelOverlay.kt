@@ -142,6 +142,7 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
                 return false
             val player = jsonObject.get("player")
             if (player != null && !player.isJsonNull) {
+                @Suppress("NAME_SHADOWING")
                 val player = player.asJsonObject
                 val lastLogin = player.get("lastLogin")
                 val firstLogin = player.get("firstLogin")
@@ -151,6 +152,7 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
                     age = System.currentTimeMillis() - firstLogin.asLong
                 val achievements = player.get("achievements")
                 if (achievements != null && !achievements.isJsonNull) {
+                    @Suppress("NAME_SHADOWING")
                     val achievements = achievements.asJsonObject
                     val bedwarsLevel = achievements.get("bedwars_level")
                     if (bedwarsLevel != null)
@@ -158,9 +160,11 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
                 }
                 val stats = player.get("stats")
                 if (stats != null && !stats.isJsonNull) {
+                    @Suppress("NAME_SHADOWING")
                     val stats = stats.asJsonObject
                     val bedwarsStats = stats.get("Bedwars")
                     if (bedwarsStats != null && !bedwarsStats.isJsonNull) {
+                        @Suppress("NAME_SHADOWING")
                         val bedwarsStats = bedwarsStats.asJsonObject
                         val finalKills = bedwarsStats.get("final_kills_bedwars")
                         val finalDeaths = bedwarsStats.get("final_deaths_bedwars")

@@ -1,23 +1,24 @@
 package net.tarasandedevelopment.tarasande_windows_platform.information
 
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.util.extension.Thread
 
 class InformationWindowsSpotify : Information("Windows", "Spotify") {
 
     private var lastState: String? = null
 
     init {
-        Thread({
+        Thread("Now playing query thread") {
             while (true) {
                 Thread.sleep(1000L)
 
                 lastState = try {
-                    Spotify.track
+                    Spotify.getTrack()
                 } catch (t: Throwable) {
                     null
                 }
             }
-        }, "Now playing query thread").start()
+        }.start()
     }
 
     override fun getMessage() = lastState

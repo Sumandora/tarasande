@@ -6,8 +6,6 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.command.CommandSource;
-import net.minecraft.server.command.ServerCommandSource;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventInputSuggestions;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;

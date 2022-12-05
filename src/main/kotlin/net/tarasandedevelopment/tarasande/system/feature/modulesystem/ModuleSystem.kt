@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem
 
 import net.minecraft.client.MinecraftClient
-import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket
 import net.minecraft.network.packet.s2c.play.HealthUpdateS2CPacket
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
@@ -133,6 +132,9 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
         )
 
         panelSystem.add(PanelArrayList(this@ManagerModule))
+        commandSystem.add(
+            CommandToggle(this@ManagerModule)
+        )
         EventDispatcher.apply {
             add(EventTick::class.java) {
                 if (it.state == EventTick.State.POST) {
@@ -160,9 +162,6 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
                     panelSystem.add(PanelElementsCategory(this@ManagerModule, it.category))
                 }
                 fileSystem.add(FileModules(this@ManagerModule))
-                commandSystem.add(
-                    CommandToggle(this@ManagerModule)
-                )
             }
         }
     }
@@ -186,8 +185,11 @@ open class Module(val name: String, val description: String, val category: Strin
             field = value
         }
 
+    @Suppress("LeakingThis")
     val visible = ValueBoolean(this, "Visible in ArrayList", true)
+    @Suppress("LeakingThis")
     val autoDisable = ValueMode(this, "Auto disable", true, "Death", "Disconnect")
+    @Suppress("LeakingThis")
     val bind = ValueBind(this, "Bind", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN)
 
     val mc: MinecraftClient = MinecraftClient.getInstance()

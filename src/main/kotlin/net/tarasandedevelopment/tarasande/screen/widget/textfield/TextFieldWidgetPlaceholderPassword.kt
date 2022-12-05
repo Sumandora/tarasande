@@ -23,11 +23,11 @@ class TextFieldWidgetPlaceholderPassword(textRenderer: TextRenderer?, x: Int, y:
         setCursorToStart()
     }
 
-    override fun mouseClicked(p_mouseClicked_1_: Double, p_mouseClicked_3_: Double, p_mouseClicked_5_: Int): Boolean {
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         val prevText = text
         if (text.isNotEmpty())
             this.text = Strings.repeat("*", text.length)
-        val b = super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_)
+        val b = super.mouseClicked(mouseX, mouseY, button)
         this.text = prevText
         return b
     }

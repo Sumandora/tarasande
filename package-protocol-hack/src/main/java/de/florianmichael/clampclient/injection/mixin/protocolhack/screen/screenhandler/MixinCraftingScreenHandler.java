@@ -43,7 +43,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
 
-@SuppressWarnings("ConstantConditions")
 @Mixin(CraftingScreenHandler.class)
 public abstract class MixinCraftingScreenHandler extends AbstractRecipeScreenHandler<CraftingInventory> {
     @Shadow @Final private CraftingInventory input;
@@ -58,6 +57,7 @@ public abstract class MixinCraftingScreenHandler extends AbstractRecipeScreenHan
     public void emulateCrafting(Inventory inventory, CallbackInfo ci) {
         if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.r1_6_4)) {
             ItemStack itemStack = ItemStack.EMPTY;
+            //noinspection DataFlowIssue
             final Optional<CraftingRecipe> optional = MinecraftClient.getInstance().getNetworkHandler().getRecipeManager().getFirstMatch(RecipeType.CRAFTING, this.input, MinecraftClient.getInstance().world);
             if (optional.isPresent()) {
                 itemStack = optional.get().craft(this.input);

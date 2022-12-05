@@ -39,6 +39,7 @@ class ManagerESP : Manager<ESPElement>() {
 }
 
 abstract class ESPElement(val name: String) {
+    @Suppress("LeakingThis")
     var enabled = ValueBoolean(this, name, false)
 
     abstract fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle)
@@ -46,6 +47,7 @@ abstract class ESPElement(val name: String) {
 
 abstract class ESPElementRotatable(name: String, private val forbiddenOrientations: Array<Orientation> = arrayOf()) : ESPElement(name) {
     val orientations = Orientation.values().filter { !forbiddenOrientations.contains(it) }
+    @Suppress("LeakingThis")
     var orientation: ValueMode? = if (orientations.size > 1)
         ValueMode(this, "$name: Orientation", false, *orientations.map { it.name.substring(0, 1).uppercase() + it.name.substring(1).lowercase() }.toTypedArray())
     else
@@ -55,7 +57,7 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
 
     override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
         val orientation = if (this.orientation != null)
-            orientations[this.orientation!!.values.indexOf(this.orientation!!.selected.get(0))]
+            orientations[this.orientation!!.values.indexOf(this.orientation!!.selected[0])]
         else
             orientations[0]
         val sideWidth = when (orientation) {

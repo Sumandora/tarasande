@@ -109,6 +109,7 @@ compileKotlin.kotlinOptions.jvmTarget = "17"
 
 tasks.register('checkCode') {
 	group "Code checker"
+	dependsOn "build"
 	doLast {
 		CodeChecker codeChecker = new CodeChecker(sourceSets.main)
 		codeChecker.check()

@@ -18,7 +18,7 @@ class BlurKawase : Blur("Kawase") {
     private val blurredFramebuffer = SimpleFramebufferWrapped()
     private val alternativeFramebuffer = SimpleFramebufferWrapped()
 
-    var kawasePasses: HashMap<Int, Array<Pair<Float, Float>>> = HashMap()
+    private var kawasePasses: HashMap<Int, Array<Pair<Float, Float>>> = HashMap()
 
 
     init {
@@ -47,6 +47,7 @@ class BlurKawase : Blur("Kawase") {
 
         for ((index, pair) in strengthLevels.withIndex()) {
             val passes = Array(pair.first * 2) { Pair(pair.second, 1.0F) }
+            @Suppress("NAME_SHADOWING")
             for ((index, pass) in passes.withIndex()) {
                 passes[index] = Pair(pass.first,
                     if (index < passes.size / 2)

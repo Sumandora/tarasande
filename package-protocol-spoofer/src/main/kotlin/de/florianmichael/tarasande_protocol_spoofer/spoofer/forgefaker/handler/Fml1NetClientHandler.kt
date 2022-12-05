@@ -1,5 +1,9 @@
 package de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler
 
+import de.florianmichael.tarasande_protocol_spoofer.accessor.IServerInfo
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelToggleableForgeFaker
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.IForgeNetClientHandler
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.legacy.ModStruct
 import io.netty.buffer.Unpooled
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import net.minecraft.client.network.MultiplayerServerListPinger
@@ -12,14 +16,10 @@ import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import de.florianmichael.tarasande_protocol_spoofer.accessor.IServerInfo
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelToggleableForgeFaker
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.IForgeNetClientHandler
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.legacy.ModStruct
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen
 import java.net.InetSocketAddress
 
-class Fml1NetClientHandler(val connection: ClientConnection) : IForgeNetClientHandler {
+class Fml1NetClientHandler(private val connection: ClientConnection) : IForgeNetClientHandler {
 
     private val itemMappings = Int2ObjectOpenHashMap<String>()
     private val blockMappings = Int2ObjectOpenHashMap<String>()
@@ -50,6 +50,7 @@ class Fml1NetClientHandler(val connection: ClientConnection) : IForgeNetClientHa
             val serverInfo = ServerInfo(address.hostName + ":" + address.port, address.hostName + ":" + address.port, false)
             MultiplayerServerListPinger().add(serverInfo) {
             }
+            @Suppress("KotlinConstantConditions")
             val payload = (serverInfo as IServerInfo).tarasande_getForgePayload()
             if (payload == null) {
                 connection.disconnect(Text.of("[" + TarasandeMain.get().name + "] Failed to get mods, try to enable FML1 Cache in ForgeFaker"))

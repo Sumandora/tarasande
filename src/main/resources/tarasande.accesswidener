@@ -59,7 +59,6 @@ accessible field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket yaw F
 accessible field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket pitch F
 accessible field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket onGround Z
 accessible field net/minecraft/client/render/RenderTickCounter tickTime F
-accessible field net/minecraft/client/render/RenderTickCounter prevTimeMillis J
 accessible field net/minecraft/network/packet/s2c/play/ResourcePackSendS2CPacket hash Ljava/lang/String;
 accessible field net/minecraft/client/sound/SoundManager soundSystem Lnet/minecraft/client/sound/SoundSystem;
 accessible field net/minecraft/client/gui/widget/TextFieldWidget selecting Z
@@ -68,7 +67,6 @@ accessible field net/minecraft/entity/TntEntity DEFAULT_FUSE I
 accessible field net/minecraft/client/render/WorldRenderer frustum Lnet/minecraft/client/render/Frustum;
 accessible field net/minecraft/network/packet/s2c/play/WorldTimeUpdateS2CPacket timeOfDay J
 accessible field net/minecraft/client/gui/screen/DirectConnectScreen addressField Lnet/minecraft/client/gui/widget/TextFieldWidget;
-accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget$ServerEntry iconTextureId Lnet/minecraft/util/Identifier;
 accessible field net/minecraft/resource/ResourcePackProfile packFactory Ljava/util/function/Supplier;
 accessible field net/minecraft/resource/AbstractFileResourcePack base Ljava/io/File;
 accessible field net/minecraft/client/resource/ClientBuiltinResourcePackProvider serverContainer Lnet/minecraft/resource/ResourcePackProfile;

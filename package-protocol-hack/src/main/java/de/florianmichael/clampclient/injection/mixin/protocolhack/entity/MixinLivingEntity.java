@@ -160,7 +160,7 @@ public abstract class MixinLivingEntity extends Entity {
     }
 
     @Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getFluidHeight(Lnet/minecraft/tag/TagKey;)D"))
-    public double fixLavaMovement(LivingEntity instance, TagKey tagKey) {
+    public double fixLavaMovement(LivingEntity instance, TagKey<Fluid> tagKey) {
         double height = instance.getFluidHeight(tagKey);
 
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2)) {

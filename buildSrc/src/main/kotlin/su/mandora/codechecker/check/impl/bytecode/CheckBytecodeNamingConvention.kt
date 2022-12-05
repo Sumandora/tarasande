@@ -4,9 +4,9 @@ import org.objectweb.asm.Type
 import su.mandora.codechecker.check.CheckBytecode
 import java.util.regex.Pattern
 
-class CheckNamingConvention : CheckBytecode("Naming convention") {
+class CheckBytecodeNamingConvention : CheckBytecode("Naming convention") {
 
-    val lambdaNames = Pattern.compile("[^*]*\\$\\d+$")
+    private val lambdaNames = Pattern.compile("[^*]*\\$\\d+$")
 
     override fun run() {
         allNodes().forEach { classNode ->
@@ -25,6 +25,7 @@ class CheckNamingConvention : CheckBytecode("Naming convention") {
 
                     if (pseudo != null) {
                         val pseudoIndex = classNode.invisibleAnnotations.indexOf(pseudo)
+                        @Suppress("KotlinConstantConditions") // I have no clue what I thought when I was writing this
                         if (pseudoIndex != 0 || pseudoIndex + 1 != classNode.invisibleAnnotations.indexOf(mixin))
                             violation(classNode, "First annotation should be @Pseudo, followed with @Mixin")
                     }

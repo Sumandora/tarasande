@@ -1,12 +1,10 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import net.minecraft.client.MinecraftClient
 import net.minecraft.command.CommandSource
 import net.minecraft.command.argument.BlockPosArgumentType
 import net.minecraft.command.argument.PosArgument
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.PositionAndOnGround
-import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
@@ -15,7 +13,6 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventMouse
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.Command
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
@@ -41,7 +38,7 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
         TarasandeMain.managerCommand().add(object : Command("teleport", "tp") {
             override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
                 return builder.then(argument("position", BlockPosArgumentType.blockPos())?.executes {
-                    teleportToPosition(it.getArgument("position", PosArgument::class.java).toAbsoluteBlockPos(createServerCommandSource()), true)
+                    teleportToPosition(it.getArgument("position", PosArgument::class.java).toAbsoluteBlockPos(createServerCommandSource()), false)
                     return@executes success
                 })
             }
@@ -80,6 +77,7 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
     }
 
     private fun teleportToPosition(blockPos: BlockPos, setGoalAndPath: Boolean = true) {
+        @Suppress("NAME_SHADOWING")
         var blockPos = blockPos
 
         while (!isPassable(blockPos))

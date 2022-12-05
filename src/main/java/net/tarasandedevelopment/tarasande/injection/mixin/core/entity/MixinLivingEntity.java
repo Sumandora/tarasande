@@ -36,6 +36,7 @@ public abstract class MixinLivingEntity extends Entity {
 
     @Inject(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;bodyTrackingIncrements:I"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateTrackedPosition(DDD)V"), to = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;serverX:D")))
     public void preventRotationLeak(CallbackInfo ci) {
+        //noinspection ConstantValue
         if (this.bodyTrackingIncrements > 0 && (Object) this == MinecraftClient.getInstance().player && RotationUtil.INSTANCE.getFakeRotation() != null) {
             Rotation rotation = RotationUtil.INSTANCE.getFakeRotation();
             RotationUtil.INSTANCE.setFakeRotation(new Rotation(

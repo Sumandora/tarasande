@@ -73,11 +73,13 @@ class InformationTimers : Information("Badlion", "Timers") {
 
     inner class Timer {
         var id: Long? = null
-        var name: String? = null
+        private var name: String? = null
+        @Suppress("unused")
         var item: Item? = null
 
         @Suppress("MemberVisibilityCanBePrivate")
         var repeating: Boolean? = null
+        @Suppress("unused")
         var time: Long? = null
 
         @Suppress("unused")
@@ -87,6 +89,7 @@ class InformationTimers : Information("Badlion", "Timers") {
         var lastUpdated: Long? = null
 
         inner class Item {
+            @Suppress("unused")
             var type: String? = null
         }
 

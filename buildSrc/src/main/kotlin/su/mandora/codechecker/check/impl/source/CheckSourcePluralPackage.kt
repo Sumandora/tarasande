@@ -2,7 +2,7 @@ package su.mandora.codechecker.check.impl.source
 
 import su.mandora.codechecker.check.CheckSource
 
-class CheckPluralPackage : CheckSource("Plural Package") {
+class CheckSourcePluralPackage : CheckSource("Plural Package") {
     override fun run() {
         allSources().forEach {  file ->
             if (file.extension == "java" || file.extension == "kt") {

@@ -23,7 +23,7 @@ import su.mandora.event.EventDispatcher
 class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: ManagerPanel, fileSystem: ManagerFile) {
 
     // General
-    val accentColor = ValueColor(this, "Accent color", 0.6F, 1.0F, 1.0F)
+    val accentColor = ValueColor(this, "Accent color", 0.6, 1.0, 1.0)
     val autoSaveConfig = object : ValueBoolean(this, "Auto save: config", true) {
         override fun onChange() {
             autoSaveDaemon.name = autoSaveDaemonName + if (!value) " (disabled)" else ""
@@ -43,17 +43,6 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
     val disableRealmsRequests = ValueBoolean(privacy, "Disable realms requests", true)
 
     init {
-        object : ValueButton(this, "Clear binds") {
-            override fun onChange() {
-                TarasandeMain.managerValue().list.forEach {
-                    if (it is ValueBind && it.filter(ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN))
-                        it.apply {
-                            type = ValueBind.Type.KEY
-                            button = GLFW.GLFW_KEY_UNKNOWN
-                        }
-                }
-            }
-        }
         object : ValueButton(this, "Cheat menu values") {
             override fun onChange() {
                 MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, this.name, panelSystem.screenCheatMenu))
@@ -130,6 +119,21 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
         if (!entities.list.contains(entity.type)) return false
 
         return true
+    }
+
+    // Other
+    init {
+        object : ValueButton(this, "Clear binds") {
+            override fun onChange() {
+                TarasandeMain.managerValue().list.forEach {
+                    if (it is ValueBind && it.filter(ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN))
+                        it.apply {
+                            type = ValueBind.Type.KEY
+                            button = GLFW.GLFW_KEY_UNKNOWN
+                        }
+                }
+            }
+        }
     }
 
     val autoSaveDaemonName = "$name config auto save daemon"

@@ -5,12 +5,8 @@ import java.util.concurrent.CopyOnWriteArrayList
 open class Manager<T : Any> {
     val list = CopyOnWriteArrayList<T>()
 
-    fun add(obj: T) {
-        insert(obj, list.size)
-    }
-
     fun add(vararg objects: T) {
-        objects.forEach { add(it) }
+        objects.forEach { insert(it, list.size) }
     }
 
     open fun insert(obj: T, index: Int) {

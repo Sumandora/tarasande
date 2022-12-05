@@ -20,5 +20,5 @@ class ManagerEnvironment : Manager<EnvironmentPreset>() {
 
 abstract class EnvironmentPreset(val name: String, val authHost: String, val accountsHost: String, val sessionHost: String, val servicesHost: String) {
 
-    fun create() = Environment.create(this.authHost, this.accountsHost, this.sessionHost, this.servicesHost, this.name)
+    fun create(): Environment = Environment.create(this.authHost, this.accountsHost, this.sessionHost, this.servicesHost, this.name)
 }

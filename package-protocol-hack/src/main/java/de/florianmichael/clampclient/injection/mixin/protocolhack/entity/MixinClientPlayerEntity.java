@@ -58,14 +58,14 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Shadow
     public Input input;
     @Shadow
-    public float lastYaw;
+    private float lastYaw;
     @Shadow
-    public float lastPitch;
+    private float lastPitch;
     @Shadow
     @Final
     public ClientPlayNetworkHandler networkHandler;
     @Shadow
-    public boolean autoJumpEnabled;
+    private boolean autoJumpEnabled;
     @Shadow
     @Final
     protected MinecraftClient client;

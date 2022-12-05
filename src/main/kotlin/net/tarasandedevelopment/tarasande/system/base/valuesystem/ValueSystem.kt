@@ -12,7 +12,7 @@ import su.mandora.event.EventDispatcher
 
 class ManagerValue(fileSystem: ManagerFile) : Manager<Value>() {
 
-    var closed = false
+    private var closed = false
 
     init {
         EventDispatcher.add(EventSuccessfulLoad::class.java, 9999) {
@@ -40,6 +40,7 @@ class ManagerValue(fileSystem: ManagerFile) : Manager<Value>() {
     }
 }
 
+@Suppress("LeakingThis")
 abstract class Value(var owner: Any, var name: String, private val valueComponent: Class<out ElementWidthValueComponent>, manage: Boolean = true) {
 
     init {

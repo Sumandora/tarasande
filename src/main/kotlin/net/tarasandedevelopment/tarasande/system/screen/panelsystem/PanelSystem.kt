@@ -29,7 +29,7 @@ import kotlin.math.round
 class ManagerPanel(fileSystem: ManagerFile) : Manager<Panel>() {
 
     val screenCheatMenu: ScreenCheatMenu
-    var panelInsertY = 5.0
+    private var panelInsertY = 5.0
 
     init {
         add(

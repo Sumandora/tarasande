@@ -8,8 +8,8 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent
 import net.tarasandedevelopment.tarasande.util.extension.withAlpha
 import java.awt.Color
 
-open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var bri: Float, var alpha: Float? = null, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentColor::class.java, manage) {
-    var hue: Float = hue
+open class ValueColor(owner: Any, name: String, hue: Double, var sat: Double, var bri: Double, var alpha: Double? = null, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentColor::class.java, manage) {
+    var hue = hue
         get() {
             return if (rainbow) {
                 (field + (System.currentTimeMillis() - rainbowStart) % 2500f / 2500F) % 1.0F
@@ -27,12 +27,13 @@ open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var 
     private var rainbowStart = 0L
 
     fun getColor(): Color {
-        var customHue = this.hue
+        val hue =
+            if(locked && this != TarasandeMain.clientValues().accentColor)
+                TarasandeMain.clientValues().accentColor.hue
+            else
+                hue
 
-        if (locked && this != TarasandeMain.clientValues().accentColor)
-            customHue = TarasandeMain.clientValues().accentColor.hue
-
-        val hsb = Color.getHSBColor(customHue, sat, bri)
+        val hsb = Color.getHSBColor(hue.toFloat(), sat.toFloat(), bri.toFloat())
         return hsb.withAlpha(if (alpha == null) 255 else (alpha!! * 255).toInt())
     }
 
@@ -51,13 +52,13 @@ open class ValueColor(owner: Any, name: String, hue: Float, var sat: Float, var 
 
     override fun load(jsonElement: JsonElement) {
         val jsonArray = jsonElement.asJsonArray
-        hue = jsonArray[0].asFloat
-        sat = jsonArray[1].asFloat
-        bri = jsonArray[2].asFloat
-        rainbow = jsonArray[3].asBoolean
-        locked = jsonArray[4].asBoolean
+        hue         = jsonArray[0].asDouble
+        sat         = jsonArray[1].asDouble
+        bri         = jsonArray[2].asDouble
+        rainbow     = jsonArray[3].asBoolean
+        locked      = jsonArray[4].asBoolean
         if (alpha != null) {
-            alpha = jsonArray[5].asFloat
+            alpha   = jsonArray[5].asDouble
         }
     }
 }

@@ -1,7 +1,10 @@
 package net.tarasandedevelopment.tarasande.event
 
+import com.mojang.brigadier.CommandDispatcher
+import com.mojang.brigadier.StringReader
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
+import net.minecraft.command.CommandSource
 import net.minecraft.item.Item
 import su.mandora.event.Event
 import java.util.*
@@ -42,3 +45,7 @@ class EventChildren(val screen: Screen, val elements: ArrayList<Element>) : Even
 class EventShowsDeathScreen(var showsDeathScreen: Boolean) : Event(false)
 class EventTimeTravel(var time: Long) : Event(false)
 class EventShutdown : Event(false)
+class EventInputSuggestions(val reader: StringReader) : Event(false) {
+    var dispatcher: CommandDispatcher<CommandSource>? = null
+    var commandSource: CommandSource? = null
+}

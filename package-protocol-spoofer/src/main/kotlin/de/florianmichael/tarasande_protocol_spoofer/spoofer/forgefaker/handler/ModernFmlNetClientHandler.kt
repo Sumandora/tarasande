@@ -1,5 +1,7 @@
 package de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler
 
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.IForgeNetClientHandler
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.legacy.ModStruct
 import io.netty.buffer.Unpooled
 import net.minecraft.network.ClientConnection
 import net.minecraft.network.Packet
@@ -8,8 +10,6 @@ import net.minecraft.network.packet.c2s.login.LoginQueryResponseC2SPacket
 import net.minecraft.network.packet.s2c.login.LoginQueryRequestS2CPacket
 import net.minecraft.util.registry.Registry
 import net.minecraft.util.registry.RegistryKey
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.IForgeNetClientHandler
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.legacy.ModStruct
 
 enum class ModernFmlState {
     FML_2,
@@ -17,7 +17,7 @@ enum class ModernFmlState {
     FML_4 // not really fml v4, just some inner changes
 }
 
-class ModernFmlNetClientHandler(val state: ModernFmlState, val connection: ClientConnection) : IForgeNetClientHandler {
+class ModernFmlNetClientHandler(private val state: ModernFmlState, private val connection: ClientConnection) : IForgeNetClientHandler {
 
     private val modTracker = ArrayList<ModStruct>()
 

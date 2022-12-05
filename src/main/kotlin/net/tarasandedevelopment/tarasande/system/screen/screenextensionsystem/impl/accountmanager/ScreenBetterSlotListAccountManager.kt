@@ -46,7 +46,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
 
     var mainAccount: Int? = null
 
-    var loginThread: ThreadRunnableExposed? = null
+    private var loginThread: ThreadRunnableExposed? = null
 
     private var loginButton: ButtonWidget? = null
     private var removeButton: ButtonWidget? = null

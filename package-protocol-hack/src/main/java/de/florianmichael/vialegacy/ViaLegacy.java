@@ -48,7 +48,6 @@ import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.Protocol1
 
 import java.util.logging.Logger;
 
-import static com.viaversion.viaversion.api.protocol.version.ProtocolVersion.*;
 import static de.florianmichael.vialegacy.protocol.LegacyProtocolVersion.*;
 
 /**

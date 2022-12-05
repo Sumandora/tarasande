@@ -21,22 +21,20 @@ object StringUtil {
     fun round(input: Double, places: Int) = String.format("%." + places + "f", input)
 
     fun formatBytes(value: Long, count: Int): String {
-        var value = value
-//        value *= 8L
-        val bytes = value.toDouble()
         return if (value < 1024L)
             "$value B"
         else if (value < 1024L * 1024L)
-            round(bytes / 1024.0, count) + " Kb"
+            round(value / 1024.0, count) + " Kb"
         else if (value < 1024L * 1024L * 1024L)
-            round(bytes / 1024.0 / 1024.0, count) + " Mb"
+            round(value / 1024.0 / 1024.0, count) + " Mb"
         else if (value < 1024L * 1024L * 1024L * 1024L)
-            round(bytes / 1024.0 / 1024.0 / 1024.0, count) + " Gb"
+            round(value / 1024.0 / 1024.0 / 1024.0, count) + " Gb"
         else
-            round(bytes / 1024.0 / 1024.0 / 1024.0 / 1024.0, count) + " Tb"
+            round(value / 1024.0 / 1024.0 / 1024.0 / 1024.0, count) + " Tb"
     }
 
     fun formatTime(input: Long): String {
+        @Suppress("NAME_SHADOWING")
         var input = input
 
         val days = TimeUnit.MILLISECONDS.toDays(input)

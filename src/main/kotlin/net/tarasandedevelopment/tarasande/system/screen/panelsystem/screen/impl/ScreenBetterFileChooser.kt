@@ -48,6 +48,7 @@ class ScreenBetterFileChooser(
             }
 
             override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+                @Suppress("NAME_SHADOWING")
                 val mouseY = mouseY - scrollOffset
 
                 val hovered = RenderUtil.isHovered(mouseX, mouseY, x, y + titleBarHeight, x + panelWidth, y + panelHeight)

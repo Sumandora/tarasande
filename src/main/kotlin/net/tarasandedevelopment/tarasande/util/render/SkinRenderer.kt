@@ -21,7 +21,7 @@ class SkinRenderer(val profile: GameProfile) {
 
         (MinecraftClient.getInstance().skinProvider as IPlayerSkinProvider).tarasande_disableSessionCheckOnce()
 
-        MinecraftClient.getInstance().skinProvider.loadSkin(next, { type, id, texture ->
+        MinecraftClient.getInstance().skinProvider.loadSkin(next, { type, id, _ ->
             when (type) {
                 MinecraftProfileTexture.Type.SKIN -> {
                     skinImage = id

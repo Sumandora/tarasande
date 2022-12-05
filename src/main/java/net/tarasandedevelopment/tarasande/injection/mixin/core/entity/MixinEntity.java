@@ -17,6 +17,7 @@ public abstract class MixinEntity {
 
     @Inject(method = "getRotationVec", at = @At("HEAD"), cancellable = true)
     public void injectFakeRotation(float tickDelta, CallbackInfoReturnable<Vec3d> cir) {
+        //noinspection ConstantValue
         if ((Object) this == MinecraftClient.getInstance().player && RotationUtil.INSTANCE.getFakeRotation() != null) {
             cir.setReturnValue(this.getRotationVector(RotationUtil.INSTANCE.getFakeRotation().getPitch(), RotationUtil.INSTANCE.getFakeRotation().getYaw()));
         }

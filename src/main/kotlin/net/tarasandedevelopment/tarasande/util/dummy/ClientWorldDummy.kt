@@ -17,7 +17,7 @@ class ClientWorldDummy : ClientWorld(null, null, null, DynamicRegistryManager.BU
     override fun setSpawnPos(pos: BlockPos?, angle: Float) {
     }
 
-    override fun getRegistryManager() = DynamicRegistryManager.BUILTIN.get()
+    override fun getRegistryManager(): DynamicRegistryManager.Immutable = DynamicRegistryManager.BUILTIN.get()
 
     override fun getSpawnPos() = BlockPos(0, 0, 0)
 

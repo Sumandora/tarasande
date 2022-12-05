@@ -21,7 +21,6 @@
 
 package de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2;
 
-import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitter;
 import de.florianmichael.vialegacy.api.LegacyClientboundPacketType;
 

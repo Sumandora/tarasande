@@ -1,14 +1,14 @@
 package de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.ui
 
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.IForgePayload
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.legacy.ModStruct
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.modern.ChannelStruct
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.modern.ModernForgePayload
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.screen.base.AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.IForgePayload
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.legacy.ModStruct
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.modern.ChannelStruct
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.modern.ModernForgePayload
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
 class ScreenBetterSlotListForgeInformation(parent: Screen, private val titleName: String, val type: Type, val struct: IForgePayload) : ScreenBetterSlotList(46, -10, -1, FontWrapper.fontHeight() * 2 + 5, parent) {

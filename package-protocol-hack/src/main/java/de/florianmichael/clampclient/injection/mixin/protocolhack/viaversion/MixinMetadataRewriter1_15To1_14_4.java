@@ -38,7 +38,7 @@ public class MixinMetadataRewriter1_15To1_14_4 {
 
     @Inject(method = "handleMetadata", at = @At(value = "INVOKE", target = "Ljava/util/List;remove(Ljava/lang/Object;)Z", shift = At.Shift.BEFORE), remap = false)
     public void trackHealth(int entityId, EntityType type, Metadata metadata, List<Metadata> metadatas, UserConnection connection, CallbackInfo ci) {
-        //noinspection ConstantConditions
+        //noinspection DataFlowIssue
         WolfHealthTracker1_14_4.INSTANCE.track(entityId, (Float) metadata.getValue());
     }
 }

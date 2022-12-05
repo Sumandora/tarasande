@@ -16,22 +16,22 @@ import java.awt.Color
 class EntityColor(private val moduleESP: ModuleESP) {
 
     private val modifyTeamColor = ValueBoolean(this, "Modify team color", true)
-    private val selfColor = object : ValueColor(this, "Self Color", 0.0F, 1.0F, 1.0F, 1.0F) {
+    private val selfColor = object : ValueColor(this, "Self Color", 0.0, 1.0, 1.0, 1.0) {
         override fun isEnabled() = modifyTeamColor.value
     }
-    private val friendsColor = object : ValueColor(this, "Friends Color", 0.0F, 1.0F, 1.0F, 1.0F) {
+    private val friendsColor = object : ValueColor(this, "Friends Color", 0.0, 1.0, 1.0, 1.0) {
         override fun isEnabled() = modifyTeamColor.value
     }
     private val useTeamColor = object : ValueBoolean(this, "Use Team Color", true) {
         override fun isEnabled() = modifyTeamColor.value
     }
-    private val playerColor = object : ValueColor(this, "Player Color", 0.0F, 1.0F, 1.0F, 1.0F) {
+    private val playerColor = object : ValueColor(this, "Player Color", 0.0, 1.0, 1.0, 1.0) {
         override fun isEnabled() = modifyTeamColor.value && !useTeamColor.value
     }
-    private val animalColor = object : ValueColor(this, "Animal Color", 0.0F, 1.0F, 1.0F, 1.0F) {
+    private val animalColor = object : ValueColor(this, "Animal Color", 0.0, 1.0, 1.0, 1.0) {
         override fun isEnabled() = modifyTeamColor.value && !useTeamColor.value
     }
-    private val mobColor = object : ValueColor(this, "Mob Color", 0.0F, 1.0F, 1.0F, 1.0F) {
+    private val mobColor = object : ValueColor(this, "Mob Color", 0.0, 1.0, 1.0, 1.0) {
         override fun isEnabled() = modifyTeamColor.value && !useTeamColor.value
     }
 

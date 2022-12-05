@@ -11,8 +11,6 @@ object ArmorUpdater1_8_0 {
     // this is a list of all 1.9 armor items with their id
     private val ids = HashMap<Item, Int>()
 
-    private var oldArmor = 0
-
     init {
         //@formatter:off
         arrayOf(

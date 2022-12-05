@@ -19,6 +19,7 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.a
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.AzureAppPreset
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterAzureApps
+import net.tarasandedevelopment.tarasande.util.extension.Thread
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.*
@@ -52,7 +53,7 @@ open class AccountMicrosoft : Account() {
             val serverSocket = ServerSocket(randomPort())
             if (!serverSocket.isBound)
                 error("Not bound")
-            val t = Thread({
+            val t = Thread("Microsoft login http server") {
                 try {
                     val socket = serverSocket.accept()
                     Thread.sleep(100L) // some browsers are slow for some reason
@@ -89,7 +90,7 @@ $errorDescription""".toByteArray())
                     t.printStackTrace()
                     serverSocket.close()
                 }
-            }, "Microsoft login http server")
+            }
             t.start()
             serverSocket
         } catch (t: Throwable) {

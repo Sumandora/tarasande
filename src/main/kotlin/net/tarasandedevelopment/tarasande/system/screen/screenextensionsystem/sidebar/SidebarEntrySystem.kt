@@ -7,11 +7,35 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBool
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueSpacer
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelElements
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.panel.ClickableWidgetPanelSidebar
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.panel.ClickableWidgetPanelSidebar
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
+
+class ManagerEntrySidebarPanel : Manager<EntrySidebarPanel>() {
+
+    fun build(): ClickableWidgetPanelSidebar {
+        return PanelElements<ElementWidthValueComponent>("Sidebar", 120.0, 0.0).let {
+            val categories = ArrayList<String>()
+            this@ManagerEntrySidebarPanel.list.forEach {
+                if (!categories.contains(it.category)) {
+                    categories.add(it.category)
+                }
+            }
+
+            categories.forEach { localEach ->
+                it.elementList.add(object : ValueSpacer(it, localEach, 1.0F, manage = false) {
+                    override fun getColor(hovered: Boolean) = Color.gray
+                }.createValueComponent())
+                this@ManagerEntrySidebarPanel.list.filter { it.category == localEach }.onEach { each ->
+                    it.elementList.addAll(each.createElements(it))
+                }
+            }
+            return@let ClickableWidgetPanelSidebar(it)
+        }
+    }
+}
 
 open class EntrySidebarPanel(val name: String, val category: String) {
 
@@ -37,9 +61,8 @@ open class EntrySidebarPanel(val name: String, val category: String) {
     }
 }
 
-open class EntrySidebarPanelSelection(name: String, category: String, val list: List<String>, var selected: String) : EntrySidebarPanel(name, category) {
-    open fun onClick(newValue: String) {
-    }
+abstract class EntrySidebarPanelSelection(name: String, category: String, val list: List<String>, var selected: String) : EntrySidebarPanel(name, category) {
+    abstract fun onClick(newValue: String)
 
     override fun createElements(owner: Any): List<ElementWidthValueComponent> {
         return list.map {
@@ -82,29 +105,5 @@ open class EntrySidebarPanelToggleable(sidebar: ManagerEntrySidebarPanel, name: 
 
             override fun getColor(hovered: Boolean) = (if (state.value) Color.green else Color.red).let { if (hovered) RenderUtil.colorInterpolate(it, TarasandeMain.clientValues().accentColor.getColor(), 0.4) else it }
         }.createValueComponent())
-    }
-}
-
-class ManagerEntrySidebarPanel : Manager<EntrySidebarPanel>() {
-
-    fun build(): ClickableWidgetPanelSidebar {
-        return PanelElements<ElementWidthValueComponent>("Sidebar", 120.0, 0.0).let {
-            val categories = ArrayList<String>()
-            this@ManagerEntrySidebarPanel.list.forEach {
-                if (!categories.contains(it.category)) {
-                    categories.add(it.category)
-                }
-            }
-
-            categories.forEach { localEach ->
-                it.elementList.add(object : ValueSpacer(it, localEach, 1.0F, manage = false) {
-                    override fun getColor(hovered: Boolean) = Color.gray
-                }.createValueComponent())
-                this@ManagerEntrySidebarPanel.list.filter { it.category == localEach }.onEach { each ->
-                    it.elementList.addAll(each.createElements(it))
-                }
-            }
-            return@let ClickableWidgetPanelSidebar(it)
-        }
     }
 }

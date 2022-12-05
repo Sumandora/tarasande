@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.Sc
 import java.io.File
 import java.util.logging.Level
 
-class ScreenExtensionPackScreen : ScreenExtensionButtonList<PackScreen>(PackScreen::class.java) {
+class ScreenExtensionButtonListPackScreen : ScreenExtensionButtonList<PackScreen>(PackScreen::class.java) {
 
     init {
         add("Dump server pack", { MinecraftClient.getInstance().resourcePackProvider?.serverContainer != null }) {

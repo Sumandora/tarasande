@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande_linux_platform.information
 
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.util.extension.Thread
 
 class InformationPortage : Information("Linux", "Portage") {
 
@@ -18,7 +19,7 @@ class InformationPortage : Information("Linux", "Portage") {
     private var lastState = ""
 
     init {
-        Thread({
+        Thread("Genlop query thread") {
             while (true) {
                 Thread.sleep(100L)
 
@@ -28,7 +29,7 @@ class InformationPortage : Information("Linux", "Portage") {
                     t.toString()
                 }
             }
-        }, "Genlop query thread").start()
+        }.start()
     }
 
     override fun getMessage(): String? {
@@ -77,7 +78,7 @@ class InformationNowPlaying : Information("Linux", "Now playing") {
     }
 
     init {
-        Thread({
+        Thread("Now playing query thread") {
             while (true) {
                 Thread.sleep(1000L)
 
@@ -87,7 +88,7 @@ class InformationNowPlaying : Information("Linux", "Now playing") {
                     null
                 }
             }
-        }, "Now playing query thread").start()
+        }.start()
     }
 
     override fun getMessage() = lastState

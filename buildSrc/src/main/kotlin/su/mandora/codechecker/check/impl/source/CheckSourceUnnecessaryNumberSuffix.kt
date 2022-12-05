@@ -3,7 +3,7 @@ package su.mandora.codechecker.check.impl.source
 import su.mandora.codechecker.check.CheckSource
 import java.util.regex.Pattern
 
-class CheckUnnecessaryNumberSuffix : CheckSource("Unnecessary Number Suffix") {
+class CheckSourceUnnecessaryNumberSuffix : CheckSource("Unnecessary Number Suffix") {
 
     private val floatRegex = Pattern.compile("[^\\w\\s]([+-]?([0-9]+([.][0-9]*)?|[.][0-9]+))d")
 

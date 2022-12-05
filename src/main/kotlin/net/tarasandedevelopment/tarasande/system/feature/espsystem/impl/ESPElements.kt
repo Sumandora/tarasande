@@ -76,8 +76,8 @@ class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.
 
 class ESPElementRotatableHealthBar : ESPElementRotatable("Health bar", arrayOf(Orientation.TOP, Orientation.BOTTOM)) {
     private val outlined = ValueBoolean(this, "Outlined", true)
-    private val fadeColorBegin = ValueColor(this, "Fade color begin", 0.33F /*green*/, 1.0F, 1.0F)
-    private val fadeColorEnd = ValueColor(this, "Fade color end", 0.0F /*red*/, 1.0F, 1.0F)
+    private val fadeColorBegin = ValueColor(this, "Fade color begin", 0.33 /*green*/, 1.0, 1.0)
+    private val fadeColorEnd = ValueColor(this, "Fade color end", 0.0 /*red*/, 1.0, 1.0)
 
     override fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double, orientation: Orientation) {
         val height = getHeight(entity, sideWidth)

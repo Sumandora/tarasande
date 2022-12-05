@@ -44,7 +44,7 @@ import javax.crypto.Cipher;
 public class MixinClientConnection implements IClientConnection_Protocol {
 
     @Shadow
-    public Channel channel;
+    private Channel channel;
 
     @Shadow
     private boolean encrypted;

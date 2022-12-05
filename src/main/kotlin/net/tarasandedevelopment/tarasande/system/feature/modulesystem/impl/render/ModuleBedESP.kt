@@ -25,6 +25,8 @@ import java.util.function.BiFunction
 /**
  * This module is pretty cool, but can be extremely processing intensive
  * In theory you should be able to go from the inside to the outside, but trying that resulted in not getting perfect results anymore
+ *
+ * New update: Was I retarded?
  */
 class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.RENDER) {
 
@@ -36,13 +38,13 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         override fun isEnabled() = calculateBestWay.value
     }
 
-    private val bedColor = object : ValueColor(this, "Bed color", 0.0F, 1.0F, 1.0F, 1.0F) {
+    private val bedColor = object : ValueColor(this, "Bed color", 0.0, 1.0, 1.0, 1.0) {
         override fun isEnabled() = calculateBestWay.value
     }
-    private val defenderColor = object : ValueColor(this, "Defender color", 0.0F, 1.0F, 1.0F, 0.0F) {
+    private val defenderColor = object : ValueColor(this, "Defender color", 0.0, 1.0, 1.0, 0.0) {
         override fun isEnabled() = calculateBestWay.value
     }
-    private val solutionColor = object : ValueColor(this, "Solution color", 0.0F, 1.0F, 1.0F, 1.0F) {
+    private val solutionColor = object : ValueColor(this, "Solution color", 0.0, 1.0, 1.0, 1.0) {
         override fun isEnabled() = calculateBestWay.value
     }
 
@@ -144,7 +146,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                     val defenders = calculateDefenses(bedParts)?.let { ArrayList(it) }
                     var solution: List<Node>? = null
                     if (defenders != null) {
-                        val outstanders = defenders.filter {
+                        val outsiders = defenders.filter {
                             allSurroundings(it).any {
                                 mc.world?.getBlockState(it)?.let { state ->
                                     state.isAir || state.getCollisionShape(MinecraftClient.getInstance().world, it).isEmpty
@@ -152,9 +154,9 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                             }
                         }
 
-                        if (outstanders.any { mc.world?.getBlockState(it)?.block is BedBlock }) continue // not a bedwars bed
+                        if (outsiders.any { mc.world?.getBlockState(it)?.block is BedBlock }) continue // not a bedwars bed
 
-                        solution = Breaker.findSolution(outstanders, defenders, bedParts, maxProcessingTime.value.toLong())
+                        solution = Breaker.findSolution(outsiders, defenders, bedParts, maxProcessingTime.value.toLong())
 
                         defenders.removeIf { bedParts.contains(it) }
                     }
@@ -207,15 +209,15 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
         private val pathFinder = PathFinder({ _, node -> defenders?.contains(BlockPos(node.x, node.y, node.z)) == true }, cost = breakSpeed)
 
-        fun findSolution(outstanders: List<BlockPos>, defenders: List<BlockPos>, beds: Array<BlockPos>, maxProcessingTime: Long): List<Node>? {
+        fun findSolution(outsiders: List<BlockPos>, defenders: List<BlockPos>, beds: Array<BlockPos>, maxProcessingTime: Long): List<Node>? {
             this.defenders = defenders
             var bestWay: List<Node>? = null
             val begin = System.currentTimeMillis()
-            for (outstander in outstanders) {
+            for (outsider in outsiders) {
                 if (System.currentTimeMillis() - begin > maxProcessingTime) break
 
-                val bestBed = beds.minByOrNull { it.getSquaredDistance(outstander) } ?: continue
-                val beginNode = Node(outstander.x, outstander.y, outstander.z)
+                val bestBed = beds.minByOrNull { it.getSquaredDistance(outsider) } ?: continue
+                val beginNode = Node(outsider.x, outsider.y, outsider.z)
                 val endNode = Node(bestBed.x, bestBed.y, bestBed.z)
                 val way = pathFinder.findPath(beginNode, endNode, maxProcessingTime) ?: break // timeout
                 if (bestWay == null)

@@ -16,7 +16,7 @@ public class MixinMinecraftClient {
         boolean glowing = entity.isGlowing();
         ModuleESP moduleESP = TarasandeMain.Companion.managerModule().get(ModuleESP.class);
         if (moduleESP.getEnabled())
-            return glowing || (moduleESP.getMode().isSelected(0) && moduleESP.filter(entity));
+            return glowing || (moduleESP.getMode().isSelected(0) && moduleESP.shouldRender(entity));
         return glowing;
     }
 }

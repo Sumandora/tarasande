@@ -38,7 +38,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@SuppressWarnings("ConstantConditions")
 @Mixin(EntityPackets.class)
 public class MixinEntityPackets1_8 {
 
@@ -47,6 +46,7 @@ public class MixinEntityPackets1_8 {
         @Override
         public Integer transform(PacketWrapper wrapper, Short slot) throws Exception {
             int entityId = wrapper.get(Type.VAR_INT, 0);
+            //noinspection DataFlowIssue
             int receiverId = wrapper.user().getEntityTracker(Protocol1_9To1_8.class).clientEntityId();
             // Normally, 0 = hand and 1-4 = armor
             // ... but if the sent id is equal to the receiver's id, 0-3 will instead mark the armor slots
@@ -90,10 +90,12 @@ public class MixinEntityPackets1_8 {
 
                     if (stack != null) {
                         if (Protocol1_9To1_8.isSword(stack.identifier())) {
+                            //noinspection DataFlowIssue
                             entityTracker.getValidBlocking().add(entityID);
                             return;
                         }
                     }
+                    //noinspection DataFlowIssue
                     entityTracker.getValidBlocking().remove(entityID);
                 });
             }

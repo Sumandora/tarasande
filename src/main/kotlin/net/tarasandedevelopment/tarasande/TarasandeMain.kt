@@ -51,17 +51,17 @@ class TarasandeMain {
         private val instance = TarasandeMain()
         fun get() = instance
 
-        fun managerBlur() = instance.managerBlur
+        fun managerFile() = instance.managerFile
         fun managerValue() = instance.managerValue
-        fun managerCommand() = instance.managerCommand
-        fun managerModule() = instance.managerModule
-        fun managerPanel() = instance.managerPanel
+        fun managerESP() = instance.managerESP
+        fun managerClickMethod() = instance.managerClickMethod
         fun managerScreenExtension() = instance.managerScreenExtension
+        fun managerBlur() = instance.managerBlur
+        fun managerPanel() = instance.managerPanel
         fun managerInformation() = instance.managerInformation
         fun managerGraph() = instance.managerGraph
-        fun managerClickMethod() = instance.managerClickMethod
-        fun managerESP() = instance.managerESP
-        fun managerFile() = instance.managerFile
+        fun managerCommand() = instance.managerCommand
+        fun managerModule() = instance.managerModule
         fun clientValues() = instance.clientValues
         fun friends() = instance.friends
         fun notifications() = instance.notifications
