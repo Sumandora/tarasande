@@ -33,8 +33,8 @@ class CommandGive : Command("give") {
     override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
         return builder.then(argument("item", ItemStackArgumentType.itemStack(registryAccess))?.executes {
             return@executes executeGive(ItemStackArgumentType.getItemStackArgument(it, "item"))
-        }).then(argument("count", IntegerArgumentType.integer())?.executes {
+        }?.then(argument("count", IntegerArgumentType.integer())?.executes {
             return@executes executeGive(ItemStackArgumentType.getItemStackArgument(it, "item"), IntegerArgumentType.getInteger(it, "count"))
-        })
+        }))
     }
 }
