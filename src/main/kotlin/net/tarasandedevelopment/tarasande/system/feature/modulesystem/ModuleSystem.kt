@@ -132,9 +132,7 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
         )
 
         panelSystem.add(PanelArrayList(this@ManagerModule))
-        commandSystem.add(
-            CommandToggle(this@ManagerModule)
-        )
+        commandSystem.add(CommandToggle(this@ManagerModule))
         EventDispatcher.apply {
             add(EventTick::class.java) {
                 if (it.state == EventTick.State.POST) {

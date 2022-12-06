@@ -14,12 +14,10 @@ import kotlin.jvm.Throws
 
 class CommandGive : Command("give") {
 
-    private val noCreativeException = SimpleCommandExceptionType(Text.literal("Player must be in creative mode to give items to self"))
-
     @Throws(CommandSyntaxException::class)
     private fun executeGive(item: ItemStackArgument, count: Int = 1): Int {
         if (!mc.player?.abilities?.creativeMode!!) {
-            throw noCreativeException.create()
+            throw notInCreative.create()
         }
         item.createStack(count.coerceAtMost(item.item.maxCount), false).also {
             mc.interactionManager?.clickCreativeStack(it, 36 + (mc.player?.inventory?.selectedSlot ?: 0))
