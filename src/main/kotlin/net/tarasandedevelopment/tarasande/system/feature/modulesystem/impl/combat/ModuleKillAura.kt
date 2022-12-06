@@ -184,7 +184,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             val prevTargets = ArrayList(targets)
             targets.clear()
             val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
-            if(closedInventory.value && mc.currentScreen is HandledScreen<*>) {
+            if(RotationUtil.fakeRotation != null && closedInventory.value && mc.currentScreen is HandledScreen<*>) {
                 event.rotation = currentRot
                 event.minRotateToOriginSpeed = aimSpeed.minValue
                 event.maxRotateToOriginSpeed = aimSpeed.maxValue
