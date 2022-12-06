@@ -58,26 +58,24 @@ class CommandEnchant : Command("enchant") {
     }
 
     override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
-        // single enchant
         builder.then(literal("single").then(argument("enchantment", EnchantmentArgumentType.enchantment())?.then(
             literal("level").then(argument("level", IntegerArgumentType.integer())?.executes {
                 val level = it.getArgument("level", Int::class.java)
 
                 it.getArgument("enchantment", Enchantment::class.java).apply {
                     singleEnchant(this, level)
-                    printChatMessage("The Enchantment [" + StringUtil.uncoverTranslation(this.translationKey) + "] at level [" + level + "] was added")
+                    printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(this.translationKey) + "] at level [" + level + "] was added")
                 }
                 return@executes success
             }).then(literal("max").executes {
                 it.getArgument("enchantment", Enchantment::class.java).apply {
                     singleEnchant(this, this.maxLevel)
-                    printChatMessage("The Enchantment [" + StringUtil.uncoverTranslation(this.translationKey) + "] at max level was added")
+                    printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(this.translationKey) + "] at max level was added")
                 }
                 return@executes success
             })
         )))
 
-        // all possible enchants
         builder.then(literal("all-possible").then(literal("level").then(
             argument("level", IntegerArgumentType.integer())?.executes { context ->
                 context.getArgument("level", Int::class.java)?.apply {
@@ -96,7 +94,6 @@ class CommandEnchant : Command("enchant") {
             return@executes success
         })))
 
-        // all enchants
         builder.then(literal("all").then(literal("level").then(
             argument("level", IntegerArgumentType.integer())?.executes { context ->
                 context.getArgument("level", Int::class.java)?.apply {
@@ -114,24 +111,21 @@ class CommandEnchant : Command("enchant") {
             return@executes success
         })))
 
-        // remove
         builder.then(literal("remove").then(argument("enchantment", EnchantmentArgumentType.enchantment())?.executes {
             val enchantment = it.getArgument("enchantment", Enchantment::class.java)
             getTargetItem().apply {
                 EnchantmentHelper.set(EnchantmentHelper.get(this).apply { remove(enchantment) }, this)
             }
             syncInventory()
-            printChatMessage("The Enchantment [" + StringUtil.uncoverTranslation(enchantment.translationKey) + "] was removed")
+            printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(enchantment.translationKey) + "] was removed")
             return@executes success
         }))
 
-        // clear
         builder.then(literal("clear").executes {
             getTargetItem().nbt?.remove("Enchantments")
             printChatMessage("All enchantments have been removed")
             return@executes success
         })
-
         return builder
     }
 }
