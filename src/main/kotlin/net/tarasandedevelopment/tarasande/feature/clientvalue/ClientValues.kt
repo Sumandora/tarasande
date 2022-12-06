@@ -8,6 +8,7 @@ import net.minecraft.entity.Tameable
 import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
+import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.clientvalue.panel.PanelElementsClientValues
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
@@ -147,11 +148,14 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
     }
 
     init {
-        autoSaveDaemon.start()
-
         panelSystem.add(PanelElementsClientValues(this))
-        EventDispatcher.add(EventIsEntityAttackable::class.java) { event ->
-            event.attackable = event.attackable && isEntityDesired(event.entity)
+        EventDispatcher.apply {
+            add(EventIsEntityAttackable::class.java) { event ->
+                event.attackable = event.attackable && isEntityDesired(event.entity)
+            }
+            add(EventSuccessfulLoad::class.java, 10000) {
+                autoSaveDaemon.start()
+            }
         }
     }
 }
