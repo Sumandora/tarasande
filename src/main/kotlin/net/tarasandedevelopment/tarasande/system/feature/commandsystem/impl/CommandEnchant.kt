@@ -121,7 +121,7 @@ class CommandEnchant : Command("enchant") {
                 EnchantmentHelper.set(EnchantmentHelper.get(this).apply { remove(enchantment) }, this)
             }
             syncInventory()
-            printChatMessage("The Enchantment [" + StringUtil.uncoverTranslation(enchantment.translationKey) + "]")
+            printChatMessage("The Enchantment [" + StringUtil.uncoverTranslation(enchantment.translationKey) + "] was removed")
             return@executes success
         }))
 
