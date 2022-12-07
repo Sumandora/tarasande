@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'net.tarasandedevelopment'
-version '1.19'
+version '19.2'
 
 repositories {
     mavenCentral()
@@ -46,6 +46,14 @@ dependencies {
 
     // HAProxy Protocol -> https://mvnrepository.com/artifact/io.netty/netty-codec-haproxy
     implementation("io.netty:netty-codec-haproxy:4.1.82.Final")
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
 }
 
 compileKotlin.kotlinOptions.jvmTarget = "17"

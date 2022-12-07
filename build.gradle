@@ -108,7 +108,7 @@ this.shadowJar {
 compileKotlin.kotlinOptions.jvmTarget = "17"
 
 tasks.register('checkCode') {
-	group "Code checker"
+	group archivesBaseName
 	dependsOn "build"
 	doLast {
 		CodeChecker codeChecker = new CodeChecker(sourceSets.main)
@@ -117,7 +117,7 @@ tasks.register('checkCode') {
 }
 
 tasks.register('installPackages') {
-	group "Package system"
+	group archivesBaseName
 	dependsOn "build"
 	doLast {
 		File base = file(".")

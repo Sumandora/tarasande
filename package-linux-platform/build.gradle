@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'net.tarasandedevelopment'
-version '1.19'
+version '19.2'
 
 repositories {
     mavenCentral()
@@ -22,6 +22,14 @@ dependencies {
 
     // tarasande Source
     implementation(project(":"))
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
 }
 
 compileKotlin.kotlinOptions.jvmTarget = "17"
