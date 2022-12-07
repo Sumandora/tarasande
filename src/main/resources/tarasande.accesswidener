@@ -72,6 +72,12 @@ accessible field net/minecraft/resource/AbstractFileResourcePack base Ljava/io/F
 accessible field net/minecraft/client/resource/ClientBuiltinResourcePackProvider serverContainer Lnet/minecraft/resource/ResourcePackProfile;
 accessible field net/minecraft/client/realms/RealmsClient sessionId Ljava/lang/String;
 accessible field net/minecraft/client/realms/RealmsClient username Ljava/lang/String;
+accessible field net/minecraft/network/packet/s2c/play/PlayerSpawnS2CPacket id I
+accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket id I
+accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket deltaX S
+accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket deltaY S
+accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket deltaZ S
+accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket positionChanged Z
 
 accessible method net/minecraft/client/render/Camera setPos (Lnet/minecraft/util/math/Vec3d;)V
 accessible method net/minecraft/client/render/Camera setRotation (FF)V

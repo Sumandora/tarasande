@@ -1,6 +1,8 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc
 
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen
+import net.minecraft.entity.TrackedPosition
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.ClientConnection
 import net.minecraft.network.NetworkState
 import net.minecraft.network.Packet
@@ -8,16 +10,14 @@ import net.minecraft.network.listener.ClientPlayPacketListener
 import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket
 import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket
 import net.minecraft.network.packet.c2s.play.PlayPongC2SPacket
-import net.minecraft.network.packet.s2c.play.KeepAliveS2CPacket
-import net.minecraft.network.packet.s2c.play.PlayPingS2CPacket
-import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
+import net.minecraft.network.packet.s2c.play.*
 import net.minecraft.util.math.Vec3d
+import net.minecraft.util.shape.VoxelShapes
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.event.EventPollEvents
-import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientConnection
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
@@ -25,6 +25,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
@@ -46,7 +47,12 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     private val cancelKey = object : ValueBind(this, "Cancel key", Type.KEY, GLFW.GLFW_KEY_UNKNOWN) {
         override fun isEnabled() = mode.isSelected(0) && affectedPackets.isSelected(0)
     }
-    private val restrictPackets = ValueMode(this, "Restrict packets", true, "Keep alive", "Ping")
+    private val restrictPackets = object : ValueMode(this, "Restrict packets", true, "Keep alive", "Ping") {
+        override fun isEnabled() = affectedPackets.anySelected()
+    }
+    private val hitBoxColor = object : ValueColor(this, "Hit box color", 0.0, 1.0, 1.0, 1.0) {
+        override fun isEnabled() = affectedPackets.isSelected(1)
+    }
 
     private val packets = CopyOnWriteArrayList<Triple<Packet<*>, EventPacket.Type, Long>>()
     private val timeUtil = TimeUtil()
@@ -54,6 +60,8 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     private var pos: Vec3d? = null
     private var velocity: Vec3d? = null
     private var rotation: Rotation? = null
+
+    private val newPositions = HashMap<Int, TrackedPosition>()
 
     init {
         // Enable both by default
@@ -68,6 +76,37 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                 }
             }
         })
+
+        EventDispatcher.apply {
+            add(EventPacket::class.java, 1) { event ->
+                if(event.type == EventPacket.Type.RECEIVE) {
+                    when(event.packet) {
+                        is PlayerSpawnS2CPacket -> {
+                            newPositions[event.packet.id] = TrackedPosition()
+                        }
+                        is EntityS2CPacket -> {
+                            event.packet.apply {
+                                if(positionChanged) {
+                                    newPositions[id]?.also { it.setPos(it.withDelta(deltaX.toLong(), deltaY.toLong(), deltaZ.toLong())) }
+                                }
+                            }
+                        }
+                        is EntityPositionS2CPacket -> {
+                            newPositions[event.packet.id]?.setPos(event.packet.let { Vec3d(it.x, it.y, it.z) })
+                        }
+                        is EntitiesDestroyS2CPacket -> {
+                            event.packet.entityIds.forEach {
+                                newPositions.remove(it)
+                            }
+                        }
+                    }
+                }
+            }
+            add(EventDisconnect::class.java) {
+                if(it.connection == mc.networkHandler?.connection)
+                    newPositions.clear()
+            }
+        }
     }
 
     override fun onEnable() {
@@ -100,6 +139,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                         restrictPackets.isSelected(1) && event.packet !is PlayPongC2SPacket && event.packet !is PlayPingS2CPacket) {
                         return@registerEvent
                     }
+
                     packets.add(Triple(event.packet, event.type,
                         if (mode.isSelected(2))
                             System.currentTimeMillis() + latency.value.toLong()
@@ -136,6 +176,11 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                         enabled = false
                     }
             }
+        }
+
+        registerEvent(EventRender3D::class.java) { event ->
+            if(affectedPackets.isSelected(1) && !restrictPackets.anySelected())
+                newPositions.forEach { (_, trackedPosition) -> RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(PlayerEntity.STANDING_DIMENSIONS.getBoxAt(trackedPosition.subtract(Vec3d.ZERO).negate())), hitBoxColor.getColor().rgb) }
         }
     }
 
