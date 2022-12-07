@@ -24,6 +24,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandEnchant
+import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandFakeGameMode
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandGive
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandSay
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
@@ -45,7 +46,8 @@ class ManagerCommand : Manager<Command>() {
         add(
             CommandSay(),
             CommandGive(),
-            CommandEnchant()
+            CommandEnchant(),
+            CommandFakeGameMode()
         )
 
         EventDispatcher.add(EventChat::class.java) {
