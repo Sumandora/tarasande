@@ -15,7 +15,6 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.im
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.ManagerEntrySidebarPanel
 import su.mandora.event.EventDispatcher
 
-class EntrySidebarPanelToggleableNoSignatures(sidebar: ManagerEntrySidebarPanel) : EntrySidebarPanelToggleable(sidebar, "No Signatures", "Spoofer")
 class EntrySidebarPanelToggleableClientBrandSpoofer(sidebar: ManagerEntrySidebarPanel) : EntrySidebarPanelToggleable(sidebar, "Client brand spoofer", "Spoofer") {
     private val clientBrand = ValueText(this, "Client brand", "vanilla")
 
@@ -39,7 +38,6 @@ class ScreenExtensionSidebarMultiplayerScreen : ScreenExtensionSidebar<Multiplay
     init {
         sidebar.apply {
             add(
-                EntrySidebarPanelToggleableNoSignatures(this),
                 EntrySidebarPanelToggleableClientBrandSpoofer(this)
             )
         }

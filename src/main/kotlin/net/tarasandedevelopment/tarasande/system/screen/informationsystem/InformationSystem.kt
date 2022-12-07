@@ -35,10 +35,7 @@ class ManagerInformation(panelSystem: ManagerPanel) : Manager<Information>() {
             // Server
             InformationServerBrand(),
             InformationOpenChannels(),
-            InformationVanishedPlayers(),
-
-            // Private message detector
-            InformationDetectedMessages()
+            InformationVanishedPlayers()
         )
 
         EventDispatcher.add(EventSuccessfulLoad::class.java, 1001) {

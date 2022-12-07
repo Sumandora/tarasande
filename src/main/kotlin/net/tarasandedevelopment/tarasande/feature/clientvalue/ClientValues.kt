@@ -66,30 +66,32 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
 
         val map = HashMap<EntityType<*>, Boolean>()
 
-        init {
-            val world = ClientWorldDummy()
-            Registries.ENTITY_TYPE.forEach {
-                map[it] = it.create(world).let { it == null || it is LivingEntity } // Players can't be created and result in null
-            }
-            world.close()
-        }
-
         override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
-        override fun filter(key: EntityType<*>) = map[key] == true
+        override fun filter(key: EntityType<*>): Boolean {
+            if (map.isEmpty()) {
+                val world = ClientWorldDummy()
+                Registries.ENTITY_TYPE.forEach {
+                    map[it] = it.create(world).let { it == null || it is LivingEntity } // Players can't be created and result in null
+                }
+                world.close()
+            }
+            return map[key] == true
+        }
     }
     private val dontAttackTamedEntities = object : ValueBoolean(targetingValues, "Don't attack tamed entities", false) {
 
         val map = HashMap<EntityType<*>, Boolean>()
 
-        init {
-            val world = ClientWorldDummy()
-            Registries.ENTITY_TYPE.forEach {
-                map[it] = it.create(world) is Tameable
+        override fun isEnabled(): Boolean {
+            if (map.isEmpty()) {
+                val world = ClientWorldDummy()
+                Registries.ENTITY_TYPE.forEach {
+                    map[it] = it.create(world) is Tameable
+                }
+                world.close()
             }
-            world.close()
+            return entities.list.any { map[it] == true }
         }
-
-        override fun isEnabled() = entities.list.any { map[it] == true }
     }
     private val dontAttackRidingEntity = object : ValueBoolean(targetingValues, "Don't attack riding entity", false) {
         override fun isEnabled() = entities.list.isNotEmpty()

@@ -15,8 +15,6 @@ public class MixinPlayerListS2CPacketUpdateGameMode {
     @Unique
     private static boolean tarasande_isInvalid;
 
-    // TODO Locals?
-
     @Redirect(method = "method_46338", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/GameMode;byId(I)Lnet/minecraft/world/GameMode;"))
     private static GameMode trackValidity(int id) {
         tarasande_isInvalid = id >= 0 && id < GameMode.values().length;

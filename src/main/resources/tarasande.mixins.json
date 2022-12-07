@@ -100,7 +100,6 @@
     "feature.module.norender.MixinStatusEffectInstance",
     "feature.module.norender.MixinWorldRenderer",
     "feature.module.screen.MixinPlayerScreenHandler",
-    "feature.screenextension.MixinClientPlayerEntity"
   ],
   "injectors": {
     "defaultRequire": 1

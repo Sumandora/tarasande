@@ -36,6 +36,11 @@
    - Anarchy modules
    - Quality of life modules
 
+## TODO-List(Together | Port)
+- Re-add PrivateMSGDetection using Via
+- Fix DownloadingTerrain Changes
+- Fix Profile Keys in 1.19.3 -> 1.19.1
+
 ## TODO-List (Emily | Tarasande)
 - User configs
 - Crystal Aura

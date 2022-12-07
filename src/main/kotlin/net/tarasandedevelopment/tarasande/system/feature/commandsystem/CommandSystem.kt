@@ -9,7 +9,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientCommandSource
+import net.minecraft.client.network.ClientDynamicRegistryType
+import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.command.CommandSource
+import net.minecraft.resource.featuretoggle.FeatureFlags
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.ClickEvent
 import net.minecraft.text.Text
@@ -21,6 +24,9 @@ import net.tarasandedevelopment.tarasande.event.EventInputSuggestions
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
+import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandEnchant
+import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandFakeGameMode
+import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandGive
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandSay
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import org.lwjgl.glfw.GLFW
@@ -40,10 +46,9 @@ class ManagerCommand : Manager<Command>() {
     init {
         add(
             CommandSay(),
-            // TODO Port; REGISTRY
-//            CommandGive(),
-//            CommandEnchant(),
-//            CommandFakeGameMode()
+            CommandGive(),
+            CommandEnchant(),
+            CommandFakeGameMode()
         )
 
         EventDispatcher.add(EventChat::class.java) {
@@ -100,7 +105,7 @@ abstract class Command(private vararg val aliases: String) {
     val mc: MinecraftClient = MinecraftClient.getInstance()
 
     companion object {
-        val registryAccess = null // TODO Port; CommandRegistryAccess(DynamicRegistryManager.BUILTIN.get())
+        val registryAccess = CommandRegistryAccess.of(ClientDynamicRegistryType.createCombinedDynamicRegistries().combinedRegistryManager, FeatureFlags.DEFAULT_ENABLED_FEATURES)
         val notInCreative = SimpleCommandExceptionType(Text.literal("You must be in creative mode to use this"))
 
         const val success = 1

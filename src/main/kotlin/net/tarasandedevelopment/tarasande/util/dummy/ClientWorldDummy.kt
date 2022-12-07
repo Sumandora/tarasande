@@ -1,9 +1,14 @@
 package net.tarasandedevelopment.tarasande.util.dummy
 
+import net.minecraft.client.network.ClientDynamicRegistryType
 import net.minecraft.client.world.ClientWorld
+import net.minecraft.registry.RegistryKeys
+import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.dimension.DimensionType
+import net.minecraft.world.dimension.DimensionTypes
 
-class ClientWorldDummy : ClientWorld(null, null, null, /*DynamicRegistryManager.BUILTIN.get().get(Registry.DIMENSION_TYPE_KEY).entryOf(DimensionTypes.OVERWORLD) TODO Port*/ null, 1, 1, null, null, false, 0L) {
+class ClientWorldDummy : ClientWorld(null, null, null, DimensionTypes, 1, 1, null, null, false, 0L) {
 
     override fun calculateAmbientDarkness() {
     }
@@ -14,7 +19,7 @@ class ClientWorldDummy : ClientWorld(null, null, null, /*DynamicRegistryManager.
     override fun setSpawnPos(pos: BlockPos?, angle: Float) {
     }
 
-    override fun getRegistryManager() = null// TODO Port; DynamicRegistryManager.BUILTIN.get()
+    override fun getRegistryManager() = ClientDynamicRegistryType.createCombinedDynamicRegistries().combinedRegistryManager
 
     override fun getSpawnPos() = BlockPos(0, 0, 0)
 
