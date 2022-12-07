@@ -41,7 +41,7 @@ dependencies {
     // Kotlin
     modImplementation "net.fabricmc:fabric-language-kotlin:${project.kotlin_wrapper_version}"
 
-    // Tarasande Source
+    // tarasande Source
     implementation(project(path: ":", configuration: "shadow"))
 
     // HAProxy Protocol -> https://mvnrepository.com/artifact/io.netty/netty-codec-haproxy

@@ -57,7 +57,7 @@ dependencies {
         implementation(via)
     }
 
-    // Tarasande Source
+    // tarasande Source
     implementation(project(path: ":", configuration: "shadow"))
 }
 
