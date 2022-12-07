@@ -108,7 +108,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
                 image = RenderUtil.createImage(imageValue.selected[0].lowercase().replace(" ", "").replace("'", "") + ".png")
 
             matrices?.push()
-            RenderSystem.setShader { GameRenderer.getPositionTexShader() }
+            RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
             RenderSystem.setShaderTexture(0, image!!.glId)
             @Suppress("NAME_SHADOWING")
             val color = color.brighter().brighter()

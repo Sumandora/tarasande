@@ -11,14 +11,14 @@ import java.util.logging.Level
 class ScreenExtensionButtonListPackScreen : ScreenExtensionButtonList<PackScreen>(PackScreen::class.java) {
 
     init {
-        add("Dump server pack", { MinecraftClient.getInstance().resourcePackProvider?.serverContainer != null }) {
-            MinecraftClient.getInstance().resourcePackProvider?.serverContainer?.apply {
-                val base = (this.packFactory.get() as ZipResourcePack).base
+        add("Dump server pack", { MinecraftClient.getInstance().serverResourcePackProvider?.serverContainer != null }) {
+            MinecraftClient.getInstance().serverResourcePackProvider?.serverContainer?.apply {
+                val base = (this.createResourcePack() as ZipResourcePack).backingZipFile
 
-                var target = File(MinecraftClient.getInstance().resourcePackDir, base.name + ".zip")
+                var target = File(MinecraftClient.getInstance().resourcePackDir.toFile(), base.name + ".zip")
                 var counter = 1
                 while (target.exists()) {
-                    target = File(MinecraftClient.getInstance().resourcePackDir, base.name + "($counter).zip")
+                    target = File(MinecraftClient.getInstance().resourcePackDir.toFile(), base.name + "($counter).zip")
                     counter++
                 }
                 try {
@@ -31,8 +31,8 @@ class ScreenExtensionButtonListPackScreen : ScreenExtensionButtonList<PackScreen
             }
         }
 
-        add("Unload server pack", { MinecraftClient.getInstance().resourcePackProvider != null }) {
-            MinecraftClient.getInstance().resourcePackProvider.clear()
+        add("Unload server pack", { MinecraftClient.getInstance().serverResourcePackProvider != null }) {
+            MinecraftClient.getInstance().serverResourcePackProvider.clear()
         }
     }
 }

@@ -5,7 +5,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.Tameable
-import net.minecraft.util.registry.Registry
+import net.minecraft.registry.Registries
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
@@ -62,13 +62,13 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
             MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, this.name, this))
         }
     }
-    val entities = object : ValueRegistry<EntityType<*>>(targetingValues, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
+    val entities = object : ValueRegistry<EntityType<*>>(targetingValues, "Entities", Registries.ENTITY_TYPE, EntityType.PLAYER) {
 
         val map = HashMap<EntityType<*>, Boolean>()
 
         init {
             val world = ClientWorldDummy()
-            Registry.ENTITY_TYPE.forEach {
+            Registries.ENTITY_TYPE.forEach {
                 map[it] = it.create(world).let { it == null || it is LivingEntity } // Players can't be created and result in null
             }
             world.close()
@@ -83,7 +83,7 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
 
         init {
             val world = ClientWorldDummy()
-            Registry.ENTITY_TYPE.forEach {
+            Registries.ENTITY_TYPE.forEach {
                 map[it] = it.create(world) is Tameable
             }
             world.close()

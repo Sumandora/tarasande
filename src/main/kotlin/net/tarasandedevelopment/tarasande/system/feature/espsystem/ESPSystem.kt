@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.system.feature.espsystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
-import net.minecraft.util.math.Vec3f
+import net.minecraft.util.math.RotationAxis
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -78,7 +78,7 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
             matrices.translate(-(rectangle.z - rectangle.x) * 0.5, (rectangle.y - rectangle.w) * 0.5, 0.0)
         } else if (orientation == Orientation.LEFT || orientation == Orientation.RIGHT) {
             matrices.translate(-(rectangle.y - rectangle.w) * 0.5, -(rectangle.y - rectangle.w) * 0.5, 0.0)
-            matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-90.0F))
+            matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-90.0F))
             matrices.translate((rectangle.y - rectangle.w) * 0.5, (rectangle.y - rectangle.w) * 0.5, 0.0)
 
             if (orientation == Orientation.RIGHT) {

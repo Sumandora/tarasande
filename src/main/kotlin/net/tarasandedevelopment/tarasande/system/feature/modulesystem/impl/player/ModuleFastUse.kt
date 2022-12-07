@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.play
 import net.minecraft.item.BowItem
 import net.minecraft.item.ItemStack
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.OnGroundOnly
+import net.minecraft.registry.Registries
 import net.minecraft.util.UseAction
-import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
@@ -45,7 +45,7 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
                     UseAction.SPEAR -> 10 // TridentItem#onStoppedUsing hard coded value, mojang is shit
                     else -> {
                         var longest = 0
-                        Registry.ITEM.forEach {
+                        Registries.ITEM.forEach {
                             val stack = ItemStack(it)
                             if (it.getUseAction(stack) == useAction) {
                                 val maxUseTime = it.getMaxUseTime(stack)

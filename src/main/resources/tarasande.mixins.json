@@ -7,7 +7,6 @@
     "core.MixinGameRenderer",
     "core.MixinMinecraftClient",
     "core.MixinWindow",
-    "core.connection.MixinChatMessageC2SPacket",
     "core.connection.MixinClientConnection",
     "core.connection.MixinClientConnectionSubInitChannel",
     "core.entity.MixinEntity",
@@ -47,7 +46,6 @@
     "event.connection.MixinClientConnectionSubOne",
     "event.connection.MixinClientPlayNetworkHandler",
     "event.connection.MixinConnectScreenSubConnect",
-    "event.connection.invalidgamemode.MixinPlayerListS2CPacketUpdateAddPlayer",
     "event.connection.invalidgamemode.MixinPlayerListS2CPacketUpdateGameMode",
     "event.entity.MixinAbstractClientPlayerEntity",
     "event.entity.MixinAbstractHorseEntity",
@@ -60,7 +58,7 @@
     "event.screen.MixinScreen",
     "feature.clientvalue.MixinMinecraftClient",
     "feature.clientvalue.MixinRealmsClient",
-    "feature.clientvalue.MixinTelemetrySender",
+    "feature.clientvalue.MixinTelemetryManager",
     "feature.module.MixinCamera",
     "feature.module.MixinEnchantmentHelper",
     "feature.module.MixinGameRenderer",
@@ -102,13 +100,13 @@
     "feature.module.norender.MixinStatusEffectInstance",
     "feature.module.norender.MixinWorldRenderer",
     "feature.module.screen.MixinPlayerScreenHandler",
-    "feature.screenextension.MixinClientPlayerEntity",
-    "feature.screenextension.MixinProfileKeys"
+    "feature.screenextension.MixinClientPlayerEntity"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-    "event.MixinChatInputSuggestor"
+    "event.MixinChatInputSuggestor",
+    "event.screen.MixinChatScreen"
   ]
 }

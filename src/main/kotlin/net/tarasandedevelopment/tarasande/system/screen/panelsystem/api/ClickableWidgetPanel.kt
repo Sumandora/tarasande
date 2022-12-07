@@ -10,7 +10,7 @@ import kotlin.math.floor
 
 open class ClickableWidgetPanel(val panel: Panel, private val update: Boolean = false) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelHeight.toInt(), Text.of(panel.title)), Element {
 
-    override fun appendNarrations(builder: NarrationMessageBuilder?) {
+    override fun appendClickableNarrations(builder: NarrationMessageBuilder?) {
     }
 
     init {

@@ -14,6 +14,7 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.a
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.ExtraInfo
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.TextFieldInfo
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen
+import net.tarasandedevelopment.tarasande.util.extension.ButtonWidget
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
 import java.util.function.Consumer
@@ -34,19 +35,12 @@ class ScreenBetterAccount(
     override fun init() {
         textFields.clear()
 
-        addDrawableChild(
-            ButtonWidget(
-                5,
-                5,
-                100,
-                20,
-                Text.of((implementationClass.annotations[0] as AccountInfo).name)
-            ) { button ->
-                implementationClass = TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).screenBetterSlotListAccountManager.managerAccount.let { it.list[(it.list.indexOf(implementationClass) + 1) % it.list.size] }
-                accountImplementation = implementationClass.getDeclaredConstructor().newInstance()
-                clearAndInit()
-                button.message = Text.of(implementationClass.name)
-            })
+        addDrawableChild(ButtonWidget(5, 5, 100, 20, Text.of((implementationClass.annotations[0] as AccountInfo).name)) { button ->
+            implementationClass = TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).screenBetterSlotListAccountManager.managerAccount.let { it.list[(it.list.indexOf(implementationClass) + 1) % it.list.size] }
+            accountImplementation = implementationClass.getDeclaredConstructor().newInstance()
+            clearAndInit()
+            button.message = Text.of(implementationClass.name)
+        })
 
         var index = 0
 

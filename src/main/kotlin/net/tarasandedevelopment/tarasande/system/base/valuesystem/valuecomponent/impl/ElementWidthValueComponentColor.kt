@@ -73,7 +73,7 @@ class ElementWidthValueComponentColor(value: Value) : ElementWidthValueComponent
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
         RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionColorShader() }
+        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
 
         val nextHue = if (valueColor.locked) TarasandeMain.clientValues().accentColor.hue else valueColor.hue
         val hsb = Color.getHSBColor(nextHue.toFloat(), 1.0F, 1.0F).let { if (valueColor.isEnabled()) it else it.darker().darker() }
@@ -106,7 +106,7 @@ class ElementWidthValueComponentColor(value: Value) : ElementWidthValueComponent
         val outerRadius = (pickerHeight - 5) / 2.0
         val middleRadius = innerRadius + (outerRadius - innerRadius) * 0.5
         val width = outerRadius - innerRadius
-        RenderSystem.setShader { GameRenderer.getPositionColorShader() }
+        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR)
         run {
             var circle = 0.0
@@ -122,7 +122,7 @@ class ElementWidthValueComponentColor(value: Value) : ElementWidthValueComponent
                 circle += 0.01
             }
         }
-        BufferRenderer.drawWithShader(bufferBuilder.end())
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
 
         RenderUtil.outlinedCircle(matrices, this.width - (pickerHeight - 5) / 2.0 - sin((valueColor.hue + 0.5F) * PI * 2) * middleRadius, (pickerHeight - 5) / 2.0 + cos((valueColor.hue + 0.5F) * PI * 2) * middleRadius, width / 2.0, 3.0F, white.rgb)
         RenderUtil.fillCircle(matrices, this.width - (pickerHeight - 5) / 2.0 - sin((valueColor.hue + 0.5F) * PI * 2) * middleRadius, (pickerHeight - 5) / 2.0 + cos((valueColor.hue + 0.5F) * PI * 2) * middleRadius, width / 2.0, Color.getHSBColor(valueColor.hue.toFloat(), 1.0F, 1.0F).let { if (valueColor.isEnabled() && !valueColor.locked) it else it.darker().darker() }.rgb)

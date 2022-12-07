@@ -4,12 +4,13 @@ import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import net.minecraft.command.CommandSource
-import net.minecraft.command.argument.EnchantmentArgumentType
+import net.minecraft.command.argument.RegistryEntryArgumentType
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryKeys
 import net.minecraft.text.Text
-import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.Command
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import java.util.function.Function
@@ -50,7 +51,7 @@ class CommandEnchant : Command("enchant") {
 
     private fun allEnchant(level: Function<Enchantment, Int>, onlyPossible: Boolean = false) {
         getTargetItem().apply {
-            for (e in Registry.ENCHANTMENT.toList())
+            for (e in Registries.ENCHANTMENT.toList())
                 if (!onlyPossible || e.isAcceptableItem(this))
                     singleEnchant(e, level.apply(e))
         }
@@ -58,7 +59,7 @@ class CommandEnchant : Command("enchant") {
     }
 
     override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
-        builder.then(literal("single").then(argument("enchantment", EnchantmentArgumentType.enchantment())?.then(
+        builder.then(literal("single").then(argument("enchantment", RegistryEntryArgumentType.registryEntry(registryAccess, RegistryKeys.ENCHANTMENT))?.then(
             literal("level").then(argument("level", IntegerArgumentType.integer())?.executes {
                 val level = it.getArgument("level", Int::class.java)
 
@@ -111,7 +112,7 @@ class CommandEnchant : Command("enchant") {
             return@executes success
         })))
 
-        builder.then(literal("remove").then(argument("enchantment", EnchantmentArgumentType.enchantment())?.executes {
+        builder.then(literal("remove").then(argument("enchantment", RegistryEntryArgumentType.registryEntry(registryAccess, RegistryKeys.ENCHANTMENT))?.executes {
             val enchantment = it.getArgument("enchantment", Enchantment::class.java)
             getTargetItem().apply {
                 EnchantmentHelper.set(EnchantmentHelper.get(this).apply { remove(enchantment) }, this)

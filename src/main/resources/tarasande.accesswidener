@@ -29,22 +29,6 @@ accessible field net/minecraft/entity/LivingEntity serverX D
 accessible field net/minecraft/entity/LivingEntity serverY D
 accessible field net/minecraft/entity/LivingEntity serverZ D
 accessible field net/minecraft/entity/LivingEntity jumpingCooldown I
-accessible field net/minecraft/util/math/Matrix4f a00 F
-accessible field net/minecraft/util/math/Matrix4f a01 F
-accessible field net/minecraft/util/math/Matrix4f a02 F
-accessible field net/minecraft/util/math/Matrix4f a03 F
-accessible field net/minecraft/util/math/Matrix4f a10 F
-accessible field net/minecraft/util/math/Matrix4f a11 F
-accessible field net/minecraft/util/math/Matrix4f a12 F
-accessible field net/minecraft/util/math/Matrix4f a13 F
-accessible field net/minecraft/util/math/Matrix4f a20 F
-accessible field net/minecraft/util/math/Matrix4f a21 F
-accessible field net/minecraft/util/math/Matrix4f a22 F
-accessible field net/minecraft/util/math/Matrix4f a23 F
-accessible field net/minecraft/util/math/Matrix4f a30 F
-accessible field net/minecraft/util/math/Matrix4f a31 F
-accessible field net/minecraft/util/math/Matrix4f a32 F
-accessible field net/minecraft/util/math/Matrix4f a33 F
 accessible field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/util/Session;
 accessible field net/minecraft/client/MinecraftClient attackCooldown I
 accessible field net/minecraft/client/MinecraftClient renderTickCounter Lnet/minecraft/client/render/RenderTickCounter;
@@ -67,9 +51,9 @@ accessible field net/minecraft/entity/TntEntity DEFAULT_FUSE I
 accessible field net/minecraft/client/render/WorldRenderer frustum Lnet/minecraft/client/render/Frustum;
 accessible field net/minecraft/network/packet/s2c/play/WorldTimeUpdateS2CPacket timeOfDay J
 accessible field net/minecraft/client/gui/screen/DirectConnectScreen addressField Lnet/minecraft/client/gui/widget/TextFieldWidget;
-accessible field net/minecraft/resource/ResourcePackProfile packFactory Ljava/util/function/Supplier;
-accessible field net/minecraft/resource/AbstractFileResourcePack base Ljava/io/File;
-accessible field net/minecraft/client/resource/ClientBuiltinResourcePackProvider serverContainer Lnet/minecraft/resource/ResourcePackProfile;
+accessible field net/minecraft/resource/ResourcePackProfile packFactory Lnet/minecraft/resource/ResourcePackProfile$PackFactory;
+accessible field net/minecraft/client/resource/ServerResourcePackProvider serverContainer Lnet/minecraft/resource/ResourcePackProfile;
+accessible field net/minecraft/resource/ZipResourcePack backingZipFile Ljava/io/File;
 accessible field net/minecraft/client/realms/RealmsClient sessionId Ljava/lang/String;
 accessible field net/minecraft/client/realms/RealmsClient username Ljava/lang/String;
 accessible field net/minecraft/network/packet/s2c/play/PlayerSpawnS2CPacket id I
@@ -78,6 +62,9 @@ accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket deltaX S
 accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket deltaY S
 accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket deltaZ S
 accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket positionChanged Z
+accessible field net/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Serialized profileId Ljava/util/UUID;
+
+accessible class net/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Serialized
 
 accessible method net/minecraft/client/render/Camera setPos (Lnet/minecraft/util/math/Vec3d;)V
 accessible method net/minecraft/client/render/Camera setRotation (FF)V

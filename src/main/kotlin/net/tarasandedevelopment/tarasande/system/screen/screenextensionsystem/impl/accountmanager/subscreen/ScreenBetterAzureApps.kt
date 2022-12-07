@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.i
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
@@ -11,6 +10,7 @@ import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.AzureAppPreset
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen
+import net.tarasandedevelopment.tarasande.util.extension.ButtonWidget
 import java.util.*
 import java.util.function.Consumer
 

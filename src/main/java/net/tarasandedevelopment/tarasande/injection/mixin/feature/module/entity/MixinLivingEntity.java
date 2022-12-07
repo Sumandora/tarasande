@@ -24,7 +24,6 @@ public abstract class MixinLivingEntity extends Entity {
     @Shadow
     public abstract boolean isClimbing();
 
-
     @ModifyConstant(method = "applyMovementInput", constant = @Constant(doubleValue = 0.2))
     public double hookFastClimb(double original) {
         if (isClimbing()) {

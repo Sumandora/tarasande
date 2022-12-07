@@ -9,7 +9,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
-import net.minecraft.util.registry.Registry
+import net.minecraft.registry.Registries
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
@@ -27,12 +27,12 @@ import java.util.concurrent.ThreadLocalRandom
 class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on held items", ModuleCategory.MISC) {
 
     private val detectionMethod = ValueMode(this, "Detection method", false, "Allow", "Disallow")
-    private val allowedItems = object : ValueRegistry<Item>(this, "Allowed items", Registry.ITEM, Items.GOLD_INGOT) {
+    private val allowedItems = object : ValueRegistry<Item>(this, "Allowed items", Registries.ITEM, Items.GOLD_INGOT) {
         override fun isEnabled() = detectionMethod.isSelected(0)
         override fun filter(key: Item) = key != Items.AIR
         override fun getTranslationKey(key: Any?) = (key as Item).translationKey
     }
-    private val disallowedItems = object : ValueRegistry<Item>(this, "Disallowed items", Registry.ITEM, Items.IRON_SWORD) {
+    private val disallowedItems = object : ValueRegistry<Item>(this, "Disallowed items", Registries.ITEM, Items.IRON_SWORD) {
         override fun isEnabled() = detectionMethod.isSelected(1)
         override fun filter(key: Item) = key != Items.AIR
         override fun getTranslationKey(key: Any?) = (key as Item).translationKey
@@ -42,7 +42,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     private val detectiveColorOverride = object : ValueColor(this, "Bow color override", 0.66, 1.0, 1.0, 1.0) {
         override fun isEnabled() = highlightDetectives.value
     }
-    private val detectiveItems = object : ValueRegistry<Item>(this, "Detective items", Registry.ITEM, Items.BOW) {
+    private val detectiveItems = object : ValueRegistry<Item>(this, "Detective items", Registries.ITEM, Items.BOW) {
         override fun isEnabled() = highlightDetectives.value
         override fun filter(key: Item) = key != Items.AIR
         override fun getTranslationKey(key: Any?) = (key as Item).translationKey
@@ -56,7 +56,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     private val customFakeNewsMessage = object : ValueText(this, "Custom fake news message", "I'm sure it is %s because he held %s") {
         override fun isEnabled() = fakeNews.isSelected(3)
     }
-    private val fakeNewsItems = object : ValueRegistry<Item>(this, "Fake news items", Registry.ITEM, Items.IRON_SWORD) {
+    private val fakeNewsItems = object : ValueRegistry<Item>(this, "Fake news items", Registries.ITEM, Items.IRON_SWORD) {
         override fun isEnabled() = !fakeNews.isSelected(0)
         override fun filter(key: Item) = key != Items.AIR
         override fun getTranslationKey(key: Any?) = (key as Item).translationKey

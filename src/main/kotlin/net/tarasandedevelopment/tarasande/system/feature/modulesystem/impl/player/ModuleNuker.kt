@@ -1,11 +1,11 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player
 
 import net.minecraft.block.Block
+import net.minecraft.registry.Registries
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
-import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventHandleBlockBreaking
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
@@ -25,12 +25,12 @@ import kotlin.math.pow
 class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius", ModuleCategory.PLAYER) {
 
     private val selectionMode = ValueMode(this, "Selection mode", false, "Include", "Exclude")
-    private val includedBlocks = object : ValueRegistry<Block>(this, "Included blocks", Registry.BLOCK) {
+    private val includedBlocks = object : ValueRegistry<Block>(this, "Included blocks", Registries.BLOCK) {
         override fun isEnabled() = selectionMode.isSelected(0)
         override fun filter(key: Block) = !key.defaultState.getCollisionShape(mc.world, BlockPos.ORIGIN).isEmpty && key.defaultState.calcBlockBreakingDelta(mc.player, mc.world, BlockPos.ORIGIN) > 0.0
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey
     }
-    private val excludedBlocks = object : ValueRegistry<Block>(this, "Excluded blocks", Registry.BLOCK) {
+    private val excludedBlocks = object : ValueRegistry<Block>(this, "Excluded blocks", Registries.BLOCK) {
         override fun isEnabled() = selectionMode.isSelected(1)
         override fun filter(key: Block) = !key.defaultState.getCollisionShape(mc.world, BlockPos.ORIGIN).isEmpty && key.defaultState.calcBlockBreakingDelta(mc.player, mc.world, BlockPos.ORIGIN) > 0.0
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey

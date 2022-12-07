@@ -71,7 +71,7 @@ class InformationVanishedPlayers : Information("World", "Vanished players") {
                 if (event.type == EventPacket.Type.RECEIVE) {
                     when (event.packet) {
                         is PlayerListS2CPacket -> {
-                            if (event.packet.action != PlayerListS2CPacket.Action.ADD_PLAYER && event.packet.action != PlayerListS2CPacket.Action.REMOVE_PLAYER)
+                            if (!event.packet.actions.contains(PlayerListS2CPacket.Action.ADD_PLAYER))
                                 for (packetEntry in event.packet.entries)
                                     if (MinecraftClient.getInstance().networkHandler?.getPlayerListEntry(packetEntry.profile.id) == null)
                                         if (!vanishedPlayers.contains(packetEntry.profile.id.toString()))

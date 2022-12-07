@@ -23,14 +23,15 @@ import net.tarasandedevelopment.tarasande.injection.accessor.IRealmsPeriodicChec
 import net.tarasandedevelopment.tarasande.screen.base.AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.file.FileAccounts
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterAccount
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterProxy
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.ManagerAccount
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.AccountSession
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.ManagerAzureApp
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.environment.ManagerEnvironment
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.file.FileAccounts
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterAccount
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterProxy
+import net.tarasandedevelopment.tarasande.util.extension.ButtonWidget
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
@@ -229,20 +230,20 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
                 with(MinecraftClient.getInstance()) {
                     session = account.session
                     authenticationService = YggdrasilAuthenticationService(java.net.Proxy.NO_PROXY, "", account.environment)
+                    sessionService = account.getSessionService()
                     userApiService = try {
                         authenticationService.createUserApiService(account.session?.accessToken)
                     } catch (ignored: Exception) {
                         updatedUserApiService = false
                         UserApiService.OFFLINE
                     }
-                    sessionService = account.getSessionService()
                     servicesSignatureVerifier = SignatureVerifier.create(authenticationService.servicesKey)
                     socialInteractionsManager = SocialInteractionsManager(MinecraftClient.getInstance(), userApiService)
-                    profileKeys = ProfileKeys(userApiService, account.session?.profile?.id, MinecraftClient.getInstance().runDirectory.toPath())
                     (realmsPeriodicCheckers as IRealmsPeriodicCheckers).tarasande_getClient().apply {
                         username = account.session?.username
                         sessionId = account.session?.sessionId
                     }
+                    profileKeys = ProfileKeys.create(userApiService, account.session, MinecraftClient.getInstance().runDirectory.toPath())
 
                     if (isMultiplayerBanned) {
                         setScreen(Bans.createBanScreen(object : BooleanConsumer {

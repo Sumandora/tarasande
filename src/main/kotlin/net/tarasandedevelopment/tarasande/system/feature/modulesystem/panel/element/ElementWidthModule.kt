@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.ele
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.util.math.RotationAxis
 import net.minecraft.util.math.Vec2f
-import net.minecraft.util.math.Vec3f
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
@@ -75,16 +75,16 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
             RenderSystem.enableBlend()
             RenderSystem.disableTexture()
             RenderSystem.defaultBlendFunc()
-            RenderSystem.setShader { GameRenderer.getPositionColorShader() }
+            RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
             matrices.translate(this.width - 16, this.defaultHeight / 2, 0.0)
-            matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion((expansion * 90.0).toFloat()))
+            matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((expansion * 90.0).toFloat()))
             matrices.translate(-(this.width - 16), -(this.defaultHeight / 2), 0.0)
             val accentColor = TarasandeMain.clientValues().accentColor.getColor()
             bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
             bufferBuilder.vertex(matrix, (this.width - 16 - 1).toFloat(), (this.defaultHeight / 2 - 2).toFloat(), 0.0F).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
             bufferBuilder.vertex(matrix, (this.width - 16 + 1).toFloat(), (this.defaultHeight / 2).toFloat(), 0.0F).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
             bufferBuilder.vertex(matrix, (this.width - 16 - 1).toFloat(), (this.defaultHeight / 2 + 2).toFloat(), 0.0F).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
-            BufferRenderer.drawWithShader(bufferBuilder.end())
+            BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
             RenderSystem.enableTexture()
             RenderSystem.disableBlend()
             GL11.glLineWidth(lineWidth)

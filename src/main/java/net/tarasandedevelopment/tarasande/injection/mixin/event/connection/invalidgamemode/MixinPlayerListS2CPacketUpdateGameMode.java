@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.event.connection.invalidgamemode;
 
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.world.GameMode;
 import net.tarasandedevelopment.tarasande.event.EventInvalidGameMode;
 import org.spongepowered.asm.mixin.Mixin;
@@ -9,26 +9,25 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import su.mandora.event.EventDispatcher;
 
-import java.util.UUID;
-
-@Mixin(targets = "net.minecraft.network.packet.s2c.play.PlayerListS2CPacket$Action$2")
+@Mixin(PlayerListS2CPacket.Action.class)
 public class MixinPlayerListS2CPacketUpdateGameMode {
 
     @Unique
-    private UUID tarasande_trackedUUID;
+    private static boolean tarasande_isInvalid;
 
-    @Redirect(method = "read", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketByteBuf;readUuid()Ljava/util/UUID;"))
-    public UUID trackUUID(PacketByteBuf instance) {
-        this.tarasande_trackedUUID = instance.readUuid();
-        return this.tarasande_trackedUUID;
+    // TODO Locals?
+
+    @Redirect(method = "method_46338", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/GameMode;byId(I)Lnet/minecraft/world/GameMode;"))
+    private static GameMode trackValidity(int id) {
+        tarasande_isInvalid = id >= 0 && id < GameMode.values().length;
+        return GameMode.byId(id);
     }
 
-    @Redirect(method = "read", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/GameMode;byId(I)Lnet/minecraft/world/GameMode;"))
-    public GameMode hookEventInvalidGameMode(int id) {
-        if (GameMode.byId(id, null) == null) {
-            EventInvalidGameMode eventInvalidGameMode = new EventInvalidGameMode(tarasande_trackedUUID);
+    @Redirect(method = "method_46338", at = @At(value = "FIELD", target = "Lnet/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Serialized;gameMode:Lnet/minecraft/world/GameMode;"))
+    private static void hookEventInvalidGameMode(PlayerListS2CPacket.Serialized instance, GameMode value) {
+        if (tarasande_isInvalid) {
+            EventInvalidGameMode eventInvalidGameMode = new EventInvalidGameMode(instance.profileId);
             EventDispatcher.INSTANCE.call(eventInvalidGameMode);
         }
-        return GameMode.byId(id);
     }
 }

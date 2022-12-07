@@ -8,9 +8,9 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffectUtil
+import net.minecraft.registry.Registries
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.MathHelper
-import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -42,7 +42,7 @@ class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble())
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val activeStatusEffects = ArrayList<Triple<StatusEffect, String, Int>>()
 
-        for (statusEffect in Registry.STATUS_EFFECT) {
+        for (statusEffect in Registries.STATUS_EFFECT) {
             val animation = animations[statusEffect]!!
             if (animation > 0.0) {
                 (MinecraftClient.getInstance().player as IClientPlayerEntity).also {
@@ -76,7 +76,7 @@ class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble())
     }
 
     override fun isVisible(): Boolean {
-        Registry.STATUS_EFFECT.forEach { statusEffect ->
+        Registries.STATUS_EFFECT.forEach { statusEffect ->
             var animation = animations.putIfAbsent(statusEffect, 0.0)
             if (animation == null || animation.isNaN()) animation = 0.0 else {
                 if ((MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_forceHasStatusEffect(statusEffect)) {

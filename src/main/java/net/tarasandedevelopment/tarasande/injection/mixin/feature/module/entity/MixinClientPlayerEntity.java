@@ -9,7 +9,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerAbilities;
-import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity;
@@ -35,17 +34,16 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Unique
     private boolean tarasande_forceGetStatusEffect;
 
-    public MixinClientPlayerEntity(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
-        super(world, profile, publicKey);
+    public MixinClientPlayerEntity(ClientWorld world, GameProfile profile) {
+        super(world, profile);
     }
-
     @Shadow
     public abstract float getYaw(float tickDelta);
 
     @Shadow
     public abstract float getPitch(float tickDelta);
 
-    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;getFoodLevel()I"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;hasForwardMovement()Z")))
+    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;canSprint()Z"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;hasForwardMovement()Z")))
     public boolean hookNoSlowdown(ClientPlayerEntity clientPlayerEntity) {
         ModuleNoSlowdown moduleNoSlowdown = TarasandeMain.Companion.managerModule().get(ModuleNoSlowdown.class);
         if (moduleNoSlowdown.getEnabled()) {
@@ -65,7 +63,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         return original;
     }
 
-    @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;flying:Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;knockDownwards()V"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;hasJumpingMount()Z")))
+    @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;flying:Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;knockDownwards()V"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getJumpingMount()Lnet/minecraft/entity/JumpingMount;")))
     public boolean hookFlight(PlayerAbilities instance) {
         tarasande_flight = false;
         tarasande_flightSpeed = 0.05F;

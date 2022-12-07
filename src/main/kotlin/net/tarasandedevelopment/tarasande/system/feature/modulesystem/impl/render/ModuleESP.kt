@@ -4,8 +4,8 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.registry.Registries
 import net.minecraft.util.math.Vec3d
-import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventRender3D
@@ -26,7 +26,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCategory.RENDER) {
 
     val mode = ValueMode(this, "Mode", true, "Shader", "2D")
-    val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registry.ENTITY_TYPE, EntityType.PLAYER) {
+    val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registries.ENTITY_TYPE, EntityType.PLAYER) {
         override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
     }
     private val hideBots = object : ValueBoolean(this, "Hide bots", false) {

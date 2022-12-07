@@ -5,7 +5,6 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.AbstractClientPlayerEntity
 import net.minecraft.client.util.DefaultSkinHelper
-import net.minecraft.util.dynamic.DynamicSerializableUuid
 import net.tarasandedevelopment.tarasande.injection.accessor.IPlayerSkinProvider
 import net.tarasandedevelopment.tarasande.util.dummy.AbstractClientPlayerEntityDummy
 
@@ -14,7 +13,8 @@ class SkinRenderer(val profile: GameProfile) {
     var player: AbstractClientPlayerEntity? = null
 
     init {
-        val next = GameProfile(DynamicSerializableUuid.getUuidFromProfile(profile), profile.name)
+        // TODO do we need to copy this?
+        val next = GameProfile(profile.id, profile.name)
 
         var skinImage = DefaultSkinHelper.getTexture(next.id)
         var capeImage = skinImage

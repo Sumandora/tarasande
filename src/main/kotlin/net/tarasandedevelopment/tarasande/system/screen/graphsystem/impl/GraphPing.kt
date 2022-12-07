@@ -13,7 +13,7 @@ class GraphPing : Graph("Connection", "Ping", 25, true) {
         EventDispatcher.apply {
             add(EventPacket::class.java) { event ->
                 if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerListS2CPacket)
-                    if (event.packet.action == PlayerListS2CPacket.Action.ADD_PLAYER || event.packet.action == PlayerListS2CPacket.Action.UPDATE_LATENCY)
+                    if (event.packet.actions.contains(PlayerListS2CPacket.Action.ADD_PLAYER) || event.packet.actions.contains(PlayerListS2CPacket.Action.UPDATE_LATENCY))
                         event.packet.entries.firstOrNull { it.profile.id == MinecraftClient.getInstance().player?.uuid }?.also {
                             add(it.latency)
                         }

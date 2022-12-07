@@ -5,7 +5,7 @@ import net.minecraft.client.network.AbstractClientPlayerEntity
 import net.minecraft.client.util.DefaultSkinHelper
 import net.minecraft.util.Identifier
 
-class AbstractClientPlayerEntityDummy(val profile: GameProfile, private val skinImage: Identifier, private val capeImage: Identifier) : AbstractClientPlayerEntity(ClientWorldDummy(), profile, null) {
+class AbstractClientPlayerEntityDummy(val profile: GameProfile, private val skinImage: Identifier, private val capeImage: Identifier) : AbstractClientPlayerEntity(ClientWorldDummy(), profile) {
 
     override fun isSpectator() = false
     override fun isCreative() = false

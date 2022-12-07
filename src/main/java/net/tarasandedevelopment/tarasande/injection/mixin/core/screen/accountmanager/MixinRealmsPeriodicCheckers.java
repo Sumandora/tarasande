@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinRealmsPeriodicCheckers implements IRealmsPeriodicCheckers {
 
     @Unique
-    // This thing has to be static, even though that makes no sense, Mixin is great
     RealmsClient tarasande_client;
 
 

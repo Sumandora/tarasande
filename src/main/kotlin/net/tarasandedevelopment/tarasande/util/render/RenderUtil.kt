@@ -9,15 +9,15 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.Direction
-import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec3d
-import net.minecraft.util.math.Vector4f
 import net.minecraft.util.shape.VoxelShape
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.util.extension.plus
 import net.tarasandedevelopment.tarasande.util.extension.unaryMinus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
+import org.joml.Matrix4f
+import org.joml.Vector4f
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
@@ -39,13 +39,13 @@ object RenderUtil {
         RenderSystem.enableBlend()
         RenderSystem.disableTexture()
         RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionColorShader() }
+        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR)
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
         bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
         bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
-        BufferRenderer.drawWithShader(bufferBuilder.end())
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
     }
@@ -59,7 +59,7 @@ object RenderUtil {
         RenderSystem.enableBlend()
         RenderSystem.disableTexture()
         RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionColorShader() }
+        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR)
         var quarterCircle = 0.5F
         while (quarterCircle <= 0.75F) {
@@ -79,7 +79,7 @@ object RenderUtil {
             bufferBuilder.vertex(matrix, (x1 + round + round * cos(quarterCircle * PI * 2)).toFloat(), (y2 - round + round * sin(quarterCircle * PI * 2)).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
             quarterCircle += 0.025F
         }
-        BufferRenderer.drawWithShader(bufferBuilder.end())
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
     }
@@ -96,14 +96,14 @@ object RenderUtil {
         RenderSystem.enableBlend()
         RenderSystem.disableTexture()
         RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionColorShader() }
+        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
         bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
         bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
-        BufferRenderer.drawWithShader(bufferBuilder.end())
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
         glLineWidth(lineWidth)
@@ -124,14 +124,14 @@ object RenderUtil {
         RenderSystem.enableBlend()
         RenderSystem.disableTexture()
         RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionColorShader() }
+        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
         bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
         bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
-        BufferRenderer.drawWithShader(bufferBuilder.end())
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
         glLineWidth(lineWidth)
@@ -148,13 +148,13 @@ object RenderUtil {
         RenderSystem.enableBlend()
         RenderSystem.disableTexture()
         RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionColorShader() }
+        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR)
         bufferBuilder.vertex(matrix, x1.toFloat(), y1.toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
         bufferBuilder.vertex(matrix, x1.toFloat(), y2.toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
         bufferBuilder.vertex(matrix, x2.toFloat(), y2.toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
         bufferBuilder.vertex(matrix, x2.toFloat(), y1.toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
-        BufferRenderer.drawWithShader(bufferBuilder.end())
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
     }
@@ -169,13 +169,13 @@ object RenderUtil {
         RenderSystem.enableBlend()
         RenderSystem.disableTexture()
         RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionColorShader() }
+        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR)
         bufferBuilder.vertex(matrix, x1.toFloat(), y1.toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
         bufferBuilder.vertex(matrix, x1.toFloat(), y2.toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
         bufferBuilder.vertex(matrix, x2.toFloat(), y2.toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
         bufferBuilder.vertex(matrix, x2.toFloat(), y1.toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
-        BufferRenderer.drawWithShader(bufferBuilder.end())
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
     }
@@ -191,14 +191,14 @@ object RenderUtil {
         RenderSystem.enableBlend()
         RenderSystem.disableTexture()
         RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionColorShader() }
+        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
         var circle = 0.0
         while (circle <= 1.01) {
             bufferBuilder.vertex(matrix, (x - sin(circle * PI * 2) * radius).toFloat(), (y + cos(circle * PI * 2) * radius).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
             circle += 0.01
         }
-        BufferRenderer.drawWithShader(bufferBuilder.end())
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
         glLineWidth(lineWidth)
@@ -214,14 +214,14 @@ object RenderUtil {
         RenderSystem.enableBlend()
         RenderSystem.disableTexture()
         RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionColorShader() }
+        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR)
         var circle = 0.0
         while (circle <= 1.01) {
             bufferBuilder.vertex(matrix, (x - sin(circle * PI * 2) * radius).toFloat(), (y + cos(circle * PI * 2) * radius).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
             circle += 0.01
         }
-        BufferRenderer.drawWithShader(bufferBuilder.end())
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
     }
@@ -240,7 +240,7 @@ object RenderUtil {
         RenderSystem.setShaderColor(colors[0], colors[1], colors[2], colors[3])
 
         val bufferBuilder = Tessellator.getInstance().buffer
-        RenderSystem.setShader { GameRenderer.getPositionShader() }
+        RenderSystem.setShader { GameRenderer.getPositionProgram() }
 
         val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
         val shape = voxelShape.offset(-vec3d.x, -vec3d.y, -vec3d.z)
@@ -285,7 +285,7 @@ object RenderUtil {
         bufferBuilder.vertex(matrix, minX, maxY, maxZ).next()
         bufferBuilder.vertex(matrix, minX, maxY, minZ).next()
 
-        BufferRenderer.drawWithShader(bufferBuilder.end())
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
 
         RenderSystem.enableDepthTest()
         RenderSystem.enableBlend()
@@ -361,7 +361,7 @@ object RenderUtil {
         for (vec in path) {
             bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).next()
         }
-        BufferRenderer.drawWithShader(bufferBuilder.end())
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
         matrices.pop()
         RenderSystem.enableDepthTest()
         RenderSystem.enableCull()
@@ -372,10 +372,10 @@ object RenderUtil {
 
     private fun matrixVectorMultiply(matrix4f: Matrix4f, vector: Vector4f): Vector4f {
         return Vector4f(
-            matrix4f.a00 * vector.x + matrix4f.a01 * vector.y + matrix4f.a02 * vector.z + matrix4f.a03 * vector.w,
-            matrix4f.a10 * vector.x + matrix4f.a11 * vector.y + matrix4f.a12 * vector.z + matrix4f.a13 * vector.w,
-            matrix4f.a20 * vector.x + matrix4f.a21 * vector.y + matrix4f.a22 * vector.z + matrix4f.a23 * vector.w,
-            matrix4f.a30 * vector.x + matrix4f.a31 * vector.y + matrix4f.a32 * vector.z + matrix4f.a33 * vector.w
+            matrix4f.m00() * vector.x + matrix4f.m01() * vector.y + matrix4f.m02() * vector.z + matrix4f.m03() * vector.w,
+            matrix4f.m10() * vector.x + matrix4f.m11() * vector.y + matrix4f.m12() * vector.z + matrix4f.m13() * vector.w,
+            matrix4f.m20() * vector.x + matrix4f.m21() * vector.y + matrix4f.m22() * vector.z + matrix4f.m23() * vector.w,
+            matrix4f.m30() * vector.x + matrix4f.m31() * vector.y + matrix4f.m32() * vector.z + matrix4f.m33() * vector.w
         )
     }
 

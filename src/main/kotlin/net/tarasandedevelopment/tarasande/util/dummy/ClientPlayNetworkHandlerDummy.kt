@@ -6,7 +6,7 @@ import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.Packet
 import net.tarasandedevelopment.tarasande.util.unsafe.UnsafeProvider
 
-class ClientPlayNetworkHandlerDummy : ClientPlayNetworkHandler(null, null, null, null, null) {
+class ClientPlayNetworkHandlerDummy : ClientPlayNetworkHandler(null, null, null, null, null, null) {
 
     init {
         error("Don't call the ClientPlayNetworkHandlerDummy constructor, use create() instead")

@@ -22,6 +22,7 @@ import net.minecraft.world.RaycastContext.ShapeType
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventInput
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
+import net.tarasandedevelopment.tarasande.injection.accessor.IChatScreen
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
@@ -170,14 +171,11 @@ object PlayerUtil {
     }
 
     fun sendChatMessage(text: String, bypassEvent: Boolean) {
-        val prevBypassChat = (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_getBypassChat()
-        if (bypassEvent)
-            (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_setBypassChat(true)
         createFakeChat {
+            (it as IChatScreen).tarasande_setBypassChat(bypassEvent)
             for (c in text.toCharArray()) it.charTyped(c, 0)
             it.keyPressed(GLFW.GLFW_KEY_ENTER, 0, 0)
         }
-        (MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_setBypassChat(prevBypassChat)
     }
 
     fun getBreakSpeed(blockPos: BlockPos): Pair<Double, Int> {

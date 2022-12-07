@@ -15,7 +15,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class MixinGameRenderer {
     @Shadow
     @Final
-    private MinecraftClient client;
+    MinecraftClient client;
 
     // stolen from 1.8
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;applyModelViewMatrix()V", shift = At.Shift.AFTER, remap = false))

@@ -40,7 +40,7 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100.0, FontWr
         RenderSystem.enableBlend()
         RenderSystem.disableTexture()
         RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionColorShader() }
+        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
 
         val onePixel = 1 / MinecraftClient.getInstance().window.scaleFactor
@@ -50,7 +50,7 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100.0, FontWr
                 println(graph.name)
             bufferBuilder.vertex(matrix, (x + (panelWidth - width) * (index / (graph.bufferLength - 1).toFloat())).toFloat(), (y + panelHeight - onePixel - (panelHeight - titleBarHeight - (1 / MinecraftClient.getInstance().window.scaleFactor)) * normalize(value.toDouble(), min, max)).toFloat(), 0.0F).color(1.0F, 1.0F, 1.0F, 1.0F).next()
         }
-        BufferRenderer.drawWithShader(bufferBuilder.end())
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
         RenderSystem.enableCull()

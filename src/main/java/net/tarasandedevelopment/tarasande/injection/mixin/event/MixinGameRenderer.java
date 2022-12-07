@@ -19,7 +19,7 @@ public class MixinGameRenderer {
 
     @Shadow
     @Final
-    private MinecraftClient client;
+    MinecraftClient client;
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;applyModelViewMatrix()V", shift = At.Shift.AFTER, remap = false))
     public void hookEventRender2D(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {

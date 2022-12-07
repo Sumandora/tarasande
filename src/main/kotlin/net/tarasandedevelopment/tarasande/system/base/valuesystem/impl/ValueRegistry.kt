@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.system.base.valuesystem.impl
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import net.minecraft.util.registry.Registry
+import net.minecraft.registry.Registry
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentRegistry
 import net.tarasandedevelopment.tarasande.util.string.StringUtil

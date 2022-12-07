@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.rend
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
+import net.minecraft.registry.Registries
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.registry.Registry
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.event.EventRenderBlockModel
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -23,7 +23,7 @@ class ModuleBlockESP : Module("Block ESP", "Highlights blocks through walls", Mo
     private val color = object : ValueColor(this, "Color", 0.0, 1.0, 1.0, 1.0) {
         override fun isEnabled() = !hideBlocks.value
     }
-    private val blocks = object : ValueRegistry<Block>(this, "Blocks", Registry.BLOCK) {
+    private val blocks = object : ValueRegistry<Block>(this, "Blocks", Registries.BLOCK) {
         override fun onChange() = onDisable()
         override fun filter(key: Block) = key != Blocks.AIR
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey

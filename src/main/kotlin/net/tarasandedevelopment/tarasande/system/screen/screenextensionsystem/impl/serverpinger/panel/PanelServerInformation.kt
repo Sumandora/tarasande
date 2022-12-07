@@ -35,7 +35,7 @@ open class PanelServerInformation(private val owner: Any) : Panel("Server Inform
     private var tooltip: MutableList<Text>? = null
     private val emulatedWidget = MultiplayerServerListWidget(null, null, 0, 0, 0, 0, 0)
     private val emulatedMultiplayerScreen = object : MultiplayerScreen(null) {
-        override fun setTooltip(tooltip: MutableList<Text>?) {
+        override fun setMultiplayerScreenTooltip(tooltip: MutableList<Text>?) {
             this@PanelServerInformation.tooltip = tooltip
         }
 

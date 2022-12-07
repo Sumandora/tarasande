@@ -2,12 +2,12 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.play
 
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
+import net.minecraft.registry.Registries
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.*
-import net.minecraft.util.registry.Registry
 import net.minecraft.util.shape.VoxelShapes
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
@@ -60,7 +60,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val silent = ValueBoolean(this, "Silent", false)
     private val lockView = ValueBoolean(this, "Lock view", false)
     private val headRoll = ValueMode(this, "Head roll", false, "Disabled", "Advantage", "Autism")
-    private val forbiddenItems = object : ValueRegistry<Item>(this, "Forbidden items", Registry.ITEM) {
+    private val forbiddenItems = object : ValueRegistry<Item>(this, "Forbidden items", Registries.ITEM) {
         override fun filter(key: Item) = key is BlockItem
         override fun getTranslationKey(key: Any?) = (key as Item).translationKey
     }

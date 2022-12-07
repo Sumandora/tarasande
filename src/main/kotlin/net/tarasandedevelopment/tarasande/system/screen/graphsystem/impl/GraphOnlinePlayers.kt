@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket
+import net.minecraft.network.packet.s2c.play.PlayerRemoveS2CPacket
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
@@ -15,15 +16,15 @@ class GraphOnlinePlayers : Graph("Server", "Online Players", 25, true) {
     init {
         EventDispatcher.apply {
             add(EventPacket::class.java) { event ->
-                if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerListS2CPacket) {
-                    val uuids = event.packet.entries.mapNotNull { it.profile.id }
-                    if (uuids.isEmpty())
-                        return@add
+                if (event.type == EventPacket.Type.RECEIVE) {
                     val prevSize = players.size
-                    when (event.packet.action) {
-                        PlayerListS2CPacket.Action.ADD_PLAYER -> players.addAll(uuids.filter { !players.contains(it) })
-                        PlayerListS2CPacket.Action.REMOVE_PLAYER -> players.removeAll(uuids.toSet())
-                        else -> return@add
+                    when (event.packet) {
+                        is PlayerListS2CPacket -> {
+                            players.addAll(event.packet.playerAdditionEntries.map { it.profileId })
+                        }
+                        is PlayerRemoveS2CPacket -> {
+                            players.removeAll(event.packet.profileIds.toSet())
+                        }
                     }
                     if (players.size != prevSize)
                         add(players.size)

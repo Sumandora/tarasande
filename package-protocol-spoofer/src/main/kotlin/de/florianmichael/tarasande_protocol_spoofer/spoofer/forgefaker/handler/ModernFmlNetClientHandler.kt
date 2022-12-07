@@ -8,8 +8,8 @@ import net.minecraft.network.Packet
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.login.LoginQueryResponseC2SPacket
 import net.minecraft.network.packet.s2c.login.LoginQueryRequestS2CPacket
-import net.minecraft.util.registry.Registry
-import net.minecraft.util.registry.RegistryKey
+import net.minecraft.registry.Registry
+import net.minecraft.registry.RegistryKey
 
 enum class ModernFmlState {
     FML_2,

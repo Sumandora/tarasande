@@ -3,11 +3,12 @@ package net.tarasandedevelopment.tarasande.injection.mixin.event.entity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MovementType;
-import net.minecraft.entity.TrackedPosition;
 import net.minecraft.util.math.Vec3d;
-import net.tarasandedevelopment.tarasande.event.*;
+import net.tarasandedevelopment.tarasande.event.EventEntityFlag;
+import net.tarasandedevelopment.tarasande.event.EventMovement;
+import net.tarasandedevelopment.tarasande.event.EventStep;
+import net.tarasandedevelopment.tarasande.event.EventVelocityYaw;
 import net.tarasandedevelopment.tarasande.injection.accessor.IEntity;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -69,8 +70,6 @@ public abstract class MixinEntity implements IEntity {
 
     @Shadow
     protected abstract boolean getFlag(int index);
-
-    @Shadow @Final private TrackedPosition trackedPosition;
 
     @Inject(method = "getFlag", at = @At("RETURN"), cancellable = true)
     public void hookEventEntityFlag(int index, CallbackInfoReturnable<Boolean> cir) {

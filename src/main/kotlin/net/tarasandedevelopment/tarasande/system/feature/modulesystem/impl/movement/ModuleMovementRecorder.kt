@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.move
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.*
-import net.minecraft.util.math.Matrix4f
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.*
@@ -15,6 +14,7 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.apache.commons.lang3.ArrayUtils
+import org.joml.Matrix4f
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL11
 
@@ -33,13 +33,14 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
     private var executingIndex = 0
     private var lastRotation: Rotation? = null
 
+    // TODO delete
     private fun drawPath(bufferBuilder: BufferBuilder, matrix: Matrix4f, record: Record, alpha: Float) {
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
         for (tick in record.ticks) {
             val vec = tick.pos
             bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).color(1F, 1F, 1F, alpha).next()
         }
-        BufferRenderer.drawWithShader(bufferBuilder.end())
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
     }
 
     override fun onDisable() {

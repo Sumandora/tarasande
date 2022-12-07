@@ -44,13 +44,13 @@ class PanelMousepad : Panel("Mousepad", 100.0, 50.0, true) {
         RenderSystem.enableBlend()
         RenderSystem.disableTexture()
         RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionColorShader() }
+        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
 
         for (rotation in rotations)
             bufferBuilder.vertex(matrix, (x + panelWidth / 2f + (rotation.yaw / xMax) * (panelWidth / 2f)).toFloat(), (y + (panelHeight + titleBarHeight) / 2f + (rotation.pitch / yMax) * ((panelHeight - titleBarHeight) / 2f)).toFloat(), 0.0F).color(1.0F, 1.0F, 1.0F, 1.0F).next()
 
-        BufferRenderer.drawWithShader(bufferBuilder.end())
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
         RenderSystem.enableTexture()
         RenderSystem.disableBlend()
         RenderSystem.enableCull()
