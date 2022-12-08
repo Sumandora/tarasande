@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'net.tarasandedevelopment'
-version '19.2'
+version tarasande_version
 
 repositories {
     mavenCentral()

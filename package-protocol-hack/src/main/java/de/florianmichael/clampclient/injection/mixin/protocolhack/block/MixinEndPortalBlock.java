@@ -54,7 +54,7 @@ public abstract class MixinEndPortalBlock extends BlockWithEntity {
 
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        if (MinecraftClient.getInstance().world == null) return;
+        if (MinecraftClient.getInstance() == null || MinecraftClient.getInstance().world == null) return;
 
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
             cir.setReturnValue(protocolhack_SHAPE_1_8);

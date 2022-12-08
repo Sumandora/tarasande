@@ -34,24 +34,17 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.encryption1_8;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.viaprotocolhack.util.VersionList;
-import net.minecraft.network.encryption.PlayerPublicKey;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
-
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 @Mixin(targets = "net.minecraft.client.gui.screen.ConnectScreen$1")
 public class MixinConnectScreenSubRun {
 
-    @Redirect(method = "run", at = @At(value = "INVOKE", target = "Ljava/util/concurrent/CompletableFuture;join()Ljava/lang/Object;"))
-    public Object redirectRun(CompletableFuture<Optional<PlayerPublicKey.PublicKeyData>> instance) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2))
-            return Optional.empty();
-
-        return instance.join();
-    }
+    // TODO do we have to do that?
+//    @Redirect(method = "run", at = @At(value = "INVOKE", target = "Ljava/util/concurrent/CompletableFuture;join()Ljava/lang/Object;"))
+//    public Object redirectRun(CompletableFuture<Optional<PlayerPublicKey.PublicKeyData>> instance) {
+//        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2))
+//            return Optional.empty();
+//
+//        return instance.join();
+//    }
 }

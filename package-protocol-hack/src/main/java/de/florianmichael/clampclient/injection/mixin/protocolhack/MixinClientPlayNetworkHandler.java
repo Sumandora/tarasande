@@ -28,11 +28,7 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.*;
-import net.minecraft.recipe.Recipe;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.util.Identifier;
-import de.florianmichael.clampclient.injection.instrumentation.RecipeInfo;
-import de.florianmichael.clampclient.injection.instrumentation.Recipes_1_12_2;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -40,10 +36,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public abstract class MixinClientPlayNetworkHandler {
@@ -99,17 +91,17 @@ public abstract class MixinClientPlayNetworkHandler {
         }
     }
 
-    @Inject(method = "onGameJoin", at = @At("RETURN"))
-    private void onOnGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
-            onSynchronizeTags(new SynchronizeTagsS2CPacket(new HashMap<>()));
-
-            List<Recipe<?>> recipes = new ArrayList<>();
-            List<RecipeInfo<?>> recipeInfos = Recipes_1_12_2.getRecipes();
-            for (int i = 0; i < recipeInfos.size(); i++) {
-                recipes.add(recipeInfos.get(i).create(new Identifier(String.valueOf(i))));
-            }
-            onSynchronizeRecipes(new SynchronizeRecipesS2CPacket(recipes));
-        }
-    }
+//    @Inject(method = "onGameJoin", at = @At("RETURN"))
+//    private void onOnGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
+//        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
+//            onSynchronizeTags(new SynchronizeTagsS2CPacket(new HashMap<>()));
+//
+//            List<Recipe<?>> recipes = new ArrayList<>();
+//            List<RecipeInfo<?>> recipeInfos = Recipes_1_12_2.getRecipes();
+//            for (int i = 0; i < recipeInfos.size(); i++) {
+//                recipes.add(recipeInfos.get(i).create(new Identifier(String.valueOf(i))));
+//            }
+//            onSynchronizeRecipes(new SynchronizeRecipesS2CPacket(recipes));
+//        }
+//    }
 }

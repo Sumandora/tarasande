@@ -1,22 +1,21 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
-import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.render.*
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.apache.commons.lang3.ArrayUtils
-import org.joml.Matrix4f
 import org.lwjgl.glfw.GLFW
-import org.lwjgl.opengl.GL11
+import java.awt.Color
 
 class ModuleMovementRecorder : Module("Movement recorder", "Records your movement for later playback", ModuleCategory.MOVEMENT) {
 
@@ -32,16 +31,6 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
     private var playbackState: PlaybackState? = null
     private var executingIndex = 0
     private var lastRotation: Rotation? = null
-
-    // TODO delete
-    private fun drawPath(bufferBuilder: BufferBuilder, matrix: Matrix4f, record: Record, alpha: Float) {
-        bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
-        for (tick in record.ticks) {
-            val vec = tick.pos
-            bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).color(1F, 1F, 1F, alpha).next()
-        }
-        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-    }
 
     override fun onDisable() {
         recording = false
@@ -184,30 +173,13 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
         }
 
         registerEvent(EventRender3D::class.java) { event ->
-            GL11.glEnable(GL11.GL_BLEND)
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
-            GL11.glDisable(GL11.GL_CULL_FACE)
-            GL11.glEnable(GL11.GL_LINE_SMOOTH)
-            GL11.glDisable(GL11.GL_DEPTH_TEST)
-            GL11.glDepthMask(false)
-            event.matrices.push()
-            val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
-            event.matrices.translate(-vec3d!!.x, -vec3d.y, -vec3d.z)
-            val bufferBuilder = Tessellator.getInstance().buffer
-            RenderSystem.setShaderColor(1F, 1F, 1F, 1f)
-            val matrix = event.matrices.peek()?.positionMatrix!!
             if (playbackState != null && playedBack != null) {
-                drawPath(bufferBuilder, matrix, playedBack!!, 1.0F)
+                RenderUtil.renderPath(event.matrices, playedBack!!.ticks.map { it.pos }, Color.white.rgb)
             } else {
                 for (record in if (currentRecording != null) ArrayUtils.add(records.toTypedArray(), currentRecording!!) else records.toTypedArray()) {
-                    drawPath(bufferBuilder, matrix, record, 1f - (mc.player?.pos?.squaredDistanceTo(record.ticks.first().pos)!! / (16.0 * 16.0)).toFloat().coerceAtMost(1.0F))
+                    RenderUtil.renderPath(event.matrices, record.ticks.map { it.pos }, Color.white.withAlpha(255 - (mc.player?.pos?.squaredDistanceTo(record.ticks.first().pos)!! / (16.0 * 16.0) * 255).toInt().coerceAtMost(255)).rgb)
                 }
             }
-            event.matrices.pop()
-            GL11.glDisable(GL11.GL_BLEND)
-            GL11.glDisable(GL11.GL_LINE_SMOOTH)
-            GL11.glEnable(GL11.GL_DEPTH_TEST)
-            GL11.glDepthMask(true)
         }
     }
 

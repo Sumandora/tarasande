@@ -19,7 +19,6 @@ import de.florianmichael.viaprotocolhack.INativeProvider
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
 import de.florianmichael.viaprotocolhack.util.VersionList
 import io.netty.channel.DefaultEventLoop
-import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.ModContainer
 import net.fabricmc.loader.api.metadata.Person
@@ -57,7 +56,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.ThreadFactory
 import java.util.logging.Logger
 
-class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
+class TarasandeProtocolHack : INativeProvider {
 
     val version = ValueNumber(this, "Protocol", Double.MIN_VALUE, SharedConstants.getProtocolVersion().toDouble(), Double.MAX_VALUE, 1.0, true)
     private val compression = arrayOf("decompress", "compress")
@@ -66,83 +65,84 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
         lateinit var cancelOpenPacket: ValueBoolean
     }
 
-    override fun onInitializeClient() {
-        EventDispatcher.add(EventSuccessfulLoad::class.java) {
-            ViaProtocolHack.instance().init(this) {
-                this.createChannelMappings()
-                ViaLegacy.init(Logger.getLogger("ViaLegacy-tarasande"))
-            }
-
-            PackFormats.checkOutdated(nativeVersion())
-
-            TarasandeMain.managerInformation().apply {
-                add(object : Information("Via Version", "Protocol Version") {
-
-                    var version: ProtocolVersion? = null
-
-                    init {
-                        EventDispatcher.apply {
-                            add(EventConnectServer::class.java) {
-                                version = VersionList.PROTOCOLS.firstOrNull { it.version == ViaProtocolHack.instance().provider().clientsideVersion } ?: ProtocolVersion.unknown
-                            }
-                            add(EventDisconnect::class.java) { event ->
-                                if(event.connection == MinecraftClient.getInstance().networkHandler?.connection)
-                                    version = null
-                            }
-                        }
-                    }
-
-                    override fun getMessage() = version?.name
-                })
-
-                add(object : Information("Via Version", "Via Pipeline") {
-                    override fun getMessage(): String? {
-                        val names = (MinecraftClient.getInstance().networkHandler?.connection as? IClientConnection_Protocol)?.protocolhack_getViaConnection()?.protocolInfo?.pipeline?.pipes()?.map { p -> p.javaClass.simpleName } ?: return null
-                        if (names.isEmpty()) return null
-                        return "\n" + names.subList(0, names.size - 1).joinToString("\n")
-                    }
-                })
-            }
-
-            TarasandeMain.managerModule().apply {
-                cancelOpenPacket = object : ValueBoolean(get(ModuleInventoryMove::class.java), "Cancel open packet (" + ProtocolVersion.v1_11_1.andOlder() + ")", false) {
-                    override fun isEnabled() = VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1)
-                }
-
-                get(ModuleTickBaseManipulation::class.java).apply {
-                    val chargeOnIdlePacketSkip = object : ValueBoolean(this, "Charge on idle packet skip (" + formatRange(*ProtocolHackValues.sendIdlePacket.version) + ")", false) {
-                        override fun isEnabled() = ProtocolHackValues.sendIdlePacket.isEnabled()
-                    }
-
-                    registerEvent(EventSkipIdlePacket::class.java) {
-                        if (chargeOnIdlePacketSkip.isEnabled() && chargeOnIdlePacketSkip.value)
-                            shifted += mc.renderTickCounter.tickTime.toLong()
-                    }
-                }
-            }
-
-            ProtocolHackValues /* Force-Load */
+    fun initialize() {
+        ViaProtocolHack.instance().init(this) {
+            this.createChannelMappings()
+            ViaLegacy.init(Logger.getLogger("ViaLegacy-tarasande"))
         }
+        PackFormats.checkOutdated(nativeVersion())
 
-        EventDispatcher.add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
-            update(ProtocolVersion.getProtocol(version.value.toInt()), false)
+        EventDispatcher.apply {
+            add(EventSuccessfulLoad::class.java) {
+                TarasandeMain.managerInformation().apply {
+                    add(object : Information("Via Version", "Protocol Version") {
 
-            TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.apply {
-                insert(object : EntrySidebarPanelSelection("Protocol Hack", "Protocol Hack", VersionList.PROTOCOLS.map { it.getSpecialName() }, ProtocolVersion.getProtocol(targetVersion()).getSpecialName()) {
-                    override fun onClick(newValue: String) {
-                        val newProtocol = VersionList.PROTOCOLS.first { it.getSpecialName() == newValue }.version.toDouble()
-                        if (version.value != newProtocol) {
-                            version.value = newProtocol
-                            update(ProtocolVersion.getProtocol(version.value.toInt()))
+                        var version: ProtocolVersion? = null
+
+                        init {
+                            EventDispatcher.apply {
+                                add(EventConnectServer::class.java) {
+                                    version = VersionList.PROTOCOLS.firstOrNull { it.version == ViaProtocolHack.instance().provider().clientsideVersion } ?: ProtocolVersion.unknown
+                                }
+                                add(EventDisconnect::class.java) { event ->
+                                    if(event.connection == MinecraftClient.getInstance().networkHandler?.connection)
+                                        version = null
+                                }
+                            }
+                        }
+
+                        override fun getMessage() = version?.name
+                    })
+
+                    add(object : Information("Via Version", "Via Pipeline") {
+                        override fun getMessage(): String? {
+                            val names = (MinecraftClient.getInstance().networkHandler?.connection as? IClientConnection_Protocol)?.protocolhack_getViaConnection()?.protocolInfo?.pipeline?.pipes()?.map { p -> p.javaClass.simpleName } ?: return null
+                            if (names.isEmpty()) return null
+                            return "\n" + names.subList(0, names.size - 1).joinToString("\n")
+                        }
+                    })
+                }
+
+                TarasandeMain.managerModule().apply {
+                    cancelOpenPacket = object : ValueBoolean(get(ModuleInventoryMove::class.java), "Cancel open packet (" + ProtocolVersion.v1_11_1.andOlder() + ")", false) {
+                        override fun isEnabled() = VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1)
+                    }
+
+                    get(ModuleTickBaseManipulation::class.java).apply {
+                        val chargeOnIdlePacketSkip = object : ValueBoolean(this, "Charge on idle packet skip (" + formatRange(*ProtocolHackValues.sendIdlePacket.version) + ")", false) {
+                            override fun isEnabled() = ProtocolHackValues.sendIdlePacket.isEnabled()
+                        }
+
+                        registerEvent(EventSkipIdlePacket::class.java) {
+                            if (chargeOnIdlePacketSkip.isEnabled() && chargeOnIdlePacketSkip.value)
+                                shifted += mc.renderTickCounter.tickTime.toLong()
                         }
                     }
-                }, 0)
+                }
 
-                insert(object : EntrySidebarPanel("Protocol Hack Values", "Protocol Hack") {
-                    override fun onClick(mouseButton: Int) {
-                        MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, name, ProtocolHackValues))
-                    }
-                }, 1)
+                ProtocolHackValues /* Force-Load */
+            }
+
+            add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
+                update(ProtocolVersion.getProtocol(version.value.toInt()), false)
+
+                TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.apply {
+                    insert(object : EntrySidebarPanelSelection("Protocol Hack", "Protocol Hack", VersionList.PROTOCOLS.map { it.getSpecialName() }, ProtocolVersion.getProtocol(targetVersion()).getSpecialName()) {
+                        override fun onClick(newValue: String) {
+                            val newProtocol = VersionList.PROTOCOLS.first { it.getSpecialName() == newValue }.version.toDouble()
+                            if (version.value != newProtocol) {
+                                version.value = newProtocol
+                                update(ProtocolVersion.getProtocol(version.value.toInt()))
+                            }
+                        }
+                    }, 0)
+
+                    insert(object : EntrySidebarPanel("Protocol Hack Values", "Protocol Hack") {
+                        override fun onClick(mouseButton: Int) {
+                            MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, name, ProtocolHackValues))
+                        }
+                    }, 1)
+                }
             }
         }
     }
@@ -172,7 +172,7 @@ class TarasandeProtocolHack : ClientModInitializer, INativeProvider {
         Protocol1_13To1_12_2.MAPPINGS.channelMappings["FORGE"] = "minecraft:forge"
     }
 
-    override fun isSinglePlayer() = MinecraftClient.getInstance().isInSingleplayer
+    override fun isSinglePlayer() = MinecraftClient.getInstance()?.isInSingleplayer != false
     override fun nativeVersion() = SharedConstants.getProtocolVersion()
     override fun targetVersion() = this.version.value.toInt()
     override fun nettyOrder() = this.compression

@@ -7,7 +7,7 @@ plugins {
 }
 
 archivesBaseName = "tarasande"
-version = "19.2"
+version = tarasande_version
 group = "net.tarasandedevelopment"
 
 def libs = [
