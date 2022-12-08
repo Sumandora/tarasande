@@ -88,8 +88,10 @@ public final class RecipeInfo<T extends Recipe<?>> {
         }
 
         final int width_f = width;
-        return new RecipeInfo<>(id -> new ShapedRecipe(id, group, width_f, height, ingredients, output),
-                RecipeSerializer.SHAPED, output);
+        // TODO Port;
+        return null;
+//        return new RecipeInfo<>(id -> new ShapedRecipe(id, group, width_f, height, ingredients, output),
+//                RecipeSerializer.SHAPED, output);
     }
 
     public static RecipeInfo<ShapedRecipe> shaped(String group, ItemConvertible output, Object... args) {
@@ -120,7 +122,9 @@ public final class RecipeInfo<T extends Recipe<?>> {
         for (ItemConvertible[] input : inputs) {
             ingredients.add(Ingredient.ofItems(input));
         }
-        return new RecipeInfo<>(id -> new ShapelessRecipe(id, group, output, ingredients), RecipeSerializer.SHAPELESS, output);
+        // TODO Port;
+        return null;
+//        return new RecipeInfo<>(id -> new ShapelessRecipe(id, group, output, ingredients), RecipeSerializer.SHAPELESS, output);
     }
 
     public static RecipeInfo<ShapelessRecipe> shapeless(String group, ItemConvertible output, ItemConvertible[]... inputs) {
@@ -168,8 +172,10 @@ public final class RecipeInfo<T extends Recipe<?>> {
     }
 
     public static RecipeInfo<SmeltingRecipe> smelting(ItemConvertible output, Ingredient input, float experience, int cookTime) {
-        ItemStack outputStack = new ItemStack(output);
-        return new RecipeInfo<>(id -> new SmeltingRecipe(id, "", input, outputStack, experience, cookTime), RecipeSerializer.SMELTING, outputStack);
+        // TODO Port;
+        return null;
+//        ItemStack outputStack = new ItemStack(output);
+//        return new RecipeInfo<>(id -> new SmeltingRecipe(id, "", input, outputStack, experience, cookTime), RecipeSerializer.SMELTING, outputStack);
     }
 
     public RecipeInfo<T> distinguisher(String distinguisher) {

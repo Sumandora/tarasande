@@ -21,20 +21,15 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.signatures1_19_0;
 
-import com.mojang.authlib.yggdrasil.response.KeyPairResponse;
 import net.minecraft.client.util.ProfileKeys;
-import net.minecraft.network.encryption.PlayerPublicKey;
-import de.florianmichael.clampclient.injection.mixininterface.IPublicKeyData_Protocol;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ProfileKeys.class)
 public class MixinProfileKeys {
+    //TODO Port;
 
-    @Inject(method = "decodeKeyPairResponse", at = @At("RETURN"))
-    private static void trackLegacyKey(KeyPairResponse keyPairResponse, CallbackInfoReturnable<PlayerPublicKey.PublicKeyData> cir) {
-        ((IPublicKeyData_Protocol) (Object) cir.getReturnValue()).protocolhack_set1_19_0Key(keyPairResponse.getLegacyPublicKeySignature());
-    }
+//    @Inject(method = "decodeKeyPairResponse", at = @At("RETURN"))
+//    private static void trackLegacyKey(KeyPairResponse keyPairResponse, CallbackInfoReturnable<PlayerPublicKey.PublicKeyData> cir) {
+//        ((IPublicKeyData_Protocol) (Object) cir.getReturnValue()).protocolhack_set1_19_0Key(keyPairResponse.getLegacyPublicKeySignature());
+//    }
 }

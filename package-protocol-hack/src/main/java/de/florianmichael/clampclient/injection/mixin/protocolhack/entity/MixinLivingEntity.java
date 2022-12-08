@@ -28,11 +28,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.SkeletonHorseEntity;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.tag.FluidTags;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -107,15 +104,16 @@ public abstract class MixinLivingEntity extends Entity {
         return self.isSprinting();
     }
 
-    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getFluidHeight(Lnet/minecraft/tag/TagKey;)D"))
-    private double redirectFluidHeight(LivingEntity instance, TagKey<Fluid> tagKey) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2) && tagKey == FluidTags.WATER) {
-            if (instance.getFluidHeight(tagKey) > 0) {
-                return 1;
-            }
-        }
-        return instance.getFluidHeight(tagKey);
-    }
+    // TODO Port;
+//    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getFluidHeight(Lnet/minecraft/tag/TagKey;)D"))
+//    private double redirectFluidHeight(LivingEntity instance, TagKey<Fluid> tagKey) {
+//        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2) && tagKey == FluidTags.WATER) {
+//            if (instance.getFluidHeight(tagKey) > 0) {
+//                return 1;
+//            }
+//        }
+//        return instance.getFluidHeight(tagKey);
+//    }
 
     @Inject(method = "applyFluidMovingSpeed", at = @At("HEAD"), cancellable = true)
     private void modifySwimSprintFallSpeed(double gravity, boolean movingDown, Vec3d velocity, CallbackInfoReturnable<Vec3d> ci) {
@@ -159,15 +157,16 @@ public abstract class MixinLivingEntity extends Entity {
         return Math.cos(a);
     }
 
-    @Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getFluidHeight(Lnet/minecraft/tag/TagKey;)D"))
-    public double fixLavaMovement(LivingEntity instance, TagKey<Fluid> tagKey) {
-        double height = instance.getFluidHeight(tagKey);
-
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2)) {
-            height += getSwimHeight() + 4;
-        }
-        return height;
-    }
+    //TODO Port;
+//    @Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getFluidHeight(Lnet/minecraft/tag/TagKey;)D"))
+//    public double fixLavaMovement(LivingEntity instance, TagKey<Fluid> tagKey) {
+//        double height = instance.getFluidHeight(tagKey);
+//
+//        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2)) {
+//            height += getSwimHeight() + 4;
+//        }
+//        return height;
+//    }
 
     @ModifyConstant(method = "isBlocking", constant = @Constant(intValue = 5))
     public int shieldBlockCounter(int constant) {

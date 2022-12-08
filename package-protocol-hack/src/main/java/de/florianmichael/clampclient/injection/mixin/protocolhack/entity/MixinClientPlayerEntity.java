@@ -23,6 +23,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
 import com.mojang.authlib.GameProfile;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import de.florianmichael.clampclient.injection.mixininterface.IClientPlayerEntity_Protocol;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
@@ -30,16 +31,13 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import de.florianmichael.clampclient.injection.mixininterface.IClientPlayerEntity_Protocol;
 import net.tarasandedevelopment.tarasande_protocol_hack.event.EventSkipIdlePacket;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.ArmorUpdater1_8_0;
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ProtocolHackValues;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -81,8 +79,9 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     private double lastZ;
     @Unique
     private boolean protocolhack_areSwingCanceledThisTick = false;
-    public MixinClientPlayerEntity(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
-        super(world, profile, publicKey);
+
+    public MixinClientPlayerEntity(ClientWorld world, GameProfile profile) {
+        super(world, profile);
     }
 
     @Shadow

@@ -4,7 +4,7 @@ import com.viaversion.viaversion.protocols.protocol1_9to1_8.ArmorType
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.Item
 import net.minecraft.item.Items
-import net.minecraft.util.registry.Registry
+import net.minecraft.registry.Registries
 
 object ArmorUpdater1_8_0 {
 
@@ -19,7 +19,7 @@ object ArmorUpdater1_8_0 {
             Items.LEATHER_LEGGINGS,     Items.CHAINMAIL_LEGGINGS,       Items.IRON_LEGGINGS,        Items.DIAMOND_LEGGINGS,     Items.GOLDEN_LEGGINGS,
             Items.LEATHER_BOOTS,        Items.CHAINMAIL_BOOTS,          Items.IRON_BOOTS,           Items.DIAMOND_BOOTS,        Items.GOLDEN_BOOTS
         ).forEach {
-            ids[it] = ArmorType.findByType(Registry.ITEM.getId(it).toString()).armorPoints
+            ids[it] = ArmorType.findByType(Registries.ITEM.getId(it).toString()).armorPoints
         }
         //@formatter:on
     }

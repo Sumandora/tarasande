@@ -63,21 +63,20 @@ object PackFormats {
 
             override fun getName() = name
 
-            override fun getReleaseTarget() = null
-
             override fun getProtocolVersion() = version.version
+
+            override fun getPackVersion(packType: PackType?): Int {
+                if (packType == PackType.RESOURCE)
+                    return packFormat
+                else
+                    throw UnsupportedOperationException()
+            }
 
             override fun getBuildTime() = null // wtf bro
 
             override fun isStable() = true
 
             override fun getSaveVersion() = null
-
-            override fun getPackVersion(packType: PackType?): Int {
-                if (packType == PackType.RESOURCE)
-                    return packFormat
-                return super.getPackVersion(packType)
-            }
         }
     }
 }

@@ -11,7 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.*;
-import net.minecraft.tag.ItemTags;
+import net.minecraft.registry.tag.ItemTags;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +20,18 @@ public class Recipes_1_12_2 {
 
     public static List<RecipeInfo<?>> getRecipes() {
         List<RecipeInfo<?>> recipes = new ArrayList<>();
+        // TODO Port;
 
-        recipes.add(RecipeInfo.of(ArmorDyeRecipe::new, RecipeSerializer.ARMOR_DYE, Items.LEATHER_HELMET));
-        recipes.add(RecipeInfo.of(BookCloningRecipe::new, RecipeSerializer.BOOK_CLONING, Items.WRITABLE_BOOK, 2));
-        recipes.add(RecipeInfo.of(MapCloningRecipe::new, RecipeSerializer.MAP_CLONING, Items.FILLED_MAP, 2));
-        recipes.add(RecipeInfo.of(MapExtendingRecipe::new, RecipeSerializer.MAP_EXTENDING, Items.FILLED_MAP));
-        recipes.add(RecipeInfo.of(FireworkRocketRecipe::new, RecipeSerializer.FIREWORK_ROCKET, Items.FIREWORK_ROCKET));
-        recipes.add(RecipeInfo.of(RepairItemRecipe::new, RecipeSerializer.REPAIR_ITEM, Items.WOODEN_SWORD));
-        recipes.add(RecipeInfo.of(TippedArrowRecipe::new, RecipeSerializer.TIPPED_ARROW, Items.TIPPED_ARROW));
-        recipes.add(RecipeInfo.of(BannerDuplicateRecipe::new, RecipeSerializer.BANNER_DUPLICATE, Items.WHITE_BANNER, 2));
-        recipes.add(RecipeInfo.of(ShieldDecorationRecipe::new, RecipeSerializer.SHIELD_DECORATION, Items.SHIELD));
-        recipes.add(RecipeInfo.of(ShulkerBoxColoringRecipe::new, RecipeSerializer.SHULKER_BOX, Items.WHITE_SHULKER_BOX));
+//        recipes.add(RecipeInfo.of(ArmorDyeRecipe::new, RecipeSerializer.ARMOR_DYE, Items.LEATHER_HELMET));
+//        recipes.add(RecipeInfo.of(BookCloningRecipe::new, RecipeSerializer.BOOK_CLONING, Items.WRITABLE_BOOK, 2));
+//        recipes.add(RecipeInfo.of(MapCloningRecipe::new, RecipeSerializer.MAP_CLONING, Items.FILLED_MAP, 2));
+//        recipes.add(RecipeInfo.of(MapExtendingRecipe::new, RecipeSerializer.MAP_EXTENDING, Items.FILLED_MAP));
+//        recipes.add(RecipeInfo.of(FireworkRocketRecipe::new, RecipeSerializer.FIREWORK_ROCKET, Items.FIREWORK_ROCKET));
+//        recipes.add(RecipeInfo.of(RepairItemRecipe::new, RecipeSerializer.REPAIR_ITEM, Items.WOODEN_SWORD));
+//        recipes.add(RecipeInfo.of(TippedArrowRecipe::new, RecipeSerializer.TIPPED_ARROW, Items.TIPPED_ARROW));
+//        recipes.add(RecipeInfo.of(BannerDuplicateRecipe::new, RecipeSerializer.BANNER_DUPLICATE, Items.WHITE_BANNER, 2));
+//        recipes.add(RecipeInfo.of(ShieldDecorationRecipe::new, RecipeSerializer.SHIELD_DECORATION, Items.SHIELD));
+//        recipes.add(RecipeInfo.of(ShulkerBoxColoringRecipe::new, RecipeSerializer.SHULKER_BOX, Items.WHITE_SHULKER_BOX));
 
         recipes.add(RecipeInfo.shapeless("wool", Blocks.YELLOW_WOOL, Items.YELLOW_DYE, Blocks.WHITE_WOOL));
         recipes.add(RecipeInfo.shaped("stained_hardened_clay", 8, Blocks.YELLOW_TERRACOTTA, "###", "#X#", "###", '#', Blocks.TERRACOTTA, 'X', Items.YELLOW_DYE));

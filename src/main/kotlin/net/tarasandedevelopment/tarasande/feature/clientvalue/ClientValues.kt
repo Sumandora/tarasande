@@ -69,7 +69,7 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
         override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
         override fun filter(key: EntityType<*>): Boolean {
             if (map.isEmpty()) {
-                val world = ClientWorldDummy()
+                val world = ClientWorldDummy.create()
                 Registries.ENTITY_TYPE.forEach {
                     map[it] = it.create(world).let { it == null || it is LivingEntity } // Players can't be created and result in null
                 }
@@ -84,7 +84,7 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
 
         override fun isEnabled(): Boolean {
             if (map.isEmpty()) {
-                val world = ClientWorldDummy()
+                val world = ClientWorldDummy.create()
                 Registries.ENTITY_TYPE.forEach {
                     map[it] = it.create(world) is Tameable
                 }

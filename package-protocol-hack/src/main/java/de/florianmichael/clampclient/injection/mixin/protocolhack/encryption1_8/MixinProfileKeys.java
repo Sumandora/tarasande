@@ -34,24 +34,16 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.encryption1_8;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.util.ProfileKeys;
-import net.minecraft.network.encryption.PlayerPublicKey;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 @Mixin(ProfileKeys.class)
 public class MixinProfileKeys {
+    //TODO Port;
 
-    @Inject(method = "refresh", at = @At("RETURN"))
-    public void injectRefresh(CallbackInfoReturnable<CompletableFuture<Optional<PlayerPublicKey.PublicKeyData>>> cir) {
-        if (VersionList.isEqualTo(ProtocolVersion.v1_19))
-            cir.getReturnValue().join();
-    }
+//    @Inject(method = "refresh", at = @At("RETURN"))
+//    public void injectRefresh(CallbackInfoReturnable<CompletableFuture<Optional<PlayerPublicKey.PublicKeyData>>> cir) {
+//        if (VersionList.isEqualTo(ProtocolVersion.v1_19))
+//            cir.getReturnValue().join();
+//    }
 }

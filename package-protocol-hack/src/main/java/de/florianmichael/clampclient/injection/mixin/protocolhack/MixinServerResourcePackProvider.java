@@ -27,7 +27,7 @@ import com.google.common.io.Files;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.GameVersion;
-import net.minecraft.client.resource.ClientBuiltinResourcePackProvider;
+import net.minecraft.client.resource.ServerResourcePackProvider;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.PackFormats;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.spongepowered.asm.mixin.Mixin;
@@ -43,8 +43,8 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 
-@Mixin(ClientBuiltinResourcePackProvider.class)
-public class MixinClientBuiltinResourcePackProvider {
+@Mixin(ServerResourcePackProvider.class)
+public class MixinServerResourcePackProvider {
 
     @Unique
     private File protocolhack_trackedFile;
