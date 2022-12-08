@@ -21,23 +21,38 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.tarasandedevelopment.tarasande_protocol_hack.platform.ProtocolHackValues;
+import net.tarasandedevelopment.tarasande_protocol_hack.util.inventory.ItemSplitter;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.util.Collection;
 
 @Mixin(ItemGroup.class)
 public class MixinItemGroup {
 
-    //TODO Port;
-//    @Redirect(method = "appendStacks", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;appendStacks(Lnet/minecraft/item/ItemGroup;Lnet/minecraft/util/collection/DefaultedList;)V"))
-//    public void removeUseless(Item instance, ItemGroup group, DefaultedList<ItemStack> stacks) {
-//        if (ItemSplitter.INSTANCE.getSplitter().containsKey(instance) && ProtocolHackValues.INSTANCE.getFilterItemGroups().getValue()) {
-//            final ProtocolVersion version = ItemSplitter.INSTANCE.getSplitter().get(instance);
-//
-//            if (VersionList.isNewerTo(version)) {
-//                instance.appendStacks(group, stacks);
-//            }
-//            return;
-//        }
-//        instance.appendStacks(group, stacks); // in case an item has mo napping
-//    }
+    @Shadow private Collection<ItemStack> displayStacks;
+
+    @Redirect(method = "updateEntries", at = @At(value = "FIELD", target = "Lnet/minecraft/item/ItemGroup;displayStacks:Ljava/util/Collection;"))
+    public void filterItems(ItemGroup instance, Collection<ItemStack> value) {
+        displayStacks = value;
+
+        for (ItemStack itemStack : value) {
+            if (ItemSplitter.INSTANCE.getSplitter().containsKey(instance) && ProtocolHackValues.INSTANCE.getFilterItemGroups().getValue()) {
+                final ProtocolVersion version = ItemSplitter.INSTANCE.getSplitter().get(instance);
+
+                if (VersionList.isOlderOrEqualTo(version)) {
+                    displayStacks.remove(itemStack);
+                }
+                return;
+            }
+
+        }
+    }
 }

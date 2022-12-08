@@ -47,10 +47,6 @@ public abstract class MixinClientPlayNetworkHandler {
     @Shadow
     public abstract void onEntityStatus(EntityStatusS2CPacket packet);
 
-    @Shadow public abstract void onSynchronizeTags(SynchronizeTagsS2CPacket packet);
-
-    @Shadow public abstract void onSynchronizeRecipes(SynchronizeRecipesS2CPacket packet);
-
     @Inject(method = "onPing", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/util/thread/ThreadExecutor;)V", shift = At.Shift.AFTER), cancellable = true)
     private void onPing(PlayPingS2CPacket packet, CallbackInfo ci) {
         if (VersionList.isNewerOrEqualTo(ProtocolVersion.v1_17))
@@ -90,18 +86,4 @@ public abstract class MixinClientPlayNetworkHandler {
             }
         }
     }
-
-//    @Inject(method = "onGameJoin", at = @At("RETURN"))
-//    private void onOnGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
-//        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
-//            onSynchronizeTags(new SynchronizeTagsS2CPacket(new HashMap<>()));
-//
-//            List<Recipe<?>> recipes = new ArrayList<>();
-//            List<RecipeInfo<?>> recipeInfos = Recipes_1_12_2.getRecipes();
-//            for (int i = 0; i < recipeInfos.size(); i++) {
-//                recipes.add(recipeInfos.get(i).create(new Identifier(String.valueOf(i))));
-//            }
-//            onSynchronizeRecipes(new SynchronizeRecipesS2CPacket(recipes));
-//        }
-//    }
 }

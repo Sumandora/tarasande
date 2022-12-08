@@ -158,7 +158,6 @@ public class Protocol1_4_0_2to1_3_1_2 extends EnZaProtocol<ClientboundPackets1_3
 				map(Type.SHORT);
 				map(Type.SHORT);
 				handler(wrapper -> {
-					// TODO | Rewrite to own Type if needed
 					final byte length = wrapper.read(Type.BYTE);
 					final byte[] mapData = new byte[length];
 					for (int i = 0; i < length; i++) {

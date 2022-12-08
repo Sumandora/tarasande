@@ -41,7 +41,6 @@
     "block.MixinSnowBlock",
     "block.MixinSoulSandBlock",
     "block.MixinWallBlock",
-    "encryption1_8.MixinConnectScreenSubRun",
     "entity.MixinAnimalEntity",
     "entity.MixinClientPlayerEntity",
     "entity.MixinCowEntity",
@@ -85,8 +84,6 @@
     "screen.screenhandler.MixinCraftingScreenHandler",
     "screen.screenhandler.MixinPlayerScreenHandler",
     "screen.screenhandler.MixinScreenHandler",
-    "signatures1_19_0.MixinArgumentSignatureDataMap",
-    "signatures1_19_0.MixinClientPlayerEntity",
     "signatures1_19_0.MixinPlayerPublicKeySubPublicKeyData",
     "viaversion.MixinAbstractProtocol",
     "viaversion.MixinCommandBlockProvider",
@@ -100,10 +97,14 @@
     "viaversion.MixinProtocol1_13_1To1_13",
     "viaversion.MixinProtocol1_16To1_15_2",
     "viaversion.MixinProtocol1_19_1To1_19",
+    "viaversion.MixinProtocol1_19_3To1_19_1",
     "viaversion.MixinProtocol1_9To1_8",
     "viaversion.MixinViaIdleThread"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "signatures1_19_0.MixinProfileKeysImpl"
+  ]
 }

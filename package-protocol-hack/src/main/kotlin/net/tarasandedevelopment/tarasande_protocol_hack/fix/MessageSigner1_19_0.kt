@@ -11,19 +11,6 @@ import java.util.*
 
 object MessageSigner1_19_0 {
 
-//    private val trackedMetadata = ArrayList<MessageMetadata>()
-//
-//    fun get(): MessageMetadata {
-//        val latest = trackedMetadata.last()
-//        trackedMetadata.remove(latest)
-//
-//        return latest
-//    }
-//
-//    fun track(messageMetadata: MessageMetadata) {
-//        trackedMetadata.add(messageMetadata)
-//    }
-
     fun sign(signer: Signer, decorateText: Text, sender: UUID, timeStamp: Instant, salt: Long): MessageSignatureData {
         return MessageSignatureData(signer.sign { sign ->
             val data = ByteArray(32)

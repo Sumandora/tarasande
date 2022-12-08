@@ -36,6 +36,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.screen.screen
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
 import net.minecraft.screen.PlayerScreenHandler;
@@ -43,6 +44,7 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
@@ -62,13 +64,12 @@ public abstract class MixinPlayerScreenHandler extends AbstractRecipeScreenHandl
         return addSlot(slot);
     }
 
-    //TODO Port;
-//    @SuppressWarnings("InvalidInjectorMethodSignature")
-//    @ModifyVariable(method = "transferSlot", ordinal = 0, at = @At(value = "STORE", ordinal = 0))
-//    private EquipmentSlot injectTransferSlot(EquipmentSlot slot) {
-//        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8) && slot == EquipmentSlot.OFFHAND)
-//            return EquipmentSlot.MAINHAND;
-//        else
-//            return slot;
-//    }
+    @SuppressWarnings("InvalidInjectorMethodSignature")
+    @ModifyVariable(method = "quickMove", ordinal = 0, at = @At(value = "STORE", ordinal = 0))
+    private EquipmentSlot injectTransferSlot(EquipmentSlot slot) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8) && slot == EquipmentSlot.OFFHAND)
+            return EquipmentSlot.MAINHAND;
+        else
+            return slot;
+    }
 }

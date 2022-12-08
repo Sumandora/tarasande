@@ -49,6 +49,6 @@ object MathUtil {
             x
 
     fun fromMatrices(matrixStack: MatrixStack): Vec3d {
-        return Vec3d(matrixStack.peek().positionMatrix.m03().toDouble(), matrixStack.peek().positionMatrix.m13().toDouble(), matrixStack.peek().positionMatrix.m23().toDouble())
+        return Vec3d(matrixStack.peek().positionMatrix.m30().toDouble(), matrixStack.peek().positionMatrix.m31().toDouble(), matrixStack.peek().positionMatrix.m32().toDouble())
     }
 }
