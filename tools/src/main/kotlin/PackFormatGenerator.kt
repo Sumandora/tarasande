@@ -32,7 +32,7 @@ fun main() {
                             val id = get("id").asString
                             val packFormat = if (packVersion.isJsonObject) packVersion.asJsonObject.get("resource").asInt else packVersion.asInt
 
-                            println("registerReplacement(" + packFormat + ", ProtocolVersion.v_" + name.replace(".", "_") + ", \"" + name + (if (name != id) "\", \"$id\")" else "\")"))
+                            println("registerVersion(ProtocolVersion.v" + name.replace(".", "_") + ", " + packFormat + ", \"" + name + (if (name != id) "\", \"$id\")" else "\")"))
                         }
                     }
                     zis.closeEntry()

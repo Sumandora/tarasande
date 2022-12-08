@@ -13,6 +13,7 @@ object PackFormats {
     val map = HashMap<Int, GameVersion>()
 
     init {
+        registerVersion(ProtocolVersion.v1_19_3, 12, "1.19.3")
         registerVersion(ProtocolVersion.v1_19_1, 9, "1.19.2")
         registerVersion(ProtocolVersion.v1_19, 9, "1.19")
         registerVersion(ProtocolVersion.v1_18_2, 8, "1.18.2")
