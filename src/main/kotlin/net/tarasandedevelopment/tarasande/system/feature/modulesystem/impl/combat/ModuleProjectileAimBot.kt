@@ -15,9 +15,9 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleFastUse
-import net.tarasandedevelopment.tarasande.util.extension.minus
-import net.tarasandedevelopment.tarasande.util.extension.plus
-import net.tarasandedevelopment.tarasande.util.extension.times
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil

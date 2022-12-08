@@ -2,15 +2,17 @@ package net.tarasandedevelopment.tarasande.system.screen.informationsystem.impl
 
 import com.google.common.collect.Iterables
 import net.minecraft.client.MinecraftClient
-import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
+import net.tarasandedevelopment.tarasande.event.EventInvalidPlayerInfo
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.packets.isNewWorld
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import su.mandora.event.EventDispatcher
+import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 
 class InformationEntities : Information("World", "Entities") {
@@ -62,27 +64,19 @@ class InformationSpawnPoint : Information("World", "Spawn Point") {
 
 class InformationVanishedPlayers : Information("World", "Vanished players") {
 
-    private val vanishedPlayers = CopyOnWriteArrayList<String>()
+    private val vanishedPlayers = CopyOnWriteArrayList<UUID>()
 
 
     init {
         EventDispatcher.apply {
+            add(EventInvalidPlayerInfo::class.java) { event ->
+                if (!vanishedPlayers.contains(event.uuid))
+                    vanishedPlayers.add(event.uuid)
+            }
             add(EventPacket::class.java) { event ->
-                if (event.type == EventPacket.Type.RECEIVE) {
-                    when (event.packet) {
-                        is PlayerListS2CPacket -> {
-                            if (!event.packet.actions.contains(PlayerListS2CPacket.Action.ADD_PLAYER))
-                                for (packetEntry in event.packet.entries)
-                                    if (MinecraftClient.getInstance().networkHandler?.getPlayerListEntry(packetEntry.profile.id) == null)
-                                        if (!vanishedPlayers.contains(packetEntry.profile.id.toString()))
-                                            vanishedPlayers.add(packetEntry.profile.id.toString())
-                        }
-
-                        is PlayerRespawnS2CPacket -> {
-                            vanishedPlayers.clear()
-                        }
-                    }
-                }
+                if(event.type == EventPacket.Type.RECEIVE && event.packet is PlayerRespawnS2CPacket)
+                    if (event.packet.isNewWorld())
+                        vanishedPlayers.clear()
             }
             add(EventDisconnect::class.java) {
                 if(it.connection == MinecraftClient.getInstance().networkHandler?.connection)

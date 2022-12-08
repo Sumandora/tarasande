@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen
-import net.tarasandedevelopment.tarasande.util.extension.ButtonWidget
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import java.util.function.Consumer
 
 class ScreenBetterEnvironment(prevScreen: Screen?, private val environment: Environment?, private val environmentConsumer: Consumer<Environment>) : ScreenBetter(prevScreen) {

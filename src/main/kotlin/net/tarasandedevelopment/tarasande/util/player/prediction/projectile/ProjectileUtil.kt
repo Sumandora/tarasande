@@ -14,7 +14,7 @@ import net.minecraft.util.math.random.RandomSplitter
 import net.tarasandedevelopment.tarasande.injection.accessor.*
 import net.tarasandedevelopment.tarasande.injection.accessor.prediction.IParticleManager
 import net.tarasandedevelopment.tarasande.injection.accessor.prediction.ISoundSystem
-import net.tarasandedevelopment.tarasande.util.extension.times
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import java.util.function.BiConsumer

@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.chea
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.Vec2f
-import net.tarasandedevelopment.tarasande.util.extension.withAlpha
+import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color

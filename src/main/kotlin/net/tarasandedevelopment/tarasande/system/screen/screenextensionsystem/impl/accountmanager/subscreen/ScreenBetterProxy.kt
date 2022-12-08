@@ -12,7 +12,7 @@ import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidge
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import net.tarasandedevelopment.tarasande.util.connection.ProxyAuthentication
 import net.tarasandedevelopment.tarasande.util.connection.ProxyType
-import net.tarasandedevelopment.tarasande.util.extension.ButtonWidget
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed

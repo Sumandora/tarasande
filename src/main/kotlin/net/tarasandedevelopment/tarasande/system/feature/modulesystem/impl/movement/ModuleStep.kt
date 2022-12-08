@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.times
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 
 class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory.MOVEMENT) {
 

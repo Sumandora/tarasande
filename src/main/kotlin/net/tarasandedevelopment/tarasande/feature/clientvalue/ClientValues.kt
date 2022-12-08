@@ -1,9 +1,7 @@
 package net.tarasandedevelopment.tarasande.feature.clientvalue
 
 import net.minecraft.client.MinecraftClient
-import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
-import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.Tameable
 import net.minecraft.registry.Registries
 import net.tarasandedevelopment.tarasande.TarasandeMain
@@ -16,8 +14,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.Valu
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
-import net.tarasandedevelopment.tarasande.util.dummy.ClientWorldDummy
-import net.tarasandedevelopment.tarasande.util.extension.Thread
+import net.tarasandedevelopment.tarasande.util.extension.javaruntime.Thread
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 
@@ -63,37 +60,28 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
         }
     }
     val entities = object : ValueRegistry<EntityType<*>>(targetingValues, "Entities", Registries.ENTITY_TYPE, EntityType.PLAYER) {
-
-        val map = HashMap<EntityType<*>, Boolean>()
-
-        override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
-        override fun filter(key: EntityType<*>): Boolean {
-            if (map.isEmpty()) {
-                val world = ClientWorldDummy.create()
-                Registries.ENTITY_TYPE.forEach {
-                    map[it] = it.create(world).let { it == null || it is LivingEntity } // Players can't be created and result in null
-                }
-                world.close()
+        init {
+            EventDispatcher.add(EventIsEntityAttackable::class.java) {
+                it.attackable = it.attackable && list.contains(it.entity.type)
             }
-            return map[key] == true
         }
+        override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
     }
     private val dontAttackTamedEntities = object : ValueBoolean(targetingValues, "Don't attack tamed entities", false) {
-
-        val map = HashMap<EntityType<*>, Boolean>()
-
-        override fun isEnabled(): Boolean {
-            if (map.isEmpty()) {
-                val world = ClientWorldDummy.create()
-                Registries.ENTITY_TYPE.forEach {
-                    map[it] = it.create(world) is Tameable
-                }
-                world.close()
+        init {
+            EventDispatcher.add(EventIsEntityAttackable::class.java) {
+                if(value)
+                    it.attackable = it.attackable && (it.entity !is Tameable || it.entity.ownerUuid != MinecraftClient.getInstance().player?.uuid)
             }
-            return entities.list.any { map[it] == true }
         }
     }
     private val dontAttackRidingEntity = object : ValueBoolean(targetingValues, "Don't attack riding entity", false) {
+        init {
+            EventDispatcher.add(EventIsEntityAttackable::class.java) {
+                if(value)
+                    it.attackable = it.attackable && it.entity != MinecraftClient.getInstance().player?.vehicle
+            }
+        }
         override fun isEnabled() = entities.list.isNotEmpty()
     }
 
@@ -114,14 +102,6 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
     val updateRotationsWhenTickSkipping = ValueBoolean(this, "Update rotations when tick skipping", false)
     val updateRotationsAccurately = object : ValueBoolean(this, "Update rotations accurately", true) {
         override fun isEnabled() = updateRotationsWhenTickSkipping.value
-    }
-
-    private fun isEntityDesired(entity: Entity): Boolean {
-        if (dontAttackRidingEntity.value && entity == MinecraftClient.getInstance().player?.vehicle) return false
-        if (dontAttackTamedEntities.value && entity is Tameable && entity.ownerUuid == MinecraftClient.getInstance().player?.uuid) return false
-        if (!entities.list.contains(entity.type)) return false
-
-        return true
     }
 
     // Other
@@ -151,13 +131,8 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
 
     init {
         panelSystem.add(PanelElementsClientValues(this))
-        EventDispatcher.apply {
-            add(EventIsEntityAttackable::class.java) { event ->
-                event.attackable = event.attackable && isEntityDesired(event.entity)
-            }
-            add(EventSuccessfulLoad::class.java, 10000) {
-                autoSaveDaemon.start()
-            }
+        EventDispatcher.add(EventSuccessfulLoad::class.java, 10000) {
+            autoSaveDaemon.start()
         }
     }
 }

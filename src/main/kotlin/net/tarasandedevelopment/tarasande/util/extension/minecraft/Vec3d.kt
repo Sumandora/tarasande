@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.util.extension
+package net.tarasandedevelopment.tarasande.util.extension.minecraft
 
 import net.minecraft.util.math.Vec3d
 

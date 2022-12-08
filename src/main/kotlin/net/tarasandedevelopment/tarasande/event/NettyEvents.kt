@@ -5,6 +5,7 @@ import net.minecraft.network.ClientConnection
 import net.minecraft.network.Packet
 import su.mandora.event.Event
 import java.net.InetSocketAddress
+import java.util.*
 
 class EventPacket(val type: Type, val packet: Packet<*>?) : Event(true) {
     enum class Type {
@@ -20,3 +21,4 @@ class EventPacketTransform(val type: Type, val buf: ByteBuf?) : Event(false) {
 
 class EventConnectServer(val address: InetSocketAddress) : Event(false)
 class EventDisconnect(val connection: ClientConnection) : Event(false)
+class EventInvalidPlayerInfo(val uuid: UUID) : Event(false)

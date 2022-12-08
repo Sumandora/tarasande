@@ -33,9 +33,9 @@ import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.C
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleClickTP
-import net.tarasandedevelopment.tarasande.util.extension.minus
-import net.tarasandedevelopment.tarasande.util.extension.plus
-import net.tarasandedevelopment.tarasande.util.extension.times
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
@@ -175,7 +175,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         return false
     }
 
-    private fun allAttacked(block: (LivingEntity) -> Boolean): Boolean {
+    private fun allAttackedLivingEntities(block: (LivingEntity) -> Boolean): Boolean {
         return (mode.isSelected(0) && targets.firstOrNull()?.first.let { it is LivingEntity && block(it) }) || (mode.isSelected(1) && targets.all { it.first is LivingEntity && block((it.first as LivingEntity)) })
     }
 
@@ -192,8 +192,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
             for (entity in mc.world?.entities!!) {
                 if (!PlayerUtil.isAttackable(entity)) continue
-                @Suppress("NAME_SHADOWING")
-                val entity = entity as LivingEntity
 
                 val boundingBox = entity.boundingBox.expand(entity.targetingMargin.toDouble())
                 val bestAimPoint = MathUtil.getBestAimPoint(boundingBox)
@@ -280,12 +278,12 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             if(closedInventory.value && mc.currentScreen is HandledScreen<*>)
                 canHit = false
 
-            if (waitForCritical.value) if (!dontWaitWhenEnemyHasShield.value || allAttacked { !hasShield(it) })
+            if (waitForCritical.value) if (!dontWaitWhenEnemyHasShield.value || allAttackedLivingEntities { !hasShield(it) })
                 if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !(mc.player as IClientPlayerEntity).tarasande_forceHasStatusEffect(StatusEffects.BLINDNESS) && !mc.player?.hasVehicle()!!)
                     if (!mc.player?.isOnGround!! && mc.player?.velocity?.y!! != 0.0 && (mc.player?.fallDistance == 0.0F || (criticalSprint.value && !mc.player?.isSprinting!!)))
                         canHit = false
 
-            if (canHit && allAttacked { !shouldAttackEntity(it) })
+            if (canHit && allAttackedLivingEntities { !shouldAttackEntity(it) })
                 canHit = false
 
             if (canHit && waitForDamageValue.value && waitForDamage)
@@ -390,7 +388,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
             if (event.keyBinding == mc.options.useKey) {
                 if (targets.isNotEmpty()) {
-                    event.pressed = event.pressed || blocking && (!preventBlockCooldown.value || allAttacked { !it.disablesShield() })
+                    event.pressed = event.pressed || blocking && (!preventBlockCooldown.value || allAttackedLivingEntities { !it.disablesShield() })
                 }
             }
             if (PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {
@@ -436,7 +434,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         }
     }
 
-    private fun getAimPoint(box: Box, entity: LivingEntity): Vec3d {
+    private fun getAimPoint(box: Box, entity: Entity): Vec3d {
         var best = MathUtil.getBestAimPoint(box)
         var visible = PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, best)
 
@@ -530,7 +528,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
 
     private fun block() {
-        if (preventBlockCooldown.value && !allAttacked { !it.disablesShield() })
+        if (preventBlockCooldown.value && !allAttackedLivingEntities { !it.disablesShield() })
             return
         when {
             blockItem.isSelected(0) -> {

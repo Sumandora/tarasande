@@ -7,7 +7,6 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.minecraft.client.input.KeyboardInput
 import net.minecraft.client.realms.gui.screen.RealmsMainScreen
 import net.minecraft.entity.Entity
-import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
@@ -23,7 +22,6 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventInput
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.injection.accessor.IChatScreen
-import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
@@ -52,9 +50,8 @@ object PlayerUtil {
 
     fun isAttackable(entity: Entity?): Boolean {
         if (entity == null) return false
-        if (entity == MinecraftClient.getInstance().player) return false
 
-        val eventIsEntityAttackable = EventIsEntityAttackable(entity, entity is LivingEntity)
+        val eventIsEntityAttackable = EventIsEntityAttackable(entity, entity != MinecraftClient.getInstance().player)
         EventDispatcher.call(eventIsEntityAttackable)
         return eventIsEntityAttackable.attackable
     }

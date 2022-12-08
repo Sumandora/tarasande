@@ -5,7 +5,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
-import net.tarasandedevelopment.tarasande.util.extension.times
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.round

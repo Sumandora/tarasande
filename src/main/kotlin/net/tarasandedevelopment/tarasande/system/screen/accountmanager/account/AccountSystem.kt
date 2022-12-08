@@ -16,7 +16,6 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.i
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.microsoft.AccountMicrosoftRefreshToken
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterEnvironment
-import net.tarasandedevelopment.tarasande.util.render.SkinRenderer
 
 class ManagerAccount : Manager<Class<out Account>>() {
     init {
@@ -33,12 +32,6 @@ class ManagerAccount : Manager<Class<out Account>>() {
 abstract class Account {
     var environment: Environment = TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).screenBetterSlotListAccountManager.managerEnvironment.list.first().create()
     var session: Session? = null
-        set(value) {
-            if (value != null)
-                skinRenderer = SkinRenderer(value.profile)
-            field = value
-        }
-    var skinRenderer: SkinRenderer? = null
 
     abstract fun logIn()
     abstract fun getDisplayName(): String

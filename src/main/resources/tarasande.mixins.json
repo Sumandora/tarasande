@@ -19,10 +19,6 @@
     "core.screen.MixinScreen",
     "core.screen.accountmanager.MixinMinecraftClient",
     "core.screen.accountmanager.MixinRealmsPeriodicCheckers",
-    "core.skin.MixinInventoryScreen",
-    "core.skin.MixinLivingEntityRenderer",
-    "core.skin.MixinPlayerEntityRenderer",
-    "core.skin.MixinPlayerSkinProvider",
     "core.widget.MixinTextFieldWidget",
     "event.MixinCamera",
     "event.MixinClientPlayerInteractionManager",
@@ -99,7 +95,7 @@
     "feature.module.norender.MixinSignBlockEntityRenderer",
     "feature.module.norender.MixinStatusEffectInstance",
     "feature.module.norender.MixinWorldRenderer",
-    "feature.module.screen.MixinPlayerScreenHandler",
+    "feature.module.screen.MixinPlayerScreenHandler"
   ],
   "injectors": {
     "defaultRequire": 1

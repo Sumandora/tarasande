@@ -2,11 +2,9 @@ package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.i
 
 import com.mojang.authlib.minecraft.UserApiService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
-import com.mojang.blaze3d.systems.RenderSystem
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.TitleScreen
-import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.network.Bans
 import net.minecraft.client.network.SocialInteractionsManager
@@ -31,8 +29,7 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.environme
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.file.FileAccounts
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterAccount
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterProxy
-import net.tarasandedevelopment.tarasande.util.extension.ButtonWidget
-import net.tarasandedevelopment.tarasande.util.math.MathUtil
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import org.apache.commons.lang3.RandomStringUtils
@@ -171,21 +168,6 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
             super.renderEntry(matrices, index, entryWidth, entryHeight, mouseX, mouseY, hovered)
-
-            if (account.skinRenderer != null && account.skinRenderer!!.player != null) {
-                val position = MathUtil.fromMatrices(matrices)
-
-                val modelViewStack = RenderSystem.getModelViewStack()
-                modelViewStack.push()
-                modelViewStack.translate(position.x, position.y, position.z)
-
-                RenderSystem.applyModelViewMatrix()
-
-                InventoryScreen.drawEntity(11, 39, 20, 0F, 0F, account.skinRenderer!!.player)
-
-                modelViewStack.pop()
-                RenderSystem.applyModelViewMatrix()
-            }
 
             FontWrapper.textShadow(matrices, Text.of(when {
                 client?.session?.equals(account.session) == true -> Formatting.GREEN.toString()

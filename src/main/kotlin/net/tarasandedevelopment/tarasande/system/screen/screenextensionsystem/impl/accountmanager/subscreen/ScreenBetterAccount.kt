@@ -14,7 +14,7 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.a
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.ExtraInfo
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.TextFieldInfo
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen
-import net.tarasandedevelopment.tarasande.util.extension.ButtonWidget
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
 import java.util.function.Consumer

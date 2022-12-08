@@ -3,9 +3,12 @@ package net.tarasandedevelopment.tarasande.injection.mixin.event.connection;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.util.math.Vec3d;
+import net.tarasandedevelopment.tarasande.event.EventInvalidPlayerInfo;
 import net.tarasandedevelopment.tarasande.event.EventRotationSet;
 import net.tarasandedevelopment.tarasande.event.EventShowsDeathScreen;
 import net.tarasandedevelopment.tarasande.event.EventVelocity;
@@ -16,7 +19,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import su.mandora.event.EventDispatcher;
+
+import java.util.Iterator;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class MixinClientPlayNetworkHandler {
@@ -51,5 +57,11 @@ public class MixinClientPlayNetworkHandler {
         EventShowsDeathScreen eventShowsDeathScreen = new EventShowsDeathScreen(instance.showsDeathScreen());
         EventDispatcher.INSTANCE.call(eventShowsDeathScreen);
         return eventShowsDeathScreen.getShowsDeathScreen();
+    }
+
+    @Inject(method = "onPlayerList", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    public void hookEventInvalidPlayerInfo(PlayerListS2CPacket packet, CallbackInfo ci, Iterator<?> var2, PlayerListS2CPacket.Entry entry, PlayerListEntry playerListEntry) {
+        EventInvalidPlayerInfo eventInvalidPlayerInfo = new EventInvalidPlayerInfo(entry.profileId());
+        EventDispatcher.INSTANCE.call(eventInvalidPlayerInfo);
     }
 }

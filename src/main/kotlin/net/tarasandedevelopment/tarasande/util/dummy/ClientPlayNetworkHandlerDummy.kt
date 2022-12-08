@@ -4,13 +4,11 @@ import com.mojang.authlib.GameProfile
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.Packet
+import net.minecraft.resource.featuretoggle.FeatureFlags
+import net.minecraft.resource.featuretoggle.FeatureSet
 import net.tarasandedevelopment.tarasande.util.unsafe.UnsafeProvider
 
-class ClientPlayNetworkHandlerDummy : ClientPlayNetworkHandler(null, null, null, null, null, null) {
-
-    init {
-        error("Don't call the ClientPlayNetworkHandlerDummy constructor, use create() instead")
-    }
+class ClientPlayNetworkHandlerDummy private constructor() : ClientPlayNetworkHandler(null, null, null, null, null, null) {
 
     override fun sendPacket(packet: Packet<*>?) {
         // Don't send packets
@@ -20,8 +18,11 @@ class ClientPlayNetworkHandlerDummy : ClientPlayNetworkHandler(null, null, null,
         return MinecraftClient.getInstance().session.profile
     }
 
+    override fun getEnabledFeatures(): FeatureSet {
+        return FeatureFlags.DEFAULT_ENABLED_FEATURES
+    }
+
     companion object {
-        // Don't actually create an instance to prevent memory leaks
         fun create() = UnsafeProvider.unsafe.allocateInstance(ClientPlayNetworkHandlerDummy::class.java) as ClientPlayNetworkHandlerDummy
     }
 

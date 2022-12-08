@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.util.extension
+package net.tarasandedevelopment.tarasande.util.extension.javaruntime
 
 import java.awt.Color
 

@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande_linux_platform.information
 
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
-import net.tarasandedevelopment.tarasande.util.extension.Thread
+import net.tarasandedevelopment.tarasande.util.extension.javaruntime.Thread
 
 class InformationPortage : Information("Linux", "Portage") {
 

@@ -15,10 +15,10 @@ import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.C
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.impl.ClickMethodCooldown
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.minus
-import net.tarasandedevelopment.tarasande.util.extension.plus
-import net.tarasandedevelopment.tarasande.util.extension.times
-import net.tarasandedevelopment.tarasande.util.extension.unaryMinus
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.unaryMinus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation

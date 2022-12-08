@@ -13,8 +13,7 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShape
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
-import net.tarasandedevelopment.tarasande.util.extension.plus
-import net.tarasandedevelopment.tarasande.util.extension.unaryMinus
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import org.joml.Matrix4f
 import org.joml.Vector4f
@@ -356,33 +355,32 @@ object RenderUtil {
         RenderSystem.setShaderColor(colors[0], colors[1], colors[2], colors[3])
 
         val bufferBuilder = Tessellator.getInstance().buffer
-        bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION)
+        bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
         val matrix = matrices?.peek()?.positionMatrix!!
         for (vec in path) {
-            bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).next()
+            bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).color(color).next()
         }
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
         matrices.pop()
         RenderSystem.enableDepthTest()
         RenderSystem.enableCull()
         glDisable(GL_LINE_SMOOTH)
-        RenderSystem.enableCull()
         RenderSystem.disableBlend()
     }
 
     private fun matrixVectorMultiply(matrix4f: Matrix4f, vector: Vector4f): Vector4f {
         return Vector4f(
-            matrix4f.m00() * vector.x + matrix4f.m01() * vector.y + matrix4f.m02() * vector.z + matrix4f.m03() * vector.w,
-            matrix4f.m10() * vector.x + matrix4f.m11() * vector.y + matrix4f.m12() * vector.z + matrix4f.m13() * vector.w,
-            matrix4f.m20() * vector.x + matrix4f.m21() * vector.y + matrix4f.m22() * vector.z + matrix4f.m23() * vector.w,
-            matrix4f.m30() * vector.x + matrix4f.m31() * vector.y + matrix4f.m32() * vector.z + matrix4f.m33() * vector.w
+            matrix4f.m00() * vector.x + matrix4f.m10() * vector.y + matrix4f.m20() * vector.z + matrix4f.m30() * vector.w,
+            matrix4f.m01() * vector.x + matrix4f.m11() * vector.y + matrix4f.m21() * vector.z + matrix4f.m31() * vector.w,
+            matrix4f.m02() * vector.x + matrix4f.m12() * vector.y + matrix4f.m22() * vector.z + matrix4f.m32() * vector.w,
+            matrix4f.m03() * vector.x + matrix4f.m13() * vector.y + matrix4f.m23() * vector.z + matrix4f.m33() * vector.w
         )
     }
 
     fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Vec3d? {
-        val camPos = -MinecraftClient.getInstance().gameRenderer.camera.pos + vector
-        val vec1 = matrixVectorMultiply(modelView, Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1.0F))
-        val screenPos = matrixVectorMultiply(projection, vec1)
+        val camPos = vector - MinecraftClient.getInstance().gameRenderer.camera.pos
+        val vec1 = Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1.0F).mul(modelView)
+        val screenPos = vec1.mul(projection)
 
         if (screenPos.w <= 0.0) return null
 
