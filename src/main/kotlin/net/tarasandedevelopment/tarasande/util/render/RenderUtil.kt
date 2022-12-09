@@ -344,9 +344,9 @@ object RenderUtil {
     fun renderPath(matrices: MatrixStack?, path: List<Vec3d>, color: Int) {
         RenderSystem.enableBlend()
         RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-        RenderSystem.disableCull()
         glEnable(GL_LINE_SMOOTH)
         RenderSystem.disableDepthTest()
+
         matrices?.push()
         val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
         matrices?.translate(-vec3d.x, -vec3d.y, -vec3d.z)
@@ -355,7 +355,11 @@ object RenderUtil {
         RenderSystem.setShaderColor(colors[0], colors[1], colors[2], colors[3])
 
         val bufferBuilder = Tessellator.getInstance().buffer
+
+        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
+
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
+
         val matrix = matrices?.peek()?.positionMatrix!!
         for (vec in path) {
             bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).color(color).next()
@@ -363,18 +367,8 @@ object RenderUtil {
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
         matrices.pop()
         RenderSystem.enableDepthTest()
-        RenderSystem.enableCull()
         glDisable(GL_LINE_SMOOTH)
         RenderSystem.disableBlend()
-    }
-
-    private fun matrixVectorMultiply(matrix4f: Matrix4f, vector: Vector4f): Vector4f {
-        return Vector4f(
-            matrix4f.m00() * vector.x + matrix4f.m10() * vector.y + matrix4f.m20() * vector.z + matrix4f.m30() * vector.w,
-            matrix4f.m01() * vector.x + matrix4f.m11() * vector.y + matrix4f.m21() * vector.z + matrix4f.m31() * vector.w,
-            matrix4f.m02() * vector.x + matrix4f.m12() * vector.y + matrix4f.m22() * vector.z + matrix4f.m32() * vector.w,
-            matrix4f.m03() * vector.x + matrix4f.m13() * vector.y + matrix4f.m23() * vector.z + matrix4f.m33() * vector.w
-        )
     }
 
     fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Vec3d? {

@@ -23,12 +23,7 @@ public class MixinChatScreen implements IChatScreen {
         EventChat eventChat = new EventChat(chatText);
         EventDispatcher.INSTANCE.call(eventChat);
         if (eventChat.getCancelled())
-            cir.setReturnValue(true); // TODO why does it always return true?
-    }
-
-    @Override
-    public boolean tarasande_getBypassChat() {
-        return tarasande_bypassChat;
+            cir.setReturnValue(true);
     }
 
     @Override
