@@ -21,6 +21,7 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.viaversion;
 
+import com.viaversion.viaversion.api.minecraft.ProfileKey;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
@@ -32,6 +33,9 @@ import com.viaversion.viaversion.protocols.protocol1_19_1to1_19.Protocol1_19_1To
 import com.viaversion.viaversion.protocols.protocol1_19_1to1_19.ServerboundPackets1_19_1;
 import com.viaversion.viaversion.protocols.protocol1_19to1_18_2.ClientboundPackets1_19;
 import com.viaversion.viaversion.protocols.protocol1_19to1_18_2.ServerboundPackets1_19;
+import de.florianmichael.clampclient.injection.mixininterface.IPublicKeyData_Protocol;
+import net.minecraft.network.encryption.PlayerPublicKey;
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.ProfileKeyStorage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -46,6 +50,19 @@ public class MixinProtocol1_19_1To1_19 extends AbstractProtocol<ClientboundPacke
             public void registerMap() {
                 this.map(Type.STRING);
                 this.map(Type.OPTIONAL_PROFILE_KEY);
+                handler(wrapper -> {
+                    final ProfileKeyStorage profileKeyStorage = wrapper.user().get(ProfileKeyStorage.class);
+                    if (profileKeyStorage != null) {
+                        final PlayerPublicKey.PublicKeyData publicKeyData = profileKeyStorage.getPublicKeyData();
+                        if (publicKeyData != null) {
+                            final ProfileKey profileKey = wrapper.get(Type.OPTIONAL_PROFILE_KEY, 0);
+                            if (profileKey != null) {
+                                final byte[] legacyKey = ((IPublicKeyData_Protocol) (Object) publicKeyData).protocolhack_get1_19_0Key().array();
+                                wrapper.set(Type.OPTIONAL_PROFILE_KEY, 0, new ProfileKey(profileKey.expiresAt(), profileKey.publicKey(), legacyKey));
+                            }
+                        }
+                    }
+                });
                 this.read(Type.OPTIONAL_UUID);
             }
         }, true);
