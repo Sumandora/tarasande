@@ -99,6 +99,7 @@
     "viaversion.MixinProtocol1_19_1To1_19",
     "viaversion.MixinProtocol1_19_3To1_19_1",
     "viaversion.MixinProtocol1_9To1_8",
+    "viaversion.MixinReceivedMessagesStorage",
     "viaversion.MixinViaIdleThread"
   ],
   "injectors": {
