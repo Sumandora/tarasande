@@ -14,6 +14,7 @@ import net.minecraft.util.math.random.RandomSplitter
 import net.tarasandedevelopment.tarasande.injection.accessor.*
 import net.tarasandedevelopment.tarasande.injection.accessor.prediction.IParticleManager
 import net.tarasandedevelopment.tarasande.injection.accessor.prediction.ISoundSystem
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.copy
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
@@ -161,17 +162,18 @@ object ProjectileUtil {
             MinecraftClient.getInstance().player?.pitch = rotation.pitch
         }
         if (!predictVelocity) {
-            MinecraftClient.getInstance().player?.velocity = Vec3d.ZERO
+            MinecraftClient.getInstance().player?.velocity = Vec3d.ZERO.copy()
         }
         projectileItem.setupRoutine.accept(itemStack, persistentProjectileEntity)
         MinecraftClient.getInstance().player?.velocity = prevVelocity
         MinecraftClient.getInstance().player?.yaw = prevRotation.yaw
         MinecraftClient.getInstance().player?.pitch = prevRotation.pitch
         while (!collided) {
+            path.add(persistentProjectileEntity.pos)
             persistentProjectileEntity.tick()
             if (persistentProjectileEntity.pos.let { it.y < MinecraftClient.getInstance().world?.bottomY!! || it == path.lastOrNull() }) break
-            path.add(persistentProjectileEntity.pos)
         }
+        path.add(persistentProjectileEntity.pos)
         soundSystem.tarasande_setDisabled(wasSoundDisabled)
         (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(prevParticlesEnabled)
         MinecraftClient.getInstance().world?.isClient = wasIsClient

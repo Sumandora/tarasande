@@ -28,6 +28,7 @@ accessible field net/minecraft/entity/LivingEntity bodyTrackingIncrements I
 accessible field net/minecraft/entity/LivingEntity serverX D
 accessible field net/minecraft/entity/LivingEntity serverY D
 accessible field net/minecraft/entity/LivingEntity serverZ D
+accessible field net/minecraft/entity/LivingEntity serverYaw D
 accessible field net/minecraft/entity/LivingEntity jumpingCooldown I
 accessible field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/util/Session;
 accessible field net/minecraft/client/MinecraftClient attackCooldown I

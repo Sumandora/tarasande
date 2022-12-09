@@ -1,27 +1,30 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat
 
 import net.minecraft.entity.Entity
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ArrowItem
 import net.minecraft.item.BowItem
 import net.minecraft.item.CrossbowItem
 import net.minecraft.item.ItemStack
-import net.minecraft.util.math.Direction
-import net.minecraft.util.math.Vec3d
+import net.minecraft.util.math.Box
+import net.minecraft.util.shape.VoxelShapes
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleFastUse
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
+import net.tarasandedevelopment.tarasande.util.player.prediction.PredictionEngine
 import net.tarasandedevelopment.tarasande.util.player.prediction.projectile.ProjectileUtil
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
@@ -29,10 +32,13 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
 
     private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.1, 1.0, 1.0, 1.0, 0.1)
     private val lockView = ValueBoolean(this, "Lock view", false)
-    private val predictionAmount = ValueNumber(this, "Prediction amount", 0.0, 1.0, 2.0, 0.1)
+    private val maxPrediction = ValueNumber(this, "Max prediction", 0.0, 40.0, 100.0, 1.0)
     private val throughWalls = ValueBoolean(this, "Through walls", false)
+    private val predictionColor = ValueColor(this, "Prediction color", 0.0, 1.0, 1.0, 1.0)
 
     private val gravity = 0.006
+
+    private var predictedBox: Box? = null
 
     private fun calcVelocity(stack: ItemStack): Double {
         return BowItem.getPullProgress(if (mc.player?.isUsingItem!! && !TarasandeMain.managerModule().get(ModuleFastUse::class.java).enabled) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
@@ -46,18 +52,20 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
         return -Math.toDegrees(atan2(velocity * velocity /*+/-*/ - root, gravity * dist))
     }
 
-    private fun deadReckoning(stack: ItemStack, entity: Entity, rotation: Rotation): Vec3d {
+    private fun deadReckoning(stack: ItemStack, entity: Entity, rotation: Rotation): Box {
+        if(entity !is PlayerEntity)
+            return entity.boundingBox
         val predicted = ProjectileUtil.predict(stack, rotation, false)
-        if (predicted.size <= 0) return entity.boundingBox.center
-        val prev = Vec3d(entity.prevX, entity.prevY, entity.prevZ)
-        return entity.boundingBox.center + (entity.pos!! - prev).withAxis(Direction.Axis.Y, 0.0) * (predicted.size.toDouble() * predictionAmount.value)
+        if (predicted.size <= 0) return entity.boundingBox
+
+        return PredictionEngine.predictState((2 + predicted.size).coerceAtMost(maxPrediction.value.toInt()), entity).first.boundingBox
     }
 
     init {
         registerEvent(EventPollEvents::class.java) { event ->
-            if (!mc.player?.isUsingItem!!) return@registerEvent
+            predictedBox = null
             val stack = mc.player?.getStackInHand(mc.player?.activeHand) ?: return@registerEvent
-            if (stack.item !is BowItem && !(stack.item is CrossbowItem && CrossbowItem.getProjectiles(stack).any { it.item is ArrowItem })) return@registerEvent
+            if ((stack.item !is BowItem || !mc.player?.isUsingItem!!) && !(stack.item is CrossbowItem && CrossbowItem.getProjectiles(stack).any { it.item is ArrowItem })) return@registerEvent
 
             val entity = mc.world?.entities?.filter { PlayerUtil.isAttackable(it) && (throughWalls.value || PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, it.eyePos)) }?.minByOrNull { RotationUtil.getRotations(mc.player?.eyePos!!, it.eyePos).fov(Rotation(mc.player!!)) } ?: return@registerEvent
 
@@ -71,7 +79,8 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
             var rotation = Rotation(yaw.toFloat(), solution.toFloat())
 
             // DEAD RECKONING
-            target = deadReckoning(stack, entity, rotation)
+            val box = deadReckoning(stack, entity, rotation)
+            target = box.center
 
             solution = calcPitch(stack, mc.player?.eyePos?.subtract(target)?.horizontalLength()!!, target.y - mc.player?.eyeY!!)
 
@@ -84,6 +93,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
             val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
             val smoothedRot = currentRot.smoothedTurn(rotation, aimSpeed)
 
+            predictedBox = box
             event.rotation = smoothedRot.correctSensitivity()
 
             if (lockView.value) {
@@ -93,6 +103,11 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
 
             event.minRotateToOriginSpeed = aimSpeed.minValue
             event.maxRotateToOriginSpeed = aimSpeed.maxValue
+        }
+
+        registerEvent(EventRender3D::class.java) { event ->
+            if(predictedBox != null)
+                RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(predictedBox), predictionColor.getColor().rgb)
         }
     }
 }

@@ -29,3 +29,7 @@ operator fun Vec3d.div(mult: Number): Vec3d {
 operator fun Vec3d.unaryMinus(): Vec3d {
     return this.negate()
 }
+
+fun Vec3d.copy(): Vec3d {
+    return Vec3d(x, y, z)
+}
