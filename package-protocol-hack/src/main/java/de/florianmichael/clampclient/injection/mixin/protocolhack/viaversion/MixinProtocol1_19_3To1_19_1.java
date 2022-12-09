@@ -2,11 +2,18 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.viaversion;
 
 import com.google.common.primitives.Longs;
 import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.minecraft.PlayerMessageSignature;
 import com.viaversion.viaversion.api.minecraft.ProfileKey;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
+import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
+import com.viaversion.viaversion.api.type.types.BitSetType;
+import com.viaversion.viaversion.api.type.types.ByteArrayType;
+import com.viaversion.viaversion.libs.gson.JsonElement;
+import com.viaversion.viaversion.libs.kyori.adventure.text.Component;
+import com.viaversion.viaversion.libs.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import com.viaversion.viaversion.protocols.base.ClientboundLoginPackets;
 import com.viaversion.viaversion.protocols.base.ServerboundLoginPackets;
 import com.viaversion.viaversion.protocols.protocol1_19_1to1_19.ClientboundPackets1_19_1;
@@ -14,11 +21,12 @@ import com.viaversion.viaversion.protocols.protocol1_19_1to1_19.ServerboundPacke
 import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.ClientboundPackets1_19_3;
 import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.Protocol1_19_3To1_19_1;
 import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.ServerboundPackets1_19_3;
+import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.storage.ReceivedMessagesStorage;
+import de.florianmichael.clampclient.injection.mixininterface.IReceivedMessagesStorage_Protocol;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.encryption.NetworkEncryptionUtils;
 import net.minecraft.network.encryption.PlayerKeyPair;
 import net.minecraft.network.encryption.PlayerPublicKey;
-import net.minecraft.network.encryption.Signer;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.MessageSigner1_19_2;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.ProfileKeyStorage;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,12 +34,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @Mixin(value = Protocol1_19_3To1_19_1.class, remap = false)
 public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPackets1_19_1, ClientboundPackets1_19_3, ServerboundPackets1_19_1, ServerboundPackets1_19_3> {
+
+    private static final ByteArrayType.OptionalByteArrayType OPTIONAL_MESSAGE_SIGNATURE_BYTES_TYPE = new ByteArrayType.OptionalByteArrayType(256);
+    private static final UUID ZERO_UUID = new UUID(0, 0);
 
     @Inject(method = "registerPackets", at = @At("RETURN"))
     public void fixKeys(CallbackInfo ci) {
@@ -102,6 +111,106 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                         }
                     }
                 });
+            }
+        });
+
+        this.registerClientbound(ClientboundPackets1_19_1.PLAYER_CHAT, ClientboundPackets1_19_3.DISGUISED_CHAT, new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                read(Type.OPTIONAL_BYTE_ARRAY_PRIMITIVE); // Previous signature
+                handler(wrapper -> {
+                    final PlayerMessageSignature signature = wrapper.read(Type.PLAYER_MESSAGE_SIGNATURE);
+
+                    // Store message signature for last seen
+                    if (!signature.uuid().equals(ZERO_UUID) && signature.signatureBytes().length != 0) {
+                        final ReceivedMessagesStorage messagesStorage = wrapper.user().get(ReceivedMessagesStorage.class);
+                        if (messagesStorage != null) {
+                            messagesStorage.add(signature);
+                            if (messagesStorage.tickUnacknowledged() > 64) {
+                                messagesStorage.resetUnacknowledgedCount();
+
+                                // Send chat acknowledgement
+                                final PacketWrapper chatAckPacket = wrapper.create(ServerboundPackets1_19_1.CHAT_ACK);
+                                chatAckPacket.write(Type.PLAYER_MESSAGE_SIGNATURE_ARRAY, messagesStorage.lastSignatures());
+                                wrapper.write(Type.OPTIONAL_PLAYER_MESSAGE_SIGNATURE, ((IReceivedMessagesStorage_Protocol) (Object) messagesStorage).protocolhack_getLastSignature());
+
+                                chatAckPacket.sendToServer(Protocol1_19_3To1_19_1.class);
+                            }
+                        }
+                    }
+
+                    final String plainMessage = wrapper.read(Type.STRING);
+                    JsonElement decoratedMessage = wrapper.read(Type.OPTIONAL_COMPONENT);
+
+                    wrapper.read(Type.LONG); // Timestamp
+                    wrapper.read(Type.LONG); // Salt
+                    wrapper.read(Type.PLAYER_MESSAGE_SIGNATURE_ARRAY); // Last seen
+
+                    final JsonElement unsignedMessage = wrapper.read(Type.OPTIONAL_COMPONENT);
+                    if (unsignedMessage != null) {
+                        decoratedMessage = unsignedMessage;
+                    }
+                    if (decoratedMessage == null) {
+                        decoratedMessage = GsonComponentSerializer.gson().serializeToTree(Component.text(plainMessage));
+                    }
+
+                    final int filterMaskType = wrapper.read(Type.VAR_INT);
+                    if (filterMaskType == 2) { // Partially filtered
+                        wrapper.read(Type.LONG_ARRAY_PRIMITIVE); // Mask
+                    }
+
+                    wrapper.write(Type.COMPONENT, decoratedMessage);
+                    // Keep chat type at the end
+                });
+            }
+        });
+
+        registerServerbound(ServerboundPackets1_19_3.CHAT_COMMAND, new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                map(Type.STRING); // Command
+                map(Type.LONG); // Timestamp
+                map(Type.LONG); // Salt
+                map(Type.VAR_INT); // Signatures
+                handler(wrapper -> {
+                    final int signatures = wrapper.get(Type.VAR_INT, 0);
+                    for (int i = 0; i < signatures; i++) {
+                        wrapper.passthrough(Type.STRING); // Argument name
+                        final byte[] signature = wrapper.read(OPTIONAL_MESSAGE_SIGNATURE_BYTES_TYPE); // Signature
+                        wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, signature);
+                    }
+
+                    wrapper.write(Type.BOOLEAN, false); // No signed preview
+
+                    final ReceivedMessagesStorage messagesStorage = wrapper.user().get(ReceivedMessagesStorage.class);
+                    if (messagesStorage != null) {
+                        messagesStorage.resetUnacknowledgedCount();
+                        wrapper.write(Type.PLAYER_MESSAGE_SIGNATURE_ARRAY, messagesStorage.lastSignatures());
+                        wrapper.write(Type.OPTIONAL_PLAYER_MESSAGE_SIGNATURE, ((IReceivedMessagesStorage_Protocol) (Object) messagesStorage).protocolhack_getLastSignature());
+                    }
+                });
+                read(Type.VAR_INT); // Offset
+                read(new BitSetType(20)); // Acknowledged
+            }
+        });
+        registerServerbound(ServerboundPackets1_19_3.CHAT_MESSAGE, new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                map(Type.STRING); // Command
+                map(Type.LONG); // Timestamp
+                map(Type.LONG); // Salt
+                map(OPTIONAL_MESSAGE_SIGNATURE_BYTES_TYPE, Type.BYTE_ARRAY_PRIMITIVE); // Signature
+                create(Type.BOOLEAN, false); // Signed Preview
+                handler(wrapper -> {
+                    final ReceivedMessagesStorage messagesStorage = wrapper.user().get(ReceivedMessagesStorage.class);
+                    if (messagesStorage != null) {
+                        messagesStorage.resetUnacknowledgedCount();
+                        wrapper.write(Type.PLAYER_MESSAGE_SIGNATURE_ARRAY, messagesStorage.lastSignatures());
+                        wrapper.write(Type.OPTIONAL_PLAYER_MESSAGE_SIGNATURE, ((IReceivedMessagesStorage_Protocol) (Object) messagesStorage).protocolhack_getLastSignature());
+                    }
+                });
+                read(Type.VAR_INT); // Offset
+                read(new BitSetType(20)); // Acknowledged
             }
         });
     }
