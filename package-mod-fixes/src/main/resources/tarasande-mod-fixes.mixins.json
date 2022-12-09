@@ -8,5 +8,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "modmenu.MixinModMenuEventHandler"
+  ]
 }

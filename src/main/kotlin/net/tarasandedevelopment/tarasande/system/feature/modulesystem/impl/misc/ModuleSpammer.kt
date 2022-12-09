@@ -45,6 +45,10 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
     private val timeUtil = TimeUtil()
     private val priorityMessages = ArrayList<String>()
 
+    init {
+        autoDisable.select(1) // Disable on disconnect
+    }
+
     override fun onDisable() {
         priorityMessages.clear()
     }

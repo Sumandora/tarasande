@@ -57,7 +57,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val clickSpeedUtil = ClickSpeedUtil(this, { true }) // for setting order
     private val waitForDamageValue = ValueBoolean(this, "Wait for damage", false)
     private val rayTrace = ValueBoolean(this, "Ray trace", false)
-    private val dontAttackInvalidRaytraceEntities = ValueBoolean(this, "Don't attack invalid raytrace entities", false)
+    private val dontAttackInvalidRaytraceEntities = object : ValueBoolean(this, "Don't attack invalid raytrace entities", false) {
+        override fun isEnabled() = rayTrace.value
+    }
     private val simulateMouseDelay = object : ValueBoolean(this, "Simulate mouse delay", false) {
         override fun isEnabled() = rayTrace.value && !mode.isSelected(1)
     }
