@@ -1,8 +1,12 @@
 package net.tarasandedevelopment.tarasande.system.screen.informationsystem.impl
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.registry.RegistryKeys
+import net.minecraft.world.dimension.DimensionType
+import net.minecraft.world.dimension.DimensionTypes
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 
@@ -19,9 +23,13 @@ class InformationXYZ : Information("Player", "XYZ") {
     override fun getMessage(): String? {
         val player = MinecraftClient.getInstance().player ?: return null
 
-        return StringUtil.round(player.x, this.decimalPlacesX.value.toInt()) + " " +
-                StringUtil.round(player.y, this.decimalPlacesY.value.toInt()) + " " +
-                StringUtil.round(player.z, this.decimalPlacesZ.value.toInt())
+        val dimension = MinecraftClient.getInstance().world?.dimension
+        val nether = MinecraftClient.getInstance().world?.registryManager?.get(RegistryKeys.DIMENSION_TYPE)?.get(DimensionTypes.OVERWORLD)
+        val pos = player.pos * DimensionType.getCoordinateScaleFactor(dimension, nether)
+
+        return StringUtil.round(pos.x, this.decimalPlacesX.value.toInt()) + " " +
+                StringUtil.round(pos.y, this.decimalPlacesY.value.toInt()) + " " +
+                StringUtil.round(pos.z, this.decimalPlacesZ.value.toInt())
     }
 }
 
@@ -33,9 +41,13 @@ class InformationNetherXYZ : Information("Player", "Nether XYZ") {
     override fun getMessage(): String? {
         val player = MinecraftClient.getInstance().player ?: return null
 
-        return StringUtil.round(player.x / 8.0, this.decimalPlacesX.value.toInt()) + " " +
-                StringUtil.round(player.y / 8.0, this.decimalPlacesY.value.toInt()) + " " +
-                StringUtil.round(player.z / 8.0, this.decimalPlacesZ.value.toInt())
+        val dimension = MinecraftClient.getInstance().world?.dimension
+        val nether = MinecraftClient.getInstance().world?.registryManager?.get(RegistryKeys.DIMENSION_TYPE)?.get(DimensionTypes.THE_NETHER)
+        val pos = player.pos * DimensionType.getCoordinateScaleFactor(dimension, nether)
+
+        return StringUtil.round(pos.x, this.decimalPlacesX.value.toInt()) + " " +
+                StringUtil.round(pos.y, this.decimalPlacesY.value.toInt()) + " " +
+                StringUtil.round(pos.z, this.decimalPlacesZ.value.toInt())
     }
 }
 

@@ -20,15 +20,6 @@ public class MixinTextFieldWidget implements ITextFieldWidget {
     @Unique
     private Color tarasande_color = null;
 
-    @Inject(method = "mouseClicked", at = @At("HEAD"))
-    public void fixSelectionBug(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
-        if (MinecraftClient.getInstance().currentScreen != null)
-            for (Element element : MinecraftClient.getInstance().currentScreen.children())
-                if (element != this)
-                    if (element instanceof TextFieldWidget)
-                        ((TextFieldWidget) element).setTextFieldFocused(false);
-    }
-
     @Redirect(method = "renderButton", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/OrderedText;FFI)I"))
     public int injectColor(TextRenderer textRenderer, MatrixStack matrices, OrderedText text, float x, float y, int color) {
         return textRenderer.drawWithShadow(matrices, text, x, y, this.tarasande_color != null ? this.tarasande_color.getRGB() : color);
