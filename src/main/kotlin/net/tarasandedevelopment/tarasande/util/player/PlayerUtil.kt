@@ -158,7 +158,7 @@ object PlayerUtil {
             }
 
             override fun sendMessage(chatText: String?, addToHistory: Boolean): Boolean {
-                super.sendMessage(chatText, addToHistory)
+                super.sendMessage(chatText, false)
                 return false
             }
         }.also {

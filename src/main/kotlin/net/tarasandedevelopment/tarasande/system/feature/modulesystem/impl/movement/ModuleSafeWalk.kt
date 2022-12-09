@@ -20,7 +20,7 @@ class ModuleSafeWalk : Module("Safe walk", "Prevents falling off blocks", Module
 
     init {
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (event.keyBinding == mc.options.sneakKey && sneak.value)
+            if (event.keyBinding == mc.options.sneakKey && sneak.value && PlayerUtil.isPlayerMoving())
                 event.pressed = event.pressed || when {
                     offGround.isSelected(0) -> mc.player?.isOnGround == true && PlayerUtil.isOnEdge(extrapolation.value)
                     offGround.isSelected(1) -> mc.player?.isOnGround == false || PlayerUtil.isOnEdge(extrapolation.value)
