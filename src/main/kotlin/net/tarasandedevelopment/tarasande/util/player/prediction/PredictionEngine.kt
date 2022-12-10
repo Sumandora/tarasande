@@ -157,14 +157,14 @@ object PredictionEngine {
 
 
     private fun getClosestInput(baseEntity: PlayerEntity): Input {
-        val prevServerPos = (baseEntity as ILivingEntity).prevServerPos() ?: return Input(0.0f, 0.0f)
+        val prevServerPos = (baseEntity as ILivingEntity).prevServerPos() ?: return Input(0.0F, 0.0F)
         val velocity = Vec3d(baseEntity.serverX, baseEntity.serverY, baseEntity.serverZ) - prevServerPos
 
         var best: Pair<Input, Double>? = null
         for(input in allInputs) {
             @Suppress("NAME_SHADOWING")
             val input = input.with(!baseEntity.isOnGround, baseEntity.isSneaking)
-            val standStill = input.movementForward == 0.0f && input.movementSideways == 0.0f
+            val standStill = input.movementForward == 0.0F && input.movementSideways == 0.0F
             if(velocity.horizontalLengthSquared() > 0.0 && standStill)
                 continue
 
@@ -172,7 +172,7 @@ object PredictionEngine {
                 if(standStill)
                     Vec3d(0.0, 0.0, 0.0)
                 else
-                    Entity.movementInputToVelocity(input.movementInput.let { Vec3d(it.x.toDouble(), 0.0, it.y.toDouble()) }, 1.0f, baseEntity.serverYaw.toFloat())
+                    Entity.movementInputToVelocity(input.movementInput.let { Vec3d(it.x.toDouble(), 0.0, it.y.toDouble()) }, 1.0F, baseEntity.serverYaw.toFloat())
 
             val distance = velocity.distanceTo(nextPos)
             if(best == null || best.second > distance)

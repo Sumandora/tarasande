@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
 import net.tarasandedevelopment.tarasande.Manager
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
@@ -12,6 +13,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.impl.BlurBox
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.impl.BlurGaussian
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.impl.BlurKawase
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import net.tarasandedevelopment.tarasande.util.render.shader.Program
 import net.tarasandedevelopment.tarasande.util.render.shader.Shader
@@ -38,7 +40,8 @@ class ManagerBlur : Manager<Blur>() {
 
         EventDispatcher.apply {
             add(EventScreenRender::class.java, 1) {
-                blurScene(shapesBuffer = screenShapesFramebuffer)
+                if(MinecraftClient.getInstance().currentScreen !is ScreenCheatMenu)
+                    blurScene(shapesBuffer = screenShapesFramebuffer)
             }
             add(EventRender2D::class.java, 1) {
                 blurScene()

@@ -63,12 +63,14 @@ class CommandEnchant : Command("enchant") {
         builder.then(literal("single").then(argument("enchantment", RegistryEntryArgumentType.registryEntry(registryAccess, RegistryKeys.ENCHANTMENT))?.then(
             literal("level").then(argument("level", IntegerArgumentType.integer())?.executes {
                 val level = it.getArgument("level", Int::class.java)
+                @Suppress("UNCHECKED_CAST")
                 (it.getArgument("enchantment", RegistryEntry.Reference::class.java) as RegistryEntry.Reference<Enchantment>).value().apply {
                     singleEnchant(this, level)
                     printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(this.translationKey) + "] at level [" + level + "] was added")
                 }
                 return@executes success
             }).then(literal("max").executes {
+                @Suppress("UNCHECKED_CAST")
                 (it.getArgument("enchantment", RegistryEntry.Reference::class.java) as RegistryEntry.Reference<Enchantment>).value().apply {
                     singleEnchant(this, this.maxLevel)
                     printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(this.translationKey) + "] at max level was added")
@@ -113,6 +115,7 @@ class CommandEnchant : Command("enchant") {
         })))
 
         builder.then(literal("remove").then(argument("enchantment", RegistryEntryArgumentType.registryEntry(registryAccess, RegistryKeys.ENCHANTMENT))?.executes {
+            @Suppress("UNCHECKED_CAST")
             val enchantment = (it.getArgument("enchantment", RegistryEntry.Reference::class.java) as RegistryEntry.Reference<Enchantment>).value()
             getTargetItem().apply {
                 EnchantmentHelper.set(EnchantmentHelper.get(this).apply { remove(enchantment) }, this)
