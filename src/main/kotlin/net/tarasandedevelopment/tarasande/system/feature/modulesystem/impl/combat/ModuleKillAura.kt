@@ -316,7 +316,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             if((waitForDamageValue.value && waitForDamage) ||
                 allAttackedLivingEntities { !shouldAttackEntity(it) } ||
-                (waitForCritical.value && mc.player?.isOnGround != true && !willPerformCritical(criticalSprint.value) && (!dontWaitWhenEnemyHasShield.value || allAttackedLivingEntities { !hasShield(it) })))
+                (waitForCritical.value && mc.player?.isOnGround != true && willPerformCritical(false, false) && !willPerformCritical(criticalSprint.value, true) && (!dontWaitWhenEnemyHasShield.value || allAttackedLivingEntities { !hasShield(it) })))
                 validEntities.clear()
 
             var attacked = false
@@ -392,7 +392,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             if (PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {
                 if (waitForCritical.value && criticalSprint.value && forceCritical.value)
                     if (!dontWaitWhenEnemyHasShield.value || !allAttackedLivingEntities { !hasShield(it) })
-                        if (willPerformCritical(false))
+                        if (willPerformCritical(false, true))
                             if (mc.player?.isSprinting!!)
                                 event.pressed = false
             }
@@ -594,15 +594,15 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         return true
     }
 
-    private fun willPerformCritical(criticalSprint: Boolean): Boolean {
-        if (mc.player?.fallDistance!! > 0.0f &&
-            mc.player?.isOnGround != true &&
+    private fun willPerformCritical(criticalSprint: Boolean, fallDistance: Boolean): Boolean {
+        if (mc.player?.isOnGround != true &&
             mc.player?.isClimbing != true &&
             mc.player?.isTouchingWater != true &&
             !(mc.player as IClientPlayerEntity).tarasande_forceHasStatusEffect(StatusEffects.BLINDNESS) &&
             mc.player?.hasVehicle() == false)
-            if (!criticalSprint || !mc.player?.isSprinting!!)
-                return true
+            if(!fallDistance || mc.player?.fallDistance!! > 0.0F)
+                if (!criticalSprint || !mc.player?.isSprinting!!)
+                    return true
         return false
     }
 
