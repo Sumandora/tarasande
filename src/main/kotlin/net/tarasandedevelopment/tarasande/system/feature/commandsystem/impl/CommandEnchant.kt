@@ -10,6 +10,7 @@ import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKeys
+import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.Command
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
@@ -62,14 +63,13 @@ class CommandEnchant : Command("enchant") {
         builder.then(literal("single").then(argument("enchantment", RegistryEntryArgumentType.registryEntry(registryAccess, RegistryKeys.ENCHANTMENT))?.then(
             literal("level").then(argument("level", IntegerArgumentType.integer())?.executes {
                 val level = it.getArgument("level", Int::class.java)
-
-                it.getArgument("enchantment", Enchantment::class.java).apply {
+                (it.getArgument("enchantment", RegistryEntry.Reference::class.java) as RegistryEntry.Reference<Enchantment>).value().apply {
                     singleEnchant(this, level)
                     printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(this.translationKey) + "] at level [" + level + "] was added")
                 }
                 return@executes success
             }).then(literal("max").executes {
-                it.getArgument("enchantment", Enchantment::class.java).apply {
+                (it.getArgument("enchantment", RegistryEntry.Reference::class.java) as RegistryEntry.Reference<Enchantment>).value().apply {
                     singleEnchant(this, this.maxLevel)
                     printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(this.translationKey) + "] at max level was added")
                 }
@@ -113,7 +113,7 @@ class CommandEnchant : Command("enchant") {
         })))
 
         builder.then(literal("remove").then(argument("enchantment", RegistryEntryArgumentType.registryEntry(registryAccess, RegistryKeys.ENCHANTMENT))?.executes {
-            val enchantment = it.getArgument("enchantment", Enchantment::class.java)
+            val enchantment = (it.getArgument("enchantment", RegistryEntry.Reference::class.java) as RegistryEntry.Reference<Enchantment>).value()
             getTargetItem().apply {
                 EnchantmentHelper.set(EnchantmentHelper.get(this).apply { remove(enchantment) }, this)
             }
