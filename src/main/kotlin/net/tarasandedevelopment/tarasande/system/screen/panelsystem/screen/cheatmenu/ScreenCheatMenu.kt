@@ -17,6 +17,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.particle.Particle
+import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
@@ -125,6 +126,10 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
         matrices?.pop()
 
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
+
+        matrices?.push()
+        DrawableHelper.fill(matrices, 0, 0, width, height, color.withAlpha((animation * 255 * 0.66).toInt()).rgb)
+        matrices?.pop()
 
         particles.forEach { it.render(matrices, mouseX.toDouble(), mouseY.toDouble(), animation) }
 
