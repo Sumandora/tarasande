@@ -5,6 +5,8 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen
+import net.minecraft.client.gui.screen.Screen
+import net.minecraft.client.gui.screen.pack.PackScreen
 import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventRender2D
@@ -31,6 +33,14 @@ class ManagerBlur : Manager<Blur>() {
     private val shapesFramebuffer = SimpleFramebufferWrapped()
     private val cutoutShader = Program(Shader("cutout.frag", GL20.GL_FRAGMENT_SHADER), Shader("default.vert", GL20.GL_VERTEX_SHADER))
 
+    // These are screens that don't call the renderBackground() method and therefore do not call the blur (yep, minecraft's rendering is just trash)
+    private val manuelScreens = arrayOf(
+        ScreenCheatMenu::class.java,
+
+        DownloadingTerrainScreen::class.java,
+        PackScreen::class.java
+    )
+
     init {
         add(
             BlurBox(),
@@ -40,8 +50,9 @@ class ManagerBlur : Manager<Blur>() {
 
         EventDispatcher.apply {
             add(EventScreenRender::class.java, 1) {
-                if ((MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().currentScreen is ScreenCheatMenu || MinecraftClient.getInstance().currentScreen is DownloadingTerrainScreen) && it.screen !is RealmsNotificationsScreen)
+                if (MinecraftClient.getInstance().world == null || manuelScreens.contains(MinecraftClient.getInstance().currentScreen!!.javaClass)) {
                     blurScene()
+                }
             }
             add(EventRender2D::class.java, 1) {
                 blurScene()
