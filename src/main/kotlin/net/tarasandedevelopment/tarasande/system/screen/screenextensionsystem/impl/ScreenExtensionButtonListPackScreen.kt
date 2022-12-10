@@ -13,16 +13,16 @@ class ScreenExtensionButtonListPackScreen : ScreenExtensionButtonList<PackScreen
     init {
         add("Dump server pack", { MinecraftClient.getInstance().serverResourcePackProvider?.serverContainer != null }) {
             MinecraftClient.getInstance().serverResourcePackProvider?.serverContainer?.apply {
+                // The pack provider, will always make ZipResourcePacks
                 val base = (this.createResourcePack() as ZipResourcePack).backingZipFile
 
                 var target = File(MinecraftClient.getInstance().resourcePackDir.toFile(), base.name + ".zip")
                 var counter = 1
                 while (target.exists()) {
-                    target = File(MinecraftClient.getInstance().resourcePackDir.toFile(), base.name + "($counter).zip")
+                    target = File(MinecraftClient.getInstance().resourcePackDir.toFile(), base.name + " ($counter).zip")
                     counter++
                 }
                 try {
-                    // The pack provider, will always make ZipResourcePacks
                     base.copyTo(target)
                 } catch (t: Throwable) {
                     t.printStackTrace()
@@ -31,7 +31,7 @@ class ScreenExtensionButtonListPackScreen : ScreenExtensionButtonList<PackScreen
             }
         }
 
-        add("Unload server pack", { MinecraftClient.getInstance().serverResourcePackProvider != null }) {
+        add("Unload server pack", { MinecraftClient.getInstance().serverResourcePackProvider?.serverContainer != null }) {
             MinecraftClient.getInstance().serverResourcePackProvider.clear()
         }
     }

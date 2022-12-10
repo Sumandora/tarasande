@@ -20,6 +20,8 @@ open class ClickableWidgetPanel(val panel: Panel, private val update: Boolean = 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         val opened = panel.opened
         panel.opened = true
+        val usedInScreen = panel.usedInScreen
+        panel.usedInScreen = true
         if (update) {
             panel.x = this.x.toDouble()
             panel.y = this.y.toDouble()
@@ -29,6 +31,7 @@ open class ClickableWidgetPanel(val panel: Panel, private val update: Boolean = 
         if (panel.isVisible())
             panel.render(matrices, mouseX, mouseY, delta)
         panel.opened = opened
+        panel.usedInScreen = usedInScreen
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

@@ -27,15 +27,15 @@ public abstract class MixinScreen {
     @Shadow
     protected abstract <T extends Element & Drawable> T addDrawableChild(T drawableElement);
 
-    @Inject(method = "render", at = @At("HEAD"))
-    public void hookEventScreenRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        EventDispatcher.INSTANCE.call(new EventScreenRender(matrices, (Screen) (Object) this, mouseX, mouseY));
-    }
-
     @Inject(method = "clearAndInit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;init()V"))
     public void hookEventChildren(CallbackInfo ci) {
         final EventChildren eventChildren = new EventChildren((Screen) (Object) this, new ArrayList<>());
         EventDispatcher.INSTANCE.call(eventChildren);
         eventChildren.getElements().forEach(element -> addDrawableChild((Element & Drawable) element));
+    }
+
+    @Inject(method = "render", at = @At("HEAD"))
+    public void hookEventScreenRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        EventDispatcher.INSTANCE.call(new EventScreenRender());
     }
 }

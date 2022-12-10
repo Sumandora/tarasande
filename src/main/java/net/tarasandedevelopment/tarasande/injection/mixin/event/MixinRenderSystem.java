@@ -51,9 +51,9 @@ public class MixinRenderSystem {
 
     @Inject(method = "flipFrame", at = @At("HEAD"))
     private static void hookEventScreenInputAndPollEvents(long window, CallbackInfo ci) {
-        EventScreenInput eventScreenInput = new EventScreenInput(false);
-        EventDispatcher.INSTANCE.call(eventScreenInput);
+        EventDispatcher.INSTANCE.call(new EventScreenInput(false));
 
         RotationUtil.INSTANCE.updateFakeRotation(false);
     }
+
 }

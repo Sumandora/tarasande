@@ -97,6 +97,7 @@ open class Panel(
     protected var alignment: Alignment = Alignment.LEFT
     var opened = false
     var modifiable = true
+    var usedInScreen = false
 
     val titleBarHeight = FontWrapper.fontHeight()
 
@@ -139,7 +140,7 @@ open class Panel(
         if (opened) {
             if (background) {
                 matrices?.push()
-                TarasandeMain.managerBlur().bind(true)
+                TarasandeMain.managerBlur().bind(true, usedInScreen)
                 RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else titleBarHeight).toDouble(), -1)
                 MinecraftClient.getInstance().framebuffer.beginWrite(true)
 

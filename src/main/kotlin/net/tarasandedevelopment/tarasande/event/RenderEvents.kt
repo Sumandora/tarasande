@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.event
 
 import net.minecraft.block.BlockState
-import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.minecraft.client.network.PlayerListEntry
 import net.minecraft.client.network.ServerInfo
@@ -15,7 +14,7 @@ import su.mandora.event.Event
 
 class EventResolutionUpdate(val prevWidth: Double, val prevHeight: Double, val width: Double, val height: Double) : Event(false)
 class EventRender2D(val matrices: MatrixStack) : Event(false)
-class EventScreenRender(val matrices: MatrixStack, val screen: Screen, val mouseX: Int, val mouseY: Int) : Event(false)
+class EventScreenRender : Event(false)
 class EventRender3D(val matrices: MatrixStack, val positionMatrix: Matrix4f) : Event(false)
 class EventGamma(val x: Int, val y: Int, var color: Int) : Event(false)
 class EventColorCorrection(var red: Int, var green: Int, var blue: Int) : Event(false)

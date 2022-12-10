@@ -4,10 +4,6 @@ import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
-import net.minecraft.client.gui.screen.DownloadingTerrainScreen
-import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.gui.screen.pack.PackScreen
-import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
@@ -16,7 +12,6 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.impl.BlurBox
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.impl.BlurGaussian
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.impl.BlurKawase
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import net.tarasandedevelopment.tarasande.util.render.shader.Program
 import net.tarasandedevelopment.tarasande.util.render.shader.Shader
@@ -30,16 +25,9 @@ class ManagerBlur : Manager<Blur>() {
     val mode: ValueMode
     val strength = ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0)
 
-    private val shapesFramebuffer = SimpleFramebufferWrapped()
+    private val inGameShapesFramebuffer = SimpleFramebufferWrapped()
+    private val screenShapesFramebuffer = SimpleFramebufferWrapped()
     private val cutoutShader = Program(Shader("cutout.frag", GL20.GL_FRAGMENT_SHADER), Shader("default.vert", GL20.GL_VERTEX_SHADER))
-
-    // These are screens that don't call the renderBackground() method and therefore do not call the blur (yep, minecraft's rendering is just trash)
-    private val manuelScreens = arrayOf(
-        ScreenCheatMenu::class.java,
-
-        DownloadingTerrainScreen::class.java,
-        PackScreen::class.java
-    )
 
     init {
         add(
@@ -50,9 +38,7 @@ class ManagerBlur : Manager<Blur>() {
 
         EventDispatcher.apply {
             add(EventScreenRender::class.java, 1) {
-                if (MinecraftClient.getInstance().world == null || manuelScreens.contains(MinecraftClient.getInstance().currentScreen!!.javaClass)) {
-                    blurScene()
-                }
+                blurScene(shapesBuffer = screenShapesFramebuffer)
             }
             add(EventRender2D::class.java, 1) {
                 blurScene()
@@ -64,11 +50,11 @@ class ManagerBlur : Manager<Blur>() {
 
     fun selected(): Blur = list[mode.let { it.values.indexOf(it.selected[0]) }]
 
-    fun bind(setViewport: Boolean) {
-        shapesFramebuffer.beginWrite(setViewport)
+    fun bind(setViewport: Boolean, screens: Boolean = false) {
+        (if(screens) screenShapesFramebuffer else inGameShapesFramebuffer).beginWrite(setViewport)
     }
 
-    internal fun blurScene(strength: Int? = null) {
+    internal fun blurScene(strength: Int? = null, shapesBuffer: Framebuffer = inGameShapesFramebuffer) {
         if (!RenderSystem.isOnRenderThread()) return
 
         GL11.glPushMatrix()
@@ -85,20 +71,20 @@ class ManagerBlur : Manager<Blur>() {
         GL20.glUniform1i(cutoutShader.getUniformLocation("shapes"), 0)
         GL13.glActiveTexture(GL13.GL_TEXTURE0)
         val texture0 = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D)
-        GlStateManager._bindTexture(shapesFramebuffer.colorAttachment)
+        GlStateManager._bindTexture(shapesBuffer.colorAttachment)
 
         GL20.glUniform1i(cutoutShader.getUniformLocation("tex"), 1)
         GL13.glActiveTexture(GL13.GL_TEXTURE1)
         val texture1 = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D)
         GlStateManager._bindTexture(framebuffer.colorAttachment)
 
-        GL20.glUniform2f(cutoutShader.getUniformLocation("resolution"), shapesFramebuffer.textureWidth.toFloat(), shapesFramebuffer.textureHeight.toFloat())
+        GL20.glUniform2f(cutoutShader.getUniformLocation("resolution"), shapesBuffer.textureWidth.toFloat(), shapesBuffer.textureHeight.toFloat())
 
         GL11.glBegin(GL11.GL_QUADS)
         GL11.glVertex2f(0F, 0F)
-        GL11.glVertex2f(shapesFramebuffer.textureWidth.toFloat(), 0F)
-        GL11.glVertex2f(shapesFramebuffer.textureWidth.toFloat(), shapesFramebuffer.textureHeight.toFloat())
-        GL11.glVertex2f(0F, shapesFramebuffer.textureHeight.toFloat())
+        GL11.glVertex2f(shapesBuffer.textureWidth.toFloat(), 0F)
+        GL11.glVertex2f(shapesBuffer.textureWidth.toFloat(), shapesBuffer.textureHeight.toFloat())
+        GL11.glVertex2f(0F, shapesBuffer.textureHeight.toFloat())
         GL11.glEnd()
 
         GL20.glUseProgram(prevShader)
@@ -109,7 +95,7 @@ class ManagerBlur : Manager<Blur>() {
         GL13.glActiveTexture(GL13.GL_TEXTURE0)
         GlStateManager._bindTexture(texture0)
 
-        shapesFramebuffer.clear(MinecraftClient.IS_SYSTEM_MAC)
+        shapesBuffer.clear(MinecraftClient.IS_SYSTEM_MAC)
         MinecraftClient.getInstance().framebuffer.beginWrite(MinecraftClient.IS_SYSTEM_MAC)
 
         if (!texture2D) GL11.glDisable(GL11.GL_TEXTURE_2D)
