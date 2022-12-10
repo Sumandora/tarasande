@@ -75,6 +75,7 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                         wrapper.write(Type.OPTIONAL_PROFILE_KEY, new ProfileKey(publicKeyData.expiresAt().toEpochMilli(), publicKeyData.key().getEncoded(), publicKeyData.keySignature()));
                         final ProfileKeyStorage profileKeyStorage = wrapper.user().get(ProfileKeyStorage.class);
                         if (profileKeyStorage != null) {
+                            profileKeyStorage.setPublicKeyData(publicKeyData);
                             profileKeyStorage.setPrivateKey(playerPublicKey.privateKey());
                             profileKeyStorage.setSigner(MessageSigner1_19_2.create(playerPublicKey.privateKey(), "SHA256withRSA"));
                         }

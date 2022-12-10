@@ -16,7 +16,7 @@ public class MixinChatScreen implements IChatScreen {
     @Unique
     private boolean tarasande_bypassChat;
 
-    @Inject(method = "sendMessage", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "sendMessage", at = @At(value = "INVOKE", target = "Ljava/lang/String;startsWith(Ljava/lang/String;)Z"), cancellable = true)
     public void hookEventChat(String chatText, boolean addToHistory, CallbackInfoReturnable<Boolean> cir) {
         if (tarasande_bypassChat)
             return;
