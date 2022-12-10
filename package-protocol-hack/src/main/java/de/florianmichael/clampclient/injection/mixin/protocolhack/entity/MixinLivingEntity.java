@@ -171,8 +171,17 @@ public abstract class MixinLivingEntity extends Entity {
 
     @ModifyConstant(method = "isBlocking", constant = @Constant(intValue = 5))
     public int shieldBlockCounter(int constant) {
-        if(VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
+        if(VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
             return 0;
+        }
         return constant;
+    }
+
+    @Redirect(method = "tickCramming", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;isClient()Z"))
+    public boolean revertOnlyPlayerCramming(World instance) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_19_1)) {
+            return false;
+        }
+        return instance.isClient();
     }
 }
