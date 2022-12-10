@@ -149,4 +149,12 @@ public abstract class MixinEntity {
         //noinspection ConstantConditions
         return Float.isFinite(f) || (Object) this instanceof ClientPlayerEntity;
     }
+
+    @ModifyConstant(method = "checkBlockCollision", constant = @Constant(doubleValue = 1.0E-7))
+    public double changeBlockCollisionConstant(double constant) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_19_1)) {
+            return 0.001;
+        }
+        return constant;
+    }
 }
