@@ -68,17 +68,20 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                     final UUID uuid = wrapper.read(Type.OPTIONAL_UUID);
 
                     final PlayerKeyPair playerPublicKey = MinecraftClient.getInstance().getProfileKeys().fetchKeyPair().get().orElse(null);
-                    if (playerPublicKey == null) {
-                        wrapper.write(Type.OPTIONAL_PROFILE_KEY, null);
-                    } else {
+                    if (playerPublicKey != null) {
+                        // Online Mode
                         final PlayerPublicKey.PublicKeyData publicKeyData = playerPublicKey.publicKey().data();
                         wrapper.write(Type.OPTIONAL_PROFILE_KEY, new ProfileKey(publicKeyData.expiresAt().toEpochMilli(), publicKeyData.key().getEncoded(), publicKeyData.keySignature()));
                         final ProfileKeyStorage profileKeyStorage = wrapper.user().get(ProfileKeyStorage.class);
                         if (profileKeyStorage != null) {
-                            profileKeyStorage.setPublicKeyData(publicKeyData);
+                            profileKeyStorage.setPublicKeyData(publicKeyData); // This is for correcting the key signature in 1.19.2 -> 1.19.0, since i don't have access to this class later, i could fetch the keyPair twice, but how do i look like?
+
                             profileKeyStorage.setPrivateKey(playerPublicKey.privateKey());
                             profileKeyStorage.setSigner(MessageSigner1_19_2.create(playerPublicKey.privateKey(), "SHA256withRSA"));
                         }
+                    } else {
+                        // Cracked mode
+                        wrapper.write(Type.OPTIONAL_PROFILE_KEY, null);
                     }
                     wrapper.write(Type.OPTIONAL_UUID, uuid);
                 });
@@ -88,12 +91,12 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
         this.registerServerbound(State.LOGIN, ServerboundLoginPackets.ENCRYPTION_KEY.getId(), ServerboundLoginPackets.ENCRYPTION_KEY.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(Type.BYTE_ARRAY_PRIMITIVE); // Keys
+                map(Type.BYTE_ARRAY_PRIMITIVE); // Encrypted Private Key
                 handler(wrapper -> {
                     final ProfileKeyStorage profileKeyStorage = wrapper.user().get(ProfileKeyStorage.class);
                     if (profileKeyStorage != null) {
                         wrapper.read(Type.BYTE_ARRAY_PRIMITIVE); // Packet-Nonce
-                        final byte[] nonce = profileKeyStorage.getOriginalNonce();
+                        final byte[] nonce = profileKeyStorage.getOriginalNonce(); // since 1.19.3 encrypts the nonce before writing it, we need to track the original nonce, since 1.19.2 uses the original nonce by the server
 
                         wrapper.write(Type.BOOLEAN, profileKeyStorage.getSigner() == null);
 
@@ -200,7 +203,12 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                 map(Type.STRING); // Command
                 map(Type.LONG); // Timestamp
                 map(Type.LONG); // Salt
-                map(OPTIONAL_MESSAGE_SIGNATURE_BYTES_TYPE, Type.BYTE_ARRAY_PRIMITIVE); // Signature
+                handler(wrapper -> {
+                    final byte[] messageSignature = wrapper.read(OPTIONAL_MESSAGE_SIGNATURE_BYTES_TYPE);
+                    if (messageSignature != null) {
+                        wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, messageSignature);
+                    }
+                });
                 create(Type.BOOLEAN, false); // Signed Preview
                 handler(wrapper -> {
                     final ReceivedMessagesStorage messagesStorage = wrapper.user().get(ReceivedMessagesStorage.class);

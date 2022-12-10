@@ -35,6 +35,6 @@
    - More advanced modules
    - Anarchy modules
    - Quality of life modules
-   - 
+   
 ## Notes
 - AutoTool: Axes can set shields on cooldown. Maybe implement that if possible axes are being used to set shields on cooldown before actually attacking with sword
