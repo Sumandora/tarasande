@@ -1,0 +1,14 @@
+## Emily's TODO-List
+- User configs
+- Crystal Aura
+- Change Name/Skin/Cape in Account Manager
+- Settings for HypixelBedwarsOverlay
+- ViaLegacy texture pack using ProtocolPatcher
+- Anti vanish: Tab completion
+- ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
+- Protocol Hack: Entity Dimensions
+- Recode File Chooser
+- Wheel Menu
+- Projectile aim bot: Crossbows & Prediction
+- Trajectory: Prediction
+- Tick base manipulation: Improve auto uncharge
