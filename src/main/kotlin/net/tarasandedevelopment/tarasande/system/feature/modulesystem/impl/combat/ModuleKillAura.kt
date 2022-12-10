@@ -186,10 +186,12 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             val prevTargets = ArrayList(targets)
             targets.clear()
             val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
-            if(RotationUtil.fakeRotation != null && closedInventory.value && mc.currentScreen is HandledScreen<*>) {
-                event.rotation = currentRot
-                event.minRotateToOriginSpeed = aimSpeed.minValue
-                event.maxRotateToOriginSpeed = aimSpeed.maxValue
+            if(closedInventory.value && mc.currentScreen is HandledScreen<*>) {
+                if(RotationUtil.fakeRotation != null) {
+                    event.rotation = currentRot
+                    event.minRotateToOriginSpeed = aimSpeed.minValue
+                    event.maxRotateToOriginSpeed = aimSpeed.maxValue
+                }
                 return@registerEvent
             }
             for (entity in mc.world?.entities!!) {
@@ -276,113 +278,107 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         registerEvent(EventAttack::class.java) { event ->
             performedTick = false
 
-            var canHit = true
-            if(closedInventory.value && mc.currentScreen is HandledScreen<*>)
-                canHit = false
+            val validEntities = ArrayList<Pair<Entity, Vec3d>>()
 
-            if (waitForCritical.value) if (!dontWaitWhenEnemyHasShield.value || allAttackedLivingEntities { !hasShield(it) })
-                if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !(mc.player as IClientPlayerEntity).tarasande_forceHasStatusEffect(StatusEffects.BLINDNESS) && !mc.player?.hasVehicle()!!)
-                    if (!mc.player?.isOnGround!! && mc.player?.velocity?.y!! != 0.0 && (mc.player?.fallDistance == 0.0F || (criticalSprint.value && !mc.player?.isSprinting!!)))
-                        canHit = false
+            targets.filter { shouldAttackEntity(it.first) }.forEach {
+                var target = it.first
+                val aimPoint = it.second
 
-            if (canHit && allAttackedLivingEntities { !shouldAttackEntity(it) })
-                canHit = false
+                val distance = aimPoint.squaredDistanceTo(mc.player?.eyePos!!)
 
-            if (canHit && waitForDamageValue.value && waitForDamage)
-                canHit = false
-
-            if (targets.isEmpty() || event.dirty || !canHit) {
-                if (targets.isNotEmpty()) // TODO is this important
-                    block() // This is a rare case of us, only being able to hit the enemy the first tick and later becoming unable to.
-                clickSpeedUtil.reset()
-                waitForHit = false
-                return@registerEvent
+                if (rayTrace.value) {
+                    if (RotationUtil.fakeRotation == null) {
+                        return@forEach
+                    } else {
+                        val hitResult = PlayerUtil.getTargetedEntity(
+                            reach.minValue,
+                            if (!mode.isSelected(1))
+                                if (simulateMouseDelay.value)
+                                    Rotation(mc.player!!.lastYaw, mc.player!!.lastPitch)
+                                else
+                                    RotationUtil.fakeRotation!!
+                            else
+                                RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint),
+                            throughWalls.isSelected(2))
+                        if (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null) {
+                            return@forEach
+                        } else {
+                            target = hitResult.entity
+                            if (!PlayerUtil.isAttackable(target) && dontAttackInvalidRaytraceEntities.value)
+                                return@forEach
+                        }
+                    }
+                } else if (distance > reach.minValue * reach.minValue) {
+                    return@forEach
+                }
+                validEntities.add(Pair(target, aimPoint))
             }
 
-            var clicks = clickSpeedUtil.getClicks()
-
-            if (clicks == 0)
-                if (mc.player?.disablesShield() == true && (counterBlocking.isSelected(2)))
-                    clicks = 1 // Axes can cancel out shields whenever they want, so lets force a hit
-
-            if (!autoBlock.isSelected(0) && mc.player?.isUsingItem!! && clicks > 0) {
-                if (unblock())
-                    return@registerEvent
-            }
+            if((waitForDamageValue.value && waitForDamage) ||
+                allAttackedLivingEntities { !shouldAttackEntity(it) } ||
+                (waitForCritical.value && mc.player?.isOnGround != true && !willPerformCritical(criticalSprint.value) && (!dontWaitWhenEnemyHasShield.value || allAttackedLivingEntities { !hasShield(it) })))
+                validEntities.clear()
 
             var attacked = false
 
-            if (!mc.player?.isUsingItem!! || (autoBlock.isSelected(1) && !needUnblock.value)) {
-                var imaginaryPosition = mc.player?.pos!!
-                teleportPath = ArrayList()
-                val maxTeleportTime = (mc.renderTickCounter.tickTime / targets.size.toDouble()).toLong()
-                for ((index, entry) in targets.withIndex()) {
-                    if (mode.isSelected(0) && index > 0)
-                        break
+            if(validEntities.isNotEmpty() && !event.dirty && (!closedInventory.value || mc.currentScreen !is HandledScreen<*>)) {
+                var clicks = clickSpeedUtil.getClicks()
 
-                    var target = entry.first
-                    val aimPoint = entry.second
+                if (clicks == 0)
+                    if (mc.player?.disablesShield() == true && !allAttackedLivingEntities { !it.isBlocking } && (counterBlocking.isSelected(2)))
+                        clicks = 1 // Axes can cancel out shields whenever they want, so lets force a hit
 
-                    if (!shouldAttackEntity(target))
-                        continue
+                if (!autoBlock.isSelected(0) && mc.player?.isUsingItem!! && clicks > 0) {
+                    if (unblock())
+                        return@registerEvent
+                }
 
-                    val distance = aimPoint.squaredDistanceTo(mc.player?.eyePos!!)
+                if (!mc.player?.isUsingItem!! || (autoBlock.isSelected(1) && !needUnblock.value)) {
+                    var imaginaryPosition = mc.player?.pos!!
+                    teleportPath = ArrayList()
+                    val maxTeleportTime = (mc.renderTickCounter.tickTime / targets.size.toDouble()).toLong()
+                    for (pair in validEntities) {
+                        val target = pair.first
+                        val aimPoint = pair.second
 
-                    if (rayTrace.value) {
-                        if (RotationUtil.fakeRotation == null) {
-                            continue
-                        } else {
-                            val hitResult = PlayerUtil.getTargetedEntity(
-                                reach.minValue,
-                                if (!mode.isSelected(1))
-                                    if (simulateMouseDelay.value)
-                                        Rotation(mc.player!!.lastYaw, mc.player!!.lastPitch)
-                                    else
-                                        RotationUtil.fakeRotation!!
-                                else
-                                    RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint),
-                                throughWalls.isSelected(2))
-                            if (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null) {
-                                continue
-                            } else {
-                                target = hitResult.entity
-                                if (!PlayerUtil.isAttackable(target) && dontAttackInvalidRaytraceEntities.value)
-                                    continue
+                        val distance = aimPoint.squaredDistanceTo(mc.player?.eyePos!!)
+
+                        if (distance > 6.0 * 6.0 && distance <= reach.minValue * reach.minValue) {
+                            (TarasandeMain.managerModule().get(ModuleClickTP::class.java).pathFinder.findPath(imaginaryPosition, target.pos, maxTeleportTime) ?: continue).forEach {
+                                mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(it.x, it.y, it.z, mc.world?.getBlockState(BlockPos(it.add(0.0, -1.0, 0.0)))?.isAir == false))
+                                teleportPath?.add(it)
+                                imaginaryPosition = it
                             }
                         }
-                    } else if (distance > reach.minValue * reach.minValue) {
-                        continue
-                    }
 
-                    if (distance > 6.0 * 6.0 && distance <= reach.minValue * reach.minValue) {
-                        (TarasandeMain.managerModule().get(ModuleClickTP::class.java).pathFinder.findPath(imaginaryPosition, target.pos, maxTeleportTime) ?: continue).forEach {
-                            mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(it.x, it.y, it.z, mc.world?.getBlockState(BlockPos(it.add(0.0, -1.0, 0.0)))?.isAir == false))
-                            teleportPath?.add(it)
-                            imaginaryPosition = it
+                        attack(target, clicks)
+                        lastFlex = null
+                        event.dirty = true
+                        waitForHit = false
+                        attacked = true
+
+                        if (mode.isSelected(0))
+                            break
+                    }
+                    if (!attacked && swingInAir.value) {
+                        if (PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.fakeRotation ?: Rotation(mc.player!!), false)?.type == HitResult.Type.MISS) {
+                            attack(null, clicks)
+                            event.dirty = true
                         }
                     }
-
-                    attack(target, clicks)
-                    lastFlex = null
-                    event.dirty = true
-                    waitForHit = false
-                    attacked = true
-                }
-                if (!attacked && swingInAir.value) {
-                    if (PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.fakeRotation ?: Rotation(mc.player!!), false)?.type == HitResult.Type.MISS) {
-                        attack(null, clicks)
-                        event.dirty = true
+                    if (mc.player?.pos != imaginaryPosition) {
+                        TarasandeMain.managerModule().get(ModuleClickTP::class.java).pathFinder.findPath(imaginaryPosition, mc.player?.pos!!, maxTeleportTime)?.forEach {
+                            mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(it.x, it.y, it.z, mc.world?.getBlockState(BlockPos(it.add(0.0, -1.0, 0.0)))?.isAir == false))
+                            teleportPath?.add(it)
+                        }
                     }
                 }
-                if (mc.player?.pos != imaginaryPosition) {
-                    TarasandeMain.managerModule().get(ModuleClickTP::class.java).pathFinder.findPath(imaginaryPosition, mc.player?.pos!!, maxTeleportTime)?.forEach {
-                        mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(it.x, it.y, it.z, mc.world?.getBlockState(BlockPos(it.add(0.0, -1.0, 0.0)))?.isAir == false))
-                        teleportPath?.add(it)
-                    }
-                }
+            } else {
+                clickSpeedUtil.reset()
+                waitForHit = false
             }
 
-            if (targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && attacked && !waitForHit && !mc.player?.isUsingItem!! && !autoBlock.isSelected(0)) {
+            if (targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && (validEntities.isEmpty() || attacked) && !mc.player?.isUsingItem!! && !autoBlock.isSelected(0)) {
                 block()
             }
         }
@@ -395,11 +391,10 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
             if (PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {
                 if (waitForCritical.value && criticalSprint.value && forceCritical.value)
-                    if (!dontWaitWhenEnemyHasShield.value || ((mode.isSelected(0) && !hasShield(targets.first().first) || (mode.isSelected(1) && targets.none { hasShield(it.first) }))))
-                        if (!mc.player?.isClimbing!! && !mc.player?.isTouchingWater!! && !(mc.player as IClientPlayerEntity).tarasande_forceHasStatusEffect(StatusEffects.BLINDNESS) && !mc.player?.hasVehicle()!!)
-                            if (!mc.player?.isOnGround!! && mc.player?.fallDistance!! >= 0.0F)
-                                if (mc.player?.isSprinting!!)
-                                    event.pressed = false
+                    if (!dontWaitWhenEnemyHasShield.value || !allAttackedLivingEntities { !hasShield(it) })
+                        if (willPerformCritical(false))
+                            if (mc.player?.isSprinting!!)
+                                event.pressed = false
             }
         }
 
@@ -597,6 +592,18 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
         }
         return true
+    }
+
+    private fun willPerformCritical(criticalSprint: Boolean): Boolean {
+        if (mc.player?.fallDistance!! > 0.0f &&
+            mc.player?.isOnGround != true &&
+            mc.player?.isClimbing != true &&
+            mc.player?.isTouchingWater != true &&
+            !(mc.player as IClientPlayerEntity).tarasande_forceHasStatusEffect(StatusEffects.BLINDNESS) &&
+            mc.player?.hasVehicle() == false)
+            if (!criticalSprint || !mc.player?.isSprinting!!)
+                return true
+        return false
     }
 
 }

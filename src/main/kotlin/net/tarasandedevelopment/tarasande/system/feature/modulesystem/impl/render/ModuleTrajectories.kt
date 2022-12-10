@@ -25,7 +25,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
         }
 
             if (stack != null) {
-                RenderUtil.renderPath(event.matrices, ProjectileUtil.predict(stack!!, RotationUtil.fakeRotation, predictVelocity.value), -1)
+                RenderUtil.renderPath(event.matrices, ProjectileUtil.predict(stack!!, RotationUtil.fakeRotation, predictVelocity.value).also { if(it.size >= 1) it.removeFirst() }, -1)
             }
         }
     }
