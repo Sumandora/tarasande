@@ -87,6 +87,8 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Shadow
     protected abstract boolean isCamera();
 
+    @Shadow protected abstract void sendSprintingPacket();
+
     @Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isCamera()Z"))
     public boolean fixMovement(ClientPlayerEntity instance) {
         if (this.isCamera()) {
@@ -197,6 +199,13 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         }
 
         return self.isTouchingWater();
+    }
+
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;sendSprintingPacket()V"))
+    public void removeSprintingPacket(ClientPlayerEntity instance) {
+        if (VersionList.isNewerOrEqualTo(ProtocolVersion.v1_19_3)) {
+            sendSprintingPacket();
+        }
     }
 
     @Override
