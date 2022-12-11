@@ -11,7 +11,7 @@ class ProfileKeyStorage1_19_2(connection: UserConnection) : StoredObject(connect
 
     var publicKeyData: PublicKeyData? = null
     var privateKey: PrivateKey? = null
-    var signer: Signer? = null
+    var signer: MessageSigner1_19_2? = null
 
     fun setupConnection(publicKeyData: PublicKeyData, privateKey: PrivateKey) {
         this.publicKeyData = publicKeyData

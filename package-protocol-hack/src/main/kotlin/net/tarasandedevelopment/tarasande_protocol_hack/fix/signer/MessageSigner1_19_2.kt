@@ -1,28 +1,31 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.fix.signer
 
-import net.minecraft.network.encryption.SignatureUpdatable
-import net.minecraft.network.encryption.Signer
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.signer.model.SignatureUpdatable1_19_2
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.signer.model.SignatureUpdater1_19_2
 import java.security.PrivateKey
 import java.security.Signature
 
 interface MessageSigner1_19_2 {
 
-    fun sign(var1: SignatureUpdatable): ByteArray?
-    fun sign(data: ByteArray?): ByteArray? {
-        return this.sign { updater -> updater.update(data) }
-    }
+    fun sign(var1: SignatureUpdatable1_19_2): ByteArray?
 
     companion object {
-        @JvmStatic
-        fun create(privateKey: PrivateKey?, algorithm: String?): Signer? {
-            return Signer { updatable: SignatureUpdatable ->
-                try {
-                    val signature = Signature.getInstance(algorithm)
-                    signature.initSign(privateKey)
-                    updatable.update(signature::update)
-                    return@Signer signature.sign()
-                } catch (exception: Exception) {
-                    throw IllegalStateException("Failed to sign message", exception)
+
+        fun create(privateKey: PrivateKey?, algorithm: String?): MessageSigner1_19_2 {
+            return object : MessageSigner1_19_2 {
+                override fun sign(signer: SignatureUpdatable1_19_2): ByteArray? {
+                    try {
+                        val signature = Signature.getInstance(algorithm)
+                        signature.initSign(privateKey)
+                        signer.update(object : SignatureUpdater1_19_2 {
+                            override fun update(data: ByteArray) {
+                                signature.update(data)
+                            }
+                        })
+                        return signature.sign()
+                    } catch (exception: Exception) {
+                        throw IllegalStateException("Failed to sign message", exception)
+                    }
                 }
             }
         }
