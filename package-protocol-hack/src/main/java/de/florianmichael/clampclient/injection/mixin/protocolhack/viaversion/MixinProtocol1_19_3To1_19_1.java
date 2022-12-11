@@ -27,8 +27,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.encryption.NetworkEncryptionUtils;
 import net.minecraft.network.encryption.PlayerKeyPair;
 import net.minecraft.network.encryption.PlayerPublicKey;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.MessageSigner1_19_2;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.ProfileKeyStorage;
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.storage.PacketNonceStorage1_19_2;
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.storage.ProfileKeyStorage1_19_2;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -53,9 +53,9 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
 
                 handler(wrapper -> {
                     final byte[] originalNonce = wrapper.get(Type.BYTE_ARRAY_PRIMITIVE, 1);
-                    final ProfileKeyStorage profileKeyStorage = wrapper.user().get(ProfileKeyStorage.class);
-                    if (profileKeyStorage != null) {
-                        profileKeyStorage.setOriginalNonce(originalNonce);
+                    final PacketNonceStorage1_19_2 packetNonceStorage = wrapper.user().get(PacketNonceStorage1_19_2.class);
+                    if (packetNonceStorage != null) {
+                        packetNonceStorage.setNonce(originalNonce);
                     }
                 });
             }
@@ -72,12 +72,10 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                         // Online Mode
                         final PlayerPublicKey.PublicKeyData publicKeyData = playerPublicKey.publicKey().data();
                         wrapper.write(Type.OPTIONAL_PROFILE_KEY, new ProfileKey(publicKeyData.expiresAt().toEpochMilli(), publicKeyData.key().getEncoded(), publicKeyData.keySignature()));
-                        final ProfileKeyStorage profileKeyStorage = wrapper.user().get(ProfileKeyStorage.class);
-                        if (profileKeyStorage != null) {
-                            profileKeyStorage.setPublicKeyData(publicKeyData); // This is for correcting the key signature in 1.19.2 -> 1.19.0, since i don't have access to this class later, i could fetch the keyPair twice, but how do i look like?
 
-                            profileKeyStorage.setPrivateKey(playerPublicKey.privateKey());
-                            profileKeyStorage.setSigner(MessageSigner1_19_2.create(playerPublicKey.privateKey(), "SHA256withRSA"));
+                        final ProfileKeyStorage1_19_2 profileKeyStorage = wrapper.user().get(ProfileKeyStorage1_19_2.class);
+                        if (profileKeyStorage != null) {
+                            profileKeyStorage.setupConnection(publicKeyData, playerPublicKey.privateKey());
                         }
                     } else {
                         // Cracked mode
@@ -92,26 +90,30 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
             @Override
             public void registerMap() {
                 map(Type.BYTE_ARRAY_PRIMITIVE); // Encrypted Private Key
-                handler(wrapper -> {
-                    final ProfileKeyStorage profileKeyStorage = wrapper.user().get(ProfileKeyStorage.class);
-                    if (profileKeyStorage != null) {
-                        wrapper.read(Type.BYTE_ARRAY_PRIMITIVE); // Packet-Nonce
-                        final byte[] nonce = profileKeyStorage.getOriginalNonce(); // since 1.19.3 encrypts the nonce before writing it, we need to track the original nonce, since 1.19.2 uses the original nonce by the server
+                read(Type.BYTE_ARRAY_PRIMITIVE); // Packet-Nonce
 
+                handler(wrapper -> {
+                    final ProfileKeyStorage1_19_2 profileKeyStorage = wrapper.user().get(ProfileKeyStorage1_19_2.class);
+                    if (profileKeyStorage != null) {
                         wrapper.write(Type.BOOLEAN, profileKeyStorage.getSigner() == null);
 
-                        if (profileKeyStorage.getSigner() != null) {
-                            // Online mode
-                            final long salt = NetworkEncryptionUtils.SecureRandomUtil.nextLong();
-                            final byte[] signedNonce = profileKeyStorage.getSigner().sign(updater -> {
-                                updater.update(nonce);
-                                updater.update(Longs.toByteArray(salt));
-                            });
-                            wrapper.write(Type.LONG, salt);
-                            wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, signedNonce);
-                        } else {
-                            // Cracked mode
-                            wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, nonce);
+                        final PacketNonceStorage1_19_2 packetNonceStorage = wrapper.user().get(PacketNonceStorage1_19_2.class);
+                        if (packetNonceStorage != null) {
+                            final byte[] nonce = packetNonceStorage.getNonce(); // since 1.19.3 encrypts the nonce before writing it, we need to track the original nonce, since 1.19.2 uses the original nonce by the server
+
+                            if (profileKeyStorage.getSigner() != null) {
+                                // Online mode
+                                final long salt = NetworkEncryptionUtils.SecureRandomUtil.nextLong();
+                                final byte[] signedNonce = profileKeyStorage.getSigner().sign(updater -> {
+                                    updater.update(nonce);
+                                    updater.update(Longs.toByteArray(salt));
+                                });
+                                wrapper.write(Type.LONG, salt);
+                                wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, signedNonce);
+                            } else {
+                                // Cracked mode
+                                wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, nonce);
+                            }
                         }
                     }
                 });
@@ -226,6 +228,7 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
 
     @Inject(method = "init", at = @At("RETURN"))
     public void addProfileKeyStorage(UserConnection user, CallbackInfo ci) {
-        user.put(new ProfileKeyStorage(user));
+        user.put(new ProfileKeyStorage1_19_2(user));
+        user.put(new PacketNonceStorage1_19_2(user));
     }
 }

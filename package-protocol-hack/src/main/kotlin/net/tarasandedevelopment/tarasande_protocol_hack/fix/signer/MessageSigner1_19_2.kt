@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande_protocol_hack.fix
+package net.tarasandedevelopment.tarasande_protocol_hack.fix.signer
 
 import net.minecraft.network.encryption.SignatureUpdatable
 import net.minecraft.network.encryption.Signer

@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande_protocol_hack.fix
+package net.tarasandedevelopment.tarasande_protocol_hack.fix.global
 
 import com.mojang.bridge.game.PackType
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
