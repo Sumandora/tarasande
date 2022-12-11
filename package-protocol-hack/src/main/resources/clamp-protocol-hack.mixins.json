@@ -43,7 +43,6 @@
     "block.MixinSoulSandBlock",
     "block.MixinWallBlock",
     "entity.MixinAbstractDonkeyEntity",
-    "entity.MixinAbstractPiglinEntity",
     "entity.MixinAllayEntity",
     "entity.MixinAnimalEntity",
     "entity.MixinClientPlayerEntity",
@@ -54,13 +53,11 @@
     "entity.MixinItemEntity",
     "entity.MixinLivingEntity",
     "entity.MixinOtherClientPlayerEntity",
-    "entity.MixinPathAwareEntity",
     "entity.MixinPiglinEntity",
     "entity.MixinPlayerEntity",
     "entity.MixinSquidEntity",
     "entity.MixinVexEntity",
     "entity.MixinWolfEntity",
-    "entity.MixinZombifiedPiglinEntity",
     "font.MixinBuiltinEmptyGlyph",
     "font.MixinBuiltinEmptyGlyphSubMissing",
     "font.MixinFontStorage",
@@ -109,12 +106,10 @@
     "viaversion.MixinProtocol1_19_3To1_19_1",
     "viaversion.MixinProtocol1_9To1_8",
     "viaversion.MixinReceivedMessagesStorage",
-    "viaversion.MixinViaIdleThread"
+    "viaversion.MixinViaIdleThread",
+    "signatures1_19_0.MixinProfileKeysImpl"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "signatures1_19_0.MixinProfileKeysImpl"
-  ]
+  }
 }
