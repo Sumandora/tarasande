@@ -11,7 +11,6 @@
     "MixinEntityPredicates",
     "MixinHeldItemRenderer",
     "MixinItemCooldownManager",
-    "MixinItemGroup",
     "MixinItemPlacementContext",
     "MixinKeyboardInput",
     "MixinMinecraftClient",
@@ -69,6 +68,7 @@
     "item.MixinEnderPearlItem",
     "item.MixinFireworkRocketItem",
     "item.MixinHoeItem",
+    "item.MixinItemGroupSubEntriesImpl",
     "item.MixinItemStack",
     "item.MixinMiningToolItem",
     "item.MixinPickaxeItem",
@@ -91,6 +91,7 @@
     "screen.screenhandler.MixinPlayerScreenHandler",
     "screen.screenhandler.MixinScreenHandler",
     "signatures1_19_0.MixinPlayerPublicKeySubPublicKeyData",
+    "signatures1_19_0.MixinProfileKeysImpl",
     "viaversion.MixinAbstractProtocol",
     "viaversion.MixinCommandBlockProvider",
     "viaversion.MixinCommonBoss",
@@ -106,8 +107,7 @@
     "viaversion.MixinProtocol1_19_3To1_19_1",
     "viaversion.MixinProtocol1_9To1_8",
     "viaversion.MixinReceivedMessagesStorage",
-    "viaversion.MixinViaIdleThread",
-    "signatures1_19_0.MixinProfileKeysImpl"
+    "viaversion.MixinViaIdleThread"
   ],
   "injectors": {
     "defaultRequire": 1
