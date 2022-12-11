@@ -20,13 +20,6 @@ public class MixinVexEntity extends HostileEntity {
         super(entityType, world);
     }
 
-    @Inject(method = "getActiveEyeHeight", at = @At("HEAD"), cancellable = true)
-    public void changeEyeHeight(EntityPose pose, EntityDimensions dimensions, CallbackInfoReturnable<Float> cir) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_19_1)) {
-            cir.setReturnValue(getEyeHeight(pose, dimensions));
-        }
-    }
-
     @Inject(method = "getHeightOffset", at = @At("HEAD"), cancellable = true)
     public void changeHeightOffset(CallbackInfoReturnable<Double> cir) {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_19_1)) {
