@@ -28,6 +28,7 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
 class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
@@ -61,7 +62,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     private var velocity: Vec3d? = null
     private var rotation: Rotation? = null
 
-    private val newPositions = HashMap<Int, TrackedPosition>()
+    private val newPositions = ConcurrentHashMap<Int, TrackedPosition>()
 
     init {
         // Enable both by default
