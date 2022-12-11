@@ -24,6 +24,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
@@ -34,6 +35,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
@@ -70,6 +72,20 @@ public abstract class MixinClientPlayNetworkHandler {
             ClientPlayerEntity player = MinecraftClient.getInstance().player;
             assert player != null;
             onEntityStatus(new EntityStatusS2CPacket(player, (byte) 28));
+        }
+    }
+
+    @Redirect(method = "onPlayerSpawnPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/DownloadingTerrainScreen;setReady()V"))
+    public void moveDownloadingTerrainClosing(DownloadingTerrainScreen instance) {
+        if (VersionList.isNewerOrEqualTo(ProtocolVersion.v1_19)) {
+            instance.setReady();
+        }
+    }
+
+    @Inject(method = "onPlayerPositionLook", at = @At("RETURN"))
+    public void closeDownloadingTerrain(PlayerPositionLookS2CPacket packet, CallbackInfo ci) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2) && MinecraftClient.getInstance().currentScreen instanceof DownloadingTerrainScreen) {
+            MinecraftClient.getInstance().setScreen(null);
         }
     }
 
