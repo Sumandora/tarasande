@@ -21,7 +21,6 @@
     "MixinServerAddress",
     "MixinServerResourcePackProvider",
     "block.MixinAbstractBlockSubAbstractBlockState",
-    "block.MixinAbstractPressurePlateBlock",
     "block.MixinAnvilBlock",
     "block.MixinBedBlock",
     "block.MixinBlock",
