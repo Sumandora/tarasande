@@ -1,6 +1,8 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.viaversion;
 
 import com.google.common.primitives.Longs;
+import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.context.ParsedArgument;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.PlayerMessageSignature;
 import com.viaversion.viaversion.api.minecraft.ProfileKey;
@@ -23,24 +25,42 @@ import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.Protocol1_19_3
 import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.ServerboundPackets1_19_3;
 import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.storage.ReceivedMessagesStorage;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.argument.SignedArgumentList;
+import net.minecraft.command.argument.SignedArgumentType;
 import net.minecraft.network.encryption.NetworkEncryptionUtils;
 import net.minecraft.network.encryption.PlayerKeyPair;
 import net.minecraft.network.encryption.PlayerPublicKey;
+import net.minecraft.network.message.ArgumentSignatureDataMap;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.MessageChain1_19_2;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.storage.PacketNonceStorage1_19_2;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.storage.ProfileKeyStorage1_19_2;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Mixin(value = Protocol1_19_3To1_19_1.class, remap = false)
 public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPackets1_19_1, ClientboundPackets1_19_3, ServerboundPackets1_19_1, ServerboundPackets1_19_3> {
 
+    @Unique
     private static final ByteArrayType.OptionalByteArrayType OPTIONAL_MESSAGE_SIGNATURE_BYTES_TYPE = new ByteArrayType.OptionalByteArrayType(256);
+
+    @Unique
+    private static final ByteArrayType MESSAGE_SIGNATURE_BYTES_TYPE = new ByteArrayType(256);
+
+    @Unique
+    private static final BitSetType ACKNOWLEDGED_BIT_SET_TYPE = new BitSetType(20);
+
+    @Unique
     private static final UUID ZERO_UUID = new UUID(0, 0);
 
     @Inject(method = "registerPackets", at = @At("RETURN"))
@@ -179,16 +199,57 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                 map(Type.LONG); // Timestamp
                 map(Type.LONG); // Salt
                 map(Type.VAR_INT); // Signatures
+
+                // Removing old signatures
                 handler(wrapper -> {
                     final int signatures = wrapper.get(Type.VAR_INT, 0);
                     for (int i = 0; i < signatures; i++) {
-                        wrapper.passthrough(Type.STRING); // Argument name
-                        final byte[] signature = wrapper.read(OPTIONAL_MESSAGE_SIGNATURE_BYTES_TYPE); // Signature
-                        wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, signature);
+                        wrapper.read(Type.STRING); // Argument name
+                        wrapper.read(MESSAGE_SIGNATURE_BYTES_TYPE); // Signature
                     }
+                });
 
+                // Removing new acknowledgement
+                handler(wrapper -> {
+                    wrapper.read(Type.VAR_INT); // Offset
+                    wrapper.read(ACKNOWLEDGED_BIT_SET_TYPE); // Acknowledged
+                });
+
+                // Signing all arguments
+                handler(wrapper -> {
+                    final UUID sender = wrapper.user().getProtocolInfo().getUuid();
+                    final String command = wrapper.get(Type.STRING, 0);
+                    final long timestamp = wrapper.get(Type.LONG, 0);
+                    final long salt = wrapper.get(Type.LONG, 1);
+
+                    final ClientPlayNetworkHandler clientPlayNetworkHandler = MinecraftClient.getInstance().getNetworkHandler();
+                    if (clientPlayNetworkHandler != null) {
+                        final ParseResults<CommandSource> parseResults = clientPlayNetworkHandler.getCommandDispatcher().parse(command, clientPlayNetworkHandler.getCommandSource());
+
+                        final ProfileKeyStorage1_19_2 profileKeyStorage = wrapper.user().get(ProfileKeyStorage1_19_2.class);
+                        final ReceivedMessagesStorage messagesStorage = wrapper.user().get(ReceivedMessagesStorage.class);
+
+                        if (messagesStorage != null && profileKeyStorage != null && sender != null && profileKeyStorage.getSigner() != null) {
+                            for (SignedArgumentList.ParsedArgument<CommandSource> argument : SignedArgumentList.of(parseResults).arguments()) {
+                                final byte[] signature = MessageChain1_19_2.INSTANCE.pack(
+                                        argument.value(),
+                                        Instant.ofEpochMilli(timestamp),
+                                        salt,
+                                        messagesStorage.lastSignatures(),
+                                        sender,
+                                        profileKeyStorage.getSigner()
+                                );
+
+                                wrapper.write(Type.STRING, argument.getNodeName());
+                                wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, signature);
+                            }
+                        }
+                    }
                     wrapper.write(Type.BOOLEAN, false); // No signed preview
+                });
 
+                // Adding old acknowledgement
+                handler(wrapper -> {
                     final ReceivedMessagesStorage messagesStorage = wrapper.user().get(ReceivedMessagesStorage.class);
                     if (messagesStorage != null) {
                         messagesStorage.resetUnacknowledgedCount();
@@ -196,8 +257,6 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                         wrapper.write(Type.OPTIONAL_PLAYER_MESSAGE_SIGNATURE, null);
                     }
                 });
-                read(Type.VAR_INT); // Offset
-                read(new BitSetType(20)); // Acknowledged
             }
         });
         registerServerbound(ServerboundPackets1_19_3.CHAT_MESSAGE, new PacketRemapper() {
@@ -207,6 +266,8 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                 map(Type.LONG); // Timestamp
                 map(Type.LONG); // Salt
                 read(OPTIONAL_MESSAGE_SIGNATURE_BYTES_TYPE); // Signature
+
+                // Emulate old Message chain
                 handler(wrapper -> {
                     final UUID sender = wrapper.user().getProtocolInfo().getUuid();
                     final String message = wrapper.get(Type.STRING, 0);
@@ -217,14 +278,30 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                     final ReceivedMessagesStorage messagesStorage = wrapper.user().get(ReceivedMessagesStorage.class);
 
                     if (messagesStorage != null && profileKeyStorage != null && sender != null && profileKeyStorage.getSigner() != null) {
-                        final byte[] signature = MessageChain1_19_2.INSTANCE.pack(message, Instant.ofEpochMilli(timestamp), salt, messagesStorage.lastSignatures(), sender, profileKeyStorage.getSigner());
+                        final byte[] signature = MessageChain1_19_2.INSTANCE.pack(
+                                message,
+                                Instant.ofEpochMilli(timestamp),
+                                salt,
+                                messagesStorage.lastSignatures(),
+                                sender,
+                                profileKeyStorage.getSigner()
+                        );
 
                         wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, signature);
+                        wrapper.write(Type.BOOLEAN, false); // Signed Preview - not implemented yet, but i could do it
                     } else {
-                        wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, null);
+                        wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, new byte[0]);
+                        wrapper.write(Type.BOOLEAN, false); // Signed Preview
                     }
                 });
-                create(Type.BOOLEAN, false); // Signed Preview
+
+                // Removing new acknowledgement
+                handler(wrapper -> {
+                    wrapper.read(Type.VAR_INT); // Offset
+                    wrapper.read(ACKNOWLEDGED_BIT_SET_TYPE); // Acknowledged
+                });
+
+                // Adding old acknowledgement
                 handler(wrapper -> {
                     final ReceivedMessagesStorage messagesStorage = wrapper.user().get(ReceivedMessagesStorage.class);
                     if (messagesStorage != null) {
@@ -233,8 +310,6 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                         wrapper.write(Type.OPTIONAL_PLAYER_MESSAGE_SIGNATURE, null);
                     }
                 });
-                read(Type.VAR_INT); // Offset
-                read(new BitSetType(20)); // Acknowledged
             }
         });
     }
