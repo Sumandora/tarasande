@@ -13,6 +13,7 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShape
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.getPositionVec3d
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import org.joml.Matrix4f
@@ -301,7 +302,7 @@ object RenderUtil {
     }
 
     fun renderCorrectItem(matrices: MatrixStack, x: Int, y: Int, tickDelta: Float, item: ItemStack) {
-        val position = MathUtil.fromMatrices(matrices)
+        val position = matrices.getPositionVec3d()
 
         RenderSystem.enableCull()
         DiffuseLighting.enableGuiDepthLighting()

@@ -47,8 +47,4 @@ object MathUtil {
             ceil(x)
         else
             x
-
-    fun fromMatrices(matrixStack: MatrixStack): Vec3d {
-        return Vec3d(matrixStack.peek().positionMatrix.m30().toDouble(), matrixStack.peek().positionMatrix.m31().toDouble(), matrixStack.peek().positionMatrix.m32().toDouble())
-    }
 }
