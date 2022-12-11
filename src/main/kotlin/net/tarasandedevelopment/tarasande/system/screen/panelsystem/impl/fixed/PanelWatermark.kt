@@ -17,6 +17,14 @@ class PanelWatermark : Panel("Watermark", FontWrapper.getWidth(JAPANESE_NAME) * 
     private val hidePersonalName = ValueBoolean(this, "Hide personal name", true)
     private val messageOfTheDay = ValueText(this, "Message of the day", TarasandeMain.get().name)
 
+    private val localHost = System.getProperty("user.name") + run {
+        try {
+            "@" + InetAddress.getLocalHost().hostName
+        } catch (t: Throwable) {
+            "" // certain systems may are unable to supply a proper host name
+        }
+    }
+
     override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
         // Mind the shadows and leave some space
         val xScale = (panelWidth - 4) / (FontWrapper.getWidth(JAPANESE_NAME) + 1.0)
@@ -30,7 +38,7 @@ class PanelWatermark : Panel("Watermark", FontWrapper.getWidth(JAPANESE_NAME) * 
         FontWrapper.textShadow(matrices, JAPANESE_NAME, (x + 1).toFloat(), (y + titleBarHeight + 1).toFloat(), TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
         matrices?.pop()
 
-        val userHost = " " + System.getProperty("user.name") + "@" + InetAddress.getLocalHost().hostName
+        val userHost = " $localHost"
         val userHostWidth = if(hidePersonalName.value) 0 else FontWrapper.getWidth(userHost)
 
         val motdWidth = FontWrapper.getWidth(messageOfTheDay.value + " ")
