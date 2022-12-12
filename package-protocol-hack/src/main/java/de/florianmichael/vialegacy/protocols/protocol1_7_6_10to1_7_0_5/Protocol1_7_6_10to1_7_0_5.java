@@ -79,7 +79,7 @@ public class Protocol1_7_6_10to1_7_0_5 extends EnZaProtocol<ClientboundPackets1_
                 map(Type.VAR_INT);
                 map(Type.STRING, ADD_DASHES);
                 map(Type.STRING);
-                handler((pw) -> pw.write(Type.VAR_INT, 0));
+                handler(wrapper -> wrapper.write(Type.VAR_INT, 0));
                 map(Type.INT);
                 map(Type.INT);
                 map(Type.INT);

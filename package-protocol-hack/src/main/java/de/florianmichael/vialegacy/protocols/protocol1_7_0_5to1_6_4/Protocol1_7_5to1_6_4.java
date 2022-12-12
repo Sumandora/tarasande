@@ -125,24 +125,24 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                handler((pw) -> {
-                    final ProtocolInfo info = pw.user().getProtocolInfo();
+                handler(wrapper -> {
+                    final ProtocolInfo info = wrapper.user().getProtocolInfo();
 
                     final int protocol = Math.abs(info.getServerProtocolVersion()); // Bypass ViaVersion, see @VersionUtil.java
 
-                    final String username = pw.read(Type.STRING);
+                    final String username = wrapper.read(Type.STRING);
                     info.setUsername(username);
                     //noinspection deprecation
-                    pw.setId(ServerboundLoginPackets1_6_4.CLIENT_PROTOCOL.getId());
-                    pw.clearPacket();
+                    wrapper.setId(ServerboundLoginPackets1_6_4.CLIENT_PROTOCOL.getId());
+                    wrapper.clearPacket();
 
-                    pw.write(Type.UNSIGNED_BYTE, (short) protocol);
-                    pw.write(Types1_6_4.STRING, username);
+                    wrapper.write(Type.UNSIGNED_BYTE, (short) protocol);
+                    wrapper.write(Types1_6_4.STRING, username);
 
-                    final HandshakeStorage handshakeStorage = pw.user().get(HandshakeStorage.class);
+                    final HandshakeStorage handshakeStorage = wrapper.user().get(HandshakeStorage.class);
                     if (handshakeStorage != null) {
-                        pw.write(Types1_6_4.STRING, handshakeStorage.hostname);
-                        pw.write(Type.INT, handshakeStorage.port);
+                        wrapper.write(Types1_6_4.STRING, handshakeStorage.hostname);
+                        wrapper.write(Type.INT, handshakeStorage.port);
                     }
                 });
             }
@@ -153,16 +153,16 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                handler(pw -> {
+                handler(wrapper -> {
                     // Server List Ping
-                    pw.write(Type.BYTE, (byte) 0x01);
+                    wrapper.write(Type.BYTE, (byte) 0x01);
                     // Plugin Message
-                    pw.write(Type.UNSIGNED_BYTE, (short) 0xFA);
-                    pw.write(Types1_6_4.STRING, "MC|PingHost");
+                    wrapper.write(Type.UNSIGNED_BYTE, (short) 0xFA);
+                    wrapper.write(Types1_6_4.STRING, "MC|PingHost");
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     DataOutputStream out = new DataOutputStream(baos);
-                    out.writeByte(pw.user().getProtocolInfo().getServerProtocolVersion());
-                    InetSocketAddress addr = (InetSocketAddress) pw.user().getChannel().remoteAddress();
+                    out.writeByte(wrapper.user().getProtocolInfo().getServerProtocolVersion());
+                    InetSocketAddress addr = (InetSocketAddress) wrapper.user().getChannel().remoteAddress();
                     String ip = addr.getHostString();
                     int port = addr.getPort();
                     out.writeShort(ip.length());
@@ -171,8 +171,8 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     }
                     out.writeInt(port);
                     out.close();
-                    pw.write(Types1_7_6_10.BYTEARRAY, baos.toByteArray());
-                    pw.sendToServer(Protocol1_7_5to1_6_4.class);
+                    wrapper.write(Types1_7_6_10.BYTEARRAY, baos.toByteArray());
+                    wrapper.sendToServer(Protocol1_7_5to1_6_4.class);
                 });
             }
         });
@@ -191,9 +191,9 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                handler((pw) -> pw.write(Type.INT, 0));
+                handler(wrapper -> wrapper.write(Type.INT, 0));
                 map(Type.INT);
-                handler((pw) -> pw.write(Type.BOOLEAN, pw.read(Type.BYTE) == 1)); // Fix mouse buttons
+                handler(wrapper -> wrapper.write(Type.BOOLEAN, wrapper.read(Type.BYTE) == 1)); // Fix mouse buttons
             }
         });
 
@@ -206,8 +206,8 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.DOUBLE); // Y/Stance
                 map(Type.DOUBLE); // Z-Position
                 map(Type.BOOLEAN); // On Ground
-                handler((pw) -> {
-                    pw.set(Type.DOUBLE, 2, pw.get(Type.DOUBLE, 1) + 1.62D);
+                handler(wrapper -> {
+                    wrapper.set(Type.DOUBLE, 2, wrapper.get(Type.DOUBLE, 1) + 1.62D);
                 });
             }
         });
@@ -223,8 +223,8 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.FLOAT); // Yaw
                 map(Type.FLOAT); // Pitch
                 map(Type.BOOLEAN); // On Ground
-                handler((pw) -> {
-                    pw.set(Type.DOUBLE, 2, pw.get(Type.DOUBLE, 1) + 1.62D);
+                handler(wrapper -> {
+                    wrapper.set(Type.DOUBLE, 2, wrapper.get(Type.DOUBLE, 1) + 1.62D);
                 });
             }
         });
@@ -246,11 +246,11 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.STRING, Types1_6_4.STRING); // Locale
                 map(Type.BYTE); // View Distance
                 map(Type.BYTE); // Chat flags
-                handler((pw) -> {
-                    boolean chatColors = pw.read(Type.BOOLEAN);
-                    byte flags = pw.get(Type.BYTE, 1);
+                handler(wrapper -> {
+                    boolean chatColors = wrapper.read(Type.BOOLEAN);
+                    byte flags = wrapper.get(Type.BYTE, 1);
                     flags = (byte) (flags | (chatColors ? 1 : 0) << 3);
-                    pw.set(Type.BYTE, 1, flags);
+                    wrapper.set(Type.BYTE, 1, flags);
                 });
                 map(Type.BYTE); // Difficulty
                 map(Type.BOOLEAN); // Show Cape
@@ -262,15 +262,15 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 map(Type.VAR_INT); // Action-ID
-                handler((pw) -> {
-                    int action = pw.get(Type.VAR_INT, 0);
+                handler(wrapper -> {
+                    int action = wrapper.get(Type.VAR_INT, 0);
                     if (action == 0) {
                         action = 1;
                     } else {
-                        pw.cancel();
+                        wrapper.cancel();
                         return;
                     }
-                    pw.set(Type.VAR_INT, 0, action);
+                    wrapper.set(Type.VAR_INT, 0, action);
                 });
             }
         });
@@ -368,31 +368,31 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Types1_6_4.STRING, Type.STRING); // Server-Id
                 map(Types1_7_6_10.BYTEARRAY); // PublicKey
                 map(Types1_7_6_10.BYTEARRAY); // VerifyToken
-                handler((pw) -> {
-                    String serverId = pw.get(Type.STRING, 0);
+                handler(wrapper -> {
+                    String serverId = wrapper.get(Type.STRING, 0);
                     // If server id is equal to '-' than the server is offline.
-                    byte[] publicKey = pw.get(Types1_7_6_10.BYTEARRAY, 0);
-                    byte[] verifyToken = pw.get(Types1_7_6_10.BYTEARRAY, 1);
+                    byte[] publicKey = wrapper.get(Types1_7_6_10.BYTEARRAY, 0);
+                    byte[] verifyToken = wrapper.get(Types1_7_6_10.BYTEARRAY, 1);
 
                     if (serverId.equals("-")) {
-                        pw.cancel();
+                        wrapper.cancel();
                         // Write Login Success packet
-                        PacketWrapper login = new PacketWrapperImpl(ServerboundLoginPackets1_6_4.CLIENT_PROTOCOL.getId(), null, pw.user());
+                        PacketWrapper login = new PacketWrapperImpl(ServerboundLoginPackets1_6_4.CLIENT_PROTOCOL.getId(), null, wrapper.user());
                         login.write(Type.STRING, UUID.randomUUID().toString().replace("-", ""));
-                        login.write(Type.STRING, pw.user().getProtocolInfo().getUsername());
+                        login.write(Type.STRING, wrapper.user().getProtocolInfo().getUsername());
                         login.send(Protocol1_7_5to1_6_4.class);
 
                         // Change state to play
-                        pw.user().getProtocolInfo().setState(State.PLAY);
+                        wrapper.user().getProtocolInfo().setState(State.PLAY);
 
                         // Send client statuses packet
-                        PacketWrapper join = new PacketWrapperImpl(0xCD, null, pw.user());
+                        PacketWrapper join = new PacketWrapperImpl(0xCD, null, wrapper.user());
                         join.write(Type.BYTE, (byte) 0);
                         join.sendToServer(Protocol1_7_5to1_6_4.class);
                     } else {
-                        pw.cancel();
+                        wrapper.cancel();
 
-                        PacketWrapper request = new PacketWrapperImpl(0x01, null, pw.user());
+                        PacketWrapper request = new PacketWrapperImpl(0x01, null, wrapper.user());
                         request.write(Type.STRING, serverId);
 
                         request.write(Type.SHORT_BYTE_ARRAY, publicKey);
@@ -444,12 +444,12 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                handler((pw) -> {
-                    String reason = pw.read(Types1_6_4.STRING);
+                handler(wrapper -> {
+                    String reason = wrapper.read(Types1_6_4.STRING);
                     String[] split = reason.split("\0");
                     if (!split[0].equals("§1") || split.length != 6) {
-                        pw.user().disconnect("Invalid response!");
-                        pw.cancel();
+                        wrapper.user().disconnect("Invalid response!");
+                        wrapper.cancel();
                     }
                     try {
                         int protocol = Integer.parseInt(split[1]);
@@ -478,10 +478,10 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                         obj.addProperty("text", motd);
                         main.add("description", obj);
                         String json = GsonUtil.getGson().toJson(main);
-                        pw.clearPacket();
-                        pw.write(Type.STRING, json);
+                        wrapper.clearPacket();
+                        wrapper.write(Type.STRING, json);
                     } catch (Throwable t) {
-                        pw.cancel();
+                        wrapper.cancel();
                     }
                 });
             }
@@ -493,10 +493,10 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             public void registerMap() {
                 map(Type.INT, Type.VAR_INT); // Entity-Id
                 map(Type.BYTE, Type.UNSIGNED_BYTE); // Animation-Id
-                handler((pw) -> {
-                    short animId = pw.get(Type.UNSIGNED_BYTE, 0);
+                handler(wrapper -> {
+                    short animId = wrapper.get(Type.UNSIGNED_BYTE, 0);
                     if (animId == 0) {
-                        pw.cancel();
+                        wrapper.cancel();
                         return;
                     } else if (animId >= 1 && animId <= 3)
                         animId--;
@@ -505,7 +505,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     else if (animId == 6 || animId == 7)
                         animId -= 2;
 
-                    pw.set(Type.UNSIGNED_BYTE, 0, animId);
+                    wrapper.set(Type.UNSIGNED_BYTE, 0, animId);
                 });
             }
         });
@@ -533,46 +533,46 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                handler((pw) -> {
-                    final int entityId = pw.read(Type.INT);
-                    final int count = pw.read(Type.INT);
+                handler(wrapper -> {
+                    final int entityId = wrapper.read(Type.INT);
+                    final int count = wrapper.read(Type.INT);
 
                     final List<EntityProperty> list = new ArrayList<>(count);
                     for (int i = 0; i < count; i++) {
                         final EntityProperty prop = new EntityProperty();
-                        prop.key = pw.read(Types1_6_4.STRING);
-                        prop.value = pw.read(Type.DOUBLE); // Value
+                        prop.key = wrapper.read(Types1_6_4.STRING);
+                        prop.value = wrapper.read(Type.DOUBLE); // Value
 
-                        short modifierCount = pw.passthrough(Type.SHORT); // Modifier count
+                        short modifierCount = wrapper.passthrough(Type.SHORT); // Modifier count
 
                         final List<EntityAttributeModifier> modifiers = new ArrayList<>(modifierCount);
 
                         for (int k = 0; k < modifierCount; k++) {
                             final EntityAttributeModifier mod = new EntityAttributeModifier();
-                            mod.uuid = pw.read(Type.UUID);
-                            mod.amount = pw.read(Type.DOUBLE);
-                            mod.operation = pw.read(Type.BYTE);
+                            mod.uuid = wrapper.read(Type.UUID);
+                            mod.amount = wrapper.read(Type.DOUBLE);
+                            mod.operation = wrapper.read(Type.BYTE);
                             modifiers.add(mod);
                         }
                         prop.modifiers = modifiers;
                         list.add(prop);
                     }
-                    pw.clearPacket();
+                    wrapper.clearPacket();
 
-                    pw.write(Type.INT, entityId);
-                    pw.write(Type.INT, list.size());
+                    wrapper.write(Type.INT, entityId);
+                    wrapper.write(Type.INT, list.size());
 
                     for (EntityProperty prop : list) {
-                        pw.write(Type.STRING, prop.key);
-                        pw.write(Type.DOUBLE, prop.value);
-                        pw.write(Type.SHORT, (short) prop.modifiers.size());
+                        wrapper.write(Type.STRING, prop.key);
+                        wrapper.write(Type.DOUBLE, prop.value);
+                        wrapper.write(Type.SHORT, (short) prop.modifiers.size());
 
                         for (int k = 0; k < prop.modifiers.size(); k++) {
                             final EntityAttributeModifier mod = prop.modifiers.get(k);
 
-                            pw.write(Type.UUID, mod.uuid);
-                            pw.write(Type.DOUBLE, mod.amount);
-                            pw.write(Type.BYTE, mod.operation);
+                            wrapper.write(Type.UUID, mod.uuid);
+                            wrapper.write(Type.DOUBLE, mod.amount);
+                            wrapper.write(Type.BYTE, mod.operation);
                         }
                     }
                 });
@@ -583,22 +583,22 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                handler((pw) -> {
-                    int entityId = pw.read(Type.INT);
-                    String levelType = pw.read(Types1_6_4.STRING);
-                    short gamemode = pw.read(Type.BYTE);
-                    byte dimension = pw.read(Type.BYTE);
-                    byte difficulty = pw.read(Type.BYTE);
-                    pw.read(Type.BYTE); // Unused (WorldHeight)
-                    byte maxPlayers = pw.read(Type.BYTE);
+                handler(wrapper -> {
+                    int entityId = wrapper.read(Type.INT);
+                    String levelType = wrapper.read(Types1_6_4.STRING);
+                    short gamemode = wrapper.read(Type.BYTE);
+                    byte dimension = wrapper.read(Type.BYTE);
+                    byte difficulty = wrapper.read(Type.BYTE);
+                    wrapper.read(Type.BYTE); // Unused (WorldHeight)
+                    byte maxPlayers = wrapper.read(Type.BYTE);
 
-                    pw.clearPacket();
-                    pw.write(Type.INT, entityId);
-                    pw.write(Type.UNSIGNED_BYTE, gamemode);
-                    pw.write(Type.BYTE, dimension);
-                    pw.write(Type.UNSIGNED_BYTE, (short) difficulty);
-                    pw.write(Type.UNSIGNED_BYTE, (short) maxPlayers);
-                    pw.write(Type.STRING, levelType);
+                    wrapper.clearPacket();
+                    wrapper.write(Type.INT, entityId);
+                    wrapper.write(Type.UNSIGNED_BYTE, gamemode);
+                    wrapper.write(Type.BYTE, dimension);
+                    wrapper.write(Type.UNSIGNED_BYTE, (short) difficulty);
+                    wrapper.write(Type.UNSIGNED_BYTE, (short) maxPlayers);
+                    wrapper.write(Type.STRING, levelType);
                 });
             }
         });
@@ -608,13 +608,13 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 map(Types1_6_4.STRING, Type.STRING);
-                handler((pw) -> {
-                    String message = pw.get(Type.STRING, 0);
+                handler(wrapper -> {
+                    String message = wrapper.get(Type.STRING, 0);
                     try {
                         BaseComponent[] components = ComponentSerializer.parse(message.replace("\"using\":", "\"with\":"));
-                        pw.set(Type.STRING, 0, ComponentSerializer.toString(components[0]));
+                        wrapper.set(Type.STRING, 0, ComponentSerializer.toString(components[0]));
                     } catch (Throwable t) {
-                        pw.set(Type.STRING, 0, ComponentSerializer.toString(new TextComponent(message)));
+                        wrapper.set(Type.STRING, 0, ComponentSerializer.toString(new TextComponent(message)));
                     }
                 });
             }
@@ -627,7 +627,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.INT); // Dimension
                 map(Type.BYTE, Type.UNSIGNED_BYTE); // Difficulty
                 map(Type.BYTE, Type.UNSIGNED_BYTE); // GameMode
-                handler((pw) -> pw.read(Type.SHORT)); // WorldHeight
+                handler(wrapper -> wrapper.read(Type.SHORT)); // WorldHeight
                 map(Types1_6_4.STRING, Type.STRING); // LevelType
             }
         });
@@ -666,13 +666,13 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             public void registerMap() {
                 map(Type.BYTE, Type.UNSIGNED_BYTE); // Reason
                 map(Type.BYTE, Type.FLOAT); // Value
-                handler((pw) -> {
-                    short id = pw.get(Type.UNSIGNED_BYTE, 0);
+                handler(wrapper -> {
+                    short id = wrapper.get(Type.UNSIGNED_BYTE, 0);
                     if (id == 1)
                         id = 2;
                     else if (id == 2)
                         id = 1;
-                    pw.set(Type.UNSIGNED_BYTE, 0, id);
+                    wrapper.set(Type.UNSIGNED_BYTE, 0, id);
                 });
             }
         });
@@ -683,7 +683,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             public void registerMap() {
                 map(Type.DOUBLE); // X-Position
                 map(Type.DOUBLE); // Y-Position
-                handler((pw) -> pw.read(Type.DOUBLE)); // Y/Stance
+                handler(wrapper -> wrapper.read(Type.DOUBLE)); // Y/Stance
                 map(Type.DOUBLE); // Z-Position
                 map(Type.FLOAT); // Yaw
                 map(Type.FLOAT); // Pitch
@@ -758,11 +758,11 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                handler((pw) -> {
-                    int id = pw.read(Type.INT);
-                    int amount = pw.read(Type.INT);
+                handler(wrapper -> {
+                    int id = wrapper.read(Type.INT);
+                    int amount = wrapper.read(Type.INT);
 
-                    pw.cancel();
+                    wrapper.cancel();
                 });
             }
         });
@@ -781,9 +781,9 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                handler((pw) -> {
-                    String text = pw.read(Types1_6_4.STRING);
-                    pw.write(Type.STRING_ARRAY, text.split("\u0000"));
+                handler(wrapper -> {
+                    String text = wrapper.read(Types1_6_4.STRING);
+                    wrapper.write(Type.STRING_ARRAY, text.split("\u0000"));
                 });
             }
         });
@@ -822,41 +822,41 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                handler((pw) -> {
-                    String name = pw.read(Types1_6_4.STRING);
-                    byte mode = pw.read(Type.BYTE);
+                handler(wrapper -> {
+                    String name = wrapper.read(Types1_6_4.STRING);
+                    byte mode = wrapper.read(Type.BYTE);
                     String displayName = null;
                     String prefix = null;
                     String suffix = null;
                     byte friendlyFire = 0;
                     String[] players = null;
                     if (mode == 0 || mode == 2) {
-                        displayName = pw.read(Types1_6_4.STRING);
-                        prefix = pw.read(Types1_6_4.STRING);
-                        suffix = pw.read(Types1_6_4.STRING);
-                        friendlyFire = pw.read(Type.BYTE);
+                        displayName = wrapper.read(Types1_6_4.STRING);
+                        prefix = wrapper.read(Types1_6_4.STRING);
+                        suffix = wrapper.read(Types1_6_4.STRING);
+                        friendlyFire = wrapper.read(Type.BYTE);
                     }
                     if (mode == 0 || mode == 3 || mode == 4) {
-                        players = new String[pw.read(Type.SHORT)];
+                        players = new String[wrapper.read(Type.SHORT)];
                         for (int i = 0; i < players.length; i++)
-                            players[i] = pw.read(Types1_6_4.STRING);
+                            players[i] = wrapper.read(Types1_6_4.STRING);
                     }
-                    pw.clearPacket();
+                    wrapper.clearPacket();
 
-                    pw.write(Type.STRING, name);
-                    pw.write(Type.BYTE, mode);
+                    wrapper.write(Type.STRING, name);
+                    wrapper.write(Type.BYTE, mode);
                     if (mode == 0 || mode == 2) {
-                        pw.write(Type.STRING, displayName);
-                        pw.write(Type.STRING, prefix);
-                        pw.write(Type.STRING, suffix);
-                        pw.write(Type.BYTE, friendlyFire);
+                        wrapper.write(Type.STRING, displayName);
+                        wrapper.write(Type.STRING, prefix);
+                        wrapper.write(Type.STRING, suffix);
+                        wrapper.write(Type.BYTE, friendlyFire);
                     }
                     if (mode == 0 || mode == 3 || mode == 4) {
-                        pw.write(Type.SHORT, (short) players.length);
+                        wrapper.write(Type.SHORT, (short) players.length);
                         for (int i = 0; i < players.length; i++)
-                            pw.write(Type.STRING, players[i]);
+                            wrapper.write(Type.STRING, players[i]);
                     }
-                    pw.cancel();
+                    wrapper.cancel();
                 });
             }
         });
@@ -866,10 +866,10 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 map(Type.INT, Type.VAR_INT); // Entity-Id
-                handler((pw) -> {
-                    String name = pw.read(Types1_6_4.STRING);
-                    pw.write(Type.STRING, UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes()).toString().replace("-", ""));
-                    pw.write(Type.STRING, name);
+                handler(wrapper -> {
+                    String name = wrapper.read(Types1_6_4.STRING);
+                    wrapper.write(Type.STRING, UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes()).toString().replace("-", ""));
+                    wrapper.write(Type.STRING, name);
                 });
                 map(Type.INT); // X-Position
                 map(Type.INT); // Y-Position
@@ -892,12 +892,12 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.INT); // Z-Position
                 map(Type.BYTE); // Yaw
                 map(Type.BYTE); // Pitch
-                handler((pw) -> {
-                    int throwerEntityId = pw.passthrough(Type.INT);
+                handler(wrapper -> {
+                    int throwerEntityId = wrapper.passthrough(Type.INT);
                     if (throwerEntityId > 0) {
-                        pw.passthrough(Type.SHORT);
-                        pw.passthrough(Type.SHORT);
-                        pw.passthrough(Type.SHORT);
+                        wrapper.passthrough(Type.SHORT);
+                        wrapper.passthrough(Type.SHORT);
+                        wrapper.passthrough(Type.SHORT);
                     }
                 }); // Object Data
             }
@@ -932,8 +932,8 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.INT); // Y-Position
                 map(Type.INT); // Z-Position
                 map(Type.INT); // Direction
-                handler((pw) -> {
-                    int direction = pw.get(Type.INT, 3);
+                handler(wrapper -> {
+                    int direction = wrapper.get(Type.INT, 3);
                     int modX = 0;
                     int modZ = 0;
                     switch (direction) {
@@ -942,8 +942,8 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                         case 2 -> modZ = -1;
                         case 3 -> modX = 1;
                     }
-                    pw.set(Type.INT, 0, pw.get(Type.INT, 0) + modX);
-                    pw.set(Type.INT, 2, pw.get(Type.INT, 2) + modZ);
+                    wrapper.set(Type.INT, 0, wrapper.get(Type.INT, 0) + modX);
+                    wrapper.set(Type.INT, 2, wrapper.get(Type.INT, 2) + modZ);
                 });
             }
         });
@@ -995,18 +995,18 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.BYTE, Type.UNSIGNED_BYTE); // Value-2
                 map(Type.SHORT, Type.VAR_INT); // Block-Type
 
-                handler((pw) -> {
+                handler(wrapper -> {
                     List<String> list = Arrays.asList("harp", "bd", "snare", "hat", "bassattack");
-                    int instrument = pw.get(Type.UNSIGNED_BYTE, 0);
+                    int instrument = wrapper.get(Type.UNSIGNED_BYTE, 0);
                     if (instrument < 0 || instrument >= list.size())
                         instrument = 0;
-                    PacketWrapper sound = PacketWrapper.create(ClientboundPackets1_6_4.ENTITY_EFFECT, pw.user());
+                    PacketWrapper sound = PacketWrapper.create(ClientboundPackets1_6_4.ENTITY_EFFECT, wrapper.user());
                     sound.write(Type.STRING, "note." + list.get(instrument));
-                    sound.write(Type.INT, pw.get(Type.INT, 0) * 8);
-                    sound.write(Type.INT, pw.get(Type.SHORT, 0) * 8);
-                    sound.write(Type.INT, pw.get(Type.INT, 1) * 8);
+                    sound.write(Type.INT, wrapper.get(Type.INT, 0) * 8);
+                    sound.write(Type.INT, wrapper.get(Type.SHORT, 0) * 8);
+                    sound.write(Type.INT, wrapper.get(Type.INT, 1) * 8);
                     sound.write(Type.FLOAT, 3.0F);
-                    short pitch = pw.get(Type.UNSIGNED_BYTE, 1);
+                    short pitch = wrapper.get(Type.UNSIGNED_BYTE, 1);
                     if (pitchList.containsKey(pitch)) {
                         pitch = pitchList.get(pitch);
                     }
@@ -1037,13 +1037,13 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.DOUBLE, Type.FLOAT); // Z-Position
                 map(Type.FLOAT); // Radius
                 map(Type.INT); // Record count
-                handler((pw) -> {
-                    int count = pw.get(Type.INT, 0);
+                handler(wrapper -> {
+                    int count = wrapper.get(Type.INT, 0);
 
                     for (int i = 0; i < count; i++) {
-                        pw.passthrough(Type.BYTE); // X-Offset
-                        pw.passthrough(Type.BYTE); // Y-Offset
-                        pw.passthrough(Type.BYTE); // Z-Offset
+                        wrapper.passthrough(Type.BYTE); // X-Offset
+                        wrapper.passthrough(Type.BYTE); // Y-Offset
+                        wrapper.passthrough(Type.BYTE); // Z-Offset
                     }
                 });
                 map(Type.FLOAT); // Player Motion X
@@ -1072,14 +1072,14 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                handler((pw) -> {
-                    short type = pw.read(Type.SHORT);
-                    int id = pw.read(Type.SHORT);
-                    byte[] data = pw.read(Types1_7_6_10.BYTEARRAY);
-                    pw.clearPacket();
+                handler(wrapper -> {
+                    short type = wrapper.read(Type.SHORT);
+                    int id = wrapper.read(Type.SHORT);
+                    byte[] data = wrapper.read(Types1_7_6_10.BYTEARRAY);
+                    wrapper.clearPacket();
 
-                    pw.write(Type.VAR_INT, id);
-                    pw.write(Types1_7_6_10.BYTEARRAY, data);
+                    wrapper.write(Type.VAR_INT, id);
+                    wrapper.write(Types1_7_6_10.BYTEARRAY, data);
                 });
             }
         });

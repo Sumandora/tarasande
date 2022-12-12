@@ -75,14 +75,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-@SuppressWarnings("RedundantSuppression")
 public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_7_6_10, ClientboundPackets1_8, ServerboundPackets1_7_6_10, ServerboundPackets1_8> {
 
     private final MaterialReplacement materialReplacement = new MaterialReplacement1_8_0_9To1_7_6_10();
     private final LegacyItemRewriter<Protocol1_8_0_9to1_7_6_10> itemRewriter = new ItemRewriter1_8_0_9to1_7_6_10(this);
     private final LegacyMetadataRewriter<Protocol1_8_0_9to1_7_6_10> metadataRewriter = new MetadataRewriter1_8_0_9to1_7_6_10(this);
 
-    public final ValueReader<Position> xyzToPosition = wrapper -> {
+    public final ValueReader<Position> xyzToPositionIII = wrapper -> {
+        final int x = wrapper.read(Type.INT);
+        final int y = wrapper.read(Type.INT);
+        final int z = wrapper.read(Type.INT);
+
+        return new Position(x, y, z);
+    };
+    public final ValueReader<Position> xyzToPositionISI = wrapper -> {
         final int x = wrapper.read(Type.INT);
         final int y = wrapper.read(Type.INT);
         final int z = wrapper.read(Type.INT);
@@ -152,20 +158,20 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
 
                 handler(wrapper -> {
                     final GameProfileTracker gameProfileTracker = wrapper.user().get(GameProfileTracker.class);
+                    if (gameProfileTracker != null) {
+                        final PacketWrapper playerInfo = PacketWrapper.create(ClientboundPackets1_7_6_10.PLAYER_INFO, wrapper.user());
+                        playerInfo.write(Type.VAR_INT, 0);
+                        playerInfo.write(Type.VAR_INT, 1);
+                        playerInfo.write(Type.UUID, UUID.fromString(gameProfileTracker.getUuid()));
+                        playerInfo.write(Type.STRING, gameProfileTracker.getName());
+                        playerInfo.write(Type.VAR_INT, 0);
+                        playerInfo.write(Type.VAR_INT, (int) wrapper.get(Type.UNSIGNED_BYTE, 0)); // GameMode
+                        playerInfo.write(Type.VAR_INT, 0); // Ping
+                        playerInfo.write(Type.OPTIONAL_STRING, gameProfileTracker.getName());
 
-                    final PacketWrapper playerInfo = PacketWrapper.create(ClientboundPackets1_7_6_10.PLAYER_INFO, wrapper.user());
-
-                    playerInfo.write(Type.VAR_INT, 0);
-                    playerInfo.write(Type.VAR_INT, 1);
-                    playerInfo.write(Type.UUID, UUID.fromString(gameProfileTracker.getUuid()));
-                    playerInfo.write(Type.STRING, gameProfileTracker.getName());
-                    playerInfo.write(Type.VAR_INT, 0);
-                    playerInfo.write(Type.VAR_INT, (int) wrapper.get(Type.UNSIGNED_BYTE, 0)); // GameMode
-                    playerInfo.write(Type.VAR_INT, 0); // Ping
-                    playerInfo.write(Type.OPTIONAL_STRING, gameProfileTracker.getName());
-
-                    playerInfo.send(Protocol1_8_0_9to1_7_6_10.class);
-                    Objects.requireNonNull(wrapper.user().get(TabListTracker.class)).add(new TabListTracker.TabListEntry(gameProfileTracker.getName(), UUID.fromString(gameProfileTracker.getUuid())));
+                        playerInfo.send(Protocol1_8_0_9to1_7_6_10.class);
+                        Objects.requireNonNull(wrapper.user().get(TabListTracker.class)).add(new TabListTracker.TabListEntry(gameProfileTracker.getName(), UUID.fromString(gameProfileTracker.getUuid())));
+                    }
 
                     wrapper.write(Type.BOOLEAN, false); // Reduced Debug Info
                 });
@@ -192,8 +198,12 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                 handler(wrapper -> {
                     final ClientWorld world = wrapper.user().get(ClientWorld.class);
 
-                    final Chunk[] chunk = wrapper.read(new ChunkBulk1_7_6_10Type(world));
-                    wrapper.write(new ChunkBulk1_8Type(world), chunk);
+                    try {
+                        final Chunk[] chunk = wrapper.read(new ChunkBulk1_7_6_10Type(world));
+                        wrapper.write(new ChunkBulk1_8Type(world), chunk);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 });
             }
         });
@@ -248,7 +258,7 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
         this.registerClientbound(ClientboundPackets1_7_6_10.SPAWN_POSITION, new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(xyzToPosition, new TypeRemapper<>(Type.POSITION)); // Position
+                map(xyzToPositionIII, new TypeRemapper<>(Type.POSITION)); // Position
             }
         });
 
@@ -297,7 +307,7 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                     wrapper.passthrough(Type.BYTE); // Pitch
                     wrapper.passthrough(Type.SHORT); // Item in hand
 
-                    List<Metadata> metadata = wrapper.read(Types1_7_6_10.METADATA_LIST); // Metadata
+                    final List<Metadata> metadata = wrapper.read(Types1_7_6_10.METADATA_LIST); // Metadata
                     metadataRewriter().rewrite(Entity1_10Types.EntityType.PLAYER, false, metadata);
                     wrapper.write(Types1_8.METADATA_LIST, metadata);
 
@@ -365,13 +375,11 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
             @Override
             public void registerMap() {
                 map(Type.INT, Type.VAR_INT); // Entity ID
-                handler(wrapper -> {
-                    wrapper.write(Type.POSITION, new Position(
-                            wrapper.read(Type.INT), // X
-                            (int) wrapper.read(Type.BYTE), // Y
-                            wrapper.read(Type.INT) // Z
-                    ));
-                });
+                handler(wrapper -> wrapper.write(Type.POSITION, new Position(
+                        wrapper.read(Type.INT), // X
+                        (int) wrapper.read(Type.BYTE), // Y
+                        wrapper.read(Type.INT) // Z
+                )));
             }
         });
 
@@ -617,7 +625,7 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
             @Override
             public void registerMap() {
                 map(Type.VAR_INT); // Entity ID
-                map(xyzToPosition, new TypeRemapper<>(Type.POSITION)); // Position
+                map(xyzToPositionIII, new TypeRemapper<>(Type.POSITION)); // Position
                 map(Type.BYTE); // Progress
             }
         });
@@ -719,8 +727,8 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                     short windowType = wrapper.read(Type.UNSIGNED_BYTE);
                     if (tracker != null) {
                         tracker.put(windowId, windowType);
+                        wrapper.write(Type.STRING, tracker.getInventoryString(windowType));  // Inventory Type
                     }
-                    wrapper.write(Type.STRING, tracker.getInventoryString(windowType));  // Inventory Type
 
                     String title = wrapper.read(Type.STRING);  // Title
                     final short slots = wrapper.read(Type.UNSIGNED_BYTE);
@@ -786,7 +794,7 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                         if (windowType == 4) {
                             Item[] old = items;
                             items = new Item[old.length + 1];
-                            items[1] = new DataItem((short) 351, (byte) 3, (short) 4, null); // Lapis
+                            items[1] = new DataItem((short) 351, (byte) 3, (short) 4, null); // Lapislazuli
 
                             for (int oldIndex = 0; oldIndex < old.length; oldIndex++) {
                                 int newIndex = oldIndex > 0 ? oldIndex + 1 : oldIndex;
@@ -802,7 +810,7 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
         this.registerClientbound(ClientboundPackets1_7_6_10.UPDATE_SIGN, new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(xyzToPosition, new TypeRemapper<>(Type.POSITION)); // Position
+                map(xyzToPositionISI, new TypeRemapper<>(Type.POSITION)); // Position
 
                 handler(wrapper -> {
                     for (int i = 0; i < 4; i++)
@@ -814,7 +822,7 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
         this.registerClientbound(ClientboundPackets1_7_6_10.BLOCK_ENTITY_DATA, new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(xyzToPosition, new TypeRemapper<>(Type.POSITION)); // Position
+                map(xyzToPositionISI, new TypeRemapper<>(Type.POSITION)); // Position
 
                 map(Type.UNSIGNED_BYTE);  // Action
                 map(Types1_7_6_10.COMPRESSED_NBT, Type.NBT); // The Item
@@ -824,7 +832,7 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
         this.registerClientbound(ClientboundPackets1_7_6_10.OPEN_SIGN_EDITOR, new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(xyzToPosition, new TypeRemapper<>(Type.POSITION)); // Position
+                map(xyzToPositionIII, new TypeRemapper<>(Type.POSITION)); // Position
             }
         });
 
@@ -1182,6 +1190,7 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
 
                 map(Type.BYTE); // Yaw
                 map(Type.BYTE); // Pitch
+                map(Type.BYTE); // Head Pitch
 
                 map(Type.SHORT); // X-Velocity
                 map(Type.SHORT); // Y-Velocity
@@ -1192,16 +1201,13 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                 handler(wrapper -> {
                     final int entityID = wrapper.get(Type.VAR_INT, 0);
                     final int typeID = wrapper.get(Type.UNSIGNED_BYTE, 0);
+                    final List<Metadata> metadataList = wrapper.get(Types1_8.METADATA_LIST, 0);
 
                     final EntityTracker1_7_6_10 tracker = wrapper.user().get(EntityTracker1_7_6_10.class);
-
-                    List<Metadata> metadataList = wrapper.get(Types1_8.METADATA_LIST, 0);
-
                     if (tracker != null) {
                         tracker.getClientEntityTypes().put(entityID, Entity1_10Types.getTypeFromId(typeID, false));
+                        metadataRewriter().rewrite(tracker.getClientEntityTypes().get(entityID), false, metadataList);
                     }
-                    //noinspection unchecked
-                    metadataRewriter().rewrite(tracker.getClientEntityTypes().get(entityID), false, metadataList);
                     wrapper.set(Types1_8.METADATA_LIST, 0, metadataList);
                 });
             }
@@ -1443,11 +1449,11 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                     }
 
                     final PacketWrapper pluginMessage = PacketWrapper.create(ServerboundPackets1_8.PLUGIN_MESSAGE, buf, wrapper.user());
-                    wrapper.write(Type.STRING, channel);
-                    wrapper.write(Type.SHORT, (short) buf.readableBytes());
-                    wrapper.passthrough(Type.REMAINING_BYTES);
+                    pluginMessage.write(Type.STRING, channel);
+                    pluginMessage.write(Type.SHORT, (short) buf.readableBytes());
+                    pluginMessage.passthrough(Type.REMAINING_BYTES);
 
-                    wrapper.sendToServer(Protocol1_8_0_9to1_7_6_10.class);
+                    pluginMessage.sendToServer(Protocol1_8_0_9to1_7_6_10.class);
                 });
             }
         });
@@ -1500,7 +1506,7 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
 
                         if (windowType == 4) {
                             if (slot == 1) {
-                                wrapper.cancel(); // Lapis
+                                wrapper.cancel(); // Lapislazuli
                             } else if (slot > 1) {
                                 slot -= 1;
                             }

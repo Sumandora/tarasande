@@ -19,7 +19,7 @@
  *         Version-independent validity and automatic renewal
  */
 
-package de.florianmichael.clampclient.injection.mixin.protocolhack.signatures1_19_0;
+package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
 import net.minecraft.network.encryption.PlayerPublicKey;
 import de.florianmichael.clampclient.injection.mixininterface.IPublicKeyData_Protocol;

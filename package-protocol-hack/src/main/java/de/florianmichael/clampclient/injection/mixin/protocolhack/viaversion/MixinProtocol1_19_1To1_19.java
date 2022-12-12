@@ -19,6 +19,7 @@
  *         Version-independent validity and automatic renewal
  */
 
+
 package de.florianmichael.clampclient.injection.mixin.protocolhack.viaversion;
 
 import com.mojang.brigadier.ParseResults;

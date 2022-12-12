@@ -89,7 +89,7 @@ public class Chunk1_7_6_10Type extends PartialType<Chunk, ClientWorld> {
             if ((primaryBitMask & 1 << i) != 0) {
                 if (storageArrays[i] == null) {
                     storageArrays[i] = new ExtendedBlockStorage(skyLight);
-                    sections[i] = new ChunkSectionImpl(skyLight);
+                    sections[i] = new ChunkSectionImpl(true);
                 }
                 byte[] blockIds = storageArrays[i].getBlockLSBArray();
                 System.arraycopy(data, dataSize, blockIds, 0, blockIds.length);
@@ -156,23 +156,30 @@ public class Chunk1_7_6_10Type extends PartialType<Chunk, ClientWorld> {
                     blockData = SpigotDataFixer.getCorrectedData(id, blockData);
 
                     char val = (char) (id << 4 | blockData);
-                    sections[i].palette(PaletteType.BLOCKS).setIdAt(px, py, pz, val);
+                    final DataPalette dataPalette = sections[i].palette(PaletteType.BLOCKS);
+                    if (dataPalette != null) {
+                        dataPalette.setIdAt(px, py, pz, val);
+                    }
                 }
             }
         }
 
         for (int i = 0; i < storageArrays.length; ++i) {
             if (storageArrays[i] != null && (primaryBitMask & 1 << i) != 0 && (!groundUp || storageArrays[i].isEmpty())) {
-                NibbleArray nibblearray = storageArrays[i].getBlocklightArray();
-                sections[i].getLight().setBlockLight(nibblearray.getHandle());
+                final ChunkSectionLight chunkSectionLight = sections[i].getLight();
+                if (chunkSectionLight != null) {
+                    chunkSectionLight.setBlockLight(storageArrays[i].getBlocklightArray().getHandle());
+                }
             }
         }
 
         if (skyLight) {
             for (int i = 0; i < storageArrays.length; ++i) {
                 if (storageArrays[i] != null && (primaryBitMask & 1 << i) != 0 && (!groundUp || storageArrays[i].isEmpty())) {
-                    NibbleArray nibblearray = storageArrays[i].getSkylightArray();
-                    sections[i].getLight().setSkyLight(nibblearray.getHandle());
+                    final ChunkSectionLight chunkSectionLight = sections[i].getLight();
+                    if (chunkSectionLight != null) {
+                        chunkSectionLight.setSkyLight(storageArrays[i].getSkylightArray().getHandle());
+                    }
                 }
             }
         }
