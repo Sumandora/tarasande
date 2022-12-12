@@ -191,7 +191,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         ThreadRunnableExposed(RunnableLogin(account)).also { loginThread = it }.start()
     }
 
-    inner class RunnableLogin(var account: Account) : Runnable {
+    inner class RunnableLogin(private val account: Account) : Runnable {
         var cancelled = false
             set(value) {
                 if (account.session != null)

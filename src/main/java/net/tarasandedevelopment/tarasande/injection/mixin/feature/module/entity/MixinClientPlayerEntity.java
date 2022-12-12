@@ -26,9 +26,10 @@ import org.spongepowered.asm.mixin.injection.*;
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IClientPlayerEntity {
 
     @Unique
-    boolean tarasande_flight;
+    private boolean tarasande_flight;
     @Unique
-    float tarasande_flightSpeed;
+    private float tarasande_flightSpeed;
+
     @Unique
     private boolean tarasande_forceHasStatusEffect;
     @Unique
@@ -37,6 +38,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     public MixinClientPlayerEntity(ClientWorld world, GameProfile profile) {
         super(world, profile);
     }
+
     @Shadow
     public abstract float getYaw(float tickDelta);
 

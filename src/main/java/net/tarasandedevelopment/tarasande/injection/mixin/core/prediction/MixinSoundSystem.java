@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinSoundSystem implements ISoundSystem {
 
     @Unique
-    public boolean tarasande_disabled;
+    private boolean tarasande_disabled;
 
     @Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;)V", at = @At("HEAD"), cancellable = true)
     public void disableSound(SoundInstance sound, CallbackInfo ci) {

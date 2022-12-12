@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> {
 
     @Unique
-    T tarasande_livingEntity;
+    private T tarasande_livingEntity;
 
     protected MixinLivingEntityRenderer(EntityRendererFactory.Context ctx) {
         super(ctx);

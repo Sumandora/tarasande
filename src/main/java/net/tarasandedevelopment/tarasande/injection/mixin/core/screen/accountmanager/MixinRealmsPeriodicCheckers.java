@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinRealmsPeriodicCheckers implements IRealmsPeriodicCheckers {
 
     @Unique
-    RealmsClient tarasande_client;
+    private RealmsClient tarasande_client;
 
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/realms/util/PeriodicRunnerFactory;create(Ljava/lang/String;Ljava/util/concurrent/Callable;Ljava/time/Duration;Lnet/minecraft/client/util/Backoff;)Lnet/minecraft/client/realms/util/PeriodicRunnerFactory$PeriodicRunner;", ordinal = 0))
