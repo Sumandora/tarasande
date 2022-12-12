@@ -1083,8 +1083,8 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                 map(Type.INT);
                 handler(wrapper -> {
                     final int entityID = wrapper.get(Type.VAR_INT, 0);
-                    final EntityTracker1_7_6_10 tracker = wrapper.user().get(EntityTracker1_7_6_10.class);
 
+                    final EntityTracker1_7_6_10 tracker = wrapper.user().get(EntityTracker1_7_6_10.class);
                     if (tracker != null) {
                         tracker.getClientEntityTypes().put(entityID, Entity1_10Types.EntityType.LIGHTNING);
                     }
@@ -1098,16 +1098,16 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                 map(Type.INT, Type.VAR_INT); // Entity ID
                 map(Types1_7_6_10.METADATA_LIST, Types1_8.METADATA_LIST); // Metadata Type
                 handler(wrapper -> {
-                    List<Metadata> metadataList = wrapper.get(Types1_8.METADATA_LIST, 0);
-
                     final int entityID = wrapper.get(Type.VAR_INT, 0);
+                    final List<Metadata> metadataList = wrapper.get(Types1_8.METADATA_LIST, 0);
+
                     final EntityTracker1_7_6_10 tracker = wrapper.user().get(EntityTracker1_7_6_10.class);
                     if (tracker != null) {
                         if (tracker.getClientEntityTypes().containsKey(entityID)) {
                             metadataRewriter().rewrite(tracker.getClientEntityTypes().get(entityID), true, metadataList);
+                            wrapper.set(Types1_8.METADATA_LIST, 0, metadataList);
                         }
                     }
-                    wrapper.set(Types1_8.METADATA_LIST, 0, metadataList);
                 });
             }
         });
@@ -1168,11 +1168,9 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                     final int entityID = wrapper.get(Type.VAR_INT, 0);
                     final int typeID = wrapper.get(Type.BYTE, 0);
 
-                    final Entity1_10Types.EntityType type = Entity1_10Types.getTypeFromId(typeID, true);
-
                     final EntityTracker1_7_6_10 tracker = wrapper.user().get(EntityTracker1_7_6_10.class);
                     if (tracker != null) {
-                        tracker.getClientEntityTypes().put(entityID, type);
+                        tracker.getClientEntityTypes().put(entityID, Entity1_10Types.getTypeFromId(typeID, true));
                     }
                 });
             }
@@ -1247,9 +1245,8 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                 }); // Entity ID Array
                 handler(wrapper -> {
                     final EntityTracker1_7_6_10 tracker = wrapper.user().get(EntityTracker1_7_6_10.class);
-
-                    for (int entityId : wrapper.get(Type.VAR_INT_ARRAY_PRIMITIVE, 0)) {
-                        if (tracker != null) {
+                    if (tracker != null) {
+                        for (int entityId : wrapper.get(Type.VAR_INT_ARRAY_PRIMITIVE, 0)) {
                             tracker.removeEntity(entityId);
                         }
                     }
@@ -1293,7 +1290,7 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                     int y = wrapper.read(Type.INT);
                     int z = wrapper.read(Type.INT);
 
-                    int direction = wrapper.read(Type.INT);
+                    final int direction = wrapper.read(Type.INT);
 
                     switch (direction) {
                         case 0 -> z += 1;

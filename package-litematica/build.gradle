@@ -2,6 +2,7 @@ plugins {
     id "java"
     id "fabric-loom"
     id "org.jetbrains.kotlin.jvm"
+    id "com.github.johnrengelman.shadow"
 }
 
 group 'net.tarasandedevelopment'
@@ -17,8 +18,25 @@ repositories {
     }
 }
 
+
+this.remapJar {
+    dependsOn shadowJar
+    //noinspection GrDeprecatedAPIUsage
+    input.set(shadowJar.archiveFile)
+}
+
+this.shadowJar {
+    archiveClassifier.set("shadow")
+    compileJava.options.encoding = "UTF-8"
+    exclude "native-binaries/*"
+
+    dependencies {
+        include(dependency("com.google.zxing:core:3.3.1"))
+    }
+}
+
+
 dependencies {
-    implementation project(path: ':')
     // Fabric
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -30,8 +48,11 @@ dependencies {
     // Litematica
     modImplementation "curse.maven:litematica-308892:4162847"
 
+    // ZXing
+    implementation "com.google.zxing:core:3.3.1"
+
     // tarasande Source
-    implementation(project(":"))
+    implementation(project(path: ":", configuration: "shadow"))
 }
 
 processResources {

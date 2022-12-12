@@ -150,11 +150,12 @@ class TarasandeProtocolHack : INativeProvider {
     fun update(protocol: ProtocolVersion, reloadProtocolHackValues: Boolean = true) {
         System.setProperty("tarasande-target-version", protocol.version.toString()) // this provides the current clientside version to all other packages
 
-        if(reloadProtocolHackValues)
+        if (reloadProtocolHackValues) {
             TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
                 if (it is ValueBooleanProtocol)
                     it.value = it.version.any { range -> protocol in range }
             }
+        }
 
         if (!FabricLoader.getInstance().isModLoaded("dashloader")) {
             MinecraftClient.getInstance().fontManager.fontStorages.values.forEach {

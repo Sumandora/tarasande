@@ -10,7 +10,8 @@ class ManagerGenerator : Manager<Generator>() {
 
     init {
         add(
-            GeneratorMazes(this)
+            GeneratorMazes(this),
+            GeneratorQRCode(this)
         )
     }
 }

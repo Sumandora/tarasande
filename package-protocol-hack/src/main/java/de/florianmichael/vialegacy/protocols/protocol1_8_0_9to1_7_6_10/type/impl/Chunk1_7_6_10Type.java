@@ -89,7 +89,7 @@ public class Chunk1_7_6_10Type extends PartialType<Chunk, ClientWorld> {
             if ((primaryBitMask & 1 << i) != 0) {
                 if (storageArrays[i] == null) {
                     storageArrays[i] = new ExtendedBlockStorage(skyLight);
-                    sections[i] = new ChunkSectionImpl(true);
+                    sections[i] = new ChunkSectionImpl(true /* Since Via only creates the getLight() pallete which are important for block lightings */);
                 }
                 byte[] blockIds = storageArrays[i].getBlockLSBArray();
                 System.arraycopy(data, dataSize, blockIds, 0, blockIds.length);
