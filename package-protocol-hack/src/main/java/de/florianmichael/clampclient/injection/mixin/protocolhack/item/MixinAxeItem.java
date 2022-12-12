@@ -49,7 +49,8 @@ public class MixinAxeItem {
 
     @Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
     public void injectUseOnBlock(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
             cir.setReturnValue(ActionResult.PASS);
+        }
     }
 }

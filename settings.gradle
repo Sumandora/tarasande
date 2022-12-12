@@ -23,4 +23,5 @@ include 'package-protocol-hack'
 include 'package-third-party'
 include 'package-dupe-exploits'
 include 'package-protocol-spoofer'
+include 'package-litematica'
 

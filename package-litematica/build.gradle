@@ -1,0 +1,45 @@
+plugins {
+    id "java"
+    id "fabric-loom"
+    id "org.jetbrains.kotlin.jvm"
+}
+
+group 'net.tarasandedevelopment'
+version tarasande_version
+
+repositories {
+    mavenCentral()
+
+    repositories {
+        maven {
+            url "https://cursemaven.com"
+        }
+    }
+}
+
+dependencies {
+    implementation project(path: ':')
+    // Fabric
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    // Kotlin
+    modImplementation "net.fabricmc:fabric-language-kotlin:${project.kotlin_wrapper_version}"
+
+    // Litematica
+    modImplementation "curse.maven:litematica-308892:4162847"
+
+    // tarasande Source
+    implementation(project(":"))
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+compileKotlin.kotlinOptions.jvmTarget = "17"
