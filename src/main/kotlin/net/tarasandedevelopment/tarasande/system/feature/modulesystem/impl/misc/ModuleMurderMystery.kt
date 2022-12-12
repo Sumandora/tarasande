@@ -52,8 +52,8 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     private val customBroadcastMessage = object : ValueText(this, "Custom broadcast message", "I'm sure it is %s because he held %s") {
         override fun isEnabled() = broadcast.isSelected(3)
     }
-    internal val murdererAssistance = ValueBoolean(this, "Murderer assistance", true)
-    internal val fakeNews = ValueMode(this, "Fake news", false, "Disabled", "Explanatory", "Legit", "Custom")
+    private val murdererAssistance = ValueBoolean(this, "Murderer assistance", true)
+    val fakeNews = ValueMode(this, "Fake news", false, "Disabled", "Explanatory", "Legit", "Custom")
     private val customFakeNewsMessage = object : ValueText(this, "Custom fake news message", "I'm sure it is %s because he held %s") {
         override fun isEnabled() = fakeNews.isSelected(3)
     }
@@ -64,8 +64,8 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     }
 
     val suspects = ConcurrentHashMap<GameProfile, Array<Item>>()
-    internal val fakeNewsTimer = TimeUtil()
-    internal var fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
+    val fakeNewsTimer = TimeUtil()
+    var fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
     private var switchedSlot = false
 
     private val messages = ArrayList<String>()
@@ -90,7 +90,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
             add(object : Information("Murder Mystery", "Fake news countdown") {
                 override fun getMessage(): String? {
                     if (enabled)
-                        if (!fakeNews.isSelected(0) && isMurderer() && murdererAssistance.value)
+                        if (!fakeNews.isSelected(0) && isMurderer())
                             return (fakeNewsTime - (System.currentTimeMillis() - fakeNewsTimer.time)).toString()
 
                     return null
@@ -162,7 +162,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         else -> false
     }
 
-    internal fun isMurderer(): Boolean {
+    fun isMurderer(): Boolean {
         for (slot in 0 until PlayerInventory.getHotbarSize()) {
             if (isIllegalItem(mc.player?.inventory?.main?.get(slot)?.item!!)) return true
         }
@@ -203,7 +203,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         }
 
         registerEvent(EventAttackEntity::class.java, 9999) { event ->
-            if (murdererAssistance.value && isMurderer() && PlayerUtil.isAttackable(event.entity)) {
+            if (isMurderer() && PlayerUtil.isAttackable(event.entity)) {
                 when (event.state) {
                     EventAttackEntity.State.PRE -> {
                         prevItem = mc.player?.inventory?.selectedSlot!!

@@ -5,7 +5,6 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
@@ -57,7 +56,7 @@ class ManagerBlur : Manager<Blur>() {
         (if(screens) screenShapesFramebuffer else inGameShapesFramebuffer).beginWrite(setViewport)
     }
 
-    internal fun blurScene(strength: Int? = null, shapesBuffer: Framebuffer = inGameShapesFramebuffer) {
+    fun blurScene(strength: Int? = null, shapesBuffer: Framebuffer = inGameShapesFramebuffer) {
         if (!RenderSystem.isOnRenderThread()) return
 
         GL11.glPushMatrix()

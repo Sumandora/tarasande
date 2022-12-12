@@ -32,7 +32,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
     private val searchRadius = ValueNumber(this, "Search radius", 1.0, 10.0, 50.0, 1.0)
 
-    internal val calculateBestWay = ValueBoolean(this, "Calculate best way", true)
+    val calculateBestWay = ValueBoolean(this, "Calculate best way", true)
 
     private val maxDefenders = object : ValueNumber(this, "Max defenders", 1.0, 128.0, 512.0, 64.0) {
         override fun isEnabled() = calculateBestWay.value
@@ -56,7 +56,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         override fun isEnabled() = calculateBestWay.value
     }
 
-    internal var bedDatas = ArrayList<BedData>()
+    var bedDatas = ArrayList<BedData>()
 
     init {
         TarasandeMain.managerInformation().add(object : Information("Bed ESP", "Beds") {
@@ -186,7 +186,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         }
     }
 
-    internal inner class BedData(val bedParts: Array<BlockPos>, val defenders: List<BlockPos>?, val solution: List<Node>?) {
+    inner class BedData(val bedParts: Array<BlockPos>, val defenders: List<BlockPos>?, val solution: List<Node>?) {
         override fun toString(): String {
             val stringBuilder = StringBuilder()
 

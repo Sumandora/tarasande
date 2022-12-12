@@ -22,7 +22,7 @@ import java.util.function.BiConsumer
 
 object ProjectileUtil {
 
-    internal val projectileItems = arrayOf(ProjectileItem(Items.BOW.javaClass, EntityType.ARROW, true) { stack, persistentProjectileEntity ->
+    val projectileItems = arrayOf(ProjectileItem(Items.BOW.javaClass, EntityType.ARROW, true) { stack, persistentProjectileEntity ->
         val velocity = BowItem.getPullProgress(if (MinecraftClient.getInstance().player?.isUsingItem!!) MinecraftClient.getInstance().player?.itemUseTime!! else stack.maxUseTime).toDouble()
         persistentProjectileEntity.setVelocity(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.pitch!!, MinecraftClient.getInstance().player?.yaw!!, 0.0F, (velocity * 3.0).toFloat(), 1.0F)
     }, ProjectileItem(Items.SNOWBALL.javaClass, EntityType.SNOWBALL, false) { _, persistentProjectileEntity ->

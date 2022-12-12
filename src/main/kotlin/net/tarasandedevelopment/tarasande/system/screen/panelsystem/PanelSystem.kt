@@ -73,7 +73,7 @@ open class Panel(
     val maxHeight: Double? = null,
     private val background: Boolean = true,
     private val resizable: Boolean = true,
-    internal val fixed: Boolean = false,
+    val fixed: Boolean = false,
     private val scissor: Boolean = false
 ) : IElement {
 

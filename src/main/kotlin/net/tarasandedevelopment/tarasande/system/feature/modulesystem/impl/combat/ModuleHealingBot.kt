@@ -37,7 +37,7 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
      */
 
     private var prevSlot: Int? = null
-    internal var state = State.IDLE
+    var state = State.IDLE
     private var intendedSlot: Int? = null
     private var intendedItem: ItemStack? = null
     private var targetRotation: Rotation? = null

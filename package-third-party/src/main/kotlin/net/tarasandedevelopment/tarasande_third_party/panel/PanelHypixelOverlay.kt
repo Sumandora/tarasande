@@ -128,7 +128,7 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
     }
 
     inner class Stats {
-        internal var requested = false
+        var requested = false
         private var playSession: Long? = null
         private var age: Long? = null
         private var level: Int? = null

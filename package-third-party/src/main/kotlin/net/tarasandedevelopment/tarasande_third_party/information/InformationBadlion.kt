@@ -98,7 +98,7 @@ class InformationTimers : Information("Badlion", "Timers") {
             return ((currentTime!! - timeDelta) / 20f * 1000F).toLong()
         }
 
-        internal fun isHidden(): Boolean {
+        fun isHidden(): Boolean {
             return !repeating!! && calcInterpolatedTime() < 0L
         }
 
