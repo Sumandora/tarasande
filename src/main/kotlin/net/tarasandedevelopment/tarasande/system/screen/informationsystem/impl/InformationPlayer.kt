@@ -6,7 +6,6 @@ import net.minecraft.world.dimension.DimensionType
 import net.minecraft.world.dimension.DimensionTypes
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 
@@ -23,9 +22,10 @@ class InformationXYZ : Information("Player", "XYZ") {
     override fun getMessage(): String? {
         val player = MinecraftClient.getInstance().player ?: return null
 
-        val dimension = MinecraftClient.getInstance().world?.dimension
-        val nether = MinecraftClient.getInstance().world?.registryManager?.get(RegistryKeys.DIMENSION_TYPE)?.get(DimensionTypes.OVERWORLD)
-        val pos = player.pos * DimensionType.getCoordinateScaleFactor(dimension, nether)
+        val dimension = MinecraftClient.getInstance().world?.dimension ?: return null
+        val nether = MinecraftClient.getInstance().world?.registryManager?.get(RegistryKeys.DIMENSION_TYPE)?.get(DimensionTypes.OVERWORLD) ?: return null
+        val scaleFactor = DimensionType.getCoordinateScaleFactor(dimension, nether)
+        val pos = player.pos.multiply(scaleFactor, 1.0, scaleFactor)
 
         return StringUtil.round(pos.x, this.decimalPlacesX.value.toInt()) + " " +
                 StringUtil.round(pos.y, this.decimalPlacesY.value.toInt()) + " " +
@@ -41,9 +41,10 @@ class InformationNetherXYZ : Information("Player", "Nether XYZ") {
     override fun getMessage(): String? {
         val player = MinecraftClient.getInstance().player ?: return null
 
-        val dimension = MinecraftClient.getInstance().world?.dimension
-        val nether = MinecraftClient.getInstance().world?.registryManager?.get(RegistryKeys.DIMENSION_TYPE)?.get(DimensionTypes.THE_NETHER)
-        val pos = player.pos * DimensionType.getCoordinateScaleFactor(dimension, nether)
+        val dimension = MinecraftClient.getInstance().world?.dimension ?: return null
+        val nether = MinecraftClient.getInstance().world?.registryManager?.get(RegistryKeys.DIMENSION_TYPE)?.get(DimensionTypes.THE_NETHER) ?: return null
+        val scaleFactor = DimensionType.getCoordinateScaleFactor(dimension, nether)
+        val pos = player.pos.multiply(scaleFactor, 1.0, scaleFactor)
 
         return StringUtil.round(pos.x, this.decimalPlacesX.value.toInt()) + " " +
                 StringUtil.round(pos.y, this.decimalPlacesY.value.toInt()) + " " +

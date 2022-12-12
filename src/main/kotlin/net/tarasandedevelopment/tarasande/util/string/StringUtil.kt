@@ -18,7 +18,7 @@ object StringUtil {
 
     fun formatEnumTypes(name: String) = (name.substring(0, 1) + name.substring(1).lowercase()).replace('_', ' ')
 
-    fun round(input: Double, places: Int) = String.format("%." + places + "f", input)
+    fun round(input: Double, places: Int) = String.format(Locale.ROOT, "%." + places + "f", input)
 
     fun formatBytes(value: Long, count: Int): String {
         return if (value < 1024L)
