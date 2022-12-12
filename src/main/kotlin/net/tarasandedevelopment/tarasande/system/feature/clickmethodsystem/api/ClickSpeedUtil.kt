@@ -6,19 +6,18 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.ClickMethod
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import java.util.concurrent.ThreadLocalRandom
-import java.util.function.Supplier
 import kotlin.math.min
 
-class ClickSpeedUtil(private val owner: Any, isVisible: Supplier<Boolean>, vararg excluded: Class<out ClickMethod>, namePrefix: String = "") {
+class ClickSpeedUtil(private val owner: Any, enabledCallback: () -> Boolean, vararg excluded: Class<out ClickMethod>, namePrefix: String = "") {
 
     private val clickMethods = TarasandeMain.managerClickMethod().getAllExcept(*excluded)
 
     private val cpsMode = object : ValueMode(owner, namePrefix + "CPS mode", false, *clickMethods.map { it.name }.toTypedArray()) {
-        override fun isEnabled() = isVisible.get()
+        override fun isEnabled() = enabledCallback.invoke()
     }
     private val cps = object : ValueNumberRange(owner, namePrefix + "CPS", 1.0, 8.0, 12.0, 20.0, 1.0) {
         override fun onChange() = reset()
-        override fun isEnabled() = clickMethods[cpsMode.values.indexOf(cpsMode.selected[0])].cpsBased && isVisible.get()
+        override fun isEnabled() = selected().cpsBased && enabledCallback.invoke()
     }
 
     private val timeUtil = TimeUtil()
@@ -37,6 +36,8 @@ class ClickSpeedUtil(private val owner: Any, isVisible: Supplier<Boolean>, varar
             timeUtil.reset()
         }
 
-        return min(clickMethods[cpsMode.values.indexOf(cpsMode.selected[0])].getClicks(targetedCPS), 10 /* safety */)
+        return min(selected().getClicks(targetedCPS), 10 /* safety */)
     }
+
+    private fun selected() = clickMethods[cpsMode.values.indexOf(cpsMode.selected[0])]
 }

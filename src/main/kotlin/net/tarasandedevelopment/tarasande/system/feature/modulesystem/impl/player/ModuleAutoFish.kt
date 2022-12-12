@@ -57,25 +57,22 @@ class ModuleAutoFish : Module("Auto fish", "Automates fishing", ModuleCategory.P
 
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
             if (event.keyBinding == mc.options.useKey) {
-                if (
-                    !PlayerUtil.isPlayerMoving() &&
-
-                    (mc.player?.mainHandStack?.item is FishingRodItem ||
-                            mc.player?.offHandStack?.item is FishingRodItem)
-                )
-                    if (mc.player?.fishHook == null) {
-                        val lastPos = ProjectileUtil.predict(ItemStack(Items.FISHING_ROD), RotationUtil.fakeRotation ?: Rotation(mc.player!!), false).lastOrNull() ?: return@registerEvent
-                        if (mc.world?.getBlockState(BlockPos(lastPos))?.fluidState?.isEmpty == false)
+                if (!PlayerUtil.isPlayerMoving())
+                    if (mc.player?.mainHandStack?.item is FishingRodItem ||
+                        mc.player?.offHandStack?.item is FishingRodItem)
+                        if (mc.player?.fishHook == null) {
+                            val lastPos = ProjectileUtil.predict(ItemStack(Items.FISHING_ROD), RotationUtil.fakeRotation ?: Rotation(mc.player!!), false).lastOrNull() ?: return@registerEvent
+                            if (mc.world?.getBlockState(BlockPos(lastPos))?.fluidState?.isEmpty == false)
+                                event.pressed = true
+                        } else if (when {
+                                mode.isSelected(0) -> mc.player?.fishHook!!.caughtFish
+                                mode.isSelected(1) -> hasCaught
+                                else -> false
+                            } || (mc.player?.fishHook?.isOnGround == true && mc.player?.fishHook?.isTouchingWater == false && mc.player?.fishHook?.age!! > 20 && abs(mc.player?.fishHook?.velocity?.y!!) <= 0.1)) {
                             event.pressed = true
-                    } else if (when {
-                            mode.isSelected(0) -> mc.player?.fishHook!!.caughtFish
-                            mode.isSelected(1) -> hasCaught
-                            else -> false
-                        } || (mc.player?.fishHook?.isOnGround == true && mc.player?.fishHook?.isTouchingWater == false && mc.player?.fishHook?.age!! > 20 && abs(mc.player?.fishHook?.velocity?.y!!) <= 0.1)) {
-                        event.pressed = true
-                        hasCaught = false
-                        blocked = true
-                    }
+                            hasCaught = false
+                            blocked = true
+                        }
             }
         }
     }

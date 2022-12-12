@@ -70,7 +70,8 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         ModuleFlight moduleFlight = TarasandeMain.Companion.managerModule().get(ModuleFlight.class);
         if (moduleFlight.getEnabled() && moduleFlight.getMode().isSelected(0)) {
             tarasande_flight = true;
-            tarasande_flightSpeed = (float) moduleFlight.getFlightSpeed().getValue();
+            // TODO Read that constant
+            tarasande_flightSpeed = 0.05F * (float) moduleFlight.getFlightSpeed().getValue();
             return true;
         }
         return instance.flying;

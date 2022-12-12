@@ -10,6 +10,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelElements
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
 import java.util.*
 
@@ -63,6 +64,10 @@ class ScreenBetterParentValues(parent: Screen, val titleName: String, val owner:
                 prevScreen = prevScreen.prevScreen
             prevScreen?.render(matrices, -1, -1, delta)
         }
+
+        TarasandeMain.managerBlur().bind(true, true)
+        RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
+        client?.framebuffer?.beginWrite(true)
 
         super.render(matrices, mouseX, mouseY, delta)
     }

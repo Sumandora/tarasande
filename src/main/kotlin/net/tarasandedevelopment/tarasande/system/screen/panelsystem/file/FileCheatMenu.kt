@@ -12,14 +12,14 @@ class FileCheatMenu(private val panelSystem: ManagerPanel) : File("CheatMenu") {
 
     override fun save(): JsonElement {
         val jsonObject = JsonObject()
-        for (panel in panelSystem.list) {
+        for ((index, panel) in panelSystem.list.withIndex()) {
             val jsonArray2 = JsonArray()
             jsonArray2.add(panel.x)
             jsonArray2.add(panel.y)
             jsonArray2.add(panel.panelWidth)
             jsonArray2.add(panel.panelHeight)
             jsonArray2.add(panel.opened)
-            jsonArray2.add(panelSystem.list.indexOf(panel))
+            jsonArray2.add(index)
             jsonObject.add(panel.title, jsonArray2)
         }
         return jsonObject
