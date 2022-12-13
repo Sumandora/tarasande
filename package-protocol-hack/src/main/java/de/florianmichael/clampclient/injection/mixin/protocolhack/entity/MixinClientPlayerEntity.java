@@ -101,11 +101,11 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
             if (VersionList.isNewerTo(ProtocolVersion.v1_8)) {
                 ++this.ticksSinceLastPositionPacketSent;
             }
-            double n = 2.05E-4;
+            double n = MathHelper.square(2.05E-4);
             if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2)) {
                 n = 9.0E-4D;
             }
-            boolean bl3 = MathHelper.squaredMagnitude(d, e, f) > MathHelper.square(n) || this.ticksSinceLastPositionPacketSent >= 20;
+            boolean bl3 = MathHelper.squaredMagnitude(d, e, f) > n || this.ticksSinceLastPositionPacketSent >= 20;
             bl4 = g != 0.0 || h != 0.0;
             if (this.hasVehicle()) {
                 Vec3d vec3d = this.getVelocity();
