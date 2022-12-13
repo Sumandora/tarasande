@@ -153,7 +153,7 @@ public abstract class MixinLivingEntity extends Entity {
 
     @Redirect(method = "travel", at = @At(value = "INVOKE", target = "Ljava/lang/Math;cos(D)D"))
     public double fixCosTable(double a) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18)) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2)) {
             return MathHelper.cos((float) a);
         }
         return Math.cos(a);

@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande_litematica.generator
+package net.tarasandedevelopment.tarasande_litematica.generator.impl
 
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
@@ -8,13 +8,15 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
+import net.tarasandedevelopment.tarasande.util.string.StringUtil
+import net.tarasandedevelopment.tarasande_litematica.generator.Generator
 import net.tarasandedevelopment.tarasande_litematica.util.LitematicaGenerator
 
 val writer = MultiFormatWriter()
 
 class GeneratorQRCode(parent: Any) : Generator(parent, "QR Code") {
 
-    private val type = ValueMode(parent, "Type", false, *BarcodeFormat.values().map { it.name }.toTypedArray())
+    private val type = ValueMode(parent, "Type", false, *BarcodeFormat.values().map { StringUtil.formatEnumTypes(it.name) }.toTypedArray())
     private val input = ValueText(parent, "Input", "https://youtu.be/dQw4w9WgXcQ")
     private val dimensionScaleX = ValueNumber(parent, "Dimension Scale X", 0.0, 0.0, 100.0, 10.0)
     private val dimensionScaleYorZ = ValueNumber(parent, "Dimension Scale Y/Z", 0.0, 0.0, 100.0, 10.0)

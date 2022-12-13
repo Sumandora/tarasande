@@ -147,7 +147,7 @@ public abstract class MixinEntity {
     @Redirect(method = {"setYaw", "setPitch"}, at = @At(value = "INVOKE", target = "Ljava/lang/Float;isFinite(F)Z"))
     public boolean modifyIsFinite(float f) {
         //noinspection ConstantConditions
-        return Float.isFinite(f) || (Object) this instanceof ClientPlayerEntity;
+        return Float.isFinite(f) || ((Object) this instanceof ClientPlayerEntity && VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2));
     }
 
     @ModifyConstant(method = "checkBlockCollision", constant = @Constant(doubleValue = 1.0E-7))
@@ -156,5 +156,12 @@ public abstract class MixinEntity {
             return 0.001;
         }
         return constant;
+    }
+
+    @Redirect(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;onLanding()V"))
+    public void revertOnLanding(Entity instance) {
+        if (VersionList.isNewerOrEqualTo(ProtocolVersion.v1_19)) {
+            instance.onLanding();
+        }
     }
 }
