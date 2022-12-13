@@ -1,14 +1,14 @@
-package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl
+package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.DirectConnectScreen
 import net.tarasandedevelopment.tarasande.event.EventKey
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtension
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.ServerPingerBase
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.panel.PanelServerInformation
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.panel.copy
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.panel.emptyServer
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.ServerPingerBase
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel.PanelServerInformation
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel.copy
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel.emptyServer
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 

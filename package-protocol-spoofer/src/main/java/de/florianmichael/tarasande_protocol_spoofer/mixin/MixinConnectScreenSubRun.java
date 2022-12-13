@@ -4,7 +4,7 @@ import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelTog
 import net.minecraft.network.ClientConnection;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.ForgeCreator;
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen;
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

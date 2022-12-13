@@ -14,8 +14,8 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.i
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.AccountYggdrasil
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.microsoft.AccountMicrosoft
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.microsoft.AccountMicrosoftRefreshToken
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterEnvironment
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterEnvironment
 
 class ManagerAccount : Manager<Class<out Account>>() {
     init {
@@ -30,7 +30,7 @@ class ManagerAccount : Manager<Class<out Account>>() {
 }
 
 abstract class Account {
-    var environment: Environment = TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).screenBetterSlotListAccountManager.managerEnvironment.list.first().create()
+    var environment: Environment = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonListMultiplayerScreen::class.java).screenBetterSlotListAccountManager.managerEnvironment.list.first().create()
     var session: Session? = null
 
     abstract fun logIn()
