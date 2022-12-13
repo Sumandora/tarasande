@@ -157,11 +157,4 @@ public abstract class MixinEntity {
         }
         return constant;
     }
-
-    @Redirect(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;onLanding()V"))
-    public void revertOnLanding(Entity instance) {
-        if (VersionList.isNewerOrEqualTo(ProtocolVersion.v1_19)) {
-            instance.onLanding();
-        }
-    }
 }

@@ -23,12 +23,4 @@ public class MixinBambooBlock {
             cir.setReturnValue(true);
         }
     }
-
-    @Redirect(method = "getPlacementState", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z", ordinal = 2))
-    public boolean adjustSaplingSuccess(BlockState instance, Block block) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_17)) {
-            return instance.isOf(block) || instance.isOf(Blocks.BAMBOO_SAPLING);
-        }
-        return instance.isOf(block);
-    }
 }
