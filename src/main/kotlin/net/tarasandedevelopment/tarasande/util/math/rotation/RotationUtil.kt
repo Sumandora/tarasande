@@ -78,14 +78,9 @@ object RotationUtil {
                             }
                         }
             }
-            add(EventIsWalking::class.java, 9999) {
+            add(EventCanSprint::class.java, 9999) {
                 if (!TarasandeMain.clientValues().correctMovement.isSelected(0)) {
-                    it.walking = PlayerUtil.isPlayerMoving() && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (goalMovementYaw ?: (fakeRotation?.yaw ?: return@add)))) <= 45
-                }
-            }
-            add(EventHasForwardMovement::class.java, 9999) {
-                if (!TarasandeMain.clientValues().correctMovement.isSelected(0)) {
-                    it.hasForwardMovement = PlayerUtil.isPlayerMoving() && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (goalMovementYaw ?: (fakeRotation?.yaw ?: return@add)))) <= 45
+                    it.canSprint = PlayerUtil.isPlayerMoving() && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (goalMovementYaw ?: (fakeRotation?.yaw ?: return@add)))) <= 45
                 }
             }
             add(EventPacket::class.java, 9999) {

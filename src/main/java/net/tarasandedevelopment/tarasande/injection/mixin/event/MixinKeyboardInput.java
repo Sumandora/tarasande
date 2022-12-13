@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.injection.mixin.event;
 
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
-import net.tarasandedevelopment.tarasande.event.EventHasForwardMovement;
 import net.tarasandedevelopment.tarasande.event.EventInput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,12 +37,5 @@ public class MixinKeyboardInput extends Input {
             if (slowDown && !eventInput.getSlowDown())
                 ci.cancel(); // This is awful, but I can't change the parameter, because Java doesn't support references
         }
-    }
-
-    @Override
-    public boolean hasForwardMovement() {
-        EventHasForwardMovement eventHasForwardMovement = new EventHasForwardMovement(super.hasForwardMovement());
-        EventDispatcher.INSTANCE.call(eventHasForwardMovement);
-        return eventHasForwardMovement.getHasForwardMovement();
     }
 }

@@ -44,16 +44,18 @@ class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array Lis
         var index = 0.0
         enabledModules.sortedBy { FontWrapper.getWidth(it.name) }.reversed().forEach {
             val animation = animations[it]!!
-            val accent = TarasandeMain.clientValues().accentColor.getColor()
-            val color = accent.withAlpha((animation * 255).toInt())
-            RenderSystem.enableBlend()
-            val animatedPosition = easing.ease(animation.toFloat())
-            when (alignment) {
-                Alignment.LEFT -> FontWrapper.textShadow(matrices, it.name, (x - (FontWrapper.getWidth(it.name) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
-                Alignment.MIDDLE -> FontWrapper.textShadow(matrices, it.name, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(it.name).toFloat() / 2.0F, (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
-                Alignment.RIGHT -> FontWrapper.textShadow(matrices, it.name, (x + panelWidth - FontWrapper.getWidth(it.name) * animatedPosition).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+            if (animation > speedIn.min) { // hack
+                val accent = TarasandeMain.clientValues().accentColor.getColor()
+                val color = accent.withAlpha((animation * 255).toInt())
+                RenderSystem.enableBlend()
+                val animatedPosition = easing.ease(animation.toFloat())
+                when (alignment) {
+                    Alignment.LEFT -> FontWrapper.textShadow(matrices, it.name, (x - (FontWrapper.getWidth(it.name) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                    Alignment.MIDDLE -> FontWrapper.textShadow(matrices, it.name, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(it.name).toFloat() / 2.0F, (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                    Alignment.RIGHT -> FontWrapper.textShadow(matrices, it.name, (x + panelWidth - FontWrapper.getWidth(it.name) * animatedPosition).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                }
+                index += animatedPosition
             }
-            index += animatedPosition
         }
     }
 

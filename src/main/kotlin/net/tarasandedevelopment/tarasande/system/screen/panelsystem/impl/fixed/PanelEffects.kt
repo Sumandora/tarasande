@@ -63,15 +63,17 @@ class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble())
         var index = 0.0
         activeStatusEffects.sortedBy { FontWrapper.getWidth(it.second) }.reversed().forEach {
             val animation = animations[it.first]!!
-            val color = Color(it.third).withAlpha((animation * 255).toInt())
-            RenderSystem.enableBlend()
-            val animatedPosition = easing.ease(animation.toFloat())
-            when (alignment) {
-                Alignment.LEFT -> FontWrapper.textShadow(matrices, it.second, (x - (FontWrapper.getWidth(it.second) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
-                Alignment.MIDDLE -> FontWrapper.textShadow(matrices, it.second, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(it.second).toFloat() / 2.0F, (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
-                Alignment.RIGHT -> FontWrapper.textShadow(matrices, it.second, (x + panelWidth - FontWrapper.getWidth(it.second) * animatedPosition).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+            if (animation > speedIn.min) { // hack
+                val color = Color(it.third).withAlpha((animation * 255).toInt())
+                RenderSystem.enableBlend()
+                val animatedPosition = easing.ease(animation.toFloat())
+                when (alignment) {
+                    Alignment.LEFT -> FontWrapper.textShadow(matrices, it.second, (x - (FontWrapper.getWidth(it.second) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                    Alignment.MIDDLE -> FontWrapper.textShadow(matrices, it.second, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(it.second).toFloat() / 2.0F, (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                    Alignment.RIGHT -> FontWrapper.textShadow(matrices, it.second, (x + panelWidth - FontWrapper.getWidth(it.second) * animatedPosition).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                }
+                index += animatedPosition
             }
-            index += animatedPosition
         }
     }
 

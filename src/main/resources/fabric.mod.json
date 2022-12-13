@@ -19,6 +19,5 @@
   ],
   "accessWidener": "tarasande.accesswidener",
   "depends": {
-    "fabric-language-kotlin": "*"
   }
 }

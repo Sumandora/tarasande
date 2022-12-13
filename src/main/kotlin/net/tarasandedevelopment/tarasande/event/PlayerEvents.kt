@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.event
 
 import net.minecraft.block.BlockState
 import net.minecraft.entity.Entity
-import net.minecraft.entity.TrackedPosition
 import net.minecraft.util.Hand
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
@@ -71,3 +70,4 @@ class EventBoundingBoxOverride(val entity: Entity, var boundingBox: Box) : Event
 class EventChat(val chatMessage: String) : Event(true)
 class EventSwing(var hand: Hand) : Event(true)
 class EventEntityHurt(val entity: Entity) : Event(false)
+class EventCanSprint(var canSprint: Boolean) : Event(false)

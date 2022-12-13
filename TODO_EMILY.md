@@ -9,6 +9,5 @@
 - Protocol Hack: Entity Dimensions
 - Recode File Chooser
 - Wheel Menu
-- Projectile aim bot: Crossbows & Prediction
 - Trajectory: Prediction
-- Tick base manipulation: Improve auto uncharge
+- Prepend valid command args to error output

@@ -5,7 +5,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
-import net.tarasandedevelopment.tarasande.event.EventIsWalking;
+import net.tarasandedevelopment.tarasande.event.EventCanSprint;
 import net.tarasandedevelopment.tarasande.event.EventUpdate;
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -56,10 +56,10 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         EventDispatcher.INSTANCE.call(new EventUpdate(EventUpdate.State.POST));
     }
 
-    @Inject(method = "isWalking", at = @At("RETURN"), cancellable = true)
-    public void hookEventIsWalking(CallbackInfoReturnable<Boolean> cir) {
-        EventIsWalking eventIsWalking = new EventIsWalking(cir.getReturnValue());
-        EventDispatcher.INSTANCE.call(eventIsWalking);
-        cir.setReturnValue(eventIsWalking.getWalking());
+    @Inject(method = "canSprint", at = @At("RETURN"), cancellable = true)
+    public void hookEventCanSprint(CallbackInfoReturnable<Boolean> cir) {
+        EventCanSprint eventCanSprint = new EventCanSprint(cir.getReturnValue());
+        EventDispatcher.INSTANCE.call(eventCanSprint);
+        cir.setReturnValue(eventCanSprint.getCanSprint());
     }
 }
