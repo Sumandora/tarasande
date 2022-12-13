@@ -27,7 +27,7 @@ object ContainerUtil {
 
     private fun wrapMaterialScore(stack: ItemStack, durability: Boolean): Float {
         return when (stack.item) {
-            is SwordItem -> (stack.item as ToolItem).material.attackDamage
+            is SwordItem -> (stack.item as SwordItem).material.attackDamage
             is ToolItem -> (stack.item as ToolItem).material.durability.toFloat()
             is ArmorItem -> (stack.item as ArmorItem).material.getDurability((stack.item as ArmorItem).slotType).toFloat()
             else -> 0.0F
@@ -75,5 +75,13 @@ object ContainerUtil {
         }
 
         return false
+    }
+
+    fun wrapMaterialDamage(stack: ItemStack): Float {
+        return when (stack.item) {
+            is SwordItem -> (stack.item as SwordItem).material.attackDamage
+            is ToolItem -> (stack.item as ToolItem).material.attackDamage
+            else -> 0.0F
+        }
     }
 }

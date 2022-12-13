@@ -53,7 +53,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
         when {
             priority.isSelected(0) -> mc.player?.eyePos?.squaredDistanceTo(Vec3d.ofCenter(it.first))?.times(-1)
             priority.isSelected(1) -> mc.player?.eyePos?.squaredDistanceTo(Vec3d.ofCenter(it.first))
-            priority.isSelected(2) -> PlayerUtil.getBreakSpeed(it.first).first
+            priority.isSelected(2) -> PlayerUtil.getBreakSpeed(it.first).first.toDouble()
             else -> 0.0
         }
     }

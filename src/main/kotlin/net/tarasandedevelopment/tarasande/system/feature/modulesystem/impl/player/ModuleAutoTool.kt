@@ -1,20 +1,27 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player
 
 import net.minecraft.enchantment.EnchantmentHelper
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.AxeItem
 import net.minecraft.item.SwordItem
 import net.minecraft.util.hit.BlockHitResult
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.ModuleHealingBot
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
+import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 
 class ModuleAutoTool : Module("Auto tool", "Selects the best tool for breaking a block", ModuleCategory.PLAYER) {
 
-    private val mode = ValueMode(this, "Mode", true, "Blocks", "Entities")
+    val mode = ValueMode(this, "Mode", true, "Blocks", "Entities")
+    val useAxeToCounterBlocking = object : ValueBoolean(this, "Use axe to counter blocking", false) {
+        override fun isEnabled() = mode.isSelected(1)
+    }
 
     init {
         registerEvent(EventUpdate::class.java) { event ->
@@ -53,8 +60,15 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool for breaking a
                 var score = 0.0F
                 for (i in 0..8) {
                     val stack = mc.player?.inventory?.main?.get(i)
-                    if (stack != null && !stack.isEmpty && stack.item is SwordItem) {
-                        val newScore = (stack.item as SwordItem).material.attackDamage + EnchantmentHelper.get(stack).values.sum()
+                    if (stack != null && !stack.isEmpty) {
+                        val newScore = ContainerUtil.wrapMaterialDamage(stack) + EnchantmentHelper.get(stack).values.sum()
+
+                        if(useAxeToCounterBlocking.value && event.entity is PlayerEntity && event.entity.isBlocking && mc.player?.inventory?.main?.subList(0, 8)?.any { it.item is AxeItem } == true) {
+                            if(stack.item !is AxeItem)
+                                continue
+                        } else if (stack.item !is SwordItem)
+                            continue
+
                         if (best == null || newScore > score) {
                             best = i
                             score = newScore

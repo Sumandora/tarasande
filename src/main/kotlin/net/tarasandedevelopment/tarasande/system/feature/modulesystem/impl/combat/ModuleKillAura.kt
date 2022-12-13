@@ -9,6 +9,7 @@ import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.passive.PassiveEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.AxeItem
 import net.minecraft.item.Items
 import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
@@ -33,6 +34,7 @@ import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.C
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleClickTP
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
@@ -325,7 +327,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 var clicks = clickSpeedUtil.getClicks()
 
                 if (clicks == 0)
-                    if (mc.player?.disablesShield() == true && !allAttackedLivingEntities { !it.isBlocking } && (counterBlocking.isSelected(2)))
+                    if (isCancellingShields() && !allAttackedLivingEntities { !it.isBlocking } && (counterBlocking.isSelected(2)))
                         clicks = 1 // Axes can cancel out shields whenever they want, so lets force a hit
 
                 if (!autoBlock.isSelected(0) && mc.player?.isUsingItem!! && clicks > 0) {
@@ -581,7 +583,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
 
     private fun shouldAttackEntity(entity: Entity): Boolean {
-        if (mc.player?.disablesShield() == false) {
+        if (!isCancellingShields()) {
             if (dontAttackWhenBlocking.value && entity is LivingEntity && entity.isBlocking)
                 if (!simulateShieldBlock.value || entity.blockedByShield(DamageSource.player(mc.player)))
                     return false
@@ -604,6 +606,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 if (!criticalSprint || !mc.player?.isSprinting!!)
                     return true
         return false
+    }
+
+    private fun isCancellingShields(): Boolean {
+        if(TarasandeMain.managerModule().get(ModuleAutoTool::class.java).let { it.enabled && it.mode.isSelected(1) && it.useAxeToCounterBlocking.value } &&
+            mc.player?.inventory?.main?.subList(0, 8)?.any { it.item is AxeItem } == true)
+            return true
+        return mc.player?.disablesShield() == true
     }
 
 }
