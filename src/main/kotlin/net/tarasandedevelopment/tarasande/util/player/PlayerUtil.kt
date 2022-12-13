@@ -175,12 +175,12 @@ object PlayerUtil {
         }
     }
 
-    fun getBreakSpeed(blockPos: BlockPos): Pair<Double, Int> {
-        if (!TarasandeMain.managerModule().get(ModuleAutoTool::class.java).enabled)
+    fun getBreakSpeed(blockPos: BlockPos): Pair<Float, Int> {
+        if (!TarasandeMain.managerModule().get(ModuleAutoTool::class.java).let { it.enabled && it.mode.isSelected(0) })
             return MinecraftClient.getInstance().player?.inventory?.selectedSlot!!.let { Pair(getBreakSpeed(blockPos, it), it) }
 
-        val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot ?: return Pair(1.0, -1)
-        var bestMult = 1.0
+        val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot
+        var bestMult = 1.0f
         var bestTool = -1
         for (i in 0..8) {
             val mult = getBreakSpeed(blockPos, i)
@@ -193,17 +193,17 @@ object PlayerUtil {
         return Pair(bestMult, bestTool)
     }
 
-    fun getBreakSpeed(blockPos: BlockPos, item: Int): Double {
-        val state = MinecraftClient.getInstance().world?.getBlockState(blockPos)
-        if (state?.isAir!! || state.getOutlineShape(MinecraftClient.getInstance().world, blockPos).isEmpty) return 1.0
-        val hardness = state.getHardness(MinecraftClient.getInstance().world, blockPos)
-        if (hardness <= 0.0F) return 1.0
+    fun getBreakSpeed(blockPos: BlockPos, item: Int): Float {
+        val state = MinecraftClient.getInstance().world?.getBlockState(blockPos) ?: return 0.0f
+
+        val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot
         MinecraftClient.getInstance().player?.inventory?.selectedSlot = item
-        var mult = MinecraftClient.getInstance().player?.getBlockBreakingSpeed(state)!!
-        if (!MinecraftClient.getInstance().player?.isOnGround!!) {
-            mult *= 5.0F // bruh
-        }
-        return 1.0 - mult / hardness / 30.0
+
+        val speed = state.calcBlockBreakingDelta(MinecraftClient.getInstance().player, MinecraftClient.getInstance().world, blockPos)
+
+        MinecraftClient.getInstance().player?.inventory?.selectedSlot = origSlot
+
+        return 1.0f - speed
     }
 
     fun predictFallDistance(position: BlockPos = MinecraftClient.getInstance().player?.blockPos!!): Int? {
