@@ -65,9 +65,11 @@ class ScreenBetterParentValues(parent: Screen, val titleName: String, val owner:
             prevScreen?.render(matrices, -1, -1, delta)
         }
 
-        TarasandeMain.managerBlur().bind(true, true)
-        RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
-        client?.framebuffer?.beginWrite(true)
+        if (client?.world != null) {
+            TarasandeMain.managerBlur().bind(true, true)
+            RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
+            client?.framebuffer?.beginWrite(true)
+        }
 
         super.render(matrices, mouseX, mouseY, delta)
     }

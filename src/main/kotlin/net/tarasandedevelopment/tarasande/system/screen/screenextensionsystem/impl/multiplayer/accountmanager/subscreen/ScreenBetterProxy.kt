@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen
+package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.widget.ButtonWidget

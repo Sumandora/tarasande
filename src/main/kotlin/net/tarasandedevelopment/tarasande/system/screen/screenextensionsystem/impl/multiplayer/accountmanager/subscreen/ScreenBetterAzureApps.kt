@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen
+package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.AzureAppPreset
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import java.util.*
 import java.util.function.Consumer
@@ -50,7 +50,7 @@ class ScreenBetterAzureApps(prevScreen: Screen?, private val azureApp: AzureAppP
         var x = 3
         var y = 3
 
-        for (environmentPreset in TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).screenBetterSlotListAccountManager.managerAzureApp.list) {
+        for (environmentPreset in TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonListMultiplayerScreen::class.java).screenBetterSlotListAccountManager.managerAzureApp.list) {
             this.addDrawableChild(ButtonWidget(x, y, 130, 20, Text.of(environmentPreset.name)) {
                 clientIdTextField?.text = environmentPreset.clientId.toString()
                 scopeTextField?.text = environmentPreset.scope

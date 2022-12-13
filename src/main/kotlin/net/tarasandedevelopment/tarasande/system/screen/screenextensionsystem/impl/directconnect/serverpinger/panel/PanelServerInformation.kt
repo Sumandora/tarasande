@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.serverpinger.panel
+package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen

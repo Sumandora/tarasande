@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain;
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.IForgePayload;
 import de.florianmichael.tarasande_protocol_spoofer.accessor.IServerInfo;
 import de.florianmichael.tarasande_protocol_spoofer.accessor.IServerMetadata;
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.ScreenExtensionSidebarMultiplayerScreen;
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

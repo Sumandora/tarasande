@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager
+package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager
 
 import com.mojang.authlib.minecraft.UserApiService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
@@ -26,9 +26,9 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.M
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.AccountSession
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.ManagerAzureApp
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.environment.ManagerEnvironment
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.file.FileAccounts
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterAccount
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.accountmanager.subscreen.ScreenBetterProxy
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.file.FileAccounts
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterAccount
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterProxy
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed

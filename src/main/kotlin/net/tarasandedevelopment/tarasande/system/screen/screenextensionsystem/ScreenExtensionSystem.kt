@@ -7,6 +7,9 @@ import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.button.PanelButton
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.*
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.ScreenExtensionDirectConnectScreen
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.ManagerEntrySidebarPanel
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.panel.ClickableWidgetPanelSidebar
 import su.mandora.event.EventDispatcher
@@ -16,6 +19,7 @@ class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
     init {
         add(
             ScreenExtensionSidebarMultiplayerScreen(),
+            ScreenExtensionButtonListMultiplayerScreen(),
             ScreenExtensionDownloadingTerrainScreen(),
             ScreenExtensionButtonListDeathScreen(),
             ScreenExtensionButtonListPackScreen(),
