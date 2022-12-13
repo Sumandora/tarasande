@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande_litematica.generator
+package net.tarasandedevelopment.tarasande_litematica.generator.impl
 
 import de.evilcodez.mazes.generator.MazeGeneratorType
 import de.evilcodez.mazes.utils.DimensionUtils
@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
+import net.tarasandedevelopment.tarasande_litematica.generator.Generator
 import net.tarasandedevelopment.tarasande_litematica.util.LitematicaGenerator
 import java.util.Random
 

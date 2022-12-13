@@ -102,7 +102,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
                 ++this.ticksSinceLastPositionPacketSent;
             }
             double n = 2.05E-4;
-            if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
+            if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2)) {
                 n = 9.0E-4D;
             }
             boolean bl3 = MathHelper.squaredMagnitude(d, e, f) > MathHelper.square(n) || this.ticksSinceLastPositionPacketSent >= 20;

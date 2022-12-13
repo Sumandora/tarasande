@@ -447,10 +447,10 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                     final boolean isGround = !(y < 0.0D);
 
                     final EntityTracker1_7_6_10 entityTracker1_7_6_10 = wrapper.user().get(EntityTracker1_7_6_10.class);
-
                     if (entityTracker1_7_6_10 != null) {
                         entityTracker1_7_6_10.getGroundTracker().put(entityId, isGround);
                     }
+
                     wrapper.write(Type.BOOLEAN, isGround);
                 }); // On Ground
             }
@@ -464,7 +464,6 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                 map(Type.BYTE); // Pitch
                 handler(wrapper -> {
                     final EntityTracker1_7_6_10 entityTracker1_7_6_10 = wrapper.user().get(EntityTracker1_7_6_10.class);
-
                     if (entityTracker1_7_6_10 != null) {
                         wrapper.write(Type.BOOLEAN, entityTracker1_7_6_10.isGround(wrapper.get(Type.VAR_INT, 0)));
                     }
@@ -490,10 +489,10 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
 
                     final boolean isGround = !(y < 0.0D);
                     final EntityTracker1_7_6_10 entityTracker1_7_6_10 = wrapper.user().get(EntityTracker1_7_6_10.class);
-
                     if (entityTracker1_7_6_10 != null) {
                         entityTracker1_7_6_10.getGroundTracker().put(entityId, isGround);
                     }
+
                     wrapper.write(Type.BOOLEAN, isGround);
                 }); // On Ground
             }
@@ -513,8 +512,8 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
 
                 handler(wrapper -> {
                     final int entityId = wrapper.get(Type.VAR_INT, 0);
-                    final EntityTracker1_7_6_10 entityTracker1_7_6_10 = wrapper.user().get(EntityTracker1_7_6_10.class);
 
+                    final EntityTracker1_7_6_10 entityTracker1_7_6_10 = wrapper.user().get(EntityTracker1_7_6_10.class);
                     if (entityTracker1_7_6_10 != null) {
                         wrapper.write(Type.BOOLEAN, entityTracker1_7_6_10.isGround(entityId));
                     }

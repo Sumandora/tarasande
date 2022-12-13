@@ -160,23 +160,25 @@ public abstract class MixinClientPlayerInteractionManager {
         FabricHandItemProvider.Companion.setLastUsedItem(player.getStackInHand(hand).copy());
     }
 
-    ActionResult actionResult;
+    @Unique
+    private ActionResult protocolhack_actionResult;
 
     @Inject(method = "interactBlock", at = @At("HEAD"), cancellable = true)
     public void cacheActionResult(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
         if(VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
-            this.actionResult = this.interactBlockInternal(player, hand, hitResult);
-            if(actionResult == ActionResult.FAIL)
-                cir.setReturnValue(actionResult);
+            this.protocolhack_actionResult = this.interactBlockInternal(player, hand, hitResult);
+
+            if (this.protocolhack_actionResult == ActionResult.FAIL) {
+                cir.setReturnValue(this.protocolhack_actionResult);
+            }
         }
     }
 
     @Redirect(method = "method_41933", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;interactBlockInternal(Lnet/minecraft/client/network/ClientPlayerEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/util/hit/BlockHitResult;)Lnet/minecraft/util/ActionResult;"))
     public ActionResult provideCachedResult(ClientPlayerInteractionManager instance, ClientPlayerEntity player, Hand hand, BlockHitResult hitResult) {
         if(VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
-            return actionResult;
+            return this.protocolhack_actionResult;
         }
         return interactBlockInternal(player, hand, hitResult);
     }
-
 }

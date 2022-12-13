@@ -5,6 +5,8 @@ import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
+import net.tarasandedevelopment.tarasande_litematica.generator.impl.GeneratorMazes
+import net.tarasandedevelopment.tarasande_litematica.generator.impl.GeneratorQRCode
 
 class ManagerGenerator : Manager<Generator>() {
 

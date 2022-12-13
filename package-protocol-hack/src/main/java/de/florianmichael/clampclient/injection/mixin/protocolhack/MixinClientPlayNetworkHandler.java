@@ -102,4 +102,34 @@ public abstract class MixinClientPlayNetworkHandler {
             }
         }
     }
+
+    @Redirect(method = "onEntityPassengersSet", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getYaw()F", ordinal = 0))
+    public float revertPrevYawSetter(Entity instance) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2)) {
+            if (this.client != null && this.client.player != null) {
+                return this.client.player.prevYaw;
+            }
+        }
+        return instance.getYaw();
+    }
+
+    @Redirect(method = "onEntityPassengersSet", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getYaw()F", ordinal = 1))
+    public float revertYawSetter(Entity instance) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2)) {
+            if (this.client != null && this.client.player != null) {
+                return this.client.player.getYaw();
+            }
+        }
+        return instance.getYaw();
+    }
+
+    @Redirect(method = "onEntityPassengersSet", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getYaw()F", ordinal = 2))
+    public float revertHeadYawSetter(Entity instance) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2)) {
+            if (this.client != null && this.client.player != null) {
+                return this.client.player.getHeadYaw();
+            }
+        }
+        return instance.getYaw();
+    }
 }
