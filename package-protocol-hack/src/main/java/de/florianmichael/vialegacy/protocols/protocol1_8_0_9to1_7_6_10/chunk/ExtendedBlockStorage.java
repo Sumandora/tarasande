@@ -41,6 +41,11 @@ public class ExtendedBlockStorage {
 
     }
 
+    public int getExtBlockID(int x, int y, int z) {
+        int var4 = this.blockLSBArray[y << 8 | z << 4 | x] & 255;
+        return this.blockMSBArray != null ? this.blockMSBArray.get(x, y, z) << 8 | var4 : var4;
+    }
+
     public byte[] getBlockLSBArray() {
         return this.blockLSBArray;
     }

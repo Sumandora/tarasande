@@ -67,15 +67,19 @@ public class MixinSwordItem extends ToolItem {
 
     @Override
     public UseAction getUseAction(ItemStack stack) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
             return UseAction.BLOCK;
+        }
+
         return super.getUseAction(stack);
     }
 
     @Override
     public int getMaxUseTime(ItemStack stack) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
             return 72000;
+        }
+
         return super.getMaxUseTime(stack);
     }
 }

@@ -147,15 +147,13 @@ public class Chunk1_7_6_10Type extends PartialType<Chunk, ClientWorld> {
                 NibbleArray nibblearray = storageArrays[i].getMetadataArray();
 
                 for (int ind = 0; ind < blockIds.length; ++ind) {
-                    int id = blockIds[ind] & 255;
-                    int px = ind & 15;
-                    int py = ind >> 8 & 15;
-                    int pz = ind >> 4 & 15;
-                    int blockData = nibblearray.get(px, py, pz);
+                    final int px = ind & 15;
+                    final int py = ind >> 8 & 15;
+                    final int pz = ind >> 4 & 15;
+                    final int blockId = storageArrays[i].getExtBlockID(px, py, pz);
+                    int blockData = SpigotDataFixer.getCorrectedData(blockId, nibblearray.get(px, py, pz));
 
-                    blockData = SpigotDataFixer.getCorrectedData(id, blockData);
-
-                    char val = (char) (id << 4 | blockData);
+                    char val = (char) (blockId << 4 | blockData);
                     final DataPalette dataPalette = sections[i].palette(PaletteType.BLOCKS);
                     if (dataPalette != null) {
                         dataPalette.setIdAt(px, py, pz, val);
