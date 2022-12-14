@@ -15,6 +15,7 @@ import kotlin.math.abs
 private val manhattan = BiFunction<Node, Node, Double> { current, target ->
     val delta = target - current
     // Ok, so I have no clue where igs found that 2.5, but it makes this way faster, so.... Thank you, I guess ^^
+    // Me from the future here: This number is bullshit, on one side it makes this way faster, on the other side a star seems to work less optimal because of it
     2.5 * (abs(delta.x) + abs(delta.y) + abs(delta.z)).toDouble()
 }
 
@@ -52,25 +53,21 @@ class PathFinder(private val allowedBlock: BiFunction<ClientWorld?, Node, Boolea
     }
 
     fun findPath(start: Node, target: Node, maxTime: Long? = null): List<Node>? {
-        val open = HashMap<Int, Node>()
+        val open = TreeSet<Node>(Comparator.comparing { it.f })
         val closed = HashSet<Int>()
-        open[start.hashCode()] = start
         start.g = cost.apply(start, start)
         start.h = heuristic.apply(start, target)
         start.f = start.g + start.h
+        open.add(start)
 
         if (start == target || !allowedBlock.apply(MinecraftClient.getInstance().world, start) || !allowedBlock.apply(MinecraftClient.getInstance().world, target)) {
-            return Collections.singletonList(open.values.first())
+            return Collections.singletonList(start)
         }
 
-        var bestNode: Node? = null
-        var current: Node?
+        var current: Node? = null
         val begin = System.currentTimeMillis()
         while ((maxTime == null || System.currentTimeMillis() - begin <= maxTime) && open.isNotEmpty()) {
-            val lowest = open.minBy { entry -> entry.value.f }
-            open.remove(lowest.key)
-
-            current = lowest.value
+            current = open.pollFirst()
             if (current == target) {
                 break
             }
@@ -78,36 +75,26 @@ class PathFinder(private val allowedBlock: BiFunction<ClientWorld?, Node, Boolea
             closed.add(current.hashCode())
 
             for (movementPossibility in directions) {
-                var movement = current + movementPossibility
+                val movement = current + movementPossibility
 
                 if (closed.contains(movement.hashCode()))
                     continue
-
-                var contains = true
-                movement = open[movement.hashCode()] ?: run { contains = false; movement }
 
                 if (!allowedBlock.apply(MinecraftClient.getInstance().world, movement))
                     continue
 
                 val newCost = current.g + cost.apply(start, movement)
 
-                if (!contains)
-                    open[movement.hashCode()] = movement
-                else if (movement.g <= newCost)
-                    continue
-
                 movement.g = newCost
                 movement.h = heuristic.apply(movement, target)
-
-                if (bestNode == null || bestNode.h > movement.h)
-                    bestNode = movement
-
                 movement.f = movement.g + movement.h
                 movement.parent = current
+
+                open.add(movement)
             }
         }
 
-        return reconstructPath(bestNode ?: return null)
+        return reconstructPath(current ?: return null)
     }
 
     private fun reconstructPath(current: Node): ArrayList<Node> {
