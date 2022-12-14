@@ -46,7 +46,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
     init {
         registerEvent(EventVelocity::class.java) { event ->
             if (!packets.isSelected(event.packet.ordinal)) return@registerEvent
-            if(event.velocityX == 0.0 && event.velocityY == 0.0 && event.velocityZ == 0.0)
+            if (event.velocityX == 0.0 && event.velocityY == 0.0 && event.velocityZ == 0.0)
                 return@registerEvent // wtf?
 
             when {

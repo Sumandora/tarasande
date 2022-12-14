@@ -69,7 +69,7 @@ object PredictionEngine {
         SharedConstants.isDevelopment = wasDevelopment
 
         @Suppress("NAME_SHADOWING")
-        val input = input ?: if(baseEntity == mc.player) mc.player?.input!! else getClosestInput(baseEntity)
+        val input = input ?: if (baseEntity == mc.player) mc.player?.input!! else getClosestInput(baseEntity)
 
         playerEntity.input = object : Input() {
             override fun tick(slowDown: Boolean, f: Float) {
@@ -103,7 +103,7 @@ object PredictionEngine {
 
         playerEntity.isOnGround = baseEntity.isOnGround // scary
 
-        if(baseEntity == mc.player) {
+        if (baseEntity == mc.player) {
             playerEntity.velocity = baseEntity.velocity
         } else {
             playerEntity.velocity = Vec3d.ZERO.copy()
@@ -115,7 +115,7 @@ object PredictionEngine {
         playerEntity.touchingWater = baseEntity.isTouchingWater
         playerEntity.isSwimming = baseEntity.isSwimming
 
-        if(baseEntity == mc.player) {
+        if (baseEntity == mc.player) {
             playerEntity.autoJumpEnabled = mc.player?.autoJumpEnabled == true
             playerEntity.ticksToNextAutojump = mc.player?.ticksToNextAutojump!!
         } else {
@@ -149,8 +149,8 @@ object PredictionEngine {
 
     private val allInputs = run {
         val list = ArrayList<Input>()
-        for(forward in -1..1)
-            for(sideways in -1..1)
+        for (forward in -1..1)
+            for (sideways in -1..1)
                 list.add(Input(forward.toFloat(), sideways.toFloat()))
         list.toTypedArray()
     }
@@ -161,21 +161,21 @@ object PredictionEngine {
         val velocity = Vec3d(baseEntity.serverX, baseEntity.serverY, baseEntity.serverZ) - prevServerPos
 
         var best: Pair<Input, Double>? = null
-        for(input in allInputs) {
+        for (input in allInputs) {
             @Suppress("NAME_SHADOWING")
             val input = input.with(!baseEntity.isOnGround, baseEntity.isSneaking)
             val standStill = input.movementForward == 0.0F && input.movementSideways == 0.0F
-            if(velocity.horizontalLengthSquared() > 0.0 && standStill)
+            if (velocity.horizontalLengthSquared() > 0.0 && standStill)
                 continue
 
             val nextPos =
-                if(standStill)
+                if (standStill)
                     Vec3d(0.0, 0.0, 0.0)
                 else
                     Entity.movementInputToVelocity(input.movementInput.let { Vec3d(it.x.toDouble(), 0.0, it.y.toDouble()) }, 1.0F, baseEntity.serverYaw.toFloat())
 
             val distance = velocity.distanceTo(nextPos)
-            if(best == null || best.second > distance)
+            if (best == null || best.second > distance)
                 best = Pair(input, distance)
         }
         return best!!.first

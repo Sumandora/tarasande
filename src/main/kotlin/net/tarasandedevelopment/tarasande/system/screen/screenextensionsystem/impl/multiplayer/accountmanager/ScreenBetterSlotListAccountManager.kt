@@ -55,9 +55,9 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
     var status = ""
 
     // @formatter:off
-    val managerEnvironment  = ManagerEnvironment()
-    val managerAzureApp     = ManagerAzureApp()
-    val managerAccount      = ManagerAccount()
+    val managerEnvironment = ManagerEnvironment()
+    val managerAzureApp = ManagerAzureApp()
+    val managerAccount = ManagerAccount()
     // @formatter:on
 
     val screenBetterProxy = ScreenBetterProxy()

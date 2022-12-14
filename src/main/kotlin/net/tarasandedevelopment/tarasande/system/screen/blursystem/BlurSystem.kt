@@ -39,7 +39,7 @@ class ManagerBlur : Manager<Blur>() {
 
         EventDispatcher.apply {
             add(EventScreenRender::class.java, 1) {
-                if(MinecraftClient.getInstance().currentScreen !is ScreenCheatMenu)
+                if (MinecraftClient.getInstance().currentScreen !is ScreenCheatMenu)
                     blurScene(shapesBuffer = screenShapesFramebuffer)
             }
             add(EventRender2D::class.java, 1) {
@@ -53,7 +53,7 @@ class ManagerBlur : Manager<Blur>() {
     fun selected(): Blur = list[mode.let { it.values.indexOf(it.selected[0]) }]
 
     fun bind(setViewport: Boolean, screens: Boolean = false) {
-        (if(screens) screenShapesFramebuffer else inGameShapesFramebuffer).beginWrite(setViewport)
+        (if (screens) screenShapesFramebuffer else inGameShapesFramebuffer).beginWrite(setViewport)
     }
 
     fun blurScene(strength: Int? = null, shapesBuffer: Framebuffer = inGameShapesFramebuffer) {

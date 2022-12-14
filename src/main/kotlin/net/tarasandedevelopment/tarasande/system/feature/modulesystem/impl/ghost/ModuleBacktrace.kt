@@ -61,7 +61,7 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
         registerEvent(EventRender3D::class.java) { event ->
             boundingBoxes.forEach {
                 it.value.forEach { box ->
-                    RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(box), if(computeSelectedBox(it.key) == box) selectedColor.getColor().rgb else defaultColor.getColor().rgb)
+                    RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(box), if (computeSelectedBox(it.key) == box) selectedColor.getColor().rgb else defaultColor.getColor().rgb)
                 }
             }
         }
@@ -71,13 +71,13 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
             val list = boundingBoxes[event.entity] ?: return@registerEvent
 
             val moduleBlink = TarasandeMain.managerModule().get(ModuleBlink::class.java)
-            if(blinkResync.value && moduleBlink.enabled) {
+            if (blinkResync.value && moduleBlink.enabled) {
                 val index = list.size - list.indexOf(box)
                 val time = (index - 1) * mc.renderTickCounter.tickTime
                 moduleBlink.onDisable(false, cancelled = false, timeOffset = time.toLong())
             }
 
-            if(removeInvalidRecords.value) {
+            if (removeInvalidRecords.value) {
                 list.removeIf { list.indexOf(it) <= list.indexOf(box) }
             }
         }

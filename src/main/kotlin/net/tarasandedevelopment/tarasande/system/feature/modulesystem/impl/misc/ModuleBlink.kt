@@ -80,21 +80,24 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
 
         EventDispatcher.apply {
             add(EventPacket::class.java, 1) { event ->
-                if(event.type == EventPacket.Type.RECEIVE) {
-                    when(event.packet) {
+                if (event.type == EventPacket.Type.RECEIVE) {
+                    when (event.packet) {
                         is PlayerSpawnS2CPacket -> {
                             newPositions[event.packet.id] = TrackedPosition()
                         }
+
                         is EntityS2CPacket -> {
                             event.packet.apply {
-                                if(positionChanged) {
+                                if (positionChanged) {
                                     newPositions[id]?.also { it.setPos(it.withDelta(deltaX.toLong(), deltaY.toLong(), deltaZ.toLong())) }
                                 }
                             }
                         }
+
                         is EntityPositionS2CPacket -> {
                             newPositions[event.packet.id]?.setPos(event.packet.let { Vec3d(it.x, it.y, it.z) })
                         }
+
                         is EntitiesDestroyS2CPacket -> {
                             event.packet.entityIds.forEach {
                                 newPositions.remove(it)
@@ -104,7 +107,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                 }
             }
             add(EventDisconnect::class.java) {
-                if(it.connection == mc.networkHandler?.connection)
+                if (it.connection == mc.networkHandler?.connection)
                     newPositions.clear()
             }
         }
@@ -127,7 +130,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                 if (mode.isSelected(1) && mc.currentScreen is DownloadingTerrainScreen) {
                     onDisable()
                 }
-                if(
+                if (
                     (event.type == EventPacket.Type.SEND && event.packet is ClientStatusC2SPacket && event.packet.mode == ClientStatusC2SPacket.Mode.PERFORM_RESPAWN) ||
                     (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerRespawnS2CPacket)
                 ) {
@@ -180,7 +183,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         }
 
         registerEvent(EventRender3D::class.java) { event ->
-            if(affectedPackets.isSelected(1) && !restrictPackets.anySelected())
+            if (affectedPackets.isSelected(1) && !restrictPackets.anySelected())
                 newPositions.forEach { (_, trackedPosition) -> RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(PlayerEntity.STANDING_DIMENSIONS.getBoxAt(trackedPosition.subtract(Vec3d.ZERO).negate())), hitBoxColor.getColor().rgb) }
         }
     }

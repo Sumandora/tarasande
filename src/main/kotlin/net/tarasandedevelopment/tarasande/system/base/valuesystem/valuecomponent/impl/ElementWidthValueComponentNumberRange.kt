@@ -31,6 +31,7 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
 
     private fun setMinValue(value: Double, clamp: Boolean) {
         val valueNumberRange = this.value as ValueNumberRange
+
         @Suppress("NAME_SHADOWING")
         var value = (value / valueNumberRange.increment).roundToInt() * valueNumberRange.increment
 
@@ -49,6 +50,7 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
 
     private fun setMaxValue(value: Double, clamp: Boolean) {
         val valueNumberRange = this.value as ValueNumberRange
+
         @Suppress("NAME_SHADOWING")
         var value = (value / valueNumberRange.increment).roundToInt() * valueNumberRange.increment
 

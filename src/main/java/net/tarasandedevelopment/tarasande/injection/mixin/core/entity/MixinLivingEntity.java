@@ -23,12 +23,18 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Shadow
     public int bodyTrackingIncrements;
-
+    @Shadow
+    public double serverX;
+    @Shadow
+    public double serverY;
+    @Shadow
+    public double serverZ;
     @Shadow
     protected double serverYaw;
-
     @Shadow
     protected double serverPitch;
+    @Unique
+    private Vec3d tarasande_oldServerPos;
 
     public MixinLivingEntity(EntityType<?> type, World world) {
         super(type, world);
@@ -36,15 +42,6 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Shadow
     public abstract float getYaw(float tickDelta);
-
-    @Shadow
-    public double serverX;
-
-    @Shadow
-    public double serverY;
-
-    @Shadow
-    public double serverZ;
 
     @Inject(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;bodyTrackingIncrements:I"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateTrackedPosition(DDD)V"), to = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;serverX:D")))
     public void preventRotationLeak(CallbackInfo ci) {
@@ -57,9 +54,6 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
             ));
         }
     }
-
-    @Unique
-    private Vec3d tarasande_oldServerPos;
 
     @Inject(method = "updateTrackedPositionAndAngles", at = @At("HEAD"))
     public void saveOldServerPos(double x, double y, double z, float yaw, float pitch, int interpolationSteps, boolean interpolate, CallbackInfo ci) {

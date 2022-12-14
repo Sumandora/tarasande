@@ -65,12 +65,13 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
                 it.attackable = it.attackable && list.contains(it.entity.type)
             }
         }
+
         override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
     }
     private val dontAttackTamedEntities = object : ValueBoolean(targetingValues, "Don't attack tamed entities", false) {
         init {
             EventDispatcher.add(EventIsEntityAttackable::class.java) {
-                if(value)
+                if (value)
                     it.attackable = it.attackable && (it.entity !is Tameable || it.entity.ownerUuid != MinecraftClient.getInstance().player?.uuid)
             }
         }
@@ -78,10 +79,11 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
     private val dontAttackRidingEntity = object : ValueBoolean(targetingValues, "Don't attack riding entity", false) {
         init {
             EventDispatcher.add(EventIsEntityAttackable::class.java) {
-                if(value)
+                if (value)
                     it.attackable = it.attackable && it.entity != MinecraftClient.getInstance().player?.vehicle
             }
         }
+
         override fun isEnabled() = entities.list.isNotEmpty()
     }
 

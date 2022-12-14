@@ -188,8 +188,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             val prevTargets = ArrayList(targets)
             targets.clear()
             val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
-            if(closedInventory.value && mc.currentScreen is HandledScreen<*>) {
-                if(RotationUtil.fakeRotation != null) {
+            if (closedInventory.value && mc.currentScreen is HandledScreen<*>) {
+                if (RotationUtil.fakeRotation != null) {
                     event.rotation = currentRot
                     event.minRotateToOriginSpeed = aimSpeed.minValue
                     event.maxRotateToOriginSpeed = aimSpeed.maxValue
@@ -230,10 +230,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             //@formatter:off
             targets.sortWith(
-                Comparator.comparing { it: Pair<Entity, Vec3d> -> if(it.first is LivingEntity) (it.first as LivingEntity).isDead else true }.
-                    thenBy { !shouldAttackEntity(it.first) }.
-                    thenBy { mc.player?.eyePos?.squaredDistanceTo(it.second)!! > reach.minValue * reach.minValue }.
-                    then(comparator)
+                Comparator.comparing { it: Pair<Entity, Vec3d> -> if (it.first is LivingEntity) (it.first as LivingEntity).isDead else true }.thenBy { !shouldAttackEntity(it.first) }.thenBy { mc.player?.eyePos?.squaredDistanceTo(it.second)!! > reach.minValue * reach.minValue }.then(comparator)
             )
             //@formatter:on
 
@@ -316,14 +313,14 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 validEntities.add(Pair(target, aimPoint))
             }
 
-            if((waitForDamageValue.value && waitForDamage) ||
+            if ((waitForDamageValue.value && waitForDamage) ||
                 allAttackedLivingEntities { !shouldAttackEntity(it) } ||
                 (waitForCritical.value && mc.player?.isOnGround != true && willPerformCritical(false, false) && !willPerformCritical(criticalSprint.value, true) && (!dontWaitWhenEnemyHasShield.value || allAttackedLivingEntities { !hasShield(it) })))
                 validEntities.clear()
 
             var attacked = false
 
-            if(validEntities.isNotEmpty() && !event.dirty && (!closedInventory.value || mc.currentScreen !is HandledScreen<*>)) {
+            if (validEntities.isNotEmpty() && !event.dirty && (!closedInventory.value || mc.currentScreen !is HandledScreen<*>)) {
                 var clicks = clickSpeedUtil.getClicks()
 
                 if (clicks == 0)
@@ -602,14 +599,14 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             mc.player?.isTouchingWater != true &&
             !(mc.player as IClientPlayerEntity).tarasande_forceHasStatusEffect(StatusEffects.BLINDNESS) &&
             mc.player?.hasVehicle() == false)
-            if(!fallDistance || mc.player?.fallDistance!! > 0.0F)
+            if (!fallDistance || mc.player?.fallDistance!! > 0.0F)
                 if (!criticalSprint || !mc.player?.isSprinting!!)
                     return true
         return false
     }
 
     private fun isCancellingShields(): Boolean {
-        if(TarasandeMain.managerModule().get(ModuleAutoTool::class.java).let { it.enabled && it.mode.isSelected(1) && it.useAxeToCounterBlocking.value } &&
+        if (TarasandeMain.managerModule().get(ModuleAutoTool::class.java).let { it.enabled && it.mode.isSelected(1) && it.useAxeToCounterBlocking.value } &&
             mc.player?.inventory?.main?.subList(0, 8)?.any { it.item is AxeItem } == true)
             return true
         return mc.player?.disablesShield() == true

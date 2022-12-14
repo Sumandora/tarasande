@@ -39,10 +39,10 @@ class PanelWatermark : Panel("Watermark", FontWrapper.getWidth(JAPANESE_NAME) * 
         matrices?.pop()
 
         val userHost = " $localHost"
-        val userHostWidth = if(hidePersonalName.value) 0 else FontWrapper.getWidth(userHost)
+        val userHostWidth = if (hidePersonalName.value) 0 else FontWrapper.getWidth(userHost)
 
         val motdWidth = FontWrapper.getWidth(messageOfTheDay.value + " ")
-        if(motdWidth > panelWidth - userHostWidth) {
+        if (motdWidth > panelWidth - userHostWidth) {
             matrices?.push()
             GlStateManager._enableScissorTest()
             val scaleFactor = MinecraftClient.getInstance().window?.scaleFactor!!.toInt()

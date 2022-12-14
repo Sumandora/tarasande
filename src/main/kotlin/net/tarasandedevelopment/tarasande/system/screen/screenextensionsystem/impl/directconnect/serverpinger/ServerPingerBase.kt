@@ -37,7 +37,7 @@ class ServerPingerBase(val parent: ScreenExtension<*>, private val addressProvid
         }
 
         override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-            if(RenderUtil.isHovered(mouseX, mouseY, x, y + titleBarHeight, x + panelWidth, y + panelHeight)) {
+            if (RenderUtil.isHovered(mouseX, mouseY, x, y + titleBarHeight, x + panelWidth, y + panelHeight)) {
                 ping(true)
                 return true
             }

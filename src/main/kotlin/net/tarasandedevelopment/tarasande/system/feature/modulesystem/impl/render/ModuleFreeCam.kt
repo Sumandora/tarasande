@@ -169,7 +169,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around
         }
 
         registerEvent(EventTick::class.java) { event ->
-            if(event.state == EventTick.State.PRE)
+            if (event.state == EventTick.State.PRE)
                 input.tick(false, 1.0F)
         }
     }

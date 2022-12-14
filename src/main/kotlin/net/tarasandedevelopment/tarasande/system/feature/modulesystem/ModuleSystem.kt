@@ -185,8 +185,10 @@ open class Module(val name: String, val description: String, val category: Strin
 
     @Suppress("LeakingThis")
     val visible = ValueBoolean(this, "Visible in ArrayList", true)
+
     @Suppress("LeakingThis")
     val autoDisable = ValueMode(this, "Auto disable", true, "Death", "Disconnect")
+
     @Suppress("LeakingThis")
     val bind = ValueBind(this, "Bind", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN)
 

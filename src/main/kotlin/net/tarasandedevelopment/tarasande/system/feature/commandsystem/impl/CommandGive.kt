@@ -3,14 +3,10 @@ package net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.exceptions.CommandSyntaxException
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import net.minecraft.command.CommandSource
 import net.minecraft.command.argument.ItemStackArgument
 import net.minecraft.command.argument.ItemStackArgumentType
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.Command
-import kotlin.jvm.Throws
 
 class CommandGive : Command("give") {
 

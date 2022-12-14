@@ -27,6 +27,7 @@ class ElementWidthValueComponentNumber(value: Value) : ElementWidthValueComponen
 
     private fun setValue(value: Double, clamp: Boolean) {
         val valueNumber = this.value as ValueNumber
+
         @Suppress("NAME_SHADOWING")
         var value = (value / valueNumber.increment).roundToInt() * valueNumber.increment
 

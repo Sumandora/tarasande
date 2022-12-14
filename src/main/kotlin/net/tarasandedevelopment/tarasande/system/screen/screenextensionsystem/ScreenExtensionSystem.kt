@@ -49,7 +49,7 @@ open class ScreenExtensionSidebar<T : Screen>(screen: Class<out T>) : ScreenExte
     private var sidebarWidget: ClickableWidgetPanelSidebar? = null
 
     override fun createElements(screen: T): MutableList<Element> {
-        return mutableListOf(sidebarWidget?: sidebar.build())
+        return mutableListOf(sidebarWidget ?: sidebar.build())
     }
 }
 

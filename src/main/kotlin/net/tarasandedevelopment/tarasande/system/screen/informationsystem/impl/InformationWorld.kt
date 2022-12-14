@@ -35,7 +35,7 @@ class InformationWorldTime : Information("World", "World Time") {
                 }
             }
             add(EventDisconnect::class.java) {
-                if(it.connection == MinecraftClient.getInstance().networkHandler?.connection)
+                if (it.connection == MinecraftClient.getInstance().networkHandler?.connection)
                     lastUpdate = null
             }
         }
@@ -74,12 +74,12 @@ class InformationVanishedPlayers : Information("World", "Vanished players") {
                     vanishedPlayers.add(event.uuid)
             }
             add(EventPacket::class.java) { event ->
-                if(event.type == EventPacket.Type.RECEIVE && event.packet is PlayerRespawnS2CPacket)
+                if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerRespawnS2CPacket)
                     if (event.packet.isNewWorld())
                         vanishedPlayers.clear()
             }
             add(EventDisconnect::class.java) {
-                if(it.connection == MinecraftClient.getInstance().networkHandler?.connection)
+                if (it.connection == MinecraftClient.getInstance().networkHandler?.connection)
                     vanishedPlayers.clear()
             }
         }

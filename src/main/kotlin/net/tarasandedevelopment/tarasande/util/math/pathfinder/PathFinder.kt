@@ -39,8 +39,10 @@ class PathFinder(private val allowedBlock: BiFunction<ClientWorld?, Node, Boolea
 
     fun findPath(start: Vec3d, target: Vec3d, maxTime: Long? = null): List<Vec3d>? {
         val mappedPath = ArrayList<Vec3d>()
+
         @Suppress("NAME_SHADOWING")
         val start = BlockPos(start)
+
         @Suppress("NAME_SHADOWING")
         val target = BlockPos(target)
         val path = findPath(Node(start.x, start.y, start.z), Node(target.x, target.y, target.z), maxTime) ?: return null

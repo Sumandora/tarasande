@@ -77,7 +77,7 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
                 if (mc.world == null) return@registerEvent
                 when (event.packet) {
                     is PlayerRespawnS2CPacket -> {
-                        if(event.packet.isNewWorld())
+                        if (event.packet.isNewWorld())
                             onDisable() // prevent memory leak
                     }
 

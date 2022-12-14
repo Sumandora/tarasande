@@ -15,8 +15,8 @@ class ModuleHitBox : Module("Hit box", "Makes enemy hit boxes larger", ModuleCat
 
     init {
         registerEvent(EventBoundingBoxOverride::class.java) { event ->
-            if(disableInterpolation.value) {
-                if(event.entity is LivingEntity) {
+            if (disableInterpolation.value) {
+                if (event.entity is LivingEntity) {
                     val center = event.boundingBox.center
                     event.boundingBox =
                         event.boundingBox

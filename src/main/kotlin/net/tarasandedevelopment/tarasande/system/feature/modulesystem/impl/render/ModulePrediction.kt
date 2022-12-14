@@ -15,8 +15,8 @@ class ModulePrediction : Module("Prediction", "Predicts the local player", Modul
 
     init {
         registerEvent(EventRender3D::class.java) { event ->
-            for(entity in if(everyone.value) mc.world?.players!! else listOf(mc.player)) {
-                if(entity != null)
+            for (entity in if (everyone.value) mc.world?.players!! else listOf(mc.player)) {
+                if (entity != null)
                     RenderUtil.renderPath(event.matrices, listOf(entity.getLerpedPos(mc.tickDelta)!!, *PredictionEngine.predictState(ticks.value.toInt(), entity).second.toTypedArray()), -1)
             }
         }

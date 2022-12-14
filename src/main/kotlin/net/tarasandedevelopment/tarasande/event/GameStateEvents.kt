@@ -8,7 +8,6 @@ import net.minecraft.command.CommandSource
 import net.minecraft.item.Item
 import su.mandora.event.Event
 import java.util.*
-import kotlin.collections.ArrayList
 
 class EventTick(val state: State) : Event(false) {
     enum class State {

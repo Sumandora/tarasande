@@ -6,8 +6,8 @@ import com.google.gson.JsonObject
 import com.mojang.authlib.Environment
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.system.base.filesystem.File
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.ScreenBetterSlotListAccountManager
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.AccountInfo
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.ScreenBetterSlotListAccountManager
 import org.apache.commons.codec.binary.Hex
 import oshi.SystemInfo
 import java.util.*

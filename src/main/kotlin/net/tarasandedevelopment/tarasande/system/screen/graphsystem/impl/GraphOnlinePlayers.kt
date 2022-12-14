@@ -22,6 +22,7 @@ class GraphOnlinePlayers : Graph("Server", "Online Players", 25, true) {
                         is PlayerListS2CPacket -> {
                             players.addAll(event.packet.playerAdditionEntries.map { it.profileId })
                         }
+
                         is PlayerRemoveS2CPacket -> {
                             players.removeAll(event.packet.profileIds.toSet())
                         }

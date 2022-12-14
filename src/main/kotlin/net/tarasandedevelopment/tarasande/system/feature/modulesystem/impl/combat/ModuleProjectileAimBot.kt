@@ -53,7 +53,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
     }
 
     private fun deadReckoning(stack: ItemStack, entity: Entity, rotation: Rotation): Box {
-        if(entity !is PlayerEntity)
+        if (entity !is PlayerEntity)
             return entity.boundingBox
         val predicted = ProjectileUtil.predict(stack, rotation, false)
         if (predicted.size <= 0) return entity.boundingBox
@@ -106,7 +106,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
         }
 
         registerEvent(EventRender3D::class.java) { event ->
-            if(predictedBox != null)
+            if (predictedBox != null)
                 RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(predictedBox), predictionColor.getColor().rgb)
         }
     }

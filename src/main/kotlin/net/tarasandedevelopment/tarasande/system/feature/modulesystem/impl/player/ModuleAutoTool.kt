@@ -63,8 +63,8 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool for breaking a
                     if (stack != null && !stack.isEmpty) {
                         val newScore = ContainerUtil.wrapMaterialDamage(stack) + EnchantmentHelper.get(stack).values.sum()
 
-                        if(useAxeToCounterBlocking.value && event.entity is PlayerEntity && event.entity.isBlocking && mc.player?.inventory?.main?.subList(0, 8)?.any { it.item is AxeItem } == true) {
-                            if(stack.item !is AxeItem)
+                        if (useAxeToCounterBlocking.value && event.entity is PlayerEntity && event.entity.isBlocking && mc.player?.inventory?.main?.subList(0, 8)?.any { it.item is AxeItem } == true) {
+                            if (stack.item !is AxeItem)
                                 continue
                         } else if (stack.item !is SwordItem)
                             continue

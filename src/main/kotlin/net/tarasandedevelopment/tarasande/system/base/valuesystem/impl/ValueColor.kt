@@ -28,7 +28,7 @@ open class ValueColor(owner: Any, name: String, hue: Double, var sat: Double, va
 
     fun getColor(): Color {
         val hue =
-            if(locked && this != TarasandeMain.clientValues().accentColor)
+            if (locked && this != TarasandeMain.clientValues().accentColor)
                 TarasandeMain.clientValues().accentColor.hue
             else
                 hue
@@ -52,13 +52,13 @@ open class ValueColor(owner: Any, name: String, hue: Double, var sat: Double, va
 
     override fun load(jsonElement: JsonElement) {
         val jsonArray = jsonElement.asJsonArray
-        hue         = jsonArray[0].asDouble
-        sat         = jsonArray[1].asDouble
-        bri         = jsonArray[2].asDouble
-        rainbow     = jsonArray[3].asBoolean
-        locked      = jsonArray[4].asBoolean
+        hue = jsonArray[0].asDouble
+        sat = jsonArray[1].asDouble
+        bri = jsonArray[2].asDouble
+        rainbow = jsonArray[3].asBoolean
+        locked = jsonArray[4].asBoolean
         if (alpha != null) {
-            alpha   = jsonArray[5].asDouble
+            alpha = jsonArray[5].asDouble
         }
     }
 }
