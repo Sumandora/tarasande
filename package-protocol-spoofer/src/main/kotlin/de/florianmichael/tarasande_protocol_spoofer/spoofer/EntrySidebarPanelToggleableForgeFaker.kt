@@ -1,6 +1,7 @@
 package de.florianmichael.tarasande_protocol_spoofer.spoofer
 
 import de.florianmichael.tarasande_protocol_spoofer.accessor.IServerInfo
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.ForgeCreator
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.IForgeNetClientHandler
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.IForgePayload
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.modern.ModernForgePayload
@@ -12,6 +13,7 @@ import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -26,12 +28,16 @@ import java.net.InetSocketAddress
 class EntrySidebarPanelToggleableForgeFaker(sidebar: ManagerEntrySidebarPanel) : EntrySidebarPanelToggleable(sidebar, "Forge Faker", "Spoofer") {
 
     val forgeInfoTracker = HashMap<InetSocketAddress, IForgePayload>()
-    var currentHandler: IForgeNetClientHandler? = null
+    private var currentHandler: IForgeNetClientHandler? = null
 
     val useFML1Cache = ValueBoolean(this, "Use FML1 cache", true)
 
     init {
         EventDispatcher.apply {
+            add(EventConnectServer::class.java) {
+                currentHandler = ForgeCreator.createNetHandler(it.connection)
+            }
+
             add(EventPacket::class.java, 1) {
                 if (!state.value || currentHandler == null) return@add
 

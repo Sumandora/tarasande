@@ -13,7 +13,7 @@
  */
 /**
  * --FLORIAN MICHAEL PRIVATE LICENCE v1.2--
- *
+ * <p>
  * This file / project is protected and is the intellectual property of Florian Michael (aka. EnZaXD),
  * any use (be it private or public, be it copying or using for own use, be it publishing or modifying) of this
  * file / project is prohibited. It requires in that use a written permission with official signature of the owner
@@ -22,24 +22,22 @@
  * The owner "Florian Michael" is free to change this license. The creator assumes no responsibility for any infringements
  * that have arisen, are arising or will arise from this project / file. If this licence is used anywhere,
  * the latest version published by the author Florian Michael (aka EnZaXD) always applies automatically.
- *
+ * <p>
  * Changelog:
- *     v1.0:
- *         Added License
- *     v1.1:
- *         Ownership withdrawn
- *     v1.2:
- *         Version-independent validity and automatic renewal
+ * v1.0:
+ * Added License
+ * v1.1:
+ * Ownership withdrawn
+ * v1.2:
+ * Version-independent validity and automatic renewal
  */
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.viaversion;
 
 import com.google.common.primitives.Longs;
-import com.mojang.brigadier.ParseResults;
-import com.mojang.brigadier.context.ParsedArgument;
-import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viabackwards.protocol.protocol1_19_1to1_19_3.storage.NonceStorage;
+import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.minecraft.PlayerMessageSignature;
-import com.viaversion.viaversion.api.minecraft.ProfileKey;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
@@ -58,29 +56,17 @@ import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.ClientboundPac
 import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.Protocol1_19_3To1_19_1;
 import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.ServerboundPackets1_19_3;
 import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.storage.ReceivedMessagesStorage;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.argument.SignedArgumentList;
-import net.minecraft.command.argument.SignedArgumentType;
-import net.minecraft.network.encryption.NetworkEncryptionUtils;
-import net.minecraft.network.encryption.PlayerKeyPair;
-import net.minecraft.network.encryption.PlayerPublicKey;
-import net.minecraft.network.message.ArgumentSignatureDataMap;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.MessageChain1_19_2;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.storage.PacketNonceStorage1_19_2;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.storage.ProfileKeyStorage1_19_2;
+import kotlin.Pair;
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.all_model.MessageMetadata1_19_all;
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.ChatSession1_19_2;
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.CommandArgumentsProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Mixin(value = Protocol1_19_3To1_19_1.class, remap = false)
 public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPackets1_19_1, ClientboundPackets1_19_3, ServerboundPackets1_19_1, ServerboundPackets1_19_3> {
@@ -105,70 +91,51 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                 map(Type.STRING); // Server-ID
                 map(Type.BYTE_ARRAY_PRIMITIVE); // Public Key
                 map(Type.BYTE_ARRAY_PRIMITIVE); // Nonce
-
-                handler(wrapper -> {
-                    final byte[] originalNonce = wrapper.get(Type.BYTE_ARRAY_PRIMITIVE, 1);
-                    final PacketNonceStorage1_19_2 packetNonceStorage = wrapper.user().get(PacketNonceStorage1_19_2.class);
-                    if (packetNonceStorage != null) {
-                        packetNonceStorage.setNonce(originalNonce);
-                    }
-                });
+                handler(wrapper -> wrapper.user().put(new NonceStorage(wrapper.get(Type.BYTE_ARRAY_PRIMITIVE, 1))));
             }
         });
         this.registerServerbound(State.LOGIN, ServerboundLoginPackets.HELLO.getId(), ServerboundLoginPackets.HELLO.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
+                map(Type.STRING);
                 handler(wrapper -> {
-                    wrapper.passthrough(Type.STRING); // Name
                     final UUID uuid = wrapper.read(Type.OPTIONAL_UUID);
 
-                    final PlayerKeyPair playerPublicKey = MinecraftClient.getInstance().getProfileKeys().fetchKeyPair().get().orElse(null);
-                    if (playerPublicKey != null) {
-                        // Online Mode
-                        final PlayerPublicKey.PublicKeyData publicKeyData = playerPublicKey.publicKey().data();
-                        wrapper.write(Type.OPTIONAL_PROFILE_KEY, new ProfileKey(publicKeyData.expiresAt().toEpochMilli(), publicKeyData.key().getEncoded(), publicKeyData.keySignature()));
+                    final ChatSession1_19_2 chatSession1192 = wrapper.user().get(ChatSession1_19_2.class);
+                    wrapper.write(Type.OPTIONAL_PROFILE_KEY, chatSession1192 != null ? chatSession1192.getProfileKey() : null);
 
-                        final ProfileKeyStorage1_19_2 profileKeyStorage = wrapper.user().get(ProfileKeyStorage1_19_2.class);
-                        if (profileKeyStorage != null) {
-                            profileKeyStorage.setupConnection(publicKeyData, playerPublicKey.privateKey());
-                        }
-                    } else {
-                        // Cracked mode
-                        wrapper.write(Type.OPTIONAL_PROFILE_KEY, null);
-                    }
                     wrapper.write(Type.OPTIONAL_UUID, uuid);
                 });
             }
         });
-
         this.registerServerbound(State.LOGIN, ServerboundLoginPackets.ENCRYPTION_KEY.getId(), ServerboundLoginPackets.ENCRYPTION_KEY.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(Type.BYTE_ARRAY_PRIMITIVE); // Encrypted Private Key
-                read(Type.BYTE_ARRAY_PRIMITIVE); // Packet-Nonce
+                map(Type.BYTE_ARRAY_PRIMITIVE); // Keys
+                create(Type.BOOLEAN, true); // Is nonce
+                map(Type.BYTE_ARRAY_PRIMITIVE); // Encrypted challenge
 
                 handler(wrapper -> {
-                    final ProfileKeyStorage1_19_2 profileKeyStorage = wrapper.user().get(ProfileKeyStorage1_19_2.class);
-                    if (profileKeyStorage != null) {
-                        wrapper.write(Type.BOOLEAN, profileKeyStorage.getSigner() == null);
-
-                        final PacketNonceStorage1_19_2 packetNonceStorage = wrapper.user().get(PacketNonceStorage1_19_2.class);
-                        if (packetNonceStorage != null) {
-                            final byte[] nonce = packetNonceStorage.getNonce(); // since 1.19.3 encrypts the nonce before writing it, we need to track the original nonce, since 1.19.2 uses the original nonce by the server
-
-                            if (profileKeyStorage.getSigner() != null) {
-                                // Online mode
-                                final long salt = NetworkEncryptionUtils.SecureRandomUtil.nextLong();
-                                final byte[] signedNonce = profileKeyStorage.getSigner().sign(updater -> {
+                    final NonceStorage nonceStorage = wrapper.user().get(NonceStorage.class);
+                    if (nonceStorage != null) {
+                        final byte[] nonce = nonceStorage.nonce();
+                        if (nonce == null) {
+                            throw new IllegalStateException("Didn't tracked the packet nonce???");
+                        }
+                        final ChatSession1_19_2 chatSession1192 = wrapper.user().get(ChatSession1_19_2.class);
+                        if (chatSession1192 != null) {
+                            wrapper.set(Type.BOOLEAN, 0, false); // Now it's a nonce
+                            final long salt = chatSession1192.getSaltGenerator().nextLong();
+                            final byte[] signedNonce = chatSession1192.getSigner().sign(updater -> {
+                                if (updater != null) {
                                     updater.update(nonce);
                                     updater.update(Longs.toByteArray(salt));
-                                });
-                                wrapper.write(Type.LONG, salt);
-                                wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, signedNonce);
-                            } else {
-                                // Cracked mode
-                                wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, nonce);
-                            }
+                                }
+                            });
+                            wrapper.read(Type.BYTE_ARRAY_PRIMITIVE); // We don't this anymore
+
+                            wrapper.write(Type.LONG, salt);
+                            wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, signedNonce);
                         }
                     }
                 });
@@ -234,12 +201,28 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                 map(Type.LONG); // Salt
                 map(Type.VAR_INT); // Signatures
 
-                // Removing old signatures
+                // Signature removing if we have a chat session
                 handler(wrapper -> {
                     final int signatures = wrapper.get(Type.VAR_INT, 0);
+
+                    final ChatSession1_19_2 chatSession1192 = wrapper.user().get(ChatSession1_19_2.class);
+                    if (chatSession1192 != null) {
+                        final CommandArgumentsProvider commandArgumentsProvider = Via.getManager().getProviders().get(CommandArgumentsProvider.class);
+                        if (commandArgumentsProvider != null) {
+                            for (int i = 0; i < signatures; i++) {
+                                wrapper.read(Type.STRING); // Argument name
+                                wrapper.read(MESSAGE_SIGNATURE_BYTES_TYPE); // Signature
+                            }
+                            return;
+                        }
+                    }
+
                     for (int i = 0; i < signatures; i++) {
-                        wrapper.read(Type.STRING); // Argument name
-                        wrapper.read(MESSAGE_SIGNATURE_BYTES_TYPE); // Signature
+                        wrapper.passthrough(Type.STRING); // Argument name
+
+                        // Signature
+                        wrapper.read(MESSAGE_SIGNATURE_BYTES_TYPE);
+                        wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, new byte[0]);
                     }
                 });
 
@@ -256,26 +239,34 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                     final long timestamp = wrapper.get(Type.LONG, 0);
                     final long salt = wrapper.get(Type.LONG, 1);
 
-                    final ClientPlayNetworkHandler clientPlayNetworkHandler = MinecraftClient.getInstance().getNetworkHandler();
-                    if (clientPlayNetworkHandler != null) {
-                        final ParseResults<CommandSource> parseResults = clientPlayNetworkHandler.getCommandDispatcher().parse(command, clientPlayNetworkHandler.getCommandSource());
+                    if (sender == null) {
+                        throw new IllegalStateException("ViaVersion didn't track the connected UUID correctly, please check your BaseProtocol1_7");
+                    }
 
-                        final ProfileKeyStorage1_19_2 profileKeyStorage = wrapper.user().get(ProfileKeyStorage1_19_2.class);
-                        final ReceivedMessagesStorage messagesStorage = wrapper.user().get(ReceivedMessagesStorage.class);
+                    final ChatSession1_19_2 chatSession1192 = wrapper.user().get(ChatSession1_19_2.class);
+                    if (chatSession1192 != null) {
+                        final CommandArgumentsProvider commandArgumentsProvider = Via.getManager().getProviders().get(CommandArgumentsProvider.class);
+                        if (commandArgumentsProvider != null) {
+                            // Signing arguments
+                            {
+                                final ReceivedMessagesStorage messagesStorage = wrapper.user().get(ReceivedMessagesStorage.class);
+                                if (messagesStorage != null) {
+                                    for (Pair<String, String> argument : commandArgumentsProvider.getSignedArguments(command)) {
+                                        final byte[] signature = chatSession1192.sign(
+                                                sender,
+                                                new MessageMetadata1_19_all(
+                                                        argument.component2(),
+                                                        timestamp,
+                                                        salt
+                                                ),
+                                                messagesStorage.lastSignatures()
+                                        );
 
-                        if (messagesStorage != null && profileKeyStorage != null && sender != null && profileKeyStorage.getSigner() != null) {
-                            for (SignedArgumentList.ParsedArgument<CommandSource> argument : SignedArgumentList.of(parseResults).arguments()) {
-                                final byte[] signature = MessageChain1_19_2.INSTANCE.pack(
-                                        argument.value(),
-                                        Instant.ofEpochMilli(timestamp),
-                                        salt,
-                                        messagesStorage.lastSignatures(),
-                                        sender,
-                                        profileKeyStorage.getSigner()
-                                );
 
-                                wrapper.write(Type.STRING, argument.getNodeName());
-                                wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, signature);
+                                        wrapper.write(Type.STRING, argument.component1());
+                                        wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, signature);
+                                    }
+                                }
                             }
                         }
                     }
@@ -299,7 +290,15 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                 map(Type.STRING); // Command
                 map(Type.LONG); // Timestamp
                 map(Type.LONG); // Salt
-                read(OPTIONAL_MESSAGE_SIGNATURE_BYTES_TYPE); // Signature
+                handler(wrapper -> {
+                    wrapper.read(OPTIONAL_MESSAGE_SIGNATURE_BYTES_TYPE); // Signature
+
+                    final ChatSession1_19_2 chatSession1192 = wrapper.user().get(ChatSession1_19_2.class);
+                    if (chatSession1192 == null) {
+                        wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, new byte[0]); // Signature
+                        wrapper.write(Type.BOOLEAN, false); // No signed preview
+                    }
+                });
 
                 // Emulate old Message chain
                 handler(wrapper -> {
@@ -308,24 +307,27 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                     final long timestamp = wrapper.get(Type.LONG, 0);
                     final long salt = wrapper.get(Type.LONG, 1);
 
-                    final ProfileKeyStorage1_19_2 profileKeyStorage = wrapper.user().get(ProfileKeyStorage1_19_2.class);
-                    final ReceivedMessagesStorage messagesStorage = wrapper.user().get(ReceivedMessagesStorage.class);
+                    if (sender == null) {
+                        throw new IllegalStateException("ViaVersion didn't track the connected UUID correctly, please check your BaseProtocol1_7");
+                    }
 
-                    if (messagesStorage != null && profileKeyStorage != null && sender != null && profileKeyStorage.getSigner() != null) {
-                        final byte[] signature = MessageChain1_19_2.INSTANCE.pack(
-                                message,
-                                Instant.ofEpochMilli(timestamp),
-                                salt,
-                                messagesStorage.lastSignatures(),
-                                sender,
-                                profileKeyStorage.getSigner()
-                        );
+                    final ChatSession1_19_2 chatSession1192 = wrapper.user().get(ChatSession1_19_2.class);
+                    if (chatSession1192 != null) {
+                        final ReceivedMessagesStorage messagesStorage = wrapper.user().get(ReceivedMessagesStorage.class);
+                        if (messagesStorage != null) {
+                            final byte[] signature = chatSession1192.sign(
+                                    sender,
+                                    new MessageMetadata1_19_all(
+                                            message,
+                                            timestamp,
+                                            salt
+                                    ),
+                                    messagesStorage.lastSignatures()
+                            );
 
-                        wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, signature);
-                        wrapper.write(Type.BOOLEAN, false); // Signed Preview - not implemented yet, but i could do it
-                    } else {
-                        wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, new byte[0]);
-                        wrapper.write(Type.BOOLEAN, false); // Signed Preview
+                            wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, signature);
+                            wrapper.write(Type.BOOLEAN, false); // Signed Preview - not implemented yet, but i could do it
+                        }
                     }
                 });
 
@@ -346,11 +348,5 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                 });
             }
         });
-    }
-
-    @Inject(method = "init", at = @At("RETURN"))
-    public void addProfileKeyStorage(UserConnection user, CallbackInfo ci) {
-        user.put(new ProfileKeyStorage1_19_2(user));
-        user.put(new PacketNonceStorage1_19_2(user));
     }
 }

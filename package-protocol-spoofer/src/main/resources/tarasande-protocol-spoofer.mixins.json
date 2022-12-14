@@ -6,7 +6,6 @@
   "client": [
     "MixinServerInfo",
     "MixinClientConnectionSubInitChannel",
-    "MixinConnectScreenSubRun",
     "MixinMultiplayerServerListPingerSubOnResponse",
     "MixinServerMetadata",
     "MixinServerMetadataDeserializer"

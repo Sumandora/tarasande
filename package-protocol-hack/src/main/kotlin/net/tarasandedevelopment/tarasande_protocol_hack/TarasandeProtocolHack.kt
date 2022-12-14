@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande_protocol_hack
 
 import com.viaversion.viaversion.ViaManagerImpl
+import com.viaversion.viaversion.api.connection.UserConnection
 import com.viaversion.viaversion.api.platform.providers.ViaProviders
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import com.viaversion.viaversion.api.protocol.version.VersionProvider
@@ -41,10 +42,12 @@ import net.tarasandedevelopment.tarasande_protocol_hack.command.ViaCommandHandle
 import net.tarasandedevelopment.tarasande_protocol_hack.event.EventSkipIdlePacket
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.andOlder
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.getSpecialName
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.CommandArgumentsProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.EntityDimensionReplacement
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.PackFormats
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ValueBooleanProtocol
+import net.tarasandedevelopment.tarasande_protocol_hack.provider.clamp.FabricCommandArgumentsProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricOldAuthProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricPreNettyProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
@@ -63,6 +66,7 @@ class TarasandeProtocolHack : INativeProvider {
 
     companion object {
         lateinit var cancelOpenPacket: ValueBoolean
+        var viaConnection: UserConnection? = null
     }
 
     fun initialize() {
@@ -144,6 +148,10 @@ class TarasandeProtocolHack : INativeProvider {
                     }, 1)
                 }
             }
+
+            add(EventConnectServer::class.java) {
+                viaConnection = (it.connection as IClientConnection_Protocol).protocolhack_getViaConnection()
+            }
         }
     }
 
@@ -212,6 +220,9 @@ class TarasandeProtocolHack : INativeProvider {
     override fun eventLoop(threadFactory: ThreadFactory?, executorService: ExecutorService?) = DefaultEventLoop(executorService)
 
     override fun createProviders(providers: ViaProviders?) {
+        // Clamp Fixes
+        providers?.use(CommandArgumentsProvider::class.java, FabricCommandArgumentsProvider())
+
         // Via Legacy
         providers?.use(OldAuthProvider::class.java, FabricOldAuthProvider())
         providers?.use(PreNettyProvider::class.java, FabricPreNettyProvider())

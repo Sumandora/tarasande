@@ -19,6 +19,6 @@ class EventPacketTransform(val type: Type, val buf: ByteBuf?) : Event(false) {
     }
 }
 
-class EventConnectServer(val address: InetSocketAddress) : Event(false)
+class EventConnectServer(val connection: ClientConnection) : Event(false)
 class EventDisconnect(val connection: ClientConnection) : Event(false)
 class EventInvalidPlayerInfo(val uuid: UUID) : Event(false)

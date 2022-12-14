@@ -79,7 +79,7 @@ public abstract class MixinMinecraftClient {
 
     @Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;hasRidingInventory()Z"))
     private void onInventoryKeyPressed(CallbackInfo ci) throws Exception {
-        final UserConnection viaConnection = ((IClientConnection_Protocol) getNetworkHandler().getConnection()).protocolhack_getViaConnection();
+        final UserConnection viaConnection = TarasandeProtocolHack.Companion.getViaConnection();
 
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1) && viaConnection != null) {
             if(TarasandeMain.Companion.managerModule().get(ModuleInventoryMove.class).getEnabled() && TarasandeProtocolHack.Companion.getCancelOpenPacket().getValue())

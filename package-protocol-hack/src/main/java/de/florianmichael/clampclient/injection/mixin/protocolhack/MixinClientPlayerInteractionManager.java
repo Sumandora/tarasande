@@ -43,6 +43,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.IClientPlayerEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.IScreenHandler_Protocol;
+import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack;
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider;
 import net.tarasandedevelopment.tarasande_protocol_hack.util.inventory.MinecraftViaItemRewriter;
 import org.spongepowered.asm.mixin.Final;
@@ -111,7 +112,7 @@ public abstract class MixinClientPlayerInteractionManager {
                 else
                     slotItemBeforeModification = protocolhack_oldItems.get(clickSlot.getSlot());
 
-                final PacketWrapper clickSlotPacket = PacketWrapper.create(ServerboundPackets1_16_2.CLICK_WINDOW, ((IClientConnection_Protocol) client.getNetworkHandler().getConnection()).protocolhack_getViaConnection());
+                final PacketWrapper clickSlotPacket = PacketWrapper.create(ServerboundPackets1_16_2.CLICK_WINDOW, TarasandeProtocolHack.Companion.getViaConnection());
 
                 clickSlotPacket.write(Type.UNSIGNED_BYTE, (short) clickSlot.getSyncId());
                 clickSlotPacket.write(Type.SHORT, (short) clickSlot.getSlot());
