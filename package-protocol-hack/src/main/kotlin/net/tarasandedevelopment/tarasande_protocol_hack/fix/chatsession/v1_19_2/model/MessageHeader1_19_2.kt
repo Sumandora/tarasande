@@ -1,5 +1,6 @@
-package net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.model
+package net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.model
 
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.model.SignatureUpdater1_19_2
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.*

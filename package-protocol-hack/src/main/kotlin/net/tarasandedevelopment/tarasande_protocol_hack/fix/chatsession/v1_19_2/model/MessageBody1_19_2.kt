@@ -1,11 +1,11 @@
-package net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.model
+package net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.model
 
 import com.google.common.hash.Hashing
 import com.google.common.hash.HashingOutputStream
 import com.viaversion.viaversion.api.minecraft.PlayerMessageSignature
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.model.MessageMetadata1_19_2
 import java.io.DataOutput
 import java.io.DataOutputStream
-import java.io.IOException
 import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.nio.charset.StandardCharsets
