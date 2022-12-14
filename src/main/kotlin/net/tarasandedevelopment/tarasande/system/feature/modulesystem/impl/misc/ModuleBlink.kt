@@ -23,6 +23,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewWorld
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
@@ -102,6 +103,11 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                             event.packet.entityIds.forEach {
                                 newPositions.remove(it)
                             }
+                        }
+
+                        is PlayerRespawnS2CPacket -> {
+                            if(event.packet.isNewWorld())
+                                newPositions.clear()
                         }
                     }
                 }
