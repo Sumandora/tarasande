@@ -14,7 +14,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegi
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 
 class ModuleNoRender : Module("No render", "Disables rendering of certain things.", ModuleCategory.RENDER) {
 
@@ -88,7 +88,7 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
         for (overlay in arrayOf(overlay, hud, world, entity)) {
             object : ValueButton(this, overlay.name) {
                 override fun onChange() {
-                    MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, overlay.name, overlay))
+                    MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, overlay.name, overlay))
                 }
             }
         }

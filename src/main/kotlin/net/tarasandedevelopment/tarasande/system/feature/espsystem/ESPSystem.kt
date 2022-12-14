@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.system.feature.espsystem.impl.ESPEleme
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.impl.ESPElementRotatableHealthBar
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.impl.ESPElementRotatableName
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleESP
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import kotlin.math.abs
 
 class ManagerESP : Manager<ESPElement>() {
@@ -28,7 +28,7 @@ class ManagerESP : Manager<ESPElement>() {
         for (element in list)
             object : ValueButton(this, element.name) {
                 override fun onChange() {
-                    MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, name, element))
+                    MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, name, element))
                 }
             }
     }

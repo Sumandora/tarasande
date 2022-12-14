@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
-import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.InputUtil
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain
@@ -17,6 +16,8 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.element.PanelElementsCategory
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterFileChooser
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
@@ -50,7 +51,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
 
         registerEvent(EventTick::class.java) { event ->
             if (event.state == EventTick.State.POST)
-                textBoxFocused = isTextboxFocused()
+                textBoxFocused = isTextBoxFocused()
         }
     }
 
@@ -61,7 +62,10 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         else -> false
     }
 
-    private fun isTextboxFocused(): Boolean {
+    private fun isTextBoxFocused(): Boolean {
+        if(mc.currentScreen is ScreenBetterOwnerValues) {
+            return (mc.currentScreen as ScreenBetterOwnerValues).panel.elementList.any { isFocused(it) }
+        }
         return TarasandeMain.managerPanel().list.any {
             when (it) {
                 is PanelElementsCategory -> it.elementList.any { it.components.any { isFocused(it) } }
@@ -71,5 +75,5 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         }
     }
 
-    private fun isPassingEvents() = (enabled && (mc.currentScreen is HandledScreen<*> || (mc.currentScreen is ScreenCheatMenu && !textBoxFocused))) || (mc.currentScreen == null || mc.currentScreen?.passEvents == true)
+    private fun isPassingEvents() = (mc.currentScreen is ScreenCheatMenu || mc.currentScreen is ScreenBetterOwnerValues || mc.currentScreen is ScreenBetterFileChooser) && !textBoxFocused
 }

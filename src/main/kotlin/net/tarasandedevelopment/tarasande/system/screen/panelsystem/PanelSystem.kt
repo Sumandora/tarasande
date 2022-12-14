@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.file.FileCheatMenu
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.fixed.*
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
@@ -217,7 +217,7 @@ open class Panel(
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
                 val valueOwner = getValueOwner()
                 if (TarasandeMain.managerValue().getValues(valueOwner).isNotEmpty()) {
-                    MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, this.title, valueOwner))
+                    MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, this.title, valueOwner))
                 }
             }
             return true

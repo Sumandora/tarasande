@@ -17,7 +17,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.Valu
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.ModuleAntiBot
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
@@ -36,12 +36,12 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
     init {
         object : ValueButton(this, "Entity colors") {
             override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, name, entityColor))
+                MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, name, entityColor))
             }
         }
         object : ValueButton(this, "2D ESP values") {
             override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, name, TarasandeMain.managerESP()))
+                MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, name, TarasandeMain.managerESP()))
             }
 
             override fun isEnabled(): Boolean {

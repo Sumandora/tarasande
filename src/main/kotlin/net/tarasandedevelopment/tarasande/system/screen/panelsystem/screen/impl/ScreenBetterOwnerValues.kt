@@ -14,9 +14,10 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
 import java.util.*
 
-class ScreenBetterParentValues(parent: Screen, val titleName: String, val owner: Any) : ScreenBetter(parent) {
+class ScreenBetterOwnerValues(parent: Screen, val titleName: String, val owner: Any) : ScreenBetter(parent) {
 
     private var clickableWidgetPanel: ClickableWidgetPanel? = null
+    lateinit var panel: PanelElements<ElementWidthValueComponent>
 
     init {
         if (parent is ScreenCheatMenu)
@@ -43,7 +44,7 @@ class ScreenBetterParentValues(parent: Screen, val titleName: String, val owner:
                 this.x = (MinecraftClient.getInstance().window.scaledWidth / 2) - 150.0
                 this.y = MinecraftClient.getInstance().window.scaledHeight / 2 - (this.panelHeight / 2)
             }
-        }).also { clickableWidgetPanel = it })
+        }.also { panel = it }).also { clickableWidgetPanel = it })
     }
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
@@ -60,7 +61,7 @@ class ScreenBetterParentValues(parent: Screen, val titleName: String, val owner:
         this.renderBackground(matrices)
         if (MinecraftClient.getInstance().world != null) {
             var prevScreen = prevScreen
-            while (prevScreen is ScreenBetterParentValues)
+            while (prevScreen is ScreenBetterOwnerValues)
                 prevScreen = prevScreen.prevScreen
             prevScreen?.render(matrices, -1, -1, delta)
         }

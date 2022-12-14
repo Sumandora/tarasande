@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterParentValues
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.Thread
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
@@ -33,7 +33,7 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
 
     private val privacy = object : ValueButton(this, "Privacy") {
         override fun onChange() {
-            MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, this.name, this))
+            MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, this.name, this))
         }
     }
 
@@ -43,12 +43,12 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
     init {
         object : ValueButton(this, "Cheat menu values") {
             override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, this.name, panelSystem.screenCheatMenu))
+                MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, this.name, panelSystem.screenCheatMenu))
             }
         }
         object : ValueButton(this, "Command values") {
             override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, this.name, commandSystem))
+                MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, this.name, commandSystem))
             }
         }
     }
@@ -56,7 +56,7 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
     // Combat
     val targetingValues = object : ValueButton(this, "Targeting values") {
         override fun onChange() {
-            MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, this.name, this))
+            MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, this.name, this))
         }
     }
     val entities = object : ValueRegistry<EntityType<*>>(targetingValues, "Entities", Registries.ENTITY_TYPE, EntityType.PLAYER) {
@@ -93,7 +93,7 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
     init {
         object : ValueButton(this, "Blur values") {
             override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenBetterParentValues(MinecraftClient.getInstance().currentScreen!!, "Blur values", TarasandeMain.managerBlur()))
+                MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, "Blur values", TarasandeMain.managerBlur()))
             }
         }
     }
