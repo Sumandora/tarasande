@@ -111,8 +111,9 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
         this.registerServerbound(State.LOGIN, ServerboundLoginPackets.ENCRYPTION_KEY.getId(), ServerboundLoginPackets.ENCRYPTION_KEY.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(Type.BYTE_ARRAY_PRIMITIVE); // Encrypted Private Key
-                read(Type.BYTE_ARRAY_PRIMITIVE); // Packet-Nonce
+                map(Type.BYTE_ARRAY_PRIMITIVE); // Keys
+                create(Type.BOOLEAN, true); // Is nonce
+                map(Type.BYTE_ARRAY_PRIMITIVE); // Encrypted challenge
 
                 handler(wrapper -> {
                     final NonceStorage nonceStorage = wrapper.user().get(NonceStorage.class);
@@ -123,7 +124,7 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                         }
                         final ChatSession1_19_2 chatSession1192 = wrapper.user().get(ChatSession1_19_2.class);
                         if (chatSession1192 != null) {
-                            wrapper.write(Type.BOOLEAN, false);
+                            wrapper.set(Type.BOOLEAN, 0, false); // Now it's a nonce
                             final long salt = chatSession1192.getSaltGenerator().nextLong();
                             final byte[] signedNonce = chatSession1192.getSigner().sign(updater -> {
                                 if (updater != null) {
@@ -131,11 +132,10 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                                     updater.update(Longs.toByteArray(salt));
                                 }
                             });
+                            wrapper.read(Type.BYTE_ARRAY_PRIMITIVE); // We don't this anymore
+
                             wrapper.write(Type.LONG, salt);
                             wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, signedNonce);
-                        } else {
-                            wrapper.write(Type.BOOLEAN, true);
-                            wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, nonce);
                         }
                     }
                 });
@@ -290,7 +290,15 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                 map(Type.STRING); // Command
                 map(Type.LONG); // Timestamp
                 map(Type.LONG); // Salt
-                read(OPTIONAL_MESSAGE_SIGNATURE_BYTES_TYPE); // Signature
+                handler(wrapper -> {
+                    wrapper.read(OPTIONAL_MESSAGE_SIGNATURE_BYTES_TYPE); // Signature
+
+                    final ChatSession1_19_2 chatSession1192 = wrapper.user().get(ChatSession1_19_2.class);
+                    if (chatSession1192 == null) {
+                        wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, new byte[0]); // Signature
+                        wrapper.write(Type.BOOLEAN, false); // No signed preview
+                    }
+                });
 
                 // Emulate old Message chain
                 handler(wrapper -> {
@@ -320,9 +328,6 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                             wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, signature);
                             wrapper.write(Type.BOOLEAN, false); // Signed Preview - not implemented yet, but i could do it
                         }
-                    } else {
-                        wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, new byte[0]);
-                        wrapper.write(Type.BOOLEAN, false); // Signed Preview
                     }
                 });
 

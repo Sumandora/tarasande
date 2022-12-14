@@ -85,7 +85,7 @@ public class MixinProtocol1_19_1To1_19 extends AbstractProtocol<ClientboundPacke
                 map(Type.STRING); // Message
                 map(Type.LONG); // Timestamp
                 map(Type.LONG); // Salt
-                read(Type.BYTE_ARRAY_PRIMITIVE); // Signature
+                map(Type.BYTE_ARRAY_PRIMITIVE); // Signature
                 handler(wrapper -> {
                     final UUID sender = wrapper.user().getProtocolInfo().getUuid();
                     final String message = wrapper.get(Type.STRING, 0);
@@ -98,7 +98,7 @@ public class MixinProtocol1_19_1To1_19 extends AbstractProtocol<ClientboundPacke
 
                     final ChatSession1_19_0 chatSession1190 = wrapper.user().get(ChatSession1_19_0.class);
                     if (chatSession1190 != null) {
-                        wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, chatSession1190.sign(
+                        wrapper.set(Type.BYTE_ARRAY_PRIMITIVE, 0, chatSession1190.sign(
                                 sender,
                                 new MessageMetadata1_19_2(
                                         message,
