@@ -1,13 +1,13 @@
-package net.tarasandedevelopment.tarasande_protocol_hack.fix.signer
+package net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2
 
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.signer.model.SignatureUpdatable1_19_2
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.signer.model.SignatureUpdater1_19_2
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.model.SignatureUpdatable1_19_2
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.model.SignatureUpdater1_19_2
 import java.security.PrivateKey
 import java.security.Signature
 
 interface MessageSigner1_19_2 {
 
-    fun sign(var1: SignatureUpdatable1_19_2): ByteArray?
+    fun sign(signer: SignatureUpdatable1_19_2): ByteArray?
 
     companion object {
 

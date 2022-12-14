@@ -82,7 +82,7 @@
     "packet.MixinUpdatePlayerAbilitiesC2SPacket",
     "screen.MixinChatScreen",
     "screen.MixinCommandBlockScreen",
-    "screen.MixinConnectScreenSubRun",
+    "screen.MixinConnectScreen_1",
     "screen.MixinDownloadingTerrainScreen",
     "screen.MixinJigsawBlockScreen",
     "screen.MixinStructureBlockScreen_1",

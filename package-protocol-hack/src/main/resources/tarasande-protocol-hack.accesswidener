@@ -9,3 +9,4 @@ accessible field net/minecraft/client/network/AllowedAddressResolver redirectRes
 accessible field net/minecraft/client/option/KeyBinding boundKey Lnet/minecraft/client/util/InputUtil$Key;
 accessible field net/minecraft/client/MinecraftClient renderTickCounter Lnet/minecraft/client/render/RenderTickCounter;
 accessible field net/minecraft/client/render/RenderTickCounter tickTime F
+accessible field net/minecraft/client/gui/screen/ConnectScreen connection Lnet/minecraft/network/ClientConnection;

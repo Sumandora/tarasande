@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande_protocol_hack.fix.signer.model
+package net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.model
 
 import com.google.common.hash.Hashing
 import com.google.common.hash.HashingOutputStream
@@ -11,7 +11,7 @@ import java.io.OutputStreamWriter
 import java.nio.charset.StandardCharsets
 import java.time.Instant
 
-class MessageBody1_19_2(private val plain: String, private val timestamp: Instant, private val salt: Long, private val lastSeenMessages: Array<PlayerMessageSignature>) {
+class MessageBody1_19_2(private val messageMetadata: MessageMetadata1_19_2, private val lastSeenMessages: Array<PlayerMessageSignature>) {
 
     private fun writeLastSeenMessages(output: DataOutput) {
         lastSeenMessages.forEach {
@@ -27,22 +27,19 @@ class MessageBody1_19_2(private val plain: String, private val timestamp: Instan
     }
 
     fun digestBytes(): ByteArray {
-        val hashingOutputStream = HashingOutputStream(Hashing.sha256(), OutputStream.nullOutputStream())
-        try {
-            DataOutputStream(hashingOutputStream).apply {
-                writeLong(salt)
-                writeLong(timestamp.epochSecond)
+        HashingOutputStream(Hashing.sha256(), OutputStream.nullOutputStream()).apply {
+            DataOutputStream(this).apply {
+                writeLong(messageMetadata.salt)
+                writeLong(Instant.ofEpochMilli(messageMetadata.timestamp).epochSecond)
                 OutputStreamWriter(this as OutputStream, StandardCharsets.UTF_8).apply {
-                    write(plain)
+                    write(messageMetadata.plain)
                     flush()
                 }
                 write(70)
 
                 writeLastSeenMessages(this)
             }
-        } catch (iOException: IOException) {
-            // empty catch block
+            return hash().asBytes()
         }
-        return hashingOutputStream.hash().asBytes()
     }
 }
