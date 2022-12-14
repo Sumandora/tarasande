@@ -36,7 +36,7 @@ import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.storage.Receiv
 import com.viaversion.viaversion.protocols.protocol1_19to1_18_2.ClientboundPackets1_19;
 import com.viaversion.viaversion.protocols.protocol1_19to1_18_2.ServerboundPackets1_19;
 import kotlin.Pair;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.model.MessageMetadata1_19_2;
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.all_model.MessageMetadata1_19_all;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_0.ChatSession1_19_0;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.CommandArgumentsProvider;
 import org.spongepowered.asm.mixin.Mixin;
@@ -100,7 +100,7 @@ public class MixinProtocol1_19_1To1_19 extends AbstractProtocol<ClientboundPacke
                     if (chatSession1190 != null) {
                         wrapper.set(Type.BYTE_ARRAY_PRIMITIVE, 0, chatSession1190.sign(
                                 sender,
-                                new MessageMetadata1_19_2(
+                                new MessageMetadata1_19_all(
                                         message,
                                         timestamp,
                                         salt
@@ -153,7 +153,7 @@ public class MixinProtocol1_19_1To1_19 extends AbstractProtocol<ClientboundPacke
                                     for (Pair<String, String> argument : commandArgumentsProvider.getSignedArguments(command)) {
                                         final byte[] signature = chatSession1190.sign(
                                                 sender,
-                                                new MessageMetadata1_19_2(
+                                                new MessageMetadata1_19_all(
                                                         argument.component2(),
                                                         timestamp,
                                                         salt

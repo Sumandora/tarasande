@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2
 import com.google.common.hash.Hashing
 import com.google.common.hash.HashingOutputStream
 import com.viaversion.viaversion.api.minecraft.PlayerMessageSignature
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.model.MessageMetadata1_19_2
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.all_model.MessageMetadata1_19_all
 import java.io.DataOutput
 import java.io.DataOutputStream
 import java.io.OutputStream
@@ -11,7 +11,7 @@ import java.io.OutputStreamWriter
 import java.nio.charset.StandardCharsets
 import java.time.Instant
 
-class MessageBody1_19_2(private val messageMetadata: MessageMetadata1_19_2, private val lastSeenMessages: Array<PlayerMessageSignature>) {
+class MessageBody1_19_2(private val messageMetadata: MessageMetadata1_19_all, private val lastSeenMessages: Array<PlayerMessageSignature>) {
 
     private fun writeLastSeenMessages(output: DataOutput) {
         lastSeenMessages.forEach {

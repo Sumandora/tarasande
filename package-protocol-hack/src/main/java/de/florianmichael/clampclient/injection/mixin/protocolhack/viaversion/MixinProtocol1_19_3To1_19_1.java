@@ -57,7 +57,7 @@ import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.Protocol1_19_3
 import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.ServerboundPackets1_19_3;
 import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.storage.ReceivedMessagesStorage;
 import kotlin.Pair;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.model.MessageMetadata1_19_2;
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.all_model.MessageMetadata1_19_all;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.ChatSession1_19_2;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.CommandArgumentsProvider;
 import org.spongepowered.asm.mixin.Mixin;
@@ -254,7 +254,7 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                                     for (Pair<String, String> argument : commandArgumentsProvider.getSignedArguments(command)) {
                                         final byte[] signature = chatSession1192.sign(
                                                 sender,
-                                                new MessageMetadata1_19_2(
+                                                new MessageMetadata1_19_all(
                                                         argument.component2(),
                                                         timestamp,
                                                         salt
@@ -317,7 +317,7 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                         if (messagesStorage != null) {
                             final byte[] signature = chatSession1192.sign(
                                     sender,
-                                    new MessageMetadata1_19_2(
+                                    new MessageMetadata1_19_all(
                                             message,
                                             timestamp,
                                             salt
