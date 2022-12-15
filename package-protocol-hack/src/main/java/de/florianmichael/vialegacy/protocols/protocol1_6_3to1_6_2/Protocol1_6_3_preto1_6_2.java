@@ -39,7 +39,7 @@ import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre.ClientboundPackets1_6_3_pre;
 import de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre.ServerboundPackets1_6_3_pre;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.ClientboundLoginPackets1_6_4;
+import de.florianmichael.vialegacy.protocols.base.ClientboundLoginPackets1_6_4;
 
 public class Protocol1_6_3_preto1_6_2 extends EnZaProtocol<ClientboundPackets1_6_2, ClientboundPackets1_6_3_pre, ServerboundPackets1_6_2, ServerboundPackets1_6_3_pre> {
 

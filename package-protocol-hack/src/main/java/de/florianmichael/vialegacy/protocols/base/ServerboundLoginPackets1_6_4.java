@@ -19,31 +19,28 @@
  *         Version-independent validity and automatic renewal
  */
 
-package de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.provider;
+package de.florianmichael.vialegacy.protocols.base;
 
-import com.viaversion.viaversion.api.platform.providers.Provider;
-import de.florianmichael.vialegacy.exception.ViaLegacyException;
-import io.netty.channel.ChannelHandler;
+import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
 
-public class PreNettyProvider implements Provider {
+public enum ServerboundLoginPackets1_6_4 implements ServerboundPacketType {
 
-    public String encryptKey() {
-        return "encrypt";
-    }
-    public String decryptKey() {
-        return "decrypt";
-    }
-    public String splitterKey() {
-        return "splitter";
-    }
-    public String prependerKey() {
-        return "prepender";
-    }
+	CLIENT_PROTOCOL(0x02),
+	SHARED_KEY(0xFC);
 
-    public ChannelHandler encryptor() {
-        throw new ViaLegacyException("PreNettyProvider not implemented");
-    }
-    public ChannelHandler decryptor() {
-        throw new ViaLegacyException("PreNettyProvider not implemented");
-    }
+	private final int id;
+
+	ServerboundLoginPackets1_6_4(final int id) {
+		this.id = id;
+	}
+
+	@Override
+	public int getId() {
+		return this.id;
+	}
+
+	@Override
+	public String getName() {
+		return name();
+	}
 }

@@ -15,7 +15,8 @@ import de.florianmichael.clampclient.injection.mixininterface.IFontStorage_Proto
 import de.florianmichael.vialegacy.ViaLegacy
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.provider.PreNettyProvider
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.provider.EncryptionProvider
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.provider.UUIDProvider
 import de.florianmichael.viaprotocolhack.INativeProvider
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
 import de.florianmichael.viaprotocolhack.util.VersionList
@@ -48,8 +49,9 @@ import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.PackFormats
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ProtocolHackValues
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ValueBooleanProtocol
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.clamp.FabricCommandArgumentsProvider
+import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricEncryptionProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricOldAuthProvider
-import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricPreNettyProvider
+import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricUUIDProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricVersionProvider
@@ -225,7 +227,8 @@ class TarasandeProtocolHack : INativeProvider {
 
         // Via Legacy
         providers?.use(OldAuthProvider::class.java, FabricOldAuthProvider())
-        providers?.use(PreNettyProvider::class.java, FabricPreNettyProvider())
+        providers?.use(UUIDProvider::class.java, FabricUUIDProvider())
+        providers?.use(EncryptionProvider::class.java, FabricEncryptionProvider())
 
         // Via Version
         providers?.use(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
