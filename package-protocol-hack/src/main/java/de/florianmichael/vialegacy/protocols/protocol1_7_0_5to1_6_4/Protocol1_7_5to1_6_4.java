@@ -35,9 +35,9 @@
 package de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4;
 
 import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.item.Item;
+import com.viaversion.viaversion.api.platform.providers.ViaProviders;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
@@ -45,20 +45,21 @@ import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.libs.gson.JsonArray;
 import com.viaversion.viaversion.libs.gson.JsonObject;
 import com.viaversion.viaversion.protocol.packet.PacketWrapperImpl;
+import com.viaversion.viaversion.protocols.base.ClientboundLoginPackets;
 import com.viaversion.viaversion.protocols.base.ServerboundLoginPackets;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
 import com.viaversion.viaversion.util.GsonUtil;
 import de.florianmichael.vialegacy.api.material.MaterialReplacement;
 import de.florianmichael.vialegacy.api.sound.SoundRewriter;
-import de.florianmichael.vialegacy.pre_netty.DummyPrepender;
-import de.florianmichael.vialegacy.pre_netty.PreNettyPacketDecoder;
-import de.florianmichael.vialegacy.pre_netty.PreNettyPacketEncoder;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.provider.PreNettyProvider;
+import de.florianmichael.vialegacy.protocols.base.ClientboundLoginPackets1_6_4;
+import de.florianmichael.vialegacy.protocols.base.ServerboundLoginPackets1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.provider.EncryptionProvider;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.provider.UUIDProvider;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.sound.NoteBlockPitch;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
-import de.florianmichael.vialegacy.pre_netty.PreNettyConstants;
 import de.florianmichael.vialegacy.protocols.base.HandshakeStorage;
 import de.florianmichael.vialegacy.protocols.protocol1_7_6_10to1_7_0_5.ClientboundPackets1_7_0_5;
 import de.florianmichael.vialegacy.protocols.protocol1_7_6_10to1_7_0_5.ServerboundPackets1_7_0_5;
@@ -69,7 +70,6 @@ import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.sound.SoundR
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.string.DisconnectPacketRemapper;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelPipeline;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -84,36 +84,8 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
     private final SoundRewriter<Protocol1_7_5to1_6_4> soundRewriter = new SoundRewriter1_7_0_5to1_6_4(this);
     private final MaterialReplacement materialReplacement = new MaterialReplacement1_7_0_5to1_6_4();
 
-    public final Map<Short, Short> pitchList = new HashMap<>();
-
     public Protocol1_7_5to1_6_4() {
         super(ClientboundPackets1_6_4.class, ClientboundPackets1_7_0_5.class, ServerboundPackets1_6_4.class, ServerboundPackets1_7_0_5.class);
-
-        pitchList.put((short) 0, (short) 31);
-        pitchList.put((short) 1, (short) 33);
-        pitchList.put((short) 2, (short) 35);
-        pitchList.put((short) 3, (short) 37);
-        pitchList.put((short) 4, (short) 39);
-        pitchList.put((short) 5, (short) 42);
-        pitchList.put((short) 6, (short) 44);
-        pitchList.put((short) 7, (short) 47);
-        pitchList.put((short) 8, (short) 50);
-        pitchList.put((short) 9, (short) 52);
-        pitchList.put((short) 10, (short) 56);
-        pitchList.put((short) 11, (short) 59);
-        pitchList.put((short) 12, (short) 63);
-        pitchList.put((short) 13, (short) 66);
-        pitchList.put((short) 14, (short) 70);
-        pitchList.put((short) 15, (short) 74);
-        pitchList.put((short) 16, (short) 79);
-        pitchList.put((short) 17, (short) 84);
-        pitchList.put((short) 18, (short) 89);
-        pitchList.put((short) 19, (short) 94);
-        pitchList.put((short) 20, (short) 100);
-        pitchList.put((short) 21, (short) 105);
-        pitchList.put((short) 22, (short) 112);
-        pitchList.put((short) 23, (short) 118);
-        pitchList.put((short) 24, (short) 126);
     }
 
     @Override
@@ -126,25 +98,87 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             @Override
             public void registerMap() {
                 handler(wrapper -> {
-                    final ProtocolInfo info = wrapper.user().getProtocolInfo();
+                    // Cancelling the packet
+                    wrapper.cancel();
 
-                    final int protocol = Math.abs(info.getServerProtocolVersion()); // Bypass ViaVersion, see @VersionUtil.java
-
+                    // Tracking the Username and UUID
                     final String username = wrapper.read(Type.STRING);
-                    info.setUsername(username);
-                    //noinspection deprecation
-                    wrapper.setId(ServerboundLoginPackets1_6_4.CLIENT_PROTOCOL.getId());
-                    wrapper.clearPacket();
+                    wrapper.user().getProtocolInfo().setUsername(username);
+                    final UUIDProvider uuidProvider = Via.getManager().getProviders().get(UUIDProvider.class);
+                    if (uuidProvider != null) {
+                        wrapper.user().getProtocolInfo().setUuid(uuidProvider.getPlayerUuid());
+                    }
 
-                    wrapper.write(Type.UNSIGNED_BYTE, (short) protocol);
-                    wrapper.write(Types1_6_4.STRING, username);
-
+                    // Sending Handshake
+                    final PacketWrapper clientProtocol = new PacketWrapperImpl(ServerboundLoginPackets1_6_4.CLIENT_PROTOCOL.getId(), null, wrapper.user());
+                    clientProtocol.write(Type.UNSIGNED_BYTE, (short) Math.abs(wrapper.user().getProtocolInfo().getServerProtocolVersion()));
+                    clientProtocol.write(Types1_6_4.STRING, username);
                     final HandshakeStorage handshakeStorage = wrapper.user().get(HandshakeStorage.class);
                     if (handshakeStorage != null) {
-                        wrapper.write(Types1_6_4.STRING, handshakeStorage.hostname);
-                        wrapper.write(Type.INT, handshakeStorage.port);
+                        clientProtocol.write(Types1_6_4.STRING, handshakeStorage.hostname);
+                        clientProtocol.write(Type.INT, handshakeStorage.port);
+                    }
+
+                    clientProtocol.sendToServer(Protocol1_7_5to1_6_4.class);
+                });
+            }
+        });
+
+        // Encryption Key (ServerAuthData / Encryption Request Response) -> Shared Key (ServerAuthData Response)
+        this.registerServerbound(State.LOGIN, ServerboundLoginPackets1_6_4.SHARED_KEY.getId(), ServerboundLoginPackets.ENCRYPTION_KEY.getId(), new PacketRemapper() {
+
+            @Override
+            public void registerMap() {
+                map(Type.SHORT_BYTE_ARRAY); // Public Key
+                map(Type.SHORT_BYTE_ARRAY); // Verify Token
+            }
+        });
+
+        // Server Auth Data 1.6 -> Login Hello 1.7 (S -> C)
+        this.registerClientbound(State.LOGIN, ClientboundLoginPackets1_6_4.SERVER_AUTH_DATA.getId(), ClientboundLoginPackets.HELLO.getId(), new PacketRemapper() {
+
+            @Override
+            public void registerMap() {
+                map(Types1_6_4.STRING, Type.STRING); // Server-Id
+                map(Type.SHORT_BYTE_ARRAY); // PublicKey
+                map(Type.SHORT_BYTE_ARRAY); // VerifyToken
+            }
+        });
+
+        // Shared Key -> Nothing
+        this.registerClientbound(State.LOGIN, ClientboundLoginPackets1_6_4.SHARED_KEY.getId(), ClientboundLoginPackets1_6_4.SHARED_KEY.getId(), new PacketRemapper() {
+
+            @Override
+            public void registerMap() {
+                handler(PacketWrapper::cancel); // We don't need this packet anymore
+
+                // Sending Login Hello S -> C
+                handler(wrapper -> {
+                    final PacketWrapper loginHello = new PacketWrapperImpl(ServerboundLoginPackets1_6_4.CLIENT_PROTOCOL.getId(), null, wrapper.user());
+                    loginHello.write(Type.STRING, UUID.randomUUID().toString().replace("-", ""));
+                    loginHello.write(Type.STRING, wrapper.user().getProtocolInfo().getUsername());
+
+                    loginHello.send(Protocol1_7_5to1_6_4.class);
+                });
+
+                // Enabling clientside encryption for the connection
+                handler(wrapper -> {
+                    final EncryptionProvider encryptionProvider = Via.getManager().getProviders().get(EncryptionProvider.class);
+                    if (encryptionProvider != null) {
+                        encryptionProvider.encryptConnection();
                     }
                 });
+
+                // Login Success 1.6.4 (C -> S)
+                handler(wrapper -> {
+                    final PacketWrapper clientCommand = new PacketWrapperImpl(ServerboundPackets1_6_4.CLIENT_STATUS, null, wrapper.user());
+                    clientCommand.write(Type.BYTE, (byte) 0);
+
+                    clientCommand.sendToServer(Protocol1_7_5to1_6_4.class);
+                });
+
+                // Switching to the next packet register card
+                handler(wrapper -> wrapper.user().getProtocolInfo().setState(State.PLAY));
             }
         });
 
@@ -312,14 +346,6 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
             }
         });
 
-        this.registerServerbound(State.LOGIN, 0xFC, 0x01, new PacketRemapper() {
-            @Override
-            public void registerMap() {
-                map(Type.SHORT_BYTE_ARRAY);
-                map(Type.SHORT_BYTE_ARRAY);
-            }
-        });
-
         this.registerClientbound(ClientboundPackets1_6_4.ENTITY_EQUIPMENT, new PacketRemapper() {
             @Override
             public void registerMap() {
@@ -359,82 +385,6 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
         // Disconnect
         this.registerClientbound(State.LOGIN, 0xFF, 0x00, new DisconnectPacketRemapper());
         this.registerClientbound(ClientboundPackets1_6_4.DISCONNECT, new DisconnectPacketRemapper());
-
-        // Encryption Request
-        this.registerClientbound(State.LOGIN, ClientboundLoginPackets1_6_4.SERVER_AUTH_DATA.getId(), 0x01, new PacketRemapper() {
-
-            @Override
-            public void registerMap() {
-                map(Types1_6_4.STRING, Type.STRING); // Server-Id
-                map(Types1_7_6_10.BYTEARRAY); // PublicKey
-                map(Types1_7_6_10.BYTEARRAY); // VerifyToken
-                handler(wrapper -> {
-                    String serverId = wrapper.get(Type.STRING, 0);
-                    // If server id is equal to '-' than the server is offline.
-                    byte[] publicKey = wrapper.get(Types1_7_6_10.BYTEARRAY, 0);
-                    byte[] verifyToken = wrapper.get(Types1_7_6_10.BYTEARRAY, 1);
-
-                    if (serverId.equals("-")) {
-                        wrapper.cancel();
-                        // Write Login Success packet
-                        PacketWrapper login = new PacketWrapperImpl(ServerboundLoginPackets1_6_4.CLIENT_PROTOCOL.getId(), null, wrapper.user());
-                        login.write(Type.STRING, UUID.randomUUID().toString().replace("-", ""));
-                        login.write(Type.STRING, wrapper.user().getProtocolInfo().getUsername());
-                        login.send(Protocol1_7_5to1_6_4.class);
-
-                        // Change state to play
-                        wrapper.user().getProtocolInfo().setState(State.PLAY);
-
-                        // Send client statuses packet
-                        PacketWrapper join = new PacketWrapperImpl(0xCD, null, wrapper.user());
-                        join.write(Type.BYTE, (byte) 0);
-                        join.sendToServer(Protocol1_7_5to1_6_4.class);
-                    } else {
-                        wrapper.cancel();
-
-                        PacketWrapper request = new PacketWrapperImpl(0x01, null, wrapper.user());
-                        request.write(Type.STRING, serverId);
-
-                        request.write(Type.SHORT_BYTE_ARRAY, publicKey);
-                        request.write(Type.SHORT_BYTE_ARRAY, verifyToken);
-
-                        request.send(Protocol1_7_5to1_6_4.class);
-                    }
-                });
-            }
-        });
-
-        this.registerClientbound(State.LOGIN, ClientboundLoginPackets1_6_4.SHARED_KEY.getId(), ServerboundLoginPackets1_6_4.CLIENT_PROTOCOL.getId(), new PacketRemapper() {
-
-            @Override
-            public void registerMap() {
-                handler((packetWrapper) -> {
-                    packetWrapper.read(Type.SHORT);
-                    packetWrapper.read(Type.SHORT);
-
-                    final ProtocolInfo info = packetWrapper.user().getProtocolInfo();
-
-                    packetWrapper.write(Type.STRING, UUID.nameUUIDFromBytes(("OfflinePlayer:" + info.getUsername()).getBytes()).toString().replace("-", ""));
-                    packetWrapper.write(Type.STRING, info.getUsername());
-
-                    final PreNettyProvider preNettyProvider = Via.getManager().getProviders().get(PreNettyProvider.class);
-                    if (preNettyProvider != null) {
-                        final ChannelPipeline pipeline = packetWrapper.user().getChannel().pipeline();
-                        pipeline.addBefore(PreNettyConstants.DECODER, preNettyProvider.decryptKey(), preNettyProvider.decryptor());
-                        pipeline.addBefore(PreNettyConstants.ENCODER, preNettyProvider.encryptKey(), preNettyProvider.encryptor());
-                    }
-
-                    PacketWrapper add = new PacketWrapperImpl(205, null, packetWrapper.user()); //Packet205ClientCommand
-                    add.write(Type.BYTE, (byte) 0);
-                    try {
-                        add.sendToServer(Protocol1_7_5to1_6_4.class);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    info.setState(State.PLAY);
-                });
-            }
-        });
 
         // Pong
         this.cancelClientbound(State.STATUS, 0x01);
@@ -838,8 +788,10 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     }
                     if (mode == 0 || mode == 3 || mode == 4) {
                         players = new String[wrapper.read(Type.SHORT)];
-                        for (int i = 0; i < players.length; i++)
+
+                        for (int i = 0; i < players.length; i++) {
                             players[i] = wrapper.read(Types1_6_4.STRING);
+                        }
                     }
                     wrapper.clearPacket();
 
@@ -853,8 +805,10 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     }
                     if (mode == 0 || mode == 3 || mode == 4) {
                         wrapper.write(Type.SHORT, (short) players.length);
-                        for (int i = 0; i < players.length; i++)
-                            wrapper.write(Type.STRING, players[i]);
+
+                        for (String player : players) {
+                            wrapper.write(Type.STRING, player);
+                        }
                     }
                     wrapper.cancel();
                 });
@@ -994,23 +948,17 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.BYTE, Type.UNSIGNED_BYTE); // Value-1
                 map(Type.BYTE, Type.UNSIGNED_BYTE); // Value-2
                 map(Type.SHORT, Type.VAR_INT); // Block-Type
-
                 handler(wrapper -> {
-                    List<String> list = Arrays.asList("harp", "bd", "snare", "hat", "bassattack");
-                    int instrument = wrapper.get(Type.UNSIGNED_BYTE, 0);
-                    if (instrument < 0 || instrument >= list.size())
-                        instrument = 0;
-                    PacketWrapper sound = PacketWrapper.create(ClientboundPackets1_6_4.ENTITY_EFFECT, wrapper.user());
-                    sound.write(Type.STRING, "note." + list.get(instrument));
+                    final int instrument = NoteBlockPitch.limitInstrument(wrapper.get(Type.UNSIGNED_BYTE, 0));
+
+                    final PacketWrapper sound = PacketWrapper.create(ClientboundPackets1_6_4.ENTITY_EFFECT, wrapper.user());
+                    sound.write(Type.STRING, NoteBlockPitch.getInstrument(instrument));
                     sound.write(Type.INT, wrapper.get(Type.INT, 0) * 8);
                     sound.write(Type.INT, wrapper.get(Type.SHORT, 0) * 8);
                     sound.write(Type.INT, wrapper.get(Type.INT, 1) * 8);
                     sound.write(Type.FLOAT, 3.0F);
-                    short pitch = wrapper.get(Type.UNSIGNED_BYTE, 1);
-                    if (pitchList.containsKey(pitch)) {
-                        pitch = pitchList.get(pitch);
-                    }
-                    sound.write(Type.UNSIGNED_BYTE, pitch);
+                    sound.write(Type.UNSIGNED_BYTE, NoteBlockPitch.getPitch(wrapper.get(Type.UNSIGNED_BYTE, 1)));
+
                     sound.send(Protocol1_7_5to1_6_4.class);
                 });
             }
@@ -1072,15 +1020,11 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                handler(wrapper -> {
-                    short type = wrapper.read(Type.SHORT);
-                    int id = wrapper.read(Type.SHORT);
-                    byte[] data = wrapper.read(Types1_7_6_10.BYTEARRAY);
-                    wrapper.clearPacket();
+                read(Type.SHORT); // Type
+                map(Type.SHORT, Type.VAR_INT); // ID
+                map(Type.SHORT_BYTE_ARRAY); // Data
 
-                    wrapper.write(Type.VAR_INT, id);
-                    wrapper.write(Types1_7_6_10.BYTEARRAY, data);
-                });
+                handler(PacketWrapper::clearPacket);
             }
         });
 
@@ -1101,7 +1045,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
     }
 
     @Override
-    public SoundRewriter soundRewriter() {
+    public SoundRewriter<Protocol1_7_5to1_6_4> soundRewriter() {
         return this.soundRewriter;
     }
 
@@ -1110,21 +1054,17 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
         return this.materialReplacement;
     }
 
+    @Override
+    public void register(ViaProviders providers) {
+        super.register(providers);
+
+        providers.register(UUIDProvider.class, new UUIDProvider());
+        providers.register(EncryptionProvider.class, new EncryptionProvider());
+    }
 
     @Override
     public void init(UserConnection userConnection) {
         userConnection.put(new ClientWorld(userConnection));
         userConnection.put(new SplitterTracker(userConnection, ClientboundPackets1_6_4.values(), ClientboundLoginPackets1_6_4.values()));
-
-        final PreNettyProvider preNettyProvider = Via.getManager().getProviders().get(PreNettyProvider.class);
-        if (preNettyProvider != null) {
-            final ChannelPipeline pipeline = userConnection.getChannel().pipeline();
-
-            pipeline.addBefore(preNettyProvider.splitterKey(), PreNettyConstants.DECODER, new PreNettyPacketDecoder(userConnection));
-            pipeline.addBefore(preNettyProvider.prependerKey(), PreNettyConstants.ENCODER, new PreNettyPacketEncoder());
-
-            pipeline.replace(preNettyProvider.prependerKey(), preNettyProvider.prependerKey(), new DummyPrepender());
-            pipeline.remove(preNettyProvider.splitterKey());
-        }
     }
 }

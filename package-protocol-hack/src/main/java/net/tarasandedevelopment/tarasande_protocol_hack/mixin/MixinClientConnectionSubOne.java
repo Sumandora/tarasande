@@ -25,6 +25,10 @@ import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
+import de.florianmichael.vialegacy.pre_netty.DummyPrepender;
+import de.florianmichael.vialegacy.pre_netty.PreNettyConstants;
+import de.florianmichael.vialegacy.pre_netty.PreNettyPacketDecoder;
+import de.florianmichael.vialegacy.pre_netty.PreNettyPacketEncoder;
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.vialegacy.protocols.base.BaseProtocol1_6;
 import de.florianmichael.viaprotocolhack.netty.CustomViaDecodeHandler;
@@ -63,6 +67,15 @@ public class MixinClientConnectionSubOne {
             channel.pipeline()
                     .addBefore("encoder", NettyConstants.HANDLER_ENCODER_NAME, new CustomViaEncodeHandler(user))
                     .addBefore("decoder", NettyConstants.HANDLER_DECODER_NAME, new CustomViaDecodeHandler(user));
+
+            if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.r1_6_4)) {
+                channel.pipeline()
+                        .addBefore(NettyConstants.HANDLER_ENCODER_NAME, PreNettyConstants.ENCODER, new PreNettyPacketEncoder())
+                        .addBefore(NettyConstants.HANDLER_DECODER_NAME, PreNettyConstants.DECODER, new PreNettyPacketDecoder(user));
+
+                channel.pipeline().replace("prepender", "prepender", new DummyPrepender());
+                channel.pipeline().remove("splitter");
+            }
         }
     }
 }

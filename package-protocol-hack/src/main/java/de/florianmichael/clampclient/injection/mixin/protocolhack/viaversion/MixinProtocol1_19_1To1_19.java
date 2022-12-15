@@ -92,12 +92,12 @@ public class MixinProtocol1_19_1To1_19 extends AbstractProtocol<ClientboundPacke
                     final long timestamp = wrapper.get(Type.LONG, 0);
                     final long salt = wrapper.get(Type.LONG, 1);
 
-                    if (sender == null) {
-                        throw new IllegalStateException("ViaVersion didn't track the connected UUID correctly, please check your BaseProtocol1_7");
-                    }
-
                     final ChatSession1_19_0 chatSession1190 = wrapper.user().get(ChatSession1_19_0.class);
                     if (chatSession1190 != null) {
+                        if (sender == null) {
+                            throw new IllegalStateException("ViaVersion didn't track the connected UUID correctly, please check your BaseProtocol1_7");
+                        }
+
                         wrapper.set(Type.BYTE_ARRAY_PRIMITIVE, 0, chatSession1190.sign(
                                 sender,
                                 new MessageMetadata1_19_all(
@@ -128,12 +128,12 @@ public class MixinProtocol1_19_1To1_19 extends AbstractProtocol<ClientboundPacke
                     final long timestamp = wrapper.get(Type.LONG, 0);
                     final long salt = wrapper.get(Type.LONG, 1);
 
-                    if (sender == null) {
-                        throw new IllegalStateException("ViaVersion didn't track the connected UUID correctly, please check your BaseProtocol1_7");
-                    }
-
                     final ChatSession1_19_0 chatSession1190 = wrapper.user().get(ChatSession1_19_0.class);
                     if (chatSession1190 != null) {
+                        if (sender == null) {
+                            throw new IllegalStateException("ViaVersion didn't track the connected UUID correctly, please check your BaseProtocol1_7");
+                        }
+
                         // Make sure we implemented the command signing
                         final CommandArgumentsProvider commandArgumentsProvider = Via.getManager().getProviders().get(CommandArgumentsProvider.class);
                         if (commandArgumentsProvider != null) {

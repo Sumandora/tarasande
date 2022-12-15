@@ -244,12 +244,11 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                     final long timestamp = wrapper.get(Type.LONG, 0);
                     final long salt = wrapper.get(Type.LONG, 1);
 
-                    if (sender == null) {
-                        throw new IllegalStateException("ViaVersion didn't track the connected UUID correctly, please check your BaseProtocol1_7");
-                    }
-
                     final ChatSession1_19_2 chatSession1192 = wrapper.user().get(ChatSession1_19_2.class);
                     if (chatSession1192 != null) {
+                        if (sender == null) {
+                            throw new IllegalStateException("ViaVersion didn't track the connected UUID correctly, please check your BaseProtocol1_7");
+                        }
                         final CommandArgumentsProvider commandArgumentsProvider = Via.getManager().getProviders().get(CommandArgumentsProvider.class);
                         if (commandArgumentsProvider != null) {
                             // Signing arguments
@@ -312,12 +311,12 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                     final long timestamp = wrapper.get(Type.LONG, 0);
                     final long salt = wrapper.get(Type.LONG, 1);
 
-                    if (sender == null) {
-                        throw new IllegalStateException("ViaVersion didn't track the connected UUID correctly, please check your BaseProtocol1_7");
-                    }
 
                     final ChatSession1_19_2 chatSession1192 = wrapper.user().get(ChatSession1_19_2.class);
                     if (chatSession1192 != null) {
+                        if (sender == null) {
+                            throw new IllegalStateException("ViaVersion didn't track the connected UUID correctly, please check your BaseProtocol1_7");
+                        }
                         final ReceivedMessagesStorage messagesStorage = wrapper.user().get(ReceivedMessagesStorage.class);
                         if (messagesStorage != null) {
                             final byte[] signature = chatSession1192.sign(

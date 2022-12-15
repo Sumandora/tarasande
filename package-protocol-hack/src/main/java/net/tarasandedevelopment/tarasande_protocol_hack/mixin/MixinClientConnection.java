@@ -23,14 +23,17 @@ package net.tarasandedevelopment.tarasande_protocol_hack.mixin;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
+import de.florianmichael.vialegacy.pre_netty.PreNettyConstants;
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.viaprotocolhack.event.PipelineReorderEvent;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import io.netty.channel.Channel;
 import net.minecraft.network.ClientConnection;
+import net.minecraft.network.encryption.PacketDecryptor;
+import net.minecraft.network.encryption.PacketEncryptor;
 import net.minecraft.text.Text;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.WolfHealthTracker1_14_4;
-import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricPreNettyProvider;
+import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricEncryptionProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -46,8 +49,6 @@ public class MixinClientConnection implements IClientConnection_Protocol {
     @Shadow
     private Channel channel;
 
-    @Shadow
-    private boolean encrypted;
     @Unique
     private UserConnection protocolhack_viaConnection;
 
@@ -64,10 +65,11 @@ public class MixinClientConnection implements IClientConnection_Protocol {
     @Inject(method = "setupEncryption", at = @At("HEAD"), cancellable = true)
     public void injectSetupEncryption(Cipher decryptionCipher, Cipher encryptionCipher, CallbackInfo ci) {
         if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.r1_6_4)) {
-            FabricPreNettyProvider.Companion.setDecryptionKey(decryptionCipher);
-            FabricPreNettyProvider.Companion.setEncryptionKey(encryptionCipher);
+            FabricEncryptionProvider.Companion.setDecryptionKey(decryptionCipher);
+            FabricEncryptionProvider.Companion.setEncryptionKey(encryptionCipher);
 
-            this.encrypted = true;
+            FabricEncryptionProvider.Companion.setChannel(this.channel);
+
             ci.cancel();
         }
     }

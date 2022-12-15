@@ -61,7 +61,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_4_0_2to1_3_1_2.Clientboun
 import de.florianmichael.vialegacy.protocols.protocol1_4_0_2to1_3_1_2.ServerboundPackets1_3_1_2;
 import de.florianmichael.vialegacy.protocols.protocol1_4_6_7to1_4_4_5.storage.DimensionStorage;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.Protocol1_7_5to1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.ServerboundLoginPackets1_6_4;
+import de.florianmichael.vialegacy.protocols.base.ServerboundLoginPackets1_6_4;
 
 import java.util.ArrayList;
 import java.util.UUID;

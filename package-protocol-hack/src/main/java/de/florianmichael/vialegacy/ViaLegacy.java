@@ -118,11 +118,10 @@ public class ViaLegacy {
     private static void registerProtocol(final ProtocolVersion from, final ProtocolVersion to, final Protocol<?, ?, ?, ?> protocol) {
         try {
             Via.getManager().getProtocolManager().registerProtocol(protocol, from, to);
+            getLogger().info("Loading " + from.getName() + " -> " + to.getName() + " mappings...");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        getLogger().info("Loading " + from.getName() + " -> " + to.getName() + " mappings...");
     }
 
     public static Logger getLogger() {

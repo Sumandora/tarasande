@@ -86,32 +86,19 @@ public class MixinConnectScreen_1 {
                 final PlayerKeyPair playerKeyPair = MinecraftClient.getInstance().getProfileKeys().fetchKeyPair().get().orElse(null);
                 if (playerKeyPair != null) {
                     final UserConnection userConnection = TarasandeProtocolHack.Companion.getViaConnection();
-
                     if (userConnection != null) {
                         final PlayerPublicKey.PublicKeyData publicKeyData = playerKeyPair.publicKey().data();
-
-                        userConnection.put(new ChatSession1_19_2(
-                                userConnection,
-                                new ProfileKey(
-                                        publicKeyData.expiresAt().toEpochMilli(),
-                                        publicKeyData.key().getEncoded(),
-                                        publicKeyData.keySignature()
-                                ),
-                                playerKeyPair.privateKey()
-                        ));
+                        userConnection.put(new ChatSession1_19_2(userConnection, new ProfileKey(publicKeyData.expiresAt().toEpochMilli(), publicKeyData.key().getEncoded(), publicKeyData.keySignature()), playerKeyPair.privateKey()));
                         if (VersionList.isEqualTo(ProtocolVersion.v1_19)) {
                             final byte[] legacyKey = ((IPublicKeyData_Protocol) (Object) publicKeyData).protocolhack_get1_19_0Key().array();
                             if (legacyKey != null) {
-                                userConnection.put(new ChatSession1_19_0(
-                                        userConnection,
-                                        legacyKey
-                                ));
+                                userConnection.put(new ChatSession1_19_0(userConnection, legacyKey));
                             } else {
                                 ViaProtocolHack.instance().logger().log(Level.WARNING, "Mojang removed the legacy key");
                             }
                         }
                     } else {
-                        ViaProtocolHack.instance().logger().log(Level.WARNING, "Via is not connected");
+                        ViaProtocolHack.instance().logger().log(Level.WARNING, "ViaVersion userConnection is null");
                     }
                 } else {
                     ViaProtocolHack.instance().logger().log(Level.WARNING, "Failed to fetch the key pair");

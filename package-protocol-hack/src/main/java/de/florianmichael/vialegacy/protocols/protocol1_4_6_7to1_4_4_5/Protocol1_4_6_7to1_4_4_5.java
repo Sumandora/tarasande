@@ -44,7 +44,7 @@ import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_4_6_7to1_4_4_5.type.impl.ChunkBulk1_4_4_5Type;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.ClientboundLoginPackets1_6_4;
+import de.florianmichael.vialegacy.protocols.base.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.MetaType_1_6_4;

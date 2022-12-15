@@ -90,7 +90,7 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
     };
     public final ValueReader<Position> xyzToPositionISI = wrapper -> {
         final int x = wrapper.read(Type.INT);
-        final int y = wrapper.read(Type.INT);
+        final int y = wrapper.read(Type.SHORT);
         final int z = wrapper.read(Type.INT);
 
         return new Position(x, y, z);
@@ -118,11 +118,10 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
         this.registerClientbound(State.LOGIN, ClientboundLoginPackets.GAME_PROFILE.getId(), ClientboundLoginPackets.GAME_PROFILE.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(Type.STRING);
-                map(Type.STRING);
+                map(Type.STRING); // UUID
+                map(Type.STRING); // Name
                 handler(wrapper -> {
                     final GameProfileTracker gameProfileTracker = wrapper.user().get(GameProfileTracker.class);
-
                     if (gameProfileTracker != null) {
                         gameProfileTracker.setUuid(wrapper.get(Type.STRING, 0));
                         gameProfileTracker.setName(wrapper.get(Type.STRING, 1));
@@ -251,7 +250,11 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
                 map(Type.INT, Type.VAR_INT); // Entity ID
                 map(Type.SHORT); // Slot
                 map(Types1_7_6_10.COMPRESSED_NBT_ITEM, Type.ITEM); // Item
-                handler(wrapper -> wrapper.set(Type.ITEM, 0, Objects.requireNonNull(getItemRewriter()).handleItemToClient(wrapper.get(Type.ITEM, 0))));
+                handler(wrapper -> {
+                    if (getItemRewriter() != null) {
+                        wrapper.set(Type.ITEM, 0, getItemRewriter().handleItemToClient(wrapper.get(Type.ITEM, 0)));
+                    }
+                });
             }
         });
 
@@ -274,8 +277,8 @@ public class Protocol1_8_0_9to1_7_6_10 extends EnZaProtocol<ClientboundPackets1_
         this.registerClientbound(ClientboundPackets1_7_6_10.SPAWN_PLAYER, new PacketRemapper() {
             @Override
             public void registerMap() {
+                map(Type.VAR_INT); // Entity yID
                 handler(wrapper -> {
-                    wrapper.passthrough(Type.VAR_INT); // Entity ID
                     final String uuid = wrapper.read(Type.STRING);
                     wrapper.write(Type.UUID, UUID.fromString(uuid));
 

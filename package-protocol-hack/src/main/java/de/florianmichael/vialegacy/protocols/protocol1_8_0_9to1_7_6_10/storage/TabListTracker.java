@@ -67,10 +67,6 @@ public class TabListTracker extends StoredObject {
 		tabListEntries.add(entry);
 	}
 
-	public int indexOf(TabListEntry entry) {
-		return tabListEntries.indexOf(entry);
-	}
-
 	public static class TabListEntry {
 		public String name;
 		public String displayName;
