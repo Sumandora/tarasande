@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_protocol_spoofer.mixin;
+package de.florianmichael.tarasande_protocol_spoofer.mixin.haproxy;
 
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelToggleableHAProxyHack;
 import io.netty.channel.Channel;

@@ -1,9 +1,6 @@
 package de.florianmichael.tarasande_protocol_spoofer
 
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelToggleableBungeeHack
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelToggleableForgeFaker
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelToggleableHAProxyHack
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelToggleableQuiltFaker
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.*
 import net.fabricmc.api.ClientModInitializer
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
@@ -19,7 +16,8 @@ class TarasandeProtocolSpoofer : ClientModInitializer {
                     EntrySidebarPanelToggleableBungeeHack(this),
                     EntrySidebarPanelToggleableForgeFaker(this),
                     EntrySidebarPanelToggleableHAProxyHack(this),
-                    EntrySidebarPanelToggleableQuiltFaker(this)
+                    EntrySidebarPanelToggleableQuiltFaker(this),
+                    EntrySidebarPanelToggleableVivecraftFaker(this)
                 )
             }
         }

@@ -1,8 +1,8 @@
-package de.florianmichael.tarasande_protocol_spoofer.mixin;
+package de.florianmichael.tarasande_protocol_spoofer.mixin.forge;
 
-import net.minecraft.client.network.ServerInfo;
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.IForgePayload;
 import de.florianmichael.tarasande_protocol_spoofer.accessor.IServerInfo;
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.IForgePayload;
+import net.minecraft.client.network.ServerInfo;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 

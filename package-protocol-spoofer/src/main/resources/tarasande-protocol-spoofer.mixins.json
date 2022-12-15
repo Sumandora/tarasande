@@ -4,11 +4,12 @@
   "package": "de.florianmichael.tarasande_protocol_spoofer.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "MixinServerInfo",
-    "MixinClientConnectionSubInitChannel",
-    "MixinMultiplayerServerListPingerSubOnResponse",
-    "MixinServerMetadata",
-    "MixinServerMetadataDeserializer"
+    "forge.MixinMultiplayerServerListPingerSubOnResponse",
+    "forge.MixinServerInfo",
+    "forge.MixinServerMetadata",
+    "forge.MixinServerMetadataDeserializer",
+    "haproxy.MixinClientConnectionSubInitChannel",
+    "vivecraft.MixinClientPlayNetworkHandler"
   ],
   "injectors": {
     "defaultRequire": 1
