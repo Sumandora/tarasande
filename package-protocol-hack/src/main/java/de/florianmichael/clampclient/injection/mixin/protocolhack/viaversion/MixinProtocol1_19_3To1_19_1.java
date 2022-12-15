@@ -113,7 +113,13 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
             public void registerMap() {
                 map(Type.BYTE_ARRAY_PRIMITIVE); // Keys
                 create(Type.BOOLEAN, true); // Is nonce
-                map(Type.BYTE_ARRAY_PRIMITIVE); // Encrypted challenge
+
+                handler(wrapper -> {
+                    final ChatSession1_19_2 chatSession1192 = wrapper.user().get(ChatSession1_19_2.class);
+                    if (chatSession1192 != null) {
+                        wrapper.read(Type.BYTE_ARRAY_PRIMITIVE); // Encrypted Nonce
+                    }
+                });
 
                 handler(wrapper -> {
                     final NonceStorage nonceStorage = wrapper.user().get(NonceStorage.class);
@@ -132,7 +138,6 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                                     updater.update(Longs.toByteArray(salt));
                                 }
                             });
-                            wrapper.read(Type.BYTE_ARRAY_PRIMITIVE); // We don't this anymore
 
                             wrapper.write(Type.LONG, salt);
                             wrapper.write(Type.BYTE_ARRAY_PRIMITIVE, signedNonce);
