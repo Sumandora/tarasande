@@ -35,7 +35,7 @@ class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", Module
             if (event.type == EventPacket.Type.SEND && event.packet is PlayerMoveC2SPacket && mode.isSelected(0)) {
                 if (mc.player?.fallDistance!! >= fallDistance.value || groundSpoofMode.isSelected(1)) {
                     event.packet.onGround = groundSpoofMode.isSelected(0)
-                    if (resetFallDistance.value)
+                    if (groundSpoofMode.isSelected(0) && resetFallDistance.value)
                         mc.player?.fallDistance = 0.0F
                 }
             }
