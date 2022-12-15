@@ -1,12 +1,12 @@
-package de.florianmichael.tarasande_protocol_spoofer.mixin;
+package de.florianmichael.tarasande_protocol_spoofer.mixin.forge;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.server.ServerMetadata;
+import de.florianmichael.tarasande_protocol_spoofer.accessor.IServerMetadata;
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.ForgeCreator;
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.IForgePayload;
-import de.florianmichael.tarasande_protocol_spoofer.accessor.IServerMetadata;
+import net.minecraft.server.ServerMetadata;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

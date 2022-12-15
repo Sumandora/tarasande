@@ -13,6 +13,7 @@ import net.minecraft.client.network.ClientDynamicRegistryType
 import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.command.CommandSource
 import net.minecraft.resource.featuretoggle.FeatureFlags
+import net.minecraft.screen.ScreenTexts
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.ClickEvent
 import net.minecraft.text.Text
@@ -31,6 +32,7 @@ import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.Comm
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
+import kotlin.math.max
 
 class ManagerCommand : Manager<Command>() {
 
@@ -62,23 +64,24 @@ class ManagerCommand : Manager<Command>() {
 
                 try {
                     dispatcher.execute(reader, this.commandSource)
-                } catch (e: CommandSyntaxException) {
+                } catch (commandSyntaxException: CommandSyntaxException) {
                     if (!exceptions.value) return@add
 
-                    CustomChat.printChatMessage(Text.literal("").formatted(Formatting.RED).append(Texts.toText(e.rawMessage)))
+                    CustomChat.printChatMessage(Text.literal("").formatted(Formatting.RED).append(Texts.toText(commandSyntaxException.rawMessage)))
 
-                    if (e.cursor >= 0) {
-                        val index = e.input.length.coerceAtMost(e.cursor)
-                        val verbose = Text.literal("").formatted(Formatting.GRAY).styled {
-                            it.withClickEvent(ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, reader.string))
+                    if (commandSyntaxException.cursor >= 0) {
+                        val i = commandSyntaxException.input.length.coerceAtMost(commandSyntaxException.cursor)
+                        val mutableText = Text.empty().formatted(Formatting.GRAY).styled { style -> style.withClickEvent(ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, it.chatMessage)) }
+                        if (i > 10) {
+                            mutableText.append(ScreenTexts.ELLIPSIS)
                         }
-
-                        if (index < e.input.length) {
-                            verbose.append(Text.literal(e.input.substring(index)).formatted(Formatting.RED, Formatting.UNDERLINE))
+                        mutableText.append(commandSyntaxException.input.substring(max(0, i - 10), i))
+                        if (i < commandSyntaxException.input.length) {
+                            val text = Text.literal(commandSyntaxException.input.substring(i)).formatted(Formatting.RED, Formatting.UNDERLINE)
+                            mutableText.append(text)
                         }
-
-                        verbose.append(Text.translatable("command.context.here").formatted(Formatting.RED, Formatting.ITALIC))
-                        CustomChat.printChatMessage(Text.literal("").formatted(Formatting.RED).append(Texts.toText(verbose)))
+                        mutableText.append(Text.translatable("command.context.here").formatted(Formatting.RED, Formatting.ITALIC))
+                        CustomChat.printChatMessage(Text.literal("").formatted(Formatting.RED).append(Texts.toText(mutableText)))
                     }
                 }
             }

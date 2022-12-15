@@ -40,6 +40,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -54,14 +55,16 @@ public class MixinServerResourcePackProvider {
         return PackFormats.INSTANCE.current();
     }
 
-    @Inject(method = "getDownloadHeaders", at = @At("TAIL"))
+    @Inject(method = "getDownloadHeaders", at = @At("TAIL"), cancellable = true)
     private static void removeHeaders(CallbackInfoReturnable<Map<String, String>> cir) {
+        LinkedHashMap<String, String> modifiableMap = new LinkedHashMap<>(cir.getReturnValue());
         if (VersionList.isOlderTo(ProtocolVersion.v1_14))
-            cir.getReturnValue().remove("X-Minecraft-Version-ID");
+            modifiableMap.remove("X-Minecraft-Version-ID");
         if (VersionList.isOlderTo(ProtocolVersion.v1_13)) {
-            cir.getReturnValue().remove("X-Minecraft-Pack-Format");
-            cir.getReturnValue().remove("User-Agent");
+            modifiableMap.remove("X-Minecraft-Pack-Format");
+            modifiableMap.remove("User-Agent");
         }
+        cir.setReturnValue(modifiableMap);
     }
 
     @Inject(method = "verifyFile", at = @At("HEAD"))
@@ -73,7 +76,7 @@ public class MixinServerResourcePackProvider {
     public String revertHashAlgorithm(HashCode instance) {
         try {
             if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
-                //noinspection UnstableApiUsage,deprecation
+                //noinspection deprecation
                 return Hashing.sha1().hashBytes(Files.toByteArray(protocolhack_trackedFile)).toString();
             } else if (VersionList.isOlderTo(ProtocolVersion.v1_18)) {
                 return DigestUtils.sha1Hex(new FileInputStream(protocolhack_trackedFile));
