@@ -34,9 +34,9 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
 
     private fun computeSelectedBox(entity: Entity): Box? {
         val playerRotation = RotationUtil.fakeRotation ?: Rotation(mc.player!!)
-        val playerEye = mc.player?.eyePos
-        val rotationVec = mc.player?.eyePos!! + playerRotation.forwardVector((mc.gameRenderer as IGameRenderer).tarasande_getReach())
-        return boundingBoxes[entity]?.filter { it.raycast(playerEye, rotationVec).isPresent }?.minByOrNull { playerEye?.squaredDistanceTo(MathUtil.closestPointToBox(playerEye, it))!! }
+        val playerEye = mc.player?.eyePos!!
+        val rotationVec = playerEye + playerRotation.forwardVector((mc.gameRenderer as IGameRenderer).tarasande_getReach())
+        return boundingBoxes[entity]?.filter { it.raycast(playerEye, rotationVec).isPresent }?.minByOrNull { playerEye.distanceTo(MathUtil.closestPointToBox(playerEye, it)) }
     }
 
     init {
