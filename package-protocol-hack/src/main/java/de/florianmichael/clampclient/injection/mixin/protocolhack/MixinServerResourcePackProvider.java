@@ -76,7 +76,7 @@ public class MixinServerResourcePackProvider {
     public String revertHashAlgorithm(HashCode instance) {
         try {
             if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
-                //noinspection UnstableApiUsage,deprecation
+                //noinspection deprecation
                 return Hashing.sha1().hashBytes(Files.toByteArray(protocolhack_trackedFile)).toString();
             } else if (VersionList.isOlderTo(ProtocolVersion.v1_18)) {
                 return DigestUtils.sha1Hex(new FileInputStream(protocolhack_trackedFile));
