@@ -40,7 +40,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -57,7 +57,7 @@ public class MixinServerResourcePackProvider {
 
     @Inject(method = "getDownloadHeaders", at = @At("TAIL"), cancellable = true)
     private static void removeHeaders(CallbackInfoReturnable<Map<String, String>> cir) {
-        HashMap<String, String> modifiableMap = new HashMap<>(cir.getReturnValue());
+        LinkedHashMap<String, String> modifiableMap = new LinkedHashMap<>(cir.getReturnValue());
         if (VersionList.isOlderTo(ProtocolVersion.v1_14))
             modifiableMap.remove("X-Minecraft-Version-ID");
         if (VersionList.isOlderTo(ProtocolVersion.v1_13)) {
