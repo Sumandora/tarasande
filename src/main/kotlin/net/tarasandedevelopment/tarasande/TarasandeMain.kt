@@ -20,6 +20,32 @@ import su.mandora.event.EventDispatcher
 import java.io.File
 import java.util.logging.Logger
 
+/**
+ * TODO AND BUG TRACKER FOR TARASANDE - (c) Johannes and FlorianMichael
+ *
+ * TODO | General:
+ *  - User configs
+ *  - Crystal Aura
+ *  - Change Name/Skin/Cape in Account Manager
+ *  - Settings for HypixelBedwarsOverlay
+ *  - ViaLegacy texture pack using ProtocolPatcher
+ *  - Anti vanish: Tab completion
+ *  - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
+ *  - Recode File Chooser
+ *  - Wheel Menu
+ *  - Trajectory: Prediction
+ *  - Prepend valid command args to error output
+ *  - Text Radar Panel
+ *  - CustomPayload and PacketLogger Panel
+ *
+ * TODO | Protocol Hack:
+ *  - Entity Dimensions
+ *  - Re-add PrivateMSGDetector in 1.19.3 -> 1.19.2
+ *  - Implement Water/Lava Movement
+ *  - Blocking/Placement is broken
+ *  - WindowClick in 1.16.5 is not fully remapped
+ *  - MerchantScreenHandler#switchTo Crasher
+ */
 class TarasandeMain {
 
     val name = "tarasande" // "lowercase gang" ~kennytv
