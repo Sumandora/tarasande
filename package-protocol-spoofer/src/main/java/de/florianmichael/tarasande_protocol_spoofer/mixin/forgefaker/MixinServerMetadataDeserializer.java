@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_protocol_spoofer.mixin.forge;
+package de.florianmichael.tarasande_protocol_spoofer.mixin.forgefaker;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
