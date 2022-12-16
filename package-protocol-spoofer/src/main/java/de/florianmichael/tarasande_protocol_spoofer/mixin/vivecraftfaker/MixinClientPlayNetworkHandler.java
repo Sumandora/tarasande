@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_protocol_spoofer.mixin.vivecraft;
+package de.florianmichael.tarasande_protocol_spoofer.mixin.vivecraftfaker;
 
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelToggleableVivecraftFaker;
 import net.minecraft.client.network.ClientPlayNetworkHandler;

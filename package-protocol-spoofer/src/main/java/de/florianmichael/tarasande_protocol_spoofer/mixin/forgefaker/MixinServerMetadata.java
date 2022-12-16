@@ -1,13 +1,13 @@
-package de.florianmichael.tarasande_protocol_spoofer.mixin.forge;
+package de.florianmichael.tarasande_protocol_spoofer.mixin.forgefaker;
 
-import de.florianmichael.tarasande_protocol_spoofer.accessor.IServerInfo;
+import de.florianmichael.tarasande_protocol_spoofer.accessor.IServerMetadata;
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.IForgePayload;
-import net.minecraft.client.network.ServerInfo;
+import net.minecraft.server.ServerMetadata;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-@Mixin(ServerInfo.class)
-public class MixinServerInfo implements IServerInfo {
+@Mixin(ServerMetadata.class)
+public class MixinServerMetadata implements IServerMetadata {
 
     @Unique
     private IForgePayload tarasande_forgePayload;

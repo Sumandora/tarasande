@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_protocol_spoofer.mixin.forge;
+package de.florianmichael.tarasande_protocol_spoofer.mixin.forgefaker;
 
 import de.florianmichael.tarasande_protocol_spoofer.accessor.IServerInfo;
 import de.florianmichael.tarasande_protocol_spoofer.accessor.IServerMetadata;

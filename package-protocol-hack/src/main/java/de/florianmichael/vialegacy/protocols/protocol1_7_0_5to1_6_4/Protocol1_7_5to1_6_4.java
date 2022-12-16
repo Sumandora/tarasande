@@ -11,25 +11,25 @@
  * cancelled by copying or removing the license and in case of violation a criminal consequence is to be expected.
  * The owner "Florian Michael" is free to change this license.
  */
-/**
- * --FLORIAN MICHAEL PRIVATE LICENCE v1.2--
- *
- * This file / project is protected and is the intellectual property of Florian Michael (aka. EnZaXD),
- * any use (be it private or public, be it copying or using for own use, be it publishing or modifying) of this
- * file / project is prohibited. It requires in that use a written permission with official signature of the owner
- * "Florian Michael". "Florian Michael" receives the right to control and manage this file / project. This right is not
- * cancelled by copying or removing the license and in case of violation a criminal consequence is to be expected.
- * The owner "Florian Michael" is free to change this license. The creator assumes no responsibility for any infringements
- * that have arisen, are arising or will arise from this project / file. If this licence is used anywhere,
- * the latest version published by the author Florian Michael (aka EnZaXD) always applies automatically.
- *
- * Changelog:
- *     v1.0:
- *         Added License
- *     v1.1:
- *         Ownership withdrawn
- *     v1.2:
- *         Version-independent validity and automatic renewal
+/*
+  --FLORIAN MICHAEL PRIVATE LICENCE v1.2--
+
+  This file / project is protected and is the intellectual property of Florian Michael (aka. EnZaXD),
+  any use (be it private or public, be it copying or using for own use, be it publishing or modifying) of this
+  file / project is prohibited. It requires in that use a written permission with official signature of the owner
+  "Florian Michael". "Florian Michael" receives the right to control and manage this file / project. This right is not
+  cancelled by copying or removing the license and in case of violation a criminal consequence is to be expected.
+  The owner "Florian Michael" is free to change this license. The creator assumes no responsibility for any infringements
+  that have arisen, are arising or will arise from this project / file. If this licence is used anywhere,
+  the latest version published by the author Florian Michael (aka EnZaXD) always applies automatically.
+
+  Changelog:
+      v1.0:
+          Added License
+      v1.1:
+          Ownership withdrawn
+      v1.2:
+          Version-independent validity and automatic renewal
  */
 
 package de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4;
@@ -49,25 +49,25 @@ import com.viaversion.viaversion.protocols.base.ClientboundLoginPackets;
 import com.viaversion.viaversion.protocols.base.ServerboundLoginPackets;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
 import com.viaversion.viaversion.util.GsonUtil;
+import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.api.material.MaterialReplacement;
 import de.florianmichael.vialegacy.api.sound.SoundRewriter;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.base.ClientboundLoginPackets1_6_4;
+import de.florianmichael.vialegacy.protocols.base.HandshakeStorage;
 import de.florianmichael.vialegacy.protocols.base.ServerboundLoginPackets1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.item.MaterialReplacement1_7_0_5to1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.model.EntityAttributeModifier;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.model.EntityProperty;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.provider.EncryptionProvider;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.provider.UUIDProvider;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.sound.NoteBlockPitch;
-import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
-import de.florianmichael.vialegacy.api.EnZaProtocol;
-import de.florianmichael.vialegacy.protocols.base.HandshakeStorage;
-import de.florianmichael.vialegacy.protocols.protocol1_7_6_10to1_7_0_5.ClientboundPackets1_7_0_5;
-import de.florianmichael.vialegacy.protocols.protocol1_7_6_10to1_7_0_5.ServerboundPackets1_7_0_5;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.model.EntityAttributeModifier;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.model.EntityProperty;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.item.MaterialReplacement1_7_0_5to1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.sound.SoundRewriter1_7_0_5to1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.string.DisconnectPacketRemapper;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_6_10to1_7_0_5.ClientboundPackets1_7_0_5;
+import de.florianmichael.vialegacy.protocols.protocol1_7_6_10to1_7_0_5.ServerboundPackets1_7_0_5;
+import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -77,7 +77,9 @@ import net.md_5.bungee.chat.ComponentSerializer;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.net.InetSocketAddress;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, ClientboundPackets1_7_0_5, ServerboundPackets1_6_4, ServerboundPackets1_7_0_5> {
 
@@ -125,14 +127,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
         });
 
         // Encryption Key (ServerAuthData / Encryption Request Response) -> Shared Key (ServerAuthData Response)
-        this.registerServerbound(State.LOGIN, ServerboundLoginPackets1_6_4.SHARED_KEY.getId(), ServerboundLoginPackets.ENCRYPTION_KEY.getId(), new PacketRemapper() {
-
-            @Override
-            public void registerMap() {
-                map(Type.SHORT_BYTE_ARRAY); // Public Key
-                map(Type.SHORT_BYTE_ARRAY); // Verify Token
-            }
-        });
+        this.registerServerbound(State.LOGIN, ServerboundLoginPackets1_6_4.SHARED_KEY.getId(), ServerboundLoginPackets.ENCRYPTION_KEY.getId());
 
         // Server Auth Data 1.6 -> Login Hello 1.7 (S -> C)
         this.registerClientbound(State.LOGIN, ClientboundLoginPackets1_6_4.SERVER_AUTH_DATA.getId(), ClientboundLoginPackets.HELLO.getId(), new PacketRemapper() {
@@ -193,19 +188,21 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                     // Plugin Message
                     wrapper.write(Type.UNSIGNED_BYTE, (short) 0xFA);
                     wrapper.write(Types1_6_4.STRING, "MC|PingHost");
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    DataOutputStream out = new DataOutputStream(baos);
+
+                    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    final DataOutputStream out = new DataOutputStream(byteArrayOutputStream);
                     out.writeByte(wrapper.user().getProtocolInfo().getServerProtocolVersion());
-                    InetSocketAddress addr = (InetSocketAddress) wrapper.user().getChannel().remoteAddress();
-                    String ip = addr.getHostString();
-                    int port = addr.getPort();
+
+                    final InetSocketAddress addr = (InetSocketAddress) wrapper.user().getChannel().remoteAddress();
+                    final String ip = addr.getHostString();
+
                     out.writeShort(ip.length());
                     for (int i = 0; i < ip.length(); i++) {
                         out.writeChar(ip.charAt(i));
                     }
-                    out.writeInt(port);
+                    out.writeInt(addr.getPort());
                     out.close();
-                    wrapper.write(Types1_7_6_10.BYTEARRAY, baos.toByteArray());
+                    wrapper.write(Types1_7_6_10.BYTEARRAY, byteArrayOutputStream.toByteArray());
                     wrapper.sendToServer(Protocol1_7_5to1_6_4.class);
                 });
             }
@@ -240,9 +237,9 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.DOUBLE); // Y/Stance
                 map(Type.DOUBLE); // Z-Position
                 map(Type.BOOLEAN); // On Ground
-                handler(wrapper -> {
-                    wrapper.set(Type.DOUBLE, 2, wrapper.get(Type.DOUBLE, 1) + 1.62D);
-                });
+
+                // Add Offset
+                handler(wrapper -> wrapper.set(Type.DOUBLE, 2, wrapper.get(Type.DOUBLE, 1) + 1.62D));
             }
         });
 
@@ -257,9 +254,9 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
                 map(Type.FLOAT); // Yaw
                 map(Type.FLOAT); // Pitch
                 map(Type.BOOLEAN); // On Ground
-                handler(wrapper -> {
-                    wrapper.set(Type.DOUBLE, 2, wrapper.get(Type.DOUBLE, 1) + 1.62D);
-                });
+
+                // Add Offset
+                handler(wrapper -> wrapper.set(Type.DOUBLE, 2, wrapper.get(Type.DOUBLE, 1) + 1.62D));
             }
         });
 
@@ -708,12 +705,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
             @Override
             public void registerMap() {
-                handler(wrapper -> {
-                    int id = wrapper.read(Type.INT);
-                    int amount = wrapper.read(Type.INT);
-
-                    wrapper.cancel();
-                });
+                handler(PacketWrapper::cancel);
             }
         });
 
