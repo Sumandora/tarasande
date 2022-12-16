@@ -65,6 +65,8 @@ class ManagerBlur : Manager<Blur>() {
         val cullFace = GL11.glIsEnabled(GL11.GL_CULL_FACE)
         GL11.glDisable(GL11.GL_CULL_FACE)
 
+        val activeTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE)
+
         val framebuffer = selected().render(strength ?: this.strength.value.toInt())
 
         MinecraftClient.getInstance().framebuffer.beginWrite(MinecraftClient.IS_SYSTEM_MAC)
@@ -96,6 +98,8 @@ class ManagerBlur : Manager<Blur>() {
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0)
         GlStateManager._bindTexture(texture0)
+
+        GL13.glActiveTexture(activeTexture)
 
         shapesBuffer.clear(MinecraftClient.IS_SYSTEM_MAC)
         MinecraftClient.getInstance().framebuffer.beginWrite(MinecraftClient.IS_SYSTEM_MAC)

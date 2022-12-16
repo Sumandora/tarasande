@@ -229,7 +229,10 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             //@formatter:off
             targets.sortWith(
-                Comparator.comparing { it: Pair<Entity, Vec3d> -> if (it.first is LivingEntity) (it.first as LivingEntity).isDead else true }.thenBy { !shouldAttackEntity(it.first) }.thenBy { mc.player?.eyePos?.squaredDistanceTo(it.second)!! > reach.minValue * reach.minValue }.then(comparator)
+                Comparator.comparing { it: Pair<Entity, Vec3d> -> if (it.first is LivingEntity) (it.first as LivingEntity).isDead else true }
+                    .thenBy { !shouldAttackEntity(it.first) }
+                    .thenBy { mc.player?.eyePos?.squaredDistanceTo(it.second)!! > reach.minValue * reach.minValue }
+                    .then(comparator)
             )
             //@formatter:on
 
