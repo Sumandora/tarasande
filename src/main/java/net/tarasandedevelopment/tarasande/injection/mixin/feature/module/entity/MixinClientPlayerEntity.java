@@ -18,12 +18,15 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.explo
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleFlight;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoSlowdown;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSafeWalk;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSprint;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoStatusEffect;
+import net.tarasandedevelopment.tarasande.util.player.PlayerUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IClientPlayerEntity {
@@ -115,6 +118,14 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         if (TarasandeMain.Companion.managerModule().get(ModulePortalScreen.class).getEnabled())
             return true;
         return instance.shouldPause();
+    }
+
+    @Inject(method = "isWalking", at = @At("HEAD"), cancellable = true)
+    public void hookSprint(CallbackInfoReturnable<Boolean> cir) {
+        ModuleSprint moduleSprint = TarasandeMain.Companion.managerModule().get(ModuleSprint.class);
+        if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().getValue())
+            if(PlayerUtil.INSTANCE.isPlayerMoving())
+                cir.setReturnValue(true);
     }
 
     @Override

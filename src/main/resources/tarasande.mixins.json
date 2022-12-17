@@ -101,6 +101,7 @@
   "client": [
     "core.screen.accountmanager.MixinProfileKeys",
     "event.MixinChatInputSuggestor",
-    "event.screen.MixinChatScreen"
+    "event.screen.MixinChatScreen",
+    "feature.module.MixinInput"
   ]
 }
