@@ -17,6 +17,7 @@ import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModulePortalScreen;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleFlight;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoSlowdown;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSafeWalk;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoStatusEffect;
 import org.spongepowered.asm.mixin.Mixin;
@@ -164,5 +165,13 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
                 return;
         }
         super.fall(heightDifference, onGround, state, landedPosition);
+    }
+
+    @Override
+    protected boolean clipAtLedge() {
+        ModuleSafeWalk moduleSafeWalk = TarasandeMain.Companion.managerModule().get(ModuleSafeWalk.class);
+        if (moduleSafeWalk.getEnabled() && !moduleSafeWalk.getSneak().getValue())
+            return true;
+        return super.clipAtLedge();
     }
 }

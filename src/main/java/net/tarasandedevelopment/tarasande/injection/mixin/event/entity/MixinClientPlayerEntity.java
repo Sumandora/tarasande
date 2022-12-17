@@ -6,10 +6,9 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.MovementType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
-import net.tarasandedevelopment.tarasande.event.EventCanSprint;
-import net.tarasandedevelopment.tarasande.event.EventMovement;
-import net.tarasandedevelopment.tarasande.event.EventUpdate;
+import net.tarasandedevelopment.tarasande.event.*;
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -72,5 +71,50 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         EventDispatcher.INSTANCE.call(eventMovement);
         setVelocity(eventMovement.getVelocity());
         super.move(movementType, eventMovement.getVelocity());
+    }
+
+    @Override
+    public float getFovMultiplier() {
+        EventMovementFovMultiplier eventMovementFovMultiplier = new EventMovementFovMultiplier(super.getFovMultiplier());
+        EventDispatcher.INSTANCE.call(eventMovementFovMultiplier);
+        return eventMovementFovMultiplier.getMovementFovMultiplier();
+    }
+
+    @Override
+    public void jump() {
+        float originalYaw;
+        EventJump eventJump = new EventJump(originalYaw = getYaw(), EventJump.State.PRE);
+        EventDispatcher.INSTANCE.call(eventJump);
+
+        setYaw(eventJump.getYaw());
+
+        if (eventJump.getCancelled())
+            return;
+
+        super.jump();
+
+        eventJump = new EventJump(originalYaw, EventJump.State.POST);
+        EventDispatcher.INSTANCE.call(eventJump);
+
+        setYaw(eventJump.getYaw());
+    }
+
+    @Override
+    public void swingHand(Hand hand) {
+        EventSwing eventSwing = new EventSwing(hand);
+        EventDispatcher.INSTANCE.call(eventSwing);
+        if (eventSwing.getCancelled())
+            return;
+        super.swingHand(hand);
+    }
+
+    @Override
+    public void updateVelocity(float speed, Vec3d movementInput) {
+        float originalYaw;
+        EventVelocityYaw eventVelocityYaw = new EventVelocityYaw(originalYaw = getYaw());
+        EventDispatcher.INSTANCE.call(eventVelocityYaw);
+        setYaw(eventVelocityYaw.getYaw());
+        super.updateVelocity(speed, movementInput);
+        setYaw(originalYaw);
     }
 }

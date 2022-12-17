@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.event.EventEntityFlag;
 import net.tarasandedevelopment.tarasande.event.EventStep;
-import net.tarasandedevelopment.tarasande.event.EventVelocityYaw;
 import net.tarasandedevelopment.tarasande.injection.accessor.IEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,21 +20,6 @@ public abstract class MixinEntity implements IEntity {
 
     @Unique
     private boolean tarasande_forceFlagRetrieval = false;
-
-    @Shadow
-    public static Vec3d movementInputToVelocity(Vec3d movementInput, float speed, float yaw) {
-        return null;
-    }
-
-    @Redirect(method = "updateVelocity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;movementInputToVelocity(Lnet/minecraft/util/math/Vec3d;FF)Lnet/minecraft/util/math/Vec3d;"))
-    public Vec3d hookEventVelocityYaw(Vec3d movementInput, float speed, float yaw) {
-        if ((Object) this == MinecraftClient.getInstance().player) {
-            EventVelocityYaw eventVelocityYaw = new EventVelocityYaw(yaw);
-            EventDispatcher.INSTANCE.call(eventVelocityYaw);
-            yaw = eventVelocityYaw.getYaw();
-        }
-        return movementInputToVelocity(movementInput, speed, yaw);
-    }
 
     @Redirect(method = "adjustMovementForCollisions(Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/util/math/Vec3d;", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;stepHeight:F"))
     public float hookEventStepPre(Entity instance) {
