@@ -81,7 +81,7 @@ class ESPElementRotatableHealthBar : ESPElementRotatable("Health bar", arrayOf(O
 
     override fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double, orientation: Orientation) {
         val height = getHeight(entity, sideWidth)
-        if (height <= 0.0) return
+        if (height.isNaN() || height <= 0.0) return
         entity as LivingEntity
         matrices.push()
         val percentage = MathHelper.clamp(entity.health / entity.maxHealth, 0.0F, 1.0F)
