@@ -149,7 +149,7 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
                 // Sending Login Hello S -> C
                 handler(wrapper -> {
-                    final PacketWrapper loginHello = new PacketWrapperImpl(ServerboundLoginPackets1_6_4.CLIENT_PROTOCOL.getId(), null, wrapper.user());
+                    final PacketWrapper loginHello = new PacketWrapperImpl(ClientboundLoginPackets.GAME_PROFILE.getId(), null, wrapper.user());
                     loginHello.write(Type.STRING, UUID.randomUUID().toString().replace("-", ""));
                     loginHello.write(Type.STRING, wrapper.user().getProtocolInfo().getUsername());
 
