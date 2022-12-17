@@ -16,7 +16,6 @@ import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import kotlin.math.cos
-import kotlin.math.max
 import kotlin.math.sin
 
 class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a circle", ModuleCategory.MOVEMENT) {
@@ -27,10 +26,10 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
     private var invert = false
 
     private fun calculateNextPosition(selfSpeed: Double, curPos: Vec3d, center: Vec3d): Vec3d {
-        var angleOffset = Math.toDegrees(selfSpeed / radius.value)
+        var angleOffset = selfSpeed / radius.value // I have no clue, why this is wrong... TODO
         if (invert)
             angleOffset *= -1
-        val angle = Math.toRadians(RotationUtil.getYaw(curPos - center) + angleOffset)
+        val angle = Math.toRadians(RotationUtil.getYaw(curPos - center)) + angleOffset
 
         return Vec3d(
             center.x - radius.value * sin(angle),
@@ -43,12 +42,11 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
         registerEvent(EventUpdate::class.java) { event ->
             if (event.state == EventUpdate.State.PRE)
                 if (mc.player?.horizontalCollision == true)
+                    // I don't think we need a check whether this module is controlling movement... this just makes it more random, not a bad thing in this context
                     invert = !invert
         }
 
         registerEvent(EventMovement::class.java, 2000) { event ->
-            if (event.entity != mc.player)
-                return@registerEvent
             if (PlayerUtil.input.movementInput?.lengthSquared() == 0.0F)
                 return@registerEvent
 
@@ -57,20 +55,16 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
                 if (moduleKillAura.enabled && moduleKillAura.targets.isNotEmpty())
                     moduleKillAura.targets[0].first
                 else if (mc.crosshairTarget?.type == HitResult.Type.ENTITY && mc.crosshairTarget is EntityHitResult) {
-                    val ent = (mc.crosshairTarget as EntityHitResult).entity
-                    if (PlayerUtil.isAttackable(ent))
-                        ent
-                    else
-                        null
+                    (mc.crosshairTarget as EntityHitResult).entity
                 } else
                     null
 
             if (enemy == null)
                 return@registerEvent
 
+            val selfSpeed = event.velocity.horizontalLength()
             val curPos = mc.player?.pos!!
             val center = enemy.pos
-            val selfSpeed = max(event.velocity.horizontalLength(), PlayerUtil.calcBaseSpeed(PlayerUtil.walkSpeed))
 
             var newPos = calculateNextPosition(selfSpeed, curPos, center)
 

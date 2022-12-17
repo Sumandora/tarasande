@@ -27,7 +27,7 @@ class EventJump(var yaw: Float, val state: State) : Event(state == State.PRE) {
     }
 }
 
-class EventMovement(val entity: Entity, var velocity: Vec3d) : Event(false)
+class EventMovement(var velocity: Vec3d) : Event(false)
 class EventAttackEntity(val entity: Entity, val state: State) : Event(false) {
     enum class State {
         PRE, POST

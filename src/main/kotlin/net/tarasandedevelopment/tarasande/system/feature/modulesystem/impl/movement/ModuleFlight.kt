@@ -31,8 +31,6 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
         registerEvent(EventMovement::class.java, 1002) { event ->
             if (!mode.isSelected(1))
                 return@registerEvent
-            if (event.entity != mc.player)
-                return@registerEvent
             var yMotion = 0.0
             if (PlayerUtil.input.jumping)
                 yMotion += flightSpeed.value

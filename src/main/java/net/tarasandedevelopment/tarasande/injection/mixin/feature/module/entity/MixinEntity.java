@@ -12,6 +12,7 @@ import java.awt.*;
 
 @Mixin(Entity.class)
 public class MixinEntity {
+
     @Inject(method = "getTeamColorValue", at = @At("RETURN"), cancellable = true)
     public void hookESP(CallbackInfoReturnable<Integer> cir) {
         ModuleESP moduleESP = TarasandeMain.Companion.managerModule().get(ModuleESP.class);
@@ -21,4 +22,5 @@ public class MixinEntity {
                 cir.setReturnValue(c.getRGB());
         }
     }
+
 }

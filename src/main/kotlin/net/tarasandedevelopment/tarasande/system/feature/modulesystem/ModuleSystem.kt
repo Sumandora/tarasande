@@ -74,6 +74,7 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
             ModuleEntityControl(),
             ModuleVehicleSpeed(),
             ModuleNoJumpCooldown(),
+            ModuleWaterSpeed(),
 
             // Player
             ModuleTimer(),

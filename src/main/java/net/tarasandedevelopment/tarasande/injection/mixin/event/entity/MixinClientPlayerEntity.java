@@ -5,7 +5,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.MovementType;
+import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.event.EventCanSprint;
+import net.tarasandedevelopment.tarasande.event.EventMovement;
 import net.tarasandedevelopment.tarasande.event.EventUpdate;
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -61,5 +64,12 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         EventCanSprint eventCanSprint = new EventCanSprint(cir.getReturnValue());
         EventDispatcher.INSTANCE.call(eventCanSprint);
         cir.setReturnValue(eventCanSprint.getCanSprint());
+    }
+
+    @Override
+    public void move(MovementType movementType, Vec3d movement) {
+        EventMovement eventMovement = new EventMovement(movement);
+        EventDispatcher.INSTANCE.call(eventMovement);
+        super.move(movementType, eventMovement.getVelocity());
     }
 }

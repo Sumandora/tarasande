@@ -2,10 +2,8 @@ package net.tarasandedevelopment.tarasande.injection.mixin.event.entity;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.MovementType;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.event.EventEntityFlag;
-import net.tarasandedevelopment.tarasande.event.EventMovement;
 import net.tarasandedevelopment.tarasande.event.EventStep;
 import net.tarasandedevelopment.tarasande.event.EventVelocityYaw;
 import net.tarasandedevelopment.tarasande.injection.accessor.IEntity;
@@ -15,7 +13,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.event.EventDispatcher;
 
@@ -38,15 +35,6 @@ public abstract class MixinEntity implements IEntity {
             yaw = eventVelocityYaw.getYaw();
         }
         return movementInputToVelocity(movementInput, speed, yaw);
-    }
-
-    @Inject(method = "move", at = @At("HEAD"))
-    public void hookEventMovement(MovementType movementType, Vec3d movement, CallbackInfo ci) {
-        EventMovement eventMovement = new EventMovement((Entity) (Object) this, movement);
-        EventDispatcher.INSTANCE.call(eventMovement);
-        movement.x = eventMovement.getVelocity().x;
-        movement.y = eventMovement.getVelocity().y;
-        movement.z = eventMovement.getVelocity().z;
     }
 
     @Redirect(method = "adjustMovementForCollisions(Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/util/math/Vec3d;", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;stepHeight:F"))

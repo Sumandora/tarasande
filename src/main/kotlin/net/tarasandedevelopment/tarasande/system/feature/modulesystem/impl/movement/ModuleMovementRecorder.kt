@@ -130,8 +130,6 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
         }
 
         registerEvent(EventMovement::class.java) { event ->
-            if (event.entity != mc.player) return@registerEvent
-
             if (playbackState == PlaybackState.EXECUTING) {
                 event.velocity = playedBack?.ticks?.get(executingIndex)?.movement!!
             }

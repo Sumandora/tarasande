@@ -16,6 +16,7 @@ class ManagerInformation(panelSystem: ManagerPanel) : Manager<Information>() {
             InformationXYZ(),
             InformationNetherXYZ(),
             InformationVelocity(),
+            InformationFallDistance(),
             InformationRotation(),
             InformationFakeRotation(),
 

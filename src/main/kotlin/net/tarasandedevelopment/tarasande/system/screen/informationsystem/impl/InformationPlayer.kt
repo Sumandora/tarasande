@@ -68,6 +68,16 @@ class InformationVelocity : Information("Player", "Velocity") {
     }
 }
 
+class InformationFallDistance : Information("Player", "Fall distance") {
+    private val decimalPlaces = ValueNumber(this, "Decimal places", 0.0, 1.0, 5.0, 1.0)
+
+    override fun getMessage(): String? {
+        val player = MinecraftClient.getInstance().player ?: return null
+
+        return StringUtil.round(player.fallDistance.toDouble(), decimalPlaces.value.toInt())
+    }
+}
+
 class InformationRotation : Information("Player", "Rotation") {
     private val decimalPlacesYaw = ValueNumber(this, "Decimal places: yaw", 0.0, 1.0, 5.0, 1.0)
     private val decimalPlacesPitch = ValueNumber(this, "Decimal places: pitch", 0.0, 1.0, 5.0, 1.0)

@@ -383,8 +383,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         }
 
         registerEvent(EventMovement::class.java) { event ->
-            if (event.entity != mc.player)
-                return@registerEvent
             if (target != null) {
                 if (PlayerUtil.input.jumping) {
                     when {
