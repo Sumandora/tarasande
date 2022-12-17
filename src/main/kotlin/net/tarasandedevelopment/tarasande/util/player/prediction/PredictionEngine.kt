@@ -157,7 +157,7 @@ object PredictionEngine {
 
 
     private fun getClosestInput(baseEntity: PlayerEntity): Input {
-        val prevServerPos = (baseEntity as ILivingEntity).prevServerPos() ?: return Input(0.0F, 0.0F)
+        val prevServerPos = (baseEntity as ILivingEntity).tarasande_prevServerPos() ?: return Input(0.0F, 0.0F)
         val velocity = Vec3d(baseEntity.serverX, baseEntity.serverY, baseEntity.serverZ) - prevServerPos
 
         var best: Pair<Input, Double>? = null

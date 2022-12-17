@@ -23,16 +23,22 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Shadow
     public int bodyTrackingIncrements;
+
     @Shadow
     public double serverX;
+
     @Shadow
     public double serverY;
+
     @Shadow
     public double serverZ;
+
     @Shadow
     public double serverYaw;
+
     @Shadow
     protected double serverPitch;
+
     @Unique
     private Vec3d tarasande_oldServerPos;
 
@@ -61,7 +67,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     }
 
     @Override
-    public Vec3d prevServerPos() {
+    public Vec3d tarasande_prevServerPos() {
         return tarasande_oldServerPos;
     }
 }

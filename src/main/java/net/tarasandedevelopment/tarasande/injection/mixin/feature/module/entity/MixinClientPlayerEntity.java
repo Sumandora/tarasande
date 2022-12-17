@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.feature.module.entity;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -9,14 +10,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerAbilities;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModulePortalScreen;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleFlight;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoSlowdown;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoStatusEffect;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,11 +29,13 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Unique
     private boolean tarasande_flight;
+
     @Unique
     private float tarasande_flightSpeed;
 
     @Unique
     private boolean tarasande_forceHasStatusEffect;
+
     @Unique
     private boolean tarasande_forceGetStatusEffect;
 
@@ -126,7 +130,6 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         return originalValue;
     }
 
-    @Nullable
     @Override
     public StatusEffectInstance getStatusEffect(StatusEffect effect) {
         final StatusEffectInstance originalValue = super.getStatusEffect(effect);
@@ -151,5 +154,15 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     public StatusEffectInstance tarasande_forceGetStatusEffect(StatusEffect effect) {
         tarasande_forceGetStatusEffect = true;
         return getStatusEffect(effect);
+    }
+
+    @Override
+    protected void fall(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition) {
+        if(onGround) {
+            final ModuleNoFall moduleNoFall = TarasandeMain.Companion.managerModule().get(ModuleNoFall.class);
+            if(moduleNoFall.getEnabled() && moduleNoFall.getMode().isSelected(0) && moduleNoFall.getGroundSpoofMode().isSelected(1))
+                return;
+        }
+        super.fall(heightDifference, onGround, state, landedPosition);
     }
 }

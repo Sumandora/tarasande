@@ -14,8 +14,8 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 
 class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", ModuleCategory.PLAYER) {
 
-    private val mode = ValueMode(this, "Mode", false, "Ground spoof", "Re-Ground", "Drag down", "Sneak-jump")
-    private val groundSpoofMode = object : ValueMode(this, "Ground spoof mode", false, "Force on-ground", "Force off-ground") {
+    val mode = ValueMode(this, "Mode", false, "Ground spoof", "Re-Ground", "Drag down", "Sneak-jump")
+    val groundSpoofMode = object : ValueMode(this, "Ground spoof mode", false, "Force on-ground", "Force off-ground") {
         override fun isEnabled() = mode.isSelected(0)
     }
     private val fallDistance = object : ValueNumber(this, "Fall distance", 0.0, 3.0, 10.0, 0.1) {
