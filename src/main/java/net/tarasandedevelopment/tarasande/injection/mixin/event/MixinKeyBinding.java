@@ -19,7 +19,7 @@ public class MixinKeyBinding {
     public void hookEventKeyBindingIsPressed(CallbackInfoReturnable<Boolean> cir) {
         EventKeyBindingIsPressed eventKeyBindingIsPressed = new EventKeyBindingIsPressed((KeyBinding) (Object) this, cir.getReturnValue());
         EventDispatcher.INSTANCE.call(eventKeyBindingIsPressed);
-        if(eventKeyBindingIsPressed.getDirty() && eventKeyBindingIsPressed.getPressed()) {
+        if(eventKeyBindingIsPressed.getDirty() && !cir.getReturnValue() && eventKeyBindingIsPressed.getPressed()) {
             timesPressed++;
         }
         cir.setReturnValue(eventKeyBindingIsPressed.getPressed());
