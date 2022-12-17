@@ -31,13 +31,13 @@ class PanelMousepad : Panel("Mousepad", 100.0, 50.0, true) {
         }
     }
 
-    override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         if (rotations.isEmpty())
             return
         val xMax = max(rotations.stream().mapToDouble { abs(it.yaw).toDouble() }.max().asDouble, panelWidth / 2.0)
         val yMax = max(rotations.stream().mapToDouble { abs(it.pitch).toDouble() }.max().asDouble, panelHeight / 2.0)
 
-        val matrix = matrices?.peek()?.positionMatrix!!
+        val matrix = matrices.peek()?.positionMatrix!!
 
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.disableCull()

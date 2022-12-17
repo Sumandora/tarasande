@@ -20,7 +20,7 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 
-class ModuleFreeCam : Module("Free cam", "Allows you to clientsidedly fly around freely", ModuleCategory.RENDER) {
+class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera", ModuleCategory.RENDER) {
 
     private val speed = ValueNumber(this, "Speed", 0.1, 1.0, 5.0, 0.1)
     private val lockRotation = ValueBoolean(this, "Lock rotation", true)

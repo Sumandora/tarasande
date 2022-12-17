@@ -21,7 +21,7 @@ class ServerPingerBase(val parent: ScreenExtension<*>, private val addressProvid
     val pingTask = TimeUtil()
 
     private val clickableWidgetPanel = ClickableWidgetPanel(object : PanelServerInformation(parent) {
-        override fun renderTitleBar(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        override fun renderTitleBar(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
             super.renderTitleBar(matrices, mouseX, mouseY, delta)
             if (showProgress.value && autoPing.value) {
                 ceil((delay.value - (System.currentTimeMillis() - pingTask.time)) / 1000.0).toInt().toString().also {

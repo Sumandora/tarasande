@@ -15,11 +15,11 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100, FontWrap
         return graph.values().size > 1
     }
 
-    override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         if (graph.isEmpty()) return
         val values = graph.values()
 
-        val matrix = matrices?.peek()?.positionMatrix!!
+        val matrix = matrices.peek()?.positionMatrix!!
 
         val min = getMin(values)
         val cur = values.last()

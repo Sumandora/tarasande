@@ -4,7 +4,7 @@ import net.minecraft.client.util.math.MatrixStack
 
 interface IElement {
     fun init()
-    fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float)
+    fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float)
     fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean
     fun mouseReleased(mouseX: Double, mouseY: Double, button: Int)
     fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean

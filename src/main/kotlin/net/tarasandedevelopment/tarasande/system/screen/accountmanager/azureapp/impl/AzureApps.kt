@@ -36,7 +36,7 @@ class AzureAppPresetTechnicLauncher : AzureAppPreset(
 )
 
 class AzureAppPresetLabyMod : AzureAppPreset(
-    "LabyMod",
+    "Laby Mod",
     UUID.fromString("27843883-6e3b-42cb-9e51-4f55a700601e"),
     "XboxLive.signin offline_access"
 )

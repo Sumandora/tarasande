@@ -37,16 +37,16 @@ class ElementWidthPlayer(val gameProfile: GameProfile, width: Double) : ElementW
         textField.init()
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val friended = TarasandeMain.friends().isFriend(gameProfile)
         RenderUtil.fill(matrices, 0.0, 0.0, this.width, this.getHeight(), Int.MIN_VALUE)
         if (friended) {
             textField.width = width - 20
             val accessor = textField.textFieldWidget as ITextFieldWidget
             accessor.tarasande_setColor(Color.white)
-            matrices?.push()
+            matrices.push()
             textField.render(matrices, mouseX, mouseY, delta)
-            matrices?.pop()
+            matrices.pop()
             accessor.tarasande_setColor(null)
         } else {
             textField.setFocused(false)

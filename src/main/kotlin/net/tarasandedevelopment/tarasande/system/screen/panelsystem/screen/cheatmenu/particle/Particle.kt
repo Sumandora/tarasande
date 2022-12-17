@@ -18,7 +18,7 @@ class Particle(private var x: Double, private var y: Double) {
 
     private var point = Vec2f(ThreadLocalRandom.current().nextDouble(MinecraftClient.getInstance().window?.scaledWidth?.toDouble()!!).toFloat(), ThreadLocalRandom.current().nextDouble(MinecraftClient.getInstance().window?.scaledHeight?.toDouble()!!).toFloat())
 
-    fun render(matrices: MatrixStack?, mouseX: Double, mouseY: Double, animation: Double) {
+    fun render(matrices: MatrixStack, mouseX: Double, mouseY: Double, animation: Double) {
         val position = Vec2f(x.toFloat(), y.toFloat())
         val dist = (1.0 / sqrt(Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(position)) * 16.0).coerceAtMost(2.0)
 

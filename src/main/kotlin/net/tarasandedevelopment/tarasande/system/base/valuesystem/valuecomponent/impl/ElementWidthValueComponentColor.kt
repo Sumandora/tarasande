@@ -38,7 +38,7 @@ class ElementWidthValueComponentColor(value: Value) : ElementWidthValueComponent
     // Make sure Accent Color doesn't handle itself
     private fun isAccent() = value == TarasandeMain.clientValues().accentColor
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val valueColor = value as ValueColor
         val white = Color.white.let { if (valueColor.isEnabled() && !valueColor.locked) it else it.darker().darker() }
         val unblockedWhite = Color.white.let { if (valueColor.isEnabled()) it else it.darker().darker() }
@@ -69,7 +69,7 @@ class ElementWidthValueComponentColor(value: Value) : ElementWidthValueComponent
 
         FontWrapper.textShadow(matrices, value.name, 0.0F, ((pickerHeight - 5) / 2.0F - FontWrapper.fontHeight() * 0.5F / 2.0F).toFloat(), white.rgb, scale = 0.5F, offset = 0.5F)
 
-        val matrix4f = matrices?.peek()?.positionMatrix!!
+        val matrix4f = matrices.peek()?.positionMatrix!!
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
         RenderSystem.defaultBlendFunc()

@@ -24,7 +24,7 @@ class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress
             event.elements.add(ClickableWidgetPanel(object : PanelElements<ElementWidthValueComponent >("Furnace progress", 100.0, 0.0) {
                 private fun addText(input: String) = elementList.add(ValueSpacer(this, input, manage = false).createValueComponent())
 
-                override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+                override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
                     elementList.clear()
                     y = MinecraftClient.getInstance().window.scaledHeight / 2f - panelHeight / 2f
 

@@ -22,7 +22,7 @@ class PanelNotifications(private val notifications: Notifications) : Panel("Noti
 
     override fun getValueOwner() = notifications
 
-    override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         notifications.alert = false
         var index = 0.0
         notifications.list.forEach {
@@ -82,7 +82,7 @@ class PanelNotifications(private val notifications: Notifications) : Panel("Noti
         return animations.any { it.value > 0.0 }.also { if (!it) notifications.alert = false }
     }
 
-    override fun renderTitleBar(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderTitleBar(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         super.renderTitleBar(matrices, mouseX, mouseY, delta)
         var x = this.x + 5.0
         if (alignment != Alignment.RIGHT)

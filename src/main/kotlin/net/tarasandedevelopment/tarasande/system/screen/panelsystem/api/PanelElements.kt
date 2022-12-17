@@ -16,22 +16,22 @@ open class PanelElements<T : ElementWidth>(title: String, minWidth: Double, minH
         }
     }
 
-    override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        matrices?.push()
+    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+        matrices.push()
         val x = x + 2
         var y = y + titleBarHeight + 2
-        matrices?.translate(x, y, 0.0)
+        matrices.translate(x, y, 0.0)
         for (it in elementList) {
             it.width = panelWidth - 4
             if (y + it.getHeight() + 2 >= this.y - scrollOffset)
                 it.render(matrices, (mouseX - x).toInt(), (mouseY - y - scrollOffset).toInt(), delta)
 
-            matrices?.translate(0.0, it.getHeight() + 2, 0.0)
+            matrices.translate(0.0, it.getHeight() + 2, 0.0)
             y += it.getHeight() + 2
 
             if (y > this.y - scrollOffset + panelHeight) break
         }
-        matrices?.pop()
+        matrices.pop()
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

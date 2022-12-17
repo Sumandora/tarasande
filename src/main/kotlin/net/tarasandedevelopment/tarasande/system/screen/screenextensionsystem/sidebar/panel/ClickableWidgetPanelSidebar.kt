@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 class ClickableWidgetPanelSidebar(panel: Panel) : ClickableWidgetPanel(panel, true) {
     private var animation = 0.1
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         this.x = (MinecraftClient.getInstance().window.scaledWidth - (this.panel.panelWidth * animation)).toInt()
         this.y = 0
         this.height = MinecraftClient.getInstance().window.scaledHeight

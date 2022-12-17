@@ -16,7 +16,7 @@ class ElementWidthValueComponentBind(value: Value) : ElementWidthValueComponent(
     override fun init() {
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val valueBind = value as ValueBind
 
         val white = Color.white.let { if (valueBind.isEnabled()) it else it.darker().darker() }

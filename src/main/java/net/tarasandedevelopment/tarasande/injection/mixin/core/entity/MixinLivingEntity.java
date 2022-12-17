@@ -30,7 +30,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     @Shadow
     public double serverZ;
     @Shadow
-    protected double serverYaw;
+    public double serverYaw;
     @Shadow
     protected double serverPitch;
     @Unique

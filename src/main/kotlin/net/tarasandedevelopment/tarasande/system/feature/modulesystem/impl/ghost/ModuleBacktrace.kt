@@ -27,7 +27,7 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
     private val ticks = ValueNumber(this, "Ticks", 1.0, 5.0, 20.0, 1.0)
     private val defaultColor = ValueColor(this, "Default color", 0.0, 1.0, 1.0, 1.0)
     private val selectedColor = ValueColor(this, "Selected color", 0.0, 1.0, 1.0, 1.0)
-    private val blinkResync = ValueBoolean(this, "Blink resync", true)
+    private val blinkResync = ValueBoolean(this, "Blink re-sync", true)
     private val removeInvalidRecords = ValueBoolean(this, "Remove invalid records", true)
 
     private val boundingBoxes = HashMap<Entity, ArrayList<Box>>()

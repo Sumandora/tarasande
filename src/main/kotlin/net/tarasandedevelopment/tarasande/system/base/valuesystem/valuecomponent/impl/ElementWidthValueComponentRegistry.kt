@@ -32,7 +32,7 @@ class ElementWidthValueComponentRegistry(value: Value) : ElementWidthValueCompon
     override fun init() {
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val valueRegistry = value as ValueRegistry<*>
 
         val white = Color.white.let { if (valueRegistry.isEnabled()) it else it.darker().darker() }
@@ -64,14 +64,14 @@ class ElementWidthValueComponentRegistry(value: Value) : ElementWidthValueCompon
         }
         RenderUtil.fill(matrices, width.toFloat() - 25.0, (FontWrapper.fontHeight() / 2.0F * (valueRegistry.list.size + 0.5F)).toDouble() + 1.0, width, (FontWrapper.fontHeight() / 2.0F * (valueRegistry.list.size + 0.5F)).toDouble() + 1.5, white.rgb)
 
-        matrices?.push()
-        matrices?.translate(width - 40, FontWrapper.fontHeight() / 2.0F * (valueRegistry.list.size + 0.5F) + 2.0, 0.0)
-        matrices?.scale(0.5F, 0.5F, 1.0F)
+        matrices.push()
+        matrices.translate(width - 40, FontWrapper.fontHeight() / 2.0F * (valueRegistry.list.size + 0.5F) + 2.0, 0.0)
+        matrices.scale(0.5F, 0.5F, 1.0F)
         if (textFieldWidget.isFocused) (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.clientValues().accentColor.getColor())
         if (!value.isEnabled()) (textFieldWidget as ITextFieldWidget).tarasande_setColor(Color.white.darker().darker())
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
         (textFieldWidget as ITextFieldWidget).tarasande_setColor(null)
-        matrices?.pop()
+        matrices.pop()
 
         for ((index, key) in searchResults.withIndex()) {
             FontWrapper.textShadow(matrices,

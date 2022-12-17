@@ -34,7 +34,7 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
         components.forEach(ElementWidthValueComponent::init)
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         RenderUtil.fill(matrices, 0.0, 0.0, this.width, this.getHeight(), Int.MIN_VALUE)
 
         val white = Color.white
@@ -65,12 +65,12 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
             val expansionAnimation = min((System.currentTimeMillis() - expansionTime) / 100.0, 1.0)
             val expansion = if (expanded) expansionAnimation else 1.0 - expansionAnimation
 
-            matrices?.push()
+            matrices.push()
             GL11.glEnable(GL11.GL_LINE_SMOOTH)
             GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST)
             val lineWidth = GL11.glGetFloat(GL11.GL_LINE_WIDTH)
             GL11.glLineWidth(2.0F)
-            val matrix = matrices?.peek()?.positionMatrix!!
+            val matrix = matrices.peek()?.positionMatrix!!
             val bufferBuilder = Tessellator.getInstance().buffer
             RenderSystem.enableBlend()
             RenderSystem.disableTexture()
@@ -94,11 +94,11 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
         if (expanded) {
             var yOffset = 0.0
             for (component in components) {
-                matrices?.push()
-                matrices?.translate(5.0, this.defaultHeight + yOffset, 0.0)
+                matrices.push()
+                matrices.translate(5.0, this.defaultHeight + yOffset, 0.0)
                 component.width = width - 10.0
                 component.render(matrices, mouseX - 5, (mouseY - defaultHeight - yOffset).toInt(), delta)
-                matrices?.pop()
+                matrices.pop()
                 yOffset += component.getHeight()
             }
         }

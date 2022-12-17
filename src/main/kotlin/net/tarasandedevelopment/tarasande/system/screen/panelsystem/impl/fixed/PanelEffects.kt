@@ -39,7 +39,7 @@ class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble())
         }
     }
 
-    override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val activeStatusEffects = ArrayList<Triple<StatusEffect, String, Int>>()
 
         for (statusEffect in Registries.STATUS_EFFECT) {

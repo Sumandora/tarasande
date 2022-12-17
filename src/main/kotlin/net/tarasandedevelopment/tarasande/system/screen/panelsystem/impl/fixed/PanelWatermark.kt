@@ -25,25 +25,25 @@ class PanelWatermark : Panel("Watermark", FontWrapper.getWidth(JAPANESE_NAME) * 
         }
     }
 
-    override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         // Mind the shadows and leave some space
         val xScale = (panelWidth - 4) / (FontWrapper.getWidth(JAPANESE_NAME) + 1.0)
         val yScale = (panelHeight - 4) / (FontWrapper.fontHeight() + 3.0)
 
-        matrices?.push()
-        matrices?.translate(x + 1, y + titleBarHeight + 1, 0.0)
-        matrices?.scale(xScale.toFloat(), yScale.toFloat(), 1.0F)
-        matrices?.translate(-(x + 1), -(y + titleBarHeight + 1), 0.0)
+        matrices.push()
+        matrices.translate(x + 1, y + titleBarHeight + 1, 0.0)
+        matrices.scale(xScale.toFloat(), yScale.toFloat(), 1.0F)
+        matrices.translate(-(x + 1), -(y + titleBarHeight + 1), 0.0)
 
         FontWrapper.textShadow(matrices, JAPANESE_NAME, (x + 1).toFloat(), (y + titleBarHeight + 1).toFloat(), TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
-        matrices?.pop()
+        matrices.pop()
 
         val userHost = " $localHost"
         val userHostWidth = if (hidePersonalName.value) 0 else FontWrapper.getWidth(userHost)
 
         val motdWidth = FontWrapper.getWidth(messageOfTheDay.value + " ")
         if (motdWidth > panelWidth - userHostWidth) {
-            matrices?.push()
+            matrices.push()
             GlStateManager._enableScissorTest()
             val scaleFactor = MinecraftClient.getInstance().window?.scaleFactor!!.toInt()
             GlStateManager._scissorBox(
@@ -52,10 +52,10 @@ class PanelWatermark : Panel("Watermark", FontWrapper.getWidth(JAPANESE_NAME) * 
                 ((panelWidth - userHostWidth) * scaleFactor).toInt(),
                 (FontWrapper.fontHeight() * scaleFactor)
             )
-            matrices?.translate(-(System.currentTimeMillis() / 50.0) % motdWidth, 0.0, 0.0)
+            matrices.translate(-(System.currentTimeMillis() / 50.0) % motdWidth, 0.0, 0.0)
             FontWrapper.textShadow(matrices, messageOfTheDay.value + " " + messageOfTheDay.value, (x + 1).toFloat(), (y + panelHeight - FontWrapper.fontHeight()).toFloat(), TarasandeMain.clientValues().accentColor.getColor().rgb)
             GlStateManager._disableScissorTest()
-            matrices?.pop()
+            matrices.pop()
         } else {
             FontWrapper.textShadow(matrices, messageOfTheDay.value, (x + 1).toFloat(), (y + panelHeight - FontWrapper.fontHeight()).toFloat(), TarasandeMain.clientValues().accentColor.getColor().rgb)
         }

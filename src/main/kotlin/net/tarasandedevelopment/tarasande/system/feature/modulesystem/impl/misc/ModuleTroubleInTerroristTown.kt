@@ -15,7 +15,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 
-class ModuleTroubleInTerrioristTown : Module("Trouble in terrorist town", "Uses assumptions to find out traitors in TTT", ModuleCategory.MISC) {
+class ModuleTroubleInTerroristTown : Module("Trouble in terrorist town", "Uses assumptions to find traitors in TTT", ModuleCategory.MISC) {
 
     private val distance = ValueNumber(this, "Distance", 0.0, 6.0, 10.0, 0.5)
     private val rotationThreshold = ValueNumber(this, "Rotation threshold", 0.0, 0.5, 1.0, 0.01)

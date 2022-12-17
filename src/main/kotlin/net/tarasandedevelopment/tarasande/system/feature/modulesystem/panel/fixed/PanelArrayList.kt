@@ -31,7 +31,7 @@ class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array Lis
         }
     }
 
-    override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val enabledModules = ArrayList<Module>()
 
         for (module in moduleSystem.list) {

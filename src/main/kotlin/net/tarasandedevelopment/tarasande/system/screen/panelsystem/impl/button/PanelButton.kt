@@ -22,13 +22,13 @@ class PanelButton(x: Int, y: Int, val width: Int, val height: Int, private val t
         }
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         panelWidth = width.toDouble()
         panelHeight = height.toDouble()
         super.render(matrices, mouseX, mouseY, delta)
     }
 
-    override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val middleX = x + panelWidth / 2.0
         val middleY = y + titleBarHeight + (panelHeight - titleBarHeight) / 2.0
 

@@ -58,7 +58,7 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
         t.start()
     }
 
-    private fun drawString(matrices: MatrixStack?, str: String, x: Double, y: Double) {
+    private fun drawString(matrices: MatrixStack, str: String, x: Double, y: Double) {
         val accent = TarasandeMain.clientValues().accentColor.getColor()
         val width = FontWrapper.getWidth(str)
         val titleBarHeight = titleBarHeight
@@ -90,7 +90,7 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
         return list
     }
 
-    override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val list = ArrayList<String>()
         list.add(baseLine)
         playerData.forEach {

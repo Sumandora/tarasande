@@ -73,7 +73,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
         particles.clear()
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         var animation = ((System.currentTimeMillis() - screenChangeTime) / animationLength.value).coerceAtMost(1.0)
         if (isClosing) animation = 1.0 - animation
 
@@ -94,13 +94,13 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
             TarasandeMain.managerBlur().blurScene(strength)
         }
 
-        matrices?.push()
+        matrices.push()
 
         if (!imageValue.isSelected(0)) {
             if (image == null)
                 image = RenderUtil.createImage(imageValue.selected[0].lowercase().replace(" ", "").replace("'", "") + ".png")
 
-            matrices?.push()
+            matrices.push()
             RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
             RenderSystem.setShaderTexture(0, image!!.glId)
             @Suppress("NAME_SHADOWING")
@@ -116,30 +116,30 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
             val width = height * aspect
 
             DrawableHelper.drawTexture(matrices, (client?.window?.scaledWidth!! - animation * width).toInt(), (client?.window?.scaledHeight!! - height).toInt(), 0, 0.0F, 0.0F, width.toInt(), height.toInt(), width.toInt(), height.toInt())
-            matrices?.pop()
+            matrices.pop()
         }
 
-        matrices?.push()
+        matrices.push()
         val numPoints = 100
         if (particles.size < numPoints)
             particles.add(Particle(width / 2.0, height / 2.0))
-        matrices?.pop()
+        matrices.pop()
 
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
 
-        matrices?.push()
+        matrices.push()
         DrawableHelper.fill(matrices, 0, 0, width, height, color.withAlpha((animation * 255 * 0.66).toInt()).rgb)
-        matrices?.pop()
+        matrices.pop()
 
         particles.forEach { it.render(matrices, mouseX.toDouble(), mouseY.toDouble(), animation) }
 
         panelSystem.list.reversed().forEach {
-            matrices?.push()
+            matrices.push()
             val panelHeight = (if (it.opened) it.panelHeight else textRenderer?.fontHeight)?.toDouble()!!
             if (!it.fixed || !(it.isVisible() && it.opened)) {
-                matrices?.translate(it.x + it.panelWidth / 2.0, it.y + panelHeight / 2.0, 0.0)
-                matrices?.scale(animation.toFloat(), animation.toFloat(), 1.0F)
-                matrices?.translate(-(it.x + it.panelWidth / 2.0), -(it.y + panelHeight / 2.0), 0.0)
+                matrices.translate(it.x + it.panelWidth / 2.0, it.y + panelHeight / 2.0, 0.0)
+                matrices.scale(animation.toFloat(), animation.toFloat(), 1.0F)
+                matrices.translate(-(it.x + it.panelWidth / 2.0), -(it.y + panelHeight / 2.0), 0.0)
             }
             val x = it.x + it.panelWidth * (1 - animation) / 2.0
             val y = it.y + panelHeight - panelHeight * (1 - animation) / 2.0 - 1
@@ -153,10 +153,10 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
                 it.render(matrices, mouseX, mouseY, delta)
             }
             GlStateManager._disableScissorTest()
-            matrices?.pop()
+            matrices.pop()
         }
 
-        matrices?.pop()
+        matrices.pop()
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

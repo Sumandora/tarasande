@@ -142,7 +142,7 @@ class ScreenBetterProxy : ScreenBetter(null) {
         super.tick()
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         FontWrapper.textShadow(matrices, "Proxy", width / 2.0F, 8 - FontWrapper.fontHeight() / 2.0F, -1, centered = true)
         FontWrapper.textShadow(matrices, status ?: return, width / 2.0F, height / 2F - 50 - 15 - FontWrapper.fontHeight() - 2, -1, centered = true)

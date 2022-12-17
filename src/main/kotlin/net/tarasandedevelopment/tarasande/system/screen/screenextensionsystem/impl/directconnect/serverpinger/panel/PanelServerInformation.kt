@@ -59,12 +59,12 @@ open class PanelServerInformation(private val owner: Any) : Panel("Server Inform
         serverEntry = emulatedWidget.ServerEntry(emulatedMultiplayerScreen, server)
     }
 
-    override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val hovered = RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), x, y + titleBarHeight, panelWidth, panelHeight - titleBarHeight)
         serverEntry?.render(matrices, 0, y.toInt() + titleBarHeight, x.toInt(), (panelWidth + 5.0 /* sick, minecraft simple shifts everything by 5 units */).toInt(), (panelHeight - titleBarHeight).toInt(), mouseX, mouseY, hovered, MinecraftClient.getInstance().tickDelta)
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         if (tooltip != null) {
             MinecraftClient.getInstance().currentScreen?.renderTooltip(matrices, tooltip, mouseX, mouseY)

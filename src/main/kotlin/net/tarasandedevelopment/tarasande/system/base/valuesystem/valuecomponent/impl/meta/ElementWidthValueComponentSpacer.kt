@@ -15,7 +15,7 @@ class ElementWidthValueComponentSpacer(value: Value) : ElementWidthValueComponen
     override fun init() {
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         lines.clear()
         val valueSpacer = value as ValueSpacer
         var str = valueSpacer.name

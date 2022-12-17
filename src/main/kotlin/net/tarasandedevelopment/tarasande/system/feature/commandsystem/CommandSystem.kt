@@ -108,7 +108,7 @@ abstract class Command(private vararg val aliases: String) {
     val mc: MinecraftClient = MinecraftClient.getInstance()
 
     companion object {
-        val registryAccess = CommandRegistryAccess.of(ClientDynamicRegistryType.createCombinedDynamicRegistries().combinedRegistryManager, FeatureFlags.DEFAULT_ENABLED_FEATURES)
+        val registryAccess: CommandRegistryAccess = CommandRegistryAccess.of(ClientDynamicRegistryType.createCombinedDynamicRegistries().combinedRegistryManager, FeatureFlags.DEFAULT_ENABLED_FEATURES)
         val notInCreative = SimpleCommandExceptionType(Text.literal("You must be in creative mode to use this"))
 
         const val success = 1

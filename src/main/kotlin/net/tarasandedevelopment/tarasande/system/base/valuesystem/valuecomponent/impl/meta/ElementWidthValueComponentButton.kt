@@ -14,7 +14,7 @@ class ElementWidthValueComponentButton(value: Value) : ElementWidthValueComponen
     override fun init() {
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val valueButton = value as ValueButton
 
         val textWidth = FontWrapper.getWidth(valueButton.name)

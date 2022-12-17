@@ -180,17 +180,17 @@ object PlayerUtil {
             return MinecraftClient.getInstance().player?.inventory?.selectedSlot!!.let { Pair(getBreakSpeed(blockPos, it), it) }
 
         val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot
-        var bestMult = 1.0f
+        var bestMultiplier = 1.0f
         var bestTool = -1
         for (i in 0..8) {
-            val mult = getBreakSpeed(blockPos, i)
-            if (bestMult > mult) {
+            val multiplier = getBreakSpeed(blockPos, i)
+            if (bestMultiplier > multiplier) {
                 bestTool = i
-                bestMult = mult
+                bestMultiplier = multiplier
             }
         }
         MinecraftClient.getInstance().player?.inventory?.selectedSlot = origSlot
-        return Pair(bestMult, bestTool)
+        return Pair(bestMultiplier, bestTool)
     }
 
     fun getBreakSpeed(blockPos: BlockPos, item: Int): Float {

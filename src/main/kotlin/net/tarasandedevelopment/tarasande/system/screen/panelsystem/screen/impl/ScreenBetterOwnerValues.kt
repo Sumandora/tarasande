@@ -57,7 +57,7 @@ class ScreenBetterOwnerValues(parent: Screen, val titleName: String, val owner: 
         return super.mouseScrolled(mouseX, mouseY, amount)
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         this.renderBackground(matrices)
         if (MinecraftClient.getInstance().world != null) {
             var prevScreen = prevScreen

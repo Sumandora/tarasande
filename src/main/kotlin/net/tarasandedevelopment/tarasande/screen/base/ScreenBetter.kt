@@ -10,7 +10,7 @@ open class ScreenBetter(var prevScreen: Screen?) : Screen(Text.of("")) {
         client!!.setScreen(prevScreen)
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         renderBackground(matrices)
         super.render(matrices, mouseX, mouseY, delta)
     }

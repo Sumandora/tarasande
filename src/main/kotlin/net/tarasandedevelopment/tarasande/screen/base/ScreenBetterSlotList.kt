@@ -21,7 +21,7 @@ open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, v
         this.listProvider = provider
     }
 
-    fun renderTitle(matrices: MatrixStack?, title: String) {
+    fun renderTitle(matrices: MatrixStack, title: String) {
         FontWrapper.textShadow(matrices, title, width / 2F, top / 2 - (FontWrapper.fontHeight() / 2F), scale = 2F, centered = true)
     }
 
@@ -97,12 +97,12 @@ open class EntryScreenBetterSlotListEntry(private val selectable: Boolean = true
         return super.mouseClicked(mouseX, mouseY, button)
     }
 
-    override fun render(matrices: MatrixStack?, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {
+    override fun render(matrices: MatrixStack, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {
         this.index = index
 
-        matrices?.push()
-        matrices?.translate(x.toDouble(), y.toDouble(), 0.0)
-        this.renderEntry(matrices!!, index, entryWidth, entryHeight, mouseX, mouseY, hovered)
+        matrices.push()
+        matrices.translate(x.toDouble(), y.toDouble(), 0.0)
+        this.renderEntry(matrices, index, entryWidth, entryHeight, mouseX, mouseY, hovered)
         matrices.pop()
 
         if (this.isSelected())

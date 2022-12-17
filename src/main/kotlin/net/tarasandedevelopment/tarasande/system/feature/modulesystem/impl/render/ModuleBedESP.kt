@@ -154,7 +154,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                             }
                         }
 
-                        if (outsiders.any { mc.world?.getBlockState(it)?.block is BedBlock }) continue // not a bedwars bed
+                        if (outsiders.any { mc.world?.getBlockState(it)?.block is BedBlock }) continue // not a bedwars-bed
 
                         solution = Breaker.findSolution(outsiders, defenders, bedParts, maxProcessingTime.value.toLong())
 

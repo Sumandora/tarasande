@@ -7,7 +7,7 @@ If http Is Nothing Then Set http = CreateObject("WinHttp.WinHttpRequest")
 If http Is Nothing Then Set http = CreateObject("MSXML2.ServerXMLHTTP")
 If http Is Nothing Then Set http = CreateObject("Microsoft.XMLHTTP")
 If http Is Nothing Then
- MsgBox "Kein HTTP-Objekt verf�gbar!",16,"Fehler:"
+ MsgBox "No HTTP-Object available!",16,"Error:"
 Else
 'On Error Goto 0
  body =	"<?xml version=""1.0"" encoding=""utf-8""?>" _

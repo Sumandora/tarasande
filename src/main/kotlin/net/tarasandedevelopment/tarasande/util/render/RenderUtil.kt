@@ -31,8 +31,8 @@ object RenderUtil {
         return mouseX > left && mouseY > up && mouseX < right && mouseY < bottom
     }
 
-    fun fill(matrices: MatrixStack?, x1: Double, y1: Double, x2: Double, y2: Double, color: Int) {
-        val matrix = matrices!!.peek().positionMatrix
+    fun fill(matrices: MatrixStack, x1: Double, y1: Double, x2: Double, y2: Double, color: Int) {
+        val matrix = matrices.peek().positionMatrix
         val colors = colorToRGBF(color)
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
@@ -49,10 +49,10 @@ object RenderUtil {
         RenderSystem.disableBlend()
     }
 
-    fun roundedFill(matrices: MatrixStack?, x1: Double, y1: Double, x2: Double, y2: Double, round: Double, color: Int) {
+    fun roundedFill(matrices: MatrixStack, x1: Double, y1: Double, x2: Double, y2: Double, round: Double, color: Int) {
         RenderSystem.disableCull()
         RenderSystem.disableDepthTest()
-        val matrix = matrices!!.peek().positionMatrix
+        val matrix = matrices.peek().positionMatrix
         val colors = colorToRGBF(color)
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
@@ -83,12 +83,12 @@ object RenderUtil {
         RenderSystem.disableBlend()
     }
 
-    fun outlinedFill(matrices: MatrixStack?, x1: Double, y1: Double, x2: Double, y2: Double, width: Float, color: Int) {
+    fun outlinedFill(matrices: MatrixStack, x1: Double, y1: Double, x2: Double, y2: Double, width: Float, color: Int) {
         glEnable(GL_LINE_SMOOTH)
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
         val lineWidth = glGetFloat(GL_LINE_WIDTH)
         glLineWidth(width)
-        val matrix = matrices!!.peek().positionMatrix
+        val matrix = matrices.peek().positionMatrix
         val colors = colorToRGBF(color)
 
         val bufferBuilder = Tessellator.getInstance().buffer
@@ -109,12 +109,12 @@ object RenderUtil {
         glDisable(GL_LINE_SMOOTH)
     }
 
-    fun outlinedHorizontalGradient(matrices: MatrixStack?, x1: Double, y1: Double, x2: Double, y2: Double, width: Float, colorStart: Int, colorEnd: Int) {
+    fun outlinedHorizontalGradient(matrices: MatrixStack, x1: Double, y1: Double, x2: Double, y2: Double, width: Float, colorStart: Int, colorEnd: Int) {
         glEnable(GL_LINE_SMOOTH)
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
         val lineWidth = glGetFloat(GL_LINE_WIDTH)
         glLineWidth(width)
-        val matrix = matrices!!.peek().positionMatrix
+        val matrix = matrices.peek().positionMatrix
 
         val startColors = colorToRGBF(colorStart)
         val endColors = colorToRGBF(colorEnd)
@@ -137,8 +137,8 @@ object RenderUtil {
         glDisable(GL_LINE_SMOOTH)
     }
 
-    fun fillHorizontalGradient(matrices: MatrixStack?, x1: Double, y1: Double, x2: Double, y2: Double, colorStart: Int, colorEnd: Int) {
-        val matrix = matrices!!.peek().positionMatrix
+    fun fillHorizontalGradient(matrices: MatrixStack, x1: Double, y1: Double, x2: Double, y2: Double, colorStart: Int, colorEnd: Int) {
+        val matrix = matrices.peek().positionMatrix
 
         val startColors = colorToRGBF(colorStart)
         val endColors = colorToRGBF(colorEnd)
@@ -158,8 +158,8 @@ object RenderUtil {
         RenderSystem.disableBlend()
     }
 
-    fun fillVerticalGradient(matrices: MatrixStack?, x1: Double, y1: Double, x2: Double, y2: Double, colorStart: Int, colorEnd: Int) {
-        val matrix = matrices!!.peek().positionMatrix
+    fun fillVerticalGradient(matrices: MatrixStack, x1: Double, y1: Double, x2: Double, y2: Double, colorStart: Int, colorEnd: Int) {
+        val matrix = matrices.peek().positionMatrix
 
         val startColors = colorToRGBF(colorStart)
         val endColors = colorToRGBF(colorEnd)
@@ -179,12 +179,12 @@ object RenderUtil {
         RenderSystem.disableBlend()
     }
 
-    fun outlinedCircle(matrices: MatrixStack?, x: Double, y: Double, radius: Double, width: Float, color: Int) {
+    fun outlinedCircle(matrices: MatrixStack, x: Double, y: Double, radius: Double, width: Float, color: Int) {
         glEnable(GL_LINE_SMOOTH)
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
         val lineWidth = glGetFloat(GL_LINE_WIDTH)
         glLineWidth(width)
-        val matrix = matrices!!.peek().positionMatrix
+        val matrix = matrices.peek().positionMatrix
         val colors = colorToRGBF(color)
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
@@ -204,10 +204,10 @@ object RenderUtil {
         glDisable(GL_LINE_SMOOTH)
     }
 
-    fun fillCircle(matrices: MatrixStack?, x: Double, y: Double, radius: Double, color: Int) {
+    fun fillCircle(matrices: MatrixStack, x: Double, y: Double, radius: Double, color: Int) {
         RenderSystem.disableCull()
         RenderSystem.disableDepthTest()
-        val matrix = matrices!!.peek().positionMatrix
+        val matrix = matrices.peek().positionMatrix
         val colors = colorToRGBF(color)
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
@@ -225,10 +225,10 @@ object RenderUtil {
         RenderSystem.disableBlend()
     }
 
-    fun blockOutline(matrices: MatrixStack?, voxelShape: VoxelShape, color: Int) {
+    fun blockOutline(matrices: MatrixStack, voxelShape: VoxelShape, color: Int) {
         if (voxelShape.isEmpty) return
 
-        val matrix = matrices!!.peek().positionMatrix
+        val matrix = matrices.peek().positionMatrix
 
         RenderSystem.enableBlend()
         RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
@@ -341,15 +341,15 @@ object RenderUtil {
         return bestFormatting!!
     }
 
-    fun renderPath(matrices: MatrixStack?, path: List<Vec3d>, color: Int) {
+    fun renderPath(matrices: MatrixStack, path: List<Vec3d>, color: Int) {
         RenderSystem.enableBlend()
         RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
         glEnable(GL_LINE_SMOOTH)
         RenderSystem.disableDepthTest()
 
-        matrices?.push()
+        matrices.push()
         val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
-        matrices?.translate(-vec3d.x, -vec3d.y, -vec3d.z)
+        matrices.translate(-vec3d.x, -vec3d.y, -vec3d.z)
 
         val colors = colorToRGBF(color)
         RenderSystem.setShaderColor(colors[0], colors[1], colors[2], colors[3])
@@ -360,7 +360,7 @@ object RenderUtil {
 
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
 
-        val matrix = matrices?.peek()?.positionMatrix!!
+        val matrix = matrices.peek()?.positionMatrix!!
         for (vec in path) {
             bufferBuilder.vertex(matrix, vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat()).color(color).next()
         }

@@ -125,7 +125,7 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
             ModuleAutoRespawn(),
             ModuleIgnoreResourcePackHash(),
             ModuleAllowAllCharacters(),
-            ModuleTroubleInTerrioristTown(),
+            ModuleTroubleInTerroristTown(),
 
             // Ghost
             ModuleReach(),

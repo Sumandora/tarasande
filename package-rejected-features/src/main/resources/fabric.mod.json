@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "tarasande-rejected-features",
   "version": "${version}",
-  "name": "tarasande rejected Features",
+  "name": "tarasande Rejected Features",
   "description": "Things that don't come in Tarasande because you don't need them or they are from other clients.",
   "authors": [
     "EnZaXD/FlorianMichael",

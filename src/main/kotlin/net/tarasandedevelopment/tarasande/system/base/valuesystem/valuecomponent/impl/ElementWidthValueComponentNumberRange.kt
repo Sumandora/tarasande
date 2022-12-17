@@ -70,7 +70,7 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
     override fun init() {
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         lastMousePos = Vec2f(mouseX.toFloat(), mouseY.toFloat())
         val valueNumberRange = value as ValueNumberRange
 

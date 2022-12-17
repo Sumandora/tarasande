@@ -14,6 +14,7 @@ import su.mandora.event.EventDispatcher;
 @Mixin(value = EventDispatcher.class, remap = false)
 public class MixinEventDispatcher {
 
+    @SuppressWarnings("InvalidInjectorMethodSignature")
     @Inject(method = "call", at = @At("HEAD"), cancellable = true)
     public void cancelOriginalScreenInputEvent(Event event, CallbackInfo ci) {
         if(event instanceof EventScreenInput && VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {

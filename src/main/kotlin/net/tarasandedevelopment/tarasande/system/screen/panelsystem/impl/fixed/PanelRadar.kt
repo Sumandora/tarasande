@@ -16,7 +16,7 @@ class PanelRadar : Panel("Radar", 100.0, 100.0, true) {
 
     private val scale = ValueNumber(this, "Scale", 0.0, 1.0, 3.0, 0.1)
 
-    override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         if (MinecraftClient.getInstance().player == null)
             return
 
@@ -25,6 +25,7 @@ class PanelRadar : Panel("Radar", 100.0, 100.0, true) {
         for (entity in MinecraftClient.getInstance().world?.entities!!) {
             if (!TarasandeMain.managerModule().get(ModuleESP::class.java).shouldRender(entity))
                 continue
+
             val otherPos = entity.getLerpedPos(MinecraftClient.getInstance().tickDelta)!!
             val dist = sqrt((otherPos.x - pos.x).pow(2.0) + (otherPos.z - pos.z).pow(2.0)) * scale.value
 

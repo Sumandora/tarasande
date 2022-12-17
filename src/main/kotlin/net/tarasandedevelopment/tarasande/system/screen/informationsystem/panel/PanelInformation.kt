@@ -40,7 +40,7 @@ class PanelInformation(private val informationSystem: ManagerInformation) : Pane
         }
     }
 
-    override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val text = ArrayList<String>()
         for (owner in informationSystem.getAllOwners()) {
 

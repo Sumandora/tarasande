@@ -22,7 +22,7 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
 
     init {
         val hwid = SystemInfo().hardware.computerSystem.hardwareUUID
-        if (hwid != null && !hwid.equals("unknown")) { // if the hwid is non-existant, we just don't encrypt at all
+        if (hwid != null && !hwid.equals("unknown")) { // if the HWID is nonexistent, we just don't encrypt at all
             var bytes = Base64.getEncoder().encode(String(Hex.encodeHex(hwid.toByteArray())).toByteArray())
             when {
                 bytes.size > 32 -> bytes = Arrays.copyOfRange(bytes, 0, 32)

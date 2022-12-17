@@ -41,7 +41,7 @@ class ElementWidthValueComponentText(value: Value) : ElementWidthValueComponent(
         }
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         textFieldWidget.width = (width * (1.0 / scale)).toInt()
         if (textFieldWidget.isFocused && value.isEnabled())
             (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.clientValues().accentColor.getColor())
@@ -53,13 +53,13 @@ class ElementWidthValueComponentText(value: Value) : ElementWidthValueComponent(
             textFieldWidget.setTextFieldFocused(false)
         }
 
-        matrices?.push()
+        matrices.push()
         if (centered)
         // scary multiplication
-            matrices?.translate(0.0, getHeight() * scale * scale * 0.5, 0.0)
-        matrices?.scale(scale, scale, 1.0F)
+            matrices.translate(0.0, getHeight() * scale * scale * 0.5, 0.0)
+        matrices.scale(scale, scale, 1.0F)
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
-        matrices?.pop()
+        matrices.pop()
         (textFieldWidget as ITextFieldWidget).tarasande_setColor(null)
     }
 

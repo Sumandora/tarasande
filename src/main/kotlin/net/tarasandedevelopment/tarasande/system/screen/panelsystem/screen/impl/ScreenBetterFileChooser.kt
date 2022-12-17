@@ -72,13 +72,13 @@ class ScreenBetterFileChooser(
                 return super.mouseClicked(mouseX, mouseY, button)
             }
 
-            override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+            override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
                 FontWrapper.text(matrices, "Current path: " + currentDirectory.absolutePath, 1F, 1F)
 
                 super.render(matrices, mouseX, mouseY, delta)
             }
 
-            override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+            override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
                 var height = titleBarHeight.toDouble() + 1
                 for (file in this.files()) {
                     if (((y + height + scrollOffset)) > y && (height + scrollOffset) < panelHeight) {
@@ -137,7 +137,7 @@ class ScreenBetterFileChooser(
         return super.charTyped(chr, modifiers)
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         this.renderBackground(matrices)
         if (MinecraftClient.getInstance().world != null) {
             var prevScreen = prevScreen

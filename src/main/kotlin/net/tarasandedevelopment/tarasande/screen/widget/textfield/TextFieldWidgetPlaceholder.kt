@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.injection.accessor.ITextFieldWidget
 import java.awt.Color
 
 open class TextFieldWidgetPlaceholder(textRenderer: TextRenderer?, x: Int, y: Int, width: Int, height: Int, text: Text?) : TextFieldWidget(textRenderer, x, y, width, height, text) {
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val prevText = text
         val accessor = this as ITextFieldWidget
         if (text.isEmpty() && !isFocused) {

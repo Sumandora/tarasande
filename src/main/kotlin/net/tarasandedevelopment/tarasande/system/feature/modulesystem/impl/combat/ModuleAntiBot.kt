@@ -20,7 +20,7 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import java.util.*
 
 class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with bots", ModuleCategory.COMBAT) {
-    private val checks = ValueMode(this, "Checks", true, "Ticks existed", "Sound", "Ground", "Invisible", "Sneaked", "Movement", "Line of sight", "Invalid gamemode", "Swing")
+    private val checks = ValueMode(this, "Checks", true, "Ticks existed", "Sound", "Ground", "Invisible", "Sneaked", "Movement", "Line of sight", "Invalid game mode", "Swing")
     private val ticksExisted = object : ValueNumber(this, "Ticks existed", 0.0, 20.0, 100.0, 1.0) {
         override fun isEnabled() = checks.isSelected(0)
     }

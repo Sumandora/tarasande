@@ -102,7 +102,7 @@ class ScreenBetterAccount(
         }.also { submitButton = it })
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         FontWrapper.textShadow(matrices, name, width / 2.0F, 8 - FontWrapper.fontHeight() / 2.0F, -1, centered = true)
     }

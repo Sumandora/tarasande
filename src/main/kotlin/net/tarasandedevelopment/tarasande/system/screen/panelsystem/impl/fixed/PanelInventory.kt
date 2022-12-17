@@ -9,11 +9,11 @@ import kotlin.math.floor
 
 class PanelInventory : Panel("Inventory", 150.0, 66.0, true) {
 
-    override fun renderContent(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         for (q in 9..35) {
             val r = (x + (q % 9) * (panelWidth / 9.0)).toInt()
             val s = (y + titleBarHeight.toDouble() + 2.0 + (floor(q / 9.0) - 1) * ((panelHeight - titleBarHeight) / 3)).toInt()
-            RenderUtil.renderCorrectItem(matrices!!, r, s, MinecraftClient.getInstance().tickDelta, MinecraftClient.getInstance().player?.inventory?.main?.get(q) as ItemStack)
+            RenderUtil.renderCorrectItem(matrices, r, s, MinecraftClient.getInstance().tickDelta, MinecraftClient.getInstance().player?.inventory?.main?.get(q) as ItemStack)
         }
     }
 

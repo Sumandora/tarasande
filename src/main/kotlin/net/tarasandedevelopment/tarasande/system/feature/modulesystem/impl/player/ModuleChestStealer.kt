@@ -112,8 +112,8 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                     if (randomize.value == 0.0) 0.0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat()
                 ))
                 if (ThreadLocalRandom.current().nextInt(100) < failChance.value) {
-                    val interp = mousePos?.add(displayPos?.add(mousePos?.negate())?.multiply(ThreadLocalRandom.current().nextDouble(0.0, 1.0).toFloat()))!!
-                    ContainerUtil.getClosestSlot(screenHandler, accessor, interp) { slot, list -> slot.id < screenHandler.inventory.size() && !hasBetterEquivalent(slot, list) }?.also {
+                    val interpolated = mousePos?.add(displayPos?.add(mousePos?.negate())?.multiply(ThreadLocalRandom.current().nextDouble(0.0, 1.0).toFloat()))!!
+                    ContainerUtil.getClosestSlot(screenHandler, accessor, interpolated) { slot, list -> slot.id < screenHandler.inventory.size() && !hasBetterEquivalent(slot, list) }?.also {
                         nextSlot = it
                     }
                 }

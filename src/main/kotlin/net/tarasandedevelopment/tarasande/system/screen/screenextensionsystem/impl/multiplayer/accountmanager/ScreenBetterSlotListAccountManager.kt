@@ -149,7 +149,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         super.tick()
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         this.renderTitle(matrices, "Account Manager")
         FontWrapper.textShadow(matrices, status, width / 2.0F, 2 * FontWrapper.fontHeight() * 2.0F, -1, centered = true)

@@ -17,7 +17,7 @@ open class ClickableWidgetPanel(val panel: Panel, private val update: Boolean = 
         panel.init()
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val opened = panel.opened
         panel.opened = true
         val usedInScreen = panel.usedInScreen

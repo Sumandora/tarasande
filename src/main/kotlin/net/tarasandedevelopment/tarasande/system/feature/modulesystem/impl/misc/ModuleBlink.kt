@@ -123,6 +123,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         pos = mc.player?.pos
         velocity = mc.player?.velocity
         rotation = Rotation(mc.player ?: return)
+        packets.clear() // This might be filled with data, because it is copy on write
     }
 
     init {
@@ -135,6 +136,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                 }
                 if (mode.isSelected(1) && mc.currentScreen is DownloadingTerrainScreen) {
                     onDisable()
+                    return@registerEvent
                 }
                 if (
                     (event.type == EventPacket.Type.SEND && event.packet is ClientStatusC2SPacket && event.packet.mode == ClientStatusC2SPacket.Mode.PERFORM_RESPAWN) ||
