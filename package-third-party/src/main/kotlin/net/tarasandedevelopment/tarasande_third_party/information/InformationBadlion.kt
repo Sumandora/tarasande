@@ -36,17 +36,17 @@ class InformationTimers : Information("Badlion", "Timers") {
                                         timer.lastUpdated = System.currentTimeMillis()
                                     }
 
-                                    "REMOVE_TIMER" -> list.removeIf { it.id == TarasandeMain.get().gson.fromJson(data, RemoveRequest::class.java).id }
+                                    "REMOVE_TIMER" -> list.removeIf { timer -> timer.id == TarasandeMain.get().gson.fromJson(data, RemoveRequest::class.java).id }
                                     "UPDATE_TIMER" -> {
                                         val newTimer = TarasandeMain.get().gson.fromJson(data, Timer::class.java)
                                         newTimer.lastUpdated = System.currentTimeMillis()
-                                        list.removeIf { it.id == newTimer.id }
+                                        list.removeIf { timer -> timer.id == newTimer.id }
                                         list.add(newTimer)
                                     }
 
                                     "SYNC_TIMERS" -> {
                                         val syncRequest = TarasandeMain.get().gson.fromJson(data, SyncRequest::class.java)
-                                        val timer = list.firstOrNull { it.id == syncRequest.id }
+                                        val timer = list.firstOrNull { timer -> timer.id == syncRequest.id }
                                         timer?.currentTime = syncRequest.time
                                         timer?.lastUpdated = System.currentTimeMillis()
                                     }

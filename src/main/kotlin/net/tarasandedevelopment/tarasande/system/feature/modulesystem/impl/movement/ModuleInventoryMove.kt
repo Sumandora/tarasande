@@ -68,8 +68,8 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         }
         return TarasandeMain.managerPanel().list.any {
             when (it) {
-                is PanelElementsCategory -> it.elementList.any { it.components.any { isFocused(it) } }
-                is PanelElementsFriends -> it.elementList.any { it.textField.isFocused() }
+                is PanelElementsCategory -> it.elementList.any { moduleElement -> moduleElement.components.any { component -> isFocused(component) } }
+                is PanelElementsFriends -> it.elementList.any { playerElement -> playerElement.textField.isFocused() }
                 else -> false
             }
         }

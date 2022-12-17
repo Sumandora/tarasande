@@ -4,6 +4,6 @@ import sun.misc.Unsafe
 
 object UnsafeProvider {
 
-    val unsafe by lazy { Unsafe::class.java.let { it.getDeclaredField("theUnsafe").let { it.isAccessible = true; it.get(null) as Unsafe } } }
+    val unsafe by lazy { Unsafe::class.java.let { it.getDeclaredField("theUnsafe").apply { isAccessible = true }.get(null) as Unsafe } }
 
 }

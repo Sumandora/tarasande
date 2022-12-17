@@ -68,23 +68,26 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
 
         override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
     }
-    private val dontAttackTamedEntities = object : ValueBoolean(targetingValues, "Don't attack tamed entities", false) {
-        init {
-            EventDispatcher.add(EventIsEntityAttackable::class.java) {
-                if (value)
-                    it.attackable = it.attackable && (it.entity !is Tameable || it.entity.ownerUuid != MinecraftClient.getInstance().player?.uuid)
-            }
-        }
-    }
-    private val dontAttackRidingEntity = object : ValueBoolean(targetingValues, "Don't attack riding entity", false) {
-        init {
-            EventDispatcher.add(EventIsEntityAttackable::class.java) {
-                if (value)
-                    it.attackable = it.attackable && it.entity != MinecraftClient.getInstance().player?.vehicle
-            }
-        }
 
-        override fun isEnabled() = entities.list.isNotEmpty()
+    init {
+        object : ValueBoolean(targetingValues, "Don't attack tamed entities", false) {
+            init {
+                EventDispatcher.add(EventIsEntityAttackable::class.java) {
+                    if (value)
+                        it.attackable = it.attackable && (it.entity !is Tameable || it.entity.ownerUuid != MinecraftClient.getInstance().player?.uuid)
+                }
+            }
+        }
+        object : ValueBoolean(targetingValues, "Don't attack riding entity", false) {
+            init {
+                EventDispatcher.add(EventIsEntityAttackable::class.java) {
+                    if (value)
+                        it.attackable = it.attackable && it.entity != MinecraftClient.getInstance().player?.vehicle
+                }
+            }
+
+            override fun isEnabled() = entities.list.isNotEmpty()
+        }
     }
 
     val correctMovement = ValueMode(this, "Correct movement", false, "Off", "Prevent Backwards Sprinting", "Direct", "Silent")

@@ -63,10 +63,10 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
             override fun getMessage(): String? {
                 if (enabled) if (calculateBestWay.value) if (bedDatas.isNotEmpty()) {
                     return "\n" + bedDatas.sortedBy {
-                        mc.player?.squaredDistanceTo(it.bedParts.let {
+                        mc.player?.squaredDistanceTo(it.bedParts.let { bedPart ->
                             var vec = Vec3d.ZERO
-                            it.forEach { vec += Vec3d.ofCenter(it) }
-                            vec / it.size
+                            bedPart.forEach { bedPos -> vec += Vec3d.ofCenter(bedPos) }
+                            vec / bedPart.size
                         })
                     }.joinToString("\n") { it.toString() }.let { it.substring(0, it.length - 1) }
                 }
@@ -138,7 +138,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
                     if (bedDatas.any { it.bedParts.any { part1 -> bedParts.any { part2 -> part1 == part2 } } }) continue // we already processed these
 
-                    if (!calculateBestWay.value || bedParts.any { allSurroundings(it).any { mc.world?.isAir(it)!! } }) {
+                    if (!calculateBestWay.value || bedParts.any { allSurroundings(it).any { surrounding -> mc.world?.isAir(surrounding)!! } }) {
                         bedDatas.add(BedData(bedParts, null, null))
                         continue // this is pointless
                     }
@@ -147,8 +147,8 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                     var solution: List<Node>? = null
                     if (defenders != null) {
                         val outsiders = defenders.filter {
-                            allSurroundings(it).any {
-                                mc.world?.getBlockState(it)?.let { state ->
+                            allSurroundings(it).any { surrounding ->
+                                mc.world?.getBlockState(surrounding)?.let { state ->
                                     state.isAir || state.getCollisionShape(MinecraftClient.getInstance().world, it).isEmpty
                                 }!!
                             }

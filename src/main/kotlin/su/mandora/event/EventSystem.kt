@@ -15,7 +15,7 @@ object EventDispatcher {
         eventListeners.computeIfAbsent(clazz) { CopyOnWriteArrayList() }.also {
             @Suppress("UNCHECKED_CAST") // bypass generics $$$$$
             it.add(Pair(c as Consumer<Event>, priority))
-            it.sortBy { it.second }
+            it.sortBy { listener -> listener.second }
         }
     }
 

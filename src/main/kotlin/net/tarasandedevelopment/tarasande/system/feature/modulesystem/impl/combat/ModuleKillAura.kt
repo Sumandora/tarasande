@@ -316,7 +316,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             if ((waitForDamageValue.value && waitForDamage) ||
                 allAttackedLivingEntities { !shouldAttackEntity(it) } ||
-                (waitForCritical.value && mc.player?.isOnGround != true && willPerformCritical(false, false) && !willPerformCritical(criticalSprint.value, true) && (!dontWaitWhenEnemyHasShield.value || allAttackedLivingEntities { !hasShield(it) })))
+                (waitForCritical.value && mc.player?.isOnGround != true && willPerformCritical(criticalSprint = false, fallDistance = false) && !willPerformCritical(criticalSprint.value, true) && (!dontWaitWhenEnemyHasShield.value || allAttackedLivingEntities { !hasShield(it) })))
                 validEntities.clear()
 
             var attacked = false
@@ -392,7 +392,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             if (PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {
                 if (waitForCritical.value && criticalSprint.value && forceCritical.value)
                     if (!dontWaitWhenEnemyHasShield.value || !allAttackedLivingEntities { !hasShield(it) })
-                        if (willPerformCritical(false, true))
+                        if (willPerformCritical(criticalSprint = false, fallDistance = true))
                             if (mc.player?.isSprinting!!)
                                 event.pressed = false
             }

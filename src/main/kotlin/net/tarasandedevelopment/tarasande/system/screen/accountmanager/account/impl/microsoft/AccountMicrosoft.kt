@@ -259,8 +259,8 @@ $errorDescription""".toByteArray())
     @Suppress("unused")
     @ExtraInfo("Azure Apps")
     val azureAppsExtra: (Screen) -> Unit = {
-        MinecraftClient.getInstance().setScreen(ScreenBetterAzureApps(it, azureApp) {
-            azureApp = it
+        MinecraftClient.getInstance().setScreen(ScreenBetterAzureApps(it, azureApp) { newAzureApp ->
+            azureApp = newAzureApp
         })
     }
 

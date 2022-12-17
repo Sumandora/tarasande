@@ -18,17 +18,17 @@ class ManagerEntrySidebarPanel : Manager<EntrySidebarPanel>() {
     fun build(): ClickableWidgetPanelSidebar {
         return PanelElements<ElementWidthValueComponent>("Sidebar", 120.0, 0.0).let {
             val categories = ArrayList<String>()
-            this@ManagerEntrySidebarPanel.list.forEach {
-                if (!categories.contains(it.category)) {
-                    categories.add(it.category)
+            this@ManagerEntrySidebarPanel.list.forEach { entry ->
+                if (!categories.contains(entry.category)) {
+                    categories.add(entry.category)
                 }
             }
 
-            categories.forEach { localEach ->
-                it.elementList.add(object : ValueSpacer(it, localEach, 1.0F, manage = false) {
+            categories.forEach { category ->
+                it.elementList.add(object : ValueSpacer(it, category, 1.0F, manage = false) {
                     override fun getColor(hovered: Boolean) = Color.gray
                 }.createValueComponent())
-                this@ManagerEntrySidebarPanel.list.filter { it.category == localEach }.onEach { each ->
+                this@ManagerEntrySidebarPanel.list.filter { entry -> entry.category == category }.onEach { each ->
                     it.elementList.addAll(each.createElements(it))
                 }
             }

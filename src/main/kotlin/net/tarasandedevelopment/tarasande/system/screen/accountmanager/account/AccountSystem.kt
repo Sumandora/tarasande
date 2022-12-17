@@ -44,8 +44,8 @@ abstract class Account {
 
     @ExtraInfo("Environment")
     open val environmentExtra: (Screen) -> Unit = {
-        MinecraftClient.getInstance().setScreen(ScreenBetterEnvironment(it, environment) {
-            environment = it
+        MinecraftClient.getInstance().setScreen(ScreenBetterEnvironment(it, environment) { newEnvironment ->
+            environment = newEnvironment
         })
     }
 }

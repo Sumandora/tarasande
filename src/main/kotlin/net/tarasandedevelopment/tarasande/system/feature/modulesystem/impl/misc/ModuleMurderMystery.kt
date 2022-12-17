@@ -79,7 +79,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                     if (enabled)
                         if (suspects.isNotEmpty()) {
                             return "\n" + suspects.entries.joinToString("\n") {
-                                it.key.name + " (" + it.value.joinToString(" and ") { it.name.string } + "§r)"
+                                it.key.name + " (" + it.value.joinToString(" and ") { item -> StringUtil.uncoverTranslation(item.translationKey) } + "§r)"
                             }
                         }
 

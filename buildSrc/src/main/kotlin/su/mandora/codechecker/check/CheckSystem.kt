@@ -1,7 +1,6 @@
 package su.mandora.codechecker.check
 
 import org.objectweb.asm.tree.ClassNode
-import su.mandora.codechecker.check.impl.bytecode.CheckBytecodeAccessModifier
 import su.mandora.codechecker.check.impl.bytecode.CheckBytecodeAccessWidenerUsage
 import su.mandora.codechecker.check.impl.bytecode.CheckBytecodeNamingConvention
 import su.mandora.codechecker.check.impl.bytecode.CheckBytecodeUnnecessaryMainCall

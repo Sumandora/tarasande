@@ -67,7 +67,7 @@ class ScreenBetterOwnerValues(parent: Screen, val titleName: String, val owner: 
         }
 
         if (client?.world != null) {
-            TarasandeMain.managerBlur().bind(true, true)
+            TarasandeMain.managerBlur().bind(setViewport = true, screens = true)
             RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
             client?.framebuffer?.beginWrite(true)
         }
