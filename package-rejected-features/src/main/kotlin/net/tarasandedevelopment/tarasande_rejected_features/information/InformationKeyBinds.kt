@@ -17,6 +17,6 @@ class InformationKeyBinds : Information("KeyBinds", "Modules") {
             }
         }
         if (names.isEmpty()) return null
-        return "\n" + names.subList(0, names.size - 1).joinToString("\n")
+        return "\n" + names.joinToString("\n")
     }
 }

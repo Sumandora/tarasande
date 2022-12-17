@@ -4,7 +4,9 @@ import net.fabricmc.api.ClientModInitializer
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande_rejected_features.information.*
-import net.tarasandedevelopment.tarasande_rejected_features.module.*
+import net.tarasandedevelopment.tarasande_rejected_features.module.ModuleDeadByDaylightEscape
+import net.tarasandedevelopment.tarasande_rejected_features.module.ModuleFurnaceProgress
+import net.tarasandedevelopment.tarasande_rejected_features.module.ModuleRoundedMovement
 import su.mandora.event.EventDispatcher
 
 class TarasandeRejectedFeatures : ClientModInitializer {
@@ -26,6 +28,7 @@ class TarasandeRejectedFeatures : ClientModInitializer {
                 InformationFeaturesModules(),
                 InformationFeaturesValues(),
                 InformationFeaturesGraphs(),
+                InformationFeaturesPackagesForTarasande(),
 
                 // KeyBinds
                 InformationKeyBinds()
