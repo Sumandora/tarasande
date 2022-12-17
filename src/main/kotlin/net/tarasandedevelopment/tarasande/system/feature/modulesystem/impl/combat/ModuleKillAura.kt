@@ -219,8 +219,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 targets.add(Pair(entity, aimPoint))
             }
             if (targets.isEmpty()) {
-                if (blocking)
-                    blocking = false
+                blocking = false
                 lastFlex = null
                 waitForDamage = true
                 teleportPath = null
@@ -379,7 +378,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 waitForHit = false
             }
 
-            if (targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && (validEntities.isEmpty() || attacked) && !mc.player?.isUsingItem!! && !autoBlock.isSelected(0)) {
+            if (!blocking && targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && (validEntities.isEmpty() || attacked) && !mc.player?.isUsingItem!! && !autoBlock.isSelected(0)) {
                 block()
             }
         }
@@ -551,7 +550,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         }
         if (hasTarget) {
             blocking = true
-            mc.options.useKey.timesPressed++
         }
     }
 

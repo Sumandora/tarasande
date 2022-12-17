@@ -5,8 +5,11 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.Window;
+import net.minecraft.text.LiteralTextContent;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.Util;
 import net.tarasandedevelopment.tarasande.event.*;
+import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -98,5 +101,10 @@ public abstract class MixinMinecraftClient {
         EventShowsDeathScreen eventShowsDeathScreen = new EventShowsDeathScreen(instance.showsDeathScreen());
         EventDispatcher.INSTANCE.call(eventShowsDeathScreen);
         return eventShowsDeathScreen.getShowsDeathScreen();
+    }
+
+    @Inject(method = "doItemUse", at = @At("HEAD"))
+    public void jadgoijadgoi(CallbackInfo ci) {
+        CustomChat.INSTANCE.printChatMessage(MutableText.of(new LiteralTextContent("abc " + player.age)));
     }
 }

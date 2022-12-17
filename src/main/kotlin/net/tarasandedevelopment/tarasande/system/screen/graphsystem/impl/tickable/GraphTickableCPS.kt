@@ -19,7 +19,7 @@ class GraphTickableCPS : GraphTickable("Player", "CPS", 200, true) {
                     clicks.add(System.currentTimeMillis())
             }
             add(EventMouse::class.java) {
-                if (it.action == GLFW.GLFW_PRESS && clickMode.isSelected(1))
+                if (clickMode.isSelected(1) && it.action == GLFW.GLFW_PRESS)
                     clicks.add(System.currentTimeMillis())
             }
         }

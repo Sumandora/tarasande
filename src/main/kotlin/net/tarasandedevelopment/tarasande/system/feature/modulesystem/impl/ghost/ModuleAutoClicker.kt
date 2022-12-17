@@ -8,6 +8,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.ClickSpeedUtil
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you", ModuleCategory.GHOST) {
 
@@ -37,11 +38,13 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
             for (entry in hashMap) {
                 if (buttons.selected.contains(keyMap[entry.key]) && entry.key.pressed) {
                     val clicks = entry.value.getClicks()
-                    if (entry.key == mc.options.useKey && mc.player?.isUsingItem == true)
-                        return@registerEvent
-                    for (i in 1..clicks) {
-                        entry.key.timesPressed++
+                    if(clicks > 0) {
+                        if(entry.key == mc.options.useKey)
+                            if(mc.player?.isUsingItem == true || PlayerUtil.getUsedHand() != null)
+                                return@registerEvent
                         event.dirty = true
+                        if(entry.key.timesPressed == 0)
+                            entry.key.timesPressed = clicks
                     }
                 } else {
                     entry.value.reset()
@@ -50,15 +53,8 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
         }
 
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            for (entry in hashMap) {
-                if (buttons.selected.contains(keyMap[entry.key]) && event.keyBinding == entry.key) {
-                    event.pressed =
-                        when (entry.key) {
-                            mc.options.attackKey -> event.pressed && mc.crosshairTarget?.type == HitResult.Type.BLOCK
-                            mc.options.useKey -> event.pressed || (mc.player?.isUsingItem == true && event.keyBinding.pressed)
-                            else -> false
-                        }
-                }
+            if(buttons.isSelected(0) && event.keyBinding == mc.options.attackKey && mc.crosshairTarget?.type != HitResult.Type.BLOCK) {
+                event.pressed = false
             }
         }
     }
