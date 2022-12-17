@@ -37,6 +37,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSprint;
+import net.tarasandedevelopment.tarasande.util.player.PlayerUtil;
 import net.tarasandedevelopment.tarasande_protocol_hack.event.EventSkipIdlePacket;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.ArmorUpdater1_8_0;
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ProtocolHackValues;
@@ -181,18 +182,23 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Inject(method = "isWalking", at = @At("HEAD"), cancellable = true)
     public void easierUnderwaterSprinting(CallbackInfoReturnable<Boolean> ci) {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_1)) {
+            ModuleSprint moduleSprint = TarasandeMain.Companion.managerModule().get(ModuleSprint.class);
+            if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().getValue())
+                if(PlayerUtil.INSTANCE.isPlayerMoving())
+                    ci.setReturnValue(true);
+
             ci.setReturnValue(input.movementForward >= 0.8);
         }
     }
 
     @Redirect(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;hasForwardMovement()Z", ordinal = 0))
     private boolean disableSprintSneak(Input input) {
-        ModuleSprint moduleSprint = TarasandeMain.Companion.managerModule().get(ModuleSprint.class);
-        if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().getValue())
-            if(input.movementForward <= 0.8F)
-                return true;
-
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_1)) {
+            ModuleSprint moduleSprint = TarasandeMain.Companion.managerModule().get(ModuleSprint.class);
+            if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().getValue())
+                if(PlayerUtil.INSTANCE.isPlayerMoving())
+                    return true;
+
             return input.movementForward >= 0.8F;
         }
 
