@@ -6,7 +6,6 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.MovementType;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.event.*;
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity;
@@ -98,15 +97,6 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         EventDispatcher.INSTANCE.call(eventJump);
 
         setYaw(eventJump.getYaw());
-    }
-
-    @Override
-    public void swingHand(Hand hand) {
-        EventSwing eventSwing = new EventSwing(hand);
-        EventDispatcher.INSTANCE.call(eventSwing);
-        if (eventSwing.getCancelled())
-            return;
-        super.swingHand(hand);
     }
 
     @Override
