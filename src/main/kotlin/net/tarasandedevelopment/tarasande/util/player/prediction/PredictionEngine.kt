@@ -194,8 +194,9 @@ fun Input(movementForward: Float, movementSideways: Float) = Input().also {
     it.pressingRight = movementSideways < 0.0
 }
 
-fun Input.with(jumping: Boolean, sneaking: Boolean): Input {
-    this.jumping = jumping
-    this.sneaking = sneaking
-    return this
+fun Input.with(jumping: Boolean = this.jumping, sneaking: Boolean = this.sneaking): Input {
+    return Input(this.movementForward, this.movementSideways).also {
+        it.jumping = jumping
+        it.sneaking = sneaking
+    }
 }
