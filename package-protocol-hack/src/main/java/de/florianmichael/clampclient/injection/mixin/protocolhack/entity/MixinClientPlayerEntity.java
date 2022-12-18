@@ -37,7 +37,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSprint;
-import net.tarasandedevelopment.tarasande.util.player.PlayerUtil;
 import net.tarasandedevelopment.tarasande_protocol_hack.event.EventSkipIdlePacket;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.ArmorUpdater1_8_0;
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ProtocolHackValues;
@@ -50,7 +49,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.event.EventDispatcher;
 
 @Mixin(value = ClientPlayerEntity.class, priority = 2000)
@@ -179,16 +177,12 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         }
     }
 
-    @Inject(method = "isWalking", at = @At("HEAD"), cancellable = true)
-    public void easierUnderwaterSprinting(CallbackInfoReturnable<Boolean> ci) {
+    @Redirect(method = "isWalking", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isSubmergedInWater()Z"))
+    public boolean easierUnderwaterSprinting(ClientPlayerEntity instance) {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_1)) {
-            ModuleSprint moduleSprint = TarasandeMain.Companion.managerModule().get(ModuleSprint.class);
-            if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
-                if(PlayerUtil.INSTANCE.isPlayerMoving())
-                    ci.setReturnValue(true);
-
-            ci.setReturnValue(input.movementForward >= 0.8);
+            return false;
         }
+        return instance.isSubmergedInWater();
     }
 
     @Redirect(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;hasForwardMovement()Z", ordinal = 0))
@@ -196,8 +190,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_1)) {
             ModuleSprint moduleSprint = TarasandeMain.Companion.managerModule().get(ModuleSprint.class);
             if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
-                if(PlayerUtil.INSTANCE.isPlayerMoving())
-                    return true;
+                return input.getMovementInput().lengthSquared() >= 0.8 * 0.8;
 
             return input.movementForward >= 0.8F;
         }

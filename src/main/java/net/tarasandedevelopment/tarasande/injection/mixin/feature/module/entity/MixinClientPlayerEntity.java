@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.injection.mixin.feature.module.entity
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.input.Input;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
@@ -13,12 +14,10 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.explo
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleFlight;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoSlowdown;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSprint;
-import net.tarasandedevelopment.tarasande.util.player.PlayerUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
@@ -106,11 +105,11 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         return instance.shouldPause();
     }
 
-    @Inject(method = "isWalking", at = @At("HEAD"), cancellable = true)
-    public void hookSprint(CallbackInfoReturnable<Boolean> cir) {
+    @Redirect(method = "isWalking", at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/Input;movementForward:F"))
+    public float hookSprint(Input instance) {
         ModuleSprint moduleSprint = TarasandeMain.Companion.managerModule().get(ModuleSprint.class);
         if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
-            if(PlayerUtil.INSTANCE.isPlayerMoving())
-                cir.setReturnValue(true);
+            return instance.getMovementInput().length();
+        return instance.movementForward;
     }
 }

@@ -3,21 +3,19 @@ package net.tarasandedevelopment.tarasande.injection.mixin.feature.module;
 import net.minecraft.client.input.Input;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSprint;
-import net.tarasandedevelopment.tarasande.util.player.PlayerUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Input.class)
 public class MixinInput {
 
-    @Inject(method = "hasForwardMovement", at = @At("HEAD"), cancellable = true)
-    public void hookSprint(CallbackInfoReturnable<Boolean> cir) {
+    @Redirect(method = "hasForwardMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/Input;movementForward:F"))
+    public float hookSprint(Input instance) {
         ModuleSprint moduleSprint = TarasandeMain.Companion.managerModule().get(ModuleSprint.class);
         if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
-            if(PlayerUtil.INSTANCE.isPlayerMoving())
-                cir.setReturnValue(true);
+            return instance.getMovementInput().length();
+        return instance.movementForward;
     }
 
 }
