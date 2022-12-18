@@ -57,6 +57,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         override fun isEnabled() = preventRerotation.value
     }
     private val aimHeight = ValueNumber(this, "Aim height", 0.0, 0.5, 1.0, 0.05)
+    private val speculativeWaiting = ValueBoolean(this, "Speculative waiting", false)
     private val silent = ValueBoolean(this, "Silent", false)
     private val lockView = ValueBoolean(this, "Lock view", false)
     private val headRoll = ValueMode(this, "Head roll", false, "Disabled", "Advantage", "Autism")
@@ -84,7 +85,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     init {
         // up & down (down should never happen unless we are trying to save ourselves)
         targets.add(Pair(BlockPos(0, -1, 0), Direction.UP))
-        targets.add(Pair(BlockPos(0, 1, 0), Direction.DOWN))
 
         for (y in 0 downTo -1) {
             // straight
@@ -139,13 +139,14 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         val arrayList = ArrayList<Triple<BlockPos, BlockPos, Direction>>()
         for (target in targets) {
             val adjacent = blockPos.add(target.first.x, target.first.y, target.first.z)
-            if (!mc.world?.isAir(adjacent)!!) arrayList.add(Triple(target.first, adjacent, target.second))
+            if (!mc.world?.isAir(adjacent)!!)
+                arrayList.add(Triple(target.first, adjacent, target.second))
         }
         var best: Pair<BlockPos, Direction>? = null
         var dist = 0.0
         for (target in arrayList) {
             if (target.third.offsetY != 0) {
-                if (mc.options.jumpKey.pressed)
+                if (PlayerUtil.input.jumping)
                     return Pair(target.second, target.third)
                 else if (best == null)
                     continue
@@ -178,11 +179,15 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             if (mc.world?.isAir(below)!!) {
                 val prevTarget = target
                 target = getAdjacentBlock(below)
+                if(speculativeWaiting.value && target?.second?.offsetY == 0 && target?.second?.opposite == prevTarget?.second)
+                    target = null
                 if (target != null) {
-                    if (rotateAtEdgeMode.isSelected(0) ||
-                        ((rotateAtEdgeMode.isSelected(1) && ((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= distance.value * distance.value || target?.second?.offsetY != 0) ||
-                                (rotateAtEdgeMode.isSelected(2) && PlayerUtil.isOnEdge(extrapolation.value)))) {
-
+                    if (when {
+                            rotateAtEdgeMode.isSelected(0) -> true
+                            rotateAtEdgeMode.isSelected(1) -> ((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= distance.value * distance.value || target?.second?.offsetY != 0
+                            rotateAtEdgeMode.isSelected(2) -> PlayerUtil.isOnEdge(extrapolation.value)
+                            else -> false
+                    }) {
                         if (lastRotation == null || run {
                                 if (!preventRerotation.value)
                                     true
@@ -210,8 +215,12 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                 placeLine = null
                                 if (shape.isEmpty)
                                     point
-                                else
-                                    MathUtil.closestPointToBox(aimTarget ?: eye, shape.offset(blockPos?.x?.toDouble()!!, blockPos.y.toDouble(), blockPos.z.toDouble()).boundingBox.expand(-padding))
+                                else {
+                                    val positionShape = shape.offset(blockPos?.x?.toDouble()!!, blockPos.y.toDouble(), blockPos.z.toDouble()).boundingBox.expand(-padding)
+                                    val lastLook = aimTarget ?: eye
+
+                                    MathUtil.closestPointToBox(lastLook, positionShape)
+                                }
                             } else {
                                 val randomizedAimHeight = aimHeight.value + ThreadLocalRandom.current().nextFloat() * 0.1 - 0.05
                                 val absoluteAimHeight = if (shape.isEmpty) randomizedAimHeight else shape.boundingBox.let { it.minY + (it.maxY - it.minY) * randomizedAimHeight }
@@ -359,6 +368,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 if (hitResult.type == HitResult.Type.BLOCK && hitResult.side == (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) && hitResult.blockPos == target?.first) {
                     if (airBelow && (((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= newEdgeDist * newEdgeDist || target?.first?.y!! < mc.player?.y!!)) {
                         if (timeUtil.hasReached(delay.value.toLong())) {
+                            aimTarget = hitResult.pos
                             placeBlock(hitResult)
                             event.dirty = true
 
