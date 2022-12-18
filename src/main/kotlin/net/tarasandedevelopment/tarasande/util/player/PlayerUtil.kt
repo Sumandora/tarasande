@@ -180,7 +180,7 @@ object PlayerUtil {
             return MinecraftClient.getInstance().player?.inventory?.selectedSlot!!.let { Pair(getBreakSpeed(blockPos, it), it) }
 
         val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot
-        var bestMultiplier = 1.0f
+        var bestMultiplier = 1.0F
         var bestTool = -1
         for (i in 0..8) {
             val multiplier = getBreakSpeed(blockPos, i)
@@ -194,7 +194,7 @@ object PlayerUtil {
     }
 
     fun getBreakSpeed(blockPos: BlockPos, item: Int): Float {
-        val state = MinecraftClient.getInstance().world?.getBlockState(blockPos) ?: return 0.0f
+        val state = MinecraftClient.getInstance().world?.getBlockState(blockPos) ?: return 0.0F
 
         val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot
         MinecraftClient.getInstance().player?.inventory?.selectedSlot = item
@@ -203,7 +203,7 @@ object PlayerUtil {
 
         MinecraftClient.getInstance().player?.inventory?.selectedSlot = origSlot
 
-        return 1.0f - speed
+        return 1.0F - speed
     }
 
     fun predictFallDistance(position: BlockPos = MinecraftClient.getInstance().player?.blockPos!!): Int? {
