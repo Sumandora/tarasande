@@ -69,7 +69,8 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     public void move(MovementType movementType, Vec3d movement) {
         EventMovement eventMovement = new EventMovement(movement);
         EventDispatcher.INSTANCE.call(eventMovement);
-        setVelocity(eventMovement.getVelocity());
+        if(movement != eventMovement.getVelocity())
+            setVelocity(eventMovement.getVelocity());
         super.move(movementType, eventMovement.getVelocity());
     }
 

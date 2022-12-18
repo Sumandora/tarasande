@@ -123,7 +123,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Inject(method = "isWalking", at = @At("HEAD"), cancellable = true)
     public void hookSprint(CallbackInfoReturnable<Boolean> cir) {
         ModuleSprint moduleSprint = TarasandeMain.Companion.managerModule().get(ModuleSprint.class);
-        if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().getValue())
+        if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
             if(PlayerUtil.INSTANCE.isPlayerMoving())
                 cir.setReturnValue(true);
     }

@@ -183,7 +183,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     public void easierUnderwaterSprinting(CallbackInfoReturnable<Boolean> ci) {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_1)) {
             ModuleSprint moduleSprint = TarasandeMain.Companion.managerModule().get(ModuleSprint.class);
-            if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().getValue())
+            if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
                 if(PlayerUtil.INSTANCE.isPlayerMoving())
                     ci.setReturnValue(true);
 
@@ -195,7 +195,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     private boolean disableSprintSneak(Input input) {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_1)) {
             ModuleSprint moduleSprint = TarasandeMain.Companion.managerModule().get(ModuleSprint.class);
-            if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().getValue())
+            if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
                 if(PlayerUtil.INSTANCE.isPlayerMoving())
                     return true;
 
