@@ -17,7 +17,8 @@ class TarasandeProtocolSpoofer : ClientModInitializer {
                     EntrySidebarPanelToggleableForgeFaker(this),
                     EntrySidebarPanelToggleableHAProxyHack(this),
                     EntrySidebarPanelToggleableQuiltFaker(this),
-                    EntrySidebarPanelToggleableVivecraftFaker(this)
+                    EntrySidebarPanelToggleableVivecraftFaker(this),
+                    EntrySidebarPanelToggleableTeslaClientFaker(this)
                 )
             }
         }

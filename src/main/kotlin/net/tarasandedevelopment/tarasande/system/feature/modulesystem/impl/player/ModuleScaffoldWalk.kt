@@ -28,6 +28,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.*
 
+
 class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you", ModuleCategory.PLAYER) {
 
     private val delay = ValueNumber(this, "Delay", 0.0, 0.0, 500.0, 50.0)

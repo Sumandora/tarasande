@@ -181,6 +181,7 @@ class TarasandeProtocolHack : INativeProvider {
         Protocol1_13To1_12_2.MAPPINGS.channelMappings["FML|MP"] = "fml:mp"
         Protocol1_13To1_12_2.MAPPINGS.channelMappings["FML"] = "minecraft:fml"
         Protocol1_13To1_12_2.MAPPINGS.channelMappings["FORGE"] = "minecraft:forge"
+        Protocol1_13To1_12_2.MAPPINGS.channelMappings["WECUI\u0000tesla:client"] = "WECUI\u0000tesla:client"
     }
 
     override fun isSinglePlayer() = MinecraftClient.getInstance()?.isInSingleplayer != false
