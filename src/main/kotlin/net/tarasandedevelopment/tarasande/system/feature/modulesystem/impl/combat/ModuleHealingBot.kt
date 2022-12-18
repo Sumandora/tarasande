@@ -8,7 +8,7 @@ import net.minecraft.potion.PotionUtil
 import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
-import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity
+import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -117,7 +117,7 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
                     val effects = PotionUtil.getPotionEffects(it)
                     if (effects.size == 1 && effects.first().effectType.let { type -> type == StatusEffects.REGENERATION || type == StatusEffects.INSTANT_HEALTH })
                         return@findItem mc.player?.health?.div(2.0)!! <= health.value
-                    return@findItem effects.all { effect -> effect.effectType.isBeneficial && !(mc.player as IClientPlayerEntity).tarasande_forceHasStatusEffect(effect.effectType) }
+                    return@findItem effects.all { effect -> effect.effectType.isBeneficial && !(mc.player as ILivingEntity).tarasande_forceHasStatusEffect(effect.effectType) }
                 }
             }
 

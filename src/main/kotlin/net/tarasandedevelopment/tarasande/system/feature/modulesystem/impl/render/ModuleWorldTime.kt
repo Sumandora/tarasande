@@ -32,8 +32,8 @@ class ModuleWorldTime : Module("World time", "Changes the time of day", ModuleCa
 
     private val forceMoonPhase = ValueMode(this, "Force moon phase", false, "Off", *moonStates)
 
-    fun moonPhase(): Int {
-        if (!enabled || forceMoonPhase.isSelected(0)) return -1
+    fun moonPhase(): Int? {
+        if (!enabled || forceMoonPhase.isSelected(0)) return null
 
         return moonStates.indexOf(forceMoonPhase.selected[0])
     }

@@ -11,7 +11,7 @@ import net.minecraft.entity.effect.StatusEffectUtil
 import net.minecraft.registry.Registries
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.MathHelper
-import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity
+import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
@@ -45,7 +45,7 @@ class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble())
         for (statusEffect in Registries.STATUS_EFFECT) {
             val animation = animations[statusEffect]!!
             if (animation > 0.0) {
-                (MinecraftClient.getInstance().player as IClientPlayerEntity).also {
+                (MinecraftClient.getInstance().player as ILivingEntity).also {
                     val statusEffectInstance = if (it.tarasande_forceHasStatusEffect(statusEffect)) it.tarasande_forceGetStatusEffect(statusEffect) else prevInstances.getOrDefault(statusEffect, null)
                     if (statusEffectInstance != null) prevInstances[statusEffect] = statusEffectInstance
                     if (statusEffect != null) {
@@ -81,7 +81,7 @@ class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble())
         Registries.STATUS_EFFECT.forEach { statusEffect ->
             var animation = animations.putIfAbsent(statusEffect, 0.0)
             if (animation == null || animation.isNaN()) animation = 0.0 else {
-                if ((MinecraftClient.getInstance().player as IClientPlayerEntity).tarasande_forceHasStatusEffect(statusEffect)) {
+                if ((MinecraftClient.getInstance().player as ILivingEntity).tarasande_forceHasStatusEffect(statusEffect)) {
                     animation += speedIn.value * RenderUtil.deltaTime
                 } else {
                     animation -= speedOut.value * RenderUtil.deltaTime

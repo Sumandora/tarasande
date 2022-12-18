@@ -1,26 +1,18 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.feature.module.entity;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerAbilities;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModulePortalScreen;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleFlight;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoSlowdown;
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSafeWalk;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSprint;
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoStatusEffect;
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,19 +21,13 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientPlayerEntity.class)
-public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IClientPlayerEntity {
+public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 
     @Unique
     private boolean tarasande_flight;
 
     @Unique
     private float tarasande_flightSpeed;
-
-    @Unique
-    private boolean tarasande_forceHasStatusEffect;
-
-    @Unique
-    private boolean tarasande_forceGetStatusEffect;
 
     public MixinClientPlayerEntity(ClientWorld world, GameProfile profile) {
         super(world, profile);
@@ -126,63 +112,5 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
             if(PlayerUtil.INSTANCE.isPlayerMoving())
                 cir.setReturnValue(true);
-    }
-
-    @Override
-    public boolean hasStatusEffect(StatusEffect effect) {
-        final boolean originalValue = super.hasStatusEffect(effect);
-        if (tarasande_forceHasStatusEffect) {
-            tarasande_forceHasStatusEffect = false;
-        } else {
-            final ModuleNoStatusEffect moduleNoStatusEffect = TarasandeMain.Companion.managerModule().get(ModuleNoStatusEffect.class);
-            if (moduleNoStatusEffect.getEnabled() && moduleNoStatusEffect.getEffects().getList().contains(effect)) {
-                return false;
-            }
-        }
-        return originalValue;
-    }
-
-    @Override
-    public StatusEffectInstance getStatusEffect(StatusEffect effect) {
-        final StatusEffectInstance originalValue = super.getStatusEffect(effect);
-        if (tarasande_forceGetStatusEffect) {
-            tarasande_forceGetStatusEffect = false;
-        } else {
-            final ModuleNoStatusEffect moduleNoStatusEffect = TarasandeMain.Companion.managerModule().get(ModuleNoStatusEffect.class);
-            if (moduleNoStatusEffect.getEnabled() && moduleNoStatusEffect.getEffects().getList().contains(effect)) {
-                return null;
-            }
-        }
-        return originalValue;
-    }
-
-    @Override
-    public boolean tarasande_forceHasStatusEffect(StatusEffect effect) {
-        tarasande_forceHasStatusEffect = true;
-        return hasStatusEffect(effect);
-    }
-
-    @Override
-    public StatusEffectInstance tarasande_forceGetStatusEffect(StatusEffect effect) {
-        tarasande_forceGetStatusEffect = true;
-        return getStatusEffect(effect);
-    }
-
-    @Override
-    protected void fall(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition) {
-        if(onGround) {
-            final ModuleNoFall moduleNoFall = TarasandeMain.Companion.managerModule().get(ModuleNoFall.class);
-            if(moduleNoFall.getEnabled() && moduleNoFall.getMode().isSelected(0) && moduleNoFall.getGroundSpoofMode().isSelected(1))
-                return;
-        }
-        super.fall(heightDifference, onGround, state, landedPosition);
-    }
-
-    @Override
-    protected boolean clipAtLedge() {
-        ModuleSafeWalk moduleSafeWalk = TarasandeMain.Companion.managerModule().get(ModuleSafeWalk.class);
-        if (moduleSafeWalk.getEnabled() && !moduleSafeWalk.getSneak().getValue())
-            return true;
-        return super.clipAtLedge();
     }
 }

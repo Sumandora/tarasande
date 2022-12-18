@@ -7,7 +7,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleBlockChangeTracker;
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleWorldTime;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,15 +26,5 @@ public abstract class MixinWorld implements WorldAccess {
         if (moduleBlockChangeTracker.getEnabled())
             if (!getBlockState(pos).getBlock().equals(state.getBlock()))
                 moduleBlockChangeTracker.getChanges().add(new Triple<>(pos, state, System.currentTimeMillis()));
-    }
-
-    @Override
-    public int getMoonPhase() {
-        final int moonPhase = TarasandeMain.Companion.managerModule().get(ModuleWorldTime.class).moonPhase();
-        if (moonPhase != 1) {
-            return moonPhase;
-        }
-
-        return WorldAccess.super.getMoonPhase();
     }
 }

@@ -33,6 +33,9 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
     init {
         registerEvent(EventMovement::class.java) { event ->
+            if (event.entity != mc.player)
+                return@registerEvent
+
             if (mc.player?.velocity?.lengthSquared()!! <= 0.01) firstMove = true
 
             if (!PlayerUtil.isPlayerMoving()) return@registerEvent

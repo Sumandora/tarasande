@@ -3,6 +3,7 @@ package su.mandora.codechecker.check
 import org.objectweb.asm.tree.ClassNode
 import su.mandora.codechecker.check.impl.bytecode.CheckBytecodeAccessWidenerUsage
 import su.mandora.codechecker.check.impl.bytecode.CheckBytecodeNamingConvention
+import su.mandora.codechecker.check.impl.bytecode.CheckBytecodeNoMixinOperation
 import su.mandora.codechecker.check.impl.bytecode.CheckBytecodeUnnecessaryMainCall
 import su.mandora.codechecker.check.impl.source.CheckSourceLowercaseNumberSuffix
 import su.mandora.codechecker.check.impl.source.CheckSourcePluralPackage
@@ -24,7 +25,8 @@ class CheckManager {
         CheckBytecodeNamingConvention(),
         CheckBytecodeAccessWidenerUsage(),
         CheckBytecodeUnnecessaryMainCall(),
-        //CheckBytecodeAccessModifier() // broken
+        //CheckBytecodeAccessModifier(), // broken
+        CheckBytecodeNoMixinOperation()
     )
 
     fun provideSources(list: ArrayList<File>) {

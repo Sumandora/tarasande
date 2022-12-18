@@ -53,6 +53,9 @@ class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", Module
         }
 
         registerEvent(EventMovement::class.java) { event ->
+            if (event.entity != mc.player)
+                return@registerEvent
+
             if (mode.isSelected(2))
                 event.velocity.y = -motion.value
         }

@@ -14,6 +14,9 @@ class ModuleVehicleSpeed : Module("Vehicle speed", "Modifies vehicle movement sp
 
     init {
         registerEvent(EventMovement::class.java) { event ->
+            if (event.entity != mc.player?.vehicle)
+                return@registerEvent
+
             if (!PlayerUtil.isPlayerMoving())
                 return@registerEvent
 

@@ -5,10 +5,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.MovementType;
-import net.minecraft.util.math.Vec3d;
-import net.tarasandedevelopment.tarasande.event.*;
-import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity;
+import net.tarasandedevelopment.tarasande.event.EventCanSprint;
+import net.tarasandedevelopment.tarasande.event.EventUpdate;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.event.EventDispatcher;
 
 @Mixin(ClientPlayerEntity.class)
-public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IClientPlayerEntity {
+public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 
     public MixinClientPlayerEntity(ClientWorld world, GameProfile profile) {
         super(world, profile);
@@ -62,50 +60,5 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         EventCanSprint eventCanSprint = new EventCanSprint(cir.getReturnValue());
         EventDispatcher.INSTANCE.call(eventCanSprint);
         cir.setReturnValue(eventCanSprint.getCanSprint());
-    }
-
-    @Override
-    public void move(MovementType movementType, Vec3d movement) {
-        EventMovement eventMovement = new EventMovement(movement);
-        EventDispatcher.INSTANCE.call(eventMovement);
-        if(movement != eventMovement.getVelocity())
-            setVelocity(eventMovement.getVelocity());
-        super.move(movementType, eventMovement.getVelocity());
-    }
-
-    @Override
-    public float getFovMultiplier() {
-        EventMovementFovMultiplier eventMovementFovMultiplier = new EventMovementFovMultiplier(super.getFovMultiplier());
-        EventDispatcher.INSTANCE.call(eventMovementFovMultiplier);
-        return eventMovementFovMultiplier.getMovementFovMultiplier();
-    }
-
-    @Override
-    public void jump() {
-        float originalYaw;
-        EventJump eventJump = new EventJump(originalYaw = getYaw(), EventJump.State.PRE);
-        EventDispatcher.INSTANCE.call(eventJump);
-
-        setYaw(eventJump.getYaw());
-
-        if (eventJump.getCancelled())
-            return;
-
-        super.jump();
-
-        eventJump = new EventJump(originalYaw, EventJump.State.POST);
-        EventDispatcher.INSTANCE.call(eventJump);
-
-        setYaw(eventJump.getYaw());
-    }
-
-    @Override
-    public void updateVelocity(float speed, Vec3d movementInput) {
-        float originalYaw;
-        EventVelocityYaw eventVelocityYaw = new EventVelocityYaw(originalYaw = getYaw());
-        EventDispatcher.INSTANCE.call(eventVelocityYaw);
-        setYaw(eventVelocityYaw.getYaw());
-        super.updateVelocity(speed, movementInput);
-        setYaw(originalYaw);
     }
 }

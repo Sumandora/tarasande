@@ -25,7 +25,7 @@ import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
-import net.tarasandedevelopment.tarasande.injection.accessor.IClientPlayerEntity
+import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -597,7 +597,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         if (mc.player?.isOnGround != true &&
             mc.player?.isClimbing != true &&
             mc.player?.isTouchingWater != true &&
-            !(mc.player as IClientPlayerEntity).tarasande_forceHasStatusEffect(StatusEffects.BLINDNESS) &&
+            !(mc.player as ILivingEntity).tarasande_forceHasStatusEffect(StatusEffects.BLINDNESS) &&
             mc.player?.hasVehicle() == false)
             if (!fallDistance || mc.player?.fallDistance!! > 0.0F)
                 if (!criticalSprint || !mc.player?.isSprinting!!)

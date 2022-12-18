@@ -383,21 +383,24 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         }
 
         registerEvent(EventMovement::class.java) { event ->
-            if (target != null) {
-                if (PlayerUtil.input.jumping) {
-                    when {
-                        tower.isSelected(1) -> {
-                            val velocity = event.velocity.add(0.0, 0.0, 0.0)
-                            val playerVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)
-                            mc.player?.jump()
-                            event.velocity = velocity?.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!!)!!
-                            mc.player?.velocity = playerVelocity
-                        }
+            if (event.entity != mc.player)
+                return@registerEvent
+            if (target == null)
+                return@registerEvent
+            if (!PlayerUtil.input.jumping)
+                return@registerEvent
 
-                        tower.isSelected(2) -> {
-                            event.velocity = event.velocity.withAxis(Direction.Axis.Y, 1.0)
-                        }
-                    }
+            when {
+                tower.isSelected(1) -> {
+                    val velocity = event.velocity.add(0.0, 0.0, 0.0)
+                    val playerVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)
+                    mc.player?.jump()
+                    event.velocity = velocity?.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!!)!!
+                    mc.player?.velocity = playerVelocity
+                }
+
+                tower.isSelected(2) -> {
+                    event.velocity = event.velocity.withAxis(Direction.Axis.Y, 1.0)
                 }
             }
         }

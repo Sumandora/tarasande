@@ -14,14 +14,14 @@ class ModuleVehicleFlight : Module("Vehicle flight", "Makes you fly with vehicle
 
     init {
         registerEvent(EventMovement::class.java) { event ->
-            val vehicle = mc.player?.vehicle
-            if (vehicle != null) {
-                var sign = 0.0
-                if (mc.options.jumpKey.isPressed) sign += 1.0
-                if (downwardsBind.isPressed()) sign -= 1.0
+            if (event.entity != mc.player?.vehicle)
+                return@registerEvent
 
-                event.velocity.y = verticalSpeed.value * sign
-            }
+            var sign = 0.0
+            if (mc.options.jumpKey.isPressed) sign += 1.0
+            if (downwardsBind.isPressed()) sign -= 1.0
+
+            event.velocity.y = verticalSpeed.value * sign
         }
     }
 }

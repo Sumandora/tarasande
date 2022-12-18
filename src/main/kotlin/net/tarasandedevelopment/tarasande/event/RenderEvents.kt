@@ -28,7 +28,7 @@ class EventFog(val state: State, val values: FloatArray) : Event(false) {
     }
 }
 
-class EventMovementFovMultiplier(var movementFovMultiplier: Float) : Event(false)
+class EventFovMultiplier(var movementFovMultiplier: Float) : Event(false)
 class EventChunkOcclusion : Event(true)
 class EventParticle(val effect: ParticleEffect) : Event(true)
 class EventPlayerListName(val playerListEntry: PlayerListEntry, var displayName: Text) : Event(false)

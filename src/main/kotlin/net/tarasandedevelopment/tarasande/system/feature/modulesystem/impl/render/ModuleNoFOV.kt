@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render
 
 import net.minecraft.util.math.MathHelper
-import net.tarasandedevelopment.tarasande.event.EventMovementFovMultiplier
+import net.tarasandedevelopment.tarasande.event.EventFovMultiplier
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
@@ -14,7 +14,7 @@ class ModuleNoFOV : Module("No FOV", "Limits the dynamic FOV", ModuleCategory.RE
     private val resetWhenIdling = ValueBoolean(this, "Reset when idling", true)
 
     init {
-        registerEvent(EventMovementFovMultiplier::class.java) { event ->
+        registerEvent(EventFovMultiplier::class.java) { event ->
             if (resetWhenIdling.value && !(PlayerUtil.isPlayerMoving() && mc.player?.isSprinting == true))
                 event.movementFovMultiplier = 1.0F
             else

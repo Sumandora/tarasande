@@ -22,6 +22,7 @@
     "core.widget.MixinTextFieldWidget",
     "event.MixinCamera",
     "event.MixinClientPlayerInteractionManager",
+    "event.MixinDimensionType",
     "event.MixinFramebuffer",
     "event.MixinGameRenderer",
     "event.MixinKeyBinding",
@@ -71,6 +72,7 @@
     "feature.module.entity.MixinEntityPredicates",
     "feature.module.entity.MixinLivingEntity",
     "feature.module.entity.MixinLivingEntityRenderer",
+    "feature.module.entity.MixinPlayerEntity",
     "feature.module.item.MixinTridentItem",
     "feature.module.norender.MixinArmorFeatureRenderer",
     "feature.module.norender.MixinBannerBlockEntityRenderer",
@@ -101,6 +103,7 @@
   "client": [
     "core.screen.accountmanager.MixinProfileKeys",
     "event.MixinChatInputSuggestor",
+    "event.entity.MixinAbstractClientPlayerEntity",
     "event.screen.MixinChatScreen",
     "feature.module.MixinInput"
   ]
