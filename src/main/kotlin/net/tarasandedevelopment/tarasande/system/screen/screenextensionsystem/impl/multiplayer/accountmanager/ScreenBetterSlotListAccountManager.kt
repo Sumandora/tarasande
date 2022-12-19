@@ -167,8 +167,6 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         }
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            super.renderEntry(matrices, index, entryWidth, entryHeight, mouseX, mouseY, hovered)
-
             FontWrapper.textShadow(matrices, Text.of(when {
                 client?.session?.equals(account.session) == true -> Formatting.GREEN.toString()
                 mainAccount == accounts.indexOf(account) -> Formatting.YELLOW.toString()

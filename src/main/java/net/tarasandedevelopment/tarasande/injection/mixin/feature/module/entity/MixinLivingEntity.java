@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = LivingEntity.class, priority = 999 /* baritone fix */)
+@Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity extends Entity implements ILivingEntity {
 
     public MixinLivingEntity(EntityType<?> type, World world) {

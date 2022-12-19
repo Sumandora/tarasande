@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.event.EventDispatcher;
 
-@Mixin(value = LivingEntity.class)
+@Mixin(value = LivingEntity.class, priority = 999 /* baritone fix */)
 public abstract class MixinLivingEntity extends Entity {
 
     @Unique

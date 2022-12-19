@@ -9,7 +9,6 @@ import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
-import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import su.mandora.event.EventDispatcher
 import kotlin.math.*
@@ -77,11 +76,6 @@ object RotationUtil {
                                 it.movementSideways = round(bestMovement[2]).toInt().toFloat()
                             }
                         }
-            }
-            add(EventCanSprint::class.java, 9999) {
-                if (!TarasandeMain.clientValues().correctMovement.isSelected(0)) {
-                    it.canSprint = PlayerUtil.isPlayerMoving() && abs(MathHelper.wrapDegrees(PlayerUtil.getMoveDirection() - (goalMovementYaw ?: (fakeRotation?.yaw ?: return@add)))) <= 45
-                }
             }
             add(EventPacket::class.java, 9999) {
                 if (it.type == EventPacket.Type.RECEIVE && it.packet is PlayerPositionLookS2CPacket) {
