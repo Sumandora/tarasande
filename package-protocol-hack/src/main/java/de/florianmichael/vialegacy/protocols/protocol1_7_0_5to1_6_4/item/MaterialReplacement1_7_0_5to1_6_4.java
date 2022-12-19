@@ -21,8 +21,8 @@
 
 package de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.item;
 
-import de.florianmichael.vialegacy.api.material.RMaterial;
 import de.florianmichael.vialegacy.api.material.MaterialReplacement;
+import de.florianmichael.vialegacy.api.material.RMaterial;
 
 public class MaterialReplacement1_7_0_5to1_6_4 extends MaterialReplacement {
 
@@ -37,7 +37,7 @@ public class MaterialReplacement1_7_0_5to1_6_4 extends MaterialReplacement {
         registerBlock(68, 0, new RMaterial(323, 0, "Wall sign"));
         registerBlock(71, 0, new RMaterial(330, 0, "Iron door block"));
         registerBlock(74, 0, new RMaterial(73, 0, "Glowing redstone ore"));
-        registerBlock(75, 0, new RMaterial(76, 0, "Restone torch off"));
+        registerBlock(75, 0, new RMaterial(76, 0, "Redstone torch off"));
         registerBlock(83, 0, new RMaterial(338, 0, "Sugar cane block"));
         registerBlock(92, 0, new RMaterial(354, 0, "Cake block"));
         registerBlock(93, 0, new RMaterial(356, 0, "Diode block off"));

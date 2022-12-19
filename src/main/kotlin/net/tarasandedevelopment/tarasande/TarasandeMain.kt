@@ -45,7 +45,6 @@ import java.util.logging.Logger
  *  - Blocking/Placement is broken
  *  - WindowClick in 1.16.5 is not fully remapped
  *  - MerchantScreenHandler#switchTo Crasher
- *  - Move Channel Mappings Creation to appropriate package
  */
 class TarasandeMain {
 

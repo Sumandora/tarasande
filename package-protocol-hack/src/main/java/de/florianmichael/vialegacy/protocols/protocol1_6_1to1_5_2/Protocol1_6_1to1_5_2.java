@@ -44,6 +44,7 @@ import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.api.metadata.LegacyMetadataRewriter;
 import de.florianmichael.vialegacy.api.sound.SoundRewriter;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
+import de.florianmichael.vialegacy.protocols.base.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.Types1_4_2;
 import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.metadata.MetadataRewriter1_6_1to1_5_2;
 import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.sound.SoundRewriter1_6_1to1_5_2;
@@ -51,7 +52,6 @@ import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.storage.Entity
 import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.storage.VehicleTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.ClientboundPackets1_6_1;
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.ServerboundPackets1_6_1;
-import de.florianmichael.vialegacy.protocols.base.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
 
 import java.util.List;
@@ -110,21 +110,27 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 				map(Type.FLOAT); // Sideways
 				map(Type.FLOAT); // Forwards
 				map(Type.BOOLEAN); // Jump
+
 				handler(wrapper -> {
-					final VehicleTracker vehicleTracker = wrapper.user().get(VehicleTracker.class);
 					final boolean dismount = wrapper.read(Type.BOOLEAN);
 					wrapper.cancel();
 
-					if (dismount && vehicleTracker.vehicleId != -999) {
-						final int cached = vehicleTracker.vehicleId;
-						vehicleTracker.vehicleId = -999;
-						final PacketWrapper interactEntity = PacketWrapper.create(ServerboundPackets1_6_1.INTERACT_ENTITY, wrapper.user());
+					final VehicleTracker vehicleTracker = wrapper.user().get(VehicleTracker.class);
+					if (vehicleTracker != null) {
+						if (dismount && vehicleTracker.vehicleId != -999) {
+							final int cached = vehicleTracker.vehicleId;
+							vehicleTracker.vehicleId = -999;
 
-						interactEntity.write(Type.INT, wrapper.user().get(EntityTracker.class).ownEntityId);
-						interactEntity.write(Type.INT, cached);
-						interactEntity.write(Type.BYTE, (byte) 0);
+							final EntityTracker entityTracker = wrapper.user().get(EntityTracker.class);
+							if (entityTracker != null) {
+								final PacketWrapper interactEntity = PacketWrapper.create(ServerboundPackets1_6_1.INTERACT_ENTITY, wrapper.user());
+								interactEntity.write(Type.INT, entityTracker.ownEntityId);
+								interactEntity.write(Type.INT, cached);
+								interactEntity.write(Type.BYTE, (byte) 0);
 
-						interactEntity.sendToServer(Protocol1_6_1to1_5_2.class);
+								interactEntity.sendToServer(Protocol1_6_1to1_5_2.class);
+							}
+						}
 					}
 				});
 			}
@@ -133,12 +139,15 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 		this.registerClientbound(ClientboundPackets1_5_2.JOIN_GAME, new PacketRemapper() {
 			@Override
 			public void registerMap() {
+				map(Type.INT); // Entity ID
 				handler(wrapper -> {
-					final int entityId = wrapper.passthrough(Type.INT);
-					final EntityTracker tracker = wrapper.user().get(EntityTracker.class);
+					final int entityId = wrapper.get(Type.INT, 0);
 
-					tracker.track(entityId, Entity1_10Types.EntityType.ENTITY_HUMAN, false);
-					tracker.ownEntityId = entityId;
+					final EntityTracker entityTracker = wrapper.user().get(EntityTracker.class);
+					if (entityTracker != null) {
+						entityTracker.track(entityId, Entity1_10Types.EntityType.ENTITY_HUMAN, false);
+						entityTracker.ownEntityId = entityId;
+					}
 
 					resetPlayerSpeed(wrapper.user(), entityId);
 				});
@@ -155,23 +164,24 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 		this.registerClientbound(ClientboundPackets1_5_2.SPAWN_MOB, new PacketRemapper() {
 			@Override
 			public void registerMap() {
+				map(Type.INT); // Entity ID
+				map(Type.BYTE); // Type
+
+				map(Type.INT); // X-Position
+				map(Type.INT); // Y-Position
+				map(Type.INT); // Z-Position
+
+				map(Type.BYTE); // Pitch
+				map(Type.BYTE); // Head pitch
+				map(Type.BYTE); // Yaw
+
+				map(Type.SHORT); // X-Velocity
+				map(Type.SHORT); // Y-Velocity
+				map(Type.SHORT); // Z-Velocity
+
 				handler(wrapper -> {
 					final EntityTracker tracker = wrapper.user().get(EntityTracker.class);
-					final int entityId = wrapper.passthrough(Type.INT);
-
-					wrapper.passthrough(Type.BYTE); // Type
-
-					wrapper.passthrough(Type.INT); // X-Position
-					wrapper.passthrough(Type.INT); // Y-Position
-					wrapper.passthrough(Type.INT); // Z-Position
-
-					wrapper.passthrough(Type.BYTE); // Pitch
-					wrapper.passthrough(Type.BYTE); // Head pitch
-					wrapper.passthrough(Type.BYTE); // Yaw
-
-					wrapper.passthrough(Type.SHORT); // Velocity-X
-					wrapper.passthrough(Type.SHORT); // Velocity-Y
-					wrapper.passthrough(Type.SHORT); // Velocity-Z
+					final int entityId = wrapper.get(Type.INT, 0);
 
 					final Entity1_10Types.EntityType entityType = Entity1_10Types.getTypeFromId(wrapper.get(Type.BYTE, 0), false);
 
@@ -186,8 +196,9 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 		this.registerClientbound(ClientboundPackets1_5_2.DESTROY_ENTITIES, new PacketRemapper() {
 			@Override
 			public void registerMap() {
+				map(Type.UNSIGNED_BYTE); // Amount
 				handler(wrapper -> {
-					int amount = wrapper.passthrough(Type.UNSIGNED_BYTE);
+					final int amount = wrapper.get(Type.UNSIGNED_BYTE, 0);
 
 					for (int i = 0; i < amount; i++) {
 						final int entityId = wrapper.passthrough(Type.INT);
