@@ -9,7 +9,6 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanelToggleable
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.ManagerEntrySidebarPanel
 
-// TODO Test me
 class EntrySidebarPanelToggleableVivecraftFaker(sidebar: ManagerEntrySidebarPanel) : EntrySidebarPanelToggleable(sidebar, "Vivecraft Faker", "Spoofer") {
     private val version = ValueText(this, "Version", "Vivecraft 1.19.2  jrbudda-VR-2-b7")
 

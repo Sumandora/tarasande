@@ -9,6 +9,7 @@
     "forgefaker.MixinServerMetadata",
     "forgefaker.MixinServerMetadataDeserializer",
     "haproxyhack.MixinClientConnectionSubInitChannel",
+    "teslaclientfaker.MixinLoginHelloC2SPacket",
     "vivecraftfaker.MixinClientPlayNetworkHandler"
   ],
   "injectors": {

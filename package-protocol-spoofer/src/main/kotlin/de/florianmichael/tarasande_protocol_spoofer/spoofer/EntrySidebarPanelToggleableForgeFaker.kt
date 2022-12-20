@@ -17,6 +17,7 @@ import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanelToggleable
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.ManagerEntrySidebarPanel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
@@ -31,11 +32,17 @@ class EntrySidebarPanelToggleableForgeFaker(sidebar: ManagerEntrySidebarPanel) :
     private var currentHandler: IForgeNetClientHandler? = null
 
     val useFML1Cache = ValueBoolean(this, "Use FML1 cache", true)
+    val autoDetectFmlHandlerByViaVersion = ValueBoolean(this, "Auto detect fml handler by ViaVersion", true)
+    val fmlHandler = object : ValueMode(this, "FML Handler", false, "FML1", "Modern v2", "Modern v3", "Modern v4") {
+        override fun isEnabled() = !autoDetectFmlHandlerByViaVersion.value
+    }
 
     init {
         EventDispatcher.apply {
             add(EventConnectServer::class.java) {
-                currentHandler = ForgeCreator.createNetHandler(it.connection)
+                if (state.value) {
+                    currentHandler = ForgeCreator.createNetHandler(it.connection)
+                }
             }
 
             add(EventPacket::class.java, 1) {

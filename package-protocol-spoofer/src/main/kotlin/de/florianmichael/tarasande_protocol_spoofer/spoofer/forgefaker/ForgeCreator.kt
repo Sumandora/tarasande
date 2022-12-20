@@ -1,14 +1,18 @@
 package de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker
 
 import com.google.gson.JsonObject
+import de.florianmichael.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelToggleableForgeFaker
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.Fml1NetClientHandler
-import net.minecraft.network.ClientConnection
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.ModernFmlNetClientHandler
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.ModernFmlState
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.IForgePayload
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.legacy.LegacyForgePayload
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.modern.ModernForgePayload
-import net.minecraft.SharedConstants
+import de.florianmichael.tarasande_protocol_spoofer.viaversion.ViaVersionExtensions
+import net.minecraft.network.ClientConnection
+import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 
 object ForgeCreator {
 
@@ -26,21 +30,15 @@ object ForgeCreator {
     }
 
     fun createNetHandler(connection: ClientConnection): IForgeNetClientHandler {
-        var clientsideVersion = SharedConstants.getGameVersion().protocolVersion
-
-        if (System.getProperty("tarasande-target-version") != null) {
-            clientsideVersion = Integer.parseInt(System.getProperty("tarasande-target-version"))
+        if (TarasandeProtocolSpoofer.isVia()) {
+            return ViaVersionExtensions.createForgeHandler(connection)
         }
 
-        if (clientsideVersion > 758 /* 1.18.2 */) {
-            return ModernFmlNetClientHandler(ModernFmlState.FML_4, connection)
-        }
-        if (clientsideVersion > 756 /* 1.17.1 */) {
-            return ModernFmlNetClientHandler(ModernFmlState.FML_3, connection)
-        }
-        if (clientsideVersion > 340 /* 1.12.2 */) {
-            return ModernFmlNetClientHandler(ModernFmlState.FML_2, connection)
-        }
+        val forgeFaker = TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(EntrySidebarPanelToggleableForgeFaker::class.java)
+        if (forgeFaker.fmlHandler.isSelected(1)) return ModernFmlNetClientHandler(ModernFmlState.FML_2, connection)
+        if (forgeFaker.fmlHandler.isSelected(2)) return ModernFmlNetClientHandler(ModernFmlState.FML_3, connection)
+        if (forgeFaker.fmlHandler.isSelected(3)) return ModernFmlNetClientHandler(ModernFmlState.FML_4, connection)
+
         return Fml1NetClientHandler(connection)
     }
 }
