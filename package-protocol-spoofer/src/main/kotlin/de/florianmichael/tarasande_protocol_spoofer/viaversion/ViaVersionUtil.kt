@@ -14,7 +14,7 @@ import net.minecraft.network.ClientConnection
 import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack
 import java.nio.charset.StandardCharsets
 
-object ViaVersionExtensions {
+object ViaVersionUtil {
 
     fun builtForgeChannelMappings() {
         Protocol1_13To1_12_2.MAPPINGS.channelMappings["FML|HS"] = "fml:hs"

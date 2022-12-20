@@ -1,7 +1,7 @@
 package de.florianmichael.tarasande_protocol_spoofer
 
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.*
-import de.florianmichael.tarasande_protocol_spoofer.viaversion.ViaVersionExtensions
+import de.florianmichael.tarasande_protocol_spoofer.viaversion.ViaVersionUtil
 import net.fabricmc.api.ClientModInitializer
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
@@ -16,7 +16,7 @@ class TarasandeProtocolSpoofer : ClientModInitializer {
         fun checkVia() {
             try {
                 Class.forName("net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack")
-                ViaVersionExtensions.builtForgeChannelMappings()
+                ViaVersionUtil.builtForgeChannelMappings()
                 isViaLoaded = true
             } catch (_: Exception) {
             }
@@ -28,7 +28,7 @@ class TarasandeProtocolSpoofer : ClientModInitializer {
     override fun onInitializeClient() {
         checkVia()
         if (isVia()) {
-            ViaVersionExtensions.builtForgeChannelMappings()
+            ViaVersionUtil.builtForgeChannelMappings()
         }
 
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
