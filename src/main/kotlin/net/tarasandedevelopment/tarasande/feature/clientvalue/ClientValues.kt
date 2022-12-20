@@ -53,6 +53,8 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
         }
     }
 
+    val allowAddressParsingForBlacklistedServers = ValueBoolean(this, "Allow address parsing for blacklisted servers", true)
+
     // Combat
     val targetingValues = object : ValueButton(this, "Targeting values") {
         override fun onChange() {
