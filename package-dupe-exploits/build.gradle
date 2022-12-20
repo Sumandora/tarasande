@@ -21,9 +21,6 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    // Kotlin
-    modImplementation "net.fabricmc:fabric-language-kotlin:${project.kotlin_wrapper_version}"
-
     // tarasande Source
     implementation(project(":"))
 }
