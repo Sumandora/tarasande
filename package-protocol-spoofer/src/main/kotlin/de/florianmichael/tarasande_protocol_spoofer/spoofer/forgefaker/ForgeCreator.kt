@@ -30,11 +30,12 @@ object ForgeCreator {
     }
 
     fun createNetHandler(connection: ClientConnection): IForgeNetClientHandler {
-        if (TarasandeProtocolSpoofer.isVia()) {
+        val forgeFaker = TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(EntrySidebarPanelToggleableForgeFaker::class.java)
+
+        if (TarasandeProtocolSpoofer.isVia() && forgeFaker.autoDetectFmlHandlerByViaVersion.value) {
             return ViaVersionExtensions.createForgeHandler(connection)
         }
 
-        val forgeFaker = TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(EntrySidebarPanelToggleableForgeFaker::class.java)
         if (forgeFaker.fmlHandler.isSelected(1)) return ModernFmlNetClientHandler(ModernFmlState.FML_2, connection)
         if (forgeFaker.fmlHandler.isSelected(2)) return ModernFmlNetClientHandler(ModernFmlState.FML_3, connection)
         if (forgeFaker.fmlHandler.isSelected(3)) return ModernFmlNetClientHandler(ModernFmlState.FML_4, connection)
