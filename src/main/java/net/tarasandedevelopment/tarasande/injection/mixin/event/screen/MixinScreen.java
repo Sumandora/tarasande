@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.tarasandedevelopment.tarasande.event.EventChildren;
 import net.tarasandedevelopment.tarasande.event.EventScreenRender;
@@ -36,6 +37,9 @@ public abstract class MixinScreen {
 
     @Inject(method = "render", at = @At("HEAD"))
     public void hookEventScreenRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        // Mojang manages to surprise me in so many ways
+        if((Object) this instanceof RealmsNotificationsScreen)
+            return;
         EventDispatcher.INSTANCE.call(new EventScreenRender());
     }
 }
