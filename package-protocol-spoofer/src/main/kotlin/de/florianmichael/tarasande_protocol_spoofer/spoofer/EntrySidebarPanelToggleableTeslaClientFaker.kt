@@ -1,5 +1,7 @@
 package de.florianmichael.tarasande_protocol_spoofer.spoofer
 
+import de.florianmichael.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
+import de.florianmichael.tarasande_protocol_spoofer.viaversion.ViaVersionExtensions
 import io.netty.buffer.Unpooled
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
@@ -36,6 +38,11 @@ class EntrySidebarPanelToggleableTeslaClientFaker(sidebar: ManagerEntrySidebarPa
                             val packet = event.packet as CustomPayloadC2SPacket
                             if(packet.channel.toString() == "minecraft:register") {
                                 packet.data = PacketByteBuf(Unpooled.buffer()).writeByteArray("WECUI\u0000tesla:client".toByteArray(StandardCharsets.US_ASCII))
+                            }
+                            if (TarasandeProtocolSpoofer.isVia()) {
+                                if (ViaVersionExtensions.spoofTeslaClientCustomPayload()) {
+                                    event.cancelled = true
+                                }
                             }
                         }
 

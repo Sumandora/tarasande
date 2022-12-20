@@ -40,9 +40,9 @@ class Fml1NetClientHandler(private val connection: ClientConnection) : IForgeNet
         this.sendCustomPayload("minecraft:register", newPacket)
         this.sendClientHello(version)
 
-        val forgeFakerElement = TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(EntrySidebarPanelToggleableForgeFaker::class.java)
-        if (forgeFakerElement.useFML1Cache.value) {
-            forgeFakerElement.forgeInfoTracker[this.connection.address]?.also {
+        val forgeFaker = TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(EntrySidebarPanelToggleableForgeFaker::class.java)
+        if (forgeFaker.useFML1Cache.value) {
+            forgeFaker.forgeInfoTracker[this.connection.address]?.also {
                 this.sendModList(it.installedMods())
             }
         } else {
