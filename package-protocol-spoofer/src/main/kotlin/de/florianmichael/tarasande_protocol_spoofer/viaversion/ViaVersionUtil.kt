@@ -12,7 +12,6 @@ import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.M
 import de.florianmichael.viaprotocolhack.util.VersionList
 import net.minecraft.network.ClientConnection
 import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack
-import java.nio.charset.StandardCharsets
 
 object ViaVersionUtil {
 
@@ -31,11 +30,11 @@ object ViaVersionUtil {
         return Fml1NetClientHandler(connection)
     }
 
-    fun spoofTeslaClientCustomPayload(): Boolean {
+    fun spoofTeslaClientCustomPayload(channel: String, value: ByteArray): Boolean {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
             val customPayload = PacketWrapper.create(ServerboundPackets1_12.PLUGIN_MESSAGE, TarasandeProtocolHack.viaConnection)
-            customPayload.write(Type.STRING, "REGISTER")
-            customPayload.write(Type.REMAINING_BYTES, "WECUI\u0000tesla:client".toByteArray(StandardCharsets.US_ASCII))
+            customPayload.write(Type.STRING, channel)
+            customPayload.write(Type.REMAINING_BYTES, value)
 
             customPayload.sendToServerRaw()
             return true
