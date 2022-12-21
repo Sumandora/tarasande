@@ -4,12 +4,12 @@
   "package": "de.florianmichael.tarasande_protocol_spoofer.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "forgefaker.MixinMultiplayerServerListPingerSubOnResponse",
-    "forgefaker.MixinServerInfo",
-    "forgefaker.MixinServerMetadata",
-    "forgefaker.MixinServerMetadataDeserializer",
-    "haproxyhack.MixinClientConnectionSubInitChannel",
-    "vivecraftfaker.MixinClientPlayNetworkHandler"
+    "de.florianmichael.injection.mixin.forgefaker.MixinMultiplayerServerListPingerSubOnResponse",
+    "de.florianmichael.injection.mixin.forgefaker.MixinServerInfo",
+    "de.florianmichael.injection.mixin.forgefaker.MixinServerMetadata",
+    "de.florianmichael.injection.mixin.forgefaker.MixinServerMetadataDeserializer",
+    "de.florianmichael.injection.mixin.haproxyhack.MixinClientConnectionSubInitChannel",
+    "de.florianmichael.injection.mixin.vivecraftfaker.MixinClientPlayNetworkHandler"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,6 +1,6 @@
 package de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler
 
-import de.florianmichael.tarasande_protocol_spoofer.accessor.IServerInfo
+import de.florianmichael.tarasande_protocol_spoofer.injection.accessor.IServerInfo
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelToggleableForgeFaker
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.IForgeNetClientHandler
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.legacy.ModStruct

@@ -4,9 +4,9 @@
   "package": "net.tarasandedevelopment.tarasande_custom_minecraft.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "MixinBuiltinEmptyGlyph",
-    "MixinBuiltinEmptyGlyphSubMissing",
-    "MixinFontStorage"
+    "net.tarasandedevelopment.tarasande_custom_minecraft.injection.mixin.MixinBuiltinEmptyGlyph",
+    "net.tarasandedevelopment.tarasande_custom_minecraft.injection.mixin.MixinBuiltinEmptyGlyphSubMissing",
+    "net.tarasandedevelopment.tarasande_custom_minecraft.injection.mixin.MixinFontStorage"
   ],
   "injectors": {
     "defaultRequire": 1

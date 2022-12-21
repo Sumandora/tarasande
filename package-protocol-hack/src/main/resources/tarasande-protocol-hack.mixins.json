@@ -5,16 +5,16 @@
   "compatibilityLevel": "JAVA_17",
   "mixinPriority": 1,
   "mixins": [
-    "MixinClientConnection",
-    "MixinClientConnectionSubOne",
-    "input.MixinEventDispatcher",
-    "input.MixinEventScreenInput",
-    "viaprotocolhack.MixinCustomViaConfig"
+    "net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin.MixinClientConnection",
+    "net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin.MixinClientConnectionSubOne",
+    "net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin.input.MixinEventDispatcher",
+    "net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin.input.MixinEventScreenInput",
+    "net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin.viaprotocolhack.MixinCustomViaConfig"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-    "MixinMain"
+    "net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin.MixinMain"
   ]
 }
