@@ -32,7 +32,7 @@ class EntrySidebarPanelToggleableForgeFaker(sidebar: ManagerEntrySidebarPanel) :
     private var currentHandler: IForgeNetClientHandler? = null
 
     val useFML1Cache = ValueBoolean(this, "Use FML1 cache", true)
-    val autoDetectFmlHandlerByViaVersion = ValueBoolean(this, "Auto detect fml handler by ViaVersion", true)
+    val autoDetectFmlHandlerByViaVersion = ValueBoolean(this, "Auto detect fml handler with ViaVersion", true)
     val fmlHandler = object : ValueMode(this, "FML Handler", false, "FML1", "Modern v2", "Modern v3", "Modern v4") {
         override fun isEnabled() = !autoDetectFmlHandlerByViaVersion.value
     }

@@ -23,7 +23,11 @@ class EntrySidebarPanelToggleablePluginMessageFilter(sidebar: ManagerEntrySideba
                 val packetChannel = (it.packet as CustomPayloadC2SPacket).channel.toString()
 
                 for (channel in channels.value) {
-                    if (if (filterType.isSelected(0)) packetChannel.contains(channel, ignoreCase.value) else packetChannel.equals(channel, ignoreCase.value)) {
+                    if (when {
+                            filterType.isSelected(0) -> packetChannel.contains(channel, ignoreCase.value)
+                            filterType.isSelected(1) -> packetChannel.equals(channel, ignoreCase.value)
+                            else -> false
+                        }) {
                         it.cancelled = true
                         break
                     }

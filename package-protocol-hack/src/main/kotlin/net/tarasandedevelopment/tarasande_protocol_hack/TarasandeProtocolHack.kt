@@ -10,7 +10,6 @@ import com.viaversion.viaversion.libs.gson.JsonObject
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
-import de.florianmichael.clampclient.injection.mixininterface.IFontStorage_Protocol
 import de.florianmichael.vialegacy.ViaLegacy
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider
@@ -162,12 +161,6 @@ class TarasandeProtocolHack : INativeProvider {
             TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
                 if (it is ValueBooleanProtocol)
                     it.value = it.version.any { range -> protocol in range }
-            }
-        }
-
-        if (!FabricLoader.getInstance().isModLoaded("dashloader")) {
-            MinecraftClient.getInstance().fontManager.fontStorages.values.forEach {
-                (it as IFontStorage_Protocol).protocolhack_clearCaches()
             }
         }
 

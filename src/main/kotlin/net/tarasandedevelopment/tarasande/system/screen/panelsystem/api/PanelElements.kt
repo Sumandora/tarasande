@@ -5,6 +5,7 @@ import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.helper.element.ElementWidth
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.math.max
 
 open class PanelElements<T : ElementWidth>(title: String, minWidth: Double, minHeight: Double, fixed: Boolean = false) : Panel(title, minWidth, minHeight, fixed = fixed) {
 
@@ -91,11 +92,6 @@ open class PanelElements<T : ElementWidth>(title: String, minWidth: Double, minH
     }
 
     override fun getMaxScrollOffset(): Double {
-        var height = 0.0
-        elementList.forEach { height += it.getHeight() + 2 }
-        return if (height > 0.0)
-            height - 2
-        else
-            0.0
+        return elementList.sumOf { it.getHeight() + 2 }
     }
 }

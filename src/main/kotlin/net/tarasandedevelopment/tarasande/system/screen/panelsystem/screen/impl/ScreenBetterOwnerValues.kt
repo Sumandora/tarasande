@@ -40,7 +40,7 @@ class ScreenBetterOwnerValues(parent: Screen, val titleName: String, val owner: 
             }
 
             override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-                this.panelHeight = getMaxScrollOffset() + titleBarHeight + 5 /* this is the padding for letting you scroll down a bit more than possible */
+                this.panelHeight = getMaxScrollOffset() + titleBarHeight + 5.0 /* this is the padding for letting you scroll down a bit more than possible */
                 val max = MinecraftClient.getInstance().window.scaledHeight
                 if (this.panelHeight >= max)
                     this.panelHeight = max.toDouble()
