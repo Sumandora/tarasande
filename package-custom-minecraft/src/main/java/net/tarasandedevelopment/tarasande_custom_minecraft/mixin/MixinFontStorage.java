@@ -19,19 +19,13 @@
  *         Version-independent validity and automatic renewal
  */
 
-package de.florianmichael.clampclient.injection.mixin.protocolhack.font;
+package net.tarasandedevelopment.tarasande_custom_minecraft.mixin;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.viaprotocolhack.util.VersionList;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.font.Font;
 import net.minecraft.client.font.FontStorage;
 import net.minecraft.client.font.GlyphRenderer;
 import net.minecraft.client.font.RenderableGlyph;
-import de.florianmichael.clampclient.injection.mixininterface.IFontStorage_Protocol;
-import de.florianmichael.clampclient.injection.instrumentation.BuiltinEmptyGlyph1_12_2;
-import org.spongepowered.asm.mixin.Final;
+import net.tarasandedevelopment.tarasande_custom_minecraft.instrumentation.BuiltinEmptyGlyph1_12_2;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -43,31 +37,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(FontStorage.class)
-public abstract class MixinFontStorage implements IFontStorage_Protocol {
+public abstract class MixinFontStorage {
 
     @Shadow protected abstract GlyphRenderer getGlyphRenderer(RenderableGlyph c);
 
-    @Shadow @Final private List<Font> fonts;
-
-    @Shadow public abstract void setFonts(List<Font> fonts);
-
     @Unique
     private GlyphRenderer unknownGlyphRenderer;
-
-    @Unique
-    private List<Font> myFonts;
-
-    @Unique
-    private boolean bypassReload;
-
-    @Inject(method = "setFonts", at = @At("HEAD"))
-    public void saveFonts(List<Font> fonts, CallbackInfo ci) {
-        if (bypassReload) {
-            bypassReload = false;
-            return;
-        }
-        this.myFonts = fonts;
-    }
 
     @Inject(method = "setFonts", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/BuiltinEmptyGlyph;bake(Ljava/util/function/Function;)Lnet/minecraft/client/font/GlyphRenderer;", ordinal = 0, shift = At.Shift.AFTER))
     public void injectSetFonts(List<Font> fonts, CallbackInfo ci) {
@@ -76,21 +51,6 @@ public abstract class MixinFontStorage implements IFontStorage_Protocol {
 
     @Inject(method = "getRectangleRenderer", at = @At("HEAD"), cancellable = true)
     public void setCustomRenderer(CallbackInfoReturnable<GlyphRenderer> cir) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2) && !FabricLoader.getInstance().isModLoaded("dashloader")) {
-            cir.setReturnValue(this.unknownGlyphRenderer);
-        }
-    }
-
-    @Override
-    public void protocolhack_clearCaches() {
-        bypassReload = true;
-
-        if (this.fonts != null) {
-            this.fonts.clear();
-
-            if (this.myFonts != null) {
-                RenderSystem.recordRenderCall(() -> setFonts(myFonts));
-            }
-        }
+        cir.setReturnValue(this.unknownGlyphRenderer);
     }
 }

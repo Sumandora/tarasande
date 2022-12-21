@@ -1,4 +1,4 @@
-package de.florianmichael.clampclient.injection.instrumentation;
+package net.tarasandedevelopment.tarasande_custom_minecraft.instrumentation;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

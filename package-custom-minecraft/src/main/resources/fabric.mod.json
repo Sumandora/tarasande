@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "tarasande-custom-minecraft",
+  "version": "${version}",
+
+  "name": "tarasande Custom Minecraft",
+  "description": "Some improvements and fixes to minecraft",
+  "authors": [
+    "EnZaXD/FlorianMichael"
+  ],
+  "contact": {
+    "homepage": "https://github.com/tarasandeDevelopment/",
+    "sources": "https://github.com/tarasandeDevelopment/tarasande"
+  },
+
+  "license": "GPL-3.0",
+  "icon": "assets/tarasande-custom-minecraft/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "net.tarasandedevelopment.tarasande_custom_minecraft.TarasandeCustomMinecraft"
+    ]
+  },
+  "mixins": [
+    "tarasande-custom-minecraft.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "minecraft": "~1.19",
+    "java": ">=17",
+    "tarasande": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": "tarasande"
+    }
+  }
+}
