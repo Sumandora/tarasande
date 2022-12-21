@@ -36,6 +36,7 @@ class EntrySidebarPanelToggleableForgeFaker(sidebar: ManagerEntrySidebarPanel) :
     val fmlHandler = object : ValueMode(this, "FML Handler", false, "FML1", "Modern v2", "Modern v3", "Modern v4") {
         override fun isEnabled() = !autoDetectFmlHandlerByViaVersion.value
     }
+    private val alwaysShowInformation = ValueBoolean(this, "Always show information", false)
 
     init {
         EventDispatcher.apply {
@@ -68,37 +69,39 @@ class EntrySidebarPanelToggleableForgeFaker(sidebar: ManagerEntrySidebarPanel) :
             }
 
             add(EventRenderMultiplayerEntry::class.java) {
-                (it.server as IServerInfo).tarasande_getForgePayload()?.also { payload ->
-                    val fontHeight = FontWrapper.fontHeight()
+                if (state.value || alwaysShowInformation.value) {
+                    (it.server as IServerInfo).tarasande_getForgePayload()?.also { payload ->
+                        val fontHeight = FontWrapper.fontHeight()
 
-                    val yPos = (it.entryHeight / 2F) - fontHeight / 2
-                    val text = FontWrapper.trimToWidth("Forge/FML Server", it.x)
-                    val endWidth = FontWrapper.getWidth(text) + 4
+                        val yPos = (it.entryHeight / 2F) - fontHeight / 2
+                        val text = FontWrapper.trimToWidth("Forge/FML Server", it.x)
+                        val endWidth = FontWrapper.getWidth(text) + 4
 
-                    FontWrapper.textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
+                        FontWrapper.textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
 
-                    if (RenderUtil.isHovered(it.mouseX.toDouble(), it.mouseY.toDouble(), it.x - endWidth.toDouble(), it.y + yPos.toDouble(), it.x - 4.0, it.y + yPos + fontHeight.toDouble())) {
-                        val tooltip = ArrayList<Text>()
+                        if (RenderUtil.isHovered(it.mouseX.toDouble(), it.mouseY.toDouble(), it.x - endWidth.toDouble(), it.y + yPos.toDouble(), it.x - 4.0, it.y + yPos + fontHeight.toDouble())) {
+                            val tooltip = ArrayList<Text>()
 
-                        if (payload.installedMods().isNotEmpty()) {
-                            tooltip.add(Text.of("Left mouse for Mods: " + payload.installedMods().size))
-                        } else {
-                            tooltip.add(Text.of("No mods available?"))
-                        }
-
-                        if (payload is ModernForgePayload) {
-                            tooltip.add(Text.of("FML Network Version: " + payload.fmlNetworkVersion))
-                            tooltip.add(Text.of("Right mouse for Channels: " + payload.channels.size))
-
-                            if (GLFW.glfwGetMouseButton(MinecraftClient.getInstance().window.handle, GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS) {
-                                MinecraftClient.getInstance().setScreen(ScreenBetterSlotListForgeInformation(MinecraftClient.getInstance().currentScreen!!, it.server.address + " (Channels: " + payload.channels.size + ")", ScreenBetterSlotListForgeInformation.Type.CHANNEL_LIST, payload))
+                            if (payload.installedMods().isNotEmpty()) {
+                                tooltip.add(Text.of("Left mouse for Mods: " + payload.installedMods().size))
+                            } else {
+                                tooltip.add(Text.of("No mods available?"))
                             }
-                        }
 
-                        it.multiplayerScreen.setTooltip(tooltip.map { line -> line.asOrderedText() })
+                            if (payload is ModernForgePayload) {
+                                tooltip.add(Text.of("FML Network Version: " + payload.fmlNetworkVersion))
+                                tooltip.add(Text.of("Right mouse for Channels: " + payload.channels.size))
 
-                        if (payload.installedMods().isNotEmpty() && GLFW.glfwGetMouseButton(MinecraftClient.getInstance().window.handle, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS) {
-                            MinecraftClient.getInstance().setScreen(ScreenBetterSlotListForgeInformation(MinecraftClient.getInstance().currentScreen!!, it.server.address + " (Mods: " + payload.installedMods().size + ")", ScreenBetterSlotListForgeInformation.Type.MOD_LIST, payload))
+                                if (GLFW.glfwGetMouseButton(MinecraftClient.getInstance().window.handle, GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS) {
+                                    MinecraftClient.getInstance().setScreen(ScreenBetterSlotListForgeInformation(MinecraftClient.getInstance().currentScreen!!, it.server.address + " (Channels: " + payload.channels.size + ")", ScreenBetterSlotListForgeInformation.Type.CHANNEL_LIST, payload))
+                                }
+                            }
+
+                            it.multiplayerScreen.setTooltip(tooltip.map { line -> line.asOrderedText() })
+
+                            if (payload.installedMods().isNotEmpty() && GLFW.glfwGetMouseButton(MinecraftClient.getInstance().window.handle, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS) {
+                                MinecraftClient.getInstance().setScreen(ScreenBetterSlotListForgeInformation(MinecraftClient.getInstance().currentScreen!!, it.server.address + " (Mods: " + payload.installedMods().size + ")", ScreenBetterSlotListForgeInformation.Type.MOD_LIST, payload))
+                            }
                         }
                     }
                 }
