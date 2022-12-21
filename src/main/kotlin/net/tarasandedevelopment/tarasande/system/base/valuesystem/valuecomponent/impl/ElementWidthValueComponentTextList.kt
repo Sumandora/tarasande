@@ -111,7 +111,9 @@ class ElementWidthValueComponentTextList(value: Value) : ElementWidthValueCompon
     }
 
     override fun charTyped(chr: Char, modifiers: Int) {
-        textFieldWidget.charTyped(chr, modifiers)
+        if (textFieldWidget.isFocused) {
+            textFieldWidget.charTyped(chr, modifiers)
+        }
     }
 
     override fun tick() {

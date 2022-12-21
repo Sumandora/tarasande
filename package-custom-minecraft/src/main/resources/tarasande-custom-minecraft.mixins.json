@@ -1,12 +1,12 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.tarasandedevelopment.tarasande_custom_minecraft.mixin",
+  "package": "net.tarasandedevelopment.tarasande_custom_minecraft.injection.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "net.tarasandedevelopment.tarasande_custom_minecraft.injection.mixin.MixinBuiltinEmptyGlyph",
-    "net.tarasandedevelopment.tarasande_custom_minecraft.injection.mixin.MixinBuiltinEmptyGlyphSubMissing",
-    "net.tarasandedevelopment.tarasande_custom_minecraft.injection.mixin.MixinFontStorage"
+    "MixinBuiltinEmptyGlyph",
+    "MixinBuiltinEmptyGlyphSubMissing",
+    "MixinFontStorage"
   ],
   "injectors": {
     "defaultRequire": 1

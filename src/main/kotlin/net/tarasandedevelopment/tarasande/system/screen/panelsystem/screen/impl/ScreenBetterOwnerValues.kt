@@ -36,13 +36,17 @@ class ScreenBetterOwnerValues(parent: Screen, val titleName: String, val owner: 
             override fun init() {
                 super.init()
 
+                this.x = (MinecraftClient.getInstance().window.scaledWidth / 2) - 150.0
+            }
+
+            override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
                 this.panelHeight = getMaxScrollOffset() + titleBarHeight + 5 /* this is the padding for letting you scroll down a bit more than possible */
                 val max = MinecraftClient.getInstance().window.scaledHeight
                 if (this.panelHeight >= max)
                     this.panelHeight = max.toDouble()
-
-                this.x = (MinecraftClient.getInstance().window.scaledWidth / 2) - 150.0
                 this.y = MinecraftClient.getInstance().window.scaledHeight / 2 - (this.panelHeight / 2)
+
+                super.render(matrices, mouseX, mouseY, delta)
             }
         }.also { panel = it }).also { clickableWidgetPanel = it })
     }
