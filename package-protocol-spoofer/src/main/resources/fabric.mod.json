@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "tarasande Protocol Spoofer",
-  "description": "Protocol spoofer for Forge, Quilt, ha-proxy protocol and BungeeCord ip forwarding",
+  "description": "tarasande package to provide connection exploits or client spoofers",
   "authors": [
     "EnZaXD/FlorianMichael"
   ],

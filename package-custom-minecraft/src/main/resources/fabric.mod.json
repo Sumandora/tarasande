@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "tarasande Custom Minecraft",
-  "description": "Some improvements and fixes to minecraft",
+  "description": "tarasande package to provide unnecessary enhancements to minecraft",
   "authors": [
     "EnZaXD/FlorianMichael"
   ],

@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "tarasande Litematica",
-  "description": "Deutschland > Flaschenland",
+  "description": "tarasande package to provide litematica generators",
   "authors": [
     "EnZaXD/FlorianMichael"
   ],

@@ -3,7 +3,7 @@
   "id": "tarasande-protocol-hack",
   "version": "${version}",
   "name": "tarasande Protocol Hack",
-  "description": "Clientside ViaProtocolHack implementation with ClampClient fixes",
+  "description": "tarasande package to provide a viaversion implementation",
   "authors": [
     "EnZaXD/FlorianMichael"
   ],

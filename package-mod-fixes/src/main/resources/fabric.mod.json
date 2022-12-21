@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "tarasande Mod Fixes",
-  "description": "Some improvements and fixes to certain mods",
+  "description": "tarasande package to provide fixes for other mods",
   "authors": [
     "EnZaXD/FlorianMichael"
   ],

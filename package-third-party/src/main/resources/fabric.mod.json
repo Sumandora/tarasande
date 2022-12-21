@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "tarasande Third Party",
-  "description": "Third Party features for certain servers and platforms",
+  "description": "tarasande package to provide features for certain servers and platforms",
   "authors": [
     "Sumandora/Johannes"
   ],
