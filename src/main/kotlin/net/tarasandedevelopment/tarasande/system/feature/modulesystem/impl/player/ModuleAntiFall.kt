@@ -8,6 +8,8 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
+import kotlin.math.abs
+import kotlin.math.min
 
 class ModuleAntiFall : Module("Anti fall", "Tries to force a setback when you are falling", ModuleCategory.PLAYER) {
 
@@ -31,12 +33,12 @@ class ModuleAntiFall : Module("Anti fall", "Tries to force a setback when you ar
                 if (mc.player?.isOnGround == true) {
                     lastOnGroundPos = mc.player?.pos
                     wasOnGround = true
-                } else if (mc.player?.fallDistance!! > fallDistance.value && (!void.value || run { (PlayerUtil.predictFallDistance() ?: return@run false) > fallDistance.value })) {
+                } else if (mc.player?.fallDistance!! > fallDistance.value && (!void.value || PlayerUtil.predictFallDistance() == null)) {
                     if ((wasOnGround || repeating.value) && mc.player?.input?.sneaking == false) {
                         when {
                             mode.isSelected(0) -> {
                                 if (lastOnGroundPos != null) {
-                                    mc.player?.setPosition(lastOnGroundPos?.add(0.0, 1.0, 0.0))
+                                    mc.player?.setPosition(lastOnGroundPos?.add(0.0, abs(min(mc.player?.velocity?.y!!, 0.0)), 0.0))
                                     mc.player?.velocity = Vec3d(0.0, 0.0, 0.0)
                                 }
                             }

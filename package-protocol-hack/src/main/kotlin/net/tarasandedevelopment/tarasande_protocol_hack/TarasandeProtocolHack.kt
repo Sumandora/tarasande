@@ -20,8 +20,6 @@ import de.florianmichael.viaprotocolhack.ViaProtocolHack
 import de.florianmichael.viaprotocolhack.util.VersionList
 import io.netty.channel.DefaultEventLoop
 import net.fabricmc.loader.api.FabricLoader
-import net.fabricmc.loader.api.ModContainer
-import net.fabricmc.loader.api.metadata.Person
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.TarasandeMain
@@ -177,16 +175,16 @@ class TarasandeProtocolHack : INativeProvider {
         val platformSpecific = JsonObject()
         val mods = JsonArray()
 
-        FabricLoader.getInstance().allMods.stream().map { mod: ModContainer ->
+        FabricLoader.getInstance().allMods.forEach { mod ->
             val jsonMod = JsonObject()
             jsonMod.addProperty("id", mod.metadata.id)
             jsonMod.addProperty("name", mod.metadata.name)
             jsonMod.addProperty("version", mod.metadata.version.friendlyString)
             val authors = JsonArray()
-            mod.metadata.authors.stream().map { it: Person ->
+            mod.metadata.authors.stream().map {
                 val info = JsonObject()
                 val contact = JsonObject()
-                it.contact.asMap().forEach { (property: String?, value: String?) -> contact.addProperty(property, value) }
+                it.contact.asMap().forEach { (property, value) -> contact.addProperty(property, value) }
                 if (contact.size() != 0) {
                     info.add("contact", contact)
                 }
@@ -194,8 +192,8 @@ class TarasandeProtocolHack : INativeProvider {
                 info
             }.forEach { element: JsonObject? -> authors.add(element) }
             jsonMod.add("authors", authors)
-            jsonMod
-        }.forEach { mods.add(it) }
+            mods.add(jsonMod)
+        }
 
         platformSpecific.add("mods", mods)
         platformSpecific.addProperty("native version", SharedConstants.getGameVersion().protocolVersion)

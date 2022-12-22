@@ -211,7 +211,7 @@ object PlayerUtil {
         while (MinecraftClient.getInstance().world?.isAir(position.add(0, -y, 0).also { if (it.y < 0) return null })!!) {
             y++
         }
-        return y
+        return (y - 1).coerceAtLeast(0)
     }
 
     fun disconnect() {
