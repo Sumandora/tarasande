@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
 import net.minecraft.particle.ParticleType
 import net.minecraft.particle.ParticleTypes
@@ -88,7 +87,7 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
         for (overlay in arrayOf(overlay, hud, world, entity)) {
             object : ValueButton(this, overlay.name) {
                 override fun onChange() {
-                    MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, overlay.name, overlay))
+                    mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, overlay.name, overlay))
                 }
             }
         }

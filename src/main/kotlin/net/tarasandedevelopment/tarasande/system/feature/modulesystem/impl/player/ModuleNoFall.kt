@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventMovement
@@ -62,7 +61,7 @@ class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", Module
 
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
             if (mode.isSelected(3) && event.keyBinding == mc.options.sneakKey && prevFallDistance > fallDistance.value && mc.options.jumpKey.isPressed) {
-                event.pressed = !MinecraftClient.getInstance().world!!.isSpaceEmpty(mc.player, mc.player?.boundingBox?.offset(0.0, mc.player?.velocity?.y!!, 0.0))
+                event.pressed = !mc.world!!.isSpaceEmpty(mc.player, mc.player?.boundingBox?.offset(0.0, mc.player?.velocity?.y!!, 0.0))
             }
         }
     }

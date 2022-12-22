@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.player.PlayerEntity
@@ -36,12 +35,12 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
     init {
         object : ValueButton(this, "Entity colors") {
             override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, name, entityColor))
+                mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, name, entityColor))
             }
         }
         object : ValueButton(this, "2D ESP values") {
             override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, name, TarasandeMain.managerESP()))
+                mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, name, TarasandeMain.managerESP()))
             }
 
             override fun isEnabled(): Boolean {

@@ -149,7 +149,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                         val outsiders = defenders.filter {
                             allSurroundings(it).any { surrounding ->
                                 mc.world?.getBlockState(surrounding)?.let { state ->
-                                    state.isAir || state.getCollisionShape(MinecraftClient.getInstance().world, it).isEmpty
+                                    state.isAir || state.getCollisionShape(mc.world, it).isEmpty
                                 }!!
                             }
                         }
@@ -230,7 +230,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                         bestG == newG -> {
                             val bestPos = bestWay[0]
                             val newPos = way[0]
-                            if (MinecraftClient.getInstance().player?.squaredDistanceTo(bestPos.x.toDouble(), bestPos.y.toDouble(), bestPos.z.toDouble())!! > MinecraftClient.getInstance().player?.squaredDistanceTo(newPos.x.toDouble(), newPos.y.toDouble(), newPos.z.toDouble())!!)
+                            if (mc.player?.squaredDistanceTo(bestPos.x.toDouble(), bestPos.y.toDouble(), bestPos.z.toDouble())!! > MinecraftClient.getInstance().player?.squaredDistanceTo(newPos.x.toDouble(), newPos.y.toDouble(), newPos.z.toDouble())!!)
                                 bestWay = way
                         }
                     }

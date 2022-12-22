@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.*
@@ -114,7 +113,7 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
         }
 
         registerEvent(EventInput::class.java) { event ->
-            if (event.input == MinecraftClient.getInstance().player?.input)
+            if (event.input == mc.player?.input)
                 if (playbackState == PlaybackState.EXECUTING) {
                     val tick = playedBack?.ticks?.get(executingIndex)!!
 

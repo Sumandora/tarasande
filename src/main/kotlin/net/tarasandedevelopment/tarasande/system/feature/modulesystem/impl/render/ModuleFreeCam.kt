@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.input.KeyboardInput
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.option.Perspective
@@ -135,7 +134,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
         registerEvent(EventInput::class.java, 1) { event ->
             if (firstInput == null || firstRealInput == null)
                 onEnable()
-            if (event.input == MinecraftClient.getInstance().player?.input) {
+            if (event.input == mc.player?.input) {
                 if (!keepMovement.value) {
                     event.movementForward = 0.0F
                     event.movementSideways = 0.0F

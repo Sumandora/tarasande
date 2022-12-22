@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
-import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
@@ -14,7 +13,7 @@ class ModulePerfectHorseJump : Module("Perfect horse jump", "Forces perfect hors
     init {
         registerEvent(EventUpdate::class.java) { event ->
             if (event.state == EventUpdate.State.PRE) {
-                MinecraftClient.getInstance().player?.also {
+                mc.player?.also {
                     it.mountJumpStrength = this.jumpPower.value.toFloat()
                     it.field_3938 = this.jumpPowerCounter.value.toInt()
                 }

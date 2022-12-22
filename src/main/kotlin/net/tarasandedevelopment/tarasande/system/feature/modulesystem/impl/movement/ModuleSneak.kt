@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
-import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.event.EventInput
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -20,7 +19,7 @@ class ModuleSneak : Module("Sneak", "Automatically sneaks", ModuleCategory.MOVEM
         }
 
         registerEvent(EventInput::class.java) { event ->
-            if (event.input == MinecraftClient.getInstance().player?.input)
+            if (event.input == mc.player?.input)
                 if (dontSlowdown.value)
                     event.slowDown = false
         }

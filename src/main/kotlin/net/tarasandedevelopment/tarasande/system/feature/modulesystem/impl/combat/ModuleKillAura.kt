@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityStatuses
@@ -425,7 +424,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private fun attack(entity: Entity?, repeat: Int) {
         for (i in 0 until repeat) {
             if (!attackCooldown.value) {
-                MinecraftClient.getInstance().attackCooldown = 0
+                mc.attackCooldown = 0
             }
             PlayerUtil.attack(entity)
         }
