@@ -57,13 +57,15 @@ public class MixinServerResourcePackProvider {
 
     @Inject(method = "getDownloadHeaders", at = @At("TAIL"), cancellable = true)
     private static void removeHeaders(CallbackInfoReturnable<Map<String, String>> cir) {
-        LinkedHashMap<String, String> modifiableMap = new LinkedHashMap<>(cir.getReturnValue());
-        if (VersionList.isOlderTo(ProtocolVersion.v1_14))
+        final LinkedHashMap<String, String> modifiableMap = new LinkedHashMap<>(cir.getReturnValue());
+        if (VersionList.isOlderTo(ProtocolVersion.v1_14)) {
             modifiableMap.remove("X-Minecraft-Version-ID");
+        }
         if (VersionList.isOlderTo(ProtocolVersion.v1_13)) {
             modifiableMap.remove("X-Minecraft-Pack-Format");
             modifiableMap.remove("User-Agent");
         }
+
         cir.setReturnValue(modifiableMap);
     }
 
@@ -91,6 +93,7 @@ public class MixinServerResourcePackProvider {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
             return instance;
         }
+
         return instance.toLowerCase(locale);
     }
 }

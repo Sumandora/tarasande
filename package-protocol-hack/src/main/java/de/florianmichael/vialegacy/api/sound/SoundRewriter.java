@@ -53,9 +53,11 @@ public class SoundRewriter<T extends EnZaProtocol> extends RewriterBase<T> {
             @Override
             public void registerMap() {
                 handler(wrapper -> {
-                    final String sound = wrapper.read(Types1_6_4.STRING);
-
-                    wrapper.write(Types1_6_4.STRING, rewrite(sound));
+                    final String sound = rewrite(wrapper.read(Types1_6_4.STRING));
+                    if (sound == null || sound.isEmpty()) {
+                        wrapper.cancel();
+                    }
+                    wrapper.write(Types1_6_4.STRING, sound);
                 });
             }
         });

@@ -27,11 +27,9 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_12to1_11_1.Protocol1_12To1_11_1;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.ServerboundPackets1_9_3;
-import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.item.SwordItem;
@@ -56,10 +54,6 @@ public abstract class MixinMinecraftClient {
     @Nullable
     public ClientPlayerEntity player;
 
-    @Shadow
-    @Nullable
-    public abstract ClientPlayNetworkHandler getNetworkHandler();
-
     @Redirect(method = "doItemUse",
             slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;interactItem(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;")),
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/HeldItemRenderer;resetEquipProgress(Lnet/minecraft/util/Hand;)V", ordinal = 0))
@@ -82,12 +76,14 @@ public abstract class MixinMinecraftClient {
         final UserConnection viaConnection = TarasandeProtocolHack.Companion.getViaConnection();
 
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1) && viaConnection != null) {
-            if(TarasandeMain.Companion.managerModule().get(ModuleInventoryMove.class).getEnabled() && TarasandeProtocolHack.Companion.getCancelOpenPacket().getValue())
+            if (TarasandeMain.Companion.managerModule().get(ModuleInventoryMove.class).getEnabled() && TarasandeProtocolHack.Companion.getCancelOpenPacket().getValue()) {
                 return;
-            final PacketWrapper clickStatus = PacketWrapper.create(ServerboundPackets1_9_3.CLIENT_STATUS, viaConnection);
+            }
 
-            clickStatus.write(Type.VAR_INT, 2); // Open Inventory Achievement
-            clickStatus.sendToServer(Protocol1_12To1_11_1.class);
+            final PacketWrapper clientStatus = PacketWrapper.create(ServerboundPackets1_9_3.CLIENT_STATUS, viaConnection);
+            clientStatus.write(Type.VAR_INT, 2); // Open Inventory Achievement
+
+            clientStatus.sendToServer(Protocol1_12To1_11_1.class);
         }
     }
 }

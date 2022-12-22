@@ -660,15 +660,6 @@ public class Protocol1_7_5to1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, 
 
         this.cancelClientbound(ClientboundPackets1_6_4.CREATIVE_INVENTORY_ACTION);
 
-        this.registerClientbound(ClientboundPackets1_6_4.WINDOW_ITEMS, new PacketRemapper() {
-
-            @Override
-            public void registerMap() {
-                map(Type.BYTE, Type.UNSIGNED_BYTE); // Window id
-                map(Types1_7_6_10.COMPRESSED_NBT_ITEM_ARRAY); // Item list
-            }
-        });
-
         this.registerClientbound(ClientboundPackets1_6_4.WINDOW_PROPERTY, new PacketRemapper() {
 
             @Override

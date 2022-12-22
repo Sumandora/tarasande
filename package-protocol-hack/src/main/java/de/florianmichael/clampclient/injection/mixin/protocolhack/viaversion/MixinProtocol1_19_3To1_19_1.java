@@ -93,7 +93,7 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                 map(Type.BYTE_ARRAY_PRIMITIVE); // Nonce
                 handler(wrapper -> wrapper.user().put(new NonceStorage(wrapper.get(Type.BYTE_ARRAY_PRIMITIVE, 1))));
             }
-        });
+        }, true);
         this.registerServerbound(State.LOGIN, ServerboundLoginPackets.HELLO.getId(), ServerboundLoginPackets.HELLO.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
@@ -107,13 +107,14 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                     wrapper.write(Type.OPTIONAL_UUID, uuid);
                 });
             }
-        });
+        }, true);
         this.registerServerbound(State.LOGIN, ServerboundLoginPackets.ENCRYPTION_KEY.getId(), ServerboundLoginPackets.ENCRYPTION_KEY.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
                 map(Type.BYTE_ARRAY_PRIMITIVE); // Keys
                 create(Type.BOOLEAN, true); // Is nonce
 
+                // Removing new nonce if chat session is connected
                 handler(wrapper -> {
                     final ChatSession1_19_2 chatSession1192 = wrapper.user().get(ChatSession1_19_2.class);
                     if (chatSession1192 != null) {
@@ -121,6 +122,7 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                     }
                 });
 
+                // Writing original packet data if chat session is connected
                 handler(wrapper -> {
                     final NonceStorage nonceStorage = wrapper.user().get(NonceStorage.class);
                     if (nonceStorage != null) {
@@ -145,7 +147,7 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                     }
                 });
             }
-        });
+        }, true);
 
         this.registerClientbound(ClientboundPackets1_19_1.PLAYER_CHAT, ClientboundPackets1_19_3.DISGUISED_CHAT, new PacketRemapper() {
             @Override
@@ -196,9 +198,9 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                     // Keep chat type at the end
                 });
             }
-        });
+        }, true);
 
-        registerServerbound(ServerboundPackets1_19_3.CHAT_COMMAND, new PacketRemapper() {
+        registerServerbound(ServerboundPackets1_19_3.CHAT_COMMAND, ServerboundPackets1_19_1.CHAT_COMMAND, new PacketRemapper() {
             @Override
             public void registerMap() {
                 map(Type.STRING); // Command
@@ -287,8 +289,8 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                     }
                 });
             }
-        });
-        registerServerbound(ServerboundPackets1_19_3.CHAT_MESSAGE, new PacketRemapper() {
+        }, true);
+        registerServerbound(ServerboundPackets1_19_3.CHAT_MESSAGE, ServerboundPackets1_19_1.CHAT_MESSAGE, new PacketRemapper() {
             @Override
             public void registerMap() {
                 map(Type.STRING); // Command
@@ -310,7 +312,6 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                     final String message = wrapper.get(Type.STRING, 0);
                     final long timestamp = wrapper.get(Type.LONG, 0);
                     final long salt = wrapper.get(Type.LONG, 1);
-
 
                     final ChatSession1_19_2 chatSession1192 = wrapper.user().get(ChatSession1_19_2.class);
                     if (chatSession1192 != null) {
@@ -351,6 +352,6 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                     }
                 });
             }
-        });
+        }, true);
     }
 }

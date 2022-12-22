@@ -79,7 +79,7 @@ public class MixinProtocol1_19_1To1_19 extends AbstractProtocol<ClientboundPacke
             public void registerMap() {
             }
         }, true);
-        this.registerServerbound(ServerboundPackets1_19_1.CHAT_MESSAGE, new PacketRemapper() {
+        this.registerServerbound(ServerboundPackets1_19_1.CHAT_MESSAGE, ServerboundPackets1_19.CHAT_MESSAGE, new PacketRemapper() {
             @Override
             public void registerMap() {
                 map(Type.STRING); // Message
@@ -112,8 +112,8 @@ public class MixinProtocol1_19_1To1_19 extends AbstractProtocol<ClientboundPacke
                 read(Type.PLAYER_MESSAGE_SIGNATURE_ARRAY); // Last seen messages
                 read(Type.OPTIONAL_PLAYER_MESSAGE_SIGNATURE); // Last received message
             }
-        });
-        this.registerServerbound(ServerboundPackets1_19_1.CHAT_COMMAND, new PacketRemapper() {
+        }, true);
+        this.registerServerbound(ServerboundPackets1_19_1.CHAT_COMMAND, ServerboundPackets1_19.CHAT_COMMAND, new PacketRemapper() {
             @Override
             public void registerMap() {
                 map(Type.STRING); // Command
@@ -173,6 +173,6 @@ public class MixinProtocol1_19_1To1_19 extends AbstractProtocol<ClientboundPacke
                 read(Type.PLAYER_MESSAGE_SIGNATURE_ARRAY); // Last seen messages
                 read(Type.OPTIONAL_PLAYER_MESSAGE_SIGNATURE); // Last received message
             }
-        });
+        }, true);
     }
 }

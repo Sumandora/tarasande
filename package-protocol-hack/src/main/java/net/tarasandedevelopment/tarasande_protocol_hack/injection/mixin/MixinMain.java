@@ -14,5 +14,4 @@ public class MixinMain {
     private static void loadViaProtocolHack(CallbackInfo ci) {
         new TarasandeProtocolHack().initialize();
     }
-
 }

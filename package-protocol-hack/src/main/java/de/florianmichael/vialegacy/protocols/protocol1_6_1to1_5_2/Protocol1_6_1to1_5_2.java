@@ -291,20 +291,6 @@ public class Protocol1_6_1to1_5_2 extends EnZaProtocol<ClientboundPackets1_5_2, 
 			}
 		});
 
-		this.registerClientbound(ClientboundPackets1_5_2.NAMED_SOUND, new PacketRemapper() {
-			@Override
-			public void registerMap() {
-				handler(wrapper -> {
-					String soundName = wrapper.read(Types1_6_4.STRING);
-					soundRewriter().rewrite(soundName);
-					if (soundName == null || soundName.isEmpty()) {
-						wrapper.cancel();
-					}
-					wrapper.write(Types1_6_4.STRING, soundName);
-				});
-			}
-		});
-
 		this.registerClientbound(ClientboundPackets1_5_2.ATTACH_ENTITY, new PacketRemapper() {
 
 			@Override

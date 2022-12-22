@@ -27,6 +27,7 @@ import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.protocol.remapper.ValueTransformer;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
+import com.viaversion.viaversion.protocols.protocol1_9to1_8.ClientboundPackets1_9;
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.ItemRewriter;
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.Protocol1_9To1_8;
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.packets.EntityPackets;
@@ -60,7 +61,7 @@ public class MixinEntityPackets1_8 {
 
     @Inject(method = "register", at = @At("RETURN"), remap = false)
     private static void fixEntityEquipment(Protocol1_9To1_8 protocol, CallbackInfo ci) {
-        protocol.registerClientbound(ClientboundPackets1_8.ENTITY_EQUIPMENT, new PacketRemapper() {
+        protocol.registerClientbound(ClientboundPackets1_8.ENTITY_EQUIPMENT, ClientboundPackets1_9.ENTITY_EQUIPMENT, new PacketRemapper() {
 
             @Override
             public void registerMap() {
@@ -99,6 +100,6 @@ public class MixinEntityPackets1_8 {
                     entityTracker.getValidBlocking().remove(entityID);
                 });
             }
-        });
+        }, true);
     }
 }

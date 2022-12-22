@@ -41,7 +41,7 @@ public class MixinProtocol1_16To1_15_2 extends AbstractProtocol<ClientboundPacke
 
     @Inject(method = "registerPackets", at = @At("RETURN"), remap = false)
     public void injectRegisterPackets(CallbackInfo ci) {
-        this.registerServerbound(ServerboundPackets1_16.PLAYER_ABILITIES, new PacketRemapper() {
+        this.registerServerbound(ServerboundPackets1_16.PLAYER_ABILITIES, ServerboundPackets1_14.PLAYER_ABILITIES, new PacketRemapper() {
             public void registerMap() {
                 this.handler((wrapper) -> {
                     wrapper.passthrough(Type.BYTE);
@@ -51,6 +51,6 @@ public class MixinProtocol1_16To1_15_2 extends AbstractProtocol<ClientboundPacke
                     wrapper.write(Type.FLOAT, abilities.getWalkSpeed());
                 });
             }
-        });
+        }, true);
     }
 }
