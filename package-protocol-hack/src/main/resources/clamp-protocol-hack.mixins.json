@@ -88,6 +88,7 @@
     "screen.hud.MixinChatInputSuggestor",
     "screen.merchant.MixinMerchantScreen",
     "screen.merchant.MixinMerchantScreenHandler",
+    "screen.screenhandler.MixinAbstractFurnaceScreenHandler",
     "screen.screenhandler.MixinBrewingStandScreenHandler",
     "screen.screenhandler.MixinCraftingScreenHandler",
     "screen.screenhandler.MixinPlayerScreenHandler",
