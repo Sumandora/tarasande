@@ -230,7 +230,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                         bestG == newG -> {
                             val bestPos = bestWay[0]
                             val newPos = way[0]
-                            if (mc.player?.squaredDistanceTo(bestPos.x.toDouble(), bestPos.y.toDouble(), bestPos.z.toDouble())!! > MinecraftClient.getInstance().player?.squaredDistanceTo(newPos.x.toDouble(), newPos.y.toDouble(), newPos.z.toDouble())!!)
+                            if (MinecraftClient.getInstance().player?.squaredDistanceTo(bestPos.x.toDouble(), bestPos.y.toDouble(), bestPos.z.toDouble())!! > MinecraftClient.getInstance().player?.squaredDistanceTo(newPos.x.toDouble(), newPos.y.toDouble(), newPos.z.toDouble())!!)
                                 bestWay = way
                         }
                     }
