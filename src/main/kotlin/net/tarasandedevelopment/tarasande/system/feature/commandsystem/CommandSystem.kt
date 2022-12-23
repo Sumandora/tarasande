@@ -54,9 +54,9 @@ class ManagerCommand : Manager<Command>() {
         )
 
         EventDispatcher.add(EventChat::class.java) {
-            if (bypassCommands.isPressed(true)) return@add
-
             if (it.chatMessage.startsWith(commandPrefix.value)) {
+                if (bypassCommands.isPressed(true)) return@add
+
                 it.cancelled = true
 
                 val reader = StringReader(it.chatMessage)

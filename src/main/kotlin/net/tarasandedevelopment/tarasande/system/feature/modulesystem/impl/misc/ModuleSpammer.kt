@@ -113,8 +113,9 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
             }
         }
 
-        registerEvent(EventChat::class.java) { event ->
-            priorityMessages.add(event.chatMessage)
+        registerEvent(EventChat::class.java, 9999) { event ->
+            if(!event.cancelled)
+                priorityMessages.add(event.chatMessage)
             event.cancelled = true
         }
     }
