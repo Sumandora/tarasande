@@ -27,7 +27,6 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.Protocol;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.vialegacy.exception.ViaLegacyException;
-import de.florianmichael.vialegacy.protocols.base.BaseProtocol1_6;
 import de.florianmichael.vialegacy.protocols.protocol1_1to1_0_0_1.Protocol1_1to1_0_0_1;
 import de.florianmichael.vialegacy.protocols.protocol1_2_1_3to1_1.Protocol1_2_1_3to1_1;
 import de.florianmichael.vialegacy.protocols.protocol1_2_4_5to1_2_1_3.Protocol1_2_4_5to1_2_1_3;
@@ -41,9 +40,11 @@ import de.florianmichael.vialegacy.protocols.protocol1_5_2to1_5_1.Protocol1_5_2t
 import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.Protocol1_6_1to1_5_2;
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.Protocol1_6_2to1_6_1;
 import de.florianmichael.vialegacy.protocols.protocol1_6_3to1_6_2.Protocol1_6_3_preto1_6_2;
+import de.florianmichael.vialegacy.protocols.protocol1_6_4.Protocol1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre.Protocol1_6_4to1_6_3_pre;
-import de.florianmichael.vialegacy.protocols.protocol1_7_6_10to1_7_0_5.Protocol1_7_6_10to1_7_0_5;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.Protocol1_7_5to1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.Protocol1_7_0_1_preto1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_2_5to1_7_0_1_pre.Protocol1_7_2_5to1_7_0_1_pre;
+import de.florianmichael.vialegacy.protocols.protocol1_7_6_10to1_7_2_5.Protocol1_7_6_10to1_7_2_5;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.Protocol1_8_0_9to1_7_6_10;
 
 import java.util.logging.Logger;
@@ -79,12 +80,13 @@ public class ViaLegacy {
         // Release Versions (1.8.x - 1.7.5)
         //                   From           Target        Protocol Implementation
         registerProtocol(    v1_8,          r1_7_6_10,    new Protocol1_8_0_9to1_7_6_10()    );
-        registerProtocol(    r1_7_6_10,     r1_7_0_5,     new Protocol1_7_6_10to1_7_0_5()    );
+        registerProtocol(    r1_7_6_10,     r1_7_2_5,     new Protocol1_7_6_10to1_7_2_5()    );
+        registerProtocol(    r1_7_2_5,      r1_7_0_1_pre, new Protocol1_7_2_5to1_7_0_1_pre() );
 
         // Pre-Netty
         // Release Versions (1.6.4 - 1.0)
         //                   From           Target        Protocol Implementation                Notes
-        registerProtocol(    r1_7_0_5,      r1_6_4,       new Protocol1_7_5to1_6_4()         );
+        registerProtocol(    r1_7_0_1_pre,  r1_6_4,       new Protocol1_7_0_1_preto1_6_4()   );
         registerProtocol(    r1_6_4,        r1_6_3_pre,   new Protocol1_6_4to1_6_3_pre()     );  // snapshot version
         registerProtocol(    r1_6_3_pre,    r1_6_2,       new Protocol1_6_3_preto1_6_2()     );
         registerProtocol(    r1_6_2,        r1_6_1,       new Protocol1_6_2to1_6_1()         );
@@ -106,12 +108,9 @@ public class ViaLegacy {
 
         // Classic Versions (c0.30 - c0.0.15a-1)
 
-        final int newestVersion = PROTOCOL_VERSIONS.get(2).getVersion();
-        final int lastVersion = PROTOCOL_VERSIONS.get(PROTOCOL_VERSIONS.size() - 1).getVersion();
-
-        getLogger().info("Base Protocol from " + newestVersion + " to " + lastVersion + "!");
-
-        Via.getManager().getProtocolManager().registerBaseProtocol(BaseProtocol1_6.INSTANCE, Range.range(newestVersion, BoundType.OPEN, lastVersion, BoundType.CLOSED));
+        // Base Protocols (Internal)
+        registerBaseProtocol(    r1_6_4,    r1_0_0_1,   Protocol1_6_4.INSTANCE    );
+        registerBaseProtocol(    r1_2_4_5,  r1_0_0_1,   Protocol1_6_4.INSTANCE    );
     }
     //@formatter:on
 
@@ -119,6 +118,15 @@ public class ViaLegacy {
         try {
             Via.getManager().getProtocolManager().registerProtocol(protocol, from, to);
             getLogger().info("Loading " + from.getName() + " -> " + to.getName() + " mappings...");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void registerBaseProtocol(final ProtocolVersion from, final ProtocolVersion to, final Protocol<?, ?, ?, ?> protocol) {
+        try {
+            Via.getManager().getProtocolManager().registerBaseProtocol(protocol, Range.range(from.getVersion(), BoundType.OPEN, to.getVersion(), BoundType.CLOSED));
+            getLogger().info("Loading " + from.getName() + " -> " + to.getName() + " base mappings...");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -30,7 +30,7 @@ import de.florianmichael.vialegacy.pre_netty.PreNettyConstants;
 import de.florianmichael.vialegacy.pre_netty.PreNettyPacketDecoder;
 import de.florianmichael.vialegacy.pre_netty.PreNettyPacketEncoder;
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
-import de.florianmichael.vialegacy.protocols.base.BaseProtocol1_6;
+import de.florianmichael.vialegacy.protocols.protocol1_6_4.Protocol1_6_4;
 import de.florianmichael.viaprotocolhack.netty.CustomViaDecodeHandler;
 import de.florianmichael.viaprotocolhack.netty.CustomViaEncodeHandler;
 import de.florianmichael.viaprotocolhack.netty.NettyConstants;
@@ -61,7 +61,7 @@ public class MixinClientConnectionSubOne {
             new ProtocolPipelineImpl(user);
 
             if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.r1_6_4)) {
-                user.getProtocolInfo().getPipeline().add(BaseProtocol1_6.INSTANCE);
+                user.getProtocolInfo().getPipeline().add(Protocol1_6_4.INSTANCE);
             }
 
             channel.pipeline()

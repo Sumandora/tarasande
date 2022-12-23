@@ -33,7 +33,8 @@ public class LegacyProtocolVersion extends ProtocolVersion {
 
     // Release Versions (1.8.x -> 1.0.0)
     public static final ProtocolVersion r1_7_6_10 = new ProtocolVersion(5, "1.7.6-1.7.10") {{ PROTOCOL_VERSIONS.add(this); }};
-    public static final ProtocolVersion r1_7_0_5 = new ProtocolVersion(4, "1.7-1.7.5") {{ PROTOCOL_VERSIONS.add(this); }};
+    public static final ProtocolVersion r1_7_2_5 = new ProtocolVersion(4, "1.7.2-1.7.5") {{ PROTOCOL_VERSIONS.add(this); }};
+    public static final ProtocolVersion r1_7_0_1_pre = new ProtocolVersion(3, "1.7.0-1.7.1-pre") {{ PROTOCOL_VERSIONS.add(this); }};
     public static final LegacyProtocolVersion r1_6_4 = new LegacyProtocolVersion(78, "1.6.4");
     public static final LegacyProtocolVersion r1_6_3_pre = new LegacyProtocolVersion(77, "1.6.3-pre");
     public static final LegacyProtocolVersion r1_6_2 = new LegacyProtocolVersion(74, "1.6.2");

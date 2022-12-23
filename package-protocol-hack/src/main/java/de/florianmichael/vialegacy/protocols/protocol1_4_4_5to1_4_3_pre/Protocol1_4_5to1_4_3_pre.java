@@ -37,13 +37,13 @@ package de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.Types1_4_2;
-import de.florianmichael.vialegacy.protocols.base.ClientboundLoginPackets1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
-import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_4_6_7to1_4_4_5.ClientboundPackets1_4_4_5;
 import de.florianmichael.vialegacy.protocols.protocol1_4_6_7to1_4_4_5.ServerboundPackets1_4_4_5;
+import de.florianmichael.vialegacy.protocols.protocol1_6_4.ClientboundLoginPackets1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.type.Types1_6_4;
 
 public class Protocol1_4_5to1_4_3_pre extends EnZaProtocol<ClientboundPackets1_4_3_pre, ClientboundPackets1_4_4_5, ServerboundPackets1_4_3_pre, ServerboundPackets1_4_4_5> {
 

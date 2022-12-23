@@ -44,7 +44,6 @@ import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.api.metadata.LegacyMetadataRewriter;
 import de.florianmichael.vialegacy.api.sound.SoundRewriter;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
-import de.florianmichael.vialegacy.protocols.base.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.Types1_4_2;
 import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.metadata.MetadataRewriter1_6_1to1_5_2;
 import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.sound.SoundRewriter1_6_1to1_5_2;
@@ -52,7 +51,8 @@ import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.storage.Entity
 import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.storage.VehicleTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.ClientboundPackets1_6_1;
 import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.ServerboundPackets1_6_1;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_6_4.ClientboundLoginPackets1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.type.Types1_6_4;
 
 import java.util.List;
 
