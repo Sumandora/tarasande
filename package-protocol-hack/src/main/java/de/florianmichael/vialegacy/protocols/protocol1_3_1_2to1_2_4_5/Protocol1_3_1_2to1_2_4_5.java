@@ -49,19 +49,20 @@ import com.viaversion.viaversion.libs.opennbt.tag.builtin.IntTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.ShortTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.StringTag;
 import de.florianmichael.vialegacy.ViaLegacy;
-import de.florianmichael.vialegacy.protocol.SplitterTracker;
-import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider;
-import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.Types1_2_5;
-import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
-import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.Types1_4_2;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
+import de.florianmichael.vialegacy.protocol.SplitterTracker;
+import de.florianmichael.vialegacy.protocols.protocol1_2_5.ClientboundLoginPackets1_2_4_5;
+import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider;
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.storage.LevelDataStorage;
+import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.Types1_2_5;
 import de.florianmichael.vialegacy.protocols.protocol1_4_0_2to1_3_1_2.ClientboundPackets1_3_1_2;
 import de.florianmichael.vialegacy.protocols.protocol1_4_0_2to1_3_1_2.ServerboundPackets1_3_1_2;
+import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.Types1_4_2;
 import de.florianmichael.vialegacy.protocols.protocol1_4_6_7to1_4_4_5.storage.DimensionStorage;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.Protocol1_7_5to1_6_4;
-import de.florianmichael.vialegacy.protocols.base.ServerboundLoginPackets1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_6_4.ServerboundLoginPackets1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.Protocol1_7_0_1_preto1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.type.Types1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -287,7 +288,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 
 					loginSuccess.write(Type.STRING, UUID.randomUUID().toString().replace("-", ""));
 					loginSuccess.write(Type.STRING, pw.user().getProtocolInfo().getUsername());
-					loginSuccess.send(Protocol1_7_5to1_6_4.class);
+					loginSuccess.send(Protocol1_7_0_1_preto1_6_4.class);
 					pw.user().getProtocolInfo().setState(State.PLAY);
 
 					final PacketWrapper login = PacketWrapper.create(ServerboundPackets1_2_4_5.JOIN_GAME, pw.user());

@@ -21,9 +21,9 @@
 
 package de.florianmichael.vialegacy.protocol.splitter;
 
-import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.Types1_4_2;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.data.NBTItems;
+import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.Types1_4_2;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.type.Types1_6_4;
 import io.netty.buffer.ByteBuf;
 
 public class TransformInstanceUtil {

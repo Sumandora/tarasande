@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy
 
 import de.florianmichael.vialegacy.pre_netty.PreNettyConstants
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.provider.EncryptionProvider
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider.EncryptionProvider
 import io.netty.channel.Channel
 import net.minecraft.network.encryption.PacketDecryptor
 import net.minecraft.network.encryption.PacketEncryptor

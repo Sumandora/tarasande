@@ -1,6 +1,6 @@
 /*
  * Copyright (c) FlorianMichael as EnZaXD 2022
- * Created on 24.06.22, 13:55
+ * Created on 6/24/22, 5:37 PM
  *
  * --FLORIAN MICHAEL PRIVATE LICENCE v1.0--
  *
@@ -32,26 +32,28 @@
  *         Version-independent validity and automatic renewal
  */
 
+package de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.type.impl;
 
-package de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre;
+import com.viaversion.viaversion.api.type.Type;
+import io.netty.buffer.ByteBuf;
 
-import com.viaversion.viaversion.api.connection.UserConnection;
-import de.florianmichael.vialegacy.api.EnZaProtocol;
-import de.florianmichael.vialegacy.protocol.SplitterTracker;
-import de.florianmichael.vialegacy.protocols.protocol1_6_4.ClientboundLoginPackets1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.ClientboundPackets1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.ServerboundPackets1_6_4;
+public class String1_6_4Type extends Type<String> {
+	
+	public String1_6_4Type() {
+		super(String.class);
+	}
 
-public class Protocol1_6_4to1_6_3_pre extends EnZaProtocol<ClientboundPackets1_6_3_pre, ClientboundPackets1_6_4, ServerboundPackets1_6_3_pre, ServerboundPackets1_6_4> {
+	@Override
+	public String read(ByteBuf buf) throws Exception {
+		char[] chars = new char[buf.readShort()];
+		for(int i = 0; i < chars.length; i++) chars[i] = buf.readChar();
+		return new String(chars);
+	}
 
-    public Protocol1_6_4to1_6_3_pre() {
-        super(ClientboundPackets1_6_3_pre.class, ClientboundPackets1_6_4.class, ServerboundPackets1_6_3_pre.class, ServerboundPackets1_6_4.class);
-    }
-
-    @Override
-    public void init(UserConnection connection) {
-        super.init(connection);
-
-        connection.put(new SplitterTracker(connection, ClientboundPackets1_6_3_pre.values(), ClientboundLoginPackets1_6_4.values()));
-    }
+	@Override
+	public void write(ByteBuf buf, String s) throws Exception {
+		char[] chars = s.toCharArray();
+		buf.writeShort(chars.length);
+		for(int i = 0; i < chars.length; i++) buf.writeChar(chars[i]);
+	}
 }

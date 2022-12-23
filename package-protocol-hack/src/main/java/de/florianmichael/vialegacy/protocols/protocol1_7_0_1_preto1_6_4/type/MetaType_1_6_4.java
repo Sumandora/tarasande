@@ -32,26 +32,42 @@
  *         Version-independent validity and automatic renewal
  */
 
+package de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.type;
 
-package de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre;
+import com.viaversion.viaversion.api.minecraft.metadata.MetaType;
+import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
 
-import com.viaversion.viaversion.api.connection.UserConnection;
-import de.florianmichael.vialegacy.api.EnZaProtocol;
-import de.florianmichael.vialegacy.protocol.SplitterTracker;
-import de.florianmichael.vialegacy.protocols.protocol1_6_4.ClientboundLoginPackets1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.ClientboundPackets1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.ServerboundPackets1_6_4;
+public enum MetaType_1_6_4 implements MetaType {
+	
+	Byte(0, Type.BYTE),
+	Short(1, Type.SHORT),
+	Int(2, Type.INT),
+	Float(3, Type.FLOAT),
+	String(4, Type.STRING),
+	Slot(5, Types1_7_6_10.COMPRESSED_NBT_ITEM),
+	Position(6, Type.VECTOR),
+	NonExistent(-1, Type.NOTHING);
+	
+	private final int typeID;
+	private final Type type;
 
-public class Protocol1_6_4to1_6_3_pre extends EnZaProtocol<ClientboundPackets1_6_3_pre, ClientboundPackets1_6_4, ServerboundPackets1_6_3_pre, ServerboundPackets1_6_4> {
+	public static MetaType_1_6_4 byId(int id) {
+		return values()[id];
+	}
 
-    public Protocol1_6_4to1_6_3_pre() {
-        super(ClientboundPackets1_6_3_pre.class, ClientboundPackets1_6_4.class, ServerboundPackets1_6_3_pre.class, ServerboundPackets1_6_4.class);
-    }
+	MetaType_1_6_4(int typeID, Type type) {
+		this.typeID = typeID;
+		this.type = type;
+	}
+	
+	@Override
+	public Type type() {
+		return type;
+	}
 
-    @Override
-    public void init(UserConnection connection) {
-        super.init(connection);
-
-        connection.put(new SplitterTracker(connection, ClientboundPackets1_6_3_pre.values(), ClientboundLoginPackets1_6_4.values()));
-    }
+	@Override
+	public int typeId() {
+		return typeID;
+	}
 }

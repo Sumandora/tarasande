@@ -32,10 +32,10 @@ import de.florianmichael.vialegacy.protocols.protocol1_2_1_3to1_1.chunk.ChunkDat
 import de.florianmichael.vialegacy.protocols.protocol1_2_1_3to1_1.chunk.ChunkTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_2_4_5to1_2_1_3.ClientboundPackets1_2_1_3;
 import de.florianmichael.vialegacy.protocols.protocol1_2_4_5to1_2_1_3.ServerboundPackets1_2_1_3;
-import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.ClientboundLoginPackets1_2_4_5;
+import de.florianmichael.vialegacy.protocols.protocol1_2_5.ClientboundLoginPackets1_2_4_5;
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.Types1_2_5;
 import de.florianmichael.vialegacy.protocols.protocol1_4_6_7to1_4_4_5.storage.DimensionStorage;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_5to1_6_4.type.Types1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.type.Types1_6_4;
 
 import java.util.zip.Inflater;
 

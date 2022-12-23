@@ -32,26 +32,15 @@
  *         Version-independent validity and automatic renewal
  */
 
+package de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.type;
 
-package de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre;
+import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.type.impl.MetadataList1_6_4Type;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.type.impl.String1_6_4Type;
 
-import com.viaversion.viaversion.api.connection.UserConnection;
-import de.florianmichael.vialegacy.api.EnZaProtocol;
-import de.florianmichael.vialegacy.protocol.SplitterTracker;
-import de.florianmichael.vialegacy.protocols.protocol1_6_4.ClientboundLoginPackets1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.ClientboundPackets1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.ServerboundPackets1_6_4;
+public class Types1_6_4 {
+	
+	public static final Type<String> STRING = new String1_6_4Type();
+	public static final MetadataList1_6_4Type METADATA_LIST = new MetadataList1_6_4Type();
 
-public class Protocol1_6_4to1_6_3_pre extends EnZaProtocol<ClientboundPackets1_6_3_pre, ClientboundPackets1_6_4, ServerboundPackets1_6_3_pre, ServerboundPackets1_6_4> {
-
-    public Protocol1_6_4to1_6_3_pre() {
-        super(ClientboundPackets1_6_3_pre.class, ClientboundPackets1_6_4.class, ServerboundPackets1_6_3_pre.class, ServerboundPackets1_6_4.class);
-    }
-
-    @Override
-    public void init(UserConnection connection) {
-        super.init(connection);
-
-        connection.put(new SplitterTracker(connection, ClientboundPackets1_6_3_pre.values(), ClientboundLoginPackets1_6_4.values()));
-    }
 }
