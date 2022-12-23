@@ -59,6 +59,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_6_4.storage.HandshakeStor
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.item.MaterialReplacement1_7_0_5to1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.model.EntityAttributeModifier;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.model.EntityProperty;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.model.ViewDistance;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider.EncryptionProvider;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider.UUIDProvider;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.sound.NoteBlockPitch;
@@ -122,6 +123,52 @@ public class Protocol1_7_0_1_preto1_6_4 extends EnZaProtocol<ClientboundPackets1
                     }
 
                     clientProtocol.sendToServer(Protocol1_7_0_1_preto1_6_4.class);
+                });
+            }
+        });
+
+        // Protocol Support doesn't respond the SharedKey with the same packet, it just sends the CustomPayload stuff
+        this.cancelClientbound(State.LOGIN, ClientboundPackets1_6_4.PLUGIN_MESSAGE.getId());
+
+        // Protocol Support login protocol
+        this.registerClientbound(State.LOGIN, ClientboundPackets1_6_4.JOIN_GAME.getId(), ClientboundPackets1_6_4.JOIN_GAME.getId(), new PacketRemapper() {
+
+            @Override
+            public void registerMap() {
+                // Cancel the original packet
+                handler(PacketWrapper::cancel);
+
+                // Sending login success to force the game to switch to play state
+                handler(wrapper -> {
+                    final PacketWrapper loginHello = new PacketWrapperImpl(ClientboundLoginPackets.GAME_PROFILE.getId(), null, wrapper.user());
+                    loginHello.write(Type.STRING, UUID.randomUUID().toString().replace("-", ""));
+                    loginHello.write(Type.STRING, wrapper.user().getProtocolInfo().getUsername());
+
+                    loginHello.send(Protocol1_7_0_1_preto1_6_4.class);
+                });
+
+                // Change ViaVersion's state to play
+                handler(wrapper -> wrapper.user().getProtocolInfo().setState(State.PLAY));
+
+                // read all joinGame fields and re-send the packet in play state
+                handler(wrapper -> {
+                    final int entityId = wrapper.read(Type.INT);
+                    final String levelType = wrapper.read(Types1_6_4.STRING);
+                    final short gameMode = wrapper.read(Type.BYTE);
+                    final byte dimension = wrapper.read(Type.BYTE);
+                    final byte difficulty = wrapper.read(Type.BYTE);
+                    wrapper.read(Type.BYTE);
+                    final byte maxPlayers = wrapper.read(Type.BYTE);
+
+                    final PacketWrapper joinGame = PacketWrapper.create(ClientboundPackets1_6_4.JOIN_GAME, wrapper.user());
+                    joinGame.write(Type.INT, entityId);
+                    joinGame.write(Type.UNSIGNED_BYTE, gameMode);
+                    joinGame.write(Type.BYTE, dimension);
+                    joinGame.write(Type.UNSIGNED_BYTE, (short) difficulty);
+                    joinGame.write(Type.UNSIGNED_BYTE, (short) maxPlayers);
+                    joinGame.write(Type.STRING, levelType);
+
+                    joinGame.send(Protocol1_7_0_1_preto1_6_4.class);
                 });
             }
         });
@@ -275,7 +322,7 @@ public class Protocol1_7_0_1_preto1_6_4 extends EnZaProtocol<ClientboundPackets1
             @Override
             public void registerMap() {
                 map(Type.STRING, Types1_6_4.STRING); // Locale
-                map(Type.BYTE); // View Distance
+                handler(wrapper -> wrapper.write(Type.BYTE, (byte) ViewDistance.approximateDistance(wrapper.read(Type.BYTE)).ordinal())); // View distance
                 map(Type.BYTE); // Chat flags
                 handler(wrapper -> {
                     boolean chatColors = wrapper.read(Type.BOOLEAN);
@@ -374,7 +421,7 @@ public class Protocol1_7_0_1_preto1_6_4 extends EnZaProtocol<ClientboundPackets1
                     for (int i = 0; i < items.length; i++) {
                         items[i] = materialReplacement().replace(items[i]);
                     }
-                    packetWrapper.write(Type.ITEM_ARRAY, items);  // Items
+                    packetWrapper.write(Types1_7_6_10.COMPRESSED_NBT_ITEM_ARRAY, items);  // Items
                 });
             }
         });
