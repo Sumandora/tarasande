@@ -54,6 +54,6 @@ public class String1_6_4Type extends Type<String> {
 	public void write(ByteBuf buf, String s) throws Exception {
 		char[] chars = s.toCharArray();
 		buf.writeShort(chars.length);
-		for(int i = 0; i < chars.length; i++) buf.writeChar(chars[i]);
+		for (char aChar : chars) buf.writeChar(aChar);
 	}
 }

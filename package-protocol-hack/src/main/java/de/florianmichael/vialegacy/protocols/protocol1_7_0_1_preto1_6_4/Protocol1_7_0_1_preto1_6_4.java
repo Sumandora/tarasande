@@ -59,11 +59,13 @@ import de.florianmichael.vialegacy.protocols.protocol1_6_4.storage.HandshakeStor
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.item.MaterialReplacement1_7_0_5to1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.model.EntityAttributeModifier;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.model.EntityProperty;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.model.PluginMessage;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.model.ViewDistance;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider.EncryptionProvider;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider.UUIDProvider;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.sound.NoteBlockPitch;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.sound.SoundRewriter1_7_0_5to1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.storage.PluginMessageStorage;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.string.DisconnectPacketRemapper;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.type.Types1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_2_5to1_7_0_1_pre.ClientboundPackets1_7_0_1_pre;
@@ -89,6 +91,14 @@ public class Protocol1_7_0_1_preto1_6_4 extends EnZaProtocol<ClientboundPackets1
 
     public Protocol1_7_0_1_preto1_6_4() {
         super(ClientboundPackets1_6_4.class, ClientboundPackets1_7_0_1_pre.class, ServerboundPackets1_6_4.class, ServerboundPackets1_7_0_1_pre.class);
+    }
+
+    private void finishModernLogin(final UserConnection connection) throws Exception {
+        final PacketWrapper loginHello = new PacketWrapperImpl(ClientboundLoginPackets.GAME_PROFILE.getId(), null, connection);
+        loginHello.write(Type.STRING, UUID.randomUUID().toString().replace("-", ""));
+        loginHello.write(Type.STRING, connection.getProtocolInfo().getUsername());
+
+        loginHello.send(Protocol1_7_0_1_preto1_6_4.class);
     }
 
     @Override
@@ -127,31 +137,41 @@ public class Protocol1_7_0_1_preto1_6_4 extends EnZaProtocol<ClientboundPackets1
             }
         });
 
-        // Protocol Support doesn't respond the SharedKey with the same packet, it just sends the CustomPayload stuff
-        this.cancelClientbound(State.LOGIN, ClientboundPackets1_6_4.PLUGIN_MESSAGE.getId());
+        // Saving Plugin messages from login and sending them after join game
+        this.registerClientbound(State.LOGIN, ClientboundPackets1_6_4.PLUGIN_MESSAGE.getId(), ClientboundPackets1_6_4.PLUGIN_MESSAGE.getId(), new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                handler(wrapper -> {
+                    final PluginMessageStorage pluginMessageStorage = wrapper.user().get(PluginMessageStorage.class);
+                    if (pluginMessageStorage != null) {
+                        final String channel = wrapper.read(Types1_6_4.STRING);
+                        final byte[] message = wrapper.read(Types1_7_6_10.BYTEARRAY);
+                        wrapper.cancel();
 
-        // Protocol Support login protocol
+                        if (message != null && message.length > 0) {
+                            pluginMessageStorage.getPluginMessages().add(new PluginMessage(channel, message));
+                        }
+                    }
+                });
+            }
+        });
+
+        // Protocol Support servers doesn't response with an empty SharedKey, they send a join game packet in the login state
         this.registerClientbound(State.LOGIN, ClientboundPackets1_6_4.JOIN_GAME.getId(), ClientboundPackets1_6_4.JOIN_GAME.getId(), new PacketRemapper() {
 
             @Override
             public void registerMap() {
-                // Cancel the original packet
-                handler(PacketWrapper::cancel);
-
-                // Sending login success to force the game to switch to play state
                 handler(wrapper -> {
-                    final PacketWrapper loginHello = new PacketWrapperImpl(ClientboundLoginPackets.GAME_PROFILE.getId(), null, wrapper.user());
-                    loginHello.write(Type.STRING, UUID.randomUUID().toString().replace("-", ""));
-                    loginHello.write(Type.STRING, wrapper.user().getProtocolInfo().getUsername());
+                    // Cancel the original packet
+                    wrapper.cancel();
 
-                    loginHello.send(Protocol1_7_0_1_preto1_6_4.class);
-                });
+                    // Sending login success to force the game to switch to play state
+                    finishModernLogin(wrapper.user());
 
-                // Change ViaVersion's state to play
-                handler(wrapper -> wrapper.user().getProtocolInfo().setState(State.PLAY));
+                    // Change ViaVersion's state to play
+                    wrapper.user().getProtocolInfo().setState(State.PLAY);
 
-                // read all joinGame fields and re-send the packet in play state
-                handler(wrapper -> {
+                    // read all joinGame fields and re-send the packet in play state
                     final int entityId = wrapper.read(Type.INT);
                     final String levelType = wrapper.read(Types1_6_4.STRING);
                     final short gameMode = wrapper.read(Type.BYTE);
@@ -169,6 +189,12 @@ public class Protocol1_7_0_1_preto1_6_4 extends EnZaProtocol<ClientboundPackets1
                     joinGame.write(Type.STRING, levelType);
 
                     joinGame.send(Protocol1_7_0_1_preto1_6_4.class);
+
+                    // Re-sync all missing PluginMessages in case the server doesn't test us and they're important...
+                    final PluginMessageStorage pluginMessageStorage = wrapper.user().get(PluginMessageStorage.class);
+                    if (pluginMessageStorage != null) {
+                        pluginMessageStorage.reSyncPluginMessages(wrapper.user());
+                    }
                 });
             }
         });
@@ -192,35 +218,59 @@ public class Protocol1_7_0_1_preto1_6_4 extends EnZaProtocol<ClientboundPackets1
 
             @Override
             public void registerMap() {
-                handler(PacketWrapper::cancel); // We don't need this packet anymore
-
-                // Sending Login Hello S -> C
                 handler(wrapper -> {
-                    final PacketWrapper loginHello = new PacketWrapperImpl(ClientboundLoginPackets.GAME_PROFILE.getId(), null, wrapper.user());
-                    loginHello.write(Type.STRING, UUID.randomUUID().toString().replace("-", ""));
-                    loginHello.write(Type.STRING, wrapper.user().getProtocolInfo().getUsername());
+                    // We don't need this packet anymore
+                    wrapper.cancel();
 
-                    loginHello.send(Protocol1_7_0_1_preto1_6_4.class);
-                });
+                    // Sending login success to force the game to switch to play state
+                    finishModernLogin(wrapper.user());
 
-                // Enabling clientside encryption for the connection
-                handler(wrapper -> {
+                    // Enabling clientside encryption for the connection
                     final EncryptionProvider encryptionProvider = Via.getManager().getProviders().get(EncryptionProvider.class);
                     if (encryptionProvider != null) {
                         encryptionProvider.encryptConnection();
                     }
-                });
 
-                // Login Success 1.6.4 (C -> S)
-                handler(wrapper -> {
+                    // Login Success 1.6.4 (C -> S)
                     final PacketWrapper clientCommand = new PacketWrapperImpl(ServerboundPackets1_6_4.CLIENT_STATUS, null, wrapper.user());
                     clientCommand.write(Type.BYTE, (byte) 0);
 
                     clientCommand.sendToServer(Protocol1_7_0_1_preto1_6_4.class);
-                });
 
-                // Switching to the next packet register card
-                handler(wrapper -> wrapper.user().getProtocolInfo().setState(State.PLAY));
+                    // Change ViaVersion's state to play
+                    wrapper.user().getProtocolInfo().setState(State.PLAY);
+                });
+            }
+        });
+
+        this.registerClientbound(ClientboundPackets1_6_4.JOIN_GAME, new PacketRemapper() {
+
+            @Override
+            public void registerMap() {
+                handler(wrapper -> {
+                    final int entityId = wrapper.read(Type.INT);
+                    final String levelType = wrapper.read(Types1_6_4.STRING);
+                    final short gameMode = wrapper.read(Type.BYTE);
+                    final byte dimension = wrapper.read(Type.BYTE);
+                    final byte difficulty = wrapper.read(Type.BYTE);
+                    wrapper.read(Type.BYTE);
+                    final byte maxPlayers = wrapper.read(Type.BYTE);
+
+                    wrapper.clearPacket();
+
+                    wrapper.write(Type.INT, entityId);
+                    wrapper.write(Type.UNSIGNED_BYTE, gameMode);
+                    wrapper.write(Type.BYTE, dimension);
+                    wrapper.write(Type.UNSIGNED_BYTE, (short) difficulty);
+                    wrapper.write(Type.UNSIGNED_BYTE, (short) maxPlayers);
+                    wrapper.write(Type.STRING, levelType);
+
+                    // Re-sync all missing PluginMessages in case the server doesn't test us and they're important...
+                    final PluginMessageStorage pluginMessageStorage = wrapper.user().get(PluginMessageStorage.class);
+                    if (pluginMessageStorage != null) {
+                        pluginMessageStorage.reSyncPluginMessages(wrapper.user());
+                    }
+                });
             }
         });
 
@@ -569,30 +619,6 @@ public class Protocol1_7_0_1_preto1_6_4 extends EnZaProtocol<ClientboundPackets1
                             wrapper.write(Type.BYTE, mod.operation);
                         }
                     }
-                });
-            }
-        });
-
-        this.registerClientbound(ClientboundPackets1_6_4.JOIN_GAME, new PacketRemapper() {
-
-            @Override
-            public void registerMap() {
-                handler(wrapper -> {
-                    int entityId = wrapper.read(Type.INT);
-                    String levelType = wrapper.read(Types1_6_4.STRING);
-                    short gamemode = wrapper.read(Type.BYTE);
-                    byte dimension = wrapper.read(Type.BYTE);
-                    byte difficulty = wrapper.read(Type.BYTE);
-                    wrapper.read(Type.BYTE); // Unused (WorldHeight)
-                    byte maxPlayers = wrapper.read(Type.BYTE);
-
-                    wrapper.clearPacket();
-                    wrapper.write(Type.INT, entityId);
-                    wrapper.write(Type.UNSIGNED_BYTE, gamemode);
-                    wrapper.write(Type.BYTE, dimension);
-                    wrapper.write(Type.UNSIGNED_BYTE, (short) difficulty);
-                    wrapper.write(Type.UNSIGNED_BYTE, (short) maxPlayers);
-                    wrapper.write(Type.STRING, levelType);
                 });
             }
         });
@@ -1094,7 +1120,10 @@ public class Protocol1_7_0_1_preto1_6_4 extends EnZaProtocol<ClientboundPackets1
 
     @Override
     public void init(UserConnection userConnection) {
-        userConnection.put(new ClientWorld(userConnection));
+        if (!userConnection.has(ClientWorld.class)) {
+            userConnection.put(new ClientWorld(userConnection));
+        }
+        userConnection.put(new PluginMessageStorage(userConnection));
         userConnection.put(new SplitterTracker(userConnection, ClientboundPackets1_6_4.values(), ClientboundLoginPackets1_6_4.values()));
     }
 }
