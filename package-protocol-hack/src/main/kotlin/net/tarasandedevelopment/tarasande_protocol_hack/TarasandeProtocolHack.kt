@@ -153,8 +153,6 @@ class TarasandeProtocolHack : INativeProvider {
     }
 
     fun update(protocol: ProtocolVersion, reloadProtocolHackValues: Boolean = true) {
-        System.setProperty("tarasande-target-version", protocol.version.toString()) // this provides the current clientside version to all other packages
-
         if (reloadProtocolHackValues) {
             TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
                 if (it is ValueBooleanProtocol)
