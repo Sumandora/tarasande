@@ -9,11 +9,10 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventEntityColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleESP
 import su.mandora.event.EventDispatcher
 import java.awt.Color
 
-class EntityColor(private val moduleESP: ModuleESP) {
+class EntityColor {
 
     private val modifyTeamColor = ValueBoolean(this, "Modify team color", true)
     private val selfColor = object : ValueColor(this, "Self Color", 0.0, 1.0, 1.0, 1.0) {
@@ -36,7 +35,7 @@ class EntityColor(private val moduleESP: ModuleESP) {
     }
 
     fun getColor(entity: Entity): Color? {
-        if (!moduleESP.enabled || !modifyTeamColor.value)
+        if (!modifyTeamColor.value)
             return null
         var color: Color? = null
 

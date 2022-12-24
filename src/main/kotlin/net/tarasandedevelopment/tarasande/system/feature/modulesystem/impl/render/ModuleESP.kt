@@ -49,7 +49,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
         }
     }
 
-    val entityColor = EntityColor(this)
+    val entityColor = EntityColor()
 
     fun shouldRender(entity: Entity) =
         entities.list.contains(entity.type) &&
