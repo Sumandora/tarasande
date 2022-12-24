@@ -7,6 +7,7 @@ import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.button.PanelButton
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.*
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.ScreenExtensionButtonListDirectConnect
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.ScreenExtensionDirectConnectScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
@@ -27,7 +28,8 @@ class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
             ScreenExtensionButtonListSleepingChatScreen(),
             ScreenExtensionDirectConnectScreen(),
             ScreenExtensionGameMenuScreen(),
-            ScreenExtensionButtonListTitleScreen()
+            ScreenExtensionButtonListTitleScreen(),
+            ScreenExtensionButtonListDirectConnect()
         )
 
         EventDispatcher.add(EventChildren::class.java) { eventChildren ->
