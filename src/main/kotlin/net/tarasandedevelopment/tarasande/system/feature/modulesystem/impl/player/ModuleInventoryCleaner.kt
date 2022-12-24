@@ -49,6 +49,9 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
 
             val screenHandler = mc.player?.playerScreenHandler!!
 
+            if(screenHandler.cursorStack?.isEmpty != false)
+                return@registerEvent
+
             if (mousePos == null) {
                 mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
             }
