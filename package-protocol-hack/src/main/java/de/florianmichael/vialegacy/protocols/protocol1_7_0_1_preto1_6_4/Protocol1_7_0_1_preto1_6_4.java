@@ -93,12 +93,22 @@ public class Protocol1_7_0_1_preto1_6_4 extends EnZaProtocol<ClientboundPackets1
         super(ClientboundPackets1_6_4.class, ClientboundPackets1_7_0_1_pre.class, ServerboundPackets1_6_4.class, ServerboundPackets1_7_0_1_pre.class);
     }
 
-    private void finishModernLogin(final UserConnection connection) throws Exception {
+    // This method switches the current packet state from login to play
+    public static void setupPlayState(final UserConnection connection) throws Exception {
+        final UUIDProvider uuidProvider = Via.getManager().getProviders().get(UUIDProvider.class);
+        if (uuidProvider == null) {
+            throw new IllegalStateException("ViaProviders didn't fired all load????");
+        }
+
+        // Finishing modern login and forcing the game to switching to play state
         final PacketWrapper loginHello = new PacketWrapperImpl(ClientboundLoginPackets.GAME_PROFILE.getId(), null, connection);
-        loginHello.write(Type.STRING, UUID.randomUUID().toString().replace("-", ""));
+        loginHello.write(Type.STRING, uuidProvider.getPlayerUuid().toString().replace("-", ""));
         loginHello.write(Type.STRING, connection.getProtocolInfo().getUsername());
 
         loginHello.send(Protocol1_7_0_1_preto1_6_4.class);
+
+        // Setting ViaVersion's state also to play
+        connection.getProtocolInfo().setState(State.PLAY);
     }
 
     @Override
@@ -166,10 +176,7 @@ public class Protocol1_7_0_1_preto1_6_4 extends EnZaProtocol<ClientboundPackets1
                     wrapper.cancel();
 
                     // Sending login success to force the game to switch to play state
-                    finishModernLogin(wrapper.user());
-
-                    // Change ViaVersion's state to play
-                    wrapper.user().getProtocolInfo().setState(State.PLAY);
+                    setupPlayState(wrapper.user());
 
                     // read all joinGame fields and re-send the packet in play state
                     final int entityId = wrapper.read(Type.INT);
@@ -223,7 +230,7 @@ public class Protocol1_7_0_1_preto1_6_4 extends EnZaProtocol<ClientboundPackets1
                     wrapper.cancel();
 
                     // Sending login success to force the game to switch to play state
-                    finishModernLogin(wrapper.user());
+                    setupPlayState(wrapper.user());
 
                     // Enabling clientside encryption for the connection
                     final EncryptionProvider encryptionProvider = Via.getManager().getProviders().get(EncryptionProvider.class);
@@ -236,9 +243,6 @@ public class Protocol1_7_0_1_preto1_6_4 extends EnZaProtocol<ClientboundPackets1
                     clientCommand.write(Type.BYTE, (byte) 0);
 
                     clientCommand.sendToServer(Protocol1_7_0_1_preto1_6_4.class);
-
-                    // Change ViaVersion's state to play
-                    wrapper.user().getProtocolInfo().setState(State.PLAY);
                 });
             }
         });
