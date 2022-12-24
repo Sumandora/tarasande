@@ -22,13 +22,11 @@ import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
+import net.minecraft.util.shape.VoxelShapes
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.ClickSpeedUtil
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
@@ -114,6 +112,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         override fun isEnabled() = waitForCritical.value && criticalSprint.value
     }
     private val closedInventory = ValueBoolean(this, "Closed inventory", false)
+    private val aimTargetColor = ValueColor(this, "Aim target color", 0.0, 1.0, 1.0, 1.0)
 
     val targets = CopyOnWriteArrayList<Pair<Entity, Vec3d>>()
     private val comparator: Comparator<Pair<Entity, Vec3d>> = Comparator.comparing {
@@ -417,6 +416,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         }
 
         registerEvent(EventRender3D::class.java) { event ->
+            if(mc.crosshairTarget != null && mc.crosshairTarget?.type == HitResult.Type.ENTITY)
+                RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(Box.from(mc.crosshairTarget?.pos).offset(-0.5, -0.5, -0.5).expand(-0.45)), aimTargetColor.getColor().rgb)
             RenderUtil.renderPath(event.matrices, teleportPath ?: return@registerEvent, -1)
         }
     }

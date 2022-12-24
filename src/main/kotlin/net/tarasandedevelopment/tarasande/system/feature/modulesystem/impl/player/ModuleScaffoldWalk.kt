@@ -70,7 +70,8 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val tower = ValueMode(this, "Tower", false, "Vanilla", "Motion", "Teleport")
     private val blockColor = ValueColor(this, "Block color", 0.0, 1.0, 1.0, 1.0)
     private val facingColor = ValueColor(this, "Facing color", 0.0, 1.0, 1.0, 1.0)
-    private val aimTargetColor = ValueColor(this, "Aim target color", 0.0, 1.0, 1.0, 1.0)
+    private val aimTargetColorRerotated = ValueColor(this, "Aim target color (rerotated)", 0.0, 1.0, 1.0, 1.0)
+    private val aimTargetColorStable = ValueColor(this, "Aim target color (stable)", 0.0, 1.0, 1.0, 1.0)
     private val placeLineColor = ValueColor(this, "Place line color", 0.0, 1.0, 1.0, 1.0)
 
     private val targets = ArrayList<Pair<BlockPos, Direction>>()
@@ -82,6 +83,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private var lastRotation: Rotation? = null
     private var prevEdgeDistance = 0.5
     private var preferredSide: Int? = null
+    private var rerotated = false
 
     init {
         // up & down (down should never happen unless we are trying to save ourselves)
@@ -119,6 +121,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     override fun onEnable() {
         prevEdgeDistance = 0.5
         clickSpeedUtil.reset()
+        rerotated = false
     }
 
     private fun placeBlock(blockHitResult: BlockHitResult) {
@@ -280,6 +283,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                             }
 
                             aimTarget = finalPoint
+                            rerotated = true
 
                             lastRotation = RotationUtil.getRotations(eye, finalPoint)
                         }
@@ -370,6 +374,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     if (airBelow && (((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= newEdgeDist * newEdgeDist || target?.first?.y!! < mc.player?.y!!)) {
                         if (timeUtil.hasReached(delay.value.toLong())) {
                             aimTarget = hitResult.pos
+                            rerotated = false
                             placeBlock(hitResult)
                             event.dirty = true
 
@@ -431,7 +436,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 RenderUtil.blockOutline(event.matrices, shape.offset(facing?.offsetX?.toDouble()!!, facing.offsetY.toDouble(), facing.offsetZ.toDouble()), facingColor.getColor().rgb)
             }
             if (aimTarget != null)
-                RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(Box.from(aimTarget).offset(-0.5, -0.5, -0.5).expand(-0.45)), aimTargetColor.getColor().rgb)
+                RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(Box.from(aimTarget).offset(-0.5, -0.5, -0.5).expand(-0.45)), (if(rerotated) aimTargetColorRerotated else aimTargetColorStable).getColor().rgb)
             if (placeLine != null)
                 RenderUtil.blockOutline(event.matrices, VoxelShapes.union(VoxelShapes.cuboid(Box.from(placeLine?.first).offset(-0.5, -0.5, -0.5).expand(-0.49)), VoxelShapes.cuboid(Box.from(placeLine?.second).offset(-0.5, -0.5, -0.5).expand(-0.49))), placeLineColor.getColor().rgb)
         }
