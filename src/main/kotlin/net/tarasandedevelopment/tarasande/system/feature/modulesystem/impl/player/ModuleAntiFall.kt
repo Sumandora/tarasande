@@ -34,7 +34,7 @@ class ModuleAntiFall : Module("Anti fall", "Tries to force a setback when you ar
                     lastOnGroundPos = mc.player?.pos
                     wasOnGround = true
                 } else if (mc.player?.fallDistance!! > fallDistance.value && (!void.value || PlayerUtil.predictFallDistance() == null)) {
-                    if ((wasOnGround || repeating.value) && mc.player?.input?.sneaking == false) {
+                    if ((wasOnGround || repeating.value) && !PlayerUtil.input.sneaking) {
                         when {
                             mode.isSelected(0) -> {
                                 if (lastOnGroundPos != null) {
