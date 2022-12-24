@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.Clickabl
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
-class PanelButton(x: Int, y: Int, val width: Int, val height: Int, private val text: String, private val pressAction: Runnable) : Panel("Button", width.toDouble(), height.toDouble(), scissor = true) {
+class PanelButton(x: Int, y: Int, val width: Int, val height: Int, private val text: String, private val pressAction: (button: Int) -> Unit) : Panel("Button", width.toDouble(), height.toDouble(), scissor = true) {
 
     init {
         this.x = x.toDouble()
@@ -17,7 +17,7 @@ class PanelButton(x: Int, y: Int, val width: Int, val height: Int, private val t
     }
 
     companion object {
-        fun createButton(x: Int, y: Int, width: Int, height: Int, text: String, pressAction: Runnable): ClickableWidgetPanel {
+        fun createButton(x: Int, y: Int, width: Int, height: Int, text: String, pressAction: (button: Int) -> Unit): ClickableWidgetPanel {
             return ClickableWidgetPanel(PanelButton(x, y, width, height, text, pressAction), true)
         }
     }
@@ -44,7 +44,7 @@ class PanelButton(x: Int, y: Int, val width: Int, val height: Int, private val t
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         return if (RenderUtil.isHovered(mouseX, mouseY, x, y + titleBarHeight, x + panelWidth, y + panelHeight)) {
             MinecraftClient.getInstance().soundManager.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F))
-            pressAction.run()
+            pressAction(button)
             true
         } else
             false

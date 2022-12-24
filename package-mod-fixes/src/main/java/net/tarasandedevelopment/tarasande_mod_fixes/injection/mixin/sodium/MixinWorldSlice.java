@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.injection.mixin.event.blockesp;
+package net.tarasandedevelopment.tarasande_mod_fixes.injection.mixin.sodium;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

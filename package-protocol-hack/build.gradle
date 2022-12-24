@@ -12,7 +12,6 @@ repositories {
     mavenCentral()
 }
 
-
 loom {
     accessWidenerPath = file("src/main/resources/tarasande-protocol-hack.accesswidener")
 }

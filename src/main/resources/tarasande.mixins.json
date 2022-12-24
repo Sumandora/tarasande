@@ -38,7 +38,6 @@
     "event.MixinWorldRenderer",
     "event.block.MixinAbstractBlockState",
     "event.blockesp.MixinRenderedChunk",
-    "event.blockesp.MixinWorldSlice",
     "event.connection.MixinClientConnection",
     "event.connection.MixinClientConnectionSubOne",
     "event.connection.MixinClientPlayNetworkHandler",
