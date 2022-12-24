@@ -88,6 +88,9 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
 
             val screenHandler = (mc.currentScreen as GenericContainerScreen).screenHandler
 
+            if(screenHandler.cursorStack?.isEmpty != false)
+                return@registerEvent
+
             if (mousePos == null) {
                 mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
             }
