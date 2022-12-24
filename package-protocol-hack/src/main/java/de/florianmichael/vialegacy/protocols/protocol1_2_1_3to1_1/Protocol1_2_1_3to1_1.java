@@ -32,9 +32,9 @@ import de.florianmichael.vialegacy.protocols.protocol1_2_1_3to1_1.chunk.ChunkDat
 import de.florianmichael.vialegacy.protocols.protocol1_2_1_3to1_1.chunk.ChunkTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_2_4_5to1_2_1_3.ClientboundPackets1_2_1_3;
 import de.florianmichael.vialegacy.protocols.protocol1_2_4_5to1_2_1_3.ServerboundPackets1_2_1_3;
-import de.florianmichael.vialegacy.protocols.protocol1_2_5.ClientboundLoginPackets1_2_4_5;
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.Types1_2_5;
 import de.florianmichael.vialegacy.protocols.protocol1_4_6_7to1_4_4_5.storage.DimensionStorage;
+import de.florianmichael.vialegacy.protocols.protocol1_6_4.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.type.Types1_6_4;
 
 import java.util.zip.Inflater;
@@ -251,9 +251,6 @@ public class Protocol1_2_1_3to1_1 extends EnZaProtocol<ClientboundPackets1_1, Cl
                         int relZ = coord >> 8 & 0xf;
                         int relY = coord & 0xff;
 
-                        int targetX = relX + (x << 4);
-                        int targetY = relY;
-                        int targetZ = relZ + (z << 4);
                         if(tracker.isChunkLoaded(x, z)) {
                             ChunkData chunk = tracker.getChunkAt(x, z);
                             chunk.setBlockId(relX, relY, relZ, id);
@@ -325,6 +322,6 @@ public class Protocol1_2_1_3to1_1 extends EnZaProtocol<ClientboundPackets1_1, Cl
     public void init(UserConnection connection) {
         super.init(connection);
 
-        connection.put(new SplitterTracker(connection, ClientboundPackets1_1.values(), ClientboundLoginPackets1_2_4_5.values()));
+        connection.put(new SplitterTracker(connection, ClientboundPackets1_1.values(), ClientboundLoginPackets1_6_4.values()));
     }
 }

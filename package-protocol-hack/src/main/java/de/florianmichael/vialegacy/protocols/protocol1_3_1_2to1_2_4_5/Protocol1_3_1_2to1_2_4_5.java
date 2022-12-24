@@ -11,33 +11,32 @@
  * cancelled by copying or removing the license and in case of violation a criminal consequence is to be expected.
  * The owner "Florian Michael" is free to change this license.
  */
-/**
- * --FLORIAN MICHAEL PRIVATE LICENCE v1.2--
- *
- * This file / project is protected and is the intellectual property of Florian Michael (aka. EnZaXD),
- * any use (be it private or public, be it copying or using for own use, be it publishing or modifying) of this
- * file / project is prohibited. It requires in that use a written permission with official signature of the owner
- * "Florian Michael". "Florian Michael" receives the right to control and manage this file / project. This right is not
- * cancelled by copying or removing the license and in case of violation a criminal consequence is to be expected.
- * The owner "Florian Michael" is free to change this license. The creator assumes no responsibility for any infringements
- * that have arisen, are arising or will arise from this project / file. If this licence is used anywhere,
- * the latest version published by the author Florian Michael (aka EnZaXD) always applies automatically.
- *
- * Changelog:
- *     v1.0:
- *         Added License
- *     v1.1:
- *         Ownership withdrawn
- *     v1.2:
- *         Version-independent validity and automatic renewal
+/*
+  --FLORIAN MICHAEL PRIVATE LICENCE v1.2--
+
+  This file / project is protected and is the intellectual property of Florian Michael (aka. EnZaXD),
+  any use (be it private or public, be it copying or using for own use, be it publishing or modifying) of this
+  file / project is prohibited. It requires in that use a written permission with official signature of the owner
+  "Florian Michael". "Florian Michael" receives the right to control and manage this file / project. This right is not
+  cancelled by copying or removing the license and in case of violation a criminal consequence is to be expected.
+  The owner "Florian Michael" is free to change this license. The creator assumes no responsibility for any infringements
+  that have arisen, are arising or will arise from this project / file. If this licence is used anywhere,
+  the latest version published by the author Florian Michael (aka EnZaXD) always applies automatically.
+
+  Changelog:
+      v1.0:
+          Added License
+      v1.1:
+          Ownership withdrawn
+      v1.2:
+          Version-independent validity and automatic renewal
  */
 
 package de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.minecraft.chunks.Chunk;
 import com.viaversion.viaversion.api.minecraft.item.DataItem;
 import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
@@ -48,79 +47,30 @@ import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.IntTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.ShortTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.StringTag;
+import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
 import de.florianmichael.vialegacy.ViaLegacy;
 import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
-import de.florianmichael.vialegacy.protocols.protocol1_2_5.ClientboundLoginPackets1_2_4_5;
+import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.data.EntityIDs;
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider;
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.storage.LevelDataStorage;
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.Types1_2_5;
+import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.type.impl.Chunk1_2_5Type;
 import de.florianmichael.vialegacy.protocols.protocol1_4_0_2to1_3_1_2.ClientboundPackets1_3_1_2;
 import de.florianmichael.vialegacy.protocols.protocol1_4_0_2to1_3_1_2.ServerboundPackets1_3_1_2;
 import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.type.Types1_4_2;
 import de.florianmichael.vialegacy.protocols.protocol1_4_6_7to1_4_4_5.storage.DimensionStorage;
+import de.florianmichael.vialegacy.protocols.protocol1_6_4.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_6_4.ServerboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.Protocol1_7_0_1_preto1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.type.Types1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;
+import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.impl.Chunk1_7_6_10Type;
 
 import java.util.ArrayList;
-import java.util.UUID;
 import java.util.logging.Level;
 
-@SuppressWarnings("ConstantConditions")
 public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2_4_5, ClientboundPackets1_3_1_2, ServerboundPackets1_2_4_5, ServerboundPackets1_3_1_2> {
-
-	private static final BiMap<Integer, String> ENTITY_IDS;
-
-	static {
-		HashBiMap<String, Integer> entityMap = HashBiMap.create();
-		entityMap.put("Item", 1);
-		entityMap.put("XPOrb", 2);
-		entityMap.put("Painting", 9);
-		entityMap.put("Arrow", 10);
-		entityMap.put("Snowball", 11);
-		entityMap.put("Fireball", 12);
-		entityMap.put("SmallFireball", 13);
-		entityMap.put("ThrownEnderpearl", 14);
-		entityMap.put("EyeOfEnderSignal", 15);
-		entityMap.put("ThrownPotion", 16);
-		entityMap.put("ThrownExpBottle", 17);
-		entityMap.put("PrimedTnt", 20);
-		entityMap.put("FallingSand", 21);
-		entityMap.put("Minecart", 40);
-		entityMap.put("Boat", 41);
-		entityMap.put("Mob", 48);
-		entityMap.put("Monster", 49);
-		entityMap.put("Creeper", 50);
-		entityMap.put("Skeleton", 51);
-		entityMap.put("Spider", 52);
-		entityMap.put("Giant", 53);
-		entityMap.put("Zombie", 54);
-		entityMap.put("Slime", 55);
-		entityMap.put("Ghast", 56);
-		entityMap.put("PigZombie", 57);
-		entityMap.put("Enderman", 58);
-		entityMap.put("CaveSpider", 59);
-		entityMap.put("Silverfish", 60);
-		entityMap.put("Blaze", 61);
-		entityMap.put("LavaSlime", 62);
-		entityMap.put("EnderDragon", 63);
-		entityMap.put("Pig", 90);
-		entityMap.put("Sheep", 91);
-		entityMap.put("Cow", 92);
-		entityMap.put("Chicken", 93);
-		entityMap.put("Squid", 94);
-		entityMap.put("Wolf", 95);
-		entityMap.put("MushroomCow", 96);
-		entityMap.put("SnowMan", 97);
-		entityMap.put("Ozelot", 98);
-		entityMap.put("VillagerGolem", 99);
-		entityMap.put("Villager", 120);
-		entityMap.put("EnderCrystal", 200);
-
-		ENTITY_IDS = entityMap.inverse();
-	}
 
 	public Protocol1_3_1_2to1_2_4_5() {
 		super(ClientboundPackets1_2_4_5.class, ClientboundPackets1_3_1_2.class, ServerboundPackets1_2_4_5.class, ServerboundPackets1_3_1_2.class);
@@ -129,23 +79,93 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 	@Override
 	protected void registerPackets() {
 		super.registerPackets();
+		this.cancelServerbound(ServerboundPackets1_3_1_2.CLIENT_SETTINGS);
 
+		// Two-Way (S -> C)
 		this.registerServerbound(State.LOGIN, ServerboundLoginPackets1_6_4.CLIENT_PROTOCOL.getId(), ServerboundLoginPackets1_6_4.CLIENT_PROTOCOL.getId(), new PacketRemapper() {
 			@Override
 			public void registerMap() {
 				handler((pw) -> {
-					pw.read(Type.UNSIGNED_BYTE); // Protocol ID
+					// Changing Packet Content
+					pw.read(Type.UNSIGNED_BYTE); // Protocol Id
 					final String username = pw.read(Types1_6_4.STRING);
 					final String host = pw.read(Types1_6_4.STRING);
 					final int port = pw.read(Type.INT);
-
 					pw.clearPacket();
 					pw.write(Types1_6_4.STRING, username + ";" + host + ":" + port);
+
+					// Setting Play State
+					Protocol1_7_0_1_preto1_6_4.setupPlayState(pw.user());
 				});
 			}
 		});
 
-		this.cancelServerbound(ServerboundPackets1_3_1_2.CLIENT_SETTINGS);
+		// Two-Way (C -> S)
+		this.registerClientbound(State.PLAY, ClientboundPackets1_2_4_5.HANDSHAKE.getId(), ClientboundPackets1_2_4_5.HANDSHAKE.getId(), new PacketRemapper() {
+			@Override
+			public void registerMap() {
+				handler(wrapper -> {
+					final String serverId = wrapper.read(Types1_6_4.STRING);
+					wrapper.cancel();
+
+					// In case we want online mode
+					if (!serverId.equals("-")) {
+						final OldAuthProvider oldAuthProvider = Via.getManager().getProviders().get(OldAuthProvider.class);
+						if (oldAuthProvider != null) {
+							try {
+								oldAuthProvider.sendJoinServer(serverId);
+							} catch (Exception e) {
+								ViaLegacy.getLogger().log(Level.WARNING, "OldAuthProvider can't send the server auth");
+							}
+						}
+					}
+
+					// Clientside forcing to success the login
+
+					final PacketWrapper joinGame = PacketWrapper.create(ServerboundPackets1_2_4_5.JOIN_GAME, wrapper.user());
+					joinGame.write(Type.INT, Math.abs(wrapper.user().getProtocolInfo().getServerProtocolVersion()));
+					joinGame.write(Types1_6_4.STRING, wrapper.user().getProtocolInfo().getUsername());
+					joinGame.write(Types1_6_4.STRING, "");
+					joinGame.write(Type.INT, 0);
+					joinGame.write(Type.INT, 0);
+					joinGame.write(Type.BYTE, (byte) 0);
+					joinGame.write(Type.BYTE, (byte) 0);
+					joinGame.write(Type.BYTE, (byte) 0);
+
+					joinGame.sendToServer(Protocol1_3_1_2to1_2_4_5.class);
+				});
+			}
+		});
+
+		this.registerClientbound(ClientboundPackets1_2_4_5.PRE_CHUNK, ClientboundPackets1_3_1_2.CHUNK_DATA, new PacketRemapper() {
+			@Override
+			public void registerMap() {
+				handler(wrapper -> {
+					final int chunkX = wrapper.read(Type.INT);
+					final int chunkZ = wrapper.read(Type.INT);
+					final short mode = wrapper.read(Type.UNSIGNED_BYTE);
+
+					if (mode == 0) {
+						wrapper.cancel();
+						return;
+					}
+
+					wrapper.write(new Chunk1_7_6_10Type(wrapper.user().get(ClientWorld.class)), Chunk1_7_6_10Type.deserialize(chunkX, chunkZ, false, false, 0, 0, new byte[256]));
+				});
+			}
+		});
+
+		this.registerClientbound(ClientboundPackets1_2_4_5.CHUNK_DATA, ClientboundPackets1_3_1_2.CHUNK_DATA, new PacketRemapper() {
+			@Override
+			public void registerMap() {
+				handler(wrapper -> {
+					final ClientWorld world = wrapper.user().get(ClientWorld.class);
+
+					final Chunk chunk = wrapper.read(new Chunk1_2_5Type(world));
+					wrapper.write(new Chunk1_7_6_10Type(world), chunk);
+				});
+			}
+		});
 
 		this.registerServerbound(ServerboundPackets1_3_1_2.CLIENT_STATUS, ServerboundPackets1_2_4_5.RESPAWN, new PacketRemapper() {
 			@Override
@@ -266,49 +286,6 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 
 		this.cancelServerbound(ServerboundPackets1_3_1_2.TAB_COMPLETE);
 
-		this.registerClientbound(State.LOGIN, ClientboundLoginPackets1_2_4_5.HANDSHAKE.getId(), ClientboundLoginPackets1_2_4_5.HANDSHAKE.getId(), new PacketRemapper() {
-			@Override
-			public void registerMap() {
-				handler((pw) -> {
-					final String serverId = pw.read(Types1_6_4.STRING);
-					pw.cancel();
-
-					if (!serverId.equals("-")) {
-						final OldAuthProvider oldAuthProvider = Via.getManager().getProviders().get(OldAuthProvider.class);
-						if (oldAuthProvider != null) {
-							try {
-								oldAuthProvider.sendJoinServer(serverId);
-							} catch (Exception e) {
-								ViaLegacy.getLogger().log(Level.WARNING, "OldAuthProvider can't send the server auth");
-							}
-						}
-					}
-
-					final PacketWrapper loginSuccess = PacketWrapper.create(ClientboundLoginPackets1_2_4_5.HANDSHAKE, pw.user());
-
-					loginSuccess.write(Type.STRING, UUID.randomUUID().toString().replace("-", ""));
-					loginSuccess.write(Type.STRING, pw.user().getProtocolInfo().getUsername());
-					loginSuccess.send(Protocol1_7_0_1_preto1_6_4.class);
-					pw.user().getProtocolInfo().setState(State.PLAY);
-
-					final PacketWrapper login = PacketWrapper.create(ServerboundPackets1_2_4_5.JOIN_GAME, pw.user());
-					login.write(Type.INT, Math.abs(pw.user().getProtocolInfo().getServerProtocolVersion()));
-
-					login.write(Types1_6_4.STRING, pw.user().getProtocolInfo().getUsername());
-					login.write(Types1_6_4.STRING, "");
-
-					login.write(Type.INT, 0);
-					login.write(Type.INT, 0);
-
-					login.write(Type.BYTE, (byte) 0);
-					login.write(Type.BYTE, (byte) 0);
-					login.write(Type.BYTE, (byte) 0);
-
-					login.sendToServer(Protocol1_3_1_2to1_2_4_5.class);
-				});
-			}
-		});
-
 		this.registerClientbound(ClientboundPackets1_2_4_5.ENTITY_EQUIPMENT, new PacketRemapper() {
 			@Override
 			public void registerMap() {
@@ -353,13 +330,16 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 
 				map(Type.UNSIGNED_BYTE); // Action-Type
 
+				map(Type.INT);
+				read(Type.INT);
+				read(Type.INT);
+
 				handler((pw) -> {
-					int param1 = pw.read(Type.INT);
-					int param2 = pw.read(Type.INT);
-					int param3 = pw.read(Type.INT);
+					final int param1 = pw.get(Type.INT, 2);
+
 					if (pw.get(Type.UNSIGNED_BYTE, 0) == 1) {
 						final CompoundTag tag = new CompoundTag();
-						tag.put("EntityId", new StringTag(ENTITY_IDS.get(param1)));
+						tag.put("EntityId", new StringTag(EntityIDs.ENTITY_IDS.get(param1)));
 						tag.put("Delay", new ShortTag((short) 20));
 						tag.put("x", new IntTag(pw.get(Type.INT, 0)));
 						tag.put("y", new IntTag(pw.get(Type.SHORT, 0)));
@@ -373,7 +353,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 		this.registerClientbound(ClientboundPackets1_2_4_5.SET_SLOT, new PacketRemapper() {
 			@Override
 			public void registerMap() {
-				map(Type.BYTE); // Window id
+				map(Type.BYTE); // Window Id
 				map(Type.SHORT); // Slot
 				map(Types1_2_5.COMPRESSED_NBT_ITEM, Types1_7_6_10.COMPRESSED_NBT_ITEM); // Item
 			}
@@ -382,17 +362,17 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 		this.registerClientbound(ClientboundPackets1_2_4_5.WINDOW_ITEMS, new PacketRemapper() {
 			@Override
 			public void registerMap() {
-				map(Type.BYTE); // Window id
 				handler((pw) -> {
-					byte wId = pw.get(Type.BYTE, 0);
-					short itms = pw.read(Type.SHORT);
-					Item[] items = new Item[itms];
-					for (int i = 0; i < itms; i++) {
+					final byte windowId = pw.read(Type.BYTE);
+					final short itemCount = pw.read(Type.SHORT);
+
+					final Item[] items = new Item[itemCount];
+					for (int i = 0; i < itemCount; i++) {
 						items[i] = pw.read(Types1_2_5.COMPRESSED_NBT_ITEM);
 					}
 					pw.clearPacket();
 
-					pw.write(Type.BYTE, wId);
+					pw.write(Type.UNSIGNED_BYTE, (short) windowId);
 					pw.write(Types1_7_6_10.COMPRESSED_NBT_ITEM_ARRAY, items);
 				});
 			}
@@ -477,42 +457,6 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 			}
 		});
 
-		this.registerClientbound(ClientboundPackets1_2_4_5.PRE_CHUNK, ClientboundPackets1_3_1_2.CHUNK_DATA, new PacketRemapper() {
-			@Override
-			public void registerMap() {
-				handler(packetWrapper -> {
-					final int chunkX = packetWrapper.read(Type.INT);
-					final int chunkZ = packetWrapper.read(Type.INT);
-					final short mode = packetWrapper.read(Type.UNSIGNED_BYTE);
-
-					if (mode != 0) {
-						packetWrapper.cancel();
-						return;
-					}
-
-					packetWrapper.write(Type.INT, chunkX);
-					packetWrapper.write(Type.INT, chunkZ);
-					packetWrapper.write(Type.BOOLEAN, true);
-					packetWrapper.write(Type.SHORT, (short) 0);
-					packetWrapper.write(Type.SHORT, (short) 0);
-					packetWrapper.write(Type.INT, 0);
-				});
-			}
-		});
-
-		this.registerClientbound(ClientboundPackets1_2_4_5.CHUNK_DATA, new PacketRemapper() {
-			@Override
-			public void registerMap() {
-				map(Type.INT); // Chunk-X
-				map(Type.INT); // Chunk-Z
-				map(Type.BOOLEAN); // Ground up
-				map(Type.SHORT); // Primary bitmask
-				map(Type.SHORT); // Add bitmask
-				map(Type.INT); // Data length
-				map(Type.INT, Type.NOTHING); // Useless shit
-			}
-		});
-
 		this.registerClientbound(ClientboundPackets1_2_4_5.EXPLOSION, new PacketRemapper() {
 			@Override
 			public void registerMap() {
@@ -556,7 +500,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 			@Override
 			public void registerMap() {
 				map(Type.INT); // X-Position
-				map(Type.UNSIGNED_BYTE); // Y-Position
+				map(Type.UNSIGNED_BYTE, Type.BYTE); // Y-Position
 				map(Type.INT); // Z-Position
 				map(Type.BYTE, Type.SHORT); // Block-Type
 				map(Type.BYTE); // Block-Metadata
@@ -568,7 +512,11 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 	public void init(UserConnection connection) {
 		super.init(connection);
 
+		if (!connection.has(ClientWorld.class)) {
+			connection.put(new ClientWorld(connection));
+		}
+
 		connection.put(new LevelDataStorage(connection));
-		connection.put(new SplitterTracker(connection, ClientboundPackets1_2_4_5.values(), ClientboundLoginPackets1_2_4_5.values()));
+		connection.put(new SplitterTracker(connection, ClientboundPackets1_2_4_5.values(), ClientboundLoginPackets1_6_4.values()));
 	}
 }

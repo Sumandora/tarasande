@@ -110,7 +110,6 @@ public class ViaLegacy {
 
         // Base Protocols (Internal)
         registerBaseProtocol(    r1_6_4,    r1_0_0_1,   Protocol1_6_4.INSTANCE    );
-        registerBaseProtocol(    r1_2_4_5,  r1_0_0_1,   Protocol1_6_4.INSTANCE    );
     }
     //@formatter:on
 

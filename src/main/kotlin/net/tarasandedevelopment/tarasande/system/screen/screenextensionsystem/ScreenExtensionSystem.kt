@@ -1,12 +1,12 @@
 package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.button.PanelButton
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.*
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.ScreenExtensionButtonListDirectConnect
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.ScreenExtensionDirectConnectScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
@@ -27,7 +27,8 @@ class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
             ScreenExtensionButtonListSleepingChatScreen(),
             ScreenExtensionDirectConnectScreen(),
             ScreenExtensionGameMenuScreen(),
-            ScreenExtensionButtonListTitleScreen()
+            ScreenExtensionButtonListTitleScreen(),
+            ScreenExtensionButtonListDirectConnect()
         )
 
         EventDispatcher.add(EventChildren::class.java) { eventChildren ->
@@ -55,26 +56,28 @@ open class ScreenExtensionSidebar<T : Screen>(screen: Class<out T>) : ScreenExte
 }
 
 open class ScreenExtensionButtonList<T : Screen>(screen: Class<out T>) : ScreenExtension<T>(screen) {
-    private val buttons = LinkedHashMap<String, Pair<() -> Boolean, () -> Unit>>()
+    private val buttons = LinkedHashMap<String, Triple<() -> Boolean, Direction, () -> Unit>>()
 
-    fun add(text: String, visible: () -> Boolean = { true }, pressAction: () -> Unit) {
-        buttons[text] = Pair(visible, pressAction)
+    fun add(text: String, visible: () -> Boolean = { true }, direction: Direction = Direction.LEFT, pressAction: () -> Unit) {
+        buttons[text] = Triple(visible, direction, pressAction)
     }
 
     override fun createElements(screen: T): MutableList<Element> {
         val list = ArrayList<Element>()
-        var x = 3
-        var y = 3
-        for (button in buttons) {
-            if (!button.value.first()) continue
+        for (value in Direction.values()) {
+            var y = 3
+            for (button in buttons.filter { it.value.second == value }) {
+                if (!button.value.first()) continue
 
-            list.add(PanelButton.createButton(x, y, 98, 25, button.key, button.value.second))
-            x += 98 + 3
-            if (x + 135 >= MinecraftClient.getInstance().window.scaledWidth) {
-                x = 3
+                list.add(PanelButton.createButton(if (value == Direction.LEFT) 3 else screen.width - 101, y, 98, 25, button.key, button.value.third))
                 y += 20 + 3
             }
         }
+
         return list
+    }
+
+    enum class Direction {
+        LEFT, RIGHT
     }
 }

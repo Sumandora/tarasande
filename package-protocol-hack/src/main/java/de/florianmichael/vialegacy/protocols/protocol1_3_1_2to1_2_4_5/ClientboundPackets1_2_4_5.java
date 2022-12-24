@@ -21,8 +21,8 @@
 
 package de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5;
 
-import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitter;
 import de.florianmichael.vialegacy.api.LegacyClientboundPacketType;
+import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitter;
 
 public enum ClientboundPackets1_2_4_5 implements LegacyClientboundPacketType {
 
@@ -39,6 +39,7 @@ public enum ClientboundPackets1_2_4_5 implements LegacyClientboundPacketType {
 		buffer.readByte();
 		buffer.readByte();
 	}),
+	HANDSHAKE(0x02, (buffer, transformer) -> transformer.readString(buffer)),
 	CHAT_MESSAGE(0x03, (buffer, transformer) -> transformer.readString(buffer)),
 	TIME_UPDATE(0x04, (buffer, transformer) -> {
 		buffer.readLong();

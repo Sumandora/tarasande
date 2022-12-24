@@ -40,17 +40,7 @@ public class Chunk1_7_6_10Type extends PartialType<Chunk, ClientWorld> {
         super(param, Chunk.class);
     }
 
-    @Override
-    public Chunk read(ByteBuf byteBuf, ClientWorld clientWorld) throws Exception {
-        int chunkX = byteBuf.readInt();
-        int chunkZ = byteBuf.readInt();
-        boolean groundUp = byteBuf.readBoolean();
-        int primaryBitMask = byteBuf.readShort();
-        int addBitMask = byteBuf.readShort();
-        int compressedSize = byteBuf.readInt();
-        byte[] data = new byte[compressedSize];
-        byteBuf.readBytes(data);
-
+    public static int calculateUncompressedSize(final int primaryBitMask, final int addBitMask, final boolean groundUp) {
         int k = 0;
         int l = 0;
 
@@ -65,7 +55,21 @@ public class Chunk1_7_6_10Type extends PartialType<Chunk, ClientWorld> {
             uncompressedSize += 256;
         }
 
-        byte[] uncompressedData = new byte[uncompressedSize];
+        return uncompressedSize;
+    }
+
+    @Override
+    public Chunk read(ByteBuf byteBuf, ClientWorld clientWorld) throws Exception {
+        final int chunkX = byteBuf.readInt();
+        final int chunkZ = byteBuf.readInt();
+        final boolean groundUp = byteBuf.readBoolean();
+        final int primaryBitMask = byteBuf.readShort();
+        final int addBitMask = byteBuf.readShort();
+        final int compressedSize = byteBuf.readInt();
+        final byte[] data = new byte[compressedSize];
+        byteBuf.readBytes(data);
+
+        final byte[] uncompressedData = new byte[calculateUncompressedSize(primaryBitMask, addBitMask, groundUp)];
         Inflater inflater = new Inflater();
         inflater.setInput(data, 0, compressedSize);
         try {
