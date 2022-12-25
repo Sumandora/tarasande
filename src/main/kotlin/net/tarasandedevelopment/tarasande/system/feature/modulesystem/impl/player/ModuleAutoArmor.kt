@@ -2,6 +2,9 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.play
 
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen
 import net.minecraft.client.gui.screen.ingame.HandledScreen
+import net.minecraft.enchantment.EnchantmentHelper
+import net.minecraft.entity.EquipmentSlot
+import net.minecraft.item.ArmorItem
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.event.EventScreenInput
@@ -12,20 +15,17 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
+import org.lwjgl.glfw.GLFW
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.sqrt
 
-class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your inventory", ModuleCategory.PLAYER) {
-
+class ModuleAutoArmor : Module("Auto armor", "Equips armor if none is equipped", ModuleCategory.PLAYER) {
     private val openInventory = ValueBoolean(this, "Open inventory", true)
     private val delay = ValueNumberRange(this, "Delay", 0.0, 100.0, 200.0, 500.0, 1.0)
     private val openDelay = object : ValueNumber(this, "Open delay", 0.0, 100.0, 500.0, 1.0) {
         override fun isEnabled() = openInventory.value
     }
     private val randomize = ValueNumber(this, "Randomize", 0.0, 0.0, 30.0, 1.0)
-
-    private val keepSameMaterial = ValueBoolean(this, "Keep same material", true)
-    private val keepSameEnchantments = ValueBoolean(this, "Keep same enchantments", true)
 
     private val timeUtil = TimeUtil()
 
@@ -34,7 +34,7 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
     private var nextDelay: Long = 0
 
     init {
-        registerEvent(EventScreenInput::class.java) { event ->
+        registerEvent(EventScreenInput::class.java, 999) { event ->
             if (event.doneInput)
                 return@registerEvent
 
@@ -56,7 +56,19 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
                 mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
             }
 
-            val nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list -> ContainerUtil.hasBetterEquivalent(slot.stack, list.filter { it != slot }.map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value) }
+            val bestArmors = EquipmentSlot.values()
+                .filter { it.isArmorSlot }
+                .filter { ContainerUtil.getEquipmentSlot(screenHandler, it)?.hasStack() != true }
+                .mapNotNull { equipmentSlot ->
+                    ContainerUtil.getValidSlots(screenHandler)
+                        .filter { it.stack.item is ArmorItem && (it.stack.item as ArmorItem).slotType == equipmentSlot }
+                        .maxByOrNull { (it.stack.item as ArmorItem).protection + EnchantmentHelper.get(it.stack).values.sum() }
+                }
+
+            if(bestArmors.isNotEmpty())
+                event.doneInput = true
+
+            val nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, _ -> bestArmors.contains(slot) }
 
             if (!timeUtil.hasReached(
                     if (wasClosed && !openInventory.value)
@@ -77,9 +89,8 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
                 mousePos = displayPos
                 val mapped = sqrt(distance).div(Vec2f(accessor.backgroundWidth.toFloat(), accessor.backgroundHeight.toFloat()).length())
                 nextDelay = (delay.minValue + (delay.maxValue - delay.minValue) * mapped).toLong()
-                mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot.id, 1 /* 1 = all; 0 = single */, SlotActionType.THROW, mc.player)
+                mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot.id, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.QUICK_MOVE, mc.player)
             }
         }
     }
-
 }

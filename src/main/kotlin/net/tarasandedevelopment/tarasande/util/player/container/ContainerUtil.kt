@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.util.player.container
 
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.enchantment.EnchantmentHelper
+import net.minecraft.entity.EquipmentSlot
 import net.minecraft.item.*
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
@@ -18,6 +19,12 @@ object ContainerUtil {
             .filter { it != null && it.isEnabled && it.hasStack() }
     }
 
+    fun getEquipmentSlot(screenHandler: ScreenHandler, equipmentSlot: EquipmentSlot): Slot? {
+        return getValidSlots(screenHandler)
+            .filter { it.id in 5..8 }
+            .firstOrNull { it.stack.item is ArmorItem && (it.stack.item as ArmorItem).slotType == equipmentSlot }
+    }
+
     fun getClosestSlot(screenHandler: ScreenHandler, original: HandledScreen<*>, lastMouseClick: Vec2f, block: (Slot, List<Slot>) -> Boolean): Slot? {
         val list = getValidSlots(screenHandler)
         return list
@@ -29,7 +36,7 @@ object ContainerUtil {
         return when (stack.item) {
             is SwordItem -> (stack.item as SwordItem).material.attackDamage
             is ToolItem -> (stack.item as ToolItem).material.durability.toFloat()
-            is ArmorItem -> (stack.item as ArmorItem).material.getDurability((stack.item as ArmorItem).slotType).toFloat()
+            is ArmorItem -> (stack.item as ArmorItem).protection.toFloat()
             else -> 0.0F
         }.times(if (durability) (1.0F - stack.damage / stack.maxDamage.toFloat()) else 1.0F)
     }

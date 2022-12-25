@@ -3,9 +3,9 @@ package net.tarasandedevelopment.tarasande.system.base.valuesystem.impl
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentTextList
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl.ElementWidthValueComponentFocusableTextList
 
-open class ValueTextList(owner: Any, name: String, var value: MutableList<String>, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentTextList::class.java, manage) {
+open class ValueTextList(owner: Any, name: String, var value: MutableList<String>, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentFocusableTextList::class.java, manage) {
     override fun save(): JsonElement? {
         val array = JsonArray()
         value.forEach {

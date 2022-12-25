@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl
+package net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
@@ -8,13 +8,13 @@ import net.tarasandedevelopment.tarasande.injection.accessor.ITextFieldWidget
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueTextList
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.ElementWidthValueComponentFocusable
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
-class ElementWidthValueComponentTextList(value: Value) : ElementWidthValueComponent(value) {
+class ElementWidthValueComponentFocusableTextList(value: Value) : ElementWidthValueComponentFocusable(value) {
     //TODO
     private val textFieldWidget = TextFieldWidgetPlaceholder(MinecraftClient.getInstance().textRenderer, 0, 0, 40 * 2, FontWrapper.fontHeight() * 2 - 1, Text.of("Input text"))
 
@@ -124,7 +124,7 @@ class ElementWidthValueComponentTextList(value: Value) : ElementWidthValueCompon
         textFieldWidget.setCursorToEnd()
     }
 
-    fun isFocused() = textFieldWidget.isFocused
+    override fun isFocused() = textFieldWidget.isFocused
 
     override fun getHeight(): Double {
         val valueTextList = value as ValueTextList

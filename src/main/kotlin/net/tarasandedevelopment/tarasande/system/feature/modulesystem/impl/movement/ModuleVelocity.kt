@@ -38,6 +38,10 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
         override fun isEnabled() = mode.isSelected(2)
     }
 
+    init {
+        addition.select(1) // Default, that's the most normal one
+    }
+
     private var receivedKnockback = false
     private var lastVelocity: Vec3d? = null
     private var isJumping = false

@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl
+package net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.injection.accessor.ITextFieldWidget
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.ElementWidthValueComponentFocusable
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
@@ -16,7 +16,7 @@ import org.lwjgl.glfw.GLFW
 import java.awt.Color
 import java.util.concurrent.CopyOnWriteArrayList
 
-class ElementWidthValueComponentRegistry(value: Value) : ElementWidthValueComponent(value) {
+class ElementWidthValueComponentFocusableRegistry(value: Value) : ElementWidthValueComponentFocusable(value) {
     //TODO
     private val textFieldWidget = TextFieldWidgetPlaceholder(MinecraftClient.getInstance().textRenderer, 0, 0, 40 * 2, FontWrapper.fontHeight() * 2 - 1, Text.of("Search"))
 
@@ -171,7 +171,7 @@ class ElementWidthValueComponentRegistry(value: Value) : ElementWidthValueCompon
         searchResults.addAll((value as ValueRegistry<*>).updateSearchResults(textFieldWidget.text, 4))
     }
 
-    fun isFocused() = textFieldWidget.isFocused
+    override fun isFocused() = textFieldWidget.isFocused
 
     override fun getHeight(): Double {
         val valueRegistry = value as ValueRegistry<*>

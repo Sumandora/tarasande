@@ -20,9 +20,11 @@ class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attackin
     private val packets = object : ValueMode(this, "Packets", true, "Velocity", "Explosion") {
         override fun isEnabled() = knockbackAware.value
     }
+    private val reducingSpeedMultiplier = ValueNumber(this, "Reducing speed multiplier", 0.0, 0.6 /* TODO Read the constant */, 1.0, 0.1)
+    private val unsprintWhenReducing = ValueBoolean(this, "Unsprint when reducing", false)
 
     private var prevVelocity: Vec3d? = null
-    private var disabled = false
+    private var takingKnockback = false
 
     init {
         registerEvent(EventAttackEntity::class.java) { event ->
@@ -31,20 +33,21 @@ class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attackin
         }
 
         registerEvent(EventKeepSprint::class.java) { event ->
-            if (!disabled) {
-                if (!unsprint.value) event.sprinting = true
-                mc.player?.velocity = prevVelocity?.multiply(speedMultiplier.value, 1.0, speedMultiplier.value)
-            }
+            val unsprint = if(takingKnockback) unsprintWhenReducing else this.unsprint
+            val speedMultiplier = if(takingKnockback) reducingSpeedMultiplier else this.speedMultiplier
+
+            if (!unsprint.value) event.sprinting = true
+            mc.player?.velocity = prevVelocity?.multiply(speedMultiplier.value, 1.0, speedMultiplier.value)
         }
 
         registerEvent(EventVelocity::class.java, 999) { event ->
             if (knockbackAware.value && packets.isSelected(event.packet.ordinal) && !event.cancelled && event.velocityX * event.velocityX + event.velocityZ * event.velocityZ > 0.01)
-                disabled = true
+                takingKnockback = true
         }
 
         registerEvent(EventAttack::class.java) {
             if (mc.player?.isOnGround!!)
-                disabled = false
+                takingKnockback = false
         }
     }
 

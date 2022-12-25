@@ -1,15 +1,15 @@
-package net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl
+package net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl
 
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.ElementWidthValueComponentFocusable
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
-class ElementWidthValueComponentBind(value: Value) : ElementWidthValueComponent(value) {
+class ElementWidthValueComponentFocusableBind(value: Value) : ElementWidthValueComponentFocusable(value) {
 
     private var waitsForInput = false
 
@@ -91,4 +91,6 @@ class ElementWidthValueComponentBind(value: Value) : ElementWidthValueComponent(
     }
 
     override fun getHeight() = FontWrapper.fontHeight().toDouble()
+
+    override fun isFocused() = waitsForInput
 }

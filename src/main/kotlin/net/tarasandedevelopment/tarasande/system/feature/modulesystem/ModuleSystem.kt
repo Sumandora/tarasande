@@ -94,6 +94,7 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
             ModuleCivBreak(),
             ModuleNoStatusEffect(),
             ModuleAntiCactus(),
+            ModuleAutoArmor(),
 
             // Render
             ModuleESP(),

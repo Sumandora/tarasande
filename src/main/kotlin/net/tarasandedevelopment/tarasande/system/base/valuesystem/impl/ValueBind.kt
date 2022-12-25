@@ -6,12 +6,12 @@ import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.event.EventKey
 import net.tarasandedevelopment.tarasande.event.EventMouse
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentBind
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl.ElementWidthValueComponentFocusableBind
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 
-open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, var mouse: Boolean = true, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentBind::class.java, manage) {
+open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, var mouse: Boolean = true, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentFocusableBind::class.java, manage) {
 
     private var presses = 0
 

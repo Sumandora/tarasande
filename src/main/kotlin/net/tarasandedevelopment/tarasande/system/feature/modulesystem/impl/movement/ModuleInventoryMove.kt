@@ -9,9 +9,7 @@ import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.feature.friend.panel.PanelElementsFriends
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentRegistry
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentText
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentTextList
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.ElementWidthValueComponentFocusable
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.element.PanelElementsCategory
@@ -55,12 +53,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         }
     }
 
-    private fun isFocused(valueComponent: ElementWidthValueComponent) = when (valueComponent) {
-        is ElementWidthValueComponentText -> valueComponent.isFocused()
-        is ElementWidthValueComponentRegistry -> valueComponent.isFocused()
-        is ElementWidthValueComponentTextList -> valueComponent.isFocused()
-        else -> false
-    }
+    private fun isFocused(valueComponent: ElementWidthValueComponent) = valueComponent is ElementWidthValueComponentFocusable && valueComponent.isFocused()
 
     private fun isTextBoxFocused(): Boolean {
         if(mc.currentScreen is ScreenBetterOwnerValues) {

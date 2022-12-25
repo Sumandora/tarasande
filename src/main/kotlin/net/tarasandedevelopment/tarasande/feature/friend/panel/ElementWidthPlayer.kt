@@ -6,7 +6,7 @@ import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.injection.accessor.ITextFieldWidget
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentText
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl.ElementWidthValueComponentFocusableText
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.render.helper.element.ElementWidth
@@ -20,7 +20,7 @@ class ElementWidthPlayer(val gameProfile: GameProfile, width: Double) : ElementW
             TarasandeMain.friends().setAlias(gameProfile, value.ifEmpty { null })
         }
     }
-    val textField = ElementWidthValueComponentText(value, 1.0F, false)
+    val textField = ElementWidthValueComponentFocusableText(value, 1.0F, false)
 
     private val defaultHeight = FontWrapper.fontHeight() * 1.5 + 2.0
     private var friendTime = 0L
@@ -49,7 +49,7 @@ class ElementWidthPlayer(val gameProfile: GameProfile, width: Double) : ElementW
             matrices.pop()
             accessor.tarasande_setColor(null)
         } else {
-            textField.setFocused(false)
+            textField.textFieldWidget.setTextFieldFocused(false)
             FontWrapper.textShadow(matrices, gameProfile.name, xOffset.toFloat(), yOffset.toFloat(), -1)
         }
 

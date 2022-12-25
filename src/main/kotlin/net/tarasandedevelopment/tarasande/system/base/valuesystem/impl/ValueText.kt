@@ -3,9 +3,9 @@ package net.tarasandedevelopment.tarasande.system.base.valuesystem.impl
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentText
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl.ElementWidthValueComponentFocusableText
 
-open class ValueText(owner: Any, name: String, var value: String, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentText::class.java, manage) {
+open class ValueText(owner: Any, name: String, var value: String, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentFocusableText::class.java, manage) {
     override fun save(): JsonElement {
         return JsonPrimitive(value)
     }

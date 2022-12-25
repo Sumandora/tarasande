@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl
+package net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
@@ -8,13 +8,13 @@ import net.tarasandedevelopment.tarasande.injection.accessor.ITextFieldWidget
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.ElementWidthValueComponentFocusable
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
-class ElementWidthValueComponentText(value: Value) : ElementWidthValueComponent(value) {
+class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueComponentFocusable(value) {
 
     var scale = 0.5F
     var centered = false
@@ -97,9 +97,7 @@ class ElementWidthValueComponentText(value: Value) : ElementWidthValueComponent(
         textFieldWidget.setTextFieldFocused(false)
     }
 
-    fun isFocused() = textFieldWidget.isFocused
-
-    fun setFocused(focused: Boolean) = textFieldWidget.setTextFieldFocused(focused)
+    override fun isFocused() = textFieldWidget.isFocused
 
     override fun getHeight() = FontWrapper.fontHeight().toDouble() * (scale + 0.5)
 }

@@ -15,7 +15,7 @@ class ClickableWidgetPanelSidebar(panel: Panel) : ClickableWidgetPanel(panel, tr
         this.y = 0
         this.height = MinecraftClient.getInstance().window.scaledHeight
 
-        if (RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), x.toDouble(), y.toDouble(), (x + width).toDouble(), (y + height).toDouble()))
+        if (RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), (x - 1).toDouble(), y.toDouble(), (x + width).toDouble(), (y + height).toDouble()))
             animation += 0.005 * RenderUtil.deltaTime
         else
             animation -= 0.005 * RenderUtil.deltaTime

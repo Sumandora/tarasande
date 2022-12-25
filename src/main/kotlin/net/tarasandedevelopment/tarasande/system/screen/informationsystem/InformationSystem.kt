@@ -45,6 +45,16 @@ class ManagerInformation(panelSystem: ManagerPanel) : Manager<Information>() {
         }
     }
 
+    override fun insert(obj: Information, index: Int) {
+        @Suppress("NAME_SHADOWING")
+        var index = index
+        // Is the owner known already? Move this information to the others from that owner
+        val idx = list.indexOfLast { it.owner == obj.owner }
+        if(idx != -1)
+            index = idx + 1
+        super.insert(obj, index)
+    }
+
     fun getAllOwners(): List<String> {
         return list.distinctBy { it.owner }.map { it.owner }
     }
