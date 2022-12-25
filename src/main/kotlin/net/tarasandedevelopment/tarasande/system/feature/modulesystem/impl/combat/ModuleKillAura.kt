@@ -416,8 +416,10 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         }
 
         registerEvent(EventRender3D::class.java) { event ->
-            if(mc.crosshairTarget != null && mc.crosshairTarget?.type == HitResult.Type.ENTITY)
-                RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(Box.from(mc.crosshairTarget?.pos).offset(-0.5, -0.5, -0.5).expand(-0.45)), aimTargetColor.getColor().rgb)
+            if(RotationUtil.fakeRotation != null)
+                if(mc.crosshairTarget != null && mc.crosshairTarget?.type == HitResult.Type.ENTITY)
+                    if(mc.crosshairTarget is EntityHitResult && targets.any { it.first == (mc.crosshairTarget as EntityHitResult).entity })
+                        RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(Box.from(mc.crosshairTarget?.pos).offset(-0.5, -0.5, -0.5).expand(-0.45)), aimTargetColor.getColor().rgb)
             RenderUtil.renderPath(event.matrices, teleportPath ?: return@registerEvent, -1)
         }
     }
