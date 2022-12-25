@@ -17,6 +17,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider.UUIDProvider
 import de.florianmichael.viaprotocolhack.INativeProvider
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
+import de.florianmichael.viaprotocolhack.util.JLoggerToLog4j
 import de.florianmichael.viaprotocolhack.util.VersionList
 import io.netty.channel.DefaultEventLoop
 import net.fabricmc.loader.api.FabricLoader
@@ -52,10 +53,10 @@ import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.Fabr
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricVersionProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.util.formatRange
+import org.apache.logging.log4j.LogManager
 import su.mandora.event.EventDispatcher
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.ThreadFactory
-import java.util.logging.Logger
 
 class TarasandeProtocolHack : INativeProvider {
 
@@ -69,7 +70,7 @@ class TarasandeProtocolHack : INativeProvider {
 
     fun initialize() {
         ViaProtocolHack.instance().init(this) {
-            ViaLegacy.init(Logger.getLogger("ViaLegacy-tarasande"))
+            ViaLegacy.init(JLoggerToLog4j(LogManager.getLogger("ViaLegacy-tarasande")))
         }
         PackFormats.checkOutdated(nativeVersion())
 
