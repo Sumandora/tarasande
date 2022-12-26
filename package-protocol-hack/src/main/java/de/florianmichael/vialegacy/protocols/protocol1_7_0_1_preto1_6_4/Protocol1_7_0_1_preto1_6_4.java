@@ -56,7 +56,7 @@ import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_6_4.ClientboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_6_4.ServerboundLoginPackets1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_6_4.storage.HandshakeStorage;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.item.MaterialReplacement1_7_0_5to1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.item.MaterialReplacement1_7_0_1_preto1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.model.EntityAttributeModifier;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.model.EntityProperty;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.model.PluginMessage;
@@ -64,7 +64,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.model.Vi
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider.EncryptionProvider;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider.UUIDProvider;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.sound.NoteBlockPitch;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.sound.SoundRewriter1_7_0_5to1_6_4;
+import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.sound.SoundRewriter1_7_0_1_preto1_6_4;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.storage.PluginMessageStorage;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.string.DisconnectPacketRemapper;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.type.Types1_6_4;
@@ -86,8 +86,8 @@ import java.util.UUID;
 
 public class Protocol1_7_0_1_preto1_6_4 extends EnZaProtocol<ClientboundPackets1_6_4, ClientboundPackets1_7_0_1_pre, ServerboundPackets1_6_4, ServerboundPackets1_7_0_1_pre> {
 
-    private final SoundRewriter<Protocol1_7_0_1_preto1_6_4> soundRewriter = new SoundRewriter1_7_0_5to1_6_4(this);
-    private final MaterialReplacement materialReplacement = new MaterialReplacement1_7_0_5to1_6_4();
+    private final SoundRewriter<Protocol1_7_0_1_preto1_6_4> soundRewriter = new SoundRewriter1_7_0_1_preto1_6_4(this);
+    private final MaterialReplacement materialReplacement = new MaterialReplacement1_7_0_1_preto1_6_4();
 
     public Protocol1_7_0_1_preto1_6_4() {
         super(ClientboundPackets1_6_4.class, ClientboundPackets1_7_0_1_pre.class, ServerboundPackets1_6_4.class, ServerboundPackets1_7_0_1_pre.class);
@@ -113,7 +113,7 @@ public class Protocol1_7_0_1_preto1_6_4 extends EnZaProtocol<ClientboundPackets1
 
     @Override
     protected void registerPackets() {
-        this.soundRewriter().register1_7_5NamedSound(ClientboundPackets1_6_4.NAMED_SOUND);
+        this.soundRewriter().register1_7_0_1_preNamedSound(ClientboundPackets1_6_4.NAMED_SOUND);
 
         // Login Start
         this.registerServerbound(State.LOGIN, ServerboundLoginPackets.HELLO.getId(), ServerboundLoginPackets.HELLO.getId(), new PacketRemapper() {
