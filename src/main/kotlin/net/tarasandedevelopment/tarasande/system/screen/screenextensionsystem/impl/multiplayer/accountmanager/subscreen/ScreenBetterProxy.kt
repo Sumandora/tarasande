@@ -151,6 +151,7 @@ class ScreenBetterProxy : ScreenBetter(null) {
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
             doneButton?.onPress()
+            return true
         } else {
             var focused = false
             for (textField in listOf(ipTextField, portTextField, usernameTextField, passwordTextField)) if (textField?.isFocused!!) focused = true
@@ -163,6 +164,7 @@ class ScreenBetterProxy : ScreenBetter(null) {
                         portTextField?.text = parts[1]
                     }
                 }
+                return true
             }
         }
         return super.keyPressed(keyCode, scanCode, modifiers)

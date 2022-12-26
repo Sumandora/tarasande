@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat
 
-import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityStatuses
 import net.minecraft.entity.LivingEntity
@@ -111,7 +110,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val forceCritical = object : ValueBoolean(this, "Force critical", true) {
         override fun isEnabled() = waitForCritical.value && criticalSprint.value
     }
-    private val closedInventory = ValueBoolean(this, "Closed inventory", false)
     private val aimTargetColor = ValueColor(this, "Aim target color", 0.0, 1.0, 1.0, 1.0)
 
     val targets = CopyOnWriteArrayList<Pair<Entity, Vec3d>>()
@@ -186,14 +184,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             val prevTargets = ArrayList(targets)
             targets.clear()
             val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
-            if (closedInventory.value && mc.currentScreen is HandledScreen<*>) {
-                if (RotationUtil.fakeRotation != null) {
-                    event.rotation = currentRot
-                    event.minRotateToOriginSpeed = aimSpeed.minValue
-                    event.maxRotateToOriginSpeed = aimSpeed.maxValue
-                }
-                return@registerEvent
-            }
             for (entity in mc.world?.entities!!) {
                 if (!PlayerUtil.isAttackable(entity)) continue
 
@@ -319,7 +309,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             var attacked = false
 
-            if (validEntities.isNotEmpty() && !event.dirty && (!closedInventory.value || mc.currentScreen !is HandledScreen<*>)) {
+            if (validEntities.isNotEmpty() && !event.dirty) {
                 var clicks = clickSpeedUtil.getClicks()
 
                 if (clicks == 0)

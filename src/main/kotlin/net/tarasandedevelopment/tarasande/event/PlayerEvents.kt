@@ -27,7 +27,24 @@ class EventJump(var yaw: Float, val state: State) : Event(state == State.PRE) {
     }
 }
 
-class EventMovement(val entity: Entity, var velocity: Vec3d) : Event(false)
+class EventMovement : Event {
+    val entity: Entity
+    var dirty = false
+        private set
+    var velocity: Vec3d
+        set(value) {
+            dirty = true
+            field = value
+        }
+
+    constructor(entity: Entity, velocity: Vec3d) : super(false) {
+        this.entity = entity
+        this.velocity = velocity
+        this.dirty = false
+    }
+
+}
+
 class EventAttackEntity(val entity: Entity, val state: State) : Event(false) {
     enum class State {
         PRE, POST
@@ -48,7 +65,7 @@ class EventStep : Event {
     var stepHeight: Float
         set(value) {
             if (state == State.POST)
-                error("stepHeight can't be modified during POST")
+                error("stepHeight can't be modified during " + State.POST.name)
             field = value
         }
     val state: State

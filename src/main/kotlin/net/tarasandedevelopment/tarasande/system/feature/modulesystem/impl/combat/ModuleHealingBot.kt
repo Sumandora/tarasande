@@ -64,12 +64,13 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
     }
 
     init {
-        registerEvent(EventPollEvents::class.java, 1) { event ->
-            if (event.dirty)
-                return@registerEvent
-
+        registerEvent(EventPollEvents::class.java, 9999) { event ->
             when (state) {
                 State.THROW -> {
+                    if (event.dirty) {
+                        onEnable()
+                        return@registerEvent
+                    }
                     if (intendedItem?.item is SplashPotionItem) {
                         event.rotation = Rotation(mc.player!!).also { it.pitch = 90.0F }.correctSensitivity()
                         targetRotation = event.rotation
@@ -94,6 +95,9 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
             if (!timer.hasReached(delay.value.toLong()))
                 return@registerEvent
 
+            if(mc.player?.isUsingItem == true)
+                return@registerEvent
+
             var bestItem: Int? = null
 
             if (items.isSelected(0)) {
@@ -109,13 +113,14 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
                         }
             }
 
-            if (bestItem == null && items.isSelected(1)) {
+            if (bestItem == null && items.isSelected(1) && !event.dirty) {
                 bestItem = findItem {
                     if (it.item !is SplashPotionItem)
                         return@findItem false
 
                     val effects = PotionUtil.getPotionEffects(it)
-                    if (effects.size == 1 && effects.first().effectType.let { type -> type == StatusEffects.REGENERATION || type == StatusEffects.INSTANT_HEALTH })
+                    println(effects + " " + (mc.player?.health?.div(2.0)!! <= health.value))
+                    if (effects.all { type -> type == StatusEffects.REGENERATION || type == StatusEffects.INSTANT_HEALTH })
                         return@findItem mc.player?.health?.div(2.0)!! <= health.value
                     return@findItem effects.all { effect -> effect.effectType.isBeneficial && !(mc.player as ILivingEntity).tarasande_forceHasStatusEffect(effect.effectType) }
                 }
@@ -123,7 +128,6 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
 
             if (bestItem != null) {
                 state = State.THROW
-                timer.reset()
                 intendedItem = mc.player?.offHandStack
                 intendedSlot = bestItem
                 if (bestItem != -1) {
@@ -139,9 +143,10 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
                 if (state == State.THROW) {
                     if (intendedItem?.item is SplashPotionItem && mc.player?.lastPitch != targetRotation?.pitch)
                         return@registerEvent
-                    event.pressed = true
-                    if ((intendedSlot == -1 && mc.player?.offHandStack?.item != intendedItem?.item) || mc.player?.mainHandStack?.item != intendedItem?.item) {
+                    if (timer.hasReached(delay.value.toLong())) {
+                        event.pressed = true
                         state = State.SWITCH_BACK
+                        timer.reset()
                     }
                 }
             }

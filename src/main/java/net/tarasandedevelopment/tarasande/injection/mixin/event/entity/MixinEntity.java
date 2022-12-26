@@ -30,6 +30,12 @@ public abstract class MixinEntity implements IEntity {
         return null;
     }
 
+    @Shadow
+    protected abstract boolean getFlag(int index);
+
+    @Shadow
+    public abstract void setVelocity(Vec3d velocity);
+
     @Redirect(method = "updateVelocity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;movementInputToVelocity(Lnet/minecraft/util/math/Vec3d;FF)Lnet/minecraft/util/math/Vec3d;"))
     public Vec3d hookEventVelocityYaw(Vec3d movementInput, float speed, float yaw) {
         if ((Object) this == MinecraftClient.getInstance().player) {
@@ -63,13 +69,13 @@ public abstract class MixinEntity implements IEntity {
     public void hookEventMovement(MovementType movementType, Vec3d movement, CallbackInfo ci) {
         EventMovement eventMovement = new EventMovement((Entity) (Object) this, movement);
         EventDispatcher.INSTANCE.call(eventMovement);
-        movement.x = eventMovement.getVelocity().x;
-        movement.y = eventMovement.getVelocity().y;
-        movement.z = eventMovement.getVelocity().z;
+        if (eventMovement.getDirty()) {
+            setVelocity(eventMovement.getVelocity());
+            movement.x = eventMovement.getVelocity().x;
+            movement.y = eventMovement.getVelocity().y;
+            movement.z = eventMovement.getVelocity().z;
+        }
     }
-
-    @Shadow
-    protected abstract boolean getFlag(int index);
 
     @Inject(method = "getFlag", at = @At("RETURN"), cancellable = true)
     public void hookEventEntityFlag(int index, CallbackInfoReturnable<Boolean> cir) {

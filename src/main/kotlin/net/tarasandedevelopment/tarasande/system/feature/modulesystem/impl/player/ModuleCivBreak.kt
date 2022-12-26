@@ -22,8 +22,8 @@ class ModuleCivBreak : Module("Civ break", "Breaks blocks multiple times", Modul
                     PlayerActionC2SPacket.Action.START_DESTROY_BLOCK -> {
                         if (packets.isSelected(0)) {
                             for (i in 0 until multiplier.value.toInt()) {
-                                mc.interactionManager!!.sendSequencedPacket(mc.world) { sequence: Int ->
-                                    PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, event.packet.pos, event.packet.direction, sequence).also {
+                                mc.interactionManager!!.sendSequencedPacket(mc.world) {
+                                    PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, event.packet.pos, event.packet.direction, it).also {
                                         (mc.networkHandler?.connection as IClientConnection).tarasande_addForcePacket(it)
                                     }
                                 }
@@ -34,8 +34,8 @@ class ModuleCivBreak : Module("Civ break", "Breaks blocks multiple times", Modul
                     PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK -> {
                         if (packets.isSelected(1)) {
                             for (i in 0 until multiplier.value.toInt()) {
-                                mc.interactionManager!!.sendSequencedPacket(mc.world) { sequence: Int ->
-                                    PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, event.packet.pos, event.packet.direction, sequence).also {
+                                mc.interactionManager!!.sendSequencedPacket(mc.world) {
+                                    PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, event.packet.pos, event.packet.direction, it).also {
                                         (mc.networkHandler?.connection as IClientConnection).tarasande_addForcePacket(it)
                                     }
                                 }
