@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
+import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.InputUtil
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain
@@ -68,5 +69,5 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         }
     }
 
-    private fun isPassingEvents() = (mc.currentScreen is ScreenCheatMenu || mc.currentScreen is ScreenBetterOwnerValues || mc.currentScreen is ScreenBetterFileChooser) && !textBoxFocused
+    private fun isPassingEvents() = (mc.currentScreen is ScreenCheatMenu || mc.currentScreen is ScreenBetterOwnerValues || mc.currentScreen is ScreenBetterFileChooser) && !textBoxFocused || mc.currentScreen is HandledScreen<*>
 }
