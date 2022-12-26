@@ -24,9 +24,9 @@ package de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.sound;
 import de.florianmichael.vialegacy.api.sound.SoundRewriter;
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.Protocol1_7_0_1_preto1_6_4;
 
-public class SoundRewriter1_7_0_5to1_6_4 extends SoundRewriter<Protocol1_7_0_1_preto1_6_4> {
+public class SoundRewriter1_7_0_1_preto1_6_4 extends SoundRewriter<Protocol1_7_0_1_preto1_6_4> {
 
-    public SoundRewriter1_7_0_5to1_6_4(Protocol1_7_0_1_preto1_6_4 protocol) {
+    public SoundRewriter1_7_0_1_preto1_6_4(Protocol1_7_0_1_preto1_6_4 protocol) {
         super(protocol);
     }
 

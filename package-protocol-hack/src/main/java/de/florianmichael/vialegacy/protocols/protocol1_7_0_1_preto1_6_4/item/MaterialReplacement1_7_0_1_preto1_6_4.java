@@ -24,9 +24,9 @@ package de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.item;
 import de.florianmichael.vialegacy.api.material.MaterialReplacement;
 import de.florianmichael.vialegacy.api.material.RMaterial;
 
-public class MaterialReplacement1_7_0_5to1_6_4 extends MaterialReplacement {
+public class MaterialReplacement1_7_0_1_preto1_6_4 extends MaterialReplacement {
 
-    public MaterialReplacement1_7_0_5to1_6_4() {
+    public MaterialReplacement1_7_0_1_preto1_6_4() {
         registerBlock(26, 0, new RMaterial(355, 0, "Bed block"));
         registerBlock(34, 0, new RMaterial(33, 0, "Piston extension"));
         registerBlock(36, 0, new RMaterial(33, 0, "Piston moving piece"));

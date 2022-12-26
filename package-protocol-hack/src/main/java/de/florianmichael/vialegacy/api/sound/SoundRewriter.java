@@ -35,7 +35,7 @@ public class SoundRewriter<T extends EnZaProtocol> extends RewriterBase<T> {
         super(protocol);
     }
 
-    public void register1_7_5NamedSound(final ClientboundPacketType packetType) {
+    public void register1_7_0_1_preNamedSound(final ClientboundPacketType packetType) {
         //noinspection unchecked
         protocol.registerClientbound(packetType, new PacketRemapper() {
 
