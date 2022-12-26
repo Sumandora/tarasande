@@ -33,8 +33,8 @@ class EventMovement : Event {
         private set
     var velocity: Vec3d
         set(value) {
-            dirty = true
             field = value
+            dirty = true
         }
 
     constructor(entity: Entity, velocity: Vec3d) : super(false) {

@@ -11,8 +11,8 @@ class EventGoalMovement : Event {
     var dirty = false
     var yaw: Float
         set(value) {
-            dirty = true
             field = value
+            dirty = true
         }
 
     constructor(yaw: Float) : super(false) {

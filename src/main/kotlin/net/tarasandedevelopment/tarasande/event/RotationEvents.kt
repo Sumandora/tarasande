@@ -9,8 +9,8 @@ class EventPollEvents : Event {
         private set
     var rotation: Rotation
         set(value) {
-            dirty = true
             field = value
+            dirty = true
         }
     var minRotateToOriginSpeed = 1.0
     var maxRotateToOriginSpeed = 1.0
