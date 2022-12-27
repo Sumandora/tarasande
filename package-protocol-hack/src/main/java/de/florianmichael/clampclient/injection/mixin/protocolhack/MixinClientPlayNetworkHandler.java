@@ -21,23 +21,36 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
+import com.mojang.authlib.GameProfile;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.network.ServerInfo;
+import net.minecraft.client.util.telemetry.WorldSession;
 import net.minecraft.entity.Entity;
-import net.minecraft.network.packet.s2c.play.*;
+import net.minecraft.network.ClientConnection;
+import net.minecraft.network.packet.s2c.play.EntityPositionS2CPacket;
+import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
+import net.minecraft.network.packet.s2c.play.PlayPingS2CPacket;
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.screen.ScreenHandler;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public abstract class MixinClientPlayNetworkHandler {
@@ -48,6 +61,16 @@ public abstract class MixinClientPlayNetworkHandler {
 
     @Shadow
     public abstract void onEntityStatus(EntityStatusS2CPacket packet);
+
+    @Mutable
+    @Shadow @Final private Set<PlayerListEntry> listedPlayerListEntries;
+
+    @Inject(method = "<init>", at = @At("RETURN"))
+    public void fixTablistOrdering(MinecraftClient client, Screen screen, ClientConnection connection, ServerInfo serverInfo, GameProfile profile, WorldSession worldSession, CallbackInfo ci) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_19_1)) {
+            this.listedPlayerListEntries = new LinkedHashSet<>();
+        }
+    }
 
     @Inject(method = "onPing", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/util/thread/ThreadExecutor;)V", shift = At.Shift.AFTER), cancellable = true)
     private void onPing(PlayPingS2CPacket packet, CallbackInfo ci) {

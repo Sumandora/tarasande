@@ -108,8 +108,5 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "screen.hud.MixinPlayerListHud"
-  ]
+  }
 }
