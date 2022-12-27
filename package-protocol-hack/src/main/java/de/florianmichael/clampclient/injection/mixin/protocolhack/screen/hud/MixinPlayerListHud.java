@@ -37,9 +37,13 @@ public class MixinPlayerListHud {
     @Shadow @Final private MinecraftClient client;
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;toList()Ljava/util/List;"))
-    public List<PlayerListEntry> test(Stream<PlayerListEntry> instance) {
+    public List<PlayerListEntry> changeSorting(Stream<PlayerListEntry> instance) {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_19_1)) {
-            return protocolhack_1_19_1sorter.sortedCopy(client.getNetworkHandler().getPlayerList()).stream().toList().subList(0, 80);
+            return protocolhack_1_19_1sorter.
+                    sortedCopy(client.getNetworkHandler().getPlayerList()).
+                    stream().
+                    toList().
+                    subList(0, Math.min(client.getNetworkHandler().getPlayerList().size(), 80));
         }
         return instance.toList();
     }
