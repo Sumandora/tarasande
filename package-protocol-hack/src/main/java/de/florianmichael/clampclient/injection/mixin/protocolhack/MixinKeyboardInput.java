@@ -26,7 +26,6 @@ import de.florianmichael.viaprotocolhack.util.VersionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSneak;
 import org.spongepowered.asm.mixin.Mixin;
@@ -46,10 +45,7 @@ public class MixinKeyboardInput extends Input {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_13_2)) {
             return this.sneaking;
         } else if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_4)) {
-            MinecraftClient client = MinecraftClient.getInstance();
-            ClientPlayerEntity player = client.player;
-            assert player != null;
-            return !player.isSpectator() && (this.sneaking || slowDown);
+            return !MinecraftClient.getInstance().player.isSpectator() && (this.sneaking || slowDown);
         }
         return slowDown;
     }

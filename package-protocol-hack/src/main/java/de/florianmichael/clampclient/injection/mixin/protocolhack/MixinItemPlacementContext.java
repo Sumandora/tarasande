@@ -43,10 +43,10 @@ public class MixinItemPlacementContext {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2) && player != null) {
             BlockPos placementPos = self.getBlockPos();
             // don't center the BlockPos on 1.10 and below
-            double blockPosCenterFactor = VersionList.isNewerTo(ProtocolVersion.v1_10) ? 0.5 : 0;
+            final double blockPosCenterFactor = VersionList.isNewerTo(ProtocolVersion.v1_10) ? 0.5 : 0;
 
             if (Math.abs(player.getX() - (placementPos.getX() + blockPosCenterFactor)) < 2 && Math.abs(player.getZ() - (placementPos.getZ() + blockPosCenterFactor)) < 2) {
-                double eyeY = player.getY() + player.getEyeHeight(player.getPose());
+                final double eyeY = player.getY() + player.getEyeHeight(player.getPose());
 
                 if (eyeY - placementPos.getY() > 2) {
                     ci.setReturnValue(Direction.DOWN);

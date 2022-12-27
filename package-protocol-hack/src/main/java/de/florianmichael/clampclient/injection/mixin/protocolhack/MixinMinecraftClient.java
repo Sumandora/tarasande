@@ -58,16 +58,19 @@ public abstract class MixinMinecraftClient {
             slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;interactItem(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;")),
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/HeldItemRenderer;resetEquipProgress(Lnet/minecraft/util/Hand;)V", ordinal = 0))
     private void redirectDoItemUse(HeldItemRenderer heldItemRenderer, Hand hand) {
-        if (VersionList.isNewerTo(ProtocolVersion.v1_8) || !(player.getStackInHand(hand).getItem() instanceof SwordItem))
+        if (VersionList.isNewerTo(ProtocolVersion.v1_8) || !(player.getStackInHand(hand).getItem() instanceof SwordItem)) {
             heldItemRenderer.resetEquipProgress(hand);
+        }
     }
 
     @Redirect(method = "doItemUse",
             slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;interactEntity(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;")),
             at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ActionResult;isAccepted()Z", ordinal = 0))
     private boolean preventGenericInteract(ActionResult instance) {
-        if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.r1_7_6_10))
+        if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.r1_7_6_10)) {
             return true;
+        }
+
         return instance.isAccepted();
     }
 
