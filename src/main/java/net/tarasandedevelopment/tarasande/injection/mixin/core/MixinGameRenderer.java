@@ -5,6 +5,8 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.HitResult;
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer;
+import net.tarasandedevelopment.tarasande.transformation.ManagerTransformer;
+import net.tarasandedevelopment.tarasande.transformation.grabber.impl.GrabberReach;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,7 +24,7 @@ public class MixinGameRenderer implements IGameRenderer {
     private boolean tarasande_disableReachExtension = false;
 
     @Unique
-    private double tarasande_reach = 3.0;
+    private double tarasande_reach = (double) ManagerTransformer.INSTANCE.getManagerGrabber().getConstant(GrabberReach.class);
 
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;"))
     public HitResult throughWalls(Entity entity, double maxDistance, float tickDelta, boolean includeFluids) {
@@ -33,10 +35,7 @@ public class MixinGameRenderer implements IGameRenderer {
 
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;getReachDistance()F"))
     public float blockReach(ClientPlayerInteractionManager clientPlayerInteractionManager) {
-        float actualBlockReach = clientPlayerInteractionManager.getReachDistance();
-        if (tarasande_reach > actualBlockReach)
-            return (float) tarasande_reach;
-        return actualBlockReach;
+        return Math.max(clientPlayerInteractionManager.getReachDistance(), (float) tarasande_reach);
     }
 
     @ModifyConstant(method = "updateTargetedEntity", constant = @Constant(doubleValue = 9.0))

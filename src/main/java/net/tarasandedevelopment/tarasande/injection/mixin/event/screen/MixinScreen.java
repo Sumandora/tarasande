@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.event.screen;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen;
@@ -26,13 +25,13 @@ public abstract class MixinScreen {
     protected MinecraftClient client;
 
     @Shadow
-    protected abstract <T extends Element & Drawable> T addDrawableChild(T drawableElement);
+    protected abstract Element addDrawableChild(Element drawableElement);
 
     @Inject(method = "clearAndInit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;init()V"))
     public void hookEventChildren(CallbackInfo ci) {
         final EventChildren eventChildren = new EventChildren((Screen) (Object) this, new ArrayList<>());
         EventDispatcher.INSTANCE.call(eventChildren);
-        eventChildren.getElements().forEach(element -> addDrawableChild((Element & Drawable) element));
+        eventChildren.getElements().forEach(this::addDrawableChild);
     }
 
     @Inject(method = "render", at = @At("HEAD"))
