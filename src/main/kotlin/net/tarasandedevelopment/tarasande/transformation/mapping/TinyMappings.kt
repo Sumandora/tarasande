@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.transformation.mappings
+package net.tarasandedevelopment.tarasande.transformation.mapping
 
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.mapping.tree.TinyMappingFactory

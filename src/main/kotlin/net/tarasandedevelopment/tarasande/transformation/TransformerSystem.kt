@@ -2,10 +2,8 @@ package net.tarasandedevelopment.tarasande.transformation
 
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.transformation.grabber.ManagerGrabber
-import net.tarasandedevelopment.tarasande.transformation.mappings.TinyMappings
-import org.objectweb.asm.tree.ClassNode
-import org.objectweb.asm.tree.FieldNode
-import org.objectweb.asm.tree.MethodNode
+import net.tarasandedevelopment.tarasande.transformation.mapping.TinyMappings
+import org.objectweb.asm.tree.*
 
 object ManagerTransformer : Manager<Transformer>() {
 
@@ -13,14 +11,12 @@ object ManagerTransformer : Manager<Transformer>() {
     val tinyMappings = TinyMappings()
 
     fun transform(classNode: ClassNode) {
+        println(classNode.name)
         list.forEach { transformer ->
             if (transformer.targetedClasses.any {
-                    println(transformer.resolveClassMapping(classNode.name) + " == $it")
                     transformer.resolveClassMapping(classNode.name) == it.replace(".", "/")
-                }) {
-                println("$transformer transforming")
+                })
                 transformer.transform(classNode)
-                }
         }
     }
 
@@ -43,9 +39,12 @@ abstract class Transformer(vararg val targetedClasses: String) {
 
     fun findMethod(classNode: ClassNode, name: String): MethodNode {
         return classNode.methods.first {
-            println(resolveMethodMapping(classNode.name, it.name, it.desc) + " == " + name)
             resolveMethodMapping(classNode.name, it.name, it.desc) == name
         }
+    }
+
+    fun findClassInitializer(classNode: ClassNode): MethodNode {
+        return classNode.methods.first { it.name == "<init>" }
     }
 
     fun findField(classNode: ClassNode, name: String): FieldNode {
@@ -53,4 +52,33 @@ abstract class Transformer(vararg val targetedClasses: String) {
             resolveFieldMapping(classNode.name, it.name) == name
         }
     }
+
+    fun InsnList.matchSignature(signature: Array<Int>): AbstractInsnNode {
+        for(index in 0 until size()) {
+            var matches = true
+            for(signatureIndex in signature.indices) {
+                if(get(index + signatureIndex).opcode != signature[signatureIndex]) {
+                    matches = false
+                    break
+                }
+            }
+            if(matches) {
+                return get(index)
+            }
+        }
+        error("Wasn't able to find signature in code")
+    }
+
+    fun AbstractInsnNode.next(amount: Int): AbstractInsnNode {
+        var curr = this
+        for(i in 0 until amount) {
+            curr = curr.next
+        }
+        return curr
+    }
+
+    fun AbstractInsnNode.asLDC(): LdcInsnNode {
+        return this as LdcInsnNode
+    }
+
 }
