@@ -24,7 +24,7 @@ public class MixinGameRenderer implements IGameRenderer {
     private boolean tarasande_disableReachExtension = false;
 
     @Unique
-    private double tarasande_reach = (double) ManagerTransformer.INSTANCE.getManagerGrabber().getConstant(GrabberReach.class);
+    private double tarasande_reach = Math.sqrt((double) ManagerTransformer.INSTANCE.getManagerGrabber().getConstant(GrabberReach.class));
 
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;"))
     public HitResult throughWalls(Entity entity, double maxDistance, float tickDelta, boolean includeFluids) {
