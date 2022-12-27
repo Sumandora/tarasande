@@ -21,13 +21,13 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.screen;
 
+import de.florianmichael.clampclient.injection.mixininterface.IChatInputSuggestor_Protocol;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
-import de.florianmichael.clampclient.injection.mixininterface.IChatInputSuggestor_Protocol;
-import net.tarasandedevelopment.tarasande_protocol_hack.platform.ProtocolHackValues;
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

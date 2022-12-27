@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande_protocol_hack.platform
+package net.tarasandedevelopment.tarasande_protocol_hack.command
 
 import com.viaversion.viaversion.api.command.ViaCommandSender
 import net.minecraft.client.MinecraftClient

@@ -19,7 +19,7 @@
  *         Version-independent validity and automatic renewal
  */
 
-package de.florianmichael.vialegacy.api;
+package de.florianmichael.vialegacy.api.viaversion;
 
 import com.viaversion.viaversion.api.protocol.packet.ClientboundPacketType;
 import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitter;

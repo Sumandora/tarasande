@@ -5,7 +5,7 @@ import de.florianmichael.viaprotocolhack.ViaProtocolHack
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.andOlder
-import net.tarasandedevelopment.tarasande_protocol_hack.util.ProtocolRange
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolRange
 
 object EntityDimensionReplacement {
 

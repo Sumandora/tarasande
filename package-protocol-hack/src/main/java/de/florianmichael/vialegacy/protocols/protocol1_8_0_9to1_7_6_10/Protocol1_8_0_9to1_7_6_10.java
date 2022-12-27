@@ -49,10 +49,10 @@ import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemPr
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.types.Chunk1_8Type;
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.types.ChunkBulk1_8Type;
 import com.viaversion.viaversion.util.ChatColorUtil;
-import de.florianmichael.vialegacy.api.EnZaProtocol;
 import de.florianmichael.vialegacy.api.item.LegacyItemRewriter;
 import de.florianmichael.vialegacy.api.material.MaterialReplacement;
 import de.florianmichael.vialegacy.api.metadata.LegacyMetadataRewriter;
+import de.florianmichael.vialegacy.api.viaversion.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.entity.EntityOffsets;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.item.ItemRewriter1_8_0_9to1_7_6_10;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.item.MaterialReplacement1_8_0_9To1_7_6_10;

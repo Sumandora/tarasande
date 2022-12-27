@@ -42,7 +42,7 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
-import de.florianmichael.vialegacy.api.EnZaProtocol;
+import de.florianmichael.vialegacy.api.viaversion.EnZaProtocol;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_4_6_7to1_4_4_5.storage.DimensionStorage;
 import de.florianmichael.vialegacy.protocols.protocol1_4_6_7to1_4_4_5.type.impl.ChunkBulk1_4_4_5Type;

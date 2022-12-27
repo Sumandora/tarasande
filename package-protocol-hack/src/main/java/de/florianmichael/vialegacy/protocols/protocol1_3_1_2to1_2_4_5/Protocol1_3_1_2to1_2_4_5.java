@@ -49,7 +49,7 @@ import com.viaversion.viaversion.libs.opennbt.tag.builtin.ShortTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.StringTag;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
 import de.florianmichael.vialegacy.ViaLegacy;
-import de.florianmichael.vialegacy.api.EnZaProtocol;
+import de.florianmichael.vialegacy.api.viaversion.EnZaProtocol;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.data.EntityIDs;
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider;
@@ -115,7 +115,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends EnZaProtocol<ClientboundPackets1_2
 							try {
 								oldAuthProvider.sendJoinServer(serverId);
 							} catch (Exception e) {
-								ViaLegacy.getLogger().log(Level.WARNING, "OldAuthProvider can't send the server auth");
+								ViaLegacy.getPlatform().getLogger().log(Level.WARNING, "OldAuthProvider can't send the server auth");
 							}
 						}
 					}

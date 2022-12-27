@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande_protocol_hack.platform
+package net.tarasandedevelopment.tarasande_protocol_hack.util.values
 
 import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
@@ -6,10 +6,9 @@ import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
+import net.tarasandedevelopment.tarasande_protocol_hack.command.ViaDumpBypassSender
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.andOlder
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.rangeTo
-import net.tarasandedevelopment.tarasande_protocol_hack.util.ProtocolRange
-import net.tarasandedevelopment.tarasande_protocol_hack.util.formatRange
 
 object ProtocolHackValues {
 

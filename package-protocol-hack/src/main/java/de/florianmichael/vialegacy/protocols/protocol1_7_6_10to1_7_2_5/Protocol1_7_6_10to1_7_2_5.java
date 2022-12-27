@@ -40,7 +40,7 @@ import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.protocol.remapper.ValueTransformer;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.base.ClientboundLoginPackets;
-import de.florianmichael.vialegacy.api.EnZaProtocol;
+import de.florianmichael.vialegacy.api.viaversion.EnZaProtocol;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.ClientboundPackets1_7_6_10;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.ServerboundPackets1_7_6_10;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.type.Types1_7_6_10;

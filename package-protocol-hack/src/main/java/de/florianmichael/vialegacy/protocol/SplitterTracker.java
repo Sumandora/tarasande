@@ -23,8 +23,8 @@ package de.florianmichael.vialegacy.protocol;
 
 import com.viaversion.viaversion.api.connection.StoredObject;
 import com.viaversion.viaversion.api.connection.UserConnection;
+import de.florianmichael.vialegacy.api.viaversion.LegacyClientboundPacketType;
 import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitter;
-import de.florianmichael.vialegacy.api.LegacyClientboundPacketType;
 
 import java.util.HashMap;
 import java.util.Map;

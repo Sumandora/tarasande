@@ -21,7 +21,7 @@
 
 package de.florianmichael.vialegacy.protocols.protocol1_6_4;
 
-import de.florianmichael.vialegacy.api.LegacyClientboundPacketType;
+import de.florianmichael.vialegacy.api.viaversion.LegacyClientboundPacketType;
 import de.florianmichael.vialegacy.protocol.splitter.IPacketSplitter;
 
 public enum ClientboundLoginPackets1_6_4 implements LegacyClientboundPacketType {

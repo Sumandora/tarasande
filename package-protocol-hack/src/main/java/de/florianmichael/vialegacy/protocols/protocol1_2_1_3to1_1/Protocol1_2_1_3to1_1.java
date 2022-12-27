@@ -26,7 +26,7 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.api.type.types.CustomByteType;
-import de.florianmichael.vialegacy.api.EnZaProtocol;
+import de.florianmichael.vialegacy.api.viaversion.EnZaProtocol;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_2_1_3to1_1.chunk.ChunkData;
 import de.florianmichael.vialegacy.protocols.protocol1_2_1_3to1_1.chunk.ChunkTracker;

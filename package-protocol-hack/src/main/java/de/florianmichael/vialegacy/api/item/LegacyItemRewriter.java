@@ -24,7 +24,7 @@ package de.florianmichael.vialegacy.api.item;
 import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.rewriter.ItemRewriter;
 import com.viaversion.viaversion.api.rewriter.RewriterBase;
-import de.florianmichael.vialegacy.api.EnZaProtocol;
+import de.florianmichael.vialegacy.api.viaversion.EnZaProtocol;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class LegacyItemRewriter<T extends EnZaProtocol<?, ?, ?, ?>> extends RewriterBase<T> implements ItemRewriter<T> {

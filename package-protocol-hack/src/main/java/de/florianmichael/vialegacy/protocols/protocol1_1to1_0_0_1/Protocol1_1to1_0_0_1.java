@@ -1,7 +1,7 @@
 package de.florianmichael.vialegacy.protocols.protocol1_1to1_0_0_1;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
-import de.florianmichael.vialegacy.api.EnZaProtocol;
+import de.florianmichael.vialegacy.api.viaversion.EnZaProtocol;
 import de.florianmichael.vialegacy.protocol.SplitterTracker;
 import de.florianmichael.vialegacy.protocols.protocol1_2_1_3to1_1.ClientboundPackets1_1;
 import de.florianmichael.vialegacy.protocols.protocol1_2_1_3to1_1.ServerboundPackets1_1;

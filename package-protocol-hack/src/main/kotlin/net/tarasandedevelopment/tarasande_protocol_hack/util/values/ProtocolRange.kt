@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande_protocol_hack.util
+package net.tarasandedevelopment.tarasande_protocol_hack.util.values
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import net.tarasandedevelopment.tarasande_protocol_hack.extension.compareTo

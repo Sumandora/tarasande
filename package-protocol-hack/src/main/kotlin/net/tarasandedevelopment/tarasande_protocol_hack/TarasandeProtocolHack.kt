@@ -11,14 +11,12 @@ import com.viaversion.viaversion.libs.gson.JsonObject
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
-import de.florianmichael.vialegacy.ViaLegacy
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider.EncryptionProvider
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider.UUIDProvider
-import de.florianmichael.viaprotocolhack.INativeProvider
+import de.florianmichael.viaprotocolhack.NativeProvider
 import de.florianmichael.viaprotocolhack.ViaProtocolHack
-import de.florianmichael.viaprotocolhack.util.JLoggerToLog4j
 import de.florianmichael.viaprotocolhack.util.VersionList
 import io.netty.channel.DefaultEventLoop
 import net.fabricmc.loader.api.FabricLoader
@@ -44,8 +42,7 @@ import net.tarasandedevelopment.tarasande_protocol_hack.extension.getSpecialName
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.CommandArgumentsProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.EntityDimensionReplacement
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.PackFormats
-import net.tarasandedevelopment.tarasande_protocol_hack.platform.ProtocolHackValues
-import net.tarasandedevelopment.tarasande_protocol_hack.platform.ValueBooleanProtocol
+import net.tarasandedevelopment.tarasande_protocol_hack.platform.ViaLegacyPlatformImpl
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.clamp.FabricCommandArgumentsProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricEncryptionProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricOldAuthProvider
@@ -53,13 +50,14 @@ import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.Fabri
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricVersionProvider
-import net.tarasandedevelopment.tarasande_protocol_hack.util.formatRange
-import org.apache.logging.log4j.LogManager
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ValueBooleanProtocol
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.formatRange
 import su.mandora.event.EventDispatcher
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.ThreadFactory
 
-class TarasandeProtocolHack : INativeProvider {
+class TarasandeProtocolHack : NativeProvider {
 
     val version = ValueNumber(this, "Protocol", Double.MIN_VALUE, SharedConstants.getProtocolVersion().toDouble(), Double.MAX_VALUE, 1.0, true)
     private val compression = arrayOf("decompress", "compress")
@@ -72,7 +70,11 @@ class TarasandeProtocolHack : INativeProvider {
     fun initialize() {
         ViaProtocolHack.instance().init(this) {
             Via.getManager().addEnableListener {
-                ViaLegacy.init(JLoggerToLog4j(LogManager.getLogger("ViaLegacy")))
+                ViaProtocolHack.loadSubPlatform("ViaLegacy") {
+                    val isLegacyLoaded = ViaProtocolHack.hasClass("de.florianmichael.vialegacy.api.ViaLegacyPlatform")
+                    if (isLegacyLoaded) ViaLegacyPlatformImpl()
+                    return@loadSubPlatform isLegacyLoaded
+                }
             }
         }
         PackFormats.checkOutdated(nativeVersion())

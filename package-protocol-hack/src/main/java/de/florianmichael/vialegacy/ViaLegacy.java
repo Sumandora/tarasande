@@ -21,36 +21,7 @@
 
 package de.florianmichael.vialegacy;
 
-import com.google.common.collect.BoundType;
-import com.google.common.collect.Range;
-import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.protocol.Protocol;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialegacy.exception.ViaLegacyException;
-import de.florianmichael.vialegacy.protocols.protocol1_1to1_0_0_1.Protocol1_1to1_0_0_1;
-import de.florianmichael.vialegacy.protocols.protocol1_2_1_3to1_1.Protocol1_2_1_3to1_1;
-import de.florianmichael.vialegacy.protocols.protocol1_2_4_5to1_2_1_3.Protocol1_2_4_5to1_2_1_3;
-import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.Protocol1_3_1_2to1_2_4_5;
-import de.florianmichael.vialegacy.protocols.protocol1_4_0_2to1_3_1_2.Protocol1_4_0_2to1_3_1_2;
-import de.florianmichael.vialegacy.protocols.protocol1_4_3_preto1_4_0_2.Protocol1_4_3_preto1_4_0_2;
-import de.florianmichael.vialegacy.protocols.protocol1_4_4_5to1_4_3_pre.Protocol1_4_5to1_4_3_pre;
-import de.florianmichael.vialegacy.protocols.protocol1_4_6_7to1_4_4_5.Protocol1_4_6_7to1_4_4_5;
-import de.florianmichael.vialegacy.protocols.protocol1_5_1to1_4_6_7.Protocol1_5_1to1_4_6_7;
-import de.florianmichael.vialegacy.protocols.protocol1_5_2to1_5_1.Protocol1_5_2to1_5_1;
-import de.florianmichael.vialegacy.protocols.protocol1_6_1to1_5_2.Protocol1_6_1to1_5_2;
-import de.florianmichael.vialegacy.protocols.protocol1_6_2to1_6_1.Protocol1_6_2to1_6_1;
-import de.florianmichael.vialegacy.protocols.protocol1_6_3to1_6_2.Protocol1_6_3_preto1_6_2;
-import de.florianmichael.vialegacy.protocols.protocol1_6_4.Protocol1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_6_4to1_6_3pre.Protocol1_6_4to1_6_3_pre;
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.Protocol1_7_0_1_preto1_6_4;
-import de.florianmichael.vialegacy.protocols.protocol1_7_2_5to1_7_0_1_pre.Protocol1_7_2_5to1_7_0_1_pre;
-import de.florianmichael.vialegacy.protocols.protocol1_7_6_10to1_7_2_5.Protocol1_7_6_10to1_7_2_5;
-import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.Protocol1_8_0_9to1_7_6_10;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static de.florianmichael.vialegacy.protocol.LegacyProtocolVersion.*;
+import de.florianmichael.vialegacy.api.ViaLegacyPlatform;
 
 /**
  * ViaLegacy is a rewrite of PrivateViaForge (2020 - 2021)
@@ -66,74 +37,13 @@ import static de.florianmichael.vialegacy.protocol.LegacyProtocolVersion.*;
  *  - 1.6.4 (?): Book writing
  */
 public class ViaLegacy {
+    private static ViaLegacyPlatform platform;
 
-    private static Logger logger;
-
-    //@formatter:off
-    public static void init(final Logger logger) {
-        if (ViaLegacy.logger != null) {
-            throw new ViaLegacyException("ViaLegacy is already loaded!");
-        }
-        ViaLegacy.logger = logger;
-        logger.log(Level.SEVERE, "Loading me was a big mistake!");
-        Via.getManager().getSubPlatforms().add("git-ViaLegacy-Florian-Michael:b4eab843d136d7ad3504fc0ed29e5d02517cf407");
-
-        // Post-Netty
-        // Release Versions (1.8.x - 1.7.5)
-        //                   From           Target        Protocol Implementation
-        registerProtocol(    v1_8,          r1_7_6_10,    new Protocol1_8_0_9to1_7_6_10()    );
-        registerProtocol(    r1_7_6_10,     r1_7_2_5,     new Protocol1_7_6_10to1_7_2_5()    );
-        registerProtocol(    r1_7_2_5,      r1_7_0_1_pre, new Protocol1_7_2_5to1_7_0_1_pre() );
-
-        // Pre-Netty
-        // Release Versions (1.6.4 - 1.0)
-        //                   From           Target        Protocol Implementation                Notes
-        registerProtocol(    r1_7_0_1_pre,  r1_6_4,       new Protocol1_7_0_1_preto1_6_4()   );
-        registerProtocol(    r1_6_4,        r1_6_3_pre,   new Protocol1_6_4to1_6_3_pre()     );  // snapshot version
-        registerProtocol(    r1_6_3_pre,    r1_6_2,       new Protocol1_6_3_preto1_6_2()     );
-        registerProtocol(    r1_6_2,        r1_6_1,       new Protocol1_6_2to1_6_1()         );
-        registerProtocol(    r1_6_1,        r1_5_2,       new Protocol1_6_1to1_5_2()         );
-        registerProtocol(    r1_5_2,        r1_5_1,       new Protocol1_5_2to1_5_1()         );
-        registerProtocol(    r1_5_1,        r1_4_6_7,     new Protocol1_5_1to1_4_6_7()       );
-        registerProtocol(    r1_4_6_7,      r1_4_4_5,     new Protocol1_4_6_7to1_4_4_5()     );
-        registerProtocol(    r1_4_4_5,      r1_4_3_pre,   new Protocol1_4_5to1_4_3_pre()     );  // snapshot version
-        registerProtocol(    r1_4_3_pre,    r1_4_0_2,     new Protocol1_4_3_preto1_4_0_2()   );
-        registerProtocol(    r1_4_0_2,      r1_3_1_2,     new Protocol1_4_0_2to1_3_1_2()     );
-        registerProtocol(    r1_3_1_2,      r1_2_4_5,     new Protocol1_3_1_2to1_2_4_5()     );
-        registerProtocol(    r1_2_4_5,      r1_2_1_3,     new Protocol1_2_4_5to1_2_1_3()     );
-        registerProtocol(    r1_2_1_3,      r1_1,         new Protocol1_2_1_3to1_1()         );
-        registerProtocol(    r1_1,          r1_0_0_1,     new Protocol1_1to1_0_0_1()         );
-
-        // Beta Versions (b1.8.1 - b1.0)
-
-        // Alpha Versions (a1.2.6 - a1.0.15)
-
-        // Classic Versions (c0.30 - c0.0.15a-1)
-
-        // Base Protocols (Internal)
-        registerBaseProtocol(    r1_6_4,    r1_0_0_1,   Protocol1_6_4.INSTANCE    );
-    }
-    //@formatter:on
-
-    private static void registerProtocol(final ProtocolVersion from, final ProtocolVersion to, final Protocol<?, ?, ?, ?> protocol) {
-        try {
-            Via.getManager().getProtocolManager().registerProtocol(protocol, from, to);
-            getLogger().info("Loading " + from.getName() + " -> " + to.getName() + " mappings...");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void init(final ViaLegacyPlatform platform) {
+        ViaLegacy.platform = platform;
     }
 
-    private static void registerBaseProtocol(final ProtocolVersion from, final ProtocolVersion to, final Protocol<?, ?, ?, ?> protocol) {
-        try {
-            Via.getManager().getProtocolManager().registerBaseProtocol(protocol, Range.range(from.getVersion(), BoundType.OPEN, to.getVersion(), BoundType.CLOSED));
-            getLogger().info("Loading " + from.getName() + " -> " + to.getName() + " base mappings...");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static Logger getLogger() {
-        return logger;
+    public static ViaLegacyPlatform getPlatform() {
+        return platform;
     }
 }

@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.extension
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import net.tarasandedevelopment.tarasande_protocol_hack.util.ProtocolRange
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolRange
 import kotlin.math.abs
 
 private val specialNames = object : HashMap<ProtocolVersion, String>() {
