@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande_protocol_hack
 
 import com.viaversion.viaversion.ViaManagerImpl
+import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.connection.UserConnection
 import com.viaversion.viaversion.api.platform.providers.ViaProviders
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
@@ -70,7 +71,9 @@ class TarasandeProtocolHack : INativeProvider {
 
     fun initialize() {
         ViaProtocolHack.instance().init(this) {
-            ViaLegacy.init(JLoggerToLog4j(LogManager.getLogger("ViaLegacy-tarasande")))
+            Via.getManager().addEnableListener {
+                ViaLegacy.init(JLoggerToLog4j(LogManager.getLogger("ViaLegacy")))
+            }
         }
         PackFormats.checkOutdated(nativeVersion())
 

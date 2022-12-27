@@ -47,6 +47,7 @@ import de.florianmichael.vialegacy.protocols.protocol1_7_2_5to1_7_0_1_pre.Protoc
 import de.florianmichael.vialegacy.protocols.protocol1_7_6_10to1_7_2_5.Protocol1_7_6_10to1_7_2_5;
 import de.florianmichael.vialegacy.protocols.protocol1_8_0_9to1_7_6_10.Protocol1_8_0_9to1_7_6_10;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static de.florianmichael.vialegacy.protocol.LegacyProtocolVersion.*;
@@ -73,8 +74,9 @@ public class ViaLegacy {
         if (ViaLegacy.logger != null) {
             throw new ViaLegacyException("ViaLegacy is already loaded!");
         }
-
         ViaLegacy.logger = logger;
+        logger.log(Level.SEVERE, "Loading me was a big mistake!");
+        Via.getManager().getSubPlatforms().add("git-ViaLegacy-Florian-Michael:b4eab843d136d7ad3504fc0ed29e5d02517cf407");
 
         // Post-Netty
         // Release Versions (1.8.x - 1.7.5)
