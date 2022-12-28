@@ -26,4 +26,5 @@ include 'package-protocol-spoofer'
 include 'package-litematica'
 include 'package-custom-minecraft'
 include 'package-crasher'
+include 'package-chat-exploits'
 

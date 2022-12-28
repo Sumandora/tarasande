@@ -141,7 +141,6 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
             ModuleTickBaseManipulation(),
             ModuleResourcePackSpoofer(),
             ModuleAntiBindingCurse(),
-            ModuleNoChatContext(),
             ModulePortalScreen(),
             ModuleEveryItemOnArmor()
         )

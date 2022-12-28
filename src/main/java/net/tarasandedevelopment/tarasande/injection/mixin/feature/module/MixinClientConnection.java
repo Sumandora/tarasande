@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.injection.mixin.feature.module.connection;
+package net.tarasandedevelopment.tarasande.injection.mixin.feature.module;
 
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.network.ClientConnection;
