@@ -143,7 +143,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         val arrayList = ArrayList<Triple<BlockPos, BlockPos, Direction>>()
         for (target in targets) {
             val adjacent = blockPos.add(target.first.x, target.first.y, target.first.z)
-            if (!mc.world?.isAir(adjacent)!! && mc.world?.isAir(adjacent.add(target.second.opposite.vector))!!)
+            if (!mc.world?.isAir(adjacent)!! && mc.world?.isAir(adjacent.add(target.second.let { if(it.offsetY == 0) it.opposite else it }.vector))!!)
                 arrayList.add(Triple(target.first, adjacent, target.second))
         }
         var best: Pair<BlockPos, Direction>? = null

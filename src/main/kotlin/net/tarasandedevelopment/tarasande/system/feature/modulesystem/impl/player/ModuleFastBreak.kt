@@ -13,8 +13,10 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 class ModuleFastBreak : Module("Fast break", "Makes blocks break faster", ModuleCategory.PLAYER) {
 
     private val mode = ValueMode(this, "Mode", false, "Speed up", "Stop early")
+    private val speedUpMode = object : ValueMode(this, "Speed up mode", false, "Addition", "Multiplication") {
+        override fun isEnabled() = mode.isSelected(0)
+    }
     private val speed = ValueNumber(this, "Speed", 0.0, 0.5, 1.0, 0.01)
-    private val speedUpMode = ValueMode(this, "Speed up mode", false, "Addition", "Multiplication")
     private val onlyWhenHoldingAppropriateTool = ValueBoolean(this, "Only when holding appropriate tool", true)
 
     init {
