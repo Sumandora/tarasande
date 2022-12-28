@@ -5,29 +5,28 @@ import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import java.util.*
-import java.util.function.BiFunction
 import kotlin.math.abs
 
 /**
  * A* Path Finding algorithm
  */
 
-private val manhattan = BiFunction<Node, Node, Double> { current, target ->
+private val manhattan: (Node, Node) -> Double = { current, target ->
     val delta = target - current
     // Ok, so I have no clue where igs found that 2.5, but it makes this way faster, so.... Thank you, I guess ^^
     // Me from the future here: This number is bullshit, on one side it makes this way faster, on the other side a star seems to work less optimal because of it
     2.5 * (abs(delta.x) + abs(delta.y) + abs(delta.z)).toDouble()
 }
 
-private val oneCost = BiFunction<Node, Node, Double> { _, _ ->
+private val oneCost: (Node, Node) -> Double = { _, _ ->
     1.0
 }
 
-private val walkable = BiFunction<ClientWorld?, Node, Boolean> { world, node ->
+private val walkable: (ClientWorld?, Node) -> Boolean = { world, node ->
     world!!.isAir(BlockPos(node.x, node.y, node.z)) && !world.isAir(BlockPos(node.x, node.y - 1, node.z))
 }
 
-private val directions = arrayOf(
+private val cardinalDirections = arrayOf(
     Node(1, 0, 0),
     Node(-1, 0, 0),
     Node(0, 0, 1),
@@ -36,7 +35,12 @@ private val directions = arrayOf(
     Node(0, -1, 0)
 )
 
-class PathFinder(private val allowedBlock: BiFunction<ClientWorld?, Node, Boolean> = walkable, private val heuristic: BiFunction<Node, Node, Double> = manhattan, private val cost: BiFunction<Node, Node, Double> = oneCost) {
+class PathFinder(
+    private val allowedBlock: (ClientWorld?, Node) -> Boolean = walkable,
+    private val heuristic: (Node, Node) -> Double = manhattan,
+    private val cost: (Node, Node) -> Double = oneCost,
+    private val directions: Array<Node> = cardinalDirections
+) {
 
     fun findPath(start: Vec3d, target: Vec3d, maxTime: Long? = null): List<Vec3d>? {
         val mappedPath = ArrayList<Vec3d>()
@@ -55,12 +59,12 @@ class PathFinder(private val allowedBlock: BiFunction<ClientWorld?, Node, Boolea
     fun findPath(start: Node, target: Node, maxTime: Long? = null): List<Node>? {
         val open = TreeSet<Node>(Comparator.comparing { it.f })
         val closed = HashSet<Int>()
-        start.g = cost.apply(start, start)
-        start.h = heuristic.apply(start, target)
+        start.g = cost(start, start)
+        start.h = heuristic(start, target)
         start.f = start.g + start.h
         open.add(start)
 
-        if (start == target || !allowedBlock.apply(MinecraftClient.getInstance().world, start) || !allowedBlock.apply(MinecraftClient.getInstance().world, target)) {
+        if (start == target || !allowedBlock(MinecraftClient.getInstance().world, start) || !allowedBlock(MinecraftClient.getInstance().world, target)) {
             return Collections.singletonList(start)
         }
 
@@ -80,13 +84,13 @@ class PathFinder(private val allowedBlock: BiFunction<ClientWorld?, Node, Boolea
                 if (closed.contains(movement.hashCode()))
                     continue
 
-                if (!allowedBlock.apply(MinecraftClient.getInstance().world, movement))
+                if (!allowedBlock(MinecraftClient.getInstance().world, movement))
                     continue
 
-                val newCost = current.g + cost.apply(start, movement)
+                val newCost = current.g + cost(start, movement)
 
                 movement.g = newCost
-                movement.h = heuristic.apply(movement, target)
+                movement.h = heuristic(movement, target)
                 movement.f = movement.g + movement.h
                 movement.parent = current
 

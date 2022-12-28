@@ -20,7 +20,6 @@ import net.tarasandedevelopment.tarasande.util.math.pathfinder.Node
 import net.tarasandedevelopment.tarasande.util.math.pathfinder.PathFinder
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import java.util.function.BiFunction
 
 /**
  * This module is pretty cool, but can be extremely processing intensive
@@ -204,7 +203,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
     object Breaker {
 
-        private val breakSpeed = BiFunction<Node, Node, Double> { _, movement -> PlayerUtil.getBreakSpeed(BlockPos(movement.x, movement.y, movement.z)).first.toDouble() }
+        private val breakSpeed: (Node, Node) -> Double = { _, movement -> PlayerUtil.getBreakSpeed(BlockPos(movement.x, movement.y, movement.z)).first.toDouble() }
         private var defenders: List<BlockPos>? = null
 
         private val pathFinder = PathFinder({ _, node -> defenders?.contains(BlockPos(node.x, node.y, node.z)) == true }, cost = breakSpeed)

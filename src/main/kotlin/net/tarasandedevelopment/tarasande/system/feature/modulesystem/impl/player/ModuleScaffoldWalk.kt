@@ -15,10 +15,7 @@ import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.C
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.impl.ClickMethodCooldown
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.unaryMinus
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.*
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
@@ -143,7 +140,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         val arrayList = ArrayList<Triple<BlockPos, BlockPos, Direction>>()
         for (target in targets) {
             val adjacent = blockPos.add(target.first.x, target.first.y, target.first.z)
-            if (!mc.world?.isAir(adjacent)!! && mc.world?.isAir(adjacent.add(target.second.let { if(it.offsetY == 0) it.opposite else it }.vector))!!)
+            if (!mc.world?.isAir(adjacent)!! && mc.world?.isAir(adjacent.add(target.second.hitResultSide().vector))!!)
                 arrayList.add(Triple(target.first, adjacent, target.second))
         }
         var best: Pair<BlockPos, Direction>? = null
@@ -201,7 +198,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                 } else {
                                     val rotationVector = lastRotation?.forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)!!
                                     val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector)
-                                    hitResult.type != HitResult.Type.BLOCK || hitResult.side != (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) || hitResult.blockPos != target?.first
+                                    hitResult.type != HitResult.Type.BLOCK || hitResult.side != target?.second?.hitResultSide() || hitResult.blockPos != target?.first
                                 }
                             }) {
 
@@ -370,7 +367,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 }
                 val rotationVector = RotationUtil.fakeRotation?.forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)!!
                 val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector)
-                if (hitResult.type == HitResult.Type.BLOCK && hitResult.side == (if (target?.second?.offsetY != 0) target?.second else target?.second?.opposite) && hitResult.blockPos == target?.first) {
+                if (hitResult.type == HitResult.Type.BLOCK && hitResult.side == target?.second?.hitResultSide() && hitResult.blockPos == target?.first) {
                     if (airBelow && (((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= newEdgeDist * newEdgeDist || target?.first?.y!! < mc.player?.y!!)) {
                         if (timeUtil.hasReached(delay.value.toLong())) {
                             aimTarget = hitResult.pos

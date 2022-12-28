@@ -105,6 +105,7 @@
     "event.entity.MixinAbstractClientPlayerEntity",
     "event.screen.MixinChatScreen",
     "feature.clientvalue.MixinAllowedAddressResolver",
+    "feature.module.MixinInGameHud",
     "feature.module.MixinInput"
   ]
 }
