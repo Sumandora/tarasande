@@ -33,12 +33,11 @@ import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.telemetry.WorldSession;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.network.ClientConnection;
-import net.minecraft.network.packet.s2c.play.EntityPositionS2CPacket;
-import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
-import net.minecraft.network.packet.s2c.play.PlayPingS2CPacket;
-import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
+import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -65,6 +64,10 @@ public abstract class MixinClientPlayNetworkHandler {
     @Mutable
     @Shadow @Final private Set<PlayerListEntry> listedPlayerListEntries;
 
+    @Shadow public abstract void onSimulationDistance(SimulationDistanceS2CPacket packet);
+
+    @Shadow public abstract void onEntityVelocityUpdate(EntityVelocityUpdateS2CPacket packet);
+
     @Inject(method = "<init>", at = @At("RETURN"))
     public void fixTablistOrdering(MinecraftClient client, Screen screen, ClientConnection connection, ServerInfo serverInfo, GameProfile profile, WorldSession worldSession, CallbackInfo ci) {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_19_1)) {
@@ -88,6 +91,25 @@ public abstract class MixinClientPlayNetworkHandler {
         if (handler == null) ci.cancel();
     }
 
+    @Inject(method = "onChunkLoadDistance", at = @At("RETURN"))
+    public void emulateSimulationDistance(ChunkLoadDistanceS2CPacket packet, CallbackInfo ci) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_17_1)) {
+            this.onSimulationDistance(new SimulationDistanceS2CPacket(packet.getDistance()));
+        }
+    }
+
+    @Inject(method = "onEntitySpawn", at = @At("TAIL"))
+    public void forceEntityVelocity(EntitySpawnS2CPacket packet, CallbackInfo ci) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_13_2)) {
+            if (packet.getEntityType() == EntityType.ITEM ||
+            packet.getEntityType() == EntityType.ARROW || packet.getEntityType() ==
+            EntityType.SPECTRAL_ARROW || packet.getEntityType() == EntityType.TRIDENT) {
+                onEntityVelocityUpdate(new EntityVelocityUpdateS2CPacket(
+                        packet.getId(), new Vec3d(packet.getVelocityX(), packet.getVelocityY(), packet.getVelocityZ())
+                ));
+            }
+        }
+    }
 
     @Inject(method = { "onGameJoin", "onPlayerRespawn" }, at = @At("TAIL"))
     private void injectOnOnGameJoinOrRespawn(CallbackInfo ci) {
