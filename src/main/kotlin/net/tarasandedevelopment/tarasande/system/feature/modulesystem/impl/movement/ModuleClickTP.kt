@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.minecraft.command.CommandSource
 import net.minecraft.command.argument.BlockPosArgumentType
 import net.minecraft.command.argument.PosArgument
+import net.minecraft.command.argument.Vec3ArgumentType
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.PositionAndOnGround
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
@@ -35,14 +36,24 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
     private var goal: Vec3d? = null
 
     init {
-        TarasandeMain.managerCommand().add(object : Command("teleport", "tp") {
-            override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
-                return builder.then(argument("position", BlockPosArgumentType.blockPos())?.executes {
-                    teleportToPosition(it.getArgument("position", PosArgument::class.java).toAbsoluteBlockPos(createServerCommandSource()), false)
-                    return@executes success
-                })
-            }
-        })
+        TarasandeMain.managerCommand().apply {
+            add(object : Command("teleport", "tp") {
+                override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
+                    return builder.then(argument("position", BlockPosArgumentType.blockPos())?.executes {
+                        teleportToPosition(it.getArgument("position", PosArgument::class.java).toAbsoluteBlockPos(createServerCommandSource()), setGoalAndPath = false)
+                        return@executes success
+                    })
+                }
+            })
+            add(object : Command("clip") {
+                override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
+                    return builder.then(argument("position", Vec3ArgumentType.vec3())?.executes {
+                        mc.player?.setPosition(it.getArgument("position", PosArgument::class.java).toAbsolutePos(createServerCommandSource()))
+                        return@executes success
+                    })
+                }
+            })
+        }
     }
 
     override fun onDisable() {
@@ -76,14 +87,14 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
         }
     }
 
-    private fun teleportToPosition(blockPos: BlockPos, setGoalAndPath: Boolean = true) {
+    private fun teleportToPosition(blockPos: BlockPos, timeout: Long = 1000L, setGoalAndPath: Boolean = true) {
         @Suppress("NAME_SHADOWING")
         var blockPos = blockPos
 
         while (!isPassable(blockPos))
             blockPos = blockPos.add(0, 1, 0)
 
-        for (vec in (pathFinder.findPath(mc.player?.pos!!, Vec3d.of(blockPos).also { if (setGoalAndPath) goal = it }, 1000L) ?: return).also { if (setGoalAndPath) path = it }) {
+        for (vec in (pathFinder.findPath(mc.player?.pos!!, Vec3d.of(blockPos).also { if (setGoalAndPath) goal = it }, timeout) ?: return).also { if (setGoalAndPath) path = it }) {
             mc.networkHandler?.sendPacket(PositionAndOnGround(vec.x, vec.y, vec.z, false))
             mc.player?.setPosition(vec)
         }
