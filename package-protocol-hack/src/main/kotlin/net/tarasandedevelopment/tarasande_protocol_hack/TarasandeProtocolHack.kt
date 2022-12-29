@@ -22,6 +22,7 @@ import io.netty.channel.DefaultEventLoop
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.GameMenuScreen
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
@@ -32,6 +33,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.explo
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleInventoryMove
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanel
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanelSelection
@@ -150,6 +152,16 @@ class TarasandeProtocolHack : NativeProvider {
                         }
                     }, 1)
                 }
+
+                TarasandeMain.managerScreenExtension().add(object : ScreenExtensionButtonList<GameMenuScreen>(GameMenuScreen::class.java) {
+                    init {
+                        "Protocol Hack Values".apply {
+                            add(this, direction = Direction.RIGHT) {
+                                MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, this, ProtocolHackValues))
+                            }
+                        }
+                    }
+                })
             }
 
             add(EventConnectServer::class.java) {
