@@ -53,6 +53,7 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
         }
     }
 
+    val allowAllCharactersInChat = ValueBoolean(this, "Allow all characters in chat", true)
     val allowAddressParsingForBlacklistedServers = ValueBoolean(this, "Allow address parsing for blacklisted servers", true)
 
     // Combat

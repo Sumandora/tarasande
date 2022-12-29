@@ -60,7 +60,7 @@
     "feature.module.MixinHeldItemRenderer",
     "feature.module.MixinMinecraftClient",
     "feature.module.MixinRenderSystem",
-    "feature.module.MixinSharedConstants",
+    "feature.clientvalue.MixinSharedConstants",
     "feature.module.MixinWorld",
     "feature.module.MixinWorldRenderer",
     "feature.module.block.MixinCommandBlock",
