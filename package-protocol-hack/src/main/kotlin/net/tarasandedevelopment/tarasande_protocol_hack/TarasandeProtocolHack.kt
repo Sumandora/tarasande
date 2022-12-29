@@ -141,7 +141,7 @@ class TarasandeProtocolHack : NativeProvider {
                             val newProtocol = VersionList.PROTOCOLS.first { it.getSpecialName() == newValue }.version.toDouble()
                             if (version.value != newProtocol) {
                                 version.value = newProtocol
-                                update(ProtocolVersion.getProtocol(version.value.toInt()))
+                                update(ProtocolVersion.getProtocol(version.value.toInt()), ProtocolHackValues.autoChangeValuesDependentOnVersion.value)
                             }
                         }
                     }, 0)
@@ -170,7 +170,7 @@ class TarasandeProtocolHack : NativeProvider {
         }
     }
 
-    fun update(protocol: ProtocolVersion, reloadProtocolHackValues: Boolean = true) {
+    fun update(protocol: ProtocolVersion, reloadProtocolHackValues: Boolean) {
         if (reloadProtocolHackValues) {
             TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
                 if (it is ValueBooleanProtocol)

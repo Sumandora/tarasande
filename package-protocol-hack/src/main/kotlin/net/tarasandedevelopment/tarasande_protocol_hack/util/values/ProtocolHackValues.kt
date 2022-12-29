@@ -13,6 +13,7 @@ import net.tarasandedevelopment.tarasande_protocol_hack.extension.rangeTo
 object ProtocolHackValues {
 
     // General
+    val autoChangeValuesDependentOnVersion = ValueBoolean(this, "Auto change values dependent on version", true)
     val filterItemGroups = ValueBoolean(this, "Filter item groups", true)
 
     @Suppress("unused")

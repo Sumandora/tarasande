@@ -23,6 +23,8 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.screen;
 
 import de.florianmichael.clampclient.injection.mixininterface.IChatInputSuggestor_Protocol;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.hud.ChatHud;
+import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -32,6 +34,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -61,5 +64,13 @@ public class MixinChatScreen extends Screen {
     @Inject(method = "onChatFieldUpdate", at = @At(value = "HEAD"))
     public void removePermanentRefreshing(String chatText, CallbackInfo ci) {
         ((IChatInputSuggestor_Protocol) this.chatInputSuggestor).protocolhack_setNativeCompletion(ProtocolHackValues.INSTANCE.getRemoveNewTabCompletion().getValue());
+    }
+
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;getIndicatorAt(DD)Lnet/minecraft/client/gui/hud/MessageIndicator;"))
+    public MessageIndicator removeIndicator(ChatHud instance, double mouseX, double mouseY) {
+        if (ProtocolHackValues.INSTANCE.getHideSignatureIndicator().getValue()) {
+            return null;
+        }
+        return instance.getIndicatorAt(mouseX, mouseY);
     }
 }
