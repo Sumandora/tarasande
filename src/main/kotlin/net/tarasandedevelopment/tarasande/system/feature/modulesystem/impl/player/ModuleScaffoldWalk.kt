@@ -156,7 +156,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 else if (best == null)
                     continue
             }
-            val dist2 = mc.player?.pos?.squaredDistanceTo(Vec3d.ofCenter(target.second) + -Vec3d.of(target.first) * 0.5)!!
+            val dist2 = mc.player?.pos?.squaredDistanceTo(Vec3d.ofCenter(target.second) - Vec3d.of(target.first) * 0.5)!!
             if (best == null || dist2 < dist) {
                 best = Pair(target.second, target.third)
                 dist = dist2
