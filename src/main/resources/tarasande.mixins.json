@@ -3,7 +3,6 @@
   "minVersion": "0.8",
   "package": "net.tarasandedevelopment.tarasande.injection.mixin",
   "compatibilityLevel": "JAVA_17",
-  "plugin": "net.tarasandedevelopment.tarasande.transformation.MixinPluginTarasande",
   "mixins": [
     "core.MixinGameRenderer",
     "core.MixinMinecraftClient",

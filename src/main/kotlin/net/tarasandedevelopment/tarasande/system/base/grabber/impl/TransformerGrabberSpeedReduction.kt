@@ -1,10 +1,10 @@
-package net.tarasandedevelopment.tarasande.transformation.grabber.impl
+package net.tarasandedevelopment.tarasande.system.base.grabber.impl
 
-import net.tarasandedevelopment.tarasande.transformation.grabber.TransformerGrabber
+import net.tarasandedevelopment.tarasande.system.base.grabber.Grabber
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.ClassNode
 
-class TransformerGrabberSpeedReduction : TransformerGrabber("net.minecraft.entity.player.PlayerEntity", 0.6) {
+class TransformerGrabberSpeedReduction : Grabber("net.minecraft.entity.player.PlayerEntity", 0.6) {
     private val reductionCode = arrayOf(
         /*
             ALOAD 0

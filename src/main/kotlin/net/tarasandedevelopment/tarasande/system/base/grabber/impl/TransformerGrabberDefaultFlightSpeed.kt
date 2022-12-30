@@ -1,10 +1,10 @@
-package net.tarasandedevelopment.tarasande.transformation.grabber.impl
+package net.tarasandedevelopment.tarasande.system.base.grabber.impl
 
-import net.tarasandedevelopment.tarasande.transformation.grabber.TransformerGrabber
+import net.tarasandedevelopment.tarasande.system.base.grabber.Grabber
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.FieldInsnNode
 
-class TransformerGrabberDefaultFlightSpeed : TransformerGrabber("net.minecraft.entity.player.PlayerAbilities", 0.05F) {
+class TransformerGrabberDefaultFlightSpeed : Grabber("net.minecraft.entity.player.PlayerAbilities", 0.05F) {
     override fun transform(classNode: ClassNode) {
         constant = findClassInitializer(classNode)
             .instructions
@@ -13,6 +13,5 @@ class TransformerGrabberDefaultFlightSpeed : TransformerGrabber("net.minecraft.e
             .previous
             .asLDC()
             .cst as Float
-        println("$constant lotto")
     }
 }

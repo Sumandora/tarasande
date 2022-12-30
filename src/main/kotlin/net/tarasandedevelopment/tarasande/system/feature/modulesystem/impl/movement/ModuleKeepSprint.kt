@@ -1,17 +1,17 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.event.EventKeepSprint
 import net.tarasandedevelopment.tarasande.event.EventVelocity
+import net.tarasandedevelopment.tarasande.system.base.grabber.impl.TransformerGrabberSpeedReduction
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.transformation.ManagerTransformer
-import net.tarasandedevelopment.tarasande.transformation.grabber.impl.TransformerGrabberSpeedReduction
 
 class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attacking", ModuleCategory.MOVEMENT) {
 
@@ -22,7 +22,7 @@ class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attackin
     private val packets = object : ValueMode(this, "Packets", true, "Velocity", "Explosion") {
         override fun isEnabled() = knockbackAware.value
     }
-    private val reducingSpeedMultiplier = ValueNumber(this, "Reducing speed multiplier", 0.0, ManagerTransformer.managerGrabber.getConstant(TransformerGrabberSpeedReduction::class.java) as Double, 1.0, 0.1)
+    private val reducingSpeedMultiplier = ValueNumber(this, "Reducing speed multiplier", 0.0, TarasandeMain.managerGrabber().getConstant(TransformerGrabberSpeedReduction::class.java) as Double, 1.0, 0.1)
     private val unsprintWhenReducing = ValueBoolean(this, "Unsprint when reducing", false)
 
     private var prevVelocity: Vec3d? = null
