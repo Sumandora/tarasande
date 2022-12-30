@@ -9,8 +9,6 @@ import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import net.tarasandedevelopment.tarasande_chat_features.CATEGORY_CHAT
 import java.nio.ByteBuffer
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 
 class ModulePrivateMsgDetector : Module("Private msg detector", "Detects private messages", CATEGORY_CHAT) {
 
@@ -39,7 +37,7 @@ class ModulePrivateMsgDetector : Module("Private msg detector", "Detects private
             }
         }
 
-        val joinedNames = java.lang.String.join(" and ", java.lang.String.join(", ", names.subList(0, names.size - 1)), names[names.size - 1])
+        val joinedNames = names.subList(0, names.size - 1).joinToString(", ") + " and " + names[names.size - 1]
         val message = (if (names.size == 1) names[0] else joinedNames) + " " + (if (names.size > 1) "have" else "has") + " seen a message you haven't!"
 
         if (MinecraftClient.getInstance().player?.age != notificationsWhenTick) {
