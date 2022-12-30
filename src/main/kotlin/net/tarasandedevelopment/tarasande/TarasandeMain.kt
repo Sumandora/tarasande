@@ -39,7 +39,6 @@ import java.util.logging.Logger
  *  - Text Radar Panel
  *  - CustomPayload and PacketLogger Panel
  *  - Smartclicking in KillAura
- *  - Tickbase offensive future mode
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions
@@ -117,7 +116,5 @@ class TarasandeMain {
         notifications = Notifications()
 
         EventDispatcher.call(EventSuccessfulLoad())
-
-        println(System.getProperty("java.class.path"))
     }
 }
