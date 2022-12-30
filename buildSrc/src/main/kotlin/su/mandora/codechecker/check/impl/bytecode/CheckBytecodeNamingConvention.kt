@@ -10,8 +10,9 @@ class CheckBytecodeNamingConvention : CheckBytecode("Naming convention") {
 
     override fun run() {
         allNodes().forEach { classNode ->
-            if (lambdaNames.asPredicate().test(classNode.name))
+            if (lambdaNames.asPredicate().test(classNode.name)) {
                 return@forEach // Lambdas don't have names duh (yes, even when kotlin adds some garbled bs, we couldn't care less)
+            }
 
             val actualName = classNode.name.split("/").last().split("$").last() // packages don't matter
 

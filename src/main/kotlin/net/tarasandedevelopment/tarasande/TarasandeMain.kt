@@ -6,6 +6,7 @@ import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
 import net.tarasandedevelopment.tarasande.feature.notification.Notifications
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
+import net.tarasandedevelopment.tarasande.system.base.grabber.ManagerGrabber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.ManagerClickMethod
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
@@ -57,6 +58,7 @@ class TarasandeMain {
     val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
     val rootDirectory = File(System.getProperty("user.home") + File.separator + name)
 
+    private val managerGrabber = ManagerGrabber()
     private val managerFile = ManagerFile()
     private val managerValue = ManagerValue(managerFile)
 
@@ -80,6 +82,7 @@ class TarasandeMain {
         private val instance = TarasandeMain()
         fun get() = instance
 
+        fun managerGrabber() = instance.managerGrabber
         fun managerFile() = instance.managerFile
         fun managerValue() = instance.managerValue
         fun managerESP() = instance.managerESP

@@ -31,7 +31,7 @@ public abstract class MixinScreen {
     public void hookEventChildren(CallbackInfo ci) {
         final EventChildren eventChildren = new EventChildren((Screen) (Object) this, new ArrayList<>());
         EventDispatcher.INSTANCE.call(eventChildren);
-        eventChildren.getElements().forEach(element -> addDrawableChild(element));
+        eventChildren.getElements().forEach(this::addDrawableChild);
     }
 
     @Inject(method = "render", at = @At("HEAD"))
