@@ -112,12 +112,10 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
             ModuleNameProtect(),
             ModuleCommandBlockBypass(),
             ModuleTrueSight(),
-            ModulePrediction(),
             ModuleNoRender(),
             ModuleCameraNoClip(),
 
             // Misc
-            ModuleSpammer(),
             ModuleBlink(),
             ModuleMurderMystery(),
             ModuleBlockBot(),
