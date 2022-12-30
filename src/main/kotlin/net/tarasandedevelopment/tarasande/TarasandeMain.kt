@@ -38,6 +38,8 @@ import java.util.logging.Logger
  *  - Prepend valid command args to error output
  *  - Text Radar Panel
  *  - CustomPayload and PacketLogger Panel
+ *  - Smartclicking in KillAura
+ *  - Tickbase offensive future mode
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions
@@ -47,8 +49,6 @@ import java.util.logging.Logger
  *  - WindowClick in 1.16.5 is not fully remapped
  *  - MerchantScreenHandler#switchTo Crasher
  *  - Disable sneak slowdown in Sneak module
- *
- *  @FlorianMichael please check SpigotRules, is 'replace' supposed to replace the old value?
  */
 class TarasandeMain {
 
