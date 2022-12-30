@@ -17,7 +17,7 @@ class EntrySidebarPanelToggleableQuiltFaker(sidebar: ManagerEntrySidebarPanel) :
 
     init {
         EventDispatcher.add(EventPacket::class.java) {
-            if (!state.value) return@add
+            if (!enabled.value) return@add
 
             if (it.type == EventPacket.Type.RECEIVE && it.packet is CustomPayloadS2CPacket) {
                 if ((it.packet as CustomPayloadS2CPacket).channel == quiltHandshake) {

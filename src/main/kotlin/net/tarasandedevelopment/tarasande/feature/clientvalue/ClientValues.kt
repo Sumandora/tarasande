@@ -1,16 +1,16 @@
 package net.tarasandedevelopment.tarasande.feature.clientvalue
 
 import net.minecraft.client.MinecraftClient
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.Tameable
-import net.minecraft.registry.Registries
 import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.DebugValues
+import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.PrivacyValues
+import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.TargetingValues
 import net.tarasandedevelopment.tarasande.feature.clientvalue.panel.PanelElementsClientValues
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
@@ -31,65 +31,20 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
         override fun isEnabled() = autoSaveConfig.value
     }
 
-    private val privacy = object : ValueButton(this, "Privacy") {
-        override fun onChange() {
-            MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, this.name, this))
-        }
+    init {
+        ValueButtonOwnerValues(this, "Privacy values", PrivacyValues)
     }
 
-    val disableTelemetry = ValueBoolean(privacy, "Disable telemetry", true)
-    val disableRealmsRequests = ValueBoolean(privacy, "Disable realms requests", true)
-
     init {
-        object : ValueButton(this, "Cheat menu values") {
-            override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, this.name, panelSystem.screenCheatMenu))
-            }
-        }
-        object : ValueButton(this, "Command values") {
-            override fun onChange() {
-                MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, this.name, commandSystem))
-            }
-        }
+        ValueButtonOwnerValues(this, "Cheat menu values", panelSystem.screenCheatMenu)
+        ValueButtonOwnerValues(this, "Command values", commandSystem)
     }
 
     val allowAddressParsingForBlacklistedServers = ValueBoolean(this, "Allow address parsing for blacklisted servers", true)
 
     // Combat
-    val targetingValues = object : ValueButton(this, "Targeting values") {
-        override fun onChange() {
-            MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, this.name, this))
-        }
-    }
-    val entities = object : ValueRegistry<EntityType<*>>(targetingValues, "Entities", Registries.ENTITY_TYPE, EntityType.PLAYER) {
-        init {
-            EventDispatcher.add(EventIsEntityAttackable::class.java) {
-                it.attackable = it.attackable && list.contains(it.entity.type)
-            }
-        }
-
-        override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
-    }
-
     init {
-        object : ValueBoolean(targetingValues, "Don't attack tamed entities", false) {
-            init {
-                EventDispatcher.add(EventIsEntityAttackable::class.java) {
-                    if (value)
-                        it.attackable = it.attackable && (it.entity !is Tameable || it.entity.ownerUuid != MinecraftClient.getInstance().player?.uuid)
-                }
-            }
-        }
-        object : ValueBoolean(targetingValues, "Don't attack riding entity", false) {
-            init {
-                EventDispatcher.add(EventIsEntityAttackable::class.java) {
-                    if (value)
-                        it.attackable = it.attackable && it.entity != MinecraftClient.getInstance().player?.vehicle
-                }
-            }
-
-            override fun isEnabled() = entities.list.isNotEmpty()
-        }
+        ValueButtonOwnerValues(this, "Targeting values", TargetingValues)
     }
 
     val correctMovement = ValueMode(this, "Correct movement", false, "Off", "Prevent Backwards Sprinting", "Direct", "Silent")
@@ -124,6 +79,7 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
                 }
             }
         }
+        ValueButtonOwnerValues(this, "Debug values", DebugValues)
     }
 
     val autoSaveDaemonName = "$name config auto save daemon"

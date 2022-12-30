@@ -119,9 +119,12 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
                         return@findItem false
 
                     val effects = PotionUtil.getPotionEffects(it)
-                    if (effects.any { type -> type.effectType == StatusEffects.REGENERATION || type.effectType == StatusEffects.INSTANT_HEALTH })
-                        return@findItem mc.player?.health?.div(2.0)!! <= health.value
-                    return@findItem effects.all { effect -> effect.effectType.isBeneficial && !(mc.player as ILivingEntity).tarasande_forceHasStatusEffect(effect.effectType) }
+                    if(effects.all { effect -> effect.effectType.isBeneficial && !(mc.player as ILivingEntity).tarasande_forceHasStatusEffect(effect.effectType) }) {
+                        if (effects.any { type -> type.effectType == StatusEffects.REGENERATION || type.effectType == StatusEffects.INSTANT_HEALTH })
+                            return@findItem mc.player?.health?.div(2.0)!! <= health.value
+                        return@findItem true
+                    }
+                    return@findItem false
                 }
             }
 

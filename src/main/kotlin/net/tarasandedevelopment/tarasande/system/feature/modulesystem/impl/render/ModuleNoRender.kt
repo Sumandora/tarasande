@@ -10,10 +10,9 @@ import net.tarasandedevelopment.tarasande.event.EventParticle
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 
 class ModuleNoRender : Module("No render", "Disables rendering of certain things.", ModuleCategory.RENDER) {
 
@@ -85,11 +84,7 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
 
     init {
         for (overlay in arrayOf(overlay, hud, world, entity)) {
-            object : ValueButton(this, overlay.name) {
-                override fun onChange() {
-                    mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, overlay.name, overlay))
-                }
-            }
+            ValueButtonOwnerValues(this, overlay.name, overlay)
         }
 
         registerEvent(EventChunkOcclusion::class.java) {

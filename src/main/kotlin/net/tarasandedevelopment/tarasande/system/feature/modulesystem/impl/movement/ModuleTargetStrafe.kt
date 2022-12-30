@@ -16,6 +16,7 @@ import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import kotlin.math.cos
+import kotlin.math.max
 import kotlin.math.sin
 
 class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a circle", ModuleCategory.MOVEMENT) {
@@ -50,7 +51,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
             if (event.entity != mc.player)
                 return@registerEvent
 
-            if (PlayerUtil.input.movementInput?.lengthSquared() == 0.0F)
+            if (!PlayerUtil.isPlayerMoving())
                 return@registerEvent
 
             val moduleKillAura = TarasandeMain.managerModule().get(ModuleKillAura::class.java)
@@ -65,14 +66,16 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
             if (enemy == null)
                 return@registerEvent
 
-            val selfSpeed = event.velocity.horizontalLength()
+            val selfSpeed = max(event.velocity.horizontalLength(), PlayerUtil.calcBaseSpeed())
+
             val curPos = mc.player?.pos!!
             val center = enemy.pos
 
             var newPos = calculateNextPosition(selfSpeed, curPos, center)
 
             val moduleFlight = TarasandeMain.managerModule().get(ModuleFlight::class.java)
-            val flying = moduleFlight.let { !it.enabled || !(it.mode.isSelected(0) || it.mode.isSelected(1)) }
+            val flying = moduleFlight.enabled
+            val freeFlying = moduleFlight.let { it.enabled && (it.mode.isSelected(0) || it.mode.isSelected(1)) }
 
             if (!flying && PlayerUtil.predictFallDistance(BlockPos(newPos)).let { it == null || it > maximumFallDistance.value }) {
                 invert = !invert
@@ -80,12 +83,13 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
             }
 
             val rotation = RotationUtil.getRotations(curPos, newPos)
+            rotation.pitch = 0.0F
             val forward = rotation.forwardVector(selfSpeed)
 
-            if (flying)
-                forward.y = event.velocity.y
+            if (freeFlying)
+                forward.y = MathHelper.clamp(center.y - curPos.y, -moduleFlight.flightSpeed.value, moduleFlight.flightSpeed.value)
             else
-                forward.y = MathHelper.clamp(forward.y, -moduleFlight.flightSpeed.value, moduleFlight.flightSpeed.value)
+                forward.y = event.velocity.y
 
             event.velocity = forward
         }

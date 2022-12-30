@@ -63,6 +63,7 @@ accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket deltaY S
 accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket deltaZ S
 accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket positionChanged Z
 accessible field net/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Serialized profileId Ljava/util/UUID;
+accessible field net/minecraft/client/network/MultiplayerServerListPinger clientConnections Ljava/util/List;
 
 accessible class net/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Serialized
 

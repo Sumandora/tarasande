@@ -11,7 +11,6 @@ import net.minecraft.item.AxeItem
 import net.minecraft.item.Items
 import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.minecraft.network.packet.s2c.play.EntityAnimationS2CPacket
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket
 import net.minecraft.util.Hand
@@ -21,7 +20,6 @@ import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
-import net.minecraft.util.shape.VoxelShapes
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
@@ -153,6 +151,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
     private var teleportPath: ArrayList<Vec3d>? = null
     private var entityCooldowns = HashMap<Entity, Int>()
+
+    private val moduleClickTP by lazy { TarasandeMain.managerModule().get(ModuleClickTP::class.java) } // make it lazy, this might not be ready when the kill aura is
 
     override fun onEnable() {
         clickSpeedUtil.reset()
@@ -322,7 +322,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 }
 
                 if (!mc.player?.isUsingItem!! || (autoBlock.isSelected(1) && !needUnblock.value)) {
-                    var imaginaryPosition = mc.player?.pos!!
+                    val previousPos = mc.player?.pos!!
                     teleportPath = ArrayList()
                     val maxTeleportTime = (mc.renderTickCounter.tickTime / targets.size.toDouble()).toLong()
                     for (pair in validEntities) {
@@ -332,11 +332,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                         val distance = aimPoint.squaredDistanceTo(mc.player?.eyePos!!)
 
                         if (distance > 6.0 * 6.0 && distance <= reach.minValue * reach.minValue) {
-                            (TarasandeMain.managerModule().get(ModuleClickTP::class.java).pathFinder.findPath(imaginaryPosition, target.pos, maxTeleportTime) ?: continue).forEach {
-                                mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(it.x, it.y, it.z, mc.world?.getBlockState(BlockPos(it.add(0.0, -1.0, 0.0)))?.isAir == false))
-                                teleportPath?.add(it)
-                                imaginaryPosition = it
-                            }
+                            val path = moduleClickTP.teleportToPosition(BlockPos(target.pos), maxTeleportTime) ?: continue // failed
+                            teleportPath!!.addAll(path)
                         }
 
                         attack(target, clicks)
@@ -354,10 +351,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                             event.dirty = true
                         }
                     }
-                    if (mc.player?.pos != imaginaryPosition) {
-                        TarasandeMain.managerModule().get(ModuleClickTP::class.java).pathFinder.findPath(imaginaryPosition, mc.player?.pos!!, maxTeleportTime)?.forEach {
-                            mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(it.x, it.y, it.z, mc.world?.getBlockState(BlockPos(it.add(0.0, -1.0, 0.0)))?.isAir == false))
-                            teleportPath?.add(it)
+                    if (mc.player?.pos != previousPos) {
+                        val backPath = moduleClickTP.teleportToPosition(BlockPos(previousPos), maxTeleportTime)
+                        if(backPath != null) {
+                            teleportPath!!.addAll(backPath)
+
+                            mc.player?.setPosition(previousPos)
+                            teleportPath!!.add(mc.player?.pos!!)
                         }
                     }
                 }
@@ -409,7 +409,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             if(RotationUtil.fakeRotation != null)
                 if(mc.crosshairTarget != null && mc.crosshairTarget?.type == HitResult.Type.ENTITY)
                     if(mc.crosshairTarget is EntityHitResult && targets.any { it.first == (mc.crosshairTarget as EntityHitResult).entity })
-                        RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(Box.from(mc.crosshairTarget?.pos).offset(-0.5, -0.5, -0.5).expand(-0.45)), aimTargetColor.getColor().rgb)
+                        RenderUtil.blockOutline(event.matrices, Box.from(mc.crosshairTarget?.pos).offset(-0.5, -0.5, -0.5).expand(-0.45), aimTargetColor.getColor().rgb)
             RenderUtil.renderPath(event.matrices, teleportPath ?: return@registerEvent, -1)
         }
     }

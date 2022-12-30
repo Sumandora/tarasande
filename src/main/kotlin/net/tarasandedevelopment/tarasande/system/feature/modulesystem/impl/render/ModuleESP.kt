@@ -12,11 +12,10 @@ import net.tarasandedevelopment.tarasande.feature.entitycolor.EntityColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.ModuleAntiBot
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
@@ -32,24 +31,14 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
         override fun isEnabled() = entities.list.contains(EntityType.PLAYER)
     }
 
-    init {
-        object : ValueButton(this, "Entity colors") {
-            override fun onChange() {
-                mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, name, entityColor))
-            }
-        }
-        object : ValueButton(this, "2D ESP values") {
-            override fun onChange() {
-                mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, name, TarasandeMain.managerESP()))
-            }
+    val entityColor = EntityColor()
 
-            override fun isEnabled(): Boolean {
-                return mode.isSelected(1)
-            }
+    init {
+        ValueButtonOwnerValues(this, "Entity colors", entityColor)
+        object : ValueButtonOwnerValues(this, "2D ESP values", TarasandeMain.managerESP()) {
+            override fun isEnabled() = mode.isSelected(1)
         }
     }
-
-    val entityColor = EntityColor()
 
     fun shouldRender(entity: Entity) =
         entities.list.contains(entity.type) &&

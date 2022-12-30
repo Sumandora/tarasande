@@ -7,7 +7,6 @@ import net.minecraft.item.BowItem
 import net.minecraft.item.CrossbowItem
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.Box
-import net.minecraft.util.shape.VoxelShapes
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.event.EventRender3D
@@ -107,7 +106,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
 
         registerEvent(EventRender3D::class.java) { event ->
             if (predictedBox != null)
-                RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(predictedBox), predictionColor.getColor().rgb)
+                RenderUtil.blockOutline(event.matrices, predictedBox!!, predictionColor.getColor().rgb)
         }
     }
 }

@@ -16,10 +16,12 @@ class ScreenExtensionButtonListPackScreen : ScreenExtensionButtonList<PackScreen
                 // The pack provider, will always make ZipResourcePacks
                 val base = (this.createResourcePack() as ZipResourcePack).backingZipFile
 
-                var target = File(MinecraftClient.getInstance().resourcePackDir.toFile(), base.name + ".zip")
+                val name = MinecraftClient.getInstance().currentServerEntry?.address ?: base.name
+
+                var target = File(MinecraftClient.getInstance().resourcePackDir.toFile(), "$name.zip")
                 var counter = 1
                 while (target.exists()) {
-                    target = File(MinecraftClient.getInstance().resourcePackDir.toFile(), base.name + " ($counter).zip")
+                    target = File(MinecraftClient.getInstance().resourcePackDir.toFile(), "$name ($counter).zip")
                     counter++
                 }
                 try {

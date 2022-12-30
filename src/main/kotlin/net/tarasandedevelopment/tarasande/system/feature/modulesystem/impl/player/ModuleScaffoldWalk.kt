@@ -8,7 +8,6 @@ import net.minecraft.util.UseAction
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.*
-import net.minecraft.util.shape.VoxelShapes
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.ClickSpeedUtil
@@ -58,7 +57,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val speculativeWaiting = ValueBoolean(this, "Speculative waiting", false)
     private val silent = ValueMode(this, "Silent", false, "Disabled", "Invisible", "Visible")
     private val lockView = ValueBoolean(this, "Lock view", false)
-    private val headRoll = ValueMode(this, "Head roll", false, "Disabled", "Advantage", "Autism")
+    private val headRoll = ValueBoolean(this, "Head roll", false)
     private val forbiddenItems = object : ValueRegistry<Item>(this, "Forbidden items", Registries.ITEM) {
         override fun filter(key: Item) = key is BlockItem
         override fun getTranslationKey(key: Any?) = (key as Item).translationKey
@@ -117,6 +116,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     }
 
     override fun onEnable() {
+        preferredSlot = mc.player?.inventory?.selectedSlot
         clickSpeedUtil.reset()
     }
 
@@ -167,16 +167,8 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
 
     init {
         registerEvent(EventPollEvents::class.java, 1001) { event ->
-            if (rotation != null) {
-                when {
-                    headRoll.isSelected(1) -> {
-                        rotation = Rotation(mc.player?.yaw!!, rotation?.pitch!!)
-                    }
-
-                    headRoll.isSelected(2) -> {
-                        rotation = Rotation(rotation?.yaw!! + mc.player?.age!! * 45, rotation?.pitch!!)
-                    }
-                }
+            if (rotation != null && headRoll.value) {
+                rotation = Rotation(mc.player?.yaw!!, rotation?.pitch!!)
             }
 
             val below = mc.player?.blockPos?.add(0, -1, 0)!!
@@ -353,26 +345,16 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 }
                 if (!hasBlock) {
                     if (!silent.isSelected(0)) {
-                        var blockAmount = 0
-                        var blockSlot: Int? = null
-                        for (slot in 0..8) {
-                            val stack = mc.player?.inventory?.main?.get(slot)
-                            if (stack != null && stack.item is BlockItem && isBlockItemValid(stack.item as BlockItem)) {
-                                if (blockSlot == null || blockAmount > stack.count) {
-                                    blockSlot = slot
-                                    blockAmount = stack.count
-                                }
-                            }
-                        }
-                        if(blockSlot == null || mc.player?.inventory?.selectedSlot != blockSlot)
-                            preferredSlot = mc.player?.inventory?.selectedSlot!!
+                        val blockSlot =
+                            mc.player?.inventory?.main?.subList(0, 9)?.
+                            withIndex()?.
+                            filter { it.value.item is BlockItem && isBlockItemValid(it.value.item as BlockItem) }?.
+                            minByOrNull { it.value.count }?.
+                            index
+
                         if (blockSlot != null) {
                             mc.player?.inventory?.selectedSlot = blockSlot
-                        } else {
-                            if(silent.isSelected(2))
-                                mc.player?.inventory?.selectedSlot = preferredSlot
-                            return@registerEvent
-                        }
+                        } else return@registerEvent
                     } else return@registerEvent
                 }
                 val rotationVector = RotationUtil.fakeRotation?.forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)!!
@@ -437,15 +419,15 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             if (target != null) {
                 val blockPos = target?.first
                 val blockState = mc.world?.getBlockState(target?.first)
-                val shape = blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos?.x?.toDouble()!!, blockPos.y.toDouble(), blockPos.z.toDouble())!!
-                RenderUtil.blockOutline(event.matrices, shape, blockColor.getColor().rgb)
+                val shape = blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos?.x?.toDouble()!!, blockPos.y.toDouble(), blockPos.z.toDouble())?.neverEmpty()!!
+                RenderUtil.blockOutline(event.matrices, shape.boundingBox, blockColor.getColor().rgb)
                 val facing = target?.second?.opposite
-                RenderUtil.blockOutline(event.matrices, shape.offset(facing?.offsetX?.toDouble()!!, facing.offsetY.toDouble(), facing.offsetZ.toDouble()), facingColor.getColor().rgb)
+                RenderUtil.blockOutline(event.matrices, shape.offset(facing?.offsetX?.toDouble()!!, facing.offsetY.toDouble(), facing.offsetZ.toDouble()).boundingBox, facingColor.getColor().rgb)
             }
             if (aimTarget != null)
-                RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(Box.from(aimTarget).offset(-0.5, -0.5, -0.5).expand(-0.45)), (if(rerotated) aimTargetColorRerotated else aimTargetColorStable).getColor().rgb)
+                RenderUtil.blockOutline(event.matrices, Box.from(aimTarget).offset(-0.5, -0.5, -0.5).expand(-0.45), (if(rerotated) aimTargetColorRerotated else aimTargetColorStable).getColor().rgb)
             if (placeLine != null)
-                RenderUtil.blockOutline(event.matrices, VoxelShapes.union(VoxelShapes.cuboid(Box.from(placeLine?.first).offset(-0.5, -0.5, -0.5).expand(-0.49)), VoxelShapes.cuboid(Box.from(placeLine?.second).offset(-0.5, -0.5, -0.5).expand(-0.49))), placeLineColor.getColor().rgb)
+                RenderUtil.blockOutline(event.matrices, Box.from(placeLine?.first).offset(-0.5, -0.5, -0.5).expand(-0.49).union(Box.from(placeLine?.second).offset(-0.5, -0.5, -0.5).expand(-0.49)), placeLineColor.getColor().rgb)
         }
     }
 

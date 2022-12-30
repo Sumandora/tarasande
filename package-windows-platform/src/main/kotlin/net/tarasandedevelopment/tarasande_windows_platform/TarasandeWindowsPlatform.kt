@@ -61,9 +61,7 @@ class TarasandeWindowsPlatform : ClientModInitializer {
                         }
                     }
 
-                    override fun onClick(state: Boolean) {
-                        super.onClick(state)
-
+                    override fun onClick(enabled: Boolean) {
                         val screenBetterProxy = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonListMultiplayerScreen::class.java).screenBetterSlotListAccountManager.screenBetterProxy
 
                         if (torProcess == null) {

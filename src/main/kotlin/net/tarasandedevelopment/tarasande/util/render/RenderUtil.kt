@@ -8,9 +8,8 @@ import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Formatting
-import net.minecraft.util.math.Direction
+import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
-import net.minecraft.util.shape.VoxelShape
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.getPositionVec3d
@@ -225,9 +224,7 @@ object RenderUtil {
         RenderSystem.disableBlend()
     }
 
-    fun blockOutline(matrices: MatrixStack, voxelShape: VoxelShape, color: Int) {
-        if (voxelShape.isEmpty) return
-
+    fun blockOutline(matrices: MatrixStack, box: Box, color: Int) {
         val matrix = matrices.peek().positionMatrix
 
         RenderSystem.enableBlend()
@@ -242,16 +239,16 @@ object RenderUtil {
         RenderSystem.setShader { GameRenderer.getPositionProgram() }
 
         val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
-        val shape = voxelShape.offset(-vec3d.x, -vec3d.y, -vec3d.z)
+        val shape = box.offset(-vec3d.x, -vec3d.y, -vec3d.z)
 
-        val minX = shape.getMin(Direction.Axis.X).toFloat()
-        val maxX = shape.getMax(Direction.Axis.X).toFloat()
+        val minX = shape.minX.toFloat()
+        val maxX = shape.maxX.toFloat()
 
-        val minY = shape.getMin(Direction.Axis.Y).toFloat()
-        val maxY = shape.getMax(Direction.Axis.Y).toFloat()
+        val minY = shape.minY.toFloat()
+        val maxY = shape.maxY.toFloat()
 
-        val minZ = shape.getMin(Direction.Axis.Z).toFloat()
-        val maxZ = shape.getMax(Direction.Axis.Z).toFloat()
+        val minZ = shape.minZ.toFloat()
+        val maxZ = shape.maxZ.toFloat()
 
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION)
         bufferBuilder.vertex(matrix, minX, minY, minZ).next()

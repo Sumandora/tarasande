@@ -1,14 +1,12 @@
 package net.tarasandedevelopment.tarasande.system.screen.informationsystem.panel
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
 
@@ -31,11 +29,7 @@ class PanelInformation(private val informationSystem: ManagerInformation) : Pane
             if (TarasandeMain.managerValue().getValues(information).isNotEmpty()) {
                 val name = map[information]!!
 
-                object : ValueButton(this, "$name values") {
-                    override fun onChange() {
-                        MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, name, information))
-                    }
-                }
+                ValueButtonOwnerValues(this, "$name values", information)
             }
         }
     }

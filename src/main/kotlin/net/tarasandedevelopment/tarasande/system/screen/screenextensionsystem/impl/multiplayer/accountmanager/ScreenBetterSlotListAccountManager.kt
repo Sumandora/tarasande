@@ -55,9 +55,9 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
     var status = ""
 
     // @formatter:off
-    val managerEnvironment = ManagerEnvironment()
-    val managerAzureApp = ManagerAzureApp()
-    val managerAccount = ManagerAccount()
+    val managerEnvironment  = ManagerEnvironment()
+    val managerAzureApp     = ManagerAzureApp()
+    val managerAccount      = ManagerAccount()
     // @formatter:on
 
     val screenBetterProxy = ScreenBetterProxy()
@@ -155,7 +155,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         FontWrapper.textShadow(matrices, status, width / 2.0F, 2 * FontWrapper.fontHeight() * 2.0F, -1, centered = true)
 
         screenBetterProxy.proxy?.apply {
-            FontWrapper.textShadow(matrices, socketAddress.address.hostAddress + ":" + socketAddress.port + " (" + ping + "ms)", 6F, 27F)
+            FontWrapper.textShadow(matrices, socketAddress.address.hostAddress + ":" + socketAddress.port + if(ping != null) " (" + ping + "ms)" else "", 6F, 27F)
         }
     }
 

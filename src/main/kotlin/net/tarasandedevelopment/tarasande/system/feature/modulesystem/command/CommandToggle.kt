@@ -21,9 +21,9 @@ class CommandToggle(private val moduleSystem: ManagerModule) : Command("toggle")
             moduleSystem.list.firstOrNull { module -> module.name == StringArgumentType.getString(it, "module") }?.apply {
                 switchState()
                 printChatMessage(name + " is now " + if (enabled) "enabled" else "disabled")
-                return@executes success
+                return@executes SUCCESS
             }
-            return@executes error
+            return@executes ERROR
         })
     }
 }

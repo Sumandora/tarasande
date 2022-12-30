@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanelToggleable
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.ManagerEntrySidebarPanel
 import su.mandora.event.EventDispatcher
-import java.util.UUID
+import java.util.*
 
 class EntrySidebarPanelToggleableBungeeHack(sidebar: ManagerEntrySidebarPanel) : EntrySidebarPanelToggleable(sidebar, "Bungee Hack", "Spoofer") {
 
@@ -25,7 +25,7 @@ class EntrySidebarPanelToggleableBungeeHack(sidebar: ManagerEntrySidebarPanel) :
         EventDispatcher.add(EventPacket::class.java) { event ->
             if (event.type != EventPacket.Type.SEND) return@add
             if (event.packet !is HandshakeC2SPacket) return@add
-            if (state.value) {
+            if (enabled.value) {
                 var uuid = MinecraftClient.getInstance().session.uuid
                 if (this.customUUID.value)
                     uuid = this.uuid.value

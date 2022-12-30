@@ -21,7 +21,7 @@ class CommandGive : Command("give") {
 
             printChatMessage("You have received the item " + it.toHoverableText().string)
         }
-        return success
+        return SUCCESS
     }
 
     override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {

@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.ghos
 
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.Box
-import net.minecraft.util.shape.VoxelShapes
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.event.EventBoundingBoxOverride
@@ -61,7 +60,7 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
         registerEvent(EventRender3D::class.java) { event ->
             boundingBoxes.forEach {
                 it.value.forEach { box ->
-                    RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(box), if (computeSelectedBox(it.key) == box) selectedColor.getColor().rgb else defaultColor.getColor().rgb)
+                    RenderUtil.blockOutline(event.matrices, box, if (computeSelectedBox(it.key) == box) selectedColor.getColor().rgb else defaultColor.getColor().rgb)
                 }
             }
         }

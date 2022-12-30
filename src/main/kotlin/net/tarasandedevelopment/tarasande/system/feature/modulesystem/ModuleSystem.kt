@@ -111,7 +111,6 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
             ModuleBlockESP(),
             ModuleNameProtect(),
             ModuleCommandBlockBypass(),
-            ModuleBlockChangeTracker(),
             ModuleTrueSight(),
             ModulePrediction(),
             ModuleNoRender(),

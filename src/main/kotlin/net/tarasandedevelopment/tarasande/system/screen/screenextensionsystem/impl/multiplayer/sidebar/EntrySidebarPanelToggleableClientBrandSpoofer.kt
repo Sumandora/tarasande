@@ -15,7 +15,7 @@ class EntrySidebarPanelToggleableClientBrandSpoofer(sidebar: ManagerEntrySidebar
 
     init {
         EventDispatcher.add(EventPacket::class.java) {
-            if (!state.value) return@add
+            if (!enabled.value) return@add
 
             if (it.type == EventPacket.Type.SEND && it.packet is CustomPayloadC2SPacket) {
                 if (it.packet.channel == CustomPayloadC2SPacket.BRAND) {

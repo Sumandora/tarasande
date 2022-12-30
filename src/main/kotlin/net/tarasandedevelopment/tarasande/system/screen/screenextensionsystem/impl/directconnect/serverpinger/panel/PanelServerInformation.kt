@@ -26,36 +26,46 @@ fun ServerInfo.copy(): ServerInfo {
 
 open class PanelServerInformation(private val owner: Any) : Panel("Server Information", 300.0, FontWrapper.fontHeight() /* I can't access titleBarHeight yet TODO */ + 32.0, background = true, scissor = false) {
 
+    companion object {
+        var tooltip: MutableList<Text>? = null
+
+        val emulatedMultiplayerScreen = object : MultiplayerScreen(null) {
+            override fun setMultiplayerScreenTooltip(tooltip: MutableList<Text>?) {
+                PanelServerInformation.tooltip = tooltip
+            }
+
+            override fun getServerList(): ServerList {
+                return object : ServerList(MinecraftClient.getInstance()) {
+                    override fun size(): Int {
+                        return 0
+                    }
+
+                    override fun saveFile() {
+                        // what do I look like?
+                    }
+                }
+            }
+        }
+    }
+
     var server = emptyServer.copy()
         set(value) {
             field = value
             createEntry()
         }
 
-    private var tooltip: MutableList<Text>? = null
     private val emulatedWidget = MultiplayerServerListWidget(null, null, 0, 0, 0, 0, 0)
-    private val emulatedMultiplayerScreen = object : MultiplayerScreen(null) {
-        override fun setMultiplayerScreenTooltip(tooltip: MutableList<Text>?) {
-            this@PanelServerInformation.tooltip = tooltip
-        }
-
-        override fun getServerList(): ServerList {
-            return object : ServerList(MinecraftClient.getInstance()) {
-                override fun size(): Int {
-                    return 0
-                }
-
-                override fun saveFile() {
-                    // what do I look like?
-                }
-            }
-        }
-    }
     private var serverEntry: ServerEntry? = null
 
     override fun getValueOwner() = owner
 
     fun createEntry() {
+        // Prevent memory leaks
+        val iterator = emulatedMultiplayerScreen.serverListPinger.clientConnections.iterator()
+        while(iterator.hasNext()) {
+            iterator.next().disconnect(Text.empty())
+            iterator.remove()
+        }
         serverEntry = emulatedWidget.ServerEntry(emulatedMultiplayerScreen, server)
     }
 

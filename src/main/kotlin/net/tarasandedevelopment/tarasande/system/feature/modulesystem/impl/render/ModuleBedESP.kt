@@ -14,6 +14,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.boundingBox
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.div
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
 import net.tarasandedevelopment.tarasande.util.math.pathfinder.Node
@@ -169,17 +170,17 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
                 for (bedPart in bedData.bedParts) {
                     val blockPos = BlockPos(bedPart.x, bedPart.y, bedPart.z)
                     val blockState = mc.world?.getBlockState(blockPos)
-                    RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, bedColor.getColor().rgb)
+                    RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.boundingBox()?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, bedColor.getColor().rgb)
                 }
                 for (node in bedData.defenders ?: continue) {
                     val blockPos = BlockPos(node.x, node.y, node.z)
                     val blockState = mc.world?.getBlockState(blockPos)
-                    RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, defenderColor.getColor().rgb)
+                    RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.boundingBox()?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, defenderColor.getColor().rgb)
                 }
                 for (node in bedData.solution ?: continue) {
                     val blockPos = BlockPos(node.x, node.y, node.z)
                     val blockState = mc.world?.getBlockState(blockPos)
-                    RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, solutionColor.getColor().rgb)
+                    RenderUtil.blockOutline(event.matrices, blockState?.getOutlineShape(mc.world, blockPos)?.boundingBox()?.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())!!, solutionColor.getColor().rgb)
                 }
             }
         }

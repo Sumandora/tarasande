@@ -42,7 +42,7 @@ class PathFinder(
     private val directions: Array<Node> = cardinalDirections
 ) {
 
-    fun findPath(start: Vec3d, target: Vec3d, maxTime: Long? = null): List<Vec3d>? {
+    fun findPath(start: Vec3d, target: Vec3d, maxTime: Long? = null): ArrayList<Vec3d>? {
         val mappedPath = ArrayList<Vec3d>()
 
         @Suppress("NAME_SHADOWING")
@@ -57,21 +57,25 @@ class PathFinder(
     }
 
     fun findPath(start: Node, target: Node, maxTime: Long? = null): List<Node>? {
-        val open = TreeSet<Node>(Comparator.comparing { it.f })
+        val open = HashMap<Int, Node>()
         val closed = HashSet<Int>()
+        open[start.hashCode()] = start
         start.g = cost(start, start)
         start.h = heuristic(start, target)
         start.f = start.g + start.h
-        open.add(start)
 
         if (start == target || !allowedBlock(MinecraftClient.getInstance().world, start) || !allowedBlock(MinecraftClient.getInstance().world, target)) {
-            return Collections.singletonList(start)
+            return open.values.toList()
         }
 
-        var current: Node? = null
+        var bestNode: Node? = null
+        var current: Node?
         val begin = System.currentTimeMillis()
         while ((maxTime == null || System.currentTimeMillis() - begin <= maxTime) && open.isNotEmpty()) {
-            current = open.pollFirst()
+            val lowest = open.minBy { entry -> entry.value.f }
+            open.remove(lowest.key)
+
+            current = lowest.value
             if (current == target) {
                 break
             }
@@ -79,26 +83,36 @@ class PathFinder(
             closed.add(current.hashCode())
 
             for (movementPossibility in directions) {
-                val movement = current + movementPossibility
+                var movement = current + movementPossibility
 
                 if (closed.contains(movement.hashCode()))
                     continue
+
+                var contains = true
+                movement = open[movement.hashCode()] ?: run { contains = false; movement }
 
                 if (!allowedBlock(MinecraftClient.getInstance().world, movement))
                     continue
 
                 val newCost = current.g + cost(start, movement)
 
+                if (!contains)
+                    open[movement.hashCode()] = movement
+                else if (movement.g <= newCost)
+                    continue
+
                 movement.g = newCost
                 movement.h = heuristic(movement, target)
+
+                if (bestNode == null || bestNode.h > movement.h)
+                    bestNode = movement
+
                 movement.f = movement.g + movement.h
                 movement.parent = current
-
-                open.add(movement)
             }
         }
 
-        return reconstructPath(current ?: return null)
+        return reconstructPath(bestNode ?: return null)
     }
 
     private fun reconstructPath(current: Node): ArrayList<Node> {
@@ -135,9 +149,10 @@ class Node(var x: Int, var y: Int, var z: Int) : Comparable<Node> {
     }
 
     override fun hashCode(): Int {
-        val cantor = { a: Int, b: Int ->
-            (a + b + 1) * (a + b) / 2 + b
-        }
-        return cantor(x, cantor(y, z))
+        val xComp = x and 4095
+        val yComp = y and 255 shl 12
+        val zComp = z and 4095 shl 20
+
+        return xComp or yComp or zComp
     }
 }

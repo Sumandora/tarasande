@@ -17,7 +17,7 @@ class EntrySidebarPanelToggleablePluginMessageFilter(sidebar: ManagerEntrySideba
 
     init {
         EventDispatcher.add(EventPacket::class.java) {
-            if (!state.value) return@add
+            if (!enabled.value) return@add
 
             if (it.type == EventPacket.Type.SEND && it.packet is CustomPayloadC2SPacket) {
                 val packetChannel = (it.packet as CustomPayloadC2SPacket).channel.toString()

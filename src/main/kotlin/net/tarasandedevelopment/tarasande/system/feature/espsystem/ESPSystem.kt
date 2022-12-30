@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.feature.espsystem
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.RotationAxis
@@ -8,12 +7,11 @@ import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.impl.ESPElementBox
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.impl.ESPElementRotatableHealthBar
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.impl.ESPElementRotatableName
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleESP
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import kotlin.math.abs
 
 class ManagerESP : Manager<ESPElement>() {
@@ -26,11 +24,7 @@ class ManagerESP : Manager<ESPElement>() {
         )
 
         for (element in list)
-            object : ValueButton(this, element.name) {
-                override fun onChange() {
-                    MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, name, element))
-                }
-            }
+            ValueButtonOwnerValues(this, element.name, element)
     }
 
     fun renderBox(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {

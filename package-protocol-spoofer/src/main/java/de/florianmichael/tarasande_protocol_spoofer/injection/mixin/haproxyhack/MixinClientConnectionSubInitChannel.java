@@ -17,7 +17,7 @@ public class MixinClientConnectionSubInitChannel {
     public void addChannelHandlers(Channel channel, CallbackInfo ci) {
         final EntrySidebarPanelToggleableHAProxyHack haProxyHack = TarasandeMain.Companion.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen.class).getSidebar().get(EntrySidebarPanelToggleableHAProxyHack.class);
 
-        if (haProxyHack.getState().getValue()) {
+        if (haProxyHack.getEnabled().getValue()) {
             channel.pipeline().addFirst("haproxy-encoder", HAProxyMessageEncoder.INSTANCE);
             channel.pipeline().addLast(haProxyHack.createHandler());
         }

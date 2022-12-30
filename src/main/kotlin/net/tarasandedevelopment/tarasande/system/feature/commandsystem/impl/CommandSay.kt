@@ -11,7 +11,7 @@ class CommandSay : Command("say") {
     override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
         return builder.then(argument("message", StringArgumentType.greedyString())?.executes {
             PlayerUtil.sendChatMessage(StringArgumentType.getString(it, "message"), true)
-            return@executes success
+            return@executes SUCCESS
         })
     }
 }

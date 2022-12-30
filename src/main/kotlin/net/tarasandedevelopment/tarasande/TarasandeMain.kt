@@ -46,6 +46,8 @@ import java.util.logging.Logger
  *  - WindowClick in 1.16.5 is not fully remapped
  *  - MerchantScreenHandler#switchTo Crasher
  *  - Disable sneak slowdown in Sneak module
+ *
+ *  @FlorianMichael please check SpigotRules, is 'replace' supposed to replace the old value?
  */
 class TarasandeMain {
 
@@ -112,5 +114,7 @@ class TarasandeMain {
         notifications = Notifications()
 
         EventDispatcher.call(EventSuccessfulLoad())
+
+        println(System.getProperty("java.class.path"))
     }
 }

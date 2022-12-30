@@ -41,13 +41,13 @@ class EntrySidebarPanelToggleableForgeFaker(sidebar: ManagerEntrySidebarPanel) :
     init {
         EventDispatcher.apply {
             add(EventConnectServer::class.java) {
-                if (state.value) {
+                if (enabled.value) {
                     currentHandler = ForgeCreator.createNetHandler(it.connection)
                 }
             }
 
             add(EventPacket::class.java, 1) {
-                if (!state.value || currentHandler == null) return@add
+                if (!enabled.value || currentHandler == null) return@add
 
                 if (it.type == EventPacket.Type.SEND) {
                     if (it.packet is HandshakeC2SPacket) {
@@ -69,7 +69,7 @@ class EntrySidebarPanelToggleableForgeFaker(sidebar: ManagerEntrySidebarPanel) :
             }
 
             add(EventRenderMultiplayerEntry::class.java) {
-                if (state.value || alwaysShowInformation.value) {
+                if (enabled.value || alwaysShowInformation.value) {
                     (it.server as IServerInfo).tarasande_getForgePayload()?.also { payload ->
                         val fontHeight = FontWrapper.fontHeight()
 

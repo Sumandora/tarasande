@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 
 class ModuleTNTBlock : Module("TNT block", "Auto-blocks when nearby TNT is exploding", ModuleCategory.COMBAT) {
 
-    private val reach = ValueNumber(this, "Reach", 0.0, 4.0, 8.0, 0.1)
+    private val reach = ValueNumber(this, "Reach", 0.1, 4.0, 8.0, 0.1)
     private val fuse = ValueNumber(this, "Fuse", 0.0, 30.0, TntEntity.DEFAULT_FUSE.toDouble(), 1.0)
 
     init {

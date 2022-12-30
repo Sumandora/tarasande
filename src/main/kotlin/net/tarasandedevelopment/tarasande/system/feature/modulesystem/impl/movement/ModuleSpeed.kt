@@ -18,7 +18,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
     private val jumpHeight = ValueNumber(this, "Jump height", 0.0, 1.0, 2.0, 0.01)
     private val gravity = ValueNumber(this, "Gravity", 0.0, 1.0, 2.0, 0.1)
-    private val speedValue = ValueNumber(this, "Speed", 0.0, PlayerUtil.walkSpeed, 1.0, 0.01)
+    private val speedValue = ValueNumber(this, "Speed", 0.0, PlayerUtil.DEFAULT_WALK_SPEED, 1.0, 0.01)
     private val speedDivider = ValueNumber(this, "Speed divider", 1.0, 60.0, 200.0, 1.0)
     private val turnRate = ValueNumber(this, "Turn rate", 0.0, 180.0, 180.0, 1.0)
     private val lowHop = ValueBoolean(this, "Low hop", false)
@@ -52,7 +52,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                     event.velocity.y = mc.player?.velocity?.y!!
 
                     mc.player?.velocity?.x = prevVelocity.x
-                    if (lowHop.value && mc.player?.horizontalCollision == false)
+                    if (lowHop.value && mc.player?.horizontalCollision == false && !mc.options.jumpKey.pressed)
                         mc.player?.velocity?.y = prevVelocity.y
                     mc.player?.velocity?.z = prevVelocity.z
 
@@ -60,7 +60,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                     speed = PlayerUtil.calcBaseSpeed(speedValue.value)
                 }
             }
-            if (event.velocity.y < 0.0) {
+            if (event.velocity.y < 0.0 && !mc.options.jumpKey.pressed) {
                 event.velocity.y = event.velocity.y * gravity.value
             }
 

@@ -1,32 +1,35 @@
-package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render
+package net.tarasandedevelopment.tarasande.feature.clientvalue.impl.debug
 
 import net.minecraft.block.BlockState
+import net.minecraft.client.MinecraftClient
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.shape.VoxelShapes
 import net.tarasandedevelopment.tarasande.event.EventRender3D
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.boundingBox
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import su.mandora.event.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
 
-class ModuleBlockChangeTracker : Module("Block change tracker", "Tracks block changes", ModuleCategory.RENDER) {
+class BlockChangeTracker {
 
+    private val enabled = ValueBoolean(this, "Enabled", false)
     private val color = ValueColor(this, "Color", 0.0, 1.0, 1.0, 1.0)
     private val time = ValueNumber(this, "Time", 0.0, 1000.0, 10000.0, 500.0)
 
     val changes = CopyOnWriteArrayList<Triple<BlockPos, BlockState, Long>>()
 
     init {
-        registerEvent(EventRender3D::class.java) { event ->
+        EventDispatcher.add(EventRender3D::class.java) { event ->
             for (change in changes) {
                 val timeDelta = System.currentTimeMillis() - change.third
                 if (timeDelta > time.value) {
                     changes.remove(change)
                 } else {
-                    RenderUtil.blockOutline(event.matrices, change.second.getOutlineShape(mc.world, change.first).let { if (it.isEmpty) VoxelShapes.fullCube() else it }.offset(change.first.x.toDouble(), change.first.y.toDouble(), change.first.z.toDouble()), color.getColor().withAlpha((color.getColor().alpha * (1.0F - timeDelta / time.value)).toInt()).rgb)
+                    if(enabled.value)
+                        RenderUtil.blockOutline(event.matrices, change.second.getOutlineShape(MinecraftClient.getInstance().world, change.first).boundingBox().offset(change.first.x.toDouble(), change.first.y.toDouble(), change.first.z.toDouble()), color.getColor().withAlpha((color.getColor().alpha * (1.0F - timeDelta / time.value)).toInt()).rgb)
                 }
             }
         }

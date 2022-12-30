@@ -33,14 +33,14 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
     private val animationLength = ValueNumber(this, "Animation length", 0.0, 100.0, 500.0, 1.0)
     private val imageValue = object : ValueMode(this, "Image", false, "Off", "Rimuru", "Shuya's girl", "Nanakusa", "Jannick", "Azusa") {
         override fun onChange() {
-            image = null
+            nativeImage = null
         }
     }
 
     private var screenChangeTime = System.currentTimeMillis()
     private var isClosing = false
 
-    var image: NativeImageBackedTexture? = null
+    var nativeImage: NativeImageBackedTexture? = null
     private val particles = ArrayList<Particle>()
 
     var disableAnimation = false
@@ -97,12 +97,12 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
         matrices.push()
 
         if (!imageValue.isSelected(0)) {
-            if (image == null)
-                image = RenderUtil.createImage(imageValue.selected[0].lowercase().replace(" ", "").replace("'", "") + ".png")
+            if (nativeImage == null)
+                nativeImage = RenderUtil.createImage(imageValue.selected[0].lowercase().replace(" ", "").replace("'", "") + ".png")
 
             matrices.push()
             RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
-            RenderSystem.setShaderTexture(0, image!!.glId)
+            RenderSystem.setShaderTexture(0, nativeImage!!.glId)
             @Suppress("NAME_SHADOWING")
             val color = color.brighter().brighter()
             RenderSystem.setShaderColor(color.red / 255f, color.green / 255f, color.blue / 255f, (animation * animation * animation).toFloat())
@@ -110,7 +110,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
             RenderSystem.defaultBlendFunc()
             RenderSystem.enableDepthTest()
 
-            val aspect = image!!.image!!.width / image!!.image!!.height.toDouble()
+            val aspect = nativeImage!!.image!!.width / nativeImage!!.image!!.height.toDouble()
 
             val height = client?.window?.scaledHeight!! * 0.85
             val width = height * aspect

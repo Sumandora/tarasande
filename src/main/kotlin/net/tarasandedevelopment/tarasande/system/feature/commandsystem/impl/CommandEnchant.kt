@@ -68,14 +68,14 @@ class CommandEnchant : Command("enchant") {
                     singleEnchant(this, level)
                     printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(this.translationKey) + "] at level [" + level + "] was added")
                 }
-                return@executes success
+                return@executes SUCCESS
             }).then(literal("max").executes {
                 @Suppress("UNCHECKED_CAST")
                 (it.getArgument("enchantment", RegistryEntry.Reference::class.java) as RegistryEntry.Reference<Enchantment>).value().apply {
                     singleEnchant(this, this.maxLevel)
                     printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(this.translationKey) + "] at max level was added")
                 }
-                return@executes success
+                return@executes SUCCESS
             })
         )))
 
@@ -87,14 +87,14 @@ class CommandEnchant : Command("enchant") {
                     }, true)
                     printChatMessage("All possible enchantments at level [$this] were added")
                 }
-                return@executes success
+                return@executes SUCCESS
             }
         ).then(literal("max").executes {
             allEnchant(level = Function {
                 return@Function it.maxLevel
             }, true)
             printChatMessage("All possible enchantments at max level were added")
-            return@executes success
+            return@executes SUCCESS
         })))
 
         builder.then(literal("all").then(literal("level").then(
@@ -105,13 +105,13 @@ class CommandEnchant : Command("enchant") {
                     })
                     printChatMessage("All enchantments at level [$this] were added")
                 }
-                return@executes success
+                return@executes SUCCESS
             }).then(literal("max").executes {
             allEnchant(level = Function {
                 return@Function it.maxLevel
             }, false)
             printChatMessage("All enchantments at max level were added")
-            return@executes success
+            return@executes SUCCESS
         })))
 
         builder.then(literal("remove").then(argument("enchantment", RegistryEntryArgumentType.registryEntry(registryAccess, RegistryKeys.ENCHANTMENT))?.executes {
@@ -122,13 +122,13 @@ class CommandEnchant : Command("enchant") {
             }
             syncInventory()
             printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(enchantment.translationKey) + "] was removed")
-            return@executes success
+            return@executes SUCCESS
         }))
 
         builder.then(literal("clear").executes {
             getTargetItem().nbt?.remove("Enchantments")
             printChatMessage("All enchantments have been removed")
-            return@executes success
+            return@executes SUCCESS
         })
         return builder
     }

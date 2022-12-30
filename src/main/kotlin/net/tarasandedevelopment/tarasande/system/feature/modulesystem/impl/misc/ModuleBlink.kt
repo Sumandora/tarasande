@@ -11,11 +11,12 @@ import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket
 import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket
 import net.minecraft.network.packet.c2s.play.PlayPongC2SPacket
 import net.minecraft.network.packet.s2c.play.*
+import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
-import net.minecraft.util.shape.VoxelShapes
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientConnection
+import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
@@ -24,8 +25,10 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewWorld
+import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
+import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
@@ -35,15 +38,19 @@ import java.util.concurrent.CopyOnWriteArrayList
 class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
 
     private val affectedPackets = ValueMode(this, "Affected packets", true, "Serverbound", "Clientbound")
-    private val mode = object : ValueMode(this, "Mode", false, "State-dependent", "Pulse blink", "Latency") {
+    private val mode = object : ValueMode(this, "Mode", false, "State-dependent", "Pulse blink", "Latency", "Automatic") {
         override fun onChange() = onDisable()
     }
     private val pulseDelay = object : ValueNumber(this, "Pulse delay", 0.0, 500.0, 1000.0, 1.0) {
-        override fun isEnabled() = mode.isSelected(1)
+        override fun isEnabled() = mode.isSelected(1) || mode.isSelected(3)
         override fun onChange() = onDisable()
     }
     private val latency = object : ValueNumber(this, "Latency", 0.0, 500.0, 1000.0, 1.0) {
         override fun isEnabled() = mode.isSelected(2)
+        override fun onChange() = onDisable()
+    }
+    private val reach = object : ValueNumber(this, "Reach", 0.1, 6.0, 15.0, 0.1) {
+        override fun isEnabled() = mode.isSelected(3)
         override fun onChange() = onDisable()
     }
     private val cancelKey = object : ValueBind(this, "Cancel key", Type.KEY, GLFW.GLFW_KEY_UNKNOWN) {
@@ -106,7 +113,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                         }
 
                         is PlayerRespawnS2CPacket -> {
-                            if(event.packet.isNewWorld())
+                            if (event.packet.isNewWorld())
                                 newPositions.clear()
                         }
                     }
@@ -126,6 +133,44 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         packets.clear() // This might be filled with data, because it is copy on write
     }
 
+    private fun shouldPulsate(): Boolean {
+        // POV: Du hast Esounds Leben in wenigen Minuten useless gemacht $$$
+
+        //@formatter:off
+        val validEntities =
+            mc.world?.entities?.
+            asSequence()?.
+            filterIsInstance<PlayerEntity>()?.
+            filter { PlayerUtil.isAttackable(it) }?.
+            filter { mc.player?.distanceTo(it)!! <= reach.value }?.
+            filter { newPositions[it.id] != null }?.
+            filter { (it as ILivingEntity).tarasande_prevServerPos() != null }?.
+            toList()!!
+        //@formatter:on
+        if (validEntities.isEmpty())
+            return false
+
+        return validEntities.all {
+            val newPosition = newPositions[it.id]!!
+            val lastPosition = (it as ILivingEntity).tarasande_prevServerPos()
+
+            val actualDist = mc.player?.eyePos?.distanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, anticipateBoundingBox(extractPosition(newPosition)).expand(it.targetingMargin.toDouble())))!!
+            // To work around the issue that anticipateBoundingBox poses, we force the same bounding box here (this is probably the most rofl "solution", there is and there are still ways it could fail)
+            val oldDist = mc.player?.eyePos?.distanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, anticipateBoundingBox(lastPosition).expand(it.targetingMargin.toDouble())))!!
+
+            return oldDist < actualDist
+        }
+    }
+
+    private fun extractPosition(trackedPosition: TrackedPosition): Vec3d {
+        return trackedPosition.subtract(Vec3d.ZERO).negate()
+    }
+
+    private fun anticipateBoundingBox(pos: Vec3d): Box {
+        // The dimensions can change, tracking that is too much effort to do correctly
+        return PlayerEntity.STANDING_DIMENSIONS.getBoxAt(pos)
+    }
+
     init {
         registerEvent(EventPacket::class.java, 9999) { event ->
             if (event.cancelled) return@registerEvent
@@ -134,7 +179,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                     packets.clear() // Packets don't matter anymore
                     return@registerEvent
                 }
-                if (mode.isSelected(1) && mc.currentScreen is DownloadingTerrainScreen) {
+                if (mc.currentScreen is DownloadingTerrainScreen) {
                     onDisable()
                     return@registerEvent
                 }
@@ -165,10 +210,11 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
 
         registerEvent(EventPollEvents::class.java, 9999) {
             when {
-                mode.isSelected(1) -> {
+                mode.isSelected(1) || mode.isSelected(3) -> {
                     if (timeUtil.hasReached(pulseDelay.value.toLong())) {
                         onDisable(true)
-                        timeUtil.reset()
+                        if (!mode.isSelected(3) || shouldPulsate())
+                            timeUtil.reset()
                     }
                 }
 
@@ -192,7 +238,9 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
 
         registerEvent(EventRender3D::class.java) { event ->
             if (affectedPackets.isSelected(1) && !restrictPackets.anySelected())
-                newPositions.forEach { (_, trackedPosition) -> RenderUtil.blockOutline(event.matrices, VoxelShapes.cuboid(PlayerEntity.STANDING_DIMENSIONS.getBoxAt(trackedPosition.subtract(Vec3d.ZERO).negate())), hitBoxColor.getColor().rgb) }
+                newPositions.forEach { (_, trackedPosition) ->
+                    RenderUtil.blockOutline(event.matrices, anticipateBoundingBox(extractPosition(trackedPosition)), hitBoxColor.getColor().rgb)
+                }
         }
     }
 

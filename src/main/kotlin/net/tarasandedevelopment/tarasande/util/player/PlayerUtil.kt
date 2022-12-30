@@ -137,8 +137,9 @@ object PlayerUtil {
         return null
     }
 
-    const val walkSpeed = 0.28
-    fun calcBaseSpeed(baseSpeed: Double = walkSpeed): Double {
+    const val DEFAULT_WALK_SPEED = 0.28
+
+    fun calcBaseSpeed(baseSpeed: Double = DEFAULT_WALK_SPEED): Double {
         return baseSpeed + 0.03 *
                 if (MinecraftClient.getInstance().player?.hasStatusEffect(StatusEffects.SPEED) == true)
                     MinecraftClient.getInstance().player?.getStatusEffect(StatusEffects.SPEED)?.amplifier!!

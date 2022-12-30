@@ -20,8 +20,12 @@ class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attackin
     private val packets = object : ValueMode(this, "Packets", true, "Velocity", "Explosion") {
         override fun isEnabled() = knockbackAware.value
     }
-    private val reducingSpeedMultiplier = ValueNumber(this, "Reducing speed multiplier", 0.0, 0.6 /* TODO Read the constant */, 1.0, 0.1)
-    private val unsprintWhenReducing = ValueBoolean(this, "Unsprint when reducing", false)
+    private val reducingSpeedMultiplier = object : ValueNumber(this, "Reducing speed multiplier", 0.0, 0.6 /* TODO Read the constant */, 1.0, 0.1) {
+        override fun isEnabled() = knockbackAware.value
+    }
+    private val unsprintWhenReducing = object : ValueBoolean(this, "Unsprint when reducing", true) {
+        override fun isEnabled() = knockbackAware.value
+    }
 
     private var prevVelocity: Vec3d? = null
     private var takingKnockback = false

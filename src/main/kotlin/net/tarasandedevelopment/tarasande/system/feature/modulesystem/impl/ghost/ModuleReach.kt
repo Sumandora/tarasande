@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 
 class ModuleReach : Module("Reach", "Increases the hit reach", ModuleCategory.GHOST) {
 
-    private val reach = ValueNumber(this, "Reach", 0.0, 3.0, 6.0, 0.1)
+    private val reach = ValueNumber(this, "Reach", 0.1, 3.0, 6.0, 0.1)
 
     private var origReach: Double? = null
 

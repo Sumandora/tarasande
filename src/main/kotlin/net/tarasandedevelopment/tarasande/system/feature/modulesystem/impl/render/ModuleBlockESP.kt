@@ -12,6 +12,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColo
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.boundingBox
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -60,7 +61,7 @@ class ModuleBlockESP : Module("Block ESP", "Highlights blocks through walls", Mo
                 val pos = pair.first
                 val shape = pair.second.getOutlineShape(mc.world, pos)?.offset(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble())
                 if (shape != null) {
-                    RenderUtil.blockOutline(event.matrices, shape, color.getColor().rgb)
+                    RenderUtil.blockOutline(event.matrices, shape.boundingBox(), color.getColor().rgb)
                 } else {
                     list.remove(pair)
                 }

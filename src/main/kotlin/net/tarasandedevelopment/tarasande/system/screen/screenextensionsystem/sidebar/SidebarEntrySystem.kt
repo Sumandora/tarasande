@@ -88,22 +88,22 @@ abstract class EntrySidebarPanelSelection(name: String, category: String, val li
 }
 
 open class EntrySidebarPanelToggleable(sidebar: ManagerEntrySidebarPanel, name: String, category: String) : EntrySidebarPanel(name, category) {
-    val state = ValueBoolean(sidebar, name, false)
-    open fun onClick(state: Boolean) {
+    val enabled = ValueBoolean(sidebar, name, false)
+    open fun onClick(enabled: Boolean) {
     }
 
     override fun createElements(owner: Any): List<ElementWidthValueComponent> {
         return listOf(object : ValueSpacer(owner, name, 1.0F, manage = false) {
             override fun onChange(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
-                    state.value = !state.value
-                    onClick(state.value)
+                    enabled.value = !enabled.value
+                    onClick(enabled.value)
                 } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     openValues()
                 }
             }
 
-            override fun getColor(hovered: Boolean) = (if (state.value) Color.green else Color.red).let { if (hovered) RenderUtil.colorInterpolate(it, TarasandeMain.clientValues().accentColor.getColor(), 0.4) else it }
+            override fun getColor(hovered: Boolean) = (if (enabled.value) Color.green else Color.red).let { if (hovered) RenderUtil.colorInterpolate(it, TarasandeMain.clientValues().accentColor.getColor(), 0.4) else it }
         }.createValueComponent())
     }
 }

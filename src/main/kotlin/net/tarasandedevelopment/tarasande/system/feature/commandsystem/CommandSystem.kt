@@ -111,8 +111,8 @@ abstract class Command(private vararg val aliases: String) {
         val registryAccess: CommandRegistryAccess = CommandRegistryAccess.of(ClientDynamicRegistryType.createCombinedDynamicRegistries().combinedRegistryManager, FeatureFlags.DEFAULT_ENABLED_FEATURES)
         val notInCreative = SimpleCommandExceptionType(Text.literal("You must be in creative mode to use this"))
 
-        const val success = 1
-        const val error = 0
+        const val SUCCESS = 1
+        const val ERROR = 0
     }
 
     fun printChatMessage(message: String) = CustomChat.printChatMessage(Text.literal(message))

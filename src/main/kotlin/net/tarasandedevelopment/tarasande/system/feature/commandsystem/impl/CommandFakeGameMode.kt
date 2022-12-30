@@ -11,7 +11,7 @@ class CommandFakeGameMode : Command("fakegamemode") {
         GameMode.values().forEach { gameMode ->
             builder.then(literal(gameMode.getName()).executes {
                 mc.interactionManager?.setGameMode(gameMode)
-                return@executes success
+                return@executes SUCCESS
             })
         }
         return builder
