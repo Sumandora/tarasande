@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.system.base.grabber.mapping
+package net.tarasandedevelopment.tarasande.system.base.grabbersystem.mapping
 
 import net.fabricmc.mapping.tree.TinyMappingFactory
 import java.io.BufferedReader

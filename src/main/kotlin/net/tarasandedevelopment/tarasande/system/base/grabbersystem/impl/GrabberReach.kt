@@ -1,10 +1,10 @@
-package net.tarasandedevelopment.tarasande.system.base.grabber.impl
+package net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl
 
-import net.tarasandedevelopment.tarasande.system.base.grabber.Grabber
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.Grabber
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.ClassNode
 
-class TransformerGrabberReach : Grabber("net.minecraft.client.render.GameRenderer", 9.0) {
+class GrabberReach : Grabber("net.minecraft.client.render.GameRenderer", 9.0) {
     private val reachCode = arrayOf(
         /*
             ILOAD 6

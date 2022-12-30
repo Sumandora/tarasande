@@ -1,10 +1,10 @@
-package net.tarasandedevelopment.tarasande.system.base.grabber.impl
+package net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl
 
-import net.tarasandedevelopment.tarasande.system.base.grabber.Grabber
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.Grabber
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.FieldInsnNode
 
-class TransformerGrabberDefaultFlightSpeed : Grabber("net.minecraft.entity.player.PlayerAbilities", 0.05F) {
+class GrabberDefaultFlightSpeed : Grabber("net.minecraft.entity.player.PlayerAbilities", 0.05F) {
     override fun transform(classNode: ClassNode) {
         constant = findClassInitializer(classNode)
             .instructions

@@ -6,7 +6,7 @@ import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
 import net.tarasandedevelopment.tarasande.feature.notification.Notifications
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
-import net.tarasandedevelopment.tarasande.system.base.grabber.ManagerGrabber
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.ManagerGrabber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.ManagerClickMethod
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand

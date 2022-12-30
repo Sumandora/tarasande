@@ -10,7 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.system.base.grabber.impl.TransformerGrabberDefaultFlightSpeed;
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberDefaultFlightSpeed;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModulePortalScreen;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleFlight;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoSlowdown;
@@ -62,7 +62,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;flying:Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;knockDownwards()V"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getJumpingMount()Lnet/minecraft/entity/JumpingMount;")))
     public boolean hookFlight(PlayerAbilities instance) {
         tarasande_flight = false;
-        tarasande_flightSpeed = (float) TarasandeMain.Companion.managerGrabber().getConstant(TransformerGrabberDefaultFlightSpeed.class);
+        tarasande_flightSpeed = (float) TarasandeMain.Companion.managerGrabber().getConstant(GrabberDefaultFlightSpeed.class);
         ModuleFlight moduleFlight = TarasandeMain.Companion.managerModule().get(ModuleFlight.class);
         if (moduleFlight.getEnabled() && moduleFlight.getMode().isSelected(0)) {
             tarasande_flight = true;

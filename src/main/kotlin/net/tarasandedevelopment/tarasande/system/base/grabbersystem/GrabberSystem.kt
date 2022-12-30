@@ -1,10 +1,10 @@
-package net.tarasandedevelopment.tarasande.system.base.grabber
+package net.tarasandedevelopment.tarasande.system.base.grabbersystem
 
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.system.base.grabber.impl.TransformerGrabberDefaultFlightSpeed
-import net.tarasandedevelopment.tarasande.system.base.grabber.impl.TransformerGrabberReach
-import net.tarasandedevelopment.tarasande.system.base.grabber.impl.TransformerGrabberSpeedReduction
-import net.tarasandedevelopment.tarasande.system.base.grabber.mapping.TinyMappings
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberDefaultFlightSpeed
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberReach
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberSpeedReduction
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.mapping.TinyMappings
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.tree.*
 import java.io.ByteArrayInputStream
@@ -19,9 +19,9 @@ class ManagerGrabber : Manager<Grabber>() {
 
     init {
         add(
-            TransformerGrabberReach(),
-            TransformerGrabberSpeedReduction(),
-            TransformerGrabberDefaultFlightSpeed()
+            GrabberReach(),
+            GrabberSpeedReduction(),
+            GrabberDefaultFlightSpeed()
         )
 
         val minecraftJar = System.getProperty("java.class.path")

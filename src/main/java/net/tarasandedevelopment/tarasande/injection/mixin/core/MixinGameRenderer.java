@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.HitResult;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer;
-import net.tarasandedevelopment.tarasande.system.base.grabber.impl.TransformerGrabberReach;
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberReach;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,7 +24,7 @@ public class MixinGameRenderer implements IGameRenderer {
     private boolean tarasande_disableReachExtension = false;
 
     @Unique
-    private double tarasande_reach = Math.sqrt((double) TarasandeMain.Companion.managerGrabber().getConstant(TransformerGrabberReach.class));
+    private double tarasande_reach = Math.sqrt((double) TarasandeMain.Companion.managerGrabber().getConstant(GrabberReach.class));
 
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;"))
     public HitResult throughWalls(Entity entity, double maxDistance, float tickDelta, boolean includeFluids) {

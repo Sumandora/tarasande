@@ -6,7 +6,7 @@ import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.event.EventKeepSprint
 import net.tarasandedevelopment.tarasande.event.EventVelocity
-import net.tarasandedevelopment.tarasande.system.base.grabber.impl.TransformerGrabberSpeedReduction
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberSpeedReduction
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -22,7 +22,7 @@ class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attackin
     private val packets = object : ValueMode(this, "Packets", true, "Velocity", "Explosion") {
         override fun isEnabled() = knockbackAware.value
     }
-    private val reducingSpeedMultiplier = object : ValueNumber(this, "Reducing speed multiplier", 0.0, TarasandeMain.managerGrabber().getConstant(TransformerGrabberSpeedReduction::class.java) as Double, 1.0, 0.1) {
+    private val reducingSpeedMultiplier = object : ValueNumber(this, "Reducing speed multiplier", 0.0, TarasandeMain.managerGrabber().getConstant(GrabberSpeedReduction::class.java) as Double, 1.0, 0.1) {
         override fun isEnabled() = knockbackAware.value
     }
     private val unsprintWhenReducing = object : ValueBoolean(this, "Unsprint when reducing", true) {
