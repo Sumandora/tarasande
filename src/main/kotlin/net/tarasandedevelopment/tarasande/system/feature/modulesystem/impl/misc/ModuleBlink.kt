@@ -63,7 +63,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         override fun isEnabled() = affectedPackets.isSelected(1)
     }
 
-    private val packets = CopyOnWriteArrayList<Triple<Packet<*>, EventPacket.Type, Long>>()
+    private var packets = CopyOnWriteArrayList<Triple<Packet<*>, EventPacket.Type, Long>>()
     private val timeUtil = TimeUtil()
 
     private var pos: Vec3d? = null
@@ -179,15 +179,13 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                     packets.clear() // Packets don't matter anymore
                     return@registerEvent
                 }
-                if (mc.currentScreen is DownloadingTerrainScreen) {
-                    onDisable()
-                    return@registerEvent
-                }
                 if (
+                    mc.currentScreen is DownloadingTerrainScreen ||
                     (event.type == EventPacket.Type.SEND && event.packet is ClientStatusC2SPacket && event.packet.mode == ClientStatusC2SPacket.Mode.PERFORM_RESPAWN) ||
                     (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerRespawnS2CPacket)
                 ) {
-                    onDisable()
+                    onDisable(true)
+                    onEnable()
                     return@registerEvent
                 }
                 if (affectedPackets.isSelected(event.type.ordinal)) {
@@ -237,15 +235,19 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         }
 
         registerEvent(EventRender3D::class.java) { event ->
-            if (affectedPackets.isSelected(1) && !restrictPackets.anySelected())
+            if (affectedPackets.isSelected(1) && !restrictPackets.anySelected()) {
+                if(mode.isSelected(3) && !shouldPulsate())
+                    return@registerEvent
                 newPositions.forEach { (_, trackedPosition) ->
                     RenderUtil.blockOutline(event.matrices, anticipateBoundingBox(extractPosition(trackedPosition)), hitBoxColor.getColor().rgb)
                 }
+            }
         }
     }
 
     override fun onDisable() {
         onDisable(true)
+        packets = CopyOnWriteArrayList() // Force garbage collection
     }
 
     fun onDisable(all: Boolean, cancelled: Boolean = false, timeOffset: Long = 0L) {

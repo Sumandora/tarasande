@@ -53,7 +53,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val rerotateOnFacingChange = object : ValueBoolean(this, "Re-rotate on facing change", false) {
         override fun isEnabled() = preventRerotation.value
     }
-    private val aimHeight = ValueNumber(this, "Aim height", 0.0, 0.5, 1.0, 0.05)
+    private val aimHeight = ValueNumberRange(this, "Aim height", 0.0, 0.4, 0.6, 1.0, 0.05)
     private val speculativeWaiting = ValueBoolean(this, "Speculative waiting", false)
     private val silent = ValueMode(this, "Silent", false, "Disabled", "Invisible", "Visible")
     private val lockView = ValueBoolean(this, "Lock view", false)
@@ -219,7 +219,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                     MathUtil.closestPointToBox(lastLook, positionShape)
                                 }
                             } else {
-                                val randomizedAimHeight = aimHeight.value + ThreadLocalRandom.current().nextFloat() * 0.1 - 0.05
+                                val randomizedAimHeight = ThreadLocalRandom.current().nextDouble(aimHeight.minValue, aimHeight.maxValue)
                                 val absoluteAimHeight = if (shape.isEmpty) randomizedAimHeight else shape.boundingBox.let { it.minY + (it.maxY - it.minY) * randomizedAimHeight }
                                 point = point.add(0.0, MathHelper.clamp(absoluteAimHeight, 0.0, 1.0) - 0.5, 0.0)
 
