@@ -3,11 +3,7 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.HealthUpdateS2CPacket
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.TarasandeMain
-import net.tarasandedevelopment.tarasande.event.EventDisconnect
-import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
-import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -95,6 +91,7 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
             ModuleNoStatusEffect(),
             ModuleAntiCactus(),
             ModuleAutoArmor(),
+            ModuleXCarry(),
 
             // Render
             ModuleESP(),
@@ -137,8 +134,7 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
             ModuleTickBaseManipulation(),
             ModuleResourcePackSpoofer(),
             ModuleAntiBindingCurse(),
-            ModulePortalScreen(),
-            ModuleEveryItemOnArmor()
+            ModulePortalScreen()
         )
 
         panelSystem.add(PanelArrayList(this@ManagerModule))
@@ -183,14 +179,13 @@ open class Module(val name: String, val description: String, val category: Strin
             if (field != value) if (value) {
                 onEnable()
                 eventListeners.forEach { EventDispatcher.add(it.first, it.second, it.third) }
-                TarasandeMain.notifications().notify("$name is now enabled")
             } else {
                 eventListeners.forEach { EventDispatcher.rem(it.first, it.third) }
                 onDisable()
-                TarasandeMain.notifications().notify("$name is now disabled")
             }
 
             field = value
+            EventDispatcher.call(EventModuleStateSwitched(this))
         }
 
     @Suppress("LeakingThis")

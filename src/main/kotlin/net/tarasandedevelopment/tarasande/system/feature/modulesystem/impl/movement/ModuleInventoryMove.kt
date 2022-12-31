@@ -2,10 +2,8 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.move
 
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.InputUtil
-import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
-import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.feature.friend.panel.PanelElementsFriends
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -21,7 +19,6 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
 
-    private val cancelClosePacket = ValueBoolean(this, "Cancel close packets", false)
     private val updateSneaking = ValueBoolean(this, "Update sneaking", false)
 
     private val movementKeys = ArrayList(PlayerUtil.movementKeys)
@@ -34,13 +31,6 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
     }
 
     init {
-        registerEvent(EventPacket::class.java) { event ->
-            if (event.type == EventPacket.Type.SEND) {
-                if (cancelClosePacket.value && event.packet is CloseHandledScreenC2SPacket && event.packet.syncId == 0)
-                    event.cancelled = true
-            }
-        }
-
         registerEvent(EventKeyBindingIsPressed::class.java, 1) { event ->
             if (isPassingEvents())
                 if (movementKeys.contains(event.keyBinding))

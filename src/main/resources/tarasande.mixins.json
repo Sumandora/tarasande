@@ -91,8 +91,7 @@
     "feature.module.norender.MixinParticleManager",
     "feature.module.norender.MixinSignBlockEntityRenderer",
     "feature.module.norender.MixinStatusEffectInstance",
-    "feature.module.norender.MixinWorldRenderer",
-    "feature.module.screen.MixinPlayerScreenHandler"
+    "feature.module.norender.MixinWorldRenderer"
   ],
   "injectors": {
     "defaultRequire": 1

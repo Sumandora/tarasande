@@ -25,7 +25,7 @@ abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: 
     override fun load(jsonElement: JsonElement) {
         val jsonArray = jsonElement.asJsonArray
         list.clear()
-        list.addAll(registry.filter { key -> jsonArray.any { it.asString.equals(getTranslationKey(key)) } })
+        list.addAll(jsonArray.mapNotNull { e -> registry.first { getTranslationKey(it) == e.asString } })
     }
 
     open fun filter(key: T) = true
