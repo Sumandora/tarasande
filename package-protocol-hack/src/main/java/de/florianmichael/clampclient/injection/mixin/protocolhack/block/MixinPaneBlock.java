@@ -29,6 +29,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(PaneBlock.class)
 public class MixinPaneBlock extends HorizontalConnectingBlock {
@@ -39,45 +40,63 @@ public class MixinPaneBlock extends HorizontalConnectingBlock {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
-            return correctShape(world, state);
-
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
+            return protocolhack_get1_8Shape(state);
+        }
         return super.getOutlineShape(state, world, pos, context);
     }
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
-            return correctShape(world, state);
-
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
+            return protocolhack_get1_8Shape(state);
+        }
         return super.getCollisionShape(state, world, pos, context);
     }
 
-    // Original Code from 1.8
-    public VoxelShape correctShape(BlockView worldIn, BlockState state) {
-        VoxelShape toReturn = VoxelShapes.empty();
+    @Unique
+    private final VoxelShape protocolhack_WEST_SHAPE_1_8 = Block.createCuboidShape(0, 0, 7, 8, 16, 9);
 
-        boolean flag = state.get(NORTH);
-        boolean flag1 = state.get(SOUTH);
-        boolean flag2 = state.get(WEST);
-        boolean flag3 = state.get(EAST);
+    @Unique
+    private final VoxelShape protocolhack_EAST_SHAPE_1_8 = Block.createCuboidShape(8, 0, 7, 16, 16, 9);
 
-        if ((!flag2 || !flag3) && (flag2 || flag3 || flag || flag1)) {
-            if (flag2)
-                toReturn = Block.createCuboidShape(0, 0, 7, 8, 16, 9);
-            else if (flag3)
-                toReturn = Block.createCuboidShape(8, 0, 7, 16, 16, 9);
+    @Unique
+    private final VoxelShape protocolhack_WEST_EAST_COMBINED_SHAPE_1_8 = Block.createCuboidShape(0, 0, 7, 16, 16, 9);
+
+    @Unique
+    private final VoxelShape protocolhack_NORTH_SHAPE_1_8 = Block.createCuboidShape(7, 0, 0, 9, 16, 8);
+
+    @Unique
+    private final VoxelShape protocolhack_SOUTH_SHAPE_1_8 = Block.createCuboidShape(7, 0, 8, 9, 16, 16);
+
+    @Unique
+    private final VoxelShape protocolhack_NORTH_SOUTH_COMBINED_SHAPE_1_8 = Block.createCuboidShape(7, 0, 0, 9, 16, 16);
+
+    @Unique
+    public VoxelShape protocolhack_get1_8Shape(BlockState state) {
+        VoxelShape finalShape = VoxelShapes.empty();
+
+        final boolean isNorthFacing = state.get(NORTH);
+        final boolean isSouthFacing = state.get(SOUTH);
+        final boolean isWestFacing = state.get(WEST);
+        final boolean isEastFacing = state.get(EAST);
+
+        if ((!isWestFacing || !isEastFacing) && (isWestFacing || isEastFacing || isNorthFacing || isSouthFacing)) {
+            if (isWestFacing)
+                finalShape = VoxelShapes.union(finalShape, protocolhack_WEST_SHAPE_1_8);
+            else if (isEastFacing)
+                finalShape = VoxelShapes.union(finalShape, protocolhack_EAST_SHAPE_1_8);
         } else
-            toReturn = Block.createCuboidShape(0, 0, 7, 16, 16, 9);
+            finalShape = VoxelShapes.union(finalShape, protocolhack_WEST_EAST_COMBINED_SHAPE_1_8);
 
-        if ((!flag || !flag1) && (flag2 || flag3 || flag || flag1)) {
-            if (flag)
-                toReturn = Block.createCuboidShape(7, 0, 0, 9, 16, 8);
-            else if (flag1)
-                toReturn = Block.createCuboidShape(7, 0, 8, 9, 16, 16);
+        if ((!isNorthFacing || !isSouthFacing) && (isWestFacing || isEastFacing || isNorthFacing || isSouthFacing)) {
+            if (isNorthFacing)
+                finalShape = VoxelShapes.union(finalShape, protocolhack_NORTH_SHAPE_1_8);
+            else if (isSouthFacing)
+                finalShape = VoxelShapes.union(finalShape, protocolhack_SOUTH_SHAPE_1_8);
         } else
-            toReturn = Block.createCuboidShape(7, 0, 0, 9, 16, 16);
+            finalShape = VoxelShapes.union(finalShape, protocolhack_NORTH_SOUTH_COMBINED_SHAPE_1_8);
 
-        return toReturn;
+        return finalShape;
     }
 }

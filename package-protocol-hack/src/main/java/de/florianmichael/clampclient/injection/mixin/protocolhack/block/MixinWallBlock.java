@@ -47,7 +47,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinWallBlock extends Block {
 
     @Unique
-    private static final VoxelShape[] protocolhack_SHAPE_BY_INDEX_1122 = new VoxelShape[]{
+    private static final VoxelShape[] protocolhack_SHAPE_BY_INDEX_1_12_2 = new VoxelShape[]{
             Block.createCuboidShape(4, 0, 4, 12, 16, 12),
             Block.createCuboidShape(4, 0, 4, 12, 16, 16),
             Block.createCuboidShape(0, 0, 4, 12, 16, 12),
@@ -70,7 +70,7 @@ public class MixinWallBlock extends Block {
             Block.createCuboidShape(0, 0, 0, 16, 16, 16)
     };
     @Unique
-    private static final VoxelShape[] protocolhack_CLIP_SHAPE_BY_INDEX_1122 = new VoxelShape[]{
+    private static final VoxelShape[] protocolhack_CLIP_SHAPE_BY_INDEX_1_12_2 = new VoxelShape[]{
             Block.createCuboidShape(4, 0, 4, 12, 24, 12),
             Block.createCuboidShape(4, 0, 4, 12, 24, 16),
             Block.createCuboidShape(0, 0, 4, 12, 24, 12),
@@ -160,12 +160,12 @@ public class MixinWallBlock extends Block {
     @Inject(method = "getCollisionShape", at = @At("HEAD"), cancellable = true)
     public void injectGetCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2))
-            cir.setReturnValue(protocolhack_CLIP_SHAPE_BY_INDEX_1122[protocolhack_getShapeIndex_1122(state)]);
+            cir.setReturnValue(protocolhack_CLIP_SHAPE_BY_INDEX_1_12_2[protocolhack_getShapeIndex_1122(state)]);
     }
 
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2))
-            cir.setReturnValue(protocolhack_SHAPE_BY_INDEX_1122[protocolhack_getShapeIndex_1122(state)]);
+            cir.setReturnValue(protocolhack_SHAPE_BY_INDEX_1_12_2[protocolhack_getShapeIndex_1122(state)]);
     }
 }

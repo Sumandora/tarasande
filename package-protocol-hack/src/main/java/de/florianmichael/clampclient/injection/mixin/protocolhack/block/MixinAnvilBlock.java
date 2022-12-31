@@ -44,9 +44,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinAnvilBlock {
 
     @Unique
-    private static final VoxelShape protocolhack_X_AXIS_SHAPE_112 = Block.createCuboidShape(0, 0, 2, 16, 16, 14);
+    private static final VoxelShape protocolhack_X_AXIS_SHAPE_1_12_2 = Block.createCuboidShape(0, 0, 2, 16, 16, 14);
     @Unique
-    private static final VoxelShape protocolhack_Z_AXIS_SHAPE_112 = Block.createCuboidShape(2, 0, 0, 14, 16, 16);
+    private static final VoxelShape protocolhack_Z_AXIS_SHAPE_1_12_2 = Block.createCuboidShape(2, 0, 0, 14, 16, 16);
     @Shadow
     @Final
     public static DirectionProperty FACING;
@@ -55,6 +55,6 @@ public class MixinAnvilBlock {
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
         Direction direction = state.get(FACING);
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2))
-            cir.setReturnValue(direction.getAxis() == Direction.Axis.X ? protocolhack_X_AXIS_SHAPE_112 : protocolhack_Z_AXIS_SHAPE_112);
+            cir.setReturnValue(direction.getAxis() == Direction.Axis.X ? protocolhack_X_AXIS_SHAPE_1_12_2 : protocolhack_Z_AXIS_SHAPE_1_12_2);
     }
 }

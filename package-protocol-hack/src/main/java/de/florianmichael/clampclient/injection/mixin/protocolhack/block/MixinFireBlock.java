@@ -40,7 +40,8 @@ public class MixinFireBlock {
 
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2)) {
             cir.setReturnValue(VoxelShapes.empty());
+        }
     }
 }

@@ -35,7 +35,8 @@ public class MixinFenceBlock {
 
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
     private void injectOnUse(CallbackInfoReturnable<ActionResult> ci) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_10))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_10)) {
             ci.setReturnValue(ActionResult.SUCCESS);
+        }
     }
 }

@@ -51,16 +51,22 @@ public class MixinBlock {
     private void modifyBlastResistance(CallbackInfoReturnable<Float> ci) {
         final Block block = ((Block) (Object) this);
 
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_4))
-            if (block == Blocks.END_STONE_BRICKS || block == Blocks.END_STONE_BRICK_SLAB || block == Blocks.END_STONE_BRICK_STAIRS || block == Blocks.END_STONE_BRICK_WALL)
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_4)) {
+            if (block == Blocks.END_STONE_BRICKS || block == Blocks.END_STONE_BRICK_SLAB || block == Blocks.END_STONE_BRICK_STAIRS || block == Blocks.END_STONE_BRICK_WALL) {
                 ci.setReturnValue(0.8F);
+            }
+        }
 
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2))
-            if (block == Blocks.PISTON || block == Blocks.STICKY_PISTON || block == Blocks.PISTON_HEAD)
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2)) {
+            if (block == Blocks.PISTON || block == Blocks.STICKY_PISTON || block == Blocks.PISTON_HEAD) {
                 ci.setReturnValue(0.5F);
+            }
+        }
 
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_16_4))
-            if (block instanceof InfestedBlock)
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_16_4)) {
+            if (block instanceof InfestedBlock) {
                 ci.setReturnValue(0.75F);
+            }
+        }
     }
 }

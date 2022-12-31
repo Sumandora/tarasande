@@ -42,17 +42,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinBedBlock {
 
     @Unique
-    private final static VoxelShape protocolhack_BED_SHAPE_1132 = Block.createCuboidShape(0, 0, 0, 16, 9, 16);
+    private final static VoxelShape protocolhack_BED_SHAPE_1_13_2 = Block.createCuboidShape(0, 0, 0, 16, 9, 16);
 
     @Inject(method = "bounceEntity", at = @At("HEAD"), cancellable = true)
     public void injectBounceEntity(Entity entity, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1)) {
             ci.cancel();
+        }
     }
 
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_13_2))
-            cir.setReturnValue(protocolhack_BED_SHAPE_1132);
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_13_2)) {
+            cir.setReturnValue(protocolhack_BED_SHAPE_1_13_2);
+        }
     }
 }

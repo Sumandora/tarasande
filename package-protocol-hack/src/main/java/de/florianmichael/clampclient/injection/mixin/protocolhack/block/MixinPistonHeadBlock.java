@@ -45,43 +45,78 @@ public class MixinPistonHeadBlock extends FacingBlock {
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2))
-            cir.setReturnValue(getCoreShape_18(state));
+            cir.setReturnValue(getCoreShape_1_8(state));
     }
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
-            return VoxelShapes.union(getHeadShape_18(state), getCoreShape_18(state));
+            return VoxelShapes.union(getHeadShape_1_8(state), getCoreShape_1_8(state));
 
         return super.getCollisionShape(state, world, pos, context);
     }
 
     @Unique
-    private VoxelShape getCoreShape_18(BlockState state) {
-        return switch (state.get(FACING)) {
-            case DOWN -> Block.createCuboidShape(6, 4, 6, 10, 16, 10);
-            case UP -> Block.createCuboidShape(6, 0, 6, 10, 12, 10);
-            case NORTH -> Block.createCuboidShape(4, 6, 4, 12, 10, 16);
-            case SOUTH -> Block.createCuboidShape(4, 6, 0, 12, 10, 12);
-            case WEST -> Block.createCuboidShape(6, 4, 4, 10, 12, 16);
-            case EAST -> Block.createCuboidShape(0, 6, 4, 12, 10, 12);
+    private final VoxelShape protocolhack_CORE_DOWN_SHAPE_1_8 = Block.createCuboidShape(6, 4, 6, 10, 16, 10);
+
+    @Unique
+    private final VoxelShape protocolhack_CORE_UP_SHAPE_1_8 = Block.createCuboidShape(6, 0, 6, 10, 12, 10);
+
+    @Unique
+    private final VoxelShape protocolhack_CORE_NORTH_SHAPE_1_8 = Block.createCuboidShape(4, 6, 4, 12, 10, 16);
+
+    @Unique
+    private final VoxelShape protocolhack_CORE_SOUTH_SHAPE_1_8 = Block.createCuboidShape(4, 6, 0, 12, 10, 12);
+
+    @Unique
+    private final VoxelShape protocolhack_CORE_WEST_SHAPE_1_8 = Block.createCuboidShape(6, 4, 4, 10, 12, 16);
+
+    @Unique
+    private final VoxelShape protocolhack_CORE_EAST_SHAPE_1_8 = Block.createCuboidShape(0, 6, 4, 12, 10, 12);
+
+    @Unique
+    private VoxelShape getCoreShape_1_8(BlockState state) {
+        final Direction direction = state.get(FACING);
+
+        return switch (direction) {
+            case DOWN -> protocolhack_CORE_DOWN_SHAPE_1_8;
+            case UP -> protocolhack_CORE_UP_SHAPE_1_8;
+            case NORTH -> protocolhack_CORE_NORTH_SHAPE_1_8;
+            case SOUTH -> protocolhack_CORE_SOUTH_SHAPE_1_8;
+            case WEST -> protocolhack_CORE_WEST_SHAPE_1_8;
+            case EAST -> protocolhack_CORE_EAST_SHAPE_1_8;
         };
     }
 
     @Unique
-    private VoxelShape getHeadShape_18(BlockState state) {
+    private final VoxelShape protocolhack_HEAD_DOWN_SHAPE_1_8 = Block.createCuboidShape(0, 0, 0, 16, 4, 16);
+
+    @Unique
+    private final VoxelShape protocolhack_HEAD_UP_SHAPE_1_8 = Block.createCuboidShape(0, 12, 0, 16, 16, 16);
+
+    @Unique
+    private final VoxelShape protocolhack_HEAD_NORTH_SHAPE_1_8 = Block.createCuboidShape(0, 0, 0, 16, 16, 4);
+
+    @Unique
+    private final VoxelShape protocolhack_HEAD_SOUTH_SHAPE_1_8 = Block.createCuboidShape(0, 0, 12, 16, 16, 16);
+
+    @Unique
+    private final VoxelShape protocolhack_HEAD_WEST_SHAPE_1_8 = Block.createCuboidShape(0, 0, 0, 4, 16, 16);
+
+    @Unique
+    private final VoxelShape protocolhack_HEAD_EAST_SHAPE_1_8 = Block.createCuboidShape(12, 0, 0, 16, 16, 16);
+
+    @Unique
+    private VoxelShape getHeadShape_1_8(BlockState state) {
         final Direction direction = state.get(FACING);
 
-        if (direction != null) {
-            return switch (direction) {
-                case DOWN -> Block.createCuboidShape(0, 0, 0, 16, 4, 16);
-                case UP -> Block.createCuboidShape(0, 12, 0, 16, 16, 16);
-                case NORTH -> Block.createCuboidShape(0, 0, 0, 16, 16, 4);
-                case SOUTH -> Block.createCuboidShape(0, 0, 12, 16, 16, 16);
-                case WEST -> Block.createCuboidShape(0, 0, 0, 4, 16, 16);
-                case EAST -> Block.createCuboidShape(12, 0, 0, 16, 16, 16);
-            };
-        }
-        return VoxelShapes.empty();
+        return switch (direction) {
+            case DOWN -> protocolhack_HEAD_DOWN_SHAPE_1_8;
+            case UP -> protocolhack_HEAD_UP_SHAPE_1_8;
+            case NORTH -> protocolhack_HEAD_NORTH_SHAPE_1_8;
+            case SOUTH -> protocolhack_HEAD_SOUTH_SHAPE_1_8;
+            case WEST -> protocolhack_HEAD_WEST_SHAPE_1_8;
+            case EAST -> protocolhack_HEAD_EAST_SHAPE_1_8;
+        };
     }
 }
