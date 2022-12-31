@@ -33,9 +33,6 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
 
     init {
         ValueButtonOwnerValues(this, "Privacy values", PrivacyValues)
-    }
-
-    init {
         ValueButtonOwnerValues(this, "Cheat menu values", panelSystem.screenCheatMenu)
         ValueButtonOwnerValues(this, "Command values", commandSystem)
     }
