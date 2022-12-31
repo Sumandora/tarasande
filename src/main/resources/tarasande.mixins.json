@@ -6,7 +6,7 @@
   "mixins": [
     "core.MixinGameRenderer",
     "core.MixinMinecraftClient",
-    "core.MixinWindow",
+    "feature.clientvalue.MixinWindow",
     "core.connection.MixinClientConnection",
     "core.connection.MixinClientConnectionSubInitChannel",
     "core.entity.MixinEntity",
