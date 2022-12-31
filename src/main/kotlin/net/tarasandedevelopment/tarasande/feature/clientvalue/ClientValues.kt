@@ -41,6 +41,7 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
     }
 
     val allowAddressParsingForBlacklistedServers = ValueBoolean(this, "Allow address parsing for blacklisted servers", true)
+    val dontDisconnectOnNettyTimeout = ValueBoolean(this, "Don't disconnect on Netty timeout", true)
 
     // Combat
     init {
