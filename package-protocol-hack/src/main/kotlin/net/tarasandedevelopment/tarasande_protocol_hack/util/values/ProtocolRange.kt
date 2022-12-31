@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.util.values
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import net.tarasandedevelopment.tarasande_protocol_hack.extension.compareTo
-import net.tarasandedevelopment.tarasande_protocol_hack.extension.getSpecialName
+import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.compareTo
+import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.getSpecialName
 
 fun formatRange(vararg version: ProtocolRange) = version.joinToString(", ") { it.toString() }
 

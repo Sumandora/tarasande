@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande_protocol_hack.command
+package net.tarasandedevelopment.tarasande_protocol_hack.util.values.command
 
 import com.viaversion.viaversion.commands.ViaCommandHandler
 
