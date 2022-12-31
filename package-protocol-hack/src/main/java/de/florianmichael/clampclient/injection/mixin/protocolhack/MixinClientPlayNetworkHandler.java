@@ -1,6 +1,6 @@
 /**
  * --FLORIAN MICHAEL PRIVATE LICENCE v1.2--
- *
+ * <p>
  * This file / project is protected and is the intellectual property of Florian Michael (aka. EnZaXD),
  * any use (be it private or public, be it copying or using for own use, be it publishing or modifying) of this
  * file / project is prohibited. It requires in that use a written permission with official signature of the owner
@@ -9,7 +9,7 @@
  * The owner "Florian Michael" is free to change this license. The creator assumes no responsibility for any infringements
  * that have arisen, are arising or will arise from this project / file. If this licence is used anywhere,
  * the latest version published by the author Florian Michael (aka EnZaXD) always applies automatically.
- *
+ * <p>
  * Changelog:
  *     v1.0:
  *         Added License
@@ -38,10 +38,8 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.math.Vec3d;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.Shadow;
+import org.slf4j.Logger;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -51,6 +49,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@SuppressWarnings("DataFlowIssue")
 @Mixin(ClientPlayNetworkHandler.class)
 public abstract class MixinClientPlayNetworkHandler {
 
@@ -148,33 +147,33 @@ public abstract class MixinClientPlayNetworkHandler {
         }
     }
 
+    @Unique
+    private boolean protocolhack_shouldRemoveBoat() {
+        return VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2) && this.client != null && this.client.player != null;
+    }
+
     @Redirect(method = "onEntityPassengersSet", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getYaw()F", ordinal = 0))
     public float revertPrevYawSetter(Entity instance) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2)) {
-            if (this.client != null && this.client.player != null) {
-                return this.client.player.prevYaw;
-            }
-        }
+        if (protocolhack_shouldRemoveBoat()) return this.client.player.prevYaw;
         return instance.getYaw();
     }
 
     @Redirect(method = "onEntityPassengersSet", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getYaw()F", ordinal = 1))
     public float revertYawSetter(Entity instance) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2)) {
-            if (this.client != null && this.client.player != null) {
-                return this.client.player.getYaw();
-            }
-        }
+        if (protocolhack_shouldRemoveBoat()) return this.client.player.getYaw();
         return instance.getYaw();
     }
 
     @Redirect(method = "onEntityPassengersSet", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getYaw()F", ordinal = 2))
     public float revertHeadYawSetter(Entity instance) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2)) {
-            if (this.client != null && this.client.player != null) {
-                return this.client.player.getHeadYaw();
-            }
-        }
+        if (protocolhack_shouldRemoveBoat()) return this.client.player.getHeadYaw();
         return instance.getYaw();
+    }
+
+    @Redirect(method = "onPlayerList", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V"))
+    public void removeNewWarning(Logger instance, String s, Object o) {
+        if (VersionList.isNewerOrEqualTo(ProtocolVersion.v1_19_3)) {
+            instance.warn(s, o);
+        }
     }
 }

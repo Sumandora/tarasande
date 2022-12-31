@@ -40,7 +40,6 @@ import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
-import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.IClientPlayerEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.IScreenHandler_Protocol;
 import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack;
@@ -88,7 +87,7 @@ public abstract class MixinClientPlayerInteractionManager {
 
     // Special Cases
     @Unique
-    private boolean shouldEmpty(final SlotActionType type, final int slot) {
+    private boolean protocolhack_shouldEmpty(final SlotActionType type, final int slot) {
         // quick craft always uses empty stack for verification
         if (type == SlotActionType.QUICK_CRAFT) return true;
 
@@ -105,7 +104,7 @@ public abstract class MixinClientPlayerInteractionManager {
             if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_16_4) && packet instanceof ClickSlotC2SPacket clickSlot) {
                 ItemStack slotItemBeforeModification;
 
-                if (this.shouldEmpty(clickSlot.getActionType(), clickSlot.getSlot()))
+                if (this.protocolhack_shouldEmpty(clickSlot.getActionType(), clickSlot.getSlot()))
                     slotItemBeforeModification = ItemStack.EMPTY;
                 else if (clickSlot.getSlot() < 0 || clickSlot.getSlot() >= protocolhack_oldItems.size())
                     slotItemBeforeModification = protocolhack_oldCursorStack;
