@@ -34,15 +34,14 @@ import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.telemetry.WorldSession;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.math.Vec3d;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
@@ -147,27 +146,13 @@ public abstract class MixinClientPlayNetworkHandler {
         }
     }
 
-    @Unique
-    private boolean protocolhack_shouldRemoveBoat() {
-        return VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2) && this.client != null && this.client.player != null;
-    }
-
-    @Redirect(method = "onEntityPassengersSet", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getYaw()F", ordinal = 0))
-    public float revertPrevYawSetter(Entity instance) {
-        if (protocolhack_shouldRemoveBoat()) return this.client.player.prevYaw;
-        return instance.getYaw();
-    }
-
-    @Redirect(method = "onEntityPassengersSet", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getYaw()F", ordinal = 1))
-    public float revertYawSetter(Entity instance) {
-        if (protocolhack_shouldRemoveBoat()) return this.client.player.getYaw();
-        return instance.getYaw();
-    }
-
-    @Redirect(method = "onEntityPassengersSet", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getYaw()F", ordinal = 2))
-    public float revertHeadYawSetter(Entity instance) {
-        if (protocolhack_shouldRemoveBoat()) return this.client.player.getHeadYaw();
-        return instance.getYaw();
+    @SuppressWarnings("InvalidInjectorMethodSignature")
+    @ModifyConstant(method = "onEntityPassengersSet", constant = @Constant(classValue = BoatEntity.class))
+    public Class<?> dontChangePlayerYaw(Object entity, Class<?> constant) {
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_18_2)) {
+            return Integer.class;
+        }
+        return constant;
     }
 
     @Redirect(method = "onPlayerList", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V"))
