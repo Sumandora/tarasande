@@ -9,6 +9,7 @@
     "MixinClientConnectionSubOne",
     "input.MixinEventDispatcher",
     "input.MixinEventScreenInput",
+    "module.MixinPlayerScreenHandler",
     "viaprotocolhack.MixinCustomViaConfig"
   ],
   "injectors": {

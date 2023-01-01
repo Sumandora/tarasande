@@ -44,6 +44,7 @@ import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.getSpecia
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.CommandArgumentsProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.EntityDimensionReplacement
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.PackFormats
+import net.tarasandedevelopment.tarasande_protocol_hack.module.ModuleEveryItemOnArmor
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ViaLegacyPlatformImpl
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.clamp.FabricCommandArgumentsProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricEncryptionProvider
@@ -127,6 +128,8 @@ class TarasandeProtocolHack : NativeProvider {
                                 shifted += mc.renderTickCounter.tickTime.toLong()
                         }
                     }
+
+                    add(ModuleEveryItemOnArmor())
                 }
 
                 ProtocolHackValues /* Force-Load */
