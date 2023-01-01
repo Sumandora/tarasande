@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande_chat_features.injection.mixin;
+package net.tarasandedevelopment.tarasande_chat_features.injection.mixin.module;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.network.message.MessageHandler;

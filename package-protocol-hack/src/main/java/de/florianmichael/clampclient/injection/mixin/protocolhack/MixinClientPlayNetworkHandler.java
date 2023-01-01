@@ -39,6 +39,7 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.math.Vec3d;
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
@@ -155,10 +156,15 @@ public abstract class MixinClientPlayNetworkHandler {
         return constant;
     }
 
-    @Redirect(method = "onPlayerList", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V"))
+    @Redirect(method = "onPlayerList", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V", remap = false))
     public void removeNewWarning(Logger instance, String s, Object o) {
         if (VersionList.isNewerOrEqualTo(ProtocolVersion.v1_19_3)) {
             instance.warn(s, o);
         }
+    }
+
+    @Redirect(method = "onServerMetadata", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/packet/s2c/play/ServerMetadataS2CPacket;isSecureChatEnforced()Z"))
+    public boolean removeSecureChatWarning(ServerMetadataS2CPacket instance) {
+        return instance.isSecureChatEnforced() || ProtocolHackValues.INSTANCE.getDisableSecureChatWarning().getValue();
     }
 }

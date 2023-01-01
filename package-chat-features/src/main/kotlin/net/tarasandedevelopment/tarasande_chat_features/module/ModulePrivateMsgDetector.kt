@@ -5,12 +5,12 @@ import com.google.common.collect.MultimapBuilder
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
-import net.tarasandedevelopment.tarasande_chat_features.CATEGORY_CHAT
 import java.nio.ByteBuffer
 import java.util.*
 
-class ModulePrivateMsgDetector : Module("Private msg detector", "Detects private messages", CATEGORY_CHAT) {
+class ModulePrivateMsgDetector : Module("Private msg detector", "Detects private messages", ModuleCategory.EXPLOIT) {
 
     private val signatures: Multimap<ByteBuffer, UUID> = MultimapBuilder.hashKeys().hashSetValues().build()
     private val seen = HashSet<ByteBuffer>()

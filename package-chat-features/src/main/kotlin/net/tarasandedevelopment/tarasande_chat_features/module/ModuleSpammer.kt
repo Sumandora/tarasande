@@ -9,14 +9,14 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
-import net.tarasandedevelopment.tarasande_chat_features.CATEGORY_CHAT
 import org.apache.commons.lang3.RandomStringUtils
 import kotlin.math.round
 import kotlin.math.sqrt
 
-class ModuleSpammer : Module("Spammer", "Spams something into the chat", CATEGORY_CHAT) {
+class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleCategory.MISC) {
 
     private val delay = ValueNumber(this, "Delay", 0.0, 2000.0, 10000.0, 500.0)
     private val noArbitraryTexts = ValueBoolean(this, "No arbitrary texts", false)

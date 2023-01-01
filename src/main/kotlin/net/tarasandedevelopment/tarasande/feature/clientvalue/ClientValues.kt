@@ -91,7 +91,9 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
     }
 
     init {
-        panelSystem.add(PanelElementsClientValues(this))
+        EventDispatcher.add(EventSuccessfulLoad::class.java, 1001) {
+            panelSystem.add(PanelElementsClientValues(this))
+        }
         EventDispatcher.add(EventSuccessfulLoad::class.java, 10000) {
             autoSaveDaemon.start()
         }

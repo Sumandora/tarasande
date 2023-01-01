@@ -24,6 +24,9 @@ object ProtocolHackValues {
         }
     }
 
+    // 1.19.2 -> 1.19
+    val disableSecureChatWarning = ValueBooleanProtocol("Disable secure chat warning", ProtocolVersion.v1_19.andOlder())
+
     // 1.19 -> 1.18.2
     val hideSignatureIndicator = ValueBooleanProtocol("Hide signature indicator", ProtocolVersion.v1_18_2.andOlder())
     val disableSequencing = ValueBooleanProtocol("Disable sequencing", ProtocolVersion.v1_18_2.andOlder())

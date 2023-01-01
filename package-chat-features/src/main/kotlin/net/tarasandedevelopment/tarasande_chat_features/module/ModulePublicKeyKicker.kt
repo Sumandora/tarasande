@@ -7,15 +7,15 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat.printChatMessage
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
-import net.tarasandedevelopment.tarasande_chat_features.CATEGORY_CHAT
 import net.tarasandedevelopment.tarasande_chat_features.gatekeep.GatekeepTracker
 import java.time.Instant
 import java.util.function.Consumer
 
-class ModulePublicKeyKicker : Module("Public key kicker", "Kicks players using outdated key signatures", CATEGORY_CHAT) {
+class ModulePublicKeyKicker : Module("Public key kicker", "Kicks players using outdated key signatures", ModuleCategory.EXPLOIT) {
 
     private var gatekeepTracker: GatekeepTracker? = null
     private var hasNotified = false

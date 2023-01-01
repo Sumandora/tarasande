@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande_chat_features.injection.mixin;
+package net.tarasandedevelopment.tarasande_chat_features.injection.mixin.module;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;

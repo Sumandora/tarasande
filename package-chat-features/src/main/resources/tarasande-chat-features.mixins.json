@@ -4,14 +4,16 @@
   "package": "net.tarasandedevelopment.tarasande_chat_features.injection.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "MixinClientPlayNetworkHandler",
-    "MixinMessageHandler",
-    "MixinProfileKeysImpl"
+    "clientvalue.MixinChatHud",
+    "module.MixinClientPlayNetworkHandler",
+    "clientvalue.MixinInGameHud",
+    "module.MixinMessageHandler",
+    "module.MixinProfileKeysImpl"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-    "MixinSharedConstants"
+    "clientvalue.MixinSharedConstants"
   ]
 }
