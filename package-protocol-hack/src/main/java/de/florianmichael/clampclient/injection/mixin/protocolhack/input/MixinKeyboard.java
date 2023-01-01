@@ -21,22 +21,25 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.input;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.viaprotocolhack.util.VersionList;
+import de.florianmichael.clampclient.injection.mixininterface.IMinecraftClient_Protocol;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.InputTracker1_12_2;
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Keyboard.class)
 public class MixinKeyboard {
 
+    @Shadow @Final private MinecraftClient client;
+
     @Redirect(method = "*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;execute(Ljava/lang/Runnable;)V"))
     public void redirectSync(MinecraftClient instance, Runnable runnable) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
-            InputTracker1_12_2.INSTANCE.getKeyboard().add(runnable);
+        if (ProtocolHackValues.INSTANCE.getExecuteInputsInSync().getValue()) {
+            ((IMinecraftClient_Protocol) client).protocolhack_getKeyboardInteractions().add(runnable);
             return;
         }
 

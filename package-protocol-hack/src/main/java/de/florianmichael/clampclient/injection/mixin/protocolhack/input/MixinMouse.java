@@ -21,22 +21,25 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.input;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.viaprotocolhack.util.VersionList;
+import de.florianmichael.clampclient.injection.mixininterface.IMinecraftClient_Protocol;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.InputTracker1_12_2;
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Mouse.class)
 public class MixinMouse {
 
+    @Shadow @Final private MinecraftClient client;
+
     @Redirect(method = {"method_29615", "method_22685", "method_22684"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;execute(Ljava/lang/Runnable;)V"), remap = false)
     public void redirectSync(MinecraftClient instance, Runnable runnable) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
-            InputTracker1_12_2.INSTANCE.getMouse().add(runnable);
+        if (ProtocolHackValues.INSTANCE.getExecuteInputsInSync().getValue()) {
+            ((IMinecraftClient_Protocol) client).protocolhack_getMouseInteractions().add(runnable);
             return;
         }
 

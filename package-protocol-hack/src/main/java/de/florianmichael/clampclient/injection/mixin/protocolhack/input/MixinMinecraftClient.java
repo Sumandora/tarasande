@@ -21,37 +21,55 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.input;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.viaprotocolhack.util.VersionList;
+import de.florianmichael.clampclient.injection.mixininterface.IMinecraftClient_Protocol;
 import net.minecraft.client.MinecraftClient;
 import net.tarasandedevelopment.tarasande.event.EventScreenInput;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.InputTracker1_12_2;
 import net.tarasandedevelopment.tarasande_protocol_hack.injection.accessor.IEventScreenInput;
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.event.EventDispatcher;
 
+import java.util.concurrent.ConcurrentLinkedDeque;
+
 @Mixin(MinecraftClient.class)
-public class MixinMinecraftClient {
+public class MixinMinecraftClient implements IMinecraftClient_Protocol {
+
+    @Unique
+    private final ConcurrentLinkedDeque<Runnable> protocolhack_keyboardInteractions = new ConcurrentLinkedDeque<>();
+
+    @Unique
+    private final ConcurrentLinkedDeque<Runnable> protocolhack_mouseInteractions = new ConcurrentLinkedDeque<>();
 
     @SuppressWarnings("ConstantConditions")
     @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;currentScreen:Lnet/minecraft/client/gui/screen/Screen;",
             ordinal = 4, shift = At.Shift.BEFORE))
     public void injectTick(CallbackInfo ci) {
-        if (VersionList.isNewerTo(ProtocolVersion.v1_12_2)) return;
+        if (!ProtocolHackValues.INSTANCE.getExecuteInputsInSync().getValue()) return;
 
-        while (!InputTracker1_12_2.INSTANCE.getMouse().isEmpty()) {
-            InputTracker1_12_2.INSTANCE.getMouse().poll().run();
+        while (!protocolhack_mouseInteractions.isEmpty()) {
+            protocolhack_mouseInteractions.poll().run();
         }
 
         EventScreenInput eventScreenInput = new EventScreenInput(false);
         ((IEventScreenInput) (Object) eventScreenInput).setOriginal(false);
         EventDispatcher.INSTANCE.call(eventScreenInput);
 
-        while (!InputTracker1_12_2.INSTANCE.getKeyboard().isEmpty()) {
-            InputTracker1_12_2.INSTANCE.getKeyboard().poll().run();
+        while (!protocolhack_keyboardInteractions.isEmpty()) {
+            protocolhack_keyboardInteractions.poll().run();
         }
+    }
+
+    @Override
+    public ConcurrentLinkedDeque<Runnable> protocolhack_getKeyboardInteractions() {
+        return this.protocolhack_keyboardInteractions;
+    }
+
+    @Override
+    public ConcurrentLinkedDeque<Runnable> protocolhack_getMouseInteractions() {
+        return this.protocolhack_mouseInteractions;
     }
 }
