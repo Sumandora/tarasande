@@ -39,6 +39,7 @@ import java.util.logging.Logger
  *  - Text Radar Panel
  *  - CustomPayload and PacketLogger Panel
  *  - Smartclicking in KillAura
+ *  - Recode KeepSprint/EventInput
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions
