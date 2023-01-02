@@ -39,6 +39,7 @@ import java.util.logging.Logger
  *  - Text Radar Panel
  *  - CustomPayload and PacketLogger Panel
  *  - Smartclicking in KillAura
+ *  - Recode KeepSprint/EventInput
  *  - Blink: Readd simple tracker, too big errors
  *  - Click Pearl
  *
