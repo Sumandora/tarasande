@@ -5,8 +5,9 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "clientvalue.MixinChatHud",
-    "module.MixinClientPlayNetworkHandler",
+    "clientvalue.MixinChatScreen",
     "clientvalue.MixinInGameHud",
+    "module.MixinClientPlayNetworkHandler",
     "module.MixinMessageHandler",
     "module.MixinProfileKeysImpl"
   ],

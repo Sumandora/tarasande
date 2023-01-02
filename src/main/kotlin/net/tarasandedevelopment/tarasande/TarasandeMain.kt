@@ -29,7 +29,6 @@ import java.util.logging.Logger
  *  - Crystal Aura
  *  - Change Name/Skin/Cape in Account Manager
  *  - Settings for HypixelBedwarsOverlay
- *  - ViaLegacy texture pack using ProtocolPatcher
  *  - Anti vanish: Tab completion
  *  - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
  *  - Recode File Chooser
@@ -51,6 +50,7 @@ import java.util.logging.Logger
  *  - WindowClick in 1.16.5 is not fully remapped
  *  - MerchantScreenHandler#switchTo Crasher
  *  - Disable sneak slowdown in Sneak module
+ *  - ViaLegacy texture pack using ProtocolPatcher
  */
 class TarasandeMain {
 
