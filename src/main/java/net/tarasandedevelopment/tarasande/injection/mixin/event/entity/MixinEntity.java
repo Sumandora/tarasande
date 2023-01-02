@@ -70,7 +70,6 @@ public abstract class MixinEntity implements IEntity {
         EventMovement eventMovement = new EventMovement((Entity) (Object) this, movement);
         EventDispatcher.INSTANCE.call(eventMovement);
         if (eventMovement.getDirty()) {
-            setVelocity(eventMovement.getVelocity());
             movement.x = eventMovement.getVelocity().x;
             movement.y = eventMovement.getVelocity().y;
             movement.z = eventMovement.getVelocity().z;

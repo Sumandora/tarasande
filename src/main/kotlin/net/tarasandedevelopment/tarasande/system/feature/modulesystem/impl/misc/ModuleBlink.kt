@@ -17,10 +17,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientConnection
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
@@ -62,6 +59,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     private val hitBoxColor = object : ValueColor(this, "Hit box color", 0.0, 1.0, 1.0, 1.0) {
         override fun isEnabled() = affectedPackets.isSelected(1)
     }
+    private val ignoreChunks = ValueBoolean(this, "Ignore chunks", true)
 
     private var packets = CopyOnWriteArrayList<Triple<Packet<*>, EventPacket.Type, Long>>()
     private val timeUtil = TimeUtil()
@@ -142,7 +140,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
             asSequence()?.
             filterIsInstance<PlayerEntity>()?.
             filter { PlayerUtil.isAttackable(it) }?.
-            filter { mc.player?.distanceTo(it)!! <= reach.value }?.
+            filter { mc.player?.eyePos?.squaredDistanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, it.boundingBox.expand(it.targetingMargin.toDouble())))!! <= reach.value * reach.value }?.
             filter { newPositions[it.id] != null }?.
             filter { (it as ILivingEntity).tarasande_prevServerPos() != null }?.
             toList()!!
@@ -182,7 +180,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                 if (
                     mc.currentScreen is DownloadingTerrainScreen ||
                     (event.type == EventPacket.Type.SEND && event.packet is ClientStatusC2SPacket && event.packet.mode == ClientStatusC2SPacket.Mode.PERFORM_RESPAWN) ||
-                    (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerRespawnS2CPacket)
+                    (event.type == EventPacket.Type.RECEIVE && (event.packet is PlayerRespawnS2CPacket || (ignoreChunks.value && (event.packet is ChunkDataS2CPacket || event.packet is LightUpdateS2CPacket))))
                 ) {
                     onDisable(true)
                     onEnable()

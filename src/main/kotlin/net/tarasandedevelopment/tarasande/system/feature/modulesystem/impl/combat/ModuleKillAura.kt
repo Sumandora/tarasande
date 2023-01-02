@@ -463,7 +463,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             // Humans always try to get to the middle
             val center = box.center
-            val dist = 1.0 - MathUtil.getBias(mc.player?.eyePos?.distanceTo(aimPoint)!! / reach.maxValue.coerceAtLeast(reach.minValue + 0.1), 0.65) // I have no idea why this works and looks like it does, but it's good, so why remove it then
+            val dist = 1.0 - MathUtil.getBias(mc.player?.eyePos?.distanceTo(aimPoint)!! / reach.maxValue.coerceAtLeast(reach.minValue + 0.5), 0.65) // I have no idea why this works and looks like it does, but it's good, so why remove it then
             aimPoint = aimPoint.add((center.x - aimPoint.x) * dist, (center.y - aimPoint.y) * (1.0 - dist) * 0.4 /* Humans dislike aiming up and down */, (center.z - aimPoint.z) * dist)
 
             // Humans can't hold their hands still

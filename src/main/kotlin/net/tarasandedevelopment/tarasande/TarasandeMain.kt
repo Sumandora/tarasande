@@ -39,6 +39,8 @@ import java.util.logging.Logger
  *  - Text Radar Panel
  *  - CustomPayload and PacketLogger Panel
  *  - Smartclicking in KillAura
+ *  - Blink: Readd simple tracker, too big errors
+ *  - Click Pearl
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions
