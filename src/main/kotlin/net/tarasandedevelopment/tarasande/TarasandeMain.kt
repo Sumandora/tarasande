@@ -52,6 +52,9 @@ import java.util.logging.Logger
  *  - MerchantScreenHandler#switchTo Crasher
  *  - Disable sneak slowdown in Sneak module
  *  - ViaLegacy texture pack using ProtocolPatcher
+ *  - Fixed GUI Modification Emulation Key Check (discovered by Paul TM)
+ *  - Implement Mouse Filter and Angle set in 1.8
+ *  - Die Keys sind Kaputt in ChatSessions???
  */
 class TarasandeMain {
 

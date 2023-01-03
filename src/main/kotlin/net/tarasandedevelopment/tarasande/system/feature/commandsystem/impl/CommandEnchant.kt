@@ -50,7 +50,7 @@ class CommandEnchant : Command("enchant") {
         syncInventory()
     }
 
-    private fun allEnchant(level: Function<Enchantment, Int>, onlyPossible: Boolean = false) {
+    private fun allEnchant(onlyPossible: Boolean = false, level: Function<Enchantment, Int>) {
         getTargetItem().apply {
             for (e in Registries.ENCHANTMENT.toList())
                 if (!onlyPossible || e.isAcceptableItem(this))
@@ -82,17 +82,17 @@ class CommandEnchant : Command("enchant") {
         builder.then(literal("all-possible").then(literal("level").then(
             argument("level", IntegerArgumentType.integer())?.executes { context ->
                 context.getArgument("level", Int::class.java)?.apply {
-                    allEnchant(level = Function {
-                        return@Function this
-                    }, true)
+                    allEnchant(true) {
+                        return@allEnchant this
+                    }
                     printChatMessage("All possible enchantments at level [$this] were added")
                 }
                 return@executes SUCCESS
             }
         ).then(literal("max").executes {
-            allEnchant(level = Function {
-                return@Function it.maxLevel
-            }, true)
+            allEnchant(true) {
+                return@allEnchant it.maxLevel
+            }
             printChatMessage("All possible enchantments at max level were added")
             return@executes SUCCESS
         })))
@@ -107,9 +107,9 @@ class CommandEnchant : Command("enchant") {
                 }
                 return@executes SUCCESS
             }).then(literal("max").executes {
-            allEnchant(level = Function {
-                return@Function it.maxLevel
-            }, false)
+            allEnchant(false) {
+                return@allEnchant it.maxLevel
+            }
             printChatMessage("All enchantments at max level were added")
             return@executes SUCCESS
         })))

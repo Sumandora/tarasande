@@ -54,8 +54,10 @@ public abstract class MixinEntity {
 
     @ModifyConstant(method = "movementInputToVelocity", constant = @Constant(doubleValue = 1E-7))
     private static double injectMovementInputToVelocity(double epsilon) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_13_2))
+        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_13_2)) {
             return 1E-4;
+        }
+
         return epsilon;
     }
 
