@@ -20,6 +20,7 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.GameMenuScreen
+import net.raphimc.vialegacy.protocols.classic.protocola1_0_15toc0_28_30.providers.ClassicMPPassProvider
 import net.raphimc.vialegacy.protocols.classic.protocola1_0_15toc0_28_30.providers.ClassicWorldHeightProvider
 import net.raphimc.vialegacy.protocols.release.protocol1_2_1_3to1_1.storage.SeedStorage
 import net.raphimc.vialegacy.protocols.release.protocol1_3_1_2to1_2_4_5.providers.OldAuthProvider
@@ -48,10 +49,7 @@ import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.PackFormats
 import net.tarasandedevelopment.tarasande_protocol_hack.module.ModuleEveryItemOnArmor
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ViaLegacyPlatformImpl
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.clamp.FabricCommandArgumentsProvider
-import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricClassicWorldHeightProvider
-import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricEncryptionProvider
-import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricGameProfileFetcher
-import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricOldAuthProvider
+import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.*
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricVersionProvider
@@ -279,6 +277,7 @@ class TarasandeProtocolHack : NativeProvider {
         providers?.use(EncryptionProvider::class.java, FabricEncryptionProvider())
         providers?.use(ClassicWorldHeightProvider::class.java, FabricClassicWorldHeightProvider())
         providers?.use(OldAuthProvider::class.java, FabricOldAuthProvider())
+        providers?.use(ClassicMPPassProvider::class.java, FabricClassicMPPassProvider())
 
         // Via Version
         providers?.use(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
