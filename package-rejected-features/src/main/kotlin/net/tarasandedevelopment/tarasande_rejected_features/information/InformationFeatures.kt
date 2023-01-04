@@ -25,7 +25,7 @@ class InformationFeaturesPackagesForTarasande : Information("Features", "Package
 
     init {
         FabricLoader.getInstance().allMods.forEach {
-            if (it.metadata.dependencies.firstOrNull { dependency -> dependency.modId == "tarasande" } != null) {
+            if (it.metadata.dependencies.any { dependency -> dependency.modId == "tarasande" }) {
                 packages.add(it.metadata.name)
             }
         }
