@@ -21,8 +21,8 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.block;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.block.*;
 import net.minecraft.block.cauldron.CauldronBehavior;
 import net.minecraft.item.Item;
@@ -51,9 +51,9 @@ public abstract class MixinCauldronBlock extends AbstractCauldronBlock {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2))
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_2)) {
             return protocolhack_CAULDRON_SHAPE_1_12_2;
-
+        }
         return super.getOutlineShape(state, world, pos, context);
     }
 }

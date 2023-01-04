@@ -1,22 +1,26 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy
 
-import de.florianmichael.vialegacy.pre_netty.PreNettyConstants
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider.EncryptionProvider
-import io.netty.channel.Channel
-import net.minecraft.network.encryption.PacketDecryptor
-import net.minecraft.network.encryption.PacketEncryptor
-import javax.crypto.Cipher
+import com.viaversion.viaversion.api.connection.UserConnection
+import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
+import net.minecraft.client.MinecraftClient
+import net.minecraft.network.ClientConnection
+import net.raphimc.vialegacy.protocols.release.protocol1_7_2_5to1_6_4.providers.EncryptionProvider
+import net.tarasandedevelopment.tarasande.event.EventConnectServer
+import su.mandora.event.EventDispatcher
 
 class FabricEncryptionProvider : EncryptionProvider() {
 
-    companion object {
-        var decryptionKey: Cipher? = null
-        var encryptionKey: Cipher? = null
-        var channel: Channel? = null
+    private var clientConnection: ClientConnection? = null
+
+    init {
+        EventDispatcher.add(EventConnectServer::class.java) {
+            clientConnection = it.connection
+        }
     }
 
-    override fun encryptConnection() {
-        channel?.pipeline()?.addBefore(PreNettyConstants.DECODER, "decrypt", PacketDecryptor(decryptionKey))
-        channel?.pipeline()?.addBefore(PreNettyConstants.ENCODER, "encrypt", PacketEncryptor(encryptionKey))
+    override fun enableDecryption(user: UserConnection?) {
+        if (clientConnection != null) {
+            (clientConnection as IClientConnection_Protocol).vialegacy_setupPreNettyEncryption()
+        }
     }
 }

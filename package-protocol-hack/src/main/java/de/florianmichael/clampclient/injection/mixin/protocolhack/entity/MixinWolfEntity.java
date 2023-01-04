@@ -21,8 +21,8 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.entity.passive.WolfEntity;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.WolfHealthTracker1_14_4;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,10 +34,9 @@ public class MixinWolfEntity {
 
     @Redirect(method = "*", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/WolfEntity;getHealth()F"))
     public float rewriteHealth(WolfEntity instance) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_4)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_14_4)) {
             return WolfHealthTracker1_14_4.INSTANCE.getHealth(instance.getId());
         }
-
         return instance.getHealth();
     }
 }

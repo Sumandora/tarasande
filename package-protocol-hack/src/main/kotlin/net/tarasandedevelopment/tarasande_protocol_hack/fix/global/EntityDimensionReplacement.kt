@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande_protocol_hack.fix.global
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.vialoadingbase.ViaLoadingBase
+import de.florianmichael.vialoadingbase.util.VersionListEnum
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
 import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.andOlder
@@ -13,14 +14,14 @@ object EntityDimensionReplacement {
     private val localReplacements = HashMap<EntityType<*>, EntityDimensions>()
 
     init {
-        registerReplacement(EntityType.WITHER_SKELETON, EntityDimensions.changing(0.72F, 2.535F), ProtocolVersion.v1_8.andOlder())
+        registerReplacement(EntityType.WITHER_SKELETON, EntityDimensions.changing(0.72F, 2.535F), VersionListEnum.r1_8.andOlder())
     }
 
     fun reloadDimensions() {
         localReplacements.clear()
         replacements.forEach {
             for (entityDimensionsProtocolRangePair in it.value) {
-                if (ProtocolVersion.getProtocol(ViaLoadingBase.instance().provider().clientsideVersion) in entityDimensionsProtocolRangePair.second) {
+                if (ViaLoadingBase.getTargetVersion() in entityDimensionsProtocolRangePair.second) {
                     localReplacements[it.key] = entityDimensionsProtocolRangePair.first
                 }
             }

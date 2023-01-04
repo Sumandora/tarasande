@@ -8,21 +8,20 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import com.viaversion.viaversion.api.protocol.version.VersionProvider
 import com.viaversion.viaversion.libs.gson.JsonArray
 import com.viaversion.viaversion.libs.gson.JsonObject
+import com.viaversion.viaversion.protocol.ProtocolManagerImpl
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
-import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
-import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider.EncryptionProvider
-import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider.UUIDProvider
 import de.florianmichael.vialoadingbase.NativeProvider
 import de.florianmichael.vialoadingbase.ViaLoadingBase
-import de.florianmichael.vialoadingbase.util.VersionList
+import de.florianmichael.vialoadingbase.util.VersionListEnum
 import io.netty.channel.DefaultEventLoop
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.GameMenuScreen
+import net.raphimc.vialegacy.protocols.release.protocol1_7_2_5to1_6_4.providers.EncryptionProvider
+import net.raphimc.vialegacy.protocols.release.protocol1_8to1_7_6_10.providers.GameProfileFetcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
@@ -37,10 +36,7 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.Sc
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanel
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanelSelection
-import net.tarasandedevelopment.tarasande_protocol_hack.util.values.command.ViaCommandHandlerTarasandeCommandHandler
 import net.tarasandedevelopment.tarasande_protocol_hack.event.EventSkipIdlePacket
-import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.andOlder
-import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.getSpecialName
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.CommandArgumentsProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.EntityDimensionReplacement
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.PackFormats
@@ -48,13 +44,14 @@ import net.tarasandedevelopment.tarasande_protocol_hack.module.ModuleEveryItemOn
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ViaLegacyPlatformImpl
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.clamp.FabricCommandArgumentsProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricEncryptionProvider
-import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricOldAuthProvider
-import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricUUIDProvider
+import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricGameProfileFetcher
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricVersionProvider
+import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.andOlder
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ValueBooleanProtocol
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.command.ViaCommandHandlerTarasandeCommandHandler
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.formatRange
 import su.mandora.event.EventDispatcher
 import java.util.concurrent.ExecutorService
@@ -73,12 +70,12 @@ class TarasandeProtocolHack : NativeProvider {
     fun initialize() {
         ViaLoadingBase.instance().init(this) {
             ViaLoadingBase.loadSubPlatform("ViaLegacy") {
-                val isLegacyLoaded = ViaLoadingBase.hasClass("de.florianmichael.vialegacy.api.ViaLegacyPlatform")
+                val isLegacyLoaded = ViaLoadingBase.hasClass("net.raphimc.vialegacy.platform.ViaLegacyPlatform")
                 if (isLegacyLoaded) ViaLegacyPlatformImpl()
                 return@loadSubPlatform isLegacyLoaded
             }
         }
-        PackFormats.checkOutdated(nativeVersion())
+        PackFormats.checkOutdated(nativeVersion().originalVersion)
 
         EventDispatcher.apply {
             add(EventSuccessfulLoad::class.java) {
@@ -90,7 +87,7 @@ class TarasandeProtocolHack : NativeProvider {
                         init {
                             EventDispatcher.apply {
                                 add(EventConnectServer::class.java) {
-                                    version = VersionList.PROTOCOLS.firstOrNull { it.version == ViaLoadingBase.instance().provider().clientsideVersion } ?: ProtocolVersion.unknown
+                                    version = VersionListEnum.RENDER_VERSIONS.map { it.protocol }.firstOrNull { it.version == ViaLoadingBase.getTargetVersion().originalVersion } ?: ProtocolVersion.unknown
                                 }
                                 add(EventDisconnect::class.java) { event ->
                                     if(event.connection == MinecraftClient.getInstance().networkHandler?.connection)
@@ -112,8 +109,8 @@ class TarasandeProtocolHack : NativeProvider {
                 }
 
                 TarasandeMain.managerModule().apply {
-                    cancelOpenPacket = object : ValueBoolean(get(ModuleInventoryMove::class.java), "Cancel open packet (" + ProtocolVersion.v1_11_1.andOlder() + ")", false) {
-                        override fun isEnabled() = VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1)
+                    cancelOpenPacket = object : ValueBoolean(get(ModuleInventoryMove::class.java), "Cancel open packet (" + VersionListEnum.r1_11_1to1_11_2.andOlder() + ")", false) {
+                        override fun isEnabled() = ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_11_1to1_11_2)
                     }
 
                     get(ModuleTickBaseManipulation::class.java).apply {
@@ -134,15 +131,15 @@ class TarasandeProtocolHack : NativeProvider {
             }
 
             add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
-                update(ProtocolVersion.getProtocol(version.value.toInt()), false)
+                update(VersionListEnum.fromProtocolId(version.value.toInt()), false)
 
                 TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.apply {
-                    insert(object : EntrySidebarPanelSelection("Protocol Hack", "Protocol Hack", VersionList.PROTOCOLS.map { it.getSpecialName() }, ProtocolVersion.getProtocol(targetVersion()).getSpecialName()) {
+                    insert(object : EntrySidebarPanelSelection("Protocol Hack", "Protocol Hack", VersionListEnum.RENDER_VERSIONS.map { it.getName() }, ViaLoadingBase.getTargetVersion().getName()) {
                         override fun onClick(newValue: String) {
-                            val newProtocol = VersionList.PROTOCOLS.first { it.getSpecialName() == newValue }.version.toDouble()
+                            val newProtocol = VersionListEnum.RENDER_VERSIONS.first { it.getName() == newValue }.version.toDouble()
                             if (version.value != newProtocol) {
                                 version.value = newProtocol
-                                update(ProtocolVersion.getProtocol(version.value.toInt()), ProtocolHackValues.autoChangeValuesDependentOnVersion.value)
+                                update(VersionListEnum.fromProtocolId(version.value.toInt()), ProtocolHackValues.autoChangeValuesDependentOnVersion.value)
                             }
                         }
                     }, 0)
@@ -171,7 +168,9 @@ class TarasandeProtocolHack : NativeProvider {
         }
     }
 
-    fun update(protocol: ProtocolVersion, reloadProtocolHackValues: Boolean) {
+    fun update(protocol: VersionListEnum, reloadProtocolHackValues: Boolean) {
+        ViaLoadingBase.instance().switchVersionTo(protocol.originalVersion)
+
         if (reloadProtocolHackValues) {
             TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
                 if (it is ValueBooleanProtocol)
@@ -183,8 +182,7 @@ class TarasandeProtocolHack : NativeProvider {
     }
 
     override fun isSinglePlayer() = MinecraftClient.getInstance()?.isInSingleplayer != false
-    override fun nativeVersion() = SharedConstants.getProtocolVersion()
-    override fun targetVersion() = this.version.value.toInt()
+    override fun nativeVersion() = VersionListEnum.r1_19_3
     override fun nettyOrder() = this.compression
     override fun run() = TarasandeMain.get().rootDirectory
 
@@ -225,8 +223,7 @@ class TarasandeProtocolHack : NativeProvider {
         providers?.use(CommandArgumentsProvider::class.java, FabricCommandArgumentsProvider())
 
         // Via Legacy
-        providers?.use(OldAuthProvider::class.java, FabricOldAuthProvider())
-        providers?.use(UUIDProvider::class.java, FabricUUIDProvider())
+        providers?.use(GameProfileFetcher::class.java, FabricGameProfileFetcher())
         providers?.use(EncryptionProvider::class.java, FabricEncryptionProvider())
 
         // Via Version
@@ -235,9 +232,7 @@ class TarasandeProtocolHack : NativeProvider {
         providers?.use(HandItemProvider::class.java, FabricHandItemProvider())
     }
 
-    override fun onBuildViaPlatform(builder: ViaManagerImpl.ViaManagerBuilder) {
+    override fun createViaPlatform(builder: ViaManagerImpl.ViaManagerBuilder) {
         builder.commandHandler(ViaCommandHandlerTarasandeCommandHandler())
     }
-
-    override fun getOptionalProtocols(): MutableList<ProtocolVersion> = LegacyProtocolVersion.PROTOCOL_VERSIONS
 }

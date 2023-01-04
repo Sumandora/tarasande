@@ -22,7 +22,8 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.world.entity.EntityIndex;
 import net.minecraft.world.entity.EntityLike;
@@ -46,12 +47,12 @@ public class MixinEntityIndex<T extends EntityLike> {
 
     @Redirect(method = "add", at = @At(value = "INVOKE", target = "Ljava/util/Map;containsKey(Ljava/lang/Object;)Z", remap = false))
     private boolean allowDuplicateUuid(Map<UUID, T> instance, Object o) {
-        return instance.containsKey(o) && VersionList.isNewerTo(ProtocolVersion.v1_16_4);
+        return instance.containsKey(o) && ViaLoadingBase.getTargetVersion().isNewerThan(VersionListEnum.r1_16_4tor1_16_5);
     }
 
     @Inject(method = "size", at = @At("HEAD"), cancellable = true)
     private void returnRealSize(CallbackInfoReturnable<Integer> cir) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_16_4)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_16_4tor1_16_5)) {
             cir.setReturnValue(this.idToEntity.size());
         }
     }

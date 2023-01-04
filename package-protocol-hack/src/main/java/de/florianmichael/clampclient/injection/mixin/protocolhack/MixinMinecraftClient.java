@@ -27,8 +27,8 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_12to1_11_1.Protocol1_12To1_11_1;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.ServerboundPackets1_9_3;
-import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.item.HeldItemRenderer;
@@ -58,7 +58,7 @@ public abstract class MixinMinecraftClient {
             slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;interactItem(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;")),
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/HeldItemRenderer;resetEquipProgress(Lnet/minecraft/util/Hand;)V", ordinal = 0))
     private void redirectDoItemUse(HeldItemRenderer heldItemRenderer, Hand hand) {
-        if (VersionList.isNewerTo(ProtocolVersion.v1_8) || !(player.getStackInHand(hand).getItem() instanceof SwordItem)) {
+        if (ViaLoadingBase.getTargetVersion().isNewerThan(VersionListEnum.r1_8) || !(player.getStackInHand(hand).getItem() instanceof SwordItem)) {
             heldItemRenderer.resetEquipProgress(hand);
         }
     }
@@ -67,7 +67,7 @@ public abstract class MixinMinecraftClient {
             slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;interactEntity(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;")),
             at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ActionResult;isAccepted()Z", ordinal = 0))
     private boolean preventGenericInteract(ActionResult instance) {
-        if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.r1_7_6_10)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_7_6tor1_7_10)) {
             return true;
         }
 
@@ -78,7 +78,7 @@ public abstract class MixinMinecraftClient {
     private void onInventoryKeyPressed(CallbackInfo ci) throws Exception {
         final UserConnection viaConnection = TarasandeProtocolHack.Companion.getViaConnection();
 
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_11_1) && viaConnection != null) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_11_1to1_11_2) && viaConnection != null) {
             if (TarasandeMain.Companion.managerModule().get(ModuleInventoryMove.class).getEnabled() && TarasandeProtocolHack.Companion.getCancelOpenPacket().getValue()) {
                 return;
             }

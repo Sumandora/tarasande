@@ -10,7 +10,7 @@ class FabricVersionProvider : BaseVersionProvider() {
 
     override fun getClosestServerProtocol(connection: UserConnection?): Int {
         if (connection!!.isClientSide) {
-            return ViaLoadingBase.instance().provider().clientsideVersion
+            return ViaLoadingBase.getTargetVersion().originalVersion
         }
         return ProtocolVersion.getProtocol(SharedConstants.getGameVersion().protocolVersion).version
     }

@@ -25,7 +25,8 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.GameVersion;
 import net.minecraft.client.resource.ServerResourcePackProvider;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.PackFormats;
@@ -58,10 +59,10 @@ public class MixinServerResourcePackProvider {
     @Inject(method = "getDownloadHeaders", at = @At("TAIL"), cancellable = true)
     private static void removeHeaders(CallbackInfoReturnable<Map<String, String>> cir) {
         final LinkedHashMap<String, String> modifiableMap = new LinkedHashMap<>(cir.getReturnValue());
-        if (VersionList.isOlderTo(ProtocolVersion.v1_14)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThan(VersionListEnum.r1_14)) {
             modifiableMap.remove("X-Minecraft-Version-ID");
         }
-        if (VersionList.isOlderTo(ProtocolVersion.v1_13)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThan(VersionListEnum.r1_13)) {
             modifiableMap.remove("X-Minecraft-Pack-Format");
             modifiableMap.remove("User-Agent");
         }
@@ -77,10 +78,10 @@ public class MixinServerResourcePackProvider {
     @Redirect(method = "verifyFile", at = @At(value = "INVOKE", target = "Lcom/google/common/hash/HashCode;toString()Ljava/lang/String;", remap = false))
     public String revertHashAlgorithm(HashCode instance) {
         try {
-            if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
+            if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
                 //noinspection deprecation
                 return Hashing.sha1().hashBytes(Files.toByteArray(protocolhack_trackedFile)).toString();
-            } else if (VersionList.isOlderTo(ProtocolVersion.v1_18)) {
+            } else if (ViaLoadingBase.getTargetVersion().isOlderThan(VersionListEnum.r1_18tor1_18_1)) {
                 return DigestUtils.sha1Hex(new FileInputStream(protocolhack_trackedFile));
             }
         } catch (IOException ignored) {
@@ -90,7 +91,7 @@ public class MixinServerResourcePackProvider {
 
     @Redirect(method = "verifyFile", at = @At(value = "INVOKE", target = "Ljava/lang/String;toLowerCase(Ljava/util/Locale;)Ljava/lang/String;"))
     public String disableIgnoreCase(String instance, Locale locale) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
             return instance;
         }
 

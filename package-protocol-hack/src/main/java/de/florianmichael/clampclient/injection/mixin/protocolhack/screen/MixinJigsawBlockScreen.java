@@ -35,7 +35,8 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.screen;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.block.entity.JigsawBlockEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.JigsawBlockScreen;
@@ -68,7 +69,7 @@ public class MixinJigsawBlockScreen extends Screen {
 
     @Inject(method = "init", at = @At("RETURN"))
     public void injectInit(CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_15_2)) {
             nameField.active = false;
             jointRotationButton.active = false;
             int index = children().indexOf(jointRotationButton);
@@ -80,7 +81,7 @@ public class MixinJigsawBlockScreen extends Screen {
 
     @Inject(method = "render", at = @At("HEAD"))
     public void injectRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_15_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_15_2)) {
             nameField.setText(targetField.getText());
         }
     }

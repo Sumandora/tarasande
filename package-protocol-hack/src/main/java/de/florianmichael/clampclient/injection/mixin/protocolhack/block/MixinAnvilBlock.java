@@ -21,8 +21,8 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.block;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -53,8 +53,8 @@ public class MixinAnvilBlock {
 
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        Direction direction = state.get(FACING);
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2))
-            cir.setReturnValue(direction.getAxis() == Direction.Axis.X ? protocolhack_X_AXIS_SHAPE_1_12_2 : protocolhack_Z_AXIS_SHAPE_1_12_2);
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_2)) {
+            cir.setReturnValue(state.get(FACING).getAxis() == Direction.Axis.X ? protocolhack_X_AXIS_SHAPE_1_12_2 : protocolhack_Z_AXIS_SHAPE_1_12_2);
+        }
     }
 }

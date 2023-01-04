@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande_protocol_hack.util.values
 
 import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
+import de.florianmichael.vialoadingbase.util.VersionListEnum
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
@@ -25,22 +25,22 @@ object ProtocolHackValues {
     }
 
     // 1.19.2 -> 1.19
-    val disableSecureChatWarning = ValueBooleanProtocol("Disable secure chat warning", ProtocolVersion.v1_19.andOlder())
+    val disableSecureChatWarning = ValueBooleanProtocol("Disable secure chat warning", VersionListEnum.r1_19.andOlder())
 
     // 1.19 -> 1.18.2
-    val hideSignatureIndicator = ValueBooleanProtocol("Hide signature indicator", ProtocolVersion.v1_18_2.andOlder())
-    val disableSequencing = ValueBooleanProtocol("Disable sequencing", ProtocolVersion.v1_18_2.andOlder())
+    val hideSignatureIndicator = ValueBooleanProtocol("Hide signature indicator", VersionListEnum.r1_18_2.andOlder())
+    val disableSequencing = ValueBooleanProtocol("Disable sequencing", VersionListEnum.r1_18_2.andOlder())
 
     // 1.14 -> 1.13.2
-    val smoothOutMerchantScreens = ValueBooleanProtocol("Smooth out merchant screens", ProtocolVersion.v1_13_2.andOlder())
+    val smoothOutMerchantScreens = ValueBooleanProtocol("Smooth out merchant screens", VersionListEnum.r1_13_2.andOlder())
 
     // 1.13 -> 1.12.2
-    val removeNewTabCompletion = ValueBooleanProtocol("Remove new tab completion", ProtocolVersion.v1_12_2.andOlder())
-    val executeInputsInSync = ValueBooleanProtocol("Execute inputs in sync", ProtocolVersion.v1_12_2.andOlder())
+    val removeNewTabCompletion = ValueBooleanProtocol("Remove new tab completion", VersionListEnum.r1_12_2.andOlder())
+    val executeInputsInSync = ValueBooleanProtocol("Execute inputs in sync", VersionListEnum.r1_12_2.andOlder())
 
     // 1.9 -> 1.8.x
-    val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", ProtocolVersion.v1_8.andOlder())
-    val sendIdlePacket = ValueBooleanProtocol("Send idle packet", ProtocolVersion.v1_8 .. LegacyProtocolVersion.r1_3_1_2)
+    val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", VersionListEnum.r1_8.andOlder())
+    val sendIdlePacket = ValueBooleanProtocol("Send idle packet", VersionListEnum.r1_8 .. VersionListEnum.r1_3_1tor1_3_2)
 }
 
 open class ValueBooleanProtocol(name: String, vararg val version: ProtocolRange) : ValueBoolean(ProtocolHackValues, "$name (" + formatRange(*version) + ")", false)

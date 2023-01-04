@@ -22,7 +22,8 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.block;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.block.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
@@ -56,10 +57,10 @@ public abstract class MixinEndPortalBlock extends BlockWithEntity {
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
         if (MinecraftClient.getInstance() == null || MinecraftClient.getInstance().world == null) return;
 
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
             cir.setReturnValue(protocolhack_SHAPE_1_8);
         }
-        else if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_16_4)) {
+        else if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_16_4tor1_16_5)) {
             cir.setReturnValue(protocolhack_SHAPE_1_16_5);
         }
     }

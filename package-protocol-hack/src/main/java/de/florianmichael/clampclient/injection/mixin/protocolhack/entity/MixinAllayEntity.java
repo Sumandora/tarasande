@@ -1,7 +1,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.entity.passive.AllayEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,7 +13,7 @@ public class MixinAllayEntity {
     
     @Inject(method = "getHeightOffset", at = @At("HEAD"), cancellable = true)
     public void changeHeightOffset(CallbackInfoReturnable<Double> cir) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_19_1)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_19_1tor1_19_2)) {
             cir.setReturnValue(0.0);
         }
     }

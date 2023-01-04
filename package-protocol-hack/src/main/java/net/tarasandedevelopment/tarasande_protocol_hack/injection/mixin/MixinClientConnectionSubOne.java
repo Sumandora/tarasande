@@ -25,19 +25,17 @@ import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
-import de.florianmichael.vialegacy.pre_netty.DummyPrepender;
-import de.florianmichael.vialegacy.pre_netty.PreNettyConstants;
-import de.florianmichael.vialegacy.pre_netty.PreNettyPacketDecoder;
-import de.florianmichael.vialegacy.pre_netty.PreNettyPacketEncoder;
-import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
-import de.florianmichael.vialegacy.protocols.protocol1_6_4.Protocol1_6_4;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.netty.CustomViaDecodeHandler;
 import de.florianmichael.vialoadingbase.netty.CustomViaEncodeHandler;
 import de.florianmichael.vialoadingbase.netty.NettyConstants;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import net.minecraft.network.ClientConnection;
+import net.raphimc.vialegacy.netty.PreNettyDecoder;
+import net.raphimc.vialegacy.netty.PreNettyEncoder;
+import net.raphimc.vialegacy.protocols.release.protocol1_7_2_5to1_6_4.baseprotocols.PreNettyBaseProtocol;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -60,21 +58,14 @@ public class MixinClientConnectionSubOne {
             ((IClientConnection_Protocol) field_11663).protocolhack_setViaConnection(user);
             new ProtocolPipelineImpl(user);
 
-            if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.r1_6_4)) {
-                user.getProtocolInfo().getPipeline().add(Protocol1_6_4.INSTANCE);
-            }
-
             channel.pipeline()
                     .addBefore("encoder", NettyConstants.HANDLER_ENCODER_NAME, new CustomViaEncodeHandler(user))
                     .addBefore("decoder", NettyConstants.HANDLER_DECODER_NAME, new CustomViaDecodeHandler(user));
 
-            if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.r1_6_4)) {
-                channel.pipeline()
-                        .addBefore(NettyConstants.HANDLER_ENCODER_NAME, PreNettyConstants.ENCODER, new PreNettyPacketEncoder())
-                        .addBefore(NettyConstants.HANDLER_DECODER_NAME, PreNettyConstants.DECODER, new PreNettyPacketDecoder(user));
-
-                channel.pipeline().replace("prepender", "prepender", new DummyPrepender());
-                channel.pipeline().remove("splitter");
+            if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_6_4)) {
+                user.getProtocolInfo().getPipeline().add(PreNettyBaseProtocol.INSTANCE);
+                channel.pipeline().addBefore("prepender", "via-pre_netty-encoder", new PreNettyEncoder(user));
+                channel.pipeline().addBefore("splitter", "via-pre_netty-decoder", new PreNettyDecoder(user));
             }
         }
     }

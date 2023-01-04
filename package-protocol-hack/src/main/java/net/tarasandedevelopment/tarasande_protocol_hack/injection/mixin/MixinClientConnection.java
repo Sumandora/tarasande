@@ -23,14 +23,15 @@ package net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
-import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.event.PipelineReorderEvent;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import io.netty.channel.Channel;
 import net.minecraft.network.ClientConnection;
+import net.minecraft.network.encryption.PacketDecryptor;
+import net.minecraft.network.encryption.PacketEncryptor;
 import net.minecraft.text.Text;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.WolfHealthTracker1_14_4;
-import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricEncryptionProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -46,12 +47,28 @@ public class MixinClientConnection implements IClientConnection_Protocol {
     @Shadow
     private Channel channel;
 
+    @Shadow private boolean encrypted;
     @Unique
     private UserConnection protocolhack_viaConnection;
+
+    @Unique
+    private Cipher vialegacy_decryptionCipher;
+
+    @Unique
+    private Cipher vialegacy_encryptionCipher;
 
     @Inject(method = "setCompressionThreshold", at = @At("RETURN"))
     private void reorderCompression(int compressionThreshold, boolean rejectBad, CallbackInfo ci) {
         channel.pipeline().fireUserEventTriggered(new PipelineReorderEvent());
+    }
+
+    @Inject(method = "setupEncryption", at = @At("HEAD"), cancellable = true)
+    private void handlePreNettyCrypto(Cipher decryptionCipher, Cipher encryptionCipher, CallbackInfo ci) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_6_4)) {
+            ci.cancel();
+            this.vialegacy_decryptionCipher = decryptionCipher;
+            this.vialegacy_encryptionCipher = encryptionCipher;
+        }
     }
 
     @Inject(method = "disconnect", at = @At("RETURN"))
@@ -59,17 +76,13 @@ public class MixinClientConnection implements IClientConnection_Protocol {
         WolfHealthTracker1_14_4.INSTANCE.clear();
     }
 
-    @Inject(method = "setupEncryption", at = @At("HEAD"), cancellable = true)
-    public void injectSetupEncryption(Cipher decryptionCipher, Cipher encryptionCipher, CallbackInfo ci) {
-        if (VersionList.isOlderOrEqualTo(LegacyProtocolVersion.r1_6_4)) {
-            FabricEncryptionProvider.Companion.setDecryptionKey(decryptionCipher);
-            FabricEncryptionProvider.Companion.setEncryptionKey(encryptionCipher);
-
-            FabricEncryptionProvider.Companion.setChannel(this.channel);
-
-            ci.cancel();
-        }
+    @Unique
+    public void vialegacy_setupPreNettyEncryption() {
+        this.encrypted = true;
+        this.channel.pipeline().addBefore("via-pre_netty-decoder", "decrypt", new PacketDecryptor(this.vialegacy_decryptionCipher));
+        this.channel.pipeline().addBefore("via-pre_netty-encoder", "encrypt", new PacketEncryptor(this.vialegacy_encryptionCipher));
     }
+
 
     @Override
     public void protocolhack_setViaConnection(UserConnection userConnection) {

@@ -6,7 +6,8 @@ import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.IForgeNet
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.Fml1NetClientHandler
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.ModernFmlNetClientHandler
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.ModernFmlState
-import de.florianmichael.vialoadingbase.util.VersionList
+import de.florianmichael.vialoadingbase.ViaLoadingBase
+import de.florianmichael.vialoadingbase.util.VersionListEnum
 import net.minecraft.network.ClientConnection
 
 object ViaVersionUtil {
@@ -19,9 +20,9 @@ object ViaVersionUtil {
     }
 
     fun createForgeHandler(connection: ClientConnection): IForgeNetClientHandler {
-        if (VersionList.isNewerTo(ProtocolVersion.v1_18_2)) return ModernFmlNetClientHandler(ModernFmlState.FML_4, connection)
-        if (VersionList.isNewerTo(ProtocolVersion.v1_17_1)) return ModernFmlNetClientHandler(ModernFmlState.FML_3, connection)
-        if (VersionList.isNewerTo(ProtocolVersion.v1_12_2)) return ModernFmlNetClientHandler(ModernFmlState.FML_2, connection)
+        if (ViaLoadingBase.getTargetVersion().isNewerThan(VersionListEnum.r1_18_2)) return ModernFmlNetClientHandler(ModernFmlState.FML_4, connection)
+        if (ViaLoadingBase.getTargetVersion().isNewerThan(VersionListEnum.r1_17_1)) return ModernFmlNetClientHandler(ModernFmlState.FML_3, connection)
+        if (ViaLoadingBase.getTargetVersion().isNewerThan(VersionListEnum.r1_12_2)) return ModernFmlNetClientHandler(ModernFmlState.FML_2, connection)
 
         return Fml1NetClientHandler(connection)
     }

@@ -21,8 +21,8 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,6 +34,6 @@ public class MixinAnimalEntity {
 
     @Redirect(method = "interactMob", at = @At(value = "FIELD", target = "Lnet/minecraft/world/World;isClient:Z"))
     public boolean redirectInteractMob(World instance) {
-        return instance.isClient && VersionList.isNewerOrEqualTo(ProtocolVersion.v1_15);
+        return instance.isClient && ViaLoadingBase.getTargetVersion().isNewerThanOrEqualTo(VersionListEnum.r1_15);
     }
 }

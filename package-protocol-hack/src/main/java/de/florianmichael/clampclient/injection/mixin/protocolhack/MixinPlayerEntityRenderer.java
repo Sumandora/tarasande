@@ -21,8 +21,8 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.util.math.Direction;
@@ -38,7 +38,7 @@ public class MixinPlayerEntityRenderer {
 
     @Inject(method = "getPositionOffset*", at = @At("RETURN"), cancellable = true)
     private void injectGetPositionOffset(AbstractClientPlayerEntity player, float delta, CallbackInfoReturnable<Vec3d> ci) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_13_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_13_2)) {
             Direction sleepingDir = player.getSleepingDirection();
 
             if (sleepingDir != null)
@@ -49,6 +49,6 @@ public class MixinPlayerEntityRenderer {
     @Redirect(method = "getPositionOffset(Lnet/minecraft/client/network/AbstractClientPlayerEntity;F)Lnet/minecraft/util/math/Vec3d;",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isInSneakingPose()Z"))
     private boolean redirectGetPositionOffset(AbstractClientPlayerEntity player) {
-        return (VersionList.isNewerTo(ProtocolVersion.v1_11_1)) && player.isInSneakingPose();
+        return (ViaLoadingBase.getTargetVersion().isNewerThan(VersionListEnum.r1_11_1to1_11_2)) && player.isInSneakingPose();
     }
 }

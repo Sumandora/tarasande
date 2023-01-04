@@ -21,8 +21,8 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.block;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.block.Block;
 import net.minecraft.block.EndPortalFrameBlock;
 import net.minecraft.util.shape.VoxelShape;
@@ -48,7 +48,7 @@ public class MixinEndPortalFrameBlock {
 
     @Redirect(method = "getOutlineShape", at = @At(value = "FIELD", target = "Lnet/minecraft/block/EndPortalFrameBlock;FRAME_WITH_EYE_SHAPE:Lnet/minecraft/util/shape/VoxelShape;"))
     public VoxelShape redirectGetOutlineShape() {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_12_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_2)) {
             return VoxelShapes.union(FRAME_SHAPE, protocolhack_EYE_SHAPE_1_12_2);
         }
         return FRAME_WITH_EYE_SHAPE;

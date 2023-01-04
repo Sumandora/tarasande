@@ -34,8 +34,8 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.item;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.EnderPearlItem;
 import net.minecraft.item.ItemStack;
@@ -52,7 +52,8 @@ public class MixinEnderPearlItem {
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     private void injectUse(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> ci) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8) && user.getAbilities().creativeMode)
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && user.getAbilities().creativeMode) {
             ci.setReturnValue(TypedActionResult.pass(user.getStackInHand(hand)));
+        }
     }
 }

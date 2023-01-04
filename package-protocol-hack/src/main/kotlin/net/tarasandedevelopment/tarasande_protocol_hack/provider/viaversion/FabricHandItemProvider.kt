@@ -10,10 +10,13 @@ import net.tarasandedevelopment.tarasande_protocol_hack.util.inventory.Minecraft
 class FabricHandItemProvider : HandItemProvider() {
 
     companion object {
-        var lastUsedItem: ItemStack = ItemStack.EMPTY
+        var lastUsedItem: ItemStack? = null
     }
 
     override fun getHandItem(info: UserConnection?): Item? {
-        return MinecraftViaItemRewriter.minecraftToViaItem(lastUsedItem, ProtocolVersion.v1_8.version)
+        if (lastUsedItem == null) {
+            return null
+        }
+        return MinecraftViaItemRewriter.minecraftToViaItem(lastUsedItem!!, ProtocolVersion.v1_8.version)
     }
 }

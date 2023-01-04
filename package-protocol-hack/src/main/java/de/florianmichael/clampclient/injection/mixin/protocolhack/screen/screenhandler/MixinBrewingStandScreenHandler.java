@@ -22,7 +22,8 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.screen.screenhandler;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.slot.Slot;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,12 +40,12 @@ public class MixinBrewingStandScreenHandler extends Slot {
 
     @Inject(method = "matches(Lnet/minecraft/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)
     private static void removeFuelSlot(CallbackInfoReturnable<Boolean> ci) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_8))
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8))
             ci.setReturnValue(false);
     }
 
     @Override
     public boolean isEnabled() {
-        return VersionList.isNewerTo(ProtocolVersion.v1_8);
+        return ViaLoadingBase.getTargetVersion().isNewerThan(VersionListEnum.r1_8);
     }
 }

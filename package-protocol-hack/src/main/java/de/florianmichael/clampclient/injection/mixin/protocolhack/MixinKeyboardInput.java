@@ -21,8 +21,8 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
@@ -42,9 +42,9 @@ public class MixinKeyboardInput extends Input {
             return slowDown;
         }
 
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_13_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_13_2)) {
             return this.sneaking;
-        } else if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_14_4)) {
+        } else if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_14_4)) {
             return !MinecraftClient.getInstance().player.isSpectator() && (this.sneaking || slowDown);
         }
         return slowDown;

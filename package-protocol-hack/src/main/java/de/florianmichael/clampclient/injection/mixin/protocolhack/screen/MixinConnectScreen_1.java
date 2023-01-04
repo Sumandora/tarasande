@@ -26,7 +26,7 @@ import com.viaversion.viaversion.api.minecraft.ProfileKey;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.clampclient.injection.mixininterface.IPublicKeyData_Protocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionList;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerAddress;
 import net.minecraft.network.encryption.PlayerKeyPair;
@@ -55,7 +55,7 @@ public class MixinConnectScreen_1 {
 
     @Redirect(method = "run", at = @At(value = "INVOKE", target = "Ljava/net/InetSocketAddress;getHostName()Ljava/lang/String;"))
     public String replaceAddress(InetSocketAddress instance) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_17)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_17)) {
             return field_33737.getAddress();
         }
 
@@ -64,7 +64,7 @@ public class MixinConnectScreen_1 {
 
     @Redirect(method = "run", at = @At(value = "INVOKE", target = "Ljava/net/InetSocketAddress;getPort()I"))
     public int replacePort(InetSocketAddress instance) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_17)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_17)) {
             return field_33737.getPort();
         }
 
@@ -73,11 +73,11 @@ public class MixinConnectScreen_1 {
 
     @Inject(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/Packet;)V", ordinal = 1, shift = At.Shift.BEFORE))
     public void setupChatSessions(CallbackInfo ci) {
-        if (VersionList.isOlderTo(ProtocolVersion.v1_19)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThan(VersionListEnum.r1_19)) {
             return; // This disables the chat session emulation for all versions <= 1.18.2
         }
 
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_19_1)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_19_1tor1_19_2)) {
             try {
                 final PlayerKeyPair playerKeyPair = MinecraftClient.getInstance().getProfileKeys().fetchKeyPair().get().orElse(null);
                 if (playerKeyPair != null) {
@@ -85,7 +85,7 @@ public class MixinConnectScreen_1 {
                     if (userConnection != null) {
                         final PlayerPublicKey.PublicKeyData publicKeyData = playerKeyPair.publicKey().data();
                         userConnection.put(new ChatSession1_19_2(userConnection, new ProfileKey(publicKeyData.expiresAt().toEpochMilli(), publicKeyData.key().getEncoded(), publicKeyData.keySignature()), playerKeyPair.privateKey()));
-                        if (VersionList.isEqualTo(ProtocolVersion.v1_19)) {
+                        if (ViaLoadingBase.getTargetVersion() == VersionListEnum.r1_19) {
                             final byte[] legacyKey = ((IPublicKeyData_Protocol) (Object) publicKeyData).protocolhack_get1_19_0Key().array();
                             if (legacyKey != null) {
                                 userConnection.put(new ChatSession1_19_0(userConnection, legacyKey));

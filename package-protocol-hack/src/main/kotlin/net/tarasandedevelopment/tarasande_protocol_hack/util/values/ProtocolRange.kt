@@ -1,19 +1,17 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.util.values
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.compareTo
-import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.getSpecialName
+import de.florianmichael.vialoadingbase.util.VersionListEnum
 
 fun formatRange(vararg version: ProtocolRange) = version.joinToString(", ") { it.toString() }
 
-class ProtocolRange(private val lowerBound: ProtocolVersion?, private val upperBound: ProtocolVersion?) {
+class ProtocolRange(private val lowerBound: VersionListEnum?, private val upperBound: VersionListEnum?) {
 
     init {
         if (lowerBound == null && upperBound == null)
             error("Invalid protocol range")
     }
 
-    operator fun contains(protocolVersion: ProtocolVersion): Boolean {
+    operator fun contains(protocolVersion: VersionListEnum): Boolean {
         if (lowerBound != null && lowerBound < protocolVersion)
             return false
         if (upperBound != null && upperBound > protocolVersion)
@@ -23,10 +21,10 @@ class ProtocolRange(private val lowerBound: ProtocolVersion?, private val upperB
 
     override fun toString(): String {
         return when {
-            lowerBound == null -> upperBound!!.getSpecialName() + "+"
-            upperBound == null -> lowerBound.getSpecialName() + "-"
-            lowerBound == upperBound -> lowerBound.getSpecialName()
-            else -> lowerBound.getSpecialName() + " - " + upperBound.getSpecialName()
+            lowerBound == null -> upperBound!!.getName() + "+"
+            upperBound == null -> lowerBound.getName() + "-"
+            lowerBound == upperBound -> lowerBound.getName()
+            else -> lowerBound.getName() + " - " + upperBound.getName()
         }
     }
 }

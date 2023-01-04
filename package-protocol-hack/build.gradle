@@ -16,13 +16,13 @@ loom {
     accessWidenerPath = file("src/main/resources/tarasande-protocol-hack.accesswidener")
 }
 
-// ViaProtocolHack READ-ME
 var viaLibs = [
         "com.viaversion:viaversion:${project.viaversion_version}",
         "com.viaversion:viabackwards-common:${project.viabackwards_version}",
         "org.yaml:snakeyaml:1.29",
 
-        "com.github.FlorianMichael:ViaLoadingBase:${project.vialoadingbase_version}"
+        "com.github.FlorianMichael:ViaLoadingBase:${project.vialoadingbase_version}",
+        "com.github.RaphiMC:ViaLegacy:${project.vialegacy_version}"
 ]
 
 this.remapJar {

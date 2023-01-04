@@ -1,9 +1,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.vialoadingbase.util.VersionList;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityPose;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.VexEntity;
@@ -22,7 +20,7 @@ public class MixinVexEntity extends HostileEntity {
 
     @Inject(method = "getHeightOffset", at = @At("HEAD"), cancellable = true)
     public void changeHeightOffset(CallbackInfoReturnable<Double> cir) {
-        if (VersionList.isOlderOrEqualTo(ProtocolVersion.v1_19_1)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_19_1tor1_19_2)) {
             cir.setReturnValue(0.0);
         }
     }
