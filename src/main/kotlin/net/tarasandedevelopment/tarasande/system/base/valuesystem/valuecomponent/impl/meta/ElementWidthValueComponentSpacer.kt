@@ -69,5 +69,5 @@ class ElementWidthValueComponentSpacer(value: Value) : ElementWidthValueComponen
     override fun onClose() {
     }
 
-    override fun getHeight() = FontWrapper.fontHeight().toDouble() * (value as ValueSpacer).scale * (lines.size + 0.5)
+    override fun getHeight() = FontWrapper.fontHeight().toDouble() * (value as ValueSpacer).scale * (lines.size)
 }
