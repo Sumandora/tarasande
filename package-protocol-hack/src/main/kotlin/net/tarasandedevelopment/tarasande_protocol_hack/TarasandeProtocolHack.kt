@@ -114,7 +114,7 @@ class TarasandeProtocolHack : NativeProvider {
                         }
                     })
 
-                    add(object : Information("Via Version", VersionListEnum.r1_7_6tor1_7_10.name + " Entity Tracker") {
+                    add(object : Information("Via Version", VersionListEnum.r1_7_6tor1_7_10.getName() + " Entity Tracker") {
                         override fun getMessage(): String? {
                             if (viaConnection!!.has(EntityTracker::class.java)) {
                                 return viaConnection!!.get(EntityTracker::class.java)?.trackedEntities?.size.toString()
@@ -123,7 +123,7 @@ class TarasandeProtocolHack : NativeProvider {
                         }
                     })
 
-                    add(object : Information("Via Version", VersionListEnum.r1_7_6tor1_7_10.name + " Virtual Holograms") {
+                    add(object : Information("Via Version", VersionListEnum.r1_7_6tor1_7_10.getName() + " Virtual Holograms") {
                         override fun getMessage(): String? {
                             if (viaConnection!!.has(EntityTracker::class.java)) {
                                 return viaConnection!!.get(EntityTracker::class.java)?.virtualHolograms?.size.toString()
@@ -132,7 +132,7 @@ class TarasandeProtocolHack : NativeProvider {
                         }
                     })
 
-                    add(object : Information("Via Version", VersionListEnum.r1_5_2.name + " Entity Tracker") {
+                    add(object : Information("Via Version", VersionListEnum.r1_5_2.getName() + " Entity Tracker") {
                         override fun getMessage(): String? {
                             if (viaConnection!!.has(net.raphimc.vialegacy.protocols.release.protocol1_6_1to1_5_2.storage.EntityTracker::class.java)) {
                                 return viaConnection!!.get(net.raphimc.vialegacy.protocols.release.protocol1_6_1to1_5_2.storage.EntityTracker::class.java)?.trackedEntities?.size.toString()
@@ -141,7 +141,7 @@ class TarasandeProtocolHack : NativeProvider {
                         }
                     })
 
-                    add(object : Information("Via Version", VersionListEnum.r1_2_4tor1_2_5.name + " Entity Tracker") {
+                    add(object : Information("Via Version", VersionListEnum.r1_2_4tor1_2_5.getName() + " Entity Tracker") {
                         override fun getMessage(): String? {
                             if (viaConnection!!.has(net.raphimc.vialegacy.protocols.release.protocol1_3_1_2to1_2_4_5.storage.EntityTracker::class.java)) {
                                 return viaConnection!!.get(net.raphimc.vialegacy.protocols.release.protocol1_3_1_2to1_2_4_5.storage.EntityTracker::class.java)?.trackedEntities?.size.toString()
@@ -150,7 +150,7 @@ class TarasandeProtocolHack : NativeProvider {
                         }
                     })
 
-                    add(object : Information("Via Version", VersionListEnum.r1_1.name + " World Seed") {
+                    add(object : Information("Via Version", VersionListEnum.r1_1.getName() + " World Seed") {
                         override fun getMessage(): String? {
                             if (viaConnection!!.has(SeedStorage::class.java)) {
                                 return viaConnection!!.get(SeedStorage::class.java)?.seed.toString()
