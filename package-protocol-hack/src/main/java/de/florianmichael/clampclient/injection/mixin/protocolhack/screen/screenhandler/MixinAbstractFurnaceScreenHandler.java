@@ -1,7 +1,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.screen.screenhandler;
 
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion;
-import de.florianmichael.viaprotocolhack.util.VersionList;
+import de.florianmichael.vialoadingbase.util.VersionList;
 import net.minecraft.screen.AbstractFurnaceScreenHandler;
 import net.minecraft.screen.PropertyDelegate;
 import org.spongepowered.asm.mixin.Final;

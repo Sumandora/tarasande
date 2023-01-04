@@ -15,9 +15,9 @@ import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
 import de.florianmichael.vialegacy.protocols.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider.EncryptionProvider
 import de.florianmichael.vialegacy.protocols.protocol1_7_0_1_preto1_6_4.provider.UUIDProvider
-import de.florianmichael.viaprotocolhack.NativeProvider
-import de.florianmichael.viaprotocolhack.ViaProtocolHack
-import de.florianmichael.viaprotocolhack.util.VersionList
+import de.florianmichael.vialoadingbase.NativeProvider
+import de.florianmichael.vialoadingbase.ViaLoadingBase
+import de.florianmichael.vialoadingbase.util.VersionList
 import io.netty.channel.DefaultEventLoop
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.SharedConstants
@@ -71,13 +71,11 @@ class TarasandeProtocolHack : NativeProvider {
     }
 
     fun initialize() {
-        ViaProtocolHack.instance().init(this) {
-            Via.getManager().addEnableListener {
-                ViaProtocolHack.loadSubPlatform("ViaLegacy") {
-                    val isLegacyLoaded = ViaProtocolHack.hasClass("de.florianmichael.vialegacy.api.ViaLegacyPlatform")
-                    if (isLegacyLoaded) ViaLegacyPlatformImpl()
-                    return@loadSubPlatform isLegacyLoaded
-                }
+        ViaLoadingBase.instance().init(this) {
+            ViaLoadingBase.loadSubPlatform("ViaLegacy") {
+                val isLegacyLoaded = ViaLoadingBase.hasClass("de.florianmichael.vialegacy.api.ViaLegacyPlatform")
+                if (isLegacyLoaded) ViaLegacyPlatformImpl()
+                return@loadSubPlatform isLegacyLoaded
             }
         }
         PackFormats.checkOutdated(nativeVersion())
@@ -92,7 +90,7 @@ class TarasandeProtocolHack : NativeProvider {
                         init {
                             EventDispatcher.apply {
                                 add(EventConnectServer::class.java) {
-                                    version = VersionList.PROTOCOLS.firstOrNull { it.version == ViaProtocolHack.instance().provider().clientsideVersion } ?: ProtocolVersion.unknown
+                                    version = VersionList.PROTOCOLS.firstOrNull { it.version == ViaLoadingBase.instance().provider().clientsideVersion } ?: ProtocolVersion.unknown
                                 }
                                 add(EventDisconnect::class.java) { event ->
                                     if(event.connection == MinecraftClient.getInstance().networkHandler?.connection)

@@ -22,7 +22,7 @@ var viaLibs = [
         "com.viaversion:viabackwards-common:${project.viabackwards_version}",
         "org.yaml:snakeyaml:1.29",
 
-        "com.github.RejectedVia:ViaProtocolHack:${project.viaprotocolhack_version}"
+        "com.github.FlorianMichael:ViaLoadingBase:${project.vialoadingbase_version}"
 ]
 
 this.remapJar {

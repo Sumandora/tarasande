@@ -22,7 +22,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.viaprotocolhack.util.VersionList;
+import de.florianmichael.vialoadingbase.util.VersionList;
 import net.minecraft.entity.passive.WolfEntity;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.WolfHealthTracker1_14_4;
 import org.spongepowered.asm.mixin.Mixin;

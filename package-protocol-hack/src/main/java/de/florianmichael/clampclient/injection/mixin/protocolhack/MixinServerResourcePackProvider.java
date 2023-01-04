@@ -25,7 +25,7 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.viaprotocolhack.util.VersionList;
+import de.florianmichael.vialoadingbase.util.VersionList;
 import net.minecraft.GameVersion;
 import net.minecraft.client.resource.ServerResourcePackProvider;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.PackFormats;

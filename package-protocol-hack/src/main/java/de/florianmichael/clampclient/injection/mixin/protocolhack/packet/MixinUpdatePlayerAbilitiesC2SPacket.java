@@ -35,7 +35,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.packet;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.viaprotocolhack.util.VersionList;
+import de.florianmichael.vialoadingbase.util.VersionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.network.PacketByteBuf;

@@ -19,7 +19,7 @@ loom {
 var viaLibs = [
         "com.viaversion:viaversion:${project.viaversion_version}",
 
-        "com.github.RejectedVia:ViaProtocolHack:${project.viaprotocolhack_version}"
+        "com.github.FlorianMichael:ViaLoadingBase:${project.vialoadingbase_version}"
 ]
 
 dependencies {

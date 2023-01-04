@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.fix.global
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import de.florianmichael.viaprotocolhack.ViaProtocolHack
+import de.florianmichael.vialoadingbase.ViaLoadingBase
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
 import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.andOlder
@@ -20,7 +20,7 @@ object EntityDimensionReplacement {
         localReplacements.clear()
         replacements.forEach {
             for (entityDimensionsProtocolRangePair in it.value) {
-                if (ProtocolVersion.getProtocol(ViaProtocolHack.instance().provider().clientsideVersion) in entityDimensionsProtocolRangePair.second) {
+                if (ProtocolVersion.getProtocol(ViaLoadingBase.instance().provider().clientsideVersion) in entityDimensionsProtocolRangePair.second) {
                     localReplacements[it.key] = entityDimensionsProtocolRangePair.first
                 }
             }

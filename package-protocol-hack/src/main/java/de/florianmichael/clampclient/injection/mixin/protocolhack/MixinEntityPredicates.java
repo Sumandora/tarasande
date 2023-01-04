@@ -22,7 +22,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.viaprotocolhack.util.VersionList;
+import de.florianmichael.vialoadingbase.util.VersionList;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import org.spongepowered.asm.mixin.Mixin;

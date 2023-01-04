@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande_protocol_hack.fix.global
 import com.mojang.bridge.game.PackType
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.vialegacy.protocol.LegacyProtocolVersion
-import de.florianmichael.viaprotocolhack.ViaProtocolHack
+import de.florianmichael.vialoadingbase.ViaLoadingBase
 import net.minecraft.GameVersion
 import net.minecraft.SharedConstants
 import net.tarasandedevelopment.tarasande_protocol_hack.util.ExceptionOutdatedRegistry
@@ -56,7 +56,7 @@ object PackFormats {
             throw ExceptionOutdatedRegistry("The current version has no pack format registered")
     }
 
-    fun current(): GameVersion = map[ViaProtocolHack.instance().provider().clientsideVersion] ?: SharedConstants.getGameVersion()
+    fun current(): GameVersion = map[ViaLoadingBase.instance().provider().clientsideVersion] ?: SharedConstants.getGameVersion()
 
     private fun registerVersion(version: ProtocolVersion, packFormat: Int, name: String = version.name, id: String = name) {
         map[version.version] = object : GameVersion {

@@ -24,15 +24,11 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.screen;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.ProfileKey;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.IPublicKeyData_Protocol;
-import de.florianmichael.viaprotocolhack.ViaProtocolHack;
-import de.florianmichael.viaprotocolhack.util.VersionList;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionList;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ConnectScreen;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ServerAddress;
-import net.minecraft.network.ClientConnection;
 import net.minecraft.network.encryption.PlayerKeyPair;
 import net.minecraft.network.encryption.PlayerPublicKey;
 import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack;
@@ -94,17 +90,17 @@ public class MixinConnectScreen_1 {
                             if (legacyKey != null) {
                                 userConnection.put(new ChatSession1_19_0(userConnection, legacyKey));
                             } else {
-                                ViaProtocolHack.instance().logger().log(Level.WARNING, "Mojang removed the legacy key");
+                                ViaLoadingBase.instance().logger().log(Level.WARNING, "Mojang removed the legacy key");
                             }
                         }
                     } else {
-                        ViaProtocolHack.instance().logger().log(Level.WARNING, "ViaVersion userConnection is null");
+                        ViaLoadingBase.instance().logger().log(Level.WARNING, "ViaVersion userConnection is null");
                     }
                 } else {
-                    ViaProtocolHack.instance().logger().log(Level.WARNING, "Failed to fetch the key pair");
+                    ViaLoadingBase.instance().logger().log(Level.WARNING, "Failed to fetch the key pair");
                 }
             } catch (InterruptedException | ExecutionException e) {
-                ViaProtocolHack.instance().logger().log(Level.WARNING, "Failed to fetch the key pair");
+                ViaLoadingBase.instance().logger().log(Level.WARNING, "Failed to fetch the key pair");
             }
         }
     }

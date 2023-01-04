@@ -22,7 +22,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.viaprotocolhack.util.VersionList;
+import de.florianmichael.vialoadingbase.util.VersionList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoulSandBlock;

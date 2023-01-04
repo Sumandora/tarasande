@@ -37,7 +37,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.item;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import de.florianmichael.viaprotocolhack.util.VersionList;
+import de.florianmichael.vialoadingbase.util.VersionList;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;

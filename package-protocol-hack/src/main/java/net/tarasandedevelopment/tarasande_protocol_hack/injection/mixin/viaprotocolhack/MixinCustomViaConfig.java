@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin.viaprotocolhack;
 
 import com.viaversion.viaversion.configuration.AbstractViaConfig;
-import de.florianmichael.viaprotocolhack.platform.viaversion.CustomViaConfig;
+import de.florianmichael.vialoadingbase.platform.viaversion.CustomViaConfig;
 import org.spongepowered.asm.mixin.Mixin;
 
 import java.io.File;

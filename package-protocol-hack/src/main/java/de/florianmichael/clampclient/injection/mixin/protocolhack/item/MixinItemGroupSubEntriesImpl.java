@@ -1,6 +1,6 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.item;
 
-import de.florianmichael.viaprotocolhack.util.VersionList;
+import de.florianmichael.vialoadingbase.util.VersionList;
 import net.minecraft.item.Item;
 import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.tarasandedevelopment.tarasande_protocol_hack.util.inventory.ItemSplitter;
