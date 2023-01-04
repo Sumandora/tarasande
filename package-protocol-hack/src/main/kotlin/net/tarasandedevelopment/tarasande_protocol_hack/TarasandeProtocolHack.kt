@@ -20,6 +20,8 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.GameMenuScreen
+import net.raphimc.vialegacy.protocols.classic.protocola1_0_15toc0_28_30.providers.ClassicWorldHeightProvider
+import net.raphimc.vialegacy.protocols.release.protocol1_3_1_2to1_2_4_5.providers.OldAuthProvider
 import net.raphimc.vialegacy.protocols.release.protocol1_7_2_5to1_6_4.providers.EncryptionProvider
 import net.raphimc.vialegacy.protocols.release.protocol1_8to1_7_6_10.providers.GameProfileFetcher
 import net.tarasandedevelopment.tarasande.TarasandeMain
@@ -43,8 +45,10 @@ import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.PackFormats
 import net.tarasandedevelopment.tarasande_protocol_hack.module.ModuleEveryItemOnArmor
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ViaLegacyPlatformImpl
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.clamp.FabricCommandArgumentsProvider
+import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricClassicWorldHeightProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricEncryptionProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricGameProfileFetcher
+import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.FabricOldAuthProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricVersionProvider
@@ -225,6 +229,8 @@ class TarasandeProtocolHack : NativeProvider {
         // Via Legacy
         providers?.use(GameProfileFetcher::class.java, FabricGameProfileFetcher())
         providers?.use(EncryptionProvider::class.java, FabricEncryptionProvider())
+        providers?.use(ClassicWorldHeightProvider::class.java, FabricClassicWorldHeightProvider())
+        providers?.use(OldAuthProvider::class.java, FabricOldAuthProvider())
 
         // Via Version
         providers?.use(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
