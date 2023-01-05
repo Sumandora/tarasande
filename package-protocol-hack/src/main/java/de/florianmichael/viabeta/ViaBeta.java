@@ -73,11 +73,11 @@ public class ViaBeta {
         return null;
     }
 
-    public static String getLevelLoading_C_0_30(final UserConnection connection) {
+    public static String getWorldLoading_C_0_30(final UserConnection connection) {
         final ClassicProgressStorage classicProgressStorage = connection.get(ClassicProgressStorage.class);
         if (classicProgressStorage == null) return null;
 
-        return classicProgressStorage.status + " (" + classicProgressStorage.progress + "%)";
+        return "§c[ViaBeta]§f " + classicProgressStorage.status + " (" + classicProgressStorage.progress + "%)";
     }
 
     public static ViaBetaPlatform getPlatform() {

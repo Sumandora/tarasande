@@ -526,7 +526,7 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
 
     private void sendChatMessage(final UserConnection user, final String msg) throws Exception {
         final PacketWrapper message = PacketWrapper.create(ClientboundPacketsa1_0_15.CHAT_MESSAGE, user);
-        message.write(Typeb1_7_0_3.STRING, msg); // message
+        message.write(Typeb1_7_0_3.STRING, "§c[ViaBeta] " + msg); // message
         message.send(Protocola1_0_15toc0_30.class);
     }
 

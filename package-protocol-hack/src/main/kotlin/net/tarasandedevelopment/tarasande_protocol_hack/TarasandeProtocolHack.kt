@@ -13,13 +13,10 @@ import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_
 import de.florianmichael.viabeta.ViaBeta
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicMPPassProvider
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicWorldHeightProvider
-import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.storage.SeedStorage
+import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.storage.ExtMessageTypesStorage
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider
-import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.storage.EntityTracker_1_2_4_5
-import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.storage.EntityTracker_1_5_2
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.provider.EncryptionProvider
 import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.provider.GameProfileFetcher
-import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.storage.EntityTracker_1_7_6_10
 import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider
 import de.florianmichael.vialoadingbase.NativeProvider
 import de.florianmichael.vialoadingbase.ViaLoadingBase
@@ -116,29 +113,36 @@ class TarasandeProtocolHack : NativeProvider {
                         override fun getMessage() = version?.name
                     })
 
-                    val viaVersionOwner = "Via Version"
-
-                    add(object : Information(viaVersionOwner, "Via Pipeline") {
+                    add(object : Information("Via Version", "Via Pipeline") {
                         override fun getMessage(): String? {
                             val names = (MinecraftClient.getInstance().networkHandler?.connection as? IClientConnection_Protocol)?.protocolhack_getViaConnection()?.protocolInfo?.pipeline?.pipes()?.map { p -> p.javaClass.simpleName } ?: return null
                             if (names.isEmpty()) return null
                             return "\n" + names.subList(0, names.size - 1).joinToString("\n")
                         }
                     })
-                    add(object : Information(viaVersionOwner, VersionListEnum.r1_7_6tor1_7_10.getName() + " Entity Tracker") {
+                    add(object : Information("Via Beta", VersionListEnum.r1_7_6tor1_7_10.getName() + " Entity Tracker") {
                         override fun getMessage() = ViaBeta.getTrackedEntities1_7_6_10(viaConnection)
                     })
-                    add(object : Information(viaVersionOwner, VersionListEnum.r1_7_6tor1_7_10.getName() + " Virtual Holograms") {
+                    add(object : Information("Via Beta", VersionListEnum.r1_7_6tor1_7_10.getName() + " Virtual Holograms") {
                         override fun getMessage() = ViaBeta.getVirtualHolograms1_7_6_10(viaConnection)
                     })
-                    add(object : Information(viaVersionOwner, VersionListEnum.r1_5_2.getName() + " Entity Tracker") {
+                    add(object : Information("Via Beta", VersionListEnum.r1_5_2.getName() + " Entity Tracker") {
                         override fun getMessage() = ViaBeta.getTrackedEntities1_5_2(viaConnection)
                     })
-                    add(object : Information(viaVersionOwner, VersionListEnum.r1_2_4tor1_2_5.getName() + " Entity Tracker") {
+                    add(object : Information("Via Beta", VersionListEnum.r1_2_4tor1_2_5.getName() + " Entity Tracker") {
                         override fun getMessage() = ViaBeta.getTrackedEntities1_2_4_5(viaConnection)
                     })
-                    add(object : Information(viaVersionOwner, VersionListEnum.r1_1.getName() + " World Seed") {
+                    add(object : Information("Via Beta", VersionListEnum.r1_1.getName() + " World Seed") {
                         override fun getMessage() = ViaBeta.getWorldSeed1_1(viaConnection)
+                    })
+                    add(object : Information("Via Beta", VersionListEnum.c0_30cpe.getName() + " Message Types Extension") {
+                        override fun getMessage(): String? {
+                            if (viaConnection == null) return null
+                            val messageTypeStorage = viaConnection!!.get(ExtMessageTypesStorage::class.java) ?: return null
+                            val list = messageTypeStorage.asDisplayList
+                            if (list.isEmpty()) return null
+                            return list.joinToString("\n")
+                        }
                     })
                 }
 
@@ -202,7 +206,7 @@ class TarasandeProtocolHack : NativeProvider {
 
             add(EventScreenRender::class.java) {
                 if (viaConnection != null && (it.screen is DownloadingTerrainScreen || it.screen is ConnectScreen)) {
-                    val levelProgress = ViaBeta.getLevelLoading_C_0_30(viaConnection)
+                    val levelProgress = ViaBeta.getWorldLoading_C_0_30(viaConnection)
                     if (levelProgress != null) {
                         FontWrapper.text(it.matrices, levelProgress, (it.screen.width / 2).toFloat(), (it.screen.height / 2 - 30).toFloat(), centered = true)
                     }

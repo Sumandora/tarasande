@@ -119,6 +119,16 @@ public enum ClientboundPacketsc0_30cpe implements ClientboundPacketType, PreNett
     EXT_TWO_WAY_PING(43, (user, buf) -> {
         buf.readByte();
         buf.readShort();
+    }),
+    EXT_WEATHER_TYPE(31, (user, buf) -> {
+        buf.readByte();
+    }),
+    EXT_SET_SPAWN_POINT(46, (user, buf) -> {
+        buf.readShort();
+        buf.readShort();
+        buf.readShort();
+        buf.readByte();
+        buf.readByte();
     });
 
     private static final ClientboundPacketsc0_30cpe[] REGISTRY = new ClientboundPacketsc0_30cpe[256];

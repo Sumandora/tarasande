@@ -12,6 +12,8 @@ import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.api.type.types.CustomByteType;
+import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
+import com.viaversion.viaversion.protocols.protocol1_9to1_8.Protocol1_9To1_8;
 import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.api.data.BlockList1_6;
 import de.florianmichael.viabeta.api.model.ChunkCoord;
@@ -25,12 +27,14 @@ import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.data
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.model.ClassicLevel;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.ClassicBlockRemapper;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.ClassicLevelStorage;
+import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.ClassicPositionTracker;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.ClassicProgressStorage;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.type.Typec0_30;
 import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.data.ClassicProtocolExtension;
 import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.data.ExtendedClassicBlocks;
 import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.storage.ExtBlockPermissionsStorage;
 import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.storage.ExtHackControlStorage;
+import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.storage.ExtMessageTypesStorage;
 import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.storage.ExtensionProtocolMetadataStorage;
 import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.task.ClassicPingTask;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.type.Type1_1;
@@ -123,6 +127,9 @@ public class Protocolc0_30toc0_30cpe extends AbstractProtocol<ClientboundPackets
                         }
                         if (supportedExtensions.contains(ClassicProtocolExtension.BLOCK_PERMISSIONS)) {
                             wrapper.user().put(new ExtBlockPermissionsStorage(wrapper.user()));
+                        }
+                        if (supportedExtensions.contains(ClassicProtocolExtension.MESSAGE_TYPES)) {
+                            wrapper.user().put(new ExtMessageTypesStorage(wrapper.user()));
                         }
 
                         final PacketWrapper extensionProtocolInfo = PacketWrapper.create(ServerboundPacketsc0_30cpe.EXTENSION_PROTOCOL_INFO, wrapper.user());
@@ -267,6 +274,44 @@ public class Protocolc0_30toc0_30cpe extends AbstractProtocol<ClientboundPackets
                 });
             }
         });
+        this.registerClientbound(ClientboundPacketsc0_30cpe.EXT_WEATHER_TYPE, null, new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                handler(wrapper -> {
+                    wrapper.cancel();
+                    final byte weatherType = wrapper.read(Type.BYTE);
+
+                    switch (weatherType) {
+                        // sunny
+                        case 0 -> changeGameState(wrapper.user(), 2, 0/*unused*/); // stop raining
+                        // raining
+                        case 1 -> {
+                            changeGameState(wrapper.user(), 1, 0/*unused*/); // start raining
+                            changeGameState(wrapper.user(), 7, 0); // set rain type to rain
+                        }
+                        // snowing
+                        case 2 -> {
+                            changeGameState(wrapper.user(), 1, 0/*unused*/); // start raining
+                            changeGameState(wrapper.user(), 7, 1); // set rain type to snow
+                        }
+                    }
+                });
+            }
+        });
+        this.registerClientbound(ClientboundPacketsc0_30cpe.EXT_SET_SPAWN_POINT, null, new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                handler(wrapper -> {
+                    final short spawnX = wrapper.read(Type.SHORT);
+                    final short spawnY = wrapper.read(Type.SHORT);
+                    final short spawnZ = wrapper.read(Type.SHORT);
+                    final byte spawnYaw = wrapper.read(Type.BYTE);
+                    final byte spawnPitch = wrapper.read(Type.BYTE);
+                    wrapper.cancel();
+                    sendChatMessage(wrapper.user(), "§aNew spawn point: &ax&6" + spawnX + " &ay&6" + spawnY + " &az&6" + spawnZ + " &ayaw&6" + spawnYaw + " &apitch&6" + spawnPitch);
+                });
+            }
+        });
 
         this.registerServerbound(State.LOGIN, ServerboundPacketsc0_30cpe.LOGIN.getId(), ServerboundPacketsc0_28.LOGIN.getId(), new PacketRemapper() {
             @Override
@@ -287,6 +332,26 @@ public class Protocolc0_30toc0_30cpe extends AbstractProtocol<ClientboundPackets
                 map(Typec0_30.STRING); // message
                 handler(wrapper -> {
                     final ExtensionProtocolMetadataStorage protocolMetadata = wrapper.user().get(ExtensionProtocolMetadataStorage.class);
+                    if (protocolMetadata.hasServerExtension(ClassicProtocolExtension.MESSAGE_TYPES)) {
+                        // When this extension is mutually supported, the PlayerID field of the standard server-to-client Message packet should be treated as a MessageType code
+                        final byte messageType = wrapper.get(Type.BYTE, 0);
+                        if (messageType == 0) return;
+                        final String message = wrapper.get(Typec0_30.STRING, 0);
+                        final ExtMessageTypesStorage messageTypesStorage = wrapper.user().get(ExtMessageTypesStorage.class);
+
+                        switch (messageType) {
+                            case 1 -> messageTypesStorage.status1 = message;
+                            case 2 -> messageTypesStorage.status2 = message;
+                            case 3 -> messageTypesStorage.status3 = message;
+
+                            case 11 -> messageTypesStorage.bottomRight1 = message;
+                            case 12 -> messageTypesStorage.bottomRight2 = message;
+                            case 13 -> messageTypesStorage.bottomRight3 = message;
+
+                            case 100 -> messageTypesStorage.announcement = message;
+                        }
+                    }
+
                     if (!protocolMetadata.hasServerExtension(ClassicProtocolExtension.LONGER_MESSAGES, 1)) return;
                     wrapper.cancel();
 
@@ -324,10 +389,7 @@ public class Protocolc0_30toc0_30cpe extends AbstractProtocol<ClientboundPackets
 
                     if (disallow) {
                         wrapper.cancel();
-                        final PacketWrapper chatMessage = PacketWrapper.create(ClientboundPacketsc0_30cpe.CHAT_MESSAGE, wrapper.user());
-                        chatMessage.write(Type.BYTE, (byte) 0); // sender id
-                        chatMessage.write(Typec0_30.STRING, "&cYou are not allowed to place/break this block"); // message
-                        chatMessage.send(Protocolc0_30toc0_30cpe.class);
+                        sendChatMessage(wrapper.user(), "&cYou are not allowed to place/break this block");
                     } else {
                         block = placeBlock ? blockId : ClassicBlocks.AIR;
                         level.setBlock(position, block);
@@ -340,6 +402,21 @@ public class Protocolc0_30toc0_30cpe extends AbstractProtocol<ClientboundPackets
                 });
             }
         });
+    }
+
+    private void sendChatMessage(final UserConnection user, final String msg) throws Exception {
+        final PacketWrapper chatMessage = PacketWrapper.create(ClientboundPacketsc0_30cpe.CHAT_MESSAGE, user);
+        chatMessage.write(Type.BYTE, (byte) 0); // sender id
+        chatMessage.write(Typec0_30.STRING, "&c[ViaBeta] " + msg); // message
+        chatMessage.send(Protocolc0_30toc0_30cpe.class);
+    }
+
+    private void changeGameState(final UserConnection user, final int state, final float value) throws Exception {
+        final PacketWrapper gameStateChange = PacketWrapper.create(ClientboundPackets1_8.GAME_EVENT, user);
+        gameStateChange.write(Type.BYTE, (byte) state);
+        gameStateChange.write(Type.FLOAT, value);
+
+        gameStateChange.send(Protocol1_9To1_8.class);
     }
 
     @Override
