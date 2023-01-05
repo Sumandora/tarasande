@@ -9,6 +9,7 @@ import de.florianmichael.viacursed.protocol.protocol1_14to3D_Shareware.Protocol1
 import de.florianmichael.viacursed.protocol.protocol1_16_2toCombatTest8c.Protocol1_16_2toCombatTest8c;
 import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.Protocol1_16to20w14infinite;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public interface ViaCursedPlatform {
@@ -16,6 +17,7 @@ public interface ViaCursedPlatform {
     default void init() {
         ViaCursed.init(this);
         Via.getManager().getSubPlatforms().add("ViaCursed-FlorianMichael");
+        getLogger().log(Level.SEVERE, "no good? no, this man is definitely up to evil.");
 
         Via.getManager().getProtocolManager().registerProtocol(new Protocol1_14to3D_Shareware(), ProtocolVersion.v1_14, CursedProtocols.s3d_shareware);
         Via.getManager().getProtocolManager().registerProtocol(new Protocol1_16to20w14infinite(), ProtocolVersion.v1_16, CursedProtocols.s20w14infinite);

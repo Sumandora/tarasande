@@ -59,10 +59,11 @@ public class MixinClientConnectionSubOne {
             ((IClientConnection_Protocol) field_11663).protocolhack_setViaConnection(user);
             new ProtocolPipelineImpl(user);
 
-            channel.pipeline()
-                    .addBefore("encoder", NettyConstants.HANDLER_ENCODER_NAME, new CustomViaEncodeHandler(user))
-                    .addBefore("decoder", NettyConstants.HANDLER_DECODER_NAME, new CustomViaDecodeHandler(user));
+            // ViaLoadingBase / ViaVersion (latest - 1.7.0)
+            channel.pipeline().addBefore("encoder", NettyConstants.HANDLER_ENCODER_NAME, new CustomViaEncodeHandler(user));
+            channel.pipeline().addBefore("decoder", NettyConstants.HANDLER_DECODER_NAME, new CustomViaDecodeHandler(user));
 
+            // ViaBeta (1.6.4 - c0.0.15a-1)
             if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_6_4)) {
                 user.getProtocolInfo().getPipeline().add(Protocol1_6_4.INSTANCE);
                 channel.pipeline().addBefore("prepender", PreNettyConstants.ENCODER, new PreNettyPacketEncoder(user));

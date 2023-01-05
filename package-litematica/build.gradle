@@ -13,7 +13,7 @@ repositories {
 
     repositories {
         maven {
-            url "https://cursemaven.com"
+            url = "https://cursemaven.com"
         }
     }
 }

@@ -59,7 +59,7 @@ public interface ViaBetaPlatform {
 
         ViaBeta.init(this, config);
         Via.getManager().getSubPlatforms().add("ViaBeta-FlorianMichael");
-        getLogger().log(Level.SEVERE, "ViaVersion you fool, loading me was a big mistake!");
+        getLogger().log(Level.SEVERE, "ViaVersion, you fool! Loading me was a grave mistake.");
 
         // Pre-Netty
         Via.getManager().getProtocolManager().registerProtocol(new Protocol1_8to1_7_6_10(), ProtocolVersion.v1_8, ProtocolVersion.v1_7_6);
