@@ -1,0 +1,23 @@
+{
+  "items": {
+    "minecraft:red_key": {
+      "id": "minecraft:tripwire_hook",
+      "name": "3D Shareware Red Key"
+    },
+    "minecraft:blue_key": {
+      "id": "minecraft:tripwire_hook",
+      "name": "3D Shareware Blue Key"
+    },
+    "minecraft:yellow_key": {
+      "id": "minecraft:tripwire_hook",
+      "name": "3D Shareware Yellow Key"
+    },
+    "minecraft:3d": {
+      "id": "minecraft:golden_carrot",
+      "name": "3D Shareware 3D"
+    }
+  },
+  "sounds": {
+    "awesome_intro": "entity.dragon_fireball.explode"
+  }
+}

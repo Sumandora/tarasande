@@ -10,10 +10,10 @@ import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.IntTag
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.ListTag
 import com.viaversion.viaversion.protocols.protocol1_17to1_16_4.types.Chunk1_17Type
+import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicWorldHeightProvider
+import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.ClassicLevelStorage
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.util.VersionListEnum
-import net.raphimc.vialegacy.protocols.classic.protocola1_0_15toc0_28_30.providers.ClassicWorldHeightProvider
-import net.raphimc.vialegacy.protocols.classic.protocola1_0_15toc0_28_30.storage.ClassicLevelStorage
 import java.util.*
 
 object WorldHeightInjection_C_0_30 {

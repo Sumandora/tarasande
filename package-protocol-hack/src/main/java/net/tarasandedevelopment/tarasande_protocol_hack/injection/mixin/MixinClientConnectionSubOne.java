@@ -25,6 +25,10 @@ import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
+import de.florianmichael.viabeta.pre_netty.PreNettyConstants;
+import de.florianmichael.viabeta.pre_netty.handler.PreNettyPacketDecoder;
+import de.florianmichael.viabeta.pre_netty.handler.PreNettyPacketEncoder;
+import de.florianmichael.viabeta.protocol.protocol1_6_4.Protocol1_6_4;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.netty.CustomViaDecodeHandler;
 import de.florianmichael.vialoadingbase.netty.CustomViaEncodeHandler;
@@ -33,9 +37,6 @@ import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import net.minecraft.network.ClientConnection;
-import net.raphimc.vialegacy.netty.PreNettyDecoder;
-import net.raphimc.vialegacy.netty.PreNettyEncoder;
-import net.raphimc.vialegacy.protocols.release.protocol1_7_2_5to1_6_4.baseprotocols.PreNettyBaseProtocol;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -63,9 +64,9 @@ public class MixinClientConnectionSubOne {
                     .addBefore("decoder", NettyConstants.HANDLER_DECODER_NAME, new CustomViaDecodeHandler(user));
 
             if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_6_4)) {
-                user.getProtocolInfo().getPipeline().add(PreNettyBaseProtocol.INSTANCE);
-                channel.pipeline().addBefore("prepender", "via-pre_netty-encoder", new PreNettyEncoder(user));
-                channel.pipeline().addBefore("splitter", "via-pre_netty-decoder", new PreNettyDecoder(user));
+                user.getProtocolInfo().getPipeline().add(Protocol1_6_4.INSTANCE);
+                channel.pipeline().addBefore("prepender", PreNettyConstants.ENCODER, new PreNettyPacketEncoder(user));
+                channel.pipeline().addBefore("splitter", PreNettyConstants.DECODER, new PreNettyPacketDecoder(user));
             }
         }
     }

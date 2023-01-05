@@ -23,6 +23,7 @@ package net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
+import de.florianmichael.viabeta.pre_netty.PreNettyConstants;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.event.PipelineReorderEvent;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
@@ -79,8 +80,8 @@ public class MixinClientConnection implements IClientConnection_Protocol {
     @Unique
     public void vialegacy_setupPreNettyEncryption() {
         this.encrypted = true;
-        this.channel.pipeline().addBefore("via-pre_netty-decoder", "decrypt", new PacketDecryptor(this.vialegacy_decryptionCipher));
-        this.channel.pipeline().addBefore("via-pre_netty-encoder", "encrypt", new PacketEncryptor(this.vialegacy_encryptionCipher));
+        this.channel.pipeline().addBefore(PreNettyConstants.DECODER, "decrypt", new PacketDecryptor(this.vialegacy_decryptionCipher));
+        this.channel.pipeline().addBefore(PreNettyConstants.ENCODER, "encrypt", new PacketEncryptor(this.vialegacy_encryptionCipher));
     }
 
 

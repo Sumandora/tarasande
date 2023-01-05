@@ -1,17 +1,24 @@
 package net.tarasandedevelopment.tarasande_protocol_hack
 
 import com.viaversion.viaversion.ViaManagerImpl
-import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.connection.UserConnection
 import com.viaversion.viaversion.api.platform.providers.ViaProviders
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import com.viaversion.viaversion.api.protocol.version.VersionProvider
 import com.viaversion.viaversion.libs.gson.JsonArray
 import com.viaversion.viaversion.libs.gson.JsonObject
-import com.viaversion.viaversion.protocol.ProtocolManagerImpl
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
+import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicMPPassProvider
+import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicWorldHeightProvider
+import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.storage.SeedStorage
+import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider
+import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.storage.EntityTracker_1_2_4_5
+import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.storage.EntityTracker_1_5_2
+import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.provider.EncryptionProvider
+import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.provider.GameProfileFetcher
+import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.storage.EntityTracker_1_7_6_10
 import de.florianmichael.vialoadingbase.NativeProvider
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.util.VersionListEnum
@@ -20,14 +27,6 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.GameMenuScreen
-import net.raphimc.vialegacy.protocols.classic.protocola1_0_15toc0_28_30.providers.ClassicMPPassProvider
-import net.raphimc.vialegacy.protocols.classic.protocola1_0_15toc0_28_30.providers.ClassicWorldHeightProvider
-import net.raphimc.vialegacy.protocols.release.protocol1_2_1_3to1_1.storage.SeedStorage
-import net.raphimc.vialegacy.protocols.release.protocol1_3_1_2to1_2_4_5.providers.OldAuthProvider
-import net.raphimc.vialegacy.protocols.release.protocol1_7_2_5to1_6_4.providers.EncryptionProvider
-import net.raphimc.vialegacy.protocols.release.protocol1_8to1_7_6_10.providers.GameProfileFetcher
-import net.raphimc.vialegacy.protocols.release.protocol1_8to1_7_6_10.storage.ChunkTracker
-import net.raphimc.vialegacy.protocols.release.protocol1_8to1_7_6_10.storage.EntityTracker
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
@@ -47,9 +46,10 @@ import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.EntityDimensionReplacement
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.PackFormats
 import net.tarasandedevelopment.tarasande_protocol_hack.module.ModuleEveryItemOnArmor
-import net.tarasandedevelopment.tarasande_protocol_hack.platform.ViaLegacyPlatformImpl
+import net.tarasandedevelopment.tarasande_protocol_hack.platform.ViaBetaPlatformImpl
+import net.tarasandedevelopment.tarasande_protocol_hack.platform.ViaCursedPlatformImpl
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.clamp.FabricCommandArgumentsProvider
-import net.tarasandedevelopment.tarasande_protocol_hack.provider.vialegacy.*
+import net.tarasandedevelopment.tarasande_protocol_hack.provider.viabeta.*
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricVersionProvider
@@ -74,10 +74,15 @@ class TarasandeProtocolHack : NativeProvider {
 
     fun initialize() {
         ViaLoadingBase.instance().init(this) {
-            ViaLoadingBase.loadSubPlatform("ViaLegacy") {
-                val isLegacyLoaded = ViaLoadingBase.hasClass("net.raphimc.vialegacy.platform.ViaLegacyPlatform")
-                if (isLegacyLoaded) ViaLegacyPlatformImpl()
-                return@loadSubPlatform isLegacyLoaded
+            ViaLoadingBase.loadSubPlatform("ViaBeta") {
+                val isBetaLoaded = ViaLoadingBase.hasClass("de.florianmichael.viabeta.base.ViaBetaPlatform")
+                if (isBetaLoaded) ViaBetaPlatformImpl()
+                return@loadSubPlatform isBetaLoaded
+            }
+            ViaLoadingBase.loadSubPlatform("ViaCursed") {
+                val isCursedLoaded = ViaLoadingBase.hasClass("de.florianmichael.viacursed.base.ViaCursedPlatform")
+                if (isCursedLoaded) ViaCursedPlatformImpl()
+                return@loadSubPlatform isCursedLoaded
             }
         }
         PackFormats.checkOutdated(nativeVersion().originalVersion)
@@ -114,8 +119,8 @@ class TarasandeProtocolHack : NativeProvider {
 
                     add(object : Information("Via Version", VersionListEnum.r1_7_6tor1_7_10.getName() + " Entity Tracker") {
                         override fun getMessage(): String? {
-                            if (viaConnection!!.has(EntityTracker::class.java)) {
-                                return viaConnection!!.get(EntityTracker::class.java)?.trackedEntities?.size.toString()
+                            if (viaConnection!!.has(EntityTracker_1_7_6_10::class.java)) {
+                                return viaConnection!!.get(EntityTracker_1_7_6_10::class.java)?.trackedEntities?.size.toString()
                             }
                             return null
                         }
@@ -123,8 +128,8 @@ class TarasandeProtocolHack : NativeProvider {
 
                     add(object : Information("Via Version", VersionListEnum.r1_7_6tor1_7_10.getName() + " Virtual Holograms") {
                         override fun getMessage(): String? {
-                            if (viaConnection!!.has(EntityTracker::class.java)) {
-                                return viaConnection!!.get(EntityTracker::class.java)?.virtualHolograms?.size.toString()
+                            if (viaConnection!!.has(EntityTracker_1_7_6_10::class.java)) {
+                                return viaConnection!!.get(EntityTracker_1_7_6_10::class.java)?.virtualHolograms?.size.toString()
                             }
                             return null
                         }
@@ -132,8 +137,8 @@ class TarasandeProtocolHack : NativeProvider {
 
                     add(object : Information("Via Version", VersionListEnum.r1_5_2.getName() + " Entity Tracker") {
                         override fun getMessage(): String? {
-                            if (viaConnection!!.has(net.raphimc.vialegacy.protocols.release.protocol1_6_1to1_5_2.storage.EntityTracker::class.java)) {
-                                return viaConnection!!.get(net.raphimc.vialegacy.protocols.release.protocol1_6_1to1_5_2.storage.EntityTracker::class.java)?.trackedEntities?.size.toString()
+                            if (viaConnection!!.has(EntityTracker_1_5_2::class.java)) {
+                                return viaConnection!!.get(EntityTracker_1_5_2::class.java)?.trackedEntities?.size.toString()
                             }
                             return null
                         }
@@ -141,8 +146,8 @@ class TarasandeProtocolHack : NativeProvider {
 
                     add(object : Information("Via Version", VersionListEnum.r1_2_4tor1_2_5.getName() + " Entity Tracker") {
                         override fun getMessage(): String? {
-                            if (viaConnection!!.has(net.raphimc.vialegacy.protocols.release.protocol1_3_1_2to1_2_4_5.storage.EntityTracker::class.java)) {
-                                return viaConnection!!.get(net.raphimc.vialegacy.protocols.release.protocol1_3_1_2to1_2_4_5.storage.EntityTracker::class.java)?.trackedEntities?.size.toString()
+                            if (viaConnection!!.has(EntityTracker_1_2_4_5::class.java)) {
+                                return viaConnection!!.get(EntityTracker_1_2_4_5::class.java)?.trackedEntities?.size.toString()
                             }
                             return null
                         }
@@ -272,7 +277,7 @@ class TarasandeProtocolHack : NativeProvider {
         // Clamp Fixes
         providers?.use(CommandArgumentsProvider::class.java, FabricCommandArgumentsProvider())
 
-        // Via Legacy
+        // Via Beta
         providers?.use(GameProfileFetcher::class.java, FabricGameProfileFetcher())
         providers?.use(EncryptionProvider::class.java, FabricEncryptionProvider())
         providers?.use(ClassicWorldHeightProvider::class.java, FabricClassicWorldHeightProvider())
