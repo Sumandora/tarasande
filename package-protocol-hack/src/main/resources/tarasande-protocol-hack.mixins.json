@@ -10,7 +10,7 @@
     "input.MixinEventDispatcher",
     "input.MixinEventScreenInput",
     "module.MixinPlayerScreenHandler",
-    "viaprotocolhack.MixinCustomViaConfig"
+    "vialoadingbase.MixinCustomViaConfig"
   ],
   "injectors": {
     "defaultRequire": 1

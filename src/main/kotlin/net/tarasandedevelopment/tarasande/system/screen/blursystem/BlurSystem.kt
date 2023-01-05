@@ -39,7 +39,7 @@ class ManagerBlur : Manager<Blur>() {
 
         EventDispatcher.apply {
             add(EventScreenRender::class.java, 1) {
-                if (MinecraftClient.getInstance().currentScreen !is ScreenCheatMenu)
+                if (it.screen !is ScreenCheatMenu)
                     blurScene(shapesBuffer = screenShapesFramebuffer)
             }
             add(EventRender2D::class.java, 1) {

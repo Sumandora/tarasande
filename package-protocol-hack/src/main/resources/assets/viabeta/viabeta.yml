@@ -1,0 +1,28 @@
+#
+# Calculate 1.7.10 OnGround field dynamically. Requires a bit of extra caching
+dynamic-onground: true
+#
+# Ignores incoming plugin channel messages of 1.8+ clients with channel names longer than 16 characters
+# CraftBukkit had this limit hardcoded until 1.8
+ignore-long-1_8-channel-names: true
+#
+# Load <= 1.7.2 player skull skins
+legacy-skull-loading: true
+#
+# Load <= 1.6.4 skins. (Adds max 500ms delay to player spawn packets)
+legacy-skin-loading: false
+#
+# Emulate sounds for <= 1.2.5
+sound-emulation: true
+#
+# Calculate <= 1.1 biomes. Requires a lot of extra calculations
+old-biomes: true
+#
+# Remap <= 1.1 biomes based on color
+remap-based-on-color: true
+#
+# Classic chunk loading range
+classic-chunk-range: 10
+#
+# How many chunks should be sent to the client per movement tick (-1 for auto)
+chunks-per-tick: -1

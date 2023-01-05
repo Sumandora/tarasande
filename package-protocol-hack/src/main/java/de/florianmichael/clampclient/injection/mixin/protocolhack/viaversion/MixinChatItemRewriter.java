@@ -4,7 +4,7 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.minecraft.nbt.BinaryTagIO;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;
 import com.viaversion.viaversion.protocols.protocol1_12to1_11_1.ChatItemRewriter;
-import net.raphimc.vialegacy.util.ViaStringTagReader1_11_2;
+import de.florianmichael.viabeta.api.rewriter.legacy.ViaStringTagReader1_11_2;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

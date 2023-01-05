@@ -36,9 +36,12 @@ public abstract class MixinScreen {
 
     @Inject(method = "render", at = @At("HEAD"))
     public void hookEventScreenRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        final Screen thisScreen = (Screen) (Object) this;
         // Mojang manages to surprise me in so many ways
-        if((Object) this instanceof RealmsNotificationsScreen)
+        if (thisScreen instanceof RealmsNotificationsScreen) {
             return;
-        EventDispatcher.INSTANCE.call(new EventScreenRender());
+        }
+
+        EventDispatcher.INSTANCE.call(new EventScreenRender(matrices, thisScreen));
     }
 }
