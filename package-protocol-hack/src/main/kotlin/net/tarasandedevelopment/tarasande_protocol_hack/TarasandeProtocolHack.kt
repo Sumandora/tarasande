@@ -10,6 +10,7 @@ import com.viaversion.viaversion.libs.gson.JsonObject
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
+import de.florianmichael.viabeta.ViaBeta
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicMPPassProvider
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicWorldHeightProvider
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.storage.SeedStorage
@@ -26,10 +27,13 @@ import io.netty.channel.DefaultEventLoop
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.ConnectScreen
+import net.minecraft.client.gui.screen.DownloadingTerrainScreen
 import net.minecraft.client.gui.screen.GameMenuScreen
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
+import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -41,6 +45,7 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.Sc
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanel
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanelSelection
+import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande_protocol_hack.event.EventSkipIdlePacket
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.CommandArgumentsProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.EntityDimensionReplacement
@@ -109,57 +114,29 @@ class TarasandeProtocolHack : NativeProvider {
                         override fun getMessage() = version?.name
                     })
 
-                    add(object : Information("Via Version", "Via Pipeline") {
+                    val viaVersionOwner = "Via Version"
+
+                    add(object : Information(viaVersionOwner, "Via Pipeline") {
                         override fun getMessage(): String? {
                             val names = (MinecraftClient.getInstance().networkHandler?.connection as? IClientConnection_Protocol)?.protocolhack_getViaConnection()?.protocolInfo?.pipeline?.pipes()?.map { p -> p.javaClass.simpleName } ?: return null
                             if (names.isEmpty()) return null
                             return "\n" + names.subList(0, names.size - 1).joinToString("\n")
                         }
                     })
-
-                    add(object : Information("Via Version", VersionListEnum.r1_7_6tor1_7_10.getName() + " Entity Tracker") {
-                        override fun getMessage(): String? {
-                            if (viaConnection!!.has(EntityTracker_1_7_6_10::class.java)) {
-                                return viaConnection!!.get(EntityTracker_1_7_6_10::class.java)?.trackedEntities?.size.toString()
-                            }
-                            return null
-                        }
+                    add(object : Information(viaVersionOwner, VersionListEnum.r1_7_6tor1_7_10.getName() + " Entity Tracker") {
+                        override fun getMessage() = ViaBeta.getTrackedEntities1_7_6_10(viaConnection)
                     })
-
-                    add(object : Information("Via Version", VersionListEnum.r1_7_6tor1_7_10.getName() + " Virtual Holograms") {
-                        override fun getMessage(): String? {
-                            if (viaConnection!!.has(EntityTracker_1_7_6_10::class.java)) {
-                                return viaConnection!!.get(EntityTracker_1_7_6_10::class.java)?.virtualHolograms?.size.toString()
-                            }
-                            return null
-                        }
+                    add(object : Information(viaVersionOwner, VersionListEnum.r1_7_6tor1_7_10.getName() + " Virtual Holograms") {
+                        override fun getMessage() = ViaBeta.getVirtualHolograms1_7_6_10(viaConnection)
                     })
-
-                    add(object : Information("Via Version", VersionListEnum.r1_5_2.getName() + " Entity Tracker") {
-                        override fun getMessage(): String? {
-                            if (viaConnection!!.has(EntityTracker_1_5_2::class.java)) {
-                                return viaConnection!!.get(EntityTracker_1_5_2::class.java)?.trackedEntities?.size.toString()
-                            }
-                            return null
-                        }
+                    add(object : Information(viaVersionOwner, VersionListEnum.r1_5_2.getName() + " Entity Tracker") {
+                        override fun getMessage() = ViaBeta.getTrackedEntities1_5_2(viaConnection)
                     })
-
-                    add(object : Information("Via Version", VersionListEnum.r1_2_4tor1_2_5.getName() + " Entity Tracker") {
-                        override fun getMessage(): String? {
-                            if (viaConnection!!.has(EntityTracker_1_2_4_5::class.java)) {
-                                return viaConnection!!.get(EntityTracker_1_2_4_5::class.java)?.trackedEntities?.size.toString()
-                            }
-                            return null
-                        }
+                    add(object : Information(viaVersionOwner, VersionListEnum.r1_2_4tor1_2_5.getName() + " Entity Tracker") {
+                        override fun getMessage() = ViaBeta.getTrackedEntities1_2_4_5(viaConnection)
                     })
-
-                    add(object : Information("Via Version", VersionListEnum.r1_1.getName() + " World Seed") {
-                        override fun getMessage(): String? {
-                            if (viaConnection!!.has(SeedStorage::class.java)) {
-                                return viaConnection!!.get(SeedStorage::class.java)?.seed.toString()
-                            }
-                            return null
-                        }
+                    add(object : Information(viaVersionOwner, VersionListEnum.r1_1.getName() + " World Seed") {
+                        override fun getMessage() = ViaBeta.getWorldSeed1_1(viaConnection)
                     })
                 }
 
@@ -219,6 +196,15 @@ class TarasandeProtocolHack : NativeProvider {
 
             add(EventConnectServer::class.java) {
                 viaConnection = (it.connection as IClientConnection_Protocol).protocolhack_getViaConnection()
+            }
+
+            add(EventScreenRender::class.java) {
+                if (viaConnection != null && (it.screen is DownloadingTerrainScreen || it.screen is ConnectScreen)) {
+                    val levelProgress = ViaBeta.getLevelLoading_C_0_30(viaConnection)
+                    if (levelProgress != null) {
+                        FontWrapper.text(it.matrices, levelProgress, (it.screen.width / 2).toFloat(), (it.screen.height / 2 - 30).toFloat(), centered = true)
+                    }
+                }
             }
         }
     }
