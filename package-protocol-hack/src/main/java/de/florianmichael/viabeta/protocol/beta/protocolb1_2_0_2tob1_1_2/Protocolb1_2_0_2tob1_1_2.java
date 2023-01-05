@@ -9,20 +9,20 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
-import de.florianmichael.viabeta.protocol.beta.protocolb1_3_0_1tob1_2_0_2.ClientboundPacketsb1_2;
-import de.florianmichael.viabeta.protocol.beta.protocolb1_3_0_1tob1_2_0_2.ServerboundPacketsb1_2;
 import de.florianmichael.viabeta.api.model.IdAndData;
+import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 import de.florianmichael.viabeta.protocol.beta.protocolb1_2_0_2tob1_1_2.rewriter.BlockDataRewriter;
 import de.florianmichael.viabeta.protocol.beta.protocolb1_2_0_2tob1_1_2.storage.EntityFlagStorage;
 import de.florianmichael.viabeta.protocol.beta.protocolb1_2_0_2tob1_1_2.type.Typeb1_1;
-import de.florianmichael.viabeta.protocol.beta.protocolb1_3_0_1tob1_2_0_2.type.impl.MetaTypeb1_2;
+import de.florianmichael.viabeta.protocol.beta.protocolb1_3_0_1tob1_2_0_2.ClientboundPacketsb1_2;
+import de.florianmichael.viabeta.protocol.beta.protocolb1_3_0_1tob1_2_0_2.ServerboundPacketsb1_2;
 import de.florianmichael.viabeta.protocol.beta.protocolb1_3_0_1tob1_2_0_2.type.Typeb1_2;
-import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.type.impl.Chunk_1_1Type;
+import de.florianmichael.viabeta.protocol.beta.protocolb1_3_0_1tob1_2_0_2.type.impl.MetaTypeb1_2;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.type.Type1_1;
+import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.type.impl.Chunk_1_1Type;
 import de.florianmichael.viabeta.protocol.protocol1_4_2to1_3_1_2.types.Type1_3_1_2;
 import de.florianmichael.viabeta.protocol.protocol1_4_4_5to1_4_2.type.Type1_4_2;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.Type1_7_6_10;
-import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 
 import java.util.ArrayList;
 

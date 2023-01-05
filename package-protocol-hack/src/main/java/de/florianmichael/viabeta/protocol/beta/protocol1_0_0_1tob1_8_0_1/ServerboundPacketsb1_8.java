@@ -2,8 +2,8 @@ package de.florianmichael.viabeta.protocol.beta.protocol1_0_0_1tob1_8_0_1;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
-import io.netty.buffer.ByteBuf;
 import de.florianmichael.viabeta.pre_netty.viaversion.PreNettyPacketType;
+import io.netty.buffer.ByteBuf;
 
 import java.util.function.BiConsumer;
 

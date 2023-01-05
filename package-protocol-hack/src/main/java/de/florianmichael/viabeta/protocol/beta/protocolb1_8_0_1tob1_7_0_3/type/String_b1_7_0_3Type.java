@@ -1,7 +1,9 @@
 package de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.type;
 
 import com.viaversion.viaversion.api.type.Type;
-import io.netty.buffer.*;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
 
 import java.io.IOException;
 

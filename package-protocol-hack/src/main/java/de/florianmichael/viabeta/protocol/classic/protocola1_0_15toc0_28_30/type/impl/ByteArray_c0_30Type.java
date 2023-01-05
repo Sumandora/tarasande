@@ -1,11 +1,11 @@
-package de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.types;
+package de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.type.impl;
 
 import com.viaversion.viaversion.api.type.Type;
 import io.netty.buffer.ByteBuf;
 
-public class ByteArrayType extends Type<byte[]> {
+public class ByteArray_c0_30Type extends Type<byte[]> {
 
-    public ByteArrayType() {
+    public ByteArray_c0_30Type() {
         super(byte[].class);
     }
 

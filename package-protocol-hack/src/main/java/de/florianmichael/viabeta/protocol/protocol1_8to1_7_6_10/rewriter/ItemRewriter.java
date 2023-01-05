@@ -5,10 +5,10 @@ import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.StringTag;
 import de.florianmichael.viabeta.ViaBeta;
-import de.florianmichael.viabeta.api.rewriter.AbstractItemRewriter;
 import de.florianmichael.viabeta.api.data.ItemList1_6;
-import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.provider.GameProfileFetcher;
+import de.florianmichael.viabeta.api.rewriter.AbstractItemRewriter;
 import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.Protocol1_7_6_10to1_7_2_5;
+import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.provider.GameProfileFetcher;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.model.GameProfile;
 
 import java.util.UUID;

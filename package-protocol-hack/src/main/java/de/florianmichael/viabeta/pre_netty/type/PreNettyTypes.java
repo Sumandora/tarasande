@@ -1,7 +1,7 @@
 package de.florianmichael.viabeta.pre_netty.type;
 
-import io.netty.buffer.ByteBuf;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.data.NbtItemList_1_2_5;
+import io.netty.buffer.ByteBuf;
 
 public class PreNettyTypes {
 

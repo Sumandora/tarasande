@@ -1,7 +1,10 @@
 package de.florianmichael.viabeta.api.rewriter;
 
 import com.viaversion.viaversion.api.minecraft.BlockChangeRecord;
-import com.viaversion.viaversion.api.minecraft.chunks.*;
+import com.viaversion.viaversion.api.minecraft.chunks.Chunk;
+import com.viaversion.viaversion.api.minecraft.chunks.ChunkSection;
+import com.viaversion.viaversion.api.minecraft.chunks.DataPalette;
+import com.viaversion.viaversion.api.minecraft.chunks.PaletteType;
 import com.viaversion.viaversion.libs.fastutil.ints.Int2IntMap;
 import com.viaversion.viaversion.libs.fastutil.ints.Int2IntOpenHashMap;
 import de.florianmichael.viabeta.api.model.IdAndData;

@@ -3,13 +3,13 @@ package de.florianmichael.viabeta.pre_netty.handler;
 import com.google.common.collect.EvictingQueue;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.pre_netty.viaversion.PreNettyPacketType;
 import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import de.florianmichael.viabeta.ViaBeta;
 
 import java.util.List;
 

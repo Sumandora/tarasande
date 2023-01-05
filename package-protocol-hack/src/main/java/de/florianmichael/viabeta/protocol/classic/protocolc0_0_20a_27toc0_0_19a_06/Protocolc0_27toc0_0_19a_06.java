@@ -5,13 +5,13 @@ import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.viabeta.api.LegacyVersionEnum;
+import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.ServerboundPacketsc0_28;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.data.ClassicBlocks;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.ClassicBlockRemapper;
-import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.types.Typesc0_30;
+import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.type.Typec0_30;
 import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_0_20a_27.ClientboundPacketsc0_20a;
-import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
-import de.florianmichael.viabeta.api.LegacyVersionEnum;
 
 public class Protocolc0_27toc0_0_19a_06 extends AbstractProtocol<ClientboundPacketsc0_19a, ClientboundPacketsc0_20a, ServerboundPacketsc0_19a, ServerboundPacketsc0_28> {
 
@@ -25,8 +25,8 @@ public class Protocolc0_27toc0_0_19a_06 extends AbstractProtocol<ClientboundPack
             @Override
             public void registerMap() {
                 map(Type.BYTE); // protocol id
-                map(Typesc0_30.STRING); // title
-                map(Typesc0_30.STRING); // motd
+                map(Typec0_30.STRING); // title
+                map(Typec0_30.STRING); // motd
                 create(Type.BYTE, (byte) 0); // op level
             }
         });
@@ -35,8 +35,8 @@ public class Protocolc0_27toc0_0_19a_06 extends AbstractProtocol<ClientboundPack
             @Override
             public void registerMap() {
                 map(Type.BYTE); // protocol id
-                map(Typesc0_30.STRING); // username
-                map(Typesc0_30.STRING); // mp pass
+                map(Typec0_30.STRING); // username
+                map(Typec0_30.STRING); // mp pass
                 read(Type.BYTE); // op level
             }
         });

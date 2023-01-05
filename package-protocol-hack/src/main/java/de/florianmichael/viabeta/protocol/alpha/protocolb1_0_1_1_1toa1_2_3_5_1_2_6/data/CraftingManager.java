@@ -6,7 +6,9 @@ import de.florianmichael.viabeta.api.data.BlockList1_6;
 import de.florianmichael.viabeta.api.data.ItemList1_6;
 import de.florianmichael.viabeta.protocol.alpha.protocolb1_0_1_1_1toa1_2_3_5_1_2_6.model.CraftingRecipe;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class CraftingManager {
 

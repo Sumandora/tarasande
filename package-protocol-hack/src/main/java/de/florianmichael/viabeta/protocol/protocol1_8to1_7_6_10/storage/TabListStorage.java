@@ -10,7 +10,9 @@ import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.Protocol1_8to1_7
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.model.GameProfile;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.model.TabListEntry;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TabListStorage extends StoredObject {
 

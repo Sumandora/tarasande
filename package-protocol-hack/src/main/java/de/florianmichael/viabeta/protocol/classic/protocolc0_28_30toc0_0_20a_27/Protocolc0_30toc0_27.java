@@ -2,12 +2,12 @@ package de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_0_20a_27
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
-import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.ServerboundPacketsc0_28;
+import de.florianmichael.viabeta.api.LegacyVersionEnum;
+import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.ClientboundPacketsc0_28;
+import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.ServerboundPacketsc0_28;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.data.ClassicBlocks;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.ClassicBlockRemapper;
-import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
-import de.florianmichael.viabeta.api.LegacyVersionEnum;
 
 public class Protocolc0_30toc0_27 extends AbstractProtocol<ClientboundPacketsc0_20a, ClientboundPacketsc0_28, ServerboundPacketsc0_28, ServerboundPacketsc0_28> {
 

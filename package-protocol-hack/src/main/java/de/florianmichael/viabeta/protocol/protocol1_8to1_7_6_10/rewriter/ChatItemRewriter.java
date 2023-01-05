@@ -4,12 +4,17 @@ import com.viaversion.viaversion.api.minecraft.item.DataItem;
 import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.minecraft.nbt.BinaryTagIO;
 import com.viaversion.viaversion.libs.fastutil.ints.Int2ObjectOpenHashMap;
-import com.viaversion.viaversion.libs.gson.*;
-import com.viaversion.viaversion.libs.opennbt.tag.builtin.*;
+import com.viaversion.viaversion.libs.gson.JsonArray;
+import com.viaversion.viaversion.libs.gson.JsonElement;
+import com.viaversion.viaversion.libs.gson.JsonObject;
+import com.viaversion.viaversion.libs.gson.JsonPrimitive;
+import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;
+import com.viaversion.viaversion.libs.opennbt.tag.builtin.ShortTag;
+import com.viaversion.viaversion.libs.opennbt.tag.builtin.StringTag;
 import com.viaversion.viaversion.rewriter.ComponentRewriter;
 import de.florianmichael.viabeta.ViaBeta;
-import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.Protocol1_8to1_7_6_10;
 import de.florianmichael.viabeta.api.rewriter.legacy.ViaStringTagReader1_11_2;
+import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.Protocol1_8to1_7_6_10;
 
 import java.io.IOException;
 

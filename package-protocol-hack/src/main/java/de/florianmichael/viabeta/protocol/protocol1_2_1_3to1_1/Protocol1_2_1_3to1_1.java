@@ -4,7 +4,9 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.BlockChangeRecord;
 import com.viaversion.viaversion.api.minecraft.Position;
-import com.viaversion.viaversion.api.minecraft.chunks.*;
+import com.viaversion.viaversion.api.minecraft.chunks.Chunk;
+import com.viaversion.viaversion.api.minecraft.chunks.ChunkSection;
+import com.viaversion.viaversion.api.minecraft.chunks.NibbleArray;
 import com.viaversion.viaversion.api.platform.providers.ViaProviders;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
@@ -12,30 +14,30 @@ import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
+import de.florianmichael.viabeta.ViaBeta;
+import de.florianmichael.viabeta.api.LegacyVersionEnum;
+import de.florianmichael.viabeta.api.model.IdAndData;
+import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.EndBiomeGenerator;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.NetherBiomeGenerator;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.PlainsBiomeGenerator;
-import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.storage.DimensionTracker_1_1;
-import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.storage.PendingBlocksTracker;
-import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.storage.SeedStorage;
-import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.task.BlockReceiveInvalidatorTask;
-import de.florianmichael.viabeta.protocol.protocol1_2_4_5to1_2_1_3.ClientboundPackets1_2_1;
-import de.florianmichael.viabeta.protocol.protocol1_2_4_5to1_2_1_3.ServerboundPackets1_2_1;
-import de.florianmichael.viabeta.ViaBeta;
-import de.florianmichael.viabeta.api.model.IdAndData;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.beta.WorldChunkManager_b1_7;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.release.WorldChunkManager_r1_1;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.model.NibbleArray1_1;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.model.NonFullChunk1_1;
-import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.type.impl.Chunk_1_1Type;
+import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.storage.DimensionTracker_1_1;
+import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.storage.PendingBlocksTracker;
+import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.storage.SeedStorage;
+import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.task.BlockReceiveInvalidatorTask;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.type.Type1_1;
-import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.types.Chunk1_2_4Type;
+import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.type.impl.Chunk_1_1Type;
+import de.florianmichael.viabeta.protocol.protocol1_2_4_5to1_2_1_3.ClientboundPackets1_2_1;
+import de.florianmichael.viabeta.protocol.protocol1_2_4_5to1_2_1_3.ServerboundPackets1_2_1;
+import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.type.impl.Chunk_1_2_4_5Type;
 import de.florianmichael.viabeta.protocol.protocol1_4_2to1_3_1_2.types.Type1_3_1_2;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.storage.ChunkTracker;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.type.Type1_6_4;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.Type1_7_6_10;
-import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
-import de.florianmichael.viabeta.api.LegacyVersionEnum;
 
 import java.util.Arrays;
 
@@ -192,7 +194,7 @@ public class Protocol1_2_1_3to1_1 extends AbstractProtocol<ClientboundPackets1_1
                         chunk.setSections(newArray);
                     }
 
-                    wrapper.write(new Chunk1_2_4Type(clientWorld), chunk);
+                    wrapper.write(new Chunk_1_2_4_5Type(clientWorld), chunk);
                 });
             }
         });

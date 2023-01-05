@@ -4,7 +4,8 @@ import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.protocol.version.VersionRange;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public enum LegacyVersionEnum {
 

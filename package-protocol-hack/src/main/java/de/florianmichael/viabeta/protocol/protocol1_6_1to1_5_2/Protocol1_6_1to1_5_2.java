@@ -8,17 +8,17 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
-import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.ServerboundPackets1_6_4;
 import de.florianmichael.viabeta.ViaBeta;
+import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.metadata.MetadataRewriter;
 import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.rewriter.SoundRewriter;
 import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.storage.AttachTracker;
 import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.storage.EntityTracker_1_5_2;
 import de.florianmichael.viabeta.protocol.protocol1_6_2to1_6_1.ClientboundPackets1_6_1;
+import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.ServerboundPackets1_6_4;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.type.Type1_6_4;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.metadata.MetaIndex1_8to1_7_6;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.Type1_7_6_10;
-import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 
 import java.util.List;
 

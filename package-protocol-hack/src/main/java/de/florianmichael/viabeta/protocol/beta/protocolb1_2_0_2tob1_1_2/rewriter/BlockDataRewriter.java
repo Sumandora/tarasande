@@ -1,8 +1,8 @@
 package de.florianmichael.viabeta.protocol.beta.protocolb1_2_0_2tob1_1_2.rewriter;
 
-import de.florianmichael.viabeta.api.rewriter.AbstractBlockRemapper;
 import de.florianmichael.viabeta.api.data.BlockList1_6;
 import de.florianmichael.viabeta.api.model.IdAndData;
+import de.florianmichael.viabeta.api.rewriter.AbstractBlockRemapper;
 
 public class BlockDataRewriter extends AbstractBlockRemapper {
 

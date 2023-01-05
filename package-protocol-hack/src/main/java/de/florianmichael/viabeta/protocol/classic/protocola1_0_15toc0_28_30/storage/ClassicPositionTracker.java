@@ -49,5 +49,4 @@ public class ClassicPositionTracker extends StoredObject {
         int i = (int) f;
         return f < (double) i ? i - 1 : i;
     }
-
 }

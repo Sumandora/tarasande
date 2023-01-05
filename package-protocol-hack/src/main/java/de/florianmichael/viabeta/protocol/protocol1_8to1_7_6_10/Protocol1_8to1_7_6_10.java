@@ -26,26 +26,26 @@ import com.viaversion.viaversion.protocols.protocol1_8.ServerboundPackets1_8;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.types.Chunk1_8Type;
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.types.ChunkBulk1_8Type;
+import de.florianmichael.viabeta.ViaBeta;
+import de.florianmichael.viabeta.api.data.ItemList1_6;
+import de.florianmichael.viabeta.api.model.IdAndData;
 import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.ClientboundPackets1_7_2;
 import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.ServerboundPackets1_7_2;
+import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.metadata.MetadataRewriter;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.model.GameProfile;
+import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.model.TabListEntry;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.model.map.MapData;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.model.map.MapIcon;
-import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.model.TabListEntry;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.rewriter.ChatItemRewriter;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.rewriter.ItemRewriter;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.rewriter.TranslationRewriter;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.storage.*;
-import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.impl.Chunk_1_7_6_10Type;
-import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.impl.ChunkBulk_1_7_6_10Type;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.Type1_7_6_10;
+import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.impl.ChunkBulk_1_7_6_10Type;
+import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.impl.Chunk_1_7_6_10Type;
+import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.util.Particle_1_7_6_10;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import de.florianmichael.viabeta.ViaBeta;
-import de.florianmichael.viabeta.api.model.IdAndData;
-import de.florianmichael.viabeta.api.data.ItemList1_6;
-import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.util.Particle_1_7_6_10;
-import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.metadata.MetadataRewriter;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -959,23 +959,18 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                     final short windowType = wrapper.user().get(WindowTracker.class).get(windowId);
                     if (windowType == 2) { // furnace
                         switch (progressBar) {
-                            case 0: { // cookTime
+                            case 0 -> { // cookTime
                                 progressBar = 2;
                                 final PacketWrapper windowProperty = PacketWrapper.create(ClientboundPackets1_8.WINDOW_PROPERTY, wrapper.user());
                                 windowProperty.write(Type.UNSIGNED_BYTE, windowId);
                                 windowProperty.write(Type.SHORT, (short) 3);
                                 windowProperty.write(Type.SHORT, (short) 200);
                                 windowProperty.send(Protocol1_8to1_7_6_10.class);
-                                break;
                             }
-                            case 1: { // furnaceBurnTime
-                                progressBar = 0;
-                                break;
-                            }
-                            case 2: { // currentItemBurnTime
-                                progressBar = 1;
-                                break;
-                            }
+                            case 1 -> // furnaceBurnTime
+                                    progressBar = 0;
+                            case 2 -> // currentItemBurnTime
+                                    progressBar = 1;
                         }
                         wrapper.set(Type.SHORT, 0, progressBar);
                     }
@@ -1293,6 +1288,7 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                         final PacketWrapper openBook = PacketWrapper.create(ClientboundPackets1_8.PLUGIN_MESSAGE, wrapper.user());
                         openBook.write(Type.STRING, "MC|BOpen"); // channel
                         openBook.write(Type.REMAINING_BYTES, new byte[0]); // data
+
                         openBook.send(Protocol1_8to1_7_6_10.class);
                         wrapper.cancel();
                     }
@@ -1423,37 +1419,29 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                     final ByteBuf lengthBuffer = Unpooled.buffer();
 
                     switch (channel) {
-                        case "MC|BEdit":
-                        case "MC|BSign":
+                        case "MC|BEdit", "MC|BSign" -> {
                             final Item item = wrapper.read(Type.ITEM); // book
                             ITEM_REWRITER.rewriteWrite(item);
-
                             lengthPacketWrapper.write(Type1_7_6_10.COMPRESSED_ITEM, item);
                             lengthPacketWrapper.writeToBuffer(lengthBuffer);
-
                             wrapper.write(Type.SHORT, (short) lengthBuffer.readableBytes()); // length
                             wrapper.write(Type1_7_6_10.COMPRESSED_ITEM, item); // book
-                            break;
-                        case "MC|TrSel":
+                        }
+                        case "MC|TrSel" -> {
                             final int selectedTrade = wrapper.read(Type.INT); // selected trade
-
                             lengthPacketWrapper.write(Type.INT, selectedTrade);
                             lengthPacketWrapper.writeToBuffer(lengthBuffer);
-
                             wrapper.write(Type.SHORT, (short) lengthBuffer.readableBytes()); // length
                             wrapper.write(Type.INT, selectedTrade); // selected trade
-                            break;
-                        case "MC|Brand":
-                        case "MC|ItemName":
+                        }
+                        case "MC|Brand", "MC|ItemName" -> {
                             final String content = wrapper.read(Type.STRING); // client brand or item name
-
                             lengthPacketWrapper.write(Type.REMAINING_BYTES, content.getBytes(StandardCharsets.UTF_8));
                             lengthPacketWrapper.writeToBuffer(lengthBuffer);
-
                             wrapper.write(Type.SHORT, (short) lengthBuffer.readableBytes()); // length
                             wrapper.write(Type.REMAINING_BYTES, content.getBytes(StandardCharsets.UTF_8)); // client brand or item name
-                            break;
-                        case "MC|AdvCdm":
+                        }
+                        case "MC|AdvCdm" -> {
                             final byte type = wrapper.read(Type.BYTE); // command block type (0 = Block, 1 = Minecart)
                             final int posXOrEntityId;
                             final int posY;
@@ -1474,7 +1462,6 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                             }
                             final String command = wrapper.read(Type.STRING); // command
                             wrapper.read(Type.BOOLEAN); // track output
-
                             lengthPacketWrapper.write(Type.BYTE, type);
                             if (type == 0) {
                                 lengthPacketWrapper.write(Type.INT, posXOrEntityId);
@@ -1485,7 +1472,6 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                             }
                             lengthPacketWrapper.write(Type.STRING, command);
                             lengthPacketWrapper.writeToBuffer(lengthBuffer);
-
                             wrapper.write(Type.SHORT, (short) lengthBuffer.readableBytes()); // length
                             wrapper.write(Type.BYTE, type); // type
                             if (type == 0) {
@@ -1496,23 +1482,19 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                                 wrapper.write(Type.INT, posXOrEntityId); // entity id
                             }
                             wrapper.write(Type.STRING, command); // command
-                            break;
-                        case "MC|Beacon":
+                        }
+                        case "MC|Beacon" -> {
                             final int primaryEffect = wrapper.read(Type.INT); // primary effect
                             final int secondaryEffect = wrapper.read(Type.INT); // secondary effect
-
                             lengthPacketWrapper.write(Type.INT, primaryEffect);
                             lengthPacketWrapper.write(Type.INT, secondaryEffect);
                             lengthPacketWrapper.writeToBuffer(lengthBuffer);
-
                             wrapper.write(Type.SHORT, (short) lengthBuffer.readableBytes()); // length
                             wrapper.write(Type.INT, primaryEffect); // primary effect
                             wrapper.write(Type.INT, secondaryEffect); // secondary effect
-                            break;
-                        case "REGISTER":
-                        case "UNREGISTER":
+                        }
+                        case "REGISTER", "UNREGISTER" -> {
                             byte[] channels = wrapper.read(Type.REMAINING_BYTES);
-
                             if (ViaBeta.getConfig().isIgnoreLong1_8ChannelNames()) {
                                 final String[] registeredChannels = new String(channels, StandardCharsets.UTF_8).split("\0");
                                 final List<String> validChannels = new ArrayList<>(registeredChannels.length);
@@ -1531,16 +1513,14 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                                 }
                                 channels = Joiner.on('\0').join(validChannels).getBytes(StandardCharsets.UTF_8);
                             }
-
                             wrapper.write(Type.SHORT, (short) channels.length); // data length
                             wrapper.write(Type.REMAINING_BYTES, channels); // data
-                            break;
-                        default:
+                        }
+                        default -> {
                             final byte[] data = wrapper.read(Type.REMAINING_BYTES);
-
                             wrapper.write(Type.SHORT, (short) data.length); // data length
                             wrapper.write(Type.REMAINING_BYTES, data); // data
-                            break;
+                        }
                     }
                     lengthBuffer.release();
                 });

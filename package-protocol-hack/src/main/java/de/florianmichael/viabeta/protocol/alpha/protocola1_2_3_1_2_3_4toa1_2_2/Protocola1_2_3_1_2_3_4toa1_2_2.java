@@ -5,9 +5,9 @@ import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 import de.florianmichael.viabeta.protocol.alpha.protocola1_2_3_5_1_2_6toa1_2_3_1_2_3_4.ClientboundPacketsa1_2_3;
 import de.florianmichael.viabeta.protocol.alpha.protocolb1_0_1_1_1toa1_2_3_5_1_2_6.ServerboundPacketsa1_2_6;
-import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 
 public class Protocola1_2_3_1_2_3_4toa1_2_2 extends AbstractProtocol<ClientboundPacketsa1_2_2, ClientboundPacketsa1_2_3, ServerboundPacketsa1_2_2, ServerboundPacketsa1_2_6> {
 

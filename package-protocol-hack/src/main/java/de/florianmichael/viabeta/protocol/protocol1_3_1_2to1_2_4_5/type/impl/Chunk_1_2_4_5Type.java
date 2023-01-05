@@ -1,13 +1,13 @@
-package de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.types;
+package de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.type.impl;
 
 import com.viaversion.viaversion.api.minecraft.chunks.Chunk;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
-import io.netty.buffer.ByteBuf;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.impl.Chunk_1_7_6_10Type;
+import io.netty.buffer.ByteBuf;
 
-public class Chunk1_2_4Type extends Chunk_1_7_6_10Type {
+public class Chunk_1_2_4_5Type extends Chunk_1_7_6_10Type {
 
-    public Chunk1_2_4Type(ClientWorld clientWorld) {
+    public Chunk_1_2_4_5Type(ClientWorld clientWorld) {
         super(clientWorld);
     }
 

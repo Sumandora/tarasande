@@ -5,12 +5,12 @@ import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
-import de.florianmichael.viabeta.protocol.protocol1_4_6_7to1_4_4_5.ClientboundPackets1_4_4;
-import de.florianmichael.viabeta.protocol.protocol1_4_4_5to1_4_2.type.Type1_4_2;
-import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.ServerboundPackets1_5_2;
-import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.type.impl.MetaType1_6_4;
-import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.type.Type1_6_4;
 import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
+import de.florianmichael.viabeta.protocol.protocol1_4_4_5to1_4_2.type.Type1_4_2;
+import de.florianmichael.viabeta.protocol.protocol1_4_6_7to1_4_4_5.ClientboundPackets1_4_4;
+import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.ServerboundPackets1_5_2;
+import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.type.Type1_6_4;
+import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.type.impl.MetaType1_6_4;
 
 import java.util.List;
 

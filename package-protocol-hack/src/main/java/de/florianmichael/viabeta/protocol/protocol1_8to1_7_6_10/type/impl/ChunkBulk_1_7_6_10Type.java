@@ -11,7 +11,9 @@ import io.netty.buffer.ByteBuf;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.zip.*;
+import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 public class ChunkBulk_1_7_6_10Type extends PartialType<Chunk[], ClientWorld> {
 

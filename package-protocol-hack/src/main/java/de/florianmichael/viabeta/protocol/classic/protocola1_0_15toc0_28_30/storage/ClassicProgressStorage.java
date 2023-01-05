@@ -12,5 +12,4 @@ public class ClassicProgressStorage extends StoredObject {
     public ClassicProgressStorage(UserConnection user) {
         super(user);
     }
-
 }

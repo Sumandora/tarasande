@@ -12,19 +12,15 @@ import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
+import de.florianmichael.viabeta.api.LegacyVersionEnum;
 import de.florianmichael.viabeta.api.data.BlockList1_6;
 import de.florianmichael.viabeta.api.model.ChunkCoord;
 import de.florianmichael.viabeta.api.model.IdAndData;
-import de.florianmichael.viabeta.protocol.alpha.protocola1_1_0_1_1_2_1toa1_0_17_1_0_17_4.Protocola1_1_0_1_1_2_1toa1_0_17_1_0_17_4;
-import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicMPPassProvider;
-import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicWorldHeightProvider;
-import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.*;
-import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.Protocol1_8to1_7_6_10;
 import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
-import de.florianmichael.viabeta.api.LegacyVersionEnum;
 import de.florianmichael.viabeta.protocol.alpha.protocola1_0_16_2toa1_0_15.ClientboundPacketsa1_0_15;
 import de.florianmichael.viabeta.protocol.alpha.protocola1_0_16_2toa1_0_15.ServerboundPacketsa1_0_15;
 import de.florianmichael.viabeta.protocol.alpha.protocola1_0_17_1_0_17_4toa1_0_16_2.storage.TimeLockStorage;
+import de.florianmichael.viabeta.protocol.alpha.protocola1_1_0_1_1_2_1toa1_0_17_1_0_17_4.Protocola1_1_0_1_1_2_1toa1_0_17_1_0_17_4;
 import de.florianmichael.viabeta.protocol.alpha.protocola1_2_0_1_2_1_1toa1_1_0_1_1_2_1.ClientboundPacketsa1_1_0;
 import de.florianmichael.viabeta.protocol.alpha.protocolb1_0_1_1_1toa1_2_3_5_1_2_6.provider.AlphaInventoryProvider;
 import de.florianmichael.viabeta.protocol.alpha.protocolb1_0_1_1_1toa1_2_3_5_1_2_6.storage.AlphaInventoryTracker;
@@ -36,8 +32,12 @@ import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.Protoc
 import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.type.Typeb1_7_0_3;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.data.ClassicBlocks;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.model.ClassicLevel;
-import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.types.Typesc0_30;
+import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicMPPassProvider;
+import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicWorldHeightProvider;
+import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.*;
+import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.type.Typec0_30;
 import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.storage.ExtBlockPermissionsStorage;
+import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.Protocol1_8to1_7_6_10;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.Type1_7_6_10;
 
 @SuppressWarnings("DataFlowIssue")
@@ -52,7 +52,7 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
         this.registerClientbound(State.LOGIN, ClientboundPacketsc0_28.DISCONNECT.getId(), ClientboundPacketsa1_0_15.DISCONNECT.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(Typesc0_30.STRING, Typeb1_7_0_3.STRING, s -> s.replace("&", "§")); // reason
+                map(Typec0_30.STRING, Typeb1_7_0_3.STRING, s -> s.replace("&", "§")); // reason
             }
         });
 
@@ -61,8 +61,8 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
             public void registerMap() {
                 read(Type.BYTE); // protocol id
                 handler(wrapper -> {
-                    final String title = wrapper.read(Typesc0_30.STRING).replace("&", "§"); // title
-                    final String motd = wrapper.read(Typesc0_30.STRING).replace("&", "§"); // motd
+                    final String title = wrapper.read(Typec0_30.STRING).replace("&", "§"); // title
+                    final String motd = wrapper.read(Typec0_30.STRING).replace("&", "§"); // motd
                     final byte opLevel = wrapper.read(Type.BYTE); // op level
                     wrapper.user().put(new ClassicServerTitleStorage(wrapper.user(), title, motd));
                     wrapper.user().get(ClassicOpLevelStorage.class).setOpLevel(opLevel);
@@ -128,7 +128,7 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 handler(wrapper -> {
                     wrapper.cancel();
                     final short partSize = wrapper.read(Type.SHORT); // part size
-                    final byte[] data = wrapper.read(Typesc0_30.BYTE_ARRAY); // data
+                    final byte[] data = wrapper.read(Typec0_30.BYTE_ARRAY); // data
                     final byte progress = wrapper.read(Type.BYTE); // progress
 
                     wrapper.user().get(ClassicLevelStorage.class).addDataPart(data, partSize);
@@ -186,7 +186,7 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
         this.registerClientbound(ClientboundPacketsc0_28.BLOCK_CHANGE, new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(Typesc0_30.POSITION, Type1_7_6_10.POSITION_UBYTE); // position
+                map(Typec0_30.POSITION, Type1_7_6_10.POSITION_UBYTE); // position
                 handler(wrapper -> {
                     final ClassicLevelStorage levelStorage = wrapper.user().get(ClassicLevelStorage.class);
                     if (levelStorage == null || !levelStorage.hasReceivedLevel()) {
@@ -211,7 +211,7 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
             @Override
             public void registerMap() {
                 map(Type.BYTE, Type.INT); // entity id
-                map(Typesc0_30.STRING, Typeb1_7_0_3.STRING, n -> n.replace("&", "§")); // username
+                map(Typec0_30.STRING, Typeb1_7_0_3.STRING, n -> n.replace("&", "§")); // username
                 map(Type.SHORT, Type.INT); // x
                 map(Type.SHORT, Type.INT); // y
                 map(Type.SHORT, Type.INT); // z
@@ -319,7 +319,7 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
             public void registerMap() {
                 handler(packetWrapper -> {
                     final byte senderId = packetWrapper.read(Type.BYTE); // sender id
-                    String message = packetWrapper.read(Typesc0_30.STRING).replace("&", "§"); // message
+                    String message = packetWrapper.read(Typec0_30.STRING).replace("&", "§"); // message
                     if (senderId < 0) {
                         message = "§e" + message;
                     }
@@ -330,7 +330,7 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
         this.registerClientbound(ClientboundPacketsc0_28.DISCONNECT, new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(Typesc0_30.STRING, Typeb1_7_0_3.STRING, s -> s.replace("&", "§")); // reason
+                map(Typec0_30.STRING, Typeb1_7_0_3.STRING, s -> s.replace("&", "§")); // reason
             }
         });
         this.registerClientbound(ClientboundPacketsc0_28.OP_LEVEL_UPDATE, null, new PacketRemapper() {
@@ -348,10 +348,10 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
             @Override
             public void registerMap() {
                 map(Type.INT, Type.BYTE); // protocol id
-                map(Typeb1_7_0_3.STRING, Typesc0_30.STRING); // username
+                map(Typeb1_7_0_3.STRING, Typec0_30.STRING); // username
                 read(Typeb1_7_0_3.STRING); // password
                 handler(wrapper -> {
-                    wrapper.write(Typesc0_30.STRING, Via.getManager().getProviders().get(ClassicMPPassProvider.class).getMpPass(wrapper.user())); // mp pass
+                    wrapper.write(Typec0_30.STRING, Via.getManager().getProviders().get(ClassicMPPassProvider.class).getMpPass(wrapper.user())); // mp pass
                     wrapper.write(Type.BYTE, (byte) 0); // op level
 
                     final ClassicProgressStorage classicProgressStorage = wrapper.user().get(ClassicProgressStorage.class);
@@ -366,7 +366,7 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 handler(wrapper -> {
                     final String message = wrapper.read(Typeb1_7_0_3.STRING); // message
                     wrapper.write(Type.BYTE, (byte) 0); // sender id
-                    wrapper.write(Typesc0_30.STRING, message); // message
+                    wrapper.write(Typec0_30.STRING, message); // message
                 });
             }
         });
@@ -460,7 +460,7 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                             sendBlockChange(wrapper.user(), pos, new IdAndData(0, 0));
                         }
 
-                        wrapper.write(Typesc0_30.POSITION, pos); // position
+                        wrapper.write(Typec0_30.POSITION, pos); // position
                         wrapper.write(Type.BOOLEAN, false); // place block
                         wrapper.write(Type.BYTE, (byte) ClassicBlocks.STONE); // block id
                     } else {
@@ -511,7 +511,7 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                         sendBlockChange(wrapper.user(), pos, remapper.getMapper().get(classicBlock));
                     }
 
-                    wrapper.write(Typesc0_30.POSITION, pos); // position
+                    wrapper.write(Typec0_30.POSITION, pos); // position
                     wrapper.write(Type.BOOLEAN, true); // place block
                     wrapper.write(Type.BYTE, classicBlock); // block id
                 });
@@ -567,5 +567,4 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
         if (userConnection.has(AlphaInventoryTracker.class)) userConnection.get(AlphaInventoryTracker.class).setCreativeMode(true);
         if (userConnection.has(TimeLockStorage.class)) userConnection.get(TimeLockStorage.class).setTime(6000L);
     }
-
 }

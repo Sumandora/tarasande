@@ -5,8 +5,8 @@ import com.viaversion.viaversion.libs.fastutil.ints.Int2ObjectOpenHashMap;
 import com.viaversion.viaversion.libs.fastutil.objects.Object2IntMap;
 import com.viaversion.viaversion.libs.fastutil.objects.Object2IntOpenHashMap;
 import de.florianmichael.viabeta.api.data.BlockList1_6;
-import de.florianmichael.viabeta.api.model.IdAndData;
 import de.florianmichael.viabeta.api.data.ItemList1_6;
+import de.florianmichael.viabeta.api.model.IdAndData;
 
 public class ClassicBlocks {
 

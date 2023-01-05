@@ -1,17 +1,17 @@
-package de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.types;
+package de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.type.impl;
 
 import com.viaversion.viaversion.api.minecraft.item.DataItem;
 import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.type.Type;
-import io.netty.buffer.ByteBuf;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.data.NbtItemList_1_2_5;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.Type1_7_6_10;
+import io.netty.buffer.ByteBuf;
 
-public class ItemType extends Type<Item> {
+public class Item_1_2_4_5Type extends Type<Item> {
 
     private final boolean compressed;
 
-    public ItemType(boolean compressed) {
+    public Item_1_2_4_5Type(boolean compressed) {
         super(Item.class);
         this.compressed = compressed;
     }

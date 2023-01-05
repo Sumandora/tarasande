@@ -2,7 +2,9 @@ package de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.mod
 
 import de.florianmichael.viabeta.api.model.ChunkCoord;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
 
 public class ChunkCoordSpiral implements Iterable<ChunkCoord> {
 

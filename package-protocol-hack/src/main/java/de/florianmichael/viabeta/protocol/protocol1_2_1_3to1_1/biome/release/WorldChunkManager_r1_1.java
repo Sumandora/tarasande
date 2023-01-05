@@ -1,9 +1,9 @@
 package de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.release;
 
 import de.florianmichael.viabeta.ViaBeta;
-import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.release.genlayer.GenLayer;
 import de.florianmichael.viabeta.api.LegacyVersionEnum;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.IWorldChunkManager;
+import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.release.genlayer.GenLayer;
 
 public class WorldChunkManager_r1_1 implements IWorldChunkManager {
 

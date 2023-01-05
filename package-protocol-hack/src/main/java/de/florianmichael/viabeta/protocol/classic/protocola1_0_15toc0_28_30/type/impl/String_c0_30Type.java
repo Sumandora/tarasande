@@ -1,4 +1,4 @@
-package de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.types;
+package de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.type.impl;
 
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.data.Cp437String;
@@ -7,9 +7,9 @@ import io.netty.buffer.ByteBuf;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class StringType extends Type<String> {
+public class String_c0_30Type extends Type<String> {
 
-    public StringType() {
+    public String_c0_30Type() {
         super(String.class);
     }
 

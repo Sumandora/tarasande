@@ -2,9 +2,9 @@ package de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.storage;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.chunks.DataPalette;
-import de.florianmichael.viabeta.api.rewriter.AbstractChunkTracker;
 import de.florianmichael.viabeta.api.data.BlockList1_6;
 import de.florianmichael.viabeta.api.model.IdAndData;
+import de.florianmichael.viabeta.api.rewriter.AbstractChunkTracker;
 
 public class ChunkTracker_1_7_6_10 extends AbstractChunkTracker {
 

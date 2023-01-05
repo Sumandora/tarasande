@@ -8,11 +8,13 @@ import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.api.model.IdAndData;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.Protocol1_2_1_3to1_1;
+import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.model.PendingBlockEntry;
 import de.florianmichael.viabeta.protocol.protocol1_2_4_5to1_2_1_3.ClientboundPackets1_2_1;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.Type1_7_6_10;
-import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.model.PendingBlockEntry;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 
 public class PendingBlocksTracker extends StoredObject {

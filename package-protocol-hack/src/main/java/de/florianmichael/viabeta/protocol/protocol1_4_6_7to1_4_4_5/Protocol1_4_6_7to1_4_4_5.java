@@ -10,15 +10,15 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
-import de.florianmichael.viabeta.protocol.protocol1_4_6_7to1_4_4_5.type.ChunkBulk_1_4_4Type;
+import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
+import de.florianmichael.viabeta.protocol.protocol1_4_6_7to1_4_4_5.type.ChunkBulk_1_4_4_5Type;
 import de.florianmichael.viabeta.protocol.protocol1_5_0_1to1_4_6_7.ClientboundPackets1_4_6;
 import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.ServerboundPackets1_5_2;
-import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.type.impl.MetaType1_6_4;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.type.Type1_6_4;
+import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.type.impl.MetaType1_6_4;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.metadata.MetaIndex1_8to1_7_6;
-import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.impl.ChunkBulk_1_7_6_10Type;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.Type1_7_6_10;
-import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
+import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.impl.ChunkBulk_1_7_6_10Type;
 
 public class Protocol1_4_6_7to1_4_4_5 extends AbstractProtocol<ClientboundPackets1_4_4, ClientboundPackets1_4_6, ServerboundPackets1_5_2, ServerboundPackets1_5_2> {
 
@@ -106,7 +106,7 @@ public class Protocol1_4_6_7to1_4_4_5 extends AbstractProtocol<ClientboundPacket
             public void registerMap() {
                 handler(wrapper -> {
                     final ClientWorld clientWorld = wrapper.user().get(ClientWorld.class);
-                    wrapper.write(new ChunkBulk_1_7_6_10Type(clientWorld), wrapper.read(new ChunkBulk_1_4_4Type(clientWorld)));
+                    wrapper.write(new ChunkBulk_1_7_6_10Type(clientWorld), wrapper.read(new ChunkBulk_1_4_4_5Type(clientWorld)));
                 });
             }
         });

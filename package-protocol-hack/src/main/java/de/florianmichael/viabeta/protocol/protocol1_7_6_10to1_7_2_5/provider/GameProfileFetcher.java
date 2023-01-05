@@ -1,6 +1,8 @@
 package de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.provider;
 
-import com.google.common.cache.*;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import com.viaversion.viaversion.api.platform.providers.Provider;

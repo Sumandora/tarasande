@@ -9,12 +9,12 @@ import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.viabeta.api.data.BlockList1_6;
 import de.florianmichael.viabeta.api.model.IdAndData;
 import de.florianmichael.viabeta.protocol.beta.protocol1_0_0_1tob1_8_0_1.Protocol1_0_0_1tob1_8_0_1;
+import de.florianmichael.viabeta.protocol.beta.protocol1_0_0_1tob1_8_0_1.storage.PlayerAirTimeStorage;
 import de.florianmichael.viabeta.protocol.protocol1_1to1_0_0_1.ClientboundPackets1_0;
-import de.florianmichael.viabeta.protocol.protocol1_4_2to1_3_1_2.types.impl.MetaType1_3_1_2;
 import de.florianmichael.viabeta.protocol.protocol1_4_2to1_3_1_2.types.Type1_3_1_2;
+import de.florianmichael.viabeta.protocol.protocol1_4_2to1_3_1_2.types.impl.MetaType1_3_1_2;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.storage.ChunkTracker;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.storage.PlayerInfoStorage;
-import de.florianmichael.viabeta.protocol.beta.protocol1_0_0_1tob1_8_0_1.storage.PlayerAirTimeStorage;
 
 public class PlayerAirTimeUpdateTask implements Runnable {
 

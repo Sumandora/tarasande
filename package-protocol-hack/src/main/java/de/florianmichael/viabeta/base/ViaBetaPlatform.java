@@ -3,6 +3,10 @@ package de.florianmichael.viabeta.base;
 import com.google.common.collect.Range;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import de.florianmichael.viabeta.ViaBeta;
+import de.florianmichael.viabeta.ViaBetaConfigImpl;
+import de.florianmichael.viabeta.api.EmptyBaseProtocol;
+import de.florianmichael.viabeta.api.LegacyVersionEnum;
 import de.florianmichael.viabeta.protocol.alpha.protocola1_0_16_2toa1_0_15.Protocola1_0_16_2toa1_0_15;
 import de.florianmichael.viabeta.protocol.alpha.protocola1_0_17_1_0_17_4toa1_0_16_2.Protocola1_0_17_1_0_17_4toa1_0_16_2;
 import de.florianmichael.viabeta.protocol.alpha.protocola1_1_0_1_1_2_1toa1_0_17_1_0_17_4.Protocola1_1_0_1_1_2_1toa1_0_17_1_0_17_4;
@@ -40,12 +44,8 @@ import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.Protocol1_6_1to1_
 import de.florianmichael.viabeta.protocol.protocol1_6_2to1_6_1.Protocol1_6_2to1_6_1;
 import de.florianmichael.viabeta.protocol.protocol1_6_4to1_6_2.Protocol1_6_4to1_6_2;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.Protocol1_7_2_5to1_6_4;
-import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.Protocol1_8to1_7_6_10;
-import de.florianmichael.viabeta.ViaBeta;
-import de.florianmichael.viabeta.ViaBetaConfigImpl;
-import de.florianmichael.viabeta.api.EmptyBaseProtocol;
 import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.Protocol1_7_6_10to1_7_2_5;
-import de.florianmichael.viabeta.api.LegacyVersionEnum;
+import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.Protocol1_8to1_7_6_10;
 
 import java.io.File;
 import java.util.logging.Level;

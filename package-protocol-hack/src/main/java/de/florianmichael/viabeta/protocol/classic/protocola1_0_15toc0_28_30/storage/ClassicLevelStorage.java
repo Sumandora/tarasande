@@ -12,14 +12,18 @@ import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.api.model.ChunkCoord;
 import de.florianmichael.viabeta.protocol.alpha.protocola1_0_16_2toa1_0_15.ClientboundPacketsa1_0_15;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.Protocola1_0_15toc0_30;
-import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.model.NibbleArray1_1;
-import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.type.impl.Chunk_1_1Type;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.model.ChunkCoordSpiral;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.model.ClassicLevel;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicWorldHeightProvider;
+import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.model.NibbleArray1_1;
+import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.type.impl.Chunk_1_1Type;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.GZIPInputStream;
 
 public class ClassicLevelStorage extends StoredObject {

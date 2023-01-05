@@ -9,9 +9,9 @@ import com.viaversion.viaversion.api.type.types.CustomByteType;
 import com.viaversion.viaversion.api.type.types.minecraft.BaseChunkType;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
 import de.florianmichael.viabeta.api.model.IdAndData;
-import io.netty.buffer.ByteBuf;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.model.NibbleArray1_1;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.model.NonFullChunk1_1;
+import io.netty.buffer.ByteBuf;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -4,9 +4,9 @@ import com.viaversion.viaversion.api.minecraft.entities.Entity1_10Types;
 import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
 import de.florianmichael.viabeta.api.model.Location;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.model.base.AbstractTrackedEntity;
-import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.storage.EntityTracker_1_2_4_5;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.sound.SoundEmulation;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.sound.SoundType;
+import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.storage.EntityTracker_1_2_4_5;
 import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.metadata.MetaIndex1_6_1to1_5_2;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.metadata.MetaIndex1_8to1_7_6;
 

@@ -1,7 +1,7 @@
 package de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.release.genlayer;
 
-import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.release.NewBiomeGenBase;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.release.IntCache;
+import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.release.NewBiomeGenBase;
 
 public class GenLayerShore_r1_0 extends GenLayer {
     public GenLayerShore_r1_0(long l, GenLayer genlayer) {

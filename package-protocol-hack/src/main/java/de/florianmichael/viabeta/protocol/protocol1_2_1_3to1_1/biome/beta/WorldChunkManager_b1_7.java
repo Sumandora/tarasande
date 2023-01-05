@@ -2,8 +2,8 @@ package de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.beta;
 
 import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.api.model.ChunkCoord;
-import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.release.NewBiomeGenBase;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.IWorldChunkManager;
+import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.release.NewBiomeGenBase;
 
 import java.util.Random;
 

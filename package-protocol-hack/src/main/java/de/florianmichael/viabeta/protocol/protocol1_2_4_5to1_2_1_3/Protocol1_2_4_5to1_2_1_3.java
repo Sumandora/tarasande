@@ -2,9 +2,9 @@ package de.florianmichael.viabeta.protocol.protocol1_2_4_5to1_2_1_3;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
+import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.ClientboundPackets1_2_4;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.ServerboundPackets1_2_4;
-import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 
 public class Protocol1_2_4_5to1_2_1_3 extends AbstractProtocol<ClientboundPackets1_2_1, ClientboundPackets1_2_4, ServerboundPackets1_2_1, ServerboundPackets1_2_4> {
 

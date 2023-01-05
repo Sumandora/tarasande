@@ -15,25 +15,29 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
-import com.viaversion.viaversion.libs.opennbt.tag.builtin.*;
+import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;
+import com.viaversion.viaversion.libs.opennbt.tag.builtin.IntTag;
+import com.viaversion.viaversion.libs.opennbt.tag.builtin.ShortTag;
+import com.viaversion.viaversion.libs.opennbt.tag.builtin.StringTag;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
 import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.api.data.BlockList1_6;
 import de.florianmichael.viabeta.api.model.IdAndData;
 import de.florianmichael.viabeta.api.model.Location;
-import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.model.base.AbstractTrackedEntity;
+import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
+import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.data.EntityList_1_2_5;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.model.TrackedEntity;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.model.TrackedLivingEntity;
-import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.storage.ChestStateTracker;
-import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.storage.DimensionTracker_1_2_4_5;
-import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.storage.EntityTracker_1_2_4_5;
-import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.data.EntityList_1_2_5;
+import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.model.base.AbstractTrackedEntity;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.sound.Sound;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.sound.SoundType;
+import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.storage.ChestStateTracker;
+import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.storage.DimensionTracker_1_2_4_5;
+import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.storage.EntityTracker_1_2_4_5;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.task.EntityTrackerTickTask;
-import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.types.Chunk1_2_4Type;
-import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.types.Types1_2_4;
+import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.type.Type1_2_4_5;
+import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.type.impl.Chunk_1_2_4_5Type;
 import de.florianmichael.viabeta.protocol.protocol1_4_2to1_3_1_2.ClientboundPackets1_3_1;
 import de.florianmichael.viabeta.protocol.protocol1_4_2to1_3_1_2.ServerboundPackets1_3_1;
 import de.florianmichael.viabeta.protocol.protocol1_4_2to1_3_1_2.types.Type1_3_1_2;
@@ -42,11 +46,13 @@ import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.storage.ChunkTr
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.storage.ProtocolMetadataStorage;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.type.Type1_6_4;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.metadata.MetaIndex1_8to1_7_6;
-import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.impl.Chunk_1_7_6_10Type;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.Type1_7_6_10;
-import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
+import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.impl.Chunk_1_7_6_10Type;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 
 @SuppressWarnings("DataFlowIssue")
@@ -240,23 +246,15 @@ public class Protocol1_3_1_2to1_2_4_5 extends AbstractProtocol<ClientboundPacket
 
                     float pitch;
                     switch (objectType) {
-                        case TNT_PRIMED:
-                            entityTracker.playSoundAt(location, Sound.RANDOM_FUSE, 1.0F, 1.0F);
-                            break;
-                        case TIPPED_ARROW:
+                        case TNT_PRIMED -> entityTracker.playSoundAt(location, Sound.RANDOM_FUSE, 1.0F, 1.0F);
+                        case TIPPED_ARROW -> {
                             pitch = 1.0F / (entityTracker.RND.nextFloat() * 0.4F + 1.2F) + 0.5F;
                             entityTracker.playSoundAt(location, Sound.RANDOM_BOW, 1.0F, pitch);
-                            break;
-                        case SNOWBALL:
-                        case EGG:
-                        case ENDER_PEARL:
-                        case ENDER_SIGNAL:
-                        case POTION:
-                        case THROWN_EXP_BOTTLE:
-                        case FISHIHNG_HOOK:
+                        }
+                        case SNOWBALL, EGG, ENDER_PEARL, ENDER_SIGNAL, POTION, THROWN_EXP_BOTTLE, FISHIHNG_HOOK -> {
                             pitch = 0.4F / (entityTracker.RND.nextFloat() * 0.4F + 0.8F);
                             entityTracker.playSoundAt(location, Sound.RANDOM_BOW, 0.5F, pitch);
-                            break;
+                        }
                     }
                 });
             }
@@ -420,7 +418,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends AbstractProtocol<ClientboundPacket
             public void registerMap() {
                 handler(wrapper -> {
                     final ClientWorld clientWorld = wrapper.user().get(ClientWorld.class);
-                    Chunk chunk = wrapper.read(new Chunk1_2_4Type(clientWorld));
+                    Chunk chunk = wrapper.read(new Chunk_1_2_4_5Type(clientWorld));
 
                     wrapper.user().get(ChestStateTracker.class).unload(chunk.getX(), chunk.getZ());
 
@@ -541,14 +539,14 @@ public class Protocol1_3_1_2to1_2_4_5 extends AbstractProtocol<ClientboundPacket
             public void registerMap() {
                 map(Type.BYTE); // window id
                 map(Type.SHORT); // slot
-                map(Types1_2_4.COMPRESSED_NBT_ITEM, Type1_7_6_10.COMPRESSED_ITEM); // item
+                map(Type1_2_4_5.COMPRESSED_NBT_ITEM, Type1_7_6_10.COMPRESSED_ITEM); // item
             }
         });
         this.registerClientbound(ClientboundPackets1_2_4.WINDOW_ITEMS, new PacketRemapper() {
             @Override
             public void registerMap() {
                 map(Type.BYTE); // window id
-                map(Types1_2_4.COMPRESSED_NBT_ITEM_ARRAY, Type1_7_6_10.COMPRESSED_ITEM_ARRAY); // items
+                map(Type1_2_4_5.COMPRESSED_NBT_ITEM_ARRAY, Type1_7_6_10.COMPRESSED_ITEM_ARRAY); // items
             }
         });
         this.registerClientbound(ClientboundPackets1_2_4.BLOCK_ENTITY_DATA, new PacketRemapper() {
@@ -663,7 +661,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends AbstractProtocol<ClientboundPacket
             public void registerMap() {
                 map(Type1_7_6_10.POSITION_UBYTE); // position
                 map(Type.UNSIGNED_BYTE); // direction
-                map(Type1_7_6_10.COMPRESSED_ITEM, Types1_2_4.COMPRESSED_NBT_ITEM); // item
+                map(Type1_7_6_10.COMPRESSED_ITEM, Type1_2_4_5.COMPRESSED_NBT_ITEM); // item
                 read(Type.UNSIGNED_BYTE); // offset x
                 read(Type.UNSIGNED_BYTE); // offset y
                 read(Type.UNSIGNED_BYTE); // offset z
@@ -677,14 +675,14 @@ public class Protocol1_3_1_2to1_2_4_5 extends AbstractProtocol<ClientboundPacket
                 map(Type.BYTE); // button
                 map(Type.SHORT); // action
                 map(Type.BYTE); // mode
-                map(Type1_7_6_10.COMPRESSED_ITEM, Types1_2_4.COMPRESSED_NBT_ITEM); // item
+                map(Type1_7_6_10.COMPRESSED_ITEM, Type1_2_4_5.COMPRESSED_NBT_ITEM); // item
             }
         });
         this.registerServerbound(ServerboundPackets1_3_1.CREATIVE_INVENTORY_ACTION, new PacketRemapper() {
             @Override
             public void registerMap() {
                 map(Type.SHORT); // slot
-                map(Type1_7_6_10.COMPRESSED_ITEM, Types1_2_4.COMPRESSED_NBT_ITEM); // item
+                map(Type1_7_6_10.COMPRESSED_ITEM, Type1_2_4_5.COMPRESSED_NBT_ITEM); // item
             }
         });
         this.registerServerbound(ServerboundPackets1_3_1.PLAYER_ABILITIES, new PacketRemapper() {
@@ -815,11 +813,14 @@ public class Protocol1_3_1_2to1_2_4_5 extends AbstractProtocol<ClientboundPacket
 
     @Override
     public void init(UserConnection userConnection) {
+        super.init(userConnection);
+
         userConnection.put(new PreNettySplitter(userConnection, Protocol1_3_1_2to1_2_4_5.class, ClientboundPackets1_2_4::getPacket));
 
         userConnection.put(new ChestStateTracker(userConnection));
         userConnection.put(new EntityTracker_1_2_4_5(userConnection));
         userConnection.put(new DimensionTracker_1_2_4_5(userConnection));
+
         if (!userConnection.has(ClientWorld.class)) {
             userConnection.put(new ClientWorld(userConnection));
         }

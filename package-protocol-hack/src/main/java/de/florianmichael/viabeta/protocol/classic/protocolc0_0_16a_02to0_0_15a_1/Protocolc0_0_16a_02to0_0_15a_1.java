@@ -6,10 +6,10 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
+import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.type.Typec0_30;
 import de.florianmichael.viabeta.protocol.classic.protocolc0_0_20a_27toc0_0_19a_06.ClientboundPacketsc0_19a;
 import de.florianmichael.viabeta.protocol.classic.protocolc0_0_20a_27toc0_0_19a_06.ServerboundPacketsc0_19a;
-import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.types.Typesc0_30;
-import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 
 public class Protocolc0_0_16a_02to0_0_15a_1 extends AbstractProtocol<ClientboundPacketsc0_15a, ClientboundPacketsc0_19a, ServerboundPacketsc0_15a, ServerboundPacketsc0_19a> {
 
@@ -23,11 +23,11 @@ public class Protocolc0_0_16a_02to0_0_15a_1 extends AbstractProtocol<Clientbound
             @Override
             public void registerMap() {
                 handler(wrapper -> {
-                    final String username = wrapper.read(Typesc0_30.STRING); // username
+                    final String username = wrapper.read(Typec0_30.STRING); // username
 
                     wrapper.write(Type.BYTE, (byte) 0); // protocol id
-                    wrapper.write(Typesc0_30.STRING, "c0.0.15a Server"); // title
-                    wrapper.write(Typesc0_30.STRING, "Logged in as: " + username); // motd
+                    wrapper.write(Typec0_30.STRING, "c0.0.15a Server"); // title
+                    wrapper.write(Typec0_30.STRING, "Logged in as: " + username); // motd
                 });
             }
         });
@@ -62,7 +62,7 @@ public class Protocolc0_0_16a_02to0_0_15a_1 extends AbstractProtocol<Clientbound
             public void registerMap() {
                 handler(wrapper -> {
                     wrapper.clearPacket();
-                    wrapper.write(Typesc0_30.STRING, wrapper.user().getProtocolInfo().getUsername()); // username
+                    wrapper.write(Typec0_30.STRING, wrapper.user().getProtocolInfo().getUsername()); // username
                 });
             }
         });

@@ -6,16 +6,16 @@ import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
+import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 import de.florianmichael.viabeta.protocol.beta.protocolb1_5_0_2tob1_4_0_1.type.Typeb1_4;
 import de.florianmichael.viabeta.protocol.beta.protocolb1_6_0_6tob1_5_0_2.ClientboundPacketsb1_5;
 import de.florianmichael.viabeta.protocol.beta.protocolb1_6_0_6tob1_5_0_2.ServerboundPacketsb1_5;
 import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.type.Typeb1_7_0_3;
-import de.florianmichael.viabeta.protocol.protocol1_4_2to1_3_1_2.types.impl.MetaType1_3_1_2;
 import de.florianmichael.viabeta.protocol.protocol1_4_2to1_3_1_2.types.Type1_3_1_2;
+import de.florianmichael.viabeta.protocol.protocol1_4_2to1_3_1_2.types.impl.MetaType1_3_1_2;
 import de.florianmichael.viabeta.protocol.protocol1_4_4_5to1_4_2.type.Type1_4_2;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.type.Type1_6_4;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.Type1_7_6_10;
-import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 
 import java.util.List;
 

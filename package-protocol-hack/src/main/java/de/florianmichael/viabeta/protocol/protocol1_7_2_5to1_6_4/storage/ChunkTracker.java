@@ -2,10 +2,10 @@ package de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.storage;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.chunks.DataPalette;
-import de.florianmichael.viabeta.api.rewriter.AbstractChunkTracker;
+import de.florianmichael.viabeta.api.LegacyVersionEnum;
 import de.florianmichael.viabeta.api.data.BlockList1_6;
 import de.florianmichael.viabeta.api.model.IdAndData;
-import de.florianmichael.viabeta.api.LegacyVersionEnum;
+import de.florianmichael.viabeta.api.rewriter.AbstractChunkTracker;
 
 import java.util.HashMap;
 import java.util.Map;
