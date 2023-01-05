@@ -7,11 +7,11 @@ import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHack
 class FabricPlayerAbilitiesProvider : PlayerAbilitiesProvider() {
 
     override fun getFlySpeed(): Float {
-        if (ProtocolHackValues.emulateWrongPlayerAbilities.value) return super.getFlySpeed()
+        if (!ProtocolHackValues.emulateWrongPlayerAbilities.value) return super.getFlySpeed()
         return MinecraftClient.getInstance().player?.abilities!!.flySpeed
     }
     override fun getWalkSpeed(): Float {
-        if (ProtocolHackValues.emulateWrongPlayerAbilities.value) return super.getWalkSpeed()
+        if (!ProtocolHackValues.emulateWrongPlayerAbilities.value) return super.getWalkSpeed()
         return MinecraftClient.getInstance().player?.abilities!!.walkSpeed
     }
 }
