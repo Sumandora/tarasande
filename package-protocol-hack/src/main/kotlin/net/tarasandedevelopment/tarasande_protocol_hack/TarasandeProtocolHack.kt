@@ -20,6 +20,7 @@ import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.storage.EntityTra
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.provider.EncryptionProvider
 import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.provider.GameProfileFetcher
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.storage.EntityTracker_1_7_6_10
+import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider
 import de.florianmichael.vialoadingbase.NativeProvider
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.util.VersionListEnum
@@ -55,6 +56,7 @@ import net.tarasandedevelopment.tarasande_protocol_hack.platform.ViaBetaPlatform
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ViaCursedPlatformImpl
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.clamp.FabricCommandArgumentsProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viabeta.*
+import net.tarasandedevelopment.tarasande_protocol_hack.provider.viacursed.FabricPlayerAbilitiesProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricVersionProvider
@@ -269,6 +271,9 @@ class TarasandeProtocolHack : NativeProvider {
         providers?.use(ClassicWorldHeightProvider::class.java, FabricClassicWorldHeightProvider())
         providers?.use(OldAuthProvider::class.java, FabricOldAuthProvider())
         providers?.use(ClassicMPPassProvider::class.java, FabricClassicMPPassProvider())
+
+        // Via Cursed
+        providers?.use(PlayerAbilitiesProvider::class.java, FabricPlayerAbilitiesProvider())
 
         // Via Version
         providers?.use(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())

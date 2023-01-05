@@ -3,9 +3,11 @@ package de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite;
 import com.viaversion.viabackwards.api.BackwardsProtocol;
 import com.viaversion.viabackwards.api.data.BackwardsMappings;
 import com.viaversion.viabackwards.api.rewriters.SoundRewriter;
+import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.RegistryType;
 import com.viaversion.viaversion.api.minecraft.entities.Entity1_16Types;
+import com.viaversion.viaversion.api.platform.providers.ViaProviders;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.data.entity.EntityTrackerBase;
@@ -16,6 +18,7 @@ import com.viaversion.viaversion.rewriter.TagRewriter;
 import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.metadata.MetadataRewriter1_16to20w14infinite;
 import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.packets.BlockItemPackets20w14infinite;
 import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.packets.EntityPackets20w14infinite;
+import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider;
 import de.florianmichael.viacursed.util.ItemBackwardsMappings;
 
 import java.util.UUID;
@@ -95,9 +98,12 @@ public class Protocol1_16to20w14infinite extends BackwardsProtocol<ClientboundPa
             public void registerMap() {
                 handler(wrapper -> {
                     wrapper.passthrough(Type.BYTE);
-                    // Flying and walking speed - not important anyways
-                    wrapper.write(Type.FLOAT, 0.05F);
-                    wrapper.write(Type.FLOAT, 0.1F);
+                    final PlayerAbilitiesProvider playerAbilitiesProvider = Via.getManager().getProviders().get(PlayerAbilitiesProvider.class);
+                    if (playerAbilitiesProvider == null) {
+                        throw new IllegalStateException("ViaCursed doesn't have PlayerAbilitiesProvider?");
+                    }
+                    wrapper.write(Type.FLOAT, playerAbilitiesProvider.getFlySpeed());
+                    wrapper.write(Type.FLOAT, playerAbilitiesProvider.getWalkSpeed());
                 });
             }
         });
@@ -147,6 +153,13 @@ public class Protocol1_16to20w14infinite extends BackwardsProtocol<ClientboundPa
         tagRewriter.addEmptyTags(RegistryType.ENTITY, "minecraft:arrows", "minecraft:beehive_inhabitors", "minecraft:raiders", "minecraft:skeletons");
         tagRewriter.addEmptyTags(RegistryType.ITEM, "minecraft:beds", "minecraft:coals", "minecraft:fences", "minecraft:flowers",
                 "minecraft:lectern_books", "minecraft:music_discs", "minecraft:small_flowers", "minecraft:tall_flowers", "minecraft:trapdoors", "minecraft:walls", "minecraft:wooden_fences");
+    }
+
+    @Override
+    public void register(ViaProviders providers) {
+        super.register(providers);
+
+        providers.register(PlayerAbilitiesProvider.class, new PlayerAbilitiesProvider());
     }
 
     @Override

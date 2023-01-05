@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.util.values
 
 import com.viaversion.viaversion.api.Via
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.vialoadingbase.util.VersionListEnum
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -9,6 +8,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.Valu
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.command.ViaDumpBypassSender
 import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.andOlder
 import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.rangeTo
+import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.singleton
 
 object ProtocolHackValues {
 
@@ -30,6 +30,9 @@ object ProtocolHackValues {
     // 1.19 -> 1.18.2
     val hideSignatureIndicator = ValueBooleanProtocol("Hide signature indicator", VersionListEnum.r1_18_2.andOlder())
     val disableSequencing = ValueBooleanProtocol("Disable sequencing", VersionListEnum.r1_18_2.andOlder())
+
+    // 20w14 infinite -> 1.16
+    val emulateWrongPlayerAbilities = ValueBooleanProtocol("Emulate (wrong!) player abilities", VersionListEnum.s20w14infinite.singleton())
 
     // 1.14 -> 1.13.2
     val smoothOutMerchantScreens = ValueBooleanProtocol("Smooth out merchant screens", VersionListEnum.r1_13_2.andOlder())
