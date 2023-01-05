@@ -42,6 +42,7 @@ import java.util.logging.Logger
  *  - Blink: Readd simple tracker, too big errors
  *  - Click Pearl
  *  - PathFinder: make values
+ *  - Render Profiler
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions
