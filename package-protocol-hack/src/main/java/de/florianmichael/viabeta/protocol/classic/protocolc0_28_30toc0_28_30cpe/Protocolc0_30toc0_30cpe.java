@@ -12,8 +12,7 @@ import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.api.type.types.CustomByteType;
-import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
-import com.viaversion.viaversion.protocols.protocol1_9to1_8.Protocol1_9To1_8;
+import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.ClientboundPackets1_19_3;
 import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.api.data.BlockList1_6;
 import de.florianmichael.viabeta.api.model.ChunkCoord;
@@ -27,7 +26,6 @@ import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.data
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.model.ClassicLevel;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.ClassicBlockRemapper;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.ClassicLevelStorage;
-import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.ClassicPositionTracker;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.ClassicProgressStorage;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.type.Typec0_30;
 import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.data.ClassicProtocolExtension;
@@ -412,11 +410,11 @@ public class Protocolc0_30toc0_30cpe extends AbstractProtocol<ClientboundPackets
     }
 
     private void changeGameState(final UserConnection user, final int state, final float value) throws Exception {
-        final PacketWrapper gameStateChange = PacketWrapper.create(ClientboundPackets1_8.GAME_EVENT, user);
+        final PacketWrapper gameStateChange = PacketWrapper.create(ClientboundPackets1_19_3.GAME_EVENT, user);
         gameStateChange.write(Type.BYTE, (byte) state);
         gameStateChange.write(Type.FLOAT, value);
 
-        gameStateChange.send(Protocol1_9To1_8.class);
+        gameStateChange.sendRaw();
     }
 
     @Override

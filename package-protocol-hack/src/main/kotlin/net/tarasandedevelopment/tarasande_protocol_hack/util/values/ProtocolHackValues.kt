@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande_protocol_hack.util.values
 
 import com.viaversion.viaversion.api.Via
 import de.florianmichael.vialoadingbase.util.VersionListEnum
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
@@ -15,6 +16,9 @@ object ProtocolHackValues {
     // General
     val autoChangeValuesDependentOnVersion = ValueBoolean(this, "Auto change values dependent on version", true)
     val betaCraftAuth = ValueBoolean(this, "BetaCraft auth", true)
+    val autoDetectInBetaCraft2Go = object : ValueBoolean(this, "Auto detect in BetaCraft2Go", false) {
+        override fun isEnabled() = FabricLoader.getInstance().isModLoaded("beta-craft-2-go")
+    }
     val legacyTest = ValueBoolean(this, "Legacy Test", false)
 
     @Suppress("unused")

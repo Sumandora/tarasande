@@ -74,6 +74,19 @@ class TarasandeProtocolHack : NativeProvider {
     companion object {
         lateinit var cancelOpenPacket: ValueBoolean
         var viaConnection: UserConnection? = null
+
+        fun update(protocol: VersionListEnum, reloadProtocolHackValues: Boolean) {
+            ViaLoadingBase.instance().switchVersionTo(protocol.originalVersion)
+
+            if (reloadProtocolHackValues) {
+                TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
+                    if (it is ValueBooleanProtocol)
+                        it.value = it.version.any { range -> protocol in range }
+                }
+            }
+
+            EntityDimensionReplacement.reloadDimensions()
+        }
     }
 
     fun initialize() {
@@ -213,19 +226,6 @@ class TarasandeProtocolHack : NativeProvider {
                 }
             }
         }
-    }
-
-    fun update(protocol: VersionListEnum, reloadProtocolHackValues: Boolean) {
-        ViaLoadingBase.instance().switchVersionTo(protocol.originalVersion)
-
-        if (reloadProtocolHackValues) {
-            TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
-                if (it is ValueBooleanProtocol)
-                    it.value = it.version.any { range -> protocol in range }
-            }
-        }
-
-        EntityDimensionReplacement.reloadDimensions()
     }
 
     override fun isSinglePlayer() = MinecraftClient.getInstance()?.isInSingleplayer != false

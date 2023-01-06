@@ -18,6 +18,11 @@
     "clamp-protocol-hack.mixins.json",
     "tarasande-protocol-hack.mixins.json"
   ],
+  "entrypoints": {
+    "florian-michael:beta-craft-2-go": [
+      "net.tarasandedevelopment.tarasande_protocol_hack.platform.BetaCraft2GoEntrypoint"
+    ]
+  },
   "accessWidener": "tarasande-protocol-hack.accesswidener",
   "depends": {
     "fabricloader": ">=0.14.9",
