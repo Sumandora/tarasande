@@ -21,7 +21,7 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_8._1_8_LegacyConstants;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.LegacyConstants_1_8;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
@@ -108,12 +108,12 @@ public abstract class MixinEntity implements IEntity_Protocol {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && (Object) this instanceof ClientPlayerEntity) {
             this.setPos(x, y, z);
             this.setBoundingBox(new Box(
-                    x - (double) _1_8_LegacyConstants.PLAYER_MODEL_WIDTH / 2.0F,
+                    x - (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH / 2.0F,
                     y,
-                    z - (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH / 2.0F,
-                    x + (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH / 2.0F,
-                    y + (double)_1_8_LegacyConstants.PLAYER_MODEL_HEIGHT,
-                    z + (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH / 2.0F
+                    z - (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH / 2.0F,
+                    x + (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH / 2.0F,
+                    y + (double) LegacyConstants_1_8.PLAYER_MODEL_HEIGHT,
+                    z + (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH / 2.0F
             ));
             ci.cancel();
         }

@@ -1,8 +1,8 @@
 package de.florianmichael.clampclient.injection.mixininterface;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_8._1_8_PlayerAndLivingEntityMovementEmulation;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.PlayerAndLivingEntityMovementEmulation_1_8;
 
 public interface ILivingEntity_Protocol {
 
-    _1_8_PlayerAndLivingEntityMovementEmulation protocolhack_getPlayerLivingEntityMovementWrapper();
+    PlayerAndLivingEntityMovementEmulation_1_8 protocolhack_getPlayerLivingEntityMovementWrapper();
 }

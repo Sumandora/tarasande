@@ -1,4 +1,4 @@
-package de.florianmichael.clampclient.injection.instrumentation_1_8.wrapper;
+package de.florianmichael.clampclient.injection.instrumentation_1_8;
 
 import net.minecraft.world.border.WorldBorder;
 

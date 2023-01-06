@@ -22,8 +22,8 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
 import com.mojang.authlib.GameProfile;
-import de.florianmichael.clampclient.injection.instrumentation_1_8._1_8_PlayerAndLivingEntityMovementEmulation;
-import de.florianmichael.clampclient.injection.instrumentation_1_8._1_8_LegacyConstants;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.PlayerAndLivingEntityMovementEmulation_1_8;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.LegacyConstants_1_8;
 import de.florianmichael.clampclient.injection.mixininterface.IClientPlayerEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
@@ -242,12 +242,12 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     public boolean canNoClipBeGood(ClientPlayerEntity instance) {
         if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return instance.noClip;
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
-            final _1_8_PlayerAndLivingEntityMovementEmulation a18PlayerAndLivingEntityMovementEmulation = ((ILivingEntity_Protocol) this).protocolhack_getPlayerLivingEntityMovementWrapper();
+            final PlayerAndLivingEntityMovementEmulation_1_8 a18PlayerAndLivingEntityMovementEmulation = ((ILivingEntity_Protocol) this).protocolhack_getPlayerLivingEntityMovementWrapper();
 
-            a18PlayerAndLivingEntityMovementEmulation.pushOutOfBlocks(this.getPos().x - (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D, this.getBoundingBox().minY + 0.5D, this.getPos().z + (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D);
-            a18PlayerAndLivingEntityMovementEmulation.pushOutOfBlocks(this.getPos().x - (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D, this.getBoundingBox().minY + 0.5D, this.getPos().z - (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D);
-            a18PlayerAndLivingEntityMovementEmulation.pushOutOfBlocks(this.getPos().x + (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D, this.getBoundingBox().minY + 0.5D, this.getPos().z - (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D);
-            a18PlayerAndLivingEntityMovementEmulation.pushOutOfBlocks(this.getPos().x + (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D, this.getBoundingBox().minY + 0.5D, this.getPos().z + (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D);
+            a18PlayerAndLivingEntityMovementEmulation.pushOutOfBlocks(this.getPos().x - (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 0.35D, this.getBoundingBox().minY + 0.5D, this.getPos().z + (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 0.35D);
+            a18PlayerAndLivingEntityMovementEmulation.pushOutOfBlocks(this.getPos().x - (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 0.35D, this.getBoundingBox().minY + 0.5D, this.getPos().z - (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 0.35D);
+            a18PlayerAndLivingEntityMovementEmulation.pushOutOfBlocks(this.getPos().x + (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 0.35D, this.getBoundingBox().minY + 0.5D, this.getPos().z - (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 0.35D);
+            a18PlayerAndLivingEntityMovementEmulation.pushOutOfBlocks(this.getPos().x + (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 0.35D, this.getBoundingBox().minY + 0.5D, this.getPos().z + (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 0.35D);
             return true;
         }
         return instance.noClip;

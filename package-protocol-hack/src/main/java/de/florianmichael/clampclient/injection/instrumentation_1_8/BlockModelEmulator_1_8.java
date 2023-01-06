@@ -1,6 +1,5 @@
 package de.florianmichael.clampclient.injection.instrumentation_1_8;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_8.wrapper.DirectionWrapper;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
 import net.minecraft.block.*;
@@ -29,7 +28,8 @@ import java.util.Map;
  * Notes:
  * - setBlockBoundsForItemRender is actually part from the Block class but not important for us, since it's the rendering (outline shape)
  */
-public class BlockModelEmulator {
+@SuppressWarnings("ALL")
+public class BlockModelEmulator_1_8 {
 
     public static final Map<Block, BlockModel> blockModelTransformer = new HashMap<>();
 
@@ -1093,6 +1093,7 @@ public class BlockModelEmulator {
         }
     }
 
+    @SuppressWarnings("UnnecessaryUnboxing")
     public static class FenceGateBlockModel extends DefaultBlockModel {
 
         public static final List<Block> FENCE_GATES_IN_1_8 = Arrays.asList(

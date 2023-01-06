@@ -1,4 +1,4 @@
-package de.florianmichael.clampclient.injection.instrumentation_1_8.util;
+package de.florianmichael.clampclient.injection.instrumentation_1_8;
 
 public class MathHelper_1_8 {
 

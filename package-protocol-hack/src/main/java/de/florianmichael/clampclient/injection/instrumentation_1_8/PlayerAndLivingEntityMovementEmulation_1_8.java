@@ -1,10 +1,6 @@
 package de.florianmichael.clampclient.injection.instrumentation_1_8;
 
 import com.google.common.collect.Lists;
-import de.florianmichael.clampclient.injection.instrumentation_1_8.util.MathHelper_1_8;
-import de.florianmichael.clampclient.injection.instrumentation_1_8.util.WaterCalculation_1_8;
-import de.florianmichael.clampclient.injection.instrumentation_1_8.wrapper.BoxWrapper;
-import de.florianmichael.clampclient.injection.instrumentation_1_8.wrapper.WorldBorderWrapper;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import net.minecraft.block.*;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -38,11 +34,11 @@ import java.util.Random;
  * was changed from the 1.14, but is replaced with the 1.8 emulation.
  */
 @SuppressWarnings({"deprecation", "RedundantCast", "UnnecessaryUnboxing", "PointlessArithmeticExpression", "DataFlowIssue"})
-public class _1_8_PlayerAndLivingEntityMovementEmulation {
+public class PlayerAndLivingEntityMovementEmulation_1_8 {
 
     private final LivingEntity original;
 
-    public _1_8_PlayerAndLivingEntityMovementEmulation(final LivingEntity original) {
+    public PlayerAndLivingEntityMovementEmulation_1_8(final LivingEntity original) {
         this.original = original;
     }
 
@@ -103,7 +99,7 @@ public class _1_8_PlayerAndLivingEntityMovementEmulation {
                         BlockState iblockstate = original.world.getBlockState(blockpos2);
 
                         try {
-                            BlockModelEmulator.getTransformerByBlock(iblockstate.getBlock()).onEntityCollidedWithBlock(original.world, blockpos2, iblockstate, original);
+                            BlockModelEmulator_1_8.getTransformerByBlock(iblockstate.getBlock()).onEntityCollidedWithBlock(original.world, blockpos2, iblockstate, original);
                         } catch (Throwable throwable) {
                             throw new RuntimeException(throwable);
                         }
@@ -136,11 +132,11 @@ public class _1_8_PlayerAndLivingEntityMovementEmulation {
 
                         if (block == materialIn) {
 
-                            double d0 = (double) ((float) (l1 + 1) - WaterCalculation_1_8.getLiquidHeightPercent(((Integer) iblockstate.get(FluidBlock.LEVEL)).intValue()));
+                            double d0 = (double) ((float) (l1 + 1) - LegacyConstants_1_8.getLiquidHeightPercent(((Integer) iblockstate.get(FluidBlock.LEVEL)).intValue()));
 
                             if ((double) l >= d0) {
                                 flag = true;
-                                vec3 = BlockModelEmulator.getTransformerByBlock(block).modifyAcceleration(original.world, blockpos$mutableblockpos, entityIn, vec3);
+                                vec3 = BlockModelEmulator_1_8.getTransformerByBlock(block).modifyAcceleration(original.world, blockpos$mutableblockpos, entityIn, vec3);
                             }
                         }
                     }
@@ -191,15 +187,15 @@ public class _1_8_PlayerAndLivingEntityMovementEmulation {
         original.playSound(SoundEvents.ENTITY_GENERIC_SPLASH /* USE GETTER */, f, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.4F);
         float f1 = (float) MathHelper.floor(original.getBoundingBox().minY);
 
-        for (int i = 0; (float) i < 1.0F + _1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 20.0F; ++i) {
-            float f2 = (this.rand.nextFloat() * 2.0F - 1.0F) * _1_8_LegacyConstants.PLAYER_MODEL_WIDTH;
-            float f3 = (this.rand.nextFloat() * 2.0F - 1.0F) * _1_8_LegacyConstants.PLAYER_MODEL_WIDTH;
+        for (int i = 0; (float) i < 1.0F + LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 20.0F; ++i) {
+            float f2 = (this.rand.nextFloat() * 2.0F - 1.0F) * LegacyConstants_1_8.PLAYER_MODEL_WIDTH;
+            float f3 = (this.rand.nextFloat() * 2.0F - 1.0F) * LegacyConstants_1_8.PLAYER_MODEL_WIDTH;
             original.world.addParticle(ParticleTypes.BUBBLE, original.getPos().x + (double) f2, (double) (f1 + 1.0F), original.getPos().z + (double) f3, original.getVelocity().x, original.getVelocity().y - (double) (this.rand.nextFloat() * 0.2F), original.getVelocity().z);
         }
 
-        for (int j = 0; (float) j < 1.0F + _1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 20.0F; ++j) {
-            float f4 = (this.rand.nextFloat() * 2.0F - 1.0F) * _1_8_LegacyConstants.PLAYER_MODEL_WIDTH;
-            float f5 = (this.rand.nextFloat() * 2.0F - 1.0F) * _1_8_LegacyConstants.PLAYER_MODEL_WIDTH;
+        for (int j = 0; (float) j < 1.0F + LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 20.0F; ++j) {
+            float f4 = (this.rand.nextFloat() * 2.0F - 1.0F) * LegacyConstants_1_8.PLAYER_MODEL_WIDTH;
+            float f5 = (this.rand.nextFloat() * 2.0F - 1.0F) * LegacyConstants_1_8.PLAYER_MODEL_WIDTH;
             original.world.addParticle(ParticleTypes.SPLASH, original.getPos().x + (double) f4, (double) (f1 + 1.0F), original.getPos().z + (double) f5, original.getVelocity().x, original.getVelocity().y, original.getVelocity().z);
         }
     }
@@ -415,7 +411,7 @@ public class _1_8_PlayerAndLivingEntityMovementEmulation {
                             iblockstate1 = world.getBlockState(mutableBlockPos);
                         }
 
-                        BlockModelEmulator.getTransformerByBlock(iblockstate1.getBlock()).addCollisionBoxesToList(world, mutableBlockPos, iblockstate1, bb, list, entityIn);
+                        BlockModelEmulator_1_8.getTransformerByBlock(iblockstate1.getBlock()).addCollisionBoxesToList(world, mutableBlockPos, iblockstate1, bb, list, entityIn);
                     }
                 }
             }
@@ -623,7 +619,7 @@ public class _1_8_PlayerAndLivingEntityMovementEmulation {
 
             if (d3 != x) original.getVelocity().x = 0.0D;
             if (d5 != z) original.getVelocity().z = 0.0D;
-            if (d4 != y) BlockModelEmulator.getTransformerByBlock(block1).onLanded(original.world, original);
+            if (d4 != y) BlockModelEmulator_1_8.getTransformerByBlock(block1).onLanded(original.world, original);
 
             if (this.canTriggerWalking() && !flag && !original.hasVehicle()) {
                 double d12 = original.getPos().x - d0;
@@ -633,7 +629,7 @@ public class _1_8_PlayerAndLivingEntityMovementEmulation {
                 if (block1 != Blocks.LADDER) d13 = 0.0D;
 
                 if (block1 != null && original.isOnGround()) {
-                    BlockModelEmulator.getTransformerByBlock(block1).onEntityCollidedWithBlock(original.world, blockpos, original);
+                    BlockModelEmulator_1_8.getTransformerByBlock(block1).onEntityCollidedWithBlock(original.world, blockpos, original);
                 }
 
                 distanceWalkedModified = (float) ((double) this.distanceWalkedModified + (double) MathHelper_1_8.sqrt_double(d12 * d12 + d14 * d14) * 0.6D);
@@ -690,7 +686,7 @@ public class _1_8_PlayerAndLivingEntityMovementEmulation {
         if (onGroundIn) {
             if (original.fallDistance > 0.0F) {
                 if (blockIn != null) {
-                    BlockModelEmulator.getTransformerByBlock(blockIn).onFallenUpon(original.world, pos, original, original.fallDistance);
+                    BlockModelEmulator_1_8.getTransformerByBlock(blockIn).onFallenUpon(original.world, pos, original, original.fallDistance);
                 } else {
                     fall(original.fallDistance, 1.0F);
                 }
