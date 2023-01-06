@@ -3,10 +3,13 @@ package de.florianmichael.clampclient.injection.instrumentation_1_8;
 import com.google.common.collect.Lists;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.blockcollision.BlockModelEmulator;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.util.MathHelper_1_8;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.util.WaterCalculation_1_8;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.wrapper.BoxWrapper;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.wrapper.WorldBorderWrapper;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import net.minecraft.block.*;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Flutterer;
 import net.minecraft.entity.LivingEntity;
@@ -15,6 +18,8 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
@@ -23,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.border.WorldBorder;
 
 import java.util.List;
+import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public class _1_8_PlayerAndLivingEntityMovementEmulation {
@@ -34,6 +40,8 @@ public class _1_8_PlayerAndLivingEntityMovementEmulation {
     }
 
     // Living Entity
+
+    private final Random rand = new Random();
 
     public void moveFlying(float strafe, float forward, float friction) {
         float f = strafe * strafe + forward * forward;
@@ -93,63 +101,253 @@ public class _1_8_PlayerAndLivingEntityMovementEmulation {
         }
     }
 
-    public void moveEntityWithHeading(float strafe, float forward) {
-        float f4 = 0.91F;
+    public boolean handleMaterialAcceleration(Box bb, Block materialIn, Entity entityIn)
+    {
+        int i = MathHelper.floor(bb.minX);
+        int j = MathHelper.floor(bb.maxX + 1.0D);
+        int k = MathHelper.floor(bb.minY);
+        int l = MathHelper.floor(bb.maxY + 1.0D);
+        int i1 = MathHelper.floor(bb.minZ);
+        int j1 = MathHelper.floor(bb.maxZ + 1.0D);
 
-        if (original.isOnGround()) {
-            f4 = getMaterialsFriction(original.world.getBlockState(new BlockPos(MathHelper.floor(original.getPos().x), MathHelper.floor(original.getBoundingBox().minY) - 1, MathHelper.floor(original.getPos().z))).getBlock()) * 0.91F;
-        }
-
-        float f = 0.16277136F / (f4 * f4 * f4);
-        float f5;
-
-        if (original.isOnGround()) {
-            f5 = getAIMoveSpeed() * f;
-        } else {
-            f5 = original.airStrafingSpeed;
-        }
-        this.moveFlying(strafe, forward, f5);
-        f4 = 0.91F;
-
-        if (original.isOnGround()) {
-            f4 = getMaterialsFriction(original.world.getBlockState(new BlockPos(MathHelper.floor(original.getPos().x), MathHelper.floor(original.getBoundingBox().minY) - 1, MathHelper.floor(original.getPos().z))).getBlock()) * 0.91F;
-        }
-
-        if (this.isOnLadder())
+        if (!original.world.isRegionLoaded(i, k, i1, j, l, j1))
         {
-            float f6 = 0.15F;
-            original.getVelocity().x = MathHelper.clamp(original.getVelocity().x, (double)(-f6), (double)f6);
-            original.getVelocity().z = MathHelper.clamp(original.getVelocity().z, (double)(-f6), (double)f6);
+            return false;
+        }
+        else
+        {
+            boolean flag = false;
+            Vec3d vec3 = new Vec3d(0.0D, 0.0D, 0.0D);
+
+            for (int k1 = i; k1 < j; ++k1)
+            {
+                for (int l1 = k; l1 < l; ++l1)
+                {
+                    for (int i2 = i1; i2 < j1; ++i2)
+                    {
+                        BlockPos blockpos$mutableblockpos = new BlockPos(k1, l1, i2);
+                        BlockState iblockstate = original.world.getBlockState(blockpos$mutableblockpos);
+                        Block block = iblockstate.getBlock();
+
+                        if (block == materialIn) {
+
+                            double d0 = (double)((float)(l1 + 1) - WaterCalculation_1_8.getLiquidHeightPercent(((Integer)iblockstate.get(FluidBlock.LEVEL)).intValue()));
+
+                            if ((double)l >= d0) {
+                                flag = true;
+                                vec3 = BlockModelEmulator.getTransformerByBlock(block).modifyAcceleration(original.world, blockpos$mutableblockpos, entityIn, vec3);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (vec3.length() > 0.0D)
+            {
+                vec3 = vec3.normalize();
+                double d1 = 0.014D;
+                entityIn.getVelocity().x += vec3.getX() * d1;
+                entityIn.getVelocity().y += vec3.getY() * d1;
+                entityIn.getVelocity().z += vec3.getZ() * d1;
+            }
+
+            return flag;
+        }
+    }
+
+    protected void updateAITick() {
+        original.getVelocity().y += 0.03999999910593033D;
+    }
+
+    protected void handleJumpLava() {
+        original.getVelocity().y += 0.03999999910593033D;
+    }
+
+    public void customJump() {
+        if (original.jumping) {
+            if (((IEntity_Protocol) original).protocolhack_isInWater()) {
+                this.updateAITick();
+            }
+            else if (false /*this.isInLava()*/)
+            {
+                this.handleJumpLava();
+            }
+            else if (original.isOnGround() && original.jumpingCooldown == 0)
+            {
+                ((ClientPlayerEntity) original).jump();
+                original.jumpingCooldown = 10;
+            }
+        } else {
+            original.jumpingCooldown = 0;
+        }
+
+    }
+
+    public void resetHeight() {
+        if (original.isSpectator()) return;
+
+        float f = MathHelper_1_8.sqrt_double(original.getVelocity().x * original.getVelocity().x * 0.20000000298023224D + original.getVelocity().y * original.getVelocity().y + original.getVelocity().z * original.getVelocity().z * 0.20000000298023224D) * 0.2F;
+
+        if (f > 1.0F)
+        {
+            f = 1.0F;
+        }
+
+        original.playSound(SoundEvents.ENTITY_GENERIC_SPLASH /* USE GETTER */, f, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.4F);
+        float f1 = (float)MathHelper.floor(original.getBoundingBox().minY);
+
+        for (int i = 0; (float)i < 1.0F + _1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 20.0F; ++i) {
+            float f2 = (this.rand.nextFloat() * 2.0F - 1.0F) * _1_8_LegacyConstants.PLAYER_MODEL_WIDTH;
+            float f3 = (this.rand.nextFloat() * 2.0F - 1.0F) * _1_8_LegacyConstants.PLAYER_MODEL_WIDTH;
+            original.world.addParticle(ParticleTypes.BUBBLE, original.getPos().x + (double)f2, (double)(f1 + 1.0F), original.getPos().z + (double)f3, original.getVelocity().x, original.getVelocity().y - (double)(this.rand.nextFloat() * 0.2F), original.getVelocity().z);
+        }
+
+        for (int j = 0; (float)j < 1.0F + _1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 20.0F; ++j) {
+            float f4 = (this.rand.nextFloat() * 2.0F - 1.0F) * _1_8_LegacyConstants.PLAYER_MODEL_WIDTH;
+            float f5 = (this.rand.nextFloat() * 2.0F - 1.0F) * _1_8_LegacyConstants.PLAYER_MODEL_WIDTH;
+            original.world.addParticle(ParticleTypes.SPLASH, original.getPos().x + (double)f4, (double)(f1 + 1.0F), original.getPos().z + (double)f5, original.getVelocity().x, original.getVelocity().y, original.getVelocity().z);
+        }
+    }
+
+    public boolean handleWaterMovement() {
+        if (handleMaterialAcceleration(original.getBoundingBox().expand(0.0D, -0.4000000059604645D, 0.0D).contract(0.001D, 0.001D, 0.001D), Blocks.WATER, original)) {
+            if (!((IEntity_Protocol) original).protocolhack_isInWater() && !original.firstUpdate) {
+                this.resetHeight();
+            }
+
             original.fallDistance = 0.0F;
-
-            if (original.getVelocity().y < -0.15D) {
-                original.getVelocity().y = -0.15D;
-            }
-
-            boolean flag = original.isSneaking() && original instanceof PlayerEntity;
-            if (flag && original.getVelocity().y < 0.0D) {
-                original.getVelocity().y = 0.0D;
-            }
+            ((IEntity_Protocol) original).protocolhack_setInWater(true);
+//            original.fire = 0;
+        } else {
+            ((IEntity_Protocol) original).protocolhack_setInWater(false);
         }
 
-        moveEntity(original.getVelocity().x, original.getVelocity().y, original.getVelocity().z);
+        return ((IEntity_Protocol) original).protocolhack_isInWater();
+    }
 
-        if (original.horizontalCollision && this.isOnLadder()) {
-            original.getVelocity().y = 0.2D;
+    public void moveEntityWithHeading(float strafe, float forward) {
+        if (!((IEntity_Protocol) original).protocolhack_isInWater() || ((PlayerEntity) original).getAbilities().flying) {
+            float f4 = 0.91F;
+
+            if (original.isOnGround()) {
+                f4 = getMaterialsFriction(original.world.getBlockState(new BlockPos(MathHelper.floor(original.getPos().x), MathHelper.floor(original.getBoundingBox().minY) - 1, MathHelper.floor(original.getPos().z))).getBlock()) * 0.91F;
+            }
+
+            float f = 0.16277136F / (f4 * f4 * f4);
+            float f5;
+
+            if (original.isOnGround()) {
+                f5 = getAIMoveSpeed() * f;
+            } else {
+                f5 = original.airStrafingSpeed;
+            }
+            this.moveFlying(strafe, forward, f5);
+            f4 = 0.91F;
+
+            if (original.isOnGround()) {
+                f4 = getMaterialsFriction(original.world.getBlockState(new BlockPos(MathHelper.floor(original.getPos().x), MathHelper.floor(original.getBoundingBox().minY) - 1, MathHelper.floor(original.getPos().z))).getBlock()) * 0.91F;
+            }
+
+            if (this.isOnLadder())
+            {
+                float f6 = 0.15F;
+                original.getVelocity().x = MathHelper.clamp(original.getVelocity().x, (double)(-f6), (double)f6);
+                original.getVelocity().z = MathHelper.clamp(original.getVelocity().z, (double)(-f6), (double)f6);
+                original.fallDistance = 0.0F;
+
+                if (original.getVelocity().y < -0.15D) {
+                    original.getVelocity().y = -0.15D;
+                }
+
+                boolean flag = original.isSneaking() && original instanceof PlayerEntity;
+                if (flag && original.getVelocity().y < 0.0D) {
+                    original.getVelocity().y = 0.0D;
+                }
+            }
+
+            moveEntity(original.getVelocity().x, original.getVelocity().y, original.getVelocity().z);
+
+            if (original.horizontalCollision && this.isOnLadder()) {
+                original.getVelocity().y = 0.2D;
+            }
+
+            if (!original.world.isChunkLoaded(new BlockPos((int)original.getPos().x, 0, (int)original.getPos().z))) {
+                if (original.getPos().y > 0)
+                    original.getVelocity().y = -0.1;
+                else
+                    original.getVelocity().y = 0;
+            } else original.getVelocity().y -= 0.08D;
+
+            original.getVelocity().y *= 0.98F;
+            original.getVelocity().x *= (double)f4;
+            original.getVelocity().z *= (double)f4;
+        } else {
+            double d0 = original.getPos().y;
+            float f1 = 0.8F;
+            float f2 = 0.02F;
+            float f3 = (float) EnchantmentHelper.getDepthStrider(original);
+
+            if (f3 > 3.0F)
+            {
+                f3 = 3.0F;
+            }
+
+            if (!original.isOnGround())
+            {
+                f3 *= 0.5F;
+            }
+
+            if (f3 > 0.0F)
+            {
+                f1 += (0.54600006F - f1) * f3 / 3.0F;
+                f2 += (this.getAIMoveSpeed() * 1.0F - f2) * f3 / 3.0F;
+            }
+
+            this.moveFlying(strafe, forward, f2);
+            this.moveEntity(original.getVelocity().x, original.getVelocity().y, original.getVelocity().z);
+            original.getVelocity().x *= (double)f1;
+            original.getVelocity().y *= 0.800000011920929D;
+            original.getVelocity().z *= (double)f1;
+            original.getVelocity().y -= 0.02D;
+
+            if (original.horizontalCollision && this.isOffsetPositionInLiquid(original.getVelocity().x, original.getVelocity().y + 0.6000000238418579D - original.getPos().y + d0, original.getVelocity().z))
+            {
+                original.getVelocity().y = 0.30000001192092896D;
+            }
         }
-
-        if (!original.world.isChunkLoaded(new BlockPos((int)original.getPos().x, 0, (int)original.getPos().z))) {
-            if (original.getPos().y > 0)
-                original.getVelocity().y = -0.1;
-            else
-                original.getVelocity().y = 0;
-        } else original.getVelocity().y -= 0.08D;
-
-        original.getVelocity().y *= 0.98F;
-        original.getVelocity().x *= (double)f4;
-        original.getVelocity().z *= (double)f4;
-
         original.updateLimbs((LivingEntity) (Object)original, original instanceof Flutterer);
+    }
+
+    public boolean isAnyLiquid(final World world, Box bb) {
+        int i = MathHelper.floor(bb.minX);
+        int j = MathHelper.floor(bb.maxX);
+        int k = MathHelper.floor(bb.minY);
+        int l = MathHelper.floor(bb.maxY);
+        int i1 = MathHelper.floor(bb.minZ);
+        int j1 = MathHelper.floor(bb.maxZ);
+
+        for (int k1 = i; k1 <= j; ++k1) {
+            for (int l1 = k; l1 <= l; ++l1) {
+                for (int i2 = i1; i2 <= j1; ++i2) {
+                    BlockPos mutableBlockPos = new BlockPos(k1, l1, i2);
+                    Block block = world.getBlockState(mutableBlockPos).getBlock();
+
+                    if (block.getDefaultState().getMaterial().isLiquid()) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isOffsetPositionInLiquid(double x, double y, double z) {
+        return isLiquidPresentInAABB(original.getBoundingBox().offset(x, y, z));
+    }
+
+    public boolean isLiquidPresentInAABB(Box bb) {
+        return getCollidingBoundingBoxes(original.world, original, bb).isEmpty() && !isAnyLiquid(original.world, bb);
     }
 
     private void resetPositionToBB() {
@@ -490,6 +688,10 @@ public class _1_8_PlayerAndLivingEntityMovementEmulation {
     }
 
     private void updateFallState(double y, boolean onGroundIn, Block blockIn, BlockPos pos) {
+        if (!((IEntity_Protocol) original).protocolhack_isInWater()) {
+            this.handleWaterMovement();
+        }
+
         if (onGroundIn) {
             if (original.fallDistance > 0.0F) {
                 if (blockIn != null) {

@@ -36,6 +36,7 @@ public class BlockModelEmulator {
         // Misc
         blockModelTransformer.put(Blocks.COBWEB, new CobwebBlockModel());
         blockModelTransformer.put(Blocks.SLIME_BLOCK, new SlimeBlockModel());
+        blockModelTransformer.put(Blocks.WATER, new LiquidBlockModel());
     }
 
     public static BlockModel getTransformerByBlock(final Block block) {

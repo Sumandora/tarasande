@@ -23,6 +23,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
 import de.florianmichael.clampclient.injection.instrumentation_1_8._1_8_LegacyConstants;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
+import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
@@ -46,6 +47,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+@SuppressWarnings("ConstantValue")
 @Mixin(Entity.class)
 public abstract class MixinEntity implements IEntity_Protocol {
 
@@ -120,8 +122,14 @@ public abstract class MixinEntity implements IEntity_Protocol {
     @SuppressWarnings("deprecation")
     @Inject(method = "updateMovementInFluid", at = @At("HEAD"), cancellable = true)
     private void modifyFluidMovementBoundingBox(TagKey<Fluid> fluidTag, double d, CallbackInfoReturnable<Boolean> ci) {
-        if (ViaLoadingBase.getTargetVersion().isNewerThan(VersionListEnum.r1_12_2))
+        if (ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) {
+            ci.setReturnValue(false);
             return;
+        }
+
+        if (ViaLoadingBase.getTargetVersion().isNewerThan(VersionListEnum.r1_12_2)) {
+            return;
+        }
 
         Box box = getBoundingBox().expand(0, -0.4, 0).contract(0.001);
         int minX = MathHelper.floor(box.minX);
@@ -195,6 +203,15 @@ public abstract class MixinEntity implements IEntity_Protocol {
         }
     }
 
+    @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;updateWaterState()Z", shift = At.Shift.BEFORE))
+    public void tickLegacyWaterMovement(CallbackInfo ci) {
+        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
+
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && (Object) this instanceof ClientPlayerEntity) {
+            ((ILivingEntity_Protocol) this).protocolhack_getPlayerLivingEntityMovementWrapper().handleWaterMovement();
+        }
+    }
+
     @Unique
     private boolean protocolhack_outsideBorder = false;
 
@@ -219,5 +236,18 @@ public abstract class MixinEntity implements IEntity_Protocol {
     @Override
     public void protocolhack_setInWeb(boolean inWeb) {
         this.protocolhack_inWeb = inWeb;
+    }
+
+    @Unique
+    private boolean protocolhack_inWater = false;
+
+    @Override
+    public boolean protocolhack_isInWater() {
+        return protocolhack_inWater;
+    }
+
+    @Override
+    public void protocolhack_setInWater(boolean inWater) {
+        this.protocolhack_inWater = inWater;
     }
 }

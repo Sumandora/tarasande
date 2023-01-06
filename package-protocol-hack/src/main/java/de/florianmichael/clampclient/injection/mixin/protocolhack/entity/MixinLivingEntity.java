@@ -45,6 +45,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
@@ -70,6 +71,12 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity_
     @Shadow public float sidewaysSpeed;
 
     @Shadow public float forwardSpeed;
+
+    @Shadow protected abstract void swimUpward(TagKey<Fluid> fluid);
+
+    @Shadow protected abstract boolean shouldSwimInFluids();
+
+    @Shadow public int jumpingCooldown;
 
     @Redirect(method = "applyMovementInput", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;jumping:Z"))
     private boolean disableJumpOnLadder(LivingEntity self) {
@@ -236,6 +243,35 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity_
             a18PlayerAndLivingEntityMovementEmulation.movePlayerWithHeading(this.sidewaysSpeed, this.forwardSpeed);
         } else {
             instance.travel(movementInput);
+        }
+    }
+
+    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;shouldSwimInFluids()Z"))
+    public boolean removeNewSwimHandling(LivingEntity instance) {
+        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return shouldSwimInFluids();
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+            return false;
+        }
+        return shouldSwimInFluids();
+    }
+
+    @Unique
+    private int previousJumpingCooldown;
+
+    @Inject(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;jumpingCooldown:I", ordinal = 4, shift = At.Shift.BEFORE))
+    public void doShit(CallbackInfo ci) {
+        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+            previousJumpingCooldown = this.jumpingCooldown;
+        }
+    }
+
+    @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;tickFallFlying()V", shift = At.Shift.BEFORE))
+    public void doShit2(CallbackInfo ci) {
+        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+            this.jumpingCooldown = previousJumpingCooldown;
+            protocolhack_getPlayerLivingEntityMovementWrapper().customJump();
         }
     }
 

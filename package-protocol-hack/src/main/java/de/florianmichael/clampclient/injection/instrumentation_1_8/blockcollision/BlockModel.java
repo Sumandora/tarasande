@@ -5,6 +5,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -23,5 +25,11 @@ public class BlockModel {
     }
     public void onLanded(World worldIn, Entity entityIn) {
         entityIn.getVelocity().y = 0.0D;
+    }
+    public Vec3d modifyAcceleration(World worldIn, BlockPos pos, Entity entityIn, Vec3d motion) {
+        return motion;
+    }
+    public boolean isBlockSolid(World worldIn, BlockPos pos, Direction side) {
+        return worldIn.getBlockState(pos).getBlock().getDefaultState().isSolidBlock(worldIn, pos);
     }
 }

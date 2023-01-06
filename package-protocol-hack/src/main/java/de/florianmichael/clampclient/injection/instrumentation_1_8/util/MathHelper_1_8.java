@@ -21,4 +21,8 @@ public class MathHelper_1_8 {
     public static float sqrt_float(float value) {
         return (float)Math.sqrt((double)value);
     }
+
+    public static float sqrt_double(double value) {
+        return (float)Math.sqrt(value);
+    }
 }
