@@ -35,8 +35,7 @@ public class BlockModelEmulator {
 
     static {
         // Base
-        blockModelTransformer.put(Blocks.STONE, new DefaultBlockModel());
-        blockModelTransformer.put(Blocks.AIR, new AirBlockModel());
+        blockModelTransformer.put(Blocks.STONE, new DefaultBlockModel()); // Every Block which doesn't have any custom model data
 
         for (Block block : CarpetBlockModel.CARPETS_IN_1_8) blockModelTransformer.put(block, new CarpetBlockModel());
         for (Block block : SlabBlockModel.SLABS_IN_1_8) blockModelTransformer.put(block, new SlabBlockModel());
@@ -82,6 +81,7 @@ public class BlockModelEmulator {
         blockModelTransformer.put(Blocks.TRAPPED_CHEST, new ChestBlockAndTrappedChestBlockModel());
 
         // These block's doesn't have any collision or model data
+        blockModelTransformer.put(Blocks.AIR, new AirBlockModel());
         blockModelTransformer.put(Blocks.OAK_SIGN, new AirBlockModel());
         blockModelTransformer.put(Blocks.OAK_WALL_SIGN, new AirBlockModel());
         blockModelTransformer.put(Blocks.BROWN_MUSHROOM, new AirBlockModel());
@@ -104,6 +104,7 @@ public class BlockModelEmulator {
         blockModelTransformer.put(Blocks.TRIPWIRE_HOOK, new AirBlockModel());
         blockModelTransformer.put(Blocks.VINE, new AirBlockModel());
         blockModelTransformer.put(Blocks.GRASS, new AirBlockModel());
+        blockModelTransformer.put(Blocks.LAVA, new AirBlockModel());
 
         /* Torch */ for (Block block : Arrays.asList(
                 Blocks.TORCH, Blocks.REDSTONE_TORCH, Blocks.WALL_TORCH,
@@ -157,6 +158,7 @@ public class BlockModelEmulator {
         public Box getCollisionBoundingBox(World worldIn, BlockPos pos, BlockState state) {
             return null;
         }
+        public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, Entity entityIn) {}
         public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, BlockState state, Entity entityIn) {}
         public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance) {
             ((ILivingEntity_Protocol) entityIn).protocolhack_getPlayerLivingEntityMovementWrapper().fall(fallDistance, 1.0F);
@@ -237,6 +239,8 @@ public class BlockModelEmulator {
 
         @Override
         public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, BlockState state, Entity entityIn) {
+            super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
+
             ((IEntity_Protocol) entityIn).protocolhack_setInWeb(true);
         }
     }
@@ -303,7 +307,7 @@ public class BlockModelEmulator {
     public static class SlimeBlockModel extends DefaultBlockModel {
 
         @Override
-        public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, BlockState state, Entity entityIn) {
+        public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, Entity entityIn) {
             if (Math.abs(entityIn.getVelocity().y) < 0.1D && !entityIn.isSneaking()) {
                 final double d0 = 0.4D + Math.abs(entityIn.getVelocity().y) * 0.2D;
 
@@ -364,7 +368,10 @@ public class BlockModelEmulator {
                 Blocks.JUNGLE_SLAB,
                 Blocks.ACACIA_SLAB,
                 Blocks.DARK_OAK_SLAB,
-                Blocks.RED_SANDSTONE_SLAB
+                Blocks.RED_SANDSTONE_SLAB,
+
+                // This was originally a metadata
+                Blocks.SMOOTH_STONE_SLAB
         );
 
         @Override
@@ -766,6 +773,13 @@ public class BlockModelEmulator {
     }
 
     public static class LilyPadBlockModel extends DefaultBlockModel {
+
+        public LilyPadBlockModel() {
+            float f = 0.5F;
+            float f1 = 0.015625F;
+
+            this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f1, 0.5F + f);
+        }
 
         @Override
         public void addCollisionBoxesToList(World worldIn, BlockPos pos, BlockState state, Box mask, List<Box> list, Entity collidingEntity) {
@@ -1174,7 +1188,10 @@ public class BlockModelEmulator {
             return new Box((double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), (double)(pos.getX() + 1), (double)((float)(pos.getY() + 1) - f), (double)(pos.getZ() + 1));
         }
 
+        @Override
         public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, BlockState state, Entity entityIn) {
+            super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
+
             entityIn.getVelocity().x *= 0.4D;
             entityIn.getVelocity().z *= 0.4D;
         }

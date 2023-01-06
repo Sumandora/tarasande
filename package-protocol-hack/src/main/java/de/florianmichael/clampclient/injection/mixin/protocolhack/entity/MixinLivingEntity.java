@@ -48,6 +48,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+@SuppressWarnings("ConstantValue")
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity extends Entity implements ILivingEntity_Protocol {
 
@@ -249,28 +250,28 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity_
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;shouldSwimInFluids()Z"))
     public boolean removeNewSwimHandling(LivingEntity instance) {
         if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return shouldSwimInFluids();
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && (Object) this instanceof ClientPlayerEntity) {
             return false;
         }
         return shouldSwimInFluids();
     }
 
     @Unique
-    private int previousJumpingCooldown;
+    private int protocolhack_previousJumpingCooldown;
 
-    @Inject(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;jumpingCooldown:I", ordinal = 4, shift = At.Shift.BEFORE))
+    @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;push(Ljava/lang/String;)V", ordinal = 2, shift = At.Shift.AFTER))
     public void doShit(CallbackInfo ci) {
         if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
-            previousJumpingCooldown = this.jumpingCooldown;
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && (Object) this instanceof ClientPlayerEntity) {
+            protocolhack_previousJumpingCooldown = this.jumpingCooldown;
         }
     }
 
     @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;tickFallFlying()V", shift = At.Shift.BEFORE))
     public void doShit2(CallbackInfo ci) {
         if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
-            this.jumpingCooldown = previousJumpingCooldown;
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && (Object) this instanceof ClientPlayerEntity) {
+            this.jumpingCooldown = protocolhack_previousJumpingCooldown;
             protocolhack_getPlayerLivingEntityMovementWrapper().customJump();
         }
     }
