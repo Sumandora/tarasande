@@ -51,7 +51,9 @@ import java.util.logging.Logger
  *  - MerchantScreenHandler#switchTo Crasher
  *  - Disable sneak slowdown in Sneak module
  *  - ViaLegacy texture pack using ProtocolPatcher
- *  - Fixed GUI Modification Emulation Key Check (discovered by Paul TM)
+ *  - Implement BetaCraft ServerList Browser (Maybe own mod)
+ *  - Adjust fix World Border in c0.30c
+ *  - Reimplement Item Splitter
  */
 class TarasandeMain {
 

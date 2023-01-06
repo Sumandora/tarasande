@@ -1110,18 +1110,15 @@ public class Protocol1_7_2_5to1_6_4 extends AbstractProtocol<ClientboundPackets1
                     final ByteBuf lengthBuffer = Unpooled.buffer();
 
                     switch (channel) {
-                        case "MC|BEdit":
-                        case "MC|BSign":
+                        case "MC|BEdit", "MC|BSign" -> {
                             final Item item = wrapper.read(Type1_7_6_10.COMPRESSED_ITEM); // book
                             ITEM_REWRITER.rewriteWrite(item);
-
                             lengthPacketWrapper.write(Type1_7_6_10.COMPRESSED_ITEM, item);
                             lengthPacketWrapper.writeToBuffer(lengthBuffer);
-
                             wrapper.set(Type.SHORT, 0, (short) lengthBuffer.readableBytes()); // length
                             wrapper.write(Type1_7_6_10.COMPRESSED_ITEM, item); // book
-                            break;
-                        case "MC|AdvCdm":
+                        }
+                        case "MC|AdvCdm" -> {
                             final byte type = wrapper.read(Type.BYTE); // command block type
                             if (type == 0) {
                                 final int posX = wrapper.read(Type.INT); // x
@@ -1143,7 +1140,7 @@ public class Protocol1_7_2_5to1_6_4 extends AbstractProtocol<ClientboundPackets1
                             } else {
                                 wrapper.cancel();
                             }
-                            break;
+                        }
                     }
                     lengthBuffer.release();
                 });
@@ -1193,5 +1190,4 @@ public class Protocol1_7_2_5to1_6_4 extends AbstractProtocol<ClientboundPackets1
             }
         });
     }
-
 }

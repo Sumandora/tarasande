@@ -356,9 +356,9 @@ public class Protocol1_2_1_3to1_1 extends AbstractProtocol<ClientboundPackets1_1
         userConnection.put(new SeedStorage(userConnection));
         userConnection.put(new PendingBlocksTracker(userConnection));
         userConnection.put(new DimensionTracker_1_1(userConnection));
+
         if (!userConnection.has(ClientWorld.class)) {
             userConnection.put(new ClientWorld(userConnection));
         }
     }
-
 }

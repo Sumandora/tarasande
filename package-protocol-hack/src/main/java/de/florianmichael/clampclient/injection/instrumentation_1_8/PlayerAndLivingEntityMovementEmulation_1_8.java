@@ -80,7 +80,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
         return (block == Blocks.LADDER || block == Blocks.VINE) && !original.isSpectator();
     }
 
-    // Spigot TM
+    // Spigot TM, this should be in the BlockModelEmulator, but how do I look?
     public float getMaterialsFriction(Block material) {
         if (material == Blocks.SLIME_BLOCK) return (float) (0.8);
         if (material == Blocks.ICE || material == Blocks.PACKED_ICE) return (float) (0.98);
@@ -127,9 +127,9 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
             for (int k1 = i; k1 < j; ++k1) {
                 for (int l1 = k; l1 < l; ++l1) {
                     for (int i2 = i1; i2 < j1; ++i2) {
-                        BlockPos blockpos$mutableblockpos = new BlockPos(k1, l1, i2);
-                        BlockState iblockstate = original.world.getBlockState(blockpos$mutableblockpos);
-                        Block block = iblockstate.getBlock();
+                        final BlockPos mutabeBlockPos = new BlockPos(k1, l1, i2);
+                        final BlockState iblockstate = original.world.getBlockState(mutabeBlockPos);
+                        final Block block = iblockstate.getBlock();
 
                         if (block == materialIn) {
 
@@ -137,7 +137,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
 
                             if ((double) l >= d0) {
                                 flag = true;
-                                vec3 = BlockModelEmulator_1_8.getTransformerByBlock(block).modifyAcceleration(original.world, blockpos$mutableblockpos, entityIn, vec3);
+                                vec3 = BlockModelEmulator_1_8.getTransformerByBlock(block).modifyAcceleration(original.world, mutabeBlockPos, entityIn, vec3);
                             }
                         }
                     }
@@ -219,7 +219,6 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
 
     public void moveEntityWithHeading(float strafe, float forward) {
         if (!isInLava() || ((PlayerEntity) original).getAbilities().flying) {
-
             if (!((IEntity_Protocol) original).protocolhack_isInWater() || ((PlayerEntity) original).getAbilities().flying) {
                 float f4 = 0.91F;
 

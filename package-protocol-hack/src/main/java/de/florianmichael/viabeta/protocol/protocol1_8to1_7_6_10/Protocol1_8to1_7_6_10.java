@@ -850,48 +850,25 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
 
                     final String inventoryName;
                     switch (windowType) {
-                        case 0:
-                            inventoryName = "minecraft:chest";
-                            break;
-                        case 1:
-                            inventoryName = "minecraft:crafting_table";
-                            break;
-                        case 2:
-                            inventoryName = "minecraft:furnace";
-                            break;
-                        case 3:
-                            inventoryName = "minecraft:dispenser";
-                            break;
-                        case 4:
-                            inventoryName = "minecraft:enchanting_table";
-                            break;
-                        case 5:
-                            inventoryName = "minecraft:brewing_stand";
-                            break;
-                        case 6:
+                        case 0 -> inventoryName = "minecraft:chest";
+                        case 1 -> inventoryName = "minecraft:crafting_table";
+                        case 2 -> inventoryName = "minecraft:furnace";
+                        case 3 -> inventoryName = "minecraft:dispenser";
+                        case 4 -> inventoryName = "minecraft:enchanting_table";
+                        case 5 -> inventoryName = "minecraft:brewing_stand";
+                        case 6 -> {
                             inventoryName = "minecraft:villager";
                             if (!useProvidedWindowTitle || title.isEmpty()) {
                                 title = "entity.Villager.name";
                                 useProvidedWindowTitle = false;
                             }
-                            break;
-                        case 7:
-                            inventoryName = "minecraft:beacon";
-                            break;
-                        case 8:
-                            inventoryName = "minecraft:anvil";
-                            break;
-                        case 9:
-                            inventoryName = "minecraft:hopper";
-                            break;
-                        case 10:
-                            inventoryName = "minecraft:dropper";
-                            break;
-                        case 11:
-                            inventoryName = "EntityHorse";
-                            break;
-                        default:
-                            throw new IllegalArgumentException("Unknown window type: " + windowType);
+                        }
+                        case 7 -> inventoryName = "minecraft:beacon";
+                        case 8 -> inventoryName = "minecraft:anvil";
+                        case 9 -> inventoryName = "minecraft:hopper";
+                        case 10 -> inventoryName = "minecraft:dropper";
+                        case 11 -> inventoryName = "EntityHorse";
+                        default -> throw new IllegalArgumentException("Unknown window type: " + windowType);
                     }
 
                     if (windowType == 1/*crafting_table*/ || windowType == 4/*enchanting_table*/ || windowType == 8/*anvil*/) {
@@ -1151,13 +1128,12 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                     wrapper.read(Type.SHORT); // length
 
                     switch (channel) {
-                        case "MC|Brand": {
+                        case "MC|Brand" -> {
                             final byte[] data = wrapper.read(Type.REMAINING_BYTES);
                             final String brand = new String(data, StandardCharsets.UTF_8);
                             wrapper.write(Type.STRING, brand);
-                            break;
                         }
-                        case "MC|TrList":
+                        case "MC|TrList" -> {
                             wrapper.passthrough(Type.INT); // window id
                             final int count = wrapper.passthrough(Type.UNSIGNED_BYTE); // count
                             for (int i = 0; i < count; i++) {
@@ -1180,15 +1156,14 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                                 wrapper.write(Type.INT, 0); // uses
                                 wrapper.write(Type.INT, Integer.MAX_VALUE); // max uses
                             }
-                            break;
-                        case "MC|RPack": {
+                        }
+                        case "MC|RPack" -> {
                             final byte[] data = wrapper.read(Type.REMAINING_BYTES);
                             final String resourcePackURL = new String(data, StandardCharsets.UTF_8);
                             wrapper.setPacketType(ClientboundPackets1_8.RESOURCE_PACK);
                             wrapper.clearPacket();
                             wrapper.write(Type.STRING, resourcePackURL);
                             wrapper.write(Type.STRING, "legacy");
-                            break;
                         }
                     }
                 });

@@ -1009,18 +1009,23 @@ public class BlockModelEmulator_1_8 {
         public int getMetaFromState(BlockState state) {
             int i = 0;
 
-            if (state.get(DoorBlock.HALF) == DoubleBlockHalf.UPPER) {
-                i = i | 8;
+            try {
+                if (state.get(DoorBlock.HALF) == DoubleBlockHalf.UPPER) {
+                    i = i | 8;
 
-                if (state.get(DoorBlock.HINGE) == DoorHinge.RIGHT) i |= 1;
-                if (state.get(DoorBlock.POWERED).booleanValue()) i |= 2;
-            } else {
-                i = i | rotateY(state.get(DoorBlock.FACING)).getHorizontal();
+                    if (state.get(DoorBlock.HINGE) == DoorHinge.RIGHT) i |= 1;
+                    if (state.get(DoorBlock.POWERED).booleanValue()) i |= 2;
+                } else {
+                    i = i | rotateY(state.get(DoorBlock.FACING)).getHorizontal();
 
-                if (state.get(DoorBlock.OPEN).booleanValue()) i |= 4;
+                    if (state.get(DoorBlock.OPEN).booleanValue()) i |= 4;
+                }
+
+                return i;
+            } catch (Exception e) {
+                // Beta 1.7.3 forcing bypass
+                return i;
             }
-
-            return i;
         }
 
         // Direction Wrapper
