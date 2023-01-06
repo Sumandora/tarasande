@@ -47,15 +47,11 @@ import java.util.logging.Logger
  * TODO | Protocol Hack:
  *  - Entity Dimensions
  *  - Re-add PrivateMSGDetector in 1.19.3 -> 1.19.2
- *  - Implement Water/Lava Movement
- *  - Blocking/Placement is broken
  *  - WindowClick in 1.16.5 is not fully remapped
  *  - MerchantScreenHandler#switchTo Crasher
  *  - Disable sneak slowdown in Sneak module
  *  - ViaLegacy texture pack using ProtocolPatcher
  *  - Fixed GUI Modification Emulation Key Check (discovered by Paul TM)
- *  - Implement Mouse Filter and Angle set in 1.8
- *  - Die Keys sind Kaputt in ChatSessions???
  */
 class TarasandeMain {
 

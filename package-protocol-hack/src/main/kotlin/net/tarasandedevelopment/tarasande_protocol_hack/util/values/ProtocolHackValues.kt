@@ -41,6 +41,7 @@ object ProtocolHackValues {
     // 1.13 -> 1.12.2
     val removeNewTabCompletion = ValueBooleanProtocol("Remove new tab completion", VersionListEnum.r1_12_2.andOlder())
     val executeInputsInSync = ValueBooleanProtocol("Execute inputs in sync", VersionListEnum.r1_12_2.andOlder())
+    val emulateMouseInputs = ValueBooleanProtocol("Emulate mouse inputs", VersionListEnum.r1_12_2.andOlder())
 
     // 1.9 -> 1.8.x
     val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", VersionListEnum.r1_8.andOlder())

@@ -23,13 +23,14 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_12to1_11_1.Protocol1_12To1_11_1;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.ServerboundPackets1_9_3;
+import de.florianmichael.clampclient.injection.mixininterface.IMouse_Protocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Mouse;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.item.SwordItem;
@@ -38,7 +39,9 @@ import net.minecraft.util.Hand;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleInventoryMove;
 import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack;
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -53,6 +56,8 @@ public abstract class MixinMinecraftClient {
     @Shadow
     @Nullable
     public ClientPlayerEntity player;
+
+    @Shadow @Final public Mouse mouse;
 
     @Redirect(method = "doItemUse",
             slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;interactItem(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;")),
@@ -87,6 +92,13 @@ public abstract class MixinMinecraftClient {
             clientStatus.write(Type.VAR_INT, 2); // Open Inventory Achievement
 
             clientStatus.sendToServer(Protocol1_12To1_11_1.class);
+        }
+    }
+
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;tick()V", ordinal = 0, shift = At.Shift.BEFORE))
+    public void tickMouseEmulationFilter(CallbackInfo ci) {
+        if (ProtocolHackValues.INSTANCE.getEmulateMouseInputs().getValue()) {
+            ((IMouse_Protocol) this.mouse).protocolhack_getMouseEmulation().tickFilter();
         }
     }
 }

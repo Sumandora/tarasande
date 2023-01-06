@@ -1,5 +1,8 @@
 package de.florianmichael.clampclient.injection.instrumentation_1_8;
 
+/**
+ * This class represents the MathHelper Changes (Table Isn) in 1.8
+ */
 public class MathHelper_1_8 {
 
     private static final float[] SIN_TABLE = new float[65536];

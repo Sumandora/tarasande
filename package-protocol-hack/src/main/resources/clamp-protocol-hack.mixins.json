@@ -118,5 +118,9 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "MixinMouse",
+    "screen.MixinSimpleOption_OptionSliderWidgetImpl"
+  ]
 }

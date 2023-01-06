@@ -80,6 +80,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
         return (block == Blocks.LADDER || block == Blocks.VINE) && !original.isSpectator();
     }
 
+    // Spigot TM
     public float getMaterialsFriction(Block material) {
         if (material == Blocks.SLIME_BLOCK) return (float) (0.8);
         if (material == Blocks.ICE || material == Blocks.PACKED_ICE) return (float) (0.98);
@@ -208,7 +209,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
 
             original.fallDistance = 0.0F;
             ((IEntity_Protocol) original).protocolhack_setInWater(true);
-//            original.fire = 0;
+            // 1.8 Clients reset fire ticks here, force when?
         } else {
             ((IEntity_Protocol) original).protocolhack_setInWater(false);
         }
@@ -598,8 +599,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
             original.verticalCollision = d4 != y;
             original.setOnGround(original.verticalCollision && d4 < 0.0D);
             original.field_36331 = original.isOnGround();
-            // TODO this.collidedSoftly = this.isCollidedHorizontally || this.isCollidedVertically;
-
+            // this.collidedSoftly doesn't exist anymore
             int i = MathHelper.floor(original.getPos().x);
             int j = MathHelper.floor(original.getPos().y - 0.20000000298023224D);
             int k = MathHelper.floor(original.getPos().z);
@@ -682,7 +682,6 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
         if (!((IEntity_Protocol) original).protocolhack_isInWater()) {
             this.handleWaterMovement();
         }
-
         if (onGroundIn) {
             if (original.fallDistance > 0.0F) {
                 if (blockIn != null) {

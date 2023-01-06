@@ -15,10 +15,16 @@ accessible field net/minecraft/entity/Entity firstUpdate Z
 accessible field net/minecraft/util/math/Direction HORIZONTAL [Lnet/minecraft/util/math/Direction;
 accessible field net/minecraft/entity/LivingEntity jumpingCooldown I
 accessible field net/minecraft/entity/LivingEntity jumping Z
+accessible field net/minecraft/client/option/SimpleOption value Ljava/lang/Object;
+accessible field net/minecraft/client/Mouse lastMouseUpdateTime D
+accessible field net/minecraft/client/Mouse cursorDeltaX D
+accessible field net/minecraft/client/Mouse cursorDeltaY D
 
 accessible method net/minecraft/entity/LivingEntity jump ()V
 accessible method net/minecraft/entity/LivingEntity getFallSound (I)Lnet/minecraft/sound/SoundEvent;
 accessible method net/minecraft/entity/Entity playStepSound (Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)V
+
+accessible class net/minecraft/client/option/SimpleOption$OptionSliderWidgetImpl
 
 mutable field net/minecraft/util/math/Vec3d x D
 mutable field net/minecraft/util/math/Vec3d y D

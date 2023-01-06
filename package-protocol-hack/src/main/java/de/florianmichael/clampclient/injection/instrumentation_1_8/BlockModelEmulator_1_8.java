@@ -153,6 +153,8 @@ public class BlockModelEmulator_1_8 {
     // This Class represents a 1.8 Block
     public static class BlockModel {
 
+        // These methods are called in the Movement Emulation accordingly
+
         public void addCollisionBoxesToList(final World world, final BlockPos pos, final BlockState state, final Box mask, final List<Box> boundingBoxList, final Entity collidingEntity) {}
         public void setBlockBounds(final float minX, final float minY, final float minZ, final float maxX, final float maxY, final float maxZ) {}
         public Box getCollisionBoundingBox(World worldIn, BlockPos pos, BlockState state) {
@@ -175,6 +177,7 @@ public class BlockModelEmulator_1_8 {
     }
 
     public static class AirBlockModel extends BlockModel {
+        // bypass class for better code style
     }
 
     public static class DefaultBlockModel extends BlockModel {
@@ -1002,7 +1005,7 @@ public class BlockModelEmulator_1_8 {
             this.setBoundBasedOnMeta(combineMetadata(worldIn, pos));
         }
 
-        public static int getMetaFromState(BlockState state) {
+        public int getMetaFromState(BlockState state) {
             int i = 0;
 
             if (state.get(DoorBlock.HALF) == DoubleBlockHalf.UPPER) {
@@ -1011,12 +1014,23 @@ public class BlockModelEmulator_1_8 {
                 if (state.get(DoorBlock.HINGE) == DoorHinge.RIGHT) i |= 1;
                 if (state.get(DoorBlock.POWERED).booleanValue()) i |= 2;
             } else {
-                i = i | DirectionWrapper.rotateY(state.get(DoorBlock.FACING)).getHorizontal();
+                i = i | rotateY(state.get(DoorBlock.FACING)).getHorizontal();
 
                 if (state.get(DoorBlock.OPEN).booleanValue()) i |= 4;
             }
 
             return i;
+        }
+
+        // Direction Wrapper
+        public Direction rotateY(final Direction input) {
+            return switch (input) {
+                case NORTH -> Direction.EAST;
+                case EAST -> Direction.SOUTH;
+                case SOUTH -> Direction.WEST;
+                case WEST -> Direction.NORTH;
+                default -> throw new IllegalStateException("Unable to get Y-rotated facing of " + input);
+            };
         }
 
         private void setBoundBasedOnMeta(int combinedMeta) {
@@ -1381,8 +1395,19 @@ public class BlockModelEmulator_1_8 {
         }
     }
 
+    /**
+     * @author FlorianMichael as Jesse
+     *
+     * This method returns the appropriate model of the 1.8 from a block, if no model was specified,
+     * the model of a Stone block (DefaultBlockModel) is passed, as in the 1.8, the BlockModelEmulator defines
+     * thus only modified blocks or blocks which have no model data.
+     * @param block input block
+     * @return block model wrapper
+     */
     public static BlockModel getTransformerByBlock(final Block block) {
-        if (!blockModelTransformer.containsKey(block)) return blockModelTransformer.get(Blocks.STONE);
+        if (!blockModelTransformer.containsKey(block)) {
+            return blockModelTransformer.get(Blocks.STONE);
+        }
         return blockModelTransformer.get(block);
     }
 }
