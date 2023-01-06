@@ -22,8 +22,10 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
 import com.mojang.authlib.GameProfile;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import de.florianmichael.clampclient.injection.instrumentation_1_8._1_8_PlayerAndLivingEntityMovementEmulation;
+import de.florianmichael.clampclient.injection.instrumentation_1_8._1_8_LegacyConstants;
 import de.florianmichael.clampclient.injection.mixininterface.IClientPlayerEntity_Protocol;
+import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.MinecraftClient;
@@ -50,6 +52,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.event.EventDispatcher;
 
 @Mixin(value = ClientPlayerEntity.class, priority = 2000)
@@ -213,6 +216,41 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         if (ViaLoadingBase.getTargetVersion().isNewerThanOrEqualTo(VersionListEnum.r1_19_3)) {
             sendSprintingPacket();
         }
+    }
+
+    @Redirect(method = "canSprint", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;hasVehicle()Z"))
+    public boolean removeNewCheck(ClientPlayerEntity instance) {
+        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return instance.hasVehicle();
+
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+            return false;
+        }
+        return instance.hasVehicle();
+    }
+
+    // I-EEE 754
+    @Inject(method = "isWalking", at = @At("HEAD"), cancellable = true)
+    public void fixRoundingConvention(CallbackInfoReturnable<Boolean> cir) {
+        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
+
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+            cir.setReturnValue(this.input.movementForward >= 0.8F);
+        }
+    }
+
+    @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerEntity;noClip:Z"))
+    public boolean canNoClipBeGood(ClientPlayerEntity instance) {
+        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return instance.noClip;
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+            final _1_8_PlayerAndLivingEntityMovementEmulation a18PlayerAndLivingEntityMovementEmulation = ((ILivingEntity_Protocol) this).protocolhack_getPlayerLivingEntityMovementWrapper();
+
+            a18PlayerAndLivingEntityMovementEmulation.pushOutOfBlocks(this.getPos().x - (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D, this.getBoundingBox().minY + 0.5D, this.getPos().z + (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D);
+            a18PlayerAndLivingEntityMovementEmulation.pushOutOfBlocks(this.getPos().x - (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D, this.getBoundingBox().minY + 0.5D, this.getPos().z - (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D);
+            a18PlayerAndLivingEntityMovementEmulation.pushOutOfBlocks(this.getPos().x + (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D, this.getBoundingBox().minY + 0.5D, this.getPos().z - (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D);
+            a18PlayerAndLivingEntityMovementEmulation.pushOutOfBlocks(this.getPos().x + (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D, this.getBoundingBox().minY + 0.5D, this.getPos().z + (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH * 0.35D);
+            return true;
+        }
+        return instance.noClip;
     }
 
     @Override

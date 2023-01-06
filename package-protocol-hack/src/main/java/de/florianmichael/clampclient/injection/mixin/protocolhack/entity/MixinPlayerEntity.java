@@ -27,17 +27,16 @@ import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -101,6 +100,28 @@ public abstract class MixinPlayerEntity extends LivingEntity {
     private void injectGetAttackCooldownProgress(CallbackInfoReturnable<Float> ci) {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
             ci.setReturnValue(1f);
+        }
+    }
+
+    // I-EEE 754
+    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isSprinting()Z"))
+    public boolean fixRoundingConvention(PlayerEntity instance) {
+        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return instance.isSprinting();
+
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+            if (instance.isSprinting()) this.airStrafingSpeed = (float) ((double) this.airStrafingSpeed + (double) 0.02F * 0.3D);
+            return false;
+        }
+        return instance.isSprinting();
+    }
+
+    // 1.8 does this randomly?
+    @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setMovementSpeed(F)V", shift = At.Shift.BEFORE))
+    public void adjustMissingBaseValue(CallbackInfo ci) {
+        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
+
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+            getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue((double) abilities.getWalkSpeed());
         }
     }
 }

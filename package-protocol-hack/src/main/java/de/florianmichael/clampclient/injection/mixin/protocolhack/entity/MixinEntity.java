@@ -21,6 +21,8 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
+import de.florianmichael.clampclient.injection.instrumentation_1_8._1_8_LegacyConstants;
+import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
@@ -36,14 +38,16 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
-public abstract class MixinEntity {
+public abstract class MixinEntity implements IEntity_Protocol {
 
     @Shadow
     public World world;
@@ -70,6 +74,10 @@ public abstract class MixinEntity {
     @Shadow
     public abstract void setVelocity(Vec3d velocity);
 
+    @Shadow public abstract void setPos(double x, double y, double z);
+
+    @Shadow public abstract void setBoundingBox(Box boundingBox);
+
     @Inject(method = "getVelocityAffectingPos", at = @At("HEAD"), cancellable = true)
     public void injectGetVelocityAffectingPos(CallbackInfoReturnable<BlockPos> cir) {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_14_4))
@@ -88,6 +96,25 @@ public abstract class MixinEntity {
     private void onSetSwimming(boolean swimming, CallbackInfo ci) {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_2) && swimming)
             ci.cancel();
+    }
+
+    // I-EEE 754
+    @Inject(method = "setPosition(DDD)V", at = @At("HEAD"), cancellable = true)
+    public void fixRoundingConvention(double x, double y, double z, CallbackInfo ci) {
+        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
+
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && (Object) this instanceof ClientPlayerEntity) {
+            this.setPos(x, y, z);
+            this.setBoundingBox(new Box(
+                    x - (double) _1_8_LegacyConstants.PLAYER_MODEL_WIDTH / 2.0F,
+                    y,
+                    z - (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH / 2.0F,
+                    x + (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH / 2.0F,
+                    y + (double)_1_8_LegacyConstants.PLAYER_MODEL_HEIGHT,
+                    z + (double)_1_8_LegacyConstants.PLAYER_MODEL_WIDTH / 2.0F
+            ));
+            ci.cancel();
+        }
     }
 
     @SuppressWarnings("deprecation")
@@ -166,5 +193,31 @@ public abstract class MixinEntity {
         if (ViaLoadingBase.getTargetVersion().isNewerThanOrEqualTo(VersionListEnum.r1_19)) {
             instance.onLanding();
         }
+    }
+
+    @Unique
+    private boolean protocolhack_outsideBorder = false;
+
+    @Override
+    public boolean protocolhack_isOutsideBorder() {
+        return protocolhack_outsideBorder;
+    }
+
+    @Override
+    public void protocolhack_setOutsideBorder(boolean outsideBorder) {
+        this.protocolhack_outsideBorder = outsideBorder;
+    }
+
+    @Unique
+    private boolean protocolhack_inWeb = false;
+
+    @Override
+    public boolean protocolhack_isInWeb() {
+        return protocolhack_inWeb;
+    }
+
+    @Override
+    public void protocolhack_setInWeb(boolean inWeb) {
+        this.protocolhack_inWeb = inWeb;
     }
 }

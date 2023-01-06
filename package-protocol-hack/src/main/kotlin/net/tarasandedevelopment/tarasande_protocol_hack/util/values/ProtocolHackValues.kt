@@ -15,6 +15,7 @@ object ProtocolHackValues {
     // General
     val autoChangeValuesDependentOnVersion = ValueBoolean(this, "Auto change values dependent on version", true)
     val betaCraftAuth = ValueBoolean(this, "BetaCraft auth", true)
+    val legacyTest = ValueBoolean(this, "Legacy Test", false)
 
     @Suppress("unused")
     val createViaDump = object : ValueButton(this, "Create via dump") {

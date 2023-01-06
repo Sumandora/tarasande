@@ -28,9 +28,12 @@ import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSneak;
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(KeyboardInput.class)
 public class MixinKeyboardInput extends Input {
@@ -48,5 +51,18 @@ public class MixinKeyboardInput extends Input {
             return !MinecraftClient.getInstance().player.isSpectator() && (this.sneaking || slowDown);
         }
         return slowDown;
+    }
+
+    // I-EEE 754
+    @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/KeyboardInput;movementSideways:F", ordinal = 1, shift = At.Shift.BEFORE), cancellable = true)
+    public void fixRoundingConvention(boolean slowDown, float f, CallbackInfo ci) {
+        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
+
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+            ci.cancel();
+
+            this.movementSideways = (float)((double)this.movementSideways * 0.3D);
+            this.movementForward = (float)((double)this.movementForward * 0.3D);
+        }
     }
 }

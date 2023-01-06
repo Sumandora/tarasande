@@ -21,9 +21,12 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import de.florianmichael.clampclient.injection.instrumentation_1_8._1_8_PlayerAndLivingEntityMovementEmulation;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.util.MathHelper_1_8;
+import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -37,13 +40,15 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class MixinLivingEntity extends Entity {
+public abstract class MixinLivingEntity extends Entity implements ILivingEntity_Protocol {
 
     @Shadow
     protected boolean jumping;
@@ -61,6 +66,10 @@ public abstract class MixinLivingEntity extends Entity {
 
     @Shadow
     protected abstract float getBaseMovementSpeedMultiplier();
+
+    @Shadow public float sidewaysSpeed;
+
+    @Shadow public float forwardSpeed;
 
     @Redirect(method = "applyMovementInput", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;jumping:Z"))
     private boolean disableJumpOnLadder(LivingEntity self) {
@@ -184,5 +193,54 @@ public abstract class MixinLivingEntity extends Entity {
             return false;
         }
         return instance.isClient();
+    }
+
+
+    @Unique
+    private final _1_8_PlayerAndLivingEntityMovementEmulation a18PlayerAndLivingEntityMovementEmulation = new _1_8_PlayerAndLivingEntityMovementEmulation((LivingEntity)(Object) this);
+
+    @Redirect(method = "jump", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isSprinting()Z"))
+    public boolean fixMathHelperTable(LivingEntity instance) {
+        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return instance.isSprinting();
+
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+            if (instance.isSprinting()) {
+                float f = this.getYaw() * 0.017453292F;
+                // this casts are very important, please: don't delete them
+                this.getVelocity().x -= (double)(MathHelper_1_8.sin(f) * 0.2F);
+                this.getVelocity().z += (double)(MathHelper_1_8.cos(f) * 0.2F);
+            }
+            return false;
+        }
+        return instance.isSprinting();
+    }
+
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isSleeping()Z", ordinal = 1))
+    public boolean removeNewCheck(LivingEntity instance) {
+        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return instance.isSleeping();
+
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+            return false;
+        }
+        return instance.isSleeping();
+    }
+
+    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;travel(Lnet/minecraft/util/math/Vec3d;)V"))
+    public void replaceMovementCode(LivingEntity instance, Vec3d movementInput) {
+        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) {
+            instance.travel(movementInput);
+            return;
+        }
+
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && instance instanceof ClientPlayerEntity) {
+            a18PlayerAndLivingEntityMovementEmulation.movePlayerWithHeading(this.sidewaysSpeed, this.forwardSpeed);
+        } else {
+            instance.travel(movementInput);
+        }
+    }
+
+    @Override
+    public _1_8_PlayerAndLivingEntityMovementEmulation protocolhack_getPlayerLivingEntityMovementWrapper() {
+        return a18PlayerAndLivingEntityMovementEmulation;
     }
 }

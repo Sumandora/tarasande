@@ -9,3 +9,9 @@ accessible field net/minecraft/client/network/AllowedAddressResolver redirectRes
 accessible field net/minecraft/client/option/KeyBinding boundKey Lnet/minecraft/client/util/InputUtil$Key;
 accessible field net/minecraft/client/MinecraftClient renderTickCounter Lnet/minecraft/client/render/RenderTickCounter;
 accessible field net/minecraft/client/render/RenderTickCounter tickTime F
+accessible field net/minecraft/block/AbstractBlock slipperiness F
+accessible field net/minecraft/world/border/WorldBorder maxRadius I
+
+mutable field net/minecraft/util/math/Vec3d x D
+mutable field net/minecraft/util/math/Vec3d y D
+mutable field net/minecraft/util/math/Vec3d z D
