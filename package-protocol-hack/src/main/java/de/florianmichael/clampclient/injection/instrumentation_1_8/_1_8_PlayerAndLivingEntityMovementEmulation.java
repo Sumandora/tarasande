@@ -1,7 +1,6 @@
 package de.florianmichael.clampclient.injection.instrumentation_1_8;
 
 import com.google.common.collect.Lists;
-import de.florianmichael.clampclient.injection.instrumentation_1_8.blockcollision.BlockModelEmulator;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.util.MathHelper_1_8;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.util.WaterCalculation_1_8;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.wrapper.BoxWrapper;
