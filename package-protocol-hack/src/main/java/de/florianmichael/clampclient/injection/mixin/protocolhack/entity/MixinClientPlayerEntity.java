@@ -41,7 +41,7 @@ import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSprint;
 import net.tarasandedevelopment.tarasande_protocol_hack.event.EventSkipIdlePacket;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.ArmorUpdater1_8_0;
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.ArmorUpdater1_8;
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -256,7 +256,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Override
     public int getArmor() {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
-            return ArmorUpdater1_8_0.INSTANCE.armor(); // Fixes Armor HUD
+            return ArmorUpdater1_8.INSTANCE.armor(); // Fixes Armor HUD
         }
         return super.getArmor();
     }

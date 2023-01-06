@@ -45,6 +45,7 @@ object ProtocolHackValues {
 
     // 1.9 -> 1.8.x
     val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", VersionListEnum.r1_8.andOlder())
+    val emulateSignGUIModification = ValueBooleanProtocol("Emulate sign gui modification", VersionListEnum.r1_8.andOlder())
     val sendIdlePacket = ValueBooleanProtocol("Send idle packet", VersionListEnum.r1_8 .. VersionListEnum.r1_3_1tor1_3_2)
 }
 

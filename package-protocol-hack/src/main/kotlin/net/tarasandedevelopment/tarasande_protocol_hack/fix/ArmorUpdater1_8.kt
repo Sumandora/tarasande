@@ -6,7 +6,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 
-object ArmorUpdater1_8_0 {
+object ArmorUpdater1_8 {
 
     // this is a list of all 1.9 armor items with their id
     private val ids = HashMap<Item, Int>()

@@ -145,7 +145,8 @@ public class BlockModelEmulator_1_8 {
                 Blocks.DEAD_BUSH, Blocks.SUNFLOWER, Blocks.DANDELION,
                 Blocks.POPPY, Blocks.BLUE_ORCHID, Blocks.ALLIUM,
                 Blocks.AZURE_BLUET, Blocks.RED_TULIP, Blocks.ORANGE_TULIP,
-                Blocks.WHITE_TULIP, Blocks.PINK_TULIP, Blocks.OXEYE_DAISY)) blockModelTransformer.put(block, new AirBlockModel());
+                Blocks.WHITE_TULIP, Blocks.PINK_TULIP, Blocks.OXEYE_DAISY,
+                Blocks.LILAC, Blocks.LARGE_FERN, Blocks.FERN)) blockModelTransformer.put(block, new AirBlockModel());
 
         /* Stem */ for (Block block : Arrays.asList(Blocks.PUMPKIN_STEM, Blocks.MELON_STEM)) blockModelTransformer.put(block, new AirBlockModel());
     }

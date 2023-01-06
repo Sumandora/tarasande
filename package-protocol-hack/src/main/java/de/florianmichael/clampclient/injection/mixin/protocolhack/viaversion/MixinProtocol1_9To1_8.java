@@ -21,59 +21,77 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.viaversion;
 
-import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.minecraft.Position;
+import com.viaversion.viaversion.api.protocol.AbstractProtocol;
+import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.libs.gson.JsonElement;
-import com.viaversion.viaversion.libs.gson.JsonNull;
-import com.viaversion.viaversion.libs.gson.JsonObject;
+import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
+import com.viaversion.viaversion.protocols.protocol1_8.ServerboundPackets1_8;
+import com.viaversion.viaversion.protocols.protocol1_9to1_8.ClientboundPackets1_9;
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.Protocol1_9To1_8;
-import com.viaversion.viaversion.util.GsonUtil;
-import net.md_5.bungee.chat.ComponentSerializer;
+import com.viaversion.viaversion.protocols.protocol1_9to1_8.ServerboundPackets1_9;
+import net.minecraft.client.MinecraftClient;
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.Sign_1_8;
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.lang.reflect.Type;
-
+@SuppressWarnings("DataFlowIssue")
 @Mixin(value = Protocol1_9To1_8.class, remap = false)
-public class MixinProtocol1_9To1_8 {
+public class MixinProtocol1_9To1_8 extends AbstractProtocol<ClientboundPackets1_8, ClientboundPackets1_9, ServerboundPackets1_8, ServerboundPackets1_9> {
 
-    @Shadow
-    private static JsonElement constructJson(String par1) {
-        return null;
-    }
+    @Inject(method = "registerPackets", at = @At("RETURN"))
+    public void emulateSignData(CallbackInfo ci) {
+        this.registerServerbound(ServerboundPackets1_9.UPDATE_SIGN, new PacketRemapper() {
+            public void registerMap() {
+                this.map(Type.POSITION);
 
-    /**
-     * @author ViaVersion Team, FlorianMichael as EnZaXD
-     * @reason fix json components
-     */
-    @Overwrite
-    public static JsonElement fixJson(String line) {
-        try {
-            line = ComponentSerializer.toString(ComponentSerializer.parse(line));
-        } catch (Throwable throwable) { // this doesn't look like its valid
-            throwable.printStackTrace(); // In case there is some nasty protocol check, we should be notified
-            return constructJson(line);
-        }
+                this.map(Type.STRING, Protocol1_9To1_8.FIX_JSON);
+                this.map(Type.STRING, Protocol1_9To1_8.FIX_JSON);
+                this.map(Type.STRING, Protocol1_9To1_8.FIX_JSON);
+                this.map(Type.STRING, Protocol1_9To1_8.FIX_JSON);
 
-        if (line == null || line.equalsIgnoreCase("null")) {
-            return JsonNull.INSTANCE;
-        } else {
-            if ((!line.startsWith("\"") || !line.endsWith("\"")) && (!line.startsWith("{") || !line.endsWith("}"))) {
-                return constructJson(line);
+                this.handler((pw) -> {
+                    if (ProtocolHackValues.INSTANCE.getEmulateSignGUIModification().getValue()) {
+                        final Sign_1_8 currentSign = Sign_1_8.Companion.getSigns().get(Sign_1_8.Companion.getSigns().size() - 1);
+
+                        final int chunkX = currentSign.getPosition().x() / 16;
+                        final int chunkZ = currentSign.getPosition().y() / 16;
+
+                        if (!MinecraftClient.getInstance().world.isChunkLoaded(chunkX, chunkZ)) {
+                            pw.cancel();
+                        }
+
+                        pw.set(Type.COMPONENT, 0, currentSign.getLine1());
+                        pw.set(Type.COMPONENT, 1, currentSign.getLine2());
+                        pw.set(Type.COMPONENT, 2, currentSign.getLine3());
+                        pw.set(Type.COMPONENT, 3, currentSign.getLine4());
+                    }
+                });
             }
-            if (line.startsWith("\"") && line.endsWith("\"")) {
-                line = "{\"text\":" + line + "}";
+        });
+
+        this.registerClientbound(ClientboundPackets1_8.UPDATE_SIGN, new PacketRemapper() {
+            public void registerMap() {
+                this.map(Type.POSITION);
+                this.map(Type.STRING, Protocol1_9To1_8.FIX_JSON);
+                this.map(Type.STRING, Protocol1_9To1_8.FIX_JSON);
+                this.map(Type.STRING, Protocol1_9To1_8.FIX_JSON);
+                this.map(Type.STRING, Protocol1_9To1_8.FIX_JSON);
+                this.handler((pw) -> {
+                    final Position position = pw.get(Type.POSITION, 0);
+
+                    final JsonElement line1 = pw.get(Type.COMPONENT, 0);
+                    final JsonElement line2 = pw.get(Type.COMPONENT, 1);
+                    final JsonElement line3 = pw.get(Type.COMPONENT, 2);
+                    final JsonElement line4 = pw.get(Type.COMPONENT, 3);
+
+                    Sign_1_8.Companion.getSigns().add(new Sign_1_8(line1, line2, line3, line4, position));
+                });
             }
-        }
-        try {
-            return GsonUtil.getGson().fromJson(line, (Type) JsonObject.class);
-        } catch (Exception e) {
-            if (Via.getConfig().isForceJsonTransform()) {
-                return constructJson(line);
-            } else {
-                Via.getPlatform().getLogger().warning("Invalid JSON String: \"" + line + "\" Please report this issue to the ViaVersion Github: " + e.getMessage());
-                return GsonUtil.getGson().fromJson("{\"text\":\"\"}", (Type) JsonObject.class);
-            }
-        }
+        });
     }
 }
