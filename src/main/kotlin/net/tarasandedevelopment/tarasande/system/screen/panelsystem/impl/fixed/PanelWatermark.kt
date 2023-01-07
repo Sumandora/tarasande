@@ -12,7 +12,7 @@ import java.net.InetAddress
 
 private const val JAPANESE_NAME = "タラサンデ"
 
-class PanelWatermark : Panel("Watermark", FontWrapper.getWidth(JAPANESE_NAME) * 5.0, FontWrapper.fontHeight() * 5.0, true) {
+class PanelWatermark : Panel("Watermark", 150.0, 50.0, true) {
 
     private val hidePersonalName = ValueBoolean(this, "Hide personal name", true)
     private val messageOfTheDay = ValueText(this, "Message of the day", TarasandeMain.get().name)

@@ -26,8 +26,8 @@ object PredictionEngine {
     fun predictState(count: Int, baseEntity: PlayerEntity = MinecraftClient.getInstance().player!!, input: Input? = null, postConfig: ((ClientPlayerEntity) -> Unit)? = null): Pair<ClientPlayerEntity, ArrayList<Vec3d>> {
         val mc = MinecraftClient.getInstance()
 
-        val selfVelocity = baseEntity.velocity
-        val localVelocity = mc.player?.velocity
+        val selfVelocity = baseEntity.velocity.copy()
+        val localVelocity = mc.player?.velocity?.copy()
 
         val wasDevelopment = SharedConstants.isDevelopment
         SharedConstants.isDevelopment = true

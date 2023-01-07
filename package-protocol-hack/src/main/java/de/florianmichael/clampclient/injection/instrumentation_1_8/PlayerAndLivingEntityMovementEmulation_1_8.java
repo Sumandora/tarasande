@@ -22,6 +22,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.border.WorldBorder;
+import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.event.EventMovement;
+import net.tarasandedevelopment.tarasande.event.EventStep;
+import net.tarasandedevelopment.tarasande.event.EventVelocityYaw;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSafeWalk;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
+import su.mandora.event.EventDispatcher;
 
 import java.util.List;
 import java.util.Random;
@@ -61,8 +68,11 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
             f = friction / f;
             strafe = strafe * f;
             forward = forward * f;
-            float f1 = MathHelper_1_8.sin(original.getYaw() * (float) Math.PI / 180.0F);
-            float f2 = MathHelper_1_8.cos(original.getYaw() * (float) Math.PI / 180.0F);
+
+            EventVelocityYaw eventVelocityYaw = new EventVelocityYaw(original.getYaw());
+            EventDispatcher.INSTANCE.call(eventVelocityYaw);
+            float f1 = MathHelper_1_8.sin(eventVelocityYaw.getYaw() * (float) Math.PI / 180.0F);
+            float f2 = MathHelper_1_8.cos(eventVelocityYaw.getYaw() * (float) Math.PI / 180.0F);
             original.getVelocity().x += (double) (strafe * f2 - forward * f1);
             original.getVelocity().z += (double) (forward * f2 + strafe * f1);
         }
@@ -352,9 +362,11 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
     }
 
     private void resetPositionToBB() {
-        original.getPos().x = (original.getBoundingBox().minX + original.getBoundingBox().maxX) / 2.0D;
-        original.getPos().y = original.getBoundingBox().minY;
-        original.getPos().z = (original.getBoundingBox().minZ + original.getBoundingBox().maxZ) / 2.0D;
+        original.setPos(
+                (original.getBoundingBox().minX + original.getBoundingBox().maxX) / 2.0D,
+                original.getBoundingBox().minY,
+                (original.getBoundingBox().minZ + original.getBoundingBox().maxZ) / 2.0D
+        );
     }
 
     public boolean isInsideBorder(WorldBorder worldBorderIn, Entity entityIn) {
@@ -420,6 +432,14 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
     }
 
     private void moveEntity(double x, double y, double z) {
+        EventMovement eventMovement = new EventMovement(original, new Vec3d(x, y, z));
+        EventDispatcher.INSTANCE.call(eventMovement);
+        if(eventMovement.getDirty()) {
+            x = eventMovement.getVelocity().x;
+            y = eventMovement.getVelocity().y;
+            z = eventMovement.getVelocity().z;
+        }
+
         if (original.noClip) {
             original.setBoundingBox(original.getBoundingBox().offset(x, y, z));
             this.resetPositionToBB();
@@ -443,7 +463,9 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
             double d4 = y;
             double d5 = z;
 
-            boolean flag = original.isOnGround() && original.isSneaking() && (Object) original instanceof PlayerEntity;
+            ModuleSafeWalk moduleSafeWalk = TarasandeMain.Companion.managerModule().get(ModuleSafeWalk.class);
+
+            boolean flag = original.isOnGround() && (original.isSneaking() || (moduleSafeWalk.getEnabled() && !moduleSafeWalk.getSneak().getValue())) && (Object) original instanceof PlayerEntity;
 
             if (flag) {
                 double d6;
@@ -510,13 +532,15 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
 
             original.setBoundingBox(original.getBoundingBox().offset(0.0D, 0.0D, z));
 
-            if (original.stepHeight > 0.0F && flag1 && (d3 != x || d5 != z)) {
+            EventStep eventStep = new EventStep(original.stepHeight, EventStep.State.PRE);
+            EventDispatcher.INSTANCE.call(eventStep);
+            if (eventStep.getStepHeight() > 0.0F && flag1 && (d3 != x || d5 != z)) {
                 double d11 = x;
                 double d7 = y;
                 double d8 = z;
                 Box axisalignedbb3 = original.getBoundingBox();
                 original.setBoundingBox(axisalignedbb);
-                y = (double) original.stepHeight;
+                y = (double) eventStep.getStepHeight();
                 List<Box> list = getCollidingBoundingBoxes(original.world, original, original.getBoundingBox().stretch(d3, y, d5));
                 Box axisalignedbb4 = original.getBoundingBox();
                 Box axisalignedbb5 = axisalignedbb4.stretch(d3, 0.0D, d5);
@@ -590,6 +614,9 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
                     z = d8;
                     original.setBoundingBox(axisalignedbb3);
                 }
+
+                eventStep = new EventStep(eventStep.getStepHeight(), EventStep.State.POST);
+                EventDispatcher.INSTANCE.call(eventStep);
             }
 
             this.resetPositionToBB();
@@ -633,6 +660,10 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
 
                 distanceWalkedModified = (float) ((double) this.distanceWalkedModified + (double) MathHelper_1_8.sqrt_double(d12 * d12 + d14 * d14) * 0.6D);
                 distanceWalkedOnStepModified = (float) ((double) this.distanceWalkedOnStepModified + (double) MathHelper_1_8.sqrt_double(d12 * d12 + d13 * d13 + d14 * d14) * 0.6D);
+
+                original.prevHorizontalSpeed = original.horizontalSpeed;
+                original.horizontalSpeed = distanceWalkedModified;
+                original.distanceTraveled = distanceWalkedModified;
 
                 if (this.distanceWalkedOnStepModified > (float) this.nextStepDistance && block1 != Blocks.AIR) {
                     this.nextStepDistance = (int) this.distanceWalkedOnStepModified + 1;
@@ -681,6 +712,13 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
         if (!((IEntity_Protocol) original).protocolhack_isInWater()) {
             this.handleWaterMovement();
         }
+
+        if(onGroundIn) {
+            ModuleNoFall moduleNoFall = TarasandeMain.Companion.managerModule().get(ModuleNoFall.class);
+            if(moduleNoFall.getEnabled() && moduleNoFall.getMode().isSelected(0) && moduleNoFall.getGroundSpoofMode().isSelected(1))
+                return;
+        }
+
         if (onGroundIn) {
             if (original.fallDistance > 0.0F) {
                 if (blockIn != null) {
