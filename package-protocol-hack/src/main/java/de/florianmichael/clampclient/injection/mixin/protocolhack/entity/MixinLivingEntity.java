@@ -260,7 +260,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity_
     private int protocolhack_previousJumpingCooldown;
 
     @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;push(Ljava/lang/String;)V", ordinal = 2, shift = At.Shift.AFTER))
-    public void doShit(CallbackInfo ci) {
+    public void trackJumpingCooldown(CallbackInfo ci) {
         if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && (Object) this instanceof ClientPlayerEntity) {
             protocolhack_previousJumpingCooldown = this.jumpingCooldown;
@@ -268,7 +268,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity_
     }
 
     @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;tickFallFlying()V", shift = At.Shift.BEFORE))
-    public void doShit2(CallbackInfo ci) {
+    public void replaceJumpingCooldown(CallbackInfo ci) {
         if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && (Object) this instanceof ClientPlayerEntity) {
             this.jumpingCooldown = protocolhack_previousJumpingCooldown;
