@@ -172,17 +172,11 @@ public class SoundEmulation {
             return sound;
         }
 
-        switch (soundType) {
-            case IDLE:
-                sound = new ConfiguredSound(entitySounds[0], 1.0F, 1.0F);
-                break;
-            case HURT:
-                sound = new ConfiguredSound(entitySounds[1], 1.0F, 1.0F);
-                break;
-            case DEATH:
-                sound = new ConfiguredSound(entitySounds[2], 1.0F, 1.0F);
-                break;
-        }
+        sound = switch (soundType) {
+            case IDLE -> new ConfiguredSound(entitySounds[0], 1.0F, 1.0F);
+            case HURT -> new ConfiguredSound(entitySounds[1], 1.0F, 1.0F);
+            case DEATH -> new ConfiguredSound(entitySounds[2], 1.0F, 1.0F);
+        };
 
         final float correctedVolume = VOL_ADJUST[entityTypeID];
         if (correctedVolume != 0F) {

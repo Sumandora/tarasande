@@ -1,7 +1,10 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.util.inventory
 
 import com.viaversion.viaversion.api.Via
+import com.viaversion.viaversion.api.connection.UserConnection
 import com.viaversion.viaversion.api.minecraft.item.Item
+import com.viaversion.viaversion.api.protocol.Protocol
+import com.viaversion.viaversion.api.protocol.ProtocolPathEntry
 import com.viaversion.viaversion.api.protocol.packet.Direction
 import com.viaversion.viaversion.api.protocol.packet.State
 import com.viaversion.viaversion.connection.UserConnectionImpl
@@ -18,33 +21,18 @@ import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket
 
 object MinecraftViaItemRewriter {
 
-    private val userConnection = UserConnectionImpl(null, true)
-
-    fun minecraftToViaItem(stack: ItemStack, targetVersion: Int): Item? {
+    fun minecraftToViaItem(info: UserConnection, stack: ItemStack, targetVersion: Int): Item? {
         // Generate protocol path
-        val path = Via.getManager().protocolManager.getProtocolPath(SharedConstants.getProtocolVersion(), targetVersion) ?: return null
+        val path: List<ProtocolPathEntry> = Via.getManager().protocolManager.getProtocolPath(SharedConstants.getProtocolVersion(), targetVersion) ?: return null
 
         // Create a fake creative inventory action
         val packet = CreativeInventoryActionC2SPacket(36, stack)
         val buf = PacketByteBuf(Unpooled.buffer())
-
         packet.write(buf)
 
         val id = NetworkState.PLAY.getPacketId(NetworkSide.SERVERBOUND, packet) ?: return null
-
-        val wrapper = PacketWrapperImpl(id, buf, userConnection)
-
-        try {
-            // Transform all packets according to UserConnectionImpl#transform
-            path.forEach {
-                it.protocol().transform(Direction.SERVERBOUND, State.PLAY, wrapper)
-                wrapper.resetReader()
-            }
-        } catch (exception: CancelException) {
-            exception.printStackTrace()
-            // The item no longer exists?
-            return null
-        }
+        val wrapper = PacketWrapperImpl(id, buf, info)
+        wrapper.apply(Direction.SERVERBOUND, State.PLAY, 0, path.map { it.protocol() })
 
         // Hack: get the first Item from the packet wrapper, sadly there is no method for that
         @Suppress("KotlinConstantConditions")

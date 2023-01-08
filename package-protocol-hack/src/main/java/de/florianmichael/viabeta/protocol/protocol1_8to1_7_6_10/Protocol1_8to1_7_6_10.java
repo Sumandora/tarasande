@@ -370,18 +370,10 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                     int modX = 0;
                     int modZ = 0;
                     switch (rotation) {
-                        case 0:
-                            modZ = 1;
-                            break;
-                        case 1:
-                            modX = -1;
-                            break;
-                        case 2:
-                            modZ = -1;
-                            break;
-                        case 3:
-                            modX = 1;
-                            break;
+                        case 0 -> modZ = 1;
+                        case 1 -> modX = -1;
+                        case 2 -> modZ = -1;
+                        case 3 -> modX = 1;
                     }
                     wrapper.set(Type.POSITION, 0, new Position(pos.x() + modX, pos.y(), pos.z() + modZ));
                 });

@@ -56,6 +56,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
+@SuppressWarnings("DataFlowIssue")
 @Mixin(ClientPlayerInteractionManager.class)
 public abstract class MixinClientPlayerInteractionManager {
 
@@ -120,7 +121,7 @@ public abstract class MixinClientPlayerInteractionManager {
                 assert client.player != null;
                 clickSlotPacket.write(Type.SHORT, ((IScreenHandler_Protocol) client.player.currentScreenHandler).protocolhack_getAndIncrementLastActionId());
                 clickSlotPacket.write(Type.VAR_INT, clickSlot.getActionType().ordinal());
-                clickSlotPacket.write(Type.FLAT_VAR_INT_ITEM, MinecraftViaItemRewriter.INSTANCE.minecraftToViaItem(slotItemBeforeModification, ProtocolVersion.v1_16.getVersion()));
+                clickSlotPacket.write(Type.FLAT_VAR_INT_ITEM, MinecraftViaItemRewriter.INSTANCE.minecraftToViaItem(clickSlotPacket.user(), slotItemBeforeModification, ProtocolVersion.v1_16.getVersion()));
 
                 clickSlotPacket.sendToServer(Protocol1_17To1_16_4.class);
 
