@@ -39,7 +39,6 @@ class ScreenBetterSlotListForgeInformation(parent: Screen, private val titleName
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
-
         this.renderTitle(matrices, this.titleName)
     }
 

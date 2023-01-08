@@ -51,6 +51,7 @@ import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.PackFormats
 import net.tarasandedevelopment.tarasande_protocol_hack.module.ModuleEveryItemOnArmor
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ViaBetaPlatformImpl
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.ViaCursedPlatformImpl
+import net.tarasandedevelopment.tarasande_protocol_hack.platform.betacraft.EntrySidebarPanelBetaCraftServers
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.clamp.FabricCommandArgumentsProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viabeta.*
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viacursed.FabricPlayerAbilitiesProvider
@@ -178,12 +179,6 @@ class TarasandeProtocolHack : NativeProvider {
                     add(ModuleEveryItemOnArmor())
                 }
 
-                ProtocolHackValues /* Force-Load */
-            }
-
-            add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
-                update(VersionListEnum.fromProtocolId(version.value.toInt()), false)
-
                 TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.apply {
                     insert(object : EntrySidebarPanelSelection("Protocol Hack", "Protocol Hack", VersionListEnum.RENDER_VERSIONS.map { it.getName() }, ViaLoadingBase.getTargetVersion().getName()) {
                         override fun onClick(newValue: String) {
@@ -200,6 +195,8 @@ class TarasandeProtocolHack : NativeProvider {
                             MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, name, ProtocolHackValues))
                         }
                     }, 1)
+
+                    insert(EntrySidebarPanelBetaCraftServers(), 2)
                 }
 
                 TarasandeMain.managerScreenExtension().add(object : ScreenExtensionButtonList<GameMenuScreen>(GameMenuScreen::class.java) {
@@ -211,6 +208,12 @@ class TarasandeProtocolHack : NativeProvider {
                         }
                     }
                 })
+
+                ProtocolHackValues /* Force-Load */
+            }
+
+            add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
+                update(VersionListEnum.fromProtocolId(version.value.toInt()), false)
             }
 
             add(EventConnectServer::class.java) {

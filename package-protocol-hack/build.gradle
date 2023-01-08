@@ -16,14 +16,15 @@ loom {
     accessWidenerPath = file("src/main/resources/tarasande-protocol-hack.accesswidener")
 }
 
-var viaLibs = [
+var libArray = [
         "com.viaversion:viaversion:${project.viaversion_version}",
         "com.viaversion:viabackwards-common:${project.viabackwards_version}",
         "org.yaml:snakeyaml:1.29",
 
         "com.github.FlorianMichael:ViaLoadingBase:${project.vialoadingbase_version}",
 
-        "net.lenni0451.mcstructs:all:2.1.0"
+        "net.lenni0451.mcstructs:all:2.1.0",
+        "org.jsoup:jsoup:1.15.3"
 ]
 
 this.remapJar {
@@ -38,7 +39,7 @@ this.shadowJar {
     exclude "native-binaries/*"
 
     dependencies {
-        for (final def lib in viaLibs) {
+        for (final def lib in libArray) {
             include(dependency(lib))
         }
     }
@@ -50,7 +51,7 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    for (final def via in viaLibs) {
+    for (final def via in libArray) {
         implementation(via)
     }
 
