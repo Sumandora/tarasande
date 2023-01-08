@@ -26,6 +26,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.EventMovement;
 import net.tarasandedevelopment.tarasande.event.EventStep;
 import net.tarasandedevelopment.tarasande.event.EventVelocityYaw;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoWeb;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSafeWalk;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
 import su.mandora.event.EventDispatcher;
@@ -453,12 +454,19 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
 
             if (((IEntity_Protocol) original).protocolhack_isInWeb()) {
                 ((IEntity_Protocol) original).protocolhack_setInWeb(false);
-                x *= 0.25D;
-                y *= 0.05000000074505806D;
-                z *= 0.25D;
-                original.getVelocity().x = 0.0D;
-                original.getVelocity().y = 0.0D;
-                original.getVelocity().z = 0.0D;
+                ModuleNoWeb moduleNoWeb = TarasandeMain.Companion.managerModule().get(ModuleNoWeb.class);
+                if(moduleNoWeb.getEnabled()) {
+                    x *= moduleNoWeb.getHorizontalSlowdown().getValue();
+                    y *= moduleNoWeb.getVerticalSlowdown().getValue();
+                    z *= moduleNoWeb.getHorizontalSlowdown().getValue();
+                } else {
+                    x *= 0.25D;
+                    y *= 0.05000000074505806D;
+                    z *= 0.25D;
+                    original.getVelocity().x = 0.0D;
+                    original.getVelocity().y = 0.0D;
+                    original.getVelocity().z = 0.0D;
+                }
             }
 
             double d3 = x;

@@ -44,6 +44,7 @@ class PanelArmor : Panel("Armor", 75.0, FontWrapper.fontHeight().toDouble()) {
                         enchantSimpleName(entry.key, maxLength.value.toInt()) + " " + entry.value,
                         m.toFloat() + itemDimension / 2, (titleBarHeight / 2) + (itemDimension + (index * titleBarHeight / 2)).toFloat(),
                         scale = scale.value.toFloat(),
+                        offset = 0.5F,
                         centered = true
                     )
                 }

@@ -10,8 +10,10 @@ import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ModuleNoWeb : Module("No web", "Prevents cobwebs' slowdown", ModuleCategory.MOVEMENT) {
 
-    private val horizontalSlowdown = ValueNumber(this, "Horizontal slowdown", 0.0, 0.25, 1.0, 0.01)
-    private val verticalSlowdown = ValueNumber(this, "Vertical slowdown", 0.0, 0.05, 1.0, 0.01)
+    @Suppress("MemberVisibilityCanBePrivate") // protocol hack package
+    val horizontalSlowdown = ValueNumber(this, "Horizontal slowdown", 0.0, 0.25, 1.0, 0.01)
+    @Suppress("MemberVisibilityCanBePrivate") // protocol hack package
+    val verticalSlowdown = ValueNumber(this, "Vertical slowdown", 0.0, 0.05, 1.0, 0.01)
 
     init {
         registerEvent(EventBlockCollision::class.java) { event ->

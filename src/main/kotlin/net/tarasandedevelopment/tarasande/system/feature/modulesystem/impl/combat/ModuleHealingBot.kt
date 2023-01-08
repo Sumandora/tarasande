@@ -73,7 +73,7 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
                         return@registerEvent
                     }
                     if (intendedItem?.item is SplashPotionItem) {
-                        event.rotation = Rotation(mc.player!!).also { it.pitch = 90.0F }.correctSensitivity()
+                        event.rotation = Rotation(mc.player!!).withPitch(90.0F).correctSensitivity()
                         targetRotation = event.rotation
                         event.minRotateToOriginSpeed = 1.0
                         event.maxRotateToOriginSpeed = 1.0
