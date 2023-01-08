@@ -11,6 +11,7 @@ import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemPr
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
 import de.florianmichael.viabeta.ViaBeta
+import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.provider.ScreenStateProvider
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicMPPassProvider
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicWorldHeightProvider
 import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.storage.ExtMessageTypesStorage
@@ -280,6 +281,7 @@ class TarasandeProtocolHack : NativeProvider {
         providers?.use(ClassicWorldHeightProvider::class.java, FabricClassicWorldHeightProvider())
         providers?.use(OldAuthProvider::class.java, FabricOldAuthProvider())
         providers?.use(ClassicMPPassProvider::class.java, FabricClassicMPPassProvider())
+        providers?.use(ScreenStateProvider::class.java, FabricScreenStateProvider())
 
         // Via Cursed
         providers?.use(PlayerAbilitiesProvider::class.java, FabricPlayerAbilitiesProvider())

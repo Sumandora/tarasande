@@ -1,9 +1,7 @@
 package de.florianmichael.clampclient.injection.mixininterface;
 
-import java.util.concurrent.ConcurrentLinkedDeque;
-
 public interface IMinecraftClient_Protocol {
 
-    ConcurrentLinkedDeque<Runnable> protocolhack_getKeyboardInteractions();
-    ConcurrentLinkedDeque<Runnable> protocolhack_getMouseInteractions();
+    void protocolhack_trackKeyboardInteraction(final Runnable interaction);
+    void protocolhack_trackMouseInteraction(final Runnable interaction);
 }

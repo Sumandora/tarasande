@@ -105,6 +105,7 @@ public class BlockModelEmulator_1_8 {
         blockModelTransformer.put(Blocks.VINE, new AirBlockModel());
         blockModelTransformer.put(Blocks.GRASS, new AirBlockModel());
         blockModelTransformer.put(Blocks.LAVA, new AirBlockModel());
+        blockModelTransformer.put(Blocks.FLOWER_POT, new AirBlockModel());
 
         /* Torch */ for (Block block : Arrays.asList(
                 Blocks.TORCH, Blocks.REDSTONE_TORCH, Blocks.WALL_TORCH,
@@ -146,7 +147,8 @@ public class BlockModelEmulator_1_8 {
                 Blocks.POPPY, Blocks.BLUE_ORCHID, Blocks.ALLIUM,
                 Blocks.AZURE_BLUET, Blocks.RED_TULIP, Blocks.ORANGE_TULIP,
                 Blocks.WHITE_TULIP, Blocks.PINK_TULIP, Blocks.OXEYE_DAISY,
-                Blocks.LILAC, Blocks.LARGE_FERN, Blocks.FERN)) blockModelTransformer.put(block, new AirBlockModel());
+                Blocks.LILAC, Blocks.LARGE_FERN, Blocks.FERN,
+                Blocks.PEONY, Blocks.ROSE_BUSH)) blockModelTransformer.put(block, new AirBlockModel());
 
         /* Stem */ for (Block block : Arrays.asList(Blocks.PUMPKIN_STEM, Blocks.MELON_STEM)) blockModelTransformer.put(block, new AirBlockModel());
     }

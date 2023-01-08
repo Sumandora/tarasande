@@ -1,10 +1,12 @@
 package de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3;
 
+import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.Position;
 import com.viaversion.viaversion.api.minecraft.chunks.Chunk;
 import com.viaversion.viaversion.api.minecraft.chunks.ChunkSection;
 import com.viaversion.viaversion.api.minecraft.chunks.PaletteType;
+import com.viaversion.viaversion.api.platform.providers.ViaProviders;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
@@ -17,6 +19,7 @@ import de.florianmichael.viabeta.protocol.alpha.protocolb1_0_1_1_1toa1_2_3_5_1_2
 import de.florianmichael.viabeta.protocol.beta.protocol1_0_0_1tob1_8_0_1.ClientboundPacketsb1_8;
 import de.florianmichael.viabeta.protocol.beta.protocol1_0_0_1tob1_8_0_1.ServerboundPacketsb1_8;
 import de.florianmichael.viabeta.protocol.beta.protocol1_0_0_1tob1_8_0_1.type.Typeb1_8_0_1;
+import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.provider.ScreenStateProvider;
 import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.storage.PlayerHealthTracker;
 import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.storage.PlayerNameTracker;
 import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.type.Typeb1_7_0_3;
@@ -214,7 +217,7 @@ public class Protocolb1_8_0_1tob1_7_0_3 extends AbstractProtocol<ClientboundPack
                 handler(wrapper -> {
                     wrapper.cancel();
                     final PacketWrapper pingResponse = PacketWrapper.create(ClientboundPacketsb1_8.DISCONNECT, wrapper.user());
-                    pingResponse.write(Type1_6_4.STRING, "The server seems to be running!\nWait 5 seconds between each connection§0§1");
+                    pingResponse.write(Type1_6_4.STRING, "[ViaBeta] The server seems to be running!\nWait 5 seconds between each connection§0§1");
                     pingResponse.send(Protocolb1_8_0_1tob1_7_0_3.class);
                 });
             }
@@ -307,7 +310,22 @@ public class Protocolb1_8_0_1tob1_7_0_3 extends AbstractProtocol<ClientboundPack
                 });
             }
         });
-        this.cancelServerbound(ServerboundPacketsb1_8.KEEP_ALIVE); // beta client only sends this packet every second if in downloading terrain screen
+        this.registerServerbound(ServerboundPacketsb1_8.KEEP_ALIVE, new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                handler(wrapper -> {
+                    // beta client only sends this packet every second if in downloading terrain screen
+                    if (!Via.getManager().getProviders().get(ScreenStateProvider.class).isDownloadingTerrain()) wrapper.cancel();
+                });
+            }
+        });
+    }
+
+    @Override
+    public void register(ViaProviders providers) {
+        super.register(providers);
+
+        providers.register(ScreenStateProvider.class, new ScreenStateProvider());
     }
 
     @Override

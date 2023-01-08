@@ -64,12 +64,12 @@ public class MixinMinecraftClient implements IMinecraftClient_Protocol {
     }
 
     @Override
-    public ConcurrentLinkedDeque<Runnable> protocolhack_getKeyboardInteractions() {
-        return this.protocolhack_keyboardInteractions;
+    public void protocolhack_trackKeyboardInteraction(Runnable interaction) {
+        this.protocolhack_keyboardInteractions.add(interaction);
     }
 
     @Override
-    public ConcurrentLinkedDeque<Runnable> protocolhack_getMouseInteractions() {
-        return this.protocolhack_mouseInteractions;
+    public void protocolhack_trackMouseInteraction(Runnable interaction) {
+        this.protocolhack_mouseInteractions.add(interaction);
     }
 }
