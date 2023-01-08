@@ -69,7 +69,7 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
         }
 
         registerEvent(EventJump::class.java) { event ->
-            if (mode.isSelected(2))
+            if (event.state == EventJump.State.PRE && mode.isSelected(2))
                 event.cancelled = true
         }
 

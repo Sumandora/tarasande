@@ -15,6 +15,15 @@ class ModuleJesus : Module("Jesus", "Lets you walk on liquids", ModuleCategory.M
     private val height = ValueNumber(this, "Height", 0.0, 1.0, 1.0, 0.01)
     private val jumpMotion = ValueNumber(this, "Jump motion", 0.0, 0.0, 1.0, 0.01)
 
+    private fun isStandingOnLiquid(): Boolean {
+        if (mc.player?.isSubmergedInWater == false && mc.player?.isInLava == false)
+            if (mc.player?.isOnGround == true)
+                if (mc.world?.getBlockState(BlockPos(mc.player?.pos?.add(0.0, -0.01, 0.0)))?.fluidState?.isEmpty == false)
+                    return true
+
+        return false
+    }
+
     init {
         registerEvent(EventCollisionShape::class.java) { event ->
             if (mc.player == null)
@@ -32,13 +41,12 @@ class ModuleJesus : Module("Jesus", "Lets you walk on liquids", ModuleCategory.M
             if (event.state == EventUpdate.State.PRE) {
                 if (mc.player?.input?.sneaking == true || mc.player?.fallDistance!! > 3.0)
                     return@registerEvent
-                if (mc.player?.isTouchingWater == true || mc.player?.isInLava == true)
-                    if (mc.world?.getBlockState(BlockPos(mc.player?.pos?.add(0.0, -0.01, 0.0)))?.fluidState?.isEmpty == false)
-                        if (jumpMotion.value > 0.0) {
-                            val prevVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)!!
-                            mc.player?.jump()
-                            mc.player?.velocity = prevVelocity.withAxis(Direction.Axis.Y, mc.player?.velocity?.y?.times(jumpMotion.value)!!)
-                        }
+                if (isStandingOnLiquid())
+                    if (jumpMotion.value > 0.0) {
+                        val prevVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)!!
+                        mc.player?.jump()
+                        mc.player?.velocity = prevVelocity.withAxis(Direction.Axis.Y, mc.player?.velocity?.y?.times(jumpMotion.value)!!)
+                    }
             }
         }
     }

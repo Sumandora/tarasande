@@ -10,6 +10,7 @@
     "module.MixinPlayerScreenHandler",
     "tarasande.MixinEventDispatcher",
     "tarasande.MixinEventScreenInput",
+    "tarasande.MixinModuleNoWebEventBlockCollision",
     "tarasande.MixinRotationCompanion",
     "vialoadingbase.MixinCustomViaConfig"
   ],

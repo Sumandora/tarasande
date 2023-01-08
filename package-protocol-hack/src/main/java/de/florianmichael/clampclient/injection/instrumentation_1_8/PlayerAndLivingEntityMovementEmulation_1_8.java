@@ -20,17 +20,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraft.world.border.WorldBorder;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.event.EventMovement;
-import net.tarasandedevelopment.tarasande.event.EventStep;
-import net.tarasandedevelopment.tarasande.event.EventVelocityYaw;
+import net.tarasandedevelopment.tarasande.event.*;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoWeb;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSafeWalk;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
+import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack;
 import su.mandora.event.EventDispatcher;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -111,6 +113,8 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
                         BlockState iblockstate = original.world.getBlockState(blockpos2);
 
                         try {
+                            EventBlockCollision eventBlockCollision = new EventBlockCollision(iblockstate, blockpos2, original);
+                            EventDispatcher.INSTANCE.call(eventBlockCollision);
                             BlockModelEmulator_1_8.getTransformerByBlock(iblockstate.getBlock()).onEntityCollidedWithBlock(original.world, blockpos2, iblockstate, original);
                         } catch (Throwable throwable) {
                             throw new RuntimeException(throwable);
@@ -425,7 +429,33 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
                             iblockstate1 = world.getBlockState(mutableBlockPos);
                         }
 
-                        BlockModelEmulator_1_8.getTransformerByBlock(iblockstate1.getBlock()).addCollisionBoxesToList(world, mutableBlockPos, iblockstate1, bb, list, entityIn);
+                        ArrayList<Box> shapes = new ArrayList<>();
+                        BlockModelEmulator_1_8.getTransformerByBlock(iblockstate1.getBlock()).addCollisionBoxesToList(world, mutableBlockPos, iblockstate1, bb, shapes, entityIn);
+
+                        if(true /*Am I supposed to be legit?*/) {
+                            // FULL LOTTO INCOMING $$$$
+                            VoxelShape shape = VoxelShapes.empty();
+                            if(!shapes.isEmpty()) {
+                                shape = VoxelShapes.cuboid(shapes.get(0).offset(-mutableBlockPos.getX(), -mutableBlockPos.getY(), -mutableBlockPos.getZ()));
+                                shapes.remove(0);
+
+                                while(!shapes.isEmpty()) {
+                                    shape = VoxelShapes.union(shape, VoxelShapes.cuboid(shapes.get(0).offset(-mutableBlockPos.getX(), -mutableBlockPos.getY(), -mutableBlockPos.getZ())));
+                                    shapes.remove(0);
+                                }
+                            }
+
+                            EventCollisionShape eventCollisionShape = new EventCollisionShape(mutableBlockPos, shape);
+                            EventDispatcher.INSTANCE.call(eventCollisionShape);
+
+                            shape = eventCollisionShape.getCollisionShape().offset(mutableBlockPos.getX(), mutableBlockPos.getY(), mutableBlockPos.getZ());
+
+                            if(!shape.isEmpty() && shape != VoxelShapes.empty()) {
+                                list.addAll(shape.getBoundingBoxes());
+                            }
+                        } else {
+                            list.addAll(shapes);
+                        }
                     }
                 }
             }
@@ -459,6 +489,11 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
                     x *= moduleNoWeb.getHorizontalSlowdown().getValue();
                     y *= moduleNoWeb.getVerticalSlowdown().getValue();
                     z *= moduleNoWeb.getHorizontalSlowdown().getValue();
+                    if(!TarasandeProtocolHack.removeVelocityReset.getValue()) {
+                        original.getVelocity().x = 0.0D;
+                        original.getVelocity().y = 0.0D;
+                        original.getVelocity().z = 0.0D;
+                    }
                 } else {
                     x *= 0.25D;
                     y *= 0.05000000074505806D;

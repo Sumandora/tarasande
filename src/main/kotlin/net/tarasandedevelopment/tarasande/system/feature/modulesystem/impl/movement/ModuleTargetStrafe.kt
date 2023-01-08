@@ -29,7 +29,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
     private var invert = false
 
     private fun calculateNextPosition(selfSpeed: Double, curPos: Vec3d, center: Vec3d): Vec3d {
-        var angleOffset = selfSpeed / radius.value // I have no clue, why this is wrong... TODO
+        var angleOffset = selfSpeed / radius.value
         if (invert)
             angleOffset *= -1
         val angle = Math.toRadians(RotationUtil.getYaw(curPos - center)) + angleOffset

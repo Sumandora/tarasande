@@ -38,6 +38,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBool
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleTickBaseManipulation
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleInventoryMove
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoWeb
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
@@ -76,6 +77,7 @@ class TarasandeProtocolHack : NativeProvider {
 
     companion object {
         lateinit var cancelOpenPacket: ValueBoolean
+        lateinit var removeVelocityReset: ValueBoolean
         var viaConnection: UserConnection? = null
 
         fun update(protocol: VersionListEnum, reloadProtocolHackValues: Boolean) {
@@ -165,6 +167,9 @@ class TarasandeProtocolHack : NativeProvider {
                 TarasandeMain.managerModule().apply {
                     cancelOpenPacket = object : ValueBoolean(get(ModuleInventoryMove::class.java), "Cancel open packet (" + VersionListEnum.r1_11_1to1_11_2.andOlder() + ")", false) {
                         override fun isEnabled() = ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_11_1to1_11_2)
+                    }
+                    removeVelocityReset = object : ValueBoolean(get(ModuleNoWeb::class.java), "Cancel open packet (Legacy Test)", false) {
+                        override fun isEnabled() = ProtocolHackValues.legacyTest.value
                     }
 
                     get(ModuleTickBaseManipulation::class.java).apply {

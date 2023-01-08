@@ -44,6 +44,9 @@ import java.util.logging.Logger
  *  - PathFinder: make values
  *  - Render Profiler
  *  - https://github.com/SirHilarious/WardenTools
+ *  - No Soul Sand (Entity#getVelocityMultiplier)
+ *  - Package DSL
+ *  - No Pitch Limit
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions
