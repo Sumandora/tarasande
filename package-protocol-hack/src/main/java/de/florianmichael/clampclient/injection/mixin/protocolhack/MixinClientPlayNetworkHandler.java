@@ -22,7 +22,6 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
 import com.mojang.authlib.GameProfile;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.MinecraftClient;
@@ -42,7 +41,10 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.slf4j.Logger;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;

@@ -3,14 +3,13 @@ package net.tarasandedevelopment.tarasande_protocol_hack.util.values
 import com.viaversion.viaversion.api.Via
 import de.florianmichael.vialoadingbase.util.VersionListEnum
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.util.extension.mc
-import net.tarasandedevelopment.tarasande_protocol_hack.util.values.command.ViaDumpBypassSender
 import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.andOlder
 import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.rangeTo
 import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.singleton
+import net.tarasandedevelopment.tarasande_protocol_hack.util.values.command.ViaDumpBypassSender
 
 object ProtocolHackValues {
 

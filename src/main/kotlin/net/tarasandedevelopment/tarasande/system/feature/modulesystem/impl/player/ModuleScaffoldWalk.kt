@@ -6,7 +6,6 @@ import net.minecraft.registry.Registries
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.*
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
@@ -195,7 +194,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                 } else {
                                     val rotationVector = rotation?.forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)!!
                                     val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector)
-                                    hitResult.type != HitResult.Type.BLOCK || hitResult.side != target?.second?.hitResultSide() || hitResult.blockPos != target?.first
+                                    hitResult.isSame(target?.second!!, target?.first!!)
                                 }
                             }) {
 
@@ -289,22 +288,24 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             }
             if (rotation == null) {
                 val rad = Math.toRadians((PlayerUtil.getMoveDirection() / 90.0).roundToInt() * 90.0) - PI / 2
-                val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, mc.player?.pos!! + Vec3d(cos(rad), 0.0, sin(rad)) * 0.3)
+                var targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, mc.player?.pos!! + Vec3d(cos(rad), 0.0, sin(rad)) * 0.3)
 
                 val diagonal = abs(round(mc.player?.yaw!! / 90) * 90 - mc.player?.yaw!!) > 22.5
                 if (!diagonal) {
                     val deltaRot = (-goalYaw.value * (45.0 / 60.0)).toFloat() // those are not triangles anymore :c
                     val centerRot = RotationUtil.getRotations(mc.player?.eyePos!!, Vec3d.ofBottomCenter(mc.player?.blockPos))
-                    val rot = Rotation(targetRot)
-                    rot.yaw += deltaRot
+                    var rot = Rotation(targetRot)
+                    rot = rot.withYaw(rot.yaw + deltaRot)
                     val firstFov = centerRot.fov(rot)
-                    rot.yaw -= deltaRot * 2.0F
+                    rot = rot.withYaw(rot.yaw + deltaRot * 2.0F)
                     val secondFov = centerRot.fov(rot)
 
-                    if (firstFov > secondFov)
-                        targetRot.yaw -= deltaRot
-                    else
-                        targetRot.yaw += deltaRot
+                    targetRot = targetRot.withYaw(
+                        if (firstFov > secondFov)
+                            targetRot.yaw - deltaRot
+                        else
+                            targetRot.yaw + deltaRot
+                    )
                 }
 
                 rotation = targetRot
@@ -360,7 +361,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 }
                 val rotationVector = RotationUtil.fakeRotation?.forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)!!
                 val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector)
-                if (hitResult.type == HitResult.Type.BLOCK && hitResult.side == target?.second?.hitResultSide() && hitResult.blockPos == target?.first) {
+                if (hitResult.isSame(target?.second!!, target?.first!!)) {
                     if (airBelow && (((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= newEdgeDist * newEdgeDist || target?.first?.y!! < (mc.player?.blockPos?.y!! - 1))) {
                         if (timeUtil.hasReached(delay.value.toLong())) {
                             aimTarget = hitResult.pos

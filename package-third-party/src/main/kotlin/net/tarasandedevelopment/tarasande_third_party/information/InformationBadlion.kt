@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande_third_party.information
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.tarasandedevelopment.tarasande.TarasandeMain

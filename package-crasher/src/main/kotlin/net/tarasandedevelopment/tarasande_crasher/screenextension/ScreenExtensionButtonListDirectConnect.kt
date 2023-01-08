@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande_crasher.screenextension
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.DirectConnectScreen
 import net.minecraft.client.network.ServerAddress
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues

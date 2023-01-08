@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin.input;
+package net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin.tarasande;
 
 import net.tarasandedevelopment.tarasande.event.EventScreenInput;
 import net.tarasandedevelopment.tarasande_protocol_hack.injection.accessor.IEventScreenInput;

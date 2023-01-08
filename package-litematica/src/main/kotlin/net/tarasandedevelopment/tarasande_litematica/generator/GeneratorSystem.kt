@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande_litematica.generator
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton

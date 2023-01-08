@@ -4,6 +4,8 @@ import net.minecraft.client.input.KeyboardInput
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.option.Perspective
 import net.minecraft.entity.Entity
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
@@ -17,6 +19,7 @@ import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
+import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 
@@ -30,6 +33,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
     private var position: Vec3d? = null
     private var beginRotation: Rotation? = null
     private var rotation: Rotation? = null
+    private var prevRotation: Rotation? = null
 
     private var prevCameraPos: Vec3d? = null
 
@@ -66,6 +70,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
             position = mc.gameRenderer.camera.pos
             rotation = Rotation(mc.gameRenderer.camera.yaw, mc.gameRenderer.camera.pitch)
             beginRotation = Rotation(mc.player!!)
+            prevRotation = beginRotation
             perspective = mc.options.perspective
             firstRealInput = PlayerUtil.input.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
             firstInput = mc.player?.input?.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
@@ -94,8 +99,13 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
         }
 
         registerEvent(EventPollEvents::class.java, 1) { event ->
-            if (beginRotation == null)
+            if (beginRotation == null || prevRotation == null || rotation == null)
                 onEnable()
+
+            if(prevRotation != null) {
+                rotation = rotation?.plus(event.rotation - prevRotation!!)
+            }
+
             mc.player?.yaw = beginRotation?.yaw!!
             mc.player?.pitch = beginRotation?.pitch!!
             if (lockRotation.value && !event.dirty) {
@@ -106,11 +116,11 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
             }
         }
 
-        registerEvent(EventMouseDelta::class.java, 1) { event ->
-            rotation = rotation?.plus(Rotation.calculateRotationChange(-event.deltaX, -event.deltaY))?.correctSensitivity() // clamp
-            event.deltaX = 0.0
-            event.deltaY = 0.0
-        }
+//        registerEvent(EventMouseDelta::class.java, 1) { event ->
+//            rotation = rotation?.plus(Rotation.calculateRotationChange(-event.deltaX, -event.deltaY))?.correctSensitivity() // clamp
+//            event.deltaX = 0.0
+//            event.deltaY = 0.0
+//        }
 
         registerEvent(EventUpdate::class.java, 1) { event ->
             if (event.state == EventUpdate.State.PRE) {
@@ -171,6 +181,11 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
         registerEvent(EventTick::class.java) { event ->
             if (event.state == EventTick.State.PRE)
                 input.tick(false, 1.0F)
+        }
+
+        registerEvent(EventPacket::class.java) { event ->
+            if(event.type == EventPacket.Type.RECEIVE && event.packet is PlayerMoveC2SPacket)
+                beginRotation = RotationUtil.evaluateNewRotation(event.packet as PlayerPositionLookS2CPacket)
         }
     }
 }

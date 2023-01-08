@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
+import net.minecraft.util.math.Direction
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.event.EventPacket
@@ -57,7 +58,7 @@ class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", Module
                 return@registerEvent
 
             if (mode.isSelected(2))
-                event.velocity.y = -motion.value
+                event.velocity = event.velocity.withAxis(Direction.Axis.Y, -motion.value)
         }
 
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->

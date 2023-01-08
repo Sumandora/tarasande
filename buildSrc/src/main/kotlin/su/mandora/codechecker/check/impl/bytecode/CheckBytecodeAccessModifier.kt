@@ -1,11 +1,7 @@
 package su.mandora.codechecker.check.impl.bytecode
 
 import org.objectweb.asm.Opcodes
-import org.objectweb.asm.tree.AbstractInsnNode
-import org.objectweb.asm.tree.ClassNode
-import org.objectweb.asm.tree.FieldInsnNode
-import org.objectweb.asm.tree.MethodInsnNode
-import org.objectweb.asm.tree.MethodNode
+import org.objectweb.asm.tree.*
 import su.mandora.codechecker.check.CheckBytecode
 import java.util.regex.Pattern
 

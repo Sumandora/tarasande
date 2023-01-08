@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
+import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
@@ -23,8 +24,11 @@ class ModuleVehicleSpeed : Module("Vehicle speed", "Modifies vehicle movement sp
 
             val rad = Math.toRadians(PlayerUtil.getMoveDirection() + 90)
 
-            event.velocity.x = cos(rad) * speed.value
-            event.velocity.z = sin(rad) * speed.value
+            event.velocity = Vec3d(
+                cos(rad) * speed.value,
+                event.velocity.y,
+                sin(rad) * speed.value
+            )
         }
     }
 }

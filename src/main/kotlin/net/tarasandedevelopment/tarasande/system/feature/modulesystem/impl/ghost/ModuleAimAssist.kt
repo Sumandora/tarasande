@@ -1,11 +1,12 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.ghost
 
-import net.minecraft.util.math.MathHelper
+import net.minecraft.util.hit.HitResult
 import net.tarasandedevelopment.tarasande.event.EventMouseDelta
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.kotlinruntime.prefer
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
@@ -35,10 +36,10 @@ class ModuleAimAssist : Module("Aim assist", "Helps you aim at enemies", ModuleC
             val smoothedRot = Rotation(selfRotation).smoothedTurn(rotation, aimSpeed).correctSensitivity() // correct wrap
 
             val deltaRotation = smoothedRot.closestDelta(selfRotation)
-            val cursorDeltas = Rotation.approximateCursorDeltas(deltaRotation)
+            val cursorDeltas = Rotation.approximateCursorDeltas(deltaRotation).prefer { PlayerUtil.getTargetedEntity(3.0 /* TODO*/, Rotation.calculateNewRotation(selfRotation, it), false)?.type == HitResult.Type.ENTITY }
 
-            event.deltaX += MathHelper.clamp(cursorDeltas.first, -maxInfluence.value, maxInfluence.value)
-            event.deltaY += MathHelper.clamp(cursorDeltas.second, -maxInfluence.value, maxInfluence.value)
+            event.deltaX += cursorDeltas.first.coerceIn(-maxInfluence.value..maxInfluence.value)
+            event.deltaY += cursorDeltas.second.coerceIn(-maxInfluence.value..maxInfluence.value)
         }
     }
 

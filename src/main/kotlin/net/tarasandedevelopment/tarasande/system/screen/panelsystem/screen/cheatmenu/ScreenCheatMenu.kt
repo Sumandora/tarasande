@@ -43,7 +43,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
     var nativeImage: NativeImageBackedTexture? = null
     private val particles = ArrayList<Particle>()
 
-    var disableAnimation = false
+    var wasClosed = true
 
     init {
         passEvents = false
@@ -61,10 +61,10 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
     }
 
     override fun init() {
-        if (disableAnimation) {
-            disableAnimation = false
+        if (!wasClosed) {
             return
         }
+        wasClosed = false
         screenChangeTime = System.currentTimeMillis()
         isClosing = false
         super.init()
@@ -206,10 +206,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
     }
 
     override fun close() {
-        println("ABC")
-        if (disableAnimation) {
-            return
-        }
+        wasClosed = true
         if (!isClosing) {
             screenChangeTime = System.currentTimeMillis()
             isClosing = true

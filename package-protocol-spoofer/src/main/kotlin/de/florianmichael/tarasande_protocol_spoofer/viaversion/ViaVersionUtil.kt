@@ -1,6 +1,5 @@
 package de.florianmichael.tarasande_protocol_spoofer.viaversion
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import com.viaversion.viaversion.protocols.protocol1_13to1_12_2.Protocol1_13To1_12_2
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.IForgeNetClientHandler
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.Fml1NetClientHandler

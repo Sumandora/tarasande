@@ -12,9 +12,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.Valu
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.Thread
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 
@@ -49,11 +47,7 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
 
     // Rendering
     init {
-        object : ValueButton(this, "Blur values") {
-            override fun onChange() {
-                mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, "Blur values", TarasandeMain.managerBlur()))
-            }
-        }
+        ValueButtonOwnerValues(this, "Blur values", TarasandeMain.managerBlur())
     }
 
     // Rotations

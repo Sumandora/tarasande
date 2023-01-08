@@ -6,7 +6,6 @@ import com.mojang.serialization.JsonOps
 import net.minecraft.client.util.ProfileKeysImpl
 import net.minecraft.network.encryption.PlayerKeyPair
 import java.io.File
-import java.lang.RuntimeException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*

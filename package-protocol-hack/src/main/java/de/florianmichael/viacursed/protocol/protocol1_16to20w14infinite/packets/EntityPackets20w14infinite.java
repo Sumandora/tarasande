@@ -10,10 +10,10 @@ import com.viaversion.viaversion.api.type.types.version.Types1_14;
 import com.viaversion.viaversion.protocols.protocol1_16to1_15_2.ClientboundPackets1_16;
 import com.viaversion.viaversion.protocols.protocol1_16to1_15_2.Protocol1_16To1_15_2;
 import com.viaversion.viaversion.protocols.protocol1_16to1_15_2.packets.EntityPackets;
-import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.ClientboundPackets20w14infinite;
-import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.metadata.MetadataRewriter1_16to20w14infinite;
 import de.florianmichael.viacursed.ViaCursed;
+import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.ClientboundPackets20w14infinite;
 import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.Protocol1_16to20w14infinite;
+import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.metadata.MetadataRewriter1_16to20w14infinite;
 
 import java.util.UUID;
 

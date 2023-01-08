@@ -39,7 +39,7 @@ class ModuleCriticals : Module("Criticals", "Forces critical hits", ModuleCatego
                     if (!mc.player?.isOnGround!!)
                         return@registerEvent
                     mc.player?.jump()
-                    mc.player?.velocity?.y = mc.player?.velocity?.y!! * motion.value
+                    mc.player?.velocity = mc.player?.velocity?.multiply(1.0, motion.value, 1.0)
                 }
 
                 mode.isSelected(2) -> {

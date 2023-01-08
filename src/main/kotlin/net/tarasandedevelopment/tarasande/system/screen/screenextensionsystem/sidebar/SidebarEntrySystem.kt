@@ -64,6 +64,8 @@ open class EntrySidebarPanel(val name: String, val category: String) {
 abstract class EntrySidebarPanelSelection(name: String, category: String, val list: List<String>, var selected: String) : EntrySidebarPanel(name, category) {
     abstract fun onClick(newValue: String)
 
+    abstract fun isSelected(value: String): Boolean
+
     override fun createElements(owner: Any): List<ElementWidthValueComponent> {
         return list.map {
             object : ValueSpacer(owner, it, 1.0F, manage = false) {
@@ -77,7 +79,7 @@ abstract class EntrySidebarPanelSelection(name: String, category: String, val li
                 }
 
                 override fun getColor(hovered: Boolean): Color {
-                    if (it == selected) {
+                    if (isSelected(it)) {
                         return TarasandeMain.clientValues().accentColor.getColor()
                     }
                     return super.getColor(hovered)

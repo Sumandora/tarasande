@@ -11,7 +11,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande_litematica.generator.Generator
 import net.tarasandedevelopment.tarasande_litematica.util.LitematicaGenerator
-import java.util.Random
+import java.util.*
 
 val random = Random()
 

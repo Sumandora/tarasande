@@ -5,7 +5,6 @@ import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.helper.element.ElementWidth
 import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.math.max
 
 open class PanelElements<T : ElementWidth>(title: String, minWidth: Double, minHeight: Double, fixed: Boolean = false) : Panel(title, minWidth, minHeight, fixed = fixed) {
 

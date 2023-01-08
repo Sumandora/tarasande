@@ -46,8 +46,6 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100, FontWrap
         val onePixel = 1 / mc.window.scaleFactor
 
         for ((index, value) in values.withIndex()) {
-            if (value == null)
-                println(graph.name)
             bufferBuilder.vertex(matrix, (x + (panelWidth - width) * (index / (graph.bufferLength - 1).toFloat())).toFloat(), (y + panelHeight - onePixel - (panelHeight - titleBarHeight - (1 / mc.window.scaleFactor)) * normalize(value.toDouble(), min, max)).toFloat(), 0.0F).color(1.0F, 1.0F, 1.0F, 1.0F).next()
         }
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())

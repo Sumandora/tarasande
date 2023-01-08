@@ -6,7 +6,10 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import net.tarasandedevelopment.tarasande_chat_features.clientvalue.ChatValues
-import net.tarasandedevelopment.tarasande_chat_features.module.*
+import net.tarasandedevelopment.tarasande_chat_features.module.ModuleNoChatContext
+import net.tarasandedevelopment.tarasande_chat_features.module.ModulePrivateMsgDetector
+import net.tarasandedevelopment.tarasande_chat_features.module.ModulePublicKeyKicker
+import net.tarasandedevelopment.tarasande_chat_features.module.ModuleSpammer
 import su.mandora.event.EventDispatcher
 
 class TarasandeChatFeatures : ClientModInitializer {

@@ -151,7 +151,7 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
                         event.rotation = lastRotation?.smoothedTurn(playedBack?.ticks?.get(executingIndex)?.rotation!!, mc.tickDelta.toDouble())!!
                     }
                 }
-                event.rotation.correctSensitivity()
+                event.rotation = event.rotation.correctSensitivity()
                 mc.player?.yaw = event.rotation.yaw
                 mc.player?.pitch = event.rotation.pitch
                 event.minRotateToOriginSpeed = 1.0

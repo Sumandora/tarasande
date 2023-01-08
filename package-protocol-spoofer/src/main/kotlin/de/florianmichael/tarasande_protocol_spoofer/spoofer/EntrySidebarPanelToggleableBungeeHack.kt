@@ -1,6 +1,5 @@
 package de.florianmichael.tarasande_protocol_spoofer.spoofer
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean

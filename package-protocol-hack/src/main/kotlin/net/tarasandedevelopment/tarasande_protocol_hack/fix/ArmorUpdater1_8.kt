@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.fix
 
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.ArmorType
-import net.minecraft.client.MinecraftClient
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries

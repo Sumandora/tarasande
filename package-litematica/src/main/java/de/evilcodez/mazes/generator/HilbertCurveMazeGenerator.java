@@ -4,7 +4,8 @@ import de.evilcodez.mazes.grid.Cell;
 import de.evilcodez.mazes.grid.Grid;
 import de.evilcodez.mazes.utils.HilbertCurve;
 
-import java.util.*;
+import java.util.List;
+import java.util.Random;
 
 public class HilbertCurveMazeGenerator extends MazeGenerator {
 

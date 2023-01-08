@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande_chat_features.module
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.network.encryption.PlayerKeyPair
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain

@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
 import net.minecraft.entity.Entity
+import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShapes
 import net.tarasandedevelopment.tarasande.event.EventCollisionShape
@@ -76,7 +77,7 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
             if (event.state == EventUpdate.State.PRE)
                 if (mode.isSelected(3))
                     if (mc.player?.age?.mod(tickFrequency.value.toInt()) == 0)
-                        mc.player?.velocity?.y = 0.0
+                        mc.player?.velocity = mc.player?.velocity?.withAxis(Direction.Axis.Y, 0.0)
         }
     }
 }

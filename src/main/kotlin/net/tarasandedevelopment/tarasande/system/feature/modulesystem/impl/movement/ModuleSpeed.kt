@@ -1,6 +1,8 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
+import net.minecraft.util.math.Direction
 import net.minecraft.util.math.MathHelper
+import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventJump
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventMovement
@@ -50,19 +52,23 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                     if (!mc.options.jumpKey.pressed)
                         mc.player?.velocity = mc.player?.velocity?.multiply(1.0, jumpHeight.value, 1.0)
 
-                    event.velocity.y = mc.player?.velocity?.y!!
+                    event.velocity = event.velocity.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!!)
 
-                    mc.player?.velocity?.x = prevVelocity.x
-                    if (lowHop.value && mc.player?.horizontalCollision == false && !mc.options.jumpKey.pressed)
-                        mc.player?.velocity?.y = prevVelocity.y
-                    mc.player?.velocity?.z = prevVelocity.z
+                    mc.player?.velocity = Vec3d(
+                        prevVelocity.x,
+                        if (lowHop.value && mc.player?.horizontalCollision == false && !mc.options.jumpKey.pressed)
+                            prevVelocity.y
+                        else
+                            mc.player?.velocity?.y!!,
+                        prevVelocity.z
+                    )
 
                 } else {
                     speed = PlayerUtil.calcBaseSpeed(speedValue.value)
                 }
             }
             if (event.velocity.y < 0.0 && !mc.options.jumpKey.pressed) {
-                event.velocity.y = event.velocity.y * gravity.value
+                event.velocity = event.velocity.multiply(1.0, gravity.value, 1.0)
             }
 
             val baseSpeed = event.velocity.horizontalLength()
@@ -76,8 +82,11 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
             val moveSpeed = max(speed, baseSpeed)
             val rad = Math.toRadians(moveDir + 90)
 
-            event.velocity.x = cos(rad) * moveSpeed
-            event.velocity.z = sin(rad) * moveSpeed
+            event.velocity = Vec3d(
+                cos(rad) * moveSpeed,
+                event.velocity.y,
+                sin(rad) * moveSpeed
+            )
 
             if (mc.player?.isOnGround == false)
                 speed -= speed / speedDivider.value

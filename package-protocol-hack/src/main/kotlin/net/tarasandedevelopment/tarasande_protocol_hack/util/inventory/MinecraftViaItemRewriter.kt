@@ -3,12 +3,9 @@ package net.tarasandedevelopment.tarasande_protocol_hack.util.inventory
 import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.connection.UserConnection
 import com.viaversion.viaversion.api.minecraft.item.Item
-import com.viaversion.viaversion.api.protocol.Protocol
 import com.viaversion.viaversion.api.protocol.ProtocolPathEntry
 import com.viaversion.viaversion.api.protocol.packet.Direction
 import com.viaversion.viaversion.api.protocol.packet.State
-import com.viaversion.viaversion.connection.UserConnectionImpl
-import com.viaversion.viaversion.exception.CancelException
 import com.viaversion.viaversion.protocol.packet.PacketWrapperImpl
 import de.florianmichael.clampclient.injection.mixininterface.IPacketWrapperImpl_Protocol
 import io.netty.buffer.Unpooled

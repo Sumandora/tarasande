@@ -6,7 +6,6 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
@@ -22,11 +21,6 @@ class ScreenBetterFileChooser(
 
     private var clickableWidgetPanel: ClickableWidgetPanel? = null
     private var currentDirectory = directory
-
-    init {
-        if (prevScreen is ScreenCheatMenu)
-            prevScreen.disableAnimation = true
-    }
 
     override fun init() {
         super.init()

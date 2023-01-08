@@ -30,6 +30,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleClickTP
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
 import net.tarasandedevelopment.tarasande.util.extension.mc
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.isEntityHitResult
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
@@ -234,7 +235,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             if (!flex.value || lowestHurtTime == null || lowestHurtTime < flexHurtTime.value) {
                 finalRot = currentRot.smoothedTurn(targetRot, aimSpeed)
                 val hitResult = PlayerUtil.getTargetedEntity(reach.minValue, finalRot)
-                if (guaranteeHit.value && target.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue && (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null)) {
+                if (guaranteeHit.value && target.second.squaredDistanceTo(mc.player?.eyePos!!) <= reach.minValue * reach.minValue && !hitResult.isEntityHitResult()) {
                     finalRot = targetRot
                 }
             } else {
@@ -245,7 +246,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 finalRot = finalRot.smoothedTurn(Rotation(finalRot.yaw + lastFlex?.yaw!!, lastFlex?.pitch!!), delta)
             }
 
-            event.rotation = finalRot.correctSensitivity()
+            event.rotation = finalRot.correctSensitivity(preference = {
+                PlayerUtil.getTargetedEntity(reach.minValue, it, throughWalls.isSelected(2))?.type == HitResult.Type.ENTITY
+            })
 
             if (lockView.value) {
                 mc.player?.yaw = event.rotation.yaw

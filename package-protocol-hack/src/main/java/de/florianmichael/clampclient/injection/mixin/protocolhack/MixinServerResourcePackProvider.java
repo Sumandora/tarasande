@@ -24,7 +24,6 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.GameVersion;

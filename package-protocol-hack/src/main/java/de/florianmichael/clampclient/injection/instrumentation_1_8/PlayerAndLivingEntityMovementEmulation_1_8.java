@@ -436,6 +436,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
         EventMovement eventMovement = new EventMovement(original, new Vec3d(x, y, z));
         EventDispatcher.INSTANCE.call(eventMovement);
         if(eventMovement.getDirty()) {
+            original.setVelocity(eventMovement.getVelocity());
             x = eventMovement.getVelocity().x;
             y = eventMovement.getVelocity().y;
             z = eventMovement.getVelocity().z;

@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
+import net.minecraft.util.math.Direction
 import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -22,7 +23,7 @@ class ModuleVehicleFlight : Module("Vehicle flight", "Makes you fly with vehicle
             if (mc.options.jumpKey.isPressed) sign += 1.0
             if (downwardsBind.isPressed()) sign -= 1.0
 
-            event.velocity.y = verticalSpeed.value * sign
+            event.velocity = event.velocity.withAxis(Direction.Axis.Y, verticalSpeed.value * sign)
         }
     }
 }

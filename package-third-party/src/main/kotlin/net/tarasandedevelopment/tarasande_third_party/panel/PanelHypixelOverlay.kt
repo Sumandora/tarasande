@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande_third_party.panel
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.mojang.authlib.GameProfile
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText

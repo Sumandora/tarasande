@@ -22,8 +22,8 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
 import com.mojang.authlib.GameProfile;
-import de.florianmichael.clampclient.injection.instrumentation_1_8.PlayerAndLivingEntityMovementEmulation_1_8;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.LegacyConstants_1_8;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.PlayerAndLivingEntityMovementEmulation_1_8;
 import de.florianmichael.clampclient.injection.mixininterface.IClientPlayerEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
@@ -255,6 +255,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Override
     public boolean shouldSwimInFluids() {
+        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return super.shouldSwimInFluids();
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
             return false;
         }

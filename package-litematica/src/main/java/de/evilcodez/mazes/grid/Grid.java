@@ -2,7 +2,9 @@ package de.evilcodez.mazes.grid;
 
 import de.evilcodez.mazes.utils.DimensionUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 

@@ -3,7 +3,9 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.viaversion;
 import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.storage.EntityTracker1_9;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(value = EntityTracker1_9.class, remap = false)
 public abstract class MixinEntityTracker1_9 {

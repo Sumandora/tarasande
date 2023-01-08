@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin.input;
+package net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin.tarasande;
 
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;

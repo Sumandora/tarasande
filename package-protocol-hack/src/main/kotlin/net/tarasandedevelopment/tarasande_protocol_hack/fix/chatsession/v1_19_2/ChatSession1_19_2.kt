@@ -4,7 +4,10 @@ import com.viaversion.viaversion.api.connection.StoredObject
 import com.viaversion.viaversion.api.connection.UserConnection
 import com.viaversion.viaversion.api.minecraft.PlayerMessageSignature
 import com.viaversion.viaversion.api.minecraft.ProfileKey
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.all_model.*
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.all_model.MessageMetadata1_19_all
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.all_model.MessageSigner1_19_all
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.all_model.SignatureUpdatable1_19_all
+import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.all_model.SignatureUpdater1_19_all
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.model.MessageBody1_19_2
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.model.MessageHeader1_19_2
 import java.security.PrivateKey

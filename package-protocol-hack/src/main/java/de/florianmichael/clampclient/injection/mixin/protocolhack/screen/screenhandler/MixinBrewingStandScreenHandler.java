@@ -21,7 +21,6 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.screen.screenhandler;
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.inventory.Inventory;

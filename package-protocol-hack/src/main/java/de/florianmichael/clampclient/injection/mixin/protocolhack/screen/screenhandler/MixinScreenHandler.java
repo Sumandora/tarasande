@@ -34,12 +34,12 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.screen.screenhandler;
 
+import de.florianmichael.clampclient.injection.mixininterface.IScreenHandler_Protocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
-import de.florianmichael.clampclient.injection.mixininterface.IScreenHandler_Protocol;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;

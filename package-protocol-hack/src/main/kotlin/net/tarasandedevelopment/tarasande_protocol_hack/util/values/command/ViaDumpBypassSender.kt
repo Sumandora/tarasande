@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.util.values.command
 
 import com.viaversion.viaversion.api.command.ViaCommandSender
-import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.util.extension.mc
 
 object ViaDumpBypassSender : ViaCommandSender {

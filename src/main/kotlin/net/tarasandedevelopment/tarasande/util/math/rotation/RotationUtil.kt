@@ -145,15 +145,12 @@ object RotationUtil {
                 lastMaxRotateToOriginSpeed = eventPollEvents.maxRotateToOriginSpeed
             } else if (fakeRotation != null) {
                 val realRotation = Rotation(mc.player!!)
-                val rotation = Rotation(fakeRotation!!)
+                var rotation = Rotation(fakeRotation!!)
                 if (mc.player?.bodyTrackingIncrements == 0)
-                    rotation.smoothedTurn(realRotation, Pair(lastMinRotateToOriginSpeed, lastMaxRotateToOriginSpeed))
-                rotation.correctSensitivity()
-                val actualDist = fakeRotation!!.fov(rotation)
-                val gcd = Rotation.getGcd() * 0.15F
-                if (actualDist <= gcd / 2 + 0.1 /* little more */) {
-                    val actualRotation = Rotation(mc.player!!)
-                    actualRotation.correctSensitivity()
+                    rotation = rotation.smoothedTurn(realRotation, Pair(lastMinRotateToOriginSpeed, lastMaxRotateToOriginSpeed))
+                rotation = rotation.correctSensitivity()
+                if (fakeRotation == rotation) {
+                    val actualRotation = Rotation(mc.player!!).correctSensitivity()
                     fakeRotation = null
                     mc.player?.yaw = actualRotation.yaw.also {
                         mc.player?.renderYaw = it

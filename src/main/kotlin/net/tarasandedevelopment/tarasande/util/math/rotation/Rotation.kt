@@ -4,14 +4,24 @@ import net.minecraft.entity.Entity
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
+import net.tarasandedevelopment.tarasande.util.extension.kotlinruntime.prefer
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.util.concurrent.ThreadLocalRandom
-import kotlin.math.round
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.sqrt
 
-class Rotation(var yaw: Float, var pitch: Float) {
+class Rotation {
+
+    val yaw: Float
+    val pitch: Float
+
+    constructor(yaw: Float, pitch: Float) {
+        this.yaw = yaw
+        this.pitch = pitch
+    }
 
     constructor(other: Rotation) : this(other.yaw, other.pitch)
     constructor(entity: Entity) : this(entity.yaw, entity.pitch)
@@ -19,7 +29,7 @@ class Rotation(var yaw: Float, var pitch: Float) {
     companion object {
         const val MAXIMUM_DELTA = 255.0 // sqrt(180 * 180 + 180 * 180)
 
-        fun getGcd(): Double {
+        private fun getGcd(): Double {
             val sensitivity = mc.options.mouseSensitivity.value * 0.6F.toDouble() + 0.2F.toDouble()
             val sensitivityPow3 = sensitivity * sensitivity * sensitivity
             val sensitivityPow3Mult8 = sensitivityPow3 * 8.0
@@ -30,35 +40,35 @@ class Rotation(var yaw: Float, var pitch: Float) {
                 sensitivityPow3Mult8
         }
 
-        fun calculateRotationChange(cursorDeltaX: Double, cursorDeltaY: Double): Rotation {
+        fun calculateNewRotation(prevRotation: Rotation, cursorDeltas: Pair<Double, Double>): Rotation {
             val gcd = getGcd()
-            return Rotation((-cursorDeltaX * gcd).toFloat() * 0.15F, (-cursorDeltaY * gcd).toFloat() * 0.15F)
+            val rotationChange = Rotation((cursorDeltas.first * gcd).toFloat() * 0.15F, (cursorDeltas.second * gcd).toFloat() * 0.15F)
+            val newRotation = prevRotation + rotationChange
+            return newRotation.withPitch(newRotation.pitch.coerceIn(-90.0F, 90.0F))
         }
 
-        fun approximateCursorDeltas(deltaRotation: Rotation): Pair<Double, Double> {
+        fun approximateCursorDeltas(deltaRotation: Rotation): Array<Pair<Double, Double>> {
             val gcd = getGcd() * 0.15F
-            return Pair(-round(deltaRotation.yaw / gcd), -round(deltaRotation.pitch / gcd))
+            val targetX = -deltaRotation.yaw / gcd
+            val targetY = -deltaRotation.pitch / gcd
+            return arrayOf(
+                Pair(floor(targetX), floor(targetY)),
+                Pair(ceil(targetX), floor(targetY)),
+                Pair(ceil(targetX), ceil(targetY)),
+                Pair(floor(targetX), ceil(targetY))
+            )
         }
     }
 
-    // I can't define prevRotation in the arguments because java wants to call it too
-
-    fun correctSensitivity(): Rotation {
-        return correctSensitivity(RotationUtil.fakeRotation ?: Rotation(mc.player!!))
-    }
-
-    fun correctSensitivity(prevRotation: Rotation): Rotation {
+    fun correctSensitivity(prevRotation: Rotation = RotationUtil.fakeRotation ?: Rotation(mc.player!!), preference: ((Rotation) -> Boolean)? = null): Rotation {
         val deltaRotation = closestDelta(prevRotation)
-
         val cursorDeltas = approximateCursorDeltas(deltaRotation)
-        val rotationChange = calculateRotationChange(cursorDeltas.first, cursorDeltas.second)
+        val newRotations = cursorDeltas.map { calculateNewRotation(prevRotation, it) }
 
-        val delta = prevRotation - rotationChange
-
-        yaw = delta.yaw
-        pitch = delta.pitch.coerceIn(-90.0F, 90.0F)
-
-        return this
+        return if (preference == null)
+            newRotations.minBy { fov(it) }
+        else
+            newRotations.prefer(preference)
     }
 
     fun smoothedTurn(target: Rotation, aimSpeed: ValueNumberRange): Rotation {
@@ -83,9 +93,7 @@ class Rotation(var yaw: Float, var pitch: Float) {
 
     fun smoothedTurn(target: Rotation, smoothness: Double): Rotation {
         val deltaRotation = closestDelta(target) * smoothness.toFloat()
-        yaw += deltaRotation.yaw
-        pitch += deltaRotation.pitch
-        return this
+        return this + deltaRotation
     }
 
     fun fov(other: Rotation): Float {
@@ -100,6 +108,28 @@ class Rotation(var yaw: Float, var pitch: Float) {
         return sqrt(deltaRotation.yaw * deltaRotation.yaw + deltaRotation.pitch * deltaRotation.pitch)
     }
 
+    fun forwardVector(dist: Double): Vec3d {
+        val f = Math.toRadians(pitch.toDouble()).toFloat()
+        val g = Math.toRadians(-yaw.toDouble()).toFloat()
+        val h = MathHelper.cos(g)
+        val i = MathHelper.sin(g)
+        val j = MathHelper.cos(f)
+        val k = MathHelper.sin(f)
+        return Vec3d((i * j).toDouble(), -k.toDouble(), (h * j).toDouble()) * dist
+    }
+
+    fun withYaw(yaw: Float): Rotation {
+        return Rotation(yaw, pitch)
+    }
+
+    fun withPitch(pitch: Float): Rotation {
+        return Rotation(yaw, pitch)
+    }
+
+    operator fun plus(other: Rotation) = Rotation(yaw + other.yaw, pitch + other.pitch)
+    operator fun minus(other: Rotation) = Rotation(yaw - other.yaw, pitch - other.pitch)
+    operator fun times(value: Float) = Rotation(yaw * value, pitch * value)
+
     override fun toString(): String {
         return "Rotation(yaw=$yaw, pitch=$pitch)"
     }
@@ -112,25 +142,4 @@ class Rotation(var yaw: Float, var pitch: Float) {
 
         return true
     }
-
-    override fun hashCode(): Int {
-        var result = yaw.hashCode()
-        result = 31 * result + pitch.hashCode()
-        return result
-    }
-
-    fun forwardVector(dist: Double): Vec3d {
-        val f = Math.toRadians(pitch.toDouble()).toFloat()
-        val g = Math.toRadians(-yaw.toDouble()).toFloat()
-        val h = MathHelper.cos(g)
-        val i = MathHelper.sin(g)
-        val j = MathHelper.cos(f)
-        val k = MathHelper.sin(f)
-        return Vec3d((i * j).toDouble(), -k.toDouble(), (h * j).toDouble()) * dist
-    }
-
-    operator fun plus(other: Rotation) = Rotation(yaw + other.yaw, pitch + other.pitch)
-    operator fun minus(other: Rotation) = Rotation(yaw - other.yaw, pitch - other.pitch)
-    operator fun times(value: Float) = Rotation(yaw * value, pitch * value)
-
 }

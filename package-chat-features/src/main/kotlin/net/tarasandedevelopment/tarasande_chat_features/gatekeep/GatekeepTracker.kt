@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande_chat_features.gatekeep
 import com.mojang.authlib.minecraft.UserApiService
 import net.minecraft.client.util.ProfileKeysImpl
 import java.nio.file.Path
-import java.util.UUID
+import java.util.*
 
 class GatekeepTracker(userApiService: UserApiService, uuid: UUID?, root: Path) {
     private val profileKeys = ArrayList<ProfileKeysImpl>()

@@ -24,7 +24,6 @@ import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.util.VersionListEnum
 import io.netty.channel.DefaultEventLoop
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.Bootstrap
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ConnectScreen
@@ -190,6 +189,11 @@ class TarasandeProtocolHack : NativeProvider {
                                 version.value = newProtocol
                                 update(VersionListEnum.fromProtocolId(version.value.toInt()), ProtocolHackValues.autoChangeValuesDependentOnVersion.value)
                             }
+                        }
+
+                        override fun isSelected(value: String): Boolean {
+                            val protocol = VersionListEnum.RENDER_VERSIONS.first { it.getName() == value }.version.toDouble()
+                            return version.value == protocol
                         }
                     }, 0)
 

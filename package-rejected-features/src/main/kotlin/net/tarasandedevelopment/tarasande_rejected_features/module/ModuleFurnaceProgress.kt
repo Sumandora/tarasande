@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande_rejected_features.module
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.screen.AbstractFurnaceScreenHandler

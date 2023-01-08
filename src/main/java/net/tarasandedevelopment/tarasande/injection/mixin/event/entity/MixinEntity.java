@@ -9,6 +9,7 @@ import net.tarasandedevelopment.tarasande.event.EventMovement;
 import net.tarasandedevelopment.tarasande.event.EventStep;
 import net.tarasandedevelopment.tarasande.event.EventVelocityYaw;
 import net.tarasandedevelopment.tarasande.injection.accessor.IEntity;
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.Vec3dKt;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -67,7 +68,7 @@ public abstract class MixinEntity implements IEntity {
 
     @Inject(method = "move", at = @At("HEAD"))
     public void hookEventMovement(MovementType movementType, Vec3d movement, CallbackInfo ci) {
-        EventMovement eventMovement = new EventMovement((Entity) (Object) this, movement);
+        EventMovement eventMovement = new EventMovement((Entity) (Object) this, Vec3dKt.copy(movement));
         EventDispatcher.INSTANCE.call(eventMovement);
         if (eventMovement.getDirty()) {
             movement.x = eventMovement.getVelocity().x;

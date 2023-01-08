@@ -27,7 +27,7 @@ public class MixinLookBehavior {
     @Inject(method = "onPlayerUpdate", at = @At("TAIL"), remap = false)
     public void fixRotationSensitivity(@Coerce Object event, CallbackInfo ci) {
         Rotation rotation = new Rotation(MinecraftClient.getInstance().player);
-        rotation.correctSensitivity(tarasande_prevRotation);
+        rotation = rotation.correctSensitivity(tarasande_prevRotation, null);
         MinecraftClient.getInstance().player.setYaw(rotation.getYaw());
         MinecraftClient.getInstance().player.setPitch(rotation.getPitch());
     }

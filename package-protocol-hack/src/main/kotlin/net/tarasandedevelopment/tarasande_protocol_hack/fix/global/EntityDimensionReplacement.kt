@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.fix.global
 
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.util.VersionListEnum
 import net.minecraft.entity.EntityDimensions

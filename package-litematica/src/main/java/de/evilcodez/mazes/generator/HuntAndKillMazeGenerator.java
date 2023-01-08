@@ -3,7 +3,8 @@ package de.evilcodez.mazes.generator;
 import de.evilcodez.mazes.grid.Cell;
 import de.evilcodez.mazes.grid.Grid;
 
-import java.util.*;
+import java.util.List;
+import java.util.Random;
 
 public class HuntAndKillMazeGenerator extends MazeGenerator {
 

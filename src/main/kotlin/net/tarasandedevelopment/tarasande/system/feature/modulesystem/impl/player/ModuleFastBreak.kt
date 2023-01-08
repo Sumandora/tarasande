@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.play
 
 import net.minecraft.item.ToolItem
 import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.hit.HitResult
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
@@ -10,6 +9,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.mc
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.isBlockResult
 
 class ModuleFastBreak : Module("Fast break", "Makes blocks break faster", ModuleCategory.PLAYER) {
 
@@ -25,7 +25,7 @@ class ModuleFastBreak : Module("Fast break", "Makes blocks break faster", Module
             if (event.state == EventUpdate.State.PRE) {
                 val item = mc.player?.mainHandStack?.item
                 var suitableForBlock = false
-                if (mc.crosshairTarget != null && mc.crosshairTarget?.type == HitResult.Type.BLOCK && mc.crosshairTarget is BlockHitResult)
+                if (mc.crosshairTarget.isBlockResult())
                     if (item is ToolItem && item.isSuitableFor(mc.world?.getBlockState((mc.crosshairTarget as BlockHitResult).blockPos)))
                         suitableForBlock = true
                 if(!onlyWhenHoldingAppropriateTool.value || suitableForBlock)

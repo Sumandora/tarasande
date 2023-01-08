@@ -23,7 +23,6 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.screen;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.ProfileKey;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.clampclient.injection.mixininterface.IPublicKeyData_Protocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;

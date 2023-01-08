@@ -7,7 +7,6 @@ import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.I
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.modern.ModernForgePayload
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.ui.ScreenBetterSlotListForgeInformation
 import io.netty.buffer.Unpooled
-import net.minecraft.client.MinecraftClient
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket

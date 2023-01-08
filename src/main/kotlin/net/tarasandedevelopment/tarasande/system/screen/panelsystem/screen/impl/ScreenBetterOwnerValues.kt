@@ -8,7 +8,6 @@ import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelElements
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
@@ -18,11 +17,6 @@ class ScreenBetterOwnerValues(title: String, parent: Screen, val owner: Any) : S
 
     private var clickableWidgetPanel: ClickableWidgetPanel? = null
     lateinit var panel: PanelElements<ElementWidthValueComponent>
-
-    init {
-        if (parent is ScreenCheatMenu)
-            parent.disableAnimation = true
-    }
 
     override fun init() {
         super.init()
