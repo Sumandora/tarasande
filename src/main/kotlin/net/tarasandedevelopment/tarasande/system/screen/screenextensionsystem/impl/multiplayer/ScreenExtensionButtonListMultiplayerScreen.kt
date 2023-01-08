@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.ScreenBetterSlotListAccountManager
+import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ScreenExtensionButtonListMultiplayerScreen : ScreenExtensionButtonList<MultiplayerScreen>(MultiplayerScreen::class.java) {
 
@@ -11,7 +11,7 @@ class ScreenExtensionButtonListMultiplayerScreen : ScreenExtensionButtonList<Mul
 
     init {
         add("Account Manager") {
-            MinecraftClient.getInstance().setScreen(screenBetterSlotListAccountManager.apply { prevScreen = MinecraftClient.getInstance().currentScreen })
+            mc.setScreen(screenBetterSlotListAccountManager.apply { prevScreen = mc.currentScreen })
         }
     }
 }

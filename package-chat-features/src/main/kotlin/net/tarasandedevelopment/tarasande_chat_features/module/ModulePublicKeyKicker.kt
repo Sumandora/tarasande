@@ -9,6 +9,7 @@ import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat.printChatMessage
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande_chat_features.gatekeep.GatekeepTracker
@@ -21,9 +22,9 @@ class ModulePublicKeyKicker : Module("Public key kicker", "Kicks players using o
     private var hasNotified = false
 
     init {
-        gatekeepTracker = GatekeepTracker(MinecraftClient.getInstance().userApiService, MinecraftClient.getInstance().session.uuidOrNull, MinecraftClient.getInstance().runDirectory.toPath())
+        gatekeepTracker = GatekeepTracker(mc.userApiService, mc.session.uuidOrNull, mc.runDirectory.toPath())
         gatekeepTracker?.getOldestValidKey()?.run {
-            MinecraftClient.getInstance().profileKeys = this
+            mc.profileKeys = this
         }
 
         registerEvent(EventDisconnect::class.java) {
@@ -33,7 +34,7 @@ class ModulePublicKeyKicker : Module("Public key kicker", "Kicks players using o
         registerEvent(EventTick::class.java) {
             if (it.state != EventTick.State.PRE) return@registerEvent
 
-            MinecraftClient.getInstance().profileKeys.fetchKeyPair().get().ifPresent(Consumer { key: PlayerKeyPair ->
+            mc.profileKeys.fetchKeyPair().get().ifPresent(Consumer { key: PlayerKeyPair ->
                 if (key.isExpired) {
                     if (!hasNotified) {
                         printChatMessage(Text.literal(
@@ -49,7 +50,7 @@ class ModulePublicKeyKicker : Module("Public key kicker", "Kicks players using o
             override fun getMessage(): String? {
                 if (!enabled) return null
 
-                val keyData = MinecraftClient.getInstance().profileKeys.fetchKeyPair().get()
+                val keyData = mc.profileKeys.fetchKeyPair().get()
                 if (keyData.isPresent) {
                     return StringUtil.formatTime(keyData.get().refreshedAfter.toEpochMilli() - Instant.now().toEpochMilli())
                 }

@@ -54,7 +54,7 @@ class ElementWidthValueComponentNumber(value: Value) : ElementWidthValueComponen
         if (dragInfo.dragging) {
             val mousePos = mouseX - (width - 50)
             val value = valueNumber.min + mousePos / 50.0 * (valueNumber.max - valueNumber.min)
-            setValue(value, !Screen.hasShiftDown())
+            setValue(value, !Screen.hasShiftDown() || !valueNumber.exceed)
         }
 
         val sliderPos = MathHelper.clamp((valueNumber.value - valueNumber.min) / (valueNumber.max - valueNumber.min), 0.0, 1.0)

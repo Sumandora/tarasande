@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.util.player.prediction
 
 import net.minecraft.SharedConstants
 import net.minecraft.block.BlockState
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.input.Input
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.client.recipebook.ClientRecipeBook
@@ -17,22 +16,21 @@ import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.injection.accessor.prediction.IParticleManager
 import net.tarasandedevelopment.tarasande.injection.accessor.prediction.ISoundSystem
 import net.tarasandedevelopment.tarasande.util.dummy.ClientPlayNetworkHandlerDummy
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.copy
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 
 object PredictionEngine {
 
-    fun predictState(count: Int, baseEntity: PlayerEntity = MinecraftClient.getInstance().player!!, input: Input? = null, postConfig: ((ClientPlayerEntity) -> Unit)? = null): Pair<ClientPlayerEntity, ArrayList<Vec3d>> {
-        val mc = MinecraftClient.getInstance()
-
+    fun predictState(count: Int, baseEntity: PlayerEntity = mc.player!!, input: Input? = null, postConfig: ((ClientPlayerEntity) -> Unit)? = null): Pair<ClientPlayerEntity, ArrayList<Vec3d>> {
         val selfVelocity = baseEntity.velocity.copy()
         val localVelocity = mc.player?.velocity?.copy()
 
         val wasDevelopment = SharedConstants.isDevelopment
         SharedConstants.isDevelopment = true
 
-        val soundSystem = MinecraftClient.getInstance().soundManager.soundSystem as ISoundSystem
+        val soundSystem = mc.soundManager.soundSystem as ISoundSystem
         val wasSoundDisabled = soundSystem.tarasande_isDisabled()
         soundSystem.tarasande_setDisabled(true)
 
@@ -126,8 +124,8 @@ object PredictionEngine {
 
         val list = ArrayList<Vec3d>()
 
-        val prevParticlesEnabled = (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_isParticlesEnabled() // race conditions :c
-        (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(false)
+        val prevParticlesEnabled = (mc.particleManager as IParticleManager).tarasande_isParticlesEnabled() // race conditions :c
+        (mc.particleManager as IParticleManager).tarasande_setParticlesEnabled(false)
 
         for (i in 0 until count) {
             playerEntity.resetPosition()
@@ -136,7 +134,7 @@ object PredictionEngine {
             list.add(playerEntity.pos)
         }
 
-        (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(prevParticlesEnabled)
+        (mc.particleManager as IParticleManager).tarasande_setParticlesEnabled(prevParticlesEnabled)
 
         baseEntity.velocity = selfVelocity
 

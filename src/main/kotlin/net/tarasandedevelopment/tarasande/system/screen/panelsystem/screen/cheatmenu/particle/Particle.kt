@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.particle
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color
@@ -16,7 +16,7 @@ class Particle(private var x: Double, private var y: Double) {
     private var xMotion: Double = 0.0
     private var yMotion: Double = 0.0
 
-    private var point = Vec2f(ThreadLocalRandom.current().nextDouble(MinecraftClient.getInstance().window?.scaledWidth?.toDouble()!!).toFloat(), ThreadLocalRandom.current().nextDouble(MinecraftClient.getInstance().window?.scaledHeight?.toDouble()!!).toFloat())
+    private var point = Vec2f(ThreadLocalRandom.current().nextDouble(mc.window.scaledWidth.toDouble()).toFloat(), ThreadLocalRandom.current().nextDouble(mc.window.scaledHeight.toDouble()).toFloat())
 
     fun render(matrices: MatrixStack, mouseX: Double, mouseY: Double, animation: Double) {
         val position = Vec2f(x.toFloat(), y.toFloat())

@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande_protocol_hack.util.values.command
 
 import com.viaversion.viaversion.api.command.ViaCommandSender
 import net.minecraft.client.MinecraftClient
+import net.tarasandedevelopment.tarasande.util.extension.mc
 
 object ViaDumpBypassSender : ViaCommandSender {
 
@@ -12,10 +13,10 @@ object ViaDumpBypassSender : ViaCommandSender {
     override fun sendMessage(msg: String?) {
         if (msg == null) return
         if (msg.contains("https://")) {
-            MinecraftClient.getInstance().keyboard.clipboard = msg.split("https://")[1]
+            mc.keyboard.clipboard = msg.split("https://")[1]
         }
     }
 
-    override fun getUUID() = MinecraftClient.getInstance().session.uuidOrNull
-    override fun getName(): String = MinecraftClient.getInstance().session.username
+    override fun getUUID() = mc.session.uuidOrNull
+    override fun getName(): String = mc.session.username
 }

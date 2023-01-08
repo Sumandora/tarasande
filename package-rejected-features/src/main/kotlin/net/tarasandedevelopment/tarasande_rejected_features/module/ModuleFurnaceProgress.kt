@@ -11,6 +11,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelElements
+import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress in the furnace", ModuleCategory.RENDER) {
 
@@ -26,7 +27,7 @@ class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress
 
                 override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
                     elementList.clear()
-                    y = MinecraftClient.getInstance().window.scaledHeight / 2f - panelHeight / 2f
+                    y = mc.window.scaledHeight / 2f - panelHeight / 2f
 
                     if (screenHandler.isBurning) {
                         addText("Item smelting finished in: " + ((screenHandler.propertyDelegate.get(3) - screenHandler.propertyDelegate.get(2)) / 20) + " seconds")

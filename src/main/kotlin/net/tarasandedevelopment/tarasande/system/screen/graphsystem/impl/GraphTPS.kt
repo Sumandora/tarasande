@@ -1,11 +1,11 @@
 package net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import su.mandora.event.EventDispatcher
 
 class GraphTPS : Graph("Server", "TPS", 25, false) {
@@ -30,7 +30,7 @@ class GraphTPS : Graph("Server", "TPS", 25, false) {
             }
 
             add(EventDisconnect::class.java) {
-                if (it.connection == MinecraftClient.getInstance().networkHandler?.connection) {
+                if (it.connection == mc.networkHandler?.connection) {
                     lastWorldTimePacket = 0L
                     timeDeltas.clear()
                     clear()

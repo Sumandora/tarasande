@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar
 
-import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -9,6 +8,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelElements
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.panel.ClickableWidgetPanelSidebar
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
@@ -41,7 +41,7 @@ open class EntrySidebarPanel(val name: String, val category: String) {
 
     fun openValues() {
         if (TarasandeMain.managerValue().getValues(this).isNotEmpty()) {
-            MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, name, this))
+            mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, name, this))
         }
     }
 

@@ -8,6 +8,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
 import java.net.URL
@@ -116,11 +117,11 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
     }
 
     override fun tick() {
-        if (MinecraftClient.getInstance().networkHandler == null || !opened)
+        if (mc.networkHandler == null || !opened)
             playerData.clear()
         else {
-            playerData.entries.removeIf { MinecraftClient.getInstance().networkHandler?.playerList?.none { entry -> entry.profile == it.key } == true }
-            MinecraftClient.getInstance().networkHandler?.playerList?.forEach {
+            playerData.entries.removeIf { mc.networkHandler?.playerList?.none { entry -> entry.profile == it.key } == true }
+            mc.networkHandler?.playerList?.forEach {
                 if (!playerData.containsKey(it.profile) && !blackList.contains(it.profile))
                     playerData[it.profile] = Stats()
             }

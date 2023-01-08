@@ -1,17 +1,17 @@
 package net.tarasandedevelopment.tarasande.util.render.font
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import java.awt.Color
 
 object FontWrapper {
 
-    private val mcInternal = MinecraftClient.getInstance().textRenderer
+    private val mcInternal = mc.textRenderer
 
     fun textOutline(matrices: MatrixStack, text: String, x: Float, y: Float, color: Int = -1, outlineColor: Int = Color.black.rgb, scale: Float = 1F, centered: Boolean = false) {
         val immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().buffer)

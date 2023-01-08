@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.HealthUpdateS2CPacket
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.*
@@ -21,6 +20,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.rende
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.element.PanelElementsCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.fixed.PanelArrayList
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.Event
 import su.mandora.event.EventDispatcher
@@ -155,7 +155,7 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
                 }
             }
             add(EventDisconnect::class.java) {
-                if (it.connection == MinecraftClient.getInstance().networkHandler?.connection) {
+                if (it.connection == mc.networkHandler?.connection) {
                     for (module in list)
                         if (module.autoDisable.isSelected(1) && module.enabled)
                             module.switchState()
@@ -196,8 +196,6 @@ open class Module(val name: String, val description: String, val category: Strin
 
     @Suppress("LeakingThis")
     val bind = ValueBind(this, "Bind", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN)
-
-    val mc: MinecraftClient = MinecraftClient.getInstance()
 
     fun switchState() {
         enabled = !enabled

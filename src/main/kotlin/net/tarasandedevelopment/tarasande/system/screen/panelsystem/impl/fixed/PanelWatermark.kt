@@ -1,12 +1,12 @@
 package net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.fixed
 
 import com.mojang.blaze3d.platform.GlStateManager
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import java.net.InetAddress
 
@@ -45,10 +45,10 @@ class PanelWatermark : Panel("Watermark", 150.0, 50.0, true) {
         if (motdWidth > panelWidth - userHostWidth) {
             matrices.push()
             GlStateManager._enableScissorTest()
-            val scaleFactor = MinecraftClient.getInstance().window?.scaleFactor!!.toInt()
+            val scaleFactor = mc.window.scaleFactor.toInt()
             GlStateManager._scissorBox(
                 (x * scaleFactor).toInt(),
-                (MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight) * scaleFactor).toInt(),
+                (mc.window.height - (y + panelHeight) * scaleFactor).toInt(),
                 ((panelWidth - userHostWidth) * scaleFactor).toInt(),
                 (FontWrapper.fontHeight() * scaleFactor)
             )

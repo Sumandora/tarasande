@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande.system.screen.accountmanager.account
 import com.google.gson.JsonArray
 import com.mojang.authlib.Environment
 import com.mojang.authlib.minecraft.MinecraftSessionService
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.Manager
@@ -16,6 +15,7 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.i
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.microsoft.AccountMicrosoftRefreshToken
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterEnvironment
+import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ManagerAccount : Manager<Class<out Account>>() {
     init {
@@ -44,7 +44,7 @@ abstract class Account {
 
     @ExtraInfo("Environment")
     open val environmentExtra: (Screen) -> Unit = {
-        MinecraftClient.getInstance().setScreen(ScreenBetterEnvironment(it, environment) { newEnvironment ->
+        mc.setScreen(ScreenBetterEnvironment(it, environment) { newEnvironment ->
             environment = newEnvironment
         })
     }

@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.espsystem.impl
 
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexConsumerProvider
@@ -16,6 +15,7 @@ import net.tarasandedevelopment.tarasande.system.feature.espsystem.ESPElement
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.ESPElementRotatable
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.Orientation
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleESP
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import java.awt.Color
@@ -48,7 +48,7 @@ class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.
         val col = Color(entity.teamColorValue).rgb // ignore alpha
         val tagName = entity.displayName.asOrderedText()
         matrices.push()
-        val width = MinecraftClient.getInstance().textRenderer!!.getWidth(tagName)
+        val width = mc.textRenderer!!.getWidth(tagName)
         var factor =
             if (fitBoxWidth.value)
                 (sideWidth / width).toFloat()
@@ -61,16 +61,16 @@ class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.
         matrices.translate(-sideWidth / 2, 0.0, 0.0)
         if (outlined.value) {
             val immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().buffer)
-            MinecraftClient.getInstance().textRenderer!!.drawWithOutline(tagName, (sideWidth / 2f - width / 2f).toFloat(), 0.0F, col, Color.black.rgb, matrices.peek().positionMatrix, immediate, LightmapTextureManager.MAX_LIGHT_COORDINATE)
+            mc.textRenderer!!.drawWithOutline(tagName, (sideWidth / 2f - width / 2f).toFloat(), 0.0F, col, Color.black.rgb, matrices.peek().positionMatrix, immediate, LightmapTextureManager.MAX_LIGHT_COORDINATE)
             immediate.draw()
         } else {
-            MinecraftClient.getInstance().textRenderer!!.drawWithShadow(matrices, tagName, (sideWidth / 2f - width / 2f).toFloat(), 0.0F, col)
+            mc.textRenderer!!.drawWithShadow(matrices, tagName, (sideWidth / 2f - width / 2f).toFloat(), 0.0F, col)
         }
         matrices.pop()
     }
 
     override fun getHeight(entity: Entity, sideWidth: Double): Double {
-        return FontWrapper.fontHeight().toDouble() * min(sideWidth / MinecraftClient.getInstance().textRenderer!!.getWidth(entity.displayName.asOrderedText()), 3.0) * scale.value
+        return FontWrapper.fontHeight().toDouble() * min(sideWidth / mc.textRenderer!!.getWidth(entity.displayName.asOrderedText()), 3.0) * scale.value
     }
 }
 

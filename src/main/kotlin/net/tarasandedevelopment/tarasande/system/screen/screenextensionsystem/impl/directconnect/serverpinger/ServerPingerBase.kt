@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -10,6 +9,7 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.Sc
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel.PanelServerInformation
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel.copy
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel.emptyServer
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
@@ -55,7 +55,7 @@ class ServerPingerBase(val parent: ScreenExtension<*>, private val addressProvid
 
     init {
         EventDispatcher.add(EventTick::class.java) {
-            MinecraftClient.getInstance().currentScreen?.apply {
+            mc.currentScreen?.apply {
                 if (javaClass.isAssignableFrom(parent.screen) && autoPing.value) {
                     ping()
                 }

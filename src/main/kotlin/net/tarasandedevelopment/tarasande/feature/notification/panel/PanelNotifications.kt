@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.Formatting
 import net.minecraft.util.StringHelper
-import net.minecraft.util.math.MathHelper
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.feature.notification.Notification
 import net.tarasandedevelopment.tarasande.feature.notification.Notifications
@@ -76,7 +75,7 @@ class PanelNotifications(private val notifications: Notifications) : Panel("Noti
                 animations.remove(notification)
                 continue
             }
-            animations[notification] = MathHelper.clamp(animation, 0.0, 1.0)
+            animations[notification] = animation.coerceIn(0.0, 1.0)
         }
 
         return animations.any { it.value > 0.0 }.also { if (!it) notifications.alert = false }

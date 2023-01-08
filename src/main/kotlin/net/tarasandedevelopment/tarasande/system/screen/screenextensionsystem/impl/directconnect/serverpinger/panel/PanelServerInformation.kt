@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget.ServerEntry
@@ -10,6 +9,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.screen.ScreenTexts
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
@@ -35,7 +35,7 @@ open class PanelServerInformation(private val owner: Any) : Panel("Server Inform
             }
 
             override fun getServerList(): ServerList {
-                return object : ServerList(MinecraftClient.getInstance()) {
+                return object : ServerList(mc) {
                     override fun size(): Int {
                         return 0
                     }
@@ -71,13 +71,13 @@ open class PanelServerInformation(private val owner: Any) : Panel("Server Inform
 
     override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val hovered = RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), x, y + titleBarHeight, panelWidth, panelHeight - titleBarHeight)
-        serverEntry?.render(matrices, 0, y.toInt() + titleBarHeight, x.toInt(), (panelWidth + 5.0 /* sick, minecraft simple shifts everything by 5 units */).toInt(), (panelHeight - titleBarHeight).toInt(), mouseX, mouseY, hovered, MinecraftClient.getInstance().tickDelta)
+        serverEntry?.render(matrices, 0, y.toInt() + titleBarHeight, x.toInt(), (panelWidth + 5.0 /* sick, minecraft simple shifts everything by 5 units */).toInt(), (panelHeight - titleBarHeight).toInt(), mouseX, mouseY, hovered, mc.tickDelta)
     }
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         if (tooltip != null) {
-            MinecraftClient.getInstance().currentScreen?.renderTooltip(matrices, tooltip, mouseX, mouseY)
+            mc.currentScreen?.renderTooltip(matrices, tooltip, mouseX, mouseY)
             tooltip = null
         }
     }

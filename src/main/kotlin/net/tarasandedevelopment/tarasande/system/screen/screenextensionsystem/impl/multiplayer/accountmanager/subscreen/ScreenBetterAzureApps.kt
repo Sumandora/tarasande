@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen
 
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.text.Text
@@ -10,6 +9,7 @@ import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.AzureAppPreset
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import java.util.*
 import java.util.function.Consumer
@@ -59,7 +59,7 @@ class ScreenBetterAzureApps(prevScreen: Screen?, private val azureApp: AzureAppP
             })
 
             x += 130 + 3
-            if (x + 135 >= MinecraftClient.getInstance().window.scaledWidth) {
+            if (x + 135 >= mc.window.scaledWidth) {
                 x = 3
                 y += 20 + 3
             }

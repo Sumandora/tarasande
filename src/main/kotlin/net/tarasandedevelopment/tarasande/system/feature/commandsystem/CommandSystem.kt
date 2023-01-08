@@ -7,7 +7,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientCommandSource
 import net.minecraft.client.network.ClientDynamicRegistryType
 import net.minecraft.command.CommandRegistryAccess
@@ -29,6 +28,7 @@ import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.Comm
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandFakeGameMode
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandGive
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandSay
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
@@ -43,7 +43,7 @@ class ManagerCommand : Manager<Command>() {
     }
 
     private val dispatcher = CommandDispatcher<CommandSource>()
-    private val commandSource = ClientCommandSource(null, MinecraftClient.getInstance()) // yep, this works lmao
+    private val commandSource = ClientCommandSource(null, mc) // yep, this works lmao
 
     init {
         add(
@@ -105,8 +105,6 @@ class ManagerCommand : Manager<Command>() {
 
 abstract class Command(private vararg val aliases: String) {
 
-    val mc: MinecraftClient = MinecraftClient.getInstance()
-
     companion object {
         val registryAccess: CommandRegistryAccess = CommandRegistryAccess.of(ClientDynamicRegistryType.createCombinedDynamicRegistries().combinedRegistryManager, FeatureFlags.DEFAULT_ENABLED_FEATURES)
         val notInCreative = SimpleCommandExceptionType(Text.literal("You must be in creative mode to use this"))
@@ -116,7 +114,7 @@ abstract class Command(private vararg val aliases: String) {
     }
 
     fun printChatMessage(message: String) = CustomChat.printChatMessage(Text.literal(message))
-    fun createServerCommandSource() = ServerCommandSource(null, MinecraftClient.getInstance().player?.pos, null, null, 0, null, null, null, null)
+    fun createServerCommandSource() = ServerCommandSource(null, mc.player?.pos, null, null, 0, null, null, null, null)
 
     open fun literal(name: String): LiteralArgumentBuilder<CommandSource> = LiteralArgumentBuilder.literal(name)
     open fun argument(name: String?, type: ArgumentType<*>?): RequiredArgumentBuilder<CommandSource?, *>? = RequiredArgumentBuilder.argument(name, type)

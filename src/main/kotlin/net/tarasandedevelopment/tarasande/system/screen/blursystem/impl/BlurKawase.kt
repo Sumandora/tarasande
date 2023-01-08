@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.screen.blursystem.impl
 
 import com.mojang.blaze3d.platform.GlStateManager
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.Blur
 import net.tarasandedevelopment.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
@@ -64,7 +63,7 @@ class BlurKawase : Blur("Kawase") {
         }
     }
 
-    override fun render(strength: Int): Framebuffer {
+    override fun render(targetBuffer: Framebuffer, strength: Int): Framebuffer {
         lateinit var last: Framebuffer
 
         var totalScale = 1.0F
@@ -75,7 +74,7 @@ class BlurKawase : Blur("Kawase") {
 
             when {
                 index == 0 -> {
-                    read = MinecraftClient.getInstance().framebuffer
+                    read = targetBuffer
                     write = alternativeFramebuffer
                 }
 

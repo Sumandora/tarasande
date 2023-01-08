@@ -1,13 +1,13 @@
 package net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.connection.packet
 
-import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.GraphTickable
+import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class GraphTickableRX : GraphTickable("Connection", "RX", 200, true) {
 
     override fun tick(): Number? {
-        if (MinecraftClient.getInstance().world == null) return null
+        if (mc.world == null) return null
 
-        return MinecraftClient.getInstance().networkHandler!!.connection.averagePacketsReceived.toInt()
+        return mc.networkHandler!!.connection.averagePacketsReceived.toInt()
     }
 }

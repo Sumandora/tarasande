@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.GameMenuScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtension
@@ -8,10 +7,11 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.im
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel.PanelServerInformation
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel.copy
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel.emptyServer
+import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ScreenExtensionGameMenuScreen : ScreenExtension<GameMenuScreen>(GameMenuScreen::class.java) {
 
-    private val serverPingerBase = ServerPingerBase(this) { MinecraftClient.getInstance().currentServerEntry?.address ?: "" }
+    private val serverPingerBase = ServerPingerBase(this) { mc.currentServerEntry?.address ?: "" }
 
     override fun createElements(screen: GameMenuScreen): MutableList<Element> {
         return mutableListOf(

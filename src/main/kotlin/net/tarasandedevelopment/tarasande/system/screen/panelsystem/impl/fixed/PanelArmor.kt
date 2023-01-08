@@ -1,12 +1,12 @@
 package net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.fixed
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
@@ -20,15 +20,15 @@ class PanelArmor : Panel("Armor", 75.0, FontWrapper.fontHeight().toDouble()) {
     private val scale = ValueNumber(this, "Scale", 0.1, 0.5, 2.0, 0.1)
 
     override fun isVisible(): Boolean {
-        return MinecraftClient.getInstance().player?.inventory?.armor?.any { it != null && !it.isEmpty } == true
+        return mc.player?.inventory?.armor?.any { it != null && !it.isEmpty } == true
     }
 
     private fun enchantSimpleName(enchantment: Enchantment, length: Int) = enchantment.getName(0).string.substring(0, length)
 
     override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         var m = 0
-        for (i in MinecraftClient.getInstance().player!!.inventory.armor.size - 1 downTo 0) {
-            val armor = MinecraftClient.getInstance().player!!.inventory.armor[i]
+        for (i in mc.player!!.inventory.armor.size - 1 downTo 0) {
+            val armor = mc.player!!.inventory.armor[i]
             if (armor.isEmpty && allocateSpaceForEmptySlots.value)
                 continue
 

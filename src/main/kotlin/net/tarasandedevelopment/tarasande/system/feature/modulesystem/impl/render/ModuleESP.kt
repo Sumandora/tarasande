@@ -9,13 +9,13 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.feature.entitycolor.EntityColor
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.ModuleAntiBot
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
@@ -26,9 +26,6 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
     val mode = ValueMode(this, "Mode", true, "Shader", "2D")
     val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registries.ENTITY_TYPE, EntityType.PLAYER) {
         override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
-    }
-    private val hideBots = object : ValueBoolean(this, "Hide bots", false) {
-        override fun isEnabled() = entities.list.contains(EntityType.PLAYER)
     }
 
     val entityColor = EntityColor()
@@ -42,7 +39,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 
     fun shouldRender(entity: Entity) =
         entities.list.contains(entity.type) &&
-                (!hideBots.value || entity !is PlayerEntity || entity == mc.player || !TarasandeMain.managerModule().get(ModuleAntiBot::class.java).isBot(entity))
+                (entity !is PlayerEntity || entity == mc.player || !TarasandeMain.managerModule().get(ModuleAntiBot::class.java).isBot(entity))
 
     private val hashMap = HashMap<Entity, Rectangle>()
 

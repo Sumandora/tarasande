@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.chea
 
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.render.GameRenderer
@@ -18,6 +17,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.particle.Particle
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
@@ -55,7 +55,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
             add(EventUpdate::class.java) { event ->
                 if (event.state == EventUpdate.State.PRE)
                     if (hotkey.wasPressed().let { it > 0 && it % 2 != 0 })
-                        MinecraftClient.getInstance().setScreen(this@ScreenCheatMenu)
+                        mc.setScreen(this@ScreenCheatMenu)
             }
         }
     }
@@ -206,6 +206,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
     }
 
     override fun close() {
+        println("ABC")
         if (disableAnimation) {
             return
         }

@@ -7,6 +7,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import su.mandora.event.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
@@ -56,14 +57,14 @@ class InformationTimers : Information("Badlion", "Timers") {
                             }
                         }
                     } else if (it.packet is PlayerRespawnS2CPacket) {
-                        if (MinecraftClient.getInstance().world != null && (it.packet as PlayerRespawnS2CPacket).dimension != MinecraftClient.getInstance().world?.registryKey) {
+                        if (mc.world != null && (it.packet as PlayerRespawnS2CPacket).dimension != mc.world?.registryKey) {
                             list.clear()
                             enabled = false
                         }
                     }
             }
             add(EventDisconnect::class.java) {
-                if (it.connection == MinecraftClient.getInstance().networkHandler?.connection) {
+                if (it.connection == mc.networkHandler?.connection) {
                     list.clear()
                     enabled = false
                 }

@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.util.player.prediction.projectile
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
@@ -14,6 +13,7 @@ import net.minecraft.util.math.random.RandomSplitter
 import net.tarasandedevelopment.tarasande.injection.accessor.*
 import net.tarasandedevelopment.tarasande.injection.accessor.prediction.IParticleManager
 import net.tarasandedevelopment.tarasande.injection.accessor.prediction.ISoundSystem
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.copy
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
@@ -23,24 +23,24 @@ import java.util.function.BiConsumer
 object ProjectileUtil {
 
     val projectileItems = arrayOf(ProjectileItem(Items.BOW.javaClass, EntityType.ARROW, true) { stack, persistentProjectileEntity ->
-        val velocity = BowItem.getPullProgress(if (MinecraftClient.getInstance().player?.isUsingItem!!) MinecraftClient.getInstance().player?.itemUseTime!! else stack.maxUseTime).toDouble()
-        persistentProjectileEntity.setVelocity(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.pitch!!, MinecraftClient.getInstance().player?.yaw!!, 0.0F, (velocity * 3.0).toFloat(), 1.0F)
+        val velocity = BowItem.getPullProgress(if (mc.player?.isUsingItem!!) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0F, (velocity * 3.0).toFloat(), 1.0F)
     }, ProjectileItem(Items.SNOWBALL.javaClass, EntityType.SNOWBALL, false) { _, persistentProjectileEntity ->
-        persistentProjectileEntity.setVelocity(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.pitch!!, MinecraftClient.getInstance().player?.yaw!!, 0.0F, 1.5F, 1.0F)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0F, 1.5F, 1.0F)
     }, ProjectileItem(Items.EGG.javaClass, EntityType.EGG, false) { _, persistentProjectileEntity ->
-        persistentProjectileEntity.setVelocity(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.pitch!!, MinecraftClient.getInstance().player?.yaw!!, 0.0F, 1.5F, 1.0F)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0F, 1.5F, 1.0F)
     }, ProjectileItem(Items.ENDER_PEARL.javaClass, EntityType.ENDER_PEARL, false) { _, persistentProjectileEntity ->
-        persistentProjectileEntity.setVelocity(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.pitch!!, MinecraftClient.getInstance().player?.yaw!!, 0.0F, 1.5F, 1.0F)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0F, 1.5F, 1.0F)
     }, ProjectileItem(Items.EXPERIENCE_BOTTLE.javaClass, EntityType.EXPERIENCE_BOTTLE, false) { _, persistentProjectileEntity ->
-        persistentProjectileEntity.setVelocity(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.pitch!!, MinecraftClient.getInstance().player?.yaw!!, -20.0F, 0.7F, 1.0F)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, -20.0F, 0.7F, 1.0F)
     }, ProjectileItem(Items.SPLASH_POTION.javaClass, EntityType.POTION, false) { _, persistentProjectileEntity ->
-        persistentProjectileEntity.setVelocity(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.pitch!!, MinecraftClient.getInstance().player?.yaw!!, -20.0F, 0.5F, 1.0F)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, -20.0F, 0.5F, 1.0F)
     }, ProjectileItem(Items.TRIDENT.javaClass, EntityType.TRIDENT, true) { item, persistentProjectileEntity ->
         val riptide = EnchantmentHelper.getRiptide(item)
-        persistentProjectileEntity.setVelocity(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.pitch!!, MinecraftClient.getInstance().player?.yaw!!, 0.0F, 2.5F + riptide.toFloat() * 0.5F, 1.0F)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0F, 2.5F + riptide.toFloat() * 0.5F, 1.0F)
     }, ProjectileItem(Items.FISHING_ROD.javaClass, EntityType.FISHING_BOBBER, false) { _, persistentProjectileEntity ->
-        val f = MinecraftClient.getInstance().player?.pitch!!
-        val g = MinecraftClient.getInstance().player?.yaw!!
+        val f = mc.player?.pitch!!
+        val g = mc.player?.yaw!!
         val h = MathHelper.cos(Math.toRadians(-g.toDouble()).toFloat() - Math.PI.toFloat())
         val i = MathHelper.sin(Math.toRadians(-g.toDouble()).toFloat() - Math.PI.toFloat())
         val j = -MathHelper.cos(Math.toRadians(-f.toDouble()).toFloat())
@@ -62,23 +62,23 @@ object ProjectileUtil {
             it.prevPitch = rotation.pitch
         }
     }, ProjectileItem(Items.CROSSBOW.javaClass, EntityType.ARROW, true) { stack, persistentProjectileEntity ->
-        persistentProjectileEntity.setVelocity(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player?.pitch!!, MinecraftClient.getInstance().player?.yaw!!, 0.0F, CrossbowItem.getSpeed(stack), 1.0F)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0F, CrossbowItem.getSpeed(stack), 1.0F)
     })
 
     fun predict(itemStack: ItemStack, rotation: Rotation?, predictVelocity: Boolean): ArrayList<Vec3d> {
         val projectileItem = projectileItems.first { it.isSame(itemStack.item) }
-        val wasIsClient = MinecraftClient.getInstance().world?.isClient == true
-        MinecraftClient.getInstance().world?.isClient = false
-        val prevParticlesEnabled = (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_isParticlesEnabled() // race conditions :c
-        (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(false)
-        val soundSystem = MinecraftClient.getInstance().soundManager.soundSystem as ISoundSystem
+        val wasIsClient = mc.world?.isClient == true
+        mc.world?.isClient = false
+        val prevParticlesEnabled = (mc.particleManager as IParticleManager).tarasande_isParticlesEnabled() // race conditions :c
+        (mc.particleManager as IParticleManager).tarasande_setParticlesEnabled(false)
+        val soundSystem = mc.soundManager.soundSystem as ISoundSystem
         val wasSoundDisabled = soundSystem.tarasande_isDisabled()
         soundSystem.tarasande_setDisabled(true)
         val path = ArrayList<Vec3d>()
         var collided = false
 
         @Suppress("UNCHECKED_CAST")
-        val persistentProjectileEntity = object : PersistentProjectileEntity(projectileItem.entityType as EntityType<PersistentProjectileEntity> /* This just shows how bad minecrafts code base is */, MinecraftClient.getInstance().player, MinecraftClient.getInstance().world) {
+        val persistentProjectileEntity = object : PersistentProjectileEntity(projectileItem.entityType as EntityType<PersistentProjectileEntity> /* This just shows how bad minecrafts code base is */, mc.player, mc.world) {
             override fun asItemStack(): ItemStack? = null
             override fun onEntityHit(entityHitResult: EntityHitResult?) {
                 collided = true
@@ -96,12 +96,12 @@ object ProjectileUtil {
             }
 
             override fun checkBlockCollision() {
-                MinecraftClient.getInstance().world?.isClient = true
+                mc.world?.isClient = true
                 super.checkBlockCollision()
-                MinecraftClient.getInstance().world?.isClient = false
+                mc.world?.isClient = false
             }
         }
-        persistentProjectileEntity.setPosition(MinecraftClient.getInstance().player?.getLerpedPos(MinecraftClient.getInstance().tickDelta)?.add(0.0, MinecraftClient.getInstance().player?.standingEyeHeight!! - 0.1, 0.0))
+        persistentProjectileEntity.setPosition(mc.player?.getLerpedPos(mc.tickDelta)?.add(0.0, mc.player?.standingEyeHeight!! - 0.1, 0.0))
         persistentProjectileEntity.random = object : Random {
             override fun split(): Random {
                 return this
@@ -155,28 +155,28 @@ object ProjectileUtil {
             }
         }
 
-        val prevRotation = Rotation(MinecraftClient.getInstance().player!!)
-        val prevVelocity = MinecraftClient.getInstance().player?.velocity?.add(0.0, 0.0, 0.0)
+        val prevRotation = Rotation(mc.player!!)
+        val prevVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)
         if (rotation != null) {
-            MinecraftClient.getInstance().player?.yaw = rotation.yaw
-            MinecraftClient.getInstance().player?.pitch = rotation.pitch
+            mc.player?.yaw = rotation.yaw
+            mc.player?.pitch = rotation.pitch
         }
         if (!predictVelocity) {
-            MinecraftClient.getInstance().player?.velocity = Vec3d.ZERO.copy()
+            mc.player?.velocity = Vec3d.ZERO.copy()
         }
         projectileItem.setupRoutine.accept(itemStack, persistentProjectileEntity)
-        MinecraftClient.getInstance().player?.velocity = prevVelocity
-        MinecraftClient.getInstance().player?.yaw = prevRotation.yaw
-        MinecraftClient.getInstance().player?.pitch = prevRotation.pitch
+        mc.player?.velocity = prevVelocity
+        mc.player?.yaw = prevRotation.yaw
+        mc.player?.pitch = prevRotation.pitch
         while (!collided) {
             path.add(persistentProjectileEntity.pos)
             persistentProjectileEntity.tick()
-            if (persistentProjectileEntity.pos.let { it.y < MinecraftClient.getInstance().world?.bottomY!! || it == path.lastOrNull() }) break
+            if (persistentProjectileEntity.pos.let { it.y < mc.world?.bottomY!! || it == path.lastOrNull() }) break
         }
         path.add(persistentProjectileEntity.pos)
         soundSystem.tarasande_setDisabled(wasSoundDisabled)
-        (MinecraftClient.getInstance().particleManager as IParticleManager).tarasande_setParticlesEnabled(prevParticlesEnabled)
-        MinecraftClient.getInstance().world?.isClient = wasIsClient
+        (mc.particleManager as IParticleManager).tarasande_setParticlesEnabled(prevParticlesEnabled)
+        mc.world?.isClient = wasIsClient
         return path
     }
 

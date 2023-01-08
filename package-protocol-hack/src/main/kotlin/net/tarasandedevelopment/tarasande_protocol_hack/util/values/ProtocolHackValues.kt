@@ -6,6 +6,7 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.command.ViaDumpBypassSender
 import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.andOlder
 import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.rangeTo
@@ -23,7 +24,7 @@ object ProtocolHackValues {
 
     @Suppress("unused")
     val createViaDump = object : ValueButton(this, "Create via dump") {
-        override fun isEnabled() = !MinecraftClient.getInstance().isInSingleplayer && MinecraftClient.getInstance().world != null
+        override fun isEnabled() = !mc.isInSingleplayer && mc.world != null
         override fun onChange() {
             Via.getManager().commandHandler.getSubCommand("dump")?.execute(ViaDumpBypassSender, arrayOf())
         }

@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
@@ -9,6 +8,7 @@ import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidge
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueTextList
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.ElementWidthValueComponentFocusable
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
@@ -16,7 +16,7 @@ import java.awt.Color
 
 class ElementWidthValueComponentFocusableTextList(value: Value) : ElementWidthValueComponentFocusable(value) {
     //TODO
-    private val textFieldWidget = TextFieldWidgetPlaceholder(MinecraftClient.getInstance().textRenderer, 0, 0, 40 * 2, FontWrapper.fontHeight() * 2 - 1, Text.of("Input text"))
+    private val textFieldWidget = TextFieldWidgetPlaceholder(mc.textRenderer, 0, 0, 40 * 2, FontWrapper.fontHeight() * 2 - 1, Text.of("Input text"))
 
     init {
         textFieldWidget.setMaxLength(Int.MAX_VALUE)

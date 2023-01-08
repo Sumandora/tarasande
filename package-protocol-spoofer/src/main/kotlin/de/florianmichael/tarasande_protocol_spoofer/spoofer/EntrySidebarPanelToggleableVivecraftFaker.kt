@@ -8,6 +8,7 @@ import net.minecraft.util.Identifier
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanelToggleable
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.ManagerEntrySidebarPanel
+import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class EntrySidebarPanelToggleableVivecraftFaker(sidebar: ManagerEntrySidebarPanel) : EntrySidebarPanelToggleable(sidebar, "Vivecraft Faker", "Spoofer") {
     private val version = ValueText(this, "Version", "Vivecraft 1.19.2  jrbudda-VR-2-b7")
@@ -15,7 +16,7 @@ class EntrySidebarPanelToggleableVivecraftFaker(sidebar: ManagerEntrySidebarPane
     private val identifier = Identifier("vivecraft:data")
 
     fun sendVersionInfo() {
-        val connection = MinecraftClient.getInstance().networkHandler?.connection!!
+        val connection = mc.networkHandler?.connection!!
 
         connection.send(CustomPayloadC2SPacket(Identifier("minecraft:register"), PacketByteBuf(Unpooled.buffer()).writeString(identifier.toString())))
         connection.send(CustomPayloadC2SPacket(identifier, PacketByteBuf(Unpooled.buffer()).apply {

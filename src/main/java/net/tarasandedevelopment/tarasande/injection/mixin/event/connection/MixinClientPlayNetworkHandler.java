@@ -12,9 +12,7 @@ import net.tarasandedevelopment.tarasande.event.EventInvalidPlayerInfo;
 import net.tarasandedevelopment.tarasande.event.EventRotationSet;
 import net.tarasandedevelopment.tarasande.event.EventShowsDeathScreen;
 import net.tarasandedevelopment.tarasande.event.EventVelocity;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -27,14 +25,10 @@ import java.util.Iterator;
 @Mixin(ClientPlayNetworkHandler.class)
 public class MixinClientPlayNetworkHandler {
 
-    @Shadow
-    @Final
-    private MinecraftClient client;
-
     @Redirect(method = "onEntityVelocityUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setVelocityClient(DDD)V"))
     public void hookEventVelocity(Entity entity, double x, double y, double z) {
         EventVelocity eventVelocity = new EventVelocity(x, y, z, EventVelocity.Packet.VELOCITY);
-        if (entity == client.player)
+        if (entity == MinecraftClient.getInstance().player)
             EventDispatcher.INSTANCE.call(eventVelocity);
         if (!eventVelocity.getCancelled())
             entity.setVelocityClient(eventVelocity.getVelocityX(), eventVelocity.getVelocityY(), eventVelocity.getVelocityZ());
@@ -49,7 +43,7 @@ public class MixinClientPlayNetworkHandler {
 
     @Inject(method = "onPlayerPositionLook", at = @At("TAIL"))
     public void hookEventRotationSet(PlayerPositionLookS2CPacket packet, CallbackInfo ci) {
-        EventDispatcher.INSTANCE.call(new EventRotationSet(client.player.getYaw(), client.player.getPitch()));
+        EventDispatcher.INSTANCE.call(new EventRotationSet(MinecraftClient.getInstance().player.getYaw(), MinecraftClient.getInstance().player.getPitch()));
     }
 
     @Redirect(method = "onDeathMessage", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;showsDeathScreen()Z"))

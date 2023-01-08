@@ -1,12 +1,12 @@
 package net.tarasandedevelopment.tarasande.feature.clientvalue.impl
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.Tameable
 import net.minecraft.registry.Registries
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import su.mandora.event.EventDispatcher
 
 object TargetingValues {
@@ -25,7 +25,7 @@ object TargetingValues {
             init {
                 EventDispatcher.add(EventIsEntityAttackable::class.java) {
                     if (value)
-                        it.attackable = it.attackable && (it.entity !is Tameable || it.entity.ownerUuid != MinecraftClient.getInstance().player?.uuid)
+                        it.attackable = it.attackable && (it.entity !is Tameable || it.entity.ownerUuid != mc.player?.uuid)
                 }
             }
         }
@@ -33,7 +33,7 @@ object TargetingValues {
             init {
                 EventDispatcher.add(EventIsEntityAttackable::class.java) {
                     if (value)
-                        it.attackable = it.attackable && it.entity != MinecraftClient.getInstance().player?.vehicle
+                        it.attackable = it.attackable && it.entity != mc.player?.vehicle
                 }
             }
 

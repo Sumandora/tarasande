@@ -1,11 +1,11 @@
 package net.tarasandedevelopment.tarasande.system.screen.graphsystem.panel
 
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import kotlin.math.max
 
@@ -43,12 +43,12 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100, FontWrap
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
 
-        val onePixel = 1 / MinecraftClient.getInstance().window.scaleFactor
+        val onePixel = 1 / mc.window.scaleFactor
 
         for ((index, value) in values.withIndex()) {
             if (value == null)
                 println(graph.name)
-            bufferBuilder.vertex(matrix, (x + (panelWidth - width) * (index / (graph.bufferLength - 1).toFloat())).toFloat(), (y + panelHeight - onePixel - (panelHeight - titleBarHeight - (1 / MinecraftClient.getInstance().window.scaleFactor)) * normalize(value.toDouble(), min, max)).toFloat(), 0.0F).color(1.0F, 1.0F, 1.0F, 1.0F).next()
+            bufferBuilder.vertex(matrix, (x + (panelWidth - width) * (index / (graph.bufferLength - 1).toFloat())).toFloat(), (y + panelHeight - onePixel - (panelHeight - titleBarHeight - (1 / mc.window.scaleFactor)) * normalize(value.toDouble(), min, max)).toFloat(), 0.0F).color(1.0F, 1.0F, 1.0F, 1.0F).next()
         }
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
         RenderSystem.enableTexture()

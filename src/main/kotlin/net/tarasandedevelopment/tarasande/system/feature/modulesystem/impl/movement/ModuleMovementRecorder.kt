@@ -7,6 +7,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
@@ -169,7 +170,7 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
             val str = if (recording) "Recording" else playbackState?.name?.let {
                 it.first() + it.substring(1).lowercase()
             } ?: return@registerEvent
-            FontWrapper.textShadow(event.matrices, str, mc.window?.scaledWidth!! / 2.0F - FontWrapper.getWidth(str) / 2.0F, mc.window?.scaledHeight!! / 2.0F - FontWrapper.fontHeight(), -1)
+            FontWrapper.textShadow(event.matrices, str, mc.window.scaledWidth / 2.0F - FontWrapper.getWidth(str) / 2.0F, mc.window.scaledHeight / 2.0F - FontWrapper.fontHeight(), -1)
         }
 
         registerEvent(EventRender3D::class.java) { event ->

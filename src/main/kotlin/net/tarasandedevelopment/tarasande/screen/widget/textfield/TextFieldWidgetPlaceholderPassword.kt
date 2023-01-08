@@ -1,11 +1,11 @@
 package net.tarasandedevelopment.tarasande.screen.widget.textfield
 
 import com.google.common.base.Strings
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
+import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class TextFieldWidgetPlaceholderPassword(textRenderer: TextRenderer?, x: Int, y: Int, width: Int, height: Int, text: Text?) : TextFieldWidgetPlaceholder(textRenderer, x, y, width, height, text) {
 
@@ -42,15 +42,15 @@ class TextFieldWidgetPlaceholderPassword(textRenderer: TextRenderer?, x: Int, y:
                 setSelectionEnd(0)
                 true
             } else if (Screen.isCopy(keyCode)) {
-                MinecraftClient.getInstance().keyboard.clipboard = this.selectedText
+                mc.keyboard.clipboard = this.selectedText
                 true
             } else if (Screen.isPaste(keyCode)) {
                 if (this.isEditable) {
-                    write(MinecraftClient.getInstance().keyboard.clipboard)
+                    write(mc.keyboard.clipboard)
                 }
                 true
             } else if (Screen.isCut(keyCode)) {
-                MinecraftClient.getInstance().keyboard.clipboard = this.selectedText
+                mc.keyboard.clipboard = this.selectedText
                 if (this.isEditable) {
                     write("")
                 }

@@ -12,6 +12,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColo
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.boundingBox
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.util.concurrent.CopyOnWriteArrayList

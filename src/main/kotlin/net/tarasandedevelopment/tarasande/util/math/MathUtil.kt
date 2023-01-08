@@ -1,9 +1,8 @@
 package net.tarasandedevelopment.tarasande.util.math
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.util.math.Box
-import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -11,21 +10,21 @@ object MathUtil {
 
     fun closestPointToBox(start: Vec3d, box: Box): Vec3d {
         return Vec3d(
-            MathHelper.clamp(start.x, box.minX, box.maxX),
-            MathHelper.clamp(start.y, box.minY, box.maxY),
-            MathHelper.clamp(start.z, box.minZ, box.maxZ)
+            start.x.coerceIn(box.minX..box.maxX),
+            start.y.coerceIn(box.minY..box.maxY),
+            start.z.coerceIn(box.minZ..box.maxZ)
         )
     }
 
     fun getBestAimPoint(box: Box): Vec3d {
-        val start = MinecraftClient.getInstance().player?.eyePos!!
+        val start = mc.player?.eyePos!!
         if (
             box.minX < start.x && start.x < box.maxX &&
             box.minZ < start.z && start.z < box.maxZ
         )
             return Vec3d(
                 box.minX + (box.maxX - box.minX) / 2.0,
-                MathHelper.clamp(start.y, box.minY, box.maxY),
+                start.y.coerceIn(box.minY..box.maxY),
                 box.minZ + (box.maxZ - box.minZ) / 2.0
             )
         return closestPointToBox(start, box)

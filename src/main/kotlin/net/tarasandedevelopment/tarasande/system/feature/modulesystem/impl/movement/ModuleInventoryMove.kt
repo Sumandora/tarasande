@@ -15,6 +15,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.elem
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterFileChooser
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
@@ -35,7 +36,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
             if (isPassingEvents())
                 if (movementKeys.contains(event.keyBinding))
                     if (event.keyBinding != mc.options.sneakKey || updateSneaking.value)
-                        event.pressed = InputUtil.isKeyPressed(mc.window?.handle!!, event.keyBinding.boundKey.code)
+                        event.pressed = InputUtil.isKeyPressed(mc.window.handle, event.keyBinding.boundKey.code)
         }
 
         registerEvent(EventTick::class.java) { event ->

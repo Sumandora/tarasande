@@ -2,12 +2,12 @@ package net.tarasandedevelopment.tarasande.system.base.valuesystem.impl
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.event.EventKey
 import net.tarasandedevelopment.tarasande.event.EventMouse
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl.ElementWidthValueComponentFocusableBind
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 
@@ -19,7 +19,7 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
         EventDispatcher.apply {
             add(EventMouse::class.java) {
                 if (type == Type.MOUSE)
-                    if (MinecraftClient.getInstance().currentScreen == null)
+                    if (mc.currentScreen == null)
                         if (button == it.button)
                             if (it.action == GLFW.GLFW_PRESS) {
                                 if (owner !is Module || this@ValueBind == owner.bind || owner.enabled)
@@ -28,7 +28,7 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
             }
             add(EventKey::class.java) {
                 if (type == Type.KEY)
-                    if (MinecraftClient.getInstance().currentScreen == null)
+                    if (mc.currentScreen == null)
                         if (it.key == button)
                             if (it.action == GLFW.GLFW_PRESS) {
                                 if (owner !is Module || this@ValueBind == owner.bind || owner.enabled)
@@ -63,11 +63,11 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
 
     fun isPressed(ignoreScreen: Boolean = false): Boolean {
         if (button == GLFW.GLFW_KEY_UNKNOWN) return false
-        if (MinecraftClient.getInstance().currentScreen != null && !ignoreScreen) return false
+        if (mc.currentScreen != null && !ignoreScreen) return false
 
         return when (type) {
-            Type.KEY -> GLFW.glfwGetKey(MinecraftClient.getInstance().window.handle, button) == GLFW.GLFW_PRESS
-            Type.MOUSE -> GLFW.glfwGetMouseButton(MinecraftClient.getInstance().window.handle, button) == GLFW.GLFW_PRESS
+            Type.KEY -> GLFW.glfwGetKey(mc.window.handle, button) == GLFW.GLFW_PRESS
+            Type.MOUSE -> GLFW.glfwGetMouseButton(mc.window.handle, button) == GLFW.GLFW_PRESS
         }
     }
 

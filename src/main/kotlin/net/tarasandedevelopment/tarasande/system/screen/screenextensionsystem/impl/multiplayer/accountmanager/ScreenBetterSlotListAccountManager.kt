@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.i
 import com.mojang.authlib.minecraft.UserApiService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.TitleScreen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.network.Bans
@@ -29,6 +28,7 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.environme
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.file.FileAccounts
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterAccount
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterProxy
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
@@ -66,7 +66,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         EventDispatcher.add(EventSuccessfulLoad::class.java, 9999) {
             TarasandeMain.managerFile().add(FileAccounts(this))
 
-            if (MinecraftClient.getInstance().session?.accountType == Session.AccountType.LEGACY && mainAccount != null) {
+            if (mc.session?.accountType == Session.AccountType.LEGACY && mainAccount != null) {
                 logIn(accounts[mainAccount!!])
 
                 while (loginThread != null && loginThread!!.isAlive)
@@ -127,7 +127,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
         }.also { addButton = it })
 
         addDrawableChild(ButtonWidget(3, 3, 100, 20, Text.of("Proxy")) {
-            MinecraftClient.getInstance().setScreen(screenBetterProxy.apply { prevScreen = MinecraftClient.getInstance().currentScreen })
+            mc.setScreen(screenBetterProxy.apply { prevScreen = mc.currentScreen })
         })
 
         addDrawableChild(ButtonWidget(width - 103, 3, 100, 20, Text.of("Random session")) {
@@ -207,7 +207,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
                     return
                 // This can't be "client" because it is called from ClientMain means it's null at this point in time
                 var updatedUserApiService = true
-                with(MinecraftClient.getInstance()) {
+                with(mc) {
                     session = account.session
                     authenticationService = YggdrasilAuthenticationService(java.net.Proxy.NO_PROXY, "", account.environment)
                     sessionService = account.getSessionService()
@@ -218,12 +218,12 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList(46, 10, 240, Fon
                         UserApiService.OFFLINE
                     }
                     servicesSignatureVerifier = SignatureVerifier.create(authenticationService.servicesKey)
-                    socialInteractionsManager = SocialInteractionsManager(MinecraftClient.getInstance(), userApiService)
+                    socialInteractionsManager = SocialInteractionsManager(mc, userApiService)
                     (realmsPeriodicCheckers as IRealmsPeriodicCheckers).tarasande_getClient().apply {
                         username = account.session?.username
                         sessionId = account.session?.sessionId
                     }
-                    profileKeys = ProfileKeys.create(userApiService, account.session, MinecraftClient.getInstance().runDirectory.toPath())
+                    profileKeys = ProfileKeys.create(userApiService, account.session, mc.runDirectory.toPath())
 
                     if (isMultiplayerBanned) {
                         setScreen(Bans.createBanScreen(object : BooleanConsumer {

@@ -1,13 +1,12 @@
 package net.tarasandedevelopment.tarasande.util.math.rotation
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
-import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import su.mandora.event.EventDispatcher
@@ -44,12 +43,12 @@ object RotationUtil {
                         it.yaw = fakeRotation!!.yaw
             }
             add(EventInput::class.java, 9999) {
-                if (it.input == MinecraftClient.getInstance().player?.input)
+                if (it.input == mc.player?.input)
                     if (fakeRotation != null)
                         if (TarasandeMain.clientValues().correctMovement.isSelected(3)) {
                             if (it.movementForward == 0.0F && it.movementSideways == 0.0F) return@add
 
-                            val realYaw = goalMovementYaw ?: MinecraftClient.getInstance().player!!.yaw
+                            val realYaw = goalMovementYaw ?: mc.player!!.yaw
                             val fakeYaw = fakeRotation!!.yaw
 
                             val moveX = it.movementSideways * cos(Math.toRadians(realYaw.toDouble())) - it.movementForward * sin(Math.toRadians(realYaw.toDouble()))
@@ -108,16 +107,16 @@ object RotationUtil {
             add(EventUpdate::class.java, 9999) {
                 when (it.state) {
                     EventUpdate.State.PRE_PACKET -> {
-                        cachedRotation = Rotation(MinecraftClient.getInstance().player!!)
+                        cachedRotation = Rotation(mc.player!!)
                         if (fakeRotation != null) {
-                            MinecraftClient.getInstance().player!!.yaw = fakeRotation!!.yaw
-                            MinecraftClient.getInstance().player!!.pitch = fakeRotation!!.pitch
+                            mc.player!!.yaw = fakeRotation!!.yaw
+                            mc.player!!.pitch = fakeRotation!!.pitch
                         }
                     }
 
                     EventUpdate.State.POST -> {
-                        MinecraftClient.getInstance().player!!.yaw = cachedRotation!!.yaw
-                        MinecraftClient.getInstance().player!!.pitch = cachedRotation!!.pitch
+                        mc.player!!.yaw = cachedRotation!!.yaw
+                        mc.player!!.pitch = cachedRotation!!.pitch
                     }
 
                     else -> {}
@@ -137,37 +136,37 @@ object RotationUtil {
     }
 
     fun updateFakeRotation(fake: Boolean) {
-        if (MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().interactionManager != null) {
-            val eventPollEvents = EventPollEvents(Rotation(MinecraftClient.getInstance().player!!), fake)
+        if (mc.player != null && mc.interactionManager != null) {
+            val eventPollEvents = EventPollEvents(Rotation(mc.player!!), fake)
             EventDispatcher.call(eventPollEvents)
             if (eventPollEvents.dirty) {
                 fakeRotation = eventPollEvents.rotation
                 lastMinRotateToOriginSpeed = eventPollEvents.minRotateToOriginSpeed
                 lastMaxRotateToOriginSpeed = eventPollEvents.maxRotateToOriginSpeed
             } else if (fakeRotation != null) {
-                val realRotation = Rotation(MinecraftClient.getInstance().player!!)
+                val realRotation = Rotation(mc.player!!)
                 val rotation = Rotation(fakeRotation!!)
-                if (MinecraftClient.getInstance().player?.bodyTrackingIncrements == 0)
+                if (mc.player?.bodyTrackingIncrements == 0)
                     rotation.smoothedTurn(realRotation, Pair(lastMinRotateToOriginSpeed, lastMaxRotateToOriginSpeed))
                 rotation.correctSensitivity()
                 val actualDist = fakeRotation!!.fov(rotation)
                 val gcd = Rotation.getGcd() * 0.15F
                 if (actualDist <= gcd / 2 + 0.1 /* little more */) {
-                    val actualRotation = Rotation(MinecraftClient.getInstance().player!!)
+                    val actualRotation = Rotation(mc.player!!)
                     actualRotation.correctSensitivity()
                     fakeRotation = null
-                    MinecraftClient.getInstance().player?.yaw = actualRotation.yaw.also {
-                        MinecraftClient.getInstance().player?.renderYaw = it
-                        MinecraftClient.getInstance().player?.lastRenderYaw = it
-                        MinecraftClient.getInstance().player?.prevYaw = it
+                    mc.player?.yaw = actualRotation.yaw.also {
+                        mc.player?.renderYaw = it
+                        mc.player?.lastRenderYaw = it
+                        mc.player?.prevYaw = it
                     }
-                    MinecraftClient.getInstance().player?.pitch = actualRotation.pitch
+                    mc.player?.pitch = actualRotation.pitch
                 } else {
                     fakeRotation = rotation
                 }
             }
 
-            val eventGoalMovement = EventGoalMovement(fakeRotation?.yaw ?: MinecraftClient.getInstance().player!!.yaw)
+            val eventGoalMovement = EventGoalMovement(fakeRotation?.yaw ?: mc.player!!.yaw)
             EventDispatcher.call(eventGoalMovement)
             goalMovementYaw =
                 if (eventGoalMovement.dirty)
@@ -197,15 +196,11 @@ object RotationUtil {
         var j = packet.yaw
         var k = packet.pitch
         if (packet.flags.contains(PlayerPositionLookS2CPacket.Flag.X_ROT)) {
-            k += MinecraftClient.getInstance().player?.pitch!!
+            k += mc.player?.pitch!!
         }
         if (packet.flags.contains(PlayerPositionLookS2CPacket.Flag.Y_ROT)) {
-            j += MinecraftClient.getInstance().player?.yaw!!
+            j += mc.player?.yaw!!
         }
-        // The pitch calculation is literally mojang dev iq overload, kept for historic reasons
-        val rot = Rotation(j, k)
-        rot.yaw %= 360.0F
-        rot.pitch = MathHelper.clamp(rot.pitch, -90.0F, 90.0F) % 360.0F
-        return rot
+        return Rotation(j, k)
     }
 }
