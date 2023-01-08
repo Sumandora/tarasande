@@ -13,6 +13,7 @@ import net.tarasandedevelopment.tarasande.system.screen.blursystem.impl.BlurBox
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.impl.BlurGaussian
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.impl.BlurKawase
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import net.tarasandedevelopment.tarasande.util.render.shader.Program
 import net.tarasandedevelopment.tarasande.util.render.shader.Shader
@@ -24,7 +25,7 @@ import su.mandora.event.EventDispatcher
 class ManagerBlur : Manager<Blur>() {
 
     val mode: ValueMode
-    val strength = ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0)
+    val strength = ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0, exceed = false)
 
     private val inGameShapesFramebuffer = SimpleFramebufferWrapped()
     private val screenShapesFramebuffer = SimpleFramebufferWrapped()
@@ -56,7 +57,7 @@ class ManagerBlur : Manager<Blur>() {
         (if (screens) screenShapesFramebuffer else inGameShapesFramebuffer).beginWrite(setViewport)
     }
 
-    fun blurScene(strength: Int? = null, shapesBuffer: Framebuffer = inGameShapesFramebuffer) {
+    fun blurScene(strength: Int? = null, shapesBuffer: Framebuffer = inGameShapesFramebuffer, targetBuffer: Framebuffer = mc.framebuffer) {
         if (!RenderSystem.isOnRenderThread()) return
 
         GL11.glPushMatrix()
@@ -67,9 +68,9 @@ class ManagerBlur : Manager<Blur>() {
 
         val activeTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE)
 
-        val framebuffer = selected().render(strength ?: this.strength.value.toInt())
+        val framebuffer = selected().render(targetBuffer, strength ?: this.strength.value.toInt())
 
-        MinecraftClient.getInstance().framebuffer.beginWrite(MinecraftClient.IS_SYSTEM_MAC)
+        mc.framebuffer.beginWrite(MinecraftClient.IS_SYSTEM_MAC)
 
         val prevShader = cutoutShader.bindProgram()
         GL20.glUniform1i(cutoutShader.getUniformLocation("shapes"), 0)
@@ -102,7 +103,7 @@ class ManagerBlur : Manager<Blur>() {
         GL13.glActiveTexture(activeTexture)
 
         shapesBuffer.clear(MinecraftClient.IS_SYSTEM_MAC)
-        MinecraftClient.getInstance().framebuffer.beginWrite(MinecraftClient.IS_SYSTEM_MAC)
+        mc.framebuffer.beginWrite(MinecraftClient.IS_SYSTEM_MAC)
 
         if (!texture2D) GL11.glDisable(GL11.GL_TEXTURE_2D)
         if (cullFace) GL11.glEnable(GL11.GL_CULL_FACE)
@@ -112,5 +113,5 @@ class ManagerBlur : Manager<Blur>() {
 }
 
 abstract class Blur(val name: String) {
-    abstract fun render(strength: Int): Framebuffer
+    abstract fun render(targetBuffer: Framebuffer, strength: Int): Framebuffer
 }

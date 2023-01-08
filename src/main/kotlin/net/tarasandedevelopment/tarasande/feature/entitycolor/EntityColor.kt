@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.feature.entitycolor
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.entity.mob.Monster
 import net.minecraft.entity.passive.AnimalEntity
@@ -9,6 +8,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventEntityColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import su.mandora.event.EventDispatcher
 import java.awt.Color
 
@@ -47,7 +47,7 @@ class EntityColor {
             if (entity is Monster) color = mobColor.getColor()
         }
 
-        if (entity == MinecraftClient.getInstance().player) color = selfColor.getColor()
+        if (entity == mc.player) color = selfColor.getColor()
         else if (entity is PlayerEntity && TarasandeMain.friends().isFriend(entity.gameProfile)) color = friendsColor.getColor()
 
         val eventEntityColor = EventEntityColor(entity, color)

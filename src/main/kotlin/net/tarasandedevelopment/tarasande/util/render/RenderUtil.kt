@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.util.render
 
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.*
 import net.minecraft.client.texture.NativeImage
 import net.minecraft.client.texture.NativeImageBackedTexture
@@ -12,6 +11,7 @@ import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.getPositionVec3d
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import org.joml.Matrix4f
@@ -238,7 +238,7 @@ object RenderUtil {
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.setShader { GameRenderer.getPositionProgram() }
 
-        val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
+        val vec3d = mc.gameRenderer.camera.pos
         val shape = box.offset(-vec3d.x, -vec3d.y, -vec3d.z)
 
         val minX = shape.minX.toFloat()
@@ -302,7 +302,7 @@ object RenderUtil {
 
         RenderSystem.enableCull()
         DiffuseLighting.enableGuiDepthLighting()
-        MinecraftClient.getInstance().inGameHud.renderHotbarItem((position.x + x).toInt(), (position.y + y).toInt(), tickDelta, MinecraftClient.getInstance().player, item, 0)
+        mc.inGameHud.renderHotbarItem((position.x + x).toInt(), (position.y + y).toInt(), tickDelta, mc.player, item, 0)
         DiffuseLighting.disableGuiDepthLighting()
     }
 
@@ -345,7 +345,7 @@ object RenderUtil {
         RenderSystem.disableDepthTest()
 
         matrices.push()
-        val vec3d = MinecraftClient.getInstance().gameRenderer.camera.pos
+        val vec3d = mc.gameRenderer.camera.pos
         matrices.translate(-vec3d.x, -vec3d.y, -vec3d.z)
 
         val colors = colorToRGBF(color)
@@ -369,7 +369,7 @@ object RenderUtil {
     }
 
     fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Vec3d? {
-        val camPos = vector - MinecraftClient.getInstance().gameRenderer.camera.pos
+        val camPos = vector - mc.gameRenderer.camera.pos
         val vec1 = Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1.0F).mul(modelView)
         val screenPos = vec1.mul(projection)
 
@@ -385,8 +385,8 @@ object RenderUtil {
         )
 
         return Vec3d(
-            screenPos.x * MinecraftClient.getInstance().window?.framebufferWidth!! / MinecraftClient.getInstance().window?.scaleFactor!!,
-            (MinecraftClient.getInstance().window?.framebufferHeight!! - (screenPos.y * MinecraftClient.getInstance().window?.framebufferHeight!!)) / MinecraftClient.getInstance().window?.scaleFactor!!,
+            screenPos.x * mc.window.framebufferWidth / mc.window.scaleFactor,
+            (mc.window.framebufferHeight - (screenPos.y * mc.window.framebufferHeight)) / mc.window.scaleFactor,
             screenPos.z.toDouble()
         )
     }

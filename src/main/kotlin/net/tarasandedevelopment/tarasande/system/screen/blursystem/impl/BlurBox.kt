@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.screen.blursystem.impl
 
 import com.mojang.blaze3d.platform.GlStateManager
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.Blur
 import net.tarasandedevelopment.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
@@ -17,8 +16,8 @@ class BlurBox : Blur("Box") {
     private val blurredFramebuffer = SimpleFramebufferWrapped()
     private val alternativeFramebuffer = SimpleFramebufferWrapped()
 
-    override fun render(strength: Int): Framebuffer {
-        sample(strength, MinecraftClient.getInstance().framebuffer, alternativeFramebuffer, Direction.HORIZONTAL)
+    override fun render(targetBuffer: Framebuffer, strength: Int): Framebuffer {
+        sample(strength, targetBuffer, alternativeFramebuffer, Direction.HORIZONTAL)
         sample(strength, alternativeFramebuffer, blurredFramebuffer, Direction.VERTICAL)
         return blurredFramebuffer
     }

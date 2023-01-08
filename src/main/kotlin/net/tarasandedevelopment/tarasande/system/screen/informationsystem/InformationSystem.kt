@@ -36,7 +36,10 @@ class ManagerInformation(panelSystem: ManagerPanel) : Manager<Information>() {
             // Server
             InformationServerBrand(),
             InformationOpenChannels(),
-            InformationVanishedPlayers()
+            InformationVanishedPlayers(),
+
+            // Game
+            InformationTickDelta()
         )
 
         EventDispatcher.add(EventSuccessfulLoad::class.java, 1001) {

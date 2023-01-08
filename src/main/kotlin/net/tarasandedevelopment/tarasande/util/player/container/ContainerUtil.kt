@@ -16,7 +16,7 @@ object ContainerUtil {
 
     fun getValidSlots(screenHandler: ScreenHandler): List<Slot> {
         return screenHandler.slots
-            .filter { it != null && it.isEnabled && it.hasStack() }
+            .filter { it != null && it.isEnabled }
     }
 
     fun getEquipmentSlot(screenHandler: ScreenHandler, equipmentSlot: EquipmentSlot): Slot? {

@@ -1,13 +1,13 @@
 package net.tarasandedevelopment.tarasande.feature.clientvalue.impl.debug
 
 import net.minecraft.block.BlockState
-import net.minecraft.client.MinecraftClient
 import net.minecraft.util.math.BlockPos
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.boundingBox
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import su.mandora.event.EventDispatcher
@@ -29,7 +29,7 @@ class BlockChangeTracker {
                     changes.remove(change)
                 } else {
                     if(enabled.value)
-                        RenderUtil.blockOutline(event.matrices, change.second.getOutlineShape(MinecraftClient.getInstance().world, change.first).boundingBox().offset(change.first.x.toDouble(), change.first.y.toDouble(), change.first.z.toDouble()), color.getColor().withAlpha((color.getColor().alpha * (1.0F - timeDelta / time.value)).toInt()).rgb)
+                        RenderUtil.blockOutline(event.matrices, change.second.getOutlineShape(mc.world, change.first).boundingBox().offset(change.first.x.toDouble(), change.first.y.toDouble(), change.first.z.toDouble()), color.getColor().withAlpha((color.getColor().alpha * (1.0F - timeDelta / time.value)).toInt()).rgb)
                 }
             }
         }

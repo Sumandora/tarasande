@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName
 import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.NoticeScreen
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.Session
@@ -20,6 +19,7 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterAzureApps
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.Thread
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.*
@@ -110,9 +110,12 @@ $errorDescription""".toByteArray())
 
         if (msAuthProfile == null) {
             val serverSocket = setupHttpServer()
-            val prevScreen = MinecraftClient.getInstance().currentScreen
+            val prevScreen = mc.currentScreen
             RenderSystem.recordRenderCall {
-                MinecraftClient.getInstance().setScreen(NoticeScreen({ cancelled = true }, Text.of("Microsoft Login"), Text.of("Your webbrowser should've opened.\nPlease authorize yourself!\nClosing this screen will cancel the process!"), Text.of("Cancel"), false))
+                mc.setScreen(object : NoticeScreen({ cancelled = true }, Text.of("Microsoft Login"), Text.of("Your webbrowser should've opened.\nPlease authorize yourself!\nClosing this screen will cancel the process!"), Text.of("Cancel"), false) {
+                    override fun close() {
+                    }
+                })
             }
             redirectUri = azureApp.redirectUri + serverSocket.localPort
             Util.getOperatingSystem().open(URI(oauthAuthorizeUrl + "?" +
@@ -125,13 +128,13 @@ $errorDescription""".toByteArray())
                 Thread.sleep(100L)
                 if (cancelled) {
                     RenderSystem.recordRenderCall {
-                        MinecraftClient.getInstance().setScreen(prevScreen)
+                        mc.setScreen(prevScreen)
                     }
                     error("Cancelled")
                 }
             }
             RenderSystem.recordRenderCall {
-                MinecraftClient.getInstance().setScreen(prevScreen)
+                mc.setScreen(prevScreen)
             }
             msAuthProfile = buildFromCode(code!!)
         }
@@ -259,7 +262,7 @@ $errorDescription""".toByteArray())
     @Suppress("unused")
     @ExtraInfo("Azure Apps")
     val azureAppsExtra: (Screen) -> Unit = {
-        MinecraftClient.getInstance().setScreen(ScreenBetterAzureApps(it, azureApp) { newAzureApp ->
+        mc.setScreen(ScreenBetterAzureApps(it, azureApp) { newAzureApp ->
             azureApp = newAzureApp
         })
     }

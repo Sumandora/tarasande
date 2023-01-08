@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
@@ -8,6 +7,7 @@ import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import java.awt.Color
@@ -102,11 +102,11 @@ class ScreenBetterFileChooser(
             }
 
             private fun createDimensions() {
-                this.panelWidth = this.files().maxOf { FontWrapper.getWidth(it.name) * 0.5 + 6.0 }.coerceAtLeast(MinecraftClient.getInstance().window?.scaledWidth!! * 0.4).coerceAtLeast(FontWrapper.getWidth(this.title) + 5.0)
-                this.panelHeight = titleBarHeight + ((FontWrapper.fontHeight() * 0.5 + 1) * (this.files().size)).coerceAtMost(MinecraftClient.getInstance().window.scaledHeight * 0.75)
+                this.panelWidth = this.files().maxOf { FontWrapper.getWidth(it.name) * 0.5 + 6.0 }.coerceAtLeast(mc.window.scaledWidth * 0.4).coerceAtLeast(FontWrapper.getWidth(this.title) + 5.0)
+                this.panelHeight = titleBarHeight + ((FontWrapper.fontHeight() * 0.5 + 1) * (this.files().size)).coerceAtMost(mc.window.scaledHeight * 0.75)
 
-                this.x = (MinecraftClient.getInstance().window.scaledWidth / 2) - (this.panelWidth / 2)
-                this.y = MinecraftClient.getInstance().window.scaledHeight / 2 - (this.panelHeight / 2)
+                this.x = (mc.window.scaledWidth / 2) - (this.panelWidth / 2)
+                this.y = mc.window.scaledHeight / 2 - (this.panelHeight / 2)
             }
 
             override fun init() {
@@ -139,7 +139,7 @@ class ScreenBetterFileChooser(
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         this.renderBackground(matrices)
-        if (MinecraftClient.getInstance().world != null) {
+        if (mc.world != null) {
             var prevScreen = prevScreen
             while (prevScreen is ScreenBetterOwnerValues)
                 prevScreen = prevScreen.prevScreen

@@ -23,6 +23,7 @@ import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.util.VersionListEnum
 import io.netty.channel.DefaultEventLoop
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.Bootstrap
 import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ConnectScreen
@@ -43,6 +44,7 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.Sc
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanel
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanelSelection
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande_protocol_hack.event.EventSkipIdlePacket
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.CommandArgumentsProvider
@@ -69,7 +71,7 @@ import java.util.concurrent.ThreadFactory
 
 class TarasandeProtocolHack : NativeProvider {
 
-    val version = ValueNumber(this, "Protocol", Double.MIN_VALUE, SharedConstants.getProtocolVersion().toDouble(), Double.MAX_VALUE, 1.0, true)
+    val version = ValueNumber(this, "Protocol", Double.MIN_VALUE, SharedConstants.getProtocolVersion().toDouble(), Double.MAX_VALUE, 1.0, exceed = false)
     private val compression = arrayOf("decompress", "compress")
 
     companion object {
@@ -118,7 +120,7 @@ class TarasandeProtocolHack : NativeProvider {
                                     version = VersionListEnum.RENDER_VERSIONS.map { it.protocol }.firstOrNull { it.version == ViaLoadingBase.getTargetVersion().originalVersion } ?: ProtocolVersion.unknown
                                 }
                                 add(EventDisconnect::class.java) { event ->
-                                    if(event.connection == MinecraftClient.getInstance().networkHandler?.connection)
+                                    if(event.connection == mc.networkHandler?.connection)
                                         version = null
                                 }
                             }
@@ -129,7 +131,7 @@ class TarasandeProtocolHack : NativeProvider {
 
                     add(object : Information("Via Version", "Via Pipeline") {
                         override fun getMessage(): String? {
-                            val names = (MinecraftClient.getInstance().networkHandler?.connection as? IClientConnection_Protocol)?.protocolhack_getViaConnection()?.protocolInfo?.pipeline?.pipes()?.map { p -> p.javaClass.simpleName } ?: return null
+                            val names = (mc.networkHandler?.connection as? IClientConnection_Protocol)?.protocolhack_getViaConnection()?.protocolInfo?.pipeline?.pipes()?.map { p -> p.javaClass.simpleName } ?: return null
                             if (names.isEmpty()) return null
                             return "\n" + names.subList(0, names.size - 1).joinToString("\n")
                         }
@@ -192,7 +194,7 @@ class TarasandeProtocolHack : NativeProvider {
 
                     insert(object : EntrySidebarPanel("Protocol Hack Values", "Protocol Hack") {
                         override fun onClick(mouseButton: Int) {
-                            MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, name, ProtocolHackValues))
+                            mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, name, ProtocolHackValues))
                         }
                     }, 1)
 
@@ -203,7 +205,7 @@ class TarasandeProtocolHack : NativeProvider {
                     init {
                         "Protocol Hack Values".apply {
                             add(this, direction = Direction.RIGHT) {
-                                MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, this, ProtocolHackValues))
+                                mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, this, ProtocolHackValues))
                             }
                         }
                     }
@@ -231,7 +233,7 @@ class TarasandeProtocolHack : NativeProvider {
         }
     }
 
-    override fun isSinglePlayer() = MinecraftClient.getInstance()?.isInSingleplayer != false
+    override fun isSinglePlayer() = MinecraftClient.getInstance() != null && mc.isInSingleplayer
     override fun nativeVersion() = VersionListEnum.r1_19_3
     override fun nettyOrder() = this.compression
     override fun run() = TarasandeMain.get().rootDirectory

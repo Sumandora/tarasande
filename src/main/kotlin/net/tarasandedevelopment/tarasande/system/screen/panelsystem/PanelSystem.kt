@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.screen.panelsystem
 
+import com.mojang.blaze3d.platform.GlConst
 import com.mojang.blaze3d.platform.GlStateManager
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
 import net.tarasandedevelopment.tarasande.Manager
@@ -15,6 +15,7 @@ import net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.fixed.*
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
@@ -106,16 +107,16 @@ open class Panel(
             EventDispatcher.apply {
                 add(EventRender2D::class.java) {
                     if (isVisible() && opened)
-                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.managerPanel().screenCheatMenu) {
+                        if (mc.currentScreen != TarasandeMain.managerPanel().screenCheatMenu) {
                             it.matrices.push()
-                            render(it.matrices, -1, -1, MinecraftClient.getInstance().tickDelta)
+                            render(it.matrices, -1, -1, mc.tickDelta)
                             it.matrices.pop()
                         }
                 }
 
                 add(EventTick::class.java) {
                     if (it.state == EventTick.State.PRE)
-                        if (MinecraftClient.getInstance().currentScreen != TarasandeMain.managerPanel().screenCheatMenu)
+                        if (mc.currentScreen != TarasandeMain.managerPanel().screenCheatMenu)
                             tick()
                 }
             }
@@ -128,9 +129,9 @@ open class Panel(
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         if (fixed) {
             when {
-                x + panelWidth / 2 <= MinecraftClient.getInstance().window.scaledWidth * 0.33 -> alignment = Alignment.LEFT
-                x + panelWidth / 2 > MinecraftClient.getInstance().window.scaledWidth * 0.33 && x + panelWidth / 2 < MinecraftClient.getInstance().window.scaledWidth * 0.66 -> alignment = Alignment.MIDDLE
-                x + panelWidth / 2 > MinecraftClient.getInstance().window.scaledWidth * 0.66 -> alignment = Alignment.RIGHT
+                x + panelWidth / 2 <= mc.window.scaledWidth * 0.33 -> alignment = Alignment.LEFT
+                x + panelWidth / 2 > mc.window.scaledWidth * 0.33 && x + panelWidth / 2 < mc.window.scaledWidth * 0.66 -> alignment = Alignment.MIDDLE
+                x + panelWidth / 2 > mc.window.scaledWidth * 0.66 -> alignment = Alignment.RIGHT
             }
         }
 
@@ -140,9 +141,10 @@ open class Panel(
         if (opened) {
             if (background) {
                 matrices.push()
+                val previousFramebuffer = GlStateManager.getBoundFramebuffer()
                 TarasandeMain.managerBlur().bind(true, usedInScreen)
                 RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else titleBarHeight).toDouble(), -1)
-                MinecraftClient.getInstance().framebuffer.beginWrite(true)
+                GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, previousFramebuffer)
 
                 val accent = TarasandeMain.clientValues().accentColor.getColor()
                 RenderUtil.fill(matrices, x, y + FontWrapper.fontHeight(), x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).withAlpha(0), 0.3, 0.3, 0.3, 0.7).rgb)
@@ -151,10 +153,10 @@ open class Panel(
 
             if (scissor) {
                 GlStateManager._enableScissorTest()
-                val scaleFactor = MinecraftClient.getInstance().window?.scaleFactor!!.toInt()
+                val scaleFactor = mc.window.scaleFactor.toInt()
                 GlStateManager._scissorBox(
                     (x * scaleFactor).toInt(),
-                    (MinecraftClient.getInstance()?.window?.height!! - (y + panelHeight) * scaleFactor).toInt(),
+                    (mc.window.height - (y + panelHeight) * scaleFactor).toInt(),
                     (panelWidth * scaleFactor).toInt(),
                     (panelHeight * scaleFactor).toInt()
                 )
@@ -177,16 +179,16 @@ open class Panel(
             y = round(mouseY - dragInfo.yOffset)
         }
 
-        x = MathHelper.clamp(x, 0.0, MinecraftClient.getInstance().window.scaledWidth.toDouble() - panelWidth)
-        y = MathHelper.clamp(y, 0.0, MinecraftClient.getInstance().window.scaledHeight.toDouble() - if (opened) panelHeight else titleBarHeight.toDouble())
+        x = MathHelper.clamp(x, 0.0, mc.window.scaledWidth.toDouble() - panelWidth)
+        y = MathHelper.clamp(y, 0.0, mc.window.scaledHeight.toDouble() - if (opened) panelHeight else titleBarHeight.toDouble())
 
         if (resizeInfo.dragging) {
-            panelWidth = MathHelper.clamp(mouseX + resizeInfo.xOffset, 0.0, MinecraftClient.getInstance().window.scaledWidth.toDouble()) - x
-            panelHeight = MathHelper.clamp(mouseY + resizeInfo.yOffset, 0.0, MinecraftClient.getInstance().window.scaledHeight.toDouble()) - y
+            panelWidth = MathHelper.clamp(mouseX + resizeInfo.xOffset, 0.0, mc.window.scaledWidth.toDouble()) - x
+            panelHeight = MathHelper.clamp(mouseY + resizeInfo.yOffset, 0.0, mc.window.scaledHeight.toDouble()) - y
         }
 
-        panelWidth = MathHelper.clamp(panelWidth, minWidth, maxWidth ?: MinecraftClient.getInstance().window.scaledWidth.toDouble())
-        panelHeight = MathHelper.clamp(panelHeight, minHeight, maxHeight ?: MinecraftClient.getInstance().window.scaledHeight.toDouble())
+        panelWidth = MathHelper.clamp(panelWidth, minWidth, maxWidth ?: mc.window.scaledWidth.toDouble())
+        panelHeight = MathHelper.clamp(panelHeight, minHeight, maxHeight ?: mc.window.scaledHeight.toDouble())
     }
 
     open fun renderTitleBar(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
@@ -217,7 +219,7 @@ open class Panel(
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
                 val valueOwner = getValueOwner()
                 if (TarasandeMain.managerValue().getValues(valueOwner).isNotEmpty()) {
-                    MinecraftClient.getInstance().setScreen(ScreenBetterOwnerValues(MinecraftClient.getInstance().currentScreen!!, this.title, valueOwner))
+                    mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, this.title, valueOwner))
                 }
             }
             return true

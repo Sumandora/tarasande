@@ -16,4 +16,5 @@ object DebugValues {
     }
 
     val openGLErrorDebugger = ValueBoolean(this, "OpenGL error debugger", true)
+    val disableInterpolation = ValueBoolean(this, "Disable interpolation", false)
 }

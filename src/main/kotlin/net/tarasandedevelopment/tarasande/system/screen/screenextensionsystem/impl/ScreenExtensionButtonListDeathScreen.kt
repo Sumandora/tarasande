@@ -1,18 +1,18 @@
 package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.DeathScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
+import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ScreenExtensionButtonListDeathScreen : ScreenExtensionButtonList<DeathScreen>(DeathScreen::class.java) {
 
     init {
         add("Fake respawn") {
-            MinecraftClient.getInstance().player?.apply { init() }
-            MinecraftClient.getInstance().setScreen(null)
+            mc.player?.init()
+            mc.setScreen(null)
         }
         add("Force respawn") {
-            MinecraftClient.getInstance().player?.requestRespawn()
+            mc.player?.requestRespawn()
         }
     }
 }

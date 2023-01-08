@@ -1,11 +1,11 @@
 package net.tarasandedevelopment.tarasande.util.dummy
 
 import com.mojang.authlib.GameProfile
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.Packet
 import net.minecraft.resource.featuretoggle.FeatureFlags
 import net.minecraft.resource.featuretoggle.FeatureSet
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.unsafe.UnsafeProvider
 
 class ClientPlayNetworkHandlerDummy private constructor() : ClientPlayNetworkHandler(null, null, null, null, null, null) {
@@ -15,7 +15,7 @@ class ClientPlayNetworkHandlerDummy private constructor() : ClientPlayNetworkHan
     }
 
     override fun getProfile(): GameProfile {
-        return MinecraftClient.getInstance().session.profile
+        return mc.session.profile
     }
 
     override fun getEnabledFeatures(): FeatureSet {

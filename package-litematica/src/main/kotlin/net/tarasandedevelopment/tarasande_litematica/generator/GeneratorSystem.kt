@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import net.tarasandedevelopment.tarasande_litematica.generator.impl.GeneratorMazes
 import net.tarasandedevelopment.tarasande_litematica.generator.impl.GeneratorQRCode
@@ -29,7 +30,7 @@ abstract class Generator(val parent: Any, val name: String) {
     }
 
     fun finish() {
-        MinecraftClient.getInstance().setScreen(null)
+        mc.setScreen(null)
         CustomChat.printChatMessage(Text.literal("Added $name as current schematic, goto the Litematica menu to build it"))
     }
     abstract fun perform()

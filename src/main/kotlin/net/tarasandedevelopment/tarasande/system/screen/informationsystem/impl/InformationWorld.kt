@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.screen.informationsystem.impl
 
 import com.google.common.collect.Iterables
-import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
@@ -9,6 +8,7 @@ import net.tarasandedevelopment.tarasande.event.EventInvalidPlayerInfo
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewWorld
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import su.mandora.event.EventDispatcher
@@ -17,9 +17,9 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class InformationEntities : Information("World", "Entities") {
     override fun getMessage(): String? {
-        if (MinecraftClient.getInstance().world == null)
+        if (mc.world == null)
             return null
-        return Iterables.size(MinecraftClient.getInstance().world?.entities!!).toString()
+        return Iterables.size(mc.world?.entities!!).toString()
     }
 }
 
@@ -35,14 +35,14 @@ class InformationWorldTime : Information("World", "World Time") {
                 }
             }
             add(EventDisconnect::class.java) {
-                if (it.connection == MinecraftClient.getInstance().networkHandler?.connection)
+                if (it.connection == mc.networkHandler?.connection)
                     lastUpdate = null
             }
         }
     }
 
     override fun getMessage(): String? {
-        if (MinecraftClient.getInstance().world == null)
+        if (mc.world == null)
             return null
         if (lastUpdate == null)
             return null
@@ -56,7 +56,7 @@ class InformationSpawnPoint : Information("World", "Spawn Point") {
     private val decimalPlacesZ = ValueNumber(this, "Decimal places: z", 0.0, 1.0, 5.0, 1.0)
 
     override fun getMessage(): String? {
-        val pos = MinecraftClient.getInstance().world?.spawnPos ?: return null
+        val pos = mc.world?.spawnPos ?: return null
 
         return StringUtil.round(pos.x.toDouble(), this.decimalPlacesX.value.toInt()) + " " + StringUtil.round(pos.y.toDouble(), this.decimalPlacesY.value.toInt()) + " " + StringUtil.round(pos.z.toDouble(), this.decimalPlacesZ.value.toInt())
     }
@@ -79,7 +79,7 @@ class InformationVanishedPlayers : Information("World", "Vanished players") {
                         vanishedPlayers.clear()
             }
             add(EventDisconnect::class.java) {
-                if (it.connection == MinecraftClient.getInstance().networkHandler?.connection)
+                if (it.connection == mc.networkHandler?.connection)
                     vanishedPlayers.clear()
             }
         }

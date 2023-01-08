@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
@@ -10,6 +9,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelElements
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
 import java.util.*
@@ -36,15 +36,15 @@ class ScreenBetterOwnerValues(parent: Screen, val titleName: String, val owner: 
             override fun init() {
                 super.init()
 
-                this.x = (MinecraftClient.getInstance().window.scaledWidth / 2) - 150.0
+                this.x = (mc.window.scaledWidth / 2) - 150.0
             }
 
             override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
                 this.panelHeight = getMaxScrollOffset() + titleBarHeight + 5.0 /* this is the padding for letting you scroll down a bit more than possible */
-                val max = MinecraftClient.getInstance().window.scaledHeight
+                val max = mc.window.scaledHeight
                 if (this.panelHeight >= max)
                     this.panelHeight = max.toDouble()
-                this.y = MinecraftClient.getInstance().window.scaledHeight / 2 - (this.panelHeight / 2)
+                this.y = mc.window.scaledHeight / 2 - (this.panelHeight / 2)
 
                 super.render(matrices, mouseX, mouseY, delta)
             }
@@ -63,7 +63,7 @@ class ScreenBetterOwnerValues(parent: Screen, val titleName: String, val owner: 
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         this.renderBackground(matrices)
-        if (MinecraftClient.getInstance().world != null) {
+        if (mc.world != null) {
             var prevScreen = prevScreen
             while (prevScreen is ScreenBetterOwnerValues)
                 prevScreen = prevScreen.prevScreen

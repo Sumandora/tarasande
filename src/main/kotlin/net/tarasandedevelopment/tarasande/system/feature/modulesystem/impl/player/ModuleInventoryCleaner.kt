@@ -10,6 +10,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 import java.util.concurrent.ThreadLocalRandom
@@ -56,7 +57,7 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
                 mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
             }
 
-            val nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list -> ContainerUtil.hasBetterEquivalent(slot.stack, list.filter { it != slot }.map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value) }
+            val nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list -> slot.hasStack() && ContainerUtil.hasBetterEquivalent(slot.stack, list.filter { it != slot }.map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value) }
 
             if (!timeUtil.hasReached(
                     if (wasClosed && !openInventory.value)

@@ -9,6 +9,7 @@ import net.minecraft.util.Identifier
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanelToggleable
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.ManagerEntrySidebarPanel
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import su.mandora.event.EventDispatcher
 
 class EntrySidebarPanelToggleableQuiltFaker(sidebar: ManagerEntrySidebarPanel) : EntrySidebarPanelToggleable(sidebar, "Quilt Faker", "Spoofer") {
@@ -36,7 +37,7 @@ class EntrySidebarPanelToggleableQuiltFaker(sidebar: ManagerEntrySidebarPanel) :
                     val buffer = PacketByteBuf(Unpooled.buffer())
                     buffer.writeVarInt(highestSupported)
 
-                    MinecraftClient.getInstance().networkHandler!!.sendPacket(CustomPayloadC2SPacket(quiltHandshake, buffer))
+                    mc.networkHandler!!.sendPacket(CustomPayloadC2SPacket(quiltHandshake, buffer))
                 }
             }
         }

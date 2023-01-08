@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.util.math.pathfinder
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import java.util.*
 import kotlin.math.abs
 
@@ -64,7 +64,7 @@ class PathFinder(
         start.h = heuristic(start, target)
         start.f = start.g + start.h
 
-        if (start == target || !allowedBlock(MinecraftClient.getInstance().world, start) || !allowedBlock(MinecraftClient.getInstance().world, target)) {
+        if (start == target || !allowedBlock(mc.world, start) || !allowedBlock(mc.world, target)) {
             return open.values.toList()
         }
 
@@ -91,7 +91,7 @@ class PathFinder(
                 var contains = true
                 movement = open[movement.hashCode()] ?: run { contains = false; movement }
 
-                if (!allowedBlock(MinecraftClient.getInstance().world, movement))
+                if (!allowedBlock(mc.world, movement))
                     continue
 
                 val newCost = current.g + cost(start, movement)

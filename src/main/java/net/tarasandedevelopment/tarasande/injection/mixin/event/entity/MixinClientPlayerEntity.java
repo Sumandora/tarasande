@@ -57,6 +57,9 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Inject(method = "canSprint", at = @At("RETURN"), cancellable = true)
     public void hookEventCanSprint(CallbackInfoReturnable<Boolean> cir) {
+        if ((Object) this != MinecraftClient.getInstance().player)
+            return;
+
         EventCanSprint eventCanSprint = new EventCanSprint(cir.getReturnValue());
         EventDispatcher.INSTANCE.call(eventCanSprint);
         cir.setReturnValue(eventCanSprint.getCanSprint());

@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc
 
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen
+import net.minecraft.entity.Entity
 import net.minecraft.entity.TrackedPosition
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.ClientConnection
@@ -11,7 +12,6 @@ import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket
 import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket
 import net.minecraft.network.packet.c2s.play.PlayPongC2SPacket
 import net.minecraft.network.packet.s2c.play.*
-import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
@@ -21,7 +21,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewWorld
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
@@ -68,7 +68,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     private var velocity: Vec3d? = null
     private var rotation: Rotation? = null
 
-    private val newPositions = ConcurrentHashMap<Int, TrackedPosition>()
+    private val newPositions = ConcurrentHashMap<Entity, Vec3d>()
 
     init {
         // Enable both by default
@@ -83,45 +83,6 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                 }
             }
         })
-
-        EventDispatcher.apply {
-            add(EventPacket::class.java, 1) { event ->
-                if (event.type == EventPacket.Type.RECEIVE) {
-                    when (event.packet) {
-                        is PlayerSpawnS2CPacket -> {
-                            newPositions[event.packet.id] = TrackedPosition()
-                        }
-
-                        is EntityS2CPacket -> {
-                            event.packet.apply {
-                                if (positionChanged) {
-                                    newPositions[id]?.also { it.setPos(it.withDelta(deltaX.toLong(), deltaY.toLong(), deltaZ.toLong())) }
-                                }
-                            }
-                        }
-
-                        is EntityPositionS2CPacket -> {
-                            newPositions[event.packet.id]?.setPos(event.packet.let { Vec3d(it.x, it.y, it.z) })
-                        }
-
-                        is EntitiesDestroyS2CPacket -> {
-                            event.packet.entityIds.forEach {
-                                newPositions.remove(it)
-                            }
-                        }
-
-                        is PlayerRespawnS2CPacket -> {
-                            if (event.packet.isNewWorld())
-                                newPositions.clear()
-                        }
-                    }
-                }
-            }
-            add(EventDisconnect::class.java) {
-                if (it.connection == mc.networkHandler?.connection)
-                    newPositions.clear()
-            }
-        }
     }
 
     override fun onEnable() {
@@ -129,6 +90,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         velocity = mc.player?.velocity
         rotation = Rotation(mc.player ?: return)
         packets.clear() // This might be filled with data, because it is copy on write
+        newPositions.clear()
     }
 
     private fun shouldPulsate(): Boolean {
@@ -141,32 +103,23 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
             filterIsInstance<PlayerEntity>()?.
             filter { PlayerUtil.isAttackable(it) }?.
             filter { mc.player?.eyePos?.squaredDistanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, it.boundingBox.expand(it.targetingMargin.toDouble())))!! <= reach.value * reach.value }?.
-            filter { newPositions[it.id] != null }?.
-            filter { (it as ILivingEntity).tarasande_prevServerPos() != null }?.
             toList()!!
         //@formatter:on
         if (validEntities.isEmpty())
             return false
 
         return validEntities.all {
-            val newPosition = newPositions[it.id]!!
-            val lastPosition = (it as ILivingEntity).tarasande_prevServerPos()
+            val newPosition = newPositions[it] ?: return false
+            val lastPosition = (it as ILivingEntity).tarasande_prevServerPos() ?: return false
 
-            val actualDist = mc.player?.eyePos?.distanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, anticipateBoundingBox(extractPosition(newPosition)).expand(it.targetingMargin.toDouble())))!!
+            val dimensions = it.getDimensions(it.pose)
+
+            val actualDist = mc.player?.eyePos?.distanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, dimensions.getBoxAt(newPosition).expand(it.targetingMargin.toDouble())))!!
             // To work around the issue that anticipateBoundingBox poses, we force the same bounding box here (this is probably the most rofl "solution", there is and there are still ways it could fail)
-            val oldDist = mc.player?.eyePos?.distanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, anticipateBoundingBox(lastPosition).expand(it.targetingMargin.toDouble())))!!
+            val oldDist = mc.player?.eyePos?.distanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, dimensions.getBoxAt(lastPosition).expand(it.targetingMargin.toDouble())))!!
 
             return oldDist < actualDist
         }
-    }
-
-    private fun extractPosition(trackedPosition: TrackedPosition): Vec3d {
-        return trackedPosition.subtract(Vec3d.ZERO).negate()
-    }
-
-    private fun anticipateBoundingBox(pos: Vec3d): Box {
-        // The dimensions can change, tracking that is too much effort to do correctly
-        return PlayerEntity.STANDING_DIMENSIONS.getBoxAt(pos)
     }
 
     init {
@@ -186,6 +139,34 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                     onEnable()
                     return@registerEvent
                 }
+
+                // Entity position tracker
+                when(event.packet) {
+                    is EntityS2CPacket -> {
+                        event.packet.apply {
+                            if (positionChanged) {
+                                val entity = mc.world?.getEntityById(event.packet.id)
+                                if(entity != null) {
+                                    val basePos = newPositions[entity] ?: entity.pos
+                                    newPositions[entity] = basePos.add(TrackedPosition().withDelta(deltaX.toLong(), deltaY.toLong(), deltaZ.toLong()))
+                                }
+                            }
+                        }
+                    }
+
+                    is EntityPositionS2CPacket -> {
+                        val entity = mc.world?.getEntityById(event.packet.id)
+                        if(entity != null)
+                            newPositions[entity] = event.packet.let { Vec3d(it.x, it.y, it.z) }
+                    }
+
+                    is EntitiesDestroyS2CPacket -> {
+                        event.packet.entityIds.forEach {
+                            newPositions.remove(mc.world?.getEntityById(it) ?: return@forEach)
+                        }
+                    }
+                }
+
                 if (affectedPackets.isSelected(event.type.ordinal)) {
                     if (restrictPackets.anySelected() &&
                         restrictPackets.isSelected(0) && event.packet !is KeepAliveC2SPacket && event.packet !is KeepAliveS2CPacket &&
@@ -236,8 +217,8 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
             if (affectedPackets.isSelected(1) && !restrictPackets.anySelected()) {
                 if(mode.isSelected(3) && !shouldPulsate())
                     return@registerEvent
-                newPositions.forEach { (_, trackedPosition) ->
-                    RenderUtil.blockOutline(event.matrices, anticipateBoundingBox(extractPosition(trackedPosition)), hitBoxColor.getColor().rgb)
+                newPositions.forEach { (entity, trackedPosition) ->
+                    RenderUtil.blockOutline(event.matrices, entity.getDimensions(entity.pose).getBoxAt(trackedPosition), hitBoxColor.getColor().rgb)
                 }
             }
         }

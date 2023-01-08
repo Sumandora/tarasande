@@ -6,6 +6,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import java.nio.ByteBuffer
 import java.util.*
@@ -26,12 +27,12 @@ class ModulePrivateMsgDetector : Module("Private msg detector", "Detects private
             return
         }
         signatures.put(data, sender)
-        if (MinecraftClient.getInstance().world == null) {
+        if (mc.world == null) {
             return
         }
         val names = ArrayList<String>()
         for (uuid in signatures.get(data)) {
-            val playerListEntry = MinecraftClient.getInstance().world?.getPlayerByUuid(uuid)
+            val playerListEntry = mc.world?.getPlayerByUuid(uuid)
             if (playerListEntry != null) {
                 names.add(playerListEntry.name.string)
             }
@@ -40,8 +41,8 @@ class ModulePrivateMsgDetector : Module("Private msg detector", "Detects private
         val joinedNames = names.subList(0, names.size - 1).joinToString(", ") + " and " + names[names.size - 1]
         val message = (if (names.size == 1) names[0] else joinedNames) + " " + (if (names.size > 1) "have" else "has") + " seen a message you haven't!"
 
-        if (MinecraftClient.getInstance().player?.age != notificationsWhenTick) {
-            notificationsWhenTick = MinecraftClient.getInstance().player!!.age
+        if (mc.player?.age != notificationsWhenTick) {
+            notificationsWhenTick = mc.player!!.age
             notificationsSent.clear()
         }
 

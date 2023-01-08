@@ -4,6 +4,7 @@ import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ModuleNoHunger : Module("No hunger", "Prevents sprinting packets", ModuleCategory.PLAYER) {
 

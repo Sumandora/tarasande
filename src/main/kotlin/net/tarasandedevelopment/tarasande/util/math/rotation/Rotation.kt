@@ -1,10 +1,10 @@
 package net.tarasandedevelopment.tarasande.util.math.rotation
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.util.concurrent.ThreadLocalRandom
@@ -20,11 +20,11 @@ class Rotation(var yaw: Float, var pitch: Float) {
         const val MAXIMUM_DELTA = 255.0 // sqrt(180 * 180 + 180 * 180)
 
         fun getGcd(): Double {
-            val sensitivity = MinecraftClient.getInstance().options.mouseSensitivity.value * 0.6F.toDouble() + 0.2F.toDouble()
+            val sensitivity = mc.options.mouseSensitivity.value * 0.6F.toDouble() + 0.2F.toDouble()
             val sensitivityPow3 = sensitivity * sensitivity * sensitivity
             val sensitivityPow3Mult8 = sensitivityPow3 * 8.0
 
-            return if (MinecraftClient.getInstance().options.perspective.isFirstPerson && MinecraftClient.getInstance().player!!.isUsingSpyglass)
+            return if (mc.options.perspective.isFirstPerson && mc.player!!.isUsingSpyglass)
                 sensitivityPow3
             else
                 sensitivityPow3Mult8
@@ -44,7 +44,7 @@ class Rotation(var yaw: Float, var pitch: Float) {
     // I can't define prevRotation in the arguments because java wants to call it too
 
     fun correctSensitivity(): Rotation {
-        return correctSensitivity(RotationUtil.fakeRotation ?: Rotation(MinecraftClient.getInstance().player!!))
+        return correctSensitivity(RotationUtil.fakeRotation ?: Rotation(mc.player!!))
     }
 
     fun correctSensitivity(prevRotation: Rotation): Rotation {
@@ -56,8 +56,7 @@ class Rotation(var yaw: Float, var pitch: Float) {
         val delta = prevRotation - rotationChange
 
         yaw = delta.yaw
-        pitch = delta.pitch
-        pitch = MathHelper.clamp(pitch, -90.0F, 90.0F)
+        pitch = delta.pitch.coerceIn(-90.0F, 90.0F)
 
         return this
     }
@@ -67,9 +66,18 @@ class Rotation(var yaw: Float, var pitch: Float) {
     }
 
     fun smoothedTurn(target: Rotation, aimSpeed: Pair<Double, Double>): Rotation {
-        val smoothness = if (aimSpeed.first == 1.0 && aimSpeed.second == 1.0) 1.0
-        else MathHelper.clamp((if (aimSpeed.first == aimSpeed.second) aimSpeed.first
-        else ThreadLocalRandom.current().nextDouble(aimSpeed.first, aimSpeed.second)) * RenderUtil.deltaTime * 0.05, 0.0, 1.0)
+        val smoothness =
+            if (aimSpeed.first == 1.0 && aimSpeed.second == 1.0)
+                1.0
+            else {
+                val randomAimSpeed =
+                    if (aimSpeed.first == aimSpeed.second)
+                        aimSpeed.first
+                    else
+                        ThreadLocalRandom.current().nextDouble(aimSpeed.first, aimSpeed.second)
+
+                (randomAimSpeed * RenderUtil.deltaTime * 0.05).coerceIn(0.0..1.0)
+            }
         return smoothedTurn(target, smoothness)
     }
 

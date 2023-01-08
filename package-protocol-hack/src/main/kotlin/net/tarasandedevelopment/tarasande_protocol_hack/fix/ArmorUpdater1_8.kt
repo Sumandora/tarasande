@@ -5,6 +5,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
+import net.tarasandedevelopment.tarasande.util.extension.mc
 
 object ArmorUpdater1_8 {
 
@@ -25,6 +26,6 @@ object ArmorUpdater1_8 {
     }
 
     fun armor(): Int {
-        return MinecraftClient.getInstance().player!!.inventory.armor.sumOf { ids[it.item] ?: 0 }
+        return mc.player!!.inventory.armor.sumOf { ids[it.item] ?: 0 }
     }
 }

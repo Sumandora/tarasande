@@ -1,11 +1,11 @@
 package net.tarasandedevelopment.tarasande.system.screen.informationsystem.impl
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import su.mandora.event.EventDispatcher
 import java.nio.charset.StandardCharsets
 
@@ -15,8 +15,8 @@ class InformationServerBrand : Information("Server", "Server Brand") {
     private val regex = ValueBoolean(this, "Regex", true)
 
     override fun getMessage(): String? {
-        if (!MinecraftClient.getInstance().isInSingleplayer) {
-            var brand = MinecraftClient.getInstance().player?.serverBrand ?: return null
+        if (!mc.isInSingleplayer) {
+            var brand = mc.player?.serverBrand ?: return null
 
             if (regex.value)
                 brand = brand.replace(compiledRegex, "")
@@ -48,7 +48,7 @@ class InformationOpenChannels : Information("Server", "Open Channels") {
                 }
             }
             add(EventDisconnect::class.java) {
-                if (it.connection == MinecraftClient.getInstance().networkHandler?.connection) {
+                if (it.connection == mc.networkHandler?.connection) {
                     openChannels.clear()
                 }
             }

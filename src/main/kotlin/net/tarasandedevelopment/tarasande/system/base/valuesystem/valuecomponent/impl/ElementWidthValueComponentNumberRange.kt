@@ -77,13 +77,13 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
         if (minDragInfo.dragging) {
             val mousePos = mouseX - (width - 50)
             val value = valueNumberRange.min + mousePos / 50.0 * (valueNumberRange.max - valueNumberRange.min)
-            setMinValue(value, !Screen.hasShiftDown())
+            setMinValue(value, !Screen.hasShiftDown() || !valueNumberRange.exceed)
         }
 
         if (maxDragInfo.dragging) {
             val mousePos = mouseX - (width - 50)
             val value = valueNumberRange.min + mousePos / 50.0 * (valueNumberRange.max - valueNumberRange.min)
-            setMaxValue(value, !Screen.hasShiftDown())
+            setMaxValue(value, !Screen.hasShiftDown() || !valueNumberRange.exceed)
         }
 
         val minSliderPos = MathHelper.clamp((valueNumberRange.minValue - valueNumberRange.min) / (valueNumberRange.max - valueNumberRange.min), 0.0, 1.0)

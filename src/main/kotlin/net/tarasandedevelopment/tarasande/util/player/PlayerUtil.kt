@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.util.player
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ChatScreen
 import net.minecraft.client.gui.screen.TitleScreen
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
@@ -24,6 +23,7 @@ import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.injection.accessor.IChatScreen
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import org.lwjgl.glfw.GLFW
@@ -32,34 +32,34 @@ import su.mandora.event.EventDispatcher
 object PlayerUtil {
 
     val movementKeys = listOf(
-        MinecraftClient.getInstance().options.forwardKey,
-        MinecraftClient.getInstance().options.leftKey,
-        MinecraftClient.getInstance().options.backKey,
-        MinecraftClient.getInstance().options.rightKey
+        mc.options.forwardKey,
+        mc.options.leftKey,
+        mc.options.backKey,
+        mc.options.rightKey
     )
-    val input = KeyboardInput(MinecraftClient.getInstance().options)
+    val input = KeyboardInput(mc.options)
 
     init {
         EventDispatcher.add(EventInput::class.java) {
-            if (it.input == MinecraftClient.getInstance().player?.input)
+            if (it.input == mc.player?.input)
                 input.tick(it.slowDown, it.slowdownAmount)
         }
     }
 
-    fun isPlayerMoving() = MinecraftClient.getInstance().player!!.input.movementInput.lengthSquared() != 0.0F
+    fun isPlayerMoving() = mc.player!!.input.movementInput.lengthSquared() != 0.0F
 
     fun isAttackable(entity: Entity?): Boolean {
         if (entity == null) return false
 
-        val eventIsEntityAttackable = EventIsEntityAttackable(entity, entity != MinecraftClient.getInstance().player)
+        val eventIsEntityAttackable = EventIsEntityAttackable(entity, entity != mc.player)
         EventDispatcher.call(eventIsEntityAttackable)
         return eventIsEntityAttackable.attackable
     }
 
     fun getTargetedEntity(reach: Double, rotation: Rotation, allowThroughWalls: Boolean = true): HitResult? {
-        val gameRenderer = MinecraftClient.getInstance().gameRenderer
+        val gameRenderer = mc.gameRenderer
         val accessor = (gameRenderer as IGameRenderer)
-        val renderTickCounter = MinecraftClient.getInstance().renderTickCounter
+        val renderTickCounter = mc.renderTickCounter
 
         val prevAllowThroughWalls = accessor.tarasande_isAllowThroughWalls()
         val prevReach = accessor.tarasande_getReach()
@@ -69,17 +69,17 @@ object PlayerUtil {
         accessor.tarasande_setReach(reach)
         accessor.tarasande_setDisableReachExtension(true)
 
-        val prevCrosshairTarget = MinecraftClient.getInstance().crosshairTarget
-        val prevTargetedEntity = MinecraftClient.getInstance().targetedEntity
+        val prevCrosshairTarget = mc.crosshairTarget
+        val prevTargetedEntity = mc.targetedEntity
 
-        val prevCameraEntity = MinecraftClient.getInstance().cameraEntity
-        MinecraftClient.getInstance().cameraEntity = MinecraftClient.getInstance().player // not using setter to avoid shader unloading, this is purely math, no rendering
+        val prevCameraEntity = mc.cameraEntity
+        mc.cameraEntity = mc.player // not using setter to avoid shader unloading, this is purely math, no rendering
 
-        val prevYaw = MinecraftClient.getInstance().player!!.yaw
-        val prevPitch = MinecraftClient.getInstance().player!!.pitch
+        val prevYaw = mc.player!!.yaw
+        val prevPitch = mc.player!!.pitch
 
-        MinecraftClient.getInstance().player!!.yaw = rotation.yaw
-        MinecraftClient.getInstance().player!!.pitch = rotation.pitch
+        mc.player!!.yaw = rotation.yaw
+        mc.player!!.pitch = rotation.pitch
 
         val prevFakeRotation = RotationUtil.fakeRotation
         RotationUtil.fakeRotation = null // prevent rotationvec override by mixin
@@ -88,19 +88,19 @@ object PlayerUtil {
         renderTickCounter.tickDelta = 1.0F
 
         gameRenderer.updateTargetedEntity(1.0F)
-        val hitResult = MinecraftClient.getInstance().crosshairTarget
+        val hitResult = mc.crosshairTarget
 
         renderTickCounter.tickDelta = prevTickDelta
 
         RotationUtil.fakeRotation = prevFakeRotation
 
-        MinecraftClient.getInstance().player?.yaw = prevYaw
-        MinecraftClient.getInstance().player?.pitch = prevPitch
+        mc.player?.yaw = prevYaw
+        mc.player?.pitch = prevPitch
 
-        MinecraftClient.getInstance().cameraEntity = prevCameraEntity
+        mc.cameraEntity = prevCameraEntity
 
-        MinecraftClient.getInstance().crosshairTarget = prevCrosshairTarget
-        MinecraftClient.getInstance().targetedEntity = prevTargetedEntity
+        mc.crosshairTarget = prevCrosshairTarget
+        mc.targetedEntity = prevTargetedEntity
 
         accessor.tarasande_setReach(prevReach)
         accessor.tarasande_setAllowThroughWalls(prevAllowThroughWalls)
@@ -109,7 +109,7 @@ object PlayerUtil {
         return hitResult
     }
 
-    fun rayCast(start: Vec3d, end: Vec3d): BlockHitResult = MinecraftClient.getInstance().world!!.raycast(RaycastContext(start, end, ShapeType.OUTLINE, FluidHandling.NONE, MinecraftClient.getInstance().player!!))
+    fun rayCast(start: Vec3d, end: Vec3d): BlockHitResult = mc.world!!.raycast(RaycastContext(start, end, ShapeType.OUTLINE, FluidHandling.NONE, mc.player!!))
 
     fun canVectorBeSeen(start: Vec3d, end: Vec3d): Boolean {
         val hitResult = rayCast(start, end)
@@ -117,16 +117,16 @@ object PlayerUtil {
     }
 
     fun getMoveDirection(): Double {
-        return RotationUtil.getYaw(input.movementInput) + (if (input.movementInput.lengthSquared() != 0.0F) 0.0 else 90.0) + MinecraftClient.getInstance().player!!.yaw
+        return RotationUtil.getYaw(input.movementInput) + (if (input.movementInput.lengthSquared() != 0.0F) 0.0 else 90.0) + mc.player!!.yaw
     }
 
-    fun isOnEdge(extrapolation: Double) = MinecraftClient.getInstance().player!!.let {
-        MinecraftClient.getInstance().world!!.isSpaceEmpty(it, it.boundingBox.offset(it.velocity.x * extrapolation, -it.stepHeight.toDouble(), it.velocity.z * extrapolation))
+    fun isOnEdge(extrapolation: Double) = mc.player!!.let {
+        mc.world!!.isSpaceEmpty(it, it.boundingBox.offset(it.velocity.x * extrapolation, -it.stepHeight.toDouble(), it.velocity.z * extrapolation))
     }
 
     fun getUsedHand(): Hand? {
         for (hand in Hand.values()) {
-            val stack = MinecraftClient.getInstance().player!!.getStackInHand(hand)
+            val stack = mc.player!!.getStackInHand(hand)
             if (!stack.isEmpty) {
                 if (stack.useAction == UseAction.NONE)
                     continue
@@ -141,8 +141,8 @@ object PlayerUtil {
 
     fun calcBaseSpeed(baseSpeed: Double = DEFAULT_WALK_SPEED): Double {
         return baseSpeed + 0.03 *
-                if (MinecraftClient.getInstance().player?.hasStatusEffect(StatusEffects.SPEED) == true)
-                    MinecraftClient.getInstance().player?.getStatusEffect(StatusEffects.SPEED)?.amplifier!!
+                if (mc.player?.hasStatusEffect(StatusEffects.SPEED) == true)
+                    mc.player?.getStatusEffect(StatusEffects.SPEED)?.amplifier!!
                 else
                     0
     }
@@ -163,7 +163,7 @@ object PlayerUtil {
                 return false
             }
         }.also {
-            it.init(MinecraftClient.getInstance(), MinecraftClient.getInstance().window.scaledWidth, MinecraftClient.getInstance().window.scaledHeight)
+            it.init(mc, mc.window.scaledWidth, mc.window.scaledHeight)
             block(it)
         }
     }
@@ -178,9 +178,9 @@ object PlayerUtil {
 
     fun getBreakSpeed(blockPos: BlockPos): Pair<Float, Int> {
         if (!TarasandeMain.managerModule().get(ModuleAutoTool::class.java).let { it.enabled && it.mode.isSelected(0) })
-            return MinecraftClient.getInstance().player?.inventory?.selectedSlot!!.let { Pair(getBreakSpeed(blockPos, it), it) }
+            return mc.player?.inventory?.selectedSlot!!.let { Pair(getBreakSpeed(blockPos, it), it) }
 
-        val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot
+        val origSlot = mc.player?.inventory?.selectedSlot
         var bestMultiplier = 1.0F
         var bestTool = -1
         for (i in 0..8) {
@@ -190,56 +190,56 @@ object PlayerUtil {
                 bestMultiplier = multiplier
             }
         }
-        MinecraftClient.getInstance().player?.inventory?.selectedSlot = origSlot
+        mc.player?.inventory?.selectedSlot = origSlot
         return Pair(bestMultiplier, bestTool)
     }
 
     fun getBreakSpeed(blockPos: BlockPos, item: Int): Float {
-        val state = MinecraftClient.getInstance().world?.getBlockState(blockPos) ?: return 0.0F
+        val state = mc.world?.getBlockState(blockPos) ?: return 0.0F
 
-        val origSlot = MinecraftClient.getInstance().player?.inventory?.selectedSlot
-        MinecraftClient.getInstance().player?.inventory?.selectedSlot = item
+        val origSlot = mc.player?.inventory?.selectedSlot
+        mc.player?.inventory?.selectedSlot = item
 
-        val speed = state.calcBlockBreakingDelta(MinecraftClient.getInstance().player, MinecraftClient.getInstance().world, blockPos)
+        val speed = state.calcBlockBreakingDelta(mc.player, mc.world, blockPos)
 
-        MinecraftClient.getInstance().player?.inventory?.selectedSlot = origSlot
+        mc.player?.inventory?.selectedSlot = origSlot
 
         return 1.0F - speed
     }
 
-    fun predictFallDistance(position: BlockPos = MinecraftClient.getInstance().player?.blockPos!!): Int? {
+    fun predictFallDistance(position: BlockPos = mc.player?.blockPos!!): Int? {
         var y = 0
-        while (MinecraftClient.getInstance().world?.isAir(position.add(0, -y, 0).also { if (it.y < 0) return null })!!) {
+        while (mc.world?.isAir(position.add(0, -y, 0).also { if (it.y < 0) return null })!!) {
             y++
         }
         return (y - 1).coerceAtLeast(0)
     }
 
     fun disconnect() {
-        MinecraftClient.getInstance().world?.disconnect()
-        MinecraftClient.getInstance().disconnect()
+        mc.world?.disconnect()
+        mc.disconnect()
 
         val title = TitleScreen()
 
-        if (MinecraftClient.getInstance().isInSingleplayer) {
-            MinecraftClient.getInstance().setScreen(title)
-        } else if (MinecraftClient.getInstance().isConnectedToRealms) {
-            MinecraftClient.getInstance().setScreen(RealmsMainScreen(title))
+        if (mc.isInSingleplayer) {
+            mc.setScreen(title)
+        } else if (mc.isConnectedToRealms) {
+            mc.setScreen(RealmsMainScreen(title))
         } else {
-            MinecraftClient.getInstance().setScreen(MultiplayerScreen(title))
+            mc.setScreen(MultiplayerScreen(title))
         }
     }
 
     fun attack(entity: Entity?) {
-        val original = MinecraftClient.getInstance().crosshairTarget
+        val original = mc.crosshairTarget
         if (entity != null) {
-            MinecraftClient.getInstance().crosshairTarget = EntityHitResult(entity)
+            mc.crosshairTarget = EntityHitResult(entity)
         } else {
-            MinecraftClient.getInstance().crosshairTarget = object : HitResult(null) {
+            mc.crosshairTarget = object : HitResult(null) {
                 override fun getType() = Type.MISS
             }
         }
-        MinecraftClient.getInstance().doAttack()
-        MinecraftClient.getInstance().crosshairTarget = original
+        mc.doAttack()
+        mc.crosshairTarget = original
     }
 }

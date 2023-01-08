@@ -13,6 +13,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
@@ -57,7 +58,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
         list.remove(slot)
         list.removeIf { ItemStack.canCombine(slot.stack, it.stack) /* nice name retard (in mcp this is called areItemStackTagsEqual)*/ }
 
-        return ContainerUtil.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.distinctBy { it.stack.item }.filter { it != slot }.toTypedArray(), *ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).toTypedArray()).map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value)
+        return ContainerUtil.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.distinctBy { it.stack.item }.filter { it != slot }.toTypedArray(), *ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).filter { it.hasStack() }.toTypedArray()).map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value)
     }
 
     init {
@@ -95,7 +96,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
             }
 
-            var nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list -> slot.id < screenHandler.inventory.size() && !hasBetterEquivalent(slot, list) }
+            var nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list -> slot.hasStack() && slot.id < screenHandler.inventory.size() && !hasBetterEquivalent(slot, list) }
 
             if (!timeUtil.hasReached(when {
                     wasClosed -> openDelay.value.toLong()
@@ -116,7 +117,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 ))
                 if (ThreadLocalRandom.current().nextInt(100) < failChance.value) {
                     val interpolated = mousePos?.add(displayPos?.add(mousePos?.negate())?.multiply(ThreadLocalRandom.current().nextDouble(0.0, 1.0).toFloat()))!!
-                    ContainerUtil.getClosestSlot(screenHandler, accessor, interpolated) { slot, list -> slot.id < screenHandler.inventory.size() && !hasBetterEquivalent(slot, list) }?.also {
+                    ContainerUtil.getClosestSlot(screenHandler, accessor, interpolated) { slot, _ -> !slot.hasStack() }?.also {
                         nextSlot = it
                     }
                 }
