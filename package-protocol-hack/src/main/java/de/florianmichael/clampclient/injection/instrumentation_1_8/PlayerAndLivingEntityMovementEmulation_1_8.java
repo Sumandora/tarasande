@@ -120,7 +120,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
         }
     }
 
-    public boolean handleMaterialAcceleration(Box bb, Block materialIn, Entity entityIn) {
+    public boolean handleMaterialAcceleration(Box bb, Material materialIn, Entity entityIn) {
         int i = MathHelper.floor(bb.minX);
         int j = MathHelper.floor(bb.maxX + 1.0D);
         int k = MathHelper.floor(bb.minY);
@@ -141,7 +141,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
                         final BlockState iblockstate = original.world.getBlockState(mutabeBlockPos);
                         final Block block = iblockstate.getBlock();
 
-                        if (block == materialIn) {
+                        if (iblockstate.getMaterial() == materialIn) {
 
                             double d0 = (double) ((float) (l1 + 1) - LegacyConstants_1_8.getLiquidHeightPercent(((Integer) iblockstate.get(FluidBlock.LEVEL)).intValue()));
 
@@ -212,7 +212,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
     }
 
     public void handleWaterMovement() {
-        if (handleMaterialAcceleration(original.getBoundingBox().expand(0.0D, -0.4000000059604645D, 0.0D).contract(0.001D, 0.001D, 0.001D), Blocks.WATER, original)) {
+        if (handleMaterialAcceleration(original.getBoundingBox().expand(0.0D, -0.4000000059604645D, 0.0D).contract(0.001D, 0.001D, 0.001D), Material.WATER, original)) {
             if (!((IEntity_Protocol) original).protocolhack_isInWater() && !original.firstUpdate) {
                 this.resetHeight();
             }
@@ -341,9 +341,10 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
             for (int l1 = k; l1 <= l; ++l1) {
                 for (int i2 = i1; i2 <= j1; ++i2) {
                     BlockPos mutableBlockPos = new BlockPos(k1, l1, i2);
+                    BlockState state = world.getBlockState(mutableBlockPos);
                     Block block = world.getBlockState(mutableBlockPos).getBlock();
 
-                    if (block.getDefaultState().getMaterial().isLiquid()) {
+                    if (state.getMaterial().isLiquid()) {
                         return true;
                     }
                 }

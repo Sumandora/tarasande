@@ -14,7 +14,7 @@ import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import java.util.*
 import java.util.function.Consumer
 
-class ScreenBetterAzureApps(prevScreen: Screen?, private val azureApp: AzureAppPreset, private val environmentConsumer: Consumer<AzureAppPreset>) : ScreenBetter(prevScreen) {
+class ScreenBetterAzureApps(prevScreen: Screen?, private val azureApp: AzureAppPreset, private val environmentConsumer: Consumer<AzureAppPreset>) : ScreenBetter(azureApp.name, prevScreen) {
 
     private var clientIdTextField: TextFieldWidget? = null
     private var scopeTextField: TextFieldWidget? = null

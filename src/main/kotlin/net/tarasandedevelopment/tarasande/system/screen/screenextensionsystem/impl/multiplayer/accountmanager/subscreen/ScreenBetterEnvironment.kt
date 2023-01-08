@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.im
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import java.util.function.Consumer
 
-class ScreenBetterEnvironment(prevScreen: Screen?, private val environment: Environment?, private val environmentConsumer: Consumer<Environment>) : ScreenBetter(prevScreen) {
+class ScreenBetterEnvironment(prevScreen: Screen?, private val environment: Environment?, private val environmentConsumer: Consumer<Environment>) : ScreenBetter("Environment", prevScreen) {
 
     private var authHostTextField: TextFieldWidget? = null
     private var accountsHostTextField: TextFieldWidget? = null

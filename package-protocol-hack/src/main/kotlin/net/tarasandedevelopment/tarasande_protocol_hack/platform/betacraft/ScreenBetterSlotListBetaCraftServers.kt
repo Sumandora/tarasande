@@ -1,17 +1,22 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.platform.betacraft
 
+import net.minecraft.client.gui.screen.ConnectScreen
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
+import net.minecraft.client.network.ServerAddress
+import net.minecraft.client.network.ServerInfo
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.screen.base.AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
-class ScreenBetterSlotListBetaCraftServers(private val titleName: String, parent: Screen, servers: ArrayList<BetaCraftServ>) : ScreenBetterSlotList(46, -10, 320, 20, parent) {
+class ScreenBetterSlotListBetaCraftServers(title: String, parent: Screen, servers: ArrayList<BetaCraftServ>) : ScreenBetterSlotList(title, parent, 46, -10, 320, 20) {
     private val reloadTimer = TimeUtil()
     private var reloadButton: ButtonWidget? = null
 
@@ -25,17 +30,6 @@ class ScreenBetterSlotListBetaCraftServers(private val titleName: String, parent
         })
     }
 
-    override fun init() {
-        super.init()
-
-        addDrawableChild(ButtonWidget(3, 3, 100, 20, Text.literal("Reload")) {
-            EntrySidebarPanelBetaCraftServers.createLookupThread {
-                updateElements(it)
-                reloadTimer.reset()
-            }
-        }.also { reloadButton = it })
-    }
-
     override fun tick() {
         super.tick()
         if (reloadButton != null) reloadButton!!.active = reloadTimer.hasReached(5000L)
@@ -43,10 +37,12 @@ class ScreenBetterSlotListBetaCraftServers(private val titleName: String, parent
 
     class EntryScreenBetterSlotListEntryBetaCraft(val server: BetaCraftServ) : EntryScreenBetterSlotListEntry() {
 
-        override fun onDoubleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {}
+        override fun onDoubleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
+            ConnectScreen.connect(mc.currentScreen, mc, ServerAddress.parse(server.address), ServerInfo(server.displayName, server.address, false))
+        }
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            FontWrapper.text(matrices, server.displayName, entryWidth.toFloat() / 2F, 1F, centered = true)
+            FontWrapper.text(matrices, server.displayName + (if (server.onlineMode) Formatting.GREEN.toString() + " [Online-Mode]" else ""), entryWidth.toFloat() / 2F, entryHeight / 4F, centered = true)
         }
     }
 }

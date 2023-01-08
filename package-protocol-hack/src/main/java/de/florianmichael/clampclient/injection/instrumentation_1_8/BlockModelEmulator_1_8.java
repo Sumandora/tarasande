@@ -173,7 +173,7 @@ public class BlockModelEmulator_1_8 {
             return motion;
         }
         public boolean isBlockSolid(World worldIn, BlockPos pos, Direction side) {
-            return worldIn.getBlockState(pos).getBlock().getDefaultState().isSolidBlock(worldIn, pos);
+            return worldIn.getBlockState(pos).getMaterial().isSolid();
         }
     }
 
@@ -252,7 +252,7 @@ public class BlockModelEmulator_1_8 {
     public static class LiquidBlockModel extends BlockModel {
 
         protected int getLevel(World worldIn, BlockPos pos) {
-            return worldIn.getBlockState(pos).getBlock() == Blocks.WATER ? ((Integer)worldIn.getBlockState(pos).get(FluidBlock.LEVEL)).intValue() : -1;
+            return worldIn.getBlockState(pos).getMaterial() == Material.WATER ? ((Integer)worldIn.getBlockState(pos).get(FluidBlock.LEVEL)).intValue() : -1;
         }
 
         protected int getEffectiveFlowDecay(World worldIn, BlockPos pos) {
@@ -261,8 +261,8 @@ public class BlockModelEmulator_1_8 {
         }
 
         public boolean isBlockSolid(World worldIn, BlockPos pos, Direction side) {
-            Block material = worldIn.getBlockState(pos).getBlock();
-            return material != Blocks.WATER && (side == Direction.UP || (material != Blocks.ICE && super.isBlockSolid(worldIn, pos, side)));
+            Material material = worldIn.getBlockState(pos).getMaterial();
+            return material == Material.WATER ? false : (side == Direction.UP ? true : (material == Material.ICE ? false : super.isBlockSolid(worldIn, pos, side)));
         }
 
         protected Vec3d getFlowVector(World worldIn, BlockPos pos) {
@@ -274,7 +274,7 @@ public class BlockModelEmulator_1_8 {
                 int j = this.getEffectiveFlowDecay(worldIn, blockpos);
 
                 if (j < 0) {
-                    if (!worldIn.getBlockState(blockpos).getBlock().getDefaultState().getMaterial().blocksMovement()) {
+                    if (!worldIn.getBlockState(blockpos).getMaterial().blocksMovement()) {
                         j = this.getEffectiveFlowDecay(worldIn, blockpos.down());
 
                         if (j >= 0) {
@@ -797,6 +797,8 @@ public class BlockModelEmulator_1_8 {
 
         public static final List<Block> PANES_IN_1_8 = Arrays.asList(
                 Blocks.GLASS_PANE,
+
+                Blocks.IRON_BARS,
 
                 Blocks.WHITE_STAINED_GLASS_PANE,
                 Blocks.ORANGE_STAINED_GLASS_PANE,

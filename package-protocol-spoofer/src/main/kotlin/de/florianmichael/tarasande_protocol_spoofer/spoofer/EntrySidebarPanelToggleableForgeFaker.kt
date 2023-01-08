@@ -94,14 +94,14 @@ class EntrySidebarPanelToggleableForgeFaker(sidebar: ManagerEntrySidebarPanel) :
                                 tooltip.add(Text.of("Right mouse for Channels: " + payload.channels.size))
 
                                 if (GLFW.glfwGetMouseButton(mc.window.handle, GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS) {
-                                    mc.setScreen(ScreenBetterSlotListForgeInformation(mc.currentScreen!!, it.server.address + " (Channels: " + payload.channels.size + ")", ScreenBetterSlotListForgeInformation.Type.CHANNEL_LIST, payload))
+                                    mc.setScreen(ScreenBetterSlotListForgeInformation(it.server.address + " (Channels: " + payload.channels.size + ")", mc.currentScreen!!, ScreenBetterSlotListForgeInformation.Type.CHANNEL_LIST, payload))
                                 }
                             }
 
                             it.multiplayerScreen.setTooltip(tooltip.map { line -> line.asOrderedText() })
 
                             if (payload.installedMods().isNotEmpty() && GLFW.glfwGetMouseButton(mc.window.handle, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS) {
-                                mc.setScreen(ScreenBetterSlotListForgeInformation(mc.currentScreen!!, it.server.address + " (Mods: " + payload.installedMods().size + ")", ScreenBetterSlotListForgeInformation.Type.MOD_LIST, payload))
+                                mc.setScreen(ScreenBetterSlotListForgeInformation(it.server.address + " (Mods: " + payload.installedMods().size + ")", mc.currentScreen!!, ScreenBetterSlotListForgeInformation.Type.MOD_LIST, payload))
                             }
                         }
                     }

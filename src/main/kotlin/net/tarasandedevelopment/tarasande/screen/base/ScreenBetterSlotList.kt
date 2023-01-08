@@ -8,10 +8,11 @@ import net.minecraft.client.gui.widget.EntryListWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
-open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, var entryWidth: Int, private val entryHeight: Int, prevScreen: Screen?) : ScreenBetter(prevScreen) {
+open class ScreenBetterSlotList(title: String, prevScreen: Screen?, private val top: Int, private val bottom: Int, var entryWidth: Int, val entryHeight: Int) : ScreenBetter(title, prevScreen) {
 
     private var listProvider: AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget.ListProvider? = null
     var slotList: AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget? = null
@@ -19,10 +20,6 @@ open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, v
 
     fun provideElements(provider: AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget.ListProvider) {
         this.listProvider = provider
-    }
-
-    fun renderTitle(matrices: MatrixStack, title: String) {
-        FontWrapper.textShadow(matrices, title, width / 2F, top / 2 - (FontWrapper.fontHeight() / 2F), scale = 2F, centered = true)
     }
 
     override fun init() {
@@ -33,7 +30,17 @@ open class ScreenBetterSlotList(private val top: Int, private val bottom: Int, v
             this.slotList?.reload()
         })
 
+        if (prevScreen != null) {
+            this.addDrawableChild(ButtonWidget(3, height - 20 - 3, 20, 20,Text.literal("<-")) {
+                MinecraftClient.getInstance().setScreen(prevScreen)
+            })
+        }
         super.init()
+    }
+
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+        super.render(matrices, mouseX, mouseY, delta)
+        FontWrapper.textShadow(matrices, title.string, width / 2F, top / 2 - (FontWrapper.fontHeight() / 2F), scale = 2F, centered = true)
     }
 }
 

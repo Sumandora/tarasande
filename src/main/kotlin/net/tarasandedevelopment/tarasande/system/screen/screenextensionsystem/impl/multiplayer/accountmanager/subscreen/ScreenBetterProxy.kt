@@ -25,7 +25,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.nio.channels.IllegalBlockingModeException
 
-class ScreenBetterProxy : ScreenBetter(null) {
+class ScreenBetterProxy : ScreenBetter("Proxy", null) {
 
     var proxy: Proxy? = null
     private var ipTextField: TextFieldWidget? = null

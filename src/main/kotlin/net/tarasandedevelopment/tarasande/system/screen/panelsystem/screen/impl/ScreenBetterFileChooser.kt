@@ -18,7 +18,7 @@ class ScreenBetterFileChooser(
     prevScreen: Screen,
     directory: File,
     val consumer: Consumer<File>
-) : ScreenBetter(prevScreen) {
+) : ScreenBetter("FileChooser", prevScreen) {
 
     private var clickableWidgetPanel: ClickableWidgetPanel? = null
     private var currentDirectory = directory

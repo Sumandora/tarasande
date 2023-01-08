@@ -254,6 +254,15 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     }
 
     @Override
+    public boolean shouldSwimInFluids() {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+            return false;
+        }
+
+        return super.shouldSwimInFluids();
+    }
+
+    @Override
     public int getArmor() {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
             return ArmorUpdater1_8.INSTANCE.armor(); // Fixes Armor HUD

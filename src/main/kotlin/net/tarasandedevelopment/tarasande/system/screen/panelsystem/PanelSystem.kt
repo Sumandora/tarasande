@@ -219,7 +219,7 @@ open class Panel(
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
                 val valueOwner = getValueOwner()
                 if (TarasandeMain.managerValue().getValues(valueOwner).isNotEmpty()) {
-                    mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, this.title, valueOwner))
+                    mc.setScreen(ScreenBetterOwnerValues(this.title, mc.currentScreen!!, valueOwner))
                 }
             }
             return true

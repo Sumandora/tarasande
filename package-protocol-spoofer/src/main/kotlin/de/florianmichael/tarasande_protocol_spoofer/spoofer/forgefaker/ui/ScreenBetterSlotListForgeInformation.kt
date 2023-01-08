@@ -11,7 +11,7 @@ import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListE
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
-class ScreenBetterSlotListForgeInformation(parent: Screen, private val titleName: String, val type: Type, val struct: IForgePayload) : ScreenBetterSlotList(46, -10, -1, FontWrapper.fontHeight() * 2 + 5, parent) {
+class ScreenBetterSlotListForgeInformation(title: String, parent: Screen, val type: Type, val struct: IForgePayload) : ScreenBetterSlotList(title, parent, 46, -46, -1, FontWrapper.fontHeight() * 2 + 5) {
 
     enum class Type {
         MOD_LIST,
@@ -37,10 +37,6 @@ class ScreenBetterSlotListForgeInformation(parent: Screen, private val titleName
         })
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        super.render(matrices, mouseX, mouseY, delta)
-        this.renderTitle(matrices, this.titleName)
-    }
 
     abstract class EntryScreenBetterSlotListEntryForgeList : EntryScreenBetterSlotListEntry() {
         abstract fun display(): String

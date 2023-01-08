@@ -41,7 +41,7 @@ open class EntrySidebarPanel(val name: String, val category: String) {
 
     fun openValues() {
         if (TarasandeMain.managerValue().getValues(this).isNotEmpty()) {
-            mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, name, this))
+            mc.setScreen(ScreenBetterOwnerValues(name, mc.currentScreen!!, this))
         }
     }
 

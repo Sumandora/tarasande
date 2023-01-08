@@ -23,7 +23,7 @@ class ScreenExtensionButtonListDirectConnect(crashSystem: ManagerCrasher) : Scre
                     } catch (_: Exception) {
                     }
                 } else if (it == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-                    mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, name, crasher))
+                    mc.setScreen(ScreenBetterOwnerValues(name, mc.currentScreen!!, crasher))
                 }
             }
         }

@@ -10,7 +10,7 @@ class ScreenExtensionButtonListTitleScreen : ScreenExtensionButtonList<TitleScre
 
     init {
         add("Client Values") {
-            mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, "Client Values", TarasandeMain.clientValues()))
+            mc.setScreen(ScreenBetterOwnerValues("Client Values", mc.currentScreen!!, TarasandeMain.clientValues()))
         }
     }
 }

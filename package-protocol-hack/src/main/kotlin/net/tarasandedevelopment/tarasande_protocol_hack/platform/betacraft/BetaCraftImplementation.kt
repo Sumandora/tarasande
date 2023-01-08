@@ -2,9 +2,9 @@ package net.tarasandedevelopment.tarasande_protocol_hack.platform.betacraft
 
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.util.VersionListEnum
-import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanel
+import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import org.jsoup.Jsoup
 import java.net.URL
@@ -73,18 +73,18 @@ class EntrySidebarPanelBetaCraftServers : EntrySidebarPanel("BetaCraft Servers",
 
     override fun onClick(mouseButton: Int) {
         if (autoRequest.isSelected(0)) {
-            serversScreen = ScreenBetterSlotListBetaCraftServers(name, MinecraftClient.getInstance().currentScreen!!, ArrayList())
-            MinecraftClient.getInstance().setScreen(serversScreen)
+            serversScreen = ScreenBetterSlotListBetaCraftServers("Goto $name -> right click -> enable automatic requests", mc.currentScreen!!, ArrayList())
+            mc.setScreen(serversScreen)
             return
         }
         if (autoRequest.isSelected(1) && hasAlreadyLoaded) {
-            MinecraftClient.getInstance().setScreen(serversScreen)
+            mc.setScreen(serversScreen)
             return
         }
         createLookupThread {
-            MinecraftClient.getInstance().executeSync {
-                serversScreen = ScreenBetterSlotListBetaCraftServers(name, MinecraftClient.getInstance().currentScreen!!, it)
-                MinecraftClient.getInstance().setScreen(serversScreen)
+            mc.executeSync {
+                serversScreen = ScreenBetterSlotListBetaCraftServers(name, mc.currentScreen!!, it)
+                mc.setScreen(serversScreen)
                 hasAlreadyLoaded = true
             }
         }.start()

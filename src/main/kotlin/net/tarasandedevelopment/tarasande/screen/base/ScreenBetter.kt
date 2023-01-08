@@ -4,7 +4,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 
-open class ScreenBetter(var prevScreen: Screen?) : Screen(Text.of("")) {
+open class ScreenBetter(title: String, var prevScreen: Screen?) : Screen(Text.of(title)) {
 
     override fun close() {
         client!!.setScreen(prevScreen)

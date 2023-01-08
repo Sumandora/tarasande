@@ -194,7 +194,7 @@ class TarasandeProtocolHack : NativeProvider {
 
                     insert(object : EntrySidebarPanel("Protocol Hack Values", "Protocol Hack") {
                         override fun onClick(mouseButton: Int) {
-                            mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, name, ProtocolHackValues))
+                            mc.setScreen(ScreenBetterOwnerValues(name, mc.currentScreen!!, ProtocolHackValues))
                         }
                     }, 1)
 
@@ -205,7 +205,7 @@ class TarasandeProtocolHack : NativeProvider {
                     init {
                         "Protocol Hack Values".apply {
                             add(this, direction = Direction.RIGHT) {
-                                mc.setScreen(ScreenBetterOwnerValues(mc.currentScreen!!, this, ProtocolHackValues))
+                                mc.setScreen(ScreenBetterOwnerValues(this, mc.currentScreen!!, ProtocolHackValues))
                             }
                         }
                     }
