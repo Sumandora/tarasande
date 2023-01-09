@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.system.screen.panelsystem
 
 import com.mojang.blaze3d.platform.GlConst
 import com.mojang.blaze3d.platform.GlStateManager
+import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
 import net.tarasandedevelopment.tarasande.Manager
@@ -24,6 +25,8 @@ import net.tarasandedevelopment.tarasande.util.render.helper.IElement
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 import java.awt.Color
+import kotlin.math.abs
+import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
 
@@ -126,6 +129,52 @@ open class Panel(
     override fun init() {
     }
 
+    private fun align() {
+        // TODO Improve this code.. I'm curious how other people implement this
+        val horizontalAlignments = ArrayList<Double>()
+        val verticalAlignments = ArrayList<Double>()
+        val tolerance = 5
+
+        val panels = TarasandeMain.managerPanel().list.filter { it != this }
+
+        val horizontalAlignablePanels = panels.filter { abs((y + panelHeight / 2.0) - (it.y + it.panelHeight / 2.0)) < (it.panelHeight + panelHeight) / 2.0 + tolerance }
+        val verticalAlignablePanels = panels.filter { abs((x + panelWidth / 2.0) - (it.x + it.panelWidth / 2.0)) < (it.panelWidth + panelWidth) / 2.0 + tolerance }
+
+        run {
+            val panel = horizontalAlignablePanels.minByOrNull { abs(it.x + it.panelWidth - x) } ?: return@run
+            val alignment = panel.x + panel.panelWidth
+            horizontalAlignments.add(alignment)
+        }
+        run {
+            val panel = horizontalAlignablePanels.minByOrNull { abs((it.x - panelWidth) - x) } ?: return@run
+            val alignment = panel.x - panelWidth
+            horizontalAlignments.add(alignment)
+        }
+        run {
+            val panel = verticalAlignablePanels.minByOrNull { abs(it.y + it.titleBarHeight - y) } ?: return@run
+            val alignment = panel.y
+            verticalAlignments.add(alignment)
+        }
+        run {
+            val panel = verticalAlignablePanels.minByOrNull { abs(it.y + it.panelHeight - y) } ?: return@run
+            val alignment = panel.y + panel.panelHeight
+            verticalAlignments.add(alignment)
+        }
+        run {
+            val panel = verticalAlignablePanels.minByOrNull { abs((it.y - panelHeight) - y) } ?: return@run
+            val alignment = panel.y - panelHeight
+            verticalAlignments.add(alignment)
+        }
+
+        horizontalAlignments.minByOrNull { abs(x - it) }?.also {
+            if (abs(x - it) < tolerance) x = it
+        }
+
+        verticalAlignments.minByOrNull { abs(y - it) }?.also {
+            if (abs(y - it) < tolerance) y = it
+        }
+    }
+
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         if (fixed) {
             when {
@@ -147,7 +196,7 @@ open class Panel(
                 GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, previousFramebuffer)
 
                 val accent = TarasandeMain.clientValues().accentColor.getColor()
-                RenderUtil.fill(matrices, x, y + FontWrapper.fontHeight(), x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).withAlpha(0), 0.3, 0.3, 0.3, 0.7).rgb)
+                RenderUtil.fill(matrices, x, y + titleBarHeight, x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).withAlpha(0), 0.3, 0.3, 0.3, 0.7).rgb)
                 matrices.pop()
             }
 
@@ -177,6 +226,8 @@ open class Panel(
         if (dragInfo.dragging) {
             x = round(mouseX - dragInfo.xOffset)
             y = round(mouseY - dragInfo.yOffset)
+            if (Screen.hasAltDown())
+                align()
         }
 
         x = MathHelper.clamp(x, 0.0, mc.window.scaledWidth.toDouble() - panelWidth)
