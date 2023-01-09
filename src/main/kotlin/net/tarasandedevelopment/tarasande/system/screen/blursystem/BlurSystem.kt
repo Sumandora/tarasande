@@ -43,7 +43,7 @@ class ManagerBlur : Manager<Blur>() {
                 if (it.screen !is ScreenCheatMenu)
                     blurScene(shapesBuffer = screenShapesFramebuffer)
             }
-            add(EventRender2D::class.java, 1) {
+            add(EventRender2D::class.java, 999) {
                 blurScene()
             }
         }

@@ -97,7 +97,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
             }
         }
 
-        registerEvent(EventRender2D::class.java, 999) { event ->
+        registerEvent(EventRender2D::class.java, 998) { event ->
             for (entry in hashMap.entries) {
                 TarasandeMain.managerESP().renderBox(event.matrices, entry.key, entry.value)
             }

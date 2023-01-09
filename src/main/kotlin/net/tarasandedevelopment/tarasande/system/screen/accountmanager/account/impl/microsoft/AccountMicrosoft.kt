@@ -30,12 +30,19 @@ import java.util.concurrent.ThreadLocalRandom
 
 @AccountInfo("Microsoft")
 open class AccountMicrosoft : Account() {
+
+    // OAuth
     private val oauthAuthorizeUrl = "https://login.live.com/oauth20_authorize.srf"
     private val oauthTokenUrl = "https://login.live.com/oauth20_token.srf"
+
+    // XBox Live
     private val xboxAuthenticateUrl = "https://user.auth.xboxlive.com/user/authenticate"
     private val xboxAuthorizeUrl = "https://xsts.auth.xboxlive.com/xsts/authorize"
+
+    // Java Edition
     private val minecraftLoginUrl = "https://api.minecraftservices.com/authentication/login_with_xbox"
     private val minecraftProfileUrl = "https://api.minecraftservices.com/minecraft/profile"
+
     private var cancelled = false
 
     private var service: MinecraftSessionService? = null
