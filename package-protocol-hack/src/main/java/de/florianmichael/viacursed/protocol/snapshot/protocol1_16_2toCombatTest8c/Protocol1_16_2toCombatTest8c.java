@@ -1,4 +1,4 @@
-package de.florianmichael.viacursed.protocol.protocol1_16_2toCombatTest8c;
+package de.florianmichael.viacursed.protocol.snapshot.protocol1_16_2toCombatTest8c;
 
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;

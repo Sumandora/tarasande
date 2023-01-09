@@ -1,11 +1,11 @@
-package de.florianmichael.viacursed.protocol.protocol1_14to3D_Shareware.packets;
+package de.florianmichael.viacursed.protocol.snapshot.protocol1_14to3D_Shareware.packets;
 
 import com.viaversion.viabackwards.api.rewriters.ItemRewriter;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_14to1_13_2.ServerboundPackets1_14;
-import de.florianmichael.viacursed.protocol.protocol1_14to3D_Shareware.ClientboundPackets3D_Shareware;
-import de.florianmichael.viacursed.protocol.protocol1_14to3D_Shareware.Protocol1_14to3D_Shareware;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_14to3D_Shareware.ClientboundPackets3D_Shareware;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_14to3D_Shareware.Protocol1_14to3D_Shareware;
 
 public class BlockItemPackets3D_Shareware extends ItemRewriter<Protocol1_14to3D_Shareware> {
 

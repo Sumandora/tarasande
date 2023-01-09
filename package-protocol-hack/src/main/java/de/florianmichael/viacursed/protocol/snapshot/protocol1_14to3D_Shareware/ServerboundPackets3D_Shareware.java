@@ -1,8 +1,8 @@
-package de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite;
+package de.florianmichael.viacursed.protocol.snapshot.protocol1_14to3D_Shareware;
 
 import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
 
-public enum ServerboundPackets20w14infinite implements ServerboundPacketType {
+public enum ServerboundPackets3D_Shareware implements ServerboundPacketType {
 
     TELEPORT_CONFIRM, // 0x00
     QUERY_BLOCK_NBT, // 0x01
@@ -19,12 +19,12 @@ public enum ServerboundPackets20w14infinite implements ServerboundPacketType {
     EDIT_BOOK, // 0x0C
     ENTITY_NBT_REQUEST, // 0x0D
     INTERACT_ENTITY, // 0x0E
-    KEEP_ALIVE, // 0x0F
-    LOCK_DIFFICULTY, // 0x10
-    PLAYER_POSITION, // 0x11
-    PLAYER_POSITION_AND_ROTATION, // 0x12
-    PLAYER_ROTATION, // 0x13
-    PLAYER_MOVEMENT, // 0x14
+    LOCK_DIFFICULTY, // 0x0F
+    KEEP_ALIVE, // 0x10
+    PLAYER_MOVEMENT, // 0x11
+    PLAYER_POSITION, // 0x12
+    PLAYER_POSITION_AND_ROTATION, // 0x13
+    PLAYER_ROTATION, // 0x14
     VEHICLE_MOVE, // 0x15
     STEER_BOAT, // 0x16
     PICK_ITEM, // 0x17

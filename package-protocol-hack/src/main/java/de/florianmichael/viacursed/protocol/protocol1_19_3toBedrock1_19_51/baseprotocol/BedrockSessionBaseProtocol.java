@@ -54,8 +54,9 @@ public class BedrockSessionBaseProtocol extends AbstractSimpleProtocol {
                     final BedrockSessionStorage bedrockSessionStorage = wrapper.user().get(BedrockSessionStorage.class);
                     if (bedrockSessionStorage == null) throw new IllegalStateException("BedrockSessionStorage is null?");
 
-                    final long startTime = System.currentTimeMillis();
                     CompletableFuture.runAsync(() -> {
+                        final long startTime = System.currentTimeMillis();
+
                         bedrockSessionStorage.bedrockClient.ping(bedrockSessionStorage.targetAddress).whenComplete((bedrockPong, throwable) -> {
                             if (throwable != null) {
                                 throwable.printStackTrace();

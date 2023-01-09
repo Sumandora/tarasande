@@ -1,4 +1,4 @@
-package de.florianmichael.viacursed.protocol.protocol1_14to3D_Shareware;
+package de.florianmichael.viacursed.protocol.snapshot.protocol1_14to3D_Shareware;
 
 import com.viaversion.viaversion.api.protocol.packet.ClientboundPacketType;
 

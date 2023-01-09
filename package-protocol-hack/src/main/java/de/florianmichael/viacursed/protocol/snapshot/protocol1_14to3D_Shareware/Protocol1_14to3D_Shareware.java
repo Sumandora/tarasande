@@ -1,4 +1,4 @@
-package de.florianmichael.viacursed.protocol.protocol1_14to3D_Shareware;
+package de.florianmichael.viacursed.protocol.snapshot.protocol1_14to3D_Shareware;
 
 import com.viaversion.viabackwards.api.BackwardsProtocol;
 import com.viaversion.viabackwards.api.data.BackwardsMappings;
@@ -13,9 +13,9 @@ import com.viaversion.viaversion.protocols.protocol1_14to1_13_2.ClientboundPacke
 import com.viaversion.viaversion.protocols.protocol1_14to1_13_2.Protocol1_14To1_13_2;
 import com.viaversion.viaversion.protocols.protocol1_14to1_13_2.ServerboundPackets1_14;
 import com.viaversion.viaversion.protocols.protocol1_14to1_13_2.types.Chunk1_14Type;
-import de.florianmichael.viacursed.protocol.protocol1_14to3D_Shareware.packets.BlockItemPackets3D_Shareware;
-import de.florianmichael.viacursed.protocol.protocol1_14to3D_Shareware.packets.EntityPackets3D_Shareware;
-import de.florianmichael.viacursed.protocol.protocol1_14to3D_Shareware.storage.ChunkCenterTracker3D_Shareware;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_14to3D_Shareware.packets.BlockItemPackets3D_Shareware;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_14to3D_Shareware.packets.EntityPackets3D_Shareware;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_14to3D_Shareware.storage.ChunkCenterTracker3D_Shareware;
 import de.florianmichael.viacursed.util.ItemBackwardsMappings;
 
 @SuppressWarnings("DataFlowIssue")

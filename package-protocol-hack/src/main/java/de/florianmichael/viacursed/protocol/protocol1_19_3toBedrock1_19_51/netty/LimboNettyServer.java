@@ -35,7 +35,7 @@ public class LimboNettyServer {
                     @Override
                     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {}
                 });
-                // It's impossible that the Limbo Servers sends packets, so we don't need an encoder here
+                // It's impossible that the Limbo server sends packets, so we don't need an encoder here
             }
         }).group(Epoll.isAvailable() ? EPOLL_CHANNEL.get() : DEFAULT_CHANNEL.get()).localAddress(LocalAddress.ANY).bind().syncUninterruptibly();
         ViaCursed.getPlatform().getLogger().log(Level.INFO, "Started local ProxyServer!");

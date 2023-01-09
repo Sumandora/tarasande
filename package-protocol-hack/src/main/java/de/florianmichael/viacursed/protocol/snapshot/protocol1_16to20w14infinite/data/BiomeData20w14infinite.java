@@ -1,4 +1,4 @@
-package de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.data;
+package de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.data;
 
 import com.viaversion.viaversion.libs.fastutil.ints.IntArrayList;
 import com.viaversion.viaversion.libs.fastutil.ints.IntList;

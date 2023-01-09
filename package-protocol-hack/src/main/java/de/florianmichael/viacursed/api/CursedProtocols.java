@@ -1,4 +1,4 @@
-package de.florianmichael.viacursed.base;
+package de.florianmichael.viacursed.api;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 

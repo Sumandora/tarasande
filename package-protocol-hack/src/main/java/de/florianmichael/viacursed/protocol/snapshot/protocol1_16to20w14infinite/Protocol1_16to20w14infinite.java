@@ -1,4 +1,4 @@
-package de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite;
+package de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite;
 
 import com.viaversion.viabackwards.api.BackwardsProtocol;
 import com.viaversion.viabackwards.api.data.BackwardsMappings;
@@ -17,10 +17,10 @@ import com.viaversion.viaversion.protocols.protocol1_16to1_15_2.Protocol1_16To1_
 import com.viaversion.viaversion.protocols.protocol1_16to1_15_2.ServerboundPackets1_16;
 import com.viaversion.viaversion.rewriter.StatisticsRewriter;
 import com.viaversion.viaversion.rewriter.TagRewriter;
-import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.metadata.MetadataRewriter1_16to20w14infinite;
-import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.packets.BlockItemPackets20w14infinite;
-import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.packets.EntityPackets20w14infinite;
-import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.metadata.MetadataRewriter1_16to20w14infinite;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.packets.BlockItemPackets20w14infinite;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.packets.EntityPackets20w14infinite;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider;
 import de.florianmichael.viacursed.util.ItemBackwardsMappings;
 
 import java.util.UUID;

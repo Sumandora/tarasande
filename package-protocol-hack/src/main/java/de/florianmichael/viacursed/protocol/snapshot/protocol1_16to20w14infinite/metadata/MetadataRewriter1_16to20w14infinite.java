@@ -1,4 +1,4 @@
-package de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.metadata;
+package de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.metadata;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.entities.Entity1_16Types;
@@ -7,7 +7,7 @@ import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
 import com.viaversion.viaversion.api.minecraft.metadata.types.MetaType1_14;
 import com.viaversion.viaversion.api.type.types.Particle;
 import com.viaversion.viaversion.rewriter.EntityRewriter;
-import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.Protocol1_16to20w14infinite;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.Protocol1_16to20w14infinite;
 
 import java.util.List;
 

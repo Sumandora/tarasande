@@ -33,7 +33,9 @@ public class BedrockSessionStorage extends StoredObject {
                 return;
             }
             clientSession.addDisconnectHandler((disconnectReason) -> ViaCursed.getPlatform().getLogger().log(Level.INFO, "Fake-Bedrock Client got disconnected: " + disconnectReason));
-            clientSession.setBatchHandler((session, compressed, packets) -> ViaCursed.getPlatform().getLogger().log(Level.INFO, "Handling incoming Packets: " + packets.stream().map(p -> p.getClass().getSimpleName()).collect(Collectors.joining(", "))));
+//            clientSession.setBatchHandler((session, compressed, packets) -> {
+//                ViaCursed.getPlatform().getLogger().log(Level.INFO, "Handling incoming Packets: " + packets.stream().map(p -> p.getClass().getSimpleName()).collect(Collectors.joining(", ")));
+//            });
             clientSession.setPacketCodec(CODEC);
             connect.accept(bedrockClient);
         }).join();

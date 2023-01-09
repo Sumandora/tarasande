@@ -5,9 +5,10 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.protocols.base.BaseProtocol1_16;
 import de.florianmichael.viacursed.ViaCursed;
-import de.florianmichael.viacursed.protocol.protocol1_14to3D_Shareware.Protocol1_14to3D_Shareware;
-import de.florianmichael.viacursed.protocol.protocol1_16_2toCombatTest8c.Protocol1_16_2toCombatTest8c;
-import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.Protocol1_16to20w14infinite;
+import de.florianmichael.viacursed.api.CursedProtocols;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_14to3D_Shareware.Protocol1_14to3D_Shareware;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_16_2toCombatTest8c.Protocol1_16_2toCombatTest8c;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.Protocol1_16to20w14infinite;
 import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.Protocol1_19_3toBedrock1_19_51;
 
 import java.util.logging.Level;

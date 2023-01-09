@@ -1,4 +1,4 @@
-package de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.metadata;
+package de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.metadata;
 
 import com.viaversion.viaversion.api.minecraft.entities.EntityType;
 import de.florianmichael.viacursed.ViaCursed;

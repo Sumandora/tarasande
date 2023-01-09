@@ -1,4 +1,4 @@
-package de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.packets;
+package de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.packets;
 
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.minecraft.entities.Entity1_16Types;
@@ -11,9 +11,9 @@ import com.viaversion.viaversion.protocols.protocol1_16to1_15_2.ClientboundPacke
 import com.viaversion.viaversion.protocols.protocol1_16to1_15_2.Protocol1_16To1_15_2;
 import com.viaversion.viaversion.protocols.protocol1_16to1_15_2.packets.EntityPackets;
 import de.florianmichael.viacursed.ViaCursed;
-import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.ClientboundPackets20w14infinite;
-import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.Protocol1_16to20w14infinite;
-import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.metadata.MetadataRewriter1_16to20w14infinite;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.ClientboundPackets20w14infinite;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.Protocol1_16to20w14infinite;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.metadata.MetadataRewriter1_16to20w14infinite;
 
 import java.util.UUID;
 

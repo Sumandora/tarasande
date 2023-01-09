@@ -1,4 +1,4 @@
-package de.florianmichael.viacursed.protocol.protocol1_14to3D_Shareware.storage;
+package de.florianmichael.viacursed.protocol.snapshot.protocol1_14to3D_Shareware.storage;
 
 import com.viaversion.viaversion.api.connection.StoredObject;
 import com.viaversion.viaversion.api.connection.UserConnection;

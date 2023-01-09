@@ -1,4 +1,4 @@
-package de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.packets;
+package de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.packets;
 
 import com.viaversion.viabackwards.api.rewriters.ItemRewriter;
 import com.viaversion.viaversion.api.minecraft.chunks.Chunk;
@@ -13,9 +13,9 @@ import com.viaversion.viaversion.protocols.protocol1_16to1_15_2.ServerboundPacke
 import com.viaversion.viaversion.protocols.protocol1_16to1_15_2.types.Chunk1_16Type;
 import com.viaversion.viaversion.rewriter.BlockRewriter;
 import com.viaversion.viaversion.util.CompactArrayUtil;
-import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.ClientboundPackets20w14infinite;
-import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.Protocol1_16to20w14infinite;
-import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.data.BiomeData20w14infinite;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.ClientboundPackets20w14infinite;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.Protocol1_16to20w14infinite;
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.data.BiomeData20w14infinite;
 
 import java.util.Map;
 

@@ -24,7 +24,7 @@ package net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
 import de.florianmichael.viabeta.pre_netty.PreNettyConstants;
-import de.florianmichael.viacursed.base.CursedProtocols;
+import de.florianmichael.viacursed.api.CursedProtocols;
 import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.Protocol1_19_3toBedrock1_19_51;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.event.PipelineReorderEvent;

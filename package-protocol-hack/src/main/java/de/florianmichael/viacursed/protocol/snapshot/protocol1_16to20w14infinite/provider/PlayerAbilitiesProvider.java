@@ -1,4 +1,4 @@
-package de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.provider;
+package de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.provider;
 
 import com.viaversion.viaversion.api.platform.providers.Provider;
 
