@@ -85,7 +85,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
                 while (iterator.hasNext()) {
                     val triple = iterator.next()
                     if (triple.second <= mc.player?.age!!) {
-                        val newVelocity = if (changeDirection.value) Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0F).forwardVector(triple.first.horizontalLength()) else triple.first
+                        val newVelocity = if (changeDirection.value && PlayerUtil.isPlayerMoving()) Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0F).forwardVector(triple.first.horizontalLength()) else triple.first
                         mc.player?.velocity = if (addition.isSelected(2) || (addition.isSelected(1) && triple.third == EventVelocity.Packet.EXPLOSION)) mc.player?.velocity!! + newVelocity else newVelocity
                         iterator.remove()
                     }

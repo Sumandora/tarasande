@@ -14,5 +14,8 @@ fun HitResult?.isBlockResult(): Boolean {
 }
 
 fun HitResult?.isSame(side: Direction, blockPos: BlockPos): Boolean {
-    return isBlockResult() && side != side.hitResultSide() || (this as BlockHitResult).blockPos != blockPos
+    if(!isBlockResult())
+        return false
+    this as BlockHitResult
+    return this.side == side.hitResultSide() && this.blockPos == blockPos
 }

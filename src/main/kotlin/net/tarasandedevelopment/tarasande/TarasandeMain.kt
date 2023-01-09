@@ -47,6 +47,8 @@ import java.util.logging.Logger
  *  - No Soul Sand (Entity#getVelocityMultiplier)
  *  - Package DSL
  *  - No Pitch Limit
+ *  - Implement GCD Preference in all modules, which profit from it
+ *  - Utility function for 'if(a == b) a else random(a, b)'
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions

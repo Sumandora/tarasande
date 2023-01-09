@@ -194,7 +194,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                 } else {
                                     val rotationVector = rotation?.forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)!!
                                     val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector)
-                                    hitResult.isSame(target?.second!!, target?.first!!)
+                                    !hitResult.isSame(target?.second!!, target?.first!!)
                                 }
                             }) {
 
@@ -219,7 +219,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                     MathUtil.closestPointToBox(lastLook, positionShape)
                                 }
                             } else {
-                                val randomizedAimHeight = ThreadLocalRandom.current().nextDouble(aimHeight.minValue, aimHeight.maxValue)
+                                val randomizedAimHeight = if(aimHeight.minValue == aimHeight.maxValue) aimHeight.minValue else ThreadLocalRandom.current().nextDouble(aimHeight.minValue, aimHeight.maxValue)
                                 val absoluteAimHeight = if (shape.isEmpty) randomizedAimHeight else shape.boundingBox.let { it.minY + (it.maxY - it.minY) * randomizedAimHeight }
                                 point = point.add(0.0, MathHelper.clamp(absoluteAimHeight, 0.0, 1.0) - 0.5, 0.0)
 
@@ -287,31 +287,38 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 }
             }
             if (rotation == null) {
-                val rad = Math.toRadians((PlayerUtil.getMoveDirection() / 90.0).roundToInt() * 90.0) - PI / 2
+                val rad = Math.toRadians(((PlayerUtil.getMoveDirection()) / 45.0).roundToInt() * 45.0) - PI / 2
+                println(Math.toDegrees(rad))
                 var targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, mc.player?.pos!! + Vec3d(cos(rad), 0.0, sin(rad)) * 0.3)
 
                 val diagonal = abs(round(mc.player?.yaw!! / 90) * 90 - mc.player?.yaw!!) > 22.5
                 if (!diagonal) {
                     val deltaRot = (-goalYaw.value * (45.0 / 60.0)).toFloat() // those are not triangles anymore :c
                     val centerRot = RotationUtil.getRotations(mc.player?.eyePos!!, Vec3d.ofBottomCenter(mc.player?.blockPos))
-                    var rot = Rotation(targetRot)
-                    rot = rot.withYaw(rot.yaw + deltaRot)
-                    val firstFov = centerRot.fov(rot)
-                    rot = rot.withYaw(rot.yaw + deltaRot * 2.0F)
-                    val secondFov = centerRot.fov(rot)
+                    val rot = Rotation(targetRot)
+                    val firstSolution = rot.withYaw(rot.yaw + deltaRot)
+                    val firstFov = centerRot.fov(firstSolution)
+                    val secondSolution = rot.withYaw(rot.yaw - deltaRot)
+                    val secondFov = centerRot.fov(secondSolution)
 
                     targetRot = targetRot.withYaw(
-                        if (firstFov > secondFov)
-                            targetRot.yaw - deltaRot
-                        else
+                        if (firstFov < secondFov)
                             targetRot.yaw + deltaRot
+                        else
+                            targetRot.yaw - deltaRot
                     )
                 }
 
                 rotation = targetRot
             }
 
-            event.rotation = currentRot.smoothedTurn(rotation!!, aimSpeed).correctSensitivity()
+            event.rotation = currentRot.smoothedTurn(rotation!!, aimSpeed).correctSensitivity(preference = {
+                if(target == null)
+                    return@correctSensitivity true
+                val rotationVector = it.forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)
+                val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector)
+                hitResult.isSame(target?.second!!, target?.first!!)
+            })
 
             if (lockView.value) {
                 mc.player?.yaw = event.rotation.yaw
