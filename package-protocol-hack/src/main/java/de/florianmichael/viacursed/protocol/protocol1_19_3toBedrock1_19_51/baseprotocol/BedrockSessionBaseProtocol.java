@@ -1,4 +1,4 @@
-package de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51;
+package de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.baseprotocol;
 
 import com.viaversion.viaversion.api.protocol.AbstractSimpleProtocol;
 import com.viaversion.viaversion.api.protocol.packet.State;
@@ -27,16 +27,13 @@ public class BedrockSessionBaseProtocol extends AbstractSimpleProtocol {
             @Override
             public void registerMap() {
                 handler(wrapper -> {
-                    ViaCursed.getPlatform().getLogger().log(Level.INFO, "The adventure begins now!");
                     wrapper.cancel();
                     wrapper.read(Type.VAR_INT); // protocolVersion
                     final String hostname = wrapper.read(Type.STRING); // hostName
                     final int port = wrapper.read(Type.UNSIGNED_SHORT); // port
 
-                    final InetSocketAddress socketAddress = new InetSocketAddress(hostname, port);
-                    wrapper.user().put(new BedrockSessionStorage(wrapper.user(), socketAddress));
-
-                    ViaCursed.getPlatform().getLogger().log(Level.INFO, "Stores new Bedrock Connection");
+                    wrapper.user().put(new BedrockSessionStorage(wrapper.user(), new InetSocketAddress(hostname, port)));
+                    ViaCursed.getPlatform().getLogger().log(Level.INFO, "The adventure begins now!");
                 });
             }
         });

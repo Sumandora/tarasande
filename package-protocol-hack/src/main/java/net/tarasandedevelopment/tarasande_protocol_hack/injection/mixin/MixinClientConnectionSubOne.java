@@ -29,13 +29,14 @@ import de.florianmichael.viabeta.pre_netty.PreNettyConstants;
 import de.florianmichael.viabeta.pre_netty.handler.PreNettyPacketDecoder;
 import de.florianmichael.viabeta.pre_netty.handler.PreNettyPacketEncoder;
 import de.florianmichael.viabeta.protocol.protocol1_6_4.Protocol1_6_4;
-import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.BedrockSessionBaseProtocol;
+import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.baseprotocol.BedrockSessionBaseProtocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.netty.CustomViaDecodeHandler;
 import de.florianmichael.vialoadingbase.netty.CustomViaEncodeHandler;
 import de.florianmichael.vialoadingbase.netty.NettyConstants;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import io.netty.channel.Channel;
+import io.netty.channel.socket.SocketChannel;
 import net.minecraft.network.ClientConnection;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -54,21 +55,29 @@ public class MixinClientConnectionSubOne {
 
     @Inject(method = "initChannel", at = @At("TAIL"))
     public void addViaVersionHandler(Channel channel, CallbackInfo ci) {
-        UserConnection user = new UserConnectionImpl(channel, true);
-        ((IClientConnection_Protocol) field_11663).protocolhack_setViaConnection(user);
-        new ProtocolPipelineImpl(user);
+        final boolean bedrockConnection = ViaLoadingBase.getTargetVersion() == VersionListEnum.rBedrock1_19_51;
 
-        // ViaLoadingBase / ViaVersion (latest - 1.7.0)
-        channel.pipeline().addBefore("encoder", NettyConstants.HANDLER_ENCODER_NAME, new CustomViaEncodeHandler(user));
-        channel.pipeline().addBefore("decoder", NettyConstants.HANDLER_DECODER_NAME, new CustomViaDecodeHandler(user));
+        if (channel instanceof SocketChannel || bedrockConnection) {
+            UserConnection user = new UserConnectionImpl(channel, true);
+            ((IClientConnection_Protocol) field_11663).protocolhack_setViaConnection(user);
+            new ProtocolPipelineImpl(user);
 
-        // ViaBeta (1.6.4 - c0.0.15a-1)
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_6_4)) {
-            user.getProtocolInfo().getPipeline().add(Protocol1_6_4.INSTANCE);
-            channel.pipeline().addBefore("prepender", PreNettyConstants.ENCODER, new PreNettyPacketEncoder(user));
-            channel.pipeline().addBefore("splitter", PreNettyConstants.DECODER, new PreNettyPacketDecoder(user));
+            // ViaLoadingBase / ViaVersion (latest - 1.7.0)
+            channel.pipeline().addBefore("encoder", NettyConstants.HANDLER_ENCODER_NAME, new CustomViaEncodeHandler(user));
+            channel.pipeline().addBefore("decoder", NettyConstants.HANDLER_DECODER_NAME, new CustomViaDecodeHandler(user));
+
+            // ViaBeta (1.6.4 - c0.0.15a-1)
+            if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_6_4)) {
+                user.getProtocolInfo().getPipeline().add(Protocol1_6_4.INSTANCE);
+
+                channel.pipeline().addBefore("prepender", PreNettyConstants.ENCODER, new PreNettyPacketEncoder(user));
+                channel.pipeline().addBefore("splitter", PreNettyConstants.DECODER, new PreNettyPacketDecoder(user));
+            }
+
+            // ViaCursed (Bedrock)
+            if (bedrockConnection) {
+                user.getProtocolInfo().getPipeline().add(BedrockSessionBaseProtocol.INSTANCE);
+            }
         }
-
-        user.getProtocolInfo().getPipeline().add(BedrockSessionBaseProtocol.INSTANCE);
     }
 }
