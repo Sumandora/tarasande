@@ -18,6 +18,7 @@ import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.provider.EncryptionProvider
 import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.provider.GameProfileFetcher
+import de.florianmichael.viacursed.base.CursedProtocols
 import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider
 import de.florianmichael.vialoadingbase.NativeProvider
 import de.florianmichael.vialoadingbase.ViaLoadingBase
@@ -81,7 +82,7 @@ class TarasandeProtocolHack : NativeProvider {
         var viaConnection: UserConnection? = null
 
         fun update(protocol: VersionListEnum, reloadProtocolHackValues: Boolean) {
-            ViaLoadingBase.instance().switchVersionTo(protocol.originalVersion)
+            ViaLoadingBase.instance().switchVersionTo(VersionListEnum.rBedrock1_19_51.originalVersion)
 
             if (reloadProtocolHackValues) {
                 TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
@@ -225,7 +226,7 @@ class TarasandeProtocolHack : NativeProvider {
             }
 
             add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
-                update(VersionListEnum.fromProtocolId(version.value.toInt()), false)
+                update(VersionListEnum.fromProtocolId(CursedProtocols.ogBedrock1_19_51.originalVersion), false)
             }
 
             add(EventConnectServer::class.java) {

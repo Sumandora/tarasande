@@ -24,6 +24,9 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.screen;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.ProfileKey;
 import de.florianmichael.clampclient.injection.mixininterface.IPublicKeyData_Protocol;
+import de.florianmichael.viacursed.base.CursedProtocols;
+import de.florianmichael.viacursed.netty.LocalNettyServer;
+import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.Protocol1_19_3toBedrock1_19_51;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.MinecraftClient;
@@ -52,12 +55,11 @@ public class MixinConnectScreen_1 {
     @Shadow
     ServerAddress field_33737;
 
-    @Redirect(method = "run", at = @At(value = "INVOKE", target = "Ljava/net/InetSocketAddress;getHostName()Ljava/lang/String;"))
+    @Redirect(method = "run", at = @At(value = "INVOKE", target = "Ljava/net/InetSocketAddress;getHostName()Ljava/lang/String;", ordinal = 1))
     public String replaceAddress(InetSocketAddress instance) {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_17)) {
             return field_33737.getAddress();
         }
-
         return instance.getHostString();
     }
 
@@ -66,7 +68,6 @@ public class MixinConnectScreen_1 {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_17)) {
             return field_33737.getPort();
         }
-
         return instance.getPort();
     }
 
