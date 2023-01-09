@@ -135,7 +135,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
 
         panelSystem.list.reversed().forEach {
             matrices.push()
-            val panelHeight = (if (it.opened) it.panelHeight else textRenderer?.fontHeight)?.toDouble()!!
+            val panelHeight = it.effectivePanelHeight()
             if (!it.fixed || !(it.isVisible() && it.opened)) {
                 matrices.translate(it.x + it.panelWidth / 2.0, it.y + panelHeight / 2.0, 0.0)
                 matrices.scale(animation.toFloat(), animation.toFloat(), 1.0F)

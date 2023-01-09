@@ -137,7 +137,7 @@ open class Panel(
 
         val panels = TarasandeMain.managerPanel().list.filter { it != this }
 
-        val horizontalAlignablePanels = panels.filter { abs((y + panelHeight / 2.0) - (it.y + it.panelHeight / 2.0)) < (it.panelHeight + panelHeight) / 2.0 + tolerance }
+        val horizontalAlignablePanels = panels.filter { abs((y + effectivePanelHeight() / 2.0) - (it.y + it.effectivePanelHeight() / 2.0)) < (it.effectivePanelHeight() + effectivePanelHeight()) / 2.0 + tolerance }
         val verticalAlignablePanels = panels.filter { abs((x + panelWidth / 2.0) - (it.x + it.panelWidth / 2.0)) < (it.panelWidth + panelWidth) / 2.0 + tolerance }
 
         run {
@@ -151,18 +151,18 @@ open class Panel(
             horizontalAlignments.add(alignment)
         }
         run {
-            val panel = verticalAlignablePanels.minByOrNull { abs(it.y + it.titleBarHeight - y) } ?: return@run
+            val panel = verticalAlignablePanels.minByOrNull { abs(it.y - y) } ?: return@run
             val alignment = panel.y
             verticalAlignments.add(alignment)
         }
         run {
-            val panel = verticalAlignablePanels.minByOrNull { abs(it.y + it.panelHeight - y) } ?: return@run
-            val alignment = panel.y + panel.panelHeight
+            val panel = verticalAlignablePanels.minByOrNull { abs(it.y + it.effectivePanelHeight() - y) } ?: return@run
+            val alignment = panel.y + panel.effectivePanelHeight()
             verticalAlignments.add(alignment)
         }
         run {
-            val panel = verticalAlignablePanels.minByOrNull { abs((it.y - panelHeight) - y) } ?: return@run
-            val alignment = panel.y - panelHeight
+            val panel = verticalAlignablePanels.minByOrNull { abs((it.y - effectivePanelHeight()) - y) } ?: return@run
+            val alignment = panel.y - effectivePanelHeight()
             verticalAlignments.add(alignment)
         }
 
@@ -192,7 +192,7 @@ open class Panel(
                 matrices.push()
                 val previousFramebuffer = GlStateManager.getBoundFramebuffer()
                 TarasandeMain.managerBlur().bind(true, usedInScreen)
-                RenderUtil.fill(matrices, x, y, x + panelWidth, y + (if (opened && isVisible()) panelHeight else titleBarHeight).toDouble(), -1)
+                RenderUtil.fill(matrices, x, y, x + panelWidth, y + effectivePanelHeight(), -1)
                 GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, previousFramebuffer)
 
                 val accent = TarasandeMain.clientValues().accentColor.getColor()
@@ -231,7 +231,7 @@ open class Panel(
         }
 
         x = MathHelper.clamp(x, 0.0, mc.window.scaledWidth.toDouble() - panelWidth)
-        y = MathHelper.clamp(y, 0.0, mc.window.scaledHeight.toDouble() - if (opened) panelHeight else titleBarHeight.toDouble())
+        y = MathHelper.clamp(y, 0.0, mc.window.scaledHeight.toDouble() - effectivePanelHeight())
 
         if (resizeInfo.dragging) {
             panelWidth = MathHelper.clamp(mouseX + resizeInfo.xOffset, 0.0, mc.window.scaledWidth.toDouble()) - x
@@ -257,7 +257,7 @@ open class Panel(
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + (if (opened) panelHeight else titleBarHeight.toDouble()))) {
+        if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + effectivePanelHeight())) {
             if (modifiable && button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                 if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight.toDouble())) {
                     dragInfo.setDragInfo(true, mouseX - x, mouseY - y)
@@ -266,7 +266,8 @@ open class Panel(
                     resizeInfo.setDragInfo(true, mouseX - (x + panelWidth - 2), mouseY - (y + panelHeight - 2))
                 }
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-                if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight.toDouble())) opened = !opened
+                if (RenderUtil.isHovered(mouseX, mouseY, x, y, x + panelWidth, y + titleBarHeight.toDouble()))
+                    opened = !opened
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
                 val valueOwner = getValueOwner()
                 if (TarasandeMain.managerValue().getValues(valueOwner).isNotEmpty()) {
@@ -315,4 +316,6 @@ open class Panel(
     open fun isVisible() = true
 
     open fun getValueOwner(): Any = this
+
+    fun effectivePanelHeight() = if(opened) panelHeight else titleBarHeight.toDouble()
 }
