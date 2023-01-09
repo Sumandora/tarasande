@@ -16,16 +16,17 @@ import java.util.stream.Collectors;
 public class BedrockSessionStorage extends StoredObject {
     public static final BedrockPacketCodec CODEC = Bedrock_v560.V560_CODEC;
     public final InetSocketAddress targetAddress;
+    public final BedrockClient bedrockClient;
 
     public BedrockSessionStorage(UserConnection user, final InetSocketAddress targetAddress) {
         super(user);
         this.targetAddress = targetAddress;
+
+        bedrockClient = new BedrockClient(new InetSocketAddress("0.0.0.0", ThreadLocalRandom.current().nextInt(20000, 60000)));
+        bedrockClient.bind().join();
     }
 
     public void connect(final Consumer<BedrockClient> connect) {
-        final BedrockClient bedrockClient = new BedrockClient(new InetSocketAddress("0.0.0.0", ThreadLocalRandom.current().nextInt(20000, 60000)));
-        bedrockClient.bind().join();
-
         bedrockClient.connect(targetAddress).whenComplete((clientSession, throwable) -> {
             if (throwable != null) {
                 throwable.printStackTrace();
@@ -36,9 +37,5 @@ public class BedrockSessionStorage extends StoredObject {
             clientSession.setPacketCodec(CODEC);
             connect.accept(bedrockClient);
         }).join();
-    }
-
-    public boolean isBedrockConnected() {
-        return false;
     }
 }
