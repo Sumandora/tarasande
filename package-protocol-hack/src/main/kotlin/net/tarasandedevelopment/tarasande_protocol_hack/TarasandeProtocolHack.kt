@@ -87,7 +87,7 @@ class TarasandeProtocolHack : NativeProvider {
         var connectedAddress: InetSocketAddress? = null
 
         fun update(protocol: VersionListEnum, reloadProtocolHackValues: Boolean) {
-            ViaLoadingBase.instance().switchVersionTo(VersionListEnum.rBedrock1_19_51.originalVersion)
+            ViaLoadingBase.instance().switchVersionTo(protocol.originalVersion)
 
             if (reloadProtocolHackValues) {
                 TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
@@ -218,7 +218,7 @@ class TarasandeProtocolHack : NativeProvider {
             }
 
             add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
-                update(VersionListEnum.fromProtocolId(CursedProtocols.ogBedrock1_19_51.originalVersion), false)
+                update(VersionListEnum.fromProtocolId(version.value.toInt()), false)
             }
 
             add(EventConnectServer::class.java) {
