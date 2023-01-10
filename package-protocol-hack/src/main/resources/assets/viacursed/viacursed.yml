@@ -1,0 +1,6 @@
+#
+# Sends the native platform version in the ping packet, so that the user can see his ping in Bedrock
+send-native-version-in-ping: true
+#
+# the native platform version for bedrock pinging
+native-version: 761

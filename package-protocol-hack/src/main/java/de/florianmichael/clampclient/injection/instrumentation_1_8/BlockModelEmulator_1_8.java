@@ -110,6 +110,7 @@ public class BlockModelEmulator_1_8 {
         blockModelTransformer.put(Blocks.GRASS, new AirBlockModel());
         blockModelTransformer.put(Blocks.LAVA, new AirBlockModel());
         blockModelTransformer.put(Blocks.FLOWER_POT, new AirBlockModel());
+        blockModelTransformer.put(Blocks.VOID_AIR, new AirBlockModel());
 
         /* Torch */ for (Block block : Arrays.asList(
                 Blocks.TORCH, Blocks.REDSTONE_TORCH, Blocks.WALL_TORCH,

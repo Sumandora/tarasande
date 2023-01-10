@@ -24,23 +24,33 @@ package net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
 import de.florianmichael.viabeta.pre_netty.PreNettyConstants;
+import de.florianmichael.viacursed.api.CursedProtocols;
+import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.Protocol1_19_3toBedrock1_19_51;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.event.PipelineReorderEvent;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
+import io.netty.bootstrap.AbstractBootstrap;
+import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.local.LocalChannel;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.encryption.PacketDecryptor;
 import net.minecraft.network.encryption.PacketEncryptor;
 import net.minecraft.text.Text;
+import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.WolfHealthTracker1_14_4;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.crypto.Cipher;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 
 @Mixin(ClientConnection.class)
 public class MixinClientConnection implements IClientConnection_Protocol {
@@ -72,6 +82,23 @@ public class MixinClientConnection implements IClientConnection_Protocol {
         }
     }
 
+    @Redirect(method = "connect", at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/Bootstrap;connect(Ljava/net/InetAddress;I)Lio/netty/channel/ChannelFuture;"))
+    private static ChannelFuture startLocalServer(Bootstrap instance, InetAddress inetHost, int inetPort) {
+        if (ViaLoadingBase.getTargetVersion().getOriginalVersion() == CursedProtocols.ogBedrock1_19_51.getOriginalVersion()) {
+            TarasandeProtocolHack.Companion.setConnectedAddress(new InetSocketAddress(inetHost, inetPort));
+            return instance.connect(Protocol1_19_3toBedrock1_19_51.createLimboServer(TarasandeProtocolHack.Companion.getConnectedAddress()));
+        }
+        return instance.connect(inetHost, inetPort);
+    }
+
+    @Redirect(method = "connect", at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/Bootstrap;channel(Ljava/lang/Class;)Lio/netty/bootstrap/AbstractBootstrap;"))
+    private static AbstractBootstrap useLocalChannel(Bootstrap instance, Class aClass) {
+        if (ViaLoadingBase.getTargetVersion().getOriginalVersion() == CursedProtocols.ogBedrock1_19_51.getOriginalVersion()) {
+            return instance.channel(LocalChannel.class);
+        }
+        return instance.channel(aClass);
+    }
+
     @Inject(method = "disconnect", at = @At("RETURN"))
     public void onDisconnect(Text disconnectReason, CallbackInfo ci) {
         WolfHealthTracker1_14_4.INSTANCE.clear();
@@ -83,7 +110,6 @@ public class MixinClientConnection implements IClientConnection_Protocol {
         this.channel.pipeline().addBefore(PreNettyConstants.DECODER, "decrypt", new PacketDecryptor(this.vialegacy_decryptionCipher));
         this.channel.pipeline().addBefore(PreNettyConstants.ENCODER, "encrypt", new PacketEncryptor(this.vialegacy_encryptionCipher));
     }
-
 
     @Override
     public void protocolhack_setViaConnection(UserConnection userConnection) {

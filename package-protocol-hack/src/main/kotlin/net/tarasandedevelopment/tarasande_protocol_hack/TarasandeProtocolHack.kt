@@ -18,7 +18,10 @@ import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.provider.EncryptionProvider
 import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.provider.GameProfileFetcher
-import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider
+import de.florianmichael.viacursed.ViaCursed
+import de.florianmichael.viacursed.api.CursedProtocols
+import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.provider.OnlineModeAuthProvider
+import de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider
 import de.florianmichael.vialoadingbase.NativeProvider
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.util.VersionListEnum
@@ -57,6 +60,7 @@ import net.tarasandedevelopment.tarasande_protocol_hack.platform.ViaCursedPlatfo
 import net.tarasandedevelopment.tarasande_protocol_hack.platform.betacraft.EntrySidebarPanelBetaCraftServers
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.clamp.FabricCommandArgumentsProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viabeta.*
+import net.tarasandedevelopment.tarasande_protocol_hack.provider.viacursed.FabricOnlineModeAuthProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viacursed.FabricPlayerAbilitiesProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
@@ -67,6 +71,7 @@ import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ValueBoolean
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.command.ViaCommandHandlerTarasandeCommandHandler
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.formatRange
 import su.mandora.event.EventDispatcher
+import java.net.InetSocketAddress
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.ThreadFactory
 
@@ -79,9 +84,10 @@ class TarasandeProtocolHack : NativeProvider {
         lateinit var cancelOpenPacket: ValueBoolean
         lateinit var removeVelocityReset: ValueBoolean
         var viaConnection: UserConnection? = null
+        var connectedAddress: InetSocketAddress? = null
 
         fun update(protocol: VersionListEnum, reloadProtocolHackValues: Boolean) {
-            ViaLoadingBase.instance().switchVersionTo(protocol.originalVersion)
+            ViaLoadingBase.instance().switchVersionTo(VersionListEnum.rBedrock1_19_51.originalVersion)
 
             if (reloadProtocolHackValues) {
                 TarasandeMain.managerValue().getValues(ProtocolHackValues).forEach {
@@ -212,7 +218,7 @@ class TarasandeProtocolHack : NativeProvider {
             }
 
             add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
-                update(VersionListEnum.fromProtocolId(version.value.toInt()), false)
+                update(VersionListEnum.fromProtocolId(CursedProtocols.ogBedrock1_19_51.originalVersion), false)
             }
 
             add(EventConnectServer::class.java) {
@@ -221,9 +227,18 @@ class TarasandeProtocolHack : NativeProvider {
 
             add(EventScreenRender::class.java) {
                 if (viaConnection != null && (it.screen is DownloadingTerrainScreen || it.screen is ConnectScreen)) {
-                    val levelProgress = ViaBeta.getWorldLoading_C_0_30(viaConnection)
-                    if (levelProgress != null) {
-                        FontWrapper.text(it.matrices, levelProgress, (it.screen.width / 2).toFloat(), (it.screen.height / 2 - 30).toFloat(), centered = true)
+                    if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.c0_28toc0_30)) {
+                        val levelProgress = ViaBeta.getWorldLoading_C_0_30(viaConnection)
+                        if (levelProgress != null) {
+                            FontWrapper.text(it.matrices, levelProgress, (it.screen.width / 2).toFloat(), (it.screen.height / 2 - 30).toFloat(), centered = true)
+                        }
+                    }
+
+                    if (ViaLoadingBase.getTargetVersion() == VersionListEnum.rBedrock1_19_51) {
+                        val connectionProgress = ViaCursed.getConnectionState_Bedrock_1_19_51(connectedAddress)
+                        if (connectionProgress != null) {
+                            FontWrapper.text(it.matrices, connectionProgress, (it.screen.width / 2).toFloat(), (it.screen.height / 2 - 30).toFloat(), centered = true)
+                        }
                     }
                 }
             }
@@ -281,6 +296,7 @@ class TarasandeProtocolHack : NativeProvider {
 
         // Via Cursed
         providers?.use(PlayerAbilitiesProvider::class.java, FabricPlayerAbilitiesProvider())
+        providers?.use(OnlineModeAuthProvider::class.java, FabricOnlineModeAuthProvider())
 
         // Via Version
         providers?.use(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
