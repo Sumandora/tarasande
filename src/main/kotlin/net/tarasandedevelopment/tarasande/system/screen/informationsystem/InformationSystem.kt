@@ -32,6 +32,7 @@ class ManagerInformation(panelSystem: ManagerPanel) : Manager<Information>() {
             InformationEntities(),
             InformationWorldTime(),
             InformationSpawnPoint(),
+            InformationTextRadar(),
 
             // Server
             InformationServerBrand(),

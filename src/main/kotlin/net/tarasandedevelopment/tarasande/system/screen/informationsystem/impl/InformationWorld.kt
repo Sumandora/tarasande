@@ -3,10 +3,12 @@ package net.tarasandedevelopment.tarasande.system.screen.informationsystem.impl
 import com.google.common.collect.Iterables
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
+import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventInvalidPlayerInfo
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.ModuleAntiBot
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewWorld
@@ -14,6 +16,7 @@ import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import su.mandora.event.EventDispatcher
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.math.min
 
 class InformationEntities : Information("World", "Entities") {
     override fun getMessage(): String? {
@@ -89,5 +92,18 @@ class InformationVanishedPlayers : Information("World", "Vanished players") {
         if (vanishedPlayers.isEmpty()) return null
 
         return "\n" + vanishedPlayers.joinToString("\n")
+    }
+}
+
+
+class InformationTextRadar : Information("World", "Text radar") {
+
+    private val amount = ValueNumber(this, "Amount", 0.0, 5.0, 15.0, 1.0)
+    private val decimalPlaces = ValueNumber(this, "Decimal places", 0.0, 1.0, 5.0, 1.0)
+
+    override fun getMessage(): String? {
+        var closestPlayers = mc.world?.players?.map { it to (mc.player?.distanceTo(it)?.toDouble() ?: 0.0) }?.sortedBy { it.second } ?: return null
+        closestPlayers = closestPlayers.filter { it.first != mc.player }.filter { !TarasandeMain.managerModule().get(ModuleAntiBot::class.java).isBot(it.first) }
+        return "\n" + closestPlayers.subList(0, min(amount.value.toInt(), closestPlayers.size)).joinToString("\n") { it.first.gameProfile.name + " (" + StringUtil.round(it.second, decimalPlaces.value.toInt()) + ")" }
     }
 }
