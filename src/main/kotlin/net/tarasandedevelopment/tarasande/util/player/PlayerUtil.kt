@@ -7,6 +7,7 @@ import net.minecraft.client.input.KeyboardInput
 import net.minecraft.client.realms.gui.screen.RealmsMainScreen
 import net.minecraft.entity.Entity
 import net.minecraft.entity.effect.StatusEffects
+import net.minecraft.item.ItemStack
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.BlockHitResult
@@ -241,5 +242,13 @@ object PlayerUtil {
         }
         mc.doAttack()
         mc.crosshairTarget = original
+    }
+
+    fun findSlot(filter: (IndexedValue<ItemStack>) -> Boolean): Int? {
+        return mc.player?.inventory?.main?.subList(0, 9)?.
+            withIndex()?.
+            filter { filter(it) }?.
+            minByOrNull { it.value.count }?.
+            index
     }
 }

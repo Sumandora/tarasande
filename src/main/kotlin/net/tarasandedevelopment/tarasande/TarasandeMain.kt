@@ -33,11 +33,9 @@ import java.util.logging.Logger
  *  - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
  *  - Recode File Chooser
  *  - Wheel Menu
- *  - Prepend valid command args to error output
  *  - Text Radar Panel
  *  - CustomPayload and PacketLogger Panel
  *  - Smartclicking in KillAura
- *  - Blink: Readd simple tracker, too big errors
  *  - Click Pearl
  *  - PathFinder: make values
  *  - Render Profiler

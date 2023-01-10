@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.mc
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.isBlockResult
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.isBlockHitResult
 
 class ModuleFastBreak : Module("Fast break", "Makes blocks break faster", ModuleCategory.PLAYER) {
 
@@ -25,7 +25,7 @@ class ModuleFastBreak : Module("Fast break", "Makes blocks break faster", Module
             if (event.state == EventUpdate.State.PRE) {
                 val item = mc.player?.mainHandStack?.item
                 var suitableForBlock = false
-                if (mc.crosshairTarget.isBlockResult())
+                if (mc.crosshairTarget.isBlockHitResult())
                     if (item is ToolItem && item.isSuitableFor(mc.world?.getBlockState((mc.crosshairTarget as BlockHitResult).blockPos)))
                         suitableForBlock = true
                 if(!onlyWhenHoldingAppropriateTool.value || suitableForBlock)
