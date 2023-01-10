@@ -33,10 +33,8 @@ import java.util.logging.Logger
  *  - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
  *  - Recode File Chooser
  *  - Wheel Menu
- *  - Text Radar Panel
  *  - CustomPayload and PacketLogger Panel
  *  - Smartclicking in KillAura
- *  - Click Pearl
  *  - PathFinder: make values
  *  - Render Profiler
  *  - https://github.com/SirHilarious/WardenTools
