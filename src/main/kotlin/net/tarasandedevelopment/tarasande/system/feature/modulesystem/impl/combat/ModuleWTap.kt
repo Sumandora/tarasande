@@ -3,14 +3,13 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.comb
 import net.minecraft.entity.LivingEntity
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
-import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.event.EventInput
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.mc
-import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCategory.COMBAT) {
 
@@ -47,16 +46,16 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
             }
         }
 
-        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (PlayerUtil.movementKeys.contains(event.keyBinding)) {
+        registerEvent(EventInput::class.java, 10000) { event ->
+            if (event.input == mc.player?.input) {
                 if (changeBinds) {
                     when {
                         mode.isSelected(0) -> {
-                            event.pressed = false
+                            event.movementForward = 0.0f
                         }
 
                         mode.isSelected(1) -> {
-                            event.pressed = !event.pressed
+                            event.movementForward *= -1.0f
                         }
                     }
                 }

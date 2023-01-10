@@ -21,7 +21,6 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.*
 
 
@@ -288,7 +287,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             }
             if (rotation == null) {
                 val rad = Math.toRadians(((PlayerUtil.getMoveDirection()) / 45.0).roundToInt() * 45.0) - PI / 2
-                println(Math.toDegrees(rad))
                 var targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, mc.player?.pos!! + Vec3d(cos(rad), 0.0, sin(rad)) * 0.3)
 
                 val diagonal = abs(round(mc.player?.yaw!! / 90) * 90 - mc.player?.yaw!!) > 22.5
@@ -354,13 +352,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 }
                 if (!hasBlock) {
                     if (!silent.isSelected(0)) {
-                        val blockSlot =
-                            mc.player?.inventory?.main?.subList(0, 9)?.
-                            withIndex()?.
-                            filter { it.value.item is BlockItem && isBlockItemValid(it.value.item as BlockItem) }?.
-                            minByOrNull { it.value.count }?.
-                            index
-
+                        val blockSlot = PlayerUtil.findSlot { it.value.item is BlockItem && isBlockItemValid(it.value.item as BlockItem) }
                         if (blockSlot != null) {
                             mc.player?.inventory?.selectedSlot = blockSlot
                         } else return@registerEvent

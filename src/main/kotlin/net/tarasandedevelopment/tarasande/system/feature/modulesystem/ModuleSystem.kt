@@ -93,6 +93,7 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
             ModuleAntiCactus(),
             ModuleAutoArmor(),
             ModuleXCarry(),
+            ModuleClickPearl(),
 
             // Render
             ModuleESP(),

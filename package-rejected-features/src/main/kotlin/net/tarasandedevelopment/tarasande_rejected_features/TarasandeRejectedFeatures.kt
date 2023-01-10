@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande_rejected_features.information.*
+import net.tarasandedevelopment.tarasande_rejected_features.module.ModuleAutoRescuePlatform
 import net.tarasandedevelopment.tarasande_rejected_features.module.ModuleDeadByDaylightEscape
 import net.tarasandedevelopment.tarasande_rejected_features.module.ModuleFurnaceProgress
 import net.tarasandedevelopment.tarasande_rejected_features.module.ModuleRoundedMovement
@@ -16,7 +17,8 @@ class TarasandeRejectedFeatures : ClientModInitializer {
             TarasandeMain.managerModule().add(
                 ModuleDeadByDaylightEscape(),
                 ModuleRoundedMovement(),
-                ModuleFurnaceProgress()
+                ModuleFurnaceProgress(),
+                ModuleAutoRescuePlatform()
             )
 
             TarasandeMain.managerInformation().add(
