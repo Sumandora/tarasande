@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.feature.module.entity;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -24,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.*;
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 
     @Unique
-    private boolean tarasande_flight;
+    private boolean tarasande_flight = false;
 
     @Unique
     private float tarasande_flightSpeed;
@@ -41,20 +42,24 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;canSprint()Z"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;hasForwardMovement()Z")))
     public boolean hookNoSlowdown(ClientPlayerEntity clientPlayerEntity) {
-        ModuleNoSlowdown moduleNoSlowdown = TarasandeMain.Companion.managerModule().get(ModuleNoSlowdown.class);
-        if (moduleNoSlowdown.getEnabled()) {
-            if (moduleNoSlowdown.isActionEnabled(moduleNoSlowdown.getActions()))
-                return false;
+        if((Object) this == MinecraftClient.getInstance().player) {
+            ModuleNoSlowdown moduleNoSlowdown = TarasandeMain.Companion.managerModule().get(ModuleNoSlowdown.class);
+            if (moduleNoSlowdown.getEnabled()) {
+                if (moduleNoSlowdown.isActionEnabled(moduleNoSlowdown.getActions()))
+                    return false;
+            }
         }
         return clientPlayerEntity.isUsingItem();
     }
 
     @ModifyConstant(method = "tickMovement", constant = @Constant(floatValue = 0.2F))
     public float hookNoSlowdown(float original) {
-        ModuleNoSlowdown moduleNoSlowdown = TarasandeMain.Companion.managerModule().get(ModuleNoSlowdown.class);
-        if (moduleNoSlowdown.getEnabled()) {
-            if (moduleNoSlowdown.isActionEnabled(moduleNoSlowdown.getActions()))
-                return (float) moduleNoSlowdown.getSlowdown().getValue();
+        if((Object) this == MinecraftClient.getInstance().player) {
+            ModuleNoSlowdown moduleNoSlowdown = TarasandeMain.Companion.managerModule().get(ModuleNoSlowdown.class);
+            if (moduleNoSlowdown.getEnabled()) {
+                if (moduleNoSlowdown.isActionEnabled(moduleNoSlowdown.getActions()))
+                    return (float) moduleNoSlowdown.getSlowdown().getValue();
+            }
         }
         return original;
     }
@@ -62,12 +67,14 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;flying:Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;knockDownwards()V"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getJumpingMount()Lnet/minecraft/entity/JumpingMount;")))
     public boolean hookFlight(PlayerAbilities instance) {
         tarasande_flight = false;
-        tarasande_flightSpeed = (float) TarasandeMain.Companion.managerGrabber().getConstant(GrabberDefaultFlightSpeed.class);
-        ModuleFlight moduleFlight = TarasandeMain.Companion.managerModule().get(ModuleFlight.class);
-        if (moduleFlight.getEnabled() && moduleFlight.getMode().isSelected(0)) {
-            tarasande_flight = true;
-            tarasande_flightSpeed *= (float) moduleFlight.getFlightSpeed().getValue();
-            return true;
+        if((Object) this == MinecraftClient.getInstance().player) {
+            tarasande_flightSpeed = (float) TarasandeMain.Companion.managerGrabber().getConstant(GrabberDefaultFlightSpeed.class);
+            ModuleFlight moduleFlight = TarasandeMain.Companion.managerModule().get(ModuleFlight.class);
+            if (moduleFlight.getEnabled() && moduleFlight.getMode().isSelected(0)) {
+                tarasande_flight = true;
+                tarasande_flightSpeed *= (float) moduleFlight.getFlightSpeed().getValue();
+                return true;
+            }
         }
         return instance.flying;
     }
@@ -79,37 +86,45 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Override
     public void travel(Vec3d movementInput) {
-        boolean fallFlying = this.getFlag(Entity.FALL_FLYING_FLAG_INDEX);
+        if((Object) this == MinecraftClient.getInstance().player) {
+            boolean fallFlying = this.getFlag(Entity.FALL_FLYING_FLAG_INDEX);
 
-        boolean flying = getAbilities().flying;
-        float flySpeed = getAbilities().getFlySpeed();
+            boolean flying = getAbilities().flying;
+            float flySpeed = getAbilities().getFlySpeed();
 
-        if (tarasande_flight) {
-            getAbilities().flying = tarasande_flight;
-            getAbilities().setFlySpeed(tarasande_flightSpeed);
+            if (tarasande_flight) {
+                getAbilities().flying = tarasande_flight;
+                getAbilities().setFlySpeed(tarasande_flightSpeed);
+            }
+
+            super.travel(movementInput);
+
+            getAbilities().flying = flying;
+            getAbilities().setFlySpeed(flySpeed);
+
+            if (tarasande_flight)
+                this.setFlag(Entity.FALL_FLYING_FLAG_INDEX, fallFlying);
+        } else {
+            super.travel(movementInput);
         }
-
-        super.travel(movementInput);
-
-        getAbilities().flying = flying;
-        getAbilities().setFlySpeed(flySpeed);
-
-        if (tarasande_flight)
-            this.setFlag(Entity.FALL_FLYING_FLAG_INDEX, fallFlying);
     }
 
     @Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;shouldPause()Z"))
     public boolean hookPortalScreen(Screen instance) {
-        if (TarasandeMain.Companion.managerModule().get(ModulePortalScreen.class).getEnabled())
-            return true;
+        if((Object) this == MinecraftClient.getInstance().player) {
+            if (TarasandeMain.Companion.managerModule().get(ModulePortalScreen.class).getEnabled())
+                return true;
+        }
         return instance.shouldPause();
     }
 
     @Redirect(method = "isWalking", at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/Input;movementForward:F"))
     public float hookSprint(Input instance) {
-        ModuleSprint moduleSprint = TarasandeMain.Companion.managerModule().get(ModuleSprint.class);
-        if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
-            return instance.getMovementInput().length();
+        if((Object) this == MinecraftClient.getInstance().player) {
+            ModuleSprint moduleSprint = TarasandeMain.Companion.managerModule().get(ModuleSprint.class);
+            if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
+                return instance.getMovementInput().length();
+        }
         return instance.movementForward;
     }
 }

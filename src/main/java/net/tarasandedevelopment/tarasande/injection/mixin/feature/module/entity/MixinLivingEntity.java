@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.feature.module.entity;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -40,21 +41,23 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @ModifyConstant(method = "applyMovementInput", constant = @Constant(doubleValue = 0.2))
     public double hookFastClimb(double original) {
-        if (isClimbing()) {
-            ModuleFastClimb moduleFastClimb = TarasandeMain.Companion.managerModule().get(ModuleFastClimb.class);
-            if (moduleFastClimb.getEnabled())
-                original *= moduleFastClimb.getMultiplier().getValue();
-        }
+        if((Object) this == MinecraftClient.getInstance().player)
+            if (isClimbing()) {
+                ModuleFastClimb moduleFastClimb = TarasandeMain.Companion.managerModule().get(ModuleFastClimb.class);
+                if (moduleFastClimb.getEnabled())
+                    original *= moduleFastClimb.getMultiplier().getValue();
+            }
         return original;
     }
 
     @Inject(method = "fall", at = @At("HEAD"), cancellable = true)
     public void hookNoFall(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition, CallbackInfo ci) {
-        if(onGround) {
-            final ModuleNoFall moduleNoFall = TarasandeMain.Companion.managerModule().get(ModuleNoFall.class);
-            if(moduleNoFall.getEnabled() && moduleNoFall.getMode().isSelected(0) && moduleNoFall.getGroundSpoofMode().isSelected(1))
-                ci.cancel();
-        }
+        if((Object) this == MinecraftClient.getInstance().player)
+            if(onGround) {
+                final ModuleNoFall moduleNoFall = TarasandeMain.Companion.managerModule().get(ModuleNoFall.class);
+                if(moduleNoFall.getEnabled() && moduleNoFall.getMode().isSelected(0) && moduleNoFall.getGroundSpoofMode().isSelected(1))
+                    ci.cancel();
+            }
     }
 
     @Unique
@@ -68,9 +71,11 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
         if (tarasande_forceHasStatusEffect) {
             tarasande_forceHasStatusEffect = false;
         } else {
-            final ModuleNoStatusEffect moduleNoStatusEffect = TarasandeMain.Companion.managerModule().get(ModuleNoStatusEffect.class);
-            if (moduleNoStatusEffect.getEnabled() && moduleNoStatusEffect.getEffects().getList().contains(effect)) {
-                cir.setReturnValue(false);
+            if((Object) this == MinecraftClient.getInstance().player) {
+                final ModuleNoStatusEffect moduleNoStatusEffect = TarasandeMain.Companion.managerModule().get(ModuleNoStatusEffect.class);
+                if (moduleNoStatusEffect.getEnabled() && moduleNoStatusEffect.getEffects().getList().contains(effect)) {
+                    cir.setReturnValue(false);
+                }
             }
         }
     }
@@ -80,9 +85,11 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
         if (tarasande_forceGetStatusEffect) {
             tarasande_forceGetStatusEffect = false;
         } else {
-            final ModuleNoStatusEffect moduleNoStatusEffect = TarasandeMain.Companion.managerModule().get(ModuleNoStatusEffect.class);
-            if (moduleNoStatusEffect.getEnabled() && moduleNoStatusEffect.getEffects().getList().contains(effect)) {
-                cir.setReturnValue(null);
+            if((Object) this == MinecraftClient.getInstance().player) {
+                final ModuleNoStatusEffect moduleNoStatusEffect = TarasandeMain.Companion.managerModule().get(ModuleNoStatusEffect.class);
+                if (moduleNoStatusEffect.getEnabled() && moduleNoStatusEffect.getEffects().getList().contains(effect)) {
+                    cir.setReturnValue(null);
+                }
             }
         }
     }

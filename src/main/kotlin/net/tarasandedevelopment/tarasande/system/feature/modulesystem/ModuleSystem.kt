@@ -71,6 +71,7 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
             ModuleVehicleSpeed(),
             ModuleNoJumpCooldown(),
             ModuleWaterSpeed(),
+            ModuleTerrainSpeed(),
 
             // Player
             ModuleTimer(),
@@ -121,6 +122,7 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
             ModuleAutoRespawn(),
             ModuleIgnoreResourcePackHash(),
             ModuleTroubleInTerroristTown(),
+            ModuleNoPitchLimit(),
 
             // Ghost
             ModuleReach(),

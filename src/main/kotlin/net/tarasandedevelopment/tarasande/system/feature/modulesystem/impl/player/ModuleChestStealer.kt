@@ -124,7 +124,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 val distance = mousePos?.distanceSquared(displayPos)!!
                 mousePos = displayPos
                 val mapped = sqrt(distance).div(Vec2f(accessor.backgroundWidth.toFloat(), accessor.backgroundHeight.toFloat()).length())
-                nextDelay = (delay.minValue + (delay.maxValue - delay.minValue) * mapped).toLong()
+                nextDelay = delay.interpolate(mapped.toDouble()).toLong()
                 mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot?.id!!, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.QUICK_MOVE, mc.player)
                 event.doneInput = true
             }

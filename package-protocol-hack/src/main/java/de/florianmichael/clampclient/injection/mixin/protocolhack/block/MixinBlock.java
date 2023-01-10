@@ -39,6 +39,7 @@ import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.InfestedBlock;
+import net.minecraft.block.SoulSandBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

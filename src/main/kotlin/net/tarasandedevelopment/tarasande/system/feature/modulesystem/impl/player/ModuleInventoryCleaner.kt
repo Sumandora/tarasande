@@ -77,7 +77,7 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
                 val distance = mousePos?.distanceSquared(displayPos)!!
                 mousePos = displayPos
                 val mapped = sqrt(distance).div(Vec2f(accessor.backgroundWidth.toFloat(), accessor.backgroundHeight.toFloat()).length())
-                nextDelay = (delay.minValue + (delay.maxValue - delay.minValue) * mapped).toLong()
+                nextDelay = delay.interpolate(mapped.toDouble()).toLong()
                 mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot.id, 1 /* 1 = all; 0 = single */, SlotActionType.THROW, mc.player)
             }
         }

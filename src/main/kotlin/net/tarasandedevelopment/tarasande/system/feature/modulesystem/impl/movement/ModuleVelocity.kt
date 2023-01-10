@@ -35,9 +35,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
     private val changeDirection = object : ValueBoolean(this, "Change direction", false) {
         override fun isEnabled() = mode.isSelected(1)
     }
-    private val chance = object : ValueNumber(this, "Chance", 0.0, 75.0, 100.0, 1.0) {
-        override fun isEnabled() = mode.isSelected(2)
-    }
+    private val chance = ValueNumber(this, "Chance", 0.0, 75.0, 100.0, 1.0)
 
     init {
         addition.select(1) // Default, that's the most normal one
@@ -50,6 +48,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
 
     init {
         registerEvent(EventVelocity::class.java) { event ->
+            if (ThreadLocalRandom.current().nextInt(100) <= chance.value) return@registerEvent
             if (!packets.isSelected(event.packet.ordinal)) return@registerEvent
             if (event.velocityX == 0.0 && event.velocityY == 0.0 && event.velocityZ == 0.0)
                 return@registerEvent // wtf?
@@ -71,10 +70,8 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
                 }
 
                 else -> {
-                    if (ThreadLocalRandom.current().nextInt(100) <= chance.value) {
-                        lastVelocity = Vec3d(event.velocityX, event.velocityY, event.velocityZ)
-                        receivedKnockback = true
-                    }
+                    lastVelocity = Vec3d(event.velocityX, event.velocityY, event.velocityZ)
+                    receivedKnockback = true
                 }
             }
         }

@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.event
 
+import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.entity.Entity
 import net.minecraft.util.Hand
@@ -88,3 +89,21 @@ class EventChat(val chatMessage: String) : Event(true)
 class EventSwing(var hand: Hand) : Event(true)
 class EventEntityHurt(val entity: Entity) : Event(false)
 class EventCanSprint(var canSprint: Boolean) : Event(false)
+
+class EventVelocityMultiplier : Event {
+    var dirty = false
+        private set
+
+    val block: Block
+    var velocityMultiplier: Double
+        set(value) {
+            field = value
+            dirty = true
+        }
+
+    constructor(block: Block, velocityMultiplier: Double) : super(false) {
+        this.block = block
+        this.velocityMultiplier = velocityMultiplier
+        this.dirty = false
+    }
+}

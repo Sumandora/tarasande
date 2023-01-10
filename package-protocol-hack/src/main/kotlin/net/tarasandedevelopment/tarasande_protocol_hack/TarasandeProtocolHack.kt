@@ -113,29 +113,16 @@ class TarasandeProtocolHack : NativeProvider {
             add(EventSuccessfulLoad::class.java) {
                 TarasandeMain.managerInformation().apply {
                     add(object : Information("Via Version", "Protocol Version") {
-
-                        var version: ProtocolVersion? = null
-
-                        init {
-                            EventDispatcher.apply {
-                                add(EventConnectServer::class.java) {
-                                    version = VersionListEnum.RENDER_VERSIONS.map { it.protocol }.firstOrNull { it.version == ViaLoadingBase.getTargetVersion().originalVersion } ?: ProtocolVersion.unknown
-                                }
-                                add(EventDisconnect::class.java) { event ->
-                                    if(event.connection == mc.networkHandler?.connection)
-                                        version = null
-                                }
-                            }
+                        override fun getMessage(): String? {
+                            val userConnection = (mc.networkHandler?.connection as? IClientConnection_Protocol)?.protocolhack_getViaConnection() ?: return null
+                            return VersionListEnum.fromUserConnection(userConnection).getName()
                         }
-
-                        override fun getMessage() = version?.name
                     })
-
                     add(object : Information("Via Version", "Via Pipeline") {
                         override fun getMessage(): String? {
                             val names = (mc.networkHandler?.connection as? IClientConnection_Protocol)?.protocolhack_getViaConnection()?.protocolInfo?.pipeline?.pipes()?.map { p -> p.javaClass.simpleName } ?: return null
                             if (names.isEmpty()) return null
-                            return "\n" + names.subList(0, names.size - 1).joinToString("\n")
+                            return "\n" + names.joinToString("\n")
                         }
                     })
                     add(object : Information("Via Beta", VersionListEnum.r1_7_6tor1_7_10.getName() + " Entity Tracker") {

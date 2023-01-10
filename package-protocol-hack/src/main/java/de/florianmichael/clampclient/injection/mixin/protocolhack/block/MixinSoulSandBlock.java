@@ -25,12 +25,17 @@ import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoulSandBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.tarasandedevelopment.tarasande.event.EventVelocityMultiplier;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import su.mandora.event.EventDispatcher;
 
 @Mixin(SoulSandBlock.class)
 public class MixinSoulSandBlock extends Block {
@@ -46,7 +51,22 @@ public class MixinSoulSandBlock extends Block {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_14_4)) {
             final Vec3d velocity = entity.getVelocity();
 
-            entity.setVelocity(velocity.getX() * 0.4D, velocity.getY(), velocity.getZ() * 0.4D);
+            double multiplier = 0.4D;
+
+            EventVelocityMultiplier eventVelocityMultiplier = new EventVelocityMultiplier(Blocks.SOUL_SAND, multiplier);
+            EventDispatcher.INSTANCE.call(eventVelocityMultiplier);
+            if(eventVelocityMultiplier.getDirty())
+                multiplier = eventVelocityMultiplier.getVelocityMultiplier();
+
+
+            entity.setVelocity(velocity.getX() * multiplier, velocity.getY(), velocity.getZ() * multiplier);
         }
+    }
+
+    @Override
+    public float getVelocityMultiplier() {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_14_4))
+            return 1.0F;
+        return super.getVelocityMultiplier();
     }
 }

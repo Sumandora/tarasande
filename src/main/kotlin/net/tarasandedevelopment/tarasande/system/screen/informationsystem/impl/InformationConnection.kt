@@ -8,7 +8,6 @@ import su.mandora.event.EventDispatcher
 
 class InformationHandlers : Information("Connection", "Handlers") {
     override fun getMessage(): String? {
-        if (mc.networkHandler == null || mc.networkHandler?.connection == null) return null
         val names = (mc.networkHandler?.connection!!.channel ?: return null).pipeline().names()
         if (names.isEmpty()) return null
         return "\n" + names.subList(0, names.size - 1).joinToString("\n")

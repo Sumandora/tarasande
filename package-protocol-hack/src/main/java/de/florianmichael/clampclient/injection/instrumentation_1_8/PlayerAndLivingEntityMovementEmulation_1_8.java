@@ -29,6 +29,7 @@ import net.tarasandedevelopment.tarasande.event.*;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoWeb;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSafeWalk;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.Vec3dKt;
 import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack;
 import net.tarasandedevelopment.tarasande_protocol_hack.injection.accessor.IEventCollisionShape;
 import su.mandora.event.EventDispatcher;

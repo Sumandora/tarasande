@@ -25,7 +25,7 @@ class ClickSpeedUtil(private val owner: Any, enabledCallback: () -> Boolean, var
     private var targetedCPS = 0.0
 
     fun reset() {
-        targetedCPS = if (cps.minValue == cps.maxValue) cps.minValue else ThreadLocalRandom.current().nextDouble(cps.minValue, cps.maxValue)
+        targetedCPS = cps.randomNumber()
         for (clickMethod in clickMethods)
             clickMethod.reset(targetedCPS)
         timeUtil.reset()
@@ -33,7 +33,7 @@ class ClickSpeedUtil(private val owner: Any, enabledCallback: () -> Boolean, var
 
     fun getClicks(): Int {
         if (timeUtil.hasReached(1000L)) {
-            targetedCPS = if (cps.minValue == cps.maxValue) cps.minValue else ThreadLocalRandom.current().nextDouble(cps.minValue, cps.maxValue)
+            targetedCPS = cps.randomNumber()
             timeUtil.reset()
         }
 

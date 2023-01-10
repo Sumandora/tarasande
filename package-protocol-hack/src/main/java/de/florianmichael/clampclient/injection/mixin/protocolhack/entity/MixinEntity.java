@@ -86,14 +86,6 @@ public abstract class MixinEntity implements IEntity_Protocol {
             cir.setReturnValue(new BlockPos(pos.x, getBoundingBox().minY - 1, pos.z));
     }
 
-    @Redirect(method = "getVelocityMultiplier", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getVelocityMultiplier()F"))
-    public float redirectGetVelocityMultiplier(Block instance) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_14_4) && instance instanceof SoulSandBlock)
-            return 1.0F;
-
-        return instance.getVelocityMultiplier();
-    }
-
     @Inject(method = "setSwimming", at = @At("HEAD"), cancellable = true)
     private void onSetSwimming(boolean swimming, CallbackInfo ci) {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_2) && swimming)

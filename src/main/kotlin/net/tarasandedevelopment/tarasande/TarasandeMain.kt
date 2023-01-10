@@ -33,7 +33,6 @@ import java.util.logging.Logger
  *  - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
  *  - Recode File Chooser
  *  - Wheel Menu
- *  - Provide all possible gcd fixes to fix killaura
  *  - Prepend valid command args to error output
  *  - Text Radar Panel
  *  - CustomPayload and PacketLogger Panel
@@ -44,11 +43,8 @@ import java.util.logging.Logger
  *  - PathFinder: make values
  *  - Render Profiler
  *  - https://github.com/SirHilarious/WardenTools
- *  - No Soul Sand (Entity#getVelocityMultiplier)
  *  - Package DSL
- *  - No Pitch Limit
  *  - Implement GCD Preference in all modules, which profit from it
- *  - Utility function for 'if(a == b) a else random(a, b)'
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions

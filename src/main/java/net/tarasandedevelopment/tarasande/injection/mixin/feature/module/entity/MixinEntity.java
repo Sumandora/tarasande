@@ -1,11 +1,15 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.feature.module.entity;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc.ModuleNoPitchLimit;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleESP;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.awt.*;
@@ -21,6 +25,14 @@ public class MixinEntity {
             if (c != null)
                 cir.setReturnValue(c.getRGB());
         }
+    }
+
+    @Redirect(method = "changeLookDirection", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F"))
+    public float hookNoPitchLimit(float value, float min, float max) {
+        if((Object) this == MinecraftClient.getInstance().player)
+            if(TarasandeMain.Companion.managerModule().get(ModuleNoPitchLimit.class).getEnabled())
+                return value;
+        return MathHelper.clamp(value, min, max);
     }
 
 }

@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.system.base.valuesystem.impl
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import io.netty.util.internal.ThreadLocalRandom
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentNumberRange
 
@@ -18,5 +19,13 @@ open class ValueNumberRange(owner: Any, name: String, val min: Double, var minVa
         val jsonArray: JsonArray = jsonElement.asJsonArray
         minValue = jsonArray.get(0).asDouble
         maxValue = jsonArray.get(1).asDouble
+    }
+
+    fun randomNumber(): Double {
+        return if(minValue == maxValue) minValue else ThreadLocalRandom.current().nextDouble(minValue, maxValue)
+    }
+
+    fun interpolate(t: Double): Double {
+        return minValue + (maxValue - minValue) * t
     }
 }

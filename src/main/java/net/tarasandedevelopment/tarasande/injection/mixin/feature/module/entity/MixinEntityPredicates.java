@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.feature.module.entity;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
@@ -16,9 +17,11 @@ public class MixinEntityPredicates {
 
     @Inject(method = "canBePushedBy", at = @At("RETURN"), cancellable = true)
     private static void hookNoCramming(Entity entity, CallbackInfoReturnable<Predicate<Entity>> cir) {
-        ModuleNoCramming moduleNoCramming = TarasandeMain.Companion.managerModule().get(ModuleNoCramming.class);
-        if (moduleNoCramming.getEnabled())
-            cir.setReturnValue(o -> moduleNoCramming.getMode().isSelected(0));
+        if(entity == MinecraftClient.getInstance().player) {
+            ModuleNoCramming moduleNoCramming = TarasandeMain.Companion.managerModule().get(ModuleNoCramming.class);
+            if (moduleNoCramming.getEnabled())
+                cir.setReturnValue(o -> moduleNoCramming.getMode().isSelected(0));
+        }
     }
 
 }

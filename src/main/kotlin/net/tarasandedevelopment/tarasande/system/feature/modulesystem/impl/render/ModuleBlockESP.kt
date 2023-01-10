@@ -27,7 +27,7 @@ class ModuleBlockESP : Module("Block ESP", "Highlights blocks through walls", Mo
     }
     private val blocks = object : ValueRegistry<Block>(this, "Blocks", Registries.BLOCK) {
         override fun onChange() = onDisable()
-        override fun filter(key: Block) = key != Blocks.AIR
+        override fun filter(key: Block) = !key.defaultState.getOutlineShape(mc.world, BlockPos.ORIGIN).isEmpty
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey
     }
 

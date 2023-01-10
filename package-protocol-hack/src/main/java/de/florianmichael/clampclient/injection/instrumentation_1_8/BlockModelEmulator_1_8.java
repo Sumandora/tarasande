@@ -1,5 +1,7 @@
 package de.florianmichael.clampclient.injection.instrumentation_1_8;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
 import net.minecraft.block.*;
@@ -14,6 +16,8 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.tarasandedevelopment.tarasande.event.EventVelocityMultiplier;
+import su.mandora.event.EventDispatcher;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -163,7 +167,12 @@ public class BlockModelEmulator_1_8 {
         public Box getCollisionBoundingBox(World worldIn, BlockPos pos, BlockState state) {
             return null;
         }
-        public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, Entity entityIn) {}
+        public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, Entity entityIn) {
+            EventVelocityMultiplier eventVelocityMultiplier = new EventVelocityMultiplier(worldIn.getBlockState(pos).getBlock(), 1.0);
+            EventDispatcher.INSTANCE.call(eventVelocityMultiplier);
+            if(eventVelocityMultiplier.getDirty())
+                entityIn.setVelocity(entityIn.getVelocity().multiply(eventVelocityMultiplier.getVelocityMultiplier(), 1.0, eventVelocityMultiplier.getVelocityMultiplier()));
+        }
         public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, BlockState state, Entity entityIn) {}
         public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance) {
             ((ILivingEntity_Protocol) entityIn).protocolhack_getPlayerLivingEntityMovementWrapper().fall(fallDistance, 1.0F);
@@ -315,7 +324,12 @@ public class BlockModelEmulator_1_8 {
         @Override
         public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, Entity entityIn) {
             if (Math.abs(entityIn.getVelocity().y) < 0.1D && !entityIn.isSneaking()) {
-                final double d0 = 0.4D + Math.abs(entityIn.getVelocity().y) * 0.2D;
+                double d0 = 0.4D + Math.abs(entityIn.getVelocity().y) * 0.2D;
+
+                EventVelocityMultiplier eventVelocityMultiplier = new EventVelocityMultiplier(Blocks.SLIME_BLOCK, (float) d0);
+                EventDispatcher.INSTANCE.call(eventVelocityMultiplier);
+                if(eventVelocityMultiplier.getDirty())
+                    d0 = eventVelocityMultiplier.getVelocityMultiplier();
 
                 entityIn.getVelocity().x *= d0;
                 entityIn.getVelocity().z *= d0;
@@ -1217,8 +1231,15 @@ public class BlockModelEmulator_1_8 {
         public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, BlockState state, Entity entityIn) {
             super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
 
-            entityIn.getVelocity().x *= 0.4D;
-            entityIn.getVelocity().z *= 0.4D;
+            double multiplier = 0.4D;
+
+            EventVelocityMultiplier eventVelocityMultiplier = new EventVelocityMultiplier(Blocks.SOUL_SAND, (float) multiplier);
+            EventDispatcher.INSTANCE.call(eventVelocityMultiplier);
+            if(eventVelocityMultiplier.getDirty())
+                multiplier = eventVelocityMultiplier.getVelocityMultiplier();
+
+            entityIn.getVelocity().x *= multiplier;
+            entityIn.getVelocity().z *= multiplier;
         }
     }
 

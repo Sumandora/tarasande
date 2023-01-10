@@ -94,7 +94,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
     private val lockView = ValueBoolean(this, "Lock view", false)
     private val flex = ValueBoolean(this, "Flex", false)
-    private val flexTurn = object : ValueNumber(this, "Flex turn", 0.0, 90.0, 180.0, 1.0) {
+    private val flexTurn = object : ValueNumber(this, "Flex turn", 1.0, 90.0, 180.0, 1.0) {
         override fun isEnabled() = flex.value
     }
     private val flexHurtTime = object : ValueNumber(this, "Flex hurt time", 0.1, 0.5, 0.9, 0.1) {

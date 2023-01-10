@@ -1,13 +1,13 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.event.entity;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.SoulSandBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.util.math.Vec3d;
-import net.tarasandedevelopment.tarasande.event.EventEntityFlag;
-import net.tarasandedevelopment.tarasande.event.EventMovement;
-import net.tarasandedevelopment.tarasande.event.EventStep;
-import net.tarasandedevelopment.tarasande.event.EventVelocityYaw;
+import net.tarasandedevelopment.tarasande.event.*;
 import net.tarasandedevelopment.tarasande.injection.accessor.IEntity;
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.Vec3dKt;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import su.mandora.event.EventDispatcher;
 
 @Mixin(Entity.class)
@@ -92,5 +93,16 @@ public abstract class MixinEntity implements IEntity {
     public boolean tarasande_forceGetFlag(int index) {
         tarasande_forceFlagRetrieval = true;
         return getFlag(index);
+    }
+
+    @Redirect(method = "getVelocityMultiplier", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getVelocityMultiplier()F"))
+    public float hookEventVelocityMultiplier(Block instance) {
+        if((Object) this == MinecraftClient.getInstance().player) {
+            EventVelocityMultiplier eventVelocityMultiplier = new EventVelocityMultiplier(instance, instance.getVelocityMultiplier());
+            EventDispatcher.INSTANCE.call(eventVelocityMultiplier);
+            if(eventVelocityMultiplier.getDirty())
+                return (float) eventVelocityMultiplier.getVelocityMultiplier();
+        }
+        return instance.getVelocityMultiplier();
     }
 }

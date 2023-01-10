@@ -53,7 +53,7 @@ open class AccountMicrosoft : Account() {
 
     var azureApp: AzureAppPreset = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonListMultiplayerScreen::class.java).screenBetterSlotListAccountManager.managerAzureApp.list.first()
 
-    protected fun randomPort(): Int = ThreadLocalRandom.current().nextInt(0, Short.MAX_VALUE.toInt() * 2 /* unsigned */)
+    protected fun randomPort(): Int = ThreadLocalRandom.current().nextInt(Short.MAX_VALUE.toInt() * 2 /* unsigned */)
 
     protected open fun setupHttpServer(): ServerSocket {
         return try {
