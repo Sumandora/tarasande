@@ -10,6 +10,14 @@ version tarasande_version
 
 repositories {
     mavenCentral()
+    maven {
+        name = "opencollab-releases"
+        url = "https://repo.opencollab.dev/maven-releases/"
+    }
+    maven {
+        name = "opencollab-snapshots"
+        url = "https://repo.opencollab.dev/maven-snapshots/"
+    }
 }
 
 loom {
@@ -24,7 +32,39 @@ var libArray = [
         "com.github.FlorianMichael:ViaLoadingBase:${project.vialoadingbase_version}",
 
         "net.lenni0451.mcstructs:all:2.1.0",
-        "org.jsoup:jsoup:1.15.3"
+        "org.jsoup:jsoup:1.15.3",
+        "com.nukkitx.protocol:common:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-common:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v291:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v313:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v332:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v340:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v354:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v361:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v388:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v389:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v390:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v407:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v408:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v419:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v422:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v428:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v431:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v440:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v448:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v465:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v471:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v475:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v486:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v503:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v527:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v534:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v544:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v545:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v554:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v557:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v560:2.9.15-SNAPSHOT",
+        "com.nimbusds:nimbus-jose-jwt:9.13"
 ]
 
 this.remapJar {
