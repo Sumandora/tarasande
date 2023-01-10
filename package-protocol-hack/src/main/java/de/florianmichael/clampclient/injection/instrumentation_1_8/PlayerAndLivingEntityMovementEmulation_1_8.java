@@ -30,6 +30,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movem
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSafeWalk;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
 import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack;
+import net.tarasandedevelopment.tarasande_protocol_hack.injection.accessor.IEventCollisionShape;
 import su.mandora.event.EventDispatcher;
 
 import java.util.ArrayList;
@@ -432,16 +433,19 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
                         ArrayList<Box> shapes = new ArrayList<>();
                         BlockModelEmulator_1_8.getTransformerByBlock(iblockstate1.getBlock()).addCollisionBoxesToList(world, mutableBlockPos, iblockstate1, bb, shapes, entityIn);
 
-                        if(true /*Am I supposed to be legit?*/) {
+                        if(true /*Am I supposed to be unlegit?*/) {
                             // FULL LOTTO INCOMING $$$$
                             VoxelShape shape = VoxelShapes.empty();
-                            if(!shapes.isEmpty()) {
-                                shape = VoxelShapes.cuboid(shapes.get(0).offset(-mutableBlockPos.getX(), -mutableBlockPos.getY(), -mutableBlockPos.getZ()));
-                                shapes.remove(0);
+                            { // Generate the VoxelShape
+                                ArrayList<Box> shapes2 = new ArrayList<>(shapes);
+                                if(!shapes2.isEmpty()) {
+                                    shape = VoxelShapes.cuboid(shapes2.get(0).offset(-mutableBlockPos.getX(), -mutableBlockPos.getY(), -mutableBlockPos.getZ()));
+                                    shapes2.remove(0);
 
-                                while(!shapes.isEmpty()) {
-                                    shape = VoxelShapes.union(shape, VoxelShapes.cuboid(shapes.get(0).offset(-mutableBlockPos.getX(), -mutableBlockPos.getY(), -mutableBlockPos.getZ())));
-                                    shapes.remove(0);
+                                    while(!shapes2.isEmpty()) {
+                                        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(shapes2.get(0).offset(-mutableBlockPos.getX(), -mutableBlockPos.getY(), -mutableBlockPos.getZ())));
+                                        shapes2.remove(0);
+                                    }
                                 }
                             }
 
@@ -450,8 +454,12 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
 
                             shape = eventCollisionShape.getCollisionShape().offset(mutableBlockPos.getX(), mutableBlockPos.getY(), mutableBlockPos.getZ());
 
-                            if(!shape.isEmpty() && shape != VoxelShapes.empty()) {
-                                list.addAll(shape.getBoundingBoxes());
+                            if(((IEventCollisionShape) (Object) eventCollisionShape).isDirty()) {
+                                if(!shape.isEmpty() && shape != VoxelShapes.empty()) {
+                                    list.addAll(shape.getBoundingBoxes());
+                                }
+                            } else {
+                                list.addAll(shapes);
                             }
                         } else {
                             list.addAll(shapes);

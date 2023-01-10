@@ -8,9 +8,9 @@
     "MixinClientConnection",
     "MixinClientConnectionSubOne",
     "module.MixinPlayerScreenHandler",
+    "tarasande.MixinEventCollisionShape",
     "tarasande.MixinEventDispatcher",
     "tarasande.MixinEventScreenInput",
-    "tarasande.MixinModuleNoWebEventBlockCollision",
     "tarasande.MixinRotationCompanion",
     "vialoadingbase.MixinCustomViaConfig"
   ],
