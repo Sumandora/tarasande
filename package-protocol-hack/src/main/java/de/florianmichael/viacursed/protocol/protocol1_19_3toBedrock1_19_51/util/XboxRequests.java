@@ -1,4 +1,4 @@
-package de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.authentication;
+package de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.util;
 
 import com.google.common.primitives.Longs;
 import com.google.gson.Gson;

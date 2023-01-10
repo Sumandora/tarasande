@@ -4,17 +4,21 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import de.florianmichael.viacursed.ViaCursed;
+import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.baseprotocol.BedrockSessionBaseProtocol;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInitializer;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.local.LocalAddress;
 import io.netty.channel.local.LocalServerChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import org.jetbrains.annotations.NotNull;
 
+import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -25,12 +29,12 @@ public class LimboNettyServer {
 
     private ChannelFuture future;
 
-    public void startServer() {
-        ViaCursed.getPlatform().getLogger().log(Level.INFO, "Starting local ProxyServer...");
+    public void startServer(final InetSocketAddress targetAddress) {
+        BedrockSessionBaseProtocol.INSTANCE.getConnectionProgress().put(targetAddress, "Starting local Limbo NettyServer...");
 
         this.future = new ServerBootstrap().channel(LocalServerChannel.class).childHandler(new ChannelInitializer<>() {
             @Override
-            protected void initChannel(@NotNull Channel channel) {
+            protected void initChannel(Channel channel) {
                 channel.pipeline().addLast("decoder", new ByteToMessageDecoder() {
                     @Override
                     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {}
@@ -38,7 +42,7 @@ public class LimboNettyServer {
                 // It's impossible that the Limbo server sends packets, so we don't need an encoder here
             }
         }).group(Epoll.isAvailable() ? EPOLL_CHANNEL.get() : DEFAULT_CHANNEL.get()).localAddress(LocalAddress.ANY).bind().syncUninterruptibly();
-        ViaCursed.getPlatform().getLogger().log(Level.INFO, "Started local ProxyServer!");
+        BedrockSessionBaseProtocol.INSTANCE.getConnectionProgress().put(targetAddress, "Started local Limbo NettyServer!");
     }
 
     public void stopServer() {

@@ -15,12 +15,14 @@ import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.stora
 import io.netty.buffer.Unpooled;
 
 import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Level;
 
 public class BedrockSessionBaseProtocol extends AbstractSimpleProtocol {
 
     public static final BedrockSessionBaseProtocol INSTANCE = new BedrockSessionBaseProtocol();
+    public final Map<InetSocketAddress, String> connectionProgress = new HashMap<>(); // We can't use Storages since at the time we need this progress via didn't load at all
 
     public BedrockSessionBaseProtocol() {
         this.initialize();
@@ -39,9 +41,10 @@ public class BedrockSessionBaseProtocol extends AbstractSimpleProtocol {
 
                     final String hostname = wrapper.read(Type.STRING);
                     final int port = wrapper.read(Type.UNSIGNED_SHORT);
+                    final InetSocketAddress targetAddress = new InetSocketAddress(hostname, port);
 
-                    wrapper.user().put(new BedrockSessionStorage(wrapper.user(), new InetSocketAddress(hostname, port)));
-                    ViaCursed.getPlatform().getLogger().log(Level.INFO, "Created BedrockSessionStorage");
+                    wrapper.user().put(new BedrockSessionStorage(wrapper.user(), targetAddress));
+                    BedrockSessionBaseProtocol.INSTANCE.getConnectionProgress().put(targetAddress, "Created Bedrock session storage");
                 });
             }
         });
@@ -73,7 +76,7 @@ public class BedrockSessionBaseProtocol extends AbstractSimpleProtocol {
                             playersObject.addProperty("max", bedrockPong.getMaximumPlayerCount());
                             playersObject.addProperty("online", bedrockPong.getPlayerCount());
                             versionObject.addProperty("name", bedrockPong.getVersion());
-                            versionObject.addProperty("protocol", bedrockPong.getProtocolVersion());
+                            versionObject.addProperty("protocol", ViaCursed.getConfig().isSendNativeVersionInPing() ? ViaCursed.getConfig().getNativeVersion() : bedrockPong.getProtocolVersion());
                             rootObject.add("description", descriptionObject);
                             rootObject.add("players", playersObject);
                             rootObject.add("version", versionObject);
@@ -97,6 +100,10 @@ public class BedrockSessionBaseProtocol extends AbstractSimpleProtocol {
         });
 
         this.cancelServerbound(State.STATUS, ServerboundStatusPackets.PING_REQUEST.getId());
+    }
+
+    public Map<InetSocketAddress, String> getConnectionProgress() {
+        return connectionProgress;
     }
 
     @Override

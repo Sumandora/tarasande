@@ -38,6 +38,7 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.network.encryption.PacketDecryptor;
 import net.minecraft.network.encryption.PacketEncryptor;
 import net.minecraft.text.Text;
+import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.WolfHealthTracker1_14_4;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -84,7 +85,8 @@ public class MixinClientConnection implements IClientConnection_Protocol {
     @Redirect(method = "connect", at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/Bootstrap;connect(Ljava/net/InetAddress;I)Lio/netty/channel/ChannelFuture;"))
     private static ChannelFuture startLocalServer(Bootstrap instance, InetAddress inetHost, int inetPort) {
         if (ViaLoadingBase.getTargetVersion().getOriginalVersion() == CursedProtocols.ogBedrock1_19_51.getOriginalVersion()) {
-            return instance.connect(Protocol1_19_3toBedrock1_19_51.createLimboServer(new InetSocketAddress(inetHost, inetPort)));
+            TarasandeProtocolHack.Companion.setConnectedAddress(new InetSocketAddress(inetHost, inetPort));
+            return instance.connect(Protocol1_19_3toBedrock1_19_51.createLimboServer(TarasandeProtocolHack.Companion.getConnectedAddress()));
         }
         return instance.connect(inetHost, inetPort);
     }
