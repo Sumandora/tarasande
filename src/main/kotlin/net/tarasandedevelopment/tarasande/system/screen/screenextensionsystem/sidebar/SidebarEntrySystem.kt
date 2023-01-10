@@ -10,13 +10,14 @@ import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.panel.ClickableWidgetPanelSidebar
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
 class ManagerEntrySidebarPanel : Manager<EntrySidebarPanel>() {
 
     fun build(): ClickableWidgetPanelSidebar {
-        return PanelElements<ElementWidthValueComponent>("Sidebar", 120.0, 0.0).let {
+        return PanelElements<ElementWidthValueComponent>("Sidebar", 0.0, 0.0).let {
             val categories = ArrayList<String>()
             this@ManagerEntrySidebarPanel.list.forEach { entry ->
                 if (!categories.contains(entry.category)) {
@@ -32,6 +33,14 @@ class ManagerEntrySidebarPanel : Manager<EntrySidebarPanel>() {
                     it.elementList.addAll(each.createElements(it))
                 }
             }
+            var width = 0.0F
+            for (element in it.elementList) {
+                if (element.value !is ValueSpacer) continue
+                if (width < FontWrapper.getWidth(element.value.name)) {
+                    width = FontWrapper.getWidth(element.value.name).toFloat()
+                }
+            }
+            it.panelWidth = width.toDouble() + 4
             return@let ClickableWidgetPanelSidebar(it)
         }
     }
