@@ -2,11 +2,10 @@ package de.florianmichael.viacursed;
 
 import de.florianmichael.viacursed.base.ViaCursedConfig;
 import de.florianmichael.viacursed.base.ViaCursedPlatform;
-import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.baseprotocol.BedrockSessionBaseProtocol;
-
-import java.net.InetSocketAddress;
 
 public class ViaCursed {
+    public static final String PREFIX_1_7 = "§c[ViaCursed]§f ";
+
     private static ViaCursedPlatform platform;
     private static ViaCursedConfig config;
 
@@ -17,12 +16,6 @@ public class ViaCursed {
 
         ViaCursed.platform = platform;
         ViaCursed.config = config;
-    }
-
-    public static String getConnectionState_Bedrock_1_19_51(final InetSocketAddress currentConnection) {
-        if (!BedrockSessionBaseProtocol.INSTANCE.getConnectionProgress().containsKey(currentConnection)) return null;
-
-        return "§c[ViaCursed]§f " + BedrockSessionBaseProtocol.INSTANCE.getConnectionProgress().get(currentConnection);
     }
 
     public static ViaCursedPlatform getPlatform() {

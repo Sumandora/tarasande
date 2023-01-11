@@ -11,6 +11,7 @@ import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemPr
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
 import de.florianmichael.viabeta.ViaBeta
+import de.florianmichael.viabeta.api.BetaProtocolAccess
 import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.provider.ScreenStateProvider
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicMPPassProvider
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicWorldHeightProvider
@@ -19,9 +20,9 @@ import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.provider.OldA
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.provider.EncryptionProvider
 import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.provider.GameProfileFetcher
 import de.florianmichael.viacursed.ViaCursed
-import de.florianmichael.viacursed.api.CursedProtocols
+import de.florianmichael.viacursed.api.CursedProtocolAccess
+import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider
 import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.provider.OnlineModeAuthProvider
-import de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider
 import de.florianmichael.vialoadingbase.NativeProvider
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.util.VersionListEnum
@@ -132,19 +133,19 @@ class TarasandeProtocolHack : NativeProvider {
                         }
                     })
                     add(object : Information("Via Beta", VersionListEnum.r1_7_6tor1_7_10.getName() + " Entity Tracker") {
-                        override fun getMessage() = ViaBeta.getTrackedEntities1_7_6_10(viaConnection)
+                        override fun getMessage() = BetaProtocolAccess.getTrackedEntities1_7_6_10(viaConnection)
                     })
                     add(object : Information("Via Beta", VersionListEnum.r1_7_6tor1_7_10.getName() + " Virtual Holograms") {
-                        override fun getMessage() = ViaBeta.getVirtualHolograms1_7_6_10(viaConnection)
+                        override fun getMessage() = BetaProtocolAccess.getVirtualHolograms1_7_6_10(viaConnection)
                     })
                     add(object : Information("Via Beta", VersionListEnum.r1_5_2.getName() + " Entity Tracker") {
-                        override fun getMessage() = ViaBeta.getTrackedEntities1_5_2(viaConnection)
+                        override fun getMessage() = BetaProtocolAccess.getTrackedEntities1_5_2(viaConnection)
                     })
                     add(object : Information("Via Beta", VersionListEnum.r1_2_4tor1_2_5.getName() + " Entity Tracker") {
-                        override fun getMessage() = ViaBeta.getTrackedEntities1_2_4_5(viaConnection)
+                        override fun getMessage() = BetaProtocolAccess.getTrackedEntities1_2_4_5(viaConnection)
                     })
                     add(object : Information("Via Beta", VersionListEnum.r1_1.getName() + " World Seed") {
-                        override fun getMessage() = ViaBeta.getWorldSeed1_1(viaConnection)
+                        override fun getMessage() = BetaProtocolAccess.getWorldSeed1_1(viaConnection)
                     })
                     add(object : Information("Via Beta", VersionListEnum.c0_30cpe.getName() + " Message Types Extension") {
                         override fun getMessage(): String? {
@@ -227,18 +228,13 @@ class TarasandeProtocolHack : NativeProvider {
 
             add(EventScreenRender::class.java) {
                 if (viaConnection != null && (it.screen is DownloadingTerrainScreen || it.screen is ConnectScreen)) {
-                    if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.c0_28toc0_30)) {
-                        val levelProgress = ViaBeta.getWorldLoading_C_0_30(viaConnection)
-                        if (levelProgress != null) {
-                            FontWrapper.text(it.matrices, levelProgress, (it.screen.width / 2).toFloat(), (it.screen.height / 2 - 30).toFloat(), centered = true)
-                        }
-                    }
+                    var levelProgress: String? = null
 
-                    if (ViaLoadingBase.getTargetVersion() == VersionListEnum.rBedrock1_19_51) {
-                        val connectionProgress = ViaCursed.getConnectionState_Bedrock_1_19_51(connectedAddress)
-                        if (connectionProgress != null) {
-                            FontWrapper.text(it.matrices, connectionProgress, (it.screen.width / 2).toFloat(), (it.screen.height / 2 - 30).toFloat(), centered = true)
-                        }
+                    if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.c0_28toc0_30)) levelProgress = BetaProtocolAccess.getWorldLoading_C_0_30(viaConnection)
+                    if (ViaLoadingBase.getTargetVersion() == VersionListEnum.rBedrock1_19_51) levelProgress = CursedProtocolAccess.getConnectionState_Bedrock_1_19_51(connectedAddress)
+
+                    if (levelProgress != null) {
+                        FontWrapper.text(it.matrices, levelProgress, (it.screen.width / 2).toFloat(), (it.screen.height / 2 - 30).toFloat(), centered = true)
                     }
                 }
             }

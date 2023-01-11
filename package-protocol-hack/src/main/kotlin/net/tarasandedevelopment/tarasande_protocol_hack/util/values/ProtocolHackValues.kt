@@ -16,9 +16,6 @@ object ProtocolHackValues {
     // General
     val autoChangeValuesDependentOnVersion = ValueBoolean(this, "Auto change values dependent on version", true)
     val betaCraftAuth = ValueBoolean(this, "BetaCraft auth", true)
-    val autoDetectInBetaCraft2Go = object : ValueBoolean(this, "Auto detect in BetaCraft2Go", false) {
-        override fun isEnabled() = FabricLoader.getInstance().isModLoaded("beta-craft-2-go")
-    }
     val legacyTest = ValueBoolean(this, "Legacy Test", false)
 
     @Suppress("unused")

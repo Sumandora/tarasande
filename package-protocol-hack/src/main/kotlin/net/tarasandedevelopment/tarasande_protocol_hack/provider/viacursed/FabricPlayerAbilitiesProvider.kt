@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.provider.viacursed
 
-import de.florianmichael.viacursed.protocol.snapshot.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider
+import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues
 

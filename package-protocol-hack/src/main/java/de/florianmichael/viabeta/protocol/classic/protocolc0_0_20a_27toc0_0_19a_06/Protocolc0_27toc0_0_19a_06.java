@@ -5,12 +5,12 @@ import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
-import de.florianmichael.viabeta.api.LegacyVersionEnum;
 import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.ServerboundPacketsc0_28;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.data.ClassicBlocks;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.ClassicBlockRemapper;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.type.Typec0_30;
+import de.florianmichael.viabeta.protocol.classic.protocolc0_0_19a_06toc0_0_18a_02.Protocolc0_0_19a_06toc0_0_18a_02;
 import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_0_20a_27.ClientboundPacketsc0_20a;
 
 public class Protocolc0_27toc0_0_19a_06 extends AbstractProtocol<ClientboundPacketsc0_19a, ClientboundPacketsc0_20a, ServerboundPacketsc0_19a, ServerboundPacketsc0_28> {
@@ -52,7 +52,7 @@ public class Protocolc0_27toc0_0_19a_06 extends AbstractProtocol<ClientboundPack
         userConnection.put(new ClassicBlockRemapper(userConnection, previousRemapper.getMapper(), o -> {
             int block = previousRemapper.getReverseMapper().getInt(o);
 
-            if (LegacyVersionEnum.fromUserConnection(userConnection).equals(LegacyVersionEnum.c0_0_19a_06)) {
+            if (!userConnection.getProtocolInfo().getPipeline().contains(Protocolc0_0_19a_06toc0_0_18a_02.class)) {
                 if (block != ClassicBlocks.STONE && block != ClassicBlocks.DIRT && block != ClassicBlocks.WOOD && block != ClassicBlocks.SAPLING && block != ClassicBlocks.GRAVEL && block != ClassicBlocks.LOG && block != ClassicBlocks.LEAVES && block != ClassicBlocks.SPONGE && block != ClassicBlocks.GLASS) {
                     block = ClassicBlocks.STONE;
                 }

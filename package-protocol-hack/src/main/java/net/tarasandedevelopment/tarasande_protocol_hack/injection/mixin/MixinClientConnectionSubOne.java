@@ -28,7 +28,7 @@ import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_
 import de.florianmichael.viabeta.pre_netty.PreNettyConstants;
 import de.florianmichael.viabeta.pre_netty.handler.PreNettyPacketDecoder;
 import de.florianmichael.viabeta.pre_netty.handler.PreNettyPacketEncoder;
-import de.florianmichael.viabeta.protocol.protocol1_6_4.Protocol1_6_4;
+import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.baseprotocol.PreNettyBypassBaseProtocol;
 import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.baseprotocol.BedrockSessionBaseProtocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.netty.CustomViaDecodeHandler;
@@ -68,7 +68,7 @@ public class MixinClientConnectionSubOne {
 
             // ViaBeta (1.6.4 - c0.0.15a-1)
             if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_6_4)) {
-                user.getProtocolInfo().getPipeline().add(Protocol1_6_4.INSTANCE);
+                user.getProtocolInfo().getPipeline().add(PreNettyBypassBaseProtocol.INSTANCE);
 
                 channel.pipeline().addBefore("prepender", PreNettyConstants.ENCODER, new PreNettyPacketEncoder(user));
                 channel.pipeline().addBefore("splitter", PreNettyConstants.DECODER, new PreNettyPacketDecoder(user));

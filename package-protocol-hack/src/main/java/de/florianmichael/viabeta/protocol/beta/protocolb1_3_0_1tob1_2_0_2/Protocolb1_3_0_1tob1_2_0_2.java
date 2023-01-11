@@ -70,7 +70,7 @@ public class Protocolb1_3_0_1tob1_2_0_2 extends AbstractProtocol<ClientboundPack
                     }
 
                     switch (status) {
-                        case 0:
+                        case 0 -> {
                             final IdAndData blockBeingBroken = Objects.requireNonNull(wrapper.user().get(ChunkTracker.class)).getBlockNotNull(pos);
                             if (BlockHardnessList.canBeBrokenInstantly(blockBeingBroken)) {
                                 sendBlockDigPacket(wrapper.user(), (byte) 0, pos, facing);
@@ -82,18 +82,14 @@ public class Protocolb1_3_0_1tob1_2_0_2 extends AbstractProtocol<ClientboundPack
                             wrapper.user().put(new BlockDigStorage(wrapper.user(), pos, facing));
                             sendBlockDigPacket(wrapper.user(), (byte) 0, pos, facing);
                             sendBlockDigPacket(wrapper.user(), (byte) 1, pos, facing);
-                            break;
-                        case 1:
-                            sendBlockDigPacket(wrapper.user(), (byte) 2, pos, facing);
-                            break;
-                        case 2:
+                        }
+                        case 1 -> sendBlockDigPacket(wrapper.user(), (byte) 2, pos, facing);
+                        case 2 -> {
                             sendBlockDigPacket(wrapper.user(), (byte) 1, pos, facing);
                             sendBlockDigPacket(wrapper.user(), (byte) 3, pos, facing);
                             sendBlockDigPacket(wrapper.user(), (byte) 2, pos, facing);
-                            break;
-                        case 4:
-                            sendBlockDigPacket(wrapper.user(), (byte) 4, pos, facing);
-                            break;
+                        }
+                        case 4 -> sendBlockDigPacket(wrapper.user(), (byte) 4, pos, facing);
                     }
                 });
             }

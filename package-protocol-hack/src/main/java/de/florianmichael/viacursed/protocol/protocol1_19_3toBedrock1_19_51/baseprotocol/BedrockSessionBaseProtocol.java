@@ -58,8 +58,6 @@ public class BedrockSessionBaseProtocol extends AbstractSimpleProtocol {
                     if (bedrockSessionStorage == null) throw new IllegalStateException("BedrockSessionStorage is null?");
 
                     CompletableFuture.runAsync(() -> {
-                        final long startTime = System.currentTimeMillis();
-
                         bedrockSessionStorage.bedrockClient.ping(bedrockSessionStorage.targetAddress).whenComplete((bedrockPong, throwable) -> {
                             if (throwable != null) {
                                 throwable.printStackTrace();
@@ -82,12 +80,8 @@ public class BedrockSessionBaseProtocol extends AbstractSimpleProtocol {
                             rootObject.add("version", versionObject);
                             statusResponse.write(Type.STRING, rootObject.toString());
 
-                            final PacketWrapper pongResponse = new PacketWrapperImpl(ClientboundStatusPackets.PONG_RESPONSE, Unpooled.buffer(), wrapper.user());
-                            pongResponse.write(Type.LONG, System.currentTimeMillis() - startTime);
-
                             try {
                                 statusResponse.send(BedrockSessionBaseProtocol.class);
-                                pongResponse.send(BedrockSessionBaseProtocol.class);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -99,7 +93,22 @@ public class BedrockSessionBaseProtocol extends AbstractSimpleProtocol {
             }
         });
 
-        this.cancelServerbound(State.STATUS, ServerboundStatusPackets.PING_REQUEST.getId());
+        this.registerServerbound(State.STATUS, ServerboundStatusPackets.PING_REQUEST.getId(), ServerboundStatusPackets.PING_REQUEST.getId(), new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                map(Type.LONG); // Start time
+                handler(wrapper -> {
+                    final PacketWrapper pongResponse = new PacketWrapperImpl(ClientboundStatusPackets.PONG_RESPONSE, Unpooled.buffer(), wrapper.user());
+                    pongResponse.write(Type.LONG, wrapper.get(Type.LONG, 0));
+
+                    try {
+                        pongResponse.send(BedrockSessionBaseProtocol.class);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        });
     }
 
     public Map<InetSocketAddress, String> getConnectionProgress() {

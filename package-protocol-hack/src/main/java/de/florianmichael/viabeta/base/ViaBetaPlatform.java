@@ -5,8 +5,8 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.ViaBetaConfigImpl;
-import de.florianmichael.viabeta.api.EmptyBaseProtocol;
-import de.florianmichael.viabeta.api.LegacyVersionEnum;
+import de.florianmichael.viabeta.api.baseprotocol.EmptyBaseProtocol;
+import de.florianmichael.viabeta.api.LegacyProtocols;
 import de.florianmichael.viabeta.protocol.alpha.protocola1_0_16_2toa1_0_15.Protocola1_0_16_2toa1_0_15;
 import de.florianmichael.viabeta.protocol.alpha.protocola1_0_17_1_0_17_4toa1_0_16_2.Protocola1_0_17_1_0_17_4toa1_0_16_2;
 import de.florianmichael.viabeta.protocol.alpha.protocola1_1_0_1_1_2_1toa1_0_17_1_0_17_4.Protocola1_1_0_1_1_2_1toa1_0_17_1_0_17_4;
@@ -64,52 +64,52 @@ public interface ViaBetaPlatform {
         // Pre-Netty
         Via.getManager().getProtocolManager().registerProtocol(new Protocol1_8to1_7_6_10(), ProtocolVersion.v1_8, ProtocolVersion.v1_7_6);
         Via.getManager().getProtocolManager().registerProtocol(new Protocol1_7_6_10to1_7_2_5(), ProtocolVersion.v1_7_6, ProtocolVersion.v1_7_1);
-        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_7_2_5to1_6_4(), ProtocolVersion.v1_7_1, LegacyVersionEnum.r1_6_4.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_6_4to1_6_2(), LegacyVersionEnum.r1_6_4.getProtocol(), LegacyVersionEnum.r1_6_2.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_6_2to1_6_1(), LegacyVersionEnum.r1_6_2.getProtocol(), LegacyVersionEnum.r1_6_1.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_6_1to1_5_2(), LegacyVersionEnum.r1_6_1.getProtocol(), LegacyVersionEnum.r1_5_2.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_5_2to1_5_0_1(), LegacyVersionEnum.r1_5_2.getProtocol(), LegacyVersionEnum.r1_5tor1_5_1.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_5_0_1to1_4_6_7(), LegacyVersionEnum.r1_5tor1_5_1.getProtocol(), LegacyVersionEnum.r1_4_6tor1_4_7.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_4_6_7to1_4_4_5(), LegacyVersionEnum.r1_4_6tor1_4_7.getProtocol(), LegacyVersionEnum.r1_4_4tor1_4_5.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_4_4_5to1_4_2(), LegacyVersionEnum.r1_4_4tor1_4_5.getProtocol(), LegacyVersionEnum.r1_4_2.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_4_2to1_3_1_2(), LegacyVersionEnum.r1_4_2.getProtocol(), LegacyVersionEnum.r1_3_1tor1_3_2.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_3_1_2to1_2_4_5(), LegacyVersionEnum.r1_3_1tor1_3_2.getProtocol(), LegacyVersionEnum.r1_2_4tor1_2_5.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_2_4_5to1_2_1_3(), LegacyVersionEnum.r1_2_4tor1_2_5.getProtocol(), LegacyVersionEnum.r1_2_1tor1_2_3.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_2_1_3to1_1(), LegacyVersionEnum.r1_2_1tor1_2_3.getProtocol(), LegacyVersionEnum.r1_1.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_1to1_0_0_1(), LegacyVersionEnum.r1_1.getProtocol(), LegacyVersionEnum.r1_0_0tor1_0_1.getProtocol());
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_7_2_5to1_6_4(), ProtocolVersion.v1_7_1, LegacyProtocols.r1_6_4);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_6_4to1_6_2(), LegacyProtocols.r1_6_4, LegacyProtocols.r1_6_2);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_6_2to1_6_1(), LegacyProtocols.r1_6_2, LegacyProtocols.r1_6_1);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_6_1to1_5_2(), LegacyProtocols.r1_6_1, LegacyProtocols.r1_5_2);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_5_2to1_5_0_1(), LegacyProtocols.r1_5_2, LegacyProtocols.r1_5tor1_5_1);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_5_0_1to1_4_6_7(), LegacyProtocols.r1_5tor1_5_1, LegacyProtocols.r1_4_6tor1_4_7);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_4_6_7to1_4_4_5(), LegacyProtocols.r1_4_6tor1_4_7, LegacyProtocols.r1_4_4tor1_4_5);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_4_4_5to1_4_2(), LegacyProtocols.r1_4_4tor1_4_5, LegacyProtocols.r1_4_2);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_4_2to1_3_1_2(), LegacyProtocols.r1_4_2, LegacyProtocols.r1_3_1tor1_3_2);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_3_1_2to1_2_4_5(), LegacyProtocols.r1_3_1tor1_3_2, LegacyProtocols.r1_2_4tor1_2_5);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_2_4_5to1_2_1_3(), LegacyProtocols.r1_2_4tor1_2_5, LegacyProtocols.r1_2_1tor1_2_3);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_2_1_3to1_1(), LegacyProtocols.r1_2_1tor1_2_3, LegacyProtocols.r1_1);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_1to1_0_0_1(), LegacyProtocols.r1_1, LegacyProtocols.r1_0_0tor1_0_1);
 
-        // Beta
-        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_0_0_1tob1_8_0_1(), LegacyVersionEnum.r1_0_0tor1_0_1.getProtocol(), LegacyVersionEnum.b1_8tob1_8_1.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_8_0_1tob1_7_0_3(), LegacyVersionEnum.b1_8tob1_8_1.getProtocol(), LegacyVersionEnum.b1_7tob1_7_3.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_7_0_3tob1_6_0_6(), LegacyVersionEnum.b1_7tob1_7_3.getProtocol(), LegacyVersionEnum.b1_6tob1_6_6.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_6_0_6tob1_5_0_2(), LegacyVersionEnum.b1_6tob1_6_6.getProtocol(), LegacyVersionEnum.b1_5tob1_5_2.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_5_0_2tob1_4_0_1(), LegacyVersionEnum.b1_5tob1_5_2.getProtocol(), LegacyVersionEnum.b1_4tob1_4_1.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_4_0_1tob1_3_0_1(), LegacyVersionEnum.b1_4tob1_4_1.getProtocol(), LegacyVersionEnum.b1_3tob1_3_1.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_3_0_1tob1_2_0_2(), LegacyVersionEnum.b1_3tob1_3_1.getProtocol(), LegacyVersionEnum.b1_2_0tob1_2_2.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_2_0_2tob1_1_2(), LegacyVersionEnum.b1_2_0tob1_2_2.getProtocol(), LegacyVersionEnum.b1_1_2.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_1_2tob1_0_1_1(), LegacyVersionEnum.b1_1_2.getProtocol(), LegacyVersionEnum.b1_0tob1_1_1.getProtocol());
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_0_0_1tob1_8_0_1(), LegacyProtocols.r1_0_0tor1_0_1, LegacyProtocols.b1_8tob1_8_1);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_8_0_1tob1_7_0_3(), LegacyProtocols.b1_8tob1_8_1, LegacyProtocols.b1_7tob1_7_3);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_7_0_3tob1_6_0_6(), LegacyProtocols.b1_7tob1_7_3, LegacyProtocols.b1_6tob1_6_6);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_6_0_6tob1_5_0_2(), LegacyProtocols.b1_6tob1_6_6, LegacyProtocols.b1_5tob1_5_2);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_5_0_2tob1_4_0_1(), LegacyProtocols.b1_5tob1_5_2, LegacyProtocols.b1_4tob1_4_1);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_4_0_1tob1_3_0_1(), LegacyProtocols.b1_4tob1_4_1, LegacyProtocols.b1_3tob1_3_1);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_3_0_1tob1_2_0_2(), LegacyProtocols.b1_3tob1_3_1, LegacyProtocols.b1_2_0tob1_2_2);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_2_0_2tob1_1_2(), LegacyProtocols.b1_2_0tob1_2_2, LegacyProtocols.b1_1_2);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_1_2tob1_0_1_1(), LegacyProtocols.b1_1_2, LegacyProtocols.b1_0tob1_1_1);
 
-        // Alpha
-        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_0_1_1_1toa1_2_3_5_1_2_6(), LegacyVersionEnum.b1_0tob1_1_1.getProtocol(), LegacyVersionEnum.a1_2_3_5toa1_2_6.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_2_3_5_1_2_6toa1_2_3_1_2_3_4(), LegacyVersionEnum.a1_2_3_5toa1_2_6.getProtocol(), LegacyVersionEnum.a1_2_3toa1_2_3_4.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_2_3_1_2_3_4toa1_2_2(), LegacyVersionEnum.a1_2_3toa1_2_3_4.getProtocol(), LegacyVersionEnum.a1_2_2.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_2_2toa1_2_0_1_2_1_1(), LegacyVersionEnum.a1_2_2.getProtocol(), LegacyVersionEnum.a1_2_0toa1_2_1_1.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_2_0_1_2_1_1toa1_1_0_1_1_2_1(), LegacyVersionEnum.a1_2_0toa1_2_1_1.getProtocol(), LegacyVersionEnum.a1_1_0toa1_1_2_1.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_1_0_1_1_2_1toa1_0_17_1_0_17_4(), LegacyVersionEnum.a1_1_0toa1_1_2_1.getProtocol(), LegacyVersionEnum.a1_0_17toa1_0_17_4.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_0_17_1_0_17_4toa1_0_16_2(), LegacyVersionEnum.a1_0_17toa1_0_17_4.getProtocol(), LegacyVersionEnum.a1_0_16toa1_0_16_2.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_0_16_2toa1_0_15(), LegacyVersionEnum.a1_0_16toa1_0_16_2.getProtocol(), LegacyVersionEnum.a1_0_15.getProtocol());
+        Via.getManager().getProtocolManager().registerProtocol(new Protocolb1_0_1_1_1toa1_2_3_5_1_2_6(), LegacyProtocols.b1_0tob1_1_1, LegacyProtocols.a1_2_3_5toa1_2_6);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_2_3_5_1_2_6toa1_2_3_1_2_3_4(), LegacyProtocols.a1_2_3_5toa1_2_6, LegacyProtocols.a1_2_3toa1_2_3_4);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_2_3_1_2_3_4toa1_2_2(), LegacyProtocols.a1_2_3toa1_2_3_4, LegacyProtocols.a1_2_2);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_2_2toa1_2_0_1_2_1_1(), LegacyProtocols.a1_2_2, LegacyProtocols.a1_2_0toa1_2_1_1);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_2_0_1_2_1_1toa1_1_0_1_1_2_1(), LegacyProtocols.a1_2_0toa1_2_1_1, LegacyProtocols.a1_1_0toa1_1_2_1);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_1_0_1_1_2_1toa1_0_17_1_0_17_4(), LegacyProtocols.a1_1_0toa1_1_2_1, LegacyProtocols.a1_0_17toa1_0_17_4);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_0_17_1_0_17_4toa1_0_16_2(), LegacyProtocols.a1_0_17toa1_0_17_4, LegacyProtocols.a1_0_16toa1_0_16_2);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_0_16_2toa1_0_15(), LegacyProtocols.a1_0_16toa1_0_16_2, LegacyProtocols.a1_0_15);
 
-        // Classic
-        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_0_15toc0_30(), LegacyVersionEnum.a1_0_15.getProtocol(), LegacyVersionEnum.c0_28toc0_30.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocolc0_30toc0_30cpe(), LegacyVersionEnum.c0_28toc0_30.getProtocol(), LegacyVersionEnum.c0_30cpe.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocolc0_30toc0_27(), LegacyVersionEnum.c0_28toc0_30.getProtocol(), LegacyVersionEnum.c0_0_20ac0_27.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocolc0_27toc0_0_19a_06(), LegacyVersionEnum.c0_0_20ac0_27.getProtocol(), LegacyVersionEnum.c0_0_19a_06.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocolc0_0_19a_06toc0_0_18a_02(), LegacyVersionEnum.c0_0_19a_06.getProtocol(), LegacyVersionEnum.c0_0_18a_02.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocolc0_0_18a_02toc0_0_16a_02(), LegacyVersionEnum.c0_0_18a_02.getProtocol(), LegacyVersionEnum.c0_0_16a_02.getProtocol());
-        Via.getManager().getProtocolManager().registerProtocol(new Protocolc0_0_16a_02to0_0_15a_1(), LegacyVersionEnum.c0_0_16a_02.getProtocol(), LegacyVersionEnum.c0_0_15a_1.getProtocol());
+        Via.getManager().getProtocolManager().registerProtocol(new Protocola1_0_15toc0_30(), LegacyProtocols.a1_0_15, LegacyProtocols.c0_28toc0_30);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocolc0_30toc0_27(), LegacyProtocols.c0_28toc0_30, LegacyProtocols.c0_0_20ac0_27);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocolc0_27toc0_0_19a_06(), LegacyProtocols.c0_0_20ac0_27, LegacyProtocols.c0_0_19a_06);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocolc0_0_19a_06toc0_0_18a_02(), LegacyProtocols.c0_0_19a_06, LegacyProtocols.c0_0_18a_02);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocolc0_0_18a_02toc0_0_16a_02(), LegacyProtocols.c0_0_18a_02, LegacyProtocols.c0_0_16a_02);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocolc0_0_16a_02to0_0_15a_1(), LegacyProtocols.c0_0_16a_02, LegacyProtocols.c0_0_15a_1);
+
+
+        // Special protocols
+        Via.getManager().getProtocolManager().registerProtocol(new Protocolc0_30toc0_30cpe(), LegacyProtocols.c0_28toc0_30, LegacyProtocols.c0_30cpe);
 
         // Base Protocols for bypassing r1.6.4 login
-        for (LegacyVersionEnum version : LegacyVersionEnum.values()) {
+        for (ProtocolVersion version : LegacyProtocols.PROTOCOLS) {
             Via.getManager().getProtocolManager().registerBaseProtocol(new EmptyBaseProtocol(), Range.singleton(version.getVersion()));
         }
     }

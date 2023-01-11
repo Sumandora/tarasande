@@ -45,7 +45,6 @@ import java.util.logging.Logger
  *  - Entity Dimensions
  *  - WindowClick in 1.16.5 is not fully remapped
  *  - ViaLegacy texture pack using ProtocolPatcher
- *  - Implement BetaCraft ServerList Browser (Maybe own mod)
  *  - Adjust fix World Border in c0.30c
  *  - Reimplement Item Splitter
  */
