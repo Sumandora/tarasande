@@ -254,9 +254,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 mc.player?.yaw = event.rotation.yaw
                 mc.player?.pitch = event.rotation.pitch
             }
-
-            event.minRotateToOriginSpeed = aimSpeed.minValue
-            event.maxRotateToOriginSpeed = aimSpeed.maxValue
         }
 
         registerEvent(EventTick::class.java) { event ->

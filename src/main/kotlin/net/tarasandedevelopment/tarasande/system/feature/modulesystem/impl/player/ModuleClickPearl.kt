@@ -30,7 +30,7 @@ class ModuleClickPearl : Module("Click pearl", "Auto switches to a ender pearl",
                     state = State.IDLE // FUCK
                     return@registerEvent
                 }
-                if(state == State.WAIT_FOR_BUTTON_RELEASE && !mc.options.useKey.isPressed) {
+                if(state == State.WAIT_FOR_BUTTON_RELEASE && !mc.options.useKey.pressed) {
                     state = State.IDLE
                     return@registerEvent
                 }
@@ -39,7 +39,7 @@ class ModuleClickPearl : Module("Click pearl", "Auto switches to a ender pearl",
                     state = State.WAIT_FOR_BUTTON_RELEASE
                     return@registerEvent
                 }
-                if(state == State.IDLE && mc.options.useKey.isPressed && mc.crosshairTarget.isMissHitResult()) {
+                if(state == State.IDLE && mc.options.useKey.pressed && mc.crosshairTarget.isMissHitResult() && mc.player?.isUsingItem == false) {
                     prevSlot = mc.player?.inventory?.selectedSlot
                     mc.player?.inventory?.selectedSlot = pearlSlot
                     state = State.WAIT_FOR_THROW

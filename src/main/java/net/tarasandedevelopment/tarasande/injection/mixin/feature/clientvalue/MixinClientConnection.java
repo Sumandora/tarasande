@@ -18,7 +18,7 @@ public class MixinClientConnection {
         }
     }
 
-    @Redirect(method = "exceptionCaught", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;debug(Ljava/lang/String;Ljava/lang/Throwable;)V", ordinal = 2))
+    @Redirect(method = "exceptionCaught", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;debug(Ljava/lang/String;Ljava/lang/Throwable;)V", ordinal = 2, remap = false))
     public void cancelWrongPacketHandling(Logger instance, String s, Throwable throwable) {
         if (!TarasandeMain.Companion.clientValues().getRemoveNettyExceptionHandling().isSelected(1)) {
             instance.debug(s, throwable);

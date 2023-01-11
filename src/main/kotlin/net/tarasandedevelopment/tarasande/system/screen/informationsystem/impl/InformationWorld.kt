@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.system.screen.informationsystem.impl
 import com.google.common.collect.Iterables
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
+import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventInvalidPlayerInfo
@@ -106,6 +107,6 @@ class InformationTextRadar : Information("World", "Text radar") {
         closestPlayers = closestPlayers.filter { it.first != mc.player }.filter { !TarasandeMain.managerModule().get(ModuleAntiBot::class.java).isBot(it.first) }
         closestPlayers = closestPlayers.subList(0, min(amount.value.toInt(), closestPlayers.size))
         if(closestPlayers.isEmpty()) return null
-        return "\n" + closestPlayers.joinToString("\n") { it.first.gameProfile.name + " (" + StringUtil.round(it.second, decimalPlaces.value.toInt()) + ")" }
+        return "\n" + closestPlayers.joinToString("\n") { Formatting.strip(it.first.gameProfile.name) + " (" + StringUtil.round(it.second, decimalPlaces.value.toInt()) + ")" }
     }
 }

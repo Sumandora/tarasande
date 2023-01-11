@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import com.mojang.authlib.GameProfile
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.extension.mc
@@ -21,6 +22,7 @@ import kotlin.math.roundToInt
 class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeight().toDouble()) {
 
     private val apiKey = ValueText(this, "API Key", "")
+    private val fields = ValueMode(this, "Fields", true, "Name", "Playtime", "Age", "Level", "Final-Kill/Death Ratio", "Winstreak", "Achievements", "API response length")
 
     private val blackList = ArrayList<GameProfile>()
     private val playerData = ConcurrentHashMap<GameProfile, Stats>()
@@ -100,13 +102,15 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
             return
         val newList = rowsToColumns(list)
         var xOffset = 0
-        for (col in newList) {
+        for ((colIndex, col) in newList.withIndex()) {
+            if(!fields.isSelected(colIndex))
+                continue
             var maxWidth = 0
-            for ((index, entry) in col.withIndex()) {
+            for ((rowIndex, entry) in col.withIndex()) {
                 val width = FontWrapper.getWidth(entry)
                 if (width > maxWidth)
                     maxWidth = width
-                drawString(matrices, entry, x + xOffset, y + index * FontWrapper.fontHeight())
+                drawString(matrices, entry, x + xOffset, y + rowIndex * FontWrapper.fontHeight())
             }
             if (alignment == Alignment.RIGHT)
                 xOffset -= maxWidth + 10

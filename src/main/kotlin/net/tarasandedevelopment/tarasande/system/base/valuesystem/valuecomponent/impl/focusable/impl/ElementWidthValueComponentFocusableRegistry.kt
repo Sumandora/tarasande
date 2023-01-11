@@ -19,10 +19,12 @@ import java.util.concurrent.CopyOnWriteArrayList
 class ElementWidthValueComponentFocusableRegistry(value: Value) : ElementWidthValueComponentFocusable(value) {
     //TODO
     private val textFieldWidget = TextFieldWidgetPlaceholder(mc.textRenderer, 0, 0, 40 * 2, FontWrapper.fontHeight() * 2 - 1, Text.of("Search"))
+    private val textFieldAccessor = textFieldWidget as ITextFieldWidget
 
     private val searchResults = CopyOnWriteArrayList<ValueRegistry.WrappedKey<*>>()
 
     init {
+        textFieldAccessor.tarasande_disableSelectionHighlight()
         textFieldWidget.setMaxLength(Int.MAX_VALUE)
         textFieldWidget.setDrawsBackground(false)
         textFieldWidget.setChangedListener { updateSearchResults() }
@@ -67,10 +69,10 @@ class ElementWidthValueComponentFocusableRegistry(value: Value) : ElementWidthVa
         matrices.push()
         matrices.translate(width - 40, FontWrapper.fontHeight() / 2.0F * (valueRegistry.list.size + 0.5F) + 2.0, 0.0)
         matrices.scale(0.5F, 0.5F, 1.0F)
-        if (textFieldWidget.isFocused) (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.clientValues().accentColor.getColor())
-        if (!value.isEnabled()) (textFieldWidget as ITextFieldWidget).tarasande_setColor(Color.white.darker().darker())
+        if (textFieldWidget.isFocused) textFieldAccessor.tarasande_setColor(TarasandeMain.clientValues().accentColor.getColor())
+        if (!value.isEnabled()) textFieldAccessor.tarasande_setColor(Color.white.darker().darker())
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
-        (textFieldWidget as ITextFieldWidget).tarasande_setColor(null)
+        textFieldAccessor.tarasande_setColor(null)
         matrices.pop()
 
         for ((index, key) in searchResults.withIndex()) {

@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventJump
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.RotationValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
@@ -12,7 +12,7 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MOVEMENT) {
 
     val allowBackwards = object : ValueBoolean(this, "Allow backwards", false) {
-        override fun isEnabled() = !TarasandeMain.clientValues().correctMovement.isSelected(1)
+        override fun isEnabled() = !RotationValues.correctMovement.isSelected(1)
     }
 
     init {

@@ -322,9 +322,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 mc.player?.yaw = event.rotation.yaw
                 mc.player?.pitch = event.rotation.pitch
             }
-
-            event.minRotateToOriginSpeed = aimSpeed.minValue
-            event.maxRotateToOriginSpeed = aimSpeed.maxValue
         }
 
         registerEvent(EventAttack::class.java, 1001) { event ->

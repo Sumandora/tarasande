@@ -110,9 +110,6 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
             mc.player?.pitch = beginRotation?.pitch!!
             if (lockRotation.value && !event.dirty) {
                 event.rotation = beginRotation!!
-                // We return ourselves in onDisable
-                event.minRotateToOriginSpeed = 0.0
-                event.maxRotateToOriginSpeed = 0.0
             }
         }
 

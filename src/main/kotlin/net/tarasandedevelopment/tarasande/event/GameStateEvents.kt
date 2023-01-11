@@ -48,3 +48,5 @@ class EventInputSuggestions(val reader: StringReader) : Event(false) {
     var dispatcher: CommandDispatcher<CommandSource>? = null
     var commandSource: CommandSource? = null
 }
+
+class EventDoAttack : Event(true)

@@ -7,6 +7,7 @@ import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import java.util.*
 import java.util.concurrent.TimeUnit
+import java.util.regex.Pattern
 
 object StringUtil {
 
@@ -72,4 +73,11 @@ object StringUtil {
         }
         return str
     }
+
+    private val colorCodePattern = Pattern.compile("(?i)\u00a7[0-9A-F]")
+
+    fun strip(string: String): String {
+        return colorCodePattern.matcher(string).replaceAll("")
+    }
+
 }

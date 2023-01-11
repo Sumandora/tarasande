@@ -101,9 +101,6 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                     list = ArrayList(list.map { Pair(it.second.blockPos, it.second) })
 
                 event.rotation = RotationUtil.getRotations(mc.player?.eyePos!!, list[0].second.pos).correctSensitivity()
-
-                event.minRotateToOriginSpeed = 1.0
-                event.maxRotateToOriginSpeed = 1.0
             }
         }
 

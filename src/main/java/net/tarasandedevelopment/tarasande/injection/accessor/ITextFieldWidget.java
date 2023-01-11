@@ -8,4 +8,6 @@ public interface ITextFieldWidget {
 
     Color tarasande_getColor();
 
+    void tarasande_disableSelectionHighlight();
+
 }

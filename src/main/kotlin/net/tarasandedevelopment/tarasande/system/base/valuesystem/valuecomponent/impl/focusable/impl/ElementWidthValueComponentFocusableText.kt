@@ -26,8 +26,10 @@ class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueC
 
     //TODO
     val textFieldWidget = TextFieldWidgetPlaceholder(mc.textRenderer, 1, 1, 1, getHeight().toInt() - 1, Text.of((value as ValueText).name))
+    private val textFieldAccessor = textFieldWidget as ITextFieldWidget
 
     init {
+        textFieldAccessor.tarasande_disableSelectionHighlight()
         textFieldWidget.setMaxLength(Int.MAX_VALUE)
         textFieldWidget.setDrawsBackground(false)
     }
@@ -44,12 +46,12 @@ class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueC
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         textFieldWidget.width = (width * (1.0 / scale)).toInt()
         if (textFieldWidget.isFocused && value.isEnabled())
-            (textFieldWidget as ITextFieldWidget).tarasande_setColor(TarasandeMain.clientValues().accentColor.getColor())
+            textFieldAccessor.tarasande_setColor(TarasandeMain.clientValues().accentColor.getColor())
         else
             textFieldWidget.setCursorToEnd()
 
         if (!value.isEnabled()) {
-            (textFieldWidget as ITextFieldWidget).tarasande_setColor(Color.white.darker().darker())
+            textFieldAccessor.tarasande_setColor(Color.white.darker().darker())
             textFieldWidget.setTextFieldFocused(false)
         }
 
@@ -60,7 +62,7 @@ class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueC
         matrices.scale(scale, scale, 1.0F)
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
         matrices.pop()
-        (textFieldWidget as ITextFieldWidget).tarasande_setColor(null)
+        textFieldAccessor.tarasande_setColor(null)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

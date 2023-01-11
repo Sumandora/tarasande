@@ -5,8 +5,8 @@ import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.util.extension.mc
+import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import java.awt.Color
 
 object FontWrapper {
@@ -31,7 +31,7 @@ object FontWrapper {
     }
 
     fun textShadow(matrices: MatrixStack, text: String, x: Float, y: Float, color: Int = -1, scale: Float = 1F, offset: Float = 1.0F, centered: Boolean = false) {
-        text(matrices, Formatting.strip(text)!!, x + offset, y + offset, Color(color, true).darker().darker().darker().darker().rgb, scale, centered)
+        text(matrices, StringUtil.strip(text), x + offset, y + offset, Color(color, true).darker().darker().darker().darker().rgb, scale, centered)
         text(matrices, text, x, y, color, scale, centered)
     }
 

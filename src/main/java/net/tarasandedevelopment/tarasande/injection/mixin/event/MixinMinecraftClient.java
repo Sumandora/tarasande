@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.event.EventDispatcher;
 
 @Mixin(MinecraftClient.class)
@@ -98,5 +99,13 @@ public abstract class MixinMinecraftClient {
         EventShowsDeathScreen eventShowsDeathScreen = new EventShowsDeathScreen(instance.showsDeathScreen());
         EventDispatcher.INSTANCE.call(eventShowsDeathScreen);
         return eventShowsDeathScreen.getShowsDeathScreen();
+    }
+
+    @Inject(method = "doAttack", at = @At("HEAD"), cancellable = true)
+    public void hookEventDoAttack(CallbackInfoReturnable<Boolean> cir) {
+        EventDoAttack eventDoAttack = new EventDoAttack();
+        EventDispatcher.INSTANCE.call(eventDoAttack);
+        if(eventDoAttack.getCancelled())
+            cir.setReturnValue(false);
     }
 }

@@ -4,6 +4,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.DebugValues
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.PrivacyValues
+import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.RotationValues
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.TargetingValues
 import net.tarasandedevelopment.tarasande.feature.clientvalue.panel.PanelElementsClientValues
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
@@ -38,25 +39,17 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
     val allowAddressParsingForBlacklistedServers = ValueBoolean(this, "Allow address parsing for blacklisted servers", true)
     val removeNettyExceptionHandling = ValueMode(this, "Remove Netty exception handling", true, "Timeout", "Wrong packets")
 
-    // Combat
     init {
+        // Combat
         ValueButtonOwnerValues(this, "Targeting values", TargetingValues)
-    }
-
-    val correctMovement = ValueMode(this, "Correct movement", false, "Off", "Prevent Backwards Sprinting", "Direct", "Silent")
-
-    // Rendering
-    init {
+        // Rendering
         ValueButtonOwnerValues(this, "Blur values", TarasandeMain.managerBlur())
+        // Rotations
+        ValueButtonOwnerValues(this, "Rotation values", RotationValues)
     }
 
-    // Rotations
     val passEventsInScreens = ValueBoolean(this, "Pass events in screens", true)
     val unlockTicksPerFrame = ValueBoolean(this, "Unlock ticks per frame", false)
-    val updateRotationsWhenTickSkipping = ValueBoolean(this, "Update rotations when tick skipping", false)
-    val updateRotationsAccurately = object : ValueBoolean(this, "Update rotations accurately", true) {
-        override fun isEnabled() = updateRotationsWhenTickSkipping.value
-    }
 
     // Other
     init {

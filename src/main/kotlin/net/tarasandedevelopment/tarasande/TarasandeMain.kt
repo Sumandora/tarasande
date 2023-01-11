@@ -28,25 +28,22 @@ import java.util.logging.Logger
  *  - User configs
  *  - Crystal Aura
  *  - Change Name/Skin/Cape in Account Manager
- *  - Settings for HypixelBedwarsOverlay
  *  - Anti vanish: Tab completion
  *  - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
  *  - Recode File Chooser
- *  - Wheel Menu
  *  - CustomPayload and PacketLogger Panel
  *  - Smartclicking in KillAura
  *  - PathFinder: make values
  *  - Render Profiler
  *  - https://github.com/SirHilarious/WardenTools
  *  - Package DSL
- *  - Implement GCD Preference in all modules, which profit from it
+ *  - Regen & Zoot
+ *  - Auto Totem
+ *  - Blink: Cancelling; Update Velocity and Position
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions
- *  - Re-add PrivateMSGDetector in 1.19.3 -> 1.19.2
  *  - WindowClick in 1.16.5 is not fully remapped
- *  - MerchantScreenHandler#switchTo Crasher
- *  - Disable sneak slowdown in Sneak module
  *  - ViaLegacy texture pack using ProtocolPatcher
  *  - Implement BetaCraft ServerList Browser (Maybe own mod)
  *  - Adjust fix World Border in c0.30c

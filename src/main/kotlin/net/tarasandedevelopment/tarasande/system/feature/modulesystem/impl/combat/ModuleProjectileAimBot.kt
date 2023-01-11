@@ -100,9 +100,6 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
                 mc.player?.yaw = event.rotation.yaw
                 mc.player?.pitch = event.rotation.pitch
             }
-
-            event.minRotateToOriginSpeed = aimSpeed.minValue
-            event.maxRotateToOriginSpeed = aimSpeed.maxValue
         }
 
         registerEvent(EventRender3D::class.java) { event ->

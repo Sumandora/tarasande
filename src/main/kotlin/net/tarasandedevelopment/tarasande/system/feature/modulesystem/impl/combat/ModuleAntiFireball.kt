@@ -48,8 +48,6 @@ class ModuleAntiFireball : Module("Anti fireball", "Hits fireballs to turn them"
 
                 if (rotate.value) {
                     event.rotation = RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint).correctSensitivity()
-                    event.minRotateToOriginSpeed = 1.0
-                    event.maxRotateToOriginSpeed = 1.0
                 }
             }
         }

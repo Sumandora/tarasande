@@ -4,8 +4,8 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.RotationValues
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
@@ -15,9 +15,6 @@ import kotlin.math.*
 object RotationUtil {
 
     var fakeRotation: Rotation? = null
-
-    private var lastMinRotateToOriginSpeed = 1.0
-    private var lastMaxRotateToOriginSpeed = 1.0
 
     private var didRotate = false
 
@@ -32,20 +29,20 @@ object RotationUtil {
                 if (it.state != EventJump.State.PRE) return@add
                 if (goalMovementYaw != null) it.yaw = goalMovementYaw!!
                 if (fakeRotation != null)
-                    if (TarasandeMain.clientValues().correctMovement.isSelected(2) || TarasandeMain.clientValues().correctMovement.isSelected(3)) {
+                    if (RotationValues.correctMovement.isSelected(2) || RotationValues.correctMovement.isSelected(3)) {
                         it.yaw = fakeRotation!!.yaw
                     }
             }
             add(EventVelocityYaw::class.java, 9999) {
                 if (goalMovementYaw != null) it.yaw = goalMovementYaw!!
                 if (fakeRotation != null)
-                    if (TarasandeMain.clientValues().correctMovement.isSelected(2) || TarasandeMain.clientValues().correctMovement.isSelected(3))
+                    if (RotationValues.correctMovement.isSelected(2) || RotationValues.correctMovement.isSelected(3))
                         it.yaw = fakeRotation!!.yaw
             }
             add(EventInput::class.java, 9999) {
                 if (it.input == mc.player?.input)
                     if (fakeRotation != null)
-                        if (TarasandeMain.clientValues().correctMovement.isSelected(3)) {
+                        if (RotationValues.correctMovement.isSelected(3)) {
                             if (it.movementForward == 0.0F && it.movementSideways == 0.0F) return@add
 
                             val realYaw = goalMovementYaw ?: mc.player!!.yaw
@@ -126,8 +123,8 @@ object RotationUtil {
     }
 
     private fun simulateFakeRotationUpdate() {
-        if (TarasandeMain.clientValues().updateRotationsWhenTickSkipping.value)
-            if (TarasandeMain.clientValues().updateRotationsAccurately.value) {
+        if (RotationValues.updateRotationsWhenTickSkipping.value)
+            if (RotationValues.updateRotationsAccurately.value) {
                 for (i in 0..(1000.0 / RenderUtil.deltaTime).roundToInt())
                     updateFakeRotation(true)
             } else {
@@ -141,13 +138,11 @@ object RotationUtil {
             EventDispatcher.call(eventPollEvents)
             if (eventPollEvents.dirty) {
                 fakeRotation = eventPollEvents.rotation
-                lastMinRotateToOriginSpeed = eventPollEvents.minRotateToOriginSpeed
-                lastMaxRotateToOriginSpeed = eventPollEvents.maxRotateToOriginSpeed
             } else if (fakeRotation != null) {
                 val realRotation = Rotation(mc.player!!)
                 var rotation = Rotation(fakeRotation!!)
                 if (mc.player?.bodyTrackingIncrements == 0)
-                    rotation = rotation.smoothedTurn(realRotation, Pair(lastMinRotateToOriginSpeed, lastMaxRotateToOriginSpeed))
+                    rotation = rotation.smoothedTurn(realRotation, RotationValues.rotateToOriginSpeed)
                 rotation = rotation.correctSensitivity()
                 if (fakeRotation == rotation) {
                     val actualRotation = Rotation(mc.player!!).correctSensitivity()

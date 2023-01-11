@@ -21,6 +21,7 @@ class ElementWidthPlayer(val gameProfile: GameProfile, width: Double) : ElementW
         }
     }
     val textField = ElementWidthValueComponentFocusableText(value, 1.0F, false)
+    private val textFieldAccessor = textField.textFieldWidget as ITextFieldWidget
 
     private val defaultHeight = FontWrapper.fontHeight() * 1.5 + 2.0
     private var friendTime = 0L
@@ -29,6 +30,8 @@ class ElementWidthPlayer(val gameProfile: GameProfile, width: Double) : ElementW
     private val yOffset = (this.defaultHeight / 2.0 - FontWrapper.fontHeight() / 2.0 + 1.0).toInt()
 
     init {
+        textFieldAccessor.tarasande_disableSelectionHighlight()
+
         textField.textFieldWidget.x = xOffset
         textField.textFieldWidget.y = yOffset
     }
@@ -42,12 +45,11 @@ class ElementWidthPlayer(val gameProfile: GameProfile, width: Double) : ElementW
         RenderUtil.fill(matrices, 0.0, 0.0, this.width, this.getHeight(), Int.MIN_VALUE)
         if (friended) {
             textField.width = width - 20
-            val accessor = textField.textFieldWidget as ITextFieldWidget
-            accessor.tarasande_setColor(Color.white)
+            textFieldAccessor.tarasande_setColor(Color.white)
             matrices.push()
             textField.render(matrices, mouseX, mouseY, delta)
             matrices.pop()
-            accessor.tarasande_setColor(null)
+            textFieldAccessor.tarasande_setColor(null)
         } else {
             textField.textFieldWidget.setTextFieldFocused(false)
             FontWrapper.textShadow(matrices, gameProfile.name, xOffset.toFloat(), yOffset.toFloat(), -1)
