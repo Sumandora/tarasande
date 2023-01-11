@@ -1,7 +1,5 @@
 package de.florianmichael.clampclient.injection.instrumentation_1_8;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
 import net.minecraft.block.*;
@@ -76,7 +74,6 @@ public class BlockModelEmulator_1_8 {
         blockModelTransformer.put(Blocks.DRAGON_EGG, new DragonEggBlockModel());
         blockModelTransformer.put(Blocks.ENCHANTING_TABLE, new EnchantmentTableBlockModel());
         blockModelTransformer.put(Blocks.ENDER_CHEST, new EnderChestBlockModel());
-        blockModelTransformer.put(Blocks.FLOWER_POT, new FlowerPotBlockModel());
 
         blockModelTransformer.put(Blocks.COMPARATOR, new RedstoneComparatorAndRepeaterBlockModel());
         blockModelTransformer.put(Blocks.REPEATER, new RedstoneComparatorAndRepeaterBlockModel());
@@ -109,7 +106,6 @@ public class BlockModelEmulator_1_8 {
         blockModelTransformer.put(Blocks.VINE, new AirBlockModel());
         blockModelTransformer.put(Blocks.GRASS, new AirBlockModel());
         blockModelTransformer.put(Blocks.LAVA, new AirBlockModel());
-        blockModelTransformer.put(Blocks.FLOWER_POT, new AirBlockModel());
         blockModelTransformer.put(Blocks.VOID_AIR, new AirBlockModel());
 
         /* Torch */ for (Block block : Arrays.asList(
@@ -156,6 +152,17 @@ public class BlockModelEmulator_1_8 {
                 Blocks.PEONY, Blocks.ROSE_BUSH)) blockModelTransformer.put(block, new AirBlockModel());
 
         /* Stem */ for (Block block : Arrays.asList(Blocks.PUMPKIN_STEM, Blocks.MELON_STEM)) blockModelTransformer.put(block, new AirBlockModel());
+
+        /* Flower Pot*/ for (Block block : Arrays.asList(
+                Blocks.FLOWER_POT, Blocks.POTTED_OAK_SAPLING, Blocks.POTTED_SPRUCE_SAPLING,
+                Blocks.POTTED_BIRCH_SAPLING, Blocks.POTTED_JUNGLE_SAPLING, Blocks.POTTED_ACACIA_SAPLING,
+                Blocks.POTTED_DARK_OAK_SAPLING, Blocks.POTTED_MANGROVE_PROPAGULE, Blocks.POTTED_FERN,
+                Blocks.POTTED_DANDELION, Blocks.POTTED_POPPY, Blocks.POTTED_BLUE_ORCHID,
+                Blocks.POTTED_ALLIUM, Blocks.POTTED_AZURE_BLUET, Blocks.POTTED_RED_TULIP,
+                Blocks.POTTED_ORANGE_TULIP, Blocks.POTTED_WHITE_TULIP, Blocks.POTTED_PINK_TULIP,
+                Blocks.POTTED_OXEYE_DAISY, Blocks.POTTED_CORNFLOWER, Blocks.POTTED_LILY_OF_THE_VALLEY,
+                Blocks.POTTED_WITHER_ROSE, Blocks.POTTED_RED_MUSHROOM, Blocks.POTTED_BROWN_MUSHROOM,
+                Blocks.POTTED_DEAD_BUSH)) blockModelTransformer.put(block, new FlowerPotBlockModel());
     }
 
     // This Class represents a 1.8 Block

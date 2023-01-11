@@ -43,7 +43,7 @@ class ModuleCriticals : Module("Criticals", "Forces critical hits", ModuleCatego
                 }
 
                 mode.isSelected(2) -> {
-                    if (!mc.player?.isOnGround!!)
+                    if (!mc.player?.isOnGround!! || !mc.player?.lastOnGround!!)
                         return@registerEvent
                     mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.OnGroundOnly(false))
                 }
