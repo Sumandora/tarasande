@@ -132,12 +132,14 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
             ModuleBacktrace(),
             ModuleHitBox(),
             ModuleFastPlace(),
+            ModuleZoot(),
 
             // Exploit
             ModuleTickBaseManipulation(),
             ModuleResourcePackSpoofer(),
             ModuleAntiBindingCurse(),
-            ModulePortalScreen()
+            ModulePortalScreen(),
+            ModuleRegen()
         )
 
         panelSystem.add(PanelArrayList(this@ManagerModule))

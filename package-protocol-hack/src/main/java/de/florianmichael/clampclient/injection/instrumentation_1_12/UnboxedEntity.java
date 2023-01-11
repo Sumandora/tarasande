@@ -3,7 +3,7 @@ package de.florianmichael.clampclient.injection.instrumentation_1_12;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.tarasandedevelopment.tarasande.TarasandeMain;
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc.ModuleNoPitchLimit;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoPitchLimit;
 
 public class UnboxedEntity {
 

@@ -44,7 +44,7 @@ class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", Module
 
         registerEvent(EventUpdate::class.java) { event ->
             if (event.state == EventUpdate.State.POST) {
-                if (mode.isSelected(1) && mc.player?.fallDistance!! >= fallDistance.value) {
+                if (mode.isSelected(1) && mc.player?.fallDistance!! >= fallDistance.value && !mc.player?.lastOnGround!!) {
                     mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.OnGroundOnly(true))
                     if (resetFallDistance.value)
                         mc.player?.fallDistance = 0.0F

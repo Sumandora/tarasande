@@ -3,6 +3,7 @@ accessWidener v1 named
 accessible field net/minecraft/network/ClientConnection channel Lio/netty/channel/Channel;
 accessible field net/minecraft/client/network/ClientPlayerEntity lastYaw F
 accessible field net/minecraft/client/network/ClientPlayerEntity lastPitch F
+accessible field net/minecraft/client/network/ClientPlayerEntity lastOnGround Z
 accessible field net/minecraft/client/network/ClientPlayerEntity mountJumpStrength F
 accessible field net/minecraft/client/network/ClientPlayerEntity field_3938 I
 accessible field net/minecraft/client/network/ClientPlayerEntity autoJumpEnabled Z
