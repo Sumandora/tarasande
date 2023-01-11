@@ -4,13 +4,9 @@ import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.GraphOnlinePlayers
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.GraphPing
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.GraphTPS
-import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.GraphTickableCPS
-import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.GraphTickableFPS
-import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.GraphTickableMemory
-import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.GraphTickableMotion
+import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.*
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.connection.packet.GraphTickableRX
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.connection.packet.GraphTickableTX
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.connection.traffic.GraphTickableIncomingTraffic
@@ -37,7 +33,7 @@ class ManagerGraph(informationSystem: ManagerInformation, panelSystem: ManagerPa
             GraphTickablePitchDelta(),
             GraphTickableMotion(),
             GraphPing(),
-            GraphOnlinePlayers(),
+            GraphTickableOnlinePlayers(),
             GraphTickableMemory(),
             GraphTickableIncomingTraffic(),
             GraphTickableOutgoingTraffic(),
