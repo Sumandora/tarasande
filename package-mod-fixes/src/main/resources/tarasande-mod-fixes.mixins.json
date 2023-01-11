@@ -11,6 +11,7 @@
     "defaultRequire": 1
   },
   "mixins": [
+    "sodium.MixinChunkTracker",
     "sodium.MixinWorldSlice"
   ]
 }
