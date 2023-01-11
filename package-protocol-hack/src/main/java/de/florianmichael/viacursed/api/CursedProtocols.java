@@ -4,8 +4,8 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
 public class CursedProtocols {
 
-    // Other games
-    public static final ProtocolVersion ogBedrock1_19_51 = new ProtocolVersion(560 << 2, "Bedrock edition v1.19.51");
+    // Releases
+    public static final ProtocolVersion rBedrock1_19_51 = new ProtocolVersion(560 << 2, "Bedrock edition v1.19.51");
 
     // Snapshots
     public static final ProtocolVersion s20w14infinite = new ProtocolVersion(709, "20w14infinite");

@@ -13,6 +13,8 @@ import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.api.type.types.CustomByteType;
 import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.ClientboundPackets1_19_3;
+import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
+import com.viaversion.viaversion.protocols.protocol1_9to1_8.Protocol1_9To1_8;
 import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.api.data.BlockList1_6;
 import de.florianmichael.viabeta.api.model.ChunkCoord;
@@ -405,7 +407,7 @@ public class Protocolc0_30toc0_30cpe extends AbstractProtocol<ClientboundPackets
     private void sendChatMessage(final UserConnection user, final String msg) throws Exception {
         final PacketWrapper chatMessage = PacketWrapper.create(ClientboundPacketsc0_30cpe.CHAT_MESSAGE, user);
         chatMessage.write(Type.BYTE, (byte) 0); // sender id
-        chatMessage.write(Typec0_30.STRING, "&c[ViaBeta] " + msg); // message
+        chatMessage.write(Typec0_30.STRING, ViaBeta.PREFIX_C_0_30 + msg); // message
         chatMessage.send(Protocolc0_30toc0_30cpe.class);
     }
 

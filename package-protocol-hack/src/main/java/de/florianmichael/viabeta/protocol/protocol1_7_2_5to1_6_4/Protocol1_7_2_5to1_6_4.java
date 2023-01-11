@@ -27,7 +27,7 @@ import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.Client
 import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.api.model.IdAndData;
 import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
-import de.florianmichael.viabeta.protocol.protocol1_6_4.storage.HandshakeStorage;
+import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.storage.HandshakeStorage;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.provider.EncryptionProvider;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.rewriter.*;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.storage.*;

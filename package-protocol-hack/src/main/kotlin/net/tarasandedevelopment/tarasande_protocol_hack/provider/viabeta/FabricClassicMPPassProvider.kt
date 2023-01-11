@@ -6,7 +6,7 @@ import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.connection.UserConnection
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicMPPassProvider
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider
-import de.florianmichael.viabeta.protocol.protocol1_6_4.storage.HandshakeStorage
+import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.storage.HandshakeStorage
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues
 import java.net.InetAddress
 import java.net.URL

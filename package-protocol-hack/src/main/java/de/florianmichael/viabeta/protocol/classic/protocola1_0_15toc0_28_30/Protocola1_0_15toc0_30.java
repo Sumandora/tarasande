@@ -12,7 +12,7 @@ import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
-import de.florianmichael.viabeta.api.LegacyVersionEnum;
+import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.api.data.BlockList1_6;
 import de.florianmichael.viabeta.api.model.ChunkCoord;
 import de.florianmichael.viabeta.api.model.IdAndData;
@@ -36,6 +36,7 @@ import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.prov
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicWorldHeightProvider;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.*;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.type.Typec0_30;
+import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.Protocolc0_30toc0_30cpe;
 import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.storage.ExtBlockPermissionsStorage;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.Protocol1_8to1_7_6_10;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.Type1_7_6_10;
@@ -526,7 +527,7 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
 
     private void sendChatMessage(final UserConnection user, final String msg) throws Exception {
         final PacketWrapper message = PacketWrapper.create(ClientboundPacketsa1_0_15.CHAT_MESSAGE, user);
-        message.write(Typeb1_7_0_3.STRING, "§c[ViaBeta] " + msg); // message
+        message.write(Typeb1_7_0_3.STRING, ViaBeta.PREFIX_1_7 + msg); // message
         message.send(Protocola1_0_15toc0_30.class);
     }
 
@@ -554,7 +555,7 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
         userConnection.put(new ClassicBlockRemapper(userConnection, i -> ClassicBlocks.MAPPING.get(i), o -> {
             int block = ClassicBlocks.REVERSE_MAPPING.getInt(o);
 
-            if (!LegacyVersionEnum.fromUserConnection(userConnection).equals(LegacyVersionEnum.c0_30cpe)) {
+            if (!userConnection.getProtocolInfo().getPipeline().contains(Protocolc0_30toc0_30cpe.class)) {
                 if (block == ClassicBlocks.GRASS) block = ClassicBlocks.DIRT;
                 else if (block == ClassicBlocks.BEDROCK) block = ClassicBlocks.STONE;
                 else if (block == ClassicBlocks.STATIONARY_WATER) block = ClassicBlocks.BLUE_WOOL;

@@ -1,6 +1,8 @@
 package de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.release.genlayer;
 
-import de.florianmichael.viabeta.api.LegacyVersionEnum;
+import com.viaversion.viaversion.api.connection.UserConnection;
+import de.florianmichael.viabeta.protocol.beta.protocol1_0_0_1tob1_8_0_1.Protocol1_0_0_1tob1_8_0_1;
+import de.florianmichael.viabeta.protocol.protocol1_1to1_0_0_1.Protocol1_1to1_0_0_1;
 
 public abstract class GenLayer {
     private long worldGenSeed;
@@ -8,31 +10,31 @@ public abstract class GenLayer {
     private long chunkSeed;
     private long baseSeed;
 
-    public static GenLayer[] func_35497_a(final LegacyVersionEnum version, final long seed) {
+    public static GenLayer[] func_35497_a(final UserConnection user, final long seed) {
         GenLayer obj = new LayerIsland(1L);
         obj = new GenLayerZoomFuzzy(2000L, obj);
-        if (version.isNewerThanOrEqualTo(LegacyVersionEnum.r1_0_0tor1_0_1)) {
+        if (!user.getProtocolInfo().getPipeline().contains(Protocol1_0_0_1tob1_8_0_1.class)) {
             obj = new GenLayerIsland_r1_0(1L, obj);
         } else {
             obj = new GenLayerIsland_b1_8(1L, obj);
         }
         obj = new GenLayerZoom(2001L, obj);
-        if (version.isNewerThanOrEqualTo(LegacyVersionEnum.r1_0_0tor1_0_1)) {
+        if (!user.getProtocolInfo().getPipeline().contains(Protocol1_0_0_1tob1_8_0_1.class)) {
             obj = new GenLayerIsland_r1_0(2L, obj);
         } else {
             obj = new GenLayerIsland_b1_8(2L, obj);
         }
-        if (version.isNewerThanOrEqualTo(LegacyVersionEnum.r1_0_0tor1_0_1)) {
+        if (!user.getProtocolInfo().getPipeline().contains(Protocol1_0_0_1tob1_8_0_1.class)) {
             obj = new GenLayerSnow(2L, obj);
         }
         obj = new GenLayerZoom(2002L, obj);
-        if (version.isNewerThanOrEqualTo(LegacyVersionEnum.r1_0_0tor1_0_1)) {
+        if (!user.getProtocolInfo().getPipeline().contains(Protocol1_0_0_1tob1_8_0_1.class)) {
             obj = new GenLayerIsland_r1_0(3L, obj);
         } else {
             obj = new GenLayerIsland_b1_8(3L, obj);
         }
         obj = new GenLayerZoom(2003L, obj);
-        if (version.isNewerThanOrEqualTo(LegacyVersionEnum.r1_0_0tor1_0_1)) {
+        if (!user.getProtocolInfo().getPipeline().contains(Protocol1_0_0_1tob1_8_0_1.class)) {
             obj = new GenLayerIsland_r1_0(4L, obj);
             obj = new GenLayerMushroomIsland(5L, obj);
         } else {
@@ -49,20 +51,20 @@ public abstract class GenLayer {
         obj1 = new GenLayerSmooth(1000L, obj1);
         GenLayer obj2 = obj;
         obj2 = GenLayerZoom.func_35515_a(1000L, obj2, 0);
-        if (version.isNewerThanOrEqualTo(LegacyVersionEnum.r1_0_0tor1_0_1)) {
+        if (!user.getProtocolInfo().getPipeline().contains(Protocol1_0_0_1tob1_8_0_1.class)) {
             obj2 = new GenLayerVillageLandscape_r1_0(200L, obj2);
         } else {
             obj2 = new GenLayerVillageLandscape_b1_8(200L, obj2);
         }
         obj2 = GenLayerZoom.func_35515_a(1000L, obj2, 2);
-        if (version.isNewerThanOrEqualTo(LegacyVersionEnum.r1_1)) {
+        if (!user.getProtocolInfo().getPipeline().contains(Protocol1_1to1_0_0_1.class)) {
             obj2 = new GenLayerHills(1000L, obj2);
         }
         GenLayer obj3 = new GenLayerTemperature(obj2);
         GenLayer obj4 = new GenLayerDownfall(obj2);
         for (int i = 0; i < byte0; i++) {
             obj2 = new GenLayerZoom(1000 + i, obj2);
-            if (version.isNewerThanOrEqualTo(LegacyVersionEnum.r1_1)) {
+            if (!user.getProtocolInfo().getPipeline().contains(Protocol1_1to1_0_0_1.class)) {
                 if (i == 0) {
                     obj2 = new GenLayerIsland_r1_0(3L, obj2);
                 }
@@ -74,13 +76,13 @@ public abstract class GenLayer {
                 }
             } else {
                 if (i == 0) {
-                    if (version.isNewerThanOrEqualTo(LegacyVersionEnum.r1_0_0tor1_0_1)) {
+                    if (!user.getProtocolInfo().getPipeline().contains(Protocol1_0_0_1tob1_8_0_1.class)) {
                         obj2 = new GenLayerIsland_r1_0(3L, obj2);
                     } else {
                         obj2 = new GenLayerIsland_b1_8(3L, obj2);
                     }
                 }
-                if (version.isNewerThanOrEqualTo(LegacyVersionEnum.r1_0_0tor1_0_1)) {
+                if (!user.getProtocolInfo().getPipeline().contains(Protocol1_0_0_1tob1_8_0_1.class)) {
                     if (i == 0) {
                         obj2 = new GenLayerShore_r1_0(1000L, obj2);
                     }

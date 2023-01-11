@@ -1,7 +1,7 @@
 package de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.release;
 
+import com.viaversion.viaversion.api.connection.UserConnection;
 import de.florianmichael.viabeta.ViaBeta;
-import de.florianmichael.viabeta.api.LegacyVersionEnum;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.IWorldChunkManager;
 import de.florianmichael.viabeta.protocol.protocol1_2_1_3to1_1.biome.release.genlayer.GenLayer;
 
@@ -20,9 +20,9 @@ public class WorldChunkManager_r1_1 implements IWorldChunkManager {
         this.remapBasedOnColor = ViaBeta.getConfig().isRemapBasedOnColor();
     }
 
-    public WorldChunkManager_r1_1(final LegacyVersionEnum version, final long seed) {
+    public WorldChunkManager_r1_1(final UserConnection user, final long seed) {
         this();
-        GenLayer[] agenlayer = GenLayer.func_35497_a(version, seed);
+        GenLayer[] agenlayer = GenLayer.func_35497_a(user, seed);
         biomeIndexLayer = agenlayer[1];
         temperatureLayer = agenlayer[2];
         rainfallLayer = agenlayer[3];
