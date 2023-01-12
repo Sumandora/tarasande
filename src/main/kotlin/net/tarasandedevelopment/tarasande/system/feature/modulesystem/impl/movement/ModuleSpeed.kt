@@ -93,7 +93,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
         }
 
         registerEvent(EventJump::class.java) {
-            if(it.state == EventJump.State.POST)
+            if (it.state == EventJump.State.POST)
                 speed = PlayerUtil.calcBaseSpeed(speedValue.value)
         }
 

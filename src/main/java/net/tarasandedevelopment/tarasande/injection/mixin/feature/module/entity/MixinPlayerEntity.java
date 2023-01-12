@@ -14,7 +14,7 @@ public class MixinPlayerEntity {
 
     @Inject(method = "clipAtLedge", at = @At("HEAD"), cancellable = true)
     public void hookSafeWalk(CallbackInfoReturnable<Boolean> cir) {
-        if((Object) this == MinecraftClient.getInstance().player) {
+        if ((Object) this == MinecraftClient.getInstance().player) {
             ModuleSafeWalk moduleSafeWalk = TarasandeMain.Companion.managerModule().get(ModuleSafeWalk.class);
             if (moduleSafeWalk.getEnabled() && !moduleSafeWalk.getSneak().getValue())
                 cir.setReturnValue(true);

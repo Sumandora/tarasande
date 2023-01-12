@@ -36,7 +36,6 @@ import java.util.logging.Logger
  *  - https://github.com/SirHilarious/WardenTools
  *  - Package DSL
  *  - Auto Totem
- *  - Blink: Cancelling; Update Velocity and Position
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions

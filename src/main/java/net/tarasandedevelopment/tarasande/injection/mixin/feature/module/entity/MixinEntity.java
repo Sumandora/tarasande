@@ -29,8 +29,8 @@ public class MixinEntity {
 
     @Redirect(method = "changeLookDirection", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F"))
     public float hookNoPitchLimit(float value, float min, float max) {
-        if((Object) this == MinecraftClient.getInstance().player)
-            if(TarasandeMain.Companion.managerModule().get(ModuleNoPitchLimit.class).getEnabled())
+        if ((Object) this == MinecraftClient.getInstance().player)
+            if (TarasandeMain.Companion.managerModule().get(ModuleNoPitchLimit.class).getEnabled())
                 return value;
         return MathHelper.clamp(value, min, max);
     }

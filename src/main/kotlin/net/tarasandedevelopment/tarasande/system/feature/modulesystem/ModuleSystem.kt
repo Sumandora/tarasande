@@ -216,11 +216,11 @@ open class Module(val name: String, val description: String, val category: Strin
 }
 
 object ModuleCategory {
-    const val COMBAT    = "Combat"
-    const val MOVEMENT  = "Movement"
-    const val PLAYER    = "Player"
-    const val RENDER    = "Render"
-    const val MISC      = "Misc"
-    const val GHOST     = "Ghost"
-    const val EXPLOIT   = "Exploit"
+    const val COMBAT = "Combat"
+    const val MOVEMENT = "Movement"
+    const val PLAYER = "Player"
+    const val RENDER = "Render"
+    const val MISC = "Misc"
+    const val GHOST = "Ghost"
+    const val EXPLOIT = "Exploit"
 }

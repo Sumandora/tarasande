@@ -42,7 +42,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;canSprint()Z"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;hasForwardMovement()Z")))
     public boolean hookNoSlowdown(ClientPlayerEntity clientPlayerEntity) {
-        if((Object) this == MinecraftClient.getInstance().player) {
+        if ((Object) this == MinecraftClient.getInstance().player) {
             ModuleNoSlowdown moduleNoSlowdown = TarasandeMain.Companion.managerModule().get(ModuleNoSlowdown.class);
             if (moduleNoSlowdown.getEnabled()) {
                 if (moduleNoSlowdown.isActionEnabled(moduleNoSlowdown.getActions()))
@@ -54,7 +54,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @ModifyConstant(method = "tickMovement", constant = @Constant(floatValue = 0.2F))
     public float hookNoSlowdown(float original) {
-        if((Object) this == MinecraftClient.getInstance().player) {
+        if ((Object) this == MinecraftClient.getInstance().player) {
             ModuleNoSlowdown moduleNoSlowdown = TarasandeMain.Companion.managerModule().get(ModuleNoSlowdown.class);
             if (moduleNoSlowdown.getEnabled()) {
                 if (moduleNoSlowdown.isActionEnabled(moduleNoSlowdown.getActions()))
@@ -67,7 +67,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;flying:Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;knockDownwards()V"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getJumpingMount()Lnet/minecraft/entity/JumpingMount;")))
     public boolean hookFlight(PlayerAbilities instance) {
         tarasande_flight = false;
-        if((Object) this == MinecraftClient.getInstance().player) {
+        if ((Object) this == MinecraftClient.getInstance().player) {
             tarasande_flightSpeed = (float) TarasandeMain.Companion.managerGrabber().getConstant(GrabberDefaultFlightSpeed.class);
             ModuleFlight moduleFlight = TarasandeMain.Companion.managerModule().get(ModuleFlight.class);
             if (moduleFlight.getEnabled() && moduleFlight.getMode().isSelected(0)) {
@@ -86,7 +86,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Override
     public void travel(Vec3d movementInput) {
-        if((Object) this == MinecraftClient.getInstance().player) {
+        if ((Object) this == MinecraftClient.getInstance().player) {
             boolean fallFlying = this.getFlag(Entity.FALL_FLYING_FLAG_INDEX);
 
             boolean flying = getAbilities().flying;
@@ -111,7 +111,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;shouldPause()Z"))
     public boolean hookPortalScreen(Screen instance) {
-        if((Object) this == MinecraftClient.getInstance().player) {
+        if ((Object) this == MinecraftClient.getInstance().player) {
             if (TarasandeMain.Companion.managerModule().get(ModulePortalScreen.class).getEnabled())
                 return true;
         }
@@ -120,7 +120,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Redirect(method = "isWalking", at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/Input;movementForward:F"))
     public float hookSprint(Input instance) {
-        if((Object) this == MinecraftClient.getInstance().player) {
+        if ((Object) this == MinecraftClient.getInstance().player) {
             ModuleSprint moduleSprint = TarasandeMain.Companion.managerModule().get(ModuleSprint.class);
             if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
                 return instance.getMovementInput().length();

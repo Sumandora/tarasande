@@ -102,7 +102,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
             if (beginRotation == null || prevRotation == null || rotation == null)
                 onEnable()
 
-            if(prevRotation != null) {
+            if (prevRotation != null) {
                 rotation = rotation?.plus(event.rotation - prevRotation!!)
             }
 
@@ -181,7 +181,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
         }
 
         registerEvent(EventPacket::class.java) { event ->
-            if(event.type == EventPacket.Type.RECEIVE && event.packet is PlayerMoveC2SPacket)
+            if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerMoveC2SPacket)
                 beginRotation = RotationUtil.evaluateNewRotation(event.packet as PlayerPositionLookS2CPacket)
         }
     }

@@ -62,7 +62,7 @@ open class PanelServerInformation(private val owner: Any) : Panel("Server Inform
     fun createEntry() {
         // Prevent memory leaks
         val iterator = emulatedMultiplayerScreen.serverListPinger.clientConnections.iterator()
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             iterator.next().disconnect(Text.empty())
             iterator.remove()
         }

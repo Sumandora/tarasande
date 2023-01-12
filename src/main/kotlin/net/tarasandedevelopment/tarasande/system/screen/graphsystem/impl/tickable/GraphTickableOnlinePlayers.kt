@@ -1,9 +1,9 @@
-package net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl
+package net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable
 
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.GraphTickable
 import net.tarasandedevelopment.tarasande.util.extension.mc
 
-class GraphOnlinePlayers : GraphTickable("Server", "Online Players", 25, true) {
+class GraphTickableOnlinePlayers : GraphTickable("Server", "Online Players", 25, true) {
 
     private var oldPlayers = 0
 

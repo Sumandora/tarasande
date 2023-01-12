@@ -245,10 +245,6 @@ object PlayerUtil {
     }
 
     fun findSlot(filter: (IndexedValue<ItemStack>) -> Boolean): Int? {
-        return mc.player?.inventory?.main?.subList(0, 9)?.
-            withIndex()?.
-            filter { filter(it) }?.
-            minByOrNull { it.value.count }?.
-            index
+        return mc.player?.inventory?.main?.subList(0, 9)?.withIndex()?.filter { filter(it) }?.minByOrNull { it.value.count }?.index
     }
 }

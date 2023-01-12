@@ -22,7 +22,7 @@ open class ValueNumberRange(owner: Any, name: String, val min: Double, var minVa
     }
 
     fun randomNumber(): Double {
-        return if(minValue == maxValue) minValue else ThreadLocalRandom.current().nextDouble(minValue, maxValue)
+        return if (minValue == maxValue) minValue else ThreadLocalRandom.current().nextDouble(minValue, maxValue)
     }
 
     fun interpolate(t: Double): Double {

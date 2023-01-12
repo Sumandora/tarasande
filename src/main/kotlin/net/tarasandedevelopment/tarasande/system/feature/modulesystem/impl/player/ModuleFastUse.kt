@@ -65,7 +65,7 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
         }
     }
 
-    private val preventIllegalPacket = ValueBoolean(this,"Prevent illegal packet", true)
+    private val preventIllegalPacket = ValueBoolean(this, "Prevent illegal packet", true)
 
     init {
         registerEvent(EventUpdate::class.java) { event ->
@@ -75,9 +75,9 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
                     if (useActions.contains(usedStack.useAction) && actions.selected.contains(nameMap[usedStack.useAction!!])) {
                         val useTime = mc.player?.itemUseTime!!
                         if (useTime > values[usedStack.useAction]?.value!!) {
-                            if(preventIllegalPacket.value) { // This will lead to more flags, but prevents simple protocol checks
+                            if (preventIllegalPacket.value) { // This will lead to more flags, but prevents simple protocol checks
                                 var onGround = mc.player?.isOnGround!!
-                                if(mc.player?.lastOnGround!! == onGround) {
+                                if (mc.player?.lastOnGround!! == onGround) {
                                     onGround = !onGround // The server already knows this state, use a different one
                                 }
                                 for (i in 0 until useTime) {

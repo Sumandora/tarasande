@@ -141,12 +141,12 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                 }
 
                 // Entity position tracker
-                when(event.packet) {
+                when (event.packet) {
                     is EntityS2CPacket -> {
                         event.packet.apply {
                             if (positionChanged) {
                                 val entity = mc.world?.getEntityById(event.packet.id)
-                                if(entity != null) {
+                                if (entity != null) {
                                     val basePos = newPositions[entity] ?: entity.pos
                                     newPositions[entity] = basePos.add(TrackedPosition().withDelta(deltaX.toLong(), deltaY.toLong(), deltaZ.toLong()))
                                 }
@@ -156,7 +156,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
 
                     is EntityPositionS2CPacket -> {
                         val entity = mc.world?.getEntityById(event.packet.id)
-                        if(entity != null)
+                        if (entity != null)
                             newPositions[entity] = event.packet.let { Vec3d(it.x, it.y, it.z) }
                     }
 
@@ -215,7 +215,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
 
         registerEvent(EventRender3D::class.java) { event ->
             if (affectedPackets.isSelected(1) && !restrictPackets.anySelected()) {
-                if(mode.isSelected(3) && !shouldPulsate())
+                if (mode.isSelected(3) && !shouldPulsate())
                     return@registerEvent
                 newPositions.forEach { (entity, trackedPosition) ->
                     RenderUtil.blockOutline(event.matrices, entity.getDimensions(entity.pose).getBoxAt(trackedPosition), hitBoxColor.getColor().rgb)

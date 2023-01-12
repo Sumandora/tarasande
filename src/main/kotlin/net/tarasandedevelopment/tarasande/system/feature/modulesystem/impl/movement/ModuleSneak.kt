@@ -12,6 +12,7 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 class ModuleSneak : Module("Sneak", "Automatically sneaks", ModuleCategory.MOVEMENT) {
 
     private val activation = ValueMode(this, "Activation", false, "Manual", "When standing still", "Permanent")
+
     @Suppress("MemberVisibilityCanBePrivate") // protocol hack package
     val dontSlowdown = ValueBoolean(this, "Don't slowdown", false)
 

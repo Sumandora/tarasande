@@ -48,7 +48,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
     private fun isFocused(valueComponent: ElementWidthValueComponent) = valueComponent is ElementWidthValueComponentFocusable && valueComponent.isFocused()
 
     private fun isTextBoxFocused(): Boolean {
-        if(mc.currentScreen is ScreenBetterOwnerValues) {
+        if (mc.currentScreen is ScreenBetterOwnerValues) {
             return (mc.currentScreen as ScreenBetterOwnerValues).panel.elementList.any { isFocused(it) }
         }
         return TarasandeMain.managerPanel().list.any {

@@ -50,7 +50,7 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
 
             val screenHandler = mc.player?.playerScreenHandler!!
 
-            if(screenHandler.cursorStack?.isEmpty == false)
+            if (screenHandler.cursorStack?.isEmpty == false)
                 return@registerEvent
 
             if (mousePos == null) {

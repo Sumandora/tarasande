@@ -16,13 +16,13 @@ class ModuleWaterSpeed : Module("Water speed", "Modifies movement speed inside f
 
     init {
         registerEvent(EventMovement::class.java) { event ->
-            if(mc.player?.isTouchingWater == true || mc.player?.isInLava == true) {
+            if (mc.player?.isTouchingWater == true || mc.player?.isInLava == true) {
                 event.velocity = event.velocity.multiply(
                     horizontalMultiplier.value,
                     verticalMultiplier.value,
                     horizontalMultiplier.value
                 )
-                if(disablePushing.value && !PlayerUtil.isPlayerMoving()) {
+                if (disablePushing.value && !PlayerUtil.isPlayerMoving()) {
                     event.velocity = event.velocity.multiply(0.0, 1.0, 0.0)
                 }
             }

@@ -5,7 +5,6 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.ClickMethod
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
-import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.min
 
 class ClickSpeedUtil(private val owner: Any, enabledCallback: () -> Boolean, vararg excluded: Class<out ClickMethod>, namePrefix: String = "") {

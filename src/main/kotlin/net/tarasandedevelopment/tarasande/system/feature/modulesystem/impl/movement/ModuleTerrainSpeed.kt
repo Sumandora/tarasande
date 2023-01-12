@@ -20,7 +20,7 @@ class ModuleTerrainSpeed : Module("Terrain speed", "Makes you move faster on cer
 
     init {
         registerEvent(EventVelocityMultiplier::class.java) { event ->
-            if(blocks.list.contains(event.block))
+            if (blocks.list.contains(event.block))
                 event.velocityMultiplier = velocityMultiplier.value
         }
     }

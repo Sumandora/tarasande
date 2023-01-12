@@ -32,13 +32,13 @@ class ManagerGrabber : Manager<Grabber>() {
                 val zis = ZipInputStream(FileInputStream(f))
                 var entry: ZipEntry?
                 var correct = false
-                while(zis.nextEntry.also { entry = it } != null) {
-                    if(entry?.name.equals("META-INF/MANIFEST.MF")) {
+                while (zis.nextEntry.also { entry = it } != null) {
+                    if (entry?.name.equals("META-INF/MANIFEST.MF")) {
                         val main = Manifest(ByteArrayInputStream(zis.readAllBytes()))
                             .mainAttributes
                             .entries
                             .firstOrNull { it.key == Attributes.Name("Main-Class") }?.value
-                        if(main == "net.minecraft.client.Main") {
+                        if (main == "net.minecraft.client.Main") {
                             correct = true
                             zis.close()
                             break
@@ -53,8 +53,8 @@ class ManagerGrabber : Manager<Grabber>() {
         val zis = ZipInputStream(FileInputStream(minecraftJar)) // We have to read it again, because we don't know at which entry we again, manifest -should- always be the first, but JVM accepts it if violated
         val classNodes = ArrayList<ClassNode>()
         var zipEntry: ZipEntry?
-        while(zis.nextEntry.also { zipEntry = it } != null) {
-            if(zipEntry!!.name.endsWith(".class")) {
+        while (zis.nextEntry.also { zipEntry = it } != null) {
+            if (zipEntry!!.name.endsWith(".class")) {
                 val node = ClassNode()
                 ClassReader(zis.readAllBytes()).accept(node, ClassReader.EXPAND_FRAMES)
                 classNodes.add(node)
@@ -80,12 +80,12 @@ class ManagerGrabber : Manager<Grabber>() {
 abstract class Grabber(val targetedClass: String, private val expected: Any) {
     var constant: Any? = null
         get() {
-            if(field == null)
+            if (field == null)
                 error(javaClass.simpleName + " wasn't able to read their constant")
             return field
         }
         protected set(value) {
-            if(value != expected)
+            if (value != expected)
                 error(javaClass.simpleName + " read a different value than expected (Expected: $expected, but received $value)")
             field = value
         }

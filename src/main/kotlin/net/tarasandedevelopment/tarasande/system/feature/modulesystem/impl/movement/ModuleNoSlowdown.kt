@@ -37,9 +37,9 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
 
     fun isActionEnabled(setting: ValueMode): Boolean {
         val activeHand = PlayerUtil.getUsedHand()
-        val usedStack = if(activeHand != null) mc.player?.getStackInHand(activeHand) else null
+        val usedStack = if (activeHand != null) mc.player?.getStackInHand(activeHand) else null
         @Suppress("FoldInitializerAndIfToElvis", "RedundantSuppression") // That looks gross & idea moment
-        if(usedStack == null)
+        if (usedStack == null)
             return mc.player?.isUsingItem == true && setting.selected.contains(useActions[UseAction.NONE])
         return setting.selected.contains(useActions[usedStack.useAction!!])
     }

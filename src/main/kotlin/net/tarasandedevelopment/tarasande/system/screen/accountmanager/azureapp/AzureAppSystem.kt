@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp
 
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.impl.*
-import java.util.*
 
 class ManagerAzureApp : Manager<AzureAppPreset>() {
 
@@ -21,4 +20,4 @@ class ManagerAzureApp : Manager<AzureAppPreset>() {
 
 }
 
-open class AzureAppPreset(val name: String, val clientId: UUID, val scope: String, val redirectUri: String = "http://localhost:", val clientSecret: String? = null)
+open class AzureAppPreset(val name: String, val clientId: String, val scope: String, val redirectUri: String = "http://localhost:", val clientSecret: String? = null)

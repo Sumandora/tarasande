@@ -42,8 +42,8 @@ class Notifications {
         val moduleNotifications = ValueBoolean(this, "Module notifications", true)
 
         EventDispatcher.add(EventModuleStateSwitched::class.java) {
-            if(moduleNotifications.value)
-                TarasandeMain.notifications().notify(it.module.name + " is now " + if(it.module.enabled) "enabled" else "disabled")
+            if (moduleNotifications.value)
+                TarasandeMain.notifications().notify(it.module.name + " is now " + if (it.module.enabled) "enabled" else "disabled")
         }
 
 

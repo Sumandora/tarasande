@@ -154,7 +154,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
         FontWrapper.textShadow(matrices, status, width / 2.0F, 2 * FontWrapper.fontHeight() * 2.0F, -1, centered = true)
 
         screenBetterProxy.proxy?.apply {
-            FontWrapper.textShadow(matrices, socketAddress.address.hostAddress + ":" + socketAddress.port + if(ping != null) " (" + ping + "ms)" else "", 6F, 27F)
+            FontWrapper.textShadow(matrices, socketAddress.address.hostAddress + ":" + socketAddress.port + if (ping != null) " (" + ping + "ms)" else "", 6F, 27F)
         }
     }
 

@@ -106,7 +106,7 @@ class InformationTextRadar : Information("World", "Text radar") {
         var closestPlayers = mc.world?.players?.map { it to (mc.player?.distanceTo(it)?.toDouble() ?: 0.0) }?.sortedBy { it.second } ?: return null
         closestPlayers = closestPlayers.filter { it.first != mc.player }.filter { !TarasandeMain.managerModule().get(ModuleAntiBot::class.java).isBot(it.first) }
         closestPlayers = closestPlayers.subList(0, min(amount.value.toInt(), closestPlayers.size))
-        if(closestPlayers.isEmpty()) return null
+        if (closestPlayers.isEmpty()) return null
         return "\n" + closestPlayers.joinToString("\n") { Formatting.strip(it.first.gameProfile.name) + " (" + StringUtil.round(it.second, decimalPlaces.value.toInt()) + ")" }
     }
 }

@@ -17,7 +17,7 @@ public class MixinEntityPredicates {
 
     @Inject(method = "canBePushedBy", at = @At("RETURN"), cancellable = true)
     private static void hookNoCramming(Entity entity, CallbackInfoReturnable<Predicate<Entity>> cir) {
-        if(entity == MinecraftClient.getInstance().player) {
+        if (entity == MinecraftClient.getInstance().player) {
             ModuleNoCramming moduleNoCramming = TarasandeMain.Companion.managerModule().get(ModuleNoCramming.class);
             if (moduleNoCramming.getEnabled())
                 cir.setReturnValue(o -> moduleNoCramming.getMode().isSelected(0));
