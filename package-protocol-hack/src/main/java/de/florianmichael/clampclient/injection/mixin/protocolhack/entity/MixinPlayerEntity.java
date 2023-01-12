@@ -106,7 +106,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
     // I-EEE 754
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isSprinting()Z"))
     public boolean fixRoundingConvention(PlayerEntity instance) {
-        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return instance.isSprinting();
+        if (!ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue()) return instance.isSprinting();
 
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
             if (instance.isSprinting()) this.airStrafingSpeed = (float) ((double) this.airStrafingSpeed + (double) 0.02F * 0.3D);
@@ -118,7 +118,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
     // 1.8 does this randomly?
     @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setMovementSpeed(F)V", shift = At.Shift.BEFORE))
     public void adjustMissingBaseValue(CallbackInfo ci) {
-        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
+        if (!ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue()) return;
 
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
             getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue((double) abilities.getWalkSpeed());

@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande_protocol_hack.util.values
 
 import com.viaversion.viaversion.api.Via
 import de.florianmichael.vialoadingbase.util.VersionListEnum
-import net.fabricmc.loader.api.FabricLoader
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.util.extension.mc
@@ -16,7 +15,6 @@ object ProtocolHackValues {
     // General
     val autoChangeValuesDependentOnVersion = ValueBoolean(this, "Auto change values dependent on version", true)
     val betaCraftAuth = ValueBoolean(this, "BetaCraft auth", true)
-    val legacyTest = ValueBoolean(this, "Legacy Test", false)
 
     @Suppress("unused")
     val createViaDump = object : ValueButton(this, "Create via dump") {
@@ -48,6 +46,7 @@ object ProtocolHackValues {
     val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", VersionListEnum.r1_8.andOlder())
     val emulateSignGUIModification = ValueBooleanProtocol("Emulate sign gui modification", VersionListEnum.r1_8.andOlder())
     val sendIdlePacket = ValueBooleanProtocol("Send idle packet", VersionListEnum.r1_8 .. VersionListEnum.r1_3_1tor1_3_2)
+    val emulatePlayerMovement = ValueBooleanProtocol("Emulate player movement", VersionListEnum.r1_8.andOlder())
 }
 
 open class ValueBooleanProtocol(name: String, vararg val version: ProtocolRange) : ValueBoolean(ProtocolHackValues, "$name (" + formatRange(*version) + ")", false)

@@ -162,8 +162,8 @@ class TarasandeProtocolHack : NativeProvider {
                     cancelOpenPacket = object : ValueBoolean(get(ModuleInventoryMove::class.java), "Cancel open packet (" + VersionListEnum.r1_11_1to1_11_2.andOlder() + ")", false) {
                         override fun isEnabled() = ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_11_1to1_11_2)
                     }
-                    removeVelocityReset = object : ValueBoolean(get(ModuleNoWeb::class.java), "Cancel open packet (Legacy Test)", false) {
-                        override fun isEnabled() = ProtocolHackValues.legacyTest.value
+                    removeVelocityReset = object : ValueBoolean(get(ModuleNoWeb::class.java), "Cancel open packet (" + ProtocolHackValues.emulatePlayerMovement.name + ")", false) {
+                        override fun isEnabled() = ProtocolHackValues.emulatePlayerMovement.value
                     }
 
                     get(ModuleTickBaseManipulation::class.java).apply {

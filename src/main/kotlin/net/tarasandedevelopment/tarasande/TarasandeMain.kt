@@ -29,8 +29,6 @@ import java.util.logging.Logger
  *  - Change Name/Skin/Cape in Account Manager
  *  - Anti vanish: Tab completion
  *  - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
- *  - Recode File Chooser
- *  - CustomPayload and PacketLogger Panel
  *  - Smartclicking in KillAura
  *  - PathFinder: make values
  *  - Render Profiler
@@ -41,8 +39,6 @@ import java.util.logging.Logger
  * TODO | Protocol Hack:
  *  - Entity Dimensions
  *  - WindowClick in 1.16.5 is not fully remapped
- *  - ViaLegacy texture pack using ProtocolPatcher
- *  - Adjust fix World Border in c0.30c
  *  - Reimplement Item Splitter
  */
 object TarasandeMain {

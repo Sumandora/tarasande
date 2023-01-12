@@ -56,9 +56,7 @@ public class MixinKeyboardInput extends Input {
     // I-EEE 754
     @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/KeyboardInput;movementSideways:F", ordinal = 1, shift = At.Shift.BEFORE), cancellable = true)
     public void fixRoundingConvention(boolean slowDown, float f, CallbackInfo ci) {
-        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
-
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue()) {
             ci.cancel();
 
             this.movementSideways = (float)((double)this.movementSideways * 0.3D);
