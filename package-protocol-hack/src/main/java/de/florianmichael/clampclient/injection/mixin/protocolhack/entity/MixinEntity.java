@@ -27,8 +27,6 @@ import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Prot
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
-import net.minecraft.block.Block;
-import net.minecraft.block.SoulSandBlock;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.fluid.Fluid;
@@ -95,9 +93,7 @@ public abstract class MixinEntity implements IEntity_Protocol {
     // I-EEE 754
     @Inject(method = "setPosition(DDD)V", at = @At("HEAD"), cancellable = true)
     public void fixRoundingConvention(double x, double y, double z, CallbackInfo ci) {
-        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
-
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && (Object) this instanceof ClientPlayerEntity) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && (Object) this instanceof ClientPlayerEntity) {
             this.setPos(x, y, z);
             this.setBoundingBox(new Box(
                     x - (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH / 2.0F,
@@ -114,7 +110,7 @@ public abstract class MixinEntity implements IEntity_Protocol {
     @SuppressWarnings("deprecation")
     @Inject(method = "updateMovementInFluid", at = @At("HEAD"), cancellable = true)
     private void modifyFluidMovementBoundingBox(TagKey<Fluid> fluidTag, double d, CallbackInfoReturnable<Boolean> ci) {
-        if (ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue()) {
             ci.setReturnValue(false);
             return;
         }
@@ -197,9 +193,7 @@ public abstract class MixinEntity implements IEntity_Protocol {
 
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;updateWaterState()Z", shift = At.Shift.BEFORE))
     public void tickLegacyWaterMovement(CallbackInfo ci) {
-        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
-
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && (Object) this instanceof ClientPlayerEntity) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && (Object) this instanceof ClientPlayerEntity) {
             ((ILivingEntity_Protocol) this).protocolhack_getPlayerLivingEntityMovementWrapper().handleWaterMovement();
         }
     }

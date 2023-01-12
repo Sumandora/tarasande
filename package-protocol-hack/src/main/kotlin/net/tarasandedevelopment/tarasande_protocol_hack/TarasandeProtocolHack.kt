@@ -3,14 +3,12 @@ package net.tarasandedevelopment.tarasande_protocol_hack
 import com.viaversion.viaversion.ViaManagerImpl
 import com.viaversion.viaversion.api.connection.UserConnection
 import com.viaversion.viaversion.api.platform.providers.ViaProviders
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import com.viaversion.viaversion.api.protocol.version.VersionProvider
 import com.viaversion.viaversion.libs.gson.JsonArray
 import com.viaversion.viaversion.libs.gson.JsonObject
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
-import de.florianmichael.viabeta.ViaBeta
 import de.florianmichael.viabeta.api.BetaProtocolAccess
 import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.provider.ScreenStateProvider
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicMPPassProvider
@@ -19,7 +17,6 @@ import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.provider.EncryptionProvider
 import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.provider.GameProfileFetcher
-import de.florianmichael.viacursed.ViaCursed
 import de.florianmichael.viacursed.api.CursedProtocolAccess
 import de.florianmichael.viacursed.protocol.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider
 import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.provider.OnlineModeAuthProvider
@@ -35,7 +32,6 @@ import net.minecraft.client.gui.screen.DownloadingTerrainScreen
 import net.minecraft.client.gui.screen.GameMenuScreen
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
-import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -162,8 +158,8 @@ class TarasandeProtocolHack : NativeProvider {
                     cancelOpenPacket = object : ValueBoolean(get(ModuleInventoryMove::class.java), "Cancel open packet (" + VersionListEnum.r1_11_1to1_11_2.andOlder() + ")", false) {
                         override fun isEnabled() = ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_11_1to1_11_2)
                     }
-                    removeVelocityReset = object : ValueBoolean(get(ModuleNoWeb::class.java), "Cancel open packet (Legacy Test)", false) {
-                        override fun isEnabled() = ProtocolHackValues.legacyTest.value
+                    removeVelocityReset = object : ValueBoolean(get(ModuleNoWeb::class.java), "Cancel open packet (" + ProtocolHackValues.emulatePlayerMovement.name + ")", false) {
+                        override fun isEnabled() = ProtocolHackValues.emulatePlayerMovement.value
                     }
 
                     get(ModuleTickBaseManipulation::class.java).apply {

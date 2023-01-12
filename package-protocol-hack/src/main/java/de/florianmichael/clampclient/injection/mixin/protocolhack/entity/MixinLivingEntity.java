@@ -209,9 +209,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity_
 
     @Redirect(method = "jump", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isSprinting()Z"))
     public boolean fixMathHelperTable(LivingEntity instance) {
-        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return instance.isSprinting();
-
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue()) {
             if (instance.isSprinting()) {
                 float f = this.getYaw() * 0.017453292F;
                 // this casts are very important, please: don't delete them
@@ -225,9 +223,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity_
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isSleeping()Z", ordinal = 1))
     public boolean removeNewCheck(LivingEntity instance) {
-        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return instance.isSleeping();
-
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue()) {
             return false;
         }
         return instance.isSleeping();
@@ -235,12 +231,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity_
 
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;travel(Lnet/minecraft/util/math/Vec3d;)V"))
     public void replaceMovementCode(LivingEntity instance, Vec3d movementInput) {
-        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) {
-            instance.travel(movementInput);
-            return;
-        }
-
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && instance instanceof ClientPlayerEntity) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && instance instanceof ClientPlayerEntity) {
             a18PlayerAndLivingEntityMovementEmulation.movePlayerWithHeading(this.sidewaysSpeed, this.forwardSpeed);
         } else {
             instance.travel(movementInput);
@@ -249,8 +240,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity_
 
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;shouldSwimInFluids()Z"))
     public boolean removeNewSwimHandling(LivingEntity instance) {
-        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return shouldSwimInFluids();
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && (Object) this instanceof ClientPlayerEntity) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && (Object) this instanceof ClientPlayerEntity) {
             return false;
         }
         return shouldSwimInFluids();
@@ -261,16 +251,14 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity_
 
     @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;push(Ljava/lang/String;)V", ordinal = 2, shift = At.Shift.AFTER))
     public void trackJumpingCooldown(CallbackInfo ci) {
-        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && (Object) this instanceof ClientPlayerEntity) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && (Object) this instanceof ClientPlayerEntity) {
             protocolhack_previousJumpingCooldown = this.jumpingCooldown;
         }
     }
 
     @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;tickFallFlying()V", shift = At.Shift.BEFORE))
     public void replaceJumpingCooldown(CallbackInfo ci) {
-        if (!ProtocolHackValues.INSTANCE.getLegacyTest().getValue()) return;
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8) && (Object) this instanceof ClientPlayerEntity) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && (Object) this instanceof ClientPlayerEntity) {
             this.jumpingCooldown = protocolhack_previousJumpingCooldown;
             protocolhack_getPlayerLivingEntityMovementWrapper().customJump();
         }
