@@ -12,6 +12,7 @@ class ModuleNoWeb : Module("No web", "Prevents cobwebs' slowdown", ModuleCategor
 
     @Suppress("MemberVisibilityCanBePrivate") // protocol hack package
     val horizontalSlowdown = ValueNumber(this, "Horizontal slowdown", 0.0, 0.25, 1.0, 0.01)
+
     @Suppress("MemberVisibilityCanBePrivate") // protocol hack package
     val verticalSlowdown = ValueNumber(this, "Vertical slowdown", 0.0, 0.05, 1.0, 0.01)
 

@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.rend
 
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
-import net.minecraft.block.Blocks
 import net.minecraft.registry.Registries
 import net.minecraft.util.math.BlockPos
 import net.tarasandedevelopment.tarasande.event.EventRender3D

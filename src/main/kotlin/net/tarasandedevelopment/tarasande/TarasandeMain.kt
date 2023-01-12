@@ -37,9 +37,7 @@ import java.util.logging.Logger
  *  - Render Profiler
  *  - https://github.com/SirHilarious/WardenTools
  *  - Package DSL
- *  - Regen & Zoot
  *  - Auto Totem
- *  - Blink: Cancelling; Update Velocity and Position
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions

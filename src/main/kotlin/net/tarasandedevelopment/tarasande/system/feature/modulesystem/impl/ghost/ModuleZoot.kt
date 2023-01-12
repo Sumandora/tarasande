@@ -35,13 +35,13 @@ class ModuleZoot : Module("Zoot", "Removes fire status", ModuleCategory.GHOST) {
         state = State.IDLE
         prevSlot = null
         intendedSlot = null
-        if(resetTimer)
+        if (resetTimer)
             timer.reset()
     }
 
     init {
         registerEvent(EventPollEvents::class.java, 1002) { event ->
-            if(mc.player?.isOnFire != true) {
+            if (mc.player?.isOnFire != true) {
                 onEnable(false)
                 return@registerEvent
             }
@@ -54,12 +54,12 @@ class ModuleZoot : Module("Zoot", "Removes fire status", ModuleCategory.GHOST) {
                     }
                     event.rotation = Rotation(mc.player!!).withPitch(90.0F).correctSensitivity()
                     targetRotation = event.rotation
-                    if(intendedSlot != null && intendedSlot != -1)
+                    if (intendedSlot != null && intendedSlot != -1)
                         mc.player?.inventory?.selectedSlot = intendedSlot
                 }
 
                 State.SWITCH_BACK -> {
-                    if(intendedSlot != null && intendedSlot != -1)
+                    if (intendedSlot != null && intendedSlot != -1)
                         mc.player?.inventory?.selectedSlot = prevSlot
                     onEnable()
                     return@registerEvent
@@ -75,8 +75,8 @@ class ModuleZoot : Module("Zoot", "Removes fire status", ModuleCategory.GHOST) {
 
             var waterBucket = PlayerUtil.findSlot { it.value.isOf(Items.WATER_BUCKET) }
 
-            if(waterBucket == null)
-                if(mc.player?.offHandStack?.isOf(Items.WATER_BUCKET) == true)
+            if (waterBucket == null)
+                if (mc.player?.offHandStack?.isOf(Items.WATER_BUCKET) == true)
                     waterBucket = -1
 
             if (waterBucket != null) {
@@ -96,9 +96,9 @@ class ModuleZoot : Module("Zoot", "Removes fire status", ModuleCategory.GHOST) {
                     if (mc.player?.lastPitch != targetRotation?.pitch)
                         return@registerEvent
                     event.keyBinding.timesPressed++
-                    if(state == State.EXTINGUISH)
+                    if (state == State.EXTINGUISH)
                         state = State.RETRIEVE_WATER
-                    else if(state == State.RETRIEVE_WATER) {
+                    else if (state == State.RETRIEVE_WATER) {
                         state = State.SWITCH_BACK
                     }
                 }

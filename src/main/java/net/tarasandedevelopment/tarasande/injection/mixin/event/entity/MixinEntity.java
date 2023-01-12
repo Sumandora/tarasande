@@ -1,8 +1,6 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.event.entity;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoulSandBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MovementType;
@@ -18,7 +16,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import su.mandora.event.EventDispatcher;
 
 @Mixin(Entity.class)
@@ -97,10 +94,10 @@ public abstract class MixinEntity implements IEntity {
 
     @Redirect(method = "getVelocityMultiplier", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getVelocityMultiplier()F"))
     public float hookEventVelocityMultiplier(Block instance) {
-        if((Object) this == MinecraftClient.getInstance().player) {
+        if ((Object) this == MinecraftClient.getInstance().player) {
             EventVelocityMultiplier eventVelocityMultiplier = new EventVelocityMultiplier(instance, instance.getVelocityMultiplier());
             EventDispatcher.INSTANCE.call(eventVelocityMultiplier);
-            if(eventVelocityMultiplier.getDirty())
+            if (eventVelocityMultiplier.getDirty())
                 return (float) eventVelocityMultiplier.getVelocityMultiplier();
         }
         return instance.getVelocityMultiplier();

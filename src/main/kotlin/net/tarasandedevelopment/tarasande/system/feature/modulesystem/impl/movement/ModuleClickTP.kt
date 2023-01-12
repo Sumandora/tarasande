@@ -111,12 +111,12 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
     private fun optimizePath(path: ArrayList<Vec3d>) {
         val iterator = path.iterator()
         var previous: Vec3d? = null
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             val current = iterator.next()
-            if(!iterator.hasNext())
+            if (!iterator.hasNext())
                 return
-            if(previous != null) {
-                if(PlayerUtil.canVectorBeSeen(previous, current) && previous.squaredDistanceTo(current) < 6.0 * 6.0) {
+            if (previous != null) {
+                if (PlayerUtil.canVectorBeSeen(previous, current) && previous.squaredDistanceTo(current) < 6.0 * 6.0) {
                     iterator.remove()
                     continue
                 }

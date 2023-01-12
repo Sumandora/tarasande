@@ -18,12 +18,20 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity extends Entity implements ILivingEntity {
+
+    @Unique
+    private boolean tarasande_forceHasStatusEffect;
+    @Unique
+    private boolean tarasande_forceGetStatusEffect;
 
     public MixinLivingEntity(EntityType<?> type, World world) {
         super(type, world);
@@ -35,13 +43,16 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     @Shadow
     public abstract boolean isClimbing();
 
-    @Shadow public abstract boolean hasStatusEffect(StatusEffect effect);
+    @Shadow
+    public abstract boolean hasStatusEffect(StatusEffect effect);
 
-    @Shadow @Nullable public abstract StatusEffectInstance getStatusEffect(StatusEffect effect);
+    @Shadow
+    @Nullable
+    public abstract StatusEffectInstance getStatusEffect(StatusEffect effect);
 
     @ModifyConstant(method = "applyMovementInput", constant = @Constant(doubleValue = 0.2))
     public double hookFastClimb(double original) {
-        if((Object) this == MinecraftClient.getInstance().player)
+        if ((Object) this == MinecraftClient.getInstance().player)
             if (isClimbing()) {
                 ModuleFastClimb moduleFastClimb = TarasandeMain.Companion.managerModule().get(ModuleFastClimb.class);
                 if (moduleFastClimb.getEnabled())
@@ -52,26 +63,20 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Inject(method = "fall", at = @At("HEAD"), cancellable = true)
     public void hookNoFall(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition, CallbackInfo ci) {
-        if((Object) this == MinecraftClient.getInstance().player)
-            if(onGround) {
+        if ((Object) this == MinecraftClient.getInstance().player)
+            if (onGround) {
                 final ModuleNoFall moduleNoFall = TarasandeMain.Companion.managerModule().get(ModuleNoFall.class);
-                if(moduleNoFall.getEnabled() && moduleNoFall.getMode().isSelected(0) && moduleNoFall.getGroundSpoofMode().isSelected(1))
+                if (moduleNoFall.getEnabled() && moduleNoFall.getMode().isSelected(0) && moduleNoFall.getGroundSpoofMode().isSelected(1))
                     ci.cancel();
             }
     }
-
-    @Unique
-    private boolean tarasande_forceHasStatusEffect;
-
-    @Unique
-    private boolean tarasande_forceGetStatusEffect;
 
     @Inject(method = "hasStatusEffect", at = @At("RETURN"), cancellable = true)
     public void hookNoStatusEffect_hasStatusEffect(StatusEffect effect, CallbackInfoReturnable<Boolean> cir) {
         if (tarasande_forceHasStatusEffect) {
             tarasande_forceHasStatusEffect = false;
         } else {
-            if((Object) this == MinecraftClient.getInstance().player) {
+            if ((Object) this == MinecraftClient.getInstance().player) {
                 final ModuleNoStatusEffect moduleNoStatusEffect = TarasandeMain.Companion.managerModule().get(ModuleNoStatusEffect.class);
                 if (moduleNoStatusEffect.getEnabled() && moduleNoStatusEffect.getEffects().getList().contains(effect)) {
                     cir.setReturnValue(false);
@@ -85,7 +90,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
         if (tarasande_forceGetStatusEffect) {
             tarasande_forceGetStatusEffect = false;
         } else {
-            if((Object) this == MinecraftClient.getInstance().player) {
+            if ((Object) this == MinecraftClient.getInstance().player) {
                 final ModuleNoStatusEffect moduleNoStatusEffect = TarasandeMain.Companion.managerModule().get(ModuleNoStatusEffect.class);
                 if (moduleNoStatusEffect.getEnabled() && moduleNoStatusEffect.getEffects().getList().contains(effect)) {
                     cir.setReturnValue(null);

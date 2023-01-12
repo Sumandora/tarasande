@@ -123,12 +123,14 @@ tasks.register('installPackages') {
 				String packageName = it.name + "-" + project(it.name).version + ".jar"
 				File build = new File(it, "build" + File.separator + "libs" + File.separator + packageName)
 				File modDest = new File(base, "run" + File.separator + "mods" + File.separator + packageName)
-				if (modDest.delete())
-					println "Deleted old $packageName"
-				else
-					println "Failed to delete old $packageName version"
-				if (build.renameTo(modDest))
-					println "Copied $packageName"
+				if(build.exists()) {
+					if (modDest.delete())
+						println "Deleted old $packageName"
+					else
+						println "Failed to delete old $packageName version"
+					if (build.renameTo(modDest))
+						println "Copied $packageName"
+				}
 			}
 		}
 	}

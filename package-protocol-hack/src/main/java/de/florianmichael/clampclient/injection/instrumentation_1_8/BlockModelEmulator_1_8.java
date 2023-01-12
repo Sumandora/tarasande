@@ -1068,7 +1068,7 @@ public class BlockModelEmulator_1_8 {
         private void setBoundBasedOnMeta(int combinedMeta) {
             float f = 0.1875F;
             this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
-            Direction enumfacing = getFacing(combinedMeta);
+            Direction enumfacing = getFacing(combinedMeta).getOpposite();
             boolean flag = isOpen(combinedMeta);
             boolean flag1 = isHingeLeft(combinedMeta);
 

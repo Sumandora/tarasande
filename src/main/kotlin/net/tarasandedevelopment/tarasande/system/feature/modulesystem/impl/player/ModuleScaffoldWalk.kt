@@ -127,7 +127,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     }
 
     override fun onDisable() {
-        if(silent.isSelected(2) && preferredSlot != null)
+        if (silent.isSelected(2) && preferredSlot != null)
             mc.player?.inventory?.selectedSlot = preferredSlot
         target = null
         aimTarget = null
@@ -175,7 +175,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             if (mc.world?.isAir(below)!!) {
                 val prevTarget = target
                 target = getAdjacentBlock(below)
-                if(speculativeWaiting.value && target?.second?.offsetY == 0 && target?.second?.opposite == prevTarget?.second)
+                if (speculativeWaiting.value && target?.second?.offsetY == 0 && target?.second?.opposite == prevTarget?.second)
                     target = null
                 if (target != null) {
                     if (when {
@@ -183,7 +183,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                             rotateAtEdgeMode.isSelected(1) -> ((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= distance.value * distance.value || target?.second?.offsetY != 0
                             rotateAtEdgeMode.isSelected(2) -> PlayerUtil.isOnEdge(extrapolation.value)
                             else -> false
-                    }) {
+                        }) {
                         if (rotation == null || run {
                                 if (!preventRerotation.value)
                                     true
@@ -311,7 +311,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             }
 
             event.rotation = currentRot.smoothedTurn(rotation!!, aimSpeed).correctSensitivity(preference = {
-                if(target == null)
+                if (target == null)
                     return@correctSensitivity true
                 val rotationVector = it.forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)
                 val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector)
@@ -423,7 +423,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 RenderUtil.blockOutline(event.matrices, shape.offset(facing?.offsetX?.toDouble()!!, facing.offsetY.toDouble(), facing.offsetZ.toDouble()).boundingBox, facingColor.getColor().rgb)
             }
             if (aimTarget != null)
-                RenderUtil.blockOutline(event.matrices, Box.from(aimTarget).offset(-0.5, -0.5, -0.5).expand(-0.45), (if(rerotated) aimTargetColorRerotated else aimTargetColorStable).getColor().rgb)
+                RenderUtil.blockOutline(event.matrices, Box.from(aimTarget).offset(-0.5, -0.5, -0.5).expand(-0.45), (if (rerotated) aimTargetColorRerotated else aimTargetColorStable).getColor().rgb)
             if (placeLine != null)
                 RenderUtil.blockOutline(event.matrices, Box.from(placeLine?.first).offset(-0.5, -0.5, -0.5).expand(-0.49).union(Box.from(placeLine?.second).offset(-0.5, -0.5, -0.5).expand(-0.49)), placeLineColor.getColor().rgb)
         }

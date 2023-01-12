@@ -15,17 +15,17 @@ public abstract class MixinKeyBinding {
 
     @Shadow
     public int timesPressed;
-
-    @Shadow public abstract String getTranslationKey();
-
     @Unique
     private boolean tarasande_wasPressed = true;
+
+    @Shadow
+    public abstract String getTranslationKey();
 
     @Inject(method = "isPressed", at = @At("RETURN"), cancellable = true)
     public void hookEventKeyBindingIsPressed(CallbackInfoReturnable<Boolean> cir) {
         EventKeyBindingIsPressed eventKeyBindingIsPressed = new EventKeyBindingIsPressed((KeyBinding) (Object) this, cir.getReturnValue());
         EventDispatcher.INSTANCE.call(eventKeyBindingIsPressed);
-        if(eventKeyBindingIsPressed.getDirty() && !tarasande_wasPressed && !cir.getReturnValue() && eventKeyBindingIsPressed.getPressed()) {
+        if (eventKeyBindingIsPressed.getDirty() && !tarasande_wasPressed && !cir.getReturnValue() && eventKeyBindingIsPressed.getPressed()) {
             timesPressed++;
         }
         cir.setReturnValue(tarasande_wasPressed = eventKeyBindingIsPressed.getPressed());

@@ -18,7 +18,9 @@ public abstract class MixinMinecraftClient {
     @Shadow
     public int attackCooldown;
 
-    @Shadow @Nullable public ClientPlayerEntity player;
+    @Shadow
+    @Nullable
+    public ClientPlayerEntity player;
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
     public int unlockTicksPerFrame(int a, int b) {
@@ -45,14 +47,14 @@ public abstract class MixinMinecraftClient {
 
     @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/RenderTickCounter;tickDelta:F", ordinal = 0))
     public float disableInterpolation(RenderTickCounter instance) {
-        if(DebugValues.INSTANCE.getDisableInterpolation().getValue())
+        if (DebugValues.INSTANCE.getDisableInterpolation().getValue())
             return 1.0F;
         return instance.tickDelta;
     }
 
     @Inject(method = "getTickDelta", at = @At("HEAD"), cancellable = true)
     public void disableInterpolation(CallbackInfoReturnable<Float> cir) {
-        if(DebugValues.INSTANCE.getDisableInterpolation().getValue())
+        if (DebugValues.INSTANCE.getDisableInterpolation().getValue())
             cir.setReturnValue(1.0F);
     }
 

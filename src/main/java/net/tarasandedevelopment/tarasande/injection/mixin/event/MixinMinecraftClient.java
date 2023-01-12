@@ -105,7 +105,7 @@ public abstract class MixinMinecraftClient {
     public void hookEventDoAttack(CallbackInfoReturnable<Boolean> cir) {
         EventDoAttack eventDoAttack = new EventDoAttack();
         EventDispatcher.INSTANCE.call(eventDoAttack);
-        if(eventDoAttack.getCancelled())
+        if (eventDoAttack.getCancelled())
             cir.setReturnValue(false);
     }
 }

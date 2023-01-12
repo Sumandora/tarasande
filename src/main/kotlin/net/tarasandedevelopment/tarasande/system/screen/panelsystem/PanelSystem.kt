@@ -26,7 +26,6 @@ import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 import java.awt.Color
 import kotlin.math.abs
-import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
 
@@ -317,5 +316,5 @@ open class Panel(
 
     open fun getValueOwner(): Any = this
 
-    fun effectivePanelHeight() = if(opened) panelHeight else titleBarHeight.toDouble()
+    fun effectivePanelHeight() = if (opened) panelHeight else titleBarHeight.toDouble()
 }

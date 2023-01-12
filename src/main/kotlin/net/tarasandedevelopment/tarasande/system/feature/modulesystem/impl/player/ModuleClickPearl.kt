@@ -18,28 +18,28 @@ class ModuleClickPearl : Module("Click pearl", "Auto switches to a ender pearl",
 
     init {
         registerEvent(EventPacket::class.java) { event ->
-            if(event.type == EventPacket.Type.SEND && event.packet is PlayerInteractItemC2SPacket) {
-                if(state == State.WAIT_FOR_THROW)
+            if (event.type == EventPacket.Type.SEND && event.packet is PlayerInteractItemC2SPacket) {
+                if (state == State.WAIT_FOR_THROW)
                     state = State.SWITCH_BACK
             }
         }
         registerEvent(EventTick::class.java) { event ->
-            if(event.state == EventTick.State.PRE) {
+            if (event.state == EventTick.State.PRE) {
                 val pearlSlot = PlayerUtil.findSlot { it.value.item is EnderPearlItem }
-                if(pearlSlot == null) {
+                if (pearlSlot == null) {
                     state = State.IDLE // FUCK
                     return@registerEvent
                 }
-                if(state == State.WAIT_FOR_BUTTON_RELEASE && !mc.options.useKey.pressed) {
+                if (state == State.WAIT_FOR_BUTTON_RELEASE && !mc.options.useKey.pressed) {
                     state = State.IDLE
                     return@registerEvent
                 }
-                if(state == State.SWITCH_BACK && prevSlot != null) {
+                if (state == State.SWITCH_BACK && prevSlot != null) {
                     mc.player?.inventory?.selectedSlot = prevSlot
                     state = State.WAIT_FOR_BUTTON_RELEASE
                     return@registerEvent
                 }
-                if(state == State.IDLE && mc.options.useKey.pressed && mc.crosshairTarget.isMissHitResult() && mc.player?.isUsingItem == false) {
+                if (state == State.IDLE && mc.options.useKey.pressed && mc.crosshairTarget.isMissHitResult() && mc.player?.isUsingItem == false) {
                     prevSlot = mc.player?.inventory?.selectedSlot
                     mc.player?.inventory?.selectedSlot = pearlSlot
                     state = State.WAIT_FOR_THROW
@@ -48,7 +48,7 @@ class ModuleClickPearl : Module("Click pearl", "Auto switches to a ender pearl",
         }
 
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if(event.keyBinding == mc.options.useKey && state == State.WAIT_FOR_THROW)
+            if (event.keyBinding == mc.options.useKey && state == State.WAIT_FOR_THROW)
                 event.pressed = true
         }
     }

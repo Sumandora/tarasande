@@ -9,15 +9,17 @@ import net.minecraft.util.math.Direction
 fun HitResult?.isEntityHitResult(): Boolean {
     return this != null && this.type == HitResult.Type.ENTITY && this is EntityHitResult
 }
+
 fun HitResult?.isBlockHitResult(): Boolean {
     return this != null && this.type == HitResult.Type.BLOCK && this is BlockHitResult
 }
+
 fun HitResult?.isMissHitResult(): Boolean {
     return this == null || this.type == HitResult.Type.MISS
 }
 
 fun HitResult?.isSame(side: Direction, blockPos: BlockPos): Boolean {
-    if(!isBlockHitResult())
+    if (!isBlockHitResult())
         return false
     this as BlockHitResult
     return this.side == side.hitResultSide() && this.blockPos == blockPos

@@ -28,7 +28,7 @@ class ModuleFastBreak : Module("Fast break", "Makes blocks break faster", Module
                 if (mc.crosshairTarget.isBlockHitResult())
                     if (item is ToolItem && item.isSuitableFor(mc.world?.getBlockState((mc.crosshairTarget as BlockHitResult).blockPos)))
                         suitableForBlock = true
-                if(!onlyWhenHoldingAppropriateTool.value || suitableForBlock)
+                if (!onlyWhenHoldingAppropriateTool.value || suitableForBlock)
                     when {
                         mode.isSelected(0) -> {
                             if (mc.interactionManager!!.currentBreakingProgress > 0.0)

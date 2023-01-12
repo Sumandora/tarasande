@@ -13,7 +13,7 @@ public class MixinInGameHud {
 
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/Perspective;isFirstPerson()Z"))
     public boolean hookFreeCam(Perspective instance) {
-        if(TarasandeMain.Companion.managerModule().get(ModuleFreeCam.class).getEnabled())
+        if (TarasandeMain.Companion.managerModule().get(ModuleFreeCam.class).getEnabled())
             return true;
         return instance.isFirstPerson();
     }

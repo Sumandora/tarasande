@@ -39,12 +39,12 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
             for (entry in hashMap) {
                 if (buttons.selected.contains(keyMap[entry.key]) && entry.key.pressed) {
                     val clicks = entry.value.getClicks()
-                    if(clicks > 0) {
-                        if(entry.key == mc.options.useKey)
-                            if(mc.player?.isUsingItem == true || PlayerUtil.getUsedHand() != null)
+                    if (clicks > 0) {
+                        if (entry.key == mc.options.useKey)
+                            if (mc.player?.isUsingItem == true || PlayerUtil.getUsedHand() != null)
                                 return@registerEvent
                         event.dirty = true
-                        if(entry.key.timesPressed == 0)
+                        if (entry.key.timesPressed == 0)
                             entry.key.timesPressed = clicks
                     }
                 } else {
@@ -54,7 +54,7 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
         }
 
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if(buttons.isSelected(0) && event.keyBinding == mc.options.attackKey && mc.crosshairTarget?.type != HitResult.Type.BLOCK) {
+            if (buttons.isSelected(0) && event.keyBinding == mc.options.attackKey && mc.crosshairTarget?.type != HitResult.Type.BLOCK) {
                 event.pressed = false
             }
         }

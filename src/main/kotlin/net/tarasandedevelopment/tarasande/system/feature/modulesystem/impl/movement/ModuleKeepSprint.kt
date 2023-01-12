@@ -40,8 +40,8 @@ class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attackin
         }
 
         registerEvent(EventKeepSprint::class.java) { event ->
-            val unsprint = if(takingKnockback) unsprintWhenReducing else this.unsprint
-            val speedMultiplier = if(takingKnockback) reducingSpeedMultiplier else this.speedMultiplier
+            val unsprint = if (takingKnockback) unsprintWhenReducing else this.unsprint
+            val speedMultiplier = if (takingKnockback) reducingSpeedMultiplier else this.speedMultiplier
 
             if (!unsprint.value) event.sprinting = true
             mc.player?.velocity = prevVelocity?.multiply(speedMultiplier.value, 1.0, speedMultiplier.value)

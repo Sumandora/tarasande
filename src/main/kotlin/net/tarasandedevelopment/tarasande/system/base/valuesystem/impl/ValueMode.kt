@@ -39,7 +39,7 @@ open class ValueMode(owner: Any, name: String, private var multiSelection: Boole
         try {
             selected.addAll(TarasandeMain.get().gson.fromJson(jsonElement, Array<String>::class.java)!!)
         } catch (jsonSyntaxException: JsonSyntaxException) {
-            if(!multiSelection)
+            if (!multiSelection)
                 select(0)
             throw jsonSyntaxException
         }

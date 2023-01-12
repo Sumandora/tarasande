@@ -94,7 +94,7 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
             if (!timer.hasReached(delay.value.toLong()))
                 return@registerEvent
 
-            if(mc.player?.isUsingItem == true)
+            if (mc.player?.isUsingItem == true)
                 return@registerEvent
 
             var bestItem: Int? = null
@@ -118,7 +118,7 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
                         return@findItem false
 
                     val effects = PotionUtil.getPotionEffects(it)
-                    if(effects.all { effect -> effect.effectType.isBeneficial && !(mc.player as ILivingEntity).tarasande_forceHasStatusEffect(effect.effectType) }) {
+                    if (effects.all { effect -> effect.effectType.isBeneficial && !(mc.player as ILivingEntity).tarasande_forceHasStatusEffect(effect.effectType) }) {
                         if (effects.any { type -> type.effectType == StatusEffects.REGENERATION || type.effectType == StatusEffects.INSTANT_HEALTH })
                             return@findItem mc.player?.health?.div(2.0)!! <= health.value
                         return@findItem true

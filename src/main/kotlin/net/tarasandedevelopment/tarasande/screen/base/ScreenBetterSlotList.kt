@@ -31,7 +31,7 @@ open class ScreenBetterSlotList(title: String, prevScreen: Screen?, private val 
         })
 
         if (prevScreen != null) {
-            this.addDrawableChild(ButtonWidget(3, height - 20 - 3, 20, 20,Text.literal("<-")) {
+            this.addDrawableChild(ButtonWidget(3, height - 20 - 3, 20, 20, Text.literal("<-")) {
                 MinecraftClient.getInstance().setScreen(prevScreen)
             })
         }

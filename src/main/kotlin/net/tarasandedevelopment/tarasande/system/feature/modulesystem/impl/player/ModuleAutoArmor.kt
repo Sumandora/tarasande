@@ -50,7 +50,7 @@ class ModuleAutoArmor : Module("Auto armor", "Equips armor if none is equipped",
 
             val screenHandler = mc.player?.playerScreenHandler!!
 
-            if(screenHandler.cursorStack?.isEmpty == false)
+            if (screenHandler.cursorStack?.isEmpty == false)
                 return@registerEvent
 
             if (mousePos == null) {
@@ -66,7 +66,7 @@ class ModuleAutoArmor : Module("Auto armor", "Equips armor if none is equipped",
                         .maxByOrNull { (it.stack.item as ArmorItem).protection + EnchantmentHelper.get(it.stack).values.sum() }
                 }
 
-            if(bestArmors.isNotEmpty())
+            if (bestArmors.isNotEmpty())
                 event.doneInput = true
 
             val nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, _ -> bestArmors.contains(slot) }
