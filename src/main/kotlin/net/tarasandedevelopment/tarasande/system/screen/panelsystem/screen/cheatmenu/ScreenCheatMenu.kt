@@ -11,6 +11,7 @@ import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventChangeScreen
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -84,7 +85,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
             }
         }
 
-        val color = TarasandeMain.clientValues.accentColor.getColor()
+        val color = ClientValues.accentColor.getColor()
 
         val strength = round(animation * ManagerBlur.strength.value).toInt()
         if (strength > 0) {

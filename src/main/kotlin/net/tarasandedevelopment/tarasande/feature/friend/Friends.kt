@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.rende
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import su.mandora.event.EventDispatcher
 
-class Friends {
+object Friends {
 
     private val friends = ArrayList<Pair<GameProfile, String?>>()
 

@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render
 
+import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventTextVisit
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
@@ -9,7 +10,7 @@ import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ModuleNameProtect : Module("Name protect", "Hides your in-game name", ModuleCategory.RENDER) {
 
-    private val protectedName = ValueText(this, "Protected name", TarasandeMain.name)
+    private val protectedName = ValueText(this, "Protected name", TARASANDE_NAME)
 
     private val border = "( |[^a-z]|\\b)"
 

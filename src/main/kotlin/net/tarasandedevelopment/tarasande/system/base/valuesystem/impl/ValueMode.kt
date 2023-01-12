@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.system.base.valuesystem.impl
 import com.google.gson.JsonElement
 import com.google.gson.JsonSyntaxException
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.gson
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentMode
 
@@ -31,13 +32,13 @@ open class ValueMode(owner: Any, name: String, private var multiSelection: Boole
     fun anySelected() = selected.isNotEmpty()
 
     override fun save(): JsonElement? {
-        return TarasandeMain.gson.toJsonTree(selected)
+        return gson.toJsonTree(selected)
     }
 
     override fun load(jsonElement: JsonElement) {
         selected.clear()
         try {
-            selected.addAll(TarasandeMain.gson.fromJson(jsonElement, Array<String>::class.java)!!)
+            selected.addAll(gson.fromJson(jsonElement, Array<String>::class.java)!!)
         } catch (jsonSyntaxException: JsonSyntaxException) {
             if (!multiSelection)
                 select(0)

@@ -34,6 +34,7 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -244,7 +245,7 @@ class TarasandeProtocolHack : NativeProvider {
     override fun isSinglePlayer() = MinecraftClient.getInstance() != null && mc.isInSingleplayer
     override fun nativeVersion() = VersionListEnum.r1_19_3
     override fun nettyOrder() = this.compression
-    override fun run() = TarasandeMain.rootDirectory
+    override fun run() = ManagerFile.rootDirectory
 
     override fun createDump(): JsonObject {
         val platformSpecific = JsonObject()

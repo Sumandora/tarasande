@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.feature.clientvalue
 
+import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.DebugValues
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.PrivacyValues
@@ -18,7 +19,7 @@ import net.tarasandedevelopment.tarasande.util.extension.javaruntime.Thread
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 
-class ClientValues(name: String) {
+object ClientValues {
 
     // General
     val accentColor = ValueColor(this, "Accent color", 0.6, 1.0, 1.0)
@@ -68,7 +69,7 @@ class ClientValues(name: String) {
         ValueButtonOwnerValues(this, "Debug values", DebugValues)
     }
 
-    val autoSaveDaemonName = "$name config auto save daemon"
+    val autoSaveDaemonName = "$TARASANDE_NAME config auto save daemon"
     val autoSaveDaemon: Thread = Thread(autoSaveDaemonName) {
         while (true) {
             Thread.sleep(autoSaveDelay.value.toLong())

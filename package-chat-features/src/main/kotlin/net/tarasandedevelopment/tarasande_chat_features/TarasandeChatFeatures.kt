@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande_chat_features.clientvalue.ChatValues
@@ -28,7 +29,7 @@ class TarasandeChatFeatures : ClientModInitializer {
                     ModuleSpammer()
             )
 
-            ValueButtonOwnerValues(TarasandeMain.clientValues, "Chat Values", ChatValues)
+            ValueButtonOwnerValues(ClientValues, "Chat Values", ChatValues)
         }
     }
 }

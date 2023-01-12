@@ -5,7 +5,7 @@ import com.google.gson.JsonObject
 import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import net.minecraft.client.util.Session
-import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.gson
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.TextFieldInfo
@@ -41,7 +41,7 @@ class AccountToken : Account() {
         http.connect()
         http.outputStream.write(JsonObject().also { it.addProperty("token", token) }.toString().toByteArray())
 
-        val json = TarasandeMain.gson.fromJson(String(http.inputStream.readAllBytes()), JsonObject::class.java)
+        val json = gson.fromJson(String(http.inputStream.readAllBytes()), JsonObject::class.java)
 
         val authenticationService = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment)
 

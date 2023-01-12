@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.util.extension.mc
@@ -312,7 +313,7 @@ object RenderUtil {
         return Color((a.red + (b.red - a.red) * tR.toFloat()) / 255.0F, (a.green + (b.green - a.green) * tG.toFloat()) / 255.0F, (a.blue + (b.blue - a.blue) * tB.toFloat()) / 255.0F, (a.alpha + (b.alpha - a.alpha) * tA.toFloat()) / 255.0F)
     }
 
-    fun createImage(path: String) = NativeImageBackedTexture(NativeImage.read(javaClass.getResourceAsStream("/assets/" + TarasandeMain.name + "/textures/$path")))
+    fun createImage(path: String) = NativeImageBackedTexture(NativeImage.read(javaClass.getResourceAsStream("/assets/$TARASANDE_NAME/textures/$path")))
 
     fun formattingByHex(hex: Int): Formatting {
         var bestFormatting: Formatting? = null

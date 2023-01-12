@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponen
 
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.injection.accessor.ITextFieldWidget
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
@@ -46,7 +46,7 @@ class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueC
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         textFieldWidget.width = (width * (1.0 / scale)).toInt()
         if (textFieldWidget.isFocused && value.isEnabled())
-            textFieldAccessor.tarasande_setColor(TarasandeMain.clientValues.accentColor.getColor())
+            textFieldAccessor.tarasande_setColor(ClientValues.accentColor.getColor())
         else
             textFieldWidget.setCursorToEnd()
 

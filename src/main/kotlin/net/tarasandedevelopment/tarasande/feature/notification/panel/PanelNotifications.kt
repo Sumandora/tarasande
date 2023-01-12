@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.Formatting
 import net.minecraft.util.StringHelper
-import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.feature.notification.Notification
 import net.tarasandedevelopment.tarasande.feature.notification.Notifications
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
@@ -29,7 +29,7 @@ class PanelNotifications(private val notifications: Notifications) : Panel("Noti
                 return
             val animation = animations[it]!!
             if (animation > notifications.speedIn.min) { // hack
-                val color = TarasandeMain.clientValues.accentColor.getColor().withAlpha((animation * 255).toInt())
+                val color = ClientValues.accentColor.getColor().withAlpha((animation * 255).toInt())
                 RenderSystem.enableBlend()
                 val animatedPosition = notifications.easing.ease(animation.toFloat())
                 val formattedTime = StringHelper.formatTicks(((it.length + 1000 - (System.currentTimeMillis() - it.creationTime)) / 1000 * 20).toInt())

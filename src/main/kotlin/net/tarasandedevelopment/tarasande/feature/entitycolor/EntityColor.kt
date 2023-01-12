@@ -4,8 +4,8 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.mob.Monster
 import net.minecraft.entity.passive.AnimalEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventEntityColor
+import net.tarasandedevelopment.tarasande.feature.friend.Friends
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.util.extension.mc
@@ -48,7 +48,7 @@ class EntityColor {
         }
 
         if (entity == mc.player) color = selfColor.getColor()
-        else if (entity is PlayerEntity && TarasandeMain.friends.isFriend(entity.gameProfile)) color = friendsColor.getColor()
+        else if (entity is PlayerEntity && Friends.isFriend(entity.gameProfile)) color = friendsColor.getColor()
 
         val eventEntityColor = EventEntityColor(entity, color)
         EventDispatcher.call(eventEntityColor)

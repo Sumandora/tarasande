@@ -5,6 +5,7 @@ import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventShutdown
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
@@ -36,7 +37,7 @@ class TarasandeWindowsPlatform : ClientModInitializer {
                     object : SidebarEntry("Fritz!Box Reconnect", NETWORK) {
 
                         private val scriptName = "ip_changer_fritzbox.vbs"
-                        private val script = File(TarasandeMain.rootDirectory, scriptName)
+                        private val script = File(ManagerFile.rootDirectory, scriptName)
 
                         init {
                             if (!script.exists()) {
@@ -47,7 +48,7 @@ class TarasandeWindowsPlatform : ClientModInitializer {
                         override fun onClick(mouseButton: Int) {
                             val builder = ProcessBuilder("wscript", this.script.absolutePath)
 
-                            builder.directory(TarasandeMain.rootDirectory)
+                            builder.directory(ManagerFile.rootDirectory)
                             builder.start()
                         }
                     },

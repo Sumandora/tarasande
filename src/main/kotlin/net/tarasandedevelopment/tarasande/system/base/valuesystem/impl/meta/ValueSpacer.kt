@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta
 
 import com.google.gson.JsonElement
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.meta.ElementWidthValueComponentSpacer
 import java.awt.Color
@@ -14,7 +15,7 @@ open class ValueSpacer(owner: Any, name: String, val scale: Float = 0.5F, manage
         onChange(-1)
     }
 
-    open fun getColor(hovered: Boolean): Color = if (hovered) TarasandeMain.clientValues.accentColor.getColor() else Color.white
+    open fun getColor(hovered: Boolean): Color = if (hovered) ClientValues.accentColor.getColor() else Color.white
     open fun onChange(mouseButton: Int) {
     }
 }

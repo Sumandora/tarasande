@@ -10,7 +10,7 @@ import net.minecraft.item.Items
 import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.registry.Registries
-import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
@@ -138,7 +138,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         }
         val message = when (broadCastMode) {
             1 -> {
-                TarasandeMain.name + " suspects " + player.gameProfile.name + (" because he held $itemMessage")
+                TARASANDE_NAME + " suspects " + player.gameProfile.name + (" because he held $itemMessage")
             }
 
             2 -> {

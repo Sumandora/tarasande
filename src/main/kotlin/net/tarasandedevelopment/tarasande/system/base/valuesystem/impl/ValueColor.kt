@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.system.base.valuesystem.impl
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentColor
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
@@ -28,8 +29,8 @@ open class ValueColor(owner: Any, name: String, hue: Double, var sat: Double, va
 
     fun getColor(): Color {
         val hue =
-            if (locked && this != TarasandeMain.clientValues.accentColor)
-                TarasandeMain.clientValues.accentColor.hue
+            if (locked && this != ClientValues.accentColor)
+                ClientValues.accentColor.hue
             else
                 hue
 

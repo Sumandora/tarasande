@@ -17,7 +17,6 @@ import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Manage
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import su.mandora.event.EventDispatcher
-import java.io.File
 import java.util.logging.Logger
 
 /**
@@ -41,23 +40,18 @@ import java.util.logging.Logger
  *  - WindowClick in 1.16.5 is not fully remapped
  *  - Reimplement Item Splitter
  */
+
+const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv
+val logger = Logger.getLogger(TARASANDE_NAME)!!
+val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
+
 object TarasandeMain {
-
-    val name = "tarasande" // "lowercase gang" ~kennytv
-
-    val logger = Logger.getLogger(name)!!
-    val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
-    val rootDirectory = File(System.getProperty("user.home") + File.separator + name)
 
     init {
         ManagerGrabber
         ManagerFile
         ManagerValue
     }
-
-    lateinit var clientValues: ClientValues
-    lateinit var friends: Friends
-    lateinit var notifications: Notifications
 
     fun onLateLoad() {
         ManagerPanel
@@ -71,9 +65,9 @@ object TarasandeMain {
         ManagerCommand
         ManagerModule
 
-        clientValues = ClientValues(name)
-        friends = Friends()
-        notifications = Notifications()
+        ClientValues
+        Friends
+        Notifications
 
         EventDispatcher.call(EventSuccessfulLoad())
     }

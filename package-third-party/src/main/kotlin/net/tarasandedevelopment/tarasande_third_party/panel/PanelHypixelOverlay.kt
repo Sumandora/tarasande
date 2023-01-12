@@ -4,7 +4,8 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.mojang.authlib.GameProfile
 import net.minecraft.client.util.math.MatrixStack
-import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.gson
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
@@ -41,7 +42,7 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
 
                         val urlConnection = URL(String.format(url, entry.key.id.toString().replace("-", ""), apiKey.value)).openConnection()
                         val jsonStr = urlConnection.getInputStream().readAllBytes().decodeToString()
-                        val jsonElement = TarasandeMain.gson.fromJson(jsonStr, JsonElement::class.java)
+                        val jsonElement = gson.fromJson(jsonStr, JsonElement::class.java)
                         if (jsonElement != null && !jsonElement.isJsonNull) {
                             if (!entry.value.parse(jsonElement.asJsonObject)) {
                                 blackList.add(entry.key)
@@ -61,7 +62,7 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
     }
 
     private fun drawString(matrices: MatrixStack, str: String, x: Double, y: Double) {
-        val accent = TarasandeMain.clientValues.accentColor.getColor()
+        val accent = ClientValues.accentColor.getColor()
         val width = FontWrapper.getWidth(str)
         val titleBarHeight = titleBarHeight
         when (alignment) {

@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc
 
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.hit.EntityHitResult
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventMouse
+import net.tarasandedevelopment.tarasande.feature.friend.Friends
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.mc
@@ -21,7 +21,7 @@ class ModuleMidClick : Module("Mid click", "Friends mid-clicked players", Module
                 if (hitResult.isEntityHitResult()) {
                     hitResult as EntityHitResult
                     if (hitResult.entity is PlayerEntity)
-                        TarasandeMain.friends.changeFriendState((hitResult.entity as PlayerEntity).gameProfile)
+                        Friends.changeFriendState((hitResult.entity as PlayerEntity).gameProfile)
                 }
             }
         }

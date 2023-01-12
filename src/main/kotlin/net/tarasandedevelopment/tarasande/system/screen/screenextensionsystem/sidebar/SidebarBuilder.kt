@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.s
 
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueSpacer
@@ -90,7 +91,7 @@ abstract class SidebarEntrySelection(name: String, category: String, val list: L
 
                 override fun getColor(hovered: Boolean): Color {
                     if (isSelected(it)) {
-                        return TarasandeMain.clientValues.accentColor.getColor()
+                        return ClientValues.accentColor.getColor()
                     }
                     return super.getColor(hovered)
                 }
@@ -115,7 +116,7 @@ open class SidebarEntryToggleable(name: String, category: String) : SidebarEntry
                 }
             }
 
-            override fun getColor(hovered: Boolean) = (if (enabled.value) Color.green else Color.red).let { if (hovered) RenderUtil.colorInterpolate(it, TarasandeMain.clientValues.accentColor.getColor(), 0.4) else it }
+            override fun getColor(hovered: Boolean) = (if (enabled.value) Color.green else Color.red).let { if (hovered) RenderUtil.colorInterpolate(it, ClientValues.accentColor.getColor(), 0.4) else it }
         }.createValueComponent())
     }
 }

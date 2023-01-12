@@ -2,7 +2,8 @@ package net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.fixed
 
 import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.util.math.MatrixStack
-import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.TARASANDE_NAME
+import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
@@ -15,7 +16,7 @@ private const val JAPANESE_NAME = "タラサンデ"
 class PanelWatermark : Panel("Watermark", 150.0, 50.0, true) {
 
     private val hidePersonalName = ValueBoolean(this, "Hide personal name", true)
-    private val messageOfTheDay = ValueText(this, "Message of the day", TarasandeMain.name)
+    private val messageOfTheDay = ValueText(this, "Message of the day", TARASANDE_NAME)
 
     private val localHost = System.getProperty("user.name") + run {
         try {
@@ -35,7 +36,7 @@ class PanelWatermark : Panel("Watermark", 150.0, 50.0, true) {
         matrices.scale(xScale.toFloat(), yScale.toFloat(), 1.0F)
         matrices.translate(-(x + 1), -(y + titleBarHeight + 1), 0.0)
 
-        FontWrapper.textShadow(matrices, JAPANESE_NAME, (x + 1).toFloat(), (y + titleBarHeight + 1).toFloat(), TarasandeMain.clientValues.accentColor.getColor().rgb, offset = 0.5F)
+        FontWrapper.textShadow(matrices, JAPANESE_NAME, (x + 1).toFloat(), (y + titleBarHeight + 1).toFloat(), ClientValues.accentColor.getColor().rgb, offset = 0.5F)
         matrices.pop()
 
         val userHost = " $localHost"
@@ -53,16 +54,16 @@ class PanelWatermark : Panel("Watermark", 150.0, 50.0, true) {
                 (FontWrapper.fontHeight() * scaleFactor)
             )
             matrices.translate(-(System.currentTimeMillis() / 50.0) % motdWidth, 0.0, 0.0)
-            FontWrapper.textShadow(matrices, messageOfTheDay.value + " " + messageOfTheDay.value, (x + 1).toFloat(), (y + panelHeight - FontWrapper.fontHeight()).toFloat(), TarasandeMain.clientValues.accentColor.getColor().rgb)
+            FontWrapper.textShadow(matrices, messageOfTheDay.value + " " + messageOfTheDay.value, (x + 1).toFloat(), (y + panelHeight - FontWrapper.fontHeight()).toFloat(), ClientValues.accentColor.getColor().rgb)
             GlStateManager._disableScissorTest()
             matrices.pop()
         } else {
-            FontWrapper.textShadow(matrices, messageOfTheDay.value, (x + 1).toFloat(), (y + panelHeight - FontWrapper.fontHeight()).toFloat(), TarasandeMain.clientValues.accentColor.getColor().rgb)
+            FontWrapper.textShadow(matrices, messageOfTheDay.value, (x + 1).toFloat(), (y + panelHeight - FontWrapper.fontHeight()).toFloat(), ClientValues.accentColor.getColor().rgb)
         }
 
         if (hidePersonalName.value)
             return
 
-        FontWrapper.textShadow(matrices, userHost, (x + panelWidth - userHostWidth - 1).toFloat(), (y + panelHeight - FontWrapper.fontHeight()).toFloat(), TarasandeMain.clientValues.accentColor.getColor().rgb)
+        FontWrapper.textShadow(matrices, userHost, (x + panelWidth - userHostWidth - 1).toFloat(), (y + panelHeight - FontWrapper.fontHeight()).toFloat(), ClientValues.accentColor.getColor().rgb)
     }
 }

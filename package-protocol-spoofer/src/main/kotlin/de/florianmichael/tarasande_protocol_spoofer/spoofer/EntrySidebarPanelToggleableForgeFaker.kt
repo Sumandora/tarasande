@@ -11,10 +11,10 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry
+import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
@@ -76,7 +76,7 @@ class EntrySidebarPanelToggleableForgeFaker : SidebarEntryToggleable( "Forge Fak
                         val text = FontWrapper.trimToWidth("Forge/FML Server", it.x)
                         val endWidth = FontWrapper.getWidth(text) + 4
 
-                        FontWrapper.textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeMain.clientValues.accentColor.getColor().rgb, offset = 0.5F)
+                        FontWrapper.textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, ClientValues.accentColor.getColor().rgb, offset = 0.5F)
 
                         if (RenderUtil.isHovered(it.mouseX.toDouble(), it.mouseY.toDouble(), it.x - endWidth.toDouble(), it.y + yPos.toDouble(), it.x - 4.0, it.y + yPos + fontHeight.toDouble())) {
                             val tooltip = ArrayList<Text>()

@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.feature.notification
 
 import de.florianmichael.ezeasing.EzEasing
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventModuleStateSwitched
 import net.tarasandedevelopment.tarasande.feature.notification.panel.PanelNotifications
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -11,7 +10,7 @@ import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import su.mandora.event.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
 
-class Notifications {
+object Notifications {
 
     private val panel = PanelNotifications(this)
 
@@ -44,7 +43,7 @@ class Notifications {
 
         EventDispatcher.add(EventModuleStateSwitched::class.java) {
             if (moduleNotifications.value)
-                TarasandeMain.notifications.notify(it.module.name + " is now " + if (it.module.enabled) "enabled" else "disabled")
+                Notifications.notify(it.module.name + " is now " + if (it.module.enabled) "enabled" else "disabled")
         }
 
 

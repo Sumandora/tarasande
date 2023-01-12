@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.i
 import net.minecraft.client.gui.screen.pack.PackScreen
 import net.minecraft.resource.ZipResourcePack
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.logger
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import java.io.File
@@ -28,7 +29,7 @@ class ScreenExtensionButtonListPackScreen : ScreenExtensionButtonList<PackScreen
                     base.copyTo(target)
                 } catch (t: Throwable) {
                     t.printStackTrace()
-                    TarasandeMain.logger.log(Level.WARNING, "Wasn't able to copy $name to " + target.absolutePath)
+                    logger.log(Level.WARNING, "Wasn't able to copy $name to " + target.absolutePath)
                 }
             }
         }

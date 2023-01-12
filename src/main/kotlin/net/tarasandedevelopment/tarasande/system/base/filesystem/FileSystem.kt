@@ -2,14 +2,18 @@ package net.tarasandedevelopment.tarasande.system.base.filesystem
 
 import com.google.gson.JsonElement
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.event.EventShutdown
+import net.tarasandedevelopment.tarasande.gson
+import net.tarasandedevelopment.tarasande.logger
 import su.mandora.event.EventDispatcher
 import java.io.FileWriter
 import java.nio.file.Files
 import java.util.logging.Level
 
 object ManagerFile : Manager<File>() {
+
+    val rootDirectory = java.io.File(System.getProperty("user.home") + java.io.File.separator + TARASANDE_NAME)
 
     init {
         EventDispatcher.add(EventShutdown::class.java) {
@@ -24,7 +28,7 @@ object ManagerFile : Manager<File>() {
 
     fun save(backup: Boolean) {
         for (file in list) {
-            val fileObj = java.io.File(TarasandeMain.rootDirectory, file.name)
+            val fileObj = java.io.File(rootDirectory, file.name)
 
             if (!fileObj.parentFile.exists())
                 fileObj.parentFile.mkdirs()
@@ -33,7 +37,7 @@ object ManagerFile : Manager<File>() {
                 fileObj.renameTo(java.io.File(fileObj.path + "_backup"))
 
             val fileWriter = FileWriter(fileObj)
-            fileWriter.write(file.encrypt(TarasandeMain.gson.toJson(file.save()))!!)
+            fileWriter.write(file.encrypt(gson.toJson(file.save()))!!)
             fileWriter.close()
         }
     }
@@ -47,15 +51,15 @@ object ManagerFile : Manager<File>() {
                 internalLoad(file, true)
             } catch (t: Throwable) {
                 t.printStackTrace()
-                TarasandeMain.logger.log(Level.CONFIG, file.name + " didn't load correctly!")
+                logger.log(Level.CONFIG, file.name + " didn't load correctly!")
             }
         }
     }
 
     private fun internalLoad(file: File, backup: Boolean) {
-        val fileObj = java.io.File(TarasandeMain.rootDirectory, file.name + (if (backup) "_backup" else ""))
+        val fileObj = java.io.File(rootDirectory, file.name + (if (backup) "_backup" else ""))
         val content = file.decrypt(String(Files.readAllBytes(fileObj.toPath()))) ?: error(file.name + "'s content is invalid")
-        val jsonElement = TarasandeMain.gson.fromJson(content, JsonElement::class.java)
+        val jsonElement = gson.fromJson(content, JsonElement::class.java)
         file.load(jsonElement)
         file.loaded = true
     }

@@ -4,7 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues;
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.DebugValues;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,7 +24,7 @@ public abstract class MixinMinecraftClient {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
     public int unlockTicksPerFrame(int a, int b) {
-        if (TarasandeMain.INSTANCE.clientValues.getUnlockTicksPerFrame().getValue()) {
+        if (ClientValues.INSTANCE.getUnlockTicksPerFrame().getValue()) {
             return b;
         }
         return Math.min(a, b);
@@ -32,7 +32,7 @@ public abstract class MixinMinecraftClient {
 
     @Redirect(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;currentScreen:Lnet/minecraft/client/gui/screen/Screen;"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;resetDebugHudChunk()V"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;handleInputEvents()V")))
     public Screen passEventsInScreens(MinecraftClient instance) {
-        if (TarasandeMain.INSTANCE.clientValues.getPassEventsInScreens().getValue())
+        if (ClientValues.INSTANCE.getPassEventsInScreens().getValue())
             if (player != null)
                 return null;
         return instance.currentScreen;
@@ -40,7 +40,7 @@ public abstract class MixinMinecraftClient {
 
     @ModifyConstant(method = "tick", constant = @Constant(intValue = 10000))
     public int ignoreCooldown(int constant) {
-        if (TarasandeMain.INSTANCE.clientValues.getPassEventsInScreens().getValue())
+        if (ClientValues.INSTANCE.getPassEventsInScreens().getValue())
             return attackCooldown;
         return constant;
     }
