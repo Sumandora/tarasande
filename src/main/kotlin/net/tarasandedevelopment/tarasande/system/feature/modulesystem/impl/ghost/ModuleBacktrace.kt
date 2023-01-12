@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.ghos
 
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.Box
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.event.EventBoundingBoxOverride
 import net.tarasandedevelopment.tarasande.event.EventRender3D
@@ -11,6 +10,7 @@ import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc.ModuleBlink
@@ -70,7 +70,7 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
             val box = computeSelectedBox(event.entity) ?: return@registerEvent
             val list = boundingBoxes[event.entity] ?: return@registerEvent
 
-            val moduleBlink = TarasandeMain.managerModule().get(ModuleBlink::class.java)
+            val moduleBlink = ManagerModule.get(ModuleBlink::class.java)
             if (blinkResync.value && moduleBlink.enabled) {
                 val index = list.size - list.indexOf(box)
                 val time = (index - 1) * mc.renderTickCounter.tickTime

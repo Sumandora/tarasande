@@ -2,9 +2,9 @@ package net.tarasandedevelopment.tarasande_linux_platform
 
 import net.fabricmc.api.ClientModInitializer
 import net.minecraft.util.Util
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventShutdown
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande_linux_platform.information.InformationNowPlaying
 import net.tarasandedevelopment.tarasande_linux_platform.information.InformationPortage
 import su.mandora.event.EventDispatcher
@@ -21,7 +21,7 @@ class TarasandeLinuxPlatform : ClientModInitializer {
         }
         EventDispatcher.apply {
             add(EventSuccessfulLoad::class.java) {
-                TarasandeMain.managerInformation().apply {
+                ManagerInformation.apply {
                     if (InformationPortage.isGenlopInstalled())
                         add(InformationPortage())
                     add(InformationNowPlaying())

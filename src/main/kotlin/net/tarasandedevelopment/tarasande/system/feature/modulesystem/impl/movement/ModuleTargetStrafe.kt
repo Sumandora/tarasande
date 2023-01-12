@@ -5,10 +5,10 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.ModuleKillAura
@@ -56,7 +56,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
             if (!PlayerUtil.isPlayerMoving())
                 return@registerEvent
 
-            val moduleKillAura = TarasandeMain.managerModule().get(ModuleKillAura::class.java)
+            val moduleKillAura = ManagerModule.get(ModuleKillAura::class.java)
             val enemy =
                 if (moduleKillAura.enabled && moduleKillAura.targets.isNotEmpty())
                     moduleKillAura.targets[0].first
@@ -75,7 +75,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
 
             var newPos = calculateNextPosition(selfSpeed, curPos, center)
 
-            val moduleFlight = TarasandeMain.managerModule().get(ModuleFlight::class.java)
+            val moduleFlight = ManagerModule.get(ModuleFlight::class.java)
             val flying = moduleFlight.enabled
             val freeFlying = moduleFlight.let { it.enabled && (it.mode.isSelected(0) || it.mode.isSelected(1)) }
 

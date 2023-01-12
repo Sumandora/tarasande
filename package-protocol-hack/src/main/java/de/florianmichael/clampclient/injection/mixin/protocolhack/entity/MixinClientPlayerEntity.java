@@ -38,7 +38,7 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSprint;
 import net.tarasandedevelopment.tarasande_protocol_hack.event.EventSkipIdlePacket;
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.ArmorUpdater1_8;
@@ -192,7 +192,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Redirect(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;hasForwardMovement()Z", ordinal = 0))
     private boolean disableSprintSneak(Input input) {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_14_1)) {
-            ModuleSprint moduleSprint = TarasandeMain.Companion.managerModule().get(ModuleSprint.class);
+            ModuleSprint moduleSprint = ManagerModule.INSTANCE.get(ModuleSprint.class);
             if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
                 return input.getMovementInput().lengthSquared() >= 0.8 * 0.8;
 

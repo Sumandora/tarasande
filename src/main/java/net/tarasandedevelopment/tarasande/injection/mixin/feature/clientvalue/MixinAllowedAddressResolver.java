@@ -14,7 +14,7 @@ public class MixinAllowedAddressResolver {
 
     @Redirect(method = "resolve", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/BlockListChecker;isAllowed(Lnet/minecraft/client/network/Address;)Z"))
     public boolean alwaysAllowAddressParsing(BlockListChecker instance, Address address) {
-        if (TarasandeMain.Companion.clientValues().getAllowAddressParsingForBlacklistedServers().getValue()) {
+        if (TarasandeMain.INSTANCE.clientValues.getAllowAddressParsingForBlacklistedServers().getValue()) {
             return true;
         }
         return instance.isAllowed(address);
@@ -22,7 +22,7 @@ public class MixinAllowedAddressResolver {
 
     @Redirect(method = "resolve", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/BlockListChecker;isAllowed(Lnet/minecraft/client/network/ServerAddress;)Z"))
     public boolean alwaysAllowServerAddressParsing(BlockListChecker instance, ServerAddress serverAddress) {
-        if (TarasandeMain.Companion.clientValues().getAllowAddressParsingForBlacklistedServers().getValue()) {
+        if (TarasandeMain.INSTANCE.clientValues.getAllowAddressParsingForBlacklistedServers().getValue()) {
             return true;
         }
         return instance.isAllowed(serverAddress);

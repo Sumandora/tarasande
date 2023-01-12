@@ -17,8 +17,7 @@ import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanelToggleable
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.ManagerEntrySidebarPanel
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
@@ -26,7 +25,7 @@ import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 import java.net.InetSocketAddress
 
-class EntrySidebarPanelToggleableForgeFaker(sidebar: ManagerEntrySidebarPanel) : EntrySidebarPanelToggleable(sidebar, "Forge Faker", "Spoofer") {
+class EntrySidebarPanelToggleableForgeFaker : SidebarEntryToggleable( "Forge Faker", "Spoofer") {
 
     val forgeInfoTracker = HashMap<InetSocketAddress, IForgePayload>()
     private var currentHandler: IForgeNetClientHandler? = null
@@ -77,7 +76,7 @@ class EntrySidebarPanelToggleableForgeFaker(sidebar: ManagerEntrySidebarPanel) :
                         val text = FontWrapper.trimToWidth("Forge/FML Server", it.x)
                         val endWidth = FontWrapper.getWidth(text) + 4
 
-                        FontWrapper.textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
+                        FontWrapper.textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeMain.clientValues.accentColor.getColor().rgb, offset = 0.5F)
 
                         if (RenderUtil.isHovered(it.mouseX.toDouble(), it.mouseY.toDouble(), it.x - endWidth.toDouble(), it.y + yPos.toDouble(), it.x - 4.0, it.y + yPos + fontHeight.toDouble())) {
                             val tooltip = ArrayList<Text>()

@@ -5,7 +5,7 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.ProfileKeysImpl;
 import net.minecraft.network.encryption.PlayerKeyPair;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande_chat_features.module.ModulePublicKeyKicker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,14 +26,14 @@ public class MixinProfileKeysImpl {
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @Inject(method = "getKeyPair", at = @At("HEAD"), cancellable = true)
     public void revokeGateKeep(Optional<PlayerKeyPair> currentKey, CallbackInfoReturnable<CompletableFuture<Optional<PlayerKeyPair>>> cir) {
-        if (TarasandeMain.Companion.managerModule().get(ModulePublicKeyKicker.class).getEnabled()) {
+        if (ManagerModule.INSTANCE.get(ModulePublicKeyKicker.class).getEnabled()) {
             cir.setReturnValue(CompletableFuture.supplyAsync(Optional::empty));
         }
     }
 
     @Inject(method = "saveKeyPairToFile", at = @At("HEAD"))
     public void trackGateKeepKeys(PlayerKeyPair keyPair, CallbackInfo ci) {
-        if (TarasandeMain.Companion.managerModule().get(ModulePublicKeyKicker.class).getEnabled()) {
+        if (ManagerModule.INSTANCE.get(ModulePublicKeyKicker.class).getEnabled()) {
             PlayerKeyPair.CODEC.encodeStart(JsonOps.INSTANCE, keyPair).result().ifPresent(jsonElement -> {
                 final String hash = Hashing.sha256().hashBytes(jsonElement.toString().getBytes(StandardCharsets.UTF_8)).toString();
                 final Path folder = MinecraftClient.getInstance().runDirectory.toPath().resolve("gatekeep").resolve(MinecraftClient.getInstance().getSession().getUuid());

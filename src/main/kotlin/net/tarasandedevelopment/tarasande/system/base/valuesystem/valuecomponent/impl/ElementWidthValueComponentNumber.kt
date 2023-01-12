@@ -60,7 +60,7 @@ class ElementWidthValueComponentNumber(value: Value) : ElementWidthValueComponen
         val sliderPos = MathHelper.clamp((valueNumber.value - valueNumber.min) / (valueNumber.max - valueNumber.min), 0.0, 1.0)
 
         var white = Color.white
-        var accentColor = TarasandeMain.clientValues().accentColor.getColor()
+        var accentColor = TarasandeMain.clientValues.accentColor.getColor()
         var color = accentColor.withAlpha(255 / 4)
         var otherColor = Color(255, 255, 255, 255 / 4)
 

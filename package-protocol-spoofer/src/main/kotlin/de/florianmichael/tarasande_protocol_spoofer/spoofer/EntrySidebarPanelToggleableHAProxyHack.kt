@@ -9,11 +9,10 @@ import io.netty.handler.codec.haproxy.HAProxyProxiedProtocol
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanelToggleable
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.ManagerEntrySidebarPanel
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
 import java.net.InetSocketAddress
 
-class EntrySidebarPanelToggleableHAProxyHack(sidebar: ManagerEntrySidebarPanel) : EntrySidebarPanelToggleable(sidebar, "HA-Proxy Hack", "Spoofer") {
+class EntrySidebarPanelToggleableHAProxyHack : SidebarEntryToggleable("HA-Proxy Hack", "Spoofer") {
 
     val modifyIP = ValueBoolean(this, "Modify ip", true)
     val ip = object : ValueText(this, "IP", "127.0.0.1") {

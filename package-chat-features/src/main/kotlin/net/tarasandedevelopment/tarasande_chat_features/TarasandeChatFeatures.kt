@@ -5,6 +5,7 @@ import net.fabricmc.loader.api.FabricLoader
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande_chat_features.clientvalue.ChatValues
 import net.tarasandedevelopment.tarasande_chat_features.module.ModuleNoChatContext
 import net.tarasandedevelopment.tarasande_chat_features.module.ModulePrivateMsgDetector
@@ -20,14 +21,14 @@ class TarasandeChatFeatures : ClientModInitializer {
 
     override fun onInitializeClient() {
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
-            TarasandeMain.managerModule().add(
+            ManagerModule.add(
                     ModuleNoChatContext(),
                     ModulePublicKeyKicker(),
                     ModulePrivateMsgDetector(),
                     ModuleSpammer()
             )
 
-            ValueButtonOwnerValues(TarasandeMain.clientValues(), "Chat Values", ChatValues)
+            ValueButtonOwnerValues(TarasandeMain.clientValues, "Chat Values", ChatValues)
         }
     }
 }

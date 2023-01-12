@@ -5,13 +5,14 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.registry.Registries
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.feature.entitycolor.EntityColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
+import net.tarasandedevelopment.tarasande.system.feature.espsystem.ManagerESP
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.ModuleAntiBot
@@ -32,14 +33,14 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 
     init {
         ValueButtonOwnerValues(this, "Entity colors", entityColor)
-        object : ValueButtonOwnerValues(this, "2D ESP values", TarasandeMain.managerESP()) {
+        object : ValueButtonOwnerValues(this, "2D ESP values", ManagerESP) {
             override fun isEnabled() = mode.isSelected(1)
         }
     }
 
     fun shouldRender(entity: Entity) =
         entities.list.contains(entity.type) &&
-                (entity !is PlayerEntity || entity == mc.player || !TarasandeMain.managerModule().get(ModuleAntiBot::class.java).isBot(entity))
+                (entity !is PlayerEntity || entity == mc.player || !ManagerModule.get(ModuleAntiBot::class.java).isBot(entity))
 
     private val hashMap = HashMap<Entity, Rectangle>()
 
@@ -99,7 +100,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 
         registerEvent(EventRender2D::class.java, 998) { event ->
             for (entry in hashMap.entries) {
-                TarasandeMain.managerESP().renderBox(event.matrices, entry.key, entry.value)
+                ManagerESP.renderBox(event.matrices, entry.key, entry.value)
             }
         }
     }

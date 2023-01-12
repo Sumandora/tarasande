@@ -4,7 +4,7 @@ import de.florianmichael.clampclient.injection.instrumentation_1_12.MouseSensiti
 import kotlin.Pair;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.MathHelper;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoPitchLimit;
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
@@ -26,7 +26,7 @@ public class MixinRotationCompanion {
                     (float)((double)prevRotation.getYaw() + (double)f2 * 0.15D),
                     (float)((double)prevRotation.getPitch() + (double)f3 * 0.15D)
             );
-            if(!TarasandeMain.Companion.managerModule().get(ModuleNoPitchLimit.class).getEnabled())
+            if(!ManagerModule.INSTANCE.get(ModuleNoPitchLimit.class).getEnabled())
                 newRotation = newRotation.withPitch(MathHelper.clamp(newRotation.getPitch(), -90.0F, 90.0F));
             cir.setReturnValue(newRotation);
         }

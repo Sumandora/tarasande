@@ -13,10 +13,12 @@ import net.minecraft.registry.Registries
 import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.ModuleAntiBot
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewWorld
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
@@ -74,7 +76,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     private var prevItem = 0
 
     init {
-        TarasandeMain.managerInformation().apply {
+        ManagerInformation.apply {
             add(object : Information("Murder Mystery", "Suspected murderers") {
                 override fun getMessage(): String? {
                     if (enabled)
@@ -136,7 +138,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         }
         val message = when (broadCastMode) {
             1 -> {
-                TarasandeMain.get().name + " suspects " + player.gameProfile.name + (" because he held $itemMessage")
+                TarasandeMain.name + " suspects " + player.gameProfile.name + (" because he held $itemMessage")
             }
 
             2 -> {
@@ -241,7 +243,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                         return@registerEvent
                     if (player !is PlayerEntity) return@registerEvent
                     if (suspects.containsKey(player.gameProfile)) return@registerEvent
-                    if (TarasandeMain.managerModule().get(ModuleAntiBot::class.java).isBot(player)) return@registerEvent
+                    if (ManagerModule.get(ModuleAntiBot::class.java).isBot(player)) return@registerEvent
 
                     var mainHand: Item? = null
                     var offHand: Item? = null

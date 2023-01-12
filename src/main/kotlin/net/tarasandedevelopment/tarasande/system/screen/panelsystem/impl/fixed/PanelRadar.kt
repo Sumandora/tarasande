@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.fixed
 
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleESP
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.extension.mc
@@ -23,7 +23,7 @@ class PanelRadar : Panel("Radar", 100.0, 100.0, true) {
         val pos = mc.player?.getLerpedPos(mc.tickDelta)!!
         val panelLength = sqrt(panelWidth * panelWidth + panelHeight * panelHeight)
         for (entity in mc.world?.entities!!) {
-            if (!TarasandeMain.managerModule().get(ModuleESP::class.java).shouldRender(entity))
+            if (!ManagerModule.get(ModuleESP::class.java).shouldRender(entity))
                 continue
 
             val otherPos = entity.getLerpedPos(mc.tickDelta)!!

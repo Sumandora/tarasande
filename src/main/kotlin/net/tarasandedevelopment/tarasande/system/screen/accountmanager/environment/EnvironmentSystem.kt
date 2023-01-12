@@ -7,7 +7,7 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.environme
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.environment.impl.EnvironmentPresetShadowGen
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.environment.impl.EnvironmentPresetTheAltening
 
-class ManagerEnvironment : Manager<EnvironmentPreset>() {
+object ManagerEnvironment : Manager<EnvironmentPreset>() {
     init {
         add(
             EnvironmentPresetMojang(),

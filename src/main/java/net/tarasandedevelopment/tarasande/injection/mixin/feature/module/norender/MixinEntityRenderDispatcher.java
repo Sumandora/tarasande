@@ -6,7 +6,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.world.WorldView;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleNoRender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,7 +18,7 @@ public class MixinEntityRenderDispatcher {
 
     @Inject(method = "renderShadow", at = @At("HEAD"), cancellable = true)
     private static void noRender_renderShadow(MatrixStack matrices, VertexConsumerProvider vertexConsumers, Entity entity, float opacity, float tickDelta, WorldView world, float radius, CallbackInfo ci) {
-        if (TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getEntity().getDeadEntities().should() && entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) {
+        if (ManagerModule.INSTANCE.get(ModuleNoRender.class).getEntity().getDeadEntities().should() && entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) {
             ci.cancel();
         }
     }

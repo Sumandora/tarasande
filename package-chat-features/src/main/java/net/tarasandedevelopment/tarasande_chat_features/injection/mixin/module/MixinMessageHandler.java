@@ -5,7 +5,7 @@ import net.minecraft.client.network.message.MessageHandler;
 import net.minecraft.network.message.MessageSignatureData;
 import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SignedMessage;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande_chat_features.module.ModulePrivateMsgDetector;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,7 +17,7 @@ public class MixinMessageHandler {
 
     @Inject(method = "onChatMessage", at = @At("HEAD"))
     public void trackChatMessages(SignedMessage message, GameProfile sender, MessageType.Parameters params, CallbackInfo ci) {
-        final ModulePrivateMsgDetector modulePrivateMsgDetector = TarasandeMain.Companion.managerModule().get(ModulePrivateMsgDetector.class);
+        final ModulePrivateMsgDetector modulePrivateMsgDetector = ManagerModule.INSTANCE.get(ModulePrivateMsgDetector.class);
 
         if (modulePrivateMsgDetector.getEnabled()) {
             if (message.signature() == null) {

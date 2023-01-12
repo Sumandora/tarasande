@@ -1,6 +1,5 @@
 package net.tarasandedevelopment.tarasande.feature.clientvalue
 
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.DebugValues
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.PrivacyValues
@@ -8,16 +7,18 @@ import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.RotationValue
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.TargetingValues
 import net.tarasandedevelopment.tarasande.feature.clientvalue.panel.PanelElementsClientValues
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
+import net.tarasandedevelopment.tarasande.system.screen.blursystem.ManagerBlur
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.Thread
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 
-class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: ManagerPanel, fileSystem: ManagerFile) {
+class ClientValues(name: String) {
 
     // General
     val accentColor = ValueColor(this, "Accent color", 0.6, 1.0, 1.0)
@@ -32,8 +33,8 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
 
     init {
         ValueButtonOwnerValues(this, "Privacy values", PrivacyValues)
-        ValueButtonOwnerValues(this, "Cheat menu values", panelSystem.screenCheatMenu)
-        ValueButtonOwnerValues(this, "Command values", commandSystem)
+        ValueButtonOwnerValues(this, "Cheat menu values", ManagerPanel.screenCheatMenu)
+        ValueButtonOwnerValues(this, "Command values", ManagerCommand)
     }
 
     val allowAddressParsingForBlacklistedServers = ValueBoolean(this, "Allow address parsing for blacklisted servers", true)
@@ -43,7 +44,7 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
         // Combat
         ValueButtonOwnerValues(this, "Targeting values", TargetingValues)
         // Rendering
-        ValueButtonOwnerValues(this, "Blur values", TarasandeMain.managerBlur())
+        ValueButtonOwnerValues(this, "Blur values", ManagerBlur)
         // Rotations
         ValueButtonOwnerValues(this, "Rotation values", RotationValues)
     }
@@ -55,7 +56,7 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
     init {
         object : ValueButton(this, "Clear binds") {
             override fun onChange() {
-                TarasandeMain.managerValue().list.forEach {
+                ManagerValue.list.forEach {
                     if (it is ValueBind && it.filter(ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN))
                         it.apply {
                             type = ValueBind.Type.KEY
@@ -72,14 +73,14 @@ class ClientValues(name: String, commandSystem: ManagerCommand, panelSystem: Man
         while (true) {
             Thread.sleep(autoSaveDelay.value.toLong())
             if (autoSaveConfig.value) {
-                fileSystem.save(false)
+                ManagerFile.save(false)
             }
         }
     }
 
     init {
         EventDispatcher.add(EventSuccessfulLoad::class.java, 1001) {
-            panelSystem.add(PanelElementsClientValues(this))
+            ManagerPanel.add(PanelElementsClientValues(this))
         }
         EventDispatcher.add(EventSuccessfulLoad::class.java, 10000) {
             autoSaveDaemon.start()

@@ -14,6 +14,7 @@ import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.system.screen.blursystem.ManagerBlur
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.particle.Particle
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
@@ -83,15 +84,15 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
             }
         }
 
-        val color = TarasandeMain.clientValues().accentColor.getColor()
+        val color = TarasandeMain.clientValues.accentColor.getColor()
 
-        val strength = round(animation * TarasandeMain.managerBlur().strength.value).toInt()
+        val strength = round(animation * ManagerBlur.strength.value).toInt()
         if (strength > 0) {
-            TarasandeMain.managerBlur().bind(true)
+            ManagerBlur.bind(true)
             RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
             client?.framebuffer?.beginWrite(true)
 
-            TarasandeMain.managerBlur().blurScene(strength)
+            ManagerBlur.blurScene(strength)
         }
 
         matrices.push()

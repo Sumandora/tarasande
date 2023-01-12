@@ -20,11 +20,11 @@ import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.ClickSpeedUtil
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleClickTP
@@ -154,7 +154,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private var teleportPath: ArrayList<Vec3d>? = null
     private var entityCooldowns = HashMap<Entity, Int>()
 
-    private val moduleClickTP by lazy { TarasandeMain.managerModule().get(ModuleClickTP::class.java) } // make it lazy, this might not be ready when the kill aura is
+    private val moduleClickTP by lazy { ManagerModule.get(ModuleClickTP::class.java) } // make it lazy, this might not be ready when the kill aura is
 
     override fun onEnable() {
         clickSpeedUtil.reset()
@@ -599,7 +599,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
 
     private fun isCancellingShields(): Boolean {
-        if (TarasandeMain.managerModule().get(ModuleAutoTool::class.java).let { it.enabled && it.mode.isSelected(1) && it.useAxeToCounterBlocking.value } &&
+        if (ManagerModule.get(ModuleAutoTool::class.java).let { it.enabled && it.mode.isSelected(1) && it.useAxeToCounterBlocking.value } &&
             mc.player?.inventory?.main?.subList(0, 8)?.any { it.item is AxeItem } == true)
             return true
         return mc.player?.disablesShield() == true

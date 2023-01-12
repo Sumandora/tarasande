@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin.module;
 
-import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande_protocol_hack.module.ModuleEveryItemOnArmor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,14 +12,14 @@ public class MixinPlayerScreenHandler {
 
     @Inject(method = "getMaxItemCount", at = @At("HEAD"), cancellable = true)
     public void hookEveryItemOnArmor_getMaxItemCount(CallbackInfoReturnable<Integer> cir) {
-        if (TarasandeMain.Companion.managerModule().get(ModuleEveryItemOnArmor.class).getEnabled()) {
+        if (ManagerModule.INSTANCE.get(ModuleEveryItemOnArmor.class).getEnabled()) {
             cir.setReturnValue(64);
         }
     }
 
     @Inject(method = "canInsert", at = @At("HEAD"), cancellable = true)
     public void hookEveryItemOnArmor_canInsert(CallbackInfoReturnable<Boolean> cir) {
-        if (TarasandeMain.Companion.managerModule().get(ModuleEveryItemOnArmor.class).getEnabled()) {
+        if (ManagerModule.INSTANCE.get(ModuleEveryItemOnArmor.class).getEnabled()) {
             cir.setReturnValue(true);
         }
     }

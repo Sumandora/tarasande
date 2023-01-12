@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.s
 
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueSpacer
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
@@ -14,12 +15,12 @@ import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
-class ManagerEntrySidebarPanel : Manager<EntrySidebarPanel>() {
+class SidebarBuilder : Manager<SidebarEntry>() {
 
     fun build(): ClickableWidgetPanelSidebar {
         return PanelElements<ElementWidthValueComponent>("Sidebar", 0.0, 0.0).let {
             val categories = ArrayList<String>()
-            this@ManagerEntrySidebarPanel.list.forEach { entry ->
+            this@SidebarBuilder.list.forEach { entry ->
                 if (!categories.contains(entry.category)) {
                     categories.add(entry.category)
                 }
@@ -29,7 +30,7 @@ class ManagerEntrySidebarPanel : Manager<EntrySidebarPanel>() {
                 it.elementList.add(object : ValueSpacer(it, category, 1.0F, manage = false) {
                     override fun getColor(hovered: Boolean) = Color.gray
                 }.createValueComponent())
-                this@ManagerEntrySidebarPanel.list.filter { entry -> entry.category == category }.onEach { each ->
+                this@SidebarBuilder.list.filter { entry -> entry.category == category }.onEach { each ->
                     it.elementList.addAll(each.createElements(it))
                 }
             }
@@ -46,10 +47,10 @@ class ManagerEntrySidebarPanel : Manager<EntrySidebarPanel>() {
     }
 }
 
-open class EntrySidebarPanel(val name: String, val category: String) {
+open class SidebarEntry(val name: String, val category: String) {
 
     fun openValues() {
-        if (TarasandeMain.managerValue().getValues(this).isNotEmpty()) {
+        if (ManagerValue.getValues(this).isNotEmpty()) {
             mc.setScreen(ScreenBetterOwnerValues(name, mc.currentScreen!!, this))
         }
     }
@@ -70,7 +71,7 @@ open class EntrySidebarPanel(val name: String, val category: String) {
     }
 }
 
-abstract class EntrySidebarPanelSelection(name: String, category: String, val list: List<String>, var selected: String) : EntrySidebarPanel(name, category) {
+abstract class SidebarEntrySelection(name: String, category: String, val list: List<String>, var selected: String) : SidebarEntry(name, category) {
     abstract fun onClick(newValue: String)
 
     abstract fun isSelected(value: String): Boolean
@@ -89,7 +90,7 @@ abstract class EntrySidebarPanelSelection(name: String, category: String, val li
 
                 override fun getColor(hovered: Boolean): Color {
                     if (isSelected(it)) {
-                        return TarasandeMain.clientValues().accentColor.getColor()
+                        return TarasandeMain.clientValues.accentColor.getColor()
                     }
                     return super.getColor(hovered)
                 }
@@ -98,8 +99,8 @@ abstract class EntrySidebarPanelSelection(name: String, category: String, val li
     }
 }
 
-open class EntrySidebarPanelToggleable(sidebar: ManagerEntrySidebarPanel, name: String, category: String) : EntrySidebarPanel(name, category) {
-    val enabled = ValueBoolean(sidebar, name, false)
+open class SidebarEntryToggleable(name: String, category: String) : SidebarEntry(name, category) {
+    val enabled = ValueBoolean(this, name, false)
     open fun onClick(enabled: Boolean) {
     }
 
@@ -114,7 +115,7 @@ open class EntrySidebarPanelToggleable(sidebar: ManagerEntrySidebarPanel, name: 
                 }
             }
 
-            override fun getColor(hovered: Boolean) = (if (enabled.value) Color.green else Color.red).let { if (hovered) RenderUtil.colorInterpolate(it, TarasandeMain.clientValues().accentColor.getColor(), 0.4) else it }
+            override fun getColor(hovered: Boolean) = (if (enabled.value) Color.green else Color.red).let { if (hovered) RenderUtil.colorInterpolate(it, TarasandeMain.clientValues.accentColor.getColor(), 0.4) else it }
         }.createValueComponent())
     }
 }

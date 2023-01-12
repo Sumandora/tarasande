@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player
 
 import net.minecraft.client.gui.screen.ingame.HandledScreen
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventMouseDelta
 import net.tarasandedevelopment.tarasande.event.EventUpdate
@@ -9,6 +8,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
@@ -28,7 +28,7 @@ class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PL
         movementKeys.add(mc.options.attackKey)
         movementKeys.add(mc.options.useKey)
 
-        TarasandeMain.managerInformation().add(object : Information("Anti AFK", "Jump countdown") {
+        ManagerInformation.add(object : Information("Anti AFK", "Jump countdown") {
             override fun getMessage() =
                 if (enabled)
                     ((delay.value * 1000L - (System.currentTimeMillis() - timer.time)) / 1000.0).roundToInt().toString()

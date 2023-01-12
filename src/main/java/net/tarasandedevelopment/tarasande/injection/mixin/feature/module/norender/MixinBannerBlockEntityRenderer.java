@@ -12,8 +12,8 @@ import net.minecraft.client.render.block.entity.BannerBlockEntityRenderer;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.RotationAxis;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleNoRender;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,8 +37,8 @@ public class MixinBannerBlockEntityRenderer {
     @Inject(method = "render(Lnet/minecraft/block/entity/BannerBlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V",
             at = @At("HEAD"), cancellable = true)
     public void noRender_render(BannerBlockEntity bannerBlockEntity, float f, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int j, CallbackInfo ci) {
-        final ValueMode modeValue = TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getWorld().getBanners();
-        if (!TarasandeMain.Companion.managerModule().get(ModuleNoRender.class).getEnabled()) return;
+        final ValueMode modeValue = ManagerModule.INSTANCE.get(ModuleNoRender.class).getWorld().getBanners();
+        if (!ManagerModule.INSTANCE.get(ModuleNoRender.class).getEnabled()) return;
 
         if (!modeValue.isSelected(0)) {
             ci.cancel();

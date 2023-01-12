@@ -1,15 +1,15 @@
 package net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api
 
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.ClickMethod
+import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.ManagerClickMethod
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import kotlin.math.min
 
 class ClickSpeedUtil(private val owner: Any, enabledCallback: () -> Boolean, vararg excluded: Class<out ClickMethod>, namePrefix: String = "") {
 
-    private val clickMethods = TarasandeMain.managerClickMethod().getAllExcept(*excluded)
+    private val clickMethods = ManagerClickMethod.getAllExcept(*excluded)
 
     private val cpsMode = object : ValueMode(owner, namePrefix + "CPS mode", false, *clickMethods.map { it.name }.toTypedArray()) {
         override fun isEnabled() = enabledCallback.invoke()

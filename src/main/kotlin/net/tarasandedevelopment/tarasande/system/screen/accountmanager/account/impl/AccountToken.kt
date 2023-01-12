@@ -9,8 +9,8 @@ import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.TextFieldInfo
+import net.tarasandedevelopment.tarasande.system.screen.accountmanager.environment.ManagerEnvironment
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.environment.impl.EnvironmentPresetEasyMC
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
 import java.net.HttpURLConnection
 import java.net.Proxy
 import java.net.URL
@@ -30,7 +30,7 @@ class AccountToken : Account() {
 
     init {
         // Default environment
-        environment = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonListMultiplayerScreen::class.java).screenBetterSlotListAccountManager.managerEnvironment.get(EnvironmentPresetEasyMC::class.java).create()
+        environment = ManagerEnvironment.get(EnvironmentPresetEasyMC::class.java).create()
     }
 
     override fun logIn() {
@@ -41,7 +41,7 @@ class AccountToken : Account() {
         http.connect()
         http.outputStream.write(JsonObject().also { it.addProperty("token", token) }.toString().toByteArray())
 
-        val json = TarasandeMain.get().gson.fromJson(String(http.inputStream.readAllBytes()), JsonObject::class.java)
+        val json = TarasandeMain.gson.fromJson(String(http.inputStream.readAllBytes()), JsonObject::class.java)
 
         val authenticationService = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment)
 

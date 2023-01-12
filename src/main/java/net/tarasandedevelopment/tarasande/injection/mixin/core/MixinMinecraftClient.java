@@ -35,7 +35,7 @@ public abstract class MixinMinecraftClient {
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setOverlay(Lnet/minecraft/client/gui/screen/Overlay;)V", shift = At.Shift.AFTER))
     public void lateLoadClient(RunArgs args, CallbackInfo ci) {
-        TarasandeMain.Companion.get().onLateLoad();
+        TarasandeMain.INSTANCE.onLateLoad();
     }
 
     @Inject(method = "render", at = @At("HEAD"))

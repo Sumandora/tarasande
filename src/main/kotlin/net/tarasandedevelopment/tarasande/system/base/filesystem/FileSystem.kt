@@ -9,7 +9,7 @@ import java.io.FileWriter
 import java.nio.file.Files
 import java.util.logging.Level
 
-class ManagerFile : Manager<File>() {
+object ManagerFile : Manager<File>() {
 
     init {
         EventDispatcher.add(EventShutdown::class.java) {
@@ -24,7 +24,7 @@ class ManagerFile : Manager<File>() {
 
     fun save(backup: Boolean) {
         for (file in list) {
-            val fileObj = java.io.File(TarasandeMain.get().rootDirectory, file.name)
+            val fileObj = java.io.File(TarasandeMain.rootDirectory, file.name)
 
             if (!fileObj.parentFile.exists())
                 fileObj.parentFile.mkdirs()
@@ -33,7 +33,7 @@ class ManagerFile : Manager<File>() {
                 fileObj.renameTo(java.io.File(fileObj.path + "_backup"))
 
             val fileWriter = FileWriter(fileObj)
-            fileWriter.write(file.encrypt(TarasandeMain.get().gson.toJson(file.save()))!!)
+            fileWriter.write(file.encrypt(TarasandeMain.gson.toJson(file.save()))!!)
             fileWriter.close()
         }
     }
@@ -47,15 +47,15 @@ class ManagerFile : Manager<File>() {
                 internalLoad(file, true)
             } catch (t: Throwable) {
                 t.printStackTrace()
-                TarasandeMain.get().logger.log(Level.CONFIG, file.name + " didn't load correctly!")
+                TarasandeMain.logger.log(Level.CONFIG, file.name + " didn't load correctly!")
             }
         }
     }
 
     private fun internalLoad(file: File, backup: Boolean) {
-        val fileObj = java.io.File(TarasandeMain.get().rootDirectory, file.name + (if (backup) "_backup" else ""))
+        val fileObj = java.io.File(TarasandeMain.rootDirectory, file.name + (if (backup) "_backup" else ""))
         val content = file.decrypt(String(Files.readAllBytes(fileObj.toPath()))) ?: error(file.name + "'s content is invalid")
-        val jsonElement = TarasandeMain.get().gson.fromJson(content, JsonElement::class.java)
+        val jsonElement = TarasandeMain.gson.fromJson(content, JsonElement::class.java)
         file.load(jsonElement)
         file.loaded = true
     }

@@ -15,7 +15,7 @@ import java.util.jar.Manifest
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-class ManagerGrabber : Manager<Grabber>() {
+object ManagerGrabber : Manager<Grabber>() {
 
     init {
         add(

@@ -22,7 +22,7 @@ import org.lwjgl.opengl.GL13
 import org.lwjgl.opengl.GL20
 import su.mandora.event.EventDispatcher
 
-class ManagerBlur : Manager<Blur>() {
+object ManagerBlur : Manager<Blur>() {
 
     val mode: ValueMode
     val strength = ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0, exceed = false)

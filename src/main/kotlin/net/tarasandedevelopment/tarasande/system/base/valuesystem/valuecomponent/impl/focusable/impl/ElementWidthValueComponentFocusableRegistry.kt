@@ -55,7 +55,7 @@ class ElementWidthValueComponentFocusableRegistry(value: Value) : ElementWidthVa
                             (FontWrapper.fontHeight() / 2.0F * (index + 0.5F)).toDouble(),
                             width,
                             (FontWrapper.fontHeight() / 2.0F * ((index + 1) + 0.5F)).toDouble()))
-                        TarasandeMain.clientValues().accentColor.getColor().rgb
+                        TarasandeMain.clientValues.accentColor.getColor().rgb
                     else
                         -1
                 else
@@ -69,7 +69,7 @@ class ElementWidthValueComponentFocusableRegistry(value: Value) : ElementWidthVa
         matrices.push()
         matrices.translate(width - 40, FontWrapper.fontHeight() / 2.0F * (valueRegistry.list.size + 0.5F) + 2.0, 0.0)
         matrices.scale(0.5F, 0.5F, 1.0F)
-        if (textFieldWidget.isFocused) textFieldAccessor.tarasande_setColor(TarasandeMain.clientValues().accentColor.getColor())
+        if (textFieldWidget.isFocused) textFieldAccessor.tarasande_setColor(TarasandeMain.clientValues.accentColor.getColor())
         if (!value.isEnabled()) textFieldAccessor.tarasande_setColor(Color.white.darker().darker())
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
         textFieldAccessor.tarasande_setColor(null)
@@ -88,7 +88,7 @@ class ElementWidthValueComponentFocusableRegistry(value: Value) : ElementWidthVa
                             (FontWrapper.fontHeight() / 2.0F * ((valueRegistry.list.size + 1) + index + 0.5F) + 2.0F).toDouble(),
                             width,
                             (FontWrapper.fontHeight() / 2.0F * ((valueRegistry.list.size + 1) + index + 0.5F) + 2.0F + FontWrapper.fontHeight() / 2.0F).toDouble()))
-                        TarasandeMain.clientValues().accentColor.getColor()
+                        TarasandeMain.clientValues.accentColor.getColor()
                     else
                         Color.white
                 else

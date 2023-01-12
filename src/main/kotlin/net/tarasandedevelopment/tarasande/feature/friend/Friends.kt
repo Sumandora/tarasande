@@ -3,13 +3,14 @@ package net.tarasandedevelopment.tarasande.feature.friend
 import com.mojang.authlib.GameProfile
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Formatting
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.event.EventPlayerListName
 import net.tarasandedevelopment.tarasande.event.EventTagName
 import net.tarasandedevelopment.tarasande.feature.friend.panel.PanelElementsFriends
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc.ModuleNoFriends
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleNameProtect
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import su.mandora.event.EventDispatcher
 
 class Friends {
@@ -19,7 +20,7 @@ class Friends {
     init {
         EventDispatcher.apply {
             add(EventIsEntityAttackable::class.java) {
-                if (TarasandeMain.managerModule().get(ModuleNoFriends::class.java).enabled)
+                if (ManagerModule.get(ModuleNoFriends::class.java).enabled)
                     return@add
 
                 if (it.attackable && it.entity is PlayerEntity)
@@ -27,7 +28,7 @@ class Friends {
                         it.attackable = false
             }
             add(EventTagName::class.java) {
-                if (TarasandeMain.managerModule().get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
+                if (ManagerModule.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
                     return@add
 
                 if (it.entity is PlayerEntity) {
@@ -38,7 +39,7 @@ class Friends {
                 }
             }
             add(EventPlayerListName::class.java) {
-                if (TarasandeMain.managerModule().get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
+                if (ManagerModule.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
                     return@add
 
                 for (friend in friends)
@@ -48,7 +49,7 @@ class Friends {
             }
         }
 
-        TarasandeMain.managerPanel().add(PanelElementsFriends(this))
+        ManagerPanel.add(PanelElementsFriends(this))
     }
 
     private fun addFriend(gameProfile: GameProfile, alias: String? = null) {

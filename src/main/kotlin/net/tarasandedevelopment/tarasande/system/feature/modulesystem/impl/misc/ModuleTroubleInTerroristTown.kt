@@ -47,7 +47,7 @@ class ModuleTroubleInTerroristTown : Module("Trouble in terrorist town", "Uses a
             val traitors = scanForTraitors(event.entity) ?: return@registerEvent
 
             if (traitors.isNotEmpty())
-                TarasandeMain.notifications().notify(event.entity.gameProfile.name + " is being attacked by " + traitors.joinToString { it.gameProfile.name })
+                TarasandeMain.notifications.notify(event.entity.gameProfile.name + " is being attacked by " + traitors.joinToString { it.gameProfile.name })
         }
 
         registerEvent(EventPacket::class.java) { event ->
@@ -57,7 +57,7 @@ class ModuleTroubleInTerroristTown : Module("Trouble in terrorist town", "Uses a
                 val traitors = scanForTraitors(mc.player!!) ?: return@registerEvent
 
                 if (traitors.isNotEmpty())
-                    TarasandeMain.notifications().notify("You are being attacked by " + traitors.joinToString { it.gameProfile.name })
+                    TarasandeMain.notifications.notify("You are being attacked by " + traitors.joinToString { it.gameProfile.name })
             }
         }
     }

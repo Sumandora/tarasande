@@ -41,7 +41,7 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
 
                         val urlConnection = URL(String.format(url, entry.key.id.toString().replace("-", ""), apiKey.value)).openConnection()
                         val jsonStr = urlConnection.getInputStream().readAllBytes().decodeToString()
-                        val jsonElement = TarasandeMain.get().gson.fromJson(jsonStr, JsonElement::class.java)
+                        val jsonElement = TarasandeMain.gson.fromJson(jsonStr, JsonElement::class.java)
                         if (jsonElement != null && !jsonElement.isJsonNull) {
                             if (!entry.value.parse(jsonElement.asJsonObject)) {
                                 blackList.add(entry.key)
@@ -61,7 +61,7 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
     }
 
     private fun drawString(matrices: MatrixStack, str: String, x: Double, y: Double) {
-        val accent = TarasandeMain.clientValues().accentColor.getColor()
+        val accent = TarasandeMain.clientValues.accentColor.getColor()
         val width = FontWrapper.getWidth(str)
         val titleBarHeight = titleBarHeight
         when (alignment) {

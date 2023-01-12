@@ -10,11 +10,11 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.im
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.ScreenExtensionDirectConnectScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.ManagerEntrySidebarPanel
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarBuilder
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.panel.ClickableWidgetPanelSidebar
 import su.mandora.event.EventDispatcher
 
-class ManagerScreenExtension : Manager<ScreenExtension<*>>() {
+object ManagerScreenExtension : Manager<ScreenExtension<*>>() {
 
     init {
         add(
@@ -47,7 +47,7 @@ abstract class ScreenExtension<T : Screen>(val screen: Class<out T>) {
 }
 
 open class ScreenExtensionSidebar<T : Screen>(screen: Class<out T>) : ScreenExtension<T>(screen) {
-    val sidebar = ManagerEntrySidebarPanel()
+    val sidebar = SidebarBuilder()
     private var sidebarWidget: ClickableWidgetPanelSidebar? = null
 
     override fun createElements(screen: T): MutableList<Element> {

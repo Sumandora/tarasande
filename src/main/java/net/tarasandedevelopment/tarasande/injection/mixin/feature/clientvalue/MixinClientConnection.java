@@ -13,14 +13,14 @@ public class MixinClientConnection {
 
     @Redirect(method = "exceptionCaught", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;disconnect(Lnet/minecraft/text/Text;)V", ordinal = 0))
     public void noNettyTimeout(ClientConnection instance, Text disconnectReason) {
-        if (!TarasandeMain.Companion.clientValues().getRemoveNettyExceptionHandling().isSelected(0)) {
+        if (!TarasandeMain.INSTANCE.clientValues.getRemoveNettyExceptionHandling().isSelected(0)) {
             instance.disconnect(disconnectReason);
         }
     }
 
     @Redirect(method = "exceptionCaught", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;debug(Ljava/lang/String;Ljava/lang/Throwable;)V", ordinal = 2, remap = false))
     public void cancelWrongPacketHandling(Logger instance, String s, Throwable throwable) {
-        if (!TarasandeMain.Companion.clientValues().getRemoveNettyExceptionHandling().isSelected(1)) {
+        if (!TarasandeMain.INSTANCE.clientValues.getRemoveNettyExceptionHandling().isSelected(1)) {
             instance.debug(s, throwable);
         }
     }

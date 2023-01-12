@@ -7,7 +7,7 @@ import net.tarasandedevelopment.tarasande.system.screen.informationsystem.panel.
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import su.mandora.event.EventDispatcher
 
-class ManagerInformation(panelSystem: ManagerPanel) : Manager<Information>() {
+object ManagerInformation : Manager<Information>() {
 
     init {
         add(
@@ -45,7 +45,7 @@ class ManagerInformation(panelSystem: ManagerPanel) : Manager<Information>() {
 
         EventDispatcher.add(EventSuccessfulLoad::class.java, 1001) {
             list.sortedBy { it.owner }
-            panelSystem.add(PanelInformation(this))
+            ManagerPanel.add(PanelInformation(this))
         }
     }
 

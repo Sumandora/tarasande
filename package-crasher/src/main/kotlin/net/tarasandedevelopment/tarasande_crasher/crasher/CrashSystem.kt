@@ -8,7 +8,7 @@ import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
 import java.nio.charset.StandardCharsets
 
-class ManagerCrasher : Manager<Crasher>() {
+object ManagerCrasher : Manager<Crasher>() {
 
     init {
         add(
@@ -53,6 +53,7 @@ abstract class Crasher(val name: String) {
     }
 
     fun writeVarInt(value: Int, output: DataOutputStream) {
+        @Suppress("NAME_SHADOWING")
         var value = value
         while (value and -0x80 !== 0x0) {
             output.writeByte(value and 0x7F or 0x80)

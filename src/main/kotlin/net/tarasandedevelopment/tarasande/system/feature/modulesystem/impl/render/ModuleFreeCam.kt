@@ -7,7 +7,6 @@ import net.minecraft.entity.Entity
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -15,6 +14,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
@@ -47,7 +47,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
     private val capturedKeys = arrayOf(mc.options.jumpKey, mc.options.sneakKey, mc.options.sprintKey)
 
     init {
-        TarasandeMain.managerInformation().add(object : Information("Free cam", "Camera position") {
+        ManagerInformation.add(object : Information("Free cam", "Camera position") {
             private val decimalPlacesX = ValueNumber(this, "Decimal places: x", 0.0, 1.0, 5.0, 1.0)
             private val decimalPlacesY = ValueNumber(this, "Decimal places: y", 0.0, 1.0, 5.0, 1.0)
             private val decimalPlacesZ = ValueNumber(this, "Decimal places: z", 0.0, 1.0, 5.0, 1.0)

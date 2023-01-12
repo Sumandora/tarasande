@@ -29,7 +29,7 @@ class PanelNotifications(private val notifications: Notifications) : Panel("Noti
                 return
             val animation = animations[it]!!
             if (animation > notifications.speedIn.min) { // hack
-                val color = TarasandeMain.clientValues().accentColor.getColor().withAlpha((animation * 255).toInt())
+                val color = TarasandeMain.clientValues.accentColor.getColor().withAlpha((animation * 255).toInt())
                 RenderSystem.enableBlend()
                 val animatedPosition = notifications.easing.ease(animation.toFloat())
                 val formattedTime = StringHelper.formatTicks(((it.length + 1000 - (System.currentTimeMillis() - it.creationTime)) / 1000 * 20).toInt())

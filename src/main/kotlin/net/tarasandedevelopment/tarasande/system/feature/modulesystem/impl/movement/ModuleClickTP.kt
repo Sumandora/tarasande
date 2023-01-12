@@ -9,10 +9,10 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.PositionAndOnGr
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventMouse
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.Command
+import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
@@ -37,7 +37,7 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
     private var goal: BlockPos? = null
 
     init {
-        TarasandeMain.managerCommand().apply {
+        ManagerCommand.apply {
             add(object : Command("teleport", "tp") {
                 override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
                     return builder.then(argument("position", BlockPosArgumentType.blockPos())?.executes {

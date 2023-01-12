@@ -29,7 +29,7 @@ public abstract class MixinSimpleOption_OptionSliderWidgetImpl extends OptionSli
     public void injectUpdateMessage(CallbackInfo ci) {
         if (this.option == MinecraftClient.getInstance().options.getMouseSensitivity()) {
             float approximation = MouseSensitivity_1_12_2.get1_12SensitivityFor1_19(((Double) this.option.value).doubleValue());
-            final Text customText = Text.literal(" (" + VersionListEnum.r1_12_2.getName() + ": " + MouseSensitivity_1_12_2.getPercentage(approximation) + "%)").styled(style -> style.withColor(TarasandeMain.Companion.clientValues().getAccentColor().getColor().getRGB()));
+            final Text customText = Text.literal(" (" + VersionListEnum.r1_12_2.getName() + ": " + MouseSensitivity_1_12_2.getPercentage(approximation) + "%)").styled(style -> style.withColor(TarasandeMain.clientValues.getAccentColor().getColor().getRGB()));
 
             this.setMessage(Text.literal("").append(this.getMessage()).append(customText));
         }

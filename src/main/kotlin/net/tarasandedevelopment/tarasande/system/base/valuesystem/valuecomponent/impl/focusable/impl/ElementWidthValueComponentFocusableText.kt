@@ -46,7 +46,7 @@ class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueC
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         textFieldWidget.width = (width * (1.0 / scale)).toInt()
         if (textFieldWidget.isFocused && value.isEnabled())
-            textFieldAccessor.tarasande_setColor(TarasandeMain.clientValues().accentColor.getColor())
+            textFieldAccessor.tarasande_setColor(TarasandeMain.clientValues.accentColor.getColor())
         else
             textFieldWidget.setCursorToEnd()
 

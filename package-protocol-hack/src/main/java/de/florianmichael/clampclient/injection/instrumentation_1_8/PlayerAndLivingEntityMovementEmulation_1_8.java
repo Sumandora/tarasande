@@ -24,12 +24,11 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraft.world.border.WorldBorder;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
 import net.tarasandedevelopment.tarasande.event.*;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoWeb;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSafeWalk;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.Vec3dKt;
 import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack;
 import net.tarasandedevelopment.tarasande_protocol_hack.injection.accessor.IEventCollisionShape;
 import su.mandora.event.EventDispatcher;
@@ -493,7 +492,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
 
             if (((IEntity_Protocol) original).protocolhack_isInWeb()) {
                 ((IEntity_Protocol) original).protocolhack_setInWeb(false);
-                ModuleNoWeb moduleNoWeb = TarasandeMain.Companion.managerModule().get(ModuleNoWeb.class);
+                ModuleNoWeb moduleNoWeb = ManagerModule.INSTANCE.get(ModuleNoWeb.class);
                 if(moduleNoWeb.getEnabled()) {
                     x *= moduleNoWeb.getHorizontalSlowdown().getValue();
                     y *= moduleNoWeb.getVerticalSlowdown().getValue();
@@ -517,7 +516,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
             double d4 = y;
             double d5 = z;
 
-            ModuleSafeWalk moduleSafeWalk = TarasandeMain.Companion.managerModule().get(ModuleSafeWalk.class);
+            ModuleSafeWalk moduleSafeWalk = ManagerModule.INSTANCE.get(ModuleSafeWalk.class);
 
             boolean flag = original.isOnGround() && (original.isSneaking() || (moduleSafeWalk.getEnabled() && !moduleSafeWalk.getSneak().getValue())) && (Object) original instanceof PlayerEntity;
 
@@ -768,7 +767,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
         }
 
         if(onGroundIn) {
-            ModuleNoFall moduleNoFall = TarasandeMain.Companion.managerModule().get(ModuleNoFall.class);
+            ModuleNoFall moduleNoFall = ManagerModule.INSTANCE.get(ModuleNoFall.class);
             if(moduleNoFall.getEnabled() && moduleNoFall.getMode().isSelected(0) && moduleNoFall.getGroundSpoofMode().isSelected(1))
                 return;
         }

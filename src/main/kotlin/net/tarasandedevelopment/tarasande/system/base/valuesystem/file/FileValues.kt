@@ -2,14 +2,14 @@ package net.tarasandedevelopment.tarasande.system.base.valuesystem.file
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.filesystem.File
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 
 class FileValues : File("Values") {
 
     override fun save(): JsonElement {
         val values = JsonObject()
-        for (value in TarasandeMain.managerValue().list) {
+        for (value in ManagerValue.list) {
             var jsonObject: JsonObject
             if (values.has(value.owner.javaClass.name)) {
                 jsonObject = values.getAsJsonObject(value.owner.javaClass.name)
@@ -30,7 +30,7 @@ class FileValues : File("Values") {
 
     override fun load(jsonElement: JsonElement) {
         val jsonObject = jsonElement as JsonObject
-        for (value in TarasandeMain.managerValue().list) {
+        for (value in ManagerValue.list) {
             if (jsonObject.has(value.owner.javaClass.name)) {
                 val jsonObject2 = jsonObject.getAsJsonObject(value.owner.javaClass.name)
                 if (jsonObject2.has(value.name)) {

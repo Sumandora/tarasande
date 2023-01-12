@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande_chat_features.injection.mixin.module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.message.SignedMessage;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande_chat_features.TarasandeChatFeatures;
 import net.tarasandedevelopment.tarasande_chat_features.module.ModuleNoChatContext;
 import net.tarasandedevelopment.tarasande_chat_features.viaversion.ViaVersionUtil;
@@ -16,7 +16,7 @@ public class MixinClientPlayNetworkHandler {
 
     @ModifyVariable(method = "acknowledge", at = @At("HEAD"), argsOnly = true, index = 2)
     public boolean hookNoChatContext(boolean value, SignedMessage message) {
-        if (TarasandeMain.Companion.managerModule().get(ModuleNoChatContext.class).getEnabled()) {
+        if (ManagerModule.INSTANCE.get(ModuleNoChatContext.class).getEnabled()) {
             if (TarasandeChatFeatures.Companion.getTarasandeProtocolHackLoaded()) {
                 if (ViaVersionUtil.INSTANCE.isSimpleSignatures()) {
                     return false;

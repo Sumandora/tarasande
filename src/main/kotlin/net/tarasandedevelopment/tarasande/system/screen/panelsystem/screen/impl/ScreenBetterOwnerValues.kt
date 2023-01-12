@@ -3,9 +3,10 @@ package net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
+import net.tarasandedevelopment.tarasande.system.screen.blursystem.ManagerBlur
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelElements
 import net.tarasandedevelopment.tarasande.util.extension.mc
@@ -23,7 +24,7 @@ class ScreenBetterOwnerValues(title: String, parent: Screen, val owner: Any) : S
         this.addDrawableChild(ClickableWidgetPanel(object : PanelElements<ElementWidthValueComponent>(this.title.string, 300.0, 0.0) {
 
             init {
-                for (it in TarasandeMain.managerValue().getValues(owner))
+                for (it in ManagerValue.getValues(owner))
                     elementList.add(it.createValueComponent())
             }
 
@@ -65,7 +66,7 @@ class ScreenBetterOwnerValues(title: String, parent: Screen, val owner: Any) : S
         }
 
         if (client?.world != null) {
-            TarasandeMain.managerBlur().bind(setViewport = true, screens = true)
+            ManagerBlur.bind(setViewport = true, screens = true)
             RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
             client?.framebuffer?.beginWrite(true)
         }

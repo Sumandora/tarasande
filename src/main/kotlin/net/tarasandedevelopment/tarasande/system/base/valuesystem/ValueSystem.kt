@@ -2,14 +2,13 @@ package net.tarasandedevelopment.tarasande.system.base.valuesystem
 
 import com.google.gson.JsonElement
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.file.FileValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import su.mandora.event.EventDispatcher
 
-class ManagerValue(fileSystem: ManagerFile) : Manager<Value>() {
+object ManagerValue : Manager<Value>() {
 
     private var closed = false
 
@@ -19,7 +18,7 @@ class ManagerValue(fileSystem: ManagerFile) : Manager<Value>() {
                 if (list.filter { it != value }.any { it.name == value.name && it.owner.javaClass.name == value.owner.javaClass.name })
                     error("Name-and-owner-clash value registered (" + value.owner.javaClass.name + " -> " + value.name + ")")
             }
-            fileSystem.add(FileValues())
+            ManagerFile.add(FileValues())
             closed = true
         }
     }
@@ -44,7 +43,7 @@ abstract class Value(var owner: Any, val name: String, private val valueComponen
 
     init {
         if (manage)
-            TarasandeMain.managerValue().add(this)
+            ManagerValue.add(this)
     }
 
     open fun isEnabled() = true

@@ -5,7 +5,7 @@ import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.impl.
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.impl.ClickMethodCooldown
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.impl.ClickMethodDynamic
 
-class ManagerClickMethod : Manager<Class<out ClickMethod>>() {
+object ManagerClickMethod : Manager<Class<out ClickMethod>>() {
 
     init {
         add(

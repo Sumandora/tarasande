@@ -2,7 +2,7 @@ package de.florianmichael.clampclient.injection.instrumentation_1_12;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoPitchLimit;
 
 public class UnboxedEntity {
@@ -14,7 +14,7 @@ public class UnboxedEntity {
         origin.setYaw((float)((double)origin.getYaw() + (double)yaw * 0.15D));
         origin.setPitch((float)((double)origin.getPitch() - (double)pitch * 0.15D));
 
-        if(!TarasandeMain.Companion.managerModule().get(ModuleNoPitchLimit.class).getEnabled())
+        if(!ManagerModule.INSTANCE.get(ModuleNoPitchLimit.class).getEnabled())
             origin.setPitch(MathHelper.clamp(origin.getPitch(), -90.0F, 90.0F));
 
         origin.prevPitch += origin.getPitch() - f;

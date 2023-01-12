@@ -5,11 +5,10 @@ import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueTextList
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanelToggleable
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.ManagerEntrySidebarPanel
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
 import su.mandora.event.EventDispatcher
 
-class EntrySidebarPanelToggleablePluginMessageFilter(sidebar: ManagerEntrySidebarPanel) : EntrySidebarPanelToggleable(sidebar, "Plugin message filter", "Spoofer") {
+class EntrySidebarPanelToggleablePluginMessageFilter : SidebarEntryToggleable("Plugin message filter", "Spoofer") {
 
     private val filterType = ValueMode(this, "Filter type", false, "Contains", "Equals")
     private val channels = ValueTextList(this, "Channels", mutableListOf("fabric"))

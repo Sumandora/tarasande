@@ -7,6 +7,7 @@ import net.tarasandedevelopment.tarasande.feature.notification.panel.PanelNotifi
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import su.mandora.event.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -43,11 +44,11 @@ class Notifications {
 
         EventDispatcher.add(EventModuleStateSwitched::class.java) {
             if (moduleNotifications.value)
-                TarasandeMain.notifications().notify(it.module.name + " is now " + if (it.module.enabled) "enabled" else "disabled")
+                TarasandeMain.notifications.notify(it.module.name + " is now " + if (it.module.enabled) "enabled" else "disabled")
         }
 
 
-        TarasandeMain.managerPanel().add(panel)
+        ManagerPanel.add(panel)
     }
 
     fun notify(text: String) {

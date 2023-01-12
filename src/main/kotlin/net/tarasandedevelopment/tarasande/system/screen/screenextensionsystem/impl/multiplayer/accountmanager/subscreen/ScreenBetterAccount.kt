@@ -5,15 +5,14 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholderPassword
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.Account
+import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.ManagerAccount
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.ExtraInfo
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.TextFieldInfo
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
@@ -27,7 +26,7 @@ class ScreenBetterAccount(
 
     private val textFields = ArrayList<TextFieldWidget>()
 
-    private var implementationClass: Class<out Account> = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonListMultiplayerScreen::class.java).screenBetterSlotListAccountManager.managerAccount.list.first()
+    private var implementationClass: Class<out Account> = ManagerAccount.list.first()
     private var accountImplementation = implementationClass.getDeclaredConstructor().newInstance()
 
     private var submitButton: ButtonWidget? = null
@@ -36,7 +35,7 @@ class ScreenBetterAccount(
         textFields.clear()
 
         addDrawableChild(ButtonWidget(5, 5, 100, 20, Text.of((implementationClass.annotations[0] as AccountInfo).name)) { button ->
-            implementationClass = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonListMultiplayerScreen::class.java).screenBetterSlotListAccountManager.managerAccount.let { it.list[(it.list.indexOf(implementationClass) + 1) % it.list.size] }
+            implementationClass = ManagerAccount.let { it.list[(it.list.indexOf(implementationClass) + 1) % it.list.size] }
             accountImplementation = implementationClass.getDeclaredConstructor().newInstance()
             clearAndInit()
             button.message = Text.of(implementationClass.name)

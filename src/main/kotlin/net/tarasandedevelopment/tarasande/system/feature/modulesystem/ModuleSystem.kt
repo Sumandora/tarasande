@@ -26,7 +26,7 @@ import su.mandora.event.Event
 import su.mandora.event.EventDispatcher
 import java.util.function.Consumer
 
-class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fileSystem: ManagerFile) : Manager<Module>() {
+object ManagerModule : Manager<Module>() {
 
     init {
         add(
@@ -142,8 +142,8 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
             ModuleRegen()
         )
 
-        panelSystem.add(PanelArrayList(this@ManagerModule))
-        commandSystem.add(CommandToggle(this@ManagerModule))
+        ManagerPanel.add(PanelArrayList(this@ManagerModule))
+        ManagerCommand.add(CommandToggle(this@ManagerModule))
         EventDispatcher.apply {
             add(EventTick::class.java) {
                 if (it.state == EventTick.State.POST) {
@@ -168,9 +168,9 @@ class ManagerModule(commandSystem: ManagerCommand, panelSystem: ManagerPanel, fi
             }
             add(EventSuccessfulLoad::class.java, 1001) {
                 this@ManagerModule.list.distinctBy { it.category }.forEach {
-                    panelSystem.add(PanelElementsCategory(this@ManagerModule, it.category))
+                    ManagerPanel.add(PanelElementsCategory(this@ManagerModule, it.category))
                 }
-                fileSystem.add(FileModules(this@ManagerModule))
+                ManagerFile.add(FileModules(this@ManagerModule))
             }
         }
     }

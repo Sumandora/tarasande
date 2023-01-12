@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.injection.mixin.feature.module.entity
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.predicate.entity.EntityPredicates;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoCramming;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,7 +18,7 @@ public class MixinEntityPredicates {
     @Inject(method = "canBePushedBy", at = @At("RETURN"), cancellable = true)
     private static void hookNoCramming(Entity entity, CallbackInfoReturnable<Predicate<Entity>> cir) {
         if (entity == MinecraftClient.getInstance().player) {
-            ModuleNoCramming moduleNoCramming = TarasandeMain.Companion.managerModule().get(ModuleNoCramming.class);
+            ModuleNoCramming moduleNoCramming = ManagerModule.INSTANCE.get(ModuleNoCramming.class);
             if (moduleNoCramming.getEnabled())
                 cir.setReturnValue(o -> moduleNoCramming.getMode().isSelected(0));
         }

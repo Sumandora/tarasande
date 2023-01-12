@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.move
 
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.InputUtil
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.feature.friend.panel.PanelElementsFriends
@@ -12,6 +11,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.element.PanelElementsCategory
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterFileChooser
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
@@ -51,7 +51,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         if (mc.currentScreen is ScreenBetterOwnerValues) {
             return (mc.currentScreen as ScreenBetterOwnerValues).panel.elementList.any { isFocused(it) }
         }
-        return TarasandeMain.managerPanel().list.any {
+        return ManagerPanel.list.any {
             when (it) {
                 is PanelElementsCategory -> it.elementList.any { moduleElement -> moduleElement.components.any { component -> isFocused(component) } }
                 is PanelElementsFriends -> it.elementList.any { playerElement -> playerElement.textField.isFocused() }

@@ -4,11 +4,11 @@ import com.google.common.collect.Iterables
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.minecraft.util.Formatting
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventInvalidPlayerInfo
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.ModuleAntiBot
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.extension.mc
@@ -104,7 +104,7 @@ class InformationTextRadar : Information("World", "Text radar") {
 
     override fun getMessage(): String? {
         var closestPlayers = mc.world?.players?.map { it to (mc.player?.distanceTo(it)?.toDouble() ?: 0.0) }?.sortedBy { it.second } ?: return null
-        closestPlayers = closestPlayers.filter { it.first != mc.player }.filter { !TarasandeMain.managerModule().get(ModuleAntiBot::class.java).isBot(it.first) }
+        closestPlayers = closestPlayers.filter { it.first != mc.player }.filter { !ManagerModule.get(ModuleAntiBot::class.java).isBot(it.first) }
         closestPlayers = closestPlayers.subList(0, min(amount.value.toInt(), closestPlayers.size))
         if (closestPlayers.isEmpty()) return null
         return "\n" + closestPlayers.joinToString("\n") { Formatting.strip(it.first.gameProfile.name) + " (" + StringUtil.round(it.second, decimalPlaces.value.toInt()) + ")" }

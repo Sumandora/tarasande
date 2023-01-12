@@ -6,10 +6,9 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
+import net.tarasandedevelopment.tarasande.system.screen.accountmanager.environment.ManagerEnvironment
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import java.util.function.Consumer
 
@@ -45,7 +44,7 @@ class ScreenBetterEnvironment(prevScreen: Screen?, private val environment: Envi
             addDrawableChild(it)
         }
 
-        for ((index, environmentPreset) in TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonListMultiplayerScreen::class.java).screenBetterSlotListAccountManager.managerEnvironment.list.withIndex()) {
+        for ((index, environmentPreset) in ManagerEnvironment.list.withIndex()) {
             this.addDrawableChild(ButtonWidget(5 + (index * 105), 5, 100, 20, Text.of(environmentPreset.name)) {
                 authHostTextField?.text = environmentPreset.authHost
                 accountsHostTextField?.text = environmentPreset.accountsHost

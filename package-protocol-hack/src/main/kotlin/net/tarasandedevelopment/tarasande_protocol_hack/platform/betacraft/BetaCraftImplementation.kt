@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande_protocol_hack.platform.betacraft
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.util.VersionListEnum
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.EntrySidebarPanel
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntry
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import org.jsoup.Jsoup
@@ -31,7 +31,7 @@ class BetaCraftServ(val displayName: String, val onlineMode: Boolean, val addres
 
 const val WEB_DATA = "http://www.betacraft.uk/serverlist"
 
-class EntrySidebarPanelBetaCraftServers : EntrySidebarPanel("BetaCraft Servers", "Protocol Hack") {
+class SidebarEntryBetaCraftServers : SidebarEntry("BetaCraft Servers", "Protocol Hack") {
 
     private val autoRequest = ValueMode(this, "Auto request", false, "Off", "Only first time", "Everytime")
     private var serversScreen: ScreenBetterSlotListBetaCraftServers? = null

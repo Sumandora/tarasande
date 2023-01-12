@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ModuleNameProtect : Module("Name protect", "Hides your in-game name", ModuleCategory.RENDER) {
 
-    private val protectedName = ValueText(this, "Protected name", TarasandeMain.get().name)
+    private val protectedName = ValueText(this, "Protected name", TarasandeMain.name)
 
     private val border = "( |[^a-z]|\\b)"
 
@@ -39,7 +39,7 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
                 return@registerEvent
             event.string = replaceName(event.string, mc.session.profile.name, protectedName.value)
 
-            for (pair in TarasandeMain.friends().names()) {
+            for (pair in TarasandeMain.friends.names()) {
                 event.string = replaceName(event.string, pair.key, pair.value)
             }
         }

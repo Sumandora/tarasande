@@ -14,12 +14,12 @@ import net.minecraft.network.encryption.SignatureVerifier
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Util
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.injection.accessor.IRealmsPeriodicCheckers
 import net.tarasandedevelopment.tarasande.screen.base.AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
+import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.ManagerAccount
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.AccountSession
@@ -54,17 +54,17 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
 
     var status = ""
 
-    // @formatter:off
-    val managerEnvironment  = ManagerEnvironment()
-    val managerAzureApp     = ManagerAzureApp()
-    val managerAccount      = ManagerAccount()
-    // @formatter:on
+    init {
+        ManagerEnvironment
+        ManagerAzureApp
+        ManagerAccount
+    }
 
     val screenBetterProxy = ScreenBetterProxy()
 
     init {
         EventDispatcher.add(EventSuccessfulLoad::class.java, 9999) {
-            TarasandeMain.managerFile().add(FileAccounts(this))
+            ManagerFile.add(FileAccounts(this))
 
             if (mc.session?.accountType == Session.AccountType.LEGACY && mainAccount != null) {
                 logIn(accounts[mainAccount!!])

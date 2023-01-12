@@ -16,6 +16,7 @@ import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import java.net.InetSocketAddress
 
@@ -40,7 +41,7 @@ class Fml1NetClientHandler(private val connection: ClientConnection) : IForgeNet
         this.sendCustomPayload("minecraft:register", newPacket)
         this.sendClientHello(version)
 
-        val forgeFaker = TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(EntrySidebarPanelToggleableForgeFaker::class.java)
+        val forgeFaker = ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(EntrySidebarPanelToggleableForgeFaker::class.java)
         if (forgeFaker.useFML1Cache.value) {
             forgeFaker.forgeInfoTracker[this.connection.address]?.also {
                 this.sendModList(it.installedMods())
@@ -53,7 +54,7 @@ class Fml1NetClientHandler(private val connection: ClientConnection) : IForgeNet
             @Suppress("KotlinConstantConditions")
             val payload = (serverInfo as IServerInfo).tarasande_getForgePayload()
             if (payload == null) {
-                connection.disconnect(Text.of("[" + TarasandeMain.get().name + "] Failed to get mods, try to enable FML1 Cache in ForgeFaker"))
+                connection.disconnect(Text.of("[" + TarasandeMain.name + "] Failed to get mods, try to enable FML1 Cache in ForgeFaker"))
                 return
             }
             this.sendModList(payload.installedMods())

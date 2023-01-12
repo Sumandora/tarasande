@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.impl.*
 
-class ManagerAzureApp : Manager<AzureAppPreset>() {
+object ManagerAzureApp : Manager<AzureAppPreset>() {
 
     init {
         add(

@@ -48,7 +48,7 @@ class EntityColor {
         }
 
         if (entity == mc.player) color = selfColor.getColor()
-        else if (entity is PlayerEntity && TarasandeMain.friends().isFriend(entity.gameProfile)) color = friendsColor.getColor()
+        else if (entity is PlayerEntity && TarasandeMain.friends.isFriend(entity.gameProfile)) color = friendsColor.getColor()
 
         val eventEntityColor = EventEntityColor(entity, color)
         EventDispatcher.call(eventEntityColor)

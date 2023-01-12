@@ -4,7 +4,6 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.RotationAxis
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
@@ -14,7 +13,7 @@ import net.tarasandedevelopment.tarasande.system.feature.espsystem.impl.ESPEleme
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleESP
 import kotlin.math.abs
 
-class ManagerESP : Manager<ESPElement>() {
+object ManagerESP : Manager<ESPElement>() {
 
     init {
         add(
@@ -61,7 +60,7 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
         }
         matrices.push()
         var padding = 2.0
-        for (espElement in TarasandeMain.managerESP().list) {
+        for (espElement in ManagerESP.list) {
             if (espElement == this) break
             if (espElement.enabled.value && espElement is ESPElementRotatable && espElement.orientations[espElement.orientation?.values?.indexOf(espElement.orientation!!.selected[0]) ?: 0] == orientation)
                 padding += espElement.getHeight(entity, sideWidth)

@@ -18,11 +18,11 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.RaycastContext
 import net.minecraft.world.RaycastContext.FluidHandling
 import net.minecraft.world.RaycastContext.ShapeType
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventInput
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.injection.accessor.IChatScreen
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
@@ -178,7 +178,7 @@ object PlayerUtil {
     }
 
     fun getBreakSpeed(blockPos: BlockPos): Pair<Float, Int> {
-        if (!TarasandeMain.managerModule().get(ModuleAutoTool::class.java).let { it.enabled && it.mode.isSelected(0) })
+        if (!ManagerModule.get(ModuleAutoTool::class.java).let { it.enabled && it.mode.isSelected(0) })
             return mc.player?.inventory?.selectedSlot!!.let { Pair(getBreakSpeed(blockPos, it), it) }
 
         val origSlot = mc.player?.inventory?.selectedSlot

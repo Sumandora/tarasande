@@ -11,6 +11,8 @@ import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
+import net.tarasandedevelopment.tarasande.system.screen.blursystem.ManagerBlur
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.file.FileCheatMenu
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.fixed.*
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
@@ -29,7 +31,7 @@ import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.round
 
-class ManagerPanel(fileSystem: ManagerFile) : Manager<Panel>() {
+object ManagerPanel : Manager<Panel>() {
 
     val screenCheatMenu: ScreenCheatMenu
     private var panelInsertY = 5.0
@@ -46,7 +48,7 @@ class ManagerPanel(fileSystem: ManagerFile) : Manager<Panel>() {
 
         screenCheatMenu = ScreenCheatMenu(this)
         EventDispatcher.add(EventSuccessfulLoad::class.java, 9999) {
-            fileSystem.add(FileCheatMenu(this))
+            ManagerFile.add(FileCheatMenu(this))
         }
     }
 
@@ -109,7 +111,7 @@ open class Panel(
             EventDispatcher.apply {
                 add(EventRender2D::class.java) {
                     if (isVisible() && opened)
-                        if (mc.currentScreen != TarasandeMain.managerPanel().screenCheatMenu) {
+                        if (mc.currentScreen != ManagerPanel.screenCheatMenu) {
                             it.matrices.push()
                             render(it.matrices, -1, -1, mc.tickDelta)
                             it.matrices.pop()
@@ -118,7 +120,7 @@ open class Panel(
 
                 add(EventTick::class.java) {
                     if (it.state == EventTick.State.PRE)
-                        if (mc.currentScreen != TarasandeMain.managerPanel().screenCheatMenu)
+                        if (mc.currentScreen != ManagerPanel.screenCheatMenu)
                             tick()
                 }
             }
@@ -134,7 +136,7 @@ open class Panel(
         val verticalAlignments = ArrayList<Double>()
         val tolerance = 5
 
-        val panels = TarasandeMain.managerPanel().list.filter { it != this }
+        val panels = ManagerPanel.list.filter { it != this }
 
         val horizontalAlignablePanels = panels.filter { abs((y + effectivePanelHeight() / 2.0) - (it.y + it.effectivePanelHeight() / 2.0)) < (it.effectivePanelHeight() + effectivePanelHeight()) / 2.0 + tolerance }
         val verticalAlignablePanels = panels.filter { abs((x + panelWidth / 2.0) - (it.x + it.panelWidth / 2.0)) < (it.panelWidth + panelWidth) / 2.0 + tolerance }
@@ -190,11 +192,11 @@ open class Panel(
             if (background) {
                 matrices.push()
                 val previousFramebuffer = GlStateManager.getBoundFramebuffer()
-                TarasandeMain.managerBlur().bind(true, usedInScreen)
+                ManagerBlur.bind(true, usedInScreen)
                 RenderUtil.fill(matrices, x, y, x + panelWidth, y + effectivePanelHeight(), -1)
                 GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, previousFramebuffer)
 
-                val accent = TarasandeMain.clientValues().accentColor.getColor()
+                val accent = TarasandeMain.clientValues.accentColor.getColor()
                 RenderUtil.fill(matrices, x, y + titleBarHeight, x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).withAlpha(0), 0.3, 0.3, 0.3, 0.7).rgb)
                 matrices.pop()
             }
@@ -243,7 +245,7 @@ open class Panel(
 
     open fun renderTitleBar(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         matrices.push()
-        RenderUtil.fill(matrices, x, y, x + panelWidth, y + titleBarHeight, TarasandeMain.clientValues().accentColor.getColor().rgb)
+        RenderUtil.fill(matrices, x, y, x + panelWidth, y + titleBarHeight, TarasandeMain.clientValues.accentColor.getColor().rgb)
         when (alignment) {
             Alignment.LEFT -> FontWrapper.textShadow(matrices, title, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2f - FontWrapper.fontHeight() / 2f, -1)
             Alignment.MIDDLE -> FontWrapper.textShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(title).toFloat() / 2.0F, y.toFloat() + titleBarHeight / 2f - FontWrapper.fontHeight() / 2f, -1)
@@ -269,7 +271,7 @@ open class Panel(
                     opened = !opened
             } else if (button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
                 val valueOwner = getValueOwner()
-                if (TarasandeMain.managerValue().getValues(valueOwner).isNotEmpty()) {
+                if (ManagerValue.getValues(valueOwner).isNotEmpty()) {
                     mc.setScreen(ScreenBetterOwnerValues(this.title, mc.currentScreen!!, valueOwner))
                 }
             }

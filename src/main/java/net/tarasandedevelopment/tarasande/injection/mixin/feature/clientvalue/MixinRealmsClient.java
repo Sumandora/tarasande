@@ -18,8 +18,8 @@ public class MixinRealmsClient {
     @Inject(method = "execute", at = @At("HEAD"))
     public void disableRequests(Request<?> r, CallbackInfoReturnable<String> cir) throws RealmsServiceException {
         if (PrivacyValues.INSTANCE.getDisableRealmsRequests().getValue()) {
-            TarasandeMain.Companion.get().getLogger().log(Level.INFO, "Blocked realms request");
-            throw new RealmsServiceException(1337, TarasandeMain.Companion.get().getName() + " cancelled this realms request to guarantee your privacy");
+            TarasandeMain.INSTANCE.getLogger().log(Level.INFO, "Blocked realms request");
+            throw new RealmsServiceException(1337, TarasandeMain.INSTANCE.getName() + " cancelled this realms request to guarantee your privacy");
         }
     }
 

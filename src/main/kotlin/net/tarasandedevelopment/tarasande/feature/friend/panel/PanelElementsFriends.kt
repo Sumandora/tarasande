@@ -11,7 +11,7 @@ class PanelElementsFriends(private val friends: Friends) : PanelElements<Element
         elementList.removeIf {
             if (mc.networkHandler?.playerList?.none { p -> p.profile == it.gameProfile }!!) {
                 it.onClose()
-                TarasandeMain.friends().apply {
+                TarasandeMain.friends.apply {
                     if (isFriend(it.gameProfile))
                         changeFriendState(it.gameProfile)
                 }

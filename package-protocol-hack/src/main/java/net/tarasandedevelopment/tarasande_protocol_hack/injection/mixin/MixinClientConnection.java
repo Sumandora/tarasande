@@ -24,7 +24,6 @@ package net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
 import de.florianmichael.viabeta.pre_netty.PreNettyConstants;
-import de.florianmichael.viacursed.api.CursedProtocols;
 import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.Protocol1_19_3toBedrock1_19_51;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.event.PipelineReorderEvent;
@@ -82,7 +81,7 @@ public class MixinClientConnection implements IClientConnection_Protocol {
         }
     }
 
-    @Redirect(method = "connect", at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/Bootstrap;connect(Ljava/net/InetAddress;I)Lio/netty/channel/ChannelFuture;"))
+    @Redirect(method = "connect", at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/Bootstrap;connect(Ljava/net/InetAddress;I)Lio/netty/channel/ChannelFuture;", remap = false))
     private static ChannelFuture startLocalServer(Bootstrap instance, InetAddress inetHost, int inetPort) {
         if (ViaLoadingBase.getTargetVersion() == VersionListEnum.rBedrock1_19_51) {
             TarasandeProtocolHack.Companion.setConnectedAddress(new InetSocketAddress(inetHost, inetPort));
@@ -91,7 +90,7 @@ public class MixinClientConnection implements IClientConnection_Protocol {
         return instance.connect(inetHost, inetPort);
     }
 
-    @Redirect(method = "connect", at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/Bootstrap;channel(Ljava/lang/Class;)Lio/netty/bootstrap/AbstractBootstrap;"))
+    @Redirect(method = "connect", at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/Bootstrap;channel(Ljava/lang/Class;)Lio/netty/bootstrap/AbstractBootstrap;", remap = false))
     private static AbstractBootstrap useLocalChannel(Bootstrap instance, Class aClass) {
         if (ViaLoadingBase.getTargetVersion() == VersionListEnum.rBedrock1_19_51) {
             return instance.channel(LocalChannel.class);

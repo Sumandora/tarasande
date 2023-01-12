@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.system.screen.informationsystem.panel
 
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
@@ -26,7 +27,7 @@ class PanelInformation(private val informationSystem: ManagerInformation) : Pane
 
     init {
         for (information in informationSystem.list) {
-            if (TarasandeMain.managerValue().getValues(information).isNotEmpty()) {
+            if (ManagerValue.getValues(information).isNotEmpty()) {
                 val name = map[information]!!
 
                 ValueButtonOwnerValues(this, "$name values", information)
@@ -68,9 +69,9 @@ class PanelInformation(private val informationSystem: ManagerInformation) : Pane
 
         for ((index, it) in text.withIndex()) {
             when (alignment) {
-                Alignment.LEFT -> FontWrapper.textShadow(matrices, it, x.toFloat(), y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
-                Alignment.MIDDLE -> FontWrapper.textShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(it).toFloat() / 2.0F, y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
-                Alignment.RIGHT -> FontWrapper.textShadow(matrices, it, x.toFloat() + panelWidth.toFloat() - FontWrapper.getWidth(it).toFloat(), y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeMain.clientValues().accentColor.getColor().rgb, offset = 0.5F)
+                Alignment.LEFT -> FontWrapper.textShadow(matrices, it, x.toFloat(), y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeMain.clientValues.accentColor.getColor().rgb, offset = 0.5F)
+                Alignment.MIDDLE -> FontWrapper.textShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(it).toFloat() / 2.0F, y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeMain.clientValues.accentColor.getColor().rgb, offset = 0.5F)
+                Alignment.RIGHT -> FontWrapper.textShadow(matrices, it, x.toFloat() + panelWidth.toFloat() - FontWrapper.getWidth(it).toFloat(), y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeMain.clientValues.accentColor.getColor().rgb, offset = 0.5F)
             }
         }
     }

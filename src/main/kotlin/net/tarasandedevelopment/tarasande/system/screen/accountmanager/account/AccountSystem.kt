@@ -6,18 +6,17 @@ import com.mojang.authlib.minecraft.MinecraftSessionService
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.ExtraInfo
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.AccountSession
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.AccountToken
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.AccountYggdrasil
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.microsoft.AccountMicrosoft
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.microsoft.AccountMicrosoftRefreshToken
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
+import net.tarasandedevelopment.tarasande.system.screen.accountmanager.environment.ManagerEnvironment
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterEnvironment
 import net.tarasandedevelopment.tarasande.util.extension.mc
 
-class ManagerAccount : Manager<Class<out Account>>() {
+object ManagerAccount : Manager<Class<out Account>>() {
     init {
         add(
             AccountSession::class.java,
@@ -30,7 +29,7 @@ class ManagerAccount : Manager<Class<out Account>>() {
 }
 
 abstract class Account {
-    var environment: Environment = TarasandeMain.managerScreenExtension().get(ScreenExtensionButtonListMultiplayerScreen::class.java).screenBetterSlotListAccountManager.managerEnvironment.list.first().create()
+    var environment: Environment = ManagerEnvironment.list.first().create()
     var session: Session? = null
 
     abstract fun logIn()

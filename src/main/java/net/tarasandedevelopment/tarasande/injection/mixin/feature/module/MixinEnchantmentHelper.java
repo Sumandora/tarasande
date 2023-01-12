@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.injection.mixin.feature.module;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleAntiBindingCurse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,7 +14,7 @@ public class MixinEnchantmentHelper {
 
     @Inject(method = "hasBindingCurse", at = @At("RETURN"), cancellable = true)
     private static void hookAntiBindingCurse(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        if (TarasandeMain.Companion.managerModule().get(ModuleAntiBindingCurse.class).getEnabled()) {
+        if (ManagerModule.INSTANCE.get(ModuleAntiBindingCurse.class).getEnabled()) {
             cir.setReturnValue(false);
         }
     }

@@ -18,7 +18,7 @@ public class MixinTelemetryManager {
     public void disableTelemetry(CallbackInfoReturnable<TelemetrySender> cir) {
         // This bypasses the TarasandeMain#disabled, because ms spying on us is a major problem
         if (PrivacyValues.INSTANCE.getDisableTelemetry().getValue()) {
-            TarasandeMain.Companion.get().getLogger().log(Level.INFO, "Returned dummy telemetry sender in order to hold back telemetry");
+            TarasandeMain.INSTANCE.getLogger().log(Level.INFO, "Returned dummy telemetry sender in order to hold back telemetry");
             cir.setReturnValue(TelemetrySender.NOOP);
         }
     }

@@ -26,7 +26,7 @@ import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSneak;
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,7 +40,7 @@ public class MixinKeyboardInput extends Input {
 
     @ModifyVariable(method = "tick", at = @At(value = "LOAD", ordinal = 0), argsOnly = true)
     private boolean injectTick(boolean slowDown) {
-        ModuleSneak moduleSneak = TarasandeMain.Companion.managerModule().get(ModuleSneak.class);
+        ModuleSneak moduleSneak = ManagerModule.INSTANCE.get(ModuleSneak.class);
         if (moduleSneak.getEnabled() && moduleSneak.getDontSlowdown().getValue()) {
             return slowDown;
         }

@@ -63,7 +63,7 @@ class GeneratorQRCode(parent: Any) : Generator(parent, "QR Code") {
                 }
             }
         } catch (e: Exception) {
-            TarasandeMain.notifications().notify("Failed to parse input, " + e.localizedMessage)
+            TarasandeMain.notifications.notify("Failed to parse input, " + e.localizedMessage)
         }
     }
 }

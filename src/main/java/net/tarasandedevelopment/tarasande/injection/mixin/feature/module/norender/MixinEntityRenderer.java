@@ -7,7 +7,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.text.Text;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleNoRender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,7 +21,7 @@ public class MixinEntityRenderer<T extends Entity> {
     @SuppressWarnings("CancellableInjectionUsage") // This plugin is garbage
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true)
     public void noRender_shouldRender(T entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Boolean> cir) {
-        final ModuleNoRender moduleNoRender = TarasandeMain.Companion.managerModule().get(ModuleNoRender.class);
+        final ModuleNoRender moduleNoRender = ManagerModule.INSTANCE.get(ModuleNoRender.class);
         if (!moduleNoRender.getEnabled()) return;
 
         if (moduleNoRender.getEntity().getEntities().getList().contains(entity.getType())) {
@@ -34,7 +34,7 @@ public class MixinEntityRenderer<T extends Entity> {
 
     @Inject(method = "renderLabelIfPresent", at = @At("HEAD"), cancellable = true)
     public void noRender_RenderLabelIfPresent(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        final ModuleNoRender moduleNoRender = TarasandeMain.Companion.managerModule().get(ModuleNoRender.class);
+        final ModuleNoRender moduleNoRender = ManagerModule.INSTANCE.get(ModuleNoRender.class);
         if (!moduleNoRender.getEnabled()) return;
 
         if (moduleNoRender.getEntity().getEntityNameTags().getList().contains(entity.getType())) {

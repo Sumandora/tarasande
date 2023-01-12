@@ -31,13 +31,13 @@ open class ValueMode(owner: Any, name: String, private var multiSelection: Boole
     fun anySelected() = selected.isNotEmpty()
 
     override fun save(): JsonElement? {
-        return TarasandeMain.get().gson.toJsonTree(selected)
+        return TarasandeMain.gson.toJsonTree(selected)
     }
 
     override fun load(jsonElement: JsonElement) {
         selected.clear()
         try {
-            selected.addAll(TarasandeMain.get().gson.fromJson(jsonElement, Array<String>::class.java)!!)
+            selected.addAll(TarasandeMain.gson.fromJson(jsonElement, Array<String>::class.java)!!)
         } catch (jsonSyntaxException: JsonSyntaxException) {
             if (!multiSelection)
                 select(0)

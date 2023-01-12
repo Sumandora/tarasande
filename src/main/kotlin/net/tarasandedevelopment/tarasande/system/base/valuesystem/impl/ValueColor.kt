@@ -28,8 +28,8 @@ open class ValueColor(owner: Any, name: String, hue: Double, var sat: Double, va
 
     fun getColor(): Color {
         val hue =
-            if (locked && this != TarasandeMain.clientValues().accentColor)
-                TarasandeMain.clientValues().accentColor.hue
+            if (locked && this != TarasandeMain.clientValues.accentColor)
+                TarasandeMain.clientValues.accentColor.hue
             else
                 hue
 

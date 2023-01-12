@@ -312,7 +312,7 @@ object RenderUtil {
         return Color((a.red + (b.red - a.red) * tR.toFloat()) / 255.0F, (a.green + (b.green - a.green) * tG.toFloat()) / 255.0F, (a.blue + (b.blue - a.blue) * tB.toFloat()) / 255.0F, (a.alpha + (b.alpha - a.alpha) * tA.toFloat()) / 255.0F)
     }
 
-    fun createImage(path: String) = NativeImageBackedTexture(NativeImage.read(javaClass.getResourceAsStream("/assets/" + TarasandeMain.get().name + "/textures/$path")))
+    fun createImage(path: String) = NativeImageBackedTexture(NativeImage.read(javaClass.getResourceAsStream("/assets/" + TarasandeMain.name + "/textures/$path")))
 
     fun formattingByHex(hex: Int): Formatting {
         var bestFormatting: Formatting? = null

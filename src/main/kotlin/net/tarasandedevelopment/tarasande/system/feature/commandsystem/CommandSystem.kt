@@ -34,7 +34,7 @@ import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 import kotlin.math.max
 
-class ManagerCommand : Manager<Command>() {
+object ManagerCommand : Manager<Command>() {
 
     private val commandPrefix = ValueText(this, "Command prefix", "$")
     private val exceptions = ValueBoolean(this, "Show exceptions", true)

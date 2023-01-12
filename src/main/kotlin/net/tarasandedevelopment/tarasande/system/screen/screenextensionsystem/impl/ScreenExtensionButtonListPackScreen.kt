@@ -28,7 +28,7 @@ class ScreenExtensionButtonListPackScreen : ScreenExtensionButtonList<PackScreen
                     base.copyTo(target)
                 } catch (t: Throwable) {
                     t.printStackTrace()
-                    TarasandeMain.get().logger.log(Level.WARNING, "Wasn't able to copy $name to " + target.absolutePath)
+                    TarasandeMain.logger.log(Level.WARNING, "Wasn't able to copy $name to " + target.absolutePath)
                 }
             }
         }

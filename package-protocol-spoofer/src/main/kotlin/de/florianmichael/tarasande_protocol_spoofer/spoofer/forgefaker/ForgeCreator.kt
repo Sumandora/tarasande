@@ -11,7 +11,7 @@ import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.l
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.modern.ModernForgePayload
 import de.florianmichael.tarasande_protocol_spoofer.viaversion.ViaVersionUtil
 import net.minecraft.network.ClientConnection
-import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 
 object ForgeCreator {
@@ -30,7 +30,7 @@ object ForgeCreator {
     }
 
     fun createNetHandler(connection: ClientConnection): IForgeNetClientHandler {
-        val forgeFaker = TarasandeMain.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(EntrySidebarPanelToggleableForgeFaker::class.java)
+        val forgeFaker = ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(EntrySidebarPanelToggleableForgeFaker::class.java)
 
         if (TarasandeProtocolSpoofer.tarasandeProtocolHackLoaded && forgeFaker.autoDetectFmlHandlerWithViaVersion.value) {
             return ViaVersionUtil.createForgeHandler(connection)

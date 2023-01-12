@@ -13,7 +13,6 @@ import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket
 import net.minecraft.network.packet.c2s.play.PlayPongC2SPacket
 import net.minecraft.network.packet.s2c.play.*
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientConnection
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
@@ -21,6 +20,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
+import net.tarasandedevelopment.tarasande.system.screen.graphsystem.ManagerGraph
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
@@ -75,7 +75,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         autoDisable.select(0)
         autoDisable.select(1)
 
-        TarasandeMain.managerGraph().add(object : Graph("Blink", "Last transaction", 50, true) {
+        ManagerGraph.add(object : Graph("Blink", "Last transaction", 50, true) {
             init {
                 EventDispatcher.add(EventPacket::class.java) { event ->
                     if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayPingS2CPacket)

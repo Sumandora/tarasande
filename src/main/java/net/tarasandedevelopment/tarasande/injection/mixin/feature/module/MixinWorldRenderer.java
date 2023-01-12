@@ -7,7 +7,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.biome.Biome;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleFog;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleRain;
 import org.joml.Matrix4f;
@@ -32,14 +32,14 @@ public class MixinWorldRenderer {
 
     @Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At("HEAD"), cancellable = true)
     public void hookFog(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean bl, Runnable runnable, CallbackInfo ci) {
-        if (TarasandeMain.Companion.managerModule().get(ModuleFog.class).getEnabled())
+        if (ManagerModule.INSTANCE.get(ModuleFog.class).getEnabled())
             ci.cancel();
     }
 
     @Redirect(method = "renderWeather", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getRainGradient(F)F"))
     public float hookRain(ClientWorld instance, float v) {
         tarasande_forceRain = false;
-        ModuleRain moduleRain = TarasandeMain.Companion.managerModule().get(ModuleRain.class);
+        ModuleRain moduleRain = ManagerModule.INSTANCE.get(ModuleRain.class);
         if (moduleRain.getEnabled()) {
             tarasande_forceRain = true;
             return (float) moduleRain.getGradient().getValue();

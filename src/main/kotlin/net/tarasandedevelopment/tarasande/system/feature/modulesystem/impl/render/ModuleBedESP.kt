@@ -4,7 +4,6 @@ import net.minecraft.block.BedBlock
 import net.minecraft.block.enums.BedPart
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -13,6 +12,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.boundingBox
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.div
@@ -59,7 +59,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
     var bedDatas = ArrayList<BedData>()
 
     init {
-        TarasandeMain.managerInformation().add(object : Information("Bed ESP", "Beds") {
+        ManagerInformation.add(object : Information("Bed ESP", "Beds") {
             override fun getMessage(): String? {
                 if (enabled) if (calculateBestWay.value) if (bedDatas.isNotEmpty()) {
                     return "\n" + bedDatas.sortedBy {

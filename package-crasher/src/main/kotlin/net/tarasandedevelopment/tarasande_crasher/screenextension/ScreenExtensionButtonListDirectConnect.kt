@@ -8,10 +8,10 @@ import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande_crasher.crasher.ManagerCrasher
 import org.lwjgl.glfw.GLFW
 
-class ScreenExtensionButtonListDirectConnect(crashSystem: ManagerCrasher) : ScreenExtensionButtonList<DirectConnectScreen>(DirectConnectScreen::class.java) {
+class ScreenExtensionButtonListDirectConnect : ScreenExtensionButtonList<DirectConnectScreen>(DirectConnectScreen::class.java) {
 
     init {
-        for (crasher in crashSystem.list) {
+        for (crasher in ManagerCrasher.list) {
             val name = crasher.name + " Crasher"
             add(name, direction = Direction.RIGHT) {
                 if (it == GLFW.GLFW_MOUSE_BUTTON_LEFT || it == GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {

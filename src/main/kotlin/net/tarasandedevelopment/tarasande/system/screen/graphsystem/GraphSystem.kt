@@ -22,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-class ManagerGraph(informationSystem: ManagerInformation, panelSystem: ManagerPanel) : Manager<Graph>() {
+object ManagerGraph : Manager<Graph>() {
 
     init {
         add(
@@ -43,8 +43,8 @@ class ManagerGraph(informationSystem: ManagerInformation, panelSystem: ManagerPa
 
         EventDispatcher.apply {
             add(EventSuccessfulLoad::class.java) {
-                informationSystem.add(*list.map { e -> InformationGraphValue(e) }.toTypedArray())
-                panelSystem.add(*list.map { e -> PanelGraph(e) }.toTypedArray())
+                ManagerInformation.add(*list.map { e -> InformationGraphValue(e) }.toTypedArray())
+                ManagerPanel.add(*list.map { e -> PanelGraph(e) }.toTypedArray())
             }
         }
     }

@@ -9,7 +9,7 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
 import net.minecraft.server.ServerMetadata;
-import net.tarasandedevelopment.tarasande.TarasandeMain;
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension;
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,7 +36,7 @@ public class MixinMultiplayerServerListPingerSubOnResponse {
         if (payload != null) {
             ((IServerInfo) field_3776).tarasande_setForgePayload(payload);
 
-            TarasandeMain.Companion.managerScreenExtension().get(ScreenExtensionSidebarMultiplayerScreen.class).getSidebar().get(EntrySidebarPanelToggleableForgeFaker.class).getForgeInfoTracker().put((InetSocketAddress) instance.getAddress(), payload);
+            ManagerScreenExtension.INSTANCE.get(ScreenExtensionSidebarMultiplayerScreen.class).getSidebar().get(EntrySidebarPanelToggleableForgeFaker.class).getForgeInfoTracker().put((InetSocketAddress) instance.getAddress(), payload);
         }
 
         instance.send(packet); // Original Code

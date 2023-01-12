@@ -21,7 +21,7 @@ class ModuleMidClick : Module("Mid click", "Friends mid-clicked players", Module
                 if (hitResult.isEntityHitResult()) {
                     hitResult as EntityHitResult
                     if (hitResult.entity is PlayerEntity)
-                        TarasandeMain.friends().changeFriendState((hitResult.entity as PlayerEntity).gameProfile)
+                        TarasandeMain.friends.changeFriendState((hitResult.entity as PlayerEntity).gameProfile)
                 }
             }
         }

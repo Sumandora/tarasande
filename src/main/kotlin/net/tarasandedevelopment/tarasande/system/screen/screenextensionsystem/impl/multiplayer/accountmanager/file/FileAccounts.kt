@@ -6,6 +6,7 @@ import com.google.gson.JsonObject
 import com.mojang.authlib.Environment
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.system.base.filesystem.File
+import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.ManagerAccount
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.ScreenBetterSlotListAccountManager
 import org.apache.commons.codec.binary.Hex
@@ -80,7 +81,7 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
     override fun load(jsonElement: JsonElement) {
         val jsonObject: JsonObject = jsonElement as JsonObject
         for (jsonElement2 in jsonObject.getAsJsonArray("Accounts")) {
-            for (accountClass in accountManager.managerAccount.list) {
+            for (accountClass in ManagerAccount.list) {
                 val jsonObject2 = jsonElement2 as JsonObject
                 if (accountClass.getAnnotation(AccountInfo::class.java).name == jsonObject2.get("Type").asString) {
                     val account = accountClass.getDeclaredConstructor().newInstance().load(jsonObject2.get("Account").asJsonArray)

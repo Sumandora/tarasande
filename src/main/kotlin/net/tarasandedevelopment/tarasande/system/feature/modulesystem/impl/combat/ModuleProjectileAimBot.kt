@@ -7,13 +7,13 @@ import net.minecraft.item.BowItem
 import net.minecraft.item.CrossbowItem
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.Box
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleFastUse
@@ -41,7 +41,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
     private var predictedBox: Box? = null
 
     private fun calcVelocity(stack: ItemStack): Double {
-        return BowItem.getPullProgress(if (mc.player?.isUsingItem!! && !TarasandeMain.managerModule().get(ModuleFastUse::class.java).enabled) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
+        return BowItem.getPullProgress(if (mc.player?.isUsingItem!! && !ManagerModule.get(ModuleFastUse::class.java).enabled) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
     }
 
     // https://en.wikipedia.org/wiki/Projectile_motion#Angle_%CE%B8_required_to_hit_coordinate_(x,_y)
