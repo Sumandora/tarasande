@@ -101,6 +101,10 @@ class TarasandeProtocolHack : NativeProvider {
         }
     }
 
+    private fun currentVersion(): VersionListEnum? {
+        return VersionListEnum.fromUserConnection(viaConnection ?: return null)
+    }
+
     fun initialize() {
         ViaLoadingBase.instance().init(this) {
             ViaLoadingBase.loadSubPlatform("ViaBeta") {
@@ -121,13 +125,12 @@ class TarasandeProtocolHack : NativeProvider {
                 ManagerInformation.apply {
                     add(object : Information("Via Version", "Protocol Version") {
                         override fun getMessage(): String? {
-                            val userConnection = (mc.networkHandler?.connection as? IClientConnection_Protocol)?.protocolhack_getViaConnection() ?: return null
-                            return VersionListEnum.fromUserConnection(userConnection).getName()
+                            return currentVersion()?.getName()
                         }
                     })
                     add(object : Information("Via Version", "Via Pipeline") {
                         override fun getMessage(): String? {
-                            val names = (mc.networkHandler?.connection as? IClientConnection_Protocol)?.protocolhack_getViaConnection()?.protocolInfo?.pipeline?.pipes()?.map { p -> p.javaClass.simpleName } ?: return null
+                            val names = viaConnection?.protocolInfo?.pipeline?.pipes()?.map { p -> p.javaClass.simpleName } ?: return null
                             if (names.isEmpty()) return null
                             return "\n" + names.joinToString("\n")
                         }
@@ -162,13 +165,13 @@ class TarasandeProtocolHack : NativeProvider {
                     cancelOpenPacket = object : ValueBoolean(get(ModuleInventoryMove::class.java), "Cancel open packet (" + VersionListEnum.r1_11_1to1_11_2.andOlder() + ")", false) {
                         override fun isEnabled() = ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_11_1to1_11_2)
                     }
-                    removeVelocityReset = object : ValueBoolean(get(ModuleNoWeb::class.java), "Cancel open packet (" + ProtocolHackValues.emulatePlayerMovement.name + ")", false) {
+                    removeVelocityReset = object : ValueBoolean(get(ModuleNoWeb::class.java), "Remove velocity reset (" + ProtocolHackValues.emulatePlayerMovement.name + ")", false) {
                         override fun isEnabled() = ProtocolHackValues.emulatePlayerMovement.value
                     }
 
                     get(ModuleTickBaseManipulation::class.java).apply {
-                        val chargeOnIdlePacketSkip = object : ValueBoolean(this, "Charge on idle packet skip (" + formatRange(*ProtocolHackValues.sendIdlePacket.version) + ")", false) {
-                            override fun isEnabled() = ProtocolHackValues.sendIdlePacket.isEnabled()
+                        val chargeOnIdlePacketSkip = object : ValueBoolean(this, "Charge on idle packet skip (" + formatRange(*ProtocolHackValues.sendIdlePacket.version[0].inverse()) + ")", false) {
+                            override fun isEnabled() = !ProtocolHackValues.sendIdlePacket.value
                         }
 
                         registerEvent(EventSkipIdlePacket::class.java) {

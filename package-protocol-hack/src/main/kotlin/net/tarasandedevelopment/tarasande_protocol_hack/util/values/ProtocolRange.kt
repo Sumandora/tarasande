@@ -1,6 +1,8 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.util.values
 
 import de.florianmichael.vialoadingbase.util.VersionListEnum
+import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.andNewer
+import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.andOlder
 
 fun formatRange(vararg version: ProtocolRange) = version.joinToString(", ") { it.toString() }
 
@@ -26,5 +28,12 @@ class ProtocolRange(private val lowerBound: VersionListEnum?, private val upperB
             lowerBound == upperBound -> lowerBound.getName()
             else -> lowerBound.getName() + " - " + upperBound.getName()
         }
+    }
+
+    fun inverse(): Array<ProtocolRange> {
+        return listOfNotNull(
+            lowerBound?.andNewer(),
+            upperBound?.andOlder()
+        ).toTypedArray()
     }
 }
