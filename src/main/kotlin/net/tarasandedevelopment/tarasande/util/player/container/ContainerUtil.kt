@@ -8,6 +8,7 @@ import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
 import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.mc
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.safeCount
 
 object ContainerUtil {
 
@@ -93,7 +94,9 @@ object ContainerUtil {
         }
     }
 
+    fun getHotbarSlots(): List<ItemStack> = mc.player?.inventory?.main?.subList(0, 9)!!
+
     fun findSlot(filter: (IndexedValue<ItemStack>) -> Boolean): Int? {
-        return mc.player?.inventory?.main?.subList(0, 9)?.withIndex()?.filter { filter(it) }?.minByOrNull { it.value.count }?.index
+        return getHotbarSlots().withIndex().filter { filter(it) }.minByOrNull { it.value.safeCount() }?.index
     }
 }

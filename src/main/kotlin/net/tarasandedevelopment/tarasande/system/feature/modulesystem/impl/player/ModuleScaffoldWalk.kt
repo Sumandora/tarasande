@@ -14,6 +14,8 @@ import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.C
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.impl.ClickMethodCooldown
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.*
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
@@ -105,6 +107,18 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             targets.add(Pair(BlockPos(1, y, 1), Direction.SOUTH))
             targets.add(Pair(BlockPos(1, y, -1), Direction.EAST))
         }
+
+        ManagerInformation.add(object : Information(name, "Blocks") {
+            override fun getMessage(): String? {
+                if(!enabled.value)
+                    return null
+                val blocks = ContainerUtil.getHotbarSlots().filter { it.item is BlockItem && isBlockItemValid(it.item as BlockItem) }.sumOf { it.safeCount() }
+                if(blocks <= 0) // Checking for negative amounts of blocks, sounds like an awesome idea
+                    return "WARNING: No blocks in hotbar"
+                return blocks.toString()
+            }
+
+        })
     }
 
     private fun intersection(line1Begin: Vec2f, line1End: Vec2f, line2Begin: Vec2f, line2End: Vec2f): Vec2f {
