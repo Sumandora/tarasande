@@ -39,7 +39,6 @@ class ElementWidthValueComponentBoolean(value: Value) : ElementWidthValueCompone
         if (button == 0 && RenderUtil.isHovered(mouseX, mouseY, width - 4, getHeight() / 2 - 2, width, getHeight() / 2 + 2)) {
             val valueBoolean = value as ValueBoolean
             valueBoolean.value = !valueBoolean.value
-            valueBoolean.onChange()
             toggleTime = System.currentTimeMillis()
             return true
         }

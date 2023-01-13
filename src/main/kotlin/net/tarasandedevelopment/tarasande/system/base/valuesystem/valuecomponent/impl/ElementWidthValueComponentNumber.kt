@@ -40,8 +40,8 @@ class ElementWidthValueComponentNumber(value: Value) : ElementWidthValueComponen
         if (value == -0.0)
             value = 0.0
 
+        val oldValue = valueNumber.value
         valueNumber.value = value
-        valueNumber.onChange()
     }
 
     override fun init() {

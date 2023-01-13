@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.provider.clamp
 
 import net.minecraft.command.argument.SignedArgumentList
-import net.tarasandedevelopment.tarasande.util.extension.mc
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.CommandArgumentsProvider
 
 class FabricCommandArgumentsProvider : CommandArgumentsProvider() {

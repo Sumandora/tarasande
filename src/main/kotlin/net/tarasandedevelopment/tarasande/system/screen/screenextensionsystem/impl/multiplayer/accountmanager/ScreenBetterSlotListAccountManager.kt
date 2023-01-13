@@ -16,6 +16,7 @@ import net.minecraft.util.Formatting
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.injection.accessor.IRealmsPeriodicCheckers
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.screen.base.AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
@@ -28,7 +29,6 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.environme
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.file.FileAccounts
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterAccount
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterProxy
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed

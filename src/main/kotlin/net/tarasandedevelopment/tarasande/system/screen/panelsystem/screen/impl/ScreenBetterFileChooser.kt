@@ -2,12 +2,11 @@ package net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl
 
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import java.awt.Color

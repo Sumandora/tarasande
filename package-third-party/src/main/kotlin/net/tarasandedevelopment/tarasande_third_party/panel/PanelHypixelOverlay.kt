@@ -6,10 +6,10 @@ import com.mojang.authlib.GameProfile
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.gson
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
 import java.net.URL

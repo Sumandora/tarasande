@@ -51,7 +51,7 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
 
     override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
         val orientation = if (this.orientation != null)
-            orientations[this.orientation!!.values.indexOf(this.orientation!!.selected[0])]
+            orientations[this.orientation!!.values.indexOf(this.orientation!!.getSelected())]
         else
             orientations[0]
         val sideWidth = when (orientation) {
@@ -62,7 +62,7 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
         var padding = 2.0
         for (espElement in ManagerESP.list) {
             if (espElement == this) break
-            if (espElement.enabled.value && espElement is ESPElementRotatable && espElement.orientations[espElement.orientation?.values?.indexOf(espElement.orientation!!.selected[0]) ?: 0] == orientation)
+            if (espElement.enabled.value && espElement is ESPElementRotatable && espElement.orientations[espElement.orientation?.values?.indexOf(espElement.orientation!!.getSelected()) ?: 0] == orientation)
                 padding += espElement.getHeight(entity, sideWidth)
         }
         matrices.translate(rectangle.x, rectangle.y, 0.0)

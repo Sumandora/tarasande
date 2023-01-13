@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.feature.notification
 
 import de.florianmichael.ezeasing.EzEasing
 import net.tarasandedevelopment.tarasande.event.EventModuleStateSwitched
+import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.notification.panel.PanelNotifications
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
@@ -34,16 +35,21 @@ object Notifications {
 
     init {
         object : ValueMode(this, "Easing function", false, *EzEasing.functionNames().toTypedArray()) {
-            override fun onChange() {
-                easing = EzEasing.byName(selected[0])
+            override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
+                easing = EzEasing.byName(getSelected())
             }
         }
 
         val moduleNotifications = ValueBoolean(this, "Module notifications", true)
 
-        EventDispatcher.add(EventModuleStateSwitched::class.java) {
-            if (moduleNotifications.value)
-                Notifications.notify(it.module.name + " is now " + if (it.module.enabled) "enabled" else "disabled")
+        EventDispatcher.apply {
+            add(EventModuleStateSwitched::class.java) {
+                if (moduleNotifications.value)
+                    notify(it.module.name + " is now " + if (it.newState) "enabled" else "disabled")
+            }
+            add(EventSuccessfulLoad::class.java, 99999) { // Clear notifications after init
+                list.clear()
+            }
         }
 
 

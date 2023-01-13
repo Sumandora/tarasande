@@ -2,11 +2,11 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.comb
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ModuleCriticals : Module("Criticals", "Forces critical hits", ModuleCategory.COMBAT) {
 

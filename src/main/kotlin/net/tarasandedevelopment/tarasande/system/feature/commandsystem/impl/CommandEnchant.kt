@@ -12,8 +12,8 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.text.Text
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.Command
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import java.util.function.Function
 

@@ -10,9 +10,8 @@ import net.minecraft.util.Formatting
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TARASANDE_NAME
-import net.tarasandedevelopment.tarasande.TarasandeMain
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.getPositionVec3d
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import org.joml.Matrix4f

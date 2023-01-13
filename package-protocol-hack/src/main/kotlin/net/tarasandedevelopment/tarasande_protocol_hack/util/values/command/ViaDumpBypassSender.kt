@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.util.values.command
 
 import com.viaversion.viaversion.api.command.ViaCommandSender
-import net.tarasandedevelopment.tarasande.util.extension.mc
+import net.tarasandedevelopment.tarasande.mc
 
 object ViaDumpBypassSender : ViaCommandSender {
 

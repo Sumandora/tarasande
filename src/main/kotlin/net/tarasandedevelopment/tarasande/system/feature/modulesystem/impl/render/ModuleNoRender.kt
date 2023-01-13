@@ -102,7 +102,7 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
                 it.cancelled = true
             }
 
-            if (world.particles.list.contains(it.effect.type)) {
+            if (world.particles.isSelected(it.effect.type)) {
                 it.cancelled = true
             }
         }
@@ -116,6 +116,6 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
 
     open class NoRenderType(val name: String)
     open inner class ValueBooleanNoRender(owner: Any, name: String, value: Boolean) : ValueBoolean(owner, name, value) {
-        fun should() = value && this@ModuleNoRender.enabled
+        fun should() = value && this@ModuleNoRender.enabled.value
     }
 }

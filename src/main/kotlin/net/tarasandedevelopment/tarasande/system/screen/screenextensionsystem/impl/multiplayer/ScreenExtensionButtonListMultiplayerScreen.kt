@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer
 
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.ScreenBetterSlotListAccountManager
-import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ScreenExtensionButtonListMultiplayerScreen : ScreenExtensionButtonList<MultiplayerScreen>(MultiplayerScreen::class.java) {
 

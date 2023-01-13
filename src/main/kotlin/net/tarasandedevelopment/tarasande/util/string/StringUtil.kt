@@ -4,7 +4,7 @@ import net.minecraft.client.resource.language.LanguageDefinition
 import net.minecraft.client.resource.language.LanguageManager
 import net.minecraft.client.resource.language.TranslationStorage
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.util.extension.mc
+import net.tarasandedevelopment.tarasande.mc
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern

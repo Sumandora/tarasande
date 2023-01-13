@@ -19,7 +19,7 @@ public class MixinMessageHandler {
     public void trackChatMessages(SignedMessage message, GameProfile sender, MessageType.Parameters params, CallbackInfo ci) {
         final ModulePrivateMsgDetector modulePrivateMsgDetector = ManagerModule.INSTANCE.get(ModulePrivateMsgDetector.class);
 
-        if (modulePrivateMsgDetector.getEnabled()) {
+        if (modulePrivateMsgDetector.getEnabled().getValue()) {
             if (message.signature() == null) {
                 return;
             }

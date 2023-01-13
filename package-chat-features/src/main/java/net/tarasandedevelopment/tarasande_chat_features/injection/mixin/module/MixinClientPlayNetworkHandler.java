@@ -16,7 +16,7 @@ public class MixinClientPlayNetworkHandler {
 
     @ModifyVariable(method = "acknowledge", at = @At("HEAD"), argsOnly = true, index = 2)
     public boolean hookNoChatContext(boolean value, SignedMessage message) {
-        if (ManagerModule.INSTANCE.get(ModuleNoChatContext.class).getEnabled()) {
+        if (ManagerModule.INSTANCE.get(ModuleNoChatContext.class).getEnabled().getValue()) {
             if (TarasandeChatFeatures.Companion.getTarasandeProtocolHackLoaded()) {
                 if (ViaVersionUtil.INSTANCE.isSimpleSignatures()) {
                     return false;

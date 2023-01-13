@@ -24,4 +24,4 @@ class EventGoalMovement : Event {
 
 class EventEntityColor(val entity: Entity, var color: Color?) : Event(false)
 class EventSuccessfulLoad : Event(false)
-class EventModuleStateSwitched(val module: Module) : Event(false)
+class EventModuleStateSwitched(val module: Module, val oldState: Boolean, val newState: Boolean) : Event(false)

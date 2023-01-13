@@ -58,7 +58,7 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
         )
 
         val toggleAnimation = min((System.currentTimeMillis() - toggleTime) / 100.0, 1.0)
-        val radius = if (module.enabled) toggleAnimation else 1.0 - toggleAnimation
+        val radius = if (module.enabled.value) toggleAnimation else 1.0 - toggleAnimation
         RenderUtil.fillCircle(matrices, width - 7, defaultHeight / 2, radius * 4.0, ClientValues.accentColor.getColor().rgb)
         RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0F, RenderUtil.colorInterpolate(ClientValues.accentColor.getColor(), Color.white, radius).rgb)
 

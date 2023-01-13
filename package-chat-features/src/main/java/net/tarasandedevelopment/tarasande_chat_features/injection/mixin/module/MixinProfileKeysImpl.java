@@ -26,14 +26,14 @@ public class MixinProfileKeysImpl {
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @Inject(method = "getKeyPair", at = @At("HEAD"), cancellable = true)
     public void revokeGateKeep(Optional<PlayerKeyPair> currentKey, CallbackInfoReturnable<CompletableFuture<Optional<PlayerKeyPair>>> cir) {
-        if (ManagerModule.INSTANCE.get(ModulePublicKeyKicker.class).getEnabled()) {
+        if (ManagerModule.INSTANCE.get(ModulePublicKeyKicker.class).getEnabled().getValue()) {
             cir.setReturnValue(CompletableFuture.supplyAsync(Optional::empty));
         }
     }
 
     @Inject(method = "saveKeyPairToFile", at = @At("HEAD"))
     public void trackGateKeepKeys(PlayerKeyPair keyPair, CallbackInfo ci) {
-        if (ManagerModule.INSTANCE.get(ModulePublicKeyKicker.class).getEnabled()) {
+        if (ManagerModule.INSTANCE.get(ModulePublicKeyKicker.class).getEnabled().getValue()) {
             PlayerKeyPair.CODEC.encodeStart(JsonOps.INSTANCE, keyPair).result().ifPresent(jsonElement -> {
                 final String hash = Hashing.sha256().hashBytes(jsonElement.toString().getBytes(StandardCharsets.UTF_8)).toString();
                 final Path folder = MinecraftClient.getInstance().runDirectory.toPath().resolve("gatekeep").resolve(MinecraftClient.getInstance().getSession().getUuid());

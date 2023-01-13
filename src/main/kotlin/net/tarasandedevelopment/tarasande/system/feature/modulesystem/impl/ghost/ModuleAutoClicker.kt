@@ -4,11 +4,11 @@ import net.minecraft.client.option.KeyBinding
 import net.minecraft.util.hit.HitResult
 import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.ClickSpeedUtil
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you", ModuleCategory.GHOST) {
@@ -24,7 +24,7 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
 
     init {
         for (pair in keyMap)
-            hashMap[pair.key] = ClickSpeedUtil(this, { buttons.selected.contains(pair.value) }, namePrefix = pair.value + ": ")
+            hashMap[pair.key] = ClickSpeedUtil(this, { buttons.isSelected(pair.value) }, namePrefix = pair.value + ": ")
     }
 
     override fun onEnable() {
@@ -37,7 +37,7 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
                 return@registerEvent
 
             for (entry in hashMap) {
-                if (buttons.selected.contains(keyMap[entry.key]) && entry.key.pressed) {
+                if (buttons.isSelected(keyMap[entry.key]!!) && entry.key.pressed) {
                     val clicks = entry.value.getClicks()
                     if (clicks > 0) {
                         if (entry.key == mc.options.useKey)

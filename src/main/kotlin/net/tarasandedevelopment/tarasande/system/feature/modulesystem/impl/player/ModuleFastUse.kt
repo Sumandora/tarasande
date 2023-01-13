@@ -7,12 +7,12 @@ import net.minecraft.registry.Registries
 import net.minecraft.util.UseAction
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import su.mandora.event.EventDispatcher
@@ -59,7 +59,7 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
                     }
                 }
                 values[useAction] = object : ValueNumber(this, nameMap[useAction] + ": Ticks", 0.0, longest.toDouble(), longest.toDouble(), 1.0) {
-                    override fun isEnabled() = actions.selected.contains(nameMap[useAction])
+                    override fun isEnabled() = actions.isSelected(nameMap[useAction]!!)
                 }
             }
         }
@@ -72,7 +72,7 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
             if (event.state == EventUpdate.State.PRE) {
                 if (mc.player?.isUsingItem == true) {
                     val usedStack = mc.player?.getStackInHand(PlayerUtil.getUsedHand() ?: return@registerEvent)!!
-                    if (useActions.contains(usedStack.useAction) && actions.selected.contains(nameMap[usedStack.useAction!!])) {
+                    if (useActions.contains(usedStack.useAction) && actions.isSelected(nameMap[usedStack.useAction!!]!!)) {
                         val useTime = mc.player?.itemUseTime!!
                         if (useTime > values[usedStack.useAction]?.value!!) {
                             if (preventIllegalPacket.value) { // This will lead to more flags, but prevents simple protocol checks

@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.i
 
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
@@ -9,7 +10,6 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.Sc
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel.PanelServerInformation
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel.copy
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel.emptyServer
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper

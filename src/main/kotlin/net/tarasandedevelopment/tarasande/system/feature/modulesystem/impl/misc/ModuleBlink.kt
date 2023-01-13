@@ -16,12 +16,12 @@ import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientConnection
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.ManagerGraph
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
@@ -36,19 +36,31 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
 
     private val affectedPackets = ValueMode(this, "Affected packets", true, "Serverbound", "Clientbound")
     private val mode = object : ValueMode(this, "Mode", false, "State-dependent", "Pulse blink", "Latency", "Automatic") {
-        override fun onChange() = onDisable()
+        override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) = onDisable()
     }
     private val pulseDelay = object : ValueNumber(this, "Pulse delay", 0.0, 500.0, 1000.0, 10.0) {
         override fun isEnabled() = mode.isSelected(1) || mode.isSelected(3)
-        override fun onChange() = onDisable()
+        override fun onChange(oldValue: Double?, newValue: Double) {
+            @Suppress("SENSELESS_COMPARISON")
+            if(packets != null)
+                onDisable()
+        }
     }
     private val latency = object : ValueNumber(this, "Latency", 0.0, 500.0, 1000.0, 10.0) {
         override fun isEnabled() = mode.isSelected(2)
-        override fun onChange() = onDisable()
+        override fun onChange(oldValue: Double?, newValue: Double) {
+            @Suppress("SENSELESS_COMPARISON")
+            if(packets != null)
+                onDisable()
+        }
     }
     private val reach = object : ValueNumber(this, "Reach", 0.1, 6.0, 15.0, 0.1) {
         override fun isEnabled() = mode.isSelected(3)
-        override fun onChange() = onDisable()
+        override fun onChange(oldValue: Double?, newValue: Double) {
+            @Suppress("SENSELESS_COMPARISON")
+            if(packets != null)
+                onDisable()
+        }
     }
     private val cancelKey = object : ValueBind(this, "Cancel key", Type.KEY, GLFW.GLFW_KEY_UNKNOWN) {
         override fun isEnabled() = mode.isSelected(0) && affectedPackets.isSelected(0)
@@ -208,7 +220,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                     if (cancelKey.wasPressed() > 0) {
                         packets.removeIf { it.second == EventPacket.Type.SEND }
                         onDisable(all = true, cancelled = true)
-                        enabled = false
+                        switchState()
                     }
             }
         }

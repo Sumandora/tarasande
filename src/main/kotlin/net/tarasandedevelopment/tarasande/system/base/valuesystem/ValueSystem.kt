@@ -47,7 +47,6 @@ abstract class Value(var owner: Any, val name: String, private val valueComponen
     }
 
     open fun isEnabled() = true
-    open fun onChange() {}
 
     abstract fun save(): JsonElement?
     abstract fun load(jsonElement: JsonElement)

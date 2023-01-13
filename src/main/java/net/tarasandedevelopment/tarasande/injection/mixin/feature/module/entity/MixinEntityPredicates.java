@@ -19,7 +19,7 @@ public class MixinEntityPredicates {
     private static void hookNoCramming(Entity entity, CallbackInfoReturnable<Predicate<Entity>> cir) {
         if (entity == MinecraftClient.getInstance().player) {
             ModuleNoCramming moduleNoCramming = ManagerModule.INSTANCE.get(ModuleNoCramming.class);
-            if (moduleNoCramming.getEnabled())
+            if (moduleNoCramming.getEnabled().getValue())
                 cir.setReturnValue(o -> moduleNoCramming.getMode().isSelected(0));
         }
     }

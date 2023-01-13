@@ -2,11 +2,11 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.move
 
 import net.minecraft.util.math.Direction
 import net.tarasandedevelopment.tarasande.event.EventMovement
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import org.lwjgl.glfw.GLFW
 
 class ModuleVehicleFlight : Module("Vehicle flight", "Makes you fly with vehicles (e.g. boat, horses)", ModuleCategory.MOVEMENT) {

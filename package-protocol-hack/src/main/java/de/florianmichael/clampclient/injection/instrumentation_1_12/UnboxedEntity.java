@@ -14,7 +14,7 @@ public class UnboxedEntity {
         origin.setYaw((float)((double)origin.getYaw() + (double)yaw * 0.15D));
         origin.setPitch((float)((double)origin.getPitch() - (double)pitch * 0.15D));
 
-        if(!ManagerModule.INSTANCE.get(ModuleNoPitchLimit.class).getEnabled())
+        if(!ManagerModule.INSTANCE.get(ModuleNoPitchLimit.class).getEnabled().getValue())
             origin.setPitch(MathHelper.clamp(origin.getPitch(), -90.0F, 90.0F));
 
         origin.prevPitch += origin.getPitch() - f;

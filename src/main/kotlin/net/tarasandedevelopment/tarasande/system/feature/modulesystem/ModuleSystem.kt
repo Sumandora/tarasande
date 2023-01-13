@@ -1,15 +1,15 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem
 
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.minecraft.network.packet.s2c.play.HealthUpdateS2CPacket
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.*
-import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.command.CommandToggle
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.file.FileModules
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.ghost.*
@@ -20,7 +20,6 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.rende
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.element.PanelElementsCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.fixed.PanelArrayList
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.Event
 import su.mandora.event.EventDispatcher
@@ -153,16 +152,26 @@ object ManagerModule : Manager<Module>() {
                 }
             }
             add(EventPacket::class.java) {
-                if (it.type == EventPacket.Type.RECEIVE && it.packet is HealthUpdateS2CPacket && it.packet.health <= 0) {
-                    for (module in list)
-                        if (module.autoDisable.isSelected(0) && module.enabled)
-                            module.switchState()
-                }
+                if (it.type == EventPacket.Type.RECEIVE)
+                    when (it.packet) {
+                        is PlayerMoveC2SPacket -> {
+                            for (module in list)
+                                if (module.autoDisable.isSelected(0) && module.enabled.value)
+                                    module.switchState()
+                        }
+
+                        is HealthUpdateS2CPacket -> {
+                            if(it.packet.health <= 0)
+                                for (module in list)
+                                    if (module.autoDisable.isSelected(1) && module.enabled.value)
+                                        module.switchState()
+                        }
+                    }
             }
             add(EventDisconnect::class.java) {
                 if (it.connection == mc.networkHandler?.connection) {
                     for (module in list)
-                        if (module.autoDisable.isSelected(1) && module.enabled)
+                        if (module.autoDisable.isSelected(2) && module.enabled.value)
                             module.switchState()
                 }
             }
@@ -170,7 +179,6 @@ object ManagerModule : Manager<Module>() {
                 this@ManagerModule.list.distinctBy { it.category }.forEach {
                     ManagerPanel.add(PanelElementsCategory(this@ManagerModule, it.category))
                 }
-                ManagerFile.add(FileModules(this@ManagerModule))
             }
         }
     }
@@ -179,9 +187,12 @@ object ManagerModule : Manager<Module>() {
 open class Module(val name: String, val description: String, val category: String) {
     private val eventListeners = HashSet<Triple<Class<Event>, Int, Consumer<Event>>>()
 
-    var enabled = false
-        set(value) {
-            if (field != value) if (value) {
+    var enabled = object : ValueBoolean(ManagerModule, name, false) {
+        override fun onChange(oldValue: Boolean?, newValue: Boolean) {
+            if(oldValue == null)
+                return
+
+            if (oldValue != newValue) if (newValue) {
                 onEnable()
                 eventListeners.forEach { EventDispatcher.add(it.first, it.second, it.third) }
             } else {
@@ -189,21 +200,21 @@ open class Module(val name: String, val description: String, val category: Strin
                 onDisable()
             }
 
-            field = value
-            EventDispatcher.call(EventModuleStateSwitched(this))
+            EventDispatcher.call(EventModuleStateSwitched(this@Module, oldValue, newValue))
         }
+    }
 
     @Suppress("LeakingThis")
     val visible = ValueBoolean(this, "Visible in ArrayList", true)
 
     @Suppress("LeakingThis")
-    val autoDisable = ValueMode(this, "Auto disable", true, "Death", "Disconnect")
+    val autoDisable = ValueMode(this, "Auto disable", true, "Serverside movement", "Death", "Disconnect")
 
     @Suppress("LeakingThis")
     val bind = ValueBind(this, "Bind", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN)
 
     fun switchState() {
-        enabled = !enabled
+        enabled.value = !enabled.value
     }
 
     open fun onEnable() {}

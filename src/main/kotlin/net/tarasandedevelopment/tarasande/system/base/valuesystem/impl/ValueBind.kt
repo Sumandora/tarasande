@@ -4,52 +4,56 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import net.tarasandedevelopment.tarasande.event.EventKey
 import net.tarasandedevelopment.tarasande.event.EventMouse
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl.ElementWidthValueComponentFocusableBind
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 
-open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, var mouse: Boolean = true, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentFocusableBind::class.java, manage) {
+open class ValueBind : Value {
 
-    private var presses = 0
+    var type: Type
+        set(value) {
+            val prevValue = field
+            field = value
+            onChange(prevValue, value)
+        }
+    var button: Int
+        set(value) {
+            val prevValue = field
+            field = value
+            onChange(prevValue, value)
+        }
+    val mouse: Boolean
 
-    init {
+    constructor(owner: Any, name: String, type: Type, button: Int, mouse: Boolean = true, manage: Boolean = true) : super(owner, name, ElementWidthValueComponentFocusableBind::class.java, manage) {
+        this.type = type
+        this.button = button
+        this.mouse = mouse
         EventDispatcher.apply {
             add(EventMouse::class.java) {
-                if (type == Type.MOUSE)
+                if (this@ValueBind.type == Type.MOUSE)
                     if (mc.currentScreen == null)
-                        if (button == it.button)
+                        if (this@ValueBind.button == it.button)
                             if (it.action == GLFW.GLFW_PRESS) {
-                                if (owner !is Module || this@ValueBind == owner.bind || owner.enabled)
+                                if (owner !is Module || this@ValueBind == owner.bind || owner.enabled.value)
                                     presses++
                             }
             }
             add(EventKey::class.java) {
-                if (type == Type.KEY)
+                if (this@ValueBind.type == Type.KEY)
                     if (mc.currentScreen == null)
-                        if (it.key == button)
+                        if (it.key == this@ValueBind.button)
                             if (it.action == GLFW.GLFW_PRESS) {
-                                if (owner !is Module || this@ValueBind == owner.bind || owner.enabled)
+                                if (owner !is Module || this@ValueBind == owner.bind || owner.enabled.value)
                                     presses++
                             }
             }
         }
     }
 
-    override fun save(): JsonElement {
-        val jsonArray = JsonArray()
-        jsonArray.add(type.ordinal)
-        jsonArray.add(button)
-        return jsonArray
-    }
-
-    override fun load(jsonElement: JsonElement) {
-        val jsonArray = jsonElement.asJsonArray
-        type = Type.values()[jsonArray.get(0).asInt]
-        button = jsonArray.get(1).asInt
-    }
+    private var presses = 0
 
     open fun filter(type: Type, bind: Int): Boolean {
         return true
@@ -69,6 +73,22 @@ open class ValueBind(owner: Any, name: String, var type: Type, var button: Int, 
             Type.KEY -> GLFW.glfwGetKey(mc.window.handle, button) == GLFW.GLFW_PRESS
             Type.MOUSE -> GLFW.glfwGetMouseButton(mc.window.handle, button) == GLFW.GLFW_PRESS
         }
+    }
+
+    open fun onChange(oldType: Type?, newType: Type) {}
+    open fun onChange(oldButton: Int?, newButton: Int) {}
+
+    override fun save(): JsonElement {
+        val jsonArray = JsonArray()
+        jsonArray.add(type.ordinal)
+        jsonArray.add(button)
+        return jsonArray
+    }
+
+    override fun load(jsonElement: JsonElement) {
+        val jsonArray = jsonElement.asJsonArray
+        type = Type.values()[jsonArray.get(0).asInt]
+        button = jsonArray.get(1).asInt
     }
 
     enum class Type {

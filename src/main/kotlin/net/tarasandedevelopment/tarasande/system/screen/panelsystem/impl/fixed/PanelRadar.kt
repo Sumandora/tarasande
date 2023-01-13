@@ -2,11 +2,11 @@ package net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.fixed
 
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleESP
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.awt.Color

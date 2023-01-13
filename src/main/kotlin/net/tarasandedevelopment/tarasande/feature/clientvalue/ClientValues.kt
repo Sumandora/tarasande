@@ -24,8 +24,9 @@ object ClientValues {
     // General
     val accentColor = ValueColor(this, "Accent color", 0.6, 1.0, 1.0)
     val autoSaveConfig = object : ValueBoolean(this, "Auto save: config", true) {
-        override fun onChange() {
-            autoSaveDaemon.name = autoSaveDaemonName + if (!value) " (disabled)" else ""
+        override fun onChange(oldValue: Boolean?, newValue: Boolean) {
+            if(autoSaveDaemon != null)
+                autoSaveDaemon.name = autoSaveDaemonName + if (!newValue) " (disabled)" else ""
         }
     }
     private val autoSaveDelay = object : ValueNumber(this, "Auto save: delay", 0.0, 10000.0, 60000.0, 1000.0) {
@@ -56,7 +57,7 @@ object ClientValues {
     // Other
     init {
         object : ValueButton(this, "Clear binds") {
-            override fun onChange() {
+            override fun onClick() {
                 ManagerValue.list.forEach {
                     if (it is ValueBind && it.filter(ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN))
                         it.apply {

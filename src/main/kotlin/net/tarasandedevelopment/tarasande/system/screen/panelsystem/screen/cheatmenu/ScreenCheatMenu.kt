@@ -8,10 +8,10 @@ import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventChangeScreen
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -19,7 +19,6 @@ import net.tarasandedevelopment.tarasande.system.screen.blursystem.ManagerBlur
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.particle.Particle
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
@@ -34,7 +33,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
     }
     private val animationLength = ValueNumber(this, "Animation length", 0.0, 100.0, 500.0, 1.0)
     private val imageValue = object : ValueMode(this, "Image", false, "Off", "Rimuru", "Shuya's girl", "Nanakusa", "Jannick", "Azusa") {
-        override fun onChange() {
+        override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
             nativeImage = null
         }
     }
@@ -100,7 +99,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
 
         if (!imageValue.isSelected(0)) {
             if (nativeImage == null)
-                nativeImage = RenderUtil.createImage(imageValue.selected[0].lowercase().replace(" ", "").replace("'", "") + ".png")
+                nativeImage = RenderUtil.createImage(imageValue.getSelected().lowercase().replace(" ", "").replace("'", "") + ".png")
 
             matrices.push()
             RenderSystem.setShader { GameRenderer.getPositionTexProgram() }

@@ -4,7 +4,7 @@ import com.viaversion.viaversion.protocols.protocol1_9to1_8.ArmorType
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
-import net.tarasandedevelopment.tarasande.util.extension.mc
+import net.tarasandedevelopment.tarasande.mc
 
 object ArmorUpdater1_8 {
 

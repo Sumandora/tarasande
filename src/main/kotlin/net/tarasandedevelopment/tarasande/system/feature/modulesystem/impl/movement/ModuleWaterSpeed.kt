@@ -1,11 +1,11 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
 import net.tarasandedevelopment.tarasande.event.EventMovement
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class ModuleWaterSpeed : Module("Water speed", "Modifies movement speed inside fluids", ModuleCategory.MOVEMENT) {

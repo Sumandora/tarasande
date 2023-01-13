@@ -17,8 +17,8 @@ import kotlin.math.min
 class ElementWidthPlayer(val gameProfile: GameProfile, width: Double) : ElementWidth(width) {
 
     private val value = object : ValueText(this, gameProfile.name, "", manage = false) {
-        override fun onChange() {
-            Friends.setAlias(gameProfile, value.ifEmpty { null })
+        override fun onChange(oldText: String?, newText: String) {
+            Friends.setAlias(gameProfile, newText.ifEmpty { null })
         }
     }
     val textField = ElementWidthValueComponentFocusableText(value, 1.0F, false)

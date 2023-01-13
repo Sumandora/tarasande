@@ -21,6 +21,7 @@ import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventChat
 import net.tarasandedevelopment.tarasande.event.EventInputSuggestions
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
@@ -28,7 +29,6 @@ import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.Comm
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandFakeGameMode
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandGive
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandSay
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher

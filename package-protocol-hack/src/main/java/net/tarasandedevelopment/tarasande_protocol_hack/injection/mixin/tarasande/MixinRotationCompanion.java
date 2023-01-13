@@ -26,7 +26,7 @@ public class MixinRotationCompanion {
                     (float)((double)prevRotation.getYaw() + (double)f2 * 0.15D),
                     (float)((double)prevRotation.getPitch() + (double)f3 * 0.15D)
             );
-            if(!ManagerModule.INSTANCE.get(ModuleNoPitchLimit.class).getEnabled())
+            if(!ManagerModule.INSTANCE.get(ModuleNoPitchLimit.class).getEnabled().getValue())
                 newRotation = newRotation.withPitch(MathHelper.clamp(newRotation.getPitch(), -90.0F, 90.0F));
             cir.setReturnValue(newRotation);
         }

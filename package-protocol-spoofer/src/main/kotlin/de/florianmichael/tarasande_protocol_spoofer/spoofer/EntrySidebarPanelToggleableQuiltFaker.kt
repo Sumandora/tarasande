@@ -6,8 +6,8 @@ import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.util.Identifier
 import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import su.mandora.event.EventDispatcher
 
 class EntrySidebarPanelToggleableQuiltFaker : SidebarEntryToggleable("Quilt Faker", "Spoofer") {

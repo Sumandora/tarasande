@@ -58,14 +58,14 @@ open class Graph(val category: String, val name: String, bufferLength: Int, inte
     init {
         if (!integer)
             object : ValueNumber(this, "Decimal places", 0.0, 1.0, 5.0, 1.0) {
-                override fun onChange() {
-                    decimalPlaces = value.toInt()
+                override fun onChange(oldValue: Double?, newValue: Double) {
+                    decimalPlaces = newValue.toInt()
                 }
             }
 
         object : ValueNumber(this, "Buffer length", 1.0, bufferLength / 2.0, bufferLength.toDouble(), 1.0) {
-            override fun onChange() {
-                this@Graph.bufferLength = value.toInt()
+            override fun onChange(oldValue: Double?, newValue: Double) {
+                this@Graph.bufferLength = newValue.toInt()
             }
         }
     }

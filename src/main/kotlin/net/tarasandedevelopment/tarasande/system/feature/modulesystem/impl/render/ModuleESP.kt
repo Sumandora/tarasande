@@ -8,6 +8,7 @@ import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.feature.entitycolor.EntityColor
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
@@ -16,7 +17,6 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerMod
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.ModuleAntiBot
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
@@ -39,7 +39,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
     }
 
     fun shouldRender(entity: Entity) =
-        entities.list.contains(entity.type) &&
+        entities.isSelected(entity.type) &&
                 (entity !is PlayerEntity || entity == mc.player || !ManagerModule.get(ModuleAntiBot::class.java).isBot(entity))
 
     private val hashMap = HashMap<Entity, Rectangle>()

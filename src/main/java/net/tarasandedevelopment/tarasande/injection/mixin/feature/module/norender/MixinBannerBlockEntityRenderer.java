@@ -38,7 +38,7 @@ public class MixinBannerBlockEntityRenderer {
             at = @At("HEAD"), cancellable = true)
     public void noRender_render(BannerBlockEntity bannerBlockEntity, float f, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int j, CallbackInfo ci) {
         final ValueMode modeValue = ManagerModule.INSTANCE.get(ModuleNoRender.class).getWorld().getBanners();
-        if (!ManagerModule.INSTANCE.get(ModuleNoRender.class).getEnabled()) return;
+        if (!ManagerModule.INSTANCE.get(ModuleNoRender.class).getEnabled().getValue()) return;
 
         if (!modeValue.isSelected(0)) {
             ci.cancel();

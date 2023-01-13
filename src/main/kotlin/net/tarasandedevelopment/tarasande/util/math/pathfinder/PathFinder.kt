@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.util.math.pathfinder
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.util.extension.mc
+import net.tarasandedevelopment.tarasande.mc
 import java.util.*
 import kotlin.math.abs
 

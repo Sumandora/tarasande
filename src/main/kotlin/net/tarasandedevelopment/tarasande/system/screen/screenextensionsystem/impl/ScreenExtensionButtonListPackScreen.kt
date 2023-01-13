@@ -2,10 +2,9 @@ package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.i
 
 import net.minecraft.client.gui.screen.pack.PackScreen
 import net.minecraft.resource.ZipResourcePack
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.logger
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import java.io.File
 import java.util.logging.Level
 

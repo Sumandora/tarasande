@@ -7,10 +7,10 @@ import net.minecraft.client.network.ServerAddress
 import net.minecraft.client.network.ServerInfo
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.Formatting
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.screen.base.AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget
 import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListEntry
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 

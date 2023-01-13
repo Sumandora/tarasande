@@ -2,11 +2,11 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.move
 
 import net.tarasandedevelopment.tarasande.event.EventInput
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class ModuleSneak : Module("Sneak", "Automatically sneaks", ModuleCategory.MOVEMENT) {

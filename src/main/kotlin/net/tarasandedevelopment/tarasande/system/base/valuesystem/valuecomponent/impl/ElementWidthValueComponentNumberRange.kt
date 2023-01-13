@@ -44,8 +44,8 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
         if (value == -0.0)
             value = 0.0
 
+        val oldMinValue = valueNumberRange.minValue
         valueNumberRange.minValue = value.coerceAtMost(valueNumberRange.maxValue)
-        valueNumberRange.onChange()
     }
 
     private fun setMaxValue(value: Double, clamp: Boolean) {
@@ -63,8 +63,8 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
         if (value == -0.0)
             value = 0.0
 
+        val oldMaxValue = valueNumberRange.maxValue
         valueNumberRange.maxValue = value.coerceAtLeast(valueNumberRange.minValue)
-        valueNumberRange.onChange()
     }
 
     override fun init() {

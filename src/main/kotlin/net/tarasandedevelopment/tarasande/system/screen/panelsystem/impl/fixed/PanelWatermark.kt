@@ -4,10 +4,10 @@ import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import java.net.InetAddress
 

@@ -8,6 +8,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.util.math.MathHelper
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -15,7 +16,6 @@ import net.tarasandedevelopment.tarasande.system.feature.espsystem.ESPElement
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.ESPElementRotatable
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.Orientation
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleESP
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import java.awt.Color

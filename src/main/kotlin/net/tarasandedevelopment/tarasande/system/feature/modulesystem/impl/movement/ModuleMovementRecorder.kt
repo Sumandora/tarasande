@@ -3,11 +3,11 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.move
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil

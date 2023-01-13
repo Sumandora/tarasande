@@ -10,26 +10,39 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: Registry<T>, vararg keys: T, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentFocusableRegistry::class.java, manage) {
 
-    var list = CopyOnWriteArrayList<T>()
+    private val list = CopyOnWriteArrayList<T>()
 
     init {
         list.addAll(keys)
     }
 
-    override fun save(): JsonElement {
-        val jsonArray = JsonArray()
-        list.forEach { jsonArray.add(getTranslationKey(it)) }
-        return jsonArray
-    }
+    fun isSelected(key: Any?) = list.contains(key)
 
-    override fun load(jsonElement: JsonElement) {
-        val jsonArray = jsonElement.asJsonArray
-        list.clear()
-        list.addAll(jsonArray.mapNotNull { e -> registry.first { getTranslationKey(it) == e.asString } })
+    fun add(wrappedKey: WrappedKey<*>) {
+        @Suppress("UNCHECKED_CAST")
+        list.add(wrappedKey.key as T)
+        onAdd(wrappedKey)
     }
+    fun remove(key: Any?) {
+        list.remove(key)
+        onRemove(key)
+    }
+    fun entries() = list.toArray()
+    fun any(predicate: (T) -> Boolean): Boolean {
+        if (list.isEmpty()) return false
+        for (element in list)
+            if (predicate(element))
+                return true
+        return false
+    }
+    fun anySelected() = list.isNotEmpty()
+    fun randomOrNull() = list.randomOrNull()
+
+    abstract fun getTranslationKey(key: Any?): String
 
     open fun filter(key: T) = true
-    abstract fun getTranslationKey(key: Any?): String
+    open fun onAdd(wrappedKey: WrappedKey<*>) {}
+    open fun onRemove(key: Any?) {}
 
     fun updateSearchResults(text: String, max: Int): ArrayList<WrappedKey<T>> {
         var count = 0
@@ -45,11 +58,17 @@ abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: 
         return list
     }
 
-    fun add(wrappedKey: WrappedKey<*>) {
-        @Suppress("UNCHECKED_CAST")
-        list.add(wrappedKey.key as T)
+    override fun save(): JsonElement {
+        val jsonArray = JsonArray()
+        list.forEach { jsonArray.add(getTranslationKey(it)) }
+        return jsonArray
+    }
+
+    override fun load(jsonElement: JsonElement) {
+        val jsonArray = jsonElement.asJsonArray
+        list.clear()
+        list.addAll(jsonArray.mapNotNull { e -> registry.first { getTranslationKey(it) == e.asString } })
     }
 
     class WrappedKey<T>(val key: T, val string: String)
-
 }

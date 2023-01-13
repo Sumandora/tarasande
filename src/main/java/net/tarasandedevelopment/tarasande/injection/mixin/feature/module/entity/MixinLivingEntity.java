@@ -55,7 +55,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
         if ((Object) this == MinecraftClient.getInstance().player)
             if (isClimbing()) {
                 ModuleFastClimb moduleFastClimb = ManagerModule.INSTANCE.get(ModuleFastClimb.class);
-                if (moduleFastClimb.getEnabled())
+                if (moduleFastClimb.getEnabled().getValue())
                     original *= moduleFastClimb.getMultiplier().getValue();
             }
         return original;
@@ -66,7 +66,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
         if ((Object) this == MinecraftClient.getInstance().player)
             if (onGround) {
                 final ModuleNoFall moduleNoFall = ManagerModule.INSTANCE.get(ModuleNoFall.class);
-                if (moduleNoFall.getEnabled() && moduleNoFall.getMode().isSelected(0) && moduleNoFall.getGroundSpoofMode().isSelected(1))
+                if (moduleNoFall.getEnabled().getValue() && moduleNoFall.getMode().isSelected(0) && moduleNoFall.getGroundSpoofMode().isSelected(1))
                     ci.cancel();
             }
     }
@@ -78,7 +78,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
         } else {
             if ((Object) this == MinecraftClient.getInstance().player) {
                 final ModuleNoStatusEffect moduleNoStatusEffect = ManagerModule.INSTANCE.get(ModuleNoStatusEffect.class);
-                if (moduleNoStatusEffect.getEnabled() && moduleNoStatusEffect.getEffects().getList().contains(effect)) {
+                if (moduleNoStatusEffect.getEnabled().getValue() && moduleNoStatusEffect.getEffects().isSelected(effect)) {
                     cir.setReturnValue(false);
                 }
             }
@@ -92,7 +92,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
         } else {
             if ((Object) this == MinecraftClient.getInstance().player) {
                 final ModuleNoStatusEffect moduleNoStatusEffect = ManagerModule.INSTANCE.get(ModuleNoStatusEffect.class);
-                if (moduleNoStatusEffect.getEnabled() && moduleNoStatusEffect.getEffects().getList().contains(effect)) {
+                if (moduleNoStatusEffect.getEnabled().getValue() && moduleNoStatusEffect.getEffects().isSelected(effect)) {
                     cir.setReturnValue(null);
                 }
             }

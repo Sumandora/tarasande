@@ -8,12 +8,12 @@ import net.minecraft.util.UseAction
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.*
 import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.ClickSpeedUtil
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.impl.ClickMethodCooldown
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.*
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
@@ -430,7 +430,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     }
 
     private fun isBlockItemValid(blockItem: BlockItem): Boolean {
-        if (forbiddenItems.list.contains(blockItem)) return false
+        if (forbiddenItems.isSelected(blockItem)) return false
 
         return if (cubeShape.value) {
             val block = blockItem.block

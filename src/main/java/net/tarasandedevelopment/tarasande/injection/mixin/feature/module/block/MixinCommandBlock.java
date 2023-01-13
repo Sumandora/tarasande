@@ -13,7 +13,7 @@ public class MixinCommandBlock {
 
     @Redirect(method = "onUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isCreativeLevelTwoOp()Z"))
     public boolean hookCommandBlockBypass(PlayerEntity instance) {
-        if (ManagerModule.INSTANCE.get(ModuleCommandBlockBypass.class).getEnabled())
+        if (ManagerModule.INSTANCE.get(ModuleCommandBlockBypass.class).getEnabled().getValue())
             return true;
         return instance.isCreativeLevelTwoOp();
     }

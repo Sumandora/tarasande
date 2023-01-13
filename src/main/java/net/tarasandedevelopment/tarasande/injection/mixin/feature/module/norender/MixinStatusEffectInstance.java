@@ -14,7 +14,7 @@ public class MixinStatusEffectInstance {
     @Inject(method = "shouldShowIcon", at = @At("HEAD"), cancellable = true)
     public void hookNoRender(CallbackInfoReturnable<Boolean> cir) {
         final ModuleNoRender moduleNoRender = ManagerModule.INSTANCE.get(ModuleNoRender.class);
-        if (!moduleNoRender.getEnabled() || moduleNoRender.getHud().getPotionIcons().isSelected(0)) return;
+        if (!moduleNoRender.getEnabled().getValue() || moduleNoRender.getHud().getPotionIcons().isSelected(0)) return;
 
         cir.setReturnValue(moduleNoRender.getHud().getPotionIcons().isSelected(2));
     }

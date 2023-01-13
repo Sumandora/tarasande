@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande_litematica.generator
 
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.Manager
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import net.tarasandedevelopment.tarasande_litematica.generator.impl.GeneratorMazes
 import net.tarasandedevelopment.tarasande_litematica.generator.impl.GeneratorQRCode
@@ -22,7 +22,7 @@ abstract class Generator(val parent: Any, val name: String) {
 
     init {
         object : ValueButton(parent, "Perform $name") {
-            override fun onChange() {
+            override fun onClick() {
                 perform()
             }
         }

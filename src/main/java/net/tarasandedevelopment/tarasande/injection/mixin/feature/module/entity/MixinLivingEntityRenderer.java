@@ -39,7 +39,7 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
 
     @Redirect(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isInvisibleTo(Lnet/minecraft/entity/player/PlayerEntity;)Z"))
     public boolean hookTrueSight_render(LivingEntity instance, PlayerEntity playerEntity) {
-        if (ManagerModule.INSTANCE.get(ModuleTrueSight.class).getEnabled())
+        if (ManagerModule.INSTANCE.get(ModuleTrueSight.class).getEnabled().getValue())
             return false;
 
         return instance.isInvisibleTo(playerEntity);
@@ -47,7 +47,7 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
 
     @Redirect(method = "hasLabel(Lnet/minecraft/entity/LivingEntity;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isInvisibleTo(Lnet/minecraft/entity/player/PlayerEntity;)Z"))
     public boolean hookTrueSight_hasLabel(LivingEntity instance, PlayerEntity playerEntity) {
-        if (ManagerModule.INSTANCE.get(ModuleTrueSight.class).getEnabled())
+        if (ManagerModule.INSTANCE.get(ModuleTrueSight.class).getEnabled().getValue())
             return false;
 
         return instance.isInvisibleTo(playerEntity);
@@ -55,14 +55,14 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
 
     @Inject(method = "isVisible", at = @At("HEAD"), cancellable = true)
     public void hookTrueSight_isVisible(T entity, CallbackInfoReturnable<Boolean> cir) {
-        if (ManagerModule.INSTANCE.get(ModuleTrueSight.class).getEnabled())
+        if (ManagerModule.INSTANCE.get(ModuleTrueSight.class).getEnabled().getValue())
             cir.setReturnValue(true);
     }
 
     @Redirect(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/EntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
     public void hookTrueSight(EntityModel<?> instance, MatrixStack matrixStack, VertexConsumer vertexConsumer, int a, int b, float c, float d, float e, float f) {
         ModuleTrueSight moduleTrueSight = ManagerModule.INSTANCE.get(ModuleTrueSight.class);
-        if (moduleTrueSight.getEnabled()) {
+        if (moduleTrueSight.getEnabled().getValue()) {
             IEntity accessor = (IEntity) tarasande_livingEntity;
             if (tarasande_livingEntity.isInvisibleTo(MinecraftClient.getInstance().player) || accessor.tarasande_forceGetFlag(Entity.INVISIBLE_FLAG_INDEX))
                 f = (float) moduleTrueSight.getAlpha().getValue();

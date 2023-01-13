@@ -5,12 +5,12 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.event.EventScreenInput
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 import java.util.concurrent.ThreadLocalRandom

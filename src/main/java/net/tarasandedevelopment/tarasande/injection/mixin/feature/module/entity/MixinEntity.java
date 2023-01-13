@@ -20,7 +20,7 @@ public class MixinEntity {
     @Inject(method = "getTeamColorValue", at = @At("RETURN"), cancellable = true)
     public void hookESP(CallbackInfoReturnable<Integer> cir) {
         ModuleESP moduleESP = ManagerModule.INSTANCE.get(ModuleESP.class);
-        if (moduleESP.getEnabled()) {
+        if (moduleESP.getEnabled().getValue()) {
             Color c = moduleESP.getEntityColor().getColor((Entity) (Object) this);
             if (c != null)
                 cir.setReturnValue(c.getRGB());
@@ -30,7 +30,7 @@ public class MixinEntity {
     @Redirect(method = "changeLookDirection", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F"))
     public float hookNoPitchLimit(float value, float min, float max) {
         if ((Object) this == MinecraftClient.getInstance().player)
-            if (ManagerModule.INSTANCE.get(ModuleNoPitchLimit.class).getEnabled())
+            if (ManagerModule.INSTANCE.get(ModuleNoPitchLimit.class).getEnabled().getValue())
                 return value;
         return MathHelper.clamp(value, min, max);
     }

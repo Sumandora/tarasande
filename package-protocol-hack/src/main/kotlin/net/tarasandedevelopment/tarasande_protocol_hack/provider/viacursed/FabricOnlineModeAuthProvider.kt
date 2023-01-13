@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande_protocol_hack.provider.viacursed
 
 import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.provider.OnlineModeAuthProvider
-import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class FabricOnlineModeAuthProvider : OnlineModeAuthProvider {
 

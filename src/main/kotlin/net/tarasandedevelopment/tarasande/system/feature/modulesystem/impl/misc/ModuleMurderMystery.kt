@@ -12,6 +12,7 @@ import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.registry.Registries
 import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
@@ -19,7 +20,6 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.ModuleAntiBot
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewWorld
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
@@ -79,7 +79,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         ManagerInformation.apply {
             add(object : Information("Murder Mystery", "Suspected murderers") {
                 override fun getMessage(): String? {
-                    if (enabled)
+                    if (enabled.value)
                         if (suspects.isNotEmpty()) {
                             return "\n" + suspects.entries.joinToString("\n") {
                                 it.key.name + " (" + it.value.joinToString(" and ") { item -> StringUtil.uncoverTranslation(item.translationKey) } + "§r)"
@@ -92,7 +92,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
 
             add(object : Information("Murder Mystery", "Fake news countdown") {
                 override fun getMessage(): String? {
-                    if (enabled)
+                    if (enabled.value)
                         if (!fakeNews.isSelected(0) && isMurderer())
                             return (fakeNewsTime - (System.currentTimeMillis() - fakeNewsTimer.time)).toString()
 
@@ -159,11 +159,12 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         if (!message.isNullOrEmpty()) messages.add(message)
     }
 
-    private fun isIllegalItem(item: Item) = if (item == Items.AIR || (highlightDetectives.value && detectiveItems.list.contains(item))) false else when {
-        detectionMethod.isSelected(0) -> !allowedItems.list.contains(item)
-        detectionMethod.isSelected(1) -> disallowedItems.list.contains(item)
-        else -> false
-    }
+    private fun isIllegalItem(item: Item) =
+        if (item == Items.AIR || (highlightDetectives.value && detectiveItems.isSelected(item))) false else when {
+            detectionMethod.isSelected(0) -> !allowedItems.isSelected(item)
+            detectionMethod.isSelected(1) -> disallowedItems.isSelected(item)
+            else -> false
+        }
 
     fun isMurderer(): Boolean {
         for (slot in 0 until PlayerInventory.getHotbarSize()) {
@@ -194,8 +195,8 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                         while (player == null || player == mc.player) {
                             player = realPlayers[ThreadLocalRandom.current().nextInt(realPlayers.size)]
                         }
-                        val randomIllegalItem = fakeNewsItems.list.randomOrNull()
-                        accuse(player, randomIllegalItem != null, false, randomIllegalItem ?: Items.AIR, Items.AIR, fakeNews.values.indexOf(fakeNews.selected[0]), customFakeNewsMessage.value)
+                        val randomIllegalItem = fakeNewsItems.entries().randomOrNull()
+                        accuse(player, randomIllegalItem != null, false, (randomIllegalItem as? Item) ?: Items.AIR, Items.AIR, fakeNews.values.indexOf(fakeNews.getSelected()), customFakeNewsMessage.value)
                         fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
                         fakeNewsTimer.reset()
                     }
@@ -264,7 +265,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                             else -> arrayOf()
                         }
                         if (!broadcast.isSelected(0)) {
-                            accuse(player, illegalMainHand, illegalOffHand, mainHand ?: Items.AIR, offHand ?: Items.AIR, broadcast.values.indexOf(broadcast.selected[0]), customBroadcastMessage.value)
+                            accuse(player, illegalMainHand, illegalOffHand, mainHand ?: Items.AIR, offHand ?: Items.AIR, broadcast.values.indexOf(broadcast.getSelected()), customBroadcastMessage.value)
                         }
                     }
                 }
@@ -274,7 +275,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
             if (event.entity is PlayerEntity)
                 if (suspects.containsKey(event.entity.gameProfile))
                     event.color = murdererColorOverride.getColor()
-                else if (highlightDetectives.value && detectiveItems.list.any { event.entity.inventory.mainHandStack.item == it || event.entity.inventory.offHand[0].item == it })
+                else if (highlightDetectives.value && detectiveItems.any { event.entity.inventory.mainHandStack.item == it || event.entity.inventory.offHand[0].item == it })
                     event.color = detectiveColorOverride.getColor()
         }
     }

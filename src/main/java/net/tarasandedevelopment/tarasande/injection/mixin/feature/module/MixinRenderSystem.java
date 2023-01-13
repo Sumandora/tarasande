@@ -14,7 +14,7 @@ public class MixinRenderSystem {
     @Redirect(method = "clearColor", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;_clearColor(FFFF)V"))
     private static void hookedFog_clearColor(float red, float green, float blue, float alpha) {
         ModuleFog moduleFog = ManagerModule.INSTANCE.get(ModuleFog.class);
-        if (moduleFog.getEnabled()) {
+        if (moduleFog.getEnabled().getValue()) {
             red = moduleFog.getColor().getColor().getRed() / 255.0F;
             green = moduleFog.getColor().getColor().getGreen() / 255.0F;
             blue = moduleFog.getColor().getColor().getBlue() / 255.0F;

@@ -493,7 +493,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
             if (((IEntity_Protocol) original).protocolhack_isInWeb()) {
                 ((IEntity_Protocol) original).protocolhack_setInWeb(false);
                 ModuleNoWeb moduleNoWeb = ManagerModule.INSTANCE.get(ModuleNoWeb.class);
-                if(moduleNoWeb.getEnabled()) {
+                if(moduleNoWeb.getEnabled().getValue()) {
                     x *= moduleNoWeb.getHorizontalSlowdown().getValue();
                     y *= moduleNoWeb.getVerticalSlowdown().getValue();
                     z *= moduleNoWeb.getHorizontalSlowdown().getValue();
@@ -518,7 +518,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
 
             ModuleSafeWalk moduleSafeWalk = ManagerModule.INSTANCE.get(ModuleSafeWalk.class);
 
-            boolean flag = original.isOnGround() && (original.isSneaking() || (moduleSafeWalk.getEnabled() && !moduleSafeWalk.getSneak().getValue())) && (Object) original instanceof PlayerEntity;
+            boolean flag = original.isOnGround() && (original.isSneaking() || (moduleSafeWalk.getEnabled().getValue() && !moduleSafeWalk.getSneak().getValue())) && (Object) original instanceof PlayerEntity;
 
             if (flag) {
                 double d6;
@@ -768,7 +768,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
 
         if(onGroundIn) {
             ModuleNoFall moduleNoFall = ManagerModule.INSTANCE.get(ModuleNoFall.class);
-            if(moduleNoFall.getEnabled() && moduleNoFall.getMode().isSelected(0) && moduleNoFall.getGroundSpoofMode().isSelected(1))
+            if(moduleNoFall.getEnabled().getValue() && moduleNoFall.getMode().isSelected(0) && moduleNoFall.getGroundSpoofMode().isSelected(1))
                 return;
         }
 

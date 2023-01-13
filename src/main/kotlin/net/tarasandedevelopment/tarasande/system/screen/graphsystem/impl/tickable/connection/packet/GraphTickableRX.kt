@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.connection.packet
 
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.GraphTickable
-import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class GraphTickableRX : GraphTickable("Connection", "RX", 200, true) {
 

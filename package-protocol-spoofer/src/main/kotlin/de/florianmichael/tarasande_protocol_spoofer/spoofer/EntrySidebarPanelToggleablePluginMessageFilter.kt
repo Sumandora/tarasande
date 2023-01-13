@@ -11,7 +11,7 @@ import su.mandora.event.EventDispatcher
 class EntrySidebarPanelToggleablePluginMessageFilter : SidebarEntryToggleable("Plugin message filter", "Spoofer") {
 
     private val filterType = ValueMode(this, "Filter type", false, "Contains", "Equals")
-    private val channels = ValueTextList(this, "Channels", mutableListOf("fabric"))
+    private val channels = ValueTextList(this, "Channels", arrayListOf("fabric"))
     private val ignoreCase = ValueBoolean(this, "Ignore case", true)
 
     init {
@@ -21,7 +21,7 @@ class EntrySidebarPanelToggleablePluginMessageFilter : SidebarEntryToggleable("P
             if (it.type == EventPacket.Type.SEND && it.packet is CustomPayloadC2SPacket) {
                 val packetChannel = (it.packet as CustomPayloadC2SPacket).channel.toString()
 
-                for (channel in channels.value) {
+                for (channel in channels.entries()) {
                     if (when {
                             filterType.isSelected(0) -> packetChannel.contains(channel, ignoreCase.value)
                             filterType.isSelected(1) -> packetChannel.equals(channel, ignoreCase.value)

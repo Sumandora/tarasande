@@ -193,7 +193,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     private boolean disableSprintSneak(Input input) {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_14_1)) {
             ModuleSprint moduleSprint = ManagerModule.INSTANCE.get(ModuleSprint.class);
-            if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
+            if (moduleSprint.getEnabled().getValue() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
                 return input.getMovementInput().lengthSquared() >= 0.8 * 0.8;
 
             return input.movementForward >= 0.8F;

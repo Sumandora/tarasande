@@ -1,6 +1,7 @@
 package net.tarasandedevelopment.tarasande
 
 import com.google.gson.GsonBuilder
+import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
@@ -34,6 +35,8 @@ import java.util.logging.Logger
  *  - https://github.com/SirHilarious/WardenTools
  *  - Package DSL
  *  - Auto Totem
+ *  - AutoLog
+ *  - Chest Aura
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions
@@ -44,6 +47,8 @@ import java.util.logging.Logger
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv
 val logger = Logger.getLogger(TARASANDE_NAME)!!
 val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
+val mc: MinecraftClient
+    get() = MinecraftClient.getInstance()
 
 object TarasandeMain {
 

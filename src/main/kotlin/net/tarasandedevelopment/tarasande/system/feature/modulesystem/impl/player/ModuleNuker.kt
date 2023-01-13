@@ -9,12 +9,12 @@ import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventHandleBlockBreaking
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
@@ -77,7 +77,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
 
                 if (blockState?.calcBlockBreakingDelta(mc.player, mc.world, blockPos)!! <= 0.0)
                     continue
-                if (!(selectionMode.isSelected(0) && includedBlocks.list.contains(blockState.block)) && !(selectionMode.isSelected(1) && !excludedBlocks.list.contains(blockState.block)))
+                if (!(selectionMode.isSelected(0) && includedBlocks.isSelected(blockState.block)) && !(selectionMode.isSelected(1) && !excludedBlocks.isSelected(blockState.block)))
                     continue
 
                 val collisionShape = blockState.getCollisionShape(mc.world, blockPos)

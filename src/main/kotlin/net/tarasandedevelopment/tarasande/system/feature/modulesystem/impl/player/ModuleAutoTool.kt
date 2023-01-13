@@ -7,13 +7,13 @@ import net.minecraft.item.SwordItem
 import net.minecraft.util.hit.BlockHitResult
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.ModuleHealingBot
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 
@@ -54,7 +54,7 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool for breaking a
             if (event.state == EventAttackEntity.State.PRE) {
                 if (!mode.isSelected(1))
                     return@registerEvent
-                if (ManagerModule.get(ModuleHealingBot::class.java).let { it.enabled && it.state != ModuleHealingBot.State.IDLE })
+                if (ManagerModule.get(ModuleHealingBot::class.java).let { it.enabled.value && it.state != ModuleHealingBot.State.IDLE })
                     return@registerEvent
 
                 var best: Int? = null

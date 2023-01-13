@@ -16,7 +16,7 @@ public class MixinTridentItem {
     @ModifyArgs(method = "onStoppedUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addVelocity(DDD)V"))
     public void hookTridentBoost(Args args) {
         ModuleTridentBoost moduleTridentBoost = ManagerModule.INSTANCE.get(ModuleTridentBoost.class);
-        if (moduleTridentBoost.getEnabled()) {
+        if (moduleTridentBoost.getEnabled().getValue()) {
             double multiplier = moduleTridentBoost.getMultiplier().getValue();
 
             args.set(0, (double) args.get(0) * multiplier);
@@ -28,7 +28,7 @@ public class MixinTridentItem {
     @Redirect(method = {"use", "onStoppedUsing"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isTouchingWaterOrRain()Z"))
     public boolean hookTridentBoost_use(PlayerEntity instance) {
         ModuleTridentBoost moduleTridentBoost = ManagerModule.INSTANCE.get(ModuleTridentBoost.class);
-        if (moduleTridentBoost.getEnabled() && moduleTridentBoost.getAllowOutOfWater().getValue())
+        if (moduleTridentBoost.getEnabled().getValue() && moduleTridentBoost.getAllowOutOfWater().getValue())
             return true;
         return instance.isTouchingWaterOrRain();
     }

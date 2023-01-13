@@ -4,12 +4,12 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventMouseDelta
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import kotlin.math.roundToInt
@@ -30,7 +30,7 @@ class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PL
 
         ManagerInformation.add(object : Information("Anti AFK", "Jump countdown") {
             override fun getMessage() =
-                if (enabled)
+                if (enabled.value)
                     ((delay.value * 1000L - (System.currentTimeMillis() - timer.time)) / 1000.0).roundToInt().toString()
                 else
                     null

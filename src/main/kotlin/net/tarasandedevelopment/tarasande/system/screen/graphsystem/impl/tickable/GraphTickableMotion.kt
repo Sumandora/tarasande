@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable
 
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.GraphTickable
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 
 

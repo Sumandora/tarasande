@@ -4,12 +4,12 @@ import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
 import net.minecraft.world.World
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ModuleWorldTime : Module("World time", "Changes the time of day", ModuleCategory.RENDER) {
 
@@ -34,9 +34,9 @@ class ModuleWorldTime : Module("World time", "Changes the time of day", ModuleCa
     private val forceMoonPhase = ValueMode(this, "Force moon phase", false, "Off", *moonStates)
 
     fun moonPhase(): Int? {
-        if (!enabled || forceMoonPhase.isSelected(0)) return null
+        if (!enabled.value || forceMoonPhase.isSelected(0)) return null
 
-        return moonStates.indexOf(forceMoonPhase.selected[0])
+        return moonStates.indexOf(forceMoonPhase.getSelected())
     }
 
     init {

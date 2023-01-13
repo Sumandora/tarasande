@@ -25,8 +25,8 @@ class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array Lis
 
     init {
         object : ValueMode(this, "Easing function", false, *EzEasing.functionNames().toTypedArray()) {
-            override fun onChange() {
-                easing = EzEasing.byName(selected[0])
+            override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
+                easing = EzEasing.byName(getSelected())
             }
         }
     }
@@ -63,7 +63,7 @@ class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array Lis
         moduleSystem.list.forEach { module ->
             var animation = animations.putIfAbsent(module, 0.0)
             if (animation == null || animation.isNaN()) animation = 0.0 else {
-                if (module.enabled) {
+                if (module.enabled.value) {
                     animation += speedIn.value * RenderUtil.deltaTime
                 } else {
                     animation -= speedOut.value * RenderUtil.deltaTime

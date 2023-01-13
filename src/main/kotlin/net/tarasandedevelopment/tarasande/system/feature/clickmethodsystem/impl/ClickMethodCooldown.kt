@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.impl
 
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.ClickMethod
-import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ClickMethodCooldown : ClickMethod("Cooldown", false) {
 

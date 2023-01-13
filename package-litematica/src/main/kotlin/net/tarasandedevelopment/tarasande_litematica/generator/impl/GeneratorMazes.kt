@@ -30,7 +30,7 @@ class GeneratorMazes(parent: Any) : Generator(parent, "Mazes") {
     }
 
     override fun perform() {
-        (if (algorithm.anySelected()) MazeGeneratorType.byName(algorithm.selected[0]) else MazeGeneratorType.BACKTRACKING).factory.get().apply {
+        (if (algorithm.anySelected()) MazeGeneratorType.byName(algorithm.getSelected()) else MazeGeneratorType.BACKTRACKING).factory.get().apply {
             val mcDimension = DimensionUtils.toMinecraftDimension(width.value.toInt(), length.value.toInt(), scale.value.toInt())
             if (mcDimension[0] < 1 || mcDimension[1] < 1) {
                 mcDimension[0] = 1
@@ -43,16 +43,16 @@ class GeneratorMazes(parent: Any) : Generator(parent, "Mazes") {
             LitematicaGenerator.create(name, dimension) { // x and z
                 for (x in 0 until dimension.x) {
                     for (z in 0 until dimension.z) {
-                        if (wallBlocks.list.isNotEmpty()) {
+                        if (wallBlocks.anySelected()) {
                             if (exportedGrid[x][z]) {
                                 for (h in 0 .. height.value.toInt()) {
-                                    it.set(x, h, z, wallBlocks.list[random.nextInt(wallBlocks.list.size)].defaultState)
+                                    it.set(x, h, z, wallBlocks.randomOrNull()!!.defaultState)
                                 }
                             }
                         }
 
-                        if (groundBlocks.list.isNotEmpty()) {
-                            it.set(x, 0, z, groundBlocks.list[random.nextInt(groundBlocks.list.size)].defaultState) // ground
+                        if (groundBlocks.anySelected()) {
+                            it.set(x, 0, z, groundBlocks.randomOrNull()!!.defaultState) // ground
                         }
                     }
                 }

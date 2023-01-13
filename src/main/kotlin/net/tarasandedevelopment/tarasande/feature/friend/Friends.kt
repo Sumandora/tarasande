@@ -20,7 +20,7 @@ object Friends {
     init {
         EventDispatcher.apply {
             add(EventIsEntityAttackable::class.java) {
-                if (ManagerModule.get(ModuleNoFriends::class.java).enabled)
+                if (ManagerModule.get(ModuleNoFriends::class.java).enabled.value)
                     return@add
 
                 if (it.attackable && it.entity is PlayerEntity)
@@ -28,7 +28,7 @@ object Friends {
                         it.attackable = false
             }
             add(EventTagName::class.java) {
-                if (ManagerModule.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
+                if (ManagerModule.get(ModuleNameProtect::class.java).enabled.value) // Name protect will replace the names, so this is redundant
                     return@add
 
                 if (it.entity is PlayerEntity) {
@@ -39,7 +39,7 @@ object Friends {
                 }
             }
             add(EventPlayerListName::class.java) {
-                if (ManagerModule.get(ModuleNameProtect::class.java).enabled) // Name protect will replace the names, so this is redundant
+                if (ManagerModule.get(ModuleNameProtect::class.java).enabled.value) // Name protect will replace the names, so this is redundant
                     return@add
 
                 for (friend in friends)

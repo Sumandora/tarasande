@@ -7,11 +7,11 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.tarasandedevelopment.tarasande.event.EventItemCooldown
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import java.util.concurrent.ThreadLocalRandom
@@ -40,8 +40,8 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
         val usedStack = if (activeHand != null) mc.player?.getStackInHand(activeHand) else null
         @Suppress("FoldInitializerAndIfToElvis", "RedundantSuppression") // That looks gross & idea moment
         if (usedStack == null)
-            return mc.player?.isUsingItem == true && setting.selected.contains(useActions[UseAction.NONE])
-        return setting.selected.contains(useActions[usedStack.useAction!!])
+            return mc.player?.isUsingItem == true && setting.isSelected(useActions[UseAction.NONE]!!)
+        return setting.isSelected(useActions[usedStack.useAction!!]!!)
     }
 
     private var interacting = false

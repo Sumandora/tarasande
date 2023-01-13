@@ -41,7 +41,7 @@ public class MixinKeyboardInput extends Input {
     @ModifyVariable(method = "tick", at = @At(value = "LOAD", ordinal = 0), argsOnly = true)
     private boolean injectTick(boolean slowDown) {
         ModuleSneak moduleSneak = ManagerModule.INSTANCE.get(ModuleSneak.class);
-        if (moduleSneak.getEnabled() && moduleSneak.getDontSlowdown().getValue()) {
+        if (moduleSneak.getEnabled().getValue() && moduleSneak.getDontSlowdown().getValue()) {
             return slowDown;
         }
 

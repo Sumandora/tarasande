@@ -7,11 +7,11 @@ import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventInvalidPlayerInfo
 import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.ModuleAntiBot
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewWorld
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import su.mandora.event.EventDispatcher

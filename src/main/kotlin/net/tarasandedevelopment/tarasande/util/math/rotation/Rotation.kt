@@ -3,11 +3,11 @@ package net.tarasandedevelopment.tarasande.util.math.rotation
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoPitchLimit
 import net.tarasandedevelopment.tarasande.util.extension.kotlinruntime.prefer
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.util.concurrent.ThreadLocalRandom
@@ -46,7 +46,7 @@ class Rotation {
             val gcd = getGcd()
             val rotationChange = Rotation((cursorDeltas.first * gcd).toFloat() * 0.15F, (cursorDeltas.second * gcd).toFloat() * 0.15F)
             var newRotation = prevRotation + rotationChange
-            if (!ManagerModule.get(ModuleNoPitchLimit::class.java).enabled)
+            if (!ManagerModule.get(ModuleNoPitchLimit::class.java).enabled.value)
                 newRotation = newRotation.withPitch(newRotation.pitch.coerceIn(-90.0F, 90.0F))
             return newRotation
         }

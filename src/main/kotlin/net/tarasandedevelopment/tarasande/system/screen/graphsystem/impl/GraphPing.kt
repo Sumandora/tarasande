@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import su.mandora.event.EventDispatcher
 
 class GraphPing : Graph("Connection", "Ping", 25, true) {

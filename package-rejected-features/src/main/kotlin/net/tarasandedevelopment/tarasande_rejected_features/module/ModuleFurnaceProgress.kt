@@ -4,13 +4,13 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.screen.AbstractFurnaceScreenHandler
 import net.tarasandedevelopment.tarasande.event.EventChildren
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueSpacer
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelElements
-import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress in the furnace", ModuleCategory.RENDER) {
 

@@ -5,7 +5,7 @@ import net.minecraft.text.Text
 import net.minecraft.text.TextColor
 import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
-import net.tarasandedevelopment.tarasande.util.extension.mc
+import net.tarasandedevelopment.tarasande.mc
 
 object CustomChat {
     fun printChatMessage(message: MutableText) {

@@ -4,9 +4,9 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.hit.EntityHitResult
 import net.tarasandedevelopment.tarasande.event.EventMouse
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.isEntityHitResult
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil

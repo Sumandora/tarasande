@@ -18,7 +18,7 @@ public class MixinHeldItemRenderer {
     @Redirect(method = "updateHeldItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;areEqual(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z"))
     public boolean hookNoSwing(ItemStack left, ItemStack right) {
         ModuleNoSwing moduleNoSwing = ManagerModule.INSTANCE.get(ModuleNoSwing.class);
-        if (moduleNoSwing.getEnabled() && moduleNoSwing.getDisableEquipProgress().getValue()) {
+        if (moduleNoSwing.getEnabled().getValue() && moduleNoSwing.getDisableEquipProgress().getValue()) {
             if (left.isEmpty() && right.isEmpty()) {
                 return true;
             }
@@ -33,7 +33,7 @@ public class MixinHeldItemRenderer {
     @Redirect(method = "updateHeldItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getAttackCooldownProgress(F)F"))
     public float hookNoSwing(ClientPlayerEntity instance, float v) {
         ModuleNoSwing moduleNoSwing = ManagerModule.INSTANCE.get(ModuleNoSwing.class);
-        if (moduleNoSwing.getEnabled() && moduleNoSwing.getDisableEquipProgress().getValue()) {
+        if (moduleNoSwing.getEnabled().getValue() && moduleNoSwing.getDisableEquipProgress().getValue()) {
             return 1.0F;
         }
         return instance.getAttackCooldownProgress(v);
@@ -42,7 +42,7 @@ public class MixinHeldItemRenderer {
     @Inject(method = "resetEquipProgress", at = @At("HEAD"), cancellable = true)
     public void hookNoSwing(Hand hand, CallbackInfo ci) {
         ModuleNoSwing moduleNoSwing = ManagerModule.INSTANCE.get(ModuleNoSwing.class);
-        if (moduleNoSwing.getEnabled() && moduleNoSwing.getDisableEquipProgress().getValue()) {
+        if (moduleNoSwing.getEnabled().getValue() && moduleNoSwing.getDisableEquipProgress().getValue()) {
             ci.cancel();
         }
     }

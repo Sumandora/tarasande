@@ -7,13 +7,13 @@ import net.minecraft.client.gl.Framebuffer
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.impl.BlurBox
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.impl.BlurGaussian
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.impl.BlurKawase
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import net.tarasandedevelopment.tarasande.util.render.shader.Program
 import net.tarasandedevelopment.tarasande.util.render.shader.Shader
@@ -51,7 +51,7 @@ object ManagerBlur : Manager<Blur>() {
         mode = ValueMode(this, "Blur mode", false, *list.map { it.name }.toTypedArray())
     }
 
-    fun selected(): Blur = list[mode.let { it.values.indexOf(it.selected[0]) }]
+    fun selected(): Blur = list[mode.let { it.values.indexOf(it.getSelected()) }]
 
     fun bind(setViewport: Boolean, screens: Boolean = false) {
         (if (screens) screenShapesFramebuffer else inGameShapesFramebuffer).beginWrite(setViewport)

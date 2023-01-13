@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.util.math
 
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.util.extension.mc
+import net.tarasandedevelopment.tarasande.mc
 import kotlin.math.ceil
 import kotlin.math.floor
 

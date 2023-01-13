@@ -9,13 +9,13 @@ import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
@@ -53,7 +53,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
             private val decimalPlacesZ = ValueNumber(this, "Decimal places: z", 0.0, 1.0, 5.0, 1.0)
 
             override fun getMessage(): String? {
-                if (!enabled)
+                if (!enabled.value)
                     return null
 
                 return position?.let {

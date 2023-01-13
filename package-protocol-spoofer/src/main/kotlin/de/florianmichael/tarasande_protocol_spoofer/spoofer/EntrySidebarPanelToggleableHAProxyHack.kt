@@ -48,9 +48,9 @@ class EntrySidebarPanelToggleableHAProxyHack : SidebarEntryToggleable("HA-Proxy 
 
             try {
                 val payload = HAProxyMessage(
-                    HAProxyProtocolVersion.values()[protocolVersion.values.indexOf(protocolVersion.selected[0])],
+                    HAProxyProtocolVersion.values()[protocolVersion.values.indexOf(protocolVersion.getSelected())],
                     HAProxyCommand.PROXY,
-                    HAProxyProxiedProtocol.values()[tcpVersion.values.indexOf(tcpVersion.selected[0]) + 1],
+                    HAProxyProxiedProtocol.values()[tcpVersion.values.indexOf(tcpVersion.getSelected()) + 1],
                     sourceIP,
                     remoteAddress.address.hostAddress,
                     sourcePort,

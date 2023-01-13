@@ -22,7 +22,7 @@ class CommandToggle(private val moduleSystem: ManagerModule) : Command("toggle")
             val module = moduleSystem.list.firstOrNull { module -> module.name == moduleName }
             if (module != null) {
                 module.switchState()
-                printChatMessage("[" + module.name + "] is now " + if (module.enabled) "enabled" else "disabled")
+                printChatMessage("[" + module.name + "] is now " + if (module.enabled.value) "enabled" else "disabled")
                 return@executes SUCCESS
             } else {
                 printChatMessage("[$moduleName] does not exist")

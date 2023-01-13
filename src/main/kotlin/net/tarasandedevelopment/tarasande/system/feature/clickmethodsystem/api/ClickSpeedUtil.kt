@@ -14,30 +14,44 @@ class ClickSpeedUtil(private val owner: Any, enabledCallback: () -> Boolean, var
     private val cpsMode = object : ValueMode(owner, namePrefix + "CPS mode", false, *clickMethods.map { it.name }.toTypedArray()) {
         override fun isEnabled() = enabledCallback.invoke()
     }
+
     private val cps = object : ValueNumberRange(owner, namePrefix + "CPS", 1.0, 8.0, 12.0, 20.0, 1.0) {
-        override fun onChange() = reset()
+        private var initialized  = false
+
+        init {
+            initialized = true
+        }
+
+        override fun onMinValueChange(oldMinValue: Double?, newMinValue: Double) {
+            if(oldMinValue != null && initialized)
+                reset()
+        }
+        override fun onMaxValueChange(oldMaxValue: Double?, newMaxValue: Double) {
+            if(oldMaxValue != null && initialized)
+                reset()
+        }
         override fun isEnabled() = selected().cpsBased && enabledCallback.invoke()
     }
 
     private val timeUtil = TimeUtil()
 
-    private var targetedCPS = 0.0
+    private var targetedCPS: Double? = null
 
     fun reset() {
         targetedCPS = cps.randomNumber()
         for (clickMethod in clickMethods)
-            clickMethod.reset(targetedCPS)
+            clickMethod.reset(targetedCPS!!)
         timeUtil.reset()
     }
 
     fun getClicks(): Int {
-        if (timeUtil.hasReached(1000L)) {
+        if (targetedCPS == null || timeUtil.hasReached(1000L)) {
             targetedCPS = cps.randomNumber()
             timeUtil.reset()
         }
 
-        return min(selected().getClicks(targetedCPS), 10 /* safety */)
+        return min(selected().getClicks(targetedCPS!!), 10 /* safety */)
     }
 
-    private fun selected() = clickMethods[cpsMode.values.indexOf(cpsMode.selected[0])]
+    private fun selected() = clickMethods[cpsMode.values.indexOf(cpsMode.getSelected())]
 }

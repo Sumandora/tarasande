@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.fixed
 
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import kotlin.math.floor
 

@@ -6,6 +6,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -13,7 +14,6 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.boundingBox
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.div
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
@@ -61,7 +61,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
     init {
         ManagerInformation.add(object : Information("Bed ESP", "Beds") {
             override fun getMessage(): String? {
-                if (enabled) if (calculateBestWay.value) if (bedDatas.isNotEmpty()) {
+                if (enabled.value && calculateBestWay.value && bedDatas.isNotEmpty()) {
                     return "\n" + bedDatas.sortedBy {
                         mc.player?.squaredDistanceTo(it.bedParts.let { bedPart ->
                             var vec = Vec3d.ZERO

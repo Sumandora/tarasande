@@ -4,11 +4,11 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.text.Text
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
 import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.AzureAppPreset
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.ManagerAzureApp
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import java.util.function.Consumer
 

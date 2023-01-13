@@ -2,9 +2,9 @@ package net.tarasandedevelopment.tarasande_crasher.screenextension
 
 import net.minecraft.client.gui.screen.DirectConnectScreen
 import net.minecraft.client.network.ServerAddress
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande_crasher.crasher.ManagerCrasher
 import org.lwjgl.glfw.GLFW
 

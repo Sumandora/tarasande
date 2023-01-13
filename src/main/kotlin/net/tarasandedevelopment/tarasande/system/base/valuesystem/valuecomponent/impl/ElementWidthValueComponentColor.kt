@@ -51,20 +51,20 @@ class ElementWidthValueComponentColor(value: Value) : ElementWidthValueComponent
         val y2 = (pickerHeight - 5) / 2.0 + cos(0.75) * ((pickerHeight - 5) / 2.0 - 5)
 
         if (alphaDragInfo.dragging) {
+            val oldColor = valueColor.getColor()
             valueColor.alpha = 1.0 - MathHelper.clamp((mouseY + (mouseY / (pickerHeight - 5) * 2 - 1) * 5) / (pickerHeight - 5), 0.0, 1.0)
-            valueColor.onChange()
         }
         if (rectDragInfo.dragging) {
+            val oldColor = valueColor.getColor()
             valueColor.sat = MathHelper.clamp((mouseX - x1) / (x2 - x1), 0.0, 1.0)
             valueColor.bri = 1.0 - MathHelper.clamp((mouseY - y1) / (y2 - y1), 0.0, 1.0)
-            valueColor.onChange()
         }
         if (wheelDragInfo.dragging) {
+            val oldColor = valueColor.getColor()
             val mousePos = Vec2f(mouseX.toFloat(), mouseY.toFloat())
             val middle = Vec2f((x1 + (x2 - x1) * 0.5).toFloat(), (y1 + (y2 - y1) * 0.5).toFloat())
             val mouseDir = mousePos.add(middle.multiply(-1.0F)).normalize() // large subtraction
             valueColor.hue = (atan2(mouseDir.y, mouseDir.x) + PI - PI / 2) / (2 * PI)
-            valueColor.onChange()
         }
 
         FontWrapper.textShadow(matrices, value.name, 0.0F, ((pickerHeight - 5) / 2.0F - FontWrapper.fontHeight() * 0.5F / 2.0F).toFloat(), white.rgb, scale = 0.5F, offset = 0.5F)

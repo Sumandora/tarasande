@@ -16,7 +16,7 @@ public class MixinPlayerEntity {
     public void hookSafeWalk(CallbackInfoReturnable<Boolean> cir) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             ModuleSafeWalk moduleSafeWalk = ManagerModule.INSTANCE.get(ModuleSafeWalk.class);
-            if (moduleSafeWalk.getEnabled() && !moduleSafeWalk.getSneak().getValue())
+            if (moduleSafeWalk.getEnabled().getValue() && !moduleSafeWalk.getSneak().getValue())
                 cir.setReturnValue(true);
         }
     }

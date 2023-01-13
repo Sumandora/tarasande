@@ -6,12 +6,12 @@ import net.minecraft.registry.Registries
 import net.minecraft.util.math.BlockPos
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.event.EventRenderBlockModel
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.boundingBox
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.util.concurrent.CopyOnWriteArrayList
@@ -19,13 +19,14 @@ import java.util.concurrent.CopyOnWriteArrayList
 class ModuleBlockESP : Module("Block ESP", "Highlights blocks through walls", ModuleCategory.RENDER) {
 
     private val hideBlocks = object : ValueBoolean(this, "Hide blocks", false) {
-        override fun onChange() = onDisable()
+        override fun onChange(oldValue: Boolean?, newValue: Boolean) = onDisable()
     }
     private val color = object : ValueColor(this, "Color", 0.0, 1.0, 1.0, 1.0) {
         override fun isEnabled() = !hideBlocks.value
     }
     private val blocks = object : ValueRegistry<Block>(this, "Blocks", Registries.BLOCK) {
-        override fun onChange() = onDisable()
+        override fun onAdd(wrappedKey: WrappedKey<*>) = onDisable()
+        override fun onRemove(key: Any?) = onDisable()
         override fun filter(key: Block) = !key.defaultState.getOutlineShape(mc.world, BlockPos.ORIGIN).isEmpty
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey
     }
@@ -37,7 +38,7 @@ class ModuleBlockESP : Module("Block ESP", "Highlights blocks through walls", Mo
     }
 
     override fun onDisable() {
-        if (!enabled)
+        if (!enabled.value)
             return
         list.clear()
         mc.worldRenderer.reload()
@@ -45,7 +46,7 @@ class ModuleBlockESP : Module("Block ESP", "Highlights blocks through walls", Mo
 
     init {
         registerEvent(EventRenderBlockModel::class.java) { event ->
-            if (!blocks.list.contains(event.state.block)) {
+            if (!blocks.isSelected(event.state.block)) {
                 if (hideBlocks.value) {
                     event.cancelled = true
                 }

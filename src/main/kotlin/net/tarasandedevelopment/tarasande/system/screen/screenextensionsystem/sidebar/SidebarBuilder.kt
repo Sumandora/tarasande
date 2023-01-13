@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar
 
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueSpacer
@@ -10,7 +10,6 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelElements
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.panel.ClickableWidgetPanelSidebar
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
@@ -61,9 +60,9 @@ open class SidebarEntry(val name: String, val category: String) {
 
     open fun createElements(owner: Any): List<ElementWidthValueComponent> {
         return listOf(object : ValueSpacer(owner, name, 1.0F, manage = false) {
-            override fun onChange(mouseButton: Int) {
+            override fun onClick(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
-                    onClick(mouseButton)
+                    this@SidebarEntry.onClick(mouseButton)
                 } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     openValues()
                 }
@@ -80,7 +79,7 @@ abstract class SidebarEntrySelection(name: String, category: String, val list: L
     override fun createElements(owner: Any): List<ElementWidthValueComponent> {
         return list.map {
             object : ValueSpacer(owner, it, 1.0F, manage = false) {
-                override fun onChange(mouseButton: Int) {
+                override fun onClick(mouseButton: Int) {
                     if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                         onClick(it)
                         selected = it
@@ -107,7 +106,7 @@ open class SidebarEntryToggleable(name: String, category: String) : SidebarEntry
 
     override fun createElements(owner: Any): List<ElementWidthValueComponent> {
         return listOf(object : ValueSpacer(owner, name, 1.0F, manage = false) {
-            override fun onChange(mouseButton: Int) {
+            override fun onClick(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     enabled.value = !enabled.value
                     onClick(enabled.value)

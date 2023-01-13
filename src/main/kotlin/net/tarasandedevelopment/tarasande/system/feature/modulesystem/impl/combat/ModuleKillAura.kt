@@ -22,6 +22,7 @@ import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.ClickSpeedUtil
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
@@ -29,7 +30,6 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleClickTP
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.isEntityHitResult
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
@@ -70,7 +70,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val throughWalls = ValueMode(this, "Through walls", false, "Off", "Continue aiming", "Hit and aim through walls")
     private val attackCooldown = ValueBoolean(this, "Attack cooldown", false)
     private val autoBlock = object : ValueMode(this, "Auto block", false, "Disabled", "Permanent", "Legit") {
-        override fun onChange() {
+        override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
             blocking = false
         }
     }
@@ -599,7 +599,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
 
     private fun isCancellingShields(): Boolean {
-        if (ManagerModule.get(ModuleAutoTool::class.java).let { it.enabled && it.mode.isSelected(1) && it.useAxeToCounterBlocking.value } &&
+        if (ManagerModule.get(ModuleAutoTool::class.java).let { it.enabled.value && it.mode.isSelected(1) && it.useAxeToCounterBlocking.value } &&
             mc.player?.inventory?.main?.subList(0, 8)?.any { it.item is AxeItem } == true)
             return true
         return mc.player?.disablesShield() == true

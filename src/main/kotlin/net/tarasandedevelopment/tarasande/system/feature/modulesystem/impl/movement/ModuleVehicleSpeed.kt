@@ -2,10 +2,10 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.move
 
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventMovement
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import kotlin.math.cos
 import kotlin.math.sin

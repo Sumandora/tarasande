@@ -8,11 +8,11 @@ import net.minecraft.registry.Registries
 import net.tarasandedevelopment.tarasande.event.EventEntityHurt
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.feature.notification.Notifications
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 
@@ -30,7 +30,7 @@ class ModuleTroubleInTerroristTown : Module("Trouble in terrorist town", "Uses a
 
         for (player in mc.world?.players?.filter { it != entity } ?: return null) {
             if (player.distanceTo(entity) <= distance.value && RotationUtil.getRotations(player.eyePos, entity.eyePos).fov(Rotation(player)) <= Rotation.MAXIMUM_DELTA * rotationThreshold.value)
-                if (items.list.contains(player.mainHandStack.item)) {
+                if (items.isSelected(player.mainHandStack.item)) {
                     // This player is probably a traitor
                     traitors.add(player)
                 }

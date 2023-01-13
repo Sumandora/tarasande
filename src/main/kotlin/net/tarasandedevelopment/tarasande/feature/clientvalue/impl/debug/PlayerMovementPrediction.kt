@@ -1,10 +1,10 @@
 package net.tarasandedevelopment.tarasande.feature.clientvalue.impl.debug
 
 import net.tarasandedevelopment.tarasande.event.EventRender3D
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.prediction.PredictionEngine
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import su.mandora.event.EventDispatcher

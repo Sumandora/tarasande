@@ -3,9 +3,9 @@ package net.tarasandedevelopment.tarasande_chat_features.module
 import com.google.common.collect.Multimap
 import com.google.common.collect.MultimapBuilder
 import net.minecraft.text.Text
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import java.nio.ByteBuffer
 import java.util.*

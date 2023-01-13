@@ -32,7 +32,7 @@ public class MixinWorldRenderer {
 
     @Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At("HEAD"), cancellable = true)
     public void hookFog(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean bl, Runnable runnable, CallbackInfo ci) {
-        if (ManagerModule.INSTANCE.get(ModuleFog.class).getEnabled())
+        if (ManagerModule.INSTANCE.get(ModuleFog.class).getEnabled().getValue())
             ci.cancel();
     }
 
@@ -40,7 +40,7 @@ public class MixinWorldRenderer {
     public float hookRain(ClientWorld instance, float v) {
         tarasande_forceRain = false;
         ModuleRain moduleRain = ManagerModule.INSTANCE.get(ModuleRain.class);
-        if (moduleRain.getEnabled()) {
+        if (moduleRain.getEnabled().getValue()) {
             tarasande_forceRain = true;
             return (float) moduleRain.getGradient().getValue();
         }

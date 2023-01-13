@@ -2,9 +2,9 @@ package net.tarasandedevelopment.tarasande_protocol_hack.platform.betacraft
 
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.util.VersionListEnum
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntry
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import org.jsoup.Jsoup
 import java.net.URL
@@ -33,7 +33,7 @@ const val WEB_DATA = "http://www.betacraft.uk/serverlist"
 
 class SidebarEntryBetaCraftServers : SidebarEntry("BetaCraft Servers", "Protocol Hack") {
 
-    private val autoRequest = ValueMode(this, "Auto request", false, "Off", "Only first time", "Everytime")
+    private val autoRequest = ValueMode(this, "Auto request", false, "Only first time", "Everytime")
     private var serversScreen: ScreenBetterSlotListBetaCraftServers? = null
 
     private var hasAlreadyLoaded = false
@@ -72,12 +72,7 @@ class SidebarEntryBetaCraftServers : SidebarEntry("BetaCraft Servers", "Protocol
     }
 
     override fun onClick(mouseButton: Int) {
-        if (autoRequest.isSelected(0)) {
-            serversScreen = ScreenBetterSlotListBetaCraftServers("Goto $name -> right click -> enable automatic requests", mc.currentScreen!!, ArrayList())
-            mc.setScreen(serversScreen)
-            return
-        }
-        if (autoRequest.isSelected(1) && hasAlreadyLoaded) {
+        if (autoRequest.isSelected(0) && hasAlreadyLoaded) {
             mc.setScreen(serversScreen)
             return
         }

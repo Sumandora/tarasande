@@ -8,8 +8,8 @@ import net.minecraft.client.option.ServerList
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.screen.ScreenTexts
 import net.minecraft.text.Text
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 

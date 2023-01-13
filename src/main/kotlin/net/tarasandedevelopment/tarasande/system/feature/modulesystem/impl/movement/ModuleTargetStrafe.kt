@@ -7,12 +7,12 @@ import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.ModuleKillAura
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.isEntityHitResult
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
@@ -58,7 +58,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
 
             val moduleKillAura = ManagerModule.get(ModuleKillAura::class.java)
             val enemy =
-                if (moduleKillAura.enabled && moduleKillAura.targets.isNotEmpty())
+                if (moduleKillAura.enabled.value && moduleKillAura.targets.isNotEmpty())
                     moduleKillAura.targets[0].first
                 else if (mc.crosshairTarget.isEntityHitResult()) {
                     (mc.crosshairTarget as EntityHitResult).entity
@@ -76,8 +76,8 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
             var newPos = calculateNextPosition(selfSpeed, curPos, center)
 
             val moduleFlight = ManagerModule.get(ModuleFlight::class.java)
-            val flying = moduleFlight.enabled
-            val freeFlying = moduleFlight.let { it.enabled && (it.mode.isSelected(0) || it.mode.isSelected(1)) }
+            val flying = moduleFlight.enabled.value
+            val freeFlying = moduleFlight.let { it.enabled.value && (it.mode.isSelected(0) || it.mode.isSelected(1)) }
 
             if (!flying && PlayerUtil.predictFallDistance(BlockPos(newPos)).let { it == null || it > maximumFallDistance.value }) {
                 invert = !invert

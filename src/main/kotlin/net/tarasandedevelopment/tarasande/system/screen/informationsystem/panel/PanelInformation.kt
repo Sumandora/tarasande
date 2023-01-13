@@ -23,7 +23,7 @@ class PanelInformation(private val informationSystem: ManagerInformation) : Pane
 
     private val elements = ValueMode(this, "Elements", true, *informationSystem.list.map { map[it]!! }.toTypedArray())
 
-    fun isSelected(information: Information) = elements.selected.contains(map[information])
+    fun isSelected(information: Information) = elements.isSelected(map[information]!!)
 
     init {
         for (information in informationSystem.list) {

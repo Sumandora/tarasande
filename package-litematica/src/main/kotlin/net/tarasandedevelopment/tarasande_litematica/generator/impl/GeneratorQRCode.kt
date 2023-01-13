@@ -31,7 +31,7 @@ class GeneratorQRCode(parent: Any) : Generator(parent, "QR Code") {
 
     override fun perform() {
         try {
-            writer.encode(input.value, if (type.anySelected()) types[type.selected[0]] else BarcodeFormat.QR_CODE, dimensionScaleX.value.toInt(), dimensionScaleYorZ.value.toInt()).apply {
+            writer.encode(input.value, types[type.getSelected()], dimensionScaleX.value.toInt(), dimensionScaleYorZ.value.toInt()).apply {
                 if (!side.anySelected() || side.isSelected(0)) {
                     LitematicaGenerator.create(name, BlockPos(width, height, 0)) {
                         for (x in 0 until width) {

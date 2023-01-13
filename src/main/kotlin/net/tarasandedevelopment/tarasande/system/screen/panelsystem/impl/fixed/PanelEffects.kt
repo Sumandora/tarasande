@@ -10,11 +10,11 @@ import net.minecraft.entity.effect.StatusEffectUtil
 import net.minecraft.registry.Registries
 import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
@@ -32,8 +32,8 @@ class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble())
 
     init {
         object : ValueMode(this, "Easing function", false, *EzEasing.functionNames().toTypedArray()) {
-            override fun onChange() {
-                easing = EzEasing.byName(selected[0])
+            override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
+                easing = EzEasing.byName(getSelected())
             }
         }
     }

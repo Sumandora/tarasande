@@ -106,7 +106,7 @@ public abstract class MixinMinecraftClient {
         final UserConnection viaConnection = TarasandeProtocolHack.Companion.getViaConnection();
 
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_11_1to1_11_2) && viaConnection != null) {
-            if (ManagerModule.INSTANCE.get(ModuleInventoryMove.class).getEnabled() && TarasandeProtocolHack.Companion.getCancelOpenPacket().getValue()) {
+            if (ManagerModule.INSTANCE.get(ModuleInventoryMove.class).getEnabled().getValue() && TarasandeProtocolHack.Companion.getCancelOpenPacket().getValue()) {
                 return;
             }
 

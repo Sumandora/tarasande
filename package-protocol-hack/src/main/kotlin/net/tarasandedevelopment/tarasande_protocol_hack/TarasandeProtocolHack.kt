@@ -30,10 +30,10 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ConnectScreen
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen
 import net.minecraft.client.gui.screen.GameMenuScreen
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -50,7 +50,6 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.Sc
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntry
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntrySelection
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import net.tarasandedevelopment.tarasande_protocol_hack.event.EventSkipIdlePacket
 import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.CommandArgumentsProvider

@@ -9,12 +9,12 @@ import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.injection.accessor.IEntity
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewWorld
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
@@ -40,7 +40,7 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
 
     init {
         object : ValueButton(this, "Reset captured data") {
-            override fun onChange() = onDisable()
+            override fun onClick() = onDisable()
         }
     }
 
@@ -159,7 +159,7 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
     }
 
     fun isBot(entity: Entity): Boolean {
-        if (!enabled) return false
+        if (!enabled.value) return false
         if (entity is PlayerEntity) {
             if (manualHit.contains(entity)) return false // The user did try to hit this entity, why would they try to attack a bot?
 

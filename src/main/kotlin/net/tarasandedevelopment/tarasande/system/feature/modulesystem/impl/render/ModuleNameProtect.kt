@@ -1,12 +1,12 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render
 
 import net.tarasandedevelopment.tarasande.TARASANDE_NAME
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventTextVisit
+import net.tarasandedevelopment.tarasande.feature.friend.Friends
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ModuleNameProtect : Module("Name protect", "Hides your in-game name", ModuleCategory.RENDER) {
 
@@ -40,7 +40,7 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
                 return@registerEvent
             event.string = replaceName(event.string, mc.session.profile.name, protectedName.value)
 
-            for (pair in TarasandeMain.friends.names()) {
+            for (pair in Friends.names()) {
                 event.string = replaceName(event.string, pair.key, pair.value)
             }
         }

@@ -3,9 +3,9 @@ package net.tarasandedevelopment.tarasande.system.screen.graphsystem.panel
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import kotlin.math.max
 

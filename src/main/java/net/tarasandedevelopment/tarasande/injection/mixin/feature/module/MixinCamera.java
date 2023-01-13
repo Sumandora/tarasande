@@ -13,7 +13,7 @@ public class MixinCamera {
 
     @Inject(method = "clipToSpace", at = @At("HEAD"), cancellable = true)
     public void hookCameraNoClip(double desiredCameraDistance, CallbackInfoReturnable<Double> cir) {
-        if (ManagerModule.INSTANCE.get(ModuleCameraNoClip.class).getEnabled()) {
+        if (ManagerModule.INSTANCE.get(ModuleCameraNoClip.class).getEnabled().getValue()) {
             cir.setReturnValue(desiredCameraDistance);
         }
     }

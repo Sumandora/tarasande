@@ -12,6 +12,7 @@ import net.minecraft.client.util.Session
 import net.minecraft.text.Text
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.gson
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.ExtraInfo
@@ -19,7 +20,6 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.ManagerAzureApp
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterAzureApps
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.Thread
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.*

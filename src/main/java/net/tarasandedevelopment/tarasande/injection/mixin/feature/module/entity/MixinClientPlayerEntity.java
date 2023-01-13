@@ -45,7 +45,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     public boolean hookNoSlowdown(ClientPlayerEntity clientPlayerEntity) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             ModuleNoSlowdown moduleNoSlowdown = ManagerModule.INSTANCE.get(ModuleNoSlowdown.class);
-            if (moduleNoSlowdown.getEnabled()) {
+            if (moduleNoSlowdown.getEnabled().getValue()) {
                 if (moduleNoSlowdown.isActionEnabled(moduleNoSlowdown.getActions()))
                     return false;
             }
@@ -57,7 +57,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     public float hookNoSlowdown(float original) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             ModuleNoSlowdown moduleNoSlowdown = ManagerModule.INSTANCE.get(ModuleNoSlowdown.class);
-            if (moduleNoSlowdown.getEnabled()) {
+            if (moduleNoSlowdown.getEnabled().getValue()) {
                 if (moduleNoSlowdown.isActionEnabled(moduleNoSlowdown.getActions()))
                     return (float) moduleNoSlowdown.getSlowdown().getValue();
             }
@@ -71,7 +71,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         if ((Object) this == MinecraftClient.getInstance().player) {
             tarasande_flightSpeed = (float) ManagerGrabber.INSTANCE.getConstant(GrabberDefaultFlightSpeed.class);
             ModuleFlight moduleFlight = ManagerModule.INSTANCE.get(ModuleFlight.class);
-            if (moduleFlight.getEnabled() && moduleFlight.getMode().isSelected(0)) {
+            if (moduleFlight.getEnabled().getValue() && moduleFlight.getMode().isSelected(0)) {
                 tarasande_flight = true;
                 tarasande_flightSpeed *= (float) moduleFlight.getFlightSpeed().getValue();
                 return true;
@@ -113,7 +113,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;shouldPause()Z"))
     public boolean hookPortalScreen(Screen instance) {
         if ((Object) this == MinecraftClient.getInstance().player) {
-            if (ManagerModule.INSTANCE.get(ModulePortalScreen.class).getEnabled())
+            if (ManagerModule.INSTANCE.get(ModulePortalScreen.class).getEnabled().getValue())
                 return true;
         }
         return instance.shouldPause();
@@ -123,7 +123,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     public float hookSprint(Input instance) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             ModuleSprint moduleSprint = ManagerModule.INSTANCE.get(ModuleSprint.class);
-            if (moduleSprint.getEnabled() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
+            if (moduleSprint.getEnabled().getValue() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
                 return instance.getMovementInput().length();
         }
         return instance.movementForward;

@@ -3,9 +3,9 @@ package net.tarasandedevelopment.tarasande.system.screen.informationsystem.impl
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.world.dimension.DimensionType
 import net.minecraft.world.dimension.DimensionTypes
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 

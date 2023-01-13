@@ -12,14 +12,14 @@ public class MixinPlayerScreenHandler {
 
     @Inject(method = "getMaxItemCount", at = @At("HEAD"), cancellable = true)
     public void hookEveryItemOnArmor_getMaxItemCount(CallbackInfoReturnable<Integer> cir) {
-        if (ManagerModule.INSTANCE.get(ModuleEveryItemOnArmor.class).getEnabled()) {
+        if (ManagerModule.INSTANCE.get(ModuleEveryItemOnArmor.class).getEnabled().getValue()) {
             cir.setReturnValue(64);
         }
     }
 
     @Inject(method = "canInsert", at = @At("HEAD"), cancellable = true)
     public void hookEveryItemOnArmor_canInsert(CallbackInfoReturnable<Boolean> cir) {
-        if (ManagerModule.INSTANCE.get(ModuleEveryItemOnArmor.class).getEnabled()) {
+        if (ManagerModule.INSTANCE.get(ModuleEveryItemOnArmor.class).getEnabled().getValue()) {
             cir.setReturnValue(true);
         }
     }

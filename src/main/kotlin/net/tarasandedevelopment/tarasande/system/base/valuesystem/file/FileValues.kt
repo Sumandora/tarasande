@@ -36,7 +36,6 @@ class FileValues : File("Values") {
                 if (jsonObject2.has(value.name)) {
                     try {
                         value.load(jsonObject2[value.name])
-                        value.onChange()
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }

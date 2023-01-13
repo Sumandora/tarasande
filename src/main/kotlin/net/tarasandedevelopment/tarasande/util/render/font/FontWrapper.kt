@@ -5,7 +5,7 @@ import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.util.extension.mc
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import java.awt.Color
 

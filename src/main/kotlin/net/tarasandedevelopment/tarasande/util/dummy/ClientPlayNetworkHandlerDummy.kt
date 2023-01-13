@@ -5,7 +5,7 @@ import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.Packet
 import net.minecraft.resource.featuretoggle.FeatureFlags
 import net.minecraft.resource.featuretoggle.FeatureSet
-import net.tarasandedevelopment.tarasande.util.extension.mc
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.util.unsafe.UnsafeProvider
 
 class ClientPlayNetworkHandlerDummy private constructor() : ClientPlayNetworkHandler(null, null, null, null, null, null) {

@@ -4,11 +4,11 @@ import net.minecraft.block.Block
 import net.minecraft.registry.Registries
 import net.minecraft.util.math.BlockPos
 import net.tarasandedevelopment.tarasande.event.EventVelocityMultiplier
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.mc
 
 class ModuleTerrainSpeed : Module("Terrain speed", "Makes you move faster on certain terrain", ModuleCategory.MOVEMENT) {
 
@@ -20,7 +20,7 @@ class ModuleTerrainSpeed : Module("Terrain speed", "Makes you move faster on cer
 
     init {
         registerEvent(EventVelocityMultiplier::class.java) { event ->
-            if (blocks.list.contains(event.block))
+            if (blocks.isSelected(event.block))
                 event.velocityMultiplier = velocityMultiplier.value
         }
     }

@@ -2,9 +2,9 @@ package net.tarasandedevelopment.tarasande_protocol_hack.util.values
 
 import com.viaversion.viaversion.api.Via
 import de.florianmichael.vialoadingbase.util.VersionListEnum
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.andOlder
 import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.rangeTo
 import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.singleton
@@ -19,7 +19,7 @@ object ProtocolHackValues {
     @Suppress("unused")
     val createViaDump = object : ValueButton(this, "Create via dump") {
         override fun isEnabled() = !mc.isInSingleplayer && mc.world != null
-        override fun onChange() {
+        override fun onClick() {
             Via.getManager().commandHandler.getSubCommand("dump")?.execute(ViaDumpBypassSender, arrayOf())
         }
     }

@@ -15,7 +15,7 @@ public class MixinMinecraftClient {
     public boolean hookESP(Entity entity) {
         boolean glowing = entity.isGlowing();
         ModuleESP moduleESP = ManagerModule.INSTANCE.get(ModuleESP.class);
-        if (moduleESP.getEnabled())
+        if (moduleESP.getEnabled().getValue())
             return glowing || (moduleESP.getMode().isSelected(0) && moduleESP.shouldRender(entity));
         return glowing;
     }

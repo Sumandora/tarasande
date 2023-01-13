@@ -6,7 +6,7 @@ import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.RotationValues
-import net.tarasandedevelopment.tarasande.util.extension.mc
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import su.mandora.event.EventDispatcher

@@ -24,7 +24,7 @@ public class MixinGameRenderer {
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/ProjectileUtil;raycast(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;D)Lnet/minecraft/util/hit/EntityHitResult;"))
     public @Nullable EntityHitResult hookNoMiningTrace(Entity entity, Vec3d min, Vec3d max, Box box, Predicate<Entity> predicate, double d) {
         ModuleNoMiningTrace moduleNoMiningTrace = ManagerModule.INSTANCE.get(ModuleNoMiningTrace.class);
-        if (moduleNoMiningTrace.getEnabled())
+        if (moduleNoMiningTrace.getEnabled().getValue())
             if (!moduleNoMiningTrace.getOnlyWhenPickaxe().getValue() || MinecraftClient.getInstance().player.getMainHandStack().getItem() instanceof PickaxeItem)
                 if (MinecraftClient.getInstance().crosshairTarget == null || MinecraftClient.getInstance().crosshairTarget.getType() == HitResult.Type.BLOCK)
                     return null;

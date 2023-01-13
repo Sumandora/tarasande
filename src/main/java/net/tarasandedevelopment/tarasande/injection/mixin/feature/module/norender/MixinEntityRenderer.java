@@ -22,9 +22,9 @@ public class MixinEntityRenderer<T extends Entity> {
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true)
     public void noRender_shouldRender(T entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Boolean> cir) {
         final ModuleNoRender moduleNoRender = ManagerModule.INSTANCE.get(ModuleNoRender.class);
-        if (!moduleNoRender.getEnabled()) return;
+        if (!moduleNoRender.getEnabled().getValue()) return;
 
-        if (moduleNoRender.getEntity().getEntities().getList().contains(entity.getType())) {
+        if (moduleNoRender.getEntity().getEntities().isSelected(entity.getType())) {
             cir.cancel();
         }
         if (moduleNoRender.getWorld().getFallingBlocks().getValue() && entity instanceof FallingBlockEntity) {
@@ -35,9 +35,9 @@ public class MixinEntityRenderer<T extends Entity> {
     @Inject(method = "renderLabelIfPresent", at = @At("HEAD"), cancellable = true)
     public void noRender_RenderLabelIfPresent(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         final ModuleNoRender moduleNoRender = ManagerModule.INSTANCE.get(ModuleNoRender.class);
-        if (!moduleNoRender.getEnabled()) return;
+        if (!moduleNoRender.getEnabled().getValue()) return;
 
-        if (moduleNoRender.getEntity().getEntityNameTags().getList().contains(entity.getType())) {
+        if (moduleNoRender.getEntity().getEntityNameTags().isSelected(entity.getType())) {
             ci.cancel();
         }
     }

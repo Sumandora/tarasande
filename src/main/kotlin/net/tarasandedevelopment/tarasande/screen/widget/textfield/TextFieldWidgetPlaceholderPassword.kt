@@ -5,7 +5,7 @@ import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.util.extension.mc
+import net.tarasandedevelopment.tarasande.mc
 
 class TextFieldWidgetPlaceholderPassword(textRenderer: TextRenderer?, x: Int, y: Int, width: Int, height: Int, text: Text?) : TextFieldWidgetPlaceholder(textRenderer, x, y, width, height, text) {
 

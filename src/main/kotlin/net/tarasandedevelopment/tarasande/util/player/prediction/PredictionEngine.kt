@@ -15,8 +15,8 @@ import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.injection.accessor.prediction.IParticleManager
 import net.tarasandedevelopment.tarasande.injection.accessor.prediction.ISoundSystem
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.util.dummy.ClientPlayNetworkHandlerDummy
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.copy
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil

@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickab
 
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import su.mandora.event.EventDispatcher
 
 class GraphTickableYawDelta : Graph("Player", "Yaw Delta", 200, false) {

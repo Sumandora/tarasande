@@ -2,9 +2,9 @@ package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.i
 
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.button.PanelButton
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtension
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class ScreenExtensionDownloadingTerrainScreen : ScreenExtension<DownloadingTerrainScreen>(DownloadingTerrainScreen::class.java) {

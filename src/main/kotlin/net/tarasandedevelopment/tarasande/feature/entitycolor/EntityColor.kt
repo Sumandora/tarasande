@@ -6,9 +6,9 @@ import net.minecraft.entity.passive.AnimalEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.tarasandedevelopment.tarasande.event.EventEntityColor
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import su.mandora.event.EventDispatcher
 import java.awt.Color
 

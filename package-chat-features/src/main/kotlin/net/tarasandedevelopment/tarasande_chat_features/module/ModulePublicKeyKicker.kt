@@ -4,11 +4,11 @@ import net.minecraft.network.encryption.PlayerKeyPair
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
-import net.tarasandedevelopment.tarasande.util.extension.mc
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat.printChatMessage
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande_chat_features.gatekeep.GatekeepTracker
@@ -47,7 +47,7 @@ class ModulePublicKeyKicker : Module("Public key kicker", "Kicks players using o
 
         ManagerInformation.add(object : Information(name, "Expiration time") {
             override fun getMessage(): String? {
-                if (!enabled) return null
+                if (!enabled.value) return null
 
                 val keyData = mc.profileKeys.fetchKeyPair().get()
                 if (keyData.isPresent) {
