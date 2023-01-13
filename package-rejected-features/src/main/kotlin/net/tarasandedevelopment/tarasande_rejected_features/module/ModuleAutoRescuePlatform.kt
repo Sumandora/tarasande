@@ -11,6 +11,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
+import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 
 class ModuleAutoRescuePlatform : Module("Auto rescue platform", "Uses rescue platforms automatically", ModuleCategory.MISC) {
 
@@ -29,7 +30,7 @@ class ModuleAutoRescuePlatform : Module("Auto rescue platform", "Uses rescue pla
         }
         registerEvent(EventTick::class.java) { event ->
             if(event.state == EventTick.State.PRE) {
-                val rescuePlatformSlot = PlayerUtil.findSlot { it.value.item == Items.BLAZE_ROD }
+                val rescuePlatformSlot = ContainerUtil.findSlot { it.value.item == Items.BLAZE_ROD }
                 if(rescuePlatformSlot == null) {
                     state = State.IDLE // FUCK
                     return@registerEvent

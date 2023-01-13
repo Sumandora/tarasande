@@ -20,6 +20,7 @@ import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
+import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import kotlin.math.*
 
@@ -349,7 +350,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 }
                 if (!hasBlock) {
                     if (!silent.isSelected(0)) {
-                        val blockSlot = PlayerUtil.findSlot { it.value.item is BlockItem && isBlockItemValid(it.value.item as BlockItem) }
+                        val blockSlot = ContainerUtil.findSlot { it.value.item is BlockItem && isBlockItemValid(it.value.item as BlockItem) }
                         if (blockSlot != null) {
                             mc.player?.inventory?.selectedSlot = blockSlot
                         } else return@registerEvent

@@ -4,7 +4,6 @@ import net.minecraft.client.input.KeyboardInput
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.option.Perspective
 import net.minecraft.entity.Entity
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.*
@@ -181,8 +180,8 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
         }
 
         registerEvent(EventPacket::class.java) { event ->
-            if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerMoveC2SPacket)
-                beginRotation = RotationUtil.evaluateNewRotation(event.packet as PlayerPositionLookS2CPacket)
+            if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerPositionLookS2CPacket)
+                beginRotation = RotationUtil.evaluateNewRotation(event.packet)
         }
     }
 }

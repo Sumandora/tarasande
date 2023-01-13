@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.isMissHitResult
-import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
+import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 
 class ModuleClickPearl : Module("Click pearl", "Auto switches to a ender pearl", ModuleCategory.PLAYER) {
 
@@ -25,7 +25,7 @@ class ModuleClickPearl : Module("Click pearl", "Auto switches to a ender pearl",
         }
         registerEvent(EventTick::class.java) { event ->
             if (event.state == EventTick.State.PRE) {
-                val pearlSlot = PlayerUtil.findSlot { it.value.item is EnderPearlItem }
+                val pearlSlot = ContainerUtil.findSlot { it.value.item is EnderPearlItem }
                 if (pearlSlot == null) {
                     state = State.IDLE // FUCK
                     return@registerEvent

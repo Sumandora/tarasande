@@ -71,7 +71,8 @@ open class SidebarEntry(val name: String, val category: String) {
     }
 }
 
-abstract class SidebarEntrySelection(name: String, category: String, val list: List<String>, var selected: String) : SidebarEntry(name, category) {
+@Suppress("unused") // Packages use this
+abstract class SidebarEntrySelection(name: String, category: String, val list: List<String>) : SidebarEntry(name, category) {
     abstract fun onClick(newValue: String)
 
     abstract fun isSelected(value: String): Boolean
@@ -82,7 +83,6 @@ abstract class SidebarEntrySelection(name: String, category: String, val list: L
                 override fun onClick(mouseButton: Int) {
                     if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                         onClick(it)
-                        selected = it
                     } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                         openValues()
                     }
@@ -100,6 +100,7 @@ abstract class SidebarEntrySelection(name: String, category: String, val list: L
 }
 
 open class SidebarEntryToggleable(name: String, category: String) : SidebarEntry(name, category) {
+    @Suppress("LeakingThis")
     val enabled = ValueBoolean(this, name, false)
     open fun onClick(enabled: Boolean) {
     }

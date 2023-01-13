@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
-import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
+import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 
 class ModuleZoot : Module("Zoot", "Removes fire status", ModuleCategory.GHOST) {
     private val delay = ValueNumber(this, "Delay", 0.0, 300.0, 500.0, 50.0)
@@ -73,7 +73,7 @@ class ModuleZoot : Module("Zoot", "Removes fire status", ModuleCategory.GHOST) {
             if (!timer.hasReached(delay.value.toLong()))
                 return@registerEvent
 
-            var waterBucket = PlayerUtil.findSlot { it.value.isOf(Items.WATER_BUCKET) }
+            var waterBucket = ContainerUtil.findSlot { it.value.isOf(Items.WATER_BUCKET) }
 
             if (waterBucket == null)
                 if (mc.player?.offHandStack?.isOf(Items.WATER_BUCKET) == true)

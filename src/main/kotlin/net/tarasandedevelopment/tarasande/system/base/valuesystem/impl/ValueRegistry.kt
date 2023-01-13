@@ -29,7 +29,7 @@ abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: 
         onRemove(key)
     }
 
-    fun entries() = list.toArray()
+    fun entries(): Array<Any> = list.toArray()
     fun any(predicate: (T) -> Boolean): Boolean {
         if (list.isEmpty()) return false
         for (element in list)

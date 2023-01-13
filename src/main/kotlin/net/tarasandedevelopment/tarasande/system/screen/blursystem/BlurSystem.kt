@@ -51,7 +51,7 @@ object ManagerBlur : Manager<Blur>() {
         mode = ValueMode(this, "Blur mode", false, *list.map { it.name }.toTypedArray())
     }
 
-    fun selected(): Blur = list[mode.let { it.values.indexOf(it.getSelected()) }]
+    private fun selected(): Blur = list[mode.let { it.values.indexOf(it.getSelected()) }]
 
     fun bind(setViewport: Boolean, screens: Boolean = false) {
         (if (screens) screenShapesFramebuffer else inGameShapesFramebuffer).beginWrite(setViewport)

@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande_windows_platform
 
 import net.fabricmc.api.ClientModInitializer
 import net.minecraft.util.Util
-import net.tarasandedevelopment.tarasande.TarasandeMain
 import net.tarasandedevelopment.tarasande.event.EventShutdown
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
@@ -67,7 +66,7 @@ class TarasandeWindowsPlatform : ClientModInitializer {
                         override fun onClick(enabled: Boolean) {
                             val screenBetterProxy = ManagerScreenExtension.get(ScreenExtensionButtonListMultiplayerScreen::class.java).screenBetterSlotListAccountManager.screenBetterProxy
 
-                            if (torProcess == null) {
+                            if (enabled) {
                                 torProcess = ProcessBuilder(torFile.absolutePath).start()
                                 screenBetterProxy.proxy = Proxy(InetSocketAddress("127.0.0.1", 9050), ProxyType.SOCKS5)
                             } else {

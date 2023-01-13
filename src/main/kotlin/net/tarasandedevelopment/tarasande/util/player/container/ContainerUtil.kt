@@ -7,6 +7,7 @@ import net.minecraft.item.*
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
 import net.minecraft.util.math.Vec2f
+import net.tarasandedevelopment.tarasande.mc
 
 object ContainerUtil {
 
@@ -90,5 +91,9 @@ object ContainerUtil {
             is ToolItem -> (stack.item as ToolItem).material.attackDamage
             else -> 0.0F
         }
+    }
+
+    fun findSlot(filter: (IndexedValue<ItemStack>) -> Boolean): Int? {
+        return mc.player?.inventory?.main?.subList(0, 9)?.withIndex()?.filter { filter(it) }?.minByOrNull { it.value.count }?.index
     }
 }

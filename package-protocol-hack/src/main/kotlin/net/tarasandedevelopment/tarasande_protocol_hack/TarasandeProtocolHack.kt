@@ -181,7 +181,7 @@ class TarasandeProtocolHack : NativeProvider {
                 }
 
                 ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.apply {
-                    insert(object : SidebarEntrySelection("Protocol Hack", "Protocol Hack", VersionListEnum.RENDER_VERSIONS.map { it.getName() }, ViaLoadingBase.getTargetVersion().getName()) {
+                    insert(object : SidebarEntrySelection("Protocol Hack", "Protocol Hack", VersionListEnum.RENDER_VERSIONS.map { it.getName() }) {
                         override fun onClick(newValue: String) {
                             val newProtocol = VersionListEnum.RENDER_VERSIONS.first { it.getName() == newValue }.version.toDouble()
                             if (version.value != newProtocol) {

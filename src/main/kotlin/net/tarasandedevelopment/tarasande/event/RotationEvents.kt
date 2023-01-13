@@ -12,8 +12,6 @@ class EventPollEvents : Event {
             field = value
             dirty = true
         }
-    var minRotateToOriginSpeed = 1.0
-    var maxRotateToOriginSpeed = 1.0
     val fake: Boolean
 
     constructor(rotation: Rotation, fake: Boolean) : super(false) {

@@ -156,7 +156,7 @@ $errorDescription""".toByteArray())
 
     private fun buildFromCode(code: String): MSAuthProfile {
         val str = post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
-            it["client_id"] = this.azureApp.clientId.toString()
+            it["client_id"] = this.azureApp.clientId
             it["code"] = code
             it["grant_type"] = "authorization_code"
             it["redirect_uri"] = redirectUri!!
@@ -171,7 +171,7 @@ $errorDescription""".toByteArray())
 
     protected fun buildFromRefreshToken(refreshToken: String): MSAuthProfile {
         val oAuthToken = gson.fromJson(post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
-            it["client_id"] = this.azureApp.clientId.toString()
+            it["client_id"] = this.azureApp.clientId
             it["refresh_token"] = refreshToken
             it["grant_type"] = "refresh_token"
             it["redirect_uri"] = redirectUri!!
@@ -301,7 +301,7 @@ $errorDescription""".toByteArray())
             minecraftProfile.id,
             minecraftLogin.accessToken,
             Optional.of(xboxLiveAuth.token),
-            Optional.of(azureApp.clientId.toString()), // I hate the jvm, I hate the bytecode, I hate the language, I hate me, I hate everything!
+            Optional.of(azureApp.clientId), // I hate the jvm, I hate the bytecode, I hate the language, I hate me, I hate everything!
             Session.AccountType.MSA
         )
 

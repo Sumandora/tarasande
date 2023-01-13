@@ -44,14 +44,16 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
     var nativeImage: NativeImageBackedTexture? = null
     private val particles = ArrayList<Particle>()
 
-    var wasClosed = true
+    private var wasClosed = true
 
     init {
         passEvents = false
         EventDispatcher.apply {
             add(EventChangeScreen::class.java) { event ->
-                if (client?.currentScreen is ScreenCheatMenu && event.newScreen == null)
+                if (client?.currentScreen is ScreenCheatMenu && event.newScreen == null) {
                     panelSystem.list.forEach { it.onClose() }
+                    wasClosed = false // Sad, but true. this cancels our smooth animation, but we can't afford to leave a screen open :c
+                }
             }
             add(EventUpdate::class.java) { event ->
                 if (event.state == EventUpdate.State.PRE)
