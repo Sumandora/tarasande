@@ -24,6 +24,7 @@ import su.mandora.event.EventDispatcher
 
 object ManagerBlur : Manager<Blur>() {
 
+    lateinit var selected: Blur
     val mode: ValueMode
     val strength = ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0, exceed = false)
 
@@ -48,10 +49,12 @@ object ManagerBlur : Manager<Blur>() {
             }
         }
 
-        mode = ValueMode(this, "Blur mode", false, *list.map { it.name }.toTypedArray())
+        mode = object : ValueMode(this, "Blur mode", false, *list.map { it.name }.toTypedArray()) {
+            override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
+                selected = list[values.indexOf(getSelected())]
+            }
+        }
     }
-
-    private fun selected(): Blur = list[mode.let { it.values.indexOf(it.getSelected()) }]
 
     fun bind(setViewport: Boolean, screens: Boolean = false) {
         (if (screens) screenShapesFramebuffer else inGameShapesFramebuffer).beginWrite(setViewport)
@@ -68,7 +71,7 @@ object ManagerBlur : Manager<Blur>() {
 
         val activeTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE)
 
-        val framebuffer = selected().render(targetBuffer, strength ?: this.strength.value.toInt())
+        val framebuffer = selected.render(targetBuffer, strength ?: this.strength.value.toInt())
 
         mc.framebuffer.beginWrite(MinecraftClient.IS_SYSTEM_MAC)
 

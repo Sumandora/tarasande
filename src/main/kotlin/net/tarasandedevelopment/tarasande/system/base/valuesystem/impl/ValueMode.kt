@@ -48,7 +48,12 @@ open class ValueMode(owner: Any, name: String, private val multiSelection: Boole
     override fun load(jsonElement: JsonElement) {
         selected.clear()
         try {
-            selected.addAll(gson.fromJson(jsonElement, Array<String>::class.java)!!)
+            gson.fromJson(jsonElement, Array<String>::class.java)!!.forEach {
+                val index = values.indexOf(it)
+                if(index != -1) {
+                    select(index)
+                }
+            }
         } catch (jsonSyntaxException: JsonSyntaxException) {
             if (!multiSelection)
                 select(0)

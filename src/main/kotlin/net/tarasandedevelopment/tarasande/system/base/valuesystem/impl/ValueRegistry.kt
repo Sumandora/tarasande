@@ -20,13 +20,17 @@ abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: 
 
     fun add(wrappedKey: WrappedKey<*>) {
         @Suppress("UNCHECKED_CAST")
-        list.add(wrappedKey.key as T)
-        onAdd(wrappedKey)
+        add(wrappedKey.key as T)
     }
+    fun add(key: T) {
+        list.add(key)
+        onAdd(key)
 
+    }
     fun remove(key: Any?) {
         list.remove(key)
-        onRemove(key)
+        @Suppress("UNCHECKED_CAST")
+        onRemove(key as T)
     }
 
     fun entries(): Array<Any> = list.toArray()
@@ -44,8 +48,8 @@ abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: 
     abstract fun getTranslationKey(key: Any?): String
 
     open fun filter(key: T) = true
-    open fun onAdd(wrappedKey: WrappedKey<*>) {}
-    open fun onRemove(key: Any?) {}
+    open fun onAdd(key: T) {}
+    open fun onRemove(key: T) {}
 
     fun updateSearchResults(text: String, max: Int): ArrayList<WrappedKey<T>> {
         var count = 0
@@ -70,7 +74,9 @@ abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: 
     override fun load(jsonElement: JsonElement) {
         val jsonArray = jsonElement.asJsonArray
         list.clear()
-        list.addAll(jsonArray.mapNotNull { e -> registry.first { getTranslationKey(it) == e.asString } })
+        jsonArray.mapNotNull { e -> registry.first { getTranslationKey(it) == e.asString } }.forEach {
+            add(it)
+        }
     }
 
     class WrappedKey<T>(val key: T, val string: String)

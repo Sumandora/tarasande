@@ -32,9 +32,8 @@ open class ValueTextList(owner: Any, name: String, private val value: ArrayList<
 
     override fun load(jsonElement: JsonElement) {
         value.clear()
-
         jsonElement.asJsonArray.forEach {
-            value.add(it.asString)
+            add(it.asString)
         }
     }
 }
