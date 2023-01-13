@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.util.math.rotation
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
+import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.*
@@ -72,6 +73,13 @@ object RotationUtil {
                                 it.movementSideways = round(bestMovement[2]).toInt().toFloat()
                             }
                         }
+            }
+            add(EventCanSprint::class.java) {
+                if (fakeRotation != null)
+                    if (RotationValues.correctMovement.isSelected(1)) {
+                        if(abs(MathHelper.wrapDegrees(fakeRotation?.yaw!! - (goalMovementYaw ?: mc.player?.yaw!!))) > 45.0f)
+                            it.canSprint = false // oof
+                    }
             }
             add(EventPacket::class.java, 9999) {
                 if (it.type == EventPacket.Type.RECEIVE && it.packet is PlayerPositionLookS2CPacket) {
