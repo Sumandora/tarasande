@@ -105,6 +105,9 @@ public class IncomingBedrockPacketHandler extends StoredObject implements Bedroc
             BedrockSessionBaseProtocol.INSTANCE.getConnectionProgress().put(getUser().get(BedrockSessionStorage.class).targetAddress, "Server accepted connection, waiting for start game...");
         } else if (packet.getStatus() == PlayStatusPacket.Status.PLAYER_SPAWN) {
             // TODO | Implement this
+            SetLocalPlayerAsInitializedPacket setLocalPlayerAsInitializedPacket = new SetLocalPlayerAsInitializedPacket();
+            setLocalPlayerAsInitializedPacket.setRuntimeEntityId(player.getRuntimeEntityId());
+            bedrockClientSession.sendPacket(setLocalPlayerAsInitializedPacket);
         } else {
             if (!TRANSLATIONS.containsKey(packet.getStatus())) {
                 quit("Quitting");
@@ -180,7 +183,6 @@ public class IncomingBedrockPacketHandler extends StoredObject implements Bedroc
     public boolean handle(ResourcePacksInfoPacket packet) {
         final ClientCacheStatusPacket clientCacheStatusPacket = new ClientCacheStatusPacket();
         clientCacheStatusPacket.setSupported(false);
-
         final ResourcePackClientResponsePacket resourcePackClientResponsePacket = new ResourcePackClientResponsePacket();
         resourcePackClientResponsePacket.setStatus(ResourcePackClientResponsePacket.Status.HAVE_ALL_PACKS);
 

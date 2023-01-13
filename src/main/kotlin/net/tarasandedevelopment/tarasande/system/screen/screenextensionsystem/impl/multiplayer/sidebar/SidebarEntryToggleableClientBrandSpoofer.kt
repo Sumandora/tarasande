@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
 import su.mandora.event.EventDispatcher
 
-class SidebarEntryToggleableClientBrandSpoofer : SidebarEntryToggleable( "Client brand spoofer", "Spoofer") {
+class SidebarEntryToggleableClientBrandSpoofer : SidebarEntryToggleable("Client brand spoofer", "Spoofer") {
 
     private val clientBrand = ValueText(this, "Client brand", "vanilla")
 

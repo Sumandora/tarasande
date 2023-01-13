@@ -11,10 +11,12 @@ open class ValueTextList(owner: Any, name: String, private val value: ArrayList<
         value.add(text)
         onAdd(text)
     }
+
     fun remove(text: String) {
         value.remove(text)
         onRemove(text)
     }
+
     fun entries(): Array<String> = value.toTypedArray()
 
     open fun onAdd(text: String) {}

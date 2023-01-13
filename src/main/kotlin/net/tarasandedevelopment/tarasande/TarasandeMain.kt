@@ -37,6 +37,7 @@ import java.util.logging.Logger
  *  - Auto Totem
  *  - AutoLog
  *  - Chest Aura
+ *  - ScaffoldWalk Blocks Information
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions

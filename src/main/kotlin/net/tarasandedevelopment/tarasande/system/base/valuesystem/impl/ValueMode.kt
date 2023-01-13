@@ -29,10 +29,11 @@ open class ValueMode(owner: Any, name: String, private val multiSelection: Boole
     }
 
     fun getSelected(): String =
-        if(!multiSelection)
+        if (!multiSelection)
             selected.first()
         else
             throw UnsupportedOperationException()
+
     fun isSelected(index: Int) = selected.contains(values[index])
     fun isSelected(entry: String) = selected.contains(entry)
 

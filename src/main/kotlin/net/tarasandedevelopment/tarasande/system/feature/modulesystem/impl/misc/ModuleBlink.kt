@@ -42,7 +42,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         override fun isEnabled() = mode.isSelected(1) || mode.isSelected(3)
         override fun onChange(oldValue: Double?, newValue: Double) {
             @Suppress("SENSELESS_COMPARISON")
-            if(packets != null)
+            if (packets != null)
                 onDisable()
         }
     }
@@ -50,7 +50,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         override fun isEnabled() = mode.isSelected(2)
         override fun onChange(oldValue: Double?, newValue: Double) {
             @Suppress("SENSELESS_COMPARISON")
-            if(packets != null)
+            if (packets != null)
                 onDisable()
         }
     }
@@ -58,7 +58,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         override fun isEnabled() = mode.isSelected(3)
         override fun onChange(oldValue: Double?, newValue: Double) {
             @Suppress("SENSELESS_COMPARISON")
-            if(packets != null)
+            if (packets != null)
                 onDisable()
         }
     }

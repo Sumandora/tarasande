@@ -122,7 +122,6 @@ object ManagerModule : Manager<Module>() {
             ModuleAutoRespawn(),
             ModuleIgnoreResourcePackHash(),
             ModuleTroubleInTerroristTown(),
-            ModuleNoPitchLimit(),
 
             // Ghost
             ModuleReach(),
@@ -138,6 +137,7 @@ object ManagerModule : Manager<Module>() {
             ModuleResourcePackSpoofer(),
             ModuleAntiBindingCurse(),
             ModulePortalScreen(),
+            ModuleNoPitchLimit(),
             ModuleRegen()
         )
 
@@ -161,7 +161,7 @@ object ManagerModule : Manager<Module>() {
                         }
 
                         is HealthUpdateS2CPacket -> {
-                            if(it.packet.health <= 0)
+                            if (it.packet.health <= 0)
                                 for (module in list)
                                     if (module.autoDisable.isSelected(1) && module.enabled.value)
                                         module.switchState()
@@ -189,7 +189,7 @@ open class Module(val name: String, val description: String, val category: Strin
 
     var enabled = object : ValueBoolean(ManagerModule, name, false) {
         override fun onChange(oldValue: Boolean?, newValue: Boolean) {
-            if(oldValue == null)
+            if (oldValue == null)
                 return
 
             if (oldValue != newValue) if (newValue) {

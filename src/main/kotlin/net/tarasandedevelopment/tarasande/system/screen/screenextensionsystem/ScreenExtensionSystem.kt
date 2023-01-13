@@ -10,8 +10,6 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.im
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.ScreenExtensionDirectConnectScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarBuilder
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.panel.ClickableWidgetPanelSidebar
 import su.mandora.event.EventDispatcher
 
 object ManagerScreenExtension : Manager<ScreenExtension<*>>() {
@@ -44,15 +42,6 @@ abstract class ScreenExtension<T : Screen>(val screen: Class<out T>) {
     @Suppress("UNCHECKED_CAST") // trashy bypass
     fun invoker(screen: Screen) = createElements(screen as T)
     abstract fun createElements(screen: T): MutableList<Element>
-}
-
-open class ScreenExtensionSidebar<T : Screen>(screen: Class<out T>) : ScreenExtension<T>(screen) {
-    val sidebar = SidebarBuilder()
-    private var sidebarWidget: ClickableWidgetPanelSidebar? = null
-
-    override fun createElements(screen: T): MutableList<Element> {
-        return mutableListOf(sidebarWidget ?: sidebar.build())
-    }
 }
 
 open class ScreenExtensionButtonList<T : Screen>(screen: Class<out T>) : ScreenExtension<T>(screen) {

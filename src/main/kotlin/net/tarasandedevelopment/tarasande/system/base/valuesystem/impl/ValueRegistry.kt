@@ -23,10 +23,12 @@ abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: 
         list.add(wrappedKey.key as T)
         onAdd(wrappedKey)
     }
+
     fun remove(key: Any?) {
         list.remove(key)
         onRemove(key)
     }
+
     fun entries() = list.toArray()
     fun any(predicate: (T) -> Boolean): Boolean {
         if (list.isEmpty()) return false
@@ -35,6 +37,7 @@ abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: 
                 return true
         return false
     }
+
     fun anySelected() = list.isNotEmpty()
     fun randomOrNull() = list.randomOrNull()
 

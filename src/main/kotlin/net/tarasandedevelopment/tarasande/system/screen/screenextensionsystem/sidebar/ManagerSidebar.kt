@@ -15,12 +15,12 @@ import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
-class SidebarBuilder : Manager<SidebarEntry>() {
+class ManagerSidebar : Manager<SidebarEntry>() {
 
     fun build(): ClickableWidgetPanelSidebar {
         return PanelElements<ElementWidthValueComponent>("Sidebar", 0.0, 0.0).let {
             val categories = ArrayList<String>()
-            this@SidebarBuilder.list.forEach { entry ->
+            this@ManagerSidebar.list.forEach { entry ->
                 if (!categories.contains(entry.category)) {
                     categories.add(entry.category)
                 }
@@ -30,7 +30,7 @@ class SidebarBuilder : Manager<SidebarEntry>() {
                 it.elementList.add(object : ValueSpacer(it, category, 1.0F, manage = false) {
                     override fun getColor(hovered: Boolean) = Color.gray
                 }.createValueComponent())
-                this@SidebarBuilder.list.filter { entry -> entry.category == category }.onEach { each ->
+                this@ManagerSidebar.list.filter { entry -> entry.category == category }.onEach { each ->
                     it.elementList.addAll(each.createElements(it))
                 }
             }
