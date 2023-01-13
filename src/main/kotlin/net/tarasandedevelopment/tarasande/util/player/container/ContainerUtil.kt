@@ -94,7 +94,7 @@ object ContainerUtil {
         }
     }
 
-    fun getHotbarSlots(): List<ItemStack> = mc.player?.inventory?.main?.subList(0, 9)!!
+    fun getHotbarSlots() = mc.player?.inventory?.main?.subList(0, 9)!!
 
     fun findSlot(filter: (IndexedValue<ItemStack>) -> Boolean): Int? {
         return getHotbarSlots().withIndex().filter { filter(it) }.minByOrNull { it.value.safeCount() }?.index

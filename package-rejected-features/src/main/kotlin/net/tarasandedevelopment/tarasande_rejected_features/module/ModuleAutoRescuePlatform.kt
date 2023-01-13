@@ -4,7 +4,7 @@ import net.minecraft.item.Items
 import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -28,8 +28,8 @@ class ModuleAutoRescuePlatform : Module("Auto rescue platform", "Uses rescue pla
                     state = State.SWITCH_BACK
             }
         }
-        registerEvent(EventTick::class.java) { event ->
-            if(event.state == EventTick.State.PRE) {
+        registerEvent(EventUpdate::class.java) { event ->
+            if(event.state == EventUpdate.State.PRE) {
                 val rescuePlatformSlot = ContainerUtil.findSlot { it.value.item == Items.BLAZE_ROD }
                 if(rescuePlatformSlot == null) {
                     state = State.IDLE // FUCK

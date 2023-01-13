@@ -38,6 +38,7 @@ import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
+import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.ThreadLocalRandom
@@ -109,6 +110,10 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
     private val forceCritical = object : ValueBoolean(this, "Force critical", true) {
         override fun isEnabled() = waitForCritical.value && criticalSprint.value
+    }
+    private val onlyNecessaryHits = ValueBoolean(this, "Only necessary hits", false)
+    private val minimalHurtTime = object : ValueNumber(this, "Minimal hurt time", 0.1, 0.5, 0.9, 0.1) {
+        override fun isEnabled() = onlyNecessaryHits.value
     }
     private val aimTargetColor = ValueColor(this, "Aim target color", 0.0, 1.0, 1.0, 1.0)
 
@@ -583,6 +588,15 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     return false
             }
         }
+
+        if(onlyNecessaryHits.value) {
+            val selfHurtTime = (mc.player?.hurtTime!! - mc.tickDelta).coerceAtLeast(0.0F) / mc.player?.maxHurtTime!!
+            val otherHurtTime = if (entity is LivingEntity && entity.maxHurtTime > 0) (entity.hurtTime - mc.tickDelta).coerceAtLeast(0.0F) / entity.maxHurtTime else null
+            if(otherHurtTime != null) {
+                if(selfHurtTime > minimalHurtTime.value && otherHurtTime > minimalHurtTime.value)
+                    return false
+            }
+        }
         return true
     }
 
@@ -599,8 +613,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
 
     private fun isCancellingShields(): Boolean {
-        if (ManagerModule.get(ModuleAutoTool::class.java).let { it.enabled.value && it.mode.isSelected(1) && it.useAxeToCounterBlocking.value } &&
-            mc.player?.inventory?.main?.subList(0, 8)?.any { it.item is AxeItem } == true)
+        if (ManagerModule.get(ModuleAutoTool::class.java).let { it.enabled.value && it.mode.isSelected(1) && it.useAxeToCounterBlocking.value } && ContainerUtil.getHotbarSlots().any { it.item is AxeItem })
             return true
         return mc.player?.disablesShield() == true
     }

@@ -6,6 +6,7 @@ import net.minecraft.item.Items
 import net.minecraft.item.SplashPotionItem
 import net.minecraft.potion.PotionUtil
 import net.tarasandedevelopment.tarasande.event.EventAttack
+import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
@@ -152,10 +153,14 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
                 }
             }
         }
-
         registerEvent(EventAttack::class.java, 1) { event ->
             if (state != State.IDLE) {
                 event.dirty = true
+            }
+        }
+        registerEvent(EventDisconnect::class.java) { event ->
+            if(event.connection == mc.player?.networkHandler?.connection) {
+                state = State.IDLE // Abort
             }
         }
     }

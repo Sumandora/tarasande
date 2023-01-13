@@ -1,10 +1,8 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player
 
-import net.minecraft.item.EnderPearlItem
+import net.minecraft.item.Items
 import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket
-import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
-import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
@@ -23,9 +21,9 @@ class ModuleClickPearl : Module("Click pearl", "Auto switches to a ender pearl",
                     state = State.SWITCH_BACK
             }
         }
-        registerEvent(EventTick::class.java) { event ->
-            if (event.state == EventTick.State.PRE) {
-                val pearlSlot = ContainerUtil.findSlot { it.value.item is EnderPearlItem }
+        registerEvent(EventUpdate::class.java) { event ->
+            if (event.state == EventUpdate.State.PRE) {
+                val pearlSlot = ContainerUtil.findSlot { it.value.item == Items.ENDER_PEARL }
                 if (pearlSlot == null) {
                     state = State.IDLE // FUCK
                     return@registerEvent
@@ -40,16 +38,27 @@ class ModuleClickPearl : Module("Click pearl", "Auto switches to a ender pearl",
                     return@registerEvent
                 }
                 if (state == State.IDLE && mc.options.useKey.pressed && mc.crosshairTarget.isMissHitResult() && mc.player?.isUsingItem == false) {
+                    if(mc.player?.inventory?.mainHandStack?.isOf(Items.ENDER_PEARL) == true)
+                        return@registerEvent
                     prevSlot = mc.player?.inventory?.selectedSlot
                     mc.player?.inventory?.selectedSlot = pearlSlot
                     state = State.WAIT_FOR_THROW
                 }
             }
         }
-
+        registerEvent(EventAttack::class.java, 1) { event ->
+            if (state != State.IDLE) {
+                event.dirty = true
+            }
+        }
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
             if (event.keyBinding == mc.options.useKey && state == State.WAIT_FOR_THROW)
                 event.pressed = true
+        }
+        registerEvent(EventDisconnect::class.java) { event ->
+            if(event.connection == mc.player?.networkHandler?.connection) {
+                state = State.IDLE // Abort
+            }
         }
     }
 

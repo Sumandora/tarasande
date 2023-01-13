@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.ghos
 
 import net.minecraft.item.Items
 import net.tarasandedevelopment.tarasande.event.EventAttack
+import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.mc
@@ -104,10 +105,14 @@ class ModuleZoot : Module("Zoot", "Removes fire status", ModuleCategory.GHOST) {
                 }
             }
         }
-
         registerEvent(EventAttack::class.java, 1) { event ->
             if (state != State.IDLE) {
                 event.dirty = true
+            }
+        }
+        registerEvent(EventDisconnect::class.java) { event ->
+            if(event.connection == mc.player?.networkHandler?.connection) {
+                state = State.IDLE // Abort
             }
         }
     }

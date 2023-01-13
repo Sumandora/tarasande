@@ -30,14 +30,11 @@ import java.util.logging.Logger
  *  - Anti vanish: Tab completion
  *  - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
  *  - Smartclicking in KillAura
- *  - PathFinder: make values
  *  - Render Profiler
  *  - https://github.com/SirHilarious/WardenTools
- *  - Package DSL
  *  - Auto Totem
  *  - AutoLog
  *  - Chest Aura
- *  - ScaffoldWalk Blocks Information
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions
