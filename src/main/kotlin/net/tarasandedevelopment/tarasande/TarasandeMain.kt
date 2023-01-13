@@ -28,10 +28,7 @@ import java.util.logging.Logger
  *  - Crystal Aura
  *  - Change Name/Skin/Cape in Account Manager
  *  - Anti vanish: Tab completion
- *  - ClickGUI: Correctly save and calculate the positions of the panels when resizing ingame
- *  - Smartclicking in KillAura
  *  - Render Profiler
- *  - https://github.com/SirHilarious/WardenTools
  *  - Auto Totem
  *  - AutoLog
  *  - Chest Aura
