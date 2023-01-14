@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
+import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.InputUtil
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
@@ -21,6 +22,7 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
 
     private val updateSneaking = ValueBoolean(this, "Update sneaking", false)
+    private val onlyInPlayerInventory = ValueBoolean(this, "Only in player inventory", false)
 
     private val movementKeys = ArrayList(PlayerUtil.movementKeys)
 
@@ -60,5 +62,5 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         }
     }
 
-    private fun isPassingEvents() = (mc.currentScreen is ScreenCheatMenu || mc.currentScreen is ScreenBetterOwnerValues || mc.currentScreen is ScreenBetterFileChooser) && !textBoxFocused || mc.currentScreen is HandledScreen<*>
+    private fun isPassingEvents() = (mc.currentScreen is ScreenCheatMenu || mc.currentScreen is ScreenBetterOwnerValues || mc.currentScreen is ScreenBetterFileChooser) && !textBoxFocused || (if(onlyInPlayerInventory.value) mc.currentScreen is AbstractInventoryScreen<*> else mc.currentScreen is HandledScreen<*>)
 }
