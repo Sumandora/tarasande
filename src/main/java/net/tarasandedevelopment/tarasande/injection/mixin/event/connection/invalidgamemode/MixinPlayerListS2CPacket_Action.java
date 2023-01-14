@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import su.mandora.event.EventDispatcher;
 
 @Mixin(PlayerListS2CPacket.Action.class)
-public class MixinPlayerListS2CPacketUpdateGameMode {
+public class MixinPlayerListS2CPacket_Action {
 
     @Unique
     private static boolean tarasande_isInvalid;

@@ -44,7 +44,7 @@ import java.util.Random;
  * higher than > 1.8, then part differences in the code are fixed again, example for this is the Soulsand which
  * was changed from the 1.14, but is replaced with the 1.8 emulation.
  */
-@SuppressWarnings({"deprecation", "RedundantCast", "UnnecessaryUnboxing", "PointlessArithmeticExpression", "DataFlowIssue"})
+@SuppressWarnings({"deprecation", "RedundantCast", "UnnecessaryUnboxing", "PointlessArithmeticExpression", "DataFlowIssue", "DuplicatedCode", "ConstantValue"})
 public class PlayerAndLivingEntityMovementEmulation_1_8 {
 
     private final LivingEntity original;
@@ -346,9 +346,8 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
         for (int k1 = i; k1 <= j; ++k1) {
             for (int l1 = k; l1 <= l; ++l1) {
                 for (int i2 = i1; i2 <= j1; ++i2) {
-                    BlockPos mutableBlockPos = new BlockPos(k1, l1, i2);
-                    BlockState state = world.getBlockState(mutableBlockPos);
-                    Block block = world.getBlockState(mutableBlockPos).getBlock();
+                    final BlockPos mutableBlockPos = new BlockPos(k1, l1, i2);
+                    final BlockState state = world.getBlockState(mutableBlockPos);
 
                     if (state.getMaterial().isLiquid()) {
                         return true;

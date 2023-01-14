@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.event.EventDispatcher;
 
 @Mixin(MultiplayerServerListWidget.ServerEntry.class)
-public class MixinMultiplayerServerListWidgetSubServerEntry {
+public class MixinMultiplayerServerListWidget_ServerEntry {
 
     @Shadow
     @Final

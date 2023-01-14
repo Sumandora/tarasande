@@ -6,7 +6,7 @@
   "mixinPriority": 1,
   "mixins": [
     "MixinClientConnection",
-    "MixinClientConnectionSubOne",
+    "MixinClientConnection_1",
     "module.MixinPlayerScreenHandler",
     "tarasande.MixinEventCollisionShape",
     "tarasande.MixinEventDispatcher",

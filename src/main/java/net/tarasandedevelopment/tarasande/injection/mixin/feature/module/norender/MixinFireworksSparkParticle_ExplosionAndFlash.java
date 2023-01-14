@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = FireworksSparkParticle.Flash.class, targets = "net.minecraft.client.particle.FireworksSparkParticle$Explosion")
-public class MixinFireworksSparkParticleSubExplosionAndFlash {
+public class MixinFireworksSparkParticle_ExplosionAndFlash {
 
     @Inject(method = "buildGeometry", at = @At("HEAD"), cancellable = true)
     public void noRender_buildGeometry(VertexConsumer vertexConsumer, Camera camera, float tickDelta, CallbackInfo ci) {

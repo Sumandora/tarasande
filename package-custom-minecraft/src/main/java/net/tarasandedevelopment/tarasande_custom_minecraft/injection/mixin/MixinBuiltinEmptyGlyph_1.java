@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(targets = "net/minecraft/client/font/BuiltinEmptyGlyph$1")
-public class MixinBuiltinEmptyGlyphSubMissing {
+public class MixinBuiltinEmptyGlyph_1 {
 
     @Inject(method = {"getWidth", "getHeight"}, at = @At("HEAD"), cancellable = true)
     public void resetDimension(CallbackInfoReturnable<Integer> cir) {

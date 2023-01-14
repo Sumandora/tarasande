@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(targets = "net.minecraft.item.ItemGroup$EntriesImpl")
-public class MixinItemGroupSubEntriesImpl {
+public class MixinItemGroup_EntriesImpl {
 
     @Redirect(method = "add", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;isEnabled(Lnet/minecraft/resource/featuretoggle/FeatureSet;)Z"))
     public boolean removeUnknownItems(Item instance, FeatureSet featureSet) {

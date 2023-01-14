@@ -10,7 +10,7 @@ import su.mandora.event.EventDispatcher;
 import java.net.InetSocketAddress;
 
 @Mixin(targets = "net.minecraft.client.gui.screen.ConnectScreen$1")
-public class MixinConnectScreenSubConnect {
+public class MixinConnectScreen_1 {
 
     @Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;connect(Ljava/net/InetSocketAddress;Z)Lnet/minecraft/network/ClientConnection;"))
     public ClientConnection hookEventConnectServer(InetSocketAddress address, boolean useEpoll) {

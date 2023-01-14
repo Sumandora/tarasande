@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.Unique;
 import java.nio.ByteBuffer;
 
 @Mixin(PlayerPublicKey.PublicKeyData.class)
-public class MixinPlayerPublicKeySubPublicKeyData implements IPublicKeyData_Protocol {
+public class MixinPlayerPublicKey_PublicKeyData implements IPublicKeyData_Protocol {
 
     @Unique
     private ByteBuffer protocolhack_1_19_0Key;

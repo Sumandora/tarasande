@@ -5,7 +5,6 @@ import com.viaversion.viaversion.api.minecraft.entities.Entity1_10Types;
 import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.viabeta.ViaBeta;
@@ -252,15 +251,6 @@ public class Protocol1_6_1to1_5_2 extends AbstractProtocol<ClientboundPackets1_5
             }
         });
 
-        this.registerServerbound(State.STATUS, ServerboundPackets1_5_2.SERVER_PING.getId(), ServerboundPackets1_6_4.SERVER_PING.getId(), new PacketRemapper() {
-            @Override
-            public void registerMap() {
-                handler(wrapper -> {
-                    wrapper.clearPacket();
-                    wrapper.write(Type.BYTE, (byte) 1); // readSuccessfully
-                });
-            }
-        });
         this.registerServerbound(ServerboundPackets1_6_4.ENTITY_ACTION, new PacketRemapper() {
             @Override
             public void registerMap() {

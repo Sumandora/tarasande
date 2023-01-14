@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(targets = "net.minecraft.network.ClientConnection$1", priority = 1001 /* after the protocol hack */)
-public class MixinClientConnectionSubOne {
+public class MixinClientConnection_1 {
 
     @Inject(method = "initChannel", at = @At("TAIL"))
     public void hookEventEncoderAndEventDecoder(Channel channel, CallbackInfo ci) {

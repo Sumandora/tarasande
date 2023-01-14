@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.net.InetSocketAddress;
 
 @Mixin(targets = "net.minecraft.client.network.MultiplayerServerListPinger$1")
-public class MixinMultiplayerServerListPingerSubOnResponse {
+public class MixinMultiplayerServerListPinger_1 {
 
     @Final
     @Shadow

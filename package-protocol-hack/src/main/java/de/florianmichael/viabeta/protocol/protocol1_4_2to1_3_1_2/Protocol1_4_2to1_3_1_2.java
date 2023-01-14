@@ -1,6 +1,5 @@
 package de.florianmichael.viabeta.protocol.protocol1_4_2to1_3_1_2;
 
-import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.entities.Entity1_10Types;
 import com.viaversion.viaversion.api.minecraft.item.DataItem;
@@ -8,9 +7,7 @@ import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.api.data.ItemList1_6;
@@ -26,7 +23,6 @@ import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.type.Type1_6_4;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.Type1_7_6_10;
 
 import java.util.List;
-import java.util.logging.Level;
 
 @SuppressWarnings("DataFlowIssue")
 public class Protocol1_4_2to1_3_1_2 extends AbstractProtocol<ClientboundPackets1_3_1, ClientboundPackets1_4_2, ServerboundPackets1_3_1, ServerboundPackets1_5_2> {
@@ -37,23 +33,8 @@ public class Protocol1_4_2to1_3_1_2 extends AbstractProtocol<ClientboundPackets1
 
     @Override
     protected void registerPackets() {
-        this.registerClientbound(State.STATUS, ClientboundPackets1_3_1.DISCONNECT.getId(), ClientboundPackets1_4_2.DISCONNECT.getId(), new PacketRemapper() {
-            @Override
-            public void registerMap() {
-                handler(wrapper -> {
-                    final String reason = wrapper.read(Type1_6_4.STRING); // reason
-                    try {
-                        final ProtocolInfo info = wrapper.user().getProtocolInfo();
-                        final String[] pingParts = reason.split("§");
-                        final String out = "§1\0" + (-info.getServerProtocolVersion() >> 2) + "\0" + ProtocolVersion.getProtocol(info.getServerProtocolVersion()).getName() + "\0" + pingParts[0] + "\0" + pingParts[1] + "\0" + pingParts[2];
-                        wrapper.write(Type1_6_4.STRING, out);
-                    } catch (Throwable e) {
-                        ViaBeta.getPlatform().getLogger().log(Level.WARNING, "Could not parse 1.3.1 ping: " + reason, e);
-                        wrapper.cancel();
-                    }
-                });
-            }
-        });
+        super.registerPackets();
+
         this.registerClientbound(ClientboundPackets1_3_1.TIME_UPDATE, new PacketRemapper() {
             @Override
             public void registerMap() {
@@ -245,12 +226,6 @@ public class Protocol1_4_2to1_3_1_2 extends AbstractProtocol<ClientboundPackets1
             }
         });
 
-        this.registerServerbound(State.STATUS, ServerboundPackets1_3_1.SERVER_PING.getId(), ServerboundPackets1_5_2.SERVER_PING.getId(), new PacketRemapper() {
-            @Override
-            public void registerMap() {
-                handler(PacketWrapper::clearPacket);
-            }
-        });
         this.registerServerbound(ServerboundPackets1_5_2.CREATIVE_INVENTORY_ACTION, new PacketRemapper() {
             @Override
             public void registerMap() {

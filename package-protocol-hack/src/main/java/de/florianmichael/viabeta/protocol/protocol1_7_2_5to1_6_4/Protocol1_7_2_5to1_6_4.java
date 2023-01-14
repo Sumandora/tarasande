@@ -20,14 +20,14 @@ import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.libs.fastutil.ints.Int2IntMap;
 import com.viaversion.viaversion.libs.fastutil.objects.Object2IntMap;
 import com.viaversion.viaversion.libs.fastutil.objects.Object2IntOpenHashMap;
-import com.viaversion.viaversion.libs.gson.JsonObject;
-import com.viaversion.viaversion.protocols.base.*;
+import com.viaversion.viaversion.protocols.base.BaseProtocol;
+import com.viaversion.viaversion.protocols.base.ClientboundLoginPackets;
+import com.viaversion.viaversion.protocols.base.ServerboundLoginPackets;
 import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
 import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.api.model.IdAndData;
 import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
-import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.storage.HandshakeStorage;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.provider.EncryptionProvider;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.rewriter.*;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.storage.*;
@@ -61,35 +61,6 @@ public class Protocol1_7_2_5to1_6_4 extends AbstractProtocol<ClientboundPackets1
 
     @Override
     protected void registerPackets() {
-        this.registerClientbound(State.STATUS, ClientboundPackets1_6_4.DISCONNECT.getId(), ClientboundStatusPackets.STATUS_RESPONSE.getId(), new PacketRemapper() {
-            @Override
-            public void registerMap() {
-                handler(wrapper -> {
-                    final String reason = wrapper.read(Type1_6_4.STRING); // reason
-                    try {
-                        final String[] motdParts = reason.split("\0");
-                        final JsonObject rootObject = new JsonObject();
-                        final JsonObject descriptionObject = new JsonObject();
-                        final JsonObject playersObject = new JsonObject();
-                        final JsonObject versionObject = new JsonObject();
-
-                        descriptionObject.addProperty("text", motdParts[3]);
-                        playersObject.addProperty("max", Integer.parseInt(motdParts[5]));
-                        playersObject.addProperty("online", Integer.parseInt(motdParts[4]));
-                        versionObject.addProperty("name", motdParts[2]);
-                        versionObject.addProperty("protocol", Integer.parseInt(motdParts[1]));
-                        rootObject.add("description", descriptionObject);
-                        rootObject.add("players", playersObject);
-                        rootObject.add("version", versionObject);
-
-                        wrapper.write(Type.STRING, rootObject.toString());
-                    } catch (Throwable e) {
-                        ViaBeta.getPlatform().getLogger().log(Level.WARNING, "Could not parse 1.6.4 ping: " + reason, e);
-                        wrapper.cancel();
-                    }
-                });
-            }
-        });
         this.registerClientbound(State.LOGIN, ClientboundPackets1_6_4.SHARED_KEY.getId(), ClientboundLoginPackets.GAME_PROFILE.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
@@ -872,34 +843,6 @@ public class Protocol1_7_2_5to1_6_4 extends AbstractProtocol<ClientboundPackets1
         });
         this.cancelClientbound(ClientboundPackets1_6_4.CREATIVE_INVENTORY_ACTION);
 
-        this.registerServerbound(State.STATUS, ServerboundPackets1_6_4.SERVER_PING.getId(), ServerboundStatusPackets.STATUS_REQUEST.getId(), new PacketRemapper() {
-            @Override
-            public void registerMap() {
-                handler(wrapper -> {
-                    final HandshakeStorage handshakeStorage = wrapper.user().get(HandshakeStorage.class);
-                    final String ip = handshakeStorage.getHostname();
-                    final int port = handshakeStorage.getPort();
-                    wrapper.write(Type.UNSIGNED_BYTE, (short) 1); // always 1
-                    wrapper.write(Type.UNSIGNED_BYTE, (short) 250); // packet id
-                    wrapper.write(Type1_6_4.STRING, "MC|PingHost"); // channel
-                    wrapper.write(Type.UNSIGNED_SHORT, 3 + 2 * ip.length() + 4); // length
-                    wrapper.write(Type.UNSIGNED_BYTE, (short) (-wrapper.user().getProtocolInfo().getServerProtocolVersion() >> 2)); // protocol Id
-                    wrapper.write(Type1_6_4.STRING, ip); // hostname
-                    wrapper.write(Type.INT, port); // port
-                });
-            }
-        });
-        this.registerServerbound(State.STATUS, -1, ServerboundStatusPackets.PING_REQUEST.getId(), new PacketRemapper() {
-            @Override
-            public void registerMap() {
-                handler(wrapper -> {
-                    wrapper.cancel();
-                    final PacketWrapper pong = PacketWrapper.create(ClientboundStatusPackets.PONG_RESPONSE, wrapper.user());
-                    pong.write(Type.LONG, wrapper.read(Type.LONG)); // start time
-                    pong.send(Protocol1_7_2_5to1_6_4.class);
-                });
-            }
-        });
         this.registerServerbound(State.LOGIN, ServerboundPackets1_6_4.CLIENT_PROTOCOL.getId(), ServerboundLoginPackets.HELLO.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {

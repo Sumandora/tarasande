@@ -25,10 +25,13 @@ import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
+import de.florianmichael.viabeta.baseprotocol.BaseProtocol1_3;
+import de.florianmichael.viabeta.baseprotocol.BaseProtocol1_5;
+import de.florianmichael.viabeta.baseprotocol.BaseProtocol1_6;
+import de.florianmichael.viabeta.baseprotocol.BaseProtocolb1_7;
 import de.florianmichael.viabeta.pre_netty.PreNettyConstants;
 import de.florianmichael.viabeta.pre_netty.handler.PreNettyPacketDecoder;
 import de.florianmichael.viabeta.pre_netty.handler.PreNettyPacketEncoder;
-import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.baseprotocol.PreNettyBypassBaseProtocol;
 import de.florianmichael.viacursed.protocol.protocol1_19_3toBedrock1_19_51.baseprotocol.BedrockSessionBaseProtocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.netty.CustomViaDecodeHandler;
@@ -46,7 +49,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(targets = "net.minecraft.network.ClientConnection$1")
-public class MixinClientConnectionSubOne {
+public class MixinClientConnection_1 {
 
     // synthetic field
     @Final
@@ -54,28 +57,43 @@ public class MixinClientConnectionSubOne {
     ClientConnection field_11663;
 
     @Inject(method = "initChannel", at = @At("TAIL"))
-    public void addViaVersionHandler(Channel channel, CallbackInfo ci) {
-        final boolean bedrockConnection = ViaLoadingBase.getTargetVersion() == VersionListEnum.rBedrock1_19_51;
-
-        if (channel instanceof SocketChannel || bedrockConnection) {
-            UserConnection user = new UserConnectionImpl(channel, true);
+    public void hackNettyPipeline(Channel channel, CallbackInfo ci) {
+        if (channel instanceof SocketChannel || ViaLoadingBase.getTargetVersion() == VersionListEnum.rBedrock1_19_51 /*this has to be since bedrock starts a local proxy*/) {
+            // Creating the user connection
+            final UserConnection user = new UserConnectionImpl(channel, true);
             ((IClientConnection_Protocol) field_11663).protocolhack_setViaConnection(user);
+            // Creating the pipeline
             new ProtocolPipelineImpl(user);
 
-            // ViaLoadingBase / ViaVersion (latest - 1.7.0)
+            // ViaLoadingBase Packet handling
             channel.pipeline().addBefore("encoder", NettyConstants.HANDLER_ENCODER_NAME, new CustomViaEncodeHandler(user));
             channel.pipeline().addBefore("decoder", NettyConstants.HANDLER_DECODER_NAME, new CustomViaDecodeHandler(user));
 
-            // ViaBeta (1.6.4 - c0.0.15a-1)
+            // ViaBeta
             if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_6_4)) {
-                user.getProtocolInfo().getPipeline().add(PreNettyBypassBaseProtocol.INSTANCE);
+                // Handshake forwarding in <= 1.6.4
+                user.getProtocolInfo().getPipeline().add(BaseProtocol1_6.INSTANCE);
+                if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_5_2)) {
+                    // Status/ping handling in <= 1.5.2
+                    user.getProtocolInfo().getPipeline().add(BaseProtocol1_5.INSTANCE);
+                    if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_3_1tor1_3_2)) {
+                        // Status/ping handling in <= 1.3.2
+                        user.getProtocolInfo().getPipeline().add(BaseProtocol1_3.INSTANCE);
+                        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.b1_7tob1_7_3)) {
+                            // Status/ping handling in <= b1.7.3
+                            user.getProtocolInfo().getPipeline().add(BaseProtocolb1_7.INSTANCE);
+                        }
+                    }
+                }
 
+                // Pre Netty Packet handling in <= 1.6.4
                 channel.pipeline().addBefore("prepender", PreNettyConstants.ENCODER, new PreNettyPacketEncoder(user));
                 channel.pipeline().addBefore("splitter", PreNettyConstants.DECODER, new PreNettyPacketDecoder(user));
             }
 
-            // ViaCursed (Bedrock)
-            if (bedrockConnection) {
+            // ViaCursed
+            if (ViaLoadingBase.getTargetVersion() == VersionListEnum.rBedrock1_19_51) {
+                // Handshake forwarding in Bedrock
                 user.getProtocolInfo().getPipeline().add(BedrockSessionBaseProtocol.INSTANCE);
             }
         }

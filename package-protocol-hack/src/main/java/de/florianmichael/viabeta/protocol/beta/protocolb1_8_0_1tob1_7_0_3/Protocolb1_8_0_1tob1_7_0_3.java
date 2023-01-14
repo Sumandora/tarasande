@@ -43,6 +43,8 @@ public class Protocolb1_8_0_1tob1_7_0_3 extends AbstractProtocol<ClientboundPack
 
     @Override
     protected void registerPackets() {
+        this.cancelServerbound(ServerboundPacketsb1_8.SERVER_PING); // via needs a remap for every packet which is located in the packet enums, kind of shit
+
         this.registerClientbound(ClientboundPacketsb1_7.KEEP_ALIVE, new PacketRemapper() {
             @Override
             public void registerMap() {
@@ -210,19 +212,6 @@ public class Protocolb1_8_0_1tob1_7_0_3 extends AbstractProtocol<ClientboundPack
                 map(Type.UNSIGNED_BYTE); // slots
             }
         });
-
-        this.registerServerbound(State.STATUS, -1, ServerboundPacketsb1_8.SERVER_PING.getId(), new PacketRemapper() {
-            @Override
-            public void registerMap() {
-                handler(wrapper -> {
-                    wrapper.cancel();
-                    final PacketWrapper pingResponse = PacketWrapper.create(ClientboundPacketsb1_8.DISCONNECT, wrapper.user());
-                    pingResponse.write(Type1_6_4.STRING, "[ViaBeta] The server seems to be running!\nWait 5 seconds between each connection§0§1");
-                    pingResponse.send(Protocolb1_8_0_1tob1_7_0_3.class);
-                });
-            }
-        });
-        this.cancelServerbound(ServerboundPacketsb1_8.SERVER_PING);
         this.registerServerbound(State.LOGIN, ServerboundPacketsb1_7.LOGIN.getId(), ServerboundPacketsb1_8.LOGIN.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
