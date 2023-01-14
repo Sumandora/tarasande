@@ -14,6 +14,7 @@ object ProtocolHackValues {
 
     // General
     val autoChangeValuesDependentOnVersion = ValueBoolean(this, "Auto change values dependent on version", true)
+    val filterItemGroups = ValueBoolean(this, "Filter item groups", true)
     val betaCraftAuth = ValueBoolean(this, "BetaCraft auth", true)
 
     @Suppress("unused")

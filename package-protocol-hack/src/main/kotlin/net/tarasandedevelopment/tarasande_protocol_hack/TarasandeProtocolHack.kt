@@ -30,6 +30,9 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ConnectScreen
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen
 import net.minecraft.client.gui.screen.GameMenuScreen
+import net.minecraft.item.Item
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
@@ -67,6 +70,7 @@ import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.Fabr
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.provider.viaversion.FabricVersionProvider
 import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.andOlder
+import net.tarasandedevelopment.tarasande_protocol_hack.util.inventory.ItemSplitter
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ValueBooleanProtocol
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.command.ViaCommandHandlerTarasandeCommandHandler
@@ -86,8 +90,15 @@ class TarasandeProtocolHack : NativeProvider {
         lateinit var removeVelocityReset: ValueBoolean
         var viaConnection: UserConnection? = null
         var connectedAddress: InetSocketAddress? = null
+        var displayItems: MutableList<Item> = ArrayList()
 
         fun update(protocol: VersionListEnum, reloadProtocolHackValues: Boolean) {
+            // Only reload if needed
+            if (ViaLoadingBase.getTargetVersion() != protocol) {
+                displayItems = Registries.ITEM.filter { ItemSplitter.shouldDisplay(it, protocol) }.toMutableList()
+                EntityDimensionReplacement.reloadDimensions()
+            }
+
             ViaLoadingBase.instance().switchVersionTo(protocol.originalVersion)
 
             if (reloadProtocolHackValues) {
@@ -96,8 +107,6 @@ class TarasandeProtocolHack : NativeProvider {
                         it.value = it.version.any { range -> protocol in range }
                 }
             }
-
-            EntityDimensionReplacement.reloadDimensions()
         }
     }
 
