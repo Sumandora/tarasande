@@ -17,11 +17,11 @@ import java.util.*
 class ScreenBetterOwnerValues(title: String, parent: Screen, val owner: Any) : ScreenBetter(title, parent) {
 
     private var clickableWidgetPanel: ClickableWidgetPanel? = null
-    lateinit var panel: PanelElements<ElementWidthValueComponent>
+    lateinit var panel: PanelElements<ElementWidthValueComponent<*>>
 
     override fun init() {
         super.init()
-        this.addDrawableChild(ClickableWidgetPanel(object : PanelElements<ElementWidthValueComponent>(this.title.string, 300.0, 0.0) {
+        this.addDrawableChild(ClickableWidgetPanel(object : PanelElements<ElementWidthValueComponent<*>>(this.title.string, 300.0, 0.0) {
 
             init {
                 for (it in ManagerValue.getValues(owner))

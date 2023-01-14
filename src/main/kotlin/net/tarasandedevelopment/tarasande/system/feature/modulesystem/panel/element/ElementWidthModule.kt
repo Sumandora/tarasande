@@ -24,7 +24,7 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
     private var expansionTime = 0L
     private var expanded = false
 
-    val components = ArrayList<ElementWidthValueComponent>()
+    val components = ArrayList<ElementWidthValueComponent<*>>()
 
     override fun init() {
         if (components.isEmpty()) {
@@ -32,7 +32,7 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
                 components.add(value.createValueComponent())
             }
         }
-        components.forEach(ElementWidthValueComponent::init)
+        components.forEach(ElementWidthValueComponent<*>::init)
     }
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {

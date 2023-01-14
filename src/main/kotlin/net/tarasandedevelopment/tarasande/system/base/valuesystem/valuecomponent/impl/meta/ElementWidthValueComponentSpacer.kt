@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import kotlin.math.floor
 
-class ElementWidthValueComponentSpacer(value: Value) : ElementWidthValueComponent(value) {
+class ElementWidthValueComponentSpacer(value: Value) : ElementWidthValueComponent<ValueSpacer>(value) {
 
     private val lines = ArrayList<String>()
 
@@ -17,8 +17,7 @@ class ElementWidthValueComponentSpacer(value: Value) : ElementWidthValueComponen
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         lines.clear()
-        val valueSpacer = value as ValueSpacer
-        var str = valueSpacer.name
+        var str = value.name
         while (str.isNotEmpty()) {
             var trimmed = FontWrapper.trimToWidth(str, floor(width / value.scale).toInt())
             if (trimmed != str) {
@@ -37,9 +36,9 @@ class ElementWidthValueComponentSpacer(value: Value) : ElementWidthValueComponen
             FontWrapper.textShadow(matrices,
                 line,
                 0.0F,
-                (getHeight() / 2.0F + (index - (lines.size - 1) / 2.0 - 0.5) * (FontWrapper.fontHeight() * valueSpacer.scale / 2.0F)).toFloat(),
-                valueSpacer.getColor(RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), 0.0, 0.0, width, getHeight())).rgb,
-                valueSpacer.scale,
+                (getHeight() / 2.0F + (index - (lines.size - 1) / 2.0 - 0.5) * (FontWrapper.fontHeight() * value.scale / 2.0F)).toFloat(),
+                value.getColor(RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), 0.0, 0.0, width, getHeight())).rgb,
+                value.scale,
                 0.5F
             )
         }

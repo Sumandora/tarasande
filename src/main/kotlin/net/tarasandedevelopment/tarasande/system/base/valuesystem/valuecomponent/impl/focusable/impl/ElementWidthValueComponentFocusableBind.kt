@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
-class ElementWidthValueComponentFocusableBind(value: Value) : ElementWidthValueComponentFocusable(value) {
+class ElementWidthValueComponentFocusableBind(value: Value) : ElementWidthValueComponentFocusable<ValueBind>(value) {
 
     private var waitsForInput = false
 
@@ -17,13 +17,11 @@ class ElementWidthValueComponentFocusableBind(value: Value) : ElementWidthValueC
     }
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        val valueBind = value as ValueBind
-
-        val white = Color.white.let { if (valueBind.isEnabled()) it else it.darker().darker() }
+        val white = Color.white.let { if (value.isEnabled()) it else it.darker().darker() }
 
         FontWrapper.textShadow(matrices, value.name, 0.0F, (getHeight() * 0.5F - FontWrapper.fontHeight() * 0.5F * 0.5F).toFloat(), white.rgb, scale = 0.5F, offset = 0.5F)
 
-        var name = RenderUtil.getBindName(valueBind.type, valueBind.button)
+        var name = RenderUtil.getBindName(value.type, value.button)
         if (waitsForInput) {
             name = "_"
         }
@@ -34,9 +32,7 @@ class ElementWidthValueComponentFocusableBind(value: Value) : ElementWidthValueC
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        val valueBind = value as ValueBind
-
-        var name = RenderUtil.getBindName(valueBind.type, valueBind.button)
+        var name = RenderUtil.getBindName(value.type, value.button)
         if (waitsForInput) {
             name = "_"
         }
@@ -46,10 +42,10 @@ class ElementWidthValueComponentFocusableBind(value: Value) : ElementWidthValueC
             waitsForInput = !waitsForInput
             return true
         } else {
-            if (waitsForInput && valueBind.mouse) {
-                if (valueBind.filter(ValueBind.Type.MOUSE, button)) {
-                    valueBind.type = ValueBind.Type.MOUSE
-                    valueBind.button = button
+            if (waitsForInput && value.mouse) {
+                if (value.filter(ValueBind.Type.MOUSE, button)) {
+                    value.type = ValueBind.Type.MOUSE
+                    value.button = button
                 }
                 waitsForInput = false
                 return true

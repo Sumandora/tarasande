@@ -9,15 +9,13 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import java.awt.Color
 
-class ElementWidthValueComponentButton(value: Value) : ElementWidthValueComponent(value) {
+class ElementWidthValueComponentButton(value: Value) : ElementWidthValueComponent<ValueButton>(value) {
 
     override fun init() {
     }
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        val valueButton = value as ValueButton
-
-        val textWidth = FontWrapper.getWidth(valueButton.name)
+        val textWidth = FontWrapper.getWidth(value.name)
 
         RenderUtil.fill(matrices, width - 4 - textWidth / 2, getHeight() / 2.0 - FontWrapper.fontHeight() / 2, width, getHeight() / 2.0 + FontWrapper.fontHeight() / 2, Int.MIN_VALUE)
 
@@ -25,7 +23,7 @@ class ElementWidthValueComponentButton(value: Value) : ElementWidthValueComponen
             value.name,
             (width - 2 - textWidth / 2).toFloat(),
             (getHeight() / 2.0F - FontWrapper.fontHeight() * 0.25F).toFloat(),
-            if (valueButton.isEnabled())
+            if (value.isEnabled())
                 if (RenderUtil.isHovered(mouseX.toDouble(),
                         mouseY.toDouble(),
                         width - 4 - textWidth / 2,
@@ -42,17 +40,15 @@ class ElementWidthValueComponentButton(value: Value) : ElementWidthValueComponen
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        val valueButton = value as ValueButton
+        val textWidth = FontWrapper.getWidth(value.name)
 
-        val textWidth = FontWrapper.getWidth(valueButton.name)
-
-        if (valueButton.isEnabled() && button == 0 && RenderUtil.isHovered(mouseX,
+        if (value.isEnabled() && button == 0 && RenderUtil.isHovered(mouseX,
                 mouseY,
                 width - 4 - textWidth / 2,
                 getHeight() / 2.0 - FontWrapper.fontHeight() / 2,
                 width,
                 getHeight() / 2.0 + FontWrapper.fontHeight() / 2)) {
-            valueButton.onClick()
+            value.onClick()
             return true
         }
         return false

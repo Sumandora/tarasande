@@ -19,28 +19,26 @@ import java.math.BigDecimal
 import java.math.MathContext
 import kotlin.math.roundToInt
 
-class ElementWidthValueComponentNumber(value: Value) : ElementWidthValueComponent(value) {
+class ElementWidthValueComponentNumber(value: Value) : ElementWidthValueComponent<ValueNumber>(value) {
 
     private val dragInfo = DragInfo()
 
     private var lastMousePos: Vec2f? = null
 
     private fun setValue(value: Double, clamp: Boolean) {
-        val valueNumber = this.value as ValueNumber
-
         @Suppress("NAME_SHADOWING")
-        var value = (value / valueNumber.increment).roundToInt() * valueNumber.increment
+        var value = (value / this.value.increment).roundToInt() * this.value.increment
 
         val sevenDecimalPlaces = BigDecimal(10.0).pow(7)
         value = BigDecimal(value).multiply(sevenDecimalPlaces).round(MathContext.DECIMAL32).divide(sevenDecimalPlaces).toDouble()
 
         if (clamp)
-            value = MathHelper.clamp(value, valueNumber.min, valueNumber.max)
+            value = MathHelper.clamp(value, this.value.min, this.value.max)
 
         if (value == -0.0)
             value = 0.0
 
-        valueNumber.value = value
+        this.value.value = value
     }
 
     override fun init() {
@@ -48,15 +46,14 @@ class ElementWidthValueComponentNumber(value: Value) : ElementWidthValueComponen
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         lastMousePos = Vec2f(mouseX.toFloat(), mouseY.toFloat())
-        val valueNumber = value as ValueNumber
 
         if (dragInfo.dragging) {
             val mousePos = mouseX - (width - 50)
-            val value = valueNumber.min + mousePos / 50.0 * (valueNumber.max - valueNumber.min)
-            setValue(value, !Screen.hasShiftDown() || !valueNumber.exceed)
+            val value = this.value.min + mousePos / 50.0 * (this.value.max - this.value.min)
+            setValue(value, !Screen.hasShiftDown() || !this.value.exceed)
         }
 
-        val sliderPos = MathHelper.clamp((valueNumber.value - valueNumber.min) / (valueNumber.max - valueNumber.min), 0.0, 1.0)
+        val sliderPos = MathHelper.clamp((this.value.value - this.value.min) / (this.value.max - this.value.min), 0.0, 1.0)
 
         var white = Color.white
         var accentColor = ClientValues.accentColor.getColor()
@@ -76,8 +73,7 @@ class ElementWidthValueComponentNumber(value: Value) : ElementWidthValueComponen
         RenderUtil.outlinedHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2.0F, white.rgb, accentColor.rgb)
 
         FontWrapper.textShadow(matrices,
-            (
-                    if (value.value !in valueNumber.min..valueNumber.max)
+            (if (value.value !in this.value.min..this.value.max)
                         (if (value.isEnabled()) {
                             Formatting.RED
                         } else {
@@ -111,14 +107,13 @@ class ElementWidthValueComponentNumber(value: Value) : ElementWidthValueComponen
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         if (value.isEnabled() && lastMousePos != null && RenderUtil.isHovered(lastMousePos?.x?.toDouble()!!, lastMousePos?.y?.toDouble()!!, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {
-            val valueNumber = value as ValueNumber
-            val increment = valueNumber.increment *
+            val increment = this.value.increment *
                     when (keyCode) {
                         GLFW.GLFW_KEY_LEFT -> -1
                         GLFW.GLFW_KEY_RIGHT -> 1
                         else -> 0
                     }
-            setValue(valueNumber.value + increment, false)
+            setValue(this.value.value + increment, false)
             return keyCode == GLFW.GLFW_KEY_LEFT || keyCode == GLFW.GLFW_KEY_RIGHT
         }
         return false
