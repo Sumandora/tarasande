@@ -248,11 +248,15 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                 var goalAim = eye
 
                                 if (offsetGoalYaw.value) {
-                                    val targetRot = mc.player?.yaw!! - 180
-                                    goalAim = intersection( // adjust our target
-                                        Vec2f(sideBegin.x.toFloat(), sideBegin.z.toFloat()), Vec2f(sideEnd.x.toFloat(), sideEnd.z.toFloat()),
-                                        Vec2f(eye.x.toFloat(), eye.z.toFloat()), (eye + Rotation(targetRot, 0.0F).forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)).let { Vec2f(it.x.toFloat(), it.z.toFloat()) }
-                                    ).let { Vec3d(it.x.toDouble(), point.y, it.y.toDouble()) }
+                                    val possibleGoals = ArrayList<Vec3d>()
+                                    for (moveDir in 0 until 8) {
+                                        val targetRot = mc.player?.yaw!! - moveDir * 45.0F
+                                        possibleGoals.add(intersection( // adjust our target
+                                            Vec2f(sideBegin.x.toFloat(), sideBegin.z.toFloat()), Vec2f(sideEnd.x.toFloat(), sideEnd.z.toFloat()),
+                                            Vec2f(eye.x.toFloat(), eye.z.toFloat()), (eye + Rotation(targetRot, 0.0F).forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)).let { Vec2f(it.x.toFloat(), it.z.toFloat()) }
+                                        ).let { Vec3d(it.x.toDouble(), point.y, it.y.toDouble()) })
+                                    }
+                                    goalAim = possibleGoals.minBy { goalAim.distanceTo(it) }
                                 }
 
                                 val beginToPoint = Vec2f((goalAim.x - sideBegin.x).toFloat(), (goalAim.z - sideBegin.z).toFloat())

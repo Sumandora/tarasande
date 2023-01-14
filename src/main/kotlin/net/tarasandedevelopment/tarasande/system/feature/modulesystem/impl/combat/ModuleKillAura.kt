@@ -13,7 +13,6 @@ import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
 import net.minecraft.network.packet.s2c.play.EntityAnimationS2CPacket
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket
-import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.hit.HitResult
@@ -75,7 +74,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             blocking = false
         }
     }
-    private val blockItem = object : ValueMode(this, "Block item", false, "Shield", "Sword") {
+    private val expectSwordBlocking = object : ValueBoolean(this, "Expect sword blocking", false) {
         override fun isEnabled() = !autoBlock.isSelected(0)
     }
     private val needUnblock = object : ValueBoolean(this, "Need unblock", true) {
@@ -525,19 +524,11 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private fun block() {
         if (preventBlockCooldown.value && !allAttackedLivingEntities { !it.disablesShield() })
             return
-        when {
-            blockItem.isSelected(0) -> {
-                val stack = mc.player?.getStackInHand(PlayerUtil.getUsedHand() ?: return)
-                if (stack?.item !is ShieldItem || mc.player?.itemCooldownManager?.isCoolingDown(stack.item)!!)
-                    return
-            }
-
-            blockItem.isSelected(1) -> {
-                val stack = mc.player?.getStackInHand(Hand.MAIN_HAND)
-                if (stack?.item !is SwordItem || mc.player?.getStackInHand(Hand.OFF_HAND)?.useAction != UseAction.NONE)
-                    return
-            }
-        }
+        val usedStack = mc.player?.getStackInHand(PlayerUtil.getUsedHand() ?: return) ?: return
+        if(usedStack.useAction != UseAction.BLOCK && !(expectSwordBlocking.value && usedStack.item is SwordItem))
+            return
+        if(mc.player?.itemCooldownManager?.isCoolingDown(usedStack.item)!!)
+            return // rip :c
 
         var hasTarget = false
         for (entry in targets) {
