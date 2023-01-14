@@ -77,7 +77,7 @@ object RotationUtil {
             add(EventCanSprint::class.java) {
                 if (fakeRotation != null)
                     if (RotationValues.correctMovement.isSelected(1)) {
-                        if(abs(MathHelper.wrapDegrees(fakeRotation?.yaw!! - (goalMovementYaw ?: mc.player?.yaw!!))) > 45.0f)
+                        if(abs(MathHelper.wrapDegrees(fakeRotation?.yaw!! - (goalMovementYaw ?: mc.player?.yaw!!))) > 45.0F)
                             it.canSprint = false // oof
                     }
             }

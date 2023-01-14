@@ -51,16 +51,13 @@ class ElementWidthValueComponentColor(value: Value) : ElementWidthValueComponent
         val y2 = (pickerHeight - 5) / 2.0 + cos(0.75) * ((pickerHeight - 5) / 2.0 - 5)
 
         if (alphaDragInfo.dragging) {
-            val oldColor = valueColor.getColor()
             valueColor.alpha = 1.0 - MathHelper.clamp((mouseY + (mouseY / (pickerHeight - 5) * 2 - 1) * 5) / (pickerHeight - 5), 0.0, 1.0)
         }
         if (rectDragInfo.dragging) {
-            val oldColor = valueColor.getColor()
             valueColor.sat = MathHelper.clamp((mouseX - x1) / (x2 - x1), 0.0, 1.0)
             valueColor.bri = 1.0 - MathHelper.clamp((mouseY - y1) / (y2 - y1), 0.0, 1.0)
         }
         if (wheelDragInfo.dragging) {
-            val oldColor = valueColor.getColor()
             val mousePos = Vec2f(mouseX.toFloat(), mouseY.toFloat())
             val middle = Vec2f((x1 + (x2 - x1) * 0.5).toFloat(), (y1 + (y2 - y1) * 0.5).toFloat())
             val mouseDir = mousePos.add(middle.multiply(-1.0F)).normalize() // large subtraction

@@ -44,7 +44,6 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
         if (value == -0.0)
             value = 0.0
 
-        val oldMinValue = valueNumberRange.minValue
         valueNumberRange.minValue = value.coerceAtMost(valueNumberRange.maxValue)
     }
 
@@ -63,7 +62,6 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
         if (value == -0.0)
             value = 0.0
 
-        val oldMaxValue = valueNumberRange.maxValue
         valueNumberRange.maxValue = value.coerceAtLeast(valueNumberRange.minValue)
     }
 

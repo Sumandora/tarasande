@@ -48,8 +48,6 @@ class ElementWidthValueComponentFocusableBind(value: Value) : ElementWidthValueC
         } else {
             if (waitsForInput && valueBind.mouse) {
                 if (valueBind.filter(ValueBind.Type.MOUSE, button)) {
-                    val oldType = valueBind.type
-                    val oldButton = valueBind.button
                     valueBind.type = ValueBind.Type.MOUSE
                     valueBind.button = button
                 }
@@ -71,8 +69,6 @@ class ElementWidthValueComponentFocusableBind(value: Value) : ElementWidthValueC
             val valueBind = value as ValueBind
             val key = if (keyCode == GLFW.GLFW_KEY_ESCAPE) GLFW.GLFW_KEY_UNKNOWN else keyCode
             if (valueBind.filter(ValueBind.Type.KEY, key)) {
-                val oldType = valueBind.type
-                val oldButton = valueBind.button
                 valueBind.type = ValueBind.Type.KEY
                 valueBind.button = key
             }
