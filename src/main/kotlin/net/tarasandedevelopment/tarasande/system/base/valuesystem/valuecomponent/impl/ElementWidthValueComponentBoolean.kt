@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import java.awt.Color
 import kotlin.math.min
 
-class ElementWidthValueComponentBoolean(value: Value) : ElementWidthValueComponent(value) {
+class ElementWidthValueComponentBoolean(value: Value) : ElementWidthValueComponent<ValueBoolean>(value) {
 
     private var toggleTime = 0L
 
@@ -21,7 +21,7 @@ class ElementWidthValueComponentBoolean(value: Value) : ElementWidthValueCompone
         FontWrapper.textShadow(matrices, value.name, 0.0F, (getHeight() * 0.5F - FontWrapper.fontHeight() * 0.5F * 0.5F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F, offset = 0.5F)
 
         val expandedAnimation = min((System.currentTimeMillis() - toggleTime) / 100.0 /* length in ms */, 1.0)
-        val fade = (if ((value as ValueBoolean).value) expandedAnimation else 1.0 - expandedAnimation)
+        val fade = (if (value.value) expandedAnimation else 1.0 - expandedAnimation)
 
         var color = RenderUtil.colorInterpolate(Color.white, ClientValues.accentColor.getColor(), fade)
         var colorInverted = RenderUtil.colorInterpolate(ClientValues.accentColor.getColor(), Color.white, fade)
@@ -37,8 +37,7 @@ class ElementWidthValueComponentBoolean(value: Value) : ElementWidthValueCompone
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (button == 0 && RenderUtil.isHovered(mouseX, mouseY, width - 4, getHeight() / 2 - 2, width, getHeight() / 2 + 2)) {
-            val valueBoolean = value as ValueBoolean
-            valueBoolean.value = !valueBoolean.value
+            value.value = !value.value
             toggleTime = System.currentTimeMillis()
             return true
         }

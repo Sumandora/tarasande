@@ -9,31 +9,28 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import java.awt.Color
 
-class ElementWidthValueComponentMode(value: Value) : ElementWidthValueComponent(value) {
+class ElementWidthValueComponentMode(value: Value) : ElementWidthValueComponent<ValueMode>(value) {
 
     override fun init() {
     }
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        val valueMode = value as ValueMode
-
         FontWrapper.textShadow(matrices, value.name, 0.0F, (getHeight() * 0.5F - FontWrapper.fontHeight() * 0.5F * 0.5F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F, offset = 0.5F)
 
-        for ((index, setting) in valueMode.values.withIndex()) {
-            var color = if (valueMode.isSelected(setting)) ClientValues.accentColor.getColor() else Color.white
-            if (!valueMode.isEnabled()) color = color.darker().darker()
-            FontWrapper.textShadow(matrices, setting, (width - FontWrapper.getWidth(setting) / 2f).toFloat(), (getHeight() / 2.0F + (index - (valueMode.values.size - 1) / 2.0 + 0.5) * (FontWrapper.fontHeight() / 2.0F) - FontWrapper.fontHeight() / 2.0F).toFloat(), color.rgb, scale = 0.5F, offset = 0.5F)
+        for ((index, setting) in value.values.withIndex()) {
+            var color = if (value.isSelected(setting)) ClientValues.accentColor.getColor() else Color.white
+            if (!value.isEnabled()) color = color.darker().darker()
+            FontWrapper.textShadow(matrices, setting, (width - FontWrapper.getWidth(setting) / 2f).toFloat(), (getHeight() / 2.0F + (index - (value.values.size - 1) / 2.0 + 0.5) * (FontWrapper.fontHeight() / 2.0F) - FontWrapper.fontHeight() / 2.0F).toFloat(), color.rgb, scale = 0.5F, offset = 0.5F)
         }
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (button != 0 || !value.isEnabled()) return false
-        val valueMode = value as ValueMode
-        for ((index, setting) in valueMode.values.withIndex()) {
+        for ((index, setting) in value.values.withIndex()) {
             val x = width - FontWrapper.getWidth(setting) / 2.0F
-            val y = getHeight() / 2.0F + (index - (valueMode.values.size - 1) / 2.0 + 0.5) * (FontWrapper.fontHeight() / 2.0F) - FontWrapper.fontHeight() / 2.0F
+            val y = getHeight() / 2.0F + (index - (this.value.values.size - 1) / 2.0 + 0.5) * (FontWrapper.fontHeight() / 2.0F) - FontWrapper.fontHeight() / 2.0F
             if (RenderUtil.isHovered(mouseX, mouseY, x, y, width, y + FontWrapper.fontHeight() / 2.0F)) {
-                valueMode.select(index)
+                value.select(index)
                 return true
             }
         }
@@ -56,5 +53,5 @@ class ElementWidthValueComponentMode(value: Value) : ElementWidthValueComponent(
     override fun onClose() {
     }
 
-    override fun getHeight() = ((value as ValueMode).values.size + 1) * FontWrapper.fontHeight().toDouble() / 2
+    override fun getHeight() = (value.values.size + 1) * FontWrapper.fontHeight().toDouble() / 2
 }

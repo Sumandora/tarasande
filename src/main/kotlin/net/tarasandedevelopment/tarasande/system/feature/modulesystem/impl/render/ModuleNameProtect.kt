@@ -15,7 +15,7 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
     private val border = "( |[^a-z]|\\b)"
 
     private fun replaceName(str: String, substring: String, replacement: String): String {
-        val regex = Regex(substring)
+        val regex = Regex(border + substring + border)
         return regex.replace(str) {
             var newStr = ""
 

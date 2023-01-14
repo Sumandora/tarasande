@@ -45,7 +45,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         }
     }
 
-    private fun isFocused(valueComponent: ElementWidthValueComponent) = valueComponent is ElementWidthValueComponentFocusable && valueComponent.isFocused()
+    private fun isFocused(valueComponent: ElementWidthValueComponent<*>) = valueComponent is ElementWidthValueComponentFocusable<*> && valueComponent.isFocused()
 
     private fun isTextBoxFocused(): Boolean {
         if (mc.currentScreen is ScreenBetterOwnerValues) {
@@ -53,7 +53,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         }
         return ManagerPanel.list.any {
             when (it) {
-                is PanelElementsCategory -> it.elementList.any { moduleElement -> moduleElement.components.any { component -> isFocused(component) } }
+                is PanelElementsCategory -> it.elementList.any { moduleElement -> moduleElement.components.any { component: ElementWidthValueComponent<*> -> isFocused(component) } }
                 is PanelElementsFriends -> it.elementList.any { playerElement -> playerElement.textField.isFocused() }
                 else -> false
             }

@@ -18,7 +18,7 @@ import java.awt.Color
 class ManagerSidebar : Manager<SidebarEntry>() {
 
     fun build(): ClickableWidgetPanelSidebar {
-        return PanelElements<ElementWidthValueComponent>("Sidebar", 0.0, 0.0).let {
+        return PanelElements<ElementWidthValueComponent<*>>("Sidebar", 0.0, 0.0).let {
             val categories = ArrayList<String>()
             this@ManagerSidebar.list.forEach { entry ->
                 if (!categories.contains(entry.category)) {
@@ -58,7 +58,7 @@ open class SidebarEntry(val name: String, val category: String) {
     open fun onClick(mouseButton: Int) {
     }
 
-    open fun createElements(owner: Any): List<ElementWidthValueComponent> {
+    open fun createElements(owner: Any): List<ElementWidthValueComponent<*>> {
         return listOf(object : ValueSpacer(owner, name, 1.0F, manage = false) {
             override fun onClick(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
@@ -77,7 +77,7 @@ abstract class SidebarEntrySelection(name: String, category: String, val list: L
 
     abstract fun isSelected(value: String): Boolean
 
-    override fun createElements(owner: Any): List<ElementWidthValueComponent> {
+    override fun createElements(owner: Any): List<ElementWidthValueComponent<*>> {
         return list.map {
             object : ValueSpacer(owner, it, 1.0F, manage = false) {
                 override fun onClick(mouseButton: Int) {
@@ -105,7 +105,7 @@ open class SidebarEntryToggleable(name: String, category: String) : SidebarEntry
     open fun onClick(enabled: Boolean) {
     }
 
-    override fun createElements(owner: Any): List<ElementWidthValueComponent> {
+    override fun createElements(owner: Any): List<ElementWidthValueComponent<*>> {
         return listOf(object : ValueSpacer(owner, name, 1.0F, manage = false) {
             override fun onClick(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {

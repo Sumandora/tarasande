@@ -14,7 +14,7 @@ import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
-class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueComponentFocusable(value) {
+class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueComponentFocusable<ValueText>(value) {
 
     var scale = 0.5F
     var centered = false
@@ -35,10 +35,9 @@ class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueC
     }
 
     override fun init() {
-        val valueText = value as ValueText
-        textFieldWidget.text = valueText.value
+        textFieldWidget.text = value.value
         textFieldWidget.setChangedListener {
-            valueText.value = it
+            value.value = it
         }
     }
 

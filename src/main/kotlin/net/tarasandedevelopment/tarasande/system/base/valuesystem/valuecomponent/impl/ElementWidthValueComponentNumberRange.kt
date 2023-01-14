@@ -22,7 +22,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueComponent(value) {
+class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueComponent<ValueNumberRange>(value) {
 
     private val minDragInfo = DragInfo()
     private val maxDragInfo = DragInfo()
@@ -30,41 +30,35 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
     private var lastMousePos: Vec2f? = null
 
     private fun setMinValue(value: Double, clamp: Boolean) {
-        val valueNumberRange = this.value as ValueNumberRange
-
         @Suppress("NAME_SHADOWING")
-        var value = (value / valueNumberRange.increment).roundToInt() * valueNumberRange.increment
+        var value = (value / this.value.increment).roundToInt() * this.value.increment
 
         val sevenDecimalPlaces = BigDecimal(10.0).pow(7)
         value = BigDecimal(value).multiply(sevenDecimalPlaces).round(MathContext.DECIMAL32).divide(sevenDecimalPlaces).toDouble()
 
         if (clamp)
-            value = MathHelper.clamp(value, valueNumberRange.min, valueNumberRange.max)
+            value = MathHelper.clamp(value, this.value.min, this.value.max)
 
         if (value == -0.0)
             value = 0.0
 
-        val oldMinValue = valueNumberRange.minValue
-        valueNumberRange.minValue = value.coerceAtMost(valueNumberRange.maxValue)
+        this.value.minValue = value.coerceAtMost(this.value.maxValue)
     }
 
     private fun setMaxValue(value: Double, clamp: Boolean) {
-        val valueNumberRange = this.value as ValueNumberRange
-
         @Suppress("NAME_SHADOWING")
-        var value = (value / valueNumberRange.increment).roundToInt() * valueNumberRange.increment
+        var value = (value / this.value.increment).roundToInt() * this.value.increment
 
         val sevenDecimalPlaces = BigDecimal(10.0).pow(7)
         value = BigDecimal(value).multiply(sevenDecimalPlaces).round(MathContext.DECIMAL32).divide(sevenDecimalPlaces).toDouble()
 
         if (clamp)
-            value = MathHelper.clamp(value, valueNumberRange.min, valueNumberRange.max)
+            value = MathHelper.clamp(value, this.value.min, this.value.max)
 
         if (value == -0.0)
             value = 0.0
 
-        val oldMaxValue = valueNumberRange.maxValue
-        valueNumberRange.maxValue = value.coerceAtLeast(valueNumberRange.minValue)
+        this.value.maxValue = value.coerceAtLeast(this.value.minValue)
     }
 
     override fun init() {
@@ -72,22 +66,20 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         lastMousePos = Vec2f(mouseX.toFloat(), mouseY.toFloat())
-        val valueNumberRange = value as ValueNumberRange
-
         if (minDragInfo.dragging) {
             val mousePos = mouseX - (width - 50)
-            val value = valueNumberRange.min + mousePos / 50.0 * (valueNumberRange.max - valueNumberRange.min)
-            setMinValue(value, !Screen.hasShiftDown() || !valueNumberRange.exceed)
+            val value = this.value.min + mousePos / 50.0 * (this.value.max - this.value.min)
+            setMinValue(value, !Screen.hasShiftDown() || !this.value.exceed)
         }
 
         if (maxDragInfo.dragging) {
             val mousePos = mouseX - (width - 50)
-            val value = valueNumberRange.min + mousePos / 50.0 * (valueNumberRange.max - valueNumberRange.min)
-            setMaxValue(value, !Screen.hasShiftDown() || !valueNumberRange.exceed)
+            val value = this.value.min + mousePos / 50.0 * (this.value.max - this.value.min)
+            setMaxValue(value, !Screen.hasShiftDown() || !this.value.exceed)
         }
 
-        val minSliderPos = MathHelper.clamp((valueNumberRange.minValue - valueNumberRange.min) / (valueNumberRange.max - valueNumberRange.min), 0.0, 1.0)
-        val maxSliderPos = MathHelper.clamp((valueNumberRange.maxValue - valueNumberRange.min) / (valueNumberRange.max - valueNumberRange.min), 0.0, 1.0)
+        val minSliderPos = MathHelper.clamp((this.value.minValue - this.value.min) / (this.value.max - this.value.min), 0.0, 1.0)
+        val maxSliderPos = MathHelper.clamp((this.value.maxValue - this.value.min) / (this.value.max - this.value.min), 0.0, 1.0)
 
         var white = Color.white
         var accentColor = ClientValues.accentColor.getColor()
@@ -110,18 +102,17 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
         }
         RenderUtil.outlinedHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2.0F, white.rgb, accentColor.rgb)
 
-        FontWrapper.textShadow(matrices,
-            (if (value.minValue !in valueNumberRange.min..valueNumberRange.max) (if (value.isEnabled()) {
+        val redColor =
+            if (value.isEnabled()) {
                 Formatting.RED
             } else {
                 Formatting.DARK_RED
-            }).toString() else "") + value.minValue.toString() +
+            }
+
+        FontWrapper.textShadow(matrices,
+            (if (value.minValue !in this.value.min..this.value.max) redColor.toString() else "") + value.minValue.toString() +
                     Formatting.RESET.toString() + "-" +
-                    (if (value.maxValue !in valueNumberRange.min..valueNumberRange.max) (if (value.isEnabled()) {
-                        Formatting.RED
-                    } else {
-                        Formatting.DARK_RED
-                    }).toString() else "") + value.maxValue.toString(),
+                    (if (value.maxValue !in this.value.min..this.value.max) redColor.toString() else "") + value.maxValue.toString(),
             (width - 50 / 2.0F).toFloat(),
             (getHeight() / 2.0F - FontWrapper.fontHeight() * 0.25F).toFloat(),
             white.rgb,
@@ -133,10 +124,8 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (value.isEnabled() && button == 0 && RenderUtil.isHovered(mouseX, mouseY, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {
-            val valueNumberRange = value as ValueNumberRange
-
-            val minSliderPos = MathHelper.clamp((valueNumberRange.minValue - valueNumberRange.min) / (valueNumberRange.max - valueNumberRange.min), 0.0, 1.0)
-            val maxSliderPos = MathHelper.clamp((valueNumberRange.maxValue - valueNumberRange.min) / (valueNumberRange.max - valueNumberRange.min), 0.0, 1.0)
+            val minSliderPos = MathHelper.clamp((this.value.minValue - this.value.min) / (this.value.max - this.value.min), 0.0, 1.0)
+            val maxSliderPos = MathHelper.clamp((this.value.maxValue - this.value.min) / (this.value.max - this.value.min), 0.0, 1.0)
 
             val mousePos = (mouseX - (width - 50)) / 50.0
 
@@ -167,17 +156,16 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         if (value.isEnabled() && lastMousePos != null && RenderUtil.isHovered(lastMousePos?.x?.toDouble()!!, lastMousePos?.y?.toDouble()!!, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {
-            val valueNumberRange = value as ValueNumberRange
             val mousePos = (lastMousePos?.x!! - (width - 50)) / 50.0
-            val increment = valueNumberRange.increment *
+            val increment = this.value.increment *
                     when (keyCode) {
                         GLFW.GLFW_KEY_LEFT -> -1
                         GLFW.GLFW_KEY_RIGHT -> 1
                         else -> 0
                     }
             when {
-                mousePos < 0.5 -> setMinValue(valueNumberRange.minValue + increment, false)
-                mousePos > 0.5 -> setMaxValue(valueNumberRange.maxValue + increment, false)
+                mousePos < 0.5 -> setMinValue(this.value.minValue + increment, false)
+                mousePos > 0.5 -> setMaxValue(this.value.maxValue + increment, false)
             }
             return keyCode == GLFW.GLFW_KEY_LEFT || keyCode == GLFW.GLFW_KEY_RIGHT
         }
