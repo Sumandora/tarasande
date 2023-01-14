@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.Grabber
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.ClassNode
+import org.objectweb.asm.tree.LdcInsnNode
 
 class GrabberReach : Grabber("net.minecraft.client.render.GameRenderer", 9.0) {
     private val reachCode = arrayOf(
@@ -27,7 +28,7 @@ class GrabberReach : Grabber("net.minecraft.client.render.GameRenderer", 9.0) {
             .instructions
             .matchSignature(reachCode)
             .next(3)
-            .asLDC()
+            .asType<LdcInsnNode>()
             .cst as Double
     }
 }

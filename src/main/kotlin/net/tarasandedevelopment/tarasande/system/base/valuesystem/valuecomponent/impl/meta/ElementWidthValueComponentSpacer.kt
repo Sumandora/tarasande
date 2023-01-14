@@ -46,7 +46,7 @@ class ElementWidthValueComponentSpacer(value: Value) : ElementWidthValueComponen
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (RenderUtil.isHovered(mouseX, mouseY, 0.0, 0.0, width, getHeight())) {
-            (value as ValueSpacer).onClick(button)
+            value.onClick(button)
             return true
         }
         return false

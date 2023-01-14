@@ -25,6 +25,7 @@ object ClientValues {
     val accentColor = ValueColor(this, "Accent color", 0.6, 1.0, 1.0)
     val autoSaveConfig = object : ValueBoolean(this, "Auto save: config", true) {
         override fun onChange(oldValue: Boolean?, newValue: Boolean) {
+            @Suppress("SENSELESS_COMPARISON")
             if (autoSaveDaemon != null)
                 autoSaveDaemon.name = autoSaveDaemonName + if (!newValue) " (disabled)" else ""
         }

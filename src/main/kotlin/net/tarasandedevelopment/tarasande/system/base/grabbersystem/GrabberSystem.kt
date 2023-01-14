@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.system.base.grabbersystem
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberDefaultFlightSpeed
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberReach
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberServerInformationOffset
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberSpeedReduction
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.mapping.TinyMappings
 import org.objectweb.asm.ClassReader
@@ -21,7 +22,8 @@ object ManagerGrabber : Manager<Grabber>() {
         add(
             GrabberReach(),
             GrabberSpeedReduction(),
-            GrabberDefaultFlightSpeed()
+            GrabberDefaultFlightSpeed(),
+            GrabberServerInformationOffset()
         )
 
         val minecraftJar = System.getProperty("java.class.path")
@@ -148,7 +150,7 @@ abstract class Grabber(val targetedClass: String, private val expected: Any) {
         return curr
     }
 
-    fun AbstractInsnNode.asLDC(): LdcInsnNode {
-        return this as LdcInsnNode
+    inline fun <reified T> AbstractInsnNode.asType(): T {
+        return this as T
     }
 }

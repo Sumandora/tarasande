@@ -62,11 +62,10 @@ class ElementWidthValueComponentFocusableBind(value: Value) : ElementWidthValueC
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         if (waitsForInput) {
-            val valueBind = value as ValueBind
             val key = if (keyCode == GLFW.GLFW_KEY_ESCAPE) GLFW.GLFW_KEY_UNKNOWN else keyCode
-            if (valueBind.filter(ValueBind.Type.KEY, key)) {
-                valueBind.type = ValueBind.Type.KEY
-                valueBind.button = key
+            if (value.filter(ValueBind.Type.KEY, key)) {
+                value.type = ValueBind.Type.KEY
+                value.button = key
             }
             waitsForInput = false
             return true

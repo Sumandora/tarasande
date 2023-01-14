@@ -9,6 +9,8 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.screen.ScreenTexts
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.mc
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.ManagerGrabber
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberServerInformationOffset
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
@@ -69,9 +71,11 @@ open class PanelServerInformation(private val owner: Any) : Panel("Server Inform
         serverEntry = emulatedWidget.ServerEntry(emulatedMultiplayerScreen, server)
     }
 
+    private val offset = ManagerGrabber.getConstant(GrabberServerInformationOffset::class.java) as Int /* sick, minecraft simple shifts everything by 5 units */
+
     override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val hovered = RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), x, y + titleBarHeight, panelWidth, panelHeight - titleBarHeight)
-        serverEntry?.render(matrices, 0, y.toInt() + titleBarHeight, x.toInt(), (panelWidth + 5.0 /* sick, minecraft simple shifts everything by 5 units */).toInt(), (panelHeight - titleBarHeight).toInt(), mouseX, mouseY, hovered, mc.tickDelta)
+        serverEntry?.render(matrices, 0, y.toInt() + titleBarHeight, x.toInt(), (panelWidth + offset).toInt(), (panelHeight - titleBarHeight).toInt(), mouseX, mouseY, hovered, mc.tickDelta)
     }
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {

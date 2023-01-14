@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.Grabber
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.ClassNode
+import org.objectweb.asm.tree.LdcInsnNode
 
 class GrabberSpeedReduction : Grabber("net.minecraft.entity.player.PlayerEntity", 0.6) {
     private val reductionCode = arrayOf(
@@ -31,7 +32,7 @@ class GrabberSpeedReduction : Grabber("net.minecraft.entity.player.PlayerEntity"
             .instructions
             .matchSignature(reductionCode)
             .next(3)
-            .asLDC()
+            .asType<LdcInsnNode>()
             .cst as Double
     }
 }
