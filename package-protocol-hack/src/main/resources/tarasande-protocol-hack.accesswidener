@@ -25,6 +25,7 @@ accessible method net/minecraft/entity/LivingEntity getFallSound (I)Lnet/minecra
 accessible method net/minecraft/entity/Entity playStepSound (Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)V
 
 accessible class net/minecraft/client/option/SimpleOption$OptionSliderWidgetImpl
+accessible class net/minecraft/client/gui/screen/GameModeSelectionScreen$GameModeSelection
 
 mutable field net/minecraft/util/math/Vec3d x D
 mutable field net/minecraft/util/math/Vec3d y D

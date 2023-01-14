@@ -30,9 +30,9 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ConnectScreen
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen
 import net.minecraft.client.gui.screen.GameMenuScreen
+import net.minecraft.client.gui.screen.GameModeSelectionScreen.GameModeSelection
 import net.minecraft.item.Item
 import net.minecraft.registry.Registries
-import net.minecraft.registry.Registry
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
@@ -107,6 +107,17 @@ class TarasandeProtocolHack : NativeProvider {
                         it.value = it.version.any { range -> protocol in range }
                 }
             }
+        }
+
+        fun unwrapGameModes(gameModes: Array<GameModeSelection>): Array<GameModeSelection> {
+            return gameModes.toMutableList().apply {
+                if (ViaLoadingBase.getTargetVersion().isOlderThan(VersionListEnum.r1_3_1tor1_3_2)) {
+                    this.remove(GameModeSelection.ADVENTURE)
+                }
+                if (ViaLoadingBase.getTargetVersion().isOlderThan(VersionListEnum.r1_8)) {
+                    this.remove(GameModeSelection.SPECTATOR)
+                }
+            }.toTypedArray()
         }
     }
 

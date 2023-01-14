@@ -70,9 +70,8 @@
     "item.MixinEnderPearlItem",
     "item.MixinFireworkRocketItem",
     "item.MixinHoeItem",
-    "item.MixinItemGroups",
-    "item.MixinItemGroups",
     "item.MixinItemGroup_EntriesImpl",
+    "item.MixinItemGroups",
     "item.MixinItemStack",
     "item.MixinMiningToolItem",
     "item.MixinPickaxeItem",
@@ -123,6 +122,8 @@
   },
   "client": [
     "MixinMouse",
+    "screen.MixinGameModeSelectionScreen",
+    "screen.MixinGameModeSelectionScreen_GameModeSelection",
     "screen.MixinSimpleOption_OptionSliderWidgetImpl"
   ]
 }
