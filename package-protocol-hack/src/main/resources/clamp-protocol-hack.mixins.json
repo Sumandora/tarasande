@@ -121,6 +121,7 @@
     "defaultRequire": 1
   },
   "client": [
+    "MixinKeyboard",
     "MixinMouse",
     "screen.MixinGameModeSelectionScreen",
     "screen.MixinGameModeSelectionScreen_GameModeSelection",

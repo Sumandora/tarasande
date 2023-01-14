@@ -19,10 +19,6 @@ public class MixinGameModeSelectionScreen_GameModeSelection {
 
     @Shadow @Final public static GameModeSelectionScreen.GameModeSelection SURVIVAL;
 
-    @Shadow @Final public static GameModeSelectionScreen.GameModeSelection ADVENTURE;
-
-    @Shadow @Final public static GameModeSelectionScreen.GameModeSelection SPECTATOR;
-
     @Shadow @Final public static GameModeSelectionScreen.GameModeSelection CREATIVE;
 
     @Inject(method = "getCommand", at = @At("HEAD"), cancellable = true)
