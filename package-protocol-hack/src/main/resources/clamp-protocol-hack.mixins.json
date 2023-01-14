@@ -100,6 +100,7 @@
     "viaversion.MixinCommandBlockProvider",
     "viaversion.MixinCommonBoss",
     "viaversion.MixinEntityPackets1_17",
+    "viaversion.MixinEntityPackets1_8_6_1",
     "viaversion.MixinEntityTracker1_9",
     "viaversion.MixinGlassConnectionHandler",
     "viaversion.MixinInventoryAcknowledgements",
