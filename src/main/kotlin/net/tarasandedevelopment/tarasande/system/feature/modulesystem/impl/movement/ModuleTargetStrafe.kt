@@ -18,7 +18,6 @@ import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import kotlin.math.cos
-import kotlin.math.max
 import kotlin.math.sin
 
 class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a circle", ModuleCategory.MOVEMENT) {
@@ -68,7 +67,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
             if (enemy == null)
                 return@registerEvent
 
-            val selfSpeed = max(event.velocity.horizontalLength(), PlayerUtil.calcBaseSpeed())
+            val selfSpeed = if(event.dirty) event.velocity.horizontalLength() else PlayerUtil.calcBaseSpeed()
 
             val curPos = mc.player?.pos!!
             val center = enemy.pos

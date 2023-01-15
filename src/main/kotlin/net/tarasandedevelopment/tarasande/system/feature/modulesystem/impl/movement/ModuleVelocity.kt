@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
+import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventUpdate
@@ -14,7 +15,6 @@ import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import java.util.concurrent.ThreadLocalRandom
-import kotlin.math.sqrt
 
 class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MOVEMENT) {
 
@@ -35,6 +35,8 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
     private val changeDirection = object : ValueBoolean(this, "Change direction", false) {
         override fun isEnabled() = mode.isSelected(1)
     }
+    private val ignoreTinyVelocity = ValueNumber(this, "Ignore tiny velocity", 0.0, 0.1, 0.5, 0.01)
+    private val cancelIgnoredVelocity = ValueBoolean(this, "Cancel ignored velocity", false)
     private val chance = ValueNumber(this, "Chance", 0.0, 75.0, 100.0, 1.0)
 
     init {
@@ -50,8 +52,12 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
         registerEvent(EventVelocity::class.java) { event ->
             if (ThreadLocalRandom.current().nextInt(100) > chance.value) return@registerEvent
             if (!packets.isSelected(event.packet.ordinal)) return@registerEvent
-            if (event.velocityX == 0.0 && event.velocityY == 0.0 && event.velocityZ == 0.0)
-                return@registerEvent // wtf?
+            val velocityVector = Vec3d(event.velocityX, event.velocityY, event.velocityZ)
+            if(velocityVector.horizontalLengthSquared() <= ignoreTinyVelocity.value * ignoreTinyVelocity.value) {
+                if(cancelIgnoredVelocity.value)
+                    event.cancelled = true
+                return@registerEvent
+            }
 
             when {
                 mode.isSelected(0) -> {
@@ -60,17 +66,17 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
 
                 mode.isSelected(1) -> {
                     if (delay.value > 0.0) {
-                        delays.add(Triple(Vec3d(event.velocityX * horizontal.value, event.velocityY * vertical.value, event.velocityZ * horizontal.value), mc.player?.age!! + delay.value.toInt(), event.packet))
+                        delays.add(Triple(velocityVector.multiply(horizontal.value, vertical.value, horizontal.value), mc.player?.age!! + delay.value.toInt(), event.packet))
                     } else {
-                        val newVelocity = if (changeDirection.value) Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0F).forwardVector(sqrt(event.velocityX * event.velocityX + event.velocityZ * event.velocityZ)) else Vec3d(event.velocityX, 0.0, event.velocityZ)
+                        val newVelocity = if (changeDirection.value) Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0F).forwardVector(velocityVector.horizontalLength()).withAxis(Direction.Axis.Y, velocityVector.y) else velocityVector
                         event.velocityX = newVelocity.x * horizontal.value
-                        event.velocityY *= vertical.value
+                        event.velocityY = newVelocity.y * vertical.value
                         event.velocityZ = newVelocity.z * horizontal.value
                     }
                 }
 
                 else -> {
-                    lastVelocity = Vec3d(event.velocityX, event.velocityY, event.velocityZ)
+                    lastVelocity = velocityVector
                     receivedKnockback = true
                 }
             }
@@ -90,7 +96,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
                 when {
                     mode.isSelected(2) -> {
                         if (receivedKnockback) {
-                            if (lastVelocity?.horizontalLengthSquared()!! > 0.01 && mc.player?.isOnGround!!)
+                            if (mc.player?.isOnGround!!)
                                 isJumping = true
 
                             receivedKnockback = false
