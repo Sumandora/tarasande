@@ -31,7 +31,6 @@ import java.util.logging.Logger
  *  - Render Profiler
  *  - Auto Totem
  *  - AutoLog
- *  - Chest Aura
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions
