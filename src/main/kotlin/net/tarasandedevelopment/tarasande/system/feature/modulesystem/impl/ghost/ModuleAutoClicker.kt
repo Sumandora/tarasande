@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.ghost
 
 import net.minecraft.client.option.KeyBinding
-import net.minecraft.util.hit.HitResult
 import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.mc
@@ -9,6 +8,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.ClickSpeedUtil
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.isBlockHitResult
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you", ModuleCategory.GHOST) {
@@ -54,7 +54,7 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
         }
 
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (buttons.isSelected(0) && event.keyBinding == mc.options.attackKey && mc.crosshairTarget?.type != HitResult.Type.BLOCK) {
+            if (buttons.isSelected(0) && event.keyBinding == mc.options.attackKey && mc.crosshairTarget?.isBlockHitResult() == true) {
                 event.pressed = false
             }
         }

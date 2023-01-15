@@ -24,6 +24,7 @@ import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.isBlockHitResult
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import org.lwjgl.glfw.GLFW
@@ -112,8 +113,7 @@ object PlayerUtil {
     fun rayCast(start: Vec3d, end: Vec3d): BlockHitResult = mc.world!!.raycast(RaycastContext(start, end, ShapeType.OUTLINE, FluidHandling.NONE, mc.player!!))
 
     fun canVectorBeSeen(start: Vec3d, end: Vec3d): Boolean {
-        val hitResult = rayCast(start, end)
-        return hitResult.type != HitResult.Type.BLOCK
+        return !rayCast(start, end).isBlockHitResult()
     }
 
     fun getMoveDirection(): Double {
@@ -240,6 +240,13 @@ object PlayerUtil {
             }
         }
         mc.doAttack()
+        mc.crosshairTarget = original
+    }
+
+    fun placeBlock(blockHitResult: BlockHitResult) {
+        val original = mc.crosshairTarget
+        mc.crosshairTarget = blockHitResult
+        mc.doItemUse()
         mc.crosshairTarget = original
     }
 

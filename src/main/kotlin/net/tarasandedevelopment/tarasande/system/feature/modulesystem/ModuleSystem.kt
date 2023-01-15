@@ -93,6 +93,7 @@ object ManagerModule : Manager<Module>() {
             ModuleAutoArmor(),
             ModuleXCarry(),
             ModuleClickPearl(),
+            ModuleBlockAura(),
 
             // Render
             ModuleESP(),

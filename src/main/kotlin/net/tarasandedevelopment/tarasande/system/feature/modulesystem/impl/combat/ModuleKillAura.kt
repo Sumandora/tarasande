@@ -15,7 +15,6 @@ import net.minecraft.network.packet.s2c.play.EntityAnimationS2CPacket
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.EntityHitResult
-import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
@@ -29,10 +28,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleClickTP
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.isEntityHitResult
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.*
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
@@ -251,7 +247,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
 
             event.rotation = finalRot.correctSensitivity(preference = {
-                PlayerUtil.getTargetedEntity(reach.minValue, it, throughWalls.isSelected(2))?.type == HitResult.Type.ENTITY
+                PlayerUtil.getTargetedEntity(reach.minValue, it, throughWalls.isSelected(2))?.isEntityHitResult() == true
             })
 
             if (lockView.value) {
@@ -351,7 +347,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                             break
                     }
                     if (!attacked && swingInAir.value) {
-                        if (PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.fakeRotation ?: Rotation(mc.player!!), false)?.type == HitResult.Type.MISS) {
+                        if (PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.fakeRotation ?: Rotation(mc.player!!), false)?.isMissHitResult() == true) {
                             attack(null, clicks)
                             event.dirty = true
                         }
@@ -412,7 +408,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
         registerEvent(EventRender3D::class.java) { event ->
             if (RotationUtil.fakeRotation != null)
-                if (mc.crosshairTarget != null && mc.crosshairTarget?.type == HitResult.Type.ENTITY)
+                if (mc.crosshairTarget != null && mc.crosshairTarget?.isEntityHitResult() == true)
                     if (mc.crosshairTarget is EntityHitResult && targets.any { it.first == (mc.crosshairTarget as EntityHitResult).entity })
                         RenderUtil.blockOutline(event.matrices, Box.from(mc.crosshairTarget?.pos).offset(-0.5, -0.5, -0.5).expand(-0.45), aimTargetColor.getColor().rgb)
             RenderUtil.renderPath(event.matrices, teleportPath ?: return@registerEvent, -1)

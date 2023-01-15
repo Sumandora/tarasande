@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.play
 import net.minecraft.block.Block
 import net.minecraft.registry.Registries
 import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventAttack
@@ -15,6 +14,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.isMissHitResult
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
@@ -86,7 +86,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
                     val pos = collisionShape.boundingBox.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble()).center
                     if (pos.squaredDistanceTo(mc.player?.eyePos) <= radius.value * radius.value) {
                         val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, pos)
-                        if (hitResult.type != HitResult.Type.BLOCK)
+                        if (hitResult.isMissHitResult())
                             continue
                         if (throughWalls.isSelected(0) && hitResult.blockPos != blockPos)
                             continue

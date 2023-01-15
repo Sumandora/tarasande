@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.rend
 
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
+import net.minecraft.block.Blocks
 import net.minecraft.registry.Registries
 import net.minecraft.util.math.BlockPos
 import net.tarasandedevelopment.tarasande.event.EventRender3D
@@ -24,7 +25,7 @@ class ModuleBlockESP : Module("Block ESP", "Highlights blocks through walls", Mo
     private val color = object : ValueColor(this, "Color", 0.0, 1.0, 1.0, 1.0) {
         override fun isEnabled() = !hideBlocks.value
     }
-    private val blocks = object : ValueRegistry<Block>(this, "Blocks", Registries.BLOCK) {
+    private val blocks = object : ValueRegistry<Block>(this, "Blocks", Registries.BLOCK, Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST) {
         override fun onAdd(key: Block) = onDisable()
         override fun onRemove(key: Block) = onDisable()
         override fun filter(key: Block) = !key.defaultState.getOutlineShape(mc.world, BlockPos.ORIGIN).isEmpty

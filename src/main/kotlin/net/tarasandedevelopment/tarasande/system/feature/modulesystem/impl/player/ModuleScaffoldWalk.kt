@@ -5,7 +5,6 @@ import net.minecraft.item.Item
 import net.minecraft.registry.Registries
 import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
-import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.*
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.mc
@@ -132,13 +131,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     override fun onEnable() {
         preferredSlot = mc.player?.inventory?.selectedSlot
         clickSpeedUtil.reset()
-    }
-
-    private fun placeBlock(blockHitResult: BlockHitResult) {
-        val original = mc.crosshairTarget
-        mc.crosshairTarget = blockHitResult
-        mc.doItemUse()
-        mc.crosshairTarget = original
     }
 
     override fun onDisable() {
@@ -381,7 +373,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                         if (timeUtil.hasReached(delay.value.toLong())) {
                             aimTarget = hitResult.pos
                             rerotated = false
-                            placeBlock(hitResult)
+                            PlayerUtil.placeBlock(hitResult)
                             event.dirty = true
 
                             if (target?.second?.offsetY == 0) {
@@ -395,7 +387,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     }
                 } else if (alwaysClick.value) {
                     for (i in 1..clicks)
-                        placeBlock(hitResult)
+                        PlayerUtil.placeBlock(hitResult)
                     event.dirty = true
                 }
                 if (silent.isSelected(1)) {
