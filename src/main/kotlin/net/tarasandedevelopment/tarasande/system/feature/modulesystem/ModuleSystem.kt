@@ -134,7 +134,6 @@ object ManagerModule : Manager<Module>() {
 
             // Exploit
             ModuleTickBaseManipulation(),
-            ModuleResourcePackSpoofer(),
             ModuleAntiBindingCurse(),
             ModulePortalScreen(),
             ModuleNoPitchLimit(),

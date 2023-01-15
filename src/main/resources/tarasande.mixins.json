@@ -103,5 +103,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "feature.module.MixinServerResourcePackProvider"
+  ]
 }
