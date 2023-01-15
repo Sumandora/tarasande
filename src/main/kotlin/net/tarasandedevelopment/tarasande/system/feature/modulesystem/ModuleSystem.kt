@@ -120,7 +120,6 @@ object ManagerModule : Manager<Module>() {
             ModuleNoFriends(),
             ModuleMidClick(),
             ModuleAutoRespawn(),
-            ModuleIgnoreResourcePackHash(),
             ModuleTroubleInTerroristTown(),
 
             // Ghost
@@ -134,7 +133,6 @@ object ManagerModule : Manager<Module>() {
 
             // Exploit
             ModuleTickBaseManipulation(),
-            ModuleResourcePackSpoofer(),
             ModuleAntiBindingCurse(),
             ModulePortalScreen(),
             ModuleNoPitchLimit(),

@@ -103,5 +103,10 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "feature.module.MixinClientPlayNetworkHandler",
+    "feature.module.MixinConfirmScreen",
+    "feature.module.MixinServerResourcePackProvider"
+  ]
 }
