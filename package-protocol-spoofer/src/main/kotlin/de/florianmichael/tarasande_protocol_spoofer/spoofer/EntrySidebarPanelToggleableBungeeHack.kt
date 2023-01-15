@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.si
 import su.mandora.event.EventDispatcher
 import java.util.*
 
-class EntrySidebarPanelToggleableBungeeHack : SidebarEntryToggleable("Bungee Hack", "Spoofer") {
+class EntrySidebarPanelToggleableBungeeHack : SidebarEntryToggleable("Bungee hack", "Spoofer") {
 
     private val endIP = ValueText(this, "End IP", "127.0.0.1")
     private val customUUID = ValueBoolean(this, "Custom UUID", false)

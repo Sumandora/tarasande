@@ -12,7 +12,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
 import java.net.InetSocketAddress
 
-class EntrySidebarPanelToggleableHAProxyHack : SidebarEntryToggleable("HA-Proxy Hack", "Spoofer") {
+class EntrySidebarPanelToggleableHAProxyHack : SidebarEntryToggleable("HA-Proxy hack", "Spoofer") {
 
     val modifyIP = ValueBoolean(this, "Modify ip", true)
     val ip = object : ValueText(this, "IP", "127.0.0.1") {

@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
 import su.mandora.event.EventDispatcher
 
-class EntrySidebarPanelToggleableQuiltFaker : SidebarEntryToggleable("Quilt Faker", "Spoofer") {
+class EntrySidebarPanelToggleableQuiltFaker : SidebarEntryToggleable("Quilt faker", "Spoofer") {
 
     private val quiltHandshake = Identifier("registry_sync/handshake")
 
