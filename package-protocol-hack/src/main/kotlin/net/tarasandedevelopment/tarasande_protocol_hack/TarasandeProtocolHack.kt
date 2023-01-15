@@ -40,6 +40,7 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleTickBaseManipulation
@@ -148,11 +149,17 @@ class TarasandeProtocolHack : NativeProvider {
                             return currentVersion()?.getName()
                         }
                     })
-                    add(object : Information("Via Version", "Via Pipeline") {
+                    add(object : Information("Via Version", "Protocols in pipeline") {
+                        private val displayMode = ValueMode(this, "Display mode", false, "Names", "Size")
+
                         override fun getMessage(): String? {
                             val names = viaConnection?.protocolInfo?.pipeline?.pipes()?.map { p -> p.javaClass.simpleName } ?: return null
                             if (names.isEmpty()) return null
-                            return "\n" + names.joinToString("\n")
+                            return if (displayMode.isSelected(0)) {
+                                "\n" + names.joinToString("\n")
+                            } else {
+                                names.size.toString()
+                            }
                         }
                     })
                     add(object : Information("Via Beta", VersionListEnum.r1_7_6tor1_7_10.getName() + " Entity Tracker") {

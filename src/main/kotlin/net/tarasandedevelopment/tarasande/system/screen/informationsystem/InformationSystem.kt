@@ -33,11 +33,12 @@ object ManagerInformation : Manager<Information>() {
             InformationWorldTime(),
             InformationSpawnPoint(),
             InformationTextRadar(),
+            InformationVanishedPlayers(),
 
             // Server
             InformationServerBrand(),
             InformationOpenChannels(),
-            InformationVanishedPlayers(),
+            InformationLag(),
 
             // Game
             InformationTickDelta()

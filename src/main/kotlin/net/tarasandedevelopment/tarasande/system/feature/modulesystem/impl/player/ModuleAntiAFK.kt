@@ -16,7 +16,7 @@ import kotlin.math.roundToInt
 
 class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PLAYER) {
 
-    val delay = ValueNumber(this, "Delay", 0.0, 60.0, 180.0, 60.0)
+    val delay = ValueNumber(this, "Delay", 0.0, 60000.0, 180000.0, 5000.0)
 
     val timer = TimeUtil()
     private val movementKeys = ArrayList(PlayerUtil.movementKeys)
@@ -31,7 +31,7 @@ class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PL
         ManagerInformation.add(object : Information("Anti AFK", "Jump countdown") {
             override fun getMessage() =
                 if (enabled.value)
-                    ((delay.value * 1000L - (System.currentTimeMillis() - timer.time)) / 1000.0).roundToInt().toString()
+                    ((delay.value - (System.currentTimeMillis() - timer.time))).roundToInt().toString()
                 else
                     null
         })
