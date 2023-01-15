@@ -37,13 +37,13 @@ public abstract class MixinServerResourcePackProvider implements IServerResource
     }
 
     @Inject(method = "download", at = @At(value = "INVOKE", target = "Ljava/util/concurrent/CompletableFuture;thenCompose(Ljava/util/function/Function;)Ljava/util/concurrent/CompletableFuture;", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILEXCEPTION, cancellable = true)
-    public void spoofResourcePackDownloading(URL url, String packSha1, boolean closeAfterDownload, CallbackInfoReturnable<CompletableFuture<?>> cir, String string, String string2, MinecraftClient minecraftClient, File file, CompletableFuture<Void> completableFuture) {
+    public void spoofResourcePackDownloading(URL url, String packSha1, boolean closeAfterDownload, CallbackInfoReturnable<CompletableFuture<?>> cir, String string, String string2, MinecraftClient minecraftClient, File file, CompletableFuture<String> completableFuture) {
         if (tarasande_spoofDownloading) {
             this.downloadTask = completableFuture.thenCompose(o -> {
                 if (!this.verifyFile(string2, file)) {
                     return CompletableFuture.failedFuture(new RuntimeException("Hash check failure for file " + file + ", see log"));
                 } else {
-                    return CompletableFuture.completedFuture(null);
+                    return CompletableFuture.completedFuture("");
                 }
             });
             this.lock.unlock();

@@ -105,6 +105,7 @@
     "defaultRequire": 1
   },
   "client": [
+    "feature.module.MixinClientPlayNetworkHandler",
     "feature.module.MixinServerResourcePackProvider"
   ]
 }
