@@ -1,7 +1,7 @@
 package de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler
 
 import de.florianmichael.tarasande_protocol_spoofer.injection.accessor.IServerInfo
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelToggleableForgeFaker
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.SidebarEntryToggleableForgeFaker
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.IForgeNetClientHandler
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.legacy.ModStruct
 import io.netty.buffer.Unpooled
@@ -41,7 +41,7 @@ class Fml1NetClientHandler(private val connection: ClientConnection) : IForgeNet
         this.sendCustomPayload("minecraft:register", newPacket)
         this.sendClientHello(version)
 
-        val forgeFaker = ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(EntrySidebarPanelToggleableForgeFaker::class.java)
+        val forgeFaker = ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(SidebarEntryToggleableForgeFaker::class.java)
         if (forgeFaker.useFML1Cache.value) {
             forgeFaker.forgeInfoTracker[this.connection.address]?.also {
                 this.sendModList(it.installedMods())

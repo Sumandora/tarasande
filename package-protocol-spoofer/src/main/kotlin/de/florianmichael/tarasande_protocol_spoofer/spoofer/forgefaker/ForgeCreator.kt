@@ -2,7 +2,7 @@ package de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker
 
 import com.google.gson.JsonObject
 import de.florianmichael.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelToggleableForgeFaker
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.SidebarEntryToggleableForgeFaker
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.Fml1NetClientHandler
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.ModernFmlNetClientHandler
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.ModernFmlState
@@ -30,7 +30,7 @@ object ForgeCreator {
     }
 
     fun createNetHandler(connection: ClientConnection): IForgeNetClientHandler {
-        val forgeFaker = ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(EntrySidebarPanelToggleableForgeFaker::class.java)
+        val forgeFaker = ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(SidebarEntryToggleableForgeFaker::class.java)
 
         if (TarasandeProtocolSpoofer.tarasandeProtocolHackLoaded && forgeFaker.autoDetectFmlHandlerWithViaVersion.value) {
             return ViaVersionUtil.createForgeHandler(connection)
