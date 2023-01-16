@@ -4,7 +4,7 @@ import de.florianmichael.vialoadingbase.util.VersionListEnum
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.andNewer
-import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.andOlder
+import net.tarasandedevelopment.tarasande_protocol_hack.util.extension.singleton
 import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolRange
 
 /**
@@ -16,46 +16,14 @@ object ItemSplitter {
     private val splitter = HashMap<Item, Array<ProtocolRange>>()
 
     fun shouldDisplay(item: Item, version: VersionListEnum): Boolean {
-        return splitter[item]?.any { version in it } == true
+        return splitter[item]?.any { version in it } != false
     }
 
     init {
-        // Version Ranges
-        splitter[Items.WHITE_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-        splitter[Items.ORANGE_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-        splitter[Items.MAGENTA_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-        splitter[Items.LIGHT_BLUE_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-        splitter[Items.YELLOW_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-        splitter[Items.LIME_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-        splitter[Items.PINK_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-        splitter[Items.GRAY_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-        splitter[Items.LIGHT_GRAY_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-        splitter[Items.CYAN_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-        splitter[Items.PURPLE_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-        splitter[Items.BLUE_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-        splitter[Items.BROWN_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-        splitter[Items.GREEN_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-        splitter[Items.RED_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-        splitter[Items.BLACK_WOOL] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_28toc0_30).inverse()
-
-        splitter[Items.WHITE_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-        splitter[Items.ORANGE_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-        splitter[Items.MAGENTA_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-        splitter[Items.LIGHT_BLUE_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-        splitter[Items.YELLOW_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-        splitter[Items.LIME_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-        splitter[Items.PINK_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-        splitter[Items.GRAY_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-        splitter[Items.LIGHT_GRAY_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-        splitter[Items.CYAN_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-        splitter[Items.PURPLE_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-        splitter[Items.BLUE_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-        splitter[Items.BROWN_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-        splitter[Items.GREEN_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-        splitter[Items.RED_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-        splitter[Items.BLACK_DYE] = ProtocolRange(VersionListEnum.b1_2_0tob1_2_2, VersionListEnum.c0_0_20ac0_27).inverse()
-
         // Singleton
+        splitter[Items.IRON_GOLEM_SPAWN_EGG] = arrayOf(VersionListEnum.r1_19_3.andNewer())
+        splitter[Items.SNOW_GOLEM_SPAWN_EGG] = arrayOf(VersionListEnum.r1_19_3.andNewer())
+
         splitter[Items.ACACIA_CHEST_BOAT] = arrayOf(VersionListEnum.r1_19.andNewer())
         splitter[Items.ALLAY_SPAWN_EGG] = arrayOf(VersionListEnum.r1_19.andNewer())
         splitter[Items.BIRCH_CHEST_BOAT] = arrayOf(VersionListEnum.r1_19.andNewer())
@@ -624,7 +592,7 @@ object ItemSplitter {
         splitter[Items.ZOMBIE_VILLAGER_SPAWN_EGG] = arrayOf(VersionListEnum.r1_11.andNewer())
 
         splitter[Items.BONE_BLOCK] = arrayOf(VersionListEnum.r1_10.andNewer())
-        splitter[Items.MAGMA_BLOCK] = arrayOf(VersionListEnum.r1_10.andNewer())
+        splitter[Items.MAGMA_BLOCK] = arrayOf(VersionListEnum.r1_10.andNewer(), VersionListEnum.c0_30cpe.singleton())
         splitter[Items.NETHER_WART_BLOCK] = arrayOf(VersionListEnum.r1_10.andNewer())
         splitter[Items.POLAR_BEAR_SPAWN_EGG] = arrayOf(VersionListEnum.r1_10.andNewer())
         splitter[Items.RED_NETHER_BRICKS] = arrayOf(VersionListEnum.r1_10.andNewer())
@@ -807,6 +775,7 @@ object ItemSplitter {
         splitter[Items.WHITE_TULIP] = arrayOf(VersionListEnum.r1_7_2tor1_7_5.andNewer())
         splitter[Items.YELLOW_STAINED_GLASS] = arrayOf(VersionListEnum.r1_7_2tor1_7_5.andNewer())
         splitter[Items.YELLOW_STAINED_GLASS_PANE] = arrayOf(VersionListEnum.r1_7_2tor1_7_5.andNewer())
+        splitter[Items.COOKED_SALMON] = arrayOf(VersionListEnum.r1_7_2tor1_7_5.andNewer())
 
         splitter[Items.BLACK_CARPET] = arrayOf(VersionListEnum.r1_6_1.andNewer())
         splitter[Items.BLACK_TERRACOTTA] = arrayOf(VersionListEnum.r1_6_1.andNewer())
@@ -864,7 +833,7 @@ object ItemSplitter {
         splitter[Items.NETHER_BRICK] = arrayOf(VersionListEnum.r1_5tor1_5_1.andNewer())
         splitter[Items.QUARTZ] = arrayOf(VersionListEnum.r1_5tor1_5_1.andNewer())
         splitter[Items.NETHER_QUARTZ_ORE] = arrayOf(VersionListEnum.r1_5tor1_5_1.andNewer())
-        splitter[Items.QUARTZ_PILLAR] = arrayOf(VersionListEnum.r1_5tor1_5_1.andNewer())
+        splitter[Items.QUARTZ_PILLAR] = arrayOf(VersionListEnum.r1_5tor1_5_1.andNewer(), VersionListEnum.c0_30cpe.singleton())
         splitter[Items.QUARTZ_SLAB] = arrayOf(VersionListEnum.r1_5tor1_5_1.andNewer())
         splitter[Items.QUARTZ_STAIRS] = arrayOf(VersionListEnum.r1_5tor1_5_1.andNewer())
         splitter[Items.COMPARATOR] = arrayOf(VersionListEnum.r1_5tor1_5_1.andNewer())
@@ -912,7 +881,7 @@ object ItemSplitter {
         splitter[Items.JUNGLE_STAIRS] = arrayOf(VersionListEnum.r1_3_1tor1_3_2.andNewer())
         splitter[Items.JUNGLE_WOOD] = arrayOf(VersionListEnum.r1_3_1tor1_3_2.andNewer())
         splitter[Items.OAK_WOOD] = arrayOf(VersionListEnum.r1_3_1tor1_3_2.andNewer())
-        splitter[Items.SANDSTONE_STAIRS] = arrayOf(VersionListEnum.r1_3_1tor1_3_2.andNewer())
+        splitter[Items.SANDSTONE_STAIRS] = arrayOf(VersionListEnum.r1_3_1tor1_3_2.andNewer(), VersionListEnum.c0_30cpe.singleton())
         splitter[Items.SPRUCE_PLANKS] = arrayOf(VersionListEnum.r1_3_1tor1_3_2.andNewer())
         splitter[Items.SPRUCE_SLAB] = arrayOf(VersionListEnum.r1_3_1tor1_3_2.andNewer())
         splitter[Items.SPRUCE_STAIRS] = arrayOf(VersionListEnum.r1_3_1tor1_3_2.andNewer())
@@ -926,6 +895,10 @@ object ItemSplitter {
         splitter[Items.JUNGLE_LOG] = arrayOf(VersionListEnum.r1_2_1tor1_2_3.andNewer())
         splitter[Items.JUNGLE_SAPLING] = arrayOf(VersionListEnum.r1_2_1tor1_2_3.andNewer())
         splitter[Items.OCELOT_SPAWN_EGG] = arrayOf(VersionListEnum.r1_2_1tor1_2_3.andNewer())
+        splitter[Items.CHISELED_SANDSTONE] = arrayOf(VersionListEnum.r1_2_1tor1_2_3.andNewer())
+        splitter[Items.CUT_SANDSTONE] = arrayOf(VersionListEnum.r1_2_1tor1_2_3.andNewer())
+        splitter[Items.REDSTONE_LAMP] = arrayOf(VersionListEnum.r1_2_1tor1_2_3.andNewer())
+        splitter[Items.EXPERIENCE_BOTTLE] = arrayOf(VersionListEnum.r1_2_1tor1_2_3.andNewer())
 
         splitter[Items.BLAZE_SPAWN_EGG] = arrayOf(VersionListEnum.r1_1.andNewer())
         splitter[Items.CAVE_SPIDER_SPAWN_EGG] = arrayOf(VersionListEnum.r1_1.andNewer())
@@ -978,8 +951,13 @@ object ItemSplitter {
         splitter[Items.END_PORTAL_FRAME] = arrayOf(VersionListEnum.r1_0_0tor1_0_1.andNewer())
         splitter[Items.END_STONE] = arrayOf(VersionListEnum.r1_0_0tor1_0_1.andNewer())
         splitter[Items.DRAGON_EGG] = arrayOf(VersionListEnum.r1_0_0tor1_0_1.andNewer())
+        splitter[Items.CAULDRON] = arrayOf(VersionListEnum.r1_0_0tor1_0_1.andNewer())
 
-        splitter[Items.STONE_BRICKS] = arrayOf(VersionListEnum.b1_8tob1_8_1.andNewer())
+        // b1.9-pre1
+        splitter[Items.MYCELIUM] = arrayOf(VersionListEnum.r1_0_0tor1_0_1.andNewer())
+        splitter[Items.LILY_PAD] = arrayOf(VersionListEnum.r1_0_0tor1_0_1.andNewer())
+
+        splitter[Items.STONE_BRICKS] = arrayOf(VersionListEnum.b1_8tob1_8_1.andNewer(), VersionListEnum.c0_30cpe.singleton())
         splitter[Items.MOSSY_STONE_BRICKS] = arrayOf(VersionListEnum.b1_8tob1_8_1.andNewer())
         splitter[Items.CRACKED_STONE_BRICKS] = arrayOf(VersionListEnum.b1_8tob1_8_1.andNewer())
         splitter[Items.INFESTED_STONE_BRICKS] = arrayOf(VersionListEnum.b1_8tob1_8_1.andNewer())
@@ -1005,6 +983,9 @@ object ItemSplitter {
         splitter[Items.ENDER_PEARL] = arrayOf(VersionListEnum.b1_8tob1_8_1.andNewer())
         splitter[Items.MELON_SLICE] = arrayOf(VersionListEnum.b1_8tob1_8_1.andNewer())
         splitter[Items.ROTTEN_FLESH] = arrayOf(VersionListEnum.b1_8tob1_8_1.andNewer())
+        splitter[Items.VINE] = arrayOf(VersionListEnum.b1_8tob1_8_1.andNewer())
+        splitter[Items.INFESTED_COBBLESTONE] = arrayOf(VersionListEnum.b1_8tob1_8_1.andNewer())
+        splitter[Items.STONE_BRICK_SLAB] = arrayOf(VersionListEnum.b1_8tob1_8_1.andNewer())
 
         splitter[Items.PISTON] = arrayOf(VersionListEnum.b1_7tob1_7_3.andNewer())
         splitter[Items.STICKY_PISTON] = arrayOf(VersionListEnum.b1_7tob1_7_3.andNewer())
@@ -1027,7 +1008,7 @@ object ItemSplitter {
 
         splitter[Items.RED_BED] = arrayOf(VersionListEnum.b1_3tob1_3_1.andNewer())
         splitter[Items.REPEATER] = arrayOf(VersionListEnum.b1_3tob1_3_1.andNewer())
-        splitter[Items.COBBLESTONE_SLAB] = arrayOf(VersionListEnum.b1_3tob1_3_1.andNewer())
+        splitter[Items.COBBLESTONE_SLAB] = arrayOf(VersionListEnum.b1_3tob1_3_1.andNewer(), VersionListEnum.c0_30cpe.singleton())
         splitter[Items.OAK_SLAB] = arrayOf(VersionListEnum.b1_3tob1_3_1.andNewer())
         splitter[Items.SANDSTONE_SLAB] = arrayOf(VersionListEnum.b1_3tob1_3_1.andNewer())
 
@@ -1048,6 +1029,22 @@ object ItemSplitter {
         splitter[Items.INK_SAC] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
         splitter[Items.CHARCOAL] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
         splitter[Items.SUGAR] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.WHITE_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.ORANGE_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.MAGENTA_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.LIGHT_BLUE_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.YELLOW_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.LIME_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.PINK_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.GRAY_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.LIGHT_GRAY_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.CYAN_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.PURPLE_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.BLUE_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.BROWN_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.GREEN_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.RED_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
+        splitter[Items.BLACK_DYE] = arrayOf(VersionListEnum.b1_2_0tob1_2_2.andNewer())
 
         splitter[Items.NETHERRACK] = arrayOf(VersionListEnum.a1_2_0toa1_2_1_1.andNewer())
         splitter[Items.SOUL_SAND] = arrayOf(VersionListEnum.a1_2_0toa1_2_1_1.andNewer())
@@ -1058,9 +1055,13 @@ object ItemSplitter {
         splitter[Items.GLOWSTONE_DUST] = arrayOf(VersionListEnum.a1_2_0toa1_2_1_1.andNewer())
         splitter[Items.COOKED_COD] = arrayOf(VersionListEnum.a1_2_0toa1_2_1_1.andNewer())
         splitter[Items.COD] = arrayOf(VersionListEnum.a1_2_0toa1_2_1_1.andNewer())
+        splitter[Items.PUMPKIN] = arrayOf(VersionListEnum.a1_2_0toa1_2_1_1.andNewer())
 
         splitter[Items.FISHING_ROD] = arrayOf(VersionListEnum.a1_1_0toa1_1_2_1.andNewer())
         splitter[Items.COMPASS] = arrayOf(VersionListEnum.a1_1_0toa1_1_2_1.andNewer())
+
+        // Indev with former 20100223 (it's not known)
+        splitter[Items.PAINTING] = arrayOf(VersionListEnum.a1_1_0toa1_1_2_1.andNewer())
 
         splitter[Items.OAK_FENCE] = arrayOf(VersionListEnum.a1_0_17toa1_0_17_4.andNewer())
 
@@ -1069,6 +1070,8 @@ object ItemSplitter {
         splitter[Items.EGG] = arrayOf(VersionListEnum.a1_0_15.andNewer())
         splitter[Items.MUSIC_DISC_13] = arrayOf(VersionListEnum.a1_0_15.andNewer())
         splitter[Items.MUSIC_DISC_CAT] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.CHEST_MINECART] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.FURNACE_MINECART] = arrayOf(VersionListEnum.a1_0_15.andNewer())
 
         // a1.0.11 (doesn't have multiplayer, so we assign it to the next multiplayer version)
         splitter[Items.SUGAR_CANE] = arrayOf(VersionListEnum.a1_0_15.andNewer())
@@ -1076,8 +1079,8 @@ object ItemSplitter {
         splitter[Items.PAPER] = arrayOf(VersionListEnum.a1_0_15.andNewer())
         splitter[Items.BOOK] = arrayOf(VersionListEnum.a1_0_15.andNewer())
         splitter[Items.CLAY_BALL] = arrayOf(VersionListEnum.a1_0_15.andNewer())
-        splitter[Items.BRICK] = arrayOf(VersionListEnum.a1_0_15.andNewer())
         splitter[Items.SLIME_BALL] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.BRICK] = arrayOf(VersionListEnum.a1_0_15.andNewer())
 
         // a1.0.8 (doesn't have multiplayer, so we assign it to the next multiplayer version)
         splitter[Items.LEATHER] = arrayOf(VersionListEnum.a1_0_15.andNewer())
@@ -1085,14 +1088,15 @@ object ItemSplitter {
 
         // a1.0.6 (doesn't have multiplayer, so we assign it to the next multiplayer version)
         splitter[Items.CACTUS] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.OAK_BOAT] = arrayOf(VersionListEnum.a1_0_15.andNewer())
 
         // a1.0.5 (doesn't have multiplayer, so we assign it to the next multiplayer version)
         splitter[Items.SNOW_BLOCK] = arrayOf(VersionListEnum.a1_0_15.andNewer())
         splitter[Items.SNOWBALL] = arrayOf(VersionListEnum.a1_0_15.andNewer())
 
         // a1.0.4 (doesn't have multiplayer, so we assign it to the next multiplayer version)
-        splitter[Items.ICE] = arrayOf(VersionListEnum.a1_0_15.andNewer())
-        splitter[Items.SNOW] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.ICE] = arrayOf(VersionListEnum.a1_0_15.andNewer(), VersionListEnum.c0_30cpe.singleton())
+        splitter[Items.SNOW] = arrayOf(VersionListEnum.a1_0_15.andNewer(), VersionListEnum.c0_30cpe.singleton())
 
         // a1.0.1 (doesn't have multiplayer, so we assign it to the next multiplayer version)
         splitter[Items.IRON_DOOR] = arrayOf(VersionListEnum.a1_0_15.andNewer())
@@ -1199,32 +1203,72 @@ object ItemSplitter {
         splitter[Items.DIAMOND_PICKAXE] = arrayOf(VersionListEnum.a1_0_15.andNewer())
         splitter[Items.DIAMOND_SHOVEL] = arrayOf(VersionListEnum.a1_0_15.andNewer())
 
+        // Indev 0.31 20091231-2 (doesn't have multiplayer, so we assign it to the next multiplayer version)
+        splitter[Items.IRON_SHOVEL] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.IRON_SWORD] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.IRON_AXE] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.IRON_PICKAXE] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.IRON_HELMET] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.IRON_CHESTPLATE] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.IRON_LEGGINGS] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.IRON_BOOTS] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.LEATHER_HELMET] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.LEATHER_CHESTPLATE] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.LEATHER_LEGGINGS] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.LEATHER_BOOTS] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.APPLE] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+
+
         // Indev 0.31 20100124-1 (doesn't have multiplayer, so we assign it to the next multiplayer version)
         splitter[Items.CHEST] = arrayOf(VersionListEnum.a1_0_15.andNewer())
 
         // Indev 0.31 20100122 (doesn't have multiplayer, so we assign it to the next multiplayer version)
         splitter[Items.BOW] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.ARROW] = arrayOf(VersionListEnum.a1_0_15.andNewer())
 
         // Indev 0.31 20100110 (doesn't have multiplayer, so we assign it to the next multiplayer version)
         splitter[Items.FLINT_AND_STEEL] = arrayOf(VersionListEnum.a1_0_15.andNewer())
 
         // Indev 0.31 20091223-2 (doesn't have multiplayer, so we assign it to the next multiplayer version)
         splitter[Items.TORCH] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.STONE_SLAB] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+
+        // Cave game tech test? I literally have no idea
+        splitter[Items.GRASS_BLOCK] = arrayOf(VersionListEnum.a1_0_15.andNewer())
+        splitter[Items.BEDROCK] = arrayOf(VersionListEnum.a1_0_15.andNewer())
 
         splitter[Items.TNT] = arrayOf(VersionListEnum.c0_28toc0_30.andNewer())
         splitter[Items.OBSIDIAN] = arrayOf(VersionListEnum.c0_28toc0_30.andNewer())
 
         // 0.26 SURVIVAL TEST (doesn't have multiplayer, so we assign it to the next multiplayer version)
-        splitter[Items.STONE_SLAB] = arrayOf(VersionListEnum.c0_28toc0_30.andNewer())
-        splitter[Items.IRON_BLOCK] = arrayOf(VersionListEnum.c0_28toc0_30.andNewer())
+        splitter[Items.IRON_ORE] = arrayOf(VersionListEnum.c0_28toc0_30.andNewer())
+        splitter[Items.GOLD_ORE] = arrayOf(VersionListEnum.c0_28toc0_30.andNewer())
+        splitter[Items.COAL_ORE] = arrayOf(VersionListEnum.c0_28toc0_30.andNewer())
         splitter[Items.MOSSY_COBBLESTONE] = arrayOf(VersionListEnum.c0_28toc0_30.andNewer())
         splitter[Items.BOOKSHELF] = arrayOf(VersionListEnum.c0_28toc0_30.andNewer())
+        splitter[Items.BRICKS] = arrayOf(VersionListEnum.c0_28toc0_30.andNewer())
 
+        splitter[Items.WHITE_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
+        splitter[Items.ORANGE_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
+        splitter[Items.MAGENTA_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
+        splitter[Items.LIGHT_BLUE_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
+        splitter[Items.YELLOW_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
+        splitter[Items.LIME_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
+        splitter[Items.PINK_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer(), VersionListEnum.c0_30cpe.singleton())
+        splitter[Items.GRAY_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
+        splitter[Items.LIGHT_GRAY_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
+        splitter[Items.CYAN_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer(), VersionListEnum.c0_30cpe.singleton())
+        splitter[Items.PURPLE_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
+        splitter[Items.BLUE_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer(), VersionListEnum.c0_30cpe.singleton())
+        splitter[Items.BROWN_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer(), VersionListEnum.c0_30cpe.singleton())
+        splitter[Items.GREEN_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer(), VersionListEnum.c0_30cpe.singleton())
+        splitter[Items.RED_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
+        splitter[Items.BLACK_WOOL] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
+        splitter[Items.SMOOTH_STONE_SLAB] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
+        splitter[Items.POPPY] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
         splitter[Items.DANDELION] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
-        splitter[Items.ROSE_BUSH] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
         splitter[Items.RED_MUSHROOM] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
-        splitter[Items.BROWN_MUSHROOM] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
-        splitter[Items.GOLD_BLOCK] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer())
+        splitter[Items.BROWN_MUSHROOM] = arrayOf(VersionListEnum.c0_0_20ac0_27.andNewer(), VersionListEnum.c0_30cpe.singleton())
 
         splitter[Items.SPONGE] = arrayOf(VersionListEnum.c0_0_19a_06.andNewer())
     }
