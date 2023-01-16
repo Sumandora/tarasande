@@ -28,7 +28,7 @@ public class BaseProtocolb1_7 extends AbstractSimpleProtocol {
                     wrapper.cancel();
                     final PacketWrapper pingResponse = PacketWrapper.create(ClientboundPacketsb1_8.DISCONNECT, wrapper.user());
                     pingResponse.write(Type1_6_4.STRING, "[ViaBeta] The server seems to be running!\nWait 5 seconds between each connection§0§1");
-                    pingResponse.send(Protocolb1_8_0_1tob1_7_0_3.class);
+                    pingResponse.send(BaseProtocolb1_7.class);
                 });
             }
         });

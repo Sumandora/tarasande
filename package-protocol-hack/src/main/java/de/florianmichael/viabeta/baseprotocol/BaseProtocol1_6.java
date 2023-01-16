@@ -98,7 +98,7 @@ public class BaseProtocol1_6 extends AbstractSimpleProtocol {
                     wrapper.cancel();
                     final PacketWrapper pong = PacketWrapper.create(ClientboundStatusPackets.PONG_RESPONSE, wrapper.user());
                     pong.write(Type.LONG, wrapper.read(Type.LONG)); // start time
-                    pong.send(Protocol1_7_2_5to1_6_4.class);
+                    pong.send(BaseProtocol1_6.class);
                 });
             }
         });
