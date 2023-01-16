@@ -57,13 +57,13 @@ class ScreenBetterOwnerValues(title: String, parent: Screen, val owner: Any) : S
     }
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-//        this.renderBackground(matrices)
-//        if (mc.world != null) {
-//            var prevScreen = prevScreen
-//            while (prevScreen is ScreenBetterOwnerValues)
-//                prevScreen = prevScreen.prevScreen
-//            prevScreen?.render(matrices, -1, -1, delta)
-//        }
+        this.renderBackground(matrices)
+        if (mc.world != null) {
+            var prevScreen = prevScreen
+            while (prevScreen is ScreenBetterOwnerValues)
+                prevScreen = prevScreen.prevScreen
+            prevScreen?.render(matrices, -1, -1, delta)
+        }
 
         if (client?.world != null) {
             ManagerBlur.bind(setViewport = true, screens = true)
