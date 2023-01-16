@@ -68,7 +68,7 @@ class InformationSpawnPoint : Information("World", "Spawn Point") {
 
 class InformationVanishedPlayers : Information("World", "Vanished players") {
 
-    private val vanishedPlayers = CopyOnWriteArrayList<UUID>()
+    private var vanishedPlayers = CopyOnWriteArrayList<UUID>()
 
 
     init {
@@ -80,11 +80,11 @@ class InformationVanishedPlayers : Information("World", "Vanished players") {
             add(EventPacket::class.java) { event ->
                 if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerRespawnS2CPacket)
                     if (event.packet.isNewWorld())
-                        vanishedPlayers.clear()
+                        vanishedPlayers = CopyOnWriteArrayList()
             }
             add(EventDisconnect::class.java) {
                 if (it.connection == mc.networkHandler?.connection)
-                    vanishedPlayers.clear()
+                    vanishedPlayers = CopyOnWriteArrayList()
             }
         }
     }

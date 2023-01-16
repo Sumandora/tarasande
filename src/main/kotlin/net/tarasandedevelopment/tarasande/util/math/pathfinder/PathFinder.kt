@@ -119,7 +119,6 @@ class PathFinder(
         @Suppress("NAME_SHADOWING")
         var current: Node? = current
         val path = ArrayList<Node>()
-        path.clear()
         while (current != null) {
             path.add(current)
             current = current.parent

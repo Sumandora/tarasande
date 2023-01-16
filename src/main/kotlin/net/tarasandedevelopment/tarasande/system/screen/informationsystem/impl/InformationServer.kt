@@ -8,6 +8,7 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.util.extension.javaruntime.clearAndGC
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import su.mandora.event.EventDispatcher
 import java.nio.charset.StandardCharsets
@@ -52,7 +53,7 @@ class InformationOpenChannels : Information("Server", "Open Channels") {
             }
             add(EventDisconnect::class.java) {
                 if (it.connection == mc.networkHandler?.connection) {
-                    openChannels.clear()
+                    openChannels.clearAndGC()
                 }
             }
         }

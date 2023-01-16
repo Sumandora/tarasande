@@ -7,6 +7,7 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.javaruntime.clearAndGC
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
@@ -34,7 +35,7 @@ class ModuleMovementRecorder : Module("Movement recorder", "Records your movemen
 
     override fun onDisable() {
         recording = false
-        records.clear()
+        records.clearAndGC()
         currentRecording = null
         lastVelocity = null
         playedBack = null

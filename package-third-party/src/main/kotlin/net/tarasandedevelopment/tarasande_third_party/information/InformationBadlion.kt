@@ -7,13 +7,14 @@ import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.gson
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewWorld
 import su.mandora.event.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 
 class InformationTimers : Information("Badlion", "Timers") {
 
-    private val list = CopyOnWriteArrayList<Timer>()
+    private var list = CopyOnWriteArrayList<Timer>()
     private var enabled = false
 
     init {
@@ -29,7 +30,7 @@ class InformationTimers : Information("Badlion", "Timers") {
                                 data = data.substring(request.length + 1, data.length)
                                 when (request) {
                                     "REGISTER", "CHANGE_WORLD" -> enabled = true
-                                    "REMOVE_ALL_TIMERS" -> list.clear()
+                                    "REMOVE_ALL_TIMERS" -> list = CopyOnWriteArrayList()
                                     "ADD_TIMER" -> {
                                         val timer = gson.fromJson(data, Timer::class.java)
                                         list.add(timer)
@@ -56,15 +57,15 @@ class InformationTimers : Information("Badlion", "Timers") {
                             }
                         }
                     } else if (it.packet is PlayerRespawnS2CPacket) {
-                        if (mc.world != null && (it.packet as PlayerRespawnS2CPacket).dimension != mc.world?.registryKey) {
-                            list.clear()
+                        if ((it.packet as PlayerRespawnS2CPacket).isNewWorld()) {
+                            list = CopyOnWriteArrayList()
                             enabled = false
                         }
                     }
             }
             add(EventDisconnect::class.java) {
                 if (it.connection == mc.networkHandler?.connection) {
-                    list.clear()
+                    list = CopyOnWriteArrayList()
                     enabled = false
                 }
             }

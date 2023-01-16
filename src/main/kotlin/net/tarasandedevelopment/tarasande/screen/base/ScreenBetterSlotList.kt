@@ -8,6 +8,7 @@ import net.minecraft.client.gui.widget.EntryListWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
@@ -32,7 +33,7 @@ open class ScreenBetterSlotList(title: String, prevScreen: Screen?, private val 
 
         if (prevScreen != null) {
             this.addDrawableChild(ButtonWidget(3, height - 20 - 3, 20, 20, Text.literal("<-")) {
-                MinecraftClient.getInstance().setScreen(prevScreen)
+                mc.setScreen(prevScreen)
             })
         }
         super.init()

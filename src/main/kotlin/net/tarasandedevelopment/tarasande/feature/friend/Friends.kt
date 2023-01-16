@@ -11,6 +11,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerMod
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc.ModuleNoFriends
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleNameProtect
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
+import net.tarasandedevelopment.tarasande.util.extension.javaruntime.clearAndGC
 import su.mandora.event.EventDispatcher
 
 object Friends {
@@ -61,7 +62,7 @@ object Friends {
         friends.removeIf { it.first == gameProfile }
     }
 
-    fun clear() = friends.clear()
+    fun clear() = friends.clearAndGC()
 
     fun isFriend(gameProfile: GameProfile) = friends.any { it.first == gameProfile }
 

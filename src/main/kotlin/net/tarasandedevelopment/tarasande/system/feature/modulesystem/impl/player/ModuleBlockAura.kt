@@ -4,6 +4,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.Blocks
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket
 import net.minecraft.network.packet.s2c.play.OpenScreenS2CPacket
+import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.registry.Registries
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.hit.HitResult
@@ -18,7 +19,9 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.javaruntime.clearAndGC
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.isMissHitResult
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewWorld
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
@@ -36,10 +39,15 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
     private val autoCloseScreens = ValueBoolean(this, "Auto close screens", false)
     private val throughWalls = ValueBoolean(this, "Through walls", true)
 
-    private val interactedBlocks = ArrayList<BlockPos>()
+    private var interactedBlocks = ArrayList<BlockPos>()
     private val timeUtil = TimeUtil()
 
     private var focusedBlock: Pair<BlockPos, BlockHitResult>? = null
+
+    override fun onDisable() {
+        interactedBlocks.clearAndGC()
+        focusedBlock = null
+    }
 
     init {
         registerEvent(EventPollEvents::class.java) { event ->
@@ -90,10 +98,19 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
             }
         }
         registerEvent(EventPacket::class.java) { event ->
-            if(event.type == EventPacket.Type.RECEIVE && event.packet is OpenScreenS2CPacket) {
-                if(autoCloseScreens.value) {
-                    mc.networkHandler?.sendPacket(CloseHandledScreenC2SPacket(event.packet.syncId))
-                    Notifications.notify("Auto closed a screen")
+            if(event.type == EventPacket.Type.RECEIVE) {
+                when(event.packet) {
+                    is OpenScreenS2CPacket -> {
+                        if(autoCloseScreens.value) {
+                            mc.networkHandler?.sendPacket(CloseHandledScreenC2SPacket(event.packet.syncId))
+                            Notifications.notify("Auto closed a screen")
+                        }
+                    }
+                    is PlayerRespawnS2CPacket -> {
+                        if(event.packet.isNewWorld()) {
+                            onDisable()
+                        }
+                    }
                 }
             }
         }

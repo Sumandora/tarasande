@@ -236,36 +236,41 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
 
         registerEvent(EventPacket::class.java) { event ->
             if (event.type == EventPacket.Type.RECEIVE)
-                if (event.packet is PlayerRespawnS2CPacket && event.packet.isNewWorld()) {
-                    suspects.clear()
-                } else if (event.packet is EntityEquipmentUpdateS2CPacket) {
-                    val player = mc.world?.getEntityById(event.packet.id)
-                    if (player == mc.player) // I swear I almost played a round without this
-                        return@registerEvent
-                    if (player !is PlayerEntity) return@registerEvent
-                    if (suspects.containsKey(player.gameProfile)) return@registerEvent
-                    if (ManagerModule.get(ModuleAntiBot::class.java).isBot(player)) return@registerEvent
-
-                    var mainHand: Item? = null
-                    var offHand: Item? = null
-                    for (pair in event.packet.equipmentList) {
-                        if (pair.first == EquipmentSlot.MAINHAND) mainHand = pair.second.item
-                        else if (pair.first == EquipmentSlot.OFFHAND) offHand = pair.second.item
+                when (event.packet) {
+                    is PlayerRespawnS2CPacket -> {
+                        if(event.packet.isNewWorld())
+                            suspects.clear()
                     }
 
-                    val illegalMainHand = if (mainHand != null) isIllegalItem(mainHand) else false
-                    val illegalOffHand = if (offHand != null) isIllegalItem(offHand) else false
+                    is EntityEquipmentUpdateS2CPacket -> {
+                        val player = mc.world?.getEntityById(event.packet.id)
+                        if (player == mc.player) // I swear I almost played a round without this
+                            return@registerEvent
+                        if (player !is PlayerEntity) return@registerEvent
+                        if (suspects.containsKey(player.gameProfile)) return@registerEvent
+                        if (ManagerModule.get(ModuleAntiBot::class.java).isBot(player)) return@registerEvent
 
-                    if (illegalMainHand || illegalOffHand) {
-                        @Suppress("KotlinConstantConditions") // I could write the offhand branch into the else, but I prefer the style
-                        suspects[player.gameProfile] = when {
-                            illegalMainHand && illegalOffHand -> arrayOf(mainHand!!, offHand!!)
-                            illegalMainHand -> arrayOf(mainHand!!)
-                            illegalOffHand -> arrayOf(offHand!!)
-                            else -> arrayOf()
+                        var mainHand: Item? = null
+                        var offHand: Item? = null
+                        for (pair in event.packet.equipmentList) {
+                            if (pair.first == EquipmentSlot.MAINHAND) mainHand = pair.second.item
+                            else if (pair.first == EquipmentSlot.OFFHAND) offHand = pair.second.item
                         }
-                        if (!broadcast.isSelected(0)) {
-                            accuse(player, illegalMainHand, illegalOffHand, mainHand ?: Items.AIR, offHand ?: Items.AIR, broadcast.values.indexOf(broadcast.getSelected()), customBroadcastMessage.value)
+
+                        val illegalMainHand = if (mainHand != null) isIllegalItem(mainHand) else false
+                        val illegalOffHand = if (offHand != null) isIllegalItem(offHand) else false
+
+                        if (illegalMainHand || illegalOffHand) {
+                            @Suppress("KotlinConstantConditions") // I could write the offhand branch into the else, but I prefer the style
+                            suspects[player.gameProfile] = when {
+                                illegalMainHand && illegalOffHand -> arrayOf(mainHand!!, offHand!!)
+                                illegalMainHand -> arrayOf(mainHand!!)
+                                illegalOffHand -> arrayOf(offHand!!)
+                                else -> arrayOf()
+                            }
+                            if (!broadcast.isSelected(0)) {
+                                accuse(player, illegalMainHand, illegalOffHand, mainHand ?: Items.AIR, offHand ?: Items.AIR, broadcast.values.indexOf(broadcast.getSelected()), customBroadcastMessage.value)
+                            }
                         }
                     }
                 }

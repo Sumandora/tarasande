@@ -14,6 +14,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
+import net.tarasandedevelopment.tarasande.util.extension.javaruntime.clearAndGC
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.boundingBox
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.div
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
@@ -107,7 +108,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
     }
 
     override fun onDisable() {
-        bedDatas.clear()
+        bedDatas.clearAndGC()
     }
 
     init {

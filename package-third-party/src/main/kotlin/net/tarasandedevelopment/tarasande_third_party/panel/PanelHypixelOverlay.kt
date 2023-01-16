@@ -26,7 +26,7 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
     private val fields = ValueMode(this, "Fields", true, "Name", "Playtime", "Age", "Level", "Final-Kill/Death Ratio", "Winstreak", "Achievements", "API response length")
 
     private val blackList = ArrayList<GameProfile>()
-    private val playerData = ConcurrentHashMap<GameProfile, Stats>()
+    private var playerData = ConcurrentHashMap<GameProfile, Stats>()
     private val url = "https://api.hypixel.net/player?uuid=%s&key=%s"
     private val baseLine = "Name\tPlaytime\tAge\tLevel\tFKDR\tWS\tACH\tLength"
 
@@ -122,7 +122,7 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
 
     override fun tick() {
         if (mc.networkHandler == null || !opened)
-            playerData.clear()
+            playerData = ConcurrentHashMap()
         else {
             playerData.entries.removeIf { mc.networkHandler?.playerList?.none { entry -> entry.profile == it.key } == true }
             mc.networkHandler?.playerList?.forEach {

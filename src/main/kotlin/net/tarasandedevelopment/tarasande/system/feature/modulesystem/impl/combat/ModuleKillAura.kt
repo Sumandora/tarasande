@@ -112,7 +112,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
     private val aimTargetColor = ValueColor(this, "Aim target color", 0.0, 1.0, 1.0, 1.0)
 
-    val targets = CopyOnWriteArrayList<Pair<Entity, Vec3d>>()
+    var targets = CopyOnWriteArrayList<Pair<Entity, Vec3d>>()
     private val comparator: Comparator<Pair<Entity, Vec3d>> = Comparator.comparing {
         when {
             priority.isSelected(0) -> {
@@ -163,7 +163,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     override fun onDisable() {
         blocking = false
         lastFlex = null
-        targets.clear()
+        targets = CopyOnWriteArrayList()
         waitForDamage = true
         teleportPath = null
     }

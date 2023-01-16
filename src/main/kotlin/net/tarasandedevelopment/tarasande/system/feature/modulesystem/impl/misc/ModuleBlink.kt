@@ -80,7 +80,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     private var velocity: Vec3d? = null
     private var rotation: Rotation? = null
 
-    private val newPositions = ConcurrentHashMap<Entity, Vec3d>()
+    private var newPositions = ConcurrentHashMap<Entity, Vec3d>()
 
     init {
         // Enable both by default
@@ -101,8 +101,8 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
         pos = mc.player?.pos
         velocity = mc.player?.velocity
         rotation = Rotation(mc.player ?: return)
-        packets.clear() // This might be filled with data, because it is copy on write
-        newPositions.clear()
+        packets = CopyOnWriteArrayList()
+        newPositions = ConcurrentHashMap()
     }
 
     private fun shouldPulsate(): Boolean {

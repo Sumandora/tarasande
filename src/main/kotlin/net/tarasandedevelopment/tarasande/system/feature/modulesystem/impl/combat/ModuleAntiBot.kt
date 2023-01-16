@@ -44,32 +44,32 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
         }
     }
 
-    private val manualHit = HashSet<PlayerEntity>()
+    private var manualHit = HashSet<PlayerEntity>()
 
-    private val passedSound = HashSet<PlayerEntity>()
-    private val passedGround = HashSet<PlayerEntity>()
-    private val passedInvisible = HashSet<PlayerEntity>()
-    private val passedSneak = HashSet<PlayerEntity>()
-    private val passedMovement = HashSet<PlayerEntity>()
-    private val passedLineOfSight = HashSet<PlayerEntity>()
+    private var passedSound = HashSet<PlayerEntity>()
+    private var passedGround = HashSet<PlayerEntity>()
+    private var passedInvisible = HashSet<PlayerEntity>()
+    private var passedSneak = HashSet<PlayerEntity>()
+    private var passedMovement = HashSet<PlayerEntity>()
+    private var passedLineOfSight = HashSet<PlayerEntity>()
 
-    private val invalidGameMode = HashSet<UUID>()
+    private var invalidGameMode = HashSet<UUID>()
 
-    private val passedSwing = HashSet<PlayerEntity>()
+    private var passedSwing = HashSet<PlayerEntity>()
 
     override fun onDisable() {
-        manualHit.clear()
+        manualHit = HashSet<PlayerEntity>()
 
-        passedSound.clear()
-        passedGround.clear()
-        passedInvisible.clear()
-        passedSneak.clear()
-        passedMovement.clear()
-        passedLineOfSight.clear()
+        passedSound = HashSet<PlayerEntity>()
+        passedGround = HashSet<PlayerEntity>()
+        passedInvisible = HashSet<PlayerEntity>()
+        passedSneak = HashSet<PlayerEntity>()
+        passedMovement = HashSet<PlayerEntity>()
+        passedLineOfSight = HashSet<PlayerEntity>()
 
-        invalidGameMode.clear()
+        invalidGameMode = HashSet<UUID>()
 
-        passedSwing.clear()
+        passedSwing = HashSet<PlayerEntity>()
     }
 
     init {

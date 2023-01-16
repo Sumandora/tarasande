@@ -21,7 +21,7 @@ class ElementWidthValueComponentFocusableRegistry(value: Value) : ElementWidthVa
     private val textFieldWidget = TextFieldWidgetPlaceholder(mc.textRenderer, 0, 0, 40 * 2, FontWrapper.fontHeight() * 2 - 1, Text.of("Search"))
     private val textFieldAccessor = textFieldWidget as ITextFieldWidget
 
-    private val searchResults = CopyOnWriteArrayList<ValueRegistry.WrappedKey<*>>()
+    private var searchResults = CopyOnWriteArrayList<ValueRegistry.WrappedKey<*>>()
 
     init {
         textFieldAccessor.tarasande_disableSelectionHighlight()
@@ -165,7 +165,7 @@ class ElementWidthValueComponentFocusableRegistry(value: Value) : ElementWidthVa
     }
 
     private fun updateSearchResults() {
-        searchResults.clear()
+        searchResults = CopyOnWriteArrayList()
         searchResults.addAll(value.updateSearchResults(textFieldWidget.text, 4))
     }
 

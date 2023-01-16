@@ -9,6 +9,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBool
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.javaruntime.clearAndGC
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
@@ -27,7 +28,7 @@ class ModuleAntiFireball : Module("Anti fireball", "Hits fireballs to turn them"
     private val timeUtil = TimeUtil()
 
     override fun onDisable() {
-        targets.clear()
+        targets.clearAndGC()
     }
 
     init {
