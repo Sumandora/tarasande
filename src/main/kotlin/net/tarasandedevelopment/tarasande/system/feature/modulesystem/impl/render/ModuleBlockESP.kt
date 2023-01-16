@@ -32,7 +32,7 @@ class ModuleBlockESP : Module("Block ESP", "Highlights blocks through walls", Mo
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey
     }
 
-    private var list = CopyOnWriteArrayList<Pair<BlockPos, BlockState>>()
+    var list = CopyOnWriteArrayList<Pair<BlockPos, BlockState>>()
 
     override fun onEnable() {
         mc.worldRenderer.reload()

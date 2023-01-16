@@ -65,7 +65,7 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
     init {
         registerEvent(EventMouse::class.java) { event ->
             if (event.action == GLFW.GLFW_PRESS && event.button == 1 && mc.currentScreen == null) {
-                val hitResult = PlayerUtil.getTargetedEntity(mc.options.viewDistance.value * 16.0, Rotation(mc.player!!), false)
+                val hitResult = PlayerUtil.getTargetedEntity(mc.gameRenderer.method_32796().toDouble(), Rotation(mc.player!!), false)
                 if (hitResult != null) {
                     val blockPos =
                         if (hitResult is BlockHitResult)

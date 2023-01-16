@@ -60,7 +60,11 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
                 if (moduleKillAura.enabled.value && moduleKillAura.targets.isNotEmpty())
                     moduleKillAura.targets[0].first
                 else if (mc.crosshairTarget.isEntityHitResult()) {
-                    (mc.crosshairTarget as EntityHitResult).entity
+                    val entity = (mc.crosshairTarget as EntityHitResult).entity
+                    if(!PlayerUtil.isAttackable(entity))
+                        null
+                    else
+                        entity
                 } else
                     null
 

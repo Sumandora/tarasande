@@ -5,6 +5,7 @@ import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.debug.BlockChangeTracker
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.debug.MinecraftDebugger
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.debug.PlayerMovementPrediction
+import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.debug.camera.Camera
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import su.mandora.event.EventDispatcher
@@ -21,6 +22,7 @@ object DebugValues {
     val openGLErrorDebugger = ValueBoolean(this, "OpenGL error debugger", true)
     val disableInterpolation = ValueBoolean(this, "Disable interpolation", false)
     private val ignoreResourcePackHash = ValueBoolean(this, "Ignore resource pack hash", false)
+    val camera = ValueButtonOwnerValues(this, "Camera", Camera())
 
     init {
         EventDispatcher.add(EventPacket::class.java) { event ->

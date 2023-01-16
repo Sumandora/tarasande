@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.move
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.event.EventEntityHurt
 import net.tarasandedevelopment.tarasande.event.EventJump
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventMovement
@@ -25,6 +26,10 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
     private val speedDivider = ValueNumber(this, "Speed divider", 1.0, 60.0, 200.0, 1.0)
     private val turnRate = ValueNumber(this, "Turn rate", 0.0, 180.0, 180.0, 1.0)
     private val lowHop = ValueBoolean(this, "Low hop", false)
+    private val damageBoost = ValueBoolean(this, "Damage boost", false)
+    private val boostAmount = object : ValueNumber(this, "Boost amount", 0.0, PlayerUtil.DEFAULT_WALK_SPEED, 1.0, 0.01) {
+        override fun isEnabled() = damageBoost.value
+    }
 
     private var speed = 0.0
     private var moveDir = 0.0
@@ -32,6 +37,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
     override fun onEnable() {
         firstMove = true
+        speed = PlayerUtil.DEFAULT_WALK_SPEED
     }
 
     init {
@@ -92,9 +98,14 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                 speed -= speed / speedDivider.value
         }
 
-        registerEvent(EventJump::class.java) {
-            if (it.state == EventJump.State.POST)
+        registerEvent(EventJump::class.java) { event ->
+            if (event.state == EventJump.State.POST)
                 speed = PlayerUtil.calcBaseSpeed(speedValue.value)
+        }
+
+        registerEvent(EventEntityHurt::class.java) { event ->
+            if (event.entity == mc.player && damageBoost.value)
+                speed = boostAmount.value
         }
 
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->

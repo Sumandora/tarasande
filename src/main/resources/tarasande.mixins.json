@@ -105,6 +105,8 @@
     "defaultRequire": 1
   },
   "client": [
+    "feature.clientvalue.MixinGameRenderer",
+    "feature.clientvalue.MixinHeldItemRenderer",
     "feature.module.MixinClientPlayNetworkHandler",
     "feature.module.MixinConfirmScreen",
     "feature.module.MixinServerResourcePackProvider"

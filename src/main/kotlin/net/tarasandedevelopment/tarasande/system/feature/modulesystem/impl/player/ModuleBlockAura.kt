@@ -17,8 +17,10 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleBlockESP
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.clearAndGC
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.isMissHitResult
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewWorld
@@ -53,7 +55,7 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
         registerEvent(EventPollEvents::class.java) { event ->
             focusedBlock = null
 
-            if(!timeUtil.hasReached(delay.value.toLong()))
+            if (!timeUtil.hasReached(delay.value.toLong()))
                 return@registerEvent
 
             val rad = ceil(reach.value).toInt()
@@ -63,7 +65,7 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
             for (x in -rad..rad) for (y in -rad..rad) for (z in -rad..rad) {
                 val blockPos = BlockPos(mc.player?.eyePos).add(x, y, z)
                 val blockState = mc.world?.getBlockState(blockPos) ?: continue
-                if(!block.isSelected(blockState.block)) continue
+                if (!block.isSelected(blockState.block)) continue
 
                 val collisionShape = blockState.getCollisionShape(mc.world, blockPos)
 
@@ -73,7 +75,7 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
                         val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, pos)
                         if (hitResult.isMissHitResult())
                             continue
-                        if(!throughWalls.value && hitResult.blockPos != pos)
+                        if (!throughWalls.value && hitResult.blockPos != pos)
                             continue
                         list.add(Pair(blockPos, hitResult))
                     }
@@ -91,23 +93,27 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
         registerEvent(EventAttack::class.java, 1001) {
             if (closedInventory.value && mc.currentScreen != null) return@registerEvent
 
-            if(focusedBlock != null) {
+            if (focusedBlock != null) {
                 PlayerUtil.placeBlock(focusedBlock!!.second.withBlockPos(focusedBlock!!.first)!!)
                 interactedBlocks.add(focusedBlock!!.first)
+                val moduleBlockESP = ManagerModule.get(ModuleBlockESP::class.java)
+                if (moduleBlockESP.enabled.value)
+                    moduleBlockESP.list.removeIf { it.first == focusedBlock!!.first }
                 timeUtil.reset()
             }
         }
         registerEvent(EventPacket::class.java) { event ->
-            if(event.type == EventPacket.Type.RECEIVE) {
-                when(event.packet) {
+            if (event.type == EventPacket.Type.RECEIVE) {
+                when (event.packet) {
                     is OpenScreenS2CPacket -> {
-                        if(autoCloseScreens.value) {
+                        if (autoCloseScreens.value) {
                             mc.networkHandler?.sendPacket(CloseHandledScreenC2SPacket(event.packet.syncId))
                             Notifications.notify("Auto closed a screen")
                         }
                     }
+
                     is PlayerRespawnS2CPacket -> {
-                        if(event.packet.isNewWorld()) {
+                        if (event.packet.isNewWorld()) {
                             onDisable()
                         }
                     }
