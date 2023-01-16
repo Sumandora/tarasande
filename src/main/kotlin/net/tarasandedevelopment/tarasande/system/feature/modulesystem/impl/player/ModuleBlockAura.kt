@@ -109,6 +109,7 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
                         if (autoCloseScreens.value) {
                             mc.networkHandler?.sendPacket(CloseHandledScreenC2SPacket(event.packet.syncId))
                             Notifications.notify("Auto closed a screen")
+                            event.cancelled = true
                         }
                     }
 
