@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
 import su.mandora.event.EventDispatcher
 
-class EntrySidebarPanelToggleablePluginMessageFilter : SidebarEntryToggleable("Plugin message filter", "Spoofer") {
+class SidebarEntryToggleablePluginMessageFilter : SidebarEntryToggleable("Plugin message filter", "Spoofer") {
 
     private val filterType = ValueMode(this, "Filter type", false, "Contains", "Equals")
     private val channels = ValueTextList(this, "Channels", arrayListOf("fabric"))

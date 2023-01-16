@@ -2,7 +2,7 @@ package de.florianmichael.tarasande_protocol_spoofer.injection.mixin.forgefaker;
 
 import de.florianmichael.tarasande_protocol_spoofer.injection.accessor.IServerInfo;
 import de.florianmichael.tarasande_protocol_spoofer.injection.accessor.IServerMetadata;
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.EntrySidebarPanelToggleableForgeFaker;
+import de.florianmichael.tarasande_protocol_spoofer.spoofer.SidebarEntryToggleableForgeFaker;
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.IForgePayload;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.network.ClientConnection;
@@ -36,7 +36,7 @@ public class MixinMultiplayerServerListPinger_1 {
         if (payload != null) {
             ((IServerInfo) field_3776).tarasande_setForgePayload(payload);
 
-            ManagerScreenExtension.INSTANCE.get(ScreenExtensionSidebarMultiplayerScreen.class).getSidebar().get(EntrySidebarPanelToggleableForgeFaker.class).getForgeInfoTracker().put((InetSocketAddress) instance.getAddress(), payload);
+            ManagerScreenExtension.INSTANCE.get(ScreenExtensionSidebarMultiplayerScreen.class).getSidebar().get(SidebarEntryToggleableForgeFaker.class).getForgeInfoTracker().put((InetSocketAddress) instance.getAddress(), payload);
         }
 
         instance.send(packet); // Original Code

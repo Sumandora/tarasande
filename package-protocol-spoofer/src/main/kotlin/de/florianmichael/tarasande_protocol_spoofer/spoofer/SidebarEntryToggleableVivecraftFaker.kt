@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
 
-class EntrySidebarPanelToggleableVivecraftFaker : SidebarEntryToggleable("Vivecraft faker", "Spoofer") {
+class SidebarEntryToggleableVivecraftFaker : SidebarEntryToggleable("Vivecraft faker", "Spoofer") {
     private val version = ValueText(this, "Version", "Vivecraft 1.19.2  jrbudda-VR-2-b7")
 
     private val identifier = Identifier("vivecraft:data")

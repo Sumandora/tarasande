@@ -23,12 +23,13 @@ class TarasandeProtocolSpoofer : ClientModInitializer {
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
             ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.apply {
                 add(
-                    EntrySidebarPanelToggleableBungeeHack(),
-                    EntrySidebarPanelToggleableForgeFaker(),
-                    EntrySidebarPanelToggleableHAProxyHack(),
-                    EntrySidebarPanelToggleableQuiltFaker(),
-                    EntrySidebarPanelToggleableVivecraftFaker(),
-                    EntrySidebarPanelToggleablePluginMessageFilter()
+                    SidebarEntryToggleableBungeeHack(),
+                    SidebarEntryToggleableForgeFaker(),
+                    SidebarEntryToggleableHAProxyHack(),
+                    SidebarEntryToggleableQuiltFaker(),
+                    SidebarEntryToggleableVivecraftFaker(),
+                    SidebarEntryToggleableTeslaClientFaker(),
+                    SidebarEntryToggleablePluginMessageFilter()
                 )
             }
         }

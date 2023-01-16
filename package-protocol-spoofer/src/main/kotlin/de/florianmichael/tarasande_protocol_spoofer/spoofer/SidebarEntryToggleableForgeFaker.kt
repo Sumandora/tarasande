@@ -25,7 +25,7 @@ import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 import java.net.InetSocketAddress
 
-class EntrySidebarPanelToggleableForgeFaker : SidebarEntryToggleable("Forge faker", "Spoofer") {
+class SidebarEntryToggleableForgeFaker : SidebarEntryToggleable("Forge faker", "Spoofer") {
 
     val forgeInfoTracker = HashMap<InetSocketAddress, IForgePayload>()
     private var currentHandler: IForgeNetClientHandler? = null
