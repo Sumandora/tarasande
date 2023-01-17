@@ -15,12 +15,14 @@ public class MixinPlayerEntity {
     @Redirect(method = "tickNewAi", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;headYaw:F"))
     public void overwriteYaw(PlayerEntity instance, float value) {
         Rotation rotation = RotationUtil.INSTANCE.getFakeRotation();
+        float pitch = instance.getPitch();
         //noinspection ConstantValue
         if((Object) this == MinecraftClient.getInstance().player && rotation != null) {
             value =  rotation.getYaw();
-            ((ILivingEntity) instance).tarasande_setHeadPitch(rotation.getPitch());
+            pitch = rotation.getPitch();
         }
         instance.headYaw = value;
+        ((ILivingEntity) instance).tarasande_setHeadPitch(pitch);
     }
 
 }
