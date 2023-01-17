@@ -37,6 +37,7 @@ import java.util.logging.Logger
  * TODO | Protocol Hack:
  *  - Entity Dimensions
  *  - WindowClick in 1.16.5 is not fully remapped
+ *  - Implement HandItemProvider in <= b1.7.3
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv

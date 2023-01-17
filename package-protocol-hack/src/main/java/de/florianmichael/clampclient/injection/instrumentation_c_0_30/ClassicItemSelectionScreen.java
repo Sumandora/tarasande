@@ -51,8 +51,18 @@ public class ClassicItemSelectionScreen extends Screen {
 
             this.client.player.getInventory().main.set(MinecraftClient.getInstance().player.getInventory().selectedSlot, selectedItem);
             this.client.player.playerScreenHandler.sendContentUpdates();
+
+            this.close();
         }
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == this.client.options.inventoryKey.boundKey.getCode()) {
+            this.close();
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
