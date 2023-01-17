@@ -21,7 +21,9 @@ public abstract class MixinWorld implements WorldAccess {
 
     @Inject(method = "setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;II)Z", at = @At("HEAD"))
     public void hookBlockChangeTracker(BlockPos pos, BlockState state, int flags, int maxUpdateDepth, CallbackInfoReturnable<Boolean> cir) {
-        if (!getBlockState(pos).getBlock().equals(state.getBlock()))
-            ((BlockChangeTracker) DebugValues.INSTANCE.getBlockChangeTracker().getValuesOwner()).getChanges().add(new Triple<>(pos, state, System.currentTimeMillis()));
+        BlockChangeTracker blockChangeTracker = ((BlockChangeTracker) DebugValues.INSTANCE.getBlockChangeTracker().getValuesOwner());
+        if (blockChangeTracker.getEnabled().getValue())
+            if (!getBlockState(pos).getBlock().equals(state.getBlock()))
+                blockChangeTracker.getChanges().add(new Triple<>(pos, state, System.currentTimeMillis()));
     }
 }

@@ -15,7 +15,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class BlockChangeTracker {
 
-    private val enabled = ValueBoolean(this, "Enabled", false)
+    val enabled = ValueBoolean(this, "Enabled", false)
     private val color = ValueColor(this, "Color", 0.0, 1.0, 1.0, 1.0)
     private val time = ValueNumber(this, "Time", 0.0, 1000.0, 10000.0, 500.0)
 
@@ -28,8 +28,7 @@ class BlockChangeTracker {
                 if (timeDelta > time.value) {
                     changes.remove(change)
                 } else {
-                    if (enabled.value)
-                        RenderUtil.blockOutline(event.matrices, change.second.getOutlineShape(mc.world, change.first).boundingBox().offset(change.first.x.toDouble(), change.first.y.toDouble(), change.first.z.toDouble()), color.getColor().withAlpha((color.getColor().alpha * (1.0F - timeDelta / time.value)).toInt()).rgb)
+                    RenderUtil.blockOutline(event.matrices, change.second.getOutlineShape(mc.world, change.first).boundingBox().offset(change.first.x.toDouble(), change.first.y.toDouble(), change.first.z.toDouble()), color.getColor().withAlpha((color.getColor().alpha * (1.0F - timeDelta / time.value)).toInt()).rgb)
                 }
             }
         }
