@@ -5,10 +5,12 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.DebugValues;
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.debug.camera.Camera;
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.debug.camera.ViewModel;
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.HandKt;
 import net.tarasandedevelopment.tarasande.util.math.MathUtil;
 import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,10 +26,13 @@ public class MixinHeldItemRenderer {
     private boolean tarasande_skipNext = false;
 
     @Unique
-    private void tarasande_applyTransform(MatrixStack matrices, Hand hand) {
+    private void tarasande_applyTransform(MatrixStack matrices, Arm arm) {
         ViewModel viewModel = (ViewModel) ((Camera) DebugValues.INSTANCE.getCamera().getValuesOwner()).getViewModel().getValuesOwner();
 
-        double handOffset = -MathUtil.INSTANCE.roundAwayFromZero(hand.ordinal() - 0.5) /* rofl */;
+        if(!viewModel.getArms().isSelected(arm.ordinal()))
+            return;
+
+        double handOffset = -MathUtil.INSTANCE.roundAwayFromZero(arm.getOpposite()/*Let's make the user input the main hand*/.ordinal() - 0.5) /* rofl */;
 
         matrices.translate(viewModel.getX().getValue() * handOffset, viewModel.getY().getValue(), viewModel.getZ().getValue());
         matrices.multiply(
@@ -45,12 +50,20 @@ public class MixinHeldItemRenderer {
             tarasande_skipNext = false;
             return;
         }
-        tarasande_applyTransform(matrices, hand);
+        tarasande_applyTransform(matrices, HandKt.toArm(hand));
     }
 
     @Inject(method = "renderFirstPersonItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/HeldItemRenderer;applyEatOrDrinkTransformation(Lnet/minecraft/client/util/math/MatrixStack;FLnet/minecraft/util/Arm;Lnet/minecraft/item/ItemStack;)V"))
     public void applyBeforeEatAnimation(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        tarasande_applyTransform(matrices, hand);
+        tarasande_applyTransform(matrices, HandKt.toArm(hand));
+        tarasande_skipNext = true;
+    }
+
+    @Inject(method = "renderArmHoldingItem", at = @At("HEAD"))
+    public void applyHand(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float equipProgress, float swingProgress, Arm arm, CallbackInfo ci) {
+        ViewModel viewModel = (ViewModel) ((Camera) DebugValues.INSTANCE.getCamera().getValuesOwner()).getViewModel().getValuesOwner();
+        if(viewModel.getApplyToHand().getValue())
+            tarasande_applyTransform(matrices, arm);
         tarasande_skipNext = true;
     }
 }
