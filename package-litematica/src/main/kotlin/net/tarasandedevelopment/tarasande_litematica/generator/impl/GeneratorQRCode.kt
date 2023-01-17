@@ -4,10 +4,10 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import net.minecraft.block.Blocks
 import net.minecraft.util.math.BlockPos
-import net.tarasandedevelopment.tarasande.feature.notification.Notifications
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
+import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande_litematica.generator.Generator
 import net.tarasandedevelopment.tarasande_litematica.util.LitematicaGenerator
@@ -63,7 +63,7 @@ class GeneratorQRCode(parent: Any) : Generator(parent, "QR Code") {
                 }
             }
         } catch (e: Exception) {
-            Notifications.notify("Failed to parse input, " + e.localizedMessage)
+            CustomChat.printChatMessage("Failed to parse input, " + e.localizedMessage)
         }
     }
 }

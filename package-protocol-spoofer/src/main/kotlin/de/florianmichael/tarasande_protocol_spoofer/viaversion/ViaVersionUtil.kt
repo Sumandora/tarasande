@@ -12,7 +12,7 @@ import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.M
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.util.VersionListEnum
 import net.minecraft.network.ClientConnection
-import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack
+import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack
 
 object ViaVersionUtil {
 

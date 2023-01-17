@@ -24,7 +24,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.input;
 import de.florianmichael.clampclient.injection.mixininterface.IMinecraftClient_Protocol;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
-import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

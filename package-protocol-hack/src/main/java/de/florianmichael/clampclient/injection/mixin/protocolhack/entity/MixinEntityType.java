@@ -23,7 +23,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.EntityDimensionReplacement;
+import de.florianmichael.tarasande_protocol_hack.fix.global.EntityDimensionReplacement;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

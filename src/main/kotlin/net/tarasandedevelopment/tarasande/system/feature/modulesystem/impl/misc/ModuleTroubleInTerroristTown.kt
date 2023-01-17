@@ -7,7 +7,6 @@ import net.minecraft.network.packet.s2c.play.HealthUpdateS2CPacket
 import net.minecraft.registry.Registries
 import net.tarasandedevelopment.tarasande.event.EventEntityHurt
 import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.feature.notification.Notifications
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
@@ -15,6 +14,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
+import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 
 class ModuleTroubleInTerroristTown : Module("Trouble in terrorist town", "Uses assumptions to find traitors in TTT", ModuleCategory.MISC) {
 
@@ -47,7 +47,7 @@ class ModuleTroubleInTerroristTown : Module("Trouble in terrorist town", "Uses a
             val traitors = scanForTraitors(event.entity) ?: return@registerEvent
 
             if (traitors.isNotEmpty())
-                Notifications.notify(event.entity.gameProfile.name + " is being attacked by " + traitors.joinToString { it.gameProfile.name })
+                CustomChat.printChatMessage(event.entity.gameProfile.name + " is being attacked by " + traitors.joinToString { it.gameProfile.name })
         }
 
         registerEvent(EventPacket::class.java) { event ->
@@ -57,7 +57,7 @@ class ModuleTroubleInTerroristTown : Module("Trouble in terrorist town", "Uses a
                 val traitors = scanForTraitors(mc.player!!) ?: return@registerEvent
 
                 if (traitors.isNotEmpty())
-                    Notifications.notify("You are being attacked by " + traitors.joinToString { it.gameProfile.name })
+                    CustomChat.printChatMessage("You are being attacked by " + traitors.joinToString { it.gameProfile.name })
             }
         }
     }

@@ -37,7 +37,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;

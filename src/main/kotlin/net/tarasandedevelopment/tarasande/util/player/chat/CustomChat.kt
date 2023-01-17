@@ -8,6 +8,8 @@ import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.mc
 
 object CustomChat {
+    fun printChatMessage(message: String) = printChatMessage(Text.literal(message))
+
     fun printChatMessage(message: MutableText) {
         val end = buildPrefix()
         end.append(message.styled { it.withColor(TextColor.fromRgb(-1)) })

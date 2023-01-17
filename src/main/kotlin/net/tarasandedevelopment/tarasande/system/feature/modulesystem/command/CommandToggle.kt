@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.minecraft.command.CommandSource
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.Command
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
+import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 
 class CommandToggle(private val moduleSystem: ManagerModule) : Command("toggle") {
 
@@ -22,10 +23,10 @@ class CommandToggle(private val moduleSystem: ManagerModule) : Command("toggle")
             val module = moduleSystem.list.firstOrNull { module -> module.name == moduleName }
             if (module != null) {
                 module.switchState()
-                printChatMessage("[" + module.name + "] is now " + if (module.enabled.value) "enabled" else "disabled")
+                CustomChat.printChatMessage("[" + module.name + "] is now " + if (module.enabled.value) "enabled" else "disabled")
                 return@executes SUCCESS
             } else {
-                printChatMessage("[$moduleName] does not exist")
+                CustomChat.printChatMessage("[$moduleName] does not exist")
                 return@executes ERROR
             }
         })

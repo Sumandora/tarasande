@@ -31,7 +31,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

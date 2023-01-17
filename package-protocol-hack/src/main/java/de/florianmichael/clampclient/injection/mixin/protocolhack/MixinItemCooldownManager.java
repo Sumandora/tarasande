@@ -23,7 +23,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.item.Item;
-import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

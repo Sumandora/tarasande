@@ -29,8 +29,8 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerMod
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoWeb;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSafeWalk;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
-import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack;
-import net.tarasandedevelopment.tarasande_protocol_hack.injection.accessor.IEventCollisionShape;
+import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack;
+import de.florianmichael.tarasande_protocol_hack.injection.accessor.IEventCollisionShape;
 import su.mandora.event.EventDispatcher;
 
 import java.util.ArrayList;

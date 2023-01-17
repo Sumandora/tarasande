@@ -14,6 +14,7 @@ import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.Command
+import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import java.util.function.Function
 
@@ -67,14 +68,14 @@ class CommandEnchant : Command("enchant") {
                 @Suppress("UNCHECKED_CAST")
                 (it.getArgument("enchantment", RegistryEntry.Reference::class.java) as RegistryEntry.Reference<Enchantment>).value().apply {
                     singleEnchant(this, level)
-                    printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(this.translationKey) + "] at level [" + level + "] was added")
+                    CustomChat.printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(this.translationKey) + "] at level [" + level + "] was added")
                 }
                 return@executes SUCCESS
             }).then(literal("max").executes {
                 @Suppress("UNCHECKED_CAST")
                 (it.getArgument("enchantment", RegistryEntry.Reference::class.java) as RegistryEntry.Reference<Enchantment>).value().apply {
                     singleEnchant(this, this.maxLevel)
-                    printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(this.translationKey) + "] at max level was added")
+                    CustomChat.printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(this.translationKey) + "] at max level was added")
                 }
                 return@executes SUCCESS
             })
@@ -86,7 +87,7 @@ class CommandEnchant : Command("enchant") {
                     allEnchant(true) {
                         return@allEnchant this
                     }
-                    printChatMessage("All possible enchantments at level [$this] were added")
+                    CustomChat.printChatMessage("All possible enchantments at level [$this] were added")
                 }
                 return@executes SUCCESS
             }
@@ -94,7 +95,7 @@ class CommandEnchant : Command("enchant") {
             allEnchant(true) {
                 return@allEnchant it.maxLevel
             }
-            printChatMessage("All possible enchantments at max level were added")
+            CustomChat.printChatMessage("All possible enchantments at max level were added")
             return@executes SUCCESS
         })))
 
@@ -104,14 +105,14 @@ class CommandEnchant : Command("enchant") {
                     allEnchant(level = Function {
                         return@Function this
                     })
-                    printChatMessage("All enchantments at level [$this] were added")
+                    CustomChat.printChatMessage("All enchantments at level [$this] were added")
                 }
                 return@executes SUCCESS
             }).then(literal("max").executes {
             allEnchant(false) {
                 return@allEnchant it.maxLevel
             }
-            printChatMessage("All enchantments at max level were added")
+            CustomChat.printChatMessage("All enchantments at max level were added")
             return@executes SUCCESS
         })))
 
@@ -122,13 +123,13 @@ class CommandEnchant : Command("enchant") {
                 EnchantmentHelper.set(EnchantmentHelper.get(this).apply { remove(enchantment) }, this)
             }
             syncInventory()
-            printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(enchantment.translationKey) + "] was removed")
+            CustomChat.printChatMessage("The enchantment [" + StringUtil.uncoverTranslation(enchantment.translationKey) + "] was removed")
             return@executes SUCCESS
         }))
 
         builder.then(literal("clear").executes {
             getTargetItem().nbt?.remove("Enchantments")
-            printChatMessage("All enchantments have been removed")
+            CustomChat.printChatMessage("All enchantments have been removed")
             return@executes SUCCESS
         })
         return builder

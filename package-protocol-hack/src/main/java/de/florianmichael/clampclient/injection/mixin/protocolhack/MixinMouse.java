@@ -3,7 +3,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack;
 import de.florianmichael.clampclient.injection.instrumentation_1_12.MouseEmulation_1_12_2;
 import de.florianmichael.clampclient.injection.mixininterface.IMouse_Protocol;
 import net.minecraft.client.Mouse;
-import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;

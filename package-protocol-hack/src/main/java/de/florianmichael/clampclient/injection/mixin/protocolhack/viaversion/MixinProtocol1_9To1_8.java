@@ -32,8 +32,8 @@ import com.viaversion.viaversion.protocols.protocol1_9to1_8.ClientboundPackets1_
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.Protocol1_9To1_8;
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.ServerboundPackets1_9;
 import net.minecraft.client.MinecraftClient;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.Sign_1_8;
-import net.tarasandedevelopment.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.fix.Sign_1_8;
+import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

@@ -124,6 +124,7 @@
   "client": [
     "MixinKeyboard",
     "MixinMouse",
+    "screen.MixinCreativeInventoryScreen",
     "screen.MixinGameModeSelectionScreen",
     "screen.MixinGameModeSelectionScreen_GameModeSelection",
     "screen.MixinSimpleOption_OptionSliderWidgetImpl"

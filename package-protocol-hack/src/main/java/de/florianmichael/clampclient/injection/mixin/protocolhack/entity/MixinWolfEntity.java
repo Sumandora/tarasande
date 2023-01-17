@@ -24,7 +24,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.entity.passive.WolfEntity;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.WolfHealthTracker1_14_4;
+import de.florianmichael.tarasande_protocol_hack.fix.WolfHealthTracker1_14_4;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

@@ -3,7 +3,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.screen;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.gui.screen.GameModeSelectionScreen;
-import net.tarasandedevelopment.tarasande_protocol_hack.TarasandeProtocolHack;
+import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.tarasandedevelopment.tarasande_protocol_hack.injection.mixin",
+  "package": "de.florianmichael.tarasande_protocol_hack.injection.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixinPriority": 1,
   "mixins": [

@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
-import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat.printChatMessage
+import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande_chat_features.gatekeep.GatekeepTracker
 import java.time.Instant
@@ -36,9 +36,7 @@ class ModulePublicKeyKicker : Module("Public key kicker", "Kicks players using o
             mc.profileKeys.fetchKeyPair().get().ifPresent(Consumer { key: PlayerKeyPair ->
                 if (key.isExpired) {
                     if (!hasNotified) {
-                        printChatMessage(Text.literal(
-                                "Your public key has now expired! Anyone who joins after this message will be disconnected when you chat"
-                        ))
+                        CustomChat.printChatMessage("Your public key has now expired! Anyone who joins after this message will be disconnected when you chat")
                         hasNotified = true
                     }
                 }

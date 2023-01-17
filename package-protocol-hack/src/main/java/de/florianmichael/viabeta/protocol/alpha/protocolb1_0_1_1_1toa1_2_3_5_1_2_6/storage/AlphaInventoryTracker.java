@@ -396,6 +396,7 @@ public class AlphaInventoryTracker extends StoredObject {
 
     private void updateInventorySlot(final byte windowId, final short slot, final Item item) {
         try {
+            System.out.println(item.identifier());
             final PacketWrapper setSlot = PacketWrapper.create(ClientboundPacketsb1_1.SET_SLOT, this.getUser());
             setSlot.write(Type.BYTE, windowId); // window id
             setSlot.write(Type.SHORT, slot); // slot

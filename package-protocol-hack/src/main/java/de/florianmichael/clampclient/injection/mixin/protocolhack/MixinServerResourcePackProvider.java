@@ -28,7 +28,7 @@ import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.GameVersion;
 import net.minecraft.client.resource.ServerResourcePackProvider;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.global.PackFormats;
+import de.florianmichael.tarasande_protocol_hack.fix.global.PackFormats;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

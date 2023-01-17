@@ -36,9 +36,9 @@ import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.storage.Receiv
 import com.viaversion.viaversion.protocols.protocol1_19to1_18_2.ClientboundPackets1_19;
 import com.viaversion.viaversion.protocols.protocol1_19to1_18_2.ServerboundPackets1_19;
 import kotlin.Pair;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.all_model.MessageMetadata1_19_all;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_0.ChatSession1_19_0;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.chatsession.v1_19_2.CommandArgumentsProvider;
+import de.florianmichael.tarasande_protocol_hack.fix.chatsession.all_model.MessageMetadata1_19_all;
+import de.florianmichael.tarasande_protocol_hack.fix.chatsession.v1_19_0.ChatSession1_19_0;
+import de.florianmichael.tarasande_protocol_hack.fix.chatsession.v1_19_2.CommandArgumentsProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

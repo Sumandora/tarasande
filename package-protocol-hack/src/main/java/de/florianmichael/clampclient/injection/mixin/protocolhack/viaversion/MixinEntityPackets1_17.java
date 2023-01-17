@@ -6,7 +6,7 @@ import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.protocols.protocol1_16_2to1_16_1.ClientboundPackets1_16_2;
 import com.viaversion.viaversion.protocols.protocol1_17to1_16_4.Protocol1_17To1_16_4;
 import com.viaversion.viaversion.protocols.protocol1_17to1_16_4.packets.EntityPackets;
-import net.tarasandedevelopment.tarasande_protocol_hack.fix.WorldHeightInjection_C_0_30;
+import de.florianmichael.tarasande_protocol_hack.fix.WorldHeightInjection_C_0_30;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

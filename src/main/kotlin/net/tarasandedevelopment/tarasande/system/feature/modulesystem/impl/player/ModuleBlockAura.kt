@@ -12,7 +12,6 @@ import net.minecraft.util.math.BlockPos
 import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventPollEvents
-import net.tarasandedevelopment.tarasande.feature.notification.Notifications
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -27,6 +26,7 @@ import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewW
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
+import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import kotlin.math.ceil
 
 class ModuleBlockAura : Module("Block aura", "Automatically interacts with blocks", ModuleCategory.PLAYER) {
@@ -108,7 +108,7 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
                     is OpenScreenS2CPacket -> {
                         if (autoCloseScreens.value) {
                             mc.networkHandler?.sendPacket(CloseHandledScreenC2SPacket(event.packet.syncId))
-                            Notifications.notify("Auto closed a screen")
+                            CustomChat.printChatMessage("Auto closed a screen")
                             event.cancelled = true
                         }
                     }

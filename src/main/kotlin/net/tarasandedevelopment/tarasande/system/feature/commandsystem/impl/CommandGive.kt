@@ -8,6 +8,7 @@ import net.minecraft.command.argument.ItemStackArgument
 import net.minecraft.command.argument.ItemStackArgumentType
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.Command
+import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 
 class CommandGive : Command("give") {
 
@@ -20,7 +21,7 @@ class CommandGive : Command("give") {
             mc.interactionManager?.clickCreativeStack(it, 36 + (mc.player?.inventory?.selectedSlot ?: 0))
             mc.player?.playerScreenHandler?.sendContentUpdates()
 
-            printChatMessage("You have received the item " + it.toHoverableText().string)
+            CustomChat.printChatMessage("You have received the item " + it.toHoverableText().string)
         }
         return SUCCESS
     }

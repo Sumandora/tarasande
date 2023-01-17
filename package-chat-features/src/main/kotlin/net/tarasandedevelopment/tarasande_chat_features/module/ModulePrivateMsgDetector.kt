@@ -46,7 +46,7 @@ class ModulePrivateMsgDetector : Module("Private msg detector", "Detects private
         }
 
         if (notificationsSent.add(message) && firstNextTick) {
-            CustomChat.printChatMessage(Text.literal(message))
+            CustomChat.printChatMessage(message)
         }
         firstNextTick = true
     }

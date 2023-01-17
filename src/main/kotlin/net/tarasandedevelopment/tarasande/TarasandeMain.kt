@@ -5,7 +5,6 @@ import net.minecraft.client.MinecraftClient
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
-import net.tarasandedevelopment.tarasande.feature.notification.Notifications
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.ManagerGrabber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
@@ -68,7 +67,6 @@ object TarasandeMain {
 
         ClientValues
         Friends
-        Notifications
 
         EventDispatcher.call(EventSuccessfulLoad())
     }

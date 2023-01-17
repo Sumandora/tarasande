@@ -113,7 +113,6 @@ abstract class Command(private vararg val aliases: String) {
         const val ERROR = 0
     }
 
-    fun printChatMessage(message: String) = CustomChat.printChatMessage(Text.literal(message))
     fun createServerCommandSource() = ServerCommandSource(null, mc.player?.pos, null, null, 0, null, null, null, null)
 
     open fun literal(name: String): LiteralArgumentBuilder<CommandSource> = LiteralArgumentBuilder.literal(name)
