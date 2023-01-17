@@ -9,6 +9,10 @@ public interface ILivingEntity {
     Vec3d tarasande_prevServerPos();
 
     boolean tarasande_forceHasStatusEffect(StatusEffect effect);
-
     StatusEffectInstance tarasande_forceGetStatusEffect(StatusEffect effect);
+
+    float tarasande_getHeadPitch();
+    void tarasande_setHeadPitch(float headPitch);
+    float tarasande_getPrevHeadPitch();
+    void tarasande_setPrevHeadPitch(float prevHeadPitch);
 }
