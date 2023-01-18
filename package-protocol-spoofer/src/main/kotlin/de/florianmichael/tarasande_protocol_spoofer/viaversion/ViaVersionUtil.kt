@@ -1,10 +1,10 @@
 package de.florianmichael.tarasande_protocol_spoofer.viaversion
 
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import com.viaversion.viaversion.api.type.Type
 import com.viaversion.viaversion.protocols.protocol1_12to1_11_1.ServerboundPackets1_12
 import com.viaversion.viaversion.protocols.protocol1_13to1_12_2.Protocol1_13To1_12_2
+import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.IForgeNetClientHandler
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.Fml1NetClientHandler
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.ModernFmlNetClientHandler
@@ -12,7 +12,6 @@ import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.M
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.util.VersionListEnum
 import net.minecraft.network.ClientConnection
-import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack
 
 object ViaVersionUtil {
 

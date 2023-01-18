@@ -1,7 +1,9 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.event;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.tarasandedevelopment.tarasande.event.EventFog;
+import net.tarasandedevelopment.tarasande.event.EventFogColor;
+import net.tarasandedevelopment.tarasande.event.EventFogEnd;
+import net.tarasandedevelopment.tarasande.event.EventFogStart;
 import net.tarasandedevelopment.tarasande.event.EventScreenInput;
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 import org.spongepowered.asm.mixin.Final;
@@ -30,23 +32,23 @@ public class MixinRenderSystem {
 
     @Redirect(method = "_setShaderFogStart", at = @At(value = "FIELD", target = "Lcom/mojang/blaze3d/systems/RenderSystem;shaderFogStart:F"))
     private static void hookEventFogStart(float value) {
-        EventFog eventFog = new EventFog(EventFog.State.FOG_START, new float[]{value});
-        EventDispatcher.INSTANCE.call(eventFog);
-        shaderFogStart = eventFog.getValues()[0];
+        EventFogStart eventFogStart = new EventFogStart(value);
+        EventDispatcher.INSTANCE.call(eventFogStart);
+        shaderFogStart = eventFogStart.getDistance();
     }
 
     @Redirect(method = "_setShaderFogEnd", at = @At(value = "FIELD", target = "Lcom/mojang/blaze3d/systems/RenderSystem;shaderFogEnd:F"))
     private static void hookEventFogEnd(float value) {
-        EventFog eventFog = new EventFog(EventFog.State.FOG_END, new float[]{value});
-        EventDispatcher.INSTANCE.call(eventFog);
-        shaderFogEnd = eventFog.getValues()[0];
+        EventFogEnd eventFogEnd = new EventFogEnd(value);
+        EventDispatcher.INSTANCE.call(eventFogEnd);
+        shaderFogEnd = eventFogEnd.getDistance();
     }
 
     @Inject(method = "_setShaderFogColor", at = @At("TAIL"))
     private static void hookEventFogColor(float f, float g, float h, float i, CallbackInfo ci) {
-        EventFog eventFog = new EventFog(EventFog.State.FOG_COLOR, new float[]{f, g, h, i});
-        EventDispatcher.INSTANCE.call(eventFog);
-        shaderFogColor = eventFog.getValues();
+        EventFogColor eventFogColor = new EventFogColor(new float[]{f, g, h, i});
+        EventDispatcher.INSTANCE.call(eventFogColor);
+        shaderFogColor = eventFogColor.getColor();
     }
 
     @Inject(method = "flipFrame", at = @At("HEAD"))

@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
 
-    @Redirect(method = "getBasicProjectionMatrix",at = @At(value = "INVOKE", target = "Lorg/joml/Matrix4f;setPerspective(FFFF)Lorg/joml/Matrix4f;"))
+    @Redirect(method = "getBasicProjectionMatrix",at = @At(value = "INVOKE", target = "Lorg/joml/Matrix4f;setPerspective(FFFF)Lorg/joml/Matrix4f;", remap = false))
     public Matrix4f overwriteAspectRatio(Matrix4f instance, float fovy, float aspect, float zNear, float zFar) {
         if(((Camera) DebugValues.INSTANCE.getCamera().getValuesOwner()).getForceAspectRatio().getValue())
             aspect = (float) ((Camera) DebugValues.INSTANCE.getCamera().getValuesOwner()).getAspectRatio().getValue();

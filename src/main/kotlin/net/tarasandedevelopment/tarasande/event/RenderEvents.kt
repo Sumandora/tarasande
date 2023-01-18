@@ -23,11 +23,10 @@ class EventCameraOverride(val camera: Camera) : Event(false)
 class EventRenderBlockModel(val state: BlockState, val pos: BlockPos) : Event(true)
 class EventTextVisit(var string: String) : Event(false)
 class EventRenderMultiplayerEntry(val matrices: MatrixStack, val x: Int, val y: Int, val entryWidth: Int, val entryHeight: Int, val mouseX: Int, val mouseY: Int, val server: ServerInfo, val multiplayerScreen: MultiplayerScreen) : Event(false)
-class EventFog(val state: State, val values: FloatArray) : Event(false) {
-    enum class State {
-        FOG_START, FOG_END, FOG_COLOR
-    }
-}
+
+class EventFogStart(var distance: Float) : Event(false)
+class EventFogEnd(var distance: Float) : Event(false)
+class EventFogColor(var color: FloatArray) : Event(false)
 
 class EventFovMultiplier(var movementFovMultiplier: Float) : Event(false)
 class EventChunkOcclusion : Event(true)

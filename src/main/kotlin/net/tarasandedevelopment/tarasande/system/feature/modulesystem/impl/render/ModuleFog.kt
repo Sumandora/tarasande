@@ -1,6 +1,8 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render
 
-import net.tarasandedevelopment.tarasande.event.EventFog
+import net.tarasandedevelopment.tarasande.event.EventFogColor
+import net.tarasandedevelopment.tarasande.event.EventFogEnd
+import net.tarasandedevelopment.tarasande.event.EventFogStart
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
@@ -12,17 +14,13 @@ class ModuleFog : Module("Fog", "Changes the fog distance and color", ModuleCate
     val color = ValueColor(this, "Color", 0.0, 1.0, 1.0)
 
     init {
-        registerEvent(EventFog::class.java) { event ->
-            when (event.state) {
-                EventFog.State.FOG_START -> event.values[0] *= distance.minValue.toFloat()
-                EventFog.State.FOG_END -> event.values[0] *= distance.maxValue.toFloat()
-                EventFog.State.FOG_COLOR -> {
-                    color.getColor().also {
-                        event.values[0] = it.red / 255.0F
-                        event.values[1] = it.green / 255.0F
-                        event.values[2] = it.blue / 255.0F
-                    }
-                }
+        registerEvent(EventFogStart::class.java) { event -> event.distance *= distance.minValue.toFloat() }
+        registerEvent(EventFogEnd::class.java) { event -> event.distance *= distance.minValue.toFloat() }
+        registerEvent(EventFogColor::class.java) { event ->
+            color.getColor().also {
+                event.color[0] = it.red / 255.0F
+                event.color[1] = it.green / 255.0F
+                event.color[2] = it.blue / 255.0F
             }
         }
     }

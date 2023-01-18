@@ -30,9 +30,7 @@ import java.util.logging.Logger
  *  - Render Profiler
  *  - Auto Totem
  *  - AutoLog
- *  - Sneak NoSlowdown
- *  - Recode EventFog
- *  - Camera: Hands Selection and Arm movement
+ *  - Find max c03 distance constant
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions
