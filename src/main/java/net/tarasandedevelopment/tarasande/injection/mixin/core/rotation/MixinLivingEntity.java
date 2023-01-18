@@ -46,9 +46,13 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Unique
     private float tarasande_headPitch;
-
     @Unique
     private float tarasande_prevHeadPitch;
+
+    @Unique
+    private float tarasande_headYaw;
+    @Unique
+    private float tarasande_prevHeadYaw;
 
     public MixinLivingEntity(EntityType<?> type, World world) {
         super(type, world);
@@ -56,6 +60,10 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Shadow
     public abstract float getYaw(float tickDelta);
+
+    @Shadow protected double serverHeadYaw;
+
+    @Shadow protected int headTrackingIncrements;
 
     @Inject(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;bodyTrackingIncrements:I"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateTrackedPosition(DDD)V"), to = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;serverX:D")))
     public void preventRotationLeak(CallbackInfo ci) {
@@ -89,19 +97,29 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
         return instance.getYaw();
     }
 
+    @Inject(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;headTrackingIncrements:I", ordinal = 2))
+    public void respectServerHeadYaw(CallbackInfo ci) {
+        tarasande_headYaw += (float)MathHelper.wrapDegrees(this.serverHeadYaw - (double)this.tarasande_headYaw) / (float)this.headTrackingIncrements;
+    }
+
     @Inject(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;headYaw:F"))
-    public void setHeadPitch(EntityType entityType, World world, CallbackInfo ci) {
+    public void setHeadRotation(EntityType entityType, World world, CallbackInfo ci) {
+        tarasande_headYaw = getYaw();
         tarasande_headPitch = getPitch();
     }
 
     @Inject(method = "onSpawnPacket", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;headYaw:F", ordinal = 1))
-    public void setHeadPitch(EntitySpawnS2CPacket packet, CallbackInfo ci) {
+    public void setHeadRotation(EntitySpawnS2CPacket packet, CallbackInfo ci) {
+        tarasande_headYaw = packet.getHeadYaw();
+        tarasande_prevHeadYaw = tarasande_headYaw;
+
         tarasande_headPitch = packet.getPitch();
         tarasande_prevHeadPitch = tarasande_headPitch;
     }
 
     @Inject(method = "baseTick", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;prevHeadYaw:F"))
-    public void updateHeadPitch(CallbackInfo ci) {
+    public void updateHeadRotation(CallbackInfo ci) {
+        tarasande_prevHeadYaw = tarasande_headYaw;
         tarasande_prevHeadPitch = tarasande_headPitch;
     }
 
@@ -133,5 +151,25 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     @Override
     public void tarasande_setPrevHeadPitch(float prevHeadPitch) {
         tarasande_prevHeadPitch = prevHeadPitch;
+    }
+
+    @Override
+    public float tarasande_getHeadYaw() {
+        return tarasande_headYaw;
+    }
+
+    @Override
+    public void tarasande_setHeadYaw(float headYaw) {
+        tarasande_headYaw = headYaw;
+    }
+
+    @Override
+    public float tarasande_getPrevHeadYaw() {
+        return tarasande_prevHeadYaw;
+    }
+
+    @Override
+    public void tarasande_setPrevHeadYaw(float prevHeadYaw) {
+        tarasande_prevHeadYaw = prevHeadYaw;
     }
 }
