@@ -25,14 +25,13 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleClickTP
 import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.CommandEnchant
 import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.CommandFakeGameMode
 import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.CommandGive
 import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.CommandSay
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
-import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.module.ModuleClickTPCommands
+import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.module.CommandClip
+import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.module.CommandTeleport
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 import kotlin.math.max
@@ -53,10 +52,12 @@ object ManagerCommand : Manager<Command>() {
             CommandSay(),
             CommandGive(),
             CommandEnchant(),
-            CommandFakeGameMode()
-        )
+            CommandFakeGameMode(),
 
-        ModuleClickTPCommands.init(ManagerModule.get(ModuleClickTP::class.java))
+            // Click-TP
+            CommandTeleport(),
+            CommandClip()
+        )
 
         EventDispatcher.add(EventChat::class.java) {
             if (it.chatMessage.startsWith(commandPrefix.value)) {
