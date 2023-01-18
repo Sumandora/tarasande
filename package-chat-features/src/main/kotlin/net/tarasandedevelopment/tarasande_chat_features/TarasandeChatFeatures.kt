@@ -29,7 +29,7 @@ class TarasandeChatFeatures : ClientModInitializer {
                     ModuleSpammer()
             )
 
-            ValueButtonOwnerValues(ClientValues, "Chat Values", ChatValues)
+            ValueButtonOwnerValues(ClientValues, "Chat values", ChatValues)
         }
     }
 }
