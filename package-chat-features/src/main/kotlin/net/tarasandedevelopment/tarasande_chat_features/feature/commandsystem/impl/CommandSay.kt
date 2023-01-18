@@ -1,9 +1,9 @@
-package net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl
+package net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.minecraft.command.CommandSource
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.Command
+import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.Command
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class CommandSay : Command("say") {

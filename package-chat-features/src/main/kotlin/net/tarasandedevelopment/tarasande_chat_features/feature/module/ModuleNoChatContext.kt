@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande_chat_features.module
+package net.tarasandedevelopment.tarasande_chat_features.feature.module
 
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory

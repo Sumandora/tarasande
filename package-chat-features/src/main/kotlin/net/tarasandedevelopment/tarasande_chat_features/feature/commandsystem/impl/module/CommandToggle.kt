@@ -1,11 +1,11 @@
-package net.tarasandedevelopment.tarasande.system.feature.modulesystem.command
+package net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.module
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.minecraft.command.CommandSource
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.Command
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
+import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.Command
 
 class CommandToggle(private val moduleSystem: ManagerModule) : Command("toggle") {
 

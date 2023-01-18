@@ -5,7 +5,7 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.message.SignedMessage;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande_chat_features.TarasandeChatFeatures;
-import net.tarasandedevelopment.tarasande_chat_features.module.ModuleNoChatContext;
+import net.tarasandedevelopment.tarasande_chat_features.feature.module.ModuleNoChatContext;
 import net.tarasandedevelopment.tarasande_chat_features.viaversion.ViaVersionUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl
+package net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl
 
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
@@ -13,7 +13,7 @@ import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.mc
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.Command
+import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.Command
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import java.util.function.Function

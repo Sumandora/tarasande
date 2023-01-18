@@ -8,8 +8,6 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.command.CommandToggle
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.*
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.ghost.*
@@ -141,7 +139,6 @@ object ManagerModule : Manager<Module>() {
         )
 
         ManagerPanel.add(PanelArrayList(this@ManagerModule))
-        ManagerCommand.add(CommandToggle(this@ManagerModule))
         EventDispatcher.apply {
             add(EventTick::class.java) {
                 if (it.state == EventTick.State.POST) {

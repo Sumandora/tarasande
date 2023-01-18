@@ -6,7 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.ProfileKeysImpl;
 import net.minecraft.network.encryption.PlayerKeyPair;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
-import net.tarasandedevelopment.tarasande_chat_features.module.ModulePublicKeyKicker;
+import net.tarasandedevelopment.tarasande_chat_features.feature.module.ModulePublicKeyKicker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

@@ -12,7 +12,6 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.ManagerBlur
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.Thread
@@ -37,7 +36,6 @@ object ClientValues {
     init {
         ValueButtonOwnerValues(this, "Privacy values", PrivacyValues)
         ValueButtonOwnerValues(this, "Cheat menu values", ManagerPanel.screenCheatMenu)
-        ValueButtonOwnerValues(this, "Command values", ManagerCommand)
     }
 
     val allowAddressParsingForBlacklistedServers = ValueBoolean(this, "Allow address parsing for blacklisted servers", true)
