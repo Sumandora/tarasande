@@ -25,12 +25,8 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
-import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.CommandEnchant
-import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.CommandFakeGameMode
-import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.CommandGive
-import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.CommandSay
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
-import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.module.CommandClip
+import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.*
 import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.module.CommandTeleport
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
@@ -53,10 +49,10 @@ object ManagerCommand : Manager<Command>() {
             CommandGive(),
             CommandEnchant(),
             CommandFakeGameMode(),
+            CommandClip(),
 
-            // Click-TP
-            CommandTeleport(),
-            CommandClip()
+            // Click TP
+            CommandTeleport()
         )
 
         EventDispatcher.add(EventChat::class.java) {
