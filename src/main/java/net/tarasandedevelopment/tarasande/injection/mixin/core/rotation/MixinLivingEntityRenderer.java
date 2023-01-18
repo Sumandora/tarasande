@@ -30,6 +30,15 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
         tarasande_entity = livingEntity;
     }
 
+    @Redirect(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerpAngleDegrees(FFF)F", ordinal = 1))
+    public float modifyYaw(float delta, float start, float end) {
+        if(tarasande_entity == MinecraftClient.getInstance().player) {
+            ILivingEntity accessor = (ILivingEntity) tarasande_entity;
+            return MathHelper.lerpAngleDegrees(delta, accessor.tarasande_getPrevHeadYaw(), accessor.tarasande_getHeadYaw());
+        }
+        return MathHelper.lerpAngleDegrees(delta, start, end);
+    }
+
     @Redirect(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 0))
     public float modifyPitch(float delta, float start, float end) {
         if(tarasande_entity == MinecraftClient.getInstance().player) {
