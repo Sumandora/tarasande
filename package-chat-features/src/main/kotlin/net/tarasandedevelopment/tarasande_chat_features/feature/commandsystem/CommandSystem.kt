@@ -28,6 +28,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.*
 import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.module.CommandTeleport
+import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.module.CommandToggle
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 import kotlin.math.max
@@ -50,8 +51,7 @@ object ManagerCommand : Manager<Command>() {
             CommandEnchant(),
             CommandFakeGameMode(),
             CommandClip(),
-
-            // Click TP
+            CommandToggle(),
             CommandTeleport()
         )
 
