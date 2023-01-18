@@ -20,14 +20,13 @@ import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.libs.fastutil.ints.Int2IntMap;
 import com.viaversion.viaversion.libs.fastutil.objects.Object2IntMap;
 import com.viaversion.viaversion.libs.fastutil.objects.Object2IntOpenHashMap;
-import com.viaversion.viaversion.protocols.base.BaseProtocol;
-import com.viaversion.viaversion.protocols.base.ClientboundLoginPackets;
-import com.viaversion.viaversion.protocols.base.ServerboundLoginPackets;
+import com.viaversion.viaversion.protocols.base.*;
 import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
 import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.api.model.IdAndData;
 import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
+import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.storage.HandshakeStorage;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.provider.EncryptionProvider;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.rewriter.*;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.storage.*;
@@ -155,6 +154,8 @@ public class Protocol1_7_2_5to1_6_4 extends AbstractProtocol<ClientboundPackets1
                     final byte dimensionId = wrapper.get(Type.BYTE, 0);
                     wrapper.user().get(DimensionTracker.class).setDimension(dimensionId);
                     wrapper.user().get(ClientWorld.class).setEnvironment(dimensionId);
+
+                    wrapper.user().put(new ChunkTracker(wrapper.user()));
                 });
             }
         });
@@ -1117,7 +1118,7 @@ public class Protocol1_7_2_5to1_6_4 extends AbstractProtocol<ClientboundPackets1
         if (!userConnection.has(ClientWorld.class)) {
             userConnection.put(new ClientWorld(userConnection));
         }
-        userConnection.put(new ChunkTracker(userConnection));
+        userConnection.put(new ChunkTracker(userConnection)); // Set again in JOIN_GAME handler for version comparisons to work
 
         userConnection.getChannel().pipeline().addFirst(new ChannelOutboundHandlerAdapter() {
             @Override
