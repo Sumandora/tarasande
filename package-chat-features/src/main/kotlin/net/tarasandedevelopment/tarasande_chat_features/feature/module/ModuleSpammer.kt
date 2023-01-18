@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande_chat_features.module
+package net.tarasandedevelopment.tarasande_chat_features.feature.module
 
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity

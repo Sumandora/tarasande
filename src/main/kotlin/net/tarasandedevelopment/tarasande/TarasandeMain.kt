@@ -8,7 +8,6 @@ import net.tarasandedevelopment.tarasande.feature.friend.Friends
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.ManagerGrabber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.ManagerESP
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.ManagerBlur
@@ -61,7 +60,6 @@ object TarasandeMain {
         ManagerScreenExtension
         ManagerBlur
 
-        ManagerCommand
         ManagerModule
 
         ClientValues

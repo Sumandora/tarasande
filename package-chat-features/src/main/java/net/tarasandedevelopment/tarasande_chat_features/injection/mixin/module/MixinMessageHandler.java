@@ -6,7 +6,7 @@ import net.minecraft.network.message.MessageSignatureData;
 import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SignedMessage;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
-import net.tarasandedevelopment.tarasande_chat_features.module.ModulePrivateMsgDetector;
+import net.tarasandedevelopment.tarasande_chat_features.feature.module.ModulePrivateMsgDetector;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
