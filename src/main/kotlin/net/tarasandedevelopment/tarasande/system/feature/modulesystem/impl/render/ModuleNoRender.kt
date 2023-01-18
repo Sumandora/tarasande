@@ -5,7 +5,8 @@ import net.minecraft.particle.ParticleType
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.registry.Registries
 import net.tarasandedevelopment.tarasande.event.EventChunkOcclusion
-import net.tarasandedevelopment.tarasande.event.EventFog
+import net.tarasandedevelopment.tarasande.event.EventFogEnd
+import net.tarasandedevelopment.tarasande.event.EventFogStart
 import net.tarasandedevelopment.tarasande.event.EventParticle
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
@@ -107,9 +108,14 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
             }
         }
 
-        registerEvent(EventFog::class.java, 9999) {
-            if (world.fog.should() && (it.state == EventFog.State.FOG_START || it.state == EventFog.State.FOG_END)) {
-                it.values[0] *= 9999.0F
+        registerEvent(EventFogStart::class.java, 9999) {
+            if(world.fog.should()) {
+                it.distance *= 9999.0F
+            }
+        }
+        registerEvent(EventFogEnd::class.java, 9999) {
+            if(world.fog.should()) {
+                it.distance *= 9999.0F
             }
         }
     }

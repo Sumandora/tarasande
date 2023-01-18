@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket
 import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket
 import net.minecraft.util.UseAction
@@ -27,7 +28,7 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
 
     val slowdown = ValueNumber(this, "Slowdown", 0.0, 1.0, 1.0, 0.01)
     val actions = ValueMode(this, "Actions", true, *useActions.map { it.value }.toTypedArray())
-    private val bypass = ValueMode(this, "Bypass", true, "Reuse", "Rehold")
+    private val bypass = ValueMode(this, "Bypass", true, "Reuse", "Rehold", "Sneaking")
     private val reuseMode = object : ValueMode(this, "Reuse mode", false, "Same slot", "Different slot") {
         override fun isEnabled() = bypass.isSelected(1)
     }
@@ -70,12 +71,27 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
                     }
                     if (bypass.isSelected(1)) {
                         if (event.state == EventUpdate.State.PRE) {
+                            if (reuseMode.isSelected(0)) {
+                                mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))
+                            }
                             if (reuseMode.isSelected(1)) {
                                 var slot = mc.player?.inventory?.selectedSlot!!
                                 while (slot == mc.player?.inventory?.selectedSlot!!) slot = ThreadLocalRandom.current().nextInt(0, 8)
                                 mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(slot))
                             }
-                            mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))
+                        }
+                    }
+                    if (bypass.isSelected(2) && mc.player?.isSneaking == false) {
+                        when (event.state) {
+                            EventUpdate.State.PRE_PACKET -> {
+                                mc.networkHandler?.sendPacket(ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY))
+                            }
+
+                            EventUpdate.State.POST -> {
+                                mc.networkHandler?.sendPacket(ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY))
+                            }
+
+                            else -> {}
                         }
                     }
                 }
