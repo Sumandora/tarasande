@@ -1,9 +1,11 @@
 package net.tarasandedevelopment.tarasande.system.screen.informationsystem.impl
 
 import net.minecraft.registry.RegistryKeys
+import net.minecraft.util.math.MathHelper
 import net.minecraft.world.dimension.DimensionType
 import net.minecraft.world.dimension.DimensionTypes
 import net.tarasandedevelopment.tarasande.mc
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
@@ -82,10 +84,14 @@ class InformationRotation : Information("Player", "Rotation") {
     private val decimalPlacesYaw = ValueNumber(this, "Decimal places: yaw", 0.0, 1.0, 5.0, 1.0)
     private val decimalPlacesPitch = ValueNumber(this, "Decimal places: pitch", 0.0, 1.0, 5.0, 1.0)
 
+    private val wrapYaw = ValueBoolean(this, "Wrap yaw", true)
+
     override fun getMessage(): String? {
         val player = mc.player ?: return null
 
-        return StringUtil.round(player.yaw.toDouble(), this.decimalPlacesYaw.value.toInt()) + " " + StringUtil.round(player.pitch.toDouble(), this.decimalPlacesPitch.value.toInt())
+        val yaw = if(wrapYaw.value) MathHelper.wrapDegrees(player.yaw) else player.yaw
+
+        return StringUtil.round(yaw.toDouble(), this.decimalPlacesYaw.value.toInt()) + " " + StringUtil.round(player.pitch.toDouble(), this.decimalPlacesPitch.value.toInt())
     }
 }
 
@@ -93,7 +99,12 @@ class InformationFakeRotation : Information("Player", "Fake Rotation") {
     private val decimalPlacesYaw = ValueNumber(this, "Decimal places: yaw", 0.0, 1.0, 5.0, 1.0)
     private val decimalPlacesPitch = ValueNumber(this, "Decimal places: pitch", 0.0, 1.0, 5.0, 1.0)
 
+    private val wrapYaw = ValueBoolean(this, "Wrap yaw", true)
+
     override fun getMessage(): String? {
-        return RotationUtil.fakeRotation?.let { StringUtil.round(it.yaw.toDouble(), this.decimalPlacesYaw.value.toInt()) + " " + StringUtil.round(it.pitch.toDouble(), this.decimalPlacesPitch.value.toInt()) }
+        return RotationUtil.fakeRotation?.let {
+            val yaw = if(wrapYaw.value) MathHelper.wrapDegrees(it.yaw) else it.yaw
+            StringUtil.round(yaw.toDouble(), this.decimalPlacesYaw.value.toInt()) + " " + StringUtil.round(it.pitch.toDouble(), this.decimalPlacesPitch.value.toInt())
+        }
     }
 }
