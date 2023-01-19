@@ -31,31 +31,30 @@ public class ClassicItemSelectionScreen extends Screen {
         super(Text.literal("Classic item selection"));
     }
 
-    public void reload(final UserConnection userConnection) {
+    public void reload(final VersionListEnum version) {
         final List<Item> allowedItems = new ArrayList<>();
-        if (userConnection != null) {
-            final VersionListEnum version = VersionListEnum.fromUserConnection(userConnection);
-
-            allowedItems.add(Items.OAK_WOOD);
-            allowedItems.add(Items.OAK_PLANKS);
-            allowedItems.add(Items.STONE);
-            allowedItems.add(Items.COBBLESTONE);
-            allowedItems.add(Items.MOSSY_COBBLESTONE);
-            allowedItems.add(Items.BRICKS);
-            allowedItems.add(Items.IRON_BLOCK);
-            allowedItems.add(Items.GOLD_BLOCK);
-            allowedItems.add(Items.GLASS);
-            allowedItems.add(Items.DIRT);
-            allowedItems.add(Items.GRAVEL);
-            allowedItems.add(Items.SAND);
-            allowedItems.add(Items.OBSIDIAN);
-            allowedItems.add(Items.COAL_ORE);
-            allowedItems.add(Items.IRON_ORE);
-            allowedItems.add(Items.GOLD_ORE);
-            allowedItems.add(Items.OAK_LEAVES);
-            allowedItems.add(Items.OAK_SAPLING);
-            allowedItems.add(Items.BOOKSHELF);
-            allowedItems.add(Items.TNT);
+        allowedItems.add(Items.OAK_WOOD);
+        allowedItems.add(Items.OAK_PLANKS);
+        allowedItems.add(Items.STONE);
+        allowedItems.add(Items.COBBLESTONE);
+        allowedItems.add(Items.MOSSY_COBBLESTONE);
+        allowedItems.add(Items.BRICKS);
+        allowedItems.add(Items.IRON_BLOCK);
+        allowedItems.add(Items.GOLD_BLOCK);
+        allowedItems.add(Items.GLASS);
+        allowedItems.add(Items.DIRT);
+        allowedItems.add(Items.GRAVEL);
+        allowedItems.add(Items.SAND);
+        allowedItems.add(Items.OBSIDIAN);
+        allowedItems.add(Items.COAL_ORE);
+        allowedItems.add(Items.IRON_ORE);
+        allowedItems.add(Items.GOLD_ORE);
+        allowedItems.add(Items.OAK_LEAVES);
+        allowedItems.add(Items.OAK_SAPLING);
+        allowedItems.add(Items.BOOKSHELF);
+        allowedItems.add(Items.TNT);
+        if (version.isNewerThan(VersionListEnum.c0_0_19a_06)) {
+            allowedItems.add(Items.SPONGE);
             if (version.isNewerThan(VersionListEnum.c0_0_20ac0_27)) {
                 allowedItems.add(Items.WHITE_WOOL);
                 allowedItems.add(Items.ORANGE_WOOL);
@@ -78,18 +77,15 @@ public class ClassicItemSelectionScreen extends Screen {
                 allowedItems.add(Items.POPPY);
                 allowedItems.add(Items.DANDELION);
                 allowedItems.add(Items.RED_MUSHROOM);
-            }
-            if (version == VersionListEnum.c0_30cpe) {
-                allowedItems.add(Items.MAGMA_BLOCK);
-                allowedItems.add(Items.QUARTZ_PILLAR);
-                allowedItems.add(Items.SANDSTONE_STAIRS);
-                allowedItems.add(Items.STONE_BRICKS);
-                allowedItems.add(Items.COBBLESTONE_SLAB);
-                allowedItems.add(Items.ICE);
-                allowedItems.add(Items.SNOW);
-            }
-            if (version.isNewerThan(VersionListEnum.c0_0_19a_06)) {
-                allowedItems.add(Items.SPONGE);
+                if (version == VersionListEnum.c0_30cpe) {
+                    allowedItems.add(Items.MAGMA_BLOCK);
+                    allowedItems.add(Items.QUARTZ_PILLAR);
+                    allowedItems.add(Items.SANDSTONE_STAIRS);
+                    allowedItems.add(Items.STONE_BRICKS);
+                    allowedItems.add(Items.COBBLESTONE_SLAB);
+                    allowedItems.add(Items.ICE);
+                    allowedItems.add(Items.SNOW);
+                }
             }
         }
 

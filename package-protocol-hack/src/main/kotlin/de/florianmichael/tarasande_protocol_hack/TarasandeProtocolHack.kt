@@ -101,7 +101,7 @@ class TarasandeProtocolHack : NativeProvider {
                 EntityDimensionReplacement.reloadDimensions()
 
                 if (protocol.isOlderThan(VersionListEnum.a1_0_15)) {
-                    ClassicItemSelectionScreen.INSTANCE.reload(viaConnection)
+                    ClassicItemSelectionScreen.INSTANCE.reload(protocol)
                 }
             }
 
