@@ -6,13 +6,13 @@ import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.GraphPing
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.GraphTPS
+import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.rotation.GraphPitchDelta
+import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.rotation.GraphYawDelta
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.*
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.connection.packet.GraphTickableRX
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.connection.packet.GraphTickableTX
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.connection.traffic.GraphTickableIncomingTraffic
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.connection.traffic.GraphTickableOutgoingTraffic
-import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.rotation.GraphTickablePitchDelta
-import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.rotation.GraphTickableYawDelta
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.information.InformationGraphValue
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.panel.PanelGraph
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
@@ -29,8 +29,8 @@ object ManagerGraph : Manager<Graph>() {
             GraphTickableFPS(),
             GraphTPS(),
             GraphTickableCPS(),
-            GraphTickableYawDelta(),
-            GraphTickablePitchDelta(),
+            GraphYawDelta(),
+            GraphPitchDelta(),
             GraphTickableMotion(),
             GraphPing(),
             GraphTickableOnlinePlayers(),
