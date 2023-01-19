@@ -1,8 +1,7 @@
-package net.tarasandedevelopment.tarasande_chat_features.module
+package net.tarasandedevelopment.tarasande_chat_features.feature.module
 
 import com.google.common.collect.Multimap
 import com.google.common.collect.MultimapBuilder
-import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory

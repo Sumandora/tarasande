@@ -1,10 +1,10 @@
-package net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl
+package net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.minecraft.command.CommandSource
 import net.minecraft.world.GameMode
 import net.tarasandedevelopment.tarasande.mc
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.Command
+import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.Command
 
 class CommandFakeGameMode : Command("fakegamemode") {
 

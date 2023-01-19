@@ -258,7 +258,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity_
     public void replaceJumpingCooldown(CallbackInfo ci) {
         if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && (Object) this instanceof ClientPlayerEntity) {
             this.jumpingCooldown = protocolhack_previousJumpingCooldown;
-            protocolhack_getPlayerLivingEntityMovementWrapper().customJump();
+            protocolhack_getPlayerLivingEntityMovementWrapper().func_c_1();
         }
     }
 

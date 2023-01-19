@@ -12,8 +12,6 @@ import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventMouse
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.mc
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.Command
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
@@ -35,27 +33,6 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
 
     private var path: List<Vec3d>? = null
     private var goal: BlockPos? = null
-
-    init {
-        ManagerCommand.apply {
-            add(object : Command("teleport", "tp") {
-                override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
-                    return builder.then(argument("position", BlockPosArgumentType.blockPos())?.executes {
-                        teleportToPosition(it.getArgument("position", PosArgument::class.java).toAbsoluteBlockPos(createServerCommandSource()))
-                        return@executes SUCCESS
-                    })
-                }
-            })
-            add(object : Command("clip") {
-                override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
-                    return builder.then(argument("position", Vec3ArgumentType.vec3())?.executes {
-                        mc.player?.setPosition(it.getArgument("position", PosArgument::class.java).toAbsolutePos(createServerCommandSource()))
-                        return@executes SUCCESS
-                    })
-                }
-            })
-        }
-    }
 
     override fun onDisable() {
         path = null

@@ -1,7 +1,6 @@
-package net.tarasandedevelopment.tarasande_chat_features.module
+package net.tarasandedevelopment.tarasande_chat_features.feature.module
 
 import net.minecraft.network.encryption.PlayerKeyPair
-import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.mc

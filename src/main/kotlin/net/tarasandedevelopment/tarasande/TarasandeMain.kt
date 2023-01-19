@@ -8,7 +8,6 @@ import net.tarasandedevelopment.tarasande.feature.friend.Friends
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.ManagerGrabber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.ManagerESP
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.ManagerBlur
@@ -33,9 +32,13 @@ import java.util.logging.Logger
  *  - Find max c03 distance constant
  *
  * TODO | Protocol Hack:
- *  - Entity Dimensions
- *  - WindowClick in 1.16.5 is not fully remapped
+ *  - Entity Dimensions in <= 1.19.2
+ *  - WindowClick is not fully remapped in <= 1.16.5
  *  - Implement HandItemProvider in <= b1.7.3
+ *  - Fix chest rendering and collisions in <= b1.8
+ *  - Reimplement sword actions in <= b1.7.3
+ *  - Change Boat and Chest Model in <= 1.8
+ *  - Bounding boxes of Fences in <= b1.5
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv
@@ -61,7 +64,6 @@ object TarasandeMain {
         ManagerScreenExtension
         ManagerBlur
 
-        ManagerCommand
         ManagerModule
 
         ClientValues

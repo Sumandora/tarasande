@@ -30,21 +30,20 @@ public class MixinHeldItemRenderer {
             return;
         }
         ViewModel viewModel = (ViewModel) ((Camera) DebugValues.INSTANCE.getCamera().getValuesOwner()).getViewModel().getValuesOwner();
-        viewModel.applyTransform(matrices, HandKt.toArm(hand));
+        viewModel.applyTransform(matrices, false, HandKt.toArm(hand));
     }
 
     @Inject(method = "renderFirstPersonItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/HeldItemRenderer;applyEatOrDrinkTransformation(Lnet/minecraft/client/util/math/MatrixStack;FLnet/minecraft/util/Arm;Lnet/minecraft/item/ItemStack;)V"))
     public void applyBeforeEatAnimation(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         ViewModel viewModel = (ViewModel) ((Camera) DebugValues.INSTANCE.getCamera().getValuesOwner()).getViewModel().getValuesOwner();
-        viewModel.applyTransform(matrices, HandKt.toArm(hand));
+        viewModel.applyTransform(matrices, false, HandKt.toArm(hand));
         tarasande_skipNext = true;
     }
 
     @Inject(method = "renderArmHoldingItem", at = @At("HEAD"))
     public void applyHand(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float equipProgress, float swingProgress, Arm arm, CallbackInfo ci) {
         ViewModel viewModel = (ViewModel) ((Camera) DebugValues.INSTANCE.getCamera().getValuesOwner()).getViewModel().getValuesOwner();
-        if(viewModel.getApplyToHand().getValue())
-            viewModel.applyTransform(matrices, arm);
+        viewModel.applyTransform(matrices, true, arm);
         tarasande_skipNext = true;
     }
 }

@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.system.feature.commandsystem
+package net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem
 
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.StringReader
@@ -25,11 +25,10 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandEnchant
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandFakeGameMode
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandGive
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl.CommandSay
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
+import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.*
+import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.module.CommandTeleport
+import net.tarasandedevelopment.tarasande_chat_features.feature.commandsystem.impl.module.CommandToggle
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 import kotlin.math.max
@@ -50,7 +49,10 @@ object ManagerCommand : Manager<Command>() {
             CommandSay(),
             CommandGive(),
             CommandEnchant(),
-            CommandFakeGameMode()
+            CommandFakeGameMode(),
+            CommandClip(),
+            CommandToggle(),
+            CommandTeleport()
         )
 
         EventDispatcher.add(EventChat::class.java) {
@@ -63,7 +65,7 @@ object ManagerCommand : Manager<Command>() {
                 reader.cursor = commandPrefix.value.length
 
                 try {
-                    dispatcher.execute(reader, this.commandSource)
+                    dispatcher.execute(reader, commandSource)
                 } catch (commandSyntaxException: CommandSyntaxException) {
                     if (!exceptions.value) return@add
 

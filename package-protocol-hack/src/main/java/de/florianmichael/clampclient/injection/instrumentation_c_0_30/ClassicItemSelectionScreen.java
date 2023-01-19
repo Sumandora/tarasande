@@ -1,14 +1,17 @@
 package de.florianmichael.clampclient.injection.instrumentation_c_0_30;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("DataFlowIssue")
@@ -29,7 +32,75 @@ public class ClassicItemSelectionScreen extends Screen {
     }
 
     public void reload(final UserConnection userConnection) {
-        final List<Item> allowedItems = ClassicItemSplitter.get(userConnection);
+        final List<Item> allowedItems = new ArrayList<>();
+        if (userConnection != null) {
+            final VersionListEnum version = VersionListEnum.fromUserConnection(userConnection);
+
+            allowedItems.add(Items.OAK_WOOD);
+            allowedItems.add(Items.OAK_PLANKS);
+            allowedItems.add(Items.STONE);
+            allowedItems.add(Items.COBBLESTONE);
+            allowedItems.add(Items.MOSSY_COBBLESTONE);
+            allowedItems.add(Items.SMOOTH_STONE_SLAB);
+            allowedItems.add(Items.BRICKS);
+            allowedItems.add(Items.IRON_BLOCK);
+            allowedItems.add(Items.GOLD_BLOCK);
+            allowedItems.add(Items.GRAY_WOOL);
+            allowedItems.add(Items.LIGHT_GRAY_WOOL);
+            allowedItems.add(Items.PURPLE_WOOL);
+            allowedItems.add(Items.RED_WOOL);
+            allowedItems.add(Items.BLACK_WOOL);
+            allowedItems.add(Items.GLASS);
+            allowedItems.add(Items.DIRT);
+            allowedItems.add(Items.GRAVEL);
+            allowedItems.add(Items.SAND);
+            allowedItems.add(Items.OBSIDIAN);
+            allowedItems.add(Items.COAL_ORE);
+            allowedItems.add(Items.IRON_ORE);
+            allowedItems.add(Items.GOLD_ORE);
+            allowedItems.add(Items.OAK_LEAVES);
+            allowedItems.add(Items.OAK_SAPLING);
+            allowedItems.add(Items.RED_MUSHROOM);
+            allowedItems.add(Items.DANDELION);
+            allowedItems.add(Items.POPPY);
+            allowedItems.add(Items.BOOKSHELF);
+            allowedItems.add(Items.TNT);
+            if (version.isNewerThan(VersionListEnum.c0_0_20ac0_27)) {
+                allowedItems.add(Items.WHITE_WOOL);
+                allowedItems.add(Items.ORANGE_WOOL);
+                allowedItems.add(Items.MAGENTA_WOOL);
+                allowedItems.add(Items.LIGHT_BLUE_WOOL);
+                allowedItems.add(Items.YELLOW_WOOL);
+                allowedItems.add(Items.LIME_WOOL);
+                allowedItems.add(Items.PINK_WOOL);
+                allowedItems.add(Items.CYAN_WOOL);
+                allowedItems.add(Items.BLUE_WOOL);
+                allowedItems.add(Items.BROWN_WOOL);
+                allowedItems.add(Items.GREEN_WOOL);
+                allowedItems.add(Items.BROWN_MUSHROOM);
+                allowedItems.add(Items.GRAY_WOOL);
+                allowedItems.add(Items.LIGHT_GRAY_WOOL);
+                allowedItems.add(Items.PURPLE_WOOL);
+                allowedItems.add(Items.RED_WOOL);
+                allowedItems.add(Items.BLACK_WOOL);
+                allowedItems.add(Items.SMOOTH_STONE_SLAB);
+                allowedItems.add(Items.POPPY);
+                allowedItems.add(Items.DANDELION);
+                allowedItems.add(Items.RED_MUSHROOM);
+            }
+            if (version == VersionListEnum.c0_30cpe) {
+                allowedItems.add(Items.MAGMA_BLOCK);
+                allowedItems.add(Items.QUARTZ_PILLAR);
+                allowedItems.add(Items.SANDSTONE_STAIRS);
+                allowedItems.add(Items.STONE_BRICKS);
+                allowedItems.add(Items.COBBLESTONE_SLAB);
+                allowedItems.add(Items.ICE);
+                allowedItems.add(Items.SNOW);
+            }
+            if (version.isNewerThan(VersionListEnum.c0_0_19a_06)) {
+                allowedItems.add(Items.SPONGE);
+            }
+        }
 
         itemGrid = new Item[MathHelper.ceil(allowedItems.size() / (double) MAX_ROW_DIVIDER)][MAX_ROW_DIVIDER];
         int x = 0;
