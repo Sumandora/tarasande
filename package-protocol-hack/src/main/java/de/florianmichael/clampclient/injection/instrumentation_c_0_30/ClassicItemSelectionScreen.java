@@ -41,15 +41,9 @@ public class ClassicItemSelectionScreen extends Screen {
             allowedItems.add(Items.STONE);
             allowedItems.add(Items.COBBLESTONE);
             allowedItems.add(Items.MOSSY_COBBLESTONE);
-            allowedItems.add(Items.SMOOTH_STONE_SLAB);
             allowedItems.add(Items.BRICKS);
             allowedItems.add(Items.IRON_BLOCK);
             allowedItems.add(Items.GOLD_BLOCK);
-            allowedItems.add(Items.GRAY_WOOL);
-            allowedItems.add(Items.LIGHT_GRAY_WOOL);
-            allowedItems.add(Items.PURPLE_WOOL);
-            allowedItems.add(Items.RED_WOOL);
-            allowedItems.add(Items.BLACK_WOOL);
             allowedItems.add(Items.GLASS);
             allowedItems.add(Items.DIRT);
             allowedItems.add(Items.GRAVEL);
@@ -60,9 +54,6 @@ public class ClassicItemSelectionScreen extends Screen {
             allowedItems.add(Items.GOLD_ORE);
             allowedItems.add(Items.OAK_LEAVES);
             allowedItems.add(Items.OAK_SAPLING);
-            allowedItems.add(Items.RED_MUSHROOM);
-            allowedItems.add(Items.DANDELION);
-            allowedItems.add(Items.POPPY);
             allowedItems.add(Items.BOOKSHELF);
             allowedItems.add(Items.TNT);
             if (version.isNewerThan(VersionListEnum.c0_0_20ac0_27)) {
