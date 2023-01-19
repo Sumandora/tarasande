@@ -36,7 +36,7 @@ class ElementWidthValueComponentSpacer(value: Value) : ElementWidthValueComponen
             FontWrapper.textShadow(matrices,
                 line,
                 0.0F,
-                (getHeight() / 2.0F + (index - (lines.size - 1) / 2.0 - 0.5) * (FontWrapper.fontHeight() * value.scale / 2.0F)).toFloat(),
+                (getHeight() / 2.0F + (index - (lines.size - 1) / 2.0) * (FontWrapper.fontHeight() * value.scale / 2.0F)).toFloat(),
                 value.getColor(RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), 0.0, 0.0, width, getHeight())).rgb,
                 value.scale,
                 0.5F
@@ -68,5 +68,5 @@ class ElementWidthValueComponentSpacer(value: Value) : ElementWidthValueComponen
     override fun onClose() {
     }
 
-    override fun getHeight() = FontWrapper.fontHeight().toDouble() * (value as ValueSpacer).scale * (lines.size + 0.2)
+    override fun getHeight() = FontWrapper.fontHeight().toDouble() * value.scale * (lines.size)
 }

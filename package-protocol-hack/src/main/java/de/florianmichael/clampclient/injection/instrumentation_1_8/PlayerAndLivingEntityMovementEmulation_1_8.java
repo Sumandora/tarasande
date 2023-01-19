@@ -181,7 +181,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
     }
 
     // This method doesn't exist in 1.8, it's a pseudo method for handling the jump cooldown
-    public void customJump() {
+    public void func_c_1() {
         if (((ClientPlayerEntity) original).input.jumping) {
             if (((IEntity_Protocol) original).protocolhack_isInWater()) {
                 this.updateAITick();
