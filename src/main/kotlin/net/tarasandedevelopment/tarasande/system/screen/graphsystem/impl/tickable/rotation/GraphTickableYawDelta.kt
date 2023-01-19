@@ -13,7 +13,7 @@ class GraphTickableYawDelta : Graph("Player", "Yaw Delta", 200, false) {
         EventDispatcher.apply {
             add(EventUpdate::class.java) { event ->
                 if (event.state == EventUpdate.State.POST) {
-                    val lastYaw = mc.player?.lastPitch ?: return@add
+                    val lastYaw = mc.player?.lastYaw ?: return@add
                     if (this@GraphTickableYawDelta.lastYaw != null)
                         add(this@GraphTickableYawDelta.lastYaw!! - lastYaw)
                     this@GraphTickableYawDelta.lastYaw = lastYaw
