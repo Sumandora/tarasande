@@ -2,6 +2,7 @@ package de.florianmichael.clampclient.injection.instrumentation_1_8;
 
 import com.google.common.collect.Lists;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
+import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleNoWebSettingsKt;
 import net.minecraft.block.*;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -29,7 +30,6 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerMod
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoWeb;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSafeWalk;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
-import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack;
 import de.florianmichael.tarasande_protocol_hack.injection.accessor.IEventCollisionShape;
 import su.mandora.event.EventDispatcher;
 
@@ -496,7 +496,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
                     x *= moduleNoWeb.getHorizontalSlowdown().getValue();
                     y *= moduleNoWeb.getVerticalSlowdown().getValue();
                     z *= moduleNoWeb.getHorizontalSlowdown().getValue();
-                    if(!TarasandeProtocolHack.removeVelocityReset.getValue()) {
+                    if(!ModuleNoWebSettingsKt.removeVelocityReset.getValue()) {
                         original.getVelocity().x = 0.0D;
                         original.getVelocity().y = 0.0D;
                         original.getVelocity().z = 0.0D;

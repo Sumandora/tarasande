@@ -19,7 +19,7 @@ class FabricEncryptionProvider : EncryptionProvider() {
 
     override fun enableDecryption(user: UserConnection?) {
         if (clientConnection != null) {
-            (clientConnection as IClientConnection_Protocol).vialegacy_setupPreNettyEncryption()
+            (clientConnection as IClientConnection_Protocol).viabeta_setupPreNettyEncryption()
         }
     }
 }

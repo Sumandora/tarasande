@@ -1,9 +1,7 @@
 package de.florianmichael.tarasande_protocol_hack.injection.mixin.module;
 
-import de.florianmichael.tarasande_protocol_hack.module.ModuleEveryItemOnArmor;
-import de.florianmichael.tarasande_protocol_hack.module.ModuleEveryItemOnArmor;
+import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleEveryItemOnArmor;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
-import de.florianmichael.tarasande_protocol_hack.module.ModuleEveryItemOnArmor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

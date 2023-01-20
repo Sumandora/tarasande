@@ -24,6 +24,8 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.screen;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.ProfileKey;
 import de.florianmichael.clampclient.injection.mixininterface.IPublicKeyData_Protocol;
+import de.florianmichael.clampclient.injection.signature.storage.ChatSession1_19_0;
+import de.florianmichael.clampclient.injection.signature.storage.ChatSession1_19_2;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.MinecraftClient;
@@ -31,8 +33,6 @@ import net.minecraft.client.network.ServerAddress;
 import net.minecraft.network.encryption.PlayerKeyPair;
 import net.minecraft.network.encryption.PlayerPublicKey;
 import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack;
-import de.florianmichael.tarasande_protocol_hack.fix.chatsession.v1_19_0.ChatSession1_19_0;
-import de.florianmichael.tarasande_protocol_hack.fix.chatsession.v1_19_2.ChatSession1_19_2;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -81,11 +81,13 @@ public class MixinConnectScreen_1 {
                     final UserConnection userConnection = TarasandeProtocolHack.Companion.getViaConnection();
                     if (userConnection != null) {
                         final PlayerPublicKey.PublicKeyData publicKeyData = playerKeyPair.publicKey().data();
-                        userConnection.put(new ChatSession1_19_2(userConnection, new ProfileKey(publicKeyData.expiresAt().toEpochMilli(), publicKeyData.key().getEncoded(), publicKeyData.keySignature()), playerKeyPair.privateKey()));
+                        final ProfileKey profileKey = new ProfileKey(publicKeyData.expiresAt().toEpochMilli(), publicKeyData.key().getEncoded(), publicKeyData.keySignature());
+
+                        userConnection.put(new ChatSession1_19_2(userConnection, profileKey, playerKeyPair.privateKey()));
                         if (ViaLoadingBase.getTargetVersion() == VersionListEnum.r1_19) {
                             final byte[] legacyKey = ((IPublicKeyData_Protocol) (Object) publicKeyData).protocolhack_get1_19_0Key().array();
                             if (legacyKey != null) {
-                                userConnection.put(new ChatSession1_19_0(userConnection, legacyKey));
+                                userConnection.put(new ChatSession1_19_0(userConnection, profileKey, playerKeyPair.privateKey(), legacyKey));
                             } else {
                                 ViaLoadingBase.instance().logger().log(Level.WARNING, "Mojang removed the legacy key");
                             }

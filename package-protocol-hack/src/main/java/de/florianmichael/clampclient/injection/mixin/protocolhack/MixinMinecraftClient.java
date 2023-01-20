@@ -26,7 +26,10 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_12to1_11_1.Protocol1_12To1_11_1;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.ServerboundPackets1_9_3;
+import de.florianmichael.clampclient.injection.mixininterface.IMinecraftClient_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.IMouse_Protocol;
+import de.florianmichael.tarasande_protocol_hack.injection.accessor.IEventScreenInput;
+import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleInventoryMoveSettingsKt;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.MinecraftClient;
@@ -36,6 +39,7 @@ import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.tarasandedevelopment.tarasande.event.EventScreenInput;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleInventoryMove;
 import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack;
@@ -44,14 +48,18 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.event.EventDispatcher;
+
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Mixin(MinecraftClient.class)
-public abstract class MixinMinecraftClient {
+public abstract class MixinMinecraftClient implements IMinecraftClient_Protocol {
 
     @Shadow
     @Nullable
@@ -101,12 +109,37 @@ public abstract class MixinMinecraftClient {
         }
     }
 
+    @Unique
+    private final ConcurrentLinkedDeque<Runnable> protocolhack_keyboardInteractions = new ConcurrentLinkedDeque<>();
+
+    @Unique
+    private final ConcurrentLinkedDeque<Runnable> protocolhack_mouseInteractions = new ConcurrentLinkedDeque<>();
+
+    @SuppressWarnings("ConstantConditions")
+    @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;currentScreen:Lnet/minecraft/client/gui/screen/Screen;",
+            ordinal = 4, shift = At.Shift.BEFORE))
+    public void injectTick(CallbackInfo ci) {
+        if (!ProtocolHackValues.INSTANCE.getExecuteInputsInSync().getValue()) return;
+
+        while (!protocolhack_mouseInteractions.isEmpty()) {
+            protocolhack_mouseInteractions.poll().run();
+        }
+
+        EventScreenInput eventScreenInput = new EventScreenInput(false);
+        ((IEventScreenInput) (Object) eventScreenInput).setOriginal(false);
+        EventDispatcher.INSTANCE.call(eventScreenInput);
+
+        while (!protocolhack_keyboardInteractions.isEmpty()) {
+            protocolhack_keyboardInteractions.poll().run();
+        }
+    }
+
     @Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;hasRidingInventory()Z"))
     private void onInventoryKeyPressed(CallbackInfo ci) throws Exception {
         final UserConnection viaConnection = TarasandeProtocolHack.Companion.getViaConnection();
 
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_11_1to1_11_2) && viaConnection != null) {
-            if (ManagerModule.INSTANCE.get(ModuleInventoryMove.class).getEnabled().getValue() && TarasandeProtocolHack.Companion.getCancelOpenPacket().getValue()) {
+            if (ManagerModule.INSTANCE.get(ModuleInventoryMove.class).getEnabled().getValue() && ModuleInventoryMoveSettingsKt.cancelOpenPacket.getValue()) {
                 return;
             }
 
@@ -122,5 +155,15 @@ public abstract class MixinMinecraftClient {
         if (ProtocolHackValues.INSTANCE.getEmulateMouseInputs().getValue()) {
             ((IMouse_Protocol) this.mouse).protocolhack_getMouseEmulation().tickFilter();
         }
+    }
+
+    @Override
+    public void protocolhack_trackKeyboardInteraction(Runnable interaction) {
+        this.protocolhack_keyboardInteractions.add(interaction);
+    }
+
+    @Override
+    public void protocolhack_trackMouseInteraction(Runnable interaction) {
+        this.protocolhack_mouseInteractions.add(interaction);
     }
 }

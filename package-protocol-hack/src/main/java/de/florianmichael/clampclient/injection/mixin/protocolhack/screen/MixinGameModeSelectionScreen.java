@@ -10,6 +10,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Mixin(GameModeSelectionScreen.class)
 public class MixinGameModeSelectionScreen {
 
@@ -22,7 +25,11 @@ public class MixinGameModeSelectionScreen {
     @Inject(method = "<init>", at = @At("RETURN"))
     public void fixUIWidth(CallbackInfo ci) {
         if (ViaLoadingBase.getTargetVersion().isOlderThan(VersionListEnum.r1_8)) {
-            protocolhack_unwrappedGameModes = TarasandeProtocolHack.Companion.unwrapGameModes(GameModeSelectionScreen.GameModeSelection.values());
+            final List<GameModeSelectionScreen.GameModeSelection> gameModeSelections = Arrays.stream(GameModeSelectionScreen.GameModeSelection.values()).toList();
+            if (ViaLoadingBase.getTargetVersion().isOlderThan(VersionListEnum.r1_3_1tor1_3_2)) gameModeSelections.remove(GameModeSelectionScreen.GameModeSelection.ADVENTURE);
+            if (ViaLoadingBase.getTargetVersion().isOlderThan(VersionListEnum.r1_8)) gameModeSelections.remove(GameModeSelectionScreen.GameModeSelection.SPECTATOR);
+
+            protocolhack_unwrappedGameModes = gameModeSelections.toArray(GameModeSelectionScreen.GameModeSelection[]::new);
             UI_WIDTH = protocolhack_unwrappedGameModes.length * 31 - 5;
         }
     }

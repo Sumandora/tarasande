@@ -42,12 +42,18 @@ object ProtocolHackValues {
     val removeNewTabCompletion = ValueBooleanProtocol("Remove new tab completion", VersionListEnum.r1_12_2.andOlder())
     val executeInputsInSync = ValueBooleanProtocol("Execute inputs in sync", VersionListEnum.r1_12_2.andOlder())
     val emulateMouseInputs = ValueBooleanProtocol("Emulate mouse inputs", VersionListEnum.r1_12_2.andOlder())
+    val sneakInstant = ValueBooleanProtocol("Sneak instant", VersionListEnum.r1_8 .. VersionListEnum.r1_12_2)
 
     // 1.9 -> 1.8.x
     val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", VersionListEnum.r1_8.andOlder())
     val emulateSignGUIModification = ValueBooleanProtocol("Emulate sign gui modification", VersionListEnum.r1_8.andOlder())
     val sendIdlePacket = ValueBooleanProtocol("Send idle packet", VersionListEnum.r1_8 .. VersionListEnum.r1_3_1tor1_3_2)
     val emulatePlayerMovement = ValueBooleanProtocol("Emulate player movement", VersionListEnum.r1_8.andOlder())
+    val emulateArmorHud = ValueBooleanProtocol("Emulate armor hud", VersionListEnum.r1_8.andOlder())
+
+    // 1.8 -> 1.7
+    val replaceSneaking = ValueBooleanProtocol("Replace sneaking", VersionListEnum.r1_7_6tor1_7_10.andOlder())
+    val adjustLongSneaking = ValueBooleanProtocol("Adjust long sneaking", VersionListEnum.r1_7_6tor1_7_10.andOlder())
 
     // a1_0_15 -> c0_28toc0_30
     val replaceCreativeInventory = ValueBooleanProtocol("Replace creative inventory", VersionListEnum.c0_28toc0_30.andOlder())

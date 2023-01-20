@@ -10,11 +10,11 @@ import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemPr
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.clampclient.injection.instrumentation_c_0_30.ClassicItemSelectionScreen
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
+import de.florianmichael.clampclient.injection.signature.provider.CommandArgumentsProvider
 import de.florianmichael.viabeta.api.BetaProtocolAccess
 import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.provider.ScreenStateProvider
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicMPPassProvider
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicWorldHeightProvider
-import de.florianmichael.viabeta.protocol.classic.protocolc0_28_30toc0_28_30cpe.storage.ExtMessageTypesStorage
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.provider.EncryptionProvider
 import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.provider.GameProfileFetcher
@@ -30,8 +30,6 @@ import net.minecraft.SharedConstants
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ConnectScreen
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen
-import net.minecraft.client.gui.screen.GameMenuScreen
-import net.minecraft.client.gui.screen.GameModeSelectionScreen.GameModeSelection
 import net.minecraft.item.Item
 import net.minecraft.registry.Registries
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
@@ -40,27 +38,13 @@ import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleTickBaseManipulation
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleInventoryMove
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoWeb
-import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntry
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntrySelection
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
-import de.florianmichael.tarasande_protocol_hack.event.EventSkipIdlePacket
-import de.florianmichael.tarasande_protocol_hack.fix.chatsession.v1_19_2.CommandArgumentsProvider
-import de.florianmichael.tarasande_protocol_hack.fix.global.EntityDimensionReplacement
-import de.florianmichael.tarasande_protocol_hack.fix.global.PackFormats
-import de.florianmichael.tarasande_protocol_hack.module.ModuleEveryItemOnArmor
+import de.florianmichael.tarasande_protocol_hack.definition.EntityDimensionsDefinition
+import de.florianmichael.tarasande_protocol_hack.definition.PackFormatsDefinition
 import de.florianmichael.tarasande_protocol_hack.platform.ViaBetaPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.platform.ViaCursedPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.platform.betacraft.SidebarEntryBetaCraftServers
@@ -71,12 +55,17 @@ import de.florianmichael.tarasande_protocol_hack.provider.viacursed.FabricPlayer
 import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
 import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
 import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricVersionProvider
-import de.florianmichael.tarasande_protocol_hack.util.extension.andOlder
-import de.florianmichael.tarasande_protocol_hack.util.inventory.ItemSplitter
+import de.florianmichael.tarasande_protocol_hack.definition.ItemReleaseVersionsDefinition
+import de.florianmichael.tarasande_protocol_hack.tarasande.information.*
+import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleEveryItemOnArmor
+import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleInventoryMove
+import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleNoWeb
+import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleTickBaseManipulation
+import de.florianmichael.tarasande_protocol_hack.tarasande.sidebar.SidebarEntryProtocolHackValues
+import de.florianmichael.tarasande_protocol_hack.tarasande.sidebar.SidebarEntrySelectionProtocolHack
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues
 import de.florianmichael.tarasande_protocol_hack.util.values.ValueBooleanProtocol
 import de.florianmichael.tarasande_protocol_hack.util.values.command.ViaCommandHandlerTarasandeCommandHandler
-import de.florianmichael.tarasande_protocol_hack.util.values.formatRange
 import su.mandora.event.EventDispatcher
 import java.net.InetSocketAddress
 import java.util.concurrent.ExecutorService
@@ -84,21 +73,19 @@ import java.util.concurrent.ThreadFactory
 
 class TarasandeProtocolHack : NativeProvider {
 
-    val version = ValueNumber(this, "Protocol", Double.MIN_VALUE, SharedConstants.getProtocolVersion().toDouble(), Double.MAX_VALUE, 1.0, exceed = false)
-    private val compression = arrayOf("decompress", "compress")
-
     companion object {
-        lateinit var cancelOpenPacket: ValueBoolean
-        lateinit var removeVelocityReset: ValueBoolean
+        // Connection data
         var viaConnection: UserConnection? = null
         var connectedAddress: InetSocketAddress? = null
+
+        // Item splitter
         var displayItems: MutableList<Item> = ArrayList()
 
         fun update(protocol: VersionListEnum, reloadProtocolHackValues: Boolean) {
             // Only reload if needed
             if (ViaLoadingBase.getTargetVersion() != protocol) {
-                displayItems = Registries.ITEM.filter { ItemSplitter.shouldDisplay(it, protocol) }.toMutableList()
-                EntityDimensionReplacement.reloadDimensions()
+                displayItems = Registries.ITEM.filter { ItemReleaseVersionsDefinition.shouldDisplay(it, protocol) }.toMutableList()
+                EntityDimensionsDefinition.reloadDimensions()
 
                 if (protocol.isOlderThan(VersionListEnum.a1_0_15)) {
                     ClassicItemSelectionScreen.INSTANCE.reload(protocol)
@@ -109,30 +96,18 @@ class TarasandeProtocolHack : NativeProvider {
 
             if (reloadProtocolHackValues) {
                 ManagerValue.getValues(ProtocolHackValues).forEach {
-                    if (it is ValueBooleanProtocol)
+                    if (it is ValueBooleanProtocol) {
                         it.value = it.version.any { range -> protocol in range }
+                    }
                 }
             }
         }
-
-        fun unwrapGameModes(gameModes: Array<GameModeSelection>): Array<GameModeSelection> {
-            return gameModes.toMutableList().apply {
-                if (ViaLoadingBase.getTargetVersion().isOlderThan(VersionListEnum.r1_3_1tor1_3_2)) {
-                    this.remove(GameModeSelection.ADVENTURE)
-                }
-                if (ViaLoadingBase.getTargetVersion().isOlderThan(VersionListEnum.r1_8)) {
-                    this.remove(GameModeSelection.SPECTATOR)
-                }
-            }.toTypedArray()
-        }
-    }
-
-    private fun currentVersion(): VersionListEnum? {
-        return VersionListEnum.fromUserConnection(viaConnection ?: return null)
     }
 
     fun initialize() {
+        // ViaVersion loading
         ViaLoadingBase.instance().init(this) {
+            // ViaVersion addons loading
             ViaLoadingBase.loadSubPlatform("ViaBeta") {
                 val isBetaLoaded = ViaLoadingBase.hasClass("de.florianmichael.viabeta.base.ViaBetaPlatform")
                 if (isBetaLoaded) ViaBetaPlatformImpl()
@@ -144,123 +119,58 @@ class TarasandeProtocolHack : NativeProvider {
                 return@loadSubPlatform isCursedLoaded
             }
         }
-        PackFormats.checkOutdated(nativeVersion().originalVersion)
+
+        // Definition setup
+        PackFormatsDefinition.checkOutdated(nativeVersion().originalVersion)
 
         EventDispatcher.apply {
             add(EventSuccessfulLoad::class.java) {
+                // Custom information list
                 ManagerInformation.apply {
-                    add(object : Information("Via Version", "Protocol Version") {
-                        override fun getMessage(): String? {
-                            return currentVersion()?.getName()
-                        }
-                    })
-                    add(object : Information("Via Version", "Protocols in pipeline") {
-                        private val displayMode = ValueMode(this, "Display mode", false, "Names", "Size")
+                    add(
+                        // Via Version
+                        InformationViaVersionProtocolVersion(),
+                        InformationViaVersionProtocolsInPipeline(),
 
-                        override fun getMessage(): String? {
-                            val names = viaConnection?.protocolInfo?.pipeline?.pipes()?.map { p -> p.javaClass.simpleName } ?: return null
-                            if (names.isEmpty()) return null
-                            return if (displayMode.isSelected(0)) {
-                                "\n" + names.joinToString("\n")
-                            } else {
-                                names.size.toString()
-                            }
-                        }
-                    })
-                    add(object : Information("Via Beta", VersionListEnum.r1_7_6tor1_7_10.getName() + " Entity Tracker") {
-                        override fun getMessage() = BetaProtocolAccess.getTrackedEntities1_7_6_10(viaConnection)
-                    })
-                    add(object : Information("Via Beta", VersionListEnum.r1_7_6tor1_7_10.getName() + " Virtual Holograms") {
-                        override fun getMessage() = BetaProtocolAccess.getVirtualHolograms1_7_6_10(viaConnection)
-                    })
-                    add(object : Information("Via Beta", VersionListEnum.r1_5_2.getName() + " Entity Tracker") {
-                        override fun getMessage() = BetaProtocolAccess.getTrackedEntities1_5_2(viaConnection)
-                    })
-                    add(object : Information("Via Beta", VersionListEnum.r1_2_4tor1_2_5.getName() + " Entity Tracker") {
-                        override fun getMessage() = BetaProtocolAccess.getTrackedEntities1_2_4_5(viaConnection)
-                    })
-                    add(object : Information("Via Beta", VersionListEnum.r1_1.getName() + " World Seed") {
-                        override fun getMessage() = BetaProtocolAccess.getWorldSeed1_1(viaConnection)
-                    })
-                    add(object : Information("Via Beta", VersionListEnum.c0_30cpe.getName() + " Message Types Extension") {
-                        override fun getMessage(): String? {
-                            if (viaConnection == null) return null
-                            val messageTypeStorage = viaConnection!!.get(ExtMessageTypesStorage::class.java) ?: return null
-                            val list = messageTypeStorage.asDisplayList
-                            if (list.isEmpty()) return null
-                            return list.joinToString("\n")
-                        }
-                    })
+                        // Via Beta
+                        InformationViaBeta1_7_6or1_7_10EntityTracker(),
+                        InformationViaBeta1_7_6or1_7_10VirtualHolograms(),
+                        InformationViaBeta1_5_2EntityTracker(),
+                        InformationViaBeta1_2_4or1_2_5EntityTracker(),
+                        InformationViaBeta1_1WorldSeed(),
+                        InformationViaBetaC0_30CPE_MessageTypesExtension()
+                    )
                 }
 
-                ManagerModule.apply {
-                    cancelOpenPacket = object : ValueBoolean(get(ModuleInventoryMove::class.java), "Cancel open packet (" + VersionListEnum.r1_11_1to1_11_2.andOlder() + ")", false) {
-                        override fun isEnabled() = ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_11_1to1_11_2)
-                    }
-                    removeVelocityReset = object : ValueBoolean(get(ModuleNoWeb::class.java), "Remove velocity reset (" + ProtocolHackValues.emulatePlayerMovement.name + ")", false) {
-                        override fun isEnabled() = ProtocolHackValues.emulatePlayerMovement.value
-                    }
+                // Protocol based module modifications
+                modifyModuleInventoryMove()
+                modifyModuleNoWeb()
+                modifyModuleTickBaseManipulation()
 
-                    get(ModuleTickBaseManipulation::class.java).apply {
-                        val chargeOnIdlePacketSkip = object : ValueBoolean(this, "Charge on idle packet skip (" + formatRange(*ProtocolHackValues.sendIdlePacket.version[0].inverse()) + ")", false) {
-                            override fun isEnabled() = !ProtocolHackValues.sendIdlePacket.value
-                        }
+                // Protocol based modules
+                ManagerModule.add(ModuleEveryItemOnArmor())
 
-                        registerEvent(EventSkipIdlePacket::class.java) {
-                            if (chargeOnIdlePacketSkip.isEnabled() && chargeOnIdlePacketSkip.value)
-                                shifted += mc.renderTickCounter.tickTime.toLong()
-                        }
-                    }
-
-                    add(ModuleEveryItemOnArmor())
-                }
-
+                // Sidebar modifications
                 ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.apply {
-                    insert(object : SidebarEntrySelection("Protocol Hack", "Protocol Hack", VersionListEnum.RENDER_VERSIONS.map { it.getName() }) {
-                        override fun onClick(newValue: String) {
-                            val newProtocol = VersionListEnum.RENDER_VERSIONS.first { it.getName() == newValue }.version.toDouble()
-                            if (version.value != newProtocol) {
-                                version.value = newProtocol
-                                update(VersionListEnum.fromProtocolId(version.value.toInt()), ProtocolHackValues.autoChangeValuesDependentOnVersion.value)
-                            }
-                        }
-
-                        override fun isSelected(value: String): Boolean {
-                            val protocol = VersionListEnum.RENDER_VERSIONS.first { it.getName() == value }.version.toDouble()
-                            return version.value == protocol
-                        }
-                    }, 0)
-
-                    insert(object : SidebarEntry("Protocol Hack Values", "Protocol Hack") {
-                        override fun onClick(mouseButton: Int) {
-                            mc.setScreen(ScreenBetterOwnerValues(name, mc.currentScreen!!, ProtocolHackValues))
-                        }
-                    }, 1)
-
+                    insert(SidebarEntrySelectionProtocolHack(), 0)
+                    insert(SidebarEntryProtocolHackValues(), 1)
                     insert(SidebarEntryBetaCraftServers(), 2)
                 }
-
-                ManagerScreenExtension.add(object : ScreenExtensionButtonList<GameMenuScreen>(GameMenuScreen::class.java) {
-                    init {
-                        "Protocol Hack Values".apply {
-                            add(this, direction = Direction.RIGHT) {
-                                mc.setScreen(ScreenBetterOwnerValues(this, mc.currentScreen!!, ProtocolHackValues))
-                            }
-                        }
-                    }
-                })
 
                 ProtocolHackValues /* Force-Load */
             }
 
+            // First-time load
             add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
-                update(VersionListEnum.fromProtocolId(version.value.toInt()), false)
+                update(VersionListEnum.fromProtocolId(ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(SidebarEntrySelectionProtocolHack::class.java).version.value.toInt()), false)
             }
 
+            // Via Connection tracker
             add(EventConnectServer::class.java) {
                 viaConnection = (it.connection as IClientConnection_Protocol).protocolhack_getViaConnection()
             }
 
+            // Custom progress bars implemented by ViaBeta and ViaCursed
             add(EventScreenRender::class.java) {
                 if (viaConnection != null && (it.screen is DownloadingTerrainScreen || it.screen is ConnectScreen)) {
                     var levelProgress: String? = null
@@ -278,9 +188,9 @@ class TarasandeProtocolHack : NativeProvider {
 
     override fun isSinglePlayer() = MinecraftClient.getInstance() != null && mc.isInSingleplayer
     override fun nativeVersion() = VersionListEnum.r1_19_3
-    override fun nettyOrder() = this.compression
     override fun run() = ManagerFile.rootDirectory
 
+    // Create dump for Via.GG
     override fun createDump(): JsonObject {
         val platformSpecific = JsonObject()
         val mods = JsonArray()
@@ -314,7 +224,7 @@ class TarasandeProtocolHack : NativeProvider {
     override fun eventLoop(threadFactory: ThreadFactory?, executorService: ExecutorService?) = DefaultEventLoop(executorService)
 
     override fun createProviders(providers: ViaProviders?) {
-        // Clamp Fixes
+        // Clamp
         providers?.use(CommandArgumentsProvider::class.java, FabricCommandArgumentsProvider())
 
         // Via Beta

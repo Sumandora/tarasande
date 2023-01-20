@@ -1,6 +1,6 @@
 package de.florianmichael.clampclient.injection.mixininterface;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_12.MouseEmulation_1_12_2;
+import de.florianmichael.clampclient.injection.instrumentation_1_12_2.MouseEmulation_1_12_2;
 
 public interface IMouse_Protocol {
 

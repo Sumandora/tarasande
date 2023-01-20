@@ -22,6 +22,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
 import com.mojang.authlib.GameProfile;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.ArmorDefinition_1_8;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.LegacyConstants_1_8;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.PlayerAndLivingEntityMovementEmulation_1_8;
 import de.florianmichael.clampclient.injection.mixininterface.IClientPlayerEntity_Protocol;
@@ -40,8 +41,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSprint;
-import de.florianmichael.tarasande_protocol_hack.event.EventSkipIdlePacket;
-import de.florianmichael.tarasande_protocol_hack.fix.ArmorUpdater1_8;
+import de.florianmichael.tarasande_protocol_hack.tarasande.EventSkipIdlePacket;
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -259,8 +259,8 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Override
     public int getArmor() {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
-            return ArmorUpdater1_8.INSTANCE.armor(); // Fixes Armor HUD
+        if (ProtocolHackValues.INSTANCE.getEmulateArmorHud().getValue()) {
+            return ArmorDefinition_1_8.sum();
         }
         return super.getArmor();
     }

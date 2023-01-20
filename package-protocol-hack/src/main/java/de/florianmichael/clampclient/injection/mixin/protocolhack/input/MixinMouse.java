@@ -21,18 +21,23 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.input;
 
+import de.florianmichael.clampclient.injection.instrumentation_1_12_2.MouseEmulation_1_12_2;
 import de.florianmichael.clampclient.injection.mixininterface.IMinecraftClient_Protocol;
+import de.florianmichael.clampclient.injection.mixininterface.IMouse_Protocol;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(Mouse.class)
-public class MixinMouse {
+@Mixin(value = Mouse.class, priority = 1001)
+public class MixinMouse implements IMouse_Protocol {
 
     @Shadow @Final private MinecraftClient client;
 
@@ -44,5 +49,21 @@ public class MixinMouse {
         }
 
         instance.execute(runnable);
+    }
+
+    @Unique
+    private final MouseEmulation_1_12_2 protocolhack_mouseEmulation = new MouseEmulation_1_12_2((Mouse)(Object)this);
+
+    @Inject(method = "updateMouse", at = @At("HEAD"), cancellable = true)
+    public void emulateMouse(CallbackInfo ci) {
+        if (ProtocolHackValues.INSTANCE.getEmulateMouseInputs().getValue()) {
+            protocolhack_mouseEmulation.updateMouse();
+            ci.cancel();
+        }
+    }
+
+    @Override
+    public MouseEmulation_1_12_2 protocolhack_getMouseEmulation() {
+        return this.protocolhack_mouseEmulation;
     }
 }

@@ -21,21 +21,23 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
+import de.florianmichael.clampclient.injection.instrumentation_1_14_4.Meta18Storage;
+import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.entity.passive.WolfEntity;
-import de.florianmichael.tarasande_protocol_hack.fix.WolfHealthTracker1_14_4;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+@SuppressWarnings("DataFlowIssue")
 @Mixin(WolfEntity.class)
 public class MixinWolfEntity {
 
     @Redirect(method = "*", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/WolfEntity;getHealth()F"))
     public float rewriteHealth(WolfEntity instance) {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_14_4)) {
-            return WolfHealthTracker1_14_4.INSTANCE.getHealth(instance.getId());
+            return TarasandeProtocolHack.Companion.getViaConnection().get(Meta18Storage.class).getHealthDataMap().get(instance.getId());
         }
         return instance.getHealth();
     }

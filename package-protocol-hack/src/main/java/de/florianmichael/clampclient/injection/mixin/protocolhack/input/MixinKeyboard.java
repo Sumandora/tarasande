@@ -22,9 +22,12 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.input;
 
 import de.florianmichael.clampclient.injection.mixininterface.IMinecraftClient_Protocol;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
+import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -44,5 +47,13 @@ public class MixinKeyboard {
         }
 
         instance.execute(runnable);
+    }
+
+    @Redirect(method = "processF3", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendCommand(Ljava/lang/String;)Z", ordinal = 0))
+    public boolean replaceSpectatorCommand(ClientPlayNetworkHandler instance, String command) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThan(VersionListEnum.r1_8)) {
+            return false;
+        }
+        return instance.sendCommand(command);
     }
 }

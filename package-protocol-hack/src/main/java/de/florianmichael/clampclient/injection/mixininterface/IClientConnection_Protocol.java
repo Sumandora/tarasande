@@ -8,5 +8,5 @@ public interface IClientConnection_Protocol {
 
     UserConnection protocolhack_getViaConnection();
 
-    void vialegacy_setupPreNettyEncryption();
+    void viabeta_setupPreNettyEncryption();
 }

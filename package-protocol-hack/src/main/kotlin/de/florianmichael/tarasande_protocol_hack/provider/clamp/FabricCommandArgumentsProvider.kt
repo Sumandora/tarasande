@@ -1,8 +1,9 @@
 package de.florianmichael.tarasande_protocol_hack.provider.clamp
 
+import de.florianmichael.clampclient.injection.signature.provider.CommandArgumentsProvider
 import net.minecraft.command.argument.SignedArgumentList
+import net.minecraft.util.Pair
 import net.tarasandedevelopment.tarasande.mc
-import de.florianmichael.tarasande_protocol_hack.fix.chatsession.v1_19_2.CommandArgumentsProvider
 
 class FabricCommandArgumentsProvider : CommandArgumentsProvider() {
 

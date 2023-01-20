@@ -38,7 +38,6 @@ import net.minecraft.network.encryption.PacketDecryptor;
 import net.minecraft.network.encryption.PacketEncryptor;
 import net.minecraft.text.Text;
 import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack;
-import de.florianmichael.tarasande_protocol_hack.fix.WolfHealthTracker1_14_4;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -98,13 +97,8 @@ public class MixinClientConnection implements IClientConnection_Protocol {
         return instance.channel(aClass);
     }
 
-    @Inject(method = "disconnect", at = @At("RETURN"))
-    public void onDisconnect(Text disconnectReason, CallbackInfo ci) {
-        WolfHealthTracker1_14_4.INSTANCE.clear();
-    }
-
     @Unique
-    public void vialegacy_setupPreNettyEncryption() {
+    public void viabeta_setupPreNettyEncryption() {
         this.encrypted = true;
         this.channel.pipeline().addBefore(PreNettyConstants.DECODER, "decrypt", new PacketDecryptor(this.vialegacy_decryptionCipher));
         this.channel.pipeline().addBefore(PreNettyConstants.ENCODER, "encrypt", new PacketEncryptor(this.vialegacy_encryptionCipher));

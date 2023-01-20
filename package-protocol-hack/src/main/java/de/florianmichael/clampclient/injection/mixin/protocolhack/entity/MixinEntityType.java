@@ -23,7 +23,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
-import de.florianmichael.tarasande_protocol_hack.fix.global.EntityDimensionReplacement;
+import de.florianmichael.tarasande_protocol_hack.definition.EntityDimensionsDefinition;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,7 +37,7 @@ public class MixinEntityType {
 
     @Redirect(method = {"getDimensions", "getWidth", "getHeight"}, at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EntityType;dimensions:Lnet/minecraft/entity/EntityDimensions;"))
     public EntityDimensions changeDimensions(EntityType instance) {
-        final EntityDimensions wrapped = EntityDimensionReplacement.INSTANCE.wrapDimension(instance);
+        final EntityDimensions wrapped = EntityDimensionsDefinition.INSTANCE.wrapDimension(instance);
         if (wrapped != null) {
             return wrapped;
         }
