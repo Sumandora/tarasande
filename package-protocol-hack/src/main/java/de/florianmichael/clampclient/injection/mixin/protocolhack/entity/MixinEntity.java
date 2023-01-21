@@ -38,6 +38,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoPitchLimit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -77,6 +79,14 @@ public abstract class MixinEntity implements IEntity_Protocol {
     @Shadow public abstract void setPos(double x, double y, double z);
 
     @Shadow public abstract void setBoundingBox(Box boundingBox);
+
+    @Shadow private float pitch;
+
+    @Shadow private float yaw;
+
+    @Shadow public float prevPitch;
+
+    @Shadow public float prevYaw;
 
     @Inject(method = "getVelocityAffectingPos", at = @At("HEAD"), cancellable = true)
     public void injectGetVelocityAffectingPos(CallbackInfoReturnable<BlockPos> cir) {
@@ -235,5 +245,20 @@ public abstract class MixinEntity implements IEntity_Protocol {
     @Override
     public void protocolhack_setInWater(boolean inWater) {
         this.protocolhack_inWater = inWater;
+    }
+
+    @Override
+    public void protocolhack_setAngles(float yaw, float pitch) {
+        float f = this.pitch;
+        float f1 = this.yaw;
+        this.yaw = (float)((double)this.yaw + (double)yaw * 0.15D);
+        this.pitch = (float)((double)this.pitch - (double)pitch * 0.15D);
+
+        if(!ManagerModule.INSTANCE.get(ModuleNoPitchLimit.class).getEnabled().getValue()) {
+            this.pitch = MathHelper.clamp(this.pitch, -90.0F, 90.0F);
+        }
+
+        this.prevPitch += this.pitch - f;
+        this.prevYaw += this.yaw - f1;
     }
 }

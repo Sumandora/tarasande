@@ -1,5 +1,6 @@
 package de.florianmichael.clampclient.injection.instrumentation_1_12_2;
 
+import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import net.minecraft.client.util.GlfwUtil;
@@ -51,12 +52,12 @@ public class MouseEmulation_1_12_2 {
             f2 = this.smoothCamFilterX * f4;
             f3 = this.smoothCamFilterY * f4;
 
-            UnboxedEntity.setAngles(MinecraftClient.getInstance().player, f2, f3 * b0);
+            ((IEntity_Protocol) MinecraftClient.getInstance().player).protocolhack_setAngles(f2, f3 * b0);
         } else {
             this.smoothCamYaw = 0.0F;
             this.smoothCamPitch = 0.0F;
 
-            UnboxedEntity.setAngles(MinecraftClient.getInstance().player, f2, f3 * b0);
+            ((IEntity_Protocol) MinecraftClient.getInstance().player).protocolhack_setAngles(f2, f3 * b0);
         }
     }
 

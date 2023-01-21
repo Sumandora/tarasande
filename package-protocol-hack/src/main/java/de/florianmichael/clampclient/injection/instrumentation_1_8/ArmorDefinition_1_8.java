@@ -3,6 +3,7 @@ package de.florianmichael.clampclient.injection.instrumentation_1_8;
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.ArmorType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 
@@ -42,7 +43,12 @@ public class ArmorDefinition_1_8 {
         }
     }
 
+    private static int getArmorPoints(final ItemStack itemStack) {
+        if (!armorTracker.containsKey(itemStack.getItem())) return 0;
+        return armorTracker.get(itemStack.getItem());
+    }
+
     public static int sum() {
-        return MinecraftClient.getInstance().player.getInventory().armor.stream().mapToInt(itemStack -> armorTracker.get(itemStack.getItem())).sum();
+        return MinecraftClient.getInstance().player.getInventory().armor.stream().mapToInt(ArmorDefinition_1_8::getArmorPoints).sum();
     }
 }

@@ -53,7 +53,7 @@ public class MixinProtocol1_9To1_8 extends AbstractProtocol<ClientboundPackets1_
 
     @Inject(method = "registerPackets", at = @At("RETURN"))
     public void emulateSignData(CallbackInfo ci) {
-        this.registerServerbound(ServerboundPackets1_9.UPDATE_SIGN, new PacketRemapper() {
+        this.registerServerbound(ServerboundPackets1_9.UPDATE_SIGN, ServerboundPackets1_8.UPDATE_SIGN, new PacketRemapper() {
             public void registerMap() {
                 this.map(Type.POSITION);
 
@@ -81,9 +81,9 @@ public class MixinProtocol1_9To1_8 extends AbstractProtocol<ClientboundPackets1_
                     }
                 });
             }
-        });
+        }, true);
 
-        this.registerClientbound(ClientboundPackets1_8.UPDATE_SIGN, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_8.UPDATE_SIGN, ClientboundPackets1_9.UPDATE_SIGN, new PacketRemapper() {
             public void registerMap() {
                 this.map(Type.POSITION);
                 this.map(Type.STRING, Protocol1_9To1_8.FIX_JSON);
@@ -104,6 +104,6 @@ public class MixinProtocol1_9To1_8 extends AbstractProtocol<ClientboundPackets1_
                     }
                 });
             }
-        });
+        }, true);
     }
 }

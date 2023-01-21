@@ -12,7 +12,6 @@ import com.viaversion.viaversion.protocols.base.ServerboundHandshakePackets;
 import com.viaversion.viaversion.protocols.base.ServerboundStatusPackets;
 import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.ClientboundPackets1_6_4;
-import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.Protocol1_7_2_5to1_6_4;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.ServerboundPackets1_6_4;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.storage.HandshakeStorage;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.storage.ProtocolMetadataStorage;

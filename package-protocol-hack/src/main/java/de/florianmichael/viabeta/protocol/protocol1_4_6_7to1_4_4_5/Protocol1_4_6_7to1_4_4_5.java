@@ -10,7 +10,9 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
+import de.florianmichael.viabeta.api.rewriter.LegacyItemRewriter;
 import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
+import de.florianmichael.viabeta.protocol.protocol1_4_6_7to1_4_4_5.rewriter.ItemRewriter;
 import de.florianmichael.viabeta.protocol.protocol1_4_6_7to1_4_4_5.type.ChunkBulk_1_4_4_5Type;
 import de.florianmichael.viabeta.protocol.protocol1_5_0_1to1_4_6_7.ClientboundPackets1_4_6;
 import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.ServerboundPackets1_5_2;
@@ -22,12 +24,17 @@ import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.impl.ChunkB
 
 public class Protocol1_4_6_7to1_4_4_5 extends AbstractProtocol<ClientboundPackets1_4_4, ClientboundPackets1_4_6, ServerboundPackets1_5_2, ServerboundPackets1_5_2> {
 
+    private final LegacyItemRewriter<Protocol1_4_6_7to1_4_4_5> itemRewriter = new ItemRewriter(this);
+
     public Protocol1_4_6_7to1_4_4_5() {
         super(ClientboundPackets1_4_4.class, ClientboundPackets1_4_6.class, ServerboundPackets1_5_2.class, ServerboundPackets1_5_2.class);
     }
 
     @Override
     protected void registerPackets() {
+        super.registerPackets();
+        this.itemRewriter.register();
+
         this.registerClientbound(ClientboundPackets1_4_4.JOIN_GAME, new PacketRemapper() {
             @Override
             public void registerMap() {
@@ -136,4 +143,8 @@ public class Protocol1_4_6_7to1_4_4_5 extends AbstractProtocol<ClientboundPacket
         }
     }
 
+    @Override
+    public LegacyItemRewriter<Protocol1_4_6_7to1_4_4_5> getItemRewriter() {
+        return this.itemRewriter;
+    }
 }

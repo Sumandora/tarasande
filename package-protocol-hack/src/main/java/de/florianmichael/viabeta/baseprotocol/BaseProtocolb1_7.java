@@ -6,7 +6,6 @@ import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import de.florianmichael.viabeta.protocol.beta.protocol1_0_0_1tob1_8_0_1.ClientboundPacketsb1_8;
 import de.florianmichael.viabeta.protocol.beta.protocol1_0_0_1tob1_8_0_1.ServerboundPacketsb1_8;
-import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.Protocolb1_8_0_1tob1_7_0_3;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.type.Type1_6_4;
 
 public class BaseProtocolb1_7 extends AbstractSimpleProtocol {

@@ -7,9 +7,11 @@ import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
-import de.florianmichael.viabeta.ViaBeta;
+import de.florianmichael.viabeta.api.rewriter.LegacyItemRewriter;
+import de.florianmichael.viabeta.api.rewriter.LegacySoundRewriter;
 import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.metadata.MetadataRewriter;
+import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.rewriter.ItemRewriter;
 import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.rewriter.SoundRewriter;
 import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.storage.AttachTracker;
 import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.storage.EntityTracker_1_5_2;
@@ -24,12 +26,19 @@ import java.util.List;
 @SuppressWarnings("DataFlowIssue")
 public class Protocol1_6_1to1_5_2 extends AbstractProtocol<ClientboundPackets1_5_2, ClientboundPackets1_6_1, ServerboundPackets1_5_2, ServerboundPackets1_6_4> {
 
+    private final LegacyItemRewriter<Protocol1_6_1to1_5_2> itemRewriter = new ItemRewriter(this);
+    private final LegacySoundRewriter<Protocol1_6_1to1_5_2> soundRewriter = new SoundRewriter(this);
+
     public Protocol1_6_1to1_5_2() {
         super(ClientboundPackets1_5_2.class, ClientboundPackets1_6_1.class, ServerboundPackets1_5_2.class, ServerboundPackets1_6_4.class);
     }
 
     @Override
     protected void registerPackets() {
+        super.registerPackets();
+        this.itemRewriter.register();
+        this.soundRewriter.register();
+
         this.registerClientbound(ClientboundPackets1_5_2.JOIN_GAME, new PacketRemapper() {
             @Override
             public void registerMap() {
@@ -211,30 +220,6 @@ public class Protocol1_6_1to1_5_2 extends AbstractProtocol<ClientboundPackets1_5
                 });
             }
         });
-        this.registerClientbound(ClientboundPackets1_5_2.NAMED_SOUND, new PacketRemapper() {
-            @Override
-            public void registerMap() {
-                handler(wrapper -> {
-                    final String oldSound = wrapper.read(Type1_6_4.STRING); // sound
-                    String newSound = SoundRewriter.map(oldSound);
-                    if (oldSound.isEmpty()) newSound = "";
-                    if (newSound == null) {
-                        ViaBeta.getPlatform().getLogger().warning("Unable to map 1.5.2 sound '" + oldSound + "'");
-                        newSound = "";
-                    }
-                    if (newSound.isEmpty()) {
-                        wrapper.cancel();
-                        return;
-                    }
-                    wrapper.write(Type1_6_4.STRING, newSound);
-                });
-                map(Type.INT); // x
-                map(Type.INT); // y
-                map(Type.INT); // z
-                map(Type.FLOAT); // volume
-                map(Type.UNSIGNED_BYTE); // pitch
-            }
-        });
         this.registerClientbound(ClientboundPackets1_5_2.STATISTICS, new PacketRemapper() {
             @Override
             public void registerMap() {
@@ -325,5 +310,10 @@ public class Protocol1_6_1to1_5_2 extends AbstractProtocol<ClientboundPackets1_5
 
         userConnection.put(new EntityTracker_1_5_2(userConnection));
         userConnection.put(new AttachTracker(userConnection));
+    }
+
+    @Override
+    public LegacyItemRewriter<Protocol1_6_1to1_5_2> getItemRewriter() {
+        return this.itemRewriter;
     }
 }

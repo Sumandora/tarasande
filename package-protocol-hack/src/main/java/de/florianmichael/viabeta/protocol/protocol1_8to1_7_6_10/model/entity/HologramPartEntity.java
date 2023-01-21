@@ -10,11 +10,11 @@ import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
 import de.florianmichael.viabeta.api.model.Location;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.Protocol1_8to1_7_6_10;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.metadata.MetaIndex1_8to1_7_6;
-import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.metadata.MetadataRewriter;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.storage.EntityTracker_1_7_6_10;
 
 import java.util.*;
 
+@SuppressWarnings("DataFlowIssue")
 public class HologramPartEntity {
 
     private static final float HORSE_HEIGHT = 1.6F;
@@ -289,7 +289,7 @@ public class HologramPartEntity {
         for (final Map.Entry<MetaIndex1_8to1_7_6, Object> entry : this.metadata.entrySet()) {
             metadataList.add(new Metadata(entry.getKey().getOldIndex(), entry.getKey().getOldType(), entry.getValue()));
         }
-        MetadataRewriter.transform(this.entityType, metadataList);
+        this.user.getProtocolInfo().getPipeline().getProtocol(Protocol1_8to1_7_6_10.class).getMetadataRewriter().transform(this.entityType, metadataList);
         return metadataList;
     }
 
