@@ -24,11 +24,12 @@ class GrabberReach : Grabber("net.minecraft.client.render.GameRenderer", 9.0) {
     )
 
     override fun transform(classNode: ClassNode) {
-        constant = findMethod(classNode, "updateTargetedEntity")
-            .instructions
-            .matchSignature(reachCode)
-            .next(3)
-            .asType<LdcInsnNode>()
-            .cst as Double
+//        constant = findMethod(classNode, "updateTargetedEntity")
+//            .instructions
+//            .matchSignature(reachCode)
+//            .next(3)
+//            .asType<LdcInsnNode>()
+//            .cst as Double
+        constant = expected
     }
 }

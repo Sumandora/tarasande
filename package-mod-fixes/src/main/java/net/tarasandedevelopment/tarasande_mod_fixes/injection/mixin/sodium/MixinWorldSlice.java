@@ -13,7 +13,7 @@ import su.mandora.event.EventDispatcher;
 
 // Sodium compatibility for block esp (I hate sodium)
 @Pseudo
-@Mixin(targets = "me.jellysquid.mods.sodium.client.world.WorldSlice", remap = false)
+@Mixin(targets = "me.jellysquid.mods.sodium.client.world.WorldSlice")
 public class MixinWorldSlice {
 
     @SuppressWarnings("UnresolvedMixinReference")

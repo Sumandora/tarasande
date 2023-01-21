@@ -26,7 +26,7 @@ class InformationViaBeta1_2_4or1_2_5EntityTracker : Information("Via Beta", Vers
     override fun getMessage(): String? = BetaProtocolAccess.getTrackedEntities1_2_4_5(TarasandeProtocolHack.viaConnection)
 }
 
-class InformationViaBeta1_1WorldSeed : Information("Via Beta", VersionListEnum.r1_1.name + " World Seed") {
+class InformationViaBeta1_1WorldSeed : Information("Via Beta", VersionListEnum.r1_1.getName() + " World Seed") {
 
     override fun getMessage(): String? = BetaProtocolAccess.getWorldSeed1_1(TarasandeProtocolHack.viaConnection)
 }

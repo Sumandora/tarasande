@@ -79,7 +79,7 @@ object ManagerGrabber : Manager<Grabber>() {
 
 }
 
-abstract class Grabber(val targetedClass: String, private val expected: Any) {
+abstract class Grabber(val targetedClass: String, val expected: Any) {
     var constant: Any? = null
         get() {
             if (field == null)

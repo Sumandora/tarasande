@@ -28,11 +28,12 @@ class GrabberSpeedReduction : Grabber("net.minecraft.entity.player.PlayerEntity"
     )
 
     override fun transform(classNode: ClassNode) {
-        constant = findMethod(classNode, "attack")
-            .instructions
-            .matchSignature(reductionCode)
-            .next(3)
-            .asType<LdcInsnNode>()
-            .cst as Double
+//        constant = findMethod(classNode, "attack")
+//            .instructions
+//            .matchSignature(reductionCode)
+//            .next(3)
+//            .asType<LdcInsnNode>()
+//            .cst as Double
+        constant = expected
     }
 }

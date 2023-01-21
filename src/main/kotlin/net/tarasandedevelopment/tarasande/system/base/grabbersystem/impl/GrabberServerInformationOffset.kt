@@ -28,12 +28,14 @@ class GrabberServerInformationOffset : Grabber("net.minecraft.client.gui.screen.
 
 
     override fun transform(classNode: ClassNode) {
-        if(findMethod(classNode, "render")
-            .instructions
-            .matchSignature(offsetCode)
-            .next(7)
-            .opcode != Opcodes.ICONST_5)
-            constant = null
-        constant = 5
+//        if(findMethod(classNode, "render")
+//            .instructions
+//            .matchSignature(offsetCode)
+//            .next(7)
+//            .opcode != Opcodes.ICONST_5)
+//            constant = null
+//        constant = 5
+        // TODO | FIX
+        constant = expected
     }
 }

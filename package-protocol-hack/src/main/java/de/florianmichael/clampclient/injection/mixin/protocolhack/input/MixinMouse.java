@@ -41,7 +41,7 @@ public class MixinMouse implements IMouse_Protocol {
 
     @Shadow @Final private MinecraftClient client;
 
-    @Redirect(method = {"method_29615", "method_22685", "method_22684"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;execute(Ljava/lang/Runnable;)V"), remap = false)
+    @Redirect(method = {"method_29615", "method_22685", "method_22684"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;execute(Ljava/lang/Runnable;)V"))
     public void redirectSync(MinecraftClient instance, Runnable runnable) {
         if (ProtocolHackValues.INSTANCE.getExecuteInputsInSync().getValue()) {
             ((IMinecraftClient_Protocol) client).protocolhack_trackMouseInteraction(runnable);
