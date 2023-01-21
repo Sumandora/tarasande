@@ -29,6 +29,7 @@ import com.viaversion.viaversion.protocols.protocol1_9to1_8.types.ChunkBulk1_8Ty
 import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.api.data.ItemList1_6;
 import de.florianmichael.viabeta.api.model.IdAndData;
+import de.florianmichael.viabeta.api.rewriter.LegacyItemRewriter;
 import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.ClientboundPackets1_7_2;
 import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.ServerboundPackets1_7_2;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.metadata.MetadataRewriter;
@@ -53,7 +54,9 @@ import java.util.*;
 @SuppressWarnings("DataFlowIssue")
 public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_7_2, ClientboundPackets1_8, ServerboundPackets1_7_2, ServerboundPackets1_8> {
 
-    public static final ItemRewriter ITEM_REWRITER = new ItemRewriter();
+    private final LegacyItemRewriter<Protocol1_8to1_7_6_10> itemRewriter = new ItemRewriter(this);
+    private final ChatItemRewriter chatItemRewriter = new ChatItemRewriter(this);
+    private final MetadataRewriter metadataRewriter = new MetadataRewriter(this);
 
     public Protocol1_8to1_7_6_10() {
         super(ClientboundPackets1_7_2.class, ClientboundPackets1_8.class, ServerboundPackets1_7_2.class, ServerboundPackets1_8.class);
@@ -79,6 +82,8 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
 
     @Override
     protected void registerPackets() {
+        this.itemRewriter.register();
+
         this.registerClientbound(State.LOGIN, ClientboundLoginPackets.HELLO.getId(), ClientboundLoginPackets.HELLO.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
@@ -128,7 +133,7 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
         this.registerClientbound(ClientboundPackets1_7_2.CHAT_MESSAGE, new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(Type.STRING, Type.STRING, msg -> TranslationRewriter.toClient(ChatItemRewriter.toClient(msg))); // message
+                map(Type.STRING, Type.STRING, msg -> TranslationRewriter.toClient(chatItemRewriter.remapShowItem(msg))); // message
                 create(Type.BYTE, (byte) 0); // position
             }
         });
@@ -138,7 +143,7 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                 map(Type.INT, Type.VAR_INT); // entity id
                 map(Type.SHORT); // slot
                 map(Type1_7_6_10.COMPRESSED_ITEM, Type.ITEM); // item
-                handler(wrapper -> ITEM_REWRITER.rewriteRead(wrapper.get(Type.ITEM, 0)));
+                handler(wrapper -> itemRewriter.handleItemToClient(wrapper.get(Type.ITEM, 0)));
             }
         });
         this.registerClientbound(ClientboundPackets1_7_2.SPAWN_POSITION, new PacketRemapper() {
@@ -229,11 +234,11 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
 
                     final short itemId = wrapper.read(Type.SHORT); // item in hand
                     final Item currentItem = new DataItem(itemId, (byte) 1, (short) 0, null);
-                    ITEM_REWRITER.rewriteRead(currentItem);
+                    itemRewriter.handleItemToClient(currentItem);
                     wrapper.write(Type.SHORT, (short) currentItem.identifier());
 
                     final List<Metadata> metadata = wrapper.read(Type1_7_6_10.METADATA_LIST); // metadata
-                    MetadataRewriter.transform(Entity1_10Types.EntityType.PLAYER, metadata);
+                    metadataRewriter.transform(Entity1_10Types.EntityType.PLAYER, metadata);
                     wrapper.write(Types1_8.METADATA_LIST, metadata);
 
                     tabListStorage.sendTempEntry(tempTabEntry);
@@ -353,7 +358,7 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                     entityTracker.updateEntityLocation(entityID, x, y, z, false);
                     entityTracker.updateEntityMetadata(entityID, metadataList);
 
-                    MetadataRewriter.transform(entityType, metadataList);
+                    metadataRewriter.transform(entityType, metadataList);
                 });
             }
         });
@@ -558,7 +563,7 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                     final int entityID = wrapper.get(Type.VAR_INT, 0);
                     if (tracker.getTrackedEntities().containsKey(entityID)) {
                         tracker.updateEntityMetadata(entityID, metadataList);
-                        MetadataRewriter.transform(tracker.getTrackedEntities().get(entityID), metadataList);
+                        metadataRewriter.transform(tracker.getTrackedEntities().get(entityID), metadataList);
                         if (metadataList.isEmpty()) wrapper.cancel();
                     } else {
                         wrapper.cancel();
@@ -798,7 +803,7 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                         int damage = 0;
                         if (parts.length > 2) damage = Integer.parseInt(parts[2]);
                         final DataItem item = new DataItem(id, (byte) 1, (short) damage, null);
-                        ITEM_REWRITER.rewriteRead(item);
+                        itemRewriter.handleItemToClient(item);
                         wrapper.write(Type.VAR_INT, item.identifier()); // particle data
                         if (item.data() != 0)
                             wrapper.write(Type.VAR_INT, (int) item.data()); // particle data
@@ -892,7 +897,7 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                     wrapper.write(Type.SHORT, slot);
                 });
                 map(Type1_7_6_10.COMPRESSED_ITEM, Type.ITEM); // item
-                handler(wrapper -> ITEM_REWRITER.rewriteRead(wrapper.get(Type.ITEM, 0)));
+                handler(wrapper -> itemRewriter.handleItemToClient(wrapper.get(Type.ITEM, 0)));
             }
         });
         this.registerClientbound(ClientboundPackets1_7_2.WINDOW_ITEMS, new PacketRemapper() {
@@ -910,7 +915,7 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                         items[1] = new DataItem(351/*lapis_lazuli*/, (byte) 3, (short) 4, null);
                     }
                     for (Item item : items) {
-                        ITEM_REWRITER.rewriteRead(item);
+                        itemRewriter.handleItemToClient(item);
                     }
                     wrapper.write(Type.ITEM_ARRAY, items);
                 });
@@ -1130,17 +1135,17 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                             final int count = wrapper.passthrough(Type.UNSIGNED_BYTE); // count
                             for (int i = 0; i < count; i++) {
                                 Item item = wrapper.read(Type1_7_6_10.COMPRESSED_ITEM);
-                                ITEM_REWRITER.rewriteRead(item);
+                                itemRewriter.handleItemToClient(item);
                                 wrapper.write(Type.ITEM, item); // item 1
 
                                 item = wrapper.read(Type1_7_6_10.COMPRESSED_ITEM);
-                                ITEM_REWRITER.rewriteRead(item);
+                                itemRewriter.handleItemToClient(item);
                                 wrapper.write(Type.ITEM, item); // item 3
 
                                 final boolean has3Items = wrapper.passthrough(Type.BOOLEAN); // has 3 items
                                 if (has3Items) {
                                     item = wrapper.read(Type1_7_6_10.COMPRESSED_ITEM);
-                                    ITEM_REWRITER.rewriteRead(item);
+                                    itemRewriter.handleItemToClient(item);
                                     wrapper.write(Type.ITEM, item); // item 2
                                 }
 
@@ -1249,7 +1254,7 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                 handler(wrapper -> {
                     final short direction = wrapper.get(Type.UNSIGNED_BYTE, 0);
                     final Item item = wrapper.get(Type1_7_6_10.COMPRESSED_ITEM, 0);
-                    ITEM_REWRITER.rewriteWrite(item);
+                    itemRewriter.handleItemToServer(item);
 
                     if (item != null && item.identifier() == ItemList1_6.writtenBook.itemID && direction == 255) { // If placed item is a book then cancel it and send an MC|BOpen to the client
                         final PacketWrapper openBook = PacketWrapper.create(ClientboundPackets1_8.PLUGIN_MESSAGE, wrapper.user());
@@ -1327,7 +1332,7 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                 map(Type.SHORT); // transaction id
                 map(Type.BYTE); // action
                 map(Type.ITEM, Type1_7_6_10.COMPRESSED_ITEM); // item
-                handler(wrapper -> ITEM_REWRITER.rewriteWrite(wrapper.get(Type1_7_6_10.COMPRESSED_ITEM, 0)));
+                handler(wrapper -> itemRewriter.handleItemToServer(wrapper.get(Type1_7_6_10.COMPRESSED_ITEM, 0)));
             }
         });
         this.registerServerbound(ServerboundPackets1_8.CREATIVE_INVENTORY_ACTION, new PacketRemapper() {
@@ -1335,7 +1340,7 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
             public void registerMap() {
                 map(Type.SHORT); // slot
                 map(Type.ITEM, Type1_7_6_10.COMPRESSED_ITEM); // item
-                handler(wrapper -> ITEM_REWRITER.rewriteWrite(wrapper.get(Type1_7_6_10.COMPRESSED_ITEM, 0)));
+                handler(wrapper -> itemRewriter.handleItemToServer(wrapper.get(Type1_7_6_10.COMPRESSED_ITEM, 0)));
             }
         });
         this.registerServerbound(ServerboundPackets1_8.UPDATE_SIGN, new PacketRemapper() {
@@ -1388,7 +1393,7 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
                     switch (channel) {
                         case "MC|BEdit", "MC|BSign" -> {
                             final Item item = wrapper.read(Type.ITEM); // book
-                            ITEM_REWRITER.rewriteWrite(item);
+                            itemRewriter.handleItemToServer(item);
                             lengthPacketWrapper.write(Type1_7_6_10.COMPRESSED_ITEM, item);
                             lengthPacketWrapper.writeToBuffer(lengthBuffer);
                             wrapper.write(Type.SHORT, (short) lengthBuffer.readableBytes()); // length
@@ -1520,6 +1525,15 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
         else if (type == Entity1_10Types.EntityType.EXPERIENCE_ORB) yOffset = 0.5F / 2F;
 
         return (int) Math.floor((yPos - yOffset) * 32F);
+    }
+
+    @Override
+    public LegacyItemRewriter<Protocol1_8to1_7_6_10> getItemRewriter() {
+        return this.itemRewriter;
+    }
+
+    public MetadataRewriter getMetadataRewriter() {
+        return this.metadataRewriter;
     }
 
     @Override

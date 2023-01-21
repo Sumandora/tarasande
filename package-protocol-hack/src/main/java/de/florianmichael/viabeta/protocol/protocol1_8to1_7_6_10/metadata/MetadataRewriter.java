@@ -12,7 +12,13 @@ import java.util.logging.Level;
 
 public class MetadataRewriter {
 
-    public static void transform(Entity1_10Types.EntityType type, List<Metadata> list) {
+    private final Protocol1_8to1_7_6_10 protocol;
+
+    public MetadataRewriter(final Protocol1_8to1_7_6_10 protocol) {
+        this.protocol = protocol;
+    }
+
+    public void transform(Entity1_10Types.EntityType type, List<Metadata> list) {
         for (Metadata entry : new ArrayList<>(list)) {
             final MetaIndex1_8to1_7_6 metaIndex = MetaIndex1_8to1_7_6.searchIndex(type, entry.id());
             try {
@@ -68,7 +74,7 @@ public class MetadataRewriter {
                         entry.setValue(((Number) value).floatValue());
                         break;
                     case Slot:
-                        Protocol1_8to1_7_6_10.ITEM_REWRITER.rewriteRead((Item) value);
+                        this.protocol.getItemRewriter().handleItemToClient((Item) value);
                         break;
                     case String:
                     case Position:

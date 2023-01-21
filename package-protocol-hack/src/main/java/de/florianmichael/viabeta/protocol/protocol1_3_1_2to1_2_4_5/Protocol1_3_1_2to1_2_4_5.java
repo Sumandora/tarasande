@@ -24,12 +24,14 @@ import de.florianmichael.viabeta.ViaBeta;
 import de.florianmichael.viabeta.api.data.BlockList1_6;
 import de.florianmichael.viabeta.api.model.IdAndData;
 import de.florianmichael.viabeta.api.model.Location;
+import de.florianmichael.viabeta.api.rewriter.LegacyItemRewriter;
 import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.data.EntityList_1_2_5;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.model.TrackedEntity;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.model.TrackedLivingEntity;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.model.base.AbstractTrackedEntity;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider;
+import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.rewriter.ItemRewriter;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.sound.Sound;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.sound.SoundType;
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.storage.ChestStateTracker;
@@ -58,12 +60,17 @@ import java.util.logging.Level;
 @SuppressWarnings("DataFlowIssue")
 public class Protocol1_3_1_2to1_2_4_5 extends AbstractProtocol<ClientboundPackets1_2_4, ClientboundPackets1_3_1, ServerboundPackets1_2_4, ServerboundPackets1_3_1> {
 
+    private final LegacyItemRewriter<Protocol1_3_1_2to1_2_4_5> itemRewriter = new ItemRewriter(this);
+
     public Protocol1_3_1_2to1_2_4_5() {
         super(ClientboundPackets1_2_4.class, ClientboundPackets1_3_1.class, ServerboundPackets1_2_4.class, ServerboundPackets1_3_1.class);
     }
 
     @Override
     protected void registerPackets() {
+        super.registerPackets();
+        this.itemRewriter.register();
+
         this.registerClientbound(State.LOGIN, ClientboundPackets1_2_4.HANDSHAKE.getId(), ClientboundPackets1_3_1.SHARED_KEY.getId(), new PacketRemapper() {
             @Override
             public void registerMap() {
@@ -683,6 +690,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends AbstractProtocol<ClientboundPacket
             public void registerMap() {
                 map(Type.SHORT); // slot
                 map(Type1_7_6_10.COMPRESSED_ITEM, Type1_2_4_5.COMPRESSED_NBT_ITEM); // item
+                handler(wrapper -> itemRewriter.handleItemToServer(wrapper.get(Type1_2_4_5.COMPRESSED_NBT_ITEM, 0)));
             }
         });
         this.registerServerbound(ServerboundPackets1_3_1.PLAYER_ABILITIES, new PacketRemapper() {
@@ -763,7 +771,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends AbstractProtocol<ClientboundPacket
                 }
                 break;
             } else if (index == MetaIndex1_8to1_7_6.CREEPER_STATE) {
-                if(metadata.<Byte>value() > 0) {
+                if (metadata.<Byte>value() > 0) {
                     tracker.playSoundAt(entity.getLocation(), Sound.RANDOM_FUSE, 1.0F, 0.5F);
                 }
             }
@@ -824,5 +832,10 @@ public class Protocol1_3_1_2to1_2_4_5 extends AbstractProtocol<ClientboundPacket
         if (!userConnection.has(ClientWorld.class)) {
             userConnection.put(new ClientWorld(userConnection));
         }
+    }
+
+    @Override
+    public LegacyItemRewriter<Protocol1_3_1_2to1_2_4_5> getItemRewriter() {
+        return this.itemRewriter;
     }
 }

@@ -220,7 +220,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Redirect(method = "canSprint", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;hasVehicle()Z"))
     public boolean removeNewCheck(ClientPlayerEntity instance) {
-        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue()) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && instance == MinecraftClient.getInstance().player) {
             return false;
         }
         return instance.hasVehicle();
@@ -229,14 +229,14 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     // I-EEE 754
     @Inject(method = "isWalking", at = @At("HEAD"), cancellable = true)
     public void fixRoundingConvention(CallbackInfoReturnable<Boolean> cir) {
-        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue()) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && (Object) this == MinecraftClient.getInstance().player) {
             cir.setReturnValue(this.input.movementForward >= 0.8F);
         }
     }
 
     @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerEntity;noClip:Z"))
     public boolean canNoClipBeGood(ClientPlayerEntity instance) {
-        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue()) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && (Object) this == MinecraftClient.getInstance().player) {
             final PlayerAndLivingEntityMovementEmulation_1_8 a18PlayerAndLivingEntityMovementEmulation = ((ILivingEntity_Protocol) this).protocolhack_getPlayerLivingEntityMovementWrapper();
 
             a18PlayerAndLivingEntityMovementEmulation.pushOutOfBlocks(this.getPos().x - (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 0.35D, this.getBoundingBox().minY + 0.5D, this.getPos().z + (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 0.35D);
@@ -250,7 +250,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Override
     public boolean shouldSwimInFluids() {
-        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue()) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && (Object) this == MinecraftClient.getInstance().player) {
             return false;
         }
 

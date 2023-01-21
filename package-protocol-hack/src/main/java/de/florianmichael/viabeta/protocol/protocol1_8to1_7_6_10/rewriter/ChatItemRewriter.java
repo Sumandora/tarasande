@@ -18,7 +18,7 @@ import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.Protocol1_8to1_7
 
 import java.io.IOException;
 
-public class ChatItemRewriter extends ComponentRewriter {
+public class ChatItemRewriter {
 
     private static final Int2ObjectOpenHashMap<String> ID_TO_NAME = new Int2ObjectOpenHashMap<>(315, 0.99F);
 
@@ -340,89 +340,93 @@ public class ChatItemRewriter extends ComponentRewriter {
         ID_TO_NAME.put(2267, "record_wait");
     }
 
-    private static final ComponentRewriter REMAP_SHOW_ITEM = new ComponentRewriter() {
-        @Override
-        protected void handleHoverEvent(JsonObject hoverEvent) {
-            super.handleHoverEvent(hoverEvent);
-            final String action = hoverEvent.getAsJsonPrimitive("action").getAsString();
-            if (!action.equals("show_item")) return;
+    private final ComponentRewriter SHOW_ITEM;
 
-            final JsonElement value = hoverEvent.get("value");
-            if (value == null) return;
+    public ChatItemRewriter(final Protocol1_8to1_7_6_10 protocol) {
+        this.SHOW_ITEM = new ComponentRewriter(protocol) {
+            @Override
+            protected void handleHoverEvent(JsonObject hoverEvent) {
+                super.handleHoverEvent(hoverEvent);
+                final String action = hoverEvent.getAsJsonPrimitive("action").getAsString();
+                if (!action.equals("show_item")) return;
 
-            final String text = findItemNBT(value);
-            if (text == null) return;
+                final JsonElement value = hoverEvent.get("value");
+                if (value == null) return;
 
-            final CompoundTag tag;
-            try {
-                tag = ViaStringTagReader1_11_2.getTagFromJson(text);
-            } catch (Exception e) {
-                ViaBeta.getPlatform().getLogger().warning("Error reading NBT in show_item:" + text);
-                throw new RuntimeException(e);
+                final String text = findItemNBT(value);
+                if (text == null) return;
+
+                final CompoundTag tag;
+                try {
+                    tag = ViaStringTagReader1_11_2.getTagFromJson(text);
+                } catch (Exception e) {
+                    ViaBeta.getPlatform().getLogger().warning("Error reading NBT in show_item:" + text);
+                    throw new RuntimeException(e);
+                }
+
+                final CompoundTag itemTag = tag.get("tag");
+                final ShortTag idTag = tag.get("id");
+                final ShortTag damageTag = tag.get("Damage");
+
+                // Call item converter
+                final short damage = damageTag != null ? damageTag.asShort() : 0;
+                final short id = idTag != null ? idTag.asShort() : 1;
+                final Item item = new DataItem();
+                item.setIdentifier(id);
+                item.setData(damage);
+                item.setTag(itemTag);
+                handleItem(item);
+
+                // Serialize again
+                if (damage != item.data()) {
+                    tag.put("Damage", new ShortTag(item.data()));
+                }
+                tag.put("id", new StringTag("minecraft:" + ID_TO_NAME.getOrDefault(item.identifier(), "stone")));
+                if (item.tag() != null) {
+                    tag.put("tag", new CompoundTag(item.tag().getValue()));
+                }
+
+                final JsonArray array = new JsonArray();
+                final JsonObject object = new JsonObject();
+                array.add(object);
+                final String serializedNBT;
+                try {
+                    serializedNBT = BinaryTagIO.writeString(tag);
+                    object.addProperty("text", serializedNBT);
+                    hoverEvent.add("value", array);
+                } catch (IOException e) {
+                    ViaBeta.getPlatform().getLogger().warning("Error writing NBT in show_item:" + text);
+                    e.printStackTrace();
+                }
             }
 
-            final CompoundTag itemTag = tag.get("tag");
-            final ShortTag idTag = tag.get("id");
-            final ShortTag damageTag = tag.get("Damage");
-
-            // Call item converter
-            final short damage = damageTag != null ? damageTag.asShort() : 0;
-            final short id = idTag != null ? idTag.asShort() : 1;
-            final Item item = new DataItem();
-            item.setIdentifier(id);
-            item.setData(damage);
-            item.setTag(itemTag);
-            handleItem(item);
-
-            // Serialize again
-            if (damage != item.data()) {
-                tag.put("Damage", new ShortTag(item.data()));
-            }
-            tag.put("id", new StringTag("minecraft:" + ID_TO_NAME.getOrDefault(item.identifier(), "stone")));
-            if (item.tag() != null) {
-                tag.put("tag", new CompoundTag(item.tag().getValue()));
+            private void handleItem(Item item) {
+                this.protocol.getItemRewriter().handleItemToClient(item);
             }
 
-            final JsonArray array = new JsonArray();
-            final JsonObject object = new JsonObject();
-            array.add(object);
-            final String serializedNBT;
-            try {
-                serializedNBT = BinaryTagIO.writeString(tag);
-                object.addProperty("text", serializedNBT);
-                hoverEvent.add("value", array);
-            } catch (IOException e) {
-                ViaBeta.getPlatform().getLogger().warning("Error writing NBT in show_item:" + text);
-                e.printStackTrace();
-            }
-        }
-
-        private void handleItem(Item item) {
-            Protocol1_8to1_7_6_10.ITEM_REWRITER.rewriteRead(item);
-        }
-
-        private String findItemNBT(JsonElement element) {
-            if (element.isJsonArray()) {
-                for (JsonElement jsonElement : element.getAsJsonArray()) {
-                    String value = findItemNBT(jsonElement);
-                    if (value != null) {
-                        return value;
+            private String findItemNBT(JsonElement element) {
+                if (element.isJsonArray()) {
+                    for (JsonElement jsonElement : element.getAsJsonArray()) {
+                        String value = findItemNBT(jsonElement);
+                        if (value != null) {
+                            return value;
+                        }
                     }
+                } else if (element.isJsonObject()) {
+                    final JsonPrimitive text = element.getAsJsonObject().getAsJsonPrimitive("text");
+                    if (text != null) {
+                        return text.getAsString();
+                    }
+                } else if (element.isJsonPrimitive()) {
+                    return element.getAsJsonPrimitive().getAsString();
                 }
-            } else if (element.isJsonObject()) {
-                final JsonPrimitive text = element.getAsJsonObject().getAsJsonPrimitive("text");
-                if (text != null) {
-                    return text.getAsString();
-                }
-            } else if (element.isJsonPrimitive()) {
-                return element.getAsJsonPrimitive().getAsString();
+                return null;
             }
-            return null;
-        }
-    };
+        };
+    }
 
-    public static String toClient(final String text) {
-        return REMAP_SHOW_ITEM.processText(text).toString();
+    public String remapShowItem(final String text) {
+        return SHOW_ITEM.processText(text).toString();
     }
 
 }

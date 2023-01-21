@@ -27,6 +27,7 @@ import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Prot
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.fluid.Fluid;
@@ -38,6 +39,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoPitchLimit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -78,6 +81,14 @@ public abstract class MixinEntity implements IEntity_Protocol {
 
     @Shadow public abstract void setBoundingBox(Box boundingBox);
 
+    @Shadow private float pitch;
+
+    @Shadow private float yaw;
+
+    @Shadow public float prevPitch;
+
+    @Shadow public float prevYaw;
+
     @Inject(method = "getVelocityAffectingPos", at = @At("HEAD"), cancellable = true)
     public void injectGetVelocityAffectingPos(CallbackInfoReturnable<BlockPos> cir) {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_14_4))
@@ -93,7 +104,7 @@ public abstract class MixinEntity implements IEntity_Protocol {
     // I-EEE 754
     @Inject(method = "setPosition(DDD)V", at = @At("HEAD"), cancellable = true)
     public void fixRoundingConvention(double x, double y, double z, CallbackInfo ci) {
-        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && (Object) this instanceof ClientPlayerEntity) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && (Object) this == MinecraftClient.getInstance().player) {
             this.setPos(x, y, z);
             this.setBoundingBox(new Box(
                     x - (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH / 2.0F,
@@ -193,7 +204,7 @@ public abstract class MixinEntity implements IEntity_Protocol {
 
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;updateWaterState()Z", shift = At.Shift.BEFORE))
     public void tickLegacyWaterMovement(CallbackInfo ci) {
-        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && (Object) this instanceof ClientPlayerEntity) {
+        if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && (Object) this == MinecraftClient.getInstance().player) {
             ((ILivingEntity_Protocol) this).protocolhack_getPlayerLivingEntityMovementWrapper().handleWaterMovement();
         }
     }
@@ -235,5 +246,20 @@ public abstract class MixinEntity implements IEntity_Protocol {
     @Override
     public void protocolhack_setInWater(boolean inWater) {
         this.protocolhack_inWater = inWater;
+    }
+
+    @Override
+    public void protocolhack_setAngles(float yaw, float pitch) {
+        float f = this.pitch;
+        float f1 = this.yaw;
+        this.yaw = (float)((double)this.yaw + (double)yaw * 0.15D);
+        this.pitch = (float)((double)this.pitch - (double)pitch * 0.15D);
+
+        if(!ManagerModule.INSTANCE.get(ModuleNoPitchLimit.class).getEnabled().getValue()) {
+            this.pitch = MathHelper.clamp(this.pitch, -90.0F, 90.0F);
+        }
+
+        this.prevPitch += this.pitch - f;
+        this.prevYaw += this.yaw - f1;
     }
 }
