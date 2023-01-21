@@ -133,8 +133,9 @@ object RotationUtil {
     private fun simulateFakeRotationUpdate() {
         if (RotationValues.updateRotationsWhenTickSkipping.value)
             if (RotationValues.updateRotationsAccurately.value) {
-                for (i in 0..(1000.0 / RenderUtil.deltaTime).roundToInt())
+                repeat((1000.0 / RenderUtil.deltaTime).roundToInt()) {
                     updateFakeRotation(true)
+                }
             } else {
                 updateFakeRotation(true)
             }

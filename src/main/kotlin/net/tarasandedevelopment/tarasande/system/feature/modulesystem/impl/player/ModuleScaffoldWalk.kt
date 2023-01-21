@@ -386,8 +386,9 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                         }
                     }
                 } else if (alwaysClick.value) {
-                    for (i in 1..clicks)
+                    repeat(clicks) {
                         PlayerUtil.placeBlock(hitResult)
+                    }
                     event.dirty = true
                 }
                 if (silent.isSelected(1)) {

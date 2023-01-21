@@ -4,7 +4,6 @@ import com.mojang.authlib.GameProfile
 import net.minecraft.SharedConstants
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket
@@ -23,6 +22,7 @@ import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Manage
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewWorld
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
+import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -69,7 +69,6 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
     val suspects = ConcurrentHashMap<GameProfile, Array<Item>>()
     val fakeNewsTimer = TimeUtil()
     var fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
-    private var switchedSlot = false
 
     private val messages = ArrayList<String>()
 
@@ -167,11 +166,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
         }
 
     fun isMurderer(): Boolean {
-        for (slot in 0 until PlayerInventory.getHotbarSize()) {
-            if (isIllegalItem(mc.player?.inventory?.main?.get(slot)?.item!!)) return true
-        }
-
-        return isIllegalItem(mc.player?.inventory?.offHand?.get(0)?.item!!)
+        return ContainerUtil.getHotbarSlots().any { isIllegalItem(it.item) } || isIllegalItem(mc.player?.inventory?.offHand?.get(0)?.item!!)
     }
 
     override fun onEnable() {
@@ -211,21 +206,10 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on hel
                 when (event.state) {
                     EventAttackEntity.State.PRE -> {
                         prevItem = mc.player?.inventory?.selectedSlot!!
-                        var sword = 0
-                        for (slot in 0 until PlayerInventory.getHotbarSize()) {
-                            if (isIllegalItem(mc.player?.inventory?.main?.get(slot)?.item!!)) {
-                                sword = slot
-                                break
-                            }
-                        }
-                        if ((mc.player?.inventory?.selectedSlot!! != sword).also { switchedSlot = it }) {
-                            mc.player?.inventory?.selectedSlot = sword
-                        }
+                        mc.player?.inventory?.selectedSlot = ContainerUtil.getHotbarSlots().indexOfFirst { isIllegalItem(it.item) }
                     }
 
-                    EventAttackEntity.State.POST -> if (switchedSlot) {
-                        mc.player?.inventory?.selectedSlot = prevItem
-                    }
+                    EventAttackEntity.State.POST -> mc.player?.inventory?.selectedSlot = prevItem
                 }
             }
         }

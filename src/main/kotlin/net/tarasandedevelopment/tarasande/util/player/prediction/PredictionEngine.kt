@@ -127,7 +127,7 @@ object PredictionEngine {
         val prevParticlesEnabled = (mc.particleManager as IParticleManager).tarasande_isParticlesEnabled() // race conditions :c
         (mc.particleManager as IParticleManager).tarasande_setParticlesEnabled(false)
 
-        for (i in 0 until count) {
+        repeat(count) {
             playerEntity.resetPosition()
             playerEntity.age++
             playerEntity.tick()

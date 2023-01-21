@@ -1,8 +1,10 @@
 package net.tarasandedevelopment.tarasande.util.player.container
 
 import net.minecraft.client.gui.screen.ingame.HandledScreen
+import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.EquipmentSlot
+import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.*
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
@@ -60,7 +62,7 @@ object ContainerUtil {
     }
 
     fun hasBetterEquivalent(stack: ItemStack, list: List<ItemStack>, keepSameMaterial: Boolean, keepSameEnchantments: Boolean): Boolean {
-        if (stack.item !is ToolItem && stack.item !is ArmorItem && stack.item !is FishingRodItem && stack.item !is BowItem)
+        if (stack.item.enchantability == 0) // actually a pretty smart check even tho its not perfect
             return false
 
         val materialScore = wrapMaterialScore(stack, false)
@@ -94,9 +96,13 @@ object ContainerUtil {
         }
     }
 
-    fun getHotbarSlots() = mc.player?.inventory?.main?.subList(0, 9)!!
+    fun getHotbarSlots() = mc.player?.inventory?.main?.subList(0, PlayerInventory.getHotbarSize())!!
 
     fun findSlot(filter: (IndexedValue<ItemStack>) -> Boolean): Int? {
         return getHotbarSlots().withIndex().filter { filter(it) }.minByOrNull { it.value.safeCount() }?.index
+    }
+
+    fun getProperEnchantments(stack: ItemStack): Map<Enchantment, Int> {
+        return EnchantmentHelper.get(stack).filter { it.key.isAcceptableItem(stack) }
     }
 }

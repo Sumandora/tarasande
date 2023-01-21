@@ -18,6 +18,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
+import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 
 class ModuleHealingBot : Module("Healing bot", "Automates healing using items", ModuleCategory.COMBAT) {
 
@@ -49,13 +50,7 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
     private fun findItem(block: (ItemStack) -> Boolean): Int? {
         if (block(mc.player?.offHandStack!!))
             return -1
-        for (slot in 0..8) {
-            val stack = mc.player?.inventory?.main?.get(slot)
-            if (stack != null && block(stack)) {
-                return slot
-            }
-        }
-        return null
+        return ContainerUtil.findSlot { block(it.value) }
     }
 
     override fun onEnable() {

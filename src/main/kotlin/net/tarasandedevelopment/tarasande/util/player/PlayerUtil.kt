@@ -180,18 +180,11 @@ object PlayerUtil {
         if (!ManagerModule.get(ModuleAutoTool::class.java).let { it.enabled.value && it.mode.isSelected(0) })
             return mc.player?.inventory?.selectedSlot!!.let { Pair(getBreakSpeed(blockPos, it), it) }
 
+
         val origSlot = mc.player?.inventory?.selectedSlot
-        var bestMultiplier = 1.0F
-        var bestTool = -1
-        for (i in 0..8) {
-            val multiplier = getBreakSpeed(blockPos, i)
-            if (bestMultiplier > multiplier) {
-                bestTool = i
-                bestMultiplier = multiplier
-            }
-        }
+        val best = (0..8).map { getBreakSpeed(blockPos, it) to it }.minBy { it.first }
         mc.player?.inventory?.selectedSlot = origSlot
-        return Pair(bestMultiplier, bestTool)
+        return best
     }
 
     fun getBreakSpeed(blockPos: BlockPos, item: Int): Float {

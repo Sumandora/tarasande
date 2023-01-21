@@ -144,7 +144,7 @@ abstract class Grabber(val targetedClass: String, private val expected: Any) {
 
     fun AbstractInsnNode.next(amount: Int): AbstractInsnNode {
         var curr = this
-        for (i in 0 until amount) {
+        repeat(amount) {
             curr = curr.next
         }
         return curr

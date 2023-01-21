@@ -80,13 +80,13 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
                                 if (mc.player?.lastOnGround!! == onGround) {
                                     onGround = !onGround // The server already knows this state, use a different one
                                 }
-                                for (i in 0 until useTime) {
+                                repeat(useTime) {
                                     mc.networkHandler?.sendPacket(OnGroundOnly(onGround))
                                     onGround = !onGround
                                 }
                                 mc.player?.lastOnGround = onGround
                             } else {
-                                for (i in 0 until useTime) {
+                                repeat(useTime) {
                                     mc.networkHandler?.sendPacket(OnGroundOnly(mc.player?.isOnGround!!))
                                 }
                             }

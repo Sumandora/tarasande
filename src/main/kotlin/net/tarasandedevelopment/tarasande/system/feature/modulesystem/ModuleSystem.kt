@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem
 
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.minecraft.network.packet.s2c.play.HealthUpdateS2CPacket
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.mc
@@ -143,14 +143,15 @@ object ManagerModule : Manager<Module>() {
             add(EventTick::class.java) {
                 if (it.state == EventTick.State.POST) {
                     for (module in list)
-                        for (i in 0 until module.bind.wasPressed())
+                        repeat(module.bind.wasPressed()) {
                             module.switchState()
+                        }
                 }
             }
             add(EventPacket::class.java) {
                 if (it.type == EventPacket.Type.RECEIVE)
                     when (it.packet) {
-                        is PlayerMoveC2SPacket -> {
+                        is PlayerPositionLookS2CPacket -> {
                             for (module in list)
                                 if (module.autoDisable.isSelected(0) && module.enabled.value)
                                     module.switchState()

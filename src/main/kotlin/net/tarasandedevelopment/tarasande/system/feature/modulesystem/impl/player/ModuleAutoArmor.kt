@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.play
 
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen
 import net.minecraft.client.gui.screen.ingame.HandledScreen
-import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.item.ArmorItem
 import net.minecraft.screen.slot.SlotActionType
@@ -63,7 +62,7 @@ class ModuleAutoArmor : Module("Auto armor", "Equips armor if none is equipped",
                 .mapNotNull { equipmentSlot ->
                     ContainerUtil.getValidSlots(screenHandler)
                         .filter { it.stack.item is ArmorItem && (it.stack.item as ArmorItem).slotType == equipmentSlot }
-                        .maxByOrNull { (it.stack.item as ArmorItem).protection + EnchantmentHelper.get(it.stack).values.sum() }
+                        .maxByOrNull { (it.stack.item as ArmorItem).protection + ContainerUtil.getProperEnchantments(it.stack).values.sum() }
                 }
 
             if (bestArmors.isNotEmpty())

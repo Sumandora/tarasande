@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player
 
-import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.AxeItem
-import net.minecraft.item.SwordItem
+import net.minecraft.item.ItemStack
+import net.minecraft.item.ToolItem
 import net.minecraft.util.hit.BlockHitResult
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.event.EventUpdate
@@ -57,28 +57,18 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool for breaking a
                 if (ManagerModule.get(ModuleHealingBot::class.java).let { it.enabled.value && it.state != ModuleHealingBot.State.IDLE })
                     return@registerEvent
 
-                var best: Int? = null
-                var score = 0.0F
-                for (i in 0..8) {
-                    val stack = mc.player?.inventory?.main?.get(i)
-                    if (stack != null && !stack.isEmpty) {
-                        val newScore = ContainerUtil.wrapMaterialDamage(stack) + EnchantmentHelper.get(stack).values.sum()
+                var hotbar: Iterable<IndexedValue<ItemStack>> = ContainerUtil.getHotbarSlots().withIndex()
 
-                        if (useAxeToCounterBlocking.value && event.entity is PlayerEntity && event.entity.isBlocking && ContainerUtil.getHotbarSlots().any { it.item is AxeItem }) {
-                            if (stack.item !is AxeItem)
-                                continue
-                        } else if (stack.item !is SwordItem)
-                            continue
+                if(useAxeToCounterBlocking.value && event.entity is PlayerEntity && event.entity.isBlocking) {
+                    if(ContainerUtil.getHotbarSlots().any { it.item is AxeItem })
+                        hotbar = hotbar.filter { it.value.item is AxeItem }
+                } else
+                    hotbar = hotbar.filter { it.value.item is ToolItem }
 
-                        if (best == null || newScore > score) {
-                            best = i
-                            score = newScore
-                        }
-                    }
-                }
+                val best = hotbar.maxByOrNull { ContainerUtil.wrapMaterialDamage(it.value) + ContainerUtil.getProperEnchantments(it.value).values.sum() }
 
                 if (best != null)
-                    mc.player?.inventory?.selectedSlot = best
+                    mc.player?.inventory?.selectedSlot = best.index
             }
         }
     }

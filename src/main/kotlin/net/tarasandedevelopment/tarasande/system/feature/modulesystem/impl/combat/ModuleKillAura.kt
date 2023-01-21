@@ -415,8 +415,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         }
     }
 
-    private fun attack(entity: Entity?, repeat: Int) {
-        for (i in 0 until repeat) {
+    private fun attack(entity: Entity?, amount: Int) {
+        repeat(amount) {
             if (!attackCooldown.value) {
                 mc.attackCooldown = 0
             }
