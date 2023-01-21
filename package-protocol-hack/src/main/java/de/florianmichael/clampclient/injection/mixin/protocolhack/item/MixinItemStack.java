@@ -36,6 +36,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.item;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.block.BlockState;
@@ -81,7 +82,7 @@ public abstract class MixinItemStack {
     @SuppressWarnings({"InvalidInjectorMethodSignature", "MixinAnnotationTarget"})
     @ModifyVariable(method = "getAttributeModifiers", ordinal = 0, at = @At(value = "STORE", ordinal = 1))
     private Multimap<EntityAttribute, EntityAttributeModifier> modifyVariableGetAttributeModifiers(Multimap<EntityAttribute, EntityAttributeModifier> modifiers) {
-        if (ViaLoadingBase.getTargetVersion().isNewerThan(VersionListEnum.r1_8)) {
+        if (!ProtocolHackValues.INSTANCE.getReplaceAttributeModifiers().getValue()) {
             return modifiers;
         }
         if (modifiers.isEmpty()) {

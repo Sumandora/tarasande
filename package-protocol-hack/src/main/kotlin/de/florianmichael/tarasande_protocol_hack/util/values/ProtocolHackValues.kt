@@ -50,6 +50,7 @@ object ProtocolHackValues {
     val sendIdlePacket = ValueBooleanProtocol("Send idle packet", VersionListEnum.r1_8 .. VersionListEnum.r1_3_1tor1_3_2)
     val emulatePlayerMovement = ValueBooleanProtocol("Emulate player movement", VersionListEnum.r1_8.andOlder())
     val emulateArmorHud = ValueBooleanProtocol("Emulate armor hud", VersionListEnum.r1_8.andOlder())
+    val replaceAttributeModifiers = ValueBooleanProtocol("Replace attribute modifiers", VersionListEnum.r1_8.andOlder())
 
     // 1.8 -> 1.7
     val replaceSneaking = ValueBooleanProtocol("Replace sneaking", VersionListEnum.r1_7_6tor1_7_10.andOlder())
