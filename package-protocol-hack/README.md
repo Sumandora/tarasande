@@ -1,10 +1,8 @@
 # Package-Protocol-Hack (Tarasande)
 ### tarasande package to provide a ViaVersion implementation
 
-## Goal
+## Goal and structure 
 This package contains the whole Protocol Translation part of tarasande, basically the ProtocolHack of tarasande is divided into four big parts:
-
-## Internal structure
 
 | Part                       | Description                                                                                                                                                             | Source                                           |
 |----------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
