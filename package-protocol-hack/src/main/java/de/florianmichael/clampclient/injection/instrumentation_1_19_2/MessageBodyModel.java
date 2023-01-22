@@ -1,20 +1,20 @@
-package de.florianmichael.clampclient.injection.signature.model.chain.v1_19_2;
+package de.florianmichael.clampclient.injection.instrumentation_1_19_2;
 
 import com.google.common.hash.Hashing;
 import com.google.common.hash.HashingOutputStream;
 import com.viaversion.viaversion.api.minecraft.PlayerMessageSignature;
-import de.florianmichael.clampclient.injection.signature.ClampMessageMetadata;
+import de.florianmichael.clampclient.injection.instrumentation_1_19_0.MessageMetadataModel;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ClampMessageBody {
-    private final ClampMessageMetadata messageMetadata;
+public class MessageBodyModel {
+    private final MessageMetadataModel messageMetadata;
     private final PlayerMessageSignature[] lastSeenMessages;
 
-    public ClampMessageBody(ClampMessageMetadata messageMetadata, PlayerMessageSignature[] lastSeenMessages) {
+    public MessageBodyModel(MessageMetadataModel messageMetadata, PlayerMessageSignature[] lastSeenMessages) {
         this.messageMetadata = messageMetadata;
         this.lastSeenMessages = lastSeenMessages;
     }

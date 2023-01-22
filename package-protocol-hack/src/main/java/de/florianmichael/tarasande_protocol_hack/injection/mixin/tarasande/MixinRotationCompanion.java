@@ -1,6 +1,6 @@
 package de.florianmichael.tarasande_protocol_hack.injection.mixin.tarasande;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_12_2.MouseSensitivity_1_12_2;
+import de.florianmichael.clampclient.injection.instrumentation_1_12_2.SensitivityCalculations;
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import kotlin.Pair;
 import net.minecraft.client.MinecraftClient;
@@ -18,7 +18,7 @@ public class MixinRotationCompanion {
     @Inject(method = "calculateNewRotation", at = @At("HEAD"), cancellable = true)
     public void overwriteCalculation(Rotation prevRotation, Pair<Double, Double> cursorDeltas, CallbackInfoReturnable<Rotation> cir) {
         if (ProtocolHackValues.INSTANCE.getEmulateMouseInputs().getValue()) {
-            float f = MouseSensitivity_1_12_2.get1_12SensitivityFor1_19(MinecraftClient.getInstance().options.getMouseSensitivity().getValue()) * 0.6F + 0.2F;
+            float f = SensitivityCalculations.get1_12SensitivityFor1_19(MinecraftClient.getInstance().options.getMouseSensitivity().getValue()) * 0.6F + 0.2F;
             float f1 = f * f * f * 8.0F;
             float f2 = ((int) cursorDeltas.getFirst().doubleValue()) * f1;
             float f3 = ((int) cursorDeltas.getSecond().doubleValue()) * f1;

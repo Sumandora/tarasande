@@ -1,6 +1,8 @@
 package de.florianmichael.tarasande_protocol_hack.util.values
 
 import com.viaversion.viaversion.api.Via
+import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.MathHelper_1_8
+import de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.FastMath
 import de.florianmichael.vialoadingbase.util.VersionListEnum
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -9,6 +11,7 @@ import de.florianmichael.tarasande_protocol_hack.util.extension.andOlder
 import de.florianmichael.tarasande_protocol_hack.util.extension.rangeTo
 import de.florianmichael.tarasande_protocol_hack.util.extension.singleton
 import de.florianmichael.tarasande_protocol_hack.util.values.command.ViaDumpBypassSender
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 
 object ProtocolHackValues {
 
@@ -49,6 +52,15 @@ object ProtocolHackValues {
     val emulateSignGUIModification = ValueBooleanProtocol("Emulate sign gui modification", VersionListEnum.r1_8.andOlder())
     val sendIdlePacket = ValueBooleanProtocol("Send idle packet", VersionListEnum.r1_8 .. VersionListEnum.r1_3_1tor1_3_2)
     val emulatePlayerMovement = ValueBooleanProtocol("Emulate player movement", VersionListEnum.r1_8.andOlder())
+    init {
+        object : ValueMode(this, "Emulate player movement: Fast math tables", false, *FastMath.values().map { it.toString() }.toTypedArray()) {
+            override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
+                super.onChange(index, oldSelected, newSelected)
+                MathHelper_1_8.fastMath = FastMath.values()[index]
+            }
+            override fun isEnabled() = emulatePlayerMovement.value
+        }
+    }
     val emulateArmorHud = ValueBooleanProtocol("Emulate armor hud", VersionListEnum.r1_8.andOlder())
     val replaceAttributeModifiers = ValueBooleanProtocol("Replace attribute modifiers", VersionListEnum.r1_8.andOlder())
 

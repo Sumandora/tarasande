@@ -22,9 +22,9 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
 import com.mojang.authlib.GameProfile;
-import de.florianmichael.clampclient.injection.instrumentation_1_8.ArmorDefinition_1_8;
-import de.florianmichael.clampclient.injection.instrumentation_1_8.LegacyConstants_1_8;
-import de.florianmichael.clampclient.injection.instrumentation_1_8.PlayerAndLivingEntityMovementEmulation_1_8;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.ArmorPointsDefinition;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.LegacyConstants_1_8;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.ClientPlayerMovement_1_8;
 import de.florianmichael.clampclient.injection.mixininterface.IClientPlayerEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
@@ -238,7 +238,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerEntity;noClip:Z"))
     public boolean canNoClipBeGood(ClientPlayerEntity instance) {
         if (ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && (Object) this == MinecraftClient.getInstance().player) {
-            final PlayerAndLivingEntityMovementEmulation_1_8 a18PlayerAndLivingEntityMovementEmulation = ((ILivingEntity_Protocol) this).protocolhack_getPlayerLivingEntityMovementWrapper();
+            final ClientPlayerMovement_1_8 a18PlayerAndLivingEntityMovementEmulation = ((ILivingEntity_Protocol) this).protocolhack_getPlayerLivingEntityMovementWrapper();
 
             a18PlayerAndLivingEntityMovementEmulation.pushOutOfBlocks(this.getPos().x - (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 0.35D, this.getBoundingBox().minY + 0.5D, this.getPos().z + (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 0.35D);
             a18PlayerAndLivingEntityMovementEmulation.pushOutOfBlocks(this.getPos().x - (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 0.35D, this.getBoundingBox().minY + 0.5D, this.getPos().z - (double) LegacyConstants_1_8.PLAYER_MODEL_WIDTH * 0.35D);
@@ -261,7 +261,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Override
     public int getArmor() {
         if (ProtocolHackValues.INSTANCE.getEmulateArmorHud().getValue()) {
-            return ArmorDefinition_1_8.sum();
+            return ArmorPointsDefinition.sum();
         }
         return super.getArmor();
     }

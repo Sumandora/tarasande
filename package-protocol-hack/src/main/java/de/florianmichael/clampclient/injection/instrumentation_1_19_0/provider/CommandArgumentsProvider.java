@@ -1,4 +1,4 @@
-package de.florianmichael.clampclient.injection.signature.provider;
+package de.florianmichael.clampclient.injection.instrumentation_1_19_0.provider;
 
 import com.viaversion.viaversion.api.platform.providers.Provider;
 import net.minecraft.util.Pair;

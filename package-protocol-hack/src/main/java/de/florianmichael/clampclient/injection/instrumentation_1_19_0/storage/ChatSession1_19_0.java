@@ -1,8 +1,8 @@
-package de.florianmichael.clampclient.injection.signature.storage;
+package de.florianmichael.clampclient.injection.instrumentation_1_19_0.storage;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.ProfileKey;
-import de.florianmichael.clampclient.injection.signature.ClampMessageMetadata;
+import de.florianmichael.clampclient.injection.instrumentation_1_19_0.MessageMetadataModel;
 import de.florianmichael.tarasande_protocol_hack.util.JsonSorter;
 import net.lenni0451.mcstructs.text.components.StringComponent;
 import net.lenni0451.mcstructs.text.serializer.TextComponentSerializer;
@@ -23,7 +23,7 @@ public class ChatSession1_19_0 extends AbstractChatSession {
         this.legacyKey = legacyKey;
     }
 
-    public byte[] sign(final UUID sender, final ClampMessageMetadata messageMetadata) {
+    public byte[] sign(final UUID sender, final MessageMetadataModel messageMetadata) {
         return getSigner().sign(updater -> {
             final byte[] data = new byte[32];
             final ByteBuffer buffer = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN);

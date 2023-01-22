@@ -16,7 +16,7 @@ package de.florianmichael.clampclient.injection.instrumentation_1_12_2;
 
 import java.util.Arrays;
 
-public class MouseSensitivity_1_12_2 {
+public class SensitivityCalculations {
 
     private static final float[] sensitivities1_12 = new float[201];
 

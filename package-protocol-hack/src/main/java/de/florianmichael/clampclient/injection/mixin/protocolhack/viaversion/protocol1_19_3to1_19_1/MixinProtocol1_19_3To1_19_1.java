@@ -56,9 +56,9 @@ import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.ClientboundPac
 import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.Protocol1_19_3To1_19_1;
 import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.ServerboundPackets1_19_3;
 import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.storage.ReceivedMessagesStorage;
-import de.florianmichael.clampclient.injection.signature.ClampMessageMetadata;
-import de.florianmichael.clampclient.injection.signature.provider.CommandArgumentsProvider;
-import de.florianmichael.clampclient.injection.signature.storage.ChatSession1_19_2;
+import de.florianmichael.clampclient.injection.instrumentation_1_19_0.MessageMetadataModel;
+import de.florianmichael.clampclient.injection.instrumentation_1_19_0.provider.CommandArgumentsProvider;
+import de.florianmichael.clampclient.injection.instrumentation_1_19_0.storage.ChatSession1_19_2;
 import net.minecraft.util.Pair;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -260,7 +260,7 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                                     for (Pair<String, String> argument : commandArgumentsProvider.getSignedArguments(command)) {
                                         final byte[] signature = chatSession1192.sign(
                                                 sender,
-                                                new ClampMessageMetadata(
+                                                new MessageMetadataModel(
                                                         argument.getRight(),
                                                         timestamp,
                                                         salt
@@ -322,7 +322,7 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                         if (messagesStorage != null) {
                             final byte[] signature = chatSession1192.sign(
                                     sender,
-                                    new ClampMessageMetadata(
+                                    new MessageMetadataModel(
                                             message,
                                             timestamp,
                                             salt

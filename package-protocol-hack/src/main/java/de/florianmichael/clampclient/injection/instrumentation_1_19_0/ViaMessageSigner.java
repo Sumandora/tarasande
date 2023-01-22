@@ -1,14 +1,14 @@
-package de.florianmichael.clampclient.injection.signature;
+package de.florianmichael.clampclient.injection.instrumentation_1_19_0;
 
-import de.florianmichael.clampclient.injection.signature.model.ClampSignatureUpdatable;
+import de.florianmichael.clampclient.injection.instrumentation_1_19_0.model.SignatureUpdatableModel;
 
 import java.security.*;
 
-public interface ClampMessageSigner {
+public interface ViaMessageSigner {
 
-    byte[] sign(final ClampSignatureUpdatable signer);
+    byte[] sign(final SignatureUpdatableModel signer);
 
-    static ClampMessageSigner create(final PrivateKey privateKey, final String algorithm) {
+    static ViaMessageSigner create(final PrivateKey privateKey, final String algorithm) {
         return signer -> {
             try {
                 final Signature signature = Signature.getInstance(algorithm);

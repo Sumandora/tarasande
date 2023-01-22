@@ -1,4 +1,4 @@
-package de.florianmichael.clampclient.injection.instrumentation_1_8;
+package de.florianmichael.clampclient.injection.instrumentation_1_8.definition;
 
 public class LegacyConstants_1_8 {
 

@@ -1,16 +1,16 @@
-package de.florianmichael.clampclient.injection.signature.model.chain.v1_19_2;
+package de.florianmichael.clampclient.injection.instrumentation_1_19_2;
 
-import de.florianmichael.clampclient.injection.signature.model.ClampSignatureUpdater;
+import de.florianmichael.clampclient.injection.instrumentation_1_19_0.model.SignatureUpdaterModel;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.UUID;
 
-public class ClampMessageHeader {
+public class MessageHeaderModel {
     private final UUID sender;
     private final byte[] precedingSignature;
 
-    public ClampMessageHeader(UUID sender, byte[] precedingSignature) {
+    public MessageHeaderModel(UUID sender, byte[] precedingSignature) {
         this.sender = sender;
         this.precedingSignature = precedingSignature;
     }
@@ -25,7 +25,7 @@ public class ClampMessageHeader {
         return data;
     }
 
-    public void updater(final byte[] bodyDigest, final ClampSignatureUpdater updater) {
+    public void updater(final byte[] bodyDigest, final SignatureUpdaterModel updater) {
         if (precedingSignature != null) {
             updater.update(precedingSignature);
         }

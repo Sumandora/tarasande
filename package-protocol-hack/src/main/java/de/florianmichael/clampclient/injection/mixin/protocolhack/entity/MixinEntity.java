@@ -21,7 +21,7 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_8.LegacyConstants_1_8;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.LegacyConstants_1_8;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;

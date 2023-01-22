@@ -1,4 +1,4 @@
-package de.florianmichael.clampclient.injection.instrumentation_1_8;
+package de.florianmichael.clampclient.injection.instrumentation_1_8.wrapper;
 
 import net.minecraft.util.math.Box;
 

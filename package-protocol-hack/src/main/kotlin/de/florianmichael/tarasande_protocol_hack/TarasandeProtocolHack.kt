@@ -10,7 +10,7 @@ import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemPr
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
 import de.florianmichael.clampclient.injection.instrumentation_c_0_30.ClassicItemSelectionScreen
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
-import de.florianmichael.clampclient.injection.signature.provider.CommandArgumentsProvider
+import de.florianmichael.clampclient.injection.instrumentation_1_19_0.provider.CommandArgumentsProvider
 import de.florianmichael.viabeta.api.BetaProtocolAccess
 import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.provider.ScreenStateProvider
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicMPPassProvider

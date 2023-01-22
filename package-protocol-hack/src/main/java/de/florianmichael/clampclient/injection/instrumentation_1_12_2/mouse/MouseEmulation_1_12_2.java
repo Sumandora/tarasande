@@ -1,5 +1,6 @@
-package de.florianmichael.clampclient.injection.instrumentation_1_12_2;
+package de.florianmichael.clampclient.injection.instrumentation_1_12_2.mouse;
 
+import de.florianmichael.clampclient.injection.instrumentation_1_12_2.SensitivityCalculations;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
@@ -33,7 +34,7 @@ public class MouseEmulation_1_12_2 {
             original.cursorDeltaY = 0.0;
             return;
         }
-        float f = MouseSensitivity_1_12_2.get1_12SensitivityFor1_19(MinecraftClient.getInstance().options.getMouseSensitivity().getValue().doubleValue()) * 0.6F + 0.2F;
+        float f = SensitivityCalculations.get1_12SensitivityFor1_19(MinecraftClient.getInstance().options.getMouseSensitivity().getValue().doubleValue()) * 0.6F + 0.2F;
         float f1 = f * f * f * 8.0F;
         float f2 = ((int) original.cursorDeltaX) * f1;
         float f3 = ((int) original.cursorDeltaY) * f1;
@@ -63,7 +64,7 @@ public class MouseEmulation_1_12_2 {
 
     public void tickFilter() {
         if (MinecraftClient.getInstance().options.smoothCameraEnabled) {
-            float f = MouseSensitivity_1_12_2.get1_12SensitivityFor1_19(MinecraftClient.getInstance().options.getMouseSensitivity().getValue().doubleValue()) * 0.6F + 0.2F;
+            float f = SensitivityCalculations.get1_12SensitivityFor1_19(MinecraftClient.getInstance().options.getMouseSensitivity().getValue().doubleValue()) * 0.6F + 0.2F;
             float f1 = f * f * f * 8.0F;
             this.smoothCamFilterX = this.mouseFilterXAxis.smooth(this.smoothCamYaw, 0.05F * f1);
             this.smoothCamFilterY = this.mouseFilterYAxis.smooth(this.smoothCamPitch, 0.05F * f1);

@@ -21,8 +21,8 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_8.MathHelper_1_8;
-import de.florianmichael.clampclient.injection.instrumentation_1_8.PlayerAndLivingEntityMovementEmulation_1_8;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.MathHelper_1_8;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.ClientPlayerMovement_1_8;
 import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
@@ -203,7 +203,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity_
 
 
     @Unique
-    private final PlayerAndLivingEntityMovementEmulation_1_8 a18PlayerAndLivingEntityMovementEmulation = new PlayerAndLivingEntityMovementEmulation_1_8((LivingEntity)(Object) this);
+    private final ClientPlayerMovement_1_8 a18PlayerAndLivingEntityMovementEmulation = new ClientPlayerMovement_1_8((LivingEntity)(Object) this);
 
     @Redirect(method = "jump", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isSprinting()Z"))
     public boolean fixMathHelperTable(LivingEntity instance) {
@@ -263,7 +263,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity_
     }
 
     @Override
-    public PlayerAndLivingEntityMovementEmulation_1_8 protocolhack_getPlayerLivingEntityMovementWrapper() {
+    public ClientPlayerMovement_1_8 protocolhack_getPlayerLivingEntityMovementWrapper() {
         return a18PlayerAndLivingEntityMovementEmulation;
     }
 }

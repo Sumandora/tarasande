@@ -12,7 +12,7 @@
  * The owner "Florian Michael" is free to change this license.
  */
 
-package de.florianmichael.clampclient.injection.instrumentation_1_12_2;
+package de.florianmichael.clampclient.injection.instrumentation_1_12_2.mouse;
 
 public class MouseFilter_1_12_2 {
 

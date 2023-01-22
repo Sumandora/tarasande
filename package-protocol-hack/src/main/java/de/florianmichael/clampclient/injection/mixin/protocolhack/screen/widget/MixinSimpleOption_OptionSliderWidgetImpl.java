@@ -1,6 +1,6 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.screen.widget;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_12_2.MouseSensitivity_1_12_2;
+import de.florianmichael.clampclient.injection.instrumentation_1_12_2.SensitivityCalculations;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.OptionSliderWidget;
@@ -28,8 +28,8 @@ public abstract class MixinSimpleOption_OptionSliderWidgetImpl extends OptionSli
     @Inject(method = "updateMessage", at = @At("RETURN"))
     public void injectUpdateMessage(CallbackInfo ci) {
         if (this.option == MinecraftClient.getInstance().options.getMouseSensitivity()) {
-            float approximation = MouseSensitivity_1_12_2.get1_12SensitivityFor1_19(((Double) this.option.value).doubleValue());
-            final Text customText = Text.literal(" (" + VersionListEnum.r1_12_2.getName() + ": " + MouseSensitivity_1_12_2.getPercentage(approximation) + "%)").styled(style -> style.withColor(ClientValues.INSTANCE.getAccentColor().getColor().getRGB()));
+            float approximation = SensitivityCalculations.get1_12SensitivityFor1_19(((Double) this.option.value).doubleValue());
+            final Text customText = Text.literal(" (" + VersionListEnum.r1_12_2.getName() + ": " + SensitivityCalculations.getPercentage(approximation) + "%)").styled(style -> style.withColor(ClientValues.INSTANCE.getAccentColor().getColor().getRGB()));
 
             this.setMessage(Text.literal("").append(this.getMessage()).append(customText));
         }

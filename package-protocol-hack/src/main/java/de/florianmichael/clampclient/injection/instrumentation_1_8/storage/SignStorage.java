@@ -1,4 +1,4 @@
-package de.florianmichael.clampclient.injection.instrumentation_1_8;
+package de.florianmichael.clampclient.injection.instrumentation_1_8.storage;
 
 import com.viaversion.viaversion.api.connection.StoredObject;
 import com.viaversion.viaversion.api.connection.UserConnection;

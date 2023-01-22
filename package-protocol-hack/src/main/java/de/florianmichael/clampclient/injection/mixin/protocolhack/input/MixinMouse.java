@@ -21,7 +21,7 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.input;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_12_2.MouseEmulation_1_12_2;
+import de.florianmichael.clampclient.injection.instrumentation_1_12_2.mouse.MouseEmulation_1_12_2;
 import de.florianmichael.clampclient.injection.mixininterface.IMinecraftClient_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.IMouse_Protocol;
 import net.minecraft.client.MinecraftClient;

@@ -1,4 +1,4 @@
-package de.florianmichael.clampclient.injection.instrumentation_1_8;
+package de.florianmichael.clampclient.injection.instrumentation_1_8.definition;
 
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
@@ -31,7 +31,7 @@ import java.util.Map;
  * - setBlockBoundsForItemRender is actually part from the Block class but not important for us, since it's the rendering (outline shape)
  */
 @SuppressWarnings("ALL")
-public class BlockModelEmulator_1_8 {
+public class BlockModelDefinition {
 
     public static final Map<Block, BlockModel> blockModelTransformer = new HashMap<>();
 

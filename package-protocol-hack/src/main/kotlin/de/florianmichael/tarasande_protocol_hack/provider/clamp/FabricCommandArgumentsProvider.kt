@@ -1,6 +1,6 @@
 package de.florianmichael.tarasande_protocol_hack.provider.clamp
 
-import de.florianmichael.clampclient.injection.signature.provider.CommandArgumentsProvider
+import de.florianmichael.clampclient.injection.instrumentation_1_19_0.provider.CommandArgumentsProvider
 import net.minecraft.command.argument.SignedArgumentList
 import net.minecraft.util.Pair
 import net.tarasandedevelopment.tarasande.mc

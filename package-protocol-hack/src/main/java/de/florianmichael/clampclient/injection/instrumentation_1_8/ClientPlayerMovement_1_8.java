@@ -1,6 +1,11 @@
 package de.florianmichael.clampclient.injection.instrumentation_1_8;
 
 import com.google.common.collect.Lists;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.BlockModelDefinition;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.LegacyConstants_1_8;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.MathHelper_1_8;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.wrapper.BoxWrapper;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.wrapper.WorldBorderWrapper;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleNoWebSettingsKt;
 import net.minecraft.block.*;
@@ -45,11 +50,11 @@ import java.util.Random;
  * was changed from the 1.14, but is replaced with the 1.8 emulation.
  */
 @SuppressWarnings({"deprecation", "RedundantCast", "UnnecessaryUnboxing", "PointlessArithmeticExpression", "DataFlowIssue", "DuplicatedCode", "ConstantValue"})
-public class PlayerAndLivingEntityMovementEmulation_1_8 {
+public class ClientPlayerMovement_1_8 {
 
     private final LivingEntity original;
 
-    public PlayerAndLivingEntityMovementEmulation_1_8(final LivingEntity original) {
+    public ClientPlayerMovement_1_8(final LivingEntity original) {
         this.original = original;
     }
 
@@ -116,7 +121,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
                         try {
                             EventBlockCollision eventBlockCollision = new EventBlockCollision(iblockstate, blockpos2, original);
                             EventDispatcher.INSTANCE.call(eventBlockCollision);
-                            BlockModelEmulator_1_8.getTransformerByBlock(iblockstate.getBlock()).onEntityCollidedWithBlock(original.world, blockpos2, iblockstate, original);
+                            BlockModelDefinition.getTransformerByBlock(iblockstate.getBlock()).onEntityCollidedWithBlock(original.world, blockpos2, iblockstate, original);
                         } catch (Throwable throwable) {
                             throw new RuntimeException(throwable);
                         }
@@ -153,7 +158,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
 
                             if ((double) l >= d0) {
                                 flag = true;
-                                vec3 = BlockModelEmulator_1_8.getTransformerByBlock(block).modifyAcceleration(original.world, mutabeBlockPos, entityIn, vec3);
+                                vec3 = BlockModelDefinition.getTransformerByBlock(block).modifyAcceleration(original.world, mutabeBlockPos, entityIn, vec3);
                             }
                         }
                     }
@@ -430,7 +435,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
                         }
 
                         ArrayList<Box> shapes = new ArrayList<>();
-                        BlockModelEmulator_1_8.getTransformerByBlock(iblockstate1.getBlock()).addCollisionBoxesToList(world, mutableBlockPos, iblockstate1, bb, shapes, entityIn);
+                        BlockModelDefinition.getTransformerByBlock(iblockstate1.getBlock()).addCollisionBoxesToList(world, mutableBlockPos, iblockstate1, bb, shapes, entityIn);
 
                         if(true /*Am I supposed to be unlegit?*/) {
                             // FULL LOTTO INCOMING $$$$
@@ -697,7 +702,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
 
             if (d3 != x) original.getVelocity().x = 0.0D;
             if (d5 != z) original.getVelocity().z = 0.0D;
-            if (d4 != y) BlockModelEmulator_1_8.getTransformerByBlock(block1).onLanded(original.world, original);
+            if (d4 != y) BlockModelDefinition.getTransformerByBlock(block1).onLanded(original.world, original);
 
             if (this.canTriggerWalking() && !flag && !original.hasVehicle()) {
                 double d12 = original.getPos().x - d0;
@@ -707,7 +712,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
                 if (block1 != Blocks.LADDER) d13 = 0.0D;
 
                 if (block1 != null && original.isOnGround()) {
-                    BlockModelEmulator_1_8.getTransformerByBlock(block1).onEntityCollidedWithBlock(original.world, blockpos, original);
+                    BlockModelDefinition.getTransformerByBlock(block1).onEntityCollidedWithBlock(original.world, blockpos, original);
                 }
 
                 distanceWalkedModified = (float) ((double) this.distanceWalkedModified + (double) MathHelper_1_8.sqrt_double(d12 * d12 + d14 * d14) * 0.6D);
@@ -774,7 +779,7 @@ public class PlayerAndLivingEntityMovementEmulation_1_8 {
         if (onGroundIn) {
             if (original.fallDistance > 0.0F) {
                 if (blockIn != null) {
-                    BlockModelEmulator_1_8.getTransformerByBlock(blockIn).onFallenUpon(original.world, pos, original, original.fallDistance);
+                    BlockModelDefinition.getTransformerByBlock(blockIn).onFallenUpon(original.world, pos, original, original.fallDistance);
                 } else {
                     fall(original.fallDistance, 1.0F);
                 }

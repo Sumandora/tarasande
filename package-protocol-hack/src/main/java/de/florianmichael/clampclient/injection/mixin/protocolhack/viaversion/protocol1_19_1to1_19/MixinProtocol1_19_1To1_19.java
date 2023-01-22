@@ -35,9 +35,9 @@ import com.viaversion.viaversion.protocols.protocol1_19_1to1_19.ServerboundPacke
 import com.viaversion.viaversion.protocols.protocol1_19_3to1_19_1.storage.ReceivedMessagesStorage;
 import com.viaversion.viaversion.protocols.protocol1_19to1_18_2.ClientboundPackets1_19;
 import com.viaversion.viaversion.protocols.protocol1_19to1_18_2.ServerboundPackets1_19;
-import de.florianmichael.clampclient.injection.signature.ClampMessageMetadata;
-import de.florianmichael.clampclient.injection.signature.provider.CommandArgumentsProvider;
-import de.florianmichael.clampclient.injection.signature.storage.ChatSession1_19_0;
+import de.florianmichael.clampclient.injection.instrumentation_1_19_0.MessageMetadataModel;
+import de.florianmichael.clampclient.injection.instrumentation_1_19_0.provider.CommandArgumentsProvider;
+import de.florianmichael.clampclient.injection.instrumentation_1_19_0.storage.ChatSession1_19_0;
 import net.minecraft.util.Pair;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -100,7 +100,7 @@ public class MixinProtocol1_19_1To1_19 extends AbstractProtocol<ClientboundPacke
 
                         wrapper.set(Type.BYTE_ARRAY_PRIMITIVE, 0, chatSession1190.sign(
                                 sender,
-                                new ClampMessageMetadata(
+                                new MessageMetadataModel(
                                         message,
                                         timestamp,
                                         salt
@@ -153,7 +153,7 @@ public class MixinProtocol1_19_1To1_19 extends AbstractProtocol<ClientboundPacke
                                     for (Pair<String, String> argument : commandArgumentsProvider.getSignedArguments(command)) {
                                         final byte[] signature = chatSession1190.sign(
                                                 sender,
-                                                new ClampMessageMetadata(
+                                                new MessageMetadataModel(
                                                         argument.getRight(),
                                                         timestamp,
                                                         salt
