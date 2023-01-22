@@ -7,6 +7,7 @@ import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.Ma
 import de.florianmichael.clampclient.injection.instrumentation_1_8.wrapper.BoxWrapper;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.wrapper.WorldBorderWrapper;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
+import de.florianmichael.tarasande_protocol_hack.injection.accessor.IEventCollisionShape;
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleNoWebSettingsKt;
 import net.minecraft.block.*;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -35,7 +36,6 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerMod
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoWeb;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSafeWalk;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
-import de.florianmichael.tarasande_protocol_hack.injection.accessor.IEventCollisionShape;
 import su.mandora.event.EventDispatcher;
 
 import java.util.ArrayList;
@@ -597,6 +597,9 @@ public class ClientPlayerMovement_1_8 {
                 double d8 = z;
                 Box axisalignedbb3 = original.getBoundingBox();
                 original.setBoundingBox(axisalignedbb);
+
+                double posY = original.getBoundingBox().minY;
+
                 y = (double) eventStep.getStepHeight();
                 List<Box> list = getCollidingBoundingBoxes(original.world, original, original.getBoundingBox().stretch(d3, y, d5));
                 Box axisalignedbb4 = original.getBoundingBox();
@@ -672,7 +675,7 @@ public class ClientPlayerMovement_1_8 {
                     original.setBoundingBox(axisalignedbb3);
                 }
 
-                eventStep = new EventStep(eventStep.getStepHeight(), EventStep.State.POST);
+                eventStep = new EventStep((float) (original.getBoundingBox().minY - posY), EventStep.State.POST);
                 EventDispatcher.INSTANCE.call(eventStep);
             }
 
