@@ -33,10 +33,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
@@ -91,14 +88,23 @@ public abstract class MixinEntity implements IEntity_Protocol {
 
     @Inject(method = "getVelocityAffectingPos", at = @At("HEAD"), cancellable = true)
     public void injectGetVelocityAffectingPos(CallbackInfoReturnable<BlockPos> cir) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_14_4))
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_14_4)) {
             cir.setReturnValue(new BlockPos(pos.x, getBoundingBox().minY - 1, pos.z));
+        }
+    }
+
+    @Inject(method = "getRotationVector(FF)Lnet/minecraft/util/math/Vec3d;", at = @At("HEAD"), cancellable = true)
+    public void onGetRotationVector(float pitch, float yaw, CallbackInfoReturnable<Vec3d> cir) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_2)) {
+            cir.setReturnValue(Vec3d.fromPolar(pitch, yaw));
+        }
     }
 
     @Inject(method = "setSwimming", at = @At("HEAD"), cancellable = true)
     private void onSetSwimming(boolean swimming, CallbackInfo ci) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_2) && swimming)
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_2) && swimming) {
             ci.cancel();
+        }
     }
 
     // I-EEE 754
@@ -261,5 +267,14 @@ public abstract class MixinEntity implements IEntity_Protocol {
 
         this.prevPitch += this.pitch - f;
         this.prevYaw += this.yaw - f1;
+    }
+
+
+    @Unique
+    private Vec3i serverPos = new Vec3i(0, 0, 0);
+
+    @Override
+    public Vec3i protocolhack_getServerPos() {
+        return serverPos;
     }
 }

@@ -43,7 +43,6 @@ import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Manage
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
-import de.florianmichael.tarasande_protocol_hack.definition.EntityDimensionsDefinition
 import de.florianmichael.tarasande_protocol_hack.definition.PackFormatsDefinition
 import de.florianmichael.tarasande_protocol_hack.platform.ViaBetaPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.platform.ViaCursedPlatformImpl
@@ -86,7 +85,6 @@ class TarasandeProtocolHack : NativeProvider {
             // Only reload if needed
             if (ViaLoadingBase.getTargetVersion() != protocol) {
                 displayItems = Registries.ITEM.filter { ItemReleaseVersionsDefinition.shouldDisplay(it, protocol) }.toMutableList()
-                EntityDimensionsDefinition.reloadDimensions()
 
                 if (protocol.isOlderThan(VersionListEnum.a1_0_15)) {
                     ClassicItemSelectionScreen.INSTANCE.reload(protocol)

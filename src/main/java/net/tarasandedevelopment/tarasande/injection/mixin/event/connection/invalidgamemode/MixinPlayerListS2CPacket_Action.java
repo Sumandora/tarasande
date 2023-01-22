@@ -1,12 +1,15 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.event.connection.invalidgamemode;
 
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.world.GameMode;
 import net.tarasandedevelopment.tarasande.event.EventInvalidGameMode;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.event.EventDispatcher;
 
 @Mixin(PlayerListS2CPacket.Action.class)
@@ -21,10 +24,10 @@ public class MixinPlayerListS2CPacket_Action {
         return GameMode.byId(id);
     }
 
-    @Redirect(method = "method_46338", at = @At(value = "FIELD", target = "Lnet/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Serialized;gameMode:Lnet/minecraft/world/GameMode;"))
-    private static void hookEventInvalidGameMode(PlayerListS2CPacket.Serialized instance, GameMode value) {
+    @Inject(method = "method_46338", at = @At(value = "FIELD", target = "Lnet/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Serialized;gameMode:Lnet/minecraft/world/GameMode;", shift = At.Shift.AFTER))
+    private static void hookEventInvalidGameMode(PlayerListS2CPacket.Serialized serialized, PacketByteBuf buf, CallbackInfo ci) {
         if (tarasande_isInvalid) {
-            EventInvalidGameMode eventInvalidGameMode = new EventInvalidGameMode(instance.profileId);
+            EventInvalidGameMode eventInvalidGameMode = new EventInvalidGameMode(serialized.profileId);
             EventDispatcher.INSTANCE.call(eventInvalidGameMode);
         }
     }
