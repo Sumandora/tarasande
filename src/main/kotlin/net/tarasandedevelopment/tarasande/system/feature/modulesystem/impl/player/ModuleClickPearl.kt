@@ -23,7 +23,11 @@ class ModuleClickPearl : Module("Click pearl", "Auto switches to a ender pearl",
         }
         registerEvent(EventUpdate::class.java) { event ->
             if (event.state == EventUpdate.State.PRE) {
-                val pearlSlot = ContainerUtil.findSlot { it.value.item == Items.ENDER_PEARL }
+                var pearlSlot = ContainerUtil.findSlot { it.value.isOf(Items.ENDER_PEARL) }
+                if (pearlSlot == null)
+                    if (mc.player?.offHandStack?.isOf(Items.ENDER_PEARL) == true)
+                        pearlSlot = -1
+
                 if (pearlSlot == null) {
                     state = State.IDLE // FUCK
                     return@registerEvent
