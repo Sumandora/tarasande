@@ -3,15 +3,15 @@ package de.florianmichael.tarasande_protocol_hack.util.values
 import com.viaversion.viaversion.api.Via
 import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.MathHelper_1_8
 import de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.FastMath
-import de.florianmichael.vialoadingbase.util.VersionListEnum
-import net.tarasandedevelopment.tarasande.mc
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import de.florianmichael.tarasande_protocol_hack.util.extension.andOlder
 import de.florianmichael.tarasande_protocol_hack.util.extension.rangeTo
 import de.florianmichael.tarasande_protocol_hack.util.extension.singleton
 import de.florianmichael.tarasande_protocol_hack.util.values.command.ViaDumpBypassSender
+import de.florianmichael.vialoadingbase.util.VersionListEnum
+import net.tarasandedevelopment.tarasande.mc
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 
 object ProtocolHackValues {
 
@@ -55,7 +55,6 @@ object ProtocolHackValues {
     init {
         object : ValueMode(this, "Emulate player movement: Fast math tables", false, *FastMath.values().map { it.toString() }.toTypedArray()) {
             override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
-                super.onChange(index, oldSelected, newSelected)
                 MathHelper_1_8.fastMath = FastMath.values()[index]
             }
             override fun isEnabled() = emulatePlayerMovement.value
