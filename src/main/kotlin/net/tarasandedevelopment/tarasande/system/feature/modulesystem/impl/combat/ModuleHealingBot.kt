@@ -62,12 +62,12 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
 
     init {
         registerEvent(EventPollEvents::class.java, 9999) { event ->
+            if (event.dirty) {
+                onEnable()
+                return@registerEvent
+            }
             when (state) {
                 State.THROW -> {
-                    if (event.dirty) {
-                        onEnable()
-                        return@registerEvent
-                    }
                     if (intendedItem?.item is SplashPotionItem) {
                         event.rotation = Rotation(mc.player!!).withPitch(90.0F).correctSensitivity()
                         targetRotation = event.rotation
@@ -108,7 +108,7 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
                         }
             }
 
-            if (bestItem == null && items.isSelected(1) && !event.dirty) {
+            if (bestItem == null && items.isSelected(1) && mc.player?.isOnGround == true && !event.dirty) {
                 bestItem = findItem {
                     if (it.item !is SplashPotionItem)
                         return@findItem false
