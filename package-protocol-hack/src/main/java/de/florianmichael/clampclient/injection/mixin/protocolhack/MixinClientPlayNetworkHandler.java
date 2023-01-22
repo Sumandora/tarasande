@@ -166,7 +166,7 @@ public abstract class MixinClientPlayNetworkHandler {
 
     @Inject(method = "onEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/util/thread/ThreadExecutor;)V", shift = At.Shift.AFTER), cancellable = true)
     public void adjustEntityOffsets(EntityS2CPacket packet, CallbackInfo ci) {
-        if (ViaLoadingBase.getTargetVersion().isNewerThanOrEqualTo(VersionListEnum.r1_8)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
             final Entity entity = packet.getEntity(this.world);
             if (entity != null) {
                 Vec3i mutableServerPos = ((IEntity_Protocol) entity).protocolhack_getServerPos();
@@ -190,7 +190,7 @@ public abstract class MixinClientPlayNetworkHandler {
 
     @Inject(method = "onEntityPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/util/thread/ThreadExecutor;)V", shift = At.Shift.AFTER), cancellable = true)
     public void adjustEntityPositionOffsets(EntityPositionS2CPacket packet, CallbackInfo ci) {
-        if (ViaLoadingBase.getTargetVersion().isNewerThanOrEqualTo(VersionListEnum.r1_15_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_15_2)) {
             Entity entity = this.world.getEntityById(packet.getId());
 
             if (entity != null) {
@@ -219,7 +219,7 @@ public abstract class MixinClientPlayNetworkHandler {
 
     @Inject(method = "onPlayerSpawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/util/thread/ThreadExecutor;)V", shift = At.Shift.AFTER), cancellable = true)
     public void onPlayerSpawn(PlayerSpawnS2CPacket packet, CallbackInfo ci) {
-        if (ViaLoadingBase.getTargetVersion().isNewerThanOrEqualTo(VersionListEnum.r1_8)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
             final Vec3i serverPos = new Vec3i((int) (Double.doubleToLongBits(packet.getX()) + Integer.MIN_VALUE), (int) (Double.doubleToLongBits(packet.getY()) + Integer.MIN_VALUE), (int) (Double.doubleToLongBits(packet.getZ()) + Integer.MIN_VALUE));
             double d0 = (double) serverPos.getX() / 32.0D;
             double d1 = (double) serverPos.getY() / 32.0D;

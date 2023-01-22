@@ -1,6 +1,6 @@
 /**
  * --FLORIAN MICHAEL PRIVATE LICENCE v1.2--
- *
+ * <p>
  * This file / project is protected and is the intellectual property of Florian Michael (aka. EnZaXD),
  * any use (be it private or public, be it copying or using for own use, be it publishing or modifying) of this
  * file / project is prohibited. It requires in that use a written permission with official signature of the owner
@@ -9,14 +9,14 @@
  * The owner "Florian Michael" is free to change this license. The creator assumes no responsibility for any infringements
  * that have arisen, are arising or will arise from this project / file. If this licence is used anywhere,
  * the latest version published by the author Florian Michael (aka EnZaXD) always applies automatically.
- *
+ * <p>
  * Changelog:
- *     v1.0:
- *         Added License
- *     v1.1:
- *         Ownership withdrawn
- *     v1.2:
- *         Version-independent validity and automatic renewal
+ * v1.0:
+ * Added License
+ * v1.1:
+ * Ownership withdrawn
+ * v1.2:
+ * Version-independent validity and automatic renewal
  */
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
@@ -24,12 +24,15 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.LegacyConstants_1_8;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
+import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.base.EntityDimension;
+import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.EntityDimensionsDefinition;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.registry.tag.TagKey;
@@ -44,6 +47,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.logging.Level;
 
 @SuppressWarnings("ConstantValue")
 @Mixin(Entity.class)
@@ -74,17 +79,62 @@ public abstract class MixinEntity implements IEntity_Protocol {
     @Shadow
     public abstract void setVelocity(Vec3d velocity);
 
-    @Shadow public abstract void setPos(double x, double y, double z);
+    @Shadow
+    public abstract void setPos(double x, double y, double z);
 
-    @Shadow public abstract void setBoundingBox(Box boundingBox);
+    @Shadow
+    public abstract void setBoundingBox(Box boundingBox);
 
-    @Shadow private float pitch;
+    @Shadow
+    private float pitch;
 
-    @Shadow private float yaw;
+    @Shadow
+    private float yaw;
 
-    @Shadow public float prevPitch;
+    @Shadow
+    public float prevPitch;
 
-    @Shadow public float prevYaw;
+    @Shadow
+    public float prevYaw;
+
+    @Shadow
+    public abstract EntityPose getPose();
+
+    @Unique
+    private EntityDimension<?> replacedDimension;
+
+    @Inject(method = "setPosition(DDD)V", at = @At("HEAD"))
+    public void onPosition(double x, double y, double z, CallbackInfo ci) {
+        if (ProtocolHackValues.INSTANCE.getEntityDimensionReplacements().getValue()) {
+            if (replacedDimension == null) {
+                replacedDimension = EntityDimensionsDefinition.INSTANCE.getWrapper().getDimension((Entity) (Object) this);
+
+                if (replacedDimension == null)
+                    ViaLoadingBase.instance().logger().log(Level.SEVERE, "Missing entity dimension wrapper for " + this.getClass());
+            }
+        }
+    }
+
+    @Inject(method = "calculateBoundingBox", at = @At("RETURN"), cancellable = true)
+    public void onCalculateBoundingBox(CallbackInfoReturnable<Box> cir) {
+        if (ProtocolHackValues.INSTANCE.getEntityDimensionReplacements().getValue() && replacedDimension != null) {
+            cir.setReturnValue(replacedDimension.getBoxAt((Entity) (Object) this, this.getPose(), this.pos));
+        }
+    }
+
+    @Inject(method = "getHeight", at = @At("RETURN"), cancellable = true)
+    public void onGetHeight(CallbackInfoReturnable<Float> cir) {
+        if (ProtocolHackValues.INSTANCE.getEntityDimensionReplacements().getValue() && replacedDimension != null) {
+            cir.setReturnValue(replacedDimension.getHeight((Entity) (Object) this, getPose()));
+        }
+    }
+
+    @Inject(method = "getWidth", at = @At("RETURN"), cancellable = true)
+    public void onGetWidth(CallbackInfoReturnable<Float> cir) {
+        if (ProtocolHackValues.INSTANCE.getEntityDimensionReplacements().getValue() && replacedDimension != null) {
+            cir.setReturnValue(replacedDimension.getWidth((Entity) (Object) this, getPose()));
+        }
+    }
 
     @Inject(method = "getVelocityAffectingPos", at = @At("HEAD"), cancellable = true)
     public void injectGetVelocityAffectingPos(CallbackInfoReturnable<BlockPos> cir) {
@@ -258,10 +308,10 @@ public abstract class MixinEntity implements IEntity_Protocol {
     public void protocolhack_setAngles(float yaw, float pitch) {
         float f = this.pitch;
         float f1 = this.yaw;
-        this.yaw = (float)((double)this.yaw + (double)yaw * 0.15D);
-        this.pitch = (float)((double)this.pitch - (double)pitch * 0.15D);
+        this.yaw = (float) ((double) this.yaw + (double) yaw * 0.15D);
+        this.pitch = (float) ((double) this.pitch - (double) pitch * 0.15D);
 
-        if(!ManagerModule.INSTANCE.get(ModuleNoPitchLimit.class).getEnabled().getValue()) {
+        if (!ManagerModule.INSTANCE.get(ModuleNoPitchLimit.class).getEnabled().getValue()) {
             this.pitch = MathHelper.clamp(this.pitch, -90.0F, 90.0F);
         }
 

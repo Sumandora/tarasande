@@ -55,6 +55,7 @@ import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricHandI
 import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
 import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricVersionProvider
 import de.florianmichael.tarasande_protocol_hack.definition.ItemReleaseVersionsDefinition
+import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.EntityDimensionsDefinition
 import de.florianmichael.tarasande_protocol_hack.tarasande.information.*
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleEveryItemOnArmor
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleInventoryMove
@@ -85,6 +86,7 @@ class TarasandeProtocolHack : NativeProvider {
             // Only reload if needed
             if (ViaLoadingBase.getTargetVersion() != protocol) {
                 displayItems = Registries.ITEM.filter { ItemReleaseVersionsDefinition.shouldDisplay(it, protocol) }.toMutableList()
+                EntityDimensionsDefinition.reload(protocol)
 
                 if (protocol.isOlderThan(VersionListEnum.a1_0_15)) {
                     ClassicItemSelectionScreen.INSTANCE.reload(protocol)
@@ -106,6 +108,8 @@ class TarasandeProtocolHack : NativeProvider {
     fun initialize() {
         ProtocolClassPaths.LEGACY_PROTOCOL_IMPLEMENTATION_CLASS = "de.florianmichael.viabeta.api.LegacyProtocols"
         ProtocolClassPaths.SNAPSHOT_PROTOCOL_IMPLEMENTATION_CLASS = "de.florianmichael.viacursed.api.CursedProtocols"
+
+        EntityDimensionsDefinition
 
         // ViaVersion loading
         ViaLoadingBase.instance().init(this) {
