@@ -34,7 +34,6 @@ import java.util.logging.Logger
  * TODO | Protocol Hack:
  *  - Entity Dimensions in <= 1.19.2
  *  - WindowClick is not fully remapped in <= 1.16.5
- *  - Implement HandItemProvider in <= b1.7.3
  *  - Fix chest rendering and collisions in <= b1.8
  *  - Reimplement sword actions in <= b1.7.3
  *  - Change Boat and Chest Model in <= 1.8

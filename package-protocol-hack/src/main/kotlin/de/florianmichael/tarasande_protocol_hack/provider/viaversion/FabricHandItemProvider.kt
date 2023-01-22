@@ -18,9 +18,6 @@ class FabricHandItemProvider : HandItemProvider() {
         if (lastUsedItem == null) {
             return null
         }
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.b1_7tob1_7_3)) {
-            return super.getHandItem(info)
-        }
-        return MinecraftViaItemRewriter.minecraftToViaItem(info, lastUsedItem!!, ViaLoadingBase.getTargetVersion().originalVersion)
+        return MinecraftViaItemRewriter.minecraftToViaItem(info, lastUsedItem!!, VersionListEnum.r1_8.originalVersion)
     }
 }
