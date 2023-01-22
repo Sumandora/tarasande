@@ -55,6 +55,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.event.EventDispatcher;
 
+@SuppressWarnings("ConstantValue")
 @Mixin(value = ClientPlayerEntity.class, priority = 2000)
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IClientPlayerEntity_Protocol {
 

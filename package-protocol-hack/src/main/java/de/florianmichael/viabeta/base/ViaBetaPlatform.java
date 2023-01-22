@@ -42,7 +42,8 @@ import de.florianmichael.viabeta.protocol.protocol1_5_0_1to1_4_6_7.Protocol1_5_0
 import de.florianmichael.viabeta.protocol.protocol1_5_2to1_5_0_1.Protocol1_5_2to1_5_0_1;
 import de.florianmichael.viabeta.protocol.protocol1_6_1to1_5_2.Protocol1_6_1to1_5_2;
 import de.florianmichael.viabeta.protocol.protocol1_6_2to1_6_1.Protocol1_6_2to1_6_1;
-import de.florianmichael.viabeta.protocol.protocol1_6_4to1_6_2.Protocol1_6_4to1_6_2;
+import de.florianmichael.viabeta.protocol.protocol1_6_3preto1_6_2.Protocol1_6_3_preto1_6_2;
+import de.florianmichael.viabeta.protocol.protocol1_6_4to1_6_3_pre.Protocol1_6_4to1_6_3_pre;
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.Protocol1_7_2_5to1_6_4;
 import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.Protocol1_7_6_10to1_7_2_5;
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.Protocol1_8to1_7_6_10;
@@ -65,7 +66,8 @@ public interface ViaBetaPlatform {
         Via.getManager().getProtocolManager().registerProtocol(new Protocol1_8to1_7_6_10(), ProtocolVersion.v1_8, ProtocolVersion.v1_7_6);
         Via.getManager().getProtocolManager().registerProtocol(new Protocol1_7_6_10to1_7_2_5(), ProtocolVersion.v1_7_6, ProtocolVersion.v1_7_1);
         Via.getManager().getProtocolManager().registerProtocol(new Protocol1_7_2_5to1_6_4(), ProtocolVersion.v1_7_1, LegacyProtocols.r1_6_4);
-        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_6_4to1_6_2(), LegacyProtocols.r1_6_4, LegacyProtocols.r1_6_2);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_6_4to1_6_3_pre(), LegacyProtocols.r1_6_4, LegacyProtocols.r1_6_3_pre);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol1_6_3_preto1_6_2(), LegacyProtocols.r1_6_3_pre, LegacyProtocols.r1_6_2);
         Via.getManager().getProtocolManager().registerProtocol(new Protocol1_6_2to1_6_1(), LegacyProtocols.r1_6_2, LegacyProtocols.r1_6_1);
         Via.getManager().getProtocolManager().registerProtocol(new Protocol1_6_1to1_5_2(), LegacyProtocols.r1_6_1, LegacyProtocols.r1_5_2);
         Via.getManager().getProtocolManager().registerProtocol(new Protocol1_5_2to1_5_0_1(), LegacyProtocols.r1_5_2, LegacyProtocols.r1_5tor1_5_1);

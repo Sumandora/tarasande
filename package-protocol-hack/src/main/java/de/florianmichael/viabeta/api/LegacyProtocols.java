@@ -49,6 +49,7 @@ public class LegacyProtocols {
     public static final ProtocolVersion r1_5_2 = registerLegacy(-61 << 2, "1.5.2");
     public static final ProtocolVersion r1_6_1 = registerLegacy(-73 << 2, "1.6.1");
     public static final ProtocolVersion r1_6_2 = registerLegacy(-74 << 2, "1.6.2");
+    public static final ProtocolVersion r1_6_3_pre = registerLegacy(-77 << 2, "1.6.3-pre");
     public static final ProtocolVersion r1_6_4 = registerLegacy(-78 << 2, "1.6.4");
 
     // Special protocols

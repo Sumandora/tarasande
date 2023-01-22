@@ -66,6 +66,7 @@ import de.florianmichael.tarasande_protocol_hack.tarasande.sidebar.SidebarEntryS
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues
 import de.florianmichael.tarasande_protocol_hack.util.values.ValueBooleanProtocol
 import de.florianmichael.tarasande_protocol_hack.util.values.command.ViaCommandHandlerTarasandeCommandHandler
+import de.florianmichael.vialoadingbase.util.ProtocolClassPaths
 import su.mandora.event.EventDispatcher
 import java.net.InetSocketAddress
 import java.util.concurrent.ExecutorService
@@ -105,6 +106,9 @@ class TarasandeProtocolHack : NativeProvider {
     }
 
     fun initialize() {
+        ProtocolClassPaths.LEGACY_PROTOCOL_IMPLEMENTATION_CLASS = "de.florianmichael.viabeta.api.LegacyProtocols"
+        ProtocolClassPaths.SNAPSHOT_PROTOCOL_IMPLEMENTATION_CLASS = "de.florianmichael.viacursed.api.CursedProtocols"
+
         // ViaVersion loading
         ViaLoadingBase.instance().init(this) {
             // ViaVersion addons loading
