@@ -1,5 +1,7 @@
 package de.florianmichael.clampclient.injection.mixininterface;
 
+import net.minecraft.util.math.Vec3i;
+
 public interface IEntity_Protocol {
 
     boolean protocolhack_isOutsideBorder();
@@ -15,4 +17,6 @@ public interface IEntity_Protocol {
     void protocolhack_setInWater(final boolean inWater);
 
     void protocolhack_setAngles(final float yaw, final float pitch);
+
+    Vec3i protocolhack_getServerPos();
 }

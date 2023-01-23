@@ -20,6 +20,10 @@ accessible field net/minecraft/client/Mouse lastMouseUpdateTime D
 accessible field net/minecraft/client/Mouse cursorDeltaX D
 accessible field net/minecraft/client/Mouse cursorDeltaY D
 
+accessible field net/minecraft/util/math/Vec3i x I
+accessible field net/minecraft/util/math/Vec3i y I
+accessible field net/minecraft/util/math/Vec3i z I
+
 accessible method net/minecraft/entity/LivingEntity jump ()V
 accessible method net/minecraft/entity/LivingEntity getFallSound (I)Lnet/minecraft/sound/SoundEvent;
 accessible method net/minecraft/entity/Entity playStepSound (Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)V

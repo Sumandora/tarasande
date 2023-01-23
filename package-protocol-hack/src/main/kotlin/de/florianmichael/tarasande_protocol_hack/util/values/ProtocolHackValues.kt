@@ -19,6 +19,7 @@ object ProtocolHackValues {
     val autoChangeValuesDependentOnVersion = ValueBoolean(this, "Auto change values dependent on version", true)
     val filterItemGroups = ValueBoolean(this, "Filter item groups", true)
     val betaCraftAuth = ValueBoolean(this, "BetaCraft auth", true)
+    val entityDimensionReplacements = ValueBoolean(this, "Entity dimension replacements", true)
 
     @Suppress("unused")
     val createViaDump = object : ValueButton(this, "Create via dump") {
