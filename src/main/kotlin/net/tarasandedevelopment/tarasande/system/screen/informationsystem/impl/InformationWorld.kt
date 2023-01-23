@@ -110,3 +110,11 @@ class InformationTextRadar : Information("World", "Text radar") {
         return "\n" + closestPlayers.joinToString("\n") { Formatting.strip(it.first.gameProfile.name) + " (" + StringUtil.round(it.second, decimalPlaces.value.toInt()) + ")" }
     }
 }
+
+
+class InformationSequence : Information("World", "Sequence") {
+
+    override fun getMessage(): String? {
+        return mc.world?.pendingUpdateManager?.sequence?.toString()
+    }
+}

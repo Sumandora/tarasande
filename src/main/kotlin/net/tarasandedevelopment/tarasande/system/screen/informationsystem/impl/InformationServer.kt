@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.system.screen.informationsystem.impl
 
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
+import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.mc
@@ -71,8 +72,13 @@ class InformationLag : Information("Server", "Lag") {
     private val lastPacket = TimeUtil()
 
     init {
-        EventDispatcher.add(EventPacket::class.java) {
-            if (it.type == EventPacket.Type.RECEIVE && it.packet is WorldTimeUpdateS2CPacket) {
+        EventDispatcher.apply {
+            add(EventPacket::class.java) {
+                if (it.type == EventPacket.Type.RECEIVE && it.packet is WorldTimeUpdateS2CPacket) {
+                    lastPacket.reset()
+                }
+            }
+            add(EventConnectServer::class.java) {
                 lastPacket.reset()
             }
         }

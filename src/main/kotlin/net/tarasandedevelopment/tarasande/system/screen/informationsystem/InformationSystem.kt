@@ -34,6 +34,7 @@ object ManagerInformation : Manager<Information>() {
             InformationSpawnPoint(),
             InformationTextRadar(),
             InformationVanishedPlayers(),
+            InformationSequence(),
 
             // Server
             InformationServerBrand(),
