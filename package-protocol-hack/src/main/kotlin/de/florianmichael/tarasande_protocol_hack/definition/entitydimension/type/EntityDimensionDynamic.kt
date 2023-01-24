@@ -1,7 +1,7 @@
 package de.florianmichael.tarasande_protocol_hack.definition.entitydimension.type
 
 import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.base.EntityDimension
-import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.ToAxisFunction
+import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.function.ToAxisFunction
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityPose
 

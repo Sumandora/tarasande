@@ -1,16 +1,12 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.feature.module;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.item.PickaxeItem;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoMiningTrace;
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.HitResultKt;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,11 +19,9 @@ public class MixinGameRenderer {
 
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/ProjectileUtil;raycast(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;D)Lnet/minecraft/util/hit/EntityHitResult;"))
     public @Nullable EntityHitResult hookNoMiningTrace(Entity entity, Vec3d min, Vec3d max, Box box, Predicate<Entity> predicate, double d) {
-        ModuleNoMiningTrace moduleNoMiningTrace = ManagerModule.INSTANCE.get(ModuleNoMiningTrace.class);
-        if (moduleNoMiningTrace.getEnabled().getValue())
-            if (!moduleNoMiningTrace.getOnlyWhenPickaxe().getValue() || MinecraftClient.getInstance().player.getMainHandStack().getItem() instanceof PickaxeItem)
-                if (HitResultKt.isBlockHitResult(MinecraftClient.getInstance().crosshairTarget))
-                    return null;
+        if (ModuleNoMiningTrace.Companion.shouldCancel()) {
+            return null;
+        }
         return ProjectileUtil.raycast(entity, min, max, box, predicate, d);
     }
 }

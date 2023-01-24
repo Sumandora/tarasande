@@ -8,7 +8,7 @@ import de.florianmichael.vialoadingbase.util.VersionListEnum
 
 object EntityDimensionsDefinition {
     private val wrapperMap = HashMap<ProtocolRange, EntityDimensionWrapper>()
-    var wrapper: EntityDimensionWrapper? = null
+    var wrapper: EntityDimensionWrapper = DimensionWrapperNative.get()
 
     init {
         wrapperMap[ProtocolRange(VersionListEnum.r1_12_2, VersionListEnum.r1_8)] = DimensionWrapper1_12_2()
@@ -18,10 +18,9 @@ object EntityDimensionsDefinition {
         for (entry in wrapperMap) {
             if (version in entry.key) {
                 wrapper = entry.value
-                println(version.getName() + " " + entry.value)
                 return
             }
         }
-        wrapper = DimensionWrapperNative()
+        wrapper = DimensionWrapperNative.get()
     }
 }

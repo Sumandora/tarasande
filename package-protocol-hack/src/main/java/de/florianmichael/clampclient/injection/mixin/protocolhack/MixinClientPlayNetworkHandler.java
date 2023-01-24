@@ -190,7 +190,7 @@ public abstract class MixinClientPlayNetworkHandler {
 
     @Inject(method = "onEntityPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/util/thread/ThreadExecutor;)V", shift = At.Shift.AFTER), cancellable = true)
     public void adjustEntityPositionOffsets(EntityPositionS2CPacket packet, CallbackInfo ci) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_15_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
             Entity entity = this.world.getEntityById(packet.getId());
 
             if (entity != null) {

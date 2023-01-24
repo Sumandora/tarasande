@@ -8,6 +8,7 @@ import com.viaversion.viaversion.libs.gson.JsonArray
 import com.viaversion.viaversion.libs.gson.JsonObject
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
+import de.florianmichael.clampclient.injection.instrumentation_1_12_2.raytrace.RaytraceDefinition
 import de.florianmichael.clampclient.injection.instrumentation_c_0_30.ClassicItemSelectionScreen
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
 import de.florianmichael.clampclient.injection.instrumentation_1_19_0.provider.CommandArgumentsProvider
@@ -87,6 +88,7 @@ class TarasandeProtocolHack : NativeProvider {
             if (ViaLoadingBase.getTargetVersion() != protocol) {
                 displayItems = Registries.ITEM.filter { ItemReleaseVersionsDefinition.shouldDisplay(it, protocol) }.toMutableList()
                 EntityDimensionsDefinition.reload(protocol)
+                RaytraceDefinition.reload(protocol)
 
                 if (protocol.isOlderThan(VersionListEnum.a1_0_15)) {
                     ClassicItemSelectionScreen.INSTANCE.reload(protocol)
@@ -109,6 +111,7 @@ class TarasandeProtocolHack : NativeProvider {
         ProtocolClassPaths.LEGACY_PROTOCOL_IMPLEMENTATION_CLASS = "de.florianmichael.viabeta.api.LegacyProtocols"
         ProtocolClassPaths.SNAPSHOT_PROTOCOL_IMPLEMENTATION_CLASS = "de.florianmichael.viacursed.api.CursedProtocols"
 
+        // Force load definition
         EntityDimensionsDefinition
 
         // ViaVersion loading

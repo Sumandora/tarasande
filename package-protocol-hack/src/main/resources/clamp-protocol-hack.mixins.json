@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixinPriority": 1,
   "mixins": [
+    "MixinBox",
     "MixinCamera",
     "MixinClientPlayerInteractionManager",
     "MixinClientPlayNetworkHandler",
@@ -126,5 +127,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "MixinGameRenderer"
+  ]
 }

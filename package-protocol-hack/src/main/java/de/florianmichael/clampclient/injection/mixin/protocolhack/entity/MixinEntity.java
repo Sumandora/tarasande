@@ -21,14 +21,18 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
+import de.florianmichael.clampclient.injection.instrumentation_1_12_2.raytrace.RaytraceBase;
+import de.florianmichael.clampclient.injection.instrumentation_1_12_2.raytrace.RaytraceDefinition;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.LegacyConstants_1_8;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
 import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.base.EntityDimension;
 import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.EntityDimensionsDefinition;
+import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.wrapper.EntityDimensionWrapper;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import kotlin.jvm.functions.Function1;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
@@ -61,15 +65,6 @@ public abstract class MixinEntity implements IEntity_Protocol {
     @Shadow
     private Vec3d pos;
 
-    @ModifyConstant(method = "movementInputToVelocity", constant = @Constant(doubleValue = 1E-7))
-    private static double injectMovementInputToVelocity(double epsilon) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_13_2)) {
-            return 1E-4;
-        }
-
-        return epsilon;
-    }
-
     @Shadow
     public abstract Box getBoundingBox();
 
@@ -101,39 +96,63 @@ public abstract class MixinEntity implements IEntity_Protocol {
     public abstract EntityPose getPose();
 
     @Unique
-    private EntityDimension<?> replacedDimension;
+    private EntityDimension<?> protocolhack_replacedDimension;
+
+    @Unique
+    private Function1<Entity, Float> protocolhack_replacedEyeHeight;
+
+    @ModifyConstant(method = "movementInputToVelocity", constant = @Constant(doubleValue = 1E-7))
+    private static double injectMovementInputToVelocity(double epsilon) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_13_2)) {
+            return 1E-4;
+        }
+        return epsilon;
+    }
 
     @Inject(method = "setPosition(DDD)V", at = @At("HEAD"))
     public void onPosition(double x, double y, double z, CallbackInfo ci) {
         if (ProtocolHackValues.INSTANCE.getEntityDimensionReplacements().getValue()) {
-            if (replacedDimension == null) {
-                replacedDimension = EntityDimensionsDefinition.INSTANCE.getWrapper().getDimension((Entity) (Object) this);
+            final EntityDimensionWrapper entityDimensionWrapper = EntityDimensionsDefinition.INSTANCE.getWrapper();
 
-                if (replacedDimension == null)
-                    ViaLoadingBase.instance().logger().log(Level.SEVERE, "Missing entity dimension wrapper for " + this.getClass());
-            }
+            if (protocolhack_replacedDimension == null) protocolhack_replacedDimension = entityDimensionWrapper.getDimension((Entity) (Object) this);
+            if (protocolhack_replacedEyeHeight == null) protocolhack_replacedEyeHeight = entityDimensionWrapper.getEyeHeight((Entity) (Object) this);
         }
     }
 
     @Inject(method = "calculateBoundingBox", at = @At("RETURN"), cancellable = true)
     public void onCalculateBoundingBox(CallbackInfoReturnable<Box> cir) {
-        if (ProtocolHackValues.INSTANCE.getEntityDimensionReplacements().getValue() && replacedDimension != null) {
-            cir.setReturnValue(replacedDimension.getBoxAt((Entity) (Object) this, this.getPose(), this.pos));
+        if (ProtocolHackValues.INSTANCE.getEntityDimensionReplacements().getValue() && protocolhack_replacedDimension != null) {
+            cir.setReturnValue(protocolhack_replacedDimension.getBoxAt((Entity) (Object) this, this.getPose(), this.pos));
         }
     }
 
     @Inject(method = "getHeight", at = @At("RETURN"), cancellable = true)
     public void onGetHeight(CallbackInfoReturnable<Float> cir) {
-        if (ProtocolHackValues.INSTANCE.getEntityDimensionReplacements().getValue() && replacedDimension != null) {
-            cir.setReturnValue(replacedDimension.getHeight((Entity) (Object) this, getPose()));
+        if (ProtocolHackValues.INSTANCE.getEntityDimensionReplacements().getValue() && protocolhack_replacedDimension != null) {
+            cir.setReturnValue(protocolhack_replacedDimension.getHeight((Entity) (Object) this, getPose()));
         }
     }
 
     @Inject(method = "getWidth", at = @At("RETURN"), cancellable = true)
     public void onGetWidth(CallbackInfoReturnable<Float> cir) {
-        if (ProtocolHackValues.INSTANCE.getEntityDimensionReplacements().getValue() && replacedDimension != null) {
-            cir.setReturnValue(replacedDimension.getWidth((Entity) (Object) this, getPose()));
+        if (ProtocolHackValues.INSTANCE.getEntityDimensionReplacements().getValue() && protocolhack_replacedDimension != null) {
+            cir.setReturnValue(protocolhack_replacedDimension.getWidth((Entity) (Object) this, getPose()));
         }
+    }
+
+    @Inject(method = "getStandingEyeHeight", at = @At("HEAD"), cancellable = true)
+    public void onGetStandingEyeHeight(CallbackInfoReturnable<Float> cir) {
+        if (protocolhack_replacedEyeHeight != null) {
+            cir.setReturnValue(protocolhack_replacedEyeHeight.invoke((Entity) (Object) this));
+        }
+    }
+
+    @Inject(method = "getCameraPosVec", at = @At("HEAD"), cancellable = true)
+    public void onGetCameraPosVec(float tickDelta, CallbackInfoReturnable<Vec3d> cir) {
+        final RaytraceBase raytraceBase = RaytraceDefinition.getClassWrapper();
+        if (raytraceBase == null) return;
+
+        cir.setReturnValue(raytraceBase.getPositionEyes((Entity) (Object) this, tickDelta));
     }
 
     @Inject(method = "getVelocityAffectingPos", at = @At("HEAD"), cancellable = true)

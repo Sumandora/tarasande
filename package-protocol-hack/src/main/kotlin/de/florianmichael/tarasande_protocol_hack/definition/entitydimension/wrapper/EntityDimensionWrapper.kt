@@ -6,4 +6,6 @@ import net.minecraft.entity.Entity
 interface EntityDimensionWrapper {
 
     fun <T : Entity> getDimension(obj: T): EntityDimension<T>?
+    fun <T : Entity> getEyeHeight(obj: T): ((t: Entity) -> Float)?
+
 }

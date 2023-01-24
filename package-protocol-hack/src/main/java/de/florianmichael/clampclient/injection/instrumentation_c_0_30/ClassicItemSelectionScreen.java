@@ -117,8 +117,9 @@ public class ClassicItemSelectionScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == this.client.options.inventoryKey.boundKey.getCode()) {
+        if (this.client.options.inventoryKey.matchesKey(keyCode, scanCode)) {
             this.close();
+            return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
