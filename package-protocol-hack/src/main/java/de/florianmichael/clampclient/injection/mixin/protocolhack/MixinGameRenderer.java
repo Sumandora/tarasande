@@ -3,6 +3,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack;
 import de.florianmichael.clampclient.injection.instrumentation_1_12_2.model.ViaRaytraceResult;
 import de.florianmichael.clampclient.injection.instrumentation_1_12_2.raytrace.RaytraceBase;
 import de.florianmichael.clampclient.injection.instrumentation_1_12_2.raytrace.RaytraceDefinition;
+import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
@@ -22,14 +23,16 @@ public class MixinGameRenderer {
 
     @Inject(method = "updateTargetedEntity", at = @At("HEAD"), cancellable = true)
     public void replaceRayTrace(float tickDelta, CallbackInfo ci) {
+        if (!ProtocolHackValues.INSTANCE.getReplaceRayTrace().getValue()) return;
+
         final RaytraceBase raytraceBase = RaytraceDefinition.getClassWrapper();
         if (raytraceBase == null) return;
 
         ci.cancel();
         client.getProfiler().push("pick");
-        Entity entity2 = this.client.getCameraEntity();
-        if (entity2 == null)
-            return;
+        final Entity entity2 = this.client.getCameraEntity();
+        if (entity2 == null) return;
+
 
         Rotation fakeRotation = RotationUtil.INSTANCE.getFakeRotation();
 

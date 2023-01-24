@@ -701,11 +701,14 @@ public class ClientPlayerMovement_1_8 {
                 }
             }
 
-            this.updateFallState(y, original.isOnGround(), block1, blockpos);
+            final BlockModelDefinition.BlockModel blockModel = BlockModelDefinition.getTransformerByBlock(block1);
+
+            this.updateFallState(y, original.isOnGround(), block1, blockModel, blockpos);
 
             if (d3 != x) original.getVelocity().x = 0.0D;
             if (d5 != z) original.getVelocity().z = 0.0D;
-            if (d4 != y) BlockModelDefinition.getTransformerByBlock(block1).onLanded(original.world, original);
+
+            if (d4 != y) blockModel.onLanded(original.world, original);
 
             if (this.canTriggerWalking() && !flag && !original.hasVehicle()) {
                 double d12 = original.getPos().x - d0;
@@ -715,7 +718,7 @@ public class ClientPlayerMovement_1_8 {
                 if (block1 != Blocks.LADDER) d13 = 0.0D;
 
                 if (block1 != null && original.isOnGround()) {
-                    BlockModelDefinition.getTransformerByBlock(block1).onEntityCollidedWithBlock(original.world, blockpos, original);
+                    blockModel.onEntityCollidedWithBlock(original.world, blockpos, original);
                 }
 
                 distanceWalkedModified = (float) ((double) this.distanceWalkedModified + (double) MathHelper_1_8.sqrt_double(d12 * d12 + d14 * d14) * 0.6D);
@@ -756,7 +759,8 @@ public class ClientPlayerMovement_1_8 {
 
         if (i > 0) {
             original.playSound(original.getFallSound(i), 1.0F, 1.0F);
-            // TODO | this.attackEntityFrom(DamageSource.fall, (float) i);
+            // attackEntityFrom is serverside-only and not relevant for us
+
             int x = MathHelper.floor(original.getX());
             int y = MathHelper.floor(original.getY() - 0.20000000298023224);
             int z = MathHelper.floor(original.getZ());
@@ -768,7 +772,7 @@ public class ClientPlayerMovement_1_8 {
         }
     }
 
-    private void updateFallState(double y, boolean onGroundIn, Block blockIn, BlockPos pos) {
+    private void updateFallState(double y, boolean onGroundIn, Block blockIn, BlockModelDefinition.BlockModel blockModel, BlockPos pos) {
         if (!((IEntity_Protocol) original).protocolhack_isInWater()) {
             this.handleWaterMovement();
         }
@@ -782,7 +786,7 @@ public class ClientPlayerMovement_1_8 {
         if (onGroundIn) {
             if (original.fallDistance > 0.0F) {
                 if (blockIn != null) {
-                    BlockModelDefinition.getTransformerByBlock(blockIn).onFallenUpon(original.world, pos, original, original.fallDistance);
+                    blockModel.onFallenUpon(original.world, pos, original, original.fallDistance);
                 } else {
                     fall(original.fallDistance, 1.0F);
                 }

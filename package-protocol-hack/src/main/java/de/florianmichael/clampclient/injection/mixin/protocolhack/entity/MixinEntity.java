@@ -149,6 +149,8 @@ public abstract class MixinEntity implements IEntity_Protocol {
 
     @Inject(method = "getCameraPosVec", at = @At("HEAD"), cancellable = true)
     public void onGetCameraPosVec(float tickDelta, CallbackInfoReturnable<Vec3d> cir) {
+        if (!ProtocolHackValues.INSTANCE.getReplaceRayTrace().getValue()) return;
+
         final RaytraceBase raytraceBase = RaytraceDefinition.getClassWrapper();
         if (raytraceBase == null) return;
 

@@ -20,6 +20,7 @@ object ProtocolHackValues {
     val filterItemGroups = ValueBoolean(this, "Filter item groups", true)
     val betaCraftAuth = ValueBoolean(this, "BetaCraft auth", true)
     val entityDimensionReplacements = ValueBoolean(this, "Entity dimension replacements", true)
+    val replaceRayTrace = ValueBoolean(this, "Replace ray trace", true)
 
     @Suppress("unused")
     val createViaDump = object : ValueButton(this, "Create via dump") {
