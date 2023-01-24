@@ -6,15 +6,14 @@ import de.florianmichael.clampclient.injection.instrumentation_1_12_2.raytrace.R
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
-import net.tarasandedevelopment.tarasande.event.EventUpdateTargetedEntity;
-import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer;
+import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
+import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.event.EventDispatcher;
 
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
@@ -26,22 +25,32 @@ public class MixinGameRenderer {
         final RaytraceBase raytraceBase = RaytraceDefinition.getClassWrapper();
         if (raytraceBase == null) return;
 
-        EventDispatcher.INSTANCE.call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.PRE));
-
         ci.cancel();
         client.getProfiler().push("pick");
         Entity entity2 = this.client.getCameraEntity();
         if (entity2 == null)
             return;
-        final IGameRenderer gameRendererAccessor = (IGameRenderer) MinecraftClient.getInstance().gameRenderer;
 
-        final ViaRaytraceResult raytrace = raytraceBase.raytrace(entity2, entity2.prevYaw, entity2.prevPitch, entity2.getYaw(), entity2.getPitch(), 1.0F);
-        client.targetedEntity = raytrace.pointed();
-        if (!gameRendererAccessor.tarasande_isAllowThroughWalls()) {
-            client.crosshairTarget = raytrace.target();
+        Rotation fakeRotation = RotationUtil.INSTANCE.getFakeRotation();
+
+        float prevYaw = entity2.prevYaw;
+        float prevPitch = entity2.prevPitch;
+
+        float yaw = entity2.getYaw();
+        float pitch = entity2.getPitch();
+
+        if(fakeRotation != null) {
+            prevYaw = fakeRotation.getYaw();
+            prevPitch = fakeRotation.getPitch();
+
+            yaw = fakeRotation.getYaw();
+            pitch = fakeRotation.getPitch();
         }
 
+        final ViaRaytraceResult raytrace = raytraceBase.raytrace(entity2, prevYaw, prevPitch, yaw, pitch, 1.0F);
+        client.crosshairTarget = raytrace.target();
+        client.targetedEntity = raytrace.pointed();
+
         client.getProfiler().pop();
-        EventDispatcher.INSTANCE.call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.POST));
     }
 }

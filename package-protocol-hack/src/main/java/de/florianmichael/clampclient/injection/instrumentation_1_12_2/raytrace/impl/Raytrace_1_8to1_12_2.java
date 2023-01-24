@@ -7,15 +7,19 @@ import de.florianmichael.clampclient.injection.instrumentation_1_12_2.raytrace.R
 import de.florianmichael.clampclient.injection.mixininterface.IBox_Protocol;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
+import net.tarasandedevelopment.tarasande.event.EventUpdateTargetedEntity;
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoMiningTrace;
+import su.mandora.event.EventDispatcher;
 
 import java.util.List;
 
@@ -45,14 +49,15 @@ public class Raytrace_1_8to1_12_2 extends RaytraceBase {
         final MinecraftClient mc = MinecraftClient.getInstance();
         final IGameRenderer gameRendererAccessor = (IGameRenderer) mc.gameRenderer;
 
+        EventDispatcher.INSTANCE.call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.PRE));
         Entity pointedEntity = null;
         HitResult objectMouseOver = null;
         if (entity != null) {
             if (mc.world != null) {
-                pointedEntity = null;
                 double d0 = (double) Math.max((mc.interactionManager.getCurrentGameMode().isCreative() ? 5.0F : 4.5F), gameRendererAccessor.tarasande_getReach());
                 Vec3d vec31 = Vec3d.fromPolar(MathHelper.lerp(partialTicks, prevPitch, pitch), MathHelper.lerpAngleDegrees(partialTicks, prevYaw, yaw));
-                objectMouseOver = raycast(entity, vec31, d0, partialTicks, false); // TODO block collisions
+                if(!gameRendererAccessor.tarasande_isAllowThroughWalls())
+                    objectMouseOver = raycast(entity, vec31, d0, partialTicks, false); // TODO block collisions
                 double d1 = d0;
                 Vec3d vec3 = entity.getCameraPosVec(partialTicks);
                 boolean flag = false;
@@ -72,7 +77,6 @@ public class Raytrace_1_8to1_12_2 extends RaytraceBase {
                 }
 
                 Vec3d vec32 = vec3.add(vec31.x * d0, vec31.y * d0, vec31.z * d0);
-                pointedEntity = null;
                 Vec3d vec33 = null;
                 float f = 1.0F;
                 List<Entity> list = mc.world.getOtherEntities(entity, entity.getBoundingBox().stretch(vec31.x * d0, vec31.y * d0, vec31.z * d0).expand((double) f, (double) f, (double) f), Predicates.and(e -> !e.isSpectator(), new Predicate<Entity>() {
@@ -82,8 +86,7 @@ public class Raytrace_1_8to1_12_2 extends RaytraceBase {
                 }));
                 double d2 = d1;
 
-                for (int j = 0; j < list.size(); ++j) {
-                    Entity entity1 = (Entity) list.get(j);
+                for (Entity entity1 : list) {
                     float f1 = entity1.getTargetingMargin();
                     Box axisalignedbb = entity1.getBoundingBox().expand((double) f1, (double) f1, (double) f1);
                     HitResult movingobjectposition = ((IBox_Protocol) axisalignedbb).protocolhack_calculateIntercept(vec3, vec32);
@@ -111,23 +114,19 @@ public class Raytrace_1_8to1_12_2 extends RaytraceBase {
                         }
                     }
                 }
-
-                if (!ModuleNoMiningTrace.Companion.shouldCancel()) {
+                if (!ManagerModule.INSTANCE.get(ModuleNoMiningTrace.class).shouldCancel()) {
                     if (pointedEntity != null && flag && vec3.distanceTo(vec33) > gameRendererAccessor.tarasande_getReach()) {
                         pointedEntity = null;
-                        objectMouseOver = BlockHitResult.createMissed(vec33, (Direction) null, new BlockPos(vec33));
+                        objectMouseOver = BlockHitResult.createMissed(vec33, null, new BlockPos(vec33));
                     }
 
                     if (pointedEntity != null && (d2 < d1 || objectMouseOver == null)) {
                         objectMouseOver = new EntityHitResult(pointedEntity, vec33);
-
-                        if (pointedEntity instanceof LivingEntity || pointedEntity instanceof ItemFrameEntity) {
-                            pointedEntity = pointedEntity;
-                        }
                     }
                 }
             }
         }
+        EventDispatcher.INSTANCE.call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.POST));
         return new ViaRaytraceResult(pointedEntity, objectMouseOver);
     }
 }
