@@ -50,7 +50,7 @@ public class MixinGameRenderer {
             pitch = fakeRotation.getPitch();
         }
 
-        final ViaRaytraceResult raytrace = raytraceBase.raytrace(entity2, prevYaw, prevPitch, yaw, pitch, 1.0F);
+        final ViaRaytraceResult raytrace = raytraceBase.raytrace(entity2, prevYaw, prevPitch, yaw, pitch, tickDelta);
         client.crosshairTarget = raytrace.target();
         client.targetedEntity = raytrace.pointed();
 
