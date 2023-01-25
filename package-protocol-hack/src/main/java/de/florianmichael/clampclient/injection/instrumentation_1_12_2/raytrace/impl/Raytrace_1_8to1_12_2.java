@@ -1,6 +1,5 @@
 package de.florianmichael.clampclient.injection.instrumentation_1_12_2.raytrace.impl;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import de.florianmichael.clampclient.injection.instrumentation_1_12_2.model.ViaRaytraceResult;
 import de.florianmichael.clampclient.injection.instrumentation_1_12_2.raytrace.RaytraceBase;
@@ -61,7 +60,6 @@ public class Raytrace_1_8to1_12_2 extends RaytraceBase {
                 double d1 = d0;
                 Vec3d vec3 = entity.getCameraPosVec(partialTicks);
                 boolean flag = false;
-                int i = 3;
 
                 if (mc.interactionManager.hasExtendedReach() && !gameRendererAccessor.tarasande_isDisableReachExtension()) {
                     d0 = 6.0D;
@@ -79,11 +77,7 @@ public class Raytrace_1_8to1_12_2 extends RaytraceBase {
                 Vec3d vec32 = vec3.add(vec31.x * d0, vec31.y * d0, vec31.z * d0);
                 Vec3d vec33 = null;
                 float f = 1.0F;
-                List<Entity> list = mc.world.getOtherEntities(entity, entity.getBoundingBox().stretch(vec31.x * d0, vec31.y * d0, vec31.z * d0).expand((double) f, (double) f, (double) f), Predicates.and(e -> !e.isSpectator(), new Predicate<Entity>() {
-                    public boolean apply(Entity p_apply_1_) {
-                        return p_apply_1_.canHit();
-                    }
-                }));
+                List<Entity> list = mc.world.getOtherEntities(entity, entity.getBoundingBox().stretch(vec31.x * d0, vec31.y * d0, vec31.z * d0).expand((double) f, (double) f, (double) f), Predicates.and(e -> !e.isSpectator(), Entity::canHit));
                 double d2 = d1;
 
                 for (Entity entity1 : list) {
