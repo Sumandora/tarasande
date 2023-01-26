@@ -16,20 +16,12 @@ class ClickSpeedUtil(private val owner: Any, enabledCallback: () -> Boolean, var
     }
 
     private val cps = object : ValueNumberRange(owner, namePrefix + "CPS", 1.0, 8.0, 12.0, 20.0, 1.0) {
-        private var initialized = false
-
-        init {
-            initialized = true
-        }
-
         override fun onMinValueChange(oldMinValue: Double?, newMinValue: Double) {
-            if (oldMinValue != null && initialized)
-                reset()
+            reset()
         }
 
         override fun onMaxValueChange(oldMaxValue: Double?, newMaxValue: Double) {
-            if (oldMaxValue != null && initialized)
-                reset()
+            reset()
         }
 
         override fun isEnabled() = selected().cpsBased && enabledCallback.invoke()
