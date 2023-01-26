@@ -58,9 +58,11 @@ object ManagerFile : Manager<File>() {
 
     private fun internalLoad(file: File, backup: Boolean) {
         val fileObj = java.io.File(rootDirectory, file.name + (if (backup) "_backup" else ""))
-        val content = file.decrypt(String(Files.readAllBytes(fileObj.toPath()))) ?: error(file.name + "'s content is invalid")
-        val jsonElement = gson.fromJson(content, JsonElement::class.java)
-        file.load(jsonElement)
+        if(fileObj.exists()) {
+            val content = file.decrypt(String(Files.readAllBytes(fileObj.toPath()))) ?: error(file.name + "'s content is invalid")
+            val jsonElement = gson.fromJson(content, JsonElement::class.java)
+            file.load(jsonElement)
+        }
         file.loaded = true
     }
 }

@@ -38,6 +38,7 @@ object ManagerBlur : Manager<Blur>() {
             BlurGaussian(),
             BlurKawase()
         )
+        selected = list.first()
 
         EventDispatcher.apply {
             add(EventScreenRender::class.java, 1) {
