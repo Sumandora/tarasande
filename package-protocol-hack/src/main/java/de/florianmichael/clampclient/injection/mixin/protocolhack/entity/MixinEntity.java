@@ -121,30 +121,22 @@ public abstract class MixinEntity implements IEntity_Protocol {
 
     @Inject(method = "calculateBoundingBox", at = @At("RETURN"), cancellable = true)
     public void onCalculateBoundingBox(CallbackInfoReturnable<Box> cir) {
-        if (ProtocolHackValues.INSTANCE.getEntityDimensionReplacements().getValue() && protocolhack_replacedDimension != null) {
-            cir.setReturnValue(protocolhack_replacedDimension.getBoxAt((Entity) (Object) this, this.getPose(), this.pos));
-        }
+        if (protocolhack_replacedDimension != null) cir.setReturnValue(protocolhack_replacedDimension.getBoxAt((Entity) (Object) this, this.getPose(), this.pos));
     }
 
     @Inject(method = "getHeight", at = @At("RETURN"), cancellable = true)
     public void onGetHeight(CallbackInfoReturnable<Float> cir) {
-        if (ProtocolHackValues.INSTANCE.getEntityDimensionReplacements().getValue() && protocolhack_replacedDimension != null) {
-            cir.setReturnValue(protocolhack_replacedDimension.getHeight((Entity) (Object) this, getPose()));
-        }
+        if (protocolhack_replacedDimension != null) cir.setReturnValue(protocolhack_replacedDimension.getHeight((Entity) (Object) this, getPose()));
     }
 
     @Inject(method = "getWidth", at = @At("RETURN"), cancellable = true)
     public void onGetWidth(CallbackInfoReturnable<Float> cir) {
-        if (ProtocolHackValues.INSTANCE.getEntityDimensionReplacements().getValue() && protocolhack_replacedDimension != null) {
-            cir.setReturnValue(protocolhack_replacedDimension.getWidth((Entity) (Object) this, getPose()));
-        }
+        if (protocolhack_replacedDimension != null) cir.setReturnValue(protocolhack_replacedDimension.getWidth((Entity) (Object) this, getPose()));
     }
 
     @Inject(method = "getStandingEyeHeight", at = @At("HEAD"), cancellable = true)
     public void onGetStandingEyeHeight(CallbackInfoReturnable<Float> cir) {
-        if (protocolhack_replacedEyeHeight != null) {
-            cir.setReturnValue(protocolhack_replacedEyeHeight.invoke((Entity) (Object) this));
-        }
+        if (protocolhack_replacedEyeHeight != null) cir.setReturnValue(protocolhack_replacedEyeHeight.invoke((Entity) (Object) this));
     }
 
     @Inject(method = "getCameraPosVec", at = @At("HEAD"), cancellable = true)
@@ -253,13 +245,13 @@ public abstract class MixinEntity implements IEntity_Protocol {
 
     @Inject(method = "getTargetingMargin", at = @At("HEAD"), cancellable = true)
     public void expandHitBox(CallbackInfoReturnable<Float> cir) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8))
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
             cir.setReturnValue(0.1F);
+        }
     }
 
     @Redirect(method = {"setYaw", "setPitch"}, at = @At(value = "INVOKE", target = "Ljava/lang/Float;isFinite(F)Z"))
     public boolean modifyIsFinite(float f) {
-        //noinspection ConstantConditions
         return Float.isFinite(f) || ((Object) this instanceof ClientPlayerEntity && ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_2));
     }
 

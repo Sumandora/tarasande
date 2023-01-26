@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+@SuppressWarnings("ShadowModifiers")
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
 
@@ -33,8 +34,7 @@ public class MixinGameRenderer {
         final Entity entity2 = this.client.getCameraEntity();
         if (entity2 == null) return;
 
-
-        Rotation fakeRotation = RotationUtil.INSTANCE.getFakeRotation();
+        final Rotation fakeRotation = RotationUtil.INSTANCE.getFakeRotation();
 
         float prevYaw = entity2.prevYaw;
         float prevPitch = entity2.prevPitch;

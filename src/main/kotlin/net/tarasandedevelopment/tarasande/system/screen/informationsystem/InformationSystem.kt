@@ -19,6 +19,7 @@ object ManagerInformation : Manager<Information>() {
             InformationFallDistance(),
             InformationRotation(),
             InformationFakeRotation(),
+            InformationReach(),
 
             // Connection
             InformationHandlers(),
