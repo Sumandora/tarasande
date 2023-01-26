@@ -5,18 +5,14 @@ import com.google.gson.JsonPrimitive
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl.ElementWidthValueComponentFocusableText
 
-open class ValueText : Value {
+open class ValueText(owner: Any, name: String, value: String, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentFocusableText::class.java, manage) {
 
-    var value: String
+    var value = value
         set(value) {
             val oldValue = field
             field = value
             onChange(oldValue, value)
         }
-
-    constructor(owner: Any, name: String, value: String, manage: Boolean = true) : super(owner, name, ElementWidthValueComponentFocusableText::class.java, manage) {
-        this.value = value
-    }
 
     open fun onChange(oldText: String?, newText: String) {}
 

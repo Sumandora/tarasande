@@ -41,17 +41,13 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     private val pulseDelay = object : ValueNumber(this, "Pulse delay", 0.0, 500.0, 1000.0, 10.0) {
         override fun isEnabled() = mode.isSelected(1) || mode.isSelected(3)
         override fun onChange(oldValue: Double?, newValue: Double) {
-            @Suppress("SENSELESS_COMPARISON")
-            if (packets != null)
-                onDisable()
+            onDisable()
         }
     }
     private val latency = object : ValueNumber(this, "Latency", 0.0, 500.0, 1000.0, 10.0) {
         override fun isEnabled() = mode.isSelected(2)
         override fun onChange(oldValue: Double?, newValue: Double) {
-            @Suppress("SENSELESS_COMPARISON")
-            if (packets != null)
-                onDisable()
+            onDisable()
         }
     }
     private val reach = object : ValueNumber(this, "Reach", 0.1, 3.0, 6.0, 0.1) {

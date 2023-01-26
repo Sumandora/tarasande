@@ -5,18 +5,14 @@ import com.google.gson.JsonPrimitive
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentBoolean
 
-open class ValueBoolean : Value {
+open class ValueBoolean(owner: Any, name: String, value: Boolean, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentBoolean::class.java, manage) {
 
-    var value: Boolean
+    var value = value
         set(value) {
             val prevValue = field
             field = value
             onChange(prevValue, value)
         }
-
-    constructor(owner: Any, name: String, value: Boolean, manage: Boolean = true) : super(owner, name, ElementWidthValueComponentBoolean::class.java, manage) {
-        this.value = value
-    }
 
     open fun onChange(oldValue: Boolean?, newValue: Boolean) {}
 

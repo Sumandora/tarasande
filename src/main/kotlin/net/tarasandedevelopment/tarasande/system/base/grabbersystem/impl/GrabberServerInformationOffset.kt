@@ -26,16 +26,13 @@ class GrabberServerInformationOffset : Grabber("net.minecraft.client.gui.screen.
         //Opcodes.ICONST_5 // Target
     )
 
-
     override fun transform(classNode: ClassNode) {
-//        if(findMethod(classNode, "render")
-//            .instructions
-//            .matchSignature(offsetCode)
-//            .next(7)
-//            .opcode != Opcodes.ICONST_5)
-//            constant = null
-//        constant = 5
-        // TODO | FIX
+        if(findMethod(classNode, "render", reverseClassMapping("net.minecraft.client.gui.widget.EntryListWidget\$Entry"))
+            .instructions
+            .matchSignature(offsetCode)
+            .next(7)
+            .opcode != Opcodes.ICONST_5)
+            constant = null
         constant = expected
     }
 }

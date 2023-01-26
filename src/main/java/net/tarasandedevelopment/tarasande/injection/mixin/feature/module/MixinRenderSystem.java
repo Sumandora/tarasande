@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class MixinRenderSystem {
 
     @Redirect(method = "clearColor", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;_clearColor(FFFF)V"))
-    private static void hookedFog_clearColor(float red, float green, float blue, float alpha) {
+    private static void hookFog(float red, float green, float blue, float alpha) {
         ModuleFog moduleFog = ManagerModule.INSTANCE.get(ModuleFog.class);
         if (moduleFog.getEnabled().getValue()) {
             red = moduleFog.getColor().getColor().getRed() / 255.0F;

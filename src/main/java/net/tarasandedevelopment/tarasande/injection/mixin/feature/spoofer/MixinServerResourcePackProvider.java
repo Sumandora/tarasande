@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.injection.mixin.feature.module;
+package net.tarasandedevelopment.tarasande.injection.mixin.feature.spoofer;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.ServerResourcePackProvider;

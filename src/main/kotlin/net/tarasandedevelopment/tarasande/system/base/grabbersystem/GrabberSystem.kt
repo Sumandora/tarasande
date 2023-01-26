@@ -18,6 +18,8 @@ import java.util.zip.ZipInputStream
 
 object ManagerGrabber : Manager<Grabber>() {
 
+    private val classNodes = ArrayList<ClassNode>()
+
     init {
         add(
             GrabberReach(),
@@ -53,7 +55,6 @@ object ManagerGrabber : Manager<Grabber>() {
             }
 
         val zis = ZipInputStream(FileInputStream(minecraftJar)) // We have to read it again, because we don't know at which entry we again, manifest -should- always be the first, but JVM accepts it if violated
-        val classNodes = ArrayList<ClassNode>()
         var zipEntry: ZipEntry?
         while (zis.nextEntry.also { zipEntry = it } != null) {
             if (zipEntry!!.name.endsWith(".class")) {
@@ -102,14 +103,20 @@ abstract class Grabber(val targetedClass: String, val expected: Any) {
         return TinyMappings.mapFieldName(owner.replace(".", "/"), name)
     }
 
+    fun reverseFieldMapping(owner: String, name: String): String {
+        return TinyMappings.unmapFieldName(owner.replace(".", "/"), name)
+    }
+
     fun resolveClassMapping(name: String): String {
         return TinyMappings.mapClassName(name.replace(".", "/"))
     }
 
-    fun findMethod(classNode: ClassNode, name: String): MethodNode {
-        return classNode.methods.first {
-            resolveMethodMapping(classNode.name, it.name, it.desc) == name
-        }
+    fun reverseClassMapping(name: String): String {
+        return TinyMappings.unmapClassName(name.replace(".", "/"))
+    }
+
+    fun findMethod(classNode: ClassNode, name: String, baseClass: String = classNode.name): MethodNode {
+        return classNode.methods.first { resolveMethodMapping(baseClass, it.name, it.desc) == name }
     }
 
     fun findClassInitializer(classNode: ClassNode): MethodNode {

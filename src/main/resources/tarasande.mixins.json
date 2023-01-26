@@ -111,6 +111,6 @@
     "feature.clientvalue.MixinHeldItemRenderer",
     "feature.module.MixinClientPlayNetworkHandler",
     "feature.module.MixinConfirmScreen",
-    "feature.module.MixinServerResourcePackProvider"
+    "feature.spoofer.MixinServerResourcePackProvider"
   ]
 }

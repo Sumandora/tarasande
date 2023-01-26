@@ -8,9 +8,9 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
 import java.awt.Color
 
-open class ValueColor : Value {
+open class ValueColor(owner: Any, name: String, hue: Double, sat: Double, bri: Double, alpha: Double? = null, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentColor::class.java, manage) {
 
-    var hue: Double
+    var hue = hue
         get() {
             return if (rainbow) {
                 (field + (System.currentTimeMillis() - rainbowStart) % 2500f / 2500F) % 1.0F
@@ -23,31 +23,24 @@ open class ValueColor : Value {
             field = value
             onHueChange(oldValue, value)
         }
-    var sat: Double
+    var sat = sat
         set(value) {
             val oldValue = field
             field = value
             onSatChange(oldValue, value)
         }
-    var bri: Double
+    var bri = bri
         set(value) {
             val oldValue = field
             field = value
             onBriChange(oldValue, value)
         }
-    var alpha: Double?
+    var alpha = alpha
         set(value) {
             val oldValue = field
             field = value
             onAlphaChange(oldValue, value)
         }
-
-    constructor(owner: Any, name: String, hue: Double, sat: Double, bri: Double, alpha: Double? = null, manage: Boolean = true) : super(owner, name, ElementWidthValueComponentColor::class.java, manage) {
-        this.sat = sat
-        this.bri = bri
-        this.alpha = alpha
-        this.hue = hue
-    }
 
     var rainbow: Boolean = false
         set(value) {

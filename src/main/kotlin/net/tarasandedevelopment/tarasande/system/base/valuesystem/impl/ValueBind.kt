@@ -11,26 +11,22 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 
-open class ValueBind : Value {
+open class ValueBind(owner: Any, name: String, type: Type, button: Int, val mouse: Boolean = true, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentFocusableBind::class.java, manage) {
 
-    var type: Type
+    var type = type
         set(value) {
             val prevValue = field
             field = value
             onChange(prevValue, value)
         }
-    var button: Int
+    var button = button
         set(value) {
             val prevValue = field
             field = value
             onChange(prevValue, value)
         }
-    val mouse: Boolean
 
-    constructor(owner: Any, name: String, type: Type, button: Int, mouse: Boolean = true, manage: Boolean = true) : super(owner, name, ElementWidthValueComponentFocusableBind::class.java, manage) {
-        this.type = type
-        this.button = button
-        this.mouse = mouse
+    init {
         EventDispatcher.apply {
             add(EventMouse::class.java) {
                 if (this@ValueBind.type == Type.MOUSE)

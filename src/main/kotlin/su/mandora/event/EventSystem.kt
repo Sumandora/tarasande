@@ -1,11 +1,12 @@
 package su.mandora.event
 
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.function.Consumer
 
 object EventDispatcher {
 
-    private val eventListeners = HashMap<Class<*>, CopyOnWriteArrayList<Pair<Consumer<Event>, Int>>>()
+    private val eventListeners = ConcurrentHashMap<Class<*>, CopyOnWriteArrayList<Pair<Consumer<Event>, Int>>>()
 
     fun call(event: Event) {
         eventListeners[event::class.java]?.forEach { it.first.accept(event) }

@@ -8,33 +8,20 @@ import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.max
 import kotlin.math.min
 
-open class ValueNumberRange : Value {
+open class ValueNumberRange(owner: Any, name: String, val min: Double, minValue: Double, maxValue: Double, val max: Double, val increment: Double, val exceed: Boolean = true, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentNumberRange::class.java, manage) {
 
-    val min: Double
-    var minValue: Double
+    var minValue = minValue
         set(value) {
             val prevValue = field
             field = value
             onMinValueChange(prevValue, value)
         }
-    var maxValue: Double
+    var maxValue = maxValue
         set(value) {
             val prevValue = field
             field = value
             onMaxValueChange(prevValue, value)
         }
-    val max: Double
-    val increment: Double
-    val exceed: Boolean
-
-    constructor(owner: Any, name: String, min: Double, minValue: Double, maxValue: Double, max: Double, increment: Double, exceed: Boolean = true, manage: Boolean = true) : super(owner, name, ElementWidthValueComponentNumberRange::class.java, manage) {
-        this.min = min
-        this.minValue = minValue
-        this.maxValue = maxValue
-        this.max = max
-        this.increment = increment
-        this.exceed = exceed
-    }
 
     fun randomNumber(): Double {
         return if (minValue == maxValue) minValue else ThreadLocalRandom.current().nextDouble(min(minValue, maxValue), max(minValue, maxValue))
