@@ -4,12 +4,16 @@ import net.minecraft.registry.RegistryKeys
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.dimension.DimensionType
 import net.minecraft.world.dimension.DimensionTypes
+import net.tarasandedevelopment.tarasande.event.EventAttackEntity
+import net.tarasandedevelopment.tarasande.event.EventConnectServer
+import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
+import su.mandora.event.EventDispatcher
 
 class InformationName : Information("Player", "Name") {
 
@@ -106,5 +110,28 @@ class InformationFakeRotation : Information("Player", "Fake Rotation") {
             val yaw = if(wrapYaw.value) MathHelper.wrapDegrees(it.yaw) else it.yaw
             StringUtil.round(yaw.toDouble(), this.decimalPlacesYaw.value.toInt()) + " " + StringUtil.round(it.pitch.toDouble(), this.decimalPlacesPitch.value.toInt())
         }
+    }
+}
+
+class InformationReach : Information("Player", "Reach") {
+    private var reach: Double? = null
+
+    init {
+        EventDispatcher.apply {
+            add(EventAttackEntity::class.java) {
+                if (it.state == EventAttackEntity.State.PRE) {
+                    reach = mc.player?.getCameraPosVec(1.0f)?.distanceTo(mc.crosshairTarget?.pos)
+                }
+            }
+            add(EventDisconnect::class.java) {
+                if (it.connection == mc.networkHandler?.connection) {
+                    reach = null
+                }
+            }
+        }
+    }
+
+    override fun getMessage(): String? {
+        return reach?.toString()
     }
 }
