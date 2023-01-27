@@ -246,4 +246,12 @@ object PlayerUtil {
     fun getSequence(): Int {
         return mc.world?.pendingUpdateManager?.incrementSequence()?.sequence!!
     }
+
+    fun updateLastPosition() {
+        mc.player?.apply {
+            lastX = x
+            lastBaseY = y
+            lastZ = z
+        }
+    }
 }

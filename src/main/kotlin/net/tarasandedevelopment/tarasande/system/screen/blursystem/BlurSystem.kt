@@ -52,13 +52,20 @@ object ManagerBlur : Manager<Blur>() {
 
         mode = object : ValueMode(this, "Blur mode", false, *list.map { it.name }.toTypedArray()) {
             override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
-                selected = list[values.indexOf(getSelected())]
+                if (!oldSelected && newSelected)
+                    selected = list[index]
             }
         }
     }
 
     fun bind(setViewport: Boolean, screens: Boolean = false) {
-        (if (screens) screenShapesFramebuffer else inGameShapesFramebuffer).beginWrite(setViewport)
+        val buffer =
+            if (screens)
+                screenShapesFramebuffer
+            else
+                inGameShapesFramebuffer
+
+        buffer.beginWrite(setViewport)
     }
 
     fun blurScene(strength: Int? = null, shapesBuffer: Framebuffer = inGameShapesFramebuffer, targetBuffer: Framebuffer = mc.framebuffer) {

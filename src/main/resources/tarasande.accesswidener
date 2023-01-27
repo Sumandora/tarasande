@@ -1,6 +1,9 @@
 accessWidener v1 named
 
 accessible field net/minecraft/network/ClientConnection channel Lio/netty/channel/Channel;
+accessible field net/minecraft/client/network/ClientPlayerEntity lastX D
+accessible field net/minecraft/client/network/ClientPlayerEntity lastBaseY D
+accessible field net/minecraft/client/network/ClientPlayerEntity lastZ D
 accessible field net/minecraft/client/network/ClientPlayerEntity lastYaw F
 accessible field net/minecraft/client/network/ClientPlayerEntity lastPitch F
 accessible field net/minecraft/client/network/ClientPlayerEntity lastOnGround Z
