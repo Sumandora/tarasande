@@ -1,10 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.base.grabbersystem
 
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberDefaultFlightSpeed
-import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberReach
-import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberServerInformationOffset
-import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberSpeedReduction
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.*
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.mapping.TinyMappings
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.tree.*
@@ -25,7 +22,8 @@ object ManagerGrabber : Manager<Grabber>() {
             GrabberReach(),
             GrabberSpeedReduction(),
             GrabberDefaultFlightSpeed(),
-            GrabberServerInformationOffset()
+            GrabberServerInformationOffset(),
+            GrabberMaxPlayerMove()
         )
 
         val minecraftJar = System.getProperty("java.class.path")
@@ -137,7 +135,7 @@ abstract class Grabber(val targetedClass: String, val expected: Any) {
         for (index in 0 until size()) {
             var matches = true
             for (signatureIndex in signature.indices) {
-                if (get(index + signatureIndex).opcode != signature[signatureIndex]) {
+                if (signature[signatureIndex].let { it != -1 && it != get(index + signatureIndex).opcode }) {
                     matches = false
                     break
                 }

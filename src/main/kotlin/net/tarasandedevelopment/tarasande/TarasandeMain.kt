@@ -29,7 +29,6 @@ import java.util.logging.Logger
  *  - Render Profiler
  *  - Auto Totem
  *  - AutoLog
- *  - Find max c03 distance constant
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions in <= 1.19.2
