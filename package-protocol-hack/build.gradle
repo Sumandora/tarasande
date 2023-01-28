@@ -31,7 +31,7 @@ var libArray = [
 
         "com.github.FlorianMichael:ViaLoadingBase:${project.vialoadingbase_version}",
 
-        "net.lenni0451.mcstructs:all:2.1.0",
+        "net.lenni0451.mcstructs:text:2.1.0",
         "org.jsoup:jsoup:1.15.3",
         "com.nukkitx.protocol:common:2.9.15-SNAPSHOT",
         "com.nukkitx.protocol:bedrock-common:2.9.15-SNAPSHOT",
