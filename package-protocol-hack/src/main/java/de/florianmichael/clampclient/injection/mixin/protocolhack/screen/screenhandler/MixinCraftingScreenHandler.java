@@ -21,8 +21,8 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.screen.screenhandler;
 
+import de.florianmichael.viabeta.api.BetaProtocols;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.CraftingResultInventory;
@@ -55,7 +55,7 @@ public abstract class MixinCraftingScreenHandler extends AbstractRecipeScreenHan
 
     @Inject(method = "onContentChanged", at = @At("HEAD"))
     public void emulateCrafting(Inventory inventory, CallbackInfo ci) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_6_4)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(BetaProtocols.r1_6_4)) {
             ItemStack itemStack = ItemStack.EMPTY;
             //noinspection DataFlowIssue
             final Optional<CraftingRecipe> optional = MinecraftClient.getInstance().getNetworkHandler().getRecipeManager().getFirstMatch(RecipeType.CRAFTING, this.input, MinecraftClient.getInstance().world);

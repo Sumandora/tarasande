@@ -21,8 +21,8 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.packet;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,7 +35,7 @@ public class MixinPacketByteBuf {
 
     @Inject(method = "readText", at = @At(value = "INVOKE", target = "Lio/netty/handler/codec/DecoderException;<init>(Ljava/lang/String;)V", shift = At.Shift.BEFORE, remap = false), cancellable = true)
     public void injectReadText(CallbackInfoReturnable<Text> cir) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_18tor1_18_1)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_18)) {
             cir.setReturnValue(null);
         }
     }

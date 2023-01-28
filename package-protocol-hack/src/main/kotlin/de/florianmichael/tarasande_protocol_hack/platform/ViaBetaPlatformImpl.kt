@@ -1,9 +1,11 @@
 package de.florianmichael.tarasande_protocol_hack.platform
 
+import com.viaversion.viaversion.api.Via
 import de.florianmichael.viabeta.base.ViaBetaPlatform
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.util.JLoggerToLog4j
 import org.apache.logging.log4j.LogManager
+import java.io.File
 
 class ViaBetaPlatformImpl : ViaBetaPlatform {
 
@@ -14,5 +16,5 @@ class ViaBetaPlatformImpl : ViaBetaPlatform {
     }
 
     override fun getLogger() = logger
-    override fun getDataFolder() = ViaLoadingBase.instance().directory()!!
+    override fun getDataFolder(): File = Via.getPlatform().dataFolder
 }

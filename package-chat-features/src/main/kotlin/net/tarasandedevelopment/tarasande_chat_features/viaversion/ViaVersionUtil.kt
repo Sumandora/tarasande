@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande_chat_features.viaversion
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.vialoadingbase.ViaLoadingBase
-import de.florianmichael.vialoadingbase.util.VersionListEnum
 
 object ViaVersionUtil {
 
-    fun isSimpleSignatures() = ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_19_1tor1_19_2)
+    fun isSimpleSignatures() = ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_19_1)
 }

@@ -2,11 +2,10 @@ package de.florianmichael.tarasande_protocol_hack.provider.viaversion
 
 import com.viaversion.viaversion.api.connection.UserConnection
 import com.viaversion.viaversion.api.minecraft.item.Item
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
-import de.florianmichael.vialoadingbase.ViaLoadingBase
 import net.minecraft.item.ItemStack
 import de.florianmichael.tarasande_protocol_hack.util.inventory.MinecraftViaItemRewriter
-import de.florianmichael.vialoadingbase.util.VersionListEnum
 
 class FabricHandItemProvider : HandItemProvider() {
 
@@ -18,6 +17,6 @@ class FabricHandItemProvider : HandItemProvider() {
         if (lastUsedItem == null) {
             return null
         }
-        return MinecraftViaItemRewriter.minecraftToViaItem(info, lastUsedItem!!, VersionListEnum.r1_8.originalVersion)
+        return MinecraftViaItemRewriter.minecraftToViaItem(info, lastUsedItem!!, ProtocolVersion.v1_8.originalVersion)
     }
 }

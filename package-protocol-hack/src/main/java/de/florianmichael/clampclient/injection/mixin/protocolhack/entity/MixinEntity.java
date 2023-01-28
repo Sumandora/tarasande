@@ -30,7 +30,7 @@ import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.base
 import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.EntityDimensionsDefinition;
 import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.wrapper.EntityDimensionWrapper;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import kotlin.jvm.functions.Function1;
 import net.minecraft.client.MinecraftClient;
@@ -103,7 +103,7 @@ public abstract class MixinEntity implements IEntity_Protocol {
 
     @ModifyConstant(method = "movementInputToVelocity", constant = @Constant(doubleValue = 1E-7))
     private static double injectMovementInputToVelocity(double epsilon) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_13_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_13_2)) {
             return 1E-4;
         }
         return epsilon;
@@ -151,21 +151,21 @@ public abstract class MixinEntity implements IEntity_Protocol {
 
     @Inject(method = "getVelocityAffectingPos", at = @At("HEAD"), cancellable = true)
     public void injectGetVelocityAffectingPos(CallbackInfoReturnable<BlockPos> cir) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_14_4)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_14_4)) {
             cir.setReturnValue(new BlockPos(pos.x, getBoundingBox().minY - 1, pos.z));
         }
     }
 
     @Inject(method = "getRotationVector(FF)Lnet/minecraft/util/math/Vec3d;", at = @At("HEAD"), cancellable = true)
     public void onGetRotationVector(float pitch, float yaw, CallbackInfoReturnable<Vec3d> cir) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_12_2)) {
             cir.setReturnValue(Vec3d.fromPolar(pitch, yaw));
         }
     }
 
     @Inject(method = "setSwimming", at = @At("HEAD"), cancellable = true)
     private void onSetSwimming(boolean swimming, CallbackInfo ci) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_2) && swimming) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_12_2) && swimming) {
             ci.cancel();
         }
     }
@@ -195,7 +195,7 @@ public abstract class MixinEntity implements IEntity_Protocol {
             return;
         }
 
-        if (ViaLoadingBase.getTargetVersion().isNewerThan(VersionListEnum.r1_12_2)) {
+        if (ViaLoadingBase.getTargetVersion().isNewerThan(ProtocolVersion.v1_12_2)) {
             return;
         }
 
@@ -245,19 +245,19 @@ public abstract class MixinEntity implements IEntity_Protocol {
 
     @Inject(method = "getTargetingMargin", at = @At("HEAD"), cancellable = true)
     public void expandHitBox(CallbackInfoReturnable<Float> cir) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_8)) {
             cir.setReturnValue(0.1F);
         }
     }
 
     @Redirect(method = {"setYaw", "setPitch"}, at = @At(value = "INVOKE", target = "Ljava/lang/Float;isFinite(F)Z"))
     public boolean modifyIsFinite(float f) {
-        return Float.isFinite(f) || ((Object) this instanceof ClientPlayerEntity && ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_2));
+        return Float.isFinite(f) || ((Object) this instanceof ClientPlayerEntity && ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_12_2));
     }
 
     @ModifyConstant(method = "checkBlockCollision", constant = @Constant(doubleValue = 1.0E-7))
     public double changeBlockCollisionConstant(double constant) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_19_1tor1_19_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_19_1)) {
             return 0.001;
         }
         return constant;
@@ -266,7 +266,7 @@ public abstract class MixinEntity implements IEntity_Protocol {
     // Not relevant for GamePlay
     @Redirect(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;onLanding()V"))
     public void revertOnLanding(Entity instance) {
-        if (ViaLoadingBase.getTargetVersion().isNewerThanOrEqualTo(VersionListEnum.r1_19)) {
+        if (ViaLoadingBase.getTargetVersion().isNewerThanOrEqualTo(ProtocolVersion.v1_19)) {
             instance.onLanding();
         }
     }

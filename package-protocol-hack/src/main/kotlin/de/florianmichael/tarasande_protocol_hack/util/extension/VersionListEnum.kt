@@ -1,24 +1,25 @@
 package de.florianmichael.tarasande_protocol_hack.util.extension
 
-import de.florianmichael.vialoadingbase.util.VersionListEnum
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolRange
+import de.florianmichael.vialoadingbase.api.version.ComparableProtocolVersion
 
-operator fun VersionListEnum.rangeTo(versionListEnum: VersionListEnum): ProtocolRange {
+operator fun ProtocolVersion.rangeTo(versionListEnum: ProtocolVersion): ProtocolRange {
     return ProtocolRange(this, versionListEnum)
 }
 
-fun VersionListEnum.andNewer(): ProtocolRange {
+fun ProtocolVersion.andNewer(): ProtocolRange {
     return ProtocolRange(null, this)
 }
 
-fun VersionListEnum.andOlder(): ProtocolRange {
+fun ProtocolVersion.andOlder(): ProtocolRange {
     return ProtocolRange(this, null)
 }
 
-fun VersionListEnum.singleton(): ProtocolRange {
+fun ProtocolVersion.singleton(): ProtocolRange {
     return ProtocolRange(this, this)
 }
 
-operator fun VersionListEnum.compareTo(versionListEnum: VersionListEnum): Int {
-    return this.ordinal - versionListEnum.version
+operator fun ComparableProtocolVersion.compareTo(protocolVersion: ComparableProtocolVersion): Int {
+    return this.index - protocolVersion.index
 }

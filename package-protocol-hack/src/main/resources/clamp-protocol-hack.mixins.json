@@ -101,6 +101,7 @@
     "screen.widget.MixinSimpleOption_OptionSliderWidgetImpl",
     "viaversion.MixinCommonBoss",
     "viaversion.MixinPacketWrapperImpl",
+    "viaversion.MixinProtocolVersion",
     "viaversion.protocol1_12to1_11_1.MixinChatItemRewriter",
     "viaversion.protocol1_13to1_12_2.MixinAbstractFenceConnectionHandler",
     "viaversion.protocol1_13to1_12_2.MixinGlassConnectionHandler",

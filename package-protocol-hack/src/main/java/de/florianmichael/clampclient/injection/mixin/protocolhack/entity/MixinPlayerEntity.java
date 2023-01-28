@@ -22,7 +22,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
@@ -57,7 +57,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 
     @Inject(method = "updatePose", at = @At("HEAD"), cancellable = true)
     private void onUpdatePose(CallbackInfo ci) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_13_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_13_2)) {
             EntityPose pose;
 
             if (isFallFlying())
@@ -81,9 +81,9 @@ public abstract class MixinPlayerEntity extends LivingEntity {
     @Inject(method = "getDimensions", at = @At("HEAD"), cancellable = true)
     private void onGetDimensions(EntityPose pose, CallbackInfoReturnable<EntityDimensions> ci) {
         if (pose == EntityPose.CROUCHING) {
-            if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+            if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_8)) {
                 ci.setReturnValue(PlayerEntity.STANDING_DIMENSIONS);
-            } else if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_13_2)) {
+            } else if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_13_2)) {
                 ci.setReturnValue(protocolhack_SNEAKING_DIMENSIONS_1_13_2);
             }
         }
@@ -91,7 +91,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 
     @ModifyConstant(method = "getActiveEyeHeight", constant = @Constant(floatValue = 1.27f))
     private float modifySneakEyeHeight(float prevEyeHeight) {
-        if (ViaLoadingBase.getTargetVersion().isNewerThan(VersionListEnum.r1_19_1tor1_19_2)) {
+        if (ViaLoadingBase.getTargetVersion().isNewerThan(ProtocolVersion.v1_19_1)) {
             return prevEyeHeight;
         } else {
             return 1.54f;
@@ -100,7 +100,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 
     @Inject(method = "getAttackCooldownProgress", at = @At("HEAD"), cancellable = true)
     private void injectGetAttackCooldownProgress(CallbackInfoReturnable<Float> ci) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_8)) {
             ci.setReturnValue(1f);
         }
     }
@@ -110,7 +110,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
     public boolean fixRoundingConvention(PlayerEntity instance) {
         if (!ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && instance == MinecraftClient.getInstance().player) return instance.isSprinting();
 
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_8)) {
             if (instance.isSprinting()) this.airStrafingSpeed = (float) ((double) this.airStrafingSpeed + (double) 0.02F * 0.3D);
             return false;
         }
@@ -122,7 +122,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
     public void adjustMissingBaseValue(CallbackInfo ci) {
         if (!ProtocolHackValues.INSTANCE.getEmulatePlayerMovement().getValue() && (Object) this == MinecraftClient.getInstance().player) return;
 
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_8)) {
             getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue((double) abilities.getWalkSpeed());
         }
     }
