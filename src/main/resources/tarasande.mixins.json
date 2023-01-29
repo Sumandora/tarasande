@@ -107,6 +107,7 @@
   },
   "client": [
     "core.rotation.MixinInventoryScreen",
+    "feature.clientvalue.MixinClientPlayerInteractionManager",
     "feature.clientvalue.MixinGameRenderer",
     "feature.clientvalue.MixinHeldItemRenderer",
     "feature.module.MixinClientPlayNetworkHandler",

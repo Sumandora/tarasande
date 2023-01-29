@@ -223,10 +223,10 @@ object PlayerUtil {
         }
     }
 
-    fun attack(entity: Entity?) {
+    fun attack(entity: Entity?, position: Vec3d? = null) {
         val original = mc.crosshairTarget
         if (entity != null) {
-            mc.crosshairTarget = EntityHitResult(entity)
+            mc.crosshairTarget = if(position == null) EntityHitResult(entity) else EntityHitResult(entity, position)
         } else {
             mc.crosshairTarget = object : HitResult(null) {
                 override fun getType() = Type.MISS

@@ -29,7 +29,7 @@ public class MixinGameRenderer {
         EventDispatcher.INSTANCE.call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.PRE));
     }
 
-    @Inject(method = "updateTargetedEntity", at = @At("RETURN"))
+    @Inject(method = "updateTargetedEntity", at = @At("TAIL"))
     public void hookEventUpdateTargetedEntityPost(float tickDelta, CallbackInfo ci) {
         EventDispatcher.INSTANCE.call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.POST));
     }

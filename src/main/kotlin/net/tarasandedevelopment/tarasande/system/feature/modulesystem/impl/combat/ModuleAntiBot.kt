@@ -130,7 +130,7 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
 
         registerEvent(EventUpdate::class.java) { event ->
             if (event.state == EventUpdate.State.PRE) {
-                if (checks.isSelected(2)) {
+                if (checks.isSelected(3)) {
                     for (player in mc.world?.players ?: return@registerEvent) {
                         if (passedInvisible.contains(player))
                             continue

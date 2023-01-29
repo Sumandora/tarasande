@@ -22,6 +22,7 @@ import net.tarasandedevelopment.tarasande.event.*
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.ClickSpeedUtil
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
@@ -106,10 +107,12 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val forceCritical = object : ValueBoolean(this, "Force critical", true) {
         override fun isEnabled() = waitForCritical.value && criticalSprint.value
     }
-    private val onlyNecessaryHits = ValueBoolean(this, "Only necessary hits", false)
-    private val minimalHurtTime = object : ValueNumber(this, "Minimal hurt time", 0.1, 0.5, 0.9, 0.1) {
-        override fun isEnabled() = onlyNecessaryHits.value
+    object SmartClickingBehaviour {
+        val enableSmartClickingBehaviour = ValueBoolean(this, "Enable smart clicking behaviour", false)
+        val enemyHurtTime = ValueNumber(this, "Enemy hurt time", 0.1, 1.0, 1.0, 0.1)
+        val selfHurtTime = ValueNumber(this, "Self hurt time", 0.1, 0.6,1.0, 0.1)
     }
+    private val smartClickingBehaviour = ValueButtonOwnerValues(this, "Smart clicking behaviour", SmartClickingBehaviour)
     private val aimTargetColor = ValueColor(this, "Aim target color", 0.0, 1.0, 1.0, 1.0)
 
     var targets = CopyOnWriteArrayList<Pair<Entity, Vec3d>>()
@@ -230,7 +233,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             val targetRot = RotationUtil.getRotations(mc.player?.eyePos!!, target.second)
             var finalRot = targetRot
 
-            val lowestHurtTime = target.first.let { if (it is LivingEntity && it.maxHurtTime > 0) (it.hurtTime - mc.tickDelta).coerceAtLeast(0.0F) / it.maxHurtTime else null }
+            val lowestHurtTime = target.first.let { if (it is LivingEntity && it.maxHurtTime > 0) it.smoothedHurtTime() else null }
 
             if (!flex.value || lowestHurtTime == null || lowestHurtTime < flexHurtTime.value) {
                 finalRot = currentRot.smoothedTurn(targetRot, aimSpeed)
@@ -337,7 +340,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                             teleportPath!!.addAll(path)
                         }
 
-                        attack(target, clicks)
+                        attack(target, clicks, aimPoint)
                         lastFlex = null
                         event.dirty = true
                         waitForHit = false
@@ -416,12 +419,12 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         }
     }
 
-    private fun attack(entity: Entity?, amount: Int) {
+    private fun attack(entity: Entity?, amount: Int, aimPoint: Vec3d? = null) {
         repeat(amount) {
             if (!attackCooldown.value) {
                 mc.attackCooldown = 0
             }
-            PlayerUtil.attack(entity)
+            PlayerUtil.attack(entity, aimPoint)
         }
     }
 
@@ -577,12 +580,14 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
         }
 
-        if(onlyNecessaryHits.value) {
-            val selfHurtTime = (mc.player?.hurtTime!! - mc.tickDelta).coerceAtLeast(0.0F) / mc.player?.maxHurtTime!!
-            val otherHurtTime = if (entity is LivingEntity && entity.maxHurtTime > 0) (entity.hurtTime - mc.tickDelta).coerceAtLeast(0.0F) / entity.maxHurtTime else null
-            if(otherHurtTime != null) {
-                if(selfHurtTime > minimalHurtTime.value && otherHurtTime > minimalHurtTime.value)
-                    return false
+        if(SmartClickingBehaviour.enableSmartClickingBehaviour.value && entity is LivingEntity) {
+            val otherHurtTime = entity.smoothedHurtTime()
+            // Is the enemy attackable?
+            if(otherHurtTime >= SmartClickingBehaviour.enemyHurtTime.value) {
+                // If not, have we just been attacked?
+                val selfHurtTime = mc.player?.smoothedHurtTime()!!
+                if(selfHurtTime <= SmartClickingBehaviour.selfHurtTime.value)
+                    return false // Have we received damage lately? If yes, ignore this opportunity, because we need to reduce our knock-back
             }
         }
         return true

@@ -16,7 +16,11 @@ import kotlin.math.roundToInt
 
 class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PLAYER) {
 
-    val delay = ValueNumber(this, "Delay", 0.0, 60000.0, 180000.0, 5000.0)
+    val delay = object : ValueNumber(this, "Delay", 0.0, 60000.0, 180000.0, 5000.0) {
+        override fun onChange(oldValue: Double?, newValue: Double) {
+            timer.reset()
+        }
+    }
 
     val timer = TimeUtil()
     private val movementKeys = ArrayList(PlayerUtil.movementKeys)
@@ -31,7 +35,7 @@ class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PL
         ManagerInformation.add(object : Information("Anti AFK", "Jump countdown") {
             override fun getMessage() =
                 if (enabled.value)
-                    ((delay.value - (System.currentTimeMillis() - timer.time))).roundToInt().toString()
+                    (((delay.value - (System.currentTimeMillis() - timer.time)) / 100).roundToInt() / 10.0).toString()
                 else
                     null
         })
@@ -54,7 +58,7 @@ class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PL
         }
 
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (timer.hasReached((delay.value * 1000).toLong())) {
+            if (timer.hasReached(delay.value.toLong())) {
                 if (event.keyBinding == mc.options.jumpKey) {
                     timer.reset()
                     event.pressed = true

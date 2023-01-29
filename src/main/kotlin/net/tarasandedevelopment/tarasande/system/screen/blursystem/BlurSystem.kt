@@ -24,7 +24,7 @@ import su.mandora.event.EventDispatcher
 
 object ManagerBlur : Manager<Blur>() {
 
-    lateinit var selected: Blur
+    var selected: Blur
     val mode: ValueMode
     val strength = ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0, exceed = false)
 

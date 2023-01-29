@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc
 
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen
 import net.minecraft.entity.Entity
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.TrackedPosition
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.ClientConnection
@@ -118,8 +119,8 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
             return false
 
         return validEntities.all {
-            val newPosition = newPositions[it] ?: return false
-            val lastPosition = (it as ILivingEntity).tarasande_prevServerPos() ?: return false
+            val newPosition = newPositions[it] ?: return true
+            val lastPosition = (it as ILivingEntity).tarasande_prevServerPos() ?: return true
 
             val dimensions = it.getDimensions(it.pose)
 
@@ -155,33 +156,6 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                     return@registerEvent
                 }
 
-                // Entity position tracker
-                when (event.packet) {
-                    is EntityS2CPacket -> {
-                        event.packet.apply {
-                            if (positionChanged) {
-                                val entity = mc.world?.getEntityById(event.packet.id)
-                                if (entity != null) {
-                                    val basePos = newPositions[entity] ?: entity.pos
-                                    newPositions[entity] = basePos.add(TrackedPosition().withDelta(deltaX.toLong(), deltaY.toLong(), deltaZ.toLong()))
-                                }
-                            }
-                        }
-                    }
-
-                    is EntityPositionS2CPacket -> {
-                        val entity = mc.world?.getEntityById(event.packet.id)
-                        if (entity != null)
-                            newPositions[entity] = event.packet.let { Vec3d(it.x, it.y, it.z) }
-                    }
-
-                    is EntitiesDestroyS2CPacket -> {
-                        event.packet.entityIds.forEach {
-                            newPositions.remove(mc.world?.getEntityById(it) ?: return@forEach)
-                        }
-                    }
-                }
-
                 if (affectedPackets.isSelected(event.type.ordinal)) {
                     if (restrictPackets.anySelected() &&
                         restrictPackets.isSelected(0) && event.packet !is KeepAliveC2SPacket && event.packet !is KeepAliveS2CPacket &&
@@ -196,6 +170,33 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
                             System.currentTimeMillis()
                     ))
                     event.cancelled = true
+                }
+
+                // Entity position tracker
+                when (event.packet) {
+                    is EntityS2CPacket -> {
+                        event.packet.apply {
+                            if (positionChanged) {
+                                val entity = mc.world?.getEntityById(event.packet.id)
+                                if (entity != null && entity is LivingEntity) {
+                                    val basePos = newPositions[entity] ?: entity.pos
+                                    newPositions[entity] = TrackedPosition().also { it.setPos(basePos) }.withDelta(deltaX.toLong(), deltaY.toLong(), deltaZ.toLong())
+                                }
+                            }
+                        }
+                    }
+
+                    is EntityPositionS2CPacket -> {
+                        val entity = mc.world?.getEntityById(event.packet.id)
+                        if (entity != null && entity is LivingEntity)
+                            newPositions[entity] = event.packet.let { Vec3d(it.x, it.y, it.z) }
+                    }
+
+                    is EntitiesDestroyS2CPacket -> {
+                        event.packet.entityIds.forEach {
+                            newPositions.remove(mc.world?.getEntityById(it) ?: return@forEach)
+                        }
+                    }
                 }
             }
         }

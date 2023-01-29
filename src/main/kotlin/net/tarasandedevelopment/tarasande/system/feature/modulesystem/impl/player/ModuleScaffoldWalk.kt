@@ -59,6 +59,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val silent = ValueMode(this, "Silent", false, "Disabled", "Invisible", "Visible")
     private val lockView = ValueBoolean(this, "Lock view", false)
     private val headRoll = ValueBoolean(this, "Head roll", false)
+    private val autoJump = ValueBoolean(this, "Auto jump", false)
     private val forbiddenItems = object : ValueRegistry<Item>(this, "Forbidden items", Registries.ITEM) {
         override fun filter(key: Item) = key is BlockItem
         override fun getTranslationKey(key: Any?) = (key as Item).translationKey
@@ -438,6 +439,11 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 RenderUtil.blockOutline(event.matrices, Box.from(aimTarget).offset(-0.5, -0.5, -0.5).expand(-0.45), (if (rerotated) aimTargetColorRerotated else aimTargetColorStable).getColor().rgb)
             if (placeLine != null)
                 RenderUtil.blockOutline(event.matrices, Box.from(placeLine?.first).offset(-0.5, -0.5, -0.5).expand(-0.49).union(Box.from(placeLine?.second).offset(-0.5, -0.5, -0.5).expand(-0.49)), placeLineColor.getColor().rgb)
+        }
+
+        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
+            if(event.keyBinding == mc.options.jumpKey && autoJump.value && mc.player?.isOnGround == true && PlayerUtil.isPlayerMoving())
+                event.pressed = true
         }
     }
 

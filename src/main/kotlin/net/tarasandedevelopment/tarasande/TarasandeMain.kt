@@ -37,6 +37,7 @@ import java.util.logging.Logger
  *  - Reimplement sword actions in <= b1.7.3
  *  - Change Boat and Chest Model in <= 1.8
  *  - Bounding boxes of Fences in <= b1.5
+ *  - Blink Position Tracker in 1.8
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv

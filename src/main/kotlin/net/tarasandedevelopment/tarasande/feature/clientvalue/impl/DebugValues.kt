@@ -23,6 +23,7 @@ object DebugValues {
     val disableInterpolation = ValueBoolean(this, "Disable interpolation", false)
     private val ignoreResourcePackHash = ValueBoolean(this, "Ignore resource pack hash", false)
     val camera = ValueButtonOwnerValues(this, "Camera", Camera())
+    val eliminateHitDelay = ValueBoolean(this, "Eliminate hit delay", false)
 
     init {
         EventDispatcher.add(EventPacket::class.java) { event ->
