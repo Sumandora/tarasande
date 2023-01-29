@@ -5,7 +5,6 @@ import net.minecraft.util.math.MathHelper
 import net.minecraft.world.dimension.DimensionType
 import net.minecraft.world.dimension.DimensionTypes
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
-import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -120,7 +119,7 @@ class InformationReach : Information("Player", "Reach") {
         EventDispatcher.apply {
             add(EventAttackEntity::class.java) {
                 if (it.state == EventAttackEntity.State.PRE) {
-                    reach = mc.player?.getCameraPosVec(1.0f)?.distanceTo(mc.crosshairTarget?.pos)
+                    reach = mc.player?.getCameraPosVec(1.0F)?.distanceTo(mc.crosshairTarget?.pos)
                 }
             }
             add(EventDisconnect::class.java) {
