@@ -1,13 +1,13 @@
 package de.florianmichael.clampclient.injection.instrumentation_1_8.definition;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.FastMath;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.MathTable;
 import net.minecraft.util.math.Vec3d;
 
 /**
  * This class represents the MathHelper Changes (Table Isn) in 1.8
  */
 public class MathHelper_1_8 {
-    public static FastMath fastMath = FastMath.NONE;
+    public static MathTable mathTable = MathTable.NONE;
 
     public static Vec3d getIntermediateWithXValue(Vec3d t, Vec3d vec, double x) {
         final double xOffset = vec.x - t.x;
@@ -53,11 +53,11 @@ public class MathHelper_1_8 {
 
 
     public static float sin(float value) {
-        return fastMath.getMath().sin(value);
+        return mathTable.getMath().sin(value);
     }
 
     public static float cos(float value) {
-        return fastMath.getMath().cos(value);
+        return mathTable.getMath().cos(value);
     }
 
     public static float sqrt_float(float value) {
