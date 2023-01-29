@@ -7,6 +7,6 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 public class BedrockProtocols {
 
     public static final String VERSION_NAME = "1.19.51";
-    public static final ProtocolVersion VIA_PROTOCOL_VERSION = new ProtocolVersion(560 << 2, "Bedrock edition v" + VERSION_NAME);
+    public static final ProtocolVersion VIA_PROTOCOL_VERSION = new ProtocolVersion(1_19_51, "Bedrock edition v" + VERSION_NAME);
     public static final BedrockPacketCodec CODEC = Bedrock_v560.V560_CODEC;
 }

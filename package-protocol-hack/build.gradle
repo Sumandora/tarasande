@@ -38,7 +38,7 @@ var libArray = [
         "com.nukkitx.protocol:common:2.9.15-SNAPSHOT",
         "com.nukkitx.protocol:bedrock-v560:2.9.15-SNAPSHOT",
         "com.nimbusds:nimbus-jose-jwt:9.13",
-        "org.lanternpowered:lmbda:2.0.0"
+        "com.github.FlorianMichael:lmbda:3.x-SNAPSHOT"
 ]
 
 this.remapJar {

@@ -46,7 +46,7 @@ import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.provider.Gam
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.ViaLoadingBase.ViaLoadingBaseBuilder
 import de.florianmichael.vialoadingbase.api.SubPlatform
-import de.florianmichael.vialoadingbase.api.version.ProtocolList
+import de.florianmichael.vialoadingbase.api.version.InternalProtocolList
 import de.florianmichael.viasnapshot.api.SnapshotProtocols
 import de.florianmichael.viasnapshot.protocol.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider
 import io.netty.channel.DefaultEventLoop
@@ -83,10 +83,11 @@ class TarasandeProtocolHack {
 
         fun update(protocol: ProtocolVersion, reloadProtocolHackValues: Boolean) {
             // Only reload if needed
-            val comparable = ProtocolList.fromProtocolVersion(protocol)
+            val comparable = InternalProtocolList.fromProtocolVersion(protocol)
 
             if (ViaLoadingBase.getTargetVersion() != protocol) {
-                displayItems = Registries.ITEM.filter { ItemReleaseVersionsDefinition.shouldDisplay(it, comparable) }.toMutableList()
+                displayItems = Registries.ITEM.filter { ItemReleaseVersionsDefinition.shouldDisplay(it, comparable) }
+                    .toMutableList()
                 EntityDimensionsDefinition.reload(comparable)
 
                 if (comparable.isOlderThan(BetaProtocols.a1_0_15)) {
@@ -106,17 +107,17 @@ class TarasandeProtocolHack {
         }
     }
 
-    private val subPlatformViaBeta = SubPlatform("ViaBeta", { SubPlatform.isClass("de.florianmichael.viabeta.base.ViaBetaPlatform") },
-        { ViaBetaPlatformImpl() }, BetaProtocols.getProtocols()
-    )
+    private val subPlatformViaBeta = SubPlatform("ViaBeta", { SubPlatform.isClass("de.florianmichael.viabeta.base.ViaBetaPlatform") }, { ViaBetaPlatformImpl() }) {
+        it.addAll(BetaProtocols.getProtocols())
+    }
 
-    private val subPlatformViaSnapshot = SubPlatform("ViaSnapshot", { SubPlatform.isClass("de.florianmichael.viasnapshot.base.ViaSnapshotPlatform") },
-        { ViaSnapshotPlatformImpl() }, SnapshotProtocols.getProtocols()
-    )
+    private val subPlatformViaSnapshot = SubPlatform("ViaSnapshot", { SubPlatform.isClass("de.florianmichael.viasnapshot.base.ViaSnapshotPlatform") }, { ViaSnapshotPlatformImpl() }) {
+        SnapshotProtocols.addProtocols(it)
+    }
 
-    private val subPlatformViaBedrock = SubPlatform("ViaBedrock", { SubPlatform.isClass("de.florianmichael.viabedrock.base.ViaBedrockPlatform") },
-        { ViaBedrockPlatformImpl() }, listOf(BedrockProtocols.VIA_PROTOCOL_VERSION)
-    )
+    private val subPlatformViaBedrock = SubPlatform("ViaBedrock", { SubPlatform.isClass("de.florianmichael.viabedrock.base.ViaBedrockPlatform") }, { ViaBedrockPlatformImpl() }) {
+        it.add(BedrockProtocols.VIA_PROTOCOL_VERSION)
+    }
 
     fun initialize() {
         // ViaVersion loading
@@ -169,14 +170,13 @@ class TarasandeProtocolHack {
                 // Via Version
                 it.use(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
                 it.use(HandItemProvider::class.java, FabricHandItemProvider())
-            }.viaManagerBuilderCreator {
-                it.commandHandler(ViaCommandHandlerTarasandeCommandHandler())
-            }.subPlatform(subPlatformViaBeta).subPlatform(subPlatformViaSnapshot).build()
+            }.viaManagerBuilderCreator { it.commandHandler(ViaCommandHandlerTarasandeCommandHandler()) }
+            .subPlatform(subPlatformViaBedrock, 0).subPlatform(subPlatformViaSnapshot).subPlatform(subPlatformViaBeta)
+            .build()
 
         // Definition setup
         PackFormatsDefinition.checkOutdated(SharedConstants.getProtocolVersion())
         EntityDimensionsDefinition
-        ClassicItemSelectionScreen.create(ProtocolList.fromProtocolVersion(BetaProtocols.c0_28toc0_30))
 
         EventDispatcher.apply {
             add(EventSuccessfulLoad::class.java) {
@@ -213,17 +213,19 @@ class TarasandeProtocolHack {
                 }
 
                 ProtocolHackValues /* Force-Load */
+
+                ClassicItemSelectionScreen.create(InternalProtocolList.fromProtocolVersion(BetaProtocols.c0_28toc0_30))
+                val accessToken = System.getProperty("BedrockKey")
+                if (accessToken != null) {
+                    println("Loaded Bedrock Key, started Xbox Session: $accessToken")
+                    MinecraftClient.getInstance().session = XboxLiveSession.create(accessToken)
+                }
             }
 
             // First-time load
             add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
-                update(
-                    ProtocolVersion.getProtocol(
-                        ManagerScreenExtension.get(
-                            ScreenExtensionSidebarMultiplayerScreen::class.java
-                        ).sidebar.get(SidebarEntrySelectionProtocolHack::class.java).version.value.toInt()
-                    ), false
-                )
+                println(ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(SidebarEntrySelectionProtocolHack::class.java).version.value.toInt())
+                update(InternalProtocolList.fromProtocolId(ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(SidebarEntrySelectionProtocolHack::class.java).version.value.toInt()), false)
             }
 
             // Via Connection tracker
@@ -236,8 +238,11 @@ class TarasandeProtocolHack {
                 if (viaConnection != null && (it.screen is DownloadingTerrainScreen || it.screen is ConnectScreen)) {
                     var levelProgress: String? = null
 
-                    if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30)) levelProgress = BetaProtocolAccess.getWorldLoading_C_0_30(viaConnection)
-                    if (ViaLoadingBase.getTargetVersion().version == BedrockProtocols.VIA_PROTOCOL_VERSION.version) levelProgress = BedrockProtocolAccess.getConnectionState_Bedrock_1_19_51(connectedAddress)
+                    if (ViaLoadingBase.getTargetVersion()
+                            .isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30)
+                    ) levelProgress = BetaProtocolAccess.getWorldLoading_C_0_30(viaConnection)
+                    if (ViaLoadingBase.getTargetVersion().version == BedrockProtocols.VIA_PROTOCOL_VERSION.version) levelProgress =
+                        BedrockProtocolAccess.getConnectionState_Bedrock_1_19_51(connectedAddress)
 
                     if (levelProgress != null) {
                         FontWrapper.text(
@@ -249,12 +254,6 @@ class TarasandeProtocolHack {
                         )
                     }
                 }
-            }
-
-            val accessToken = System.getProperty("BedrockKey")
-            if (accessToken != null) {
-                println("Loaded Bedrock Key, started Xbox Session: $accessToken")
-                MinecraftClient.getInstance().session = XboxLiveSession.create(accessToken)
             }
         }
     }
