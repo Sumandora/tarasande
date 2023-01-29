@@ -19,6 +19,7 @@ accessible field net/minecraft/client/option/SimpleOption value Ljava/lang/Objec
 accessible field net/minecraft/client/Mouse lastMouseUpdateTime D
 accessible field net/minecraft/client/Mouse cursorDeltaX D
 accessible field net/minecraft/client/Mouse cursorDeltaY D
+accessible field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/util/Session;
 
 accessible field net/minecraft/util/math/Vec3i x I
 accessible field net/minecraft/util/math/Vec3i y I
@@ -36,3 +37,4 @@ accessible class net/minecraft/client/gui/screen/GameModeSelectionScreen$GameMod
 mutable field net/minecraft/util/math/Vec3d x D
 mutable field net/minecraft/util/math/Vec3d y D
 mutable field net/minecraft/util/math/Vec3d z D
+mutable field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/util/Session;

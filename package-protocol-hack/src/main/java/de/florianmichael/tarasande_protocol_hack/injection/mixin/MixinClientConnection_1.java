@@ -25,6 +25,8 @@ import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
+import de.florianmichael.viabedrock.api.BedrockProtocols;
+import de.florianmichael.viabedrock.baseprotocol.BedrockSessionBaseProtocol;
 import de.florianmichael.viabeta.api.BetaProtocols;
 import de.florianmichael.viabeta.baseprotocol.BaseProtocol1_3;
 import de.florianmichael.viabeta.baseprotocol.BaseProtocol1_5;
@@ -57,7 +59,9 @@ public class MixinClientConnection_1 {
 
     @Inject(method = "initChannel", at = @At("TAIL"))
     public void hackNettyPipeline(Channel channel, CallbackInfo ci) {
-        if (channel instanceof SocketChannel) {
+        final boolean bedrockEdition = ViaLoadingBase.getTargetVersion().getVersion() == BedrockProtocols.VIA_PROTOCOL_VERSION.getVersion();
+
+        if (channel instanceof SocketChannel || bedrockEdition) {
             // Creating the user connection
             final UserConnection user = new UserConnectionImpl(channel, true);
             ((IClientConnection_Protocol) field_11663).protocolhack_setViaConnection(user);
@@ -88,6 +92,12 @@ public class MixinClientConnection_1 {
                 // Pre Netty Packet handling in <= 1.6.4
                 channel.pipeline().addBefore("prepender", PreNettyConstants.ENCODER, new PreNettyPacketEncoder(user));
                 channel.pipeline().addBefore("splitter", PreNettyConstants.DECODER, new PreNettyPacketDecoder(user));
+            }
+
+            // ViaCursed
+            if (bedrockEdition) {
+                // Handshake forwarding in Bedrock
+                user.getProtocolInfo().getPipeline().add(BedrockSessionBaseProtocol.INSTANCE);
             }
         }
     }

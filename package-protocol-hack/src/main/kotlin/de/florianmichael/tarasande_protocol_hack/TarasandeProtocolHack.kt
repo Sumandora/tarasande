@@ -13,6 +13,7 @@ import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_
 import de.florianmichael.tarasande_protocol_hack.definition.ItemReleaseVersionsDefinition
 import de.florianmichael.tarasande_protocol_hack.definition.PackFormatsDefinition
 import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.EntityDimensionsDefinition
+import de.florianmichael.tarasande_protocol_hack.platform.ViaBedrockPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.platform.ViaBetaPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.platform.ViaSnapshotPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.platform.betacraft.SidebarEntryBetaCraftServers
@@ -31,6 +32,9 @@ import de.florianmichael.tarasande_protocol_hack.tarasande.sidebar.SidebarEntryS
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues
 import de.florianmichael.tarasande_protocol_hack.util.values.ValueBooleanProtocol
 import de.florianmichael.tarasande_protocol_hack.util.values.command.ViaCommandHandlerTarasandeCommandHandler
+import de.florianmichael.tarasande_protocol_hack.xbox.XboxLiveSession
+import de.florianmichael.viabedrock.api.BedrockProtocolAccess
+import de.florianmichael.viabedrock.api.BedrockProtocols
 import de.florianmichael.viabeta.api.BetaProtocolAccess
 import de.florianmichael.viabeta.api.BetaProtocols
 import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.provider.ScreenStateProvider
@@ -65,12 +69,14 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.Ma
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import su.mandora.event.EventDispatcher
+import java.net.InetSocketAddress
 
 class TarasandeProtocolHack {
 
     companion object {
         // Connection data
         var viaConnection: UserConnection? = null
+        var connectedAddress: InetSocketAddress? = null
 
         // Item splitter
         var displayItems: MutableList<Item> = ArrayList()
@@ -106,6 +112,10 @@ class TarasandeProtocolHack {
 
     private val subPlatformViaSnapshot = SubPlatform("ViaSnapshot", { SubPlatform.isClass("de.florianmichael.viasnapshot.base.ViaSnapshotPlatform") },
         { ViaSnapshotPlatformImpl() }, SnapshotProtocols.getProtocols()
+    )
+
+    private val subPlatformViaBedrock = SubPlatform("ViaBedrock", { SubPlatform.isClass("de.florianmichael.viabedrock.base.ViaBedrockPlatform") },
+        { ViaBedrockPlatformImpl() }, listOf(BedrockProtocols.VIA_PROTOCOL_VERSION)
     )
 
     fun initialize() {
@@ -226,9 +236,8 @@ class TarasandeProtocolHack {
                 if (viaConnection != null && (it.screen is DownloadingTerrainScreen || it.screen is ConnectScreen)) {
                     var levelProgress: String? = null
 
-                    if (ViaLoadingBase.getTargetVersion()
-                            .isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30)
-                    ) levelProgress = BetaProtocolAccess.getWorldLoading_C_0_30(viaConnection)
+                    if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30)) levelProgress = BetaProtocolAccess.getWorldLoading_C_0_30(viaConnection)
+                    if (ViaLoadingBase.getTargetVersion().version == BedrockProtocols.VIA_PROTOCOL_VERSION.version) levelProgress = BedrockProtocolAccess.getConnectionState_Bedrock_1_19_51(connectedAddress)
 
                     if (levelProgress != null) {
                         FontWrapper.text(
@@ -240,6 +249,12 @@ class TarasandeProtocolHack {
                         )
                     }
                 }
+            }
+
+            val accessToken = System.getProperty("BedrockKey")
+            if (accessToken != null) {
+                println("Loaded Bedrock Key, started Xbox Session: $accessToken")
+                MinecraftClient.getInstance().session = XboxLiveSession.create(accessToken)
             }
         }
     }
