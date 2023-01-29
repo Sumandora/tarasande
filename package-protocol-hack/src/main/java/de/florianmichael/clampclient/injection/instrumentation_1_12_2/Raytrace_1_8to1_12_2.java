@@ -3,7 +3,7 @@ package de.florianmichael.clampclient.injection.instrumentation_1_12_2;
 import com.google.common.base.Predicates;
 import de.florianmichael.clampclient.injection.instrumentation_1_12_2.model.ViaRaytraceResult;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.MathHelper_1_8;
-import de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.FastMath;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.MathTable;
 import de.florianmichael.clampclient.injection.mixininterface.IBox_Protocol;
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import net.minecraft.client.MinecraftClient;
@@ -126,17 +126,17 @@ public class Raytrace_1_8to1_12_2 {
     }
 
     public ViaRaytraceResult bruteforceRaytrace(Entity entity, float prevYaw, float prevPitch, float yaw, float pitch, float partialTicks) {
-        final FastMath originalFastMath = MathHelper_1_8.fastMath;
+        final MathTable originalMathTable = MathHelper_1_8.mathTable;
 
         ViaRaytraceResult bestRaytrace = null;
 
-        FastMath[] values = FastMath.values();
+        MathTable[] values = MathTable.values();
         for (int i = 0; i < values.length; i++) {
-            FastMath fastMath = values[i];
+            MathTable mathTable = values[i];
             if (!ProtocolHackValues.INSTANCE.getBruteforceRaytraceFastMathTables().isSelected(i))
                 continue;
 
-            MathHelper_1_8.fastMath = fastMath;
+            MathHelper_1_8.mathTable = mathTable;
             ViaRaytraceResult newRaytrace = raytrace(entity, prevYaw, prevPitch, yaw, pitch, partialTicks);
 
             if(bestRaytrace == null)
@@ -147,7 +147,7 @@ public class Raytrace_1_8to1_12_2 {
                 bestRaytrace = newRaytrace;
         }
 
-        MathHelper_1_8.fastMath = originalFastMath;
+        MathHelper_1_8.mathTable = originalMathTable;
 
         return bestRaytrace;
     }
