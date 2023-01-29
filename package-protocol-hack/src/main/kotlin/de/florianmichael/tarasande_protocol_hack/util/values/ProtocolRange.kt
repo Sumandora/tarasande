@@ -5,7 +5,7 @@ import de.florianmichael.tarasande_protocol_hack.util.extension.andNewer
 import de.florianmichael.tarasande_protocol_hack.util.extension.andOlder
 import de.florianmichael.tarasande_protocol_hack.util.extension.compareTo
 import de.florianmichael.vialoadingbase.api.version.ComparableProtocolVersion
-import de.florianmichael.vialoadingbase.api.version.ProtocolList
+import de.florianmichael.vialoadingbase.api.version.InternalProtocolList
 
 fun formatRange(vararg version: ProtocolRange) = version.joinToString(", ") { it.toString() }
 
@@ -19,8 +19,8 @@ class ProtocolRange(private val lowerBound: ProtocolVersion?, private val upperB
             error("Invalid protocol range")
         }
 
-        if (lowerBound != null) lowerBoundComparable = ProtocolList.fromProtocolVersion(lowerBound)
-        if (upperBound != null) upperBoundComparable = ProtocolList.fromProtocolVersion(upperBound)
+        if (lowerBound != null) lowerBoundComparable = InternalProtocolList.fromProtocolVersion(lowerBound)
+        if (upperBound != null) upperBoundComparable = InternalProtocolList.fromProtocolVersion(upperBound)
     }
 
     operator fun contains(protocolVersion: ComparableProtocolVersion): Boolean {

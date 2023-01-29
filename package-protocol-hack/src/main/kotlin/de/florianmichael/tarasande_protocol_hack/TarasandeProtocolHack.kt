@@ -6,12 +6,14 @@ import com.viaversion.viaversion.libs.gson.JsonArray
 import com.viaversion.viaversion.libs.gson.JsonObject
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
+import de.florianmichael.clampclient.injection.instrumentation_1_12_2.Raytrace_1_8to1_12_2
 import de.florianmichael.clampclient.injection.instrumentation_1_19_0.provider.CommandArgumentsProvider
 import de.florianmichael.clampclient.injection.instrumentation_c_0_30.ClassicItemSelectionScreen
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
 import de.florianmichael.tarasande_protocol_hack.definition.ItemReleaseVersionsDefinition
 import de.florianmichael.tarasande_protocol_hack.definition.PackFormatsDefinition
 import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.EntityDimensionsDefinition
+import de.florianmichael.tarasande_protocol_hack.platform.ViaBedrockPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.platform.ViaBetaPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.platform.ViaSnapshotPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.platform.betacraft.SidebarEntryBetaCraftServers
@@ -30,6 +32,9 @@ import de.florianmichael.tarasande_protocol_hack.tarasande.sidebar.SidebarEntryS
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues
 import de.florianmichael.tarasande_protocol_hack.util.values.ValueBooleanProtocol
 import de.florianmichael.tarasande_protocol_hack.util.values.command.ViaCommandHandlerTarasandeCommandHandler
+import de.florianmichael.tarasande_protocol_hack.xbox.XboxLiveSession
+import de.florianmichael.viabedrock.api.BedrockProtocolAccess
+import de.florianmichael.viabedrock.api.BedrockProtocols
 import de.florianmichael.viabeta.api.BetaProtocolAccess
 import de.florianmichael.viabeta.api.BetaProtocols
 import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.provider.ScreenStateProvider
@@ -41,7 +46,7 @@ import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.provider.Gam
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.ViaLoadingBase.ViaLoadingBaseBuilder
 import de.florianmichael.vialoadingbase.api.SubPlatform
-import de.florianmichael.vialoadingbase.api.version.ProtocolList
+import de.florianmichael.vialoadingbase.api.version.InternalProtocolList
 import de.florianmichael.viasnapshot.api.SnapshotProtocols
 import de.florianmichael.viasnapshot.protocol.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider
 import io.netty.channel.DefaultEventLoop
@@ -64,22 +69,25 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.Ma
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import su.mandora.event.EventDispatcher
+import java.net.InetSocketAddress
 
 class TarasandeProtocolHack {
 
     companion object {
         // Connection data
         var viaConnection: UserConnection? = null
+        var connectedAddress: InetSocketAddress? = null
 
         // Item splitter
         var displayItems: MutableList<Item> = ArrayList()
 
         fun update(protocol: ProtocolVersion, reloadProtocolHackValues: Boolean) {
             // Only reload if needed
-            val comparable = ProtocolList.fromProtocolVersion(protocol)
+            val comparable = InternalProtocolList.fromProtocolVersion(protocol)
 
             if (ViaLoadingBase.getTargetVersion() != protocol) {
-                displayItems = Registries.ITEM.filter { ItemReleaseVersionsDefinition.shouldDisplay(it, comparable) }.toMutableList()
+                displayItems = Registries.ITEM.filter { ItemReleaseVersionsDefinition.shouldDisplay(it, comparable) }
+                    .toMutableList()
                 EntityDimensionsDefinition.reload(comparable)
 
                 if (comparable.isOlderThan(BetaProtocols.a1_0_15)) {
@@ -99,13 +107,17 @@ class TarasandeProtocolHack {
         }
     }
 
-    private val subPlatformViaBeta = SubPlatform("ViaBeta", { SubPlatform.isClass("de.florianmichael.viabeta.base.ViaBetaPlatform") },
-        { ViaBetaPlatformImpl() }, BetaProtocols.getProtocols()
-    )
+    private val subPlatformViaBeta = SubPlatform("ViaBeta", { SubPlatform.isClass("de.florianmichael.viabeta.base.ViaBetaPlatform") }, { ViaBetaPlatformImpl() }) {
+        it.addAll(BetaProtocols.getProtocols())
+    }
 
-    private val subPlatformViaSnapshot = SubPlatform("ViaSnapshot", { SubPlatform.isClass("de.florianmichael.viasnapshot.base.ViaSnapshotPlatform") },
-        { ViaSnapshotPlatformImpl() }, SnapshotProtocols.getProtocols()
-    )
+    private val subPlatformViaSnapshot = SubPlatform("ViaSnapshot", { SubPlatform.isClass("de.florianmichael.viasnapshot.base.ViaSnapshotPlatform") }, { ViaSnapshotPlatformImpl() }) {
+        SnapshotProtocols.addProtocols(it)
+    }
+
+    private val subPlatformViaBedrock = SubPlatform("ViaBedrock", { SubPlatform.isClass("de.florianmichael.viabedrock.base.ViaBedrockPlatform") }, { ViaBedrockPlatformImpl() }) {
+        it.add(BedrockProtocols.VIA_PROTOCOL_VERSION)
+    }
 
     fun initialize() {
         // ViaVersion loading
@@ -158,17 +170,16 @@ class TarasandeProtocolHack {
                 // Via Version
                 it.use(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
                 it.use(HandItemProvider::class.java, FabricHandItemProvider())
-            }.viaManagerBuilderCreator {
-                it.commandHandler(ViaCommandHandlerTarasandeCommandHandler())
-            }.subPlatform(subPlatformViaBeta).subPlatform(subPlatformViaSnapshot).build()
+            }.viaManagerBuilderCreator { it.commandHandler(ViaCommandHandlerTarasandeCommandHandler()) }
+            .subPlatform(subPlatformViaBedrock, 0).subPlatform(subPlatformViaSnapshot).subPlatform(subPlatformViaBeta)
+            .build()
+
+        // Definition setup
+        PackFormatsDefinition.checkOutdated(SharedConstants.getProtocolVersion())
+        EntityDimensionsDefinition
 
         EventDispatcher.apply {
             add(EventSuccessfulLoad::class.java) {
-                // Definition setup
-                PackFormatsDefinition.checkOutdated(SharedConstants.getProtocolVersion())
-                EntityDimensionsDefinition
-                ClassicItemSelectionScreen.create(ProtocolList.fromProtocolVersion(BetaProtocols.c0_28toc0_30))
-
                 // Custom information list
                 ManagerInformation.apply {
                     add(
@@ -202,17 +213,19 @@ class TarasandeProtocolHack {
                 }
 
                 ProtocolHackValues /* Force-Load */
+
+                ClassicItemSelectionScreen.create(InternalProtocolList.fromProtocolVersion(BetaProtocols.c0_28toc0_30))
+                val accessToken = System.getProperty("BedrockKey")
+                if (accessToken != null) {
+                    println("Loaded Bedrock Key, started Xbox Session: $accessToken")
+                    MinecraftClient.getInstance().session = XboxLiveSession.create(accessToken)
+                }
             }
 
             // First-time load
             add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
-                update(
-                    ProtocolVersion.getProtocol(
-                        ManagerScreenExtension.get(
-                            ScreenExtensionSidebarMultiplayerScreen::class.java
-                        ).sidebar.get(SidebarEntrySelectionProtocolHack::class.java).version.value.toInt()
-                    ), false
-                )
+                println(ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(SidebarEntrySelectionProtocolHack::class.java).version.value.toInt())
+                update(InternalProtocolList.fromProtocolId(ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(SidebarEntrySelectionProtocolHack::class.java).version.value.toInt()), false)
             }
 
             // Via Connection tracker
@@ -228,6 +241,8 @@ class TarasandeProtocolHack {
                     if (ViaLoadingBase.getTargetVersion()
                             .isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30)
                     ) levelProgress = BetaProtocolAccess.getWorldLoading_C_0_30(viaConnection)
+                    if (ViaLoadingBase.getTargetVersion().version == BedrockProtocols.VIA_PROTOCOL_VERSION.version) levelProgress =
+                        BedrockProtocolAccess.getConnectionState_Bedrock_1_19_51(connectedAddress)
 
                     if (levelProgress != null) {
                         FontWrapper.text(

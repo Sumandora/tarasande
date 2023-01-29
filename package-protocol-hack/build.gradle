@@ -32,7 +32,13 @@ var libArray = [
         "com.github.FlorianMichael:ViaLoadingBase:${project.vialoadingbase_version}",
 
         "net.lenni0451.mcstructs:text:2.1.0",
-        "org.jsoup:jsoup:1.15.3"
+        "org.jsoup:jsoup:1.15.3",
+
+        // Nukkit -> CloudBurst, Co
+        "com.nukkitx.protocol:common:2.9.15-SNAPSHOT",
+        "com.nukkitx.protocol:bedrock-v560:2.9.15-SNAPSHOT",
+        "com.nimbusds:nimbus-jose-jwt:9.13",
+        "com.github.FlorianMichael:lmbda:3.x-SNAPSHOT"
 ]
 
 this.remapJar {
@@ -50,6 +56,9 @@ this.shadowJar {
         for (final def lib in libArray) {
             include(dependency(lib))
         }
+        include(dependency("com.nukkitx.protocol:.*"))
+        include(dependency("com.nukkitx.network:.*"))
+        include(dependency("com.nukkitx.fastutil:.*"))
     }
 }
 

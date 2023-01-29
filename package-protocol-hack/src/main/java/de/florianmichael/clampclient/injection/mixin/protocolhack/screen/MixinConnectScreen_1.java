@@ -26,6 +26,9 @@ import com.viaversion.viaversion.api.minecraft.ProfileKey;
 import de.florianmichael.clampclient.injection.mixininterface.IPublicKeyData_Protocol;
 import de.florianmichael.clampclient.injection.instrumentation_1_19_0.storage.ChatSession1_19_0;
 import de.florianmichael.clampclient.injection.instrumentation_1_19_0.storage.ChatSession1_19_2;
+import de.florianmichael.tarasande_protocol_hack.xbox.XboxLiveSession;
+import de.florianmichael.viabedrock.api.BedrockProtocols;
+import de.florianmichael.viabedrock.api.provider.AuthDataProvider;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.client.MinecraftClient;
@@ -70,6 +73,16 @@ public class MixinConnectScreen_1 {
 
     @Inject(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/Packet;)V", ordinal = 1, shift = At.Shift.BEFORE))
     public void setupChatSessions(CallbackInfo ci) {
+        if (ViaLoadingBase.getTargetVersion().getVersion() == BedrockProtocols.VIA_PROTOCOL_VERSION.getVersion()) {
+            if (MinecraftClient.getInstance().session instanceof XboxLiveSession) {
+                final UserConnection userConnection = TarasandeProtocolHack.Companion.getViaConnection();
+                if (userConnection != null) {
+                    final XboxLiveSession xboxLiveSession = (XboxLiveSession) MinecraftClient.getInstance().session;
+                    userConnection.put(new AuthDataProvider(userConnection, xboxLiveSession.getUsername(), xboxLiveSession.getChainData(), xboxLiveSession.getBedrockXuid(), xboxLiveSession.getKeyPair(), xboxLiveSession::signBytes));
+                }
+            }
+        }
+
         if (ViaLoadingBase.getTargetVersion().isOlderThan(ProtocolVersion.v1_19)) {
             return; // This disables the chat session emulation for all versions <= 1.18.2
         }
