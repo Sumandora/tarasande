@@ -15,7 +15,7 @@ class SidebarEntryProtocolHackValues : SidebarEntry("Protocol Hack Values", "Pro
             init {
                 "Protocol Hack Values".apply {
                     add(this, direction = Direction.RIGHT) {
-                        mc.setScreen(ScreenBetterOwnerValues(this, mc.currentScreen!!, ProtocolHackValues))
+                        onClick(it)
                     }
                 }
             }
