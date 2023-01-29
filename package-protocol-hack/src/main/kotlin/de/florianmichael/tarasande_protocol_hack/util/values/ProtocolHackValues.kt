@@ -8,13 +8,12 @@ import de.florianmichael.tarasande_protocol_hack.util.extension.andOlder
 import de.florianmichael.tarasande_protocol_hack.util.extension.rangeTo
 import de.florianmichael.tarasande_protocol_hack.util.extension.singleton
 import de.florianmichael.tarasande_protocol_hack.util.values.command.ViaDumpBypassSender
+import de.florianmichael.viabeta.api.BetaProtocols
 import de.florianmichael.viasnapshot.api.SnapshotProtocols
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
-
-import de.florianmichael.viabeta.api.BetaProtocols;
 
 object ProtocolHackValues {
 
@@ -58,13 +57,13 @@ object ProtocolHackValues {
     val sendIdlePacket = ValueBooleanProtocol("Send idle packet", ProtocolVersion.v1_8 .. BetaProtocols.r1_3_1tor1_3_2)
     val emulatePlayerMovement = ValueBooleanProtocol("Emulate player movement", ProtocolVersion.v1_8.andOlder())
     init {
-        object : ValueMode(this, "Emulate player movement: Fast math tables", false, *FastMath.values().map { it.toString() }.toTypedArray()) {
+        object : ValueMode(this, "Fast math tables", false, *FastMath.values().map { it.toString() }.toTypedArray()) {
             override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
                 MathHelper_1_8.fastMath = FastMath.values()[index]
             }
-            override fun isEnabled() = emulatePlayerMovement.value
         }
     }
+    val bruteforceRaytraceFastMathTables = ValueMode(this, "Bruteforce Raytrace: Fast math tables", true, *FastMath.values().map { it.toString() }.toTypedArray())
     val emulateArmorHud = ValueBooleanProtocol("Emulate armor hud", ProtocolVersion.v1_8.andOlder())
     val replaceAttributeModifiers = ValueBooleanProtocol("Replace attribute modifiers", ProtocolVersion.v1_8.andOlder())
 

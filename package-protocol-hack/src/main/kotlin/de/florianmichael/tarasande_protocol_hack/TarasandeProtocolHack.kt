@@ -6,7 +6,6 @@ import com.viaversion.viaversion.libs.gson.JsonArray
 import com.viaversion.viaversion.libs.gson.JsonObject
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
-import de.florianmichael.clampclient.injection.instrumentation_1_12_2.Raytrace_1_8to1_12_2
 import de.florianmichael.clampclient.injection.instrumentation_1_19_0.provider.CommandArgumentsProvider
 import de.florianmichael.clampclient.injection.instrumentation_c_0_30.ClassicItemSelectionScreen
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
@@ -163,13 +162,13 @@ class TarasandeProtocolHack {
                 it.commandHandler(ViaCommandHandlerTarasandeCommandHandler())
             }.subPlatform(subPlatformViaBeta).subPlatform(subPlatformViaSnapshot).build()
 
-        // Definition setup
-        PackFormatsDefinition.checkOutdated(SharedConstants.getProtocolVersion())
-        EntityDimensionsDefinition
-        ClassicItemSelectionScreen.create(ProtocolList.fromProtocolVersion(BetaProtocols.c0_28toc0_30))
-
         EventDispatcher.apply {
             add(EventSuccessfulLoad::class.java) {
+                // Definition setup
+                PackFormatsDefinition.checkOutdated(SharedConstants.getProtocolVersion())
+                EntityDimensionsDefinition
+                ClassicItemSelectionScreen.create(ProtocolList.fromProtocolVersion(BetaProtocols.c0_28toc0_30))
+
                 // Custom information list
                 ManagerInformation.apply {
                     add(

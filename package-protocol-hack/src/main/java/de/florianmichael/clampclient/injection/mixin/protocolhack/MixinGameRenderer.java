@@ -1,7 +1,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_12_2.model.ViaRaytraceResult;
 import de.florianmichael.clampclient.injection.instrumentation_1_12_2.Raytrace_1_8to1_12_2;
+import de.florianmichael.clampclient.injection.instrumentation_1_12_2.model.ViaRaytraceResult;
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
@@ -46,7 +46,11 @@ public class MixinGameRenderer {
             pitch = fakeRotation.getPitch();
         }
 
-        final ViaRaytraceResult raytrace = Raytrace_1_8to1_12_2.CLASS_WRAPPER.raytrace(entity2, prevYaw, prevPitch, yaw, pitch, tickDelta);
+        final ViaRaytraceResult raytrace;
+        if(ProtocolHackValues.INSTANCE.getBruteforceRaytraceFastMathTables().anySelected())
+            raytrace = Raytrace_1_8to1_12_2.CLASS_WRAPPER.bruteforceRaytrace(entity2, prevYaw, prevPitch, yaw, pitch, tickDelta);
+        else
+            raytrace = Raytrace_1_8to1_12_2.CLASS_WRAPPER.raytrace(entity2, prevYaw, prevPitch, yaw, pitch, tickDelta);
         client.crosshairTarget = raytrace.target();
         client.targetedEntity = raytrace.pointed();
 
