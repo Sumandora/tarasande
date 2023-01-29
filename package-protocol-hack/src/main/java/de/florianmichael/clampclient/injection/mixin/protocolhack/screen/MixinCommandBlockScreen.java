@@ -35,7 +35,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.screen;
 
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.block.entity.CommandBlockBlockEntity;
 import net.minecraft.client.gui.screen.ingame.CommandBlockScreen;
 import net.minecraft.client.gui.widget.CyclingButtonWidget;
@@ -61,7 +61,7 @@ public abstract class MixinCommandBlockScreen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void injectInit(CallbackInfo ci) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_8)) {
             modeButton.visible = false;
             conditionalModeButton.visible = false;
             redstoneTriggerButton.visible = false;

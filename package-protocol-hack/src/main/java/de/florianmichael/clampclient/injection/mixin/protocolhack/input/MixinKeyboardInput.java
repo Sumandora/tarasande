@@ -22,7 +22,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.input;
 
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
@@ -45,9 +45,9 @@ public class MixinKeyboardInput extends Input {
             return slowDown;
         }
 
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_13_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_13_2)) {
             return this.sneaking;
-        } else if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_14_4)) {
+        } else if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_14_4)) {
             return !MinecraftClient.getInstance().player.isSpectator() && (this.sneaking || slowDown);
         }
         return slowDown;

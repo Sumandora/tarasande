@@ -22,7 +22,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.block;
 
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FarmlandBlock;
@@ -54,7 +54,7 @@ public class MixinFarmlandBlock extends Block {
 
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     public void injectGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_9_3tor1_9_4)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_9_3)) {
             cir.setReturnValue(protocolhack_SHAPE_1_9_4);
         }
     }

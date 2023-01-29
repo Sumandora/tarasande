@@ -1,17 +1,20 @@
 package de.florianmichael.tarasande_protocol_hack.util.values
 
 import com.viaversion.viaversion.api.Via
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.MathHelper_1_8
 import de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.FastMath
 import de.florianmichael.tarasande_protocol_hack.util.extension.andOlder
 import de.florianmichael.tarasande_protocol_hack.util.extension.rangeTo
 import de.florianmichael.tarasande_protocol_hack.util.extension.singleton
 import de.florianmichael.tarasande_protocol_hack.util.values.command.ViaDumpBypassSender
-import de.florianmichael.vialoadingbase.util.VersionListEnum
+import de.florianmichael.viasnapshot.api.SnapshotProtocols
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
+
+import de.florianmichael.viabeta.api.BetaProtocols;
 
 object ProtocolHackValues {
 
@@ -20,7 +23,6 @@ object ProtocolHackValues {
     val filterItemGroups = ValueBoolean(this, "Filter item groups", true)
     val betaCraftAuth = ValueBoolean(this, "BetaCraft auth", true)
     val entityDimensionReplacements = ValueBoolean(this, "Entity dimension replacements", true)
-    val replaceRayTrace = ValueBoolean(this, "Replace ray trace", true)
 
     @Suppress("unused")
     val createViaDump = object : ValueButton(this, "Create via dump") {
@@ -31,29 +33,30 @@ object ProtocolHackValues {
     }
 
     // 1.19.2 -> 1.19
-    val disableSecureChatWarning = ValueBooleanProtocol("Disable secure chat warning", VersionListEnum.r1_19.andOlder())
+    val disableSecureChatWarning = ValueBooleanProtocol("Disable secure chat warning", ProtocolVersion.v1_19.andOlder())
 
     // 1.19 -> 1.18.2
-    val hideSignatureIndicator = ValueBooleanProtocol("Hide signature indicator", VersionListEnum.r1_18_2.andOlder())
-    val disableSequencing = ValueBooleanProtocol("Disable sequencing", VersionListEnum.r1_18_2.andOlder())
+    val hideSignatureIndicator = ValueBooleanProtocol("Hide signature indicator", ProtocolVersion.v1_18_2.andOlder())
+    val disableSequencing = ValueBooleanProtocol("Disable sequencing", ProtocolVersion.v1_18_2.andOlder())
 
     // 20w14 infinite -> 1.16
-    val emulateWrongPlayerAbilities = ValueBooleanProtocol("Emulate (wrong!) player abilities", VersionListEnum.s20w14infinite.singleton())
+    val emulateWrongPlayerAbilities = ValueBooleanProtocol("Emulate (wrong!) player abilities", SnapshotProtocols.s20w14infinite.singleton())
 
     // 1.14 -> 1.13.2
-    val smoothOutMerchantScreens = ValueBooleanProtocol("Smooth out merchant screens", VersionListEnum.r1_13_2.andOlder())
+    val smoothOutMerchantScreens = ValueBooleanProtocol("Smooth out merchant screens", ProtocolVersion.v1_13_2.andOlder())
 
     // 1.13 -> 1.12.2
-    val removeNewTabCompletion = ValueBooleanProtocol("Remove new tab completion", VersionListEnum.r1_12_2.andOlder())
-    val executeInputsInSync = ValueBooleanProtocol("Execute inputs in sync", VersionListEnum.r1_12_2.andOlder())
-    val emulateMouseInputs = ValueBooleanProtocol("Emulate mouse inputs", VersionListEnum.r1_12_2.andOlder())
-    val sneakInstant = ValueBooleanProtocol("Sneak instant", VersionListEnum.r1_8 .. VersionListEnum.r1_12_2)
+    val removeNewTabCompletion = ValueBooleanProtocol("Remove new tab completion", ProtocolVersion.v1_12_2.andOlder())
+    val executeInputsInSync = ValueBooleanProtocol("Execute inputs in sync", ProtocolVersion.v1_12_2.andOlder())
+    val emulateMouseInputs = ValueBooleanProtocol("Emulate mouse inputs", ProtocolVersion.v1_12_2.andOlder())
+    val sneakInstant = ValueBooleanProtocol("Sneak instant", ProtocolVersion.v1_8 .. ProtocolVersion.v1_12_2)
+    val replaceRayTrace = ValueBooleanProtocol("Replace ray trace", ProtocolVersion.v1_12_2.andOlder())
 
     // 1.9 -> 1.8.x
-    val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", VersionListEnum.r1_8.andOlder())
-    val emulateSignGUIModification = ValueBooleanProtocol("Emulate sign gui modification", VersionListEnum.r1_8.andOlder())
-    val sendIdlePacket = ValueBooleanProtocol("Send idle packet", VersionListEnum.r1_8 .. VersionListEnum.r1_3_1tor1_3_2)
-    val emulatePlayerMovement = ValueBooleanProtocol("Emulate player movement", VersionListEnum.r1_8.andOlder())
+    val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", ProtocolVersion.v1_8.andOlder())
+    val emulateSignGUIModification = ValueBooleanProtocol("Emulate sign gui modification", ProtocolVersion.v1_8.andOlder())
+    val sendIdlePacket = ValueBooleanProtocol("Send idle packet", ProtocolVersion.v1_8 .. BetaProtocols.r1_3_1tor1_3_2)
+    val emulatePlayerMovement = ValueBooleanProtocol("Emulate player movement", ProtocolVersion.v1_8.andOlder())
     init {
         object : ValueMode(this, "Emulate player movement: Fast math tables", false, *FastMath.values().map { it.toString() }.toTypedArray()) {
             override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
@@ -62,15 +65,15 @@ object ProtocolHackValues {
             override fun isEnabled() = emulatePlayerMovement.value
         }
     }
-    val emulateArmorHud = ValueBooleanProtocol("Emulate armor hud", VersionListEnum.r1_8.andOlder())
-    val replaceAttributeModifiers = ValueBooleanProtocol("Replace attribute modifiers", VersionListEnum.r1_8.andOlder())
+    val emulateArmorHud = ValueBooleanProtocol("Emulate armor hud", ProtocolVersion.v1_8.andOlder())
+    val replaceAttributeModifiers = ValueBooleanProtocol("Replace attribute modifiers", ProtocolVersion.v1_8.andOlder())
 
     // 1.8 -> 1.7
-    val replaceSneaking = ValueBooleanProtocol("Replace sneaking", VersionListEnum.r1_7_6tor1_7_10.andOlder())
-    val adjustLongSneaking = ValueBooleanProtocol("Adjust long sneaking", VersionListEnum.r1_7_6tor1_7_10.andOlder())
+    val replaceSneaking = ValueBooleanProtocol("Replace sneaking", ProtocolVersion.v1_7_6.andOlder())
+    val adjustLongSneaking = ValueBooleanProtocol("Adjust long sneaking", ProtocolVersion.v1_7_6.andOlder())
 
     // a1_0_15 -> c0_28toc0_30
-    val replaceCreativeInventory = ValueBooleanProtocol("Replace creative inventory", VersionListEnum.c0_28toc0_30.andOlder())
+    val replaceCreativeInventory = ValueBooleanProtocol("Replace creative inventory", BetaProtocols.c0_28toc0_30.andOlder())
 }
 
 open class ValueBooleanProtocol(name: String, vararg val version: ProtocolRange) : ValueBoolean(ProtocolHackValues, "$name (" + formatRange(*version) + ")", false)

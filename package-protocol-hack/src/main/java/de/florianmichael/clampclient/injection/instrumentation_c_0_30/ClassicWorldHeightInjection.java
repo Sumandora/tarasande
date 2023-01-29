@@ -12,11 +12,11 @@ import com.viaversion.viaversion.libs.opennbt.tag.builtin.ListTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.Tag;
 import com.viaversion.viaversion.protocols.protocol1_17to1_16_4.Protocol1_17To1_16_4;
 import com.viaversion.viaversion.protocols.protocol1_17to1_16_4.types.Chunk1_17Type;
+import de.florianmichael.viabeta.api.BetaProtocols;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.model.ClassicLevel;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicWorldHeightProvider;
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.storage.ClassicLevelStorage;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -32,7 +32,7 @@ public class ClassicWorldHeightInjection {
                     parentRemapper.remap(wrapper);
                     if (wrapper.isCancelled()) return;
 
-                    if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.c0_28toc0_30)) {
+                    if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30)) {
                         for (Tag dimension : wrapper.get(Type.NBT, 0).<CompoundTag>get("minecraft:dimension_type").<ListTag>get("value")) {
                             changeDimensionTagHeight(wrapper.user(), ((CompoundTag) dimension).get("element"));
                         }
@@ -51,7 +51,7 @@ public class ClassicWorldHeightInjection {
                     parentRemapper.remap(wrapper);
                     if (wrapper.isCancelled()) return;
 
-                    if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.c0_28toc0_30)) {
+                    if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30)) {
                         changeDimensionTagHeight(wrapper.user(), wrapper.get(Type.NBT, 0));
                     }
                 });
@@ -67,7 +67,7 @@ public class ClassicWorldHeightInjection {
                     parentRemapper.remap(wrapper);
                     if (wrapper.isCancelled()) return;
 
-                    if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.c0_28toc0_30)) {
+                    if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30)) {
                         wrapper.resetReader();
                         final Chunk chunk = wrapper.read(new Chunk1_17Type(16));
                         wrapper.write(new Chunk1_17Type(chunk.getSections().length), chunk);
@@ -162,7 +162,7 @@ public class ClassicWorldHeightInjection {
             @Override
             public void registerMap() {
                 handler(wrapper -> {
-                    if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.c0_28toc0_30)) {
+                    if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30)) {
                         classicLightHandler.remap(wrapper);
                     } else {
                         parentRemapper.remap(wrapper);

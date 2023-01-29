@@ -2,7 +2,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
 import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.MathHelper_1_8;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,7 +15,7 @@ public class MixinVec3d {
 
     @Redirect(method = "distanceTo", at = @At(value = "INVOKE", target = "Ljava/lang/Math;sqrt(D)D"))
     public double onSqrt(double a) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_12_2)) {
             return (double) MathHelper_1_8.sqrt_double(a);
         }
 
@@ -24,7 +24,7 @@ public class MixinVec3d {
 
     @Inject(method = "fromPolar(FF)Lnet/minecraft/util/math/Vec3d;", at = @At("HEAD"), cancellable = true)
     private static void fromPolar(float pitch, float yaw, CallbackInfoReturnable<Vec3d> cir) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_12_2)) {
             float f = MathHelper_1_8.cos(-yaw * 0.017453292F - (float)Math.PI);
             float f1 = MathHelper_1_8.sin(-yaw * 0.017453292F - (float)Math.PI);
             float f2 = -MathHelper_1_8.cos(-pitch * 0.017453292F);

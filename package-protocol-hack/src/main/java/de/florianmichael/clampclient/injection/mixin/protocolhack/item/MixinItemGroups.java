@@ -1,7 +1,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.item;
 
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
+import de.florianmichael.vialoadingbase.api.version.ComparableProtocolVersion;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.resource.featuretoggle.FeatureSet;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinItemGroups {
 
     @Unique
-    private static VersionListEnum protocolhack_version;
+    private static ComparableProtocolVersion protocolhack_version;
 
     @Redirect(method = "displayParametersMatch", at = @At(value = "INVOKE", target = "Lnet/minecraft/resource/featuretoggle/FeatureSet;equals(Ljava/lang/Object;)Z"))
     private static boolean adjustLastVersionMatchCheck(FeatureSet instance, Object o) {

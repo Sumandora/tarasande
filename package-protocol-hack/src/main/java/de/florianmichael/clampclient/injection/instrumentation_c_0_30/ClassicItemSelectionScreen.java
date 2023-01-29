@@ -1,7 +1,7 @@
 package de.florianmichael.clampclient.injection.instrumentation_c_0_30;
 
-import com.viaversion.viaversion.api.connection.UserConnection;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
+import de.florianmichael.viabeta.api.BetaProtocols;
+import de.florianmichael.vialoadingbase.api.version.ComparableProtocolVersion;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -17,7 +17,7 @@ import java.util.List;
 @SuppressWarnings("DataFlowIssue")
 public class ClassicItemSelectionScreen extends Screen {
 
-    public static ClassicItemSelectionScreen INSTANCE = new ClassicItemSelectionScreen();
+    public static ClassicItemSelectionScreen INSTANCE;
 
     private final static int MAX_ROW_DIVIDER = 9;
     private final static int ITEM_XY_BOX_DIMENSION_CLASSIC = 25;
@@ -27,11 +27,16 @@ public class ClassicItemSelectionScreen extends Screen {
     public Item[][] itemGrid = null;
     public ItemStack selectedItem = null;
 
+    public static void create(final ComparableProtocolVersion version) {
+        ClassicItemSelectionScreen.INSTANCE = new ClassicItemSelectionScreen();
+        ClassicItemSelectionScreen.INSTANCE.reload(version);
+    }
+
     public ClassicItemSelectionScreen() {
         super(Text.literal("Classic item selection"));
     }
 
-    public void reload(final VersionListEnum version) {
+    public void reload(final ComparableProtocolVersion version) {
         final List<Item> allowedItems = new ArrayList<>();
         allowedItems.add(Items.OAK_WOOD);
         allowedItems.add(Items.OAK_PLANKS);
@@ -53,9 +58,9 @@ public class ClassicItemSelectionScreen extends Screen {
         allowedItems.add(Items.OAK_SAPLING);
         allowedItems.add(Items.BOOKSHELF);
         allowedItems.add(Items.TNT);
-        if (version.isNewerThan(VersionListEnum.c0_0_19a_06)) {
+        if (version.isNewerThan(BetaProtocols.c0_0_19a_06)) {
             allowedItems.add(Items.SPONGE);
-            if (version.isNewerThan(VersionListEnum.c0_0_20ac0_27)) {
+            if (version.isNewerThan(BetaProtocols.c0_0_20ac0_27)) {
                 allowedItems.add(Items.WHITE_WOOL);
                 allowedItems.add(Items.ORANGE_WOOL);
                 allowedItems.add(Items.MAGENTA_WOOL);
@@ -77,7 +82,7 @@ public class ClassicItemSelectionScreen extends Screen {
                 allowedItems.add(Items.POPPY);
                 allowedItems.add(Items.DANDELION);
                 allowedItems.add(Items.RED_MUSHROOM);
-                if (version == VersionListEnum.c0_30cpe) {
+                if (version == BetaProtocols.c0_30cpe) {
                     allowedItems.add(Items.MAGMA_BLOCK);
                     allowedItems.add(Items.QUARTZ_PILLAR);
                     allowedItems.add(Items.SANDSTONE_STAIRS);

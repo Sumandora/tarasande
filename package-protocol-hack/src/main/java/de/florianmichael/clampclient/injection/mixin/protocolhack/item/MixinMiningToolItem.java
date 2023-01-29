@@ -35,7 +35,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.item;
 
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
@@ -51,7 +51,7 @@ public class MixinMiningToolItem {
     @Inject(method = "getMiningSpeedMultiplier", at = @At("RETURN"), cancellable = true)
     public void changeHoeEffectiveBlocks(ItemStack stack, BlockState state, CallbackInfoReturnable<Float> cir) {
         //noinspection ConstantValue
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_15_2) && (Object) this instanceof HoeItem) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_15_2) && (Object) this instanceof HoeItem) {
             cir.setReturnValue(1.0F);
         }
     }

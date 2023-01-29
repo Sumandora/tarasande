@@ -36,7 +36,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.item;
 
 import com.google.common.collect.ImmutableSet;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -69,7 +69,7 @@ public abstract class MixinPickaxeItem extends MiningToolItem {
 
     @Override
     public boolean isSuitableFor(BlockState state) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_16_4tor1_16_5)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_16_4)) {
             Block block = state.getBlock();
             int i = this.getMaterial().getMiningLevel();
             if (block == Blocks.OBSIDIAN) {
@@ -87,9 +87,9 @@ public abstract class MixinPickaxeItem extends MiningToolItem {
 
     @Override
     public float getMiningSpeedMultiplier(ItemStack stack, BlockState state) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_15_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_15_2)) {
             return protocolhack_EFFECTIVE_MATERIALS.contains(state.getMaterial()) || protocolhack_EFFECTIVE_BLOCKS_1152.contains(state.getBlock()) ? this.miningSpeed : 1.0F;
-        } else if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_16_4tor1_16_5)) {
+        } else if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_16_4)) {
             return protocolhack_EFFECTIVE_MATERIALS.contains(state.getMaterial()) || protocolhack_EFFECTIVE_BLOCKS_1165.contains(state.getBlock()) ? this.miningSpeed : 1.0F;
         }
         return super.getMiningSpeedMultiplier(stack, state);

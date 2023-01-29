@@ -1,7 +1,8 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.screen;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import de.florianmichael.viabeta.api.BetaProtocols;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameModeSelectionScreen;
 import org.spongepowered.asm.mixin.Final;
@@ -23,7 +24,7 @@ public class MixinGameModeSelectionScreen_GameModeSelection {
 
     @Inject(method = "getCommand", at = @At("HEAD"), cancellable = true)
     private void oldCommand(CallbackInfoReturnable<String> cir) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_2_4tor1_2_5)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(BetaProtocols.r1_2_4tor1_2_5)) {
             cir.setReturnValue(
                     "gamemode " + MinecraftClient.getInstance().getSession().getUsername() + ' ' + switch (((Enum<?>)(Object)this).ordinal()) {
                         case 0, 3 -> 1;
@@ -36,11 +37,11 @@ public class MixinGameModeSelectionScreen_GameModeSelection {
 
     @Inject(method = "next", at = @At("HEAD"), cancellable = true)
     public void unwrapGameModes(CallbackInfoReturnable<Optional<GameModeSelectionScreen.GameModeSelection>> cir) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThan(VersionListEnum.r1_8)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThan(ProtocolVersion.v1_8)) {
             switch ((GameModeSelectionScreen.GameModeSelection)(Object)this) {
                 case CREATIVE -> cir.setReturnValue(Optional.of(SURVIVAL));
                 case SURVIVAL -> {
-                    if (ViaLoadingBase.getTargetVersion().isOlderThan(VersionListEnum.r1_2_4tor1_2_5)) {
+                    if (ViaLoadingBase.getTargetVersion().isOlderThan(BetaProtocols.r1_2_4tor1_2_5)) {
                         cir.setReturnValue(Optional.of(CREATIVE));
                     } else {
                         cir.setReturnValue(Optional.of(GameModeSelectionScreen.GameModeSelection.ADVENTURE));

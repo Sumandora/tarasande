@@ -34,8 +34,8 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.packet;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.network.PacketByteBuf;
@@ -61,7 +61,7 @@ public class MixinUpdatePlayerAbilitiesC2SPacket {
 
         byte b = 0;
 
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_15_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_15_2)) {
             if (this.flying) b = (byte) (b | 2); // Minecraft
 
             if (abilities.invulnerable) b |= 1;

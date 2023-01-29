@@ -35,7 +35,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.screen;
 
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -65,14 +65,14 @@ public class MixinDownloadingTerrainScreen extends Screen {
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     public void injectTick(CallbackInfo ci) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_1)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_12_1)) {
             protocolhack_tickCounter++;
 
             if (protocolhack_tickCounter % 20 == 0) {
                 MinecraftClient.getInstance().getNetworkHandler().sendPacket(new KeepAliveC2SPacket(0));
             }
         }
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_19_1tor1_19_2)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_19_1)) {
             final boolean isTimeOver = this.closeOnNextTick || System.currentTimeMillis() > this.loadStartTime + 2000L;
 
             if (isTimeOver && this.client != null && this.client.player != null) {

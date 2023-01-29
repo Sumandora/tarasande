@@ -31,7 +31,7 @@ import de.florianmichael.clampclient.injection.mixininterface.IMouse_Protocol;
 import de.florianmichael.tarasande_protocol_hack.injection.accessor.IEventScreenInput;
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleInventoryMoveSettingsKt;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -73,7 +73,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient_Protocol 
             slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;interactItem(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;")),
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/HeldItemRenderer;resetEquipProgress(Lnet/minecraft/util/Hand;)V", ordinal = 0))
     private void redirectDoItemUse(HeldItemRenderer heldItemRenderer, Hand hand) {
-        if (ViaLoadingBase.getTargetVersion().isNewerThan(VersionListEnum.r1_8) || !(player.getStackInHand(hand).getItem() instanceof SwordItem)) {
+        if (ViaLoadingBase.getTargetVersion().isNewerThan(ProtocolVersion.v1_8) || !(player.getStackInHand(hand).getItem() instanceof SwordItem)) {
             heldItemRenderer.resetEquipProgress(hand);
         }
     }
@@ -82,7 +82,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient_Protocol 
             slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;interactEntity(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;")),
             at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ActionResult;isAccepted()Z", ordinal = 0))
     private boolean preventGenericInteract(ActionResult instance) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_7_6tor1_7_10)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_7_6)) {
             return true;
         }
 
@@ -94,7 +94,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient_Protocol 
      */
     @Redirect(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;attackCooldown:I", ordinal = 1))
     public int unwrapOperation(MinecraftClient instance) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_8)) {
             return 0;
         }
         return attackCooldown;
@@ -102,7 +102,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient_Protocol 
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;handleInputEvents()V", shift = At.Shift.BEFORE))
     public void updateCooldown(CallbackInfo ci) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_8)) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_8)) {
             if (this.attackCooldown > 0) {
                 --this.attackCooldown;
             }
@@ -138,7 +138,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient_Protocol 
     private void onInventoryKeyPressed(CallbackInfo ci) throws Exception {
         final UserConnection viaConnection = TarasandeProtocolHack.Companion.getViaConnection();
 
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_11_1to1_11_2) && viaConnection != null) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_11_1) && viaConnection != null) {
             if (ManagerModule.INSTANCE.get(ModuleInventoryMove.class).getEnabled().getValue() && ModuleInventoryMoveSettingsKt.cancelOpenPacket.getValue()) {
                 return;
             }

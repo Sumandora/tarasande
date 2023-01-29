@@ -22,7 +22,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.item;
 
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import de.florianmichael.vialoadingbase.util.VersionListEnum;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.util.math.BlockPos;
@@ -40,10 +40,10 @@ public class MixinItemPlacementContext {
         ItemPlacementContext self = (ItemPlacementContext) (Object) this;
 
         PlayerEntity player = self.getPlayer();
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(VersionListEnum.r1_12_2) && player != null) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_12_2) && player != null) {
             BlockPos placementPos = self.getBlockPos();
             // don't center the BlockPos on 1.10 and below
-            final double blockPosCenterFactor = ViaLoadingBase.getTargetVersion().isNewerThan(VersionListEnum.r1_10) ? 0.5 : 0;
+            final double blockPosCenterFactor = ViaLoadingBase.getTargetVersion().isNewerThan(ProtocolVersion.v1_10) ? 0.5 : 0;
 
             if (Math.abs(player.getX() - (placementPos.getX() + blockPosCenterFactor)) < 2 && Math.abs(player.getZ() - (placementPos.getZ() + blockPosCenterFactor)) < 2) {
                 final double eyeY = player.getY() + player.getEyeHeight(player.getPose());

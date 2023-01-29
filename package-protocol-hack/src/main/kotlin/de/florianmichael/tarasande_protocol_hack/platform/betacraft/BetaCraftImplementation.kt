@@ -1,7 +1,7 @@
 package de.florianmichael.tarasande_protocol_hack.platform.betacraft
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.vialoadingbase.ViaLoadingBase
-import de.florianmichael.vialoadingbase.util.VersionListEnum
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntry
@@ -10,7 +10,7 @@ import org.jsoup.Jsoup
 import java.net.URL
 
 // Defines a Beta-Craft Server
-class BetaCraftServ(val displayName: String, val onlineMode: Boolean, val address: String, val version: VersionListEnum) {
+class BetaCraftServ(val displayName: String, val onlineMode: Boolean, val address: String, val version: ProtocolVersion) {
 
     companion object {
         fun fromJoinString(displayName: String, onlineMode: Boolean, joinString: String): BetaCraftServ? {
@@ -18,9 +18,9 @@ class BetaCraftServ(val displayName: String, val onlineMode: Boolean, val addres
                 val joinStringAsArray = joinString.split("/")
 
                 if (joinStringAsArray[4].toIntOrNull() != null) {
-                    BetaCraftServ(displayName, onlineMode, joinStringAsArray[2], VersionListEnum.fromProtocolId(joinStringAsArray[4].toInt()))
+                    BetaCraftServ(displayName, onlineMode, joinStringAsArray[2], ProtocolVersion.getProtocol(joinStringAsArray[4].toInt()))
                 } else {
-                    BetaCraftServ(displayName, onlineMode, joinStringAsArray[2], VersionListEnum.UNKNOWN)
+                    BetaCraftServ(displayName, onlineMode, joinStringAsArray[2], ProtocolVersion.unknown)
                 }
             } catch (_: Exception) {
                 null
@@ -60,7 +60,7 @@ class SidebarEntryBetaCraftServers : SidebarEntry("BetaCraft Servers", "Protocol
                     val joinString = onlineClass.attr("href")
                     val model = BetaCraftServ.fromJoinString(element.html(), onlineMode, joinString)
                     if (model == null) {
-                        ViaLoadingBase.instance().logger().severe("Skipped BetaCraft Model with invalid data: " + joinString + " named: " + element.html())
+                        ViaLoadingBase.LOGGER.severe("Skipped BetaCraft Model with invalid data: " + joinString + " named: " + element.html())
                         continue
                     }
 
