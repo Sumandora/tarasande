@@ -6,11 +6,33 @@ import com.viaversion.viaversion.libs.gson.JsonArray
 import com.viaversion.viaversion.libs.gson.JsonObject
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
-import de.florianmichael.clampclient.injection.instrumentation_1_12_2.raytrace.RaytraceDefinition
+import de.florianmichael.clampclient.injection.instrumentation_1_12_2.Raytrace_1_8to1_12_2
+import de.florianmichael.clampclient.injection.instrumentation_1_19_0.provider.CommandArgumentsProvider
 import de.florianmichael.clampclient.injection.instrumentation_c_0_30.ClassicItemSelectionScreen
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
-import de.florianmichael.clampclient.injection.instrumentation_1_19_0.provider.CommandArgumentsProvider
+import de.florianmichael.tarasande_protocol_hack.definition.ItemReleaseVersionsDefinition
+import de.florianmichael.tarasande_protocol_hack.definition.PackFormatsDefinition
+import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.EntityDimensionsDefinition
+import de.florianmichael.tarasande_protocol_hack.platform.ViaBetaPlatformImpl
+import de.florianmichael.tarasande_protocol_hack.platform.ViaSnapshotPlatformImpl
+import de.florianmichael.tarasande_protocol_hack.platform.betacraft.SidebarEntryBetaCraftServers
+import de.florianmichael.tarasande_protocol_hack.provider.clamp.FabricCommandArgumentsProvider
+import de.florianmichael.tarasande_protocol_hack.provider.viabeta.*
+import de.florianmichael.tarasande_protocol_hack.provider.viasnapshot.FabricPlayerAbilitiesProvider
+import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
+import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
+import de.florianmichael.tarasande_protocol_hack.tarasande.information.*
+import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleEveryItemOnArmor
+import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleInventoryMove
+import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleNoWeb
+import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleTickBaseManipulation
+import de.florianmichael.tarasande_protocol_hack.tarasande.sidebar.SidebarEntryProtocolHackValues
+import de.florianmichael.tarasande_protocol_hack.tarasande.sidebar.SidebarEntrySelectionProtocolHack
+import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues
+import de.florianmichael.tarasande_protocol_hack.util.values.ValueBooleanProtocol
+import de.florianmichael.tarasande_protocol_hack.util.values.command.ViaCommandHandlerTarasandeCommandHandler
 import de.florianmichael.viabeta.api.BetaProtocolAccess
+import de.florianmichael.viabeta.api.BetaProtocols
 import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.provider.ScreenStateProvider
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicMPPassProvider
 import de.florianmichael.viabeta.protocol.classic.protocola1_0_15toc0_28_30.provider.ClassicWorldHeightProvider
@@ -18,6 +40,11 @@ import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.provider.OldA
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.provider.EncryptionProvider
 import de.florianmichael.viabeta.protocol.protocol1_7_6_10to1_7_2_5.provider.GameProfileFetcher
 import de.florianmichael.vialoadingbase.ViaLoadingBase
+import de.florianmichael.vialoadingbase.ViaLoadingBase.ViaLoadingBaseBuilder
+import de.florianmichael.vialoadingbase.api.SubPlatform
+import de.florianmichael.vialoadingbase.api.version.ProtocolList
+import de.florianmichael.viasnapshot.api.SnapshotProtocols
+import de.florianmichael.viasnapshot.protocol.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider
 import io.netty.channel.DefaultEventLoop
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.SharedConstants
@@ -37,33 +64,6 @@ import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Manage
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
-import de.florianmichael.tarasande_protocol_hack.definition.PackFormatsDefinition
-import de.florianmichael.tarasande_protocol_hack.platform.betacraft.SidebarEntryBetaCraftServers
-import de.florianmichael.tarasande_protocol_hack.provider.clamp.FabricCommandArgumentsProvider
-import de.florianmichael.tarasande_protocol_hack.provider.viabeta.*
-import de.florianmichael.tarasande_protocol_hack.provider.viasnapshot.FabricPlayerAbilitiesProvider
-import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
-import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
-import de.florianmichael.tarasande_protocol_hack.definition.ItemReleaseVersionsDefinition
-import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.EntityDimensionsDefinition
-import de.florianmichael.tarasande_protocol_hack.platform.ViaBetaPlatformImpl
-import de.florianmichael.tarasande_protocol_hack.platform.ViaSnapshotPlatformImpl
-import de.florianmichael.tarasande_protocol_hack.tarasande.information.*
-import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleEveryItemOnArmor
-import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleInventoryMove
-import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleNoWeb
-import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleTickBaseManipulation
-import de.florianmichael.tarasande_protocol_hack.tarasande.sidebar.SidebarEntryProtocolHackValues
-import de.florianmichael.tarasande_protocol_hack.tarasande.sidebar.SidebarEntrySelectionProtocolHack
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues
-import de.florianmichael.tarasande_protocol_hack.util.values.ValueBooleanProtocol
-import de.florianmichael.tarasande_protocol_hack.util.values.command.ViaCommandHandlerTarasandeCommandHandler
-import de.florianmichael.viabeta.api.BetaProtocols
-import de.florianmichael.vialoadingbase.ViaLoadingBase.ViaLoadingBaseBuilder
-import de.florianmichael.vialoadingbase.api.SubPlatform
-import de.florianmichael.vialoadingbase.api.version.ProtocolList
-import de.florianmichael.viasnapshot.api.SnapshotProtocols
-import de.florianmichael.viasnapshot.protocol.protocol1_16to20w14infinite.provider.PlayerAbilitiesProvider
 import su.mandora.event.EventDispatcher
 
 class TarasandeProtocolHack {
@@ -82,7 +82,6 @@ class TarasandeProtocolHack {
             if (ViaLoadingBase.getTargetVersion() != protocol) {
                 displayItems = Registries.ITEM.filter { ItemReleaseVersionsDefinition.shouldDisplay(it, comparable) }.toMutableList()
                 EntityDimensionsDefinition.reload(comparable)
-                RaytraceDefinition.reload(comparable)
 
                 if (comparable.isOlderThan(BetaProtocols.a1_0_15)) {
                     ClassicItemSelectionScreen.INSTANCE.reload(comparable)
@@ -167,6 +166,7 @@ class TarasandeProtocolHack {
         // Definition setup
         PackFormatsDefinition.checkOutdated(SharedConstants.getProtocolVersion())
         EntityDimensionsDefinition
+        ClassicItemSelectionScreen.create(ProtocolList.fromProtocolVersion(BetaProtocols.c0_28toc0_30))
 
         EventDispatcher.apply {
             add(EventSuccessfulLoad::class.java) {

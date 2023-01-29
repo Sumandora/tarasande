@@ -17,7 +17,7 @@ import java.util.List;
 @SuppressWarnings("DataFlowIssue")
 public class ClassicItemSelectionScreen extends Screen {
 
-    public static ClassicItemSelectionScreen INSTANCE = new ClassicItemSelectionScreen();
+    public static ClassicItemSelectionScreen INSTANCE;
 
     private final static int MAX_ROW_DIVIDER = 9;
     private final static int ITEM_XY_BOX_DIMENSION_CLASSIC = 25;
@@ -26,6 +26,11 @@ public class ClassicItemSelectionScreen extends Screen {
 
     public Item[][] itemGrid = null;
     public ItemStack selectedItem = null;
+
+    public static void create(final ComparableProtocolVersion version) {
+        ClassicItemSelectionScreen.INSTANCE = new ClassicItemSelectionScreen();
+        ClassicItemSelectionScreen.INSTANCE.reload(version);
+    }
 
     public ClassicItemSelectionScreen() {
         super(Text.literal("Classic item selection"));

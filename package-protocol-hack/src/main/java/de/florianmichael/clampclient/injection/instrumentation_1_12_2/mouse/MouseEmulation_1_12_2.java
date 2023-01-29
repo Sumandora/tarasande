@@ -1,6 +1,5 @@
 package de.florianmichael.clampclient.injection.instrumentation_1_12_2.mouse;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_12_2.SensitivityCalculations;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;

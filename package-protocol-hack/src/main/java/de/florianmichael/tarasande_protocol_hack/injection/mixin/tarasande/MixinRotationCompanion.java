@@ -1,6 +1,6 @@
 package de.florianmichael.tarasande_protocol_hack.injection.mixin.tarasande;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_12_2.SensitivityCalculations;
+import de.florianmichael.clampclient.injection.instrumentation_1_12_2.mouse.SensitivityCalculations;
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import kotlin.Pair;
 import net.minecraft.client.MinecraftClient;

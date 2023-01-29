@@ -1,8 +1,7 @@
-package de.florianmichael.clampclient.injection.instrumentation_1_12_2.raytrace.impl;
+package de.florianmichael.clampclient.injection.instrumentation_1_12_2;
 
 import com.google.common.base.Predicates;
 import de.florianmichael.clampclient.injection.instrumentation_1_12_2.model.ViaRaytraceResult;
-import de.florianmichael.clampclient.injection.instrumentation_1_12_2.raytrace.RaytraceBase;
 import de.florianmichael.clampclient.injection.mixininterface.IBox_Protocol;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -22,10 +21,9 @@ import su.mandora.event.EventDispatcher;
 
 import java.util.List;
 
-public class Raytrace_1_8to1_12_2 extends RaytraceBase {
-    public static final Raytrace_1_8to1_12_2 SELF = new Raytrace_1_8to1_12_2();
+public class Raytrace_1_8to1_12_2 {
+    public static final Raytrace_1_8to1_12_2 CLASS_WRAPPER = new Raytrace_1_8to1_12_2();
 
-    @Override
     public Vec3d getPositionEyes(Entity entity, float partialTicks) {
         if (partialTicks == 1.0F) {
             return new Vec3d(entity.getX(), entity.getY() + (double)entity.getStandingEyeHeight(), entity.getZ());
@@ -43,7 +41,6 @@ public class Raytrace_1_8to1_12_2 extends RaytraceBase {
         return entity.world.raycast(new RaycastContext(vec3d, vec3d3, RaycastContext.ShapeType.OUTLINE, includeFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE, entity));
     }
 
-    @Override
     public ViaRaytraceResult raytrace(Entity entity, float prevYaw, float prevPitch, float yaw, float pitch, float partialTicks) {
         final MinecraftClient mc = MinecraftClient.getInstance();
         final IGameRenderer gameRendererAccessor = (IGameRenderer) mc.gameRenderer;

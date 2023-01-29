@@ -1,6 +1,6 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.screen.widget;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_12_2.SensitivityCalculations;
+import de.florianmichael.clampclient.injection.instrumentation_1_12_2.mouse.SensitivityCalculations;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.OptionSliderWidget;

@@ -21,8 +21,7 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_12_2.raytrace.RaytraceBase;
-import de.florianmichael.clampclient.injection.instrumentation_1_12_2.raytrace.RaytraceDefinition;
+import de.florianmichael.clampclient.injection.instrumentation_1_12_2.Raytrace_1_8to1_12_2;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.LegacyConstants_1_8;
 import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
@@ -51,8 +50,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.logging.Level;
 
 @SuppressWarnings("ConstantValue")
 @Mixin(Entity.class)
@@ -143,10 +140,7 @@ public abstract class MixinEntity implements IEntity_Protocol {
     public void onGetCameraPosVec(float tickDelta, CallbackInfoReturnable<Vec3d> cir) {
         if (!ProtocolHackValues.INSTANCE.getReplaceRayTrace().getValue()) return;
 
-        final RaytraceBase raytraceBase = RaytraceDefinition.getClassWrapper();
-        if (raytraceBase == null) return;
-
-        cir.setReturnValue(raytraceBase.getPositionEyes((Entity) (Object) this, tickDelta));
+        cir.setReturnValue(Raytrace_1_8to1_12_2.CLASS_WRAPPER.getPositionEyes((Entity) (Object) this, tickDelta));
     }
 
     @Inject(method = "getVelocityAffectingPos", at = @At("HEAD"), cancellable = true)

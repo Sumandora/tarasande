@@ -23,7 +23,6 @@ object ProtocolHackValues {
     val filterItemGroups = ValueBoolean(this, "Filter item groups", true)
     val betaCraftAuth = ValueBoolean(this, "BetaCraft auth", true)
     val entityDimensionReplacements = ValueBoolean(this, "Entity dimension replacements", true)
-    val replaceRayTrace = ValueBoolean(this, "Replace ray trace", true)
 
     @Suppress("unused")
     val createViaDump = object : ValueButton(this, "Create via dump") {
@@ -51,6 +50,7 @@ object ProtocolHackValues {
     val executeInputsInSync = ValueBooleanProtocol("Execute inputs in sync", ProtocolVersion.v1_12_2.andOlder())
     val emulateMouseInputs = ValueBooleanProtocol("Emulate mouse inputs", ProtocolVersion.v1_12_2.andOlder())
     val sneakInstant = ValueBooleanProtocol("Sneak instant", ProtocolVersion.v1_8 .. ProtocolVersion.v1_12_2)
+    val replaceRayTrace = ValueBooleanProtocol("Replace ray trace", ProtocolVersion.v1_12_2.andOlder())
 
     // 1.9 -> 1.8.x
     val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", ProtocolVersion.v1_8.andOlder())

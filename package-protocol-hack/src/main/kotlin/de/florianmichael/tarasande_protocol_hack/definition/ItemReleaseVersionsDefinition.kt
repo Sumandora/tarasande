@@ -1220,7 +1220,6 @@ object ItemReleaseVersionsDefinition {
         splitter[Items.LEATHER_BOOTS] = arrayOf(BetaProtocols.a1_0_15.andNewer())
         splitter[Items.APPLE] = arrayOf(BetaProtocols.a1_0_15.andNewer())
 
-
         // Indev 0.31 20100124-1 (doesn't have multiplayer, so we assign it to the next multiplayer version)
         splitter[Items.CHEST] = arrayOf(BetaProtocols.a1_0_15.andNewer())
 
