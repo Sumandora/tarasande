@@ -29,6 +29,9 @@ import java.util.logging.Logger
  *  - Render Profiler
  *  - Auto Totem
  *  - AutoLog
+ *  - Obfuscator
+ *  - Inventory Module Abstraction
+ *  
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions in <= 1.19.2
