@@ -4,7 +4,7 @@ import de.florianmichael.rmath.mathtable.impl.*;
 
 public enum MathTableRegistry {
 
-    NONE("None", new NoneMathTable()),
+    MINECRAFT("Minecraft", new MinecraftMathTable()),
     OPTIFINE_D5("Optifine <= D5", new OptifineD5MathTable()),
     OPTIFINE_K4("Optifine >= K4", new OptifineK4MathTable()),
     JAVA("Java", new JavaMathTable()),

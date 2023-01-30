@@ -2,7 +2,7 @@ package de.florianmichael.rmath.mathtable.impl;
 
 import de.florianmichael.rmath.mathtable.MathTable;
 
-public class NoneMathTable implements MathTable {
+public class MinecraftMathTable implements MathTable {
 
     private static final float[] SIN_TABLE = new float[65536];
 

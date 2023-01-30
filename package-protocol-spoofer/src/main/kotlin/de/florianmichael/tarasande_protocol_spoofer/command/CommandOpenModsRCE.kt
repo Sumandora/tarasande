@@ -10,6 +10,7 @@ import io.netty.buffer.Unpooled
 import net.minecraft.command.CommandSource
 import net.minecraft.command.argument.GameModeArgumentType
 import net.minecraft.world.GameMode
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.Command
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import java.io.*
@@ -54,7 +55,7 @@ class CommandOpenModsRCE : Command("openmodsrce") {
         }
     }
 
-    private fun execute(worldId: Int = 0, entityId: Int = 1, gameMode: GameMode = GameMode.CREATIVE) {
+    private fun execute(worldId: Int = 1, entityId: Int = mc.player?.id?: 0, gameMode: GameMode = GameMode.CREATIVE) {
         var payload = Unpooled.buffer()
         val closer = Closer.create()
         val raw = closer.register(ByteBufOutputStream(payload) as Closeable) as OutputStream

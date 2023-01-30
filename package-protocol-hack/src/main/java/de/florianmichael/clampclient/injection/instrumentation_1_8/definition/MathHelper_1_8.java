@@ -7,7 +7,7 @@ import net.minecraft.util.math.Vec3d;
  * This class represents the MathHelper Changes (Table Isn) in 1.8
  */
 public class MathHelper_1_8 {
-    public static MathTableRegistry mathTable = MathTableRegistry.NONE;
+    public static MathTableRegistry mathTable = MathTableRegistry.MINECRAFT;
 
     public static Vec3d getIntermediateWithXValue(Vec3d t, Vec3d vec, double x) {
         final double xOffset = vec.x - t.x;
