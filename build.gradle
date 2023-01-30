@@ -12,11 +12,7 @@ version = tarasande_version
 group = "net.tarasandedevelopment"
 
 def libs = [
-		// Proxy -> https://mvnrepository.com/artifact/io.netty/netty-handler-proxy
-		"io.netty:netty-handler-proxy:4.1.82.Final",
-
-		// BungeeCord Chat -> https://mvnrepository.com/artifact/net.md-5/bungeecord-chat
-		"net.md-5:bungeecord-chat:1.16-R0.4"
+		"io.netty:netty-handler-proxy:4.1.82.Final"
 ]
 
 loom {
@@ -50,7 +46,6 @@ subprojects {
 }
 
 dependencies {
-	// Fabric
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"

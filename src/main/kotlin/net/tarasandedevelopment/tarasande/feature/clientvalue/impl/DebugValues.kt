@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.feature.clientvalue.impl
 import net.minecraft.network.packet.s2c.play.ResourcePackSendS2CPacket
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.debug.BlockChangeTracker
+import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.debug.Chat
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.debug.MinecraftDebugger
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.debug.PlayerMovementPrediction
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.debug.camera.Camera
@@ -12,18 +13,19 @@ import su.mandora.event.EventDispatcher
 
 object DebugValues {
 
-    val blockChangeTracker = ValueButtonOwnerValues(this, "Block change tracker", BlockChangeTracker())
-    val minecraftDebugger = ValueButtonOwnerValues(this, "Minecraft debugger", MinecraftDebugger())
+    val blockChangeTracker = ValueButtonOwnerValues(this, "Block change tracker", BlockChangeTracker)
 
     init {
+        ValueButtonOwnerValues(this, "Minecraft debugger", MinecraftDebugger)
         ValueButtonOwnerValues(this, "Player movement prediction", PlayerMovementPrediction())
     }
 
     val openGLErrorDebugger = ValueBoolean(this, "OpenGL error debugger", true)
     val disableInterpolation = ValueBoolean(this, "Disable interpolation", false)
     private val ignoreResourcePackHash = ValueBoolean(this, "Ignore resource pack hash", false)
-    val camera = ValueButtonOwnerValues(this, "Camera", Camera())
+    val camera = ValueButtonOwnerValues(this, "Camera", Camera)
     val eliminateHitDelay = ValueBoolean(this, "Eliminate hit delay", false)
+    val chat = ValueButtonOwnerValues(this, "Chat", Chat)
 
     init {
         EventDispatcher.add(EventPacket::class.java) { event ->

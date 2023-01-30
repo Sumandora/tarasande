@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.feature.clientvalue.impl.debug
 
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 
-class MinecraftDebugger {
+object MinecraftDebugger {
 
     val collision = ValueBoolean(this, "Collision", false)
     val chunkLoading = ValueBoolean(this, "Chunk loading", false)

@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.util.math.MathUtil.roundAwayFromZero
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import org.joml.Quaternionf
 
-class ViewModel {
+object ViewModel {
 
     private val x = ValueNumber(this, "X", -4.0, 0.0, 4.0, 0.1)
     private val y = ValueNumber(this, "Y", -4.0, 0.0, 4.0, 0.1)

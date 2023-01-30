@@ -120,6 +120,7 @@ object ManagerModule : Manager<Module>() {
             ModuleMidClick(),
             ModuleAutoRespawn(),
             ModuleTroubleInTerroristTown(),
+            ModuleSpammer(),
 
             // Ghost
             ModuleReach(),

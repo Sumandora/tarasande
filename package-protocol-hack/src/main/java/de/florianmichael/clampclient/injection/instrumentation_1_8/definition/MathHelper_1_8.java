@@ -1,13 +1,13 @@
 package de.florianmichael.clampclient.injection.instrumentation_1_8.definition;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.MathTable;
+import de.florianmichael.rmath.mathtable.MathTableRegistry;
 import net.minecraft.util.math.Vec3d;
 
 /**
  * This class represents the MathHelper Changes (Table Isn) in 1.8
  */
 public class MathHelper_1_8 {
-    public static MathTable mathTable = MathTable.NONE;
+    public static MathTableRegistry mathTable = MathTableRegistry.NONE;
 
     public static Vec3d getIntermediateWithXValue(Vec3d t, Vec3d vec, double x) {
         final double xOffset = vec.x - t.x;

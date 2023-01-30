@@ -25,25 +25,22 @@ public class MixinHeldItemRenderer {
 
     @Inject(method = "renderFirstPersonItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/HeldItemRenderer;applyEquipOffset(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/Arm;F)V"))
     public void applyViewModelValues(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        if(tarasande_skipNext) {
+        if (tarasande_skipNext) {
             tarasande_skipNext = false;
             return;
         }
-        ViewModel viewModel = (ViewModel) ((Camera) DebugValues.INSTANCE.getCamera().getValuesOwner()).getViewModel().getValuesOwner();
-        viewModel.applyTransform(matrices, false, HandKt.toArm(hand));
+        ViewModel.INSTANCE.applyTransform(matrices, false, HandKt.toArm(hand));
     }
 
     @Inject(method = "renderFirstPersonItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/HeldItemRenderer;applyEatOrDrinkTransformation(Lnet/minecraft/client/util/math/MatrixStack;FLnet/minecraft/util/Arm;Lnet/minecraft/item/ItemStack;)V"))
     public void applyBeforeEatAnimation(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        ViewModel viewModel = (ViewModel) ((Camera) DebugValues.INSTANCE.getCamera().getValuesOwner()).getViewModel().getValuesOwner();
-        viewModel.applyTransform(matrices, false, HandKt.toArm(hand));
+        ViewModel.INSTANCE.applyTransform(matrices, false, HandKt.toArm(hand));
         tarasande_skipNext = true;
     }
 
     @Inject(method = "renderArmHoldingItem", at = @At("HEAD"))
     public void applyHand(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float equipProgress, float swingProgress, Arm arm, CallbackInfo ci) {
-        ViewModel viewModel = (ViewModel) ((Camera) DebugValues.INSTANCE.getCamera().getValuesOwner()).getViewModel().getValuesOwner();
-        viewModel.applyTransform(matrices, true, arm);
+        ViewModel.INSTANCE.applyTransform(matrices, true, arm);
         tarasande_skipNext = true;
     }
 }

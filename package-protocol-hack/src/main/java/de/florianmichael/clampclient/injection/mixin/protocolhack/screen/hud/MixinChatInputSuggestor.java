@@ -24,7 +24,9 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.screen.hud;
 import de.florianmichael.clampclient.injection.mixininterface.IChatInputSuggestor_Protocol;
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -42,6 +44,7 @@ public abstract class MixinChatInputSuggestor implements IChatInputSuggestor_Pro
 
     @Shadow public abstract void clearWindow();
 
+    @Shadow @Final private TextFieldWidget textField;
     @Unique
     private boolean protocolhack_isCustomCompletion = false;
 
@@ -54,7 +57,7 @@ public abstract class MixinChatInputSuggestor implements IChatInputSuggestor_Pro
 
     @Inject(method = "keyPressed", at = @At("RETURN"))
     public void autoClear(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (!ProtocolHackValues.INSTANCE.getRemoveNewTabCompletion().getValue()) {
+        if (!ProtocolHackValues.INSTANCE.getRemoveNewTabCompletion().getValue() || !textField.getText().startsWith("/")) {
             return;
         }
 

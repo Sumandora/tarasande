@@ -32,7 +32,6 @@ this.shadowJar {
     }
 }
 
-// ViaProtocolHack READ-ME
 var viaLibs = [
         "com.viaversion:viaversion:${project.viaversion_version}",
 
@@ -40,17 +39,14 @@ var viaLibs = [
 ]
 
 dependencies {
-    // Fabric
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    // tarasande Source
-    implementation(project(path: ":", configuration: "shadow"))
-    implementation(project(path: ":package-protocol-hack", configuration: "shadow"))
+    implementation project(path: ":", configuration: "shadow")
+    implementation project(path: ":package-protocol-hack", configuration: "shadow")
 
-    // HAProxy Protocol -> https://mvnrepository.com/artifact/io.netty/netty-codec-haproxy
-    implementation("io.netty:netty-codec-haproxy:4.1.82.Final")
+    implementation "io.netty:netty-codec-haproxy:4.1.82.Final"
 
     for (final def via in viaLibs) {
         implementation(via)

@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.fixed
 
 import com.mojang.blaze3d.systems.RenderSystem
-import de.florianmichael.ezeasing.EzEasing
+import de.florianmichael.rmath.EzEasing
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
