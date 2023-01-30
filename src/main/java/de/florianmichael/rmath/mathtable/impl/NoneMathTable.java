@@ -1,14 +1,14 @@
-package de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.impl;
+package de.florianmichael.rmath.mathtable.impl;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.Math;
+import de.florianmichael.rmath.mathtable.MathTable;
 
-public class NoneMath implements Math {
+public class NoneMathTable implements MathTable {
 
     private static final float[] SIN_TABLE = new float[65536];
 
     static {
         for (int i = 0; i < 65536; ++i) {
-            SIN_TABLE[i] = (float) java.lang.Math.sin((double) i * java.lang.Math.PI * 2.0D / 65536.0D);
+            SIN_TABLE[i] = (float) Math.sin((double) i * Math.PI * 2.0D / 65536.0D);
         }
     }
 

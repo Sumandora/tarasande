@@ -1,4 +1,4 @@
-package de.florianmichael.ezeasing;
+package de.florianmichael.rmath;
 
 import java.util.Arrays;
 import java.util.List;

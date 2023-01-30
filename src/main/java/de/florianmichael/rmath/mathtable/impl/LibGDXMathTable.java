@@ -1,8 +1,8 @@
-package de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.impl;
+package de.florianmichael.rmath.mathtable.impl;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.Math;
+import de.florianmichael.rmath.mathtable.MathTable;
 
-public class LibGDXMath implements Math {
+public class LibGDXMathTable implements MathTable {
     public static final float BF_PI = 3.1415927f;
 
     private static final int BF_SIN_BITS = 14; // 16KB. Adjust for accuracy.
@@ -20,10 +20,10 @@ public class LibGDXMath implements Math {
 
     static {
         for(int i = 0; i < BF_SIN_COUNT; i++) {
-            BF_table[i] = (float) java.lang.Math.sin((i + 0.5f) / BF_SIN_COUNT * BF_radFull);
+            BF_table[i] = (float) Math.sin((i + 0.5f) / BF_SIN_COUNT * BF_radFull);
         }
         for (int i = 0; i < 360; i += 90) {
-            BF_table[(int)(i * BF_degToIndex) & BF_SIN_MASK] = (float) java.lang.Math.sin(i * BF_degreesToRadians);
+            BF_table[(int)(i * BF_degToIndex) & BF_SIN_MASK] = (float) Math.sin(i * BF_degreesToRadians);
         }
     }
 

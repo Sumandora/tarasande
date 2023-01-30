@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.fixed
 
 import com.mojang.blaze3d.systems.RenderSystem
-import de.florianmichael.ezeasing.EzEasing
+import de.florianmichael.rmath.EzEasing
 import net.minecraft.client.resource.language.I18n
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.effect.StatusEffect

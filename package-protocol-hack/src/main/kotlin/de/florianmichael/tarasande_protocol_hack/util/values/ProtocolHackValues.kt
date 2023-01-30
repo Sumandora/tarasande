@@ -3,7 +3,7 @@ package de.florianmichael.tarasande_protocol_hack.util.values
 import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.MathHelper_1_8
-import de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.MathTable
+import de.florianmichael.rmath.mathtable.MathTableRegistry
 import de.florianmichael.tarasande_protocol_hack.util.extension.andOlder
 import de.florianmichael.tarasande_protocol_hack.util.extension.rangeTo
 import de.florianmichael.tarasande_protocol_hack.util.extension.singleton
@@ -57,13 +57,13 @@ object ProtocolHackValues {
     val sendIdlePacket = ValueBooleanProtocol("Send idle packet", ProtocolVersion.v1_8 .. BetaProtocols.r1_3_1tor1_3_2)
     val emulatePlayerMovement = ValueBooleanProtocol("Emulate player movement", ProtocolVersion.v1_8.andOlder())
     init {
-        object : ValueMode(this, "Fast math tables", false, *MathTable.values().map { it.toString() }.toTypedArray()) {
+        object : ValueMode(this, "Fast math tables", false, *MathTableRegistry.values().map { it.toString() }.toTypedArray()) {
             override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
-                MathHelper_1_8.mathTable = MathTable.values()[index]
+                MathHelper_1_8.mathTable = MathTableRegistry.values()[index]
             }
         }
     }
-    val bruteforceRaytraceFastMathTables = ValueMode(this, "Bruteforce Raytrace: Fast math tables", true, *MathTable.values().map { it.toString() }.toTypedArray())
+    val bruteforceRaytraceFastMathTables = ValueMode(this, "Bruteforce Raytrace: Fast math tables", true, *MathTableRegistry.values().map { it.toString() }.toTypedArray())
     val emulateArmorHud = ValueBooleanProtocol("Emulate armor hud", ProtocolVersion.v1_8.andOlder())
     val replaceAttributeModifiers = ValueBooleanProtocol("Replace attribute modifiers", ProtocolVersion.v1_8.andOlder())
 

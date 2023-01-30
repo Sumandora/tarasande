@@ -1,8 +1,8 @@
-package de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.impl;
+package de.florianmichael.rmath.mathtable.impl;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.Math;
+import de.florianmichael.rmath.mathtable.MathTable;
 
-public class RivensHalfMath implements Math {
+public class RivensHalfMathTable implements MathTable {
 
     private static final float BF_SIN_TO_COS;
     private static final int BF_SIN_BITS, BF_SIN_MASK, BF_SIN_MASK2, BF_SIN_COUNT, BF_SIN_COUNT2;
@@ -10,7 +10,7 @@ public class RivensHalfMath implements Math {
     private static final float[] BF_sinHalf;
 
     static {
-        BF_SIN_TO_COS = (float)(java.lang.Math.PI * 0.5f);
+        BF_SIN_TO_COS = (float)(Math.PI * 0.5f);
 
         BF_SIN_BITS = 12;
         BF_SIN_MASK = ~(-1 << BF_SIN_BITS);
@@ -18,12 +18,12 @@ public class RivensHalfMath implements Math {
         BF_SIN_COUNT = BF_SIN_MASK + 1;
         BF_SIN_COUNT2 = BF_SIN_MASK2 + 1;
 
-        BF_radFull = (float)(java.lang.Math.PI * 2.0);
+        BF_radFull = (float)(Math.PI * 2.0);
         BF_radToIndex = BF_SIN_COUNT / BF_radFull;
 
         BF_sinHalf = new float[BF_SIN_COUNT2];
         for (int i = 0; i < BF_SIN_COUNT2; i++) {
-            BF_sinHalf[i] = (float) java.lang.Math.sin((i + java.lang.Math.min(1, i % (BF_SIN_COUNT / 4)) * 0.5) / BF_SIN_COUNT * BF_radFull);
+            BF_sinHalf[i] = (float) Math.sin((i + Math.min(1, i % (BF_SIN_COUNT / 4)) * 0.5) / BF_SIN_COUNT * BF_radFull);
         }
 
         float[] hardcodedAngles = {
@@ -34,7 +34,7 @@ public class RivensHalfMath implements Math {
             int index1 = (int)(angle * BF_radToIndex) & BF_SIN_MASK;
             int index2 = index1 & BF_SIN_MASK2;
             int mul = ((index1 == index2) ? +1 : -1);
-            BF_sinHalf[index2] = (float)(java.lang.Math.sin(angle) / mul);
+            BF_sinHalf[index2] = (float)(Math.sin(angle) / mul);
         }
     }
 

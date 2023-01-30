@@ -1,8 +1,8 @@
-package de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.impl;
+package de.florianmichael.rmath.mathtable.impl;
 
-import de.florianmichael.clampclient.injection.instrumentation_1_8.fastmath.Math;
+import de.florianmichael.rmath.mathtable.MathTable;
 
-public class K4Math implements Math {
+public class OptifineK4MathTable implements MathTable {
 
 
     private static final float radToIndex = roundToFloat(651.8986469044033D);
@@ -11,13 +11,13 @@ public class K4Math implements Math {
     static {
         for (int j = 0; j < SIN_TABLE_FAST.length; ++j)
         {
-            SIN_TABLE_FAST[j] = roundToFloat(java.lang.Math.sin((double)j * java.lang.Math.PI * 2.0D / 4096.0D));
+            SIN_TABLE_FAST[j] = roundToFloat(Math.sin((double)j * Math.PI * 2.0D / 4096.0D));
         }
     }
 
     public static float roundToFloat(double d)
     {
-        return (float)((double) java.lang.Math.round(d * 1.0E8D) / 1.0E8D);
+        return (float)((double) Math.round(d * 1.0E8D) / 1.0E8D);
     }
 
     @Override
