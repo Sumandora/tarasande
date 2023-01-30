@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import su.mandora.event.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
 
-class BlockChangeTracker {
+object BlockChangeTracker {
 
     val enabled = ValueBoolean(this, "Enabled", false)
     private val color = ValueColor(this, "Color", 0.0, 1.0, 1.0, 1.0)

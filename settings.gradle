@@ -15,6 +15,7 @@ pluginManagement {
     }
 }
 include 'tools'
+include 'package-chat-exploits'
 include 'package-windows-platform'
 include 'package-linux-platform'
 include 'package-mod-fixes'
@@ -26,4 +27,3 @@ include 'package-protocol-spoofer'
 include 'package-litematica'
 include 'package-custom-minecraft'
 include 'package-crasher'
-include 'package-chat-features'

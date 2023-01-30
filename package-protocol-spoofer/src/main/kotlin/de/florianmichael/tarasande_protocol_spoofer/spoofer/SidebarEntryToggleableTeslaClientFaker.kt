@@ -42,19 +42,11 @@ class SidebarEntryToggleableTeslaClientFaker : SidebarEntryToggleable("Tesla cli
                                 packet.data = PacketByteBuf(Unpooled.buffer()).writeByteArray("WECUI\u0000tesla:client".toByteArray(StandardCharsets.US_ASCII))
                             }
                             if (TarasandeProtocolSpoofer.tarasandeProtocolHackLoaded) {
-                                if (ViaVersionUtil.spoofTeslaClientCustomPayload("REGISTER", "WECUI\u0000tesla:client".toByteArray(StandardCharsets.US_ASCII))) {
+                                if (ViaVersionUtil.sendLegacyPluginMessage("REGISTER", "WECUI\u0000tesla:client".toByteArray(StandardCharsets.US_ASCII))) {
                                     event.cancelled = true
                                 }
                             }
-                            if (fakeWeCui.value) {
-                                val weCuiPayload = CustomPayloadC2SPacket(Identifier("WECUI"), PacketByteBuf(Unpooled.buffer()).writeString(weCuiVersion.value))
-
-                                if (TarasandeProtocolSpoofer.tarasandeProtocolHackLoaded) {
-                                    if (!ViaVersionUtil.spoofTeslaClientCustomPayload("WECUI", weCuiVersion.value.toByteArray(StandardCharsets.UTF_8)))
-                                        MinecraftClient.getInstance().player?.networkHandler?.sendPacket(weCuiPayload)
-                                } else
-                                    MinecraftClient.getInstance().player?.networkHandler?.sendPacket(weCuiPayload)
-                            }
+                            if (fakeWeCui.value) TarasandeProtocolSpoofer.enforcePluginMessage("WECUI", weCuiVersion.value.toByteArray(StandardCharsets.UTF_8))
                         }
 
                         is HandshakeC2SPacket -> {

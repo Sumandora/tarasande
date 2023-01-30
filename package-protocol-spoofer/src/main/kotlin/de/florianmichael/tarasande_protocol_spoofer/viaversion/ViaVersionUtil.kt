@@ -30,7 +30,7 @@ object ViaVersionUtil {
         return Fml1NetClientHandler(connection)
     }
 
-    fun spoofTeslaClientCustomPayload(channel: String, value: ByteArray): Boolean {
+    fun sendLegacyPluginMessage(channel: String, value: ByteArray): Boolean {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_12_2)) {
             val customPayload = PacketWrapper.create(ServerboundPackets1_12.PLUGIN_MESSAGE, TarasandeProtocolHack.viaConnection)
             customPayload.write(Type.STRING, channel)

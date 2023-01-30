@@ -37,19 +37,14 @@ this.shadowJar {
 
 
 dependencies {
-    // Fabric
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    // Litematica
-    modImplementation "curse.maven:litematica-308892:4162847"
-
-    // ZXing
-    implementation "com.google.zxing:core:3.3.1"
-
-    // tarasande Source
     implementation(project(path: ":", configuration: "shadow"))
+
+    modImplementation "curse.maven:litematica-308892:4162847"
+    implementation "com.google.zxing:core:3.3.1"
 }
 
 processResources {

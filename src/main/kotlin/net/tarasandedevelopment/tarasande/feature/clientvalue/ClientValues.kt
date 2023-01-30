@@ -12,6 +12,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
+import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.ManagerBlur
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.Thread
@@ -46,6 +47,8 @@ object ClientValues {
         ValueButtonOwnerValues(this, "Blur values", ManagerBlur)
         // Rotations
         ValueButtonOwnerValues(this, "Rotation values", RotationValues)
+        // Commands
+        ValueButtonOwnerValues(this, "Command values", ManagerCommand)
     }
 
     val passEventsInScreens = ValueBoolean(this, "Pass events in screens", true)
@@ -67,7 +70,7 @@ object ClientValues {
         ValueButtonOwnerValues(this, "Debug values", DebugValues)
     }
 
-    val autoSaveDaemonName = "$TARASANDE_NAME config auto save daemon"
+    const val autoSaveDaemonName = "$TARASANDE_NAME config auto save daemon"
     val autoSaveDaemon: Thread = Thread(autoSaveDaemonName) {
         while (true) {
             Thread.sleep(autoSaveDelay.value.toLong())

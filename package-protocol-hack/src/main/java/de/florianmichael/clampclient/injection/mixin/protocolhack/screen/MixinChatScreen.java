@@ -28,6 +28,7 @@ import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
@@ -44,13 +45,15 @@ public class MixinChatScreen extends Screen {
     @Shadow
     ChatInputSuggestor chatInputSuggestor;
 
+    @Shadow protected TextFieldWidget chatField;
+
     protected MixinChatScreen(Text title) {
         super(title);
     }
 
     @Inject(method = "keyPressed", at = @At("HEAD"))
     public void reAddKeyBind(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (!ProtocolHackValues.INSTANCE.getRemoveNewTabCompletion().getValue()) {
+        if (!ProtocolHackValues.INSTANCE.getRemoveNewTabCompletion().getValue() || !this.chatField.getText().startsWith("/")) {
             return;
         }
 
@@ -63,6 +66,8 @@ public class MixinChatScreen extends Screen {
 
     @Inject(method = "onChatFieldUpdate", at = @At(value = "HEAD"))
     public void removePermanentRefreshing(String chatText, CallbackInfo ci) {
+        if (!chatText.startsWith("/")) return;
+
         ((IChatInputSuggestor_Protocol) this.chatInputSuggestor).protocolhack_setNativeCompletion(ProtocolHackValues.INSTANCE.getRemoveNewTabCompletion().getValue());
     }
 

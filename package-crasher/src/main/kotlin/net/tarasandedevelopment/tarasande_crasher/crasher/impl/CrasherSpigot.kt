@@ -18,7 +18,7 @@ class CrasherSpigot : Crasher("Spigot") {
             socket.tcpNoDelay = true
 
             val output = DataOutputStream(socket.getOutputStream())
-            writePacket(createHandshakePacket(address, port, protocolVersion.value.toIntOrNull()?: 47), output) // TODO | Notifications
+            writePacket(createHandshakePacket(address, port, protocolVersion.value.toIntOrNull()?: 47), output)
             writePacket(createHelloWorldPacket(sessionName.value), output)
 
             socket.setSoLinger(true, 0)

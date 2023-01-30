@@ -124,5 +124,6 @@ object ManagerBlur : Manager<Blur>() {
 }
 
 abstract class Blur(val name: String) {
+
     abstract fun render(targetBuffer: Framebuffer, strength: Int): Framebuffer
 }

@@ -8,6 +8,7 @@ import net.tarasandedevelopment.tarasande.feature.friend.Friends
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.ManagerGrabber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
+import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.feature.espsystem.ManagerESP
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.ManagerBlur
@@ -36,15 +37,19 @@ import java.util.logging.Logger
  *  - WindowClick is not fully remapped in <= 1.16.5
  *
  * TODO | Crasher:
- *  - Cleanup crasher (Velocity is outdated)
  *  - Basic crasher module
  *
  * TODO | Protocol Spoofer:
  *  - Add basic exploits from bash for Forge
+ *  - Crayfish Fill and Nuker
  *
  * TODO | Litematica:
  *  - Implement PixelArt generator
  *  - Implement head and skin generator
+ *
+ * TODO | IDEAS:
+ *  - CheckHost
+ *  - Multi-ServerList-System
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv
@@ -70,6 +75,7 @@ object TarasandeMain {
         ManagerScreenExtension
         ManagerBlur
 
+        ManagerCommand
         ManagerModule
 
         ClientValues

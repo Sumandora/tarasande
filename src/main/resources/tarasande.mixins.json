@@ -60,6 +60,7 @@
     "feature.clientvalue.MixinDebugRenderer",
     "feature.clientvalue.MixinMinecraftClient",
     "feature.clientvalue.MixinRealmsClient",
+    "feature.clientvalue.MixinSharedConstants",
     "feature.clientvalue.MixinTelemetryManager",
     "feature.clientvalue.MixinWindow",
     "feature.module.MixinCamera",
@@ -107,9 +108,12 @@
   },
   "client": [
     "core.rotation.MixinInventoryScreen",
+    "feature.clientvalue.MixinChatHud",
+    "feature.clientvalue.MixinChatScreen",
     "feature.clientvalue.MixinClientPlayerInteractionManager",
     "feature.clientvalue.MixinGameRenderer",
     "feature.clientvalue.MixinHeldItemRenderer",
+    "feature.clientvalue.MixinInGameHud",
     "feature.module.MixinClientPlayNetworkHandler",
     "feature.module.MixinConfirmScreen",
     "feature.spoofer.MixinServerResourcePackProvider"
