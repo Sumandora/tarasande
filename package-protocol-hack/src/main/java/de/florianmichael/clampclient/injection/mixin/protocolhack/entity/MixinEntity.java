@@ -325,13 +325,4 @@ public abstract class MixinEntity implements IEntity_Protocol {
         this.prevPitch += this.pitch - f;
         this.prevYaw += this.yaw - f1;
     }
-
-
-    @Unique
-    private Vec3i serverPos = new Vec3i(0, 0, 0);
-
-    @Override
-    public Vec3i protocolhack_getServerPos() {
-        return serverPos;
-    }
 }

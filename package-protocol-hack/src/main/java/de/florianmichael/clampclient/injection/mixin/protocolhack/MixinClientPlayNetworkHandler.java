@@ -22,7 +22,6 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
 import com.mojang.authlib.GameProfile;
-import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.client.MinecraftClient;
@@ -39,7 +38,6 @@ import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.math.Vec3d;
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
-import net.minecraft.util.math.Vec3i;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -48,6 +46,7 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -163,84 +162,17 @@ public abstract class MixinClientPlayNetworkHandler {
         return instance.isSecureChatEnforced() || ProtocolHackValues.INSTANCE.getDisableSecureChatWarning().getValue();
     }
 
-    @Inject(method = "onEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/util/thread/ThreadExecutor;)V", shift = At.Shift.AFTER), cancellable = true)
-    public void adjustEntityOffsets(EntityS2CPacket packet, CallbackInfo ci) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_8)) {
-            final Entity entity = packet.getEntity(this.world);
-            if (entity != null) {
-                Vec3i mutableServerPos = ((IEntity_Protocol) entity).protocolhack_getServerPos();
-                mutableServerPos.x += packet.getDeltaX() / 128;
-                mutableServerPos.y += packet.getDeltaY() / 128;
-                mutableServerPos.z += packet.getDeltaZ() / 128;
+    @Inject(method = "onEntityPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;updateTrackedPositionAndAngles(DDDFFIZ)V", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
+    public void fixThreshold(EntityPositionS2CPacket packet, CallbackInfo ci, Entity entity) {
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_15_2)) {
+            if (Math.abs(entity.getX() - packet.getX()) < 0.03125D && Math.abs(entity.getY() - packet.getY()) < 0.015625D && Math.abs(entity.getZ() - packet.getZ()) < 0.03125D) {
+                ci.cancel();
+                float g = (float)(packet.getYaw() * 360) / 256.0F;
+                float h = (float)(packet.getPitch() * 360) / 256.0F;
 
-                double d0 = (double) mutableServerPos.x / 32.0D;
-                double d1 = (double) mutableServerPos.y / 32.0D;
-                double d2 = (double) mutableServerPos.z / 32.0D;
-
-                float f = packet.hasRotation() ? (float) (packet.getYaw() * 360) / 256.0F : entity.getYaw();
-                float f1 = packet.hasRotation() ? (float) (packet.getPitch() * 360) / 256.0F : entity.getPitch();
-                entity.updateTrackedPositionAndAngles(d0, d1, d2, f, f1, 3, false);
+                entity.updateTrackedPositionAndAngles(entity.getX(), entity.getY(), entity.getZ(), g, h, 3, true);
                 entity.setOnGround(packet.isOnGround());
             }
-
-            ci.cancel();
-        }
-    }
-
-    @Inject(method = "onEntityPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/util/thread/ThreadExecutor;)V", shift = At.Shift.AFTER), cancellable = true)
-    public void adjustEntityPositionOffsets(EntityPositionS2CPacket packet, CallbackInfo ci) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_8)) {
-            Entity entity = this.world.getEntityById(packet.getId());
-
-            if (entity != null) {
-                Vec3i serverPos = new Vec3i((int) (Double.doubleToLongBits(packet.getX()) + Integer.MIN_VALUE), (int) (Double.doubleToLongBits(packet.getY()) + Integer.MIN_VALUE), (int) (Double.doubleToLongBits(packet.getZ()) + Integer.MIN_VALUE));
-                Vec3i mutableServerPos = ((IEntity_Protocol) entity).protocolhack_getServerPos();
-                mutableServerPos.x = serverPos.x;
-                mutableServerPos.y = serverPos.y;
-                mutableServerPos.z = serverPos.z;
-
-                double d0 = (double) mutableServerPos.x / 32.0D;
-                double d1 = (double) mutableServerPos.y / 32.0D;
-                double d2 = (double) mutableServerPos.z / 32.0D;
-                float f = (float) (packet.getYaw() * 360) / 256.0F;
-                float f1 = (float) (packet.getPitch() * 360) / 256.0F;
-
-                if (Math.abs(entity.getX() - d0) < 0.03125D && Math.abs(entity.getY() - d1) < 0.015625D && Math.abs(entity.getZ() - d2) < 0.03125D) {
-                    entity.updateTrackedPositionAndAngles(entity.getX(), entity.getY(), entity.getZ(), f, f1, 3, true);
-                } else {
-                    entity.updateTrackedPositionAndAngles(d0, d1, d2, f, f1, 3, true);
-                }
-                entity.setOnGround(packet.isOnGround());
-            }
-            ci.cancel();
-        }
-    }
-
-    @Inject(method = "onPlayerSpawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/util/thread/ThreadExecutor;)V", shift = At.Shift.AFTER), cancellable = true)
-    public void onPlayerSpawn(PlayerSpawnS2CPacket packet, CallbackInfo ci) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_8)) {
-            final Vec3i serverPos = new Vec3i((int) (Double.doubleToLongBits(packet.getX()) + Integer.MIN_VALUE), (int) (Double.doubleToLongBits(packet.getY()) + Integer.MIN_VALUE), (int) (Double.doubleToLongBits(packet.getZ()) + Integer.MIN_VALUE));
-            double d0 = (double) serverPos.getX() / 32.0D;
-            double d1 = (double) serverPos.getY() / 32.0D;
-            double d2 = (double) serverPos.getZ() / 32.0D;
-            float f = (float) (packet.getYaw() * 360) / 256.0F;
-            float f1 = (float) (packet.getPitch() * 360) / 256.0F;
-
-            int i = packet.getId();
-            final OtherClientPlayerEntity entityOtherPlayer = new OtherClientPlayerEntity(this.client.world, this.getPlayerListEntry(packet.getPlayerUuid()).getProfile());
-            entityOtherPlayer.setId(i);
-            Vec3i mutableServerPos = ((IEntity_Protocol) entityOtherPlayer).protocolhack_getServerPos();
-            mutableServerPos.x = serverPos.x;
-            mutableServerPos.y = serverPos.y;
-            mutableServerPos.z = serverPos.z;
-
-            entityOtherPlayer.prevX = entityOtherPlayer.lastRenderX = (double) mutableServerPos.x;
-            entityOtherPlayer.prevY = entityOtherPlayer.lastRenderY = (double) mutableServerPos.y;
-            entityOtherPlayer.prevZ = entityOtherPlayer.lastRenderZ = (double) mutableServerPos.z;
-            entityOtherPlayer.updatePositionAndAngles(d0, d1, d2, f, f1);
-            this.world.addPlayer(i, entityOtherPlayer);
-
-            ci.cancel();
         }
     }
 }
