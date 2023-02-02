@@ -94,7 +94,7 @@ public class MixinClientConnection_1 {
                 channel.pipeline().addBefore("splitter", PreNettyConstants.DECODER, new PreNettyPacketDecoder(user));
             }
 
-            // ViaCursed
+            // ViaBedrock
             if (bedrockEdition) {
                 // Handshake forwarding in Bedrock
                 user.getProtocolInfo().getPipeline().add(BedrockSessionBaseProtocol.INSTANCE);
