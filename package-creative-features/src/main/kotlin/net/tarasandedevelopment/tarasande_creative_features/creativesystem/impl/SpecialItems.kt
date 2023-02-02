@@ -5,10 +5,8 @@ import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
-import net.tarasandedevelopment.tarasande_creative_features.creativesystem.ExploitCreative
 import net.tarasandedevelopment.tarasande_creative_features.creativesystem.ExploitCreativeSingle
 import net.tarasandedevelopment.tarasande_creative_features.creativesystem.valuecomponent.meta.ValueButtonItem
-import net.tarasandedevelopment.tarasande_creative_features.util.ItemUtil
 
 class ExploitCreativeSpecialVanillaItems(parent: Any) : ExploitCreativeSingle(parent, "Special Vanilla Items", ItemStack(Items.COMMAND_BLOCK)) {
 
@@ -18,14 +16,14 @@ class ExploitCreativeSpecialVanillaItems(parent: Any) : ExploitCreativeSingle(pa
 
 class ExploitCreativeLightItems(parent: Any) : ExploitCreativeSingle(parent, "Light Levels", ItemStack(Items.LIGHT)) {
 
-    object LightLevels {
+    inner class LightLevels {
         init {
             for (i in 0 until 16) {
                 val stack = createLight(i)
 
                 object : ValueButtonItem(this, "Get with Level $i", stack) {
                     override fun onClick() {
-                        ItemUtil.give(createLight(i))
+                        this@ExploitCreativeLightItems.give(createLight(i))
                     }
                 }
             }
@@ -46,11 +44,9 @@ class ExploitCreativeLightItems(parent: Any) : ExploitCreativeSingle(parent, "Li
 
     }
 
-    init {
-        LightLevels // force-load
-    }
+    private val lightLevels = LightLevels()
 
     override fun onPress() {
-        mc.setScreen(ScreenBetterOwnerValues(this.name, mc.currentScreen!!, LightLevels))
+        mc.setScreen(ScreenBetterOwnerValues(this.name, mc.currentScreen!!, lightLevels))
     }
 }

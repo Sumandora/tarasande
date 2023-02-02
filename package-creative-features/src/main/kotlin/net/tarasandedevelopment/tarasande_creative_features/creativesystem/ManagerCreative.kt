@@ -1,10 +1,15 @@
 package net.tarasandedevelopment.tarasande_creative_features.creativesystem
 
+import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
+import net.minecraft.nbt.*
+import net.minecraft.world.GameMode
 import net.tarasandedevelopment.tarasande.Manager
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
+import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import net.tarasandedevelopment.tarasande_creative_features.creativesystem.impl.ExploitCreativeCommandBlockSpawner
 import net.tarasandedevelopment.tarasande_creative_features.creativesystem.impl.ExploitCreativeItemControl
@@ -38,10 +43,7 @@ object ManagerCreative : Manager<ExploitCreative>() {
             ExploitCreativeLightItems(this),
         )
 
-        val settings = mutableListOf("None")
-        settings.addAll(this.storages.map { s -> StringUtil.uncoverTranslation(s.translationKey) })
-
-        packager = ValueMode(this, "Spawner Packager", false, *settings.toTypedArray())
+        packager = ValueMode(this, "Spawner Packager", false, *mutableListOf("None").apply { addAll(storages.map { s -> StringUtil.uncoverTranslation(s.translationKey) }) }.toTypedArray())
 
         ManagerPanel.add(PanelElementsCreative())
     }
@@ -49,12 +51,7 @@ object ManagerCreative : Manager<ExploitCreative>() {
     fun getPackagedItem(): ItemStack? {
         if (!packager.anySelected() || packager.isSelected(0)) return null
 
-        this.storages.forEachIndexed { index, item ->
-            if (packager.isSelected(index))
-                return item.defaultStack
-        }
-
-        return null
+        return this.storages.filterIndexed { index, _ -> packager.isSelected(index) }.firstOrNull()?.defaultStack
     }
 }
 
@@ -62,19 +59,70 @@ abstract class ExploitCreative(val parent: Any, val name: String, val icon: Item
 
     fun createAction(name: String, icon: ItemStack, action: () -> Unit) {
         object : ValueButtonItem(parent, name, icon) {
-            override fun onClick() {
-                action()
-            }
+            override fun onClick() { action() }
+
+            override fun isEnabled() = mc.interactionManager!!.currentGameMode == GameMode.CREATIVE
         }
+    }
+
+    private val placed = "The item was placed in your hotbar"
+
+    open fun give(stack: ItemStack) {
+        if (!MinecraftClient.getInstance().player?.abilities!!.creativeMode) {
+            return
+        }
+
+        if (!MinecraftClient.getInstance().player?.inventory!!.insertStack(stack)) {
+            return
+        }
+
+        mc.setScreen(null)
+        CustomChat.printChatMessage(placed)
+    }
+
+    // ReinerWahnsinn Spawner Bypass for Spigot/CraftBukkit 1.8.3
+    open fun packageExploit(stack: ItemStack): ItemStack {
+        val packager = ManagerCreative.getPackagedItem() ?: return stack
+
+        val packagedItem = ItemStack(packager.item)
+
+        val base = NbtCompound()
+        val blockEntityTag = NbtCompound()
+
+        if (packager.item == Items.FURNACE) {
+            blockEntityTag.put("BurnTime", NbtShort.of(0))
+            blockEntityTag.put("CookTime", NbtShort.of(0))
+            blockEntityTag.put("CookTimeTotal", NbtShort.of(0))
+            // [..id..]
+            blockEntityTag.put("Lock", NbtString.of(""))
+        }
+
+        blockEntityTag.put("id", NbtString.of(StringUtil.uncoverTranslation(stack.translationKey).replace(" ", "")))
+
+        val items = NbtList()
+
+        val bypassItem = NbtCompound()
+        bypassItem.put("Count", NbtByte.of(1))
+        bypassItem.put("Damage", NbtShort.of(stack.damage.toShort()))
+        bypassItem.put("id", NbtString.of(StringUtil.uncoverTranslation(stack.translationKey).replace(" ", "")))
+        bypassItem.put("Slot", NbtShort.of(0))
+        bypassItem.put("tag", stack.nbt)
+
+        items.add(bypassItem)
+
+        blockEntityTag.put("Items", items)
+        base.put("BlockEntityTag", blockEntityTag)
+
+        packagedItem.nbt = base
+
+        return packagedItem
     }
 }
 
 abstract class ExploitCreativeSingle(parent: Any, name: String, icon: ItemStack) : ExploitCreative(parent, name, icon) {
 
     init {
-        createAction(name, icon) {
-            onPress()
-        }
+        createAction(name, icon) { onPress() }
     }
 
     abstract fun onPress()
