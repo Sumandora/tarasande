@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import java.awt.Color
 
-class ElementWidthValueComponentButton(value: Value) : ElementWidthValueComponent<ValueButton>(value) {
+open class ElementWidthValueComponentButton(value: Value) : ElementWidthValueComponent<ValueButton>(value) {
 
     override fun init() {
     }
