@@ -2,10 +2,7 @@ package net.tarasandedevelopment.tarasande.feature.clientvalue
 
 import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
-import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.DebugValues
-import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.PrivacyValues
-import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.RotationValues
-import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.TargetingValues
+import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.*
 import net.tarasandedevelopment.tarasande.feature.clientvalue.panel.PanelElementsClientValues
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
@@ -35,6 +32,7 @@ object ClientValues {
     init {
         ValueButtonOwnerValues(this, "Privacy values", PrivacyValues)
         ValueButtonOwnerValues(this, "Cheat menu values", ManagerPanel.screenCheatMenu)
+        ValueButtonOwnerValues(this, "Accessibility values", AccessibilityValues)
     }
 
     val allowAddressParsingForBlacklistedServers = ValueBoolean(this, "Allow address parsing for blacklisted servers", true)

@@ -23,7 +23,8 @@ object ManagerGrabber : Manager<Grabber>() {
             GrabberSpeedReduction(),
             GrabberDefaultFlightSpeed(),
             GrabberServerInformationOffset(),
-            GrabberMaxPlayerMove()
+            GrabberMaxPlayerMove(),
+            GrabberScrollbarWidth()
         )
 
         val minecraftJar = System.getProperty("java.class.path")
@@ -52,7 +53,7 @@ object ManagerGrabber : Manager<Grabber>() {
                 return@first correct
             }
 
-        val zis = ZipInputStream(FileInputStream(minecraftJar)) // We have to read it again, because we don't know at which entry we again, manifest -should- always be the first, but JVM accepts it if violated
+        val zis = ZipInputStream(FileInputStream(minecraftJar)) // We have to read it again, because we don't know at which entry we are, manifest -should- always be the first, but JVM accepts it regardless
         var zipEntry: ZipEntry?
         while (zis.nextEntry.also { zipEntry = it } != null) {
             if (zipEntry!!.name.endsWith(".class")) {

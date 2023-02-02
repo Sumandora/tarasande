@@ -2,4 +2,4 @@ package net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.
 
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class ExtraInfo(val name: String)
+annotation class ExtraInfo(val name: String, val alternativeLogin: Boolean = false)

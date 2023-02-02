@@ -76,12 +76,12 @@ class SidebarEntryBetaCraftServers : SidebarEntry("BetaCraft Servers", "Protocol
             mc.setScreen(serversScreen)
             return
         }
-        createLookupThread {
-            mc.executeSync {
-                serversScreen = ScreenBetterSlotListBetaCraftServers(name, mc.currentScreen!!, it)
-                mc.setScreen(serversScreen)
-                hasAlreadyLoaded = true
-            }
-        }.start()
+        serversScreen = ScreenBetterSlotListBetaCraftServers(name, mc.currentScreen!!).also {
+            createLookupThread { servers ->
+                it.updateElements(servers)
+            }.start()
+        }
+        mc.setScreen(serversScreen)
+        hasAlreadyLoaded = true
     }
 }

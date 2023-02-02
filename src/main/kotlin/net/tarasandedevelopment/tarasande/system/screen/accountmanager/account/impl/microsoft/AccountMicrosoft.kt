@@ -16,6 +16,7 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.ExtraInfo
+import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.TextFieldInfo
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.AzureAppPreset
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.ManagerAzureApp
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterAzureApps
@@ -27,35 +28,41 @@ import java.nio.charset.StandardCharsets
 import java.sql.Timestamp
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
+import java.util.regex.Pattern
+
+// OAuth
+private const val OAUTH_AUTHORIZE_URL = "https://login.live.com/oauth20_authorize.srf"
+private const val OAUTH_TOKEN_URL = "https://login.live.com/oauth20_token.srf"
+
+// XBox Live
+private const val XBOX_AUTHENTICATE_URL = "https://user.auth.xboxlive.com/user/authenticate"
+private const val XBOX_AUTHORIZE_URL = "https://xsts.auth.xboxlive.com/xsts/authorize"
+
+// Java Edition
+private const val MINECRAFT_LOGIN_URL = "https://api.minecraftservices.com/authentication/login_with_xbox"
+private const val MINECRAFT_PROFILE_URL = "https://api.minecraftservices.com/minecraft/profile"
 
 @AccountInfo("Microsoft")
 open class AccountMicrosoft : Account() {
 
-    // OAuth
-    private val oauthAuthorizeUrl = "https://login.live.com/oauth20_authorize.srf"
-    private val oauthTokenUrl = "https://login.live.com/oauth20_token.srf"
+    @TextFieldInfo("E-Mail", false)
+    var email = ""
 
-    // XBox Live
-    private val xboxAuthenticateUrl = "https://user.auth.xboxlive.com/user/authenticate"
-    private val xboxAuthorizeUrl = "https://xsts.auth.xboxlive.com/xsts/authorize"
-
-    // Java Edition
-    private val minecraftLoginUrl = "https://api.minecraftservices.com/authentication/login_with_xbox"
-    private val minecraftProfileUrl = "https://api.minecraftservices.com/minecraft/profile"
-
-    private var cancelled = false
+    @TextFieldInfo("Password", true)
+    var password = ""
 
     private var service: MinecraftSessionService? = null
 
     protected var msAuthProfile: MSAuthProfile? = null
     protected var redirectUri: String? = null
+
     private var code: String? = null
 
     var azureApp: AzureAppPreset = ManagerAzureApp.list.first()
 
     protected fun randomPort(): Int = ThreadLocalRandom.current().nextInt(Short.MAX_VALUE.toInt() * 2 /* unsigned */)
 
-    protected open fun setupHttpServer(): ServerSocket {
+    protected open fun setupHttpServer(code: (String?) -> Unit): ServerSocket {
         return try {
             val serverSocket = ServerSocket(randomPort())
             if (!serverSocket.isBound)
@@ -73,14 +80,14 @@ open class AccountMicrosoft : Account() {
                     }
                     val path = content.split("\n").first().split(" ")[1]
                     try {
-                        code = path.split("code=")[1].split(" ")[0].split("&")[0]
+                        code(path.split("code=")[1].split(" ")[0].split("&")[0])
                         socket.getOutputStream().write("""HTTP/2 200 OK
 content-type: text/plain
 
 You can close this page now.""".toByteArray())
                     } catch (t: Throwable) {
                         t.printStackTrace()
-                        cancelled = true
+                        code(null)
                         var errorDescription = path.split("&").map { it.split("=") }.firstOrNull { it[0].equals("error_description", true) }?.get(1) ?: "Couldn't parse error description"
                         errorDescription = URLDecoder.decode(errorDescription, StandardCharsets.UTF_8)
                         socket.getOutputStream().write("""HTTP/2 200 OK
@@ -101,49 +108,27 @@ $errorDescription""".toByteArray())
             t.start()
             serverSocket
         } catch (t: Throwable) {
-            setupHttpServer()
+            setupHttpServer(code)
         }
     }
 
     override fun logIn() {
-        code = null
-        cancelled = false
-        if (msAuthProfile != null &&
-            (msAuthProfile?.xboxLiveAuth?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true ||
-                    msAuthProfile?.xboxLiveSecurityTokens?.notAfter?.time?.compareTo(System.currentTimeMillis())?.let { it < 0 } == true)
-        ) {
-            msAuthProfile = msAuthProfile?.renew() // use refresh token to update the account
-        }
-
-        if (msAuthProfile == null) {
-            val serverSocket = setupHttpServer()
-            val prevScreen = mc.currentScreen
-            RenderSystem.recordRenderCall {
-                mc.setScreen(object : NoticeScreen({ cancelled = true }, Text.of("Microsoft Login"), Text.of("Your webbrowser should've opened.\nPlease authorize yourself!\nClosing this screen will cancel the process!"), Text.of("Cancel"), false) {
-                    override fun close() {
-                    }
-                })
+        if (msAuthProfile != null) {
+            val msAuthProfile = msAuthProfile!!
+            if (
+            //@formatter:off
+                msAuthProfile.xboxLiveAuth          .notAfter.time < System.currentTimeMillis() ||
+                msAuthProfile.xboxLiveSecurityTokens.notAfter.time < System.currentTimeMillis()
+            //@formatter:on
+            ) {
+                this.msAuthProfile = msAuthProfile.renew() // use refresh token to update the account
             }
-            redirectUri = azureApp.redirectUri + serverSocket.localPort
-            Util.getOperatingSystem().open(URI(oauthAuthorizeUrl + "?" +
-                    "redirect_uri=" + redirectUri + "&" +
-                    "scope=" + URLEncoder.encode(this.azureApp.scope, StandardCharsets.UTF_8) + "&" +
-                    "response_type=code&" +
-                    "client_id=" + this.azureApp.clientId
-            ))
-            while (code == null) {
-                Thread.sleep(100L)
-                if (cancelled) {
-                    RenderSystem.recordRenderCall {
-                        mc.setScreen(prevScreen)
-                    }
-                    error("Cancelled")
-                }
+        } else {
+            if (email.isNotEmpty() && password.isNotEmpty()) { // We are not going to safe these
+                msAuthProfile = buildFromCredentials(email, password)
+            } else if(code != null) {
+                msAuthProfile = buildFromCode(code!!)
             }
-            RenderSystem.recordRenderCall {
-                mc.setScreen(prevScreen)
-            }
-            msAuthProfile = buildFromCode(code!!)
         }
 
         service = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment).createMinecraftSessionService()
@@ -154,8 +139,41 @@ $errorDescription""".toByteArray())
         }
     }
 
+    private fun buildFromCredentials(email: String, password: String): MSAuthProfile {
+        val getResponse = get("$OAUTH_AUTHORIZE_URL?" + buildArguments(HashMap<String, String>().also {
+            it["client_id"] = azureApp.clientId
+            it["redirect_uri"] = "https://login.live.com/oauth20_desktop.srf".also { url -> redirectUri = url }
+            it["response_type"] = "code"
+            it["scope"] = azureApp.scope
+        }), 60 * 1000, HashMap())
+
+        val content = getResponse.first
+        val cookie = getResponse.second
+
+        val urlPost = content
+            .substring(content.indexOf("urlPost:"))
+            .let { it.substring(it.indexOf("'") + 1) }
+            .let { it.substring(0, it.indexOf("'")) }
+        val sFTTag = content
+            .substring(content.indexOf("sFTTag:"))
+            .let { it.substring(it.indexOf("value=\"")) }
+            .let { it.substring(it.indexOf("\"") + 1) }
+            .let { it.substring(0, it.indexOf("\"")) }
+
+        val postResponse = post(urlPost, 60 * 1000, HashMap<String, String>().also {
+            it["login"] = email
+            it["loginfmt"] = email
+            it["passwd"] = password
+            it["PPFT"] = sFTTag
+        }, cookie)
+
+        val matcher = Pattern.compile("[?|&]code=([\\w.-]+)").matcher(URLDecoder.decode(postResponse.second, StandardCharsets.UTF_8.name()));
+        matcher.find()
+        return buildFromCode(matcher.group(1))
+    }
+
     private fun buildFromCode(code: String): MSAuthProfile {
-        val str = post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
+        val oAuthToken = gson.fromJson(post(OAUTH_TOKEN_URL, 60 * 1000, HashMap<String, String>().also {
             it["client_id"] = this.azureApp.clientId
             it["code"] = code
             it["grant_type"] = "authorization_code"
@@ -164,22 +182,20 @@ $errorDescription""".toByteArray())
             if (this.azureApp.clientSecret != null) {
                 it["client_secret"] = this.azureApp.clientSecret!!
             }
-        })
-        val oAuthToken = gson.fromJson(str, JsonObject::class.java)
+        }).first, JsonObject::class.java)
         return buildFromOAuthToken(oAuthToken)
     }
 
     protected fun buildFromRefreshToken(refreshToken: String): MSAuthProfile {
-        val oAuthToken = gson.fromJson(post(oauthTokenUrl, 60 * 1000, HashMap<String, String>().also {
+        val oAuthToken = gson.fromJson(post(OAUTH_TOKEN_URL, 60 * 1000, HashMap<String, String>().also {
             it["client_id"] = this.azureApp.clientId
             it["refresh_token"] = refreshToken
             it["grant_type"] = "refresh_token"
-            it["redirect_uri"] = redirectUri!!
             it["scope"] = this.azureApp.scope
             if (this.azureApp.clientSecret != null) {
                 it["client_secret"] = this.azureApp.clientSecret!!
             }
-        }), JsonObject::class.java)
+        }).first, JsonObject::class.java)
         return buildFromOAuthToken(oAuthToken)
     }
 
@@ -192,7 +208,7 @@ $errorDescription""".toByteArray())
         req.add("Properties", reqProps)
         req.addProperty("RelyingParty", "http://auth.xboxlive.com")
         req.addProperty("TokenType", "JWT")
-        val xboxLiveAuth = gson.fromJson(post(xboxAuthenticateUrl, 60 * 1000, "application/json", req.toString()), JsonObject::class.java)
+        val xboxLiveAuth = gson.fromJson(post(XBOX_AUTHENTICATE_URL, 60 * 1000, "application/json", req.toString()).first, JsonObject::class.java)
         return buildFromXboxLive(oAuthToken, xboxLiveAuth)
     }
 
@@ -206,21 +222,21 @@ $errorDescription""".toByteArray())
         req.add("Properties", reqProps)
         req.addProperty("RelyingParty", "rp://api.minecraftservices.com/")
         req.addProperty("TokenType", "JWT")
-        val xboxLiveSecurityTokens = gson.fromJson(post(xboxAuthorizeUrl, 60 * 1000, "application/json", req.toString()), JsonObject::class.java)
+        val xboxLiveSecurityTokens = gson.fromJson(post(XBOX_AUTHORIZE_URL, 60 * 1000, "application/json", req.toString()).first, JsonObject::class.java)
         return buildFromXboxLiveSecurityTokens(oAuthToken, xboxLiveAuth, xboxLiveSecurityTokens)
     }
 
     private fun buildFromXboxLiveSecurityTokens(oAuthToken: JsonObject, xboxLiveAuth: JsonObject, xboxLiveSecurityTokens: JsonObject): MSAuthProfile {
         val req = JsonObject()
         req.addProperty("identityToken", "XBL3.0 x=" + xboxLiveSecurityTokens.getAsJsonObject("DisplayClaims").getAsJsonArray("xui")[0].asJsonObject["uhs"].asString + ";" + xboxLiveSecurityTokens["Token"].asString)
-        val minecraftLogin = gson.fromJson(post(minecraftLoginUrl, 60 * 1000, "application/json", req.toString()), JsonObject::class.java)
+        val minecraftLogin = gson.fromJson(post(MINECRAFT_LOGIN_URL, 60 * 1000, "application/json", req.toString()).first, JsonObject::class.java)
         return buildFromMinecraftLogin(oAuthToken, xboxLiveAuth, xboxLiveSecurityTokens, minecraftLogin)
     }
 
     private fun buildFromMinecraftLogin(oAuthToken: JsonObject, xboxLiveAuth: JsonObject, xboxLiveSecurityTokens: JsonObject, minecraftLogin: JsonObject): MSAuthProfile {
-        val minecraftProfile = gson.fromJson(get(minecraftProfileUrl, 60 * 1000, HashMap<String, String>().also {
+        val minecraftProfile = gson.fromJson(get(MINECRAFT_PROFILE_URL, 60 * 1000, HashMap<String, String>().also {
             it["Authorization"] = "Bearer " + minecraftLogin["access_token"].asString
-        }), JsonObject::class.java)
+        }).first, JsonObject::class.java)
         return gson.let {
             MSAuthProfile(
                 it.fromJson(oAuthToken, MSAuthProfile.OAuthToken::class.java),
@@ -233,37 +249,45 @@ $errorDescription""".toByteArray())
         }
     }
 
-    operator fun get(url: String, timeout: Int, headers: HashMap<String, String>): String {
+    operator fun get(url: String, timeout: Int, headers: HashMap<String, String>): Pair<String /* Content */, String /* Cookies */> {
         val urlConnection = URL(url).openConnection() as HttpURLConnection
         headers.forEach(urlConnection::setRequestProperty)
         urlConnection.readTimeout = timeout
         urlConnection.connectTimeout = timeout
         urlConnection.requestMethod = "GET"
+        urlConnection.doInput = true
         urlConnection.connect()
-        return urlConnection.inputStream.readAllBytes().decodeToString()
+        return urlConnection.inputStream.readAllBytes().decodeToString() to urlConnection.getHeaderField("set-cookie")
     }
 
-    fun post(url: String, timeout: Int, arguments: HashMap<String, String>): String {
-        val argumentsStr = StringBuilder()
+    private fun buildArguments(arguments: HashMap<String, String>): String {
+        val stringBuilder = StringBuilder()
         arguments.forEach {
-            argumentsStr.append(URLEncoder.encode(it.key, StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(it.value, StandardCharsets.UTF_8)).append("&")
+            stringBuilder.append(URLEncoder.encode(it.key, StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(it.value, StandardCharsets.UTF_8)).append("&")
         }
-        return post(url, timeout, "application/x-www-form-urlencoded", argumentsStr.substring(0, argumentsStr.length - 1))
+        return stringBuilder.toString()
     }
 
-    fun post(url: String, timeout: Int, contentType: String, input: String): String {
+    fun post(url: String, timeout: Int, arguments: HashMap<String, String>, cookie: String? = null): Pair<String, String> {
+        val argumentsStr = buildArguments(arguments)
+        return post(url, timeout, "application/x-www-form-urlencoded", argumentsStr.substring(0, argumentsStr.length - 1), cookie)
+    }
+
+    fun post(url: String, timeout: Int, contentType: String, input: String, cookie: String? = null): Pair<String, String> {
         val urlConnection = URL(url).openConnection() as HttpURLConnection
         urlConnection.readTimeout = timeout
         urlConnection.connectTimeout = timeout
         urlConnection.requestMethod = "POST"
         urlConnection.doOutput = true
-        urlConnection.setFixedLengthStreamingMode(input.length)
+        urlConnection.doInput = true
         urlConnection.setRequestProperty("Content-Type", contentType)
         urlConnection.setRequestProperty("Accept", contentType)
+        if(cookie != null)
+            urlConnection.setRequestProperty("Cookie", cookie)
         urlConnection.connect()
         urlConnection.outputStream.write(input.toByteArray(StandardCharsets.UTF_8))
         urlConnection.outputStream.flush()
-        return urlConnection.inputStream.readAllBytes().decodeToString()
+        return urlConnection.inputStream.readAllBytes().decodeToString() to urlConnection.url.toString()
     }
 
     @Suppress("unused")
@@ -272,6 +296,43 @@ $errorDescription""".toByteArray())
         mc.setScreen(ScreenBetterAzureApps(it, azureApp) { newAzureApp ->
             azureApp = newAzureApp
         })
+    }
+
+    @Suppress("unused")
+    @ExtraInfo("Web Login", alternativeLogin = true)
+    val webLogin: (Screen) -> Unit = {
+        var finished = false
+
+        val serverSocket = setupHttpServer(code = {
+            code = it
+            finished = true
+        })
+
+        val prevScreen = mc.currentScreen
+        RenderSystem.recordRenderCall {
+            mc.setScreen(object : NoticeScreen({ finished = true }, Text.of("Microsoft Login"), Text.of("Your webbrowser should've opened.\nPlease authorize yourself!\nClosing this screen will cancel the process!"), Text.of("Cancel"), false) {
+                override fun close() {
+                    // Escape can bypass this screen, I hate mojang
+                    finished = true
+                    super.close()
+                }
+            })
+        }
+        redirectUri = azureApp.redirectUri + serverSocket.localPort
+        Util.getOperatingSystem().open(URI(OAUTH_AUTHORIZE_URL + "?" +
+                "redirect_uri=" + redirectUri + "&" +
+                "scope=" + URLEncoder.encode(this.azureApp.scope, StandardCharsets.UTF_8) + "&" +
+                "response_type=code&" +
+                "client_id=" + this.azureApp.clientId
+        ))
+        Thread("Waiting for login thread") {
+            while (!finished) {
+                Thread.sleep(100L)
+            }
+            RenderSystem.recordRenderCall {
+                mc.setScreen(prevScreen)
+            }
+        }.start()
     }
 
     override fun getDisplayName(): String {
@@ -292,6 +353,8 @@ $errorDescription""".toByteArray())
     }
 
     override fun create(credentials: List<String>) {
+        email = credentials[0]
+        password = credentials[1]
     }
 
     data class MSAuthProfile(val oAuthToken: OAuthToken, val xboxLiveAuth: XboxLiveAuth, val xboxLiveSecurityTokens: XboxLiveSecurityTokens, val minecraftLogin: MinecraftLogin, val minecraftProfile: MinecraftProfile, val azureApp: AzureAppPreset) {

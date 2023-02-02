@@ -31,13 +31,16 @@ import java.util.logging.Logger
  *  - Auto Totem
  *  - AutoLog
  *  - Obfuscator
- *  - Inventory Module Abstraction
- *  
+ *  - Dump Items/Blocks/Player
+ *  - Re-add Wiki
+ *  - Add Rotation RL
+ *  - AccountMicrosoft: Change Name on login & Remove Get&Post Methods
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions are missing
  *  - Entity offset "fix" is a bit cursed
  *  - WindowClick is not fully remapped in <= 1.16.5
+ *  - Bedrock account type
  *
  * TODO | Crasher:
  *  - Basic crasher module

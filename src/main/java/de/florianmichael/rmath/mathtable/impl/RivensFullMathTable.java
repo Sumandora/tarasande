@@ -10,7 +10,7 @@ public class RivensFullMathTable implements MathTable {
     private static final float[] BF_sinFull;
 
     static {
-        BF_SIN_TO_COS = (float) (Math.PI * 0.5f);
+        BF_SIN_TO_COS = (float) (Math.PI * 0.5F);
 
         BF_SIN_BITS = 12;
         BF_SIN_MASK = ~(-1 << BF_SIN_BITS);

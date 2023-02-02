@@ -6,12 +6,12 @@ import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.m
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.modern.ModernForgePayload
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
-import net.tarasandedevelopment.tarasande.screen.base.AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget
-import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListEntry
-import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
+import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
+import net.tarasandedevelopment.tarasande.util.screen.EntryScreenBetterSlotList
+import net.tarasandedevelopment.tarasande.util.screen.ScreenBetterSlotList
 
-class ScreenBetterSlotListForgeInformation(title: String, parent: Screen, val type: Type, val struct: IForgePayload) : ScreenBetterSlotList(title, parent, 46, -46, -1, FontWrapper.fontHeight() * 2 + 5) {
+class ScreenBetterSlotListForgeInformation(title: String, parent: Screen, private val type: Type, private val struct: IForgePayload) : ScreenBetterSlotList(title, parent, 46, -46) {
 
     enum class Type {
         MOD_LIST,
@@ -19,38 +19,25 @@ class ScreenBetterSlotListForgeInformation(title: String, parent: Screen, val ty
     }
 
     init {
-        this.provideElements(object : AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget.ListProvider {
-            override fun get(): List<EntryScreenBetterSlotListEntryForgeList> {
-                val list = when (type) {
-                    Type.MOD_LIST -> struct.installedMods().map { m -> EntryScreenBetterSlotListEntryForgeListMods(m) }
-                    Type.CHANNEL_LIST -> (struct as ModernForgePayload).channels.map { m -> EntryScreenBetterSlotListEntryForgeListChannels(m) }
-                }
-                list.forEach {
-                    val width = (FontWrapper.getWidth(it.display()) * 2) + 5
-
-                    if (entryWidth <= width) {
-                        entryWidth = width
-                    }
-                }
-                return list
+        this.provideElements {
+            when (type) {
+                Type.MOD_LIST -> struct.installedMods().map { m -> EntryScreenBetterSlotListStringMod(m) }
+                Type.CHANNEL_LIST -> (struct as ModernForgePayload).channels.map { m -> EntryScreenBetterSlotListStringChannel(m) }
             }
-        })
-    }
-
-
-    abstract class EntryScreenBetterSlotListEntryForgeList : EntryScreenBetterSlotListEntry() {
-        abstract fun display(): String
-
-        override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            FontWrapper.text(matrices, this.display(), entryWidth.toFloat() / 4F, 1F, scale = 2F, centered = true)
         }
     }
 
-    class EntryScreenBetterSlotListEntryForgeListMods(private val modStruct: ModStruct) : EntryScreenBetterSlotListEntryForgeList() {
-        override fun display() = this.modStruct.modId + " (" + this.modStruct.modVersion + ")"
+
+    open class EntryScreenBetterSlotListString(private val text: String) : EntryScreenBetterSlotList(FontWrapper.getWidth(text) * 2 + 5, FontWrapper.fontHeight() * 2) {
+        override fun getNarration(): Text {
+            return Text.of(text)
+        }
+
+        override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
+            FontWrapper.text(matrices, text, entryWidth / 2F, entryHeight / 2F - FontWrapper.fontHeight() /* Scale cancels the division out */, scale = 2F, centered = true)
+        }
     }
 
-    class EntryScreenBetterSlotListEntryForgeListChannels(private val channelStruct: ChannelStruct) : EntryScreenBetterSlotListEntryForgeList() {
-        override fun display() = this.channelStruct.name + " (" + this.channelStruct.version + ")"
-    }
+    class EntryScreenBetterSlotListStringMod(modStruct: ModStruct) : EntryScreenBetterSlotListString(modStruct.modId + " (" + modStruct.modVersion + ")")
+    class EntryScreenBetterSlotListStringChannel(channelStruct: ChannelStruct) : EntryScreenBetterSlotListString(channelStruct.name + " (" + channelStruct.version + ")")
 }

@@ -23,8 +23,8 @@ public class RivensMathTable implements MathTable {
         BF_cos = new float[BF_SIN_COUNT];
 
         for (int i = 0; i < BF_SIN_COUNT; i++) {
-            BF_sin[i] = (float) Math.sin((i + 0.5f) / BF_SIN_COUNT * BF_radFull);
-            BF_cos[i] = (float) Math.cos((i + 0.5f) / BF_SIN_COUNT * BF_radFull);
+            BF_sin[i] = (float) Math.sin((i + 0.5F) / BF_SIN_COUNT * BF_radFull);
+            BF_cos[i] = (float) Math.cos((i + 0.5F) / BF_SIN_COUNT * BF_radFull);
         }
 
         // Four cardinal directions (credits: Nate)

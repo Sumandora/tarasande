@@ -3,7 +3,6 @@ package de.florianmichael.tarasande_protocol_spoofer.spoofer
 import de.florianmichael.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
 import de.florianmichael.tarasande_protocol_spoofer.viaversion.ViaVersionUtil
 import io.netty.buffer.Unpooled
-import net.minecraft.client.MinecraftClient
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.network.packet.c2s.login.LoginHelloC2SPacket
@@ -11,8 +10,8 @@ import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.text.LiteralTextContent
 import net.minecraft.text.MutableText
-import net.minecraft.util.Identifier
 import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.logger
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
@@ -69,7 +68,7 @@ class SidebarEntryToggleableTeslaClientFaker : SidebarEntryToggleable("Tesla cli
                     if (event.packet is CustomPayloadS2CPacket) {
                         val packet = (event.packet as CustomPayloadS2CPacket)
                         if(packet.channel.toString() == "tesla:client") {
-                            CustomChat.printChatMessage(MutableText.of(LiteralTextContent(("Tesla Client Request: " + packet.data.writtenBytes.decodeToString()).also { println(it) })))
+                            CustomChat.printChatMessage(MutableText.of(LiteralTextContent(("Tesla Client Request: " + packet.data.writtenBytes.decodeToString()).also { logger.warning(it) })))
                         }
                     }
                 }

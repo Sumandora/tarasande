@@ -6,7 +6,7 @@ public class TaylorMathTable implements MathTable {
 
     private static final float BF_SIN_TO_COS;
     static {
-        BF_SIN_TO_COS = (float)(Math.PI * 0.5f);
+        BF_SIN_TO_COS = (float)(Math.PI * 0.5F);
     }
 
     @Override

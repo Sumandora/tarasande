@@ -5,9 +5,6 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.screen.base.ScreenBetter
-import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholder
-import net.tarasandedevelopment.tarasande.screen.widget.textfield.TextFieldWidgetPlaceholderPassword
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.ManagerAccount
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.AccountInfo
@@ -15,6 +12,9 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.a
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.TextFieldInfo
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
+import net.tarasandedevelopment.tarasande.util.screen.ScreenBetter
+import net.tarasandedevelopment.tarasande.util.screen.widget.TextFieldWidgetPlaceholder
+import net.tarasandedevelopment.tarasande.util.screen.widget.TextFieldWidgetPlaceholderPassword
 import org.lwjgl.glfw.GLFW
 import java.util.function.Consumer
 
@@ -41,8 +41,6 @@ class ScreenBetterAccount(
             button.message = Text.of(implementationClass.name)
         })
 
-        var index = 0
-
         val fields = implementationClass.declaredFields.toMutableList()
 
         var myClass = implementationClass
@@ -52,16 +50,20 @@ class ScreenBetterAccount(
             myClass = myClass.superclass as Class<out Account>
         }
 
-        var i = 0
+        var buttonIndex = 0
+        var textFieldIndex = 0
         for (field in fields) {
             field.isAccessible = true
             if (field.isAnnotationPresent(ExtraInfo::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                val anyField = field.get(accountImplementation) as Function1<Screen, *>
-                addDrawableChild(ButtonWidget(width - 105, 5 + index * 23, 100, 20, Text.of(field.getAnnotation(ExtraInfo::class.java).name)) {
+                val anyField = field.get(accountImplementation) as Function1<Screen, Unit>
+                val annotation = field.getAnnotation(ExtraInfo::class.java)
+                addDrawableChild(ButtonWidget(width - 105, 5 + buttonIndex * 23, 100, 20, Text.of(annotation.name)) {
                     anyField(this)
+                    if(annotation.alternativeLogin)
+                        accountConsumer.accept(accountImplementation)
                 })
-                index++
+                buttonIndex++
             } else if (field.isAnnotationPresent(TextFieldInfo::class.java)) {
                 val textFieldInfo: TextFieldInfo = field.getAnnotation(TextFieldInfo::class.java)
                 if (textFieldInfo.hidden) {
@@ -70,7 +72,7 @@ class ScreenBetterAccount(
                             TextFieldWidgetPlaceholderPassword(
                                 textRenderer,
                                 width / 2 - 150,
-                                (height * 0.25F + i * 25).toInt(),
+                                (height * 0.25F + textFieldIndex * 25).toInt(),
                                 300,
                                 20,
                                 Text.of(textFieldInfo.name)
@@ -82,7 +84,7 @@ class ScreenBetterAccount(
                             TextFieldWidgetPlaceholder(
                                 textRenderer,
                                 width / 2 - 150,
-                                (height * 0.25F + i * 25).toInt(),
+                                (height * 0.25F + textFieldIndex * 25).toInt(),
                                 300,
                                 20,
                                 Text.of(textFieldInfo.name)
@@ -90,7 +92,7 @@ class ScreenBetterAccount(
                     )
                 }
 
-                i++
+                textFieldIndex++
             }
         }
 

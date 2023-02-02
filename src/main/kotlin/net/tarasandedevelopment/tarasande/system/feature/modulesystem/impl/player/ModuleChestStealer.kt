@@ -14,6 +14,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.safeCount
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
@@ -61,6 +62,16 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
         return ContainerUtil.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.distinctBy { it.stack.item }.filter { it != slot }.toTypedArray(), *ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).filter { it.hasStack() }.toTypedArray()).map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value)
     }
 
+    /**
+     * Checks if the player inventory contains a slot, which is capable of picking up the new stack
+     */
+    private fun canTransfer(slot: Slot): Boolean {
+        val playerInventory = mc.player?.playerScreenHandler!!
+        return playerInventory.slots
+            .filter { it.isEnabled }
+            .any { !it.hasStack() || (ItemStack.canCombine(it.stack, slot.stack) && it.stack.safeCount() < it.stack.maxCount) }
+    }
+
     init {
         registerEvent(EventScreenInput::class.java) { event ->
             /*
@@ -96,7 +107,12 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
             }
 
-            var nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list -> slot.hasStack() && slot.id < screenHandler.inventory.size() && !hasBetterEquivalent(slot, list) }
+            var nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list ->
+                slot.hasStack() &&
+                slot.id < screenHandler.inventory.size() &&
+                !hasBetterEquivalent(slot, list) &&
+                canTransfer(slot)
+            }
 
             if (!timeUtil.hasReached(when {
                     wasClosed -> openDelay.value.toLong()

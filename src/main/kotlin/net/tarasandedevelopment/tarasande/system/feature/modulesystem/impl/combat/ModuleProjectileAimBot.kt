@@ -71,7 +71,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
 
             var target = entity.boundingBox.center
 
-            var solution = calcPitch(stack, mc.player?.eyePos?.subtract(target)?.horizontalLength()!!, target.y - mc.player?.eyeY!!)
+            var solution = calcPitch(stack, (mc.player?.eyePos!! - target).horizontalLength(), target.y - mc.player?.eyeY!!)
 
             if (solution.isNaN()) return@registerEvent
 
@@ -82,7 +82,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
             val box = deadReckoning(stack, entity, rotation)
             target = box.center
 
-            solution = calcPitch(stack, mc.player?.eyePos?.subtract(target)?.horizontalLength()!!, target.y - mc.player?.eyeY!!)
+            solution = calcPitch(stack, (mc.player?.eyePos!! - target).horizontalLength(), target.y - mc.player?.eyeY!!)
 
             if (solution.isNaN()) return@registerEvent
 

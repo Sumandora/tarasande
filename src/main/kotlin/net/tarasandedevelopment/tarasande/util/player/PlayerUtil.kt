@@ -150,6 +150,7 @@ object PlayerUtil {
     private fun createFakeChat(block: (ChatScreen) -> Unit) {
         object : ChatScreen("") {
             override fun narrateScreenIfNarrationEnabled(onlyChangedNarrations: Boolean) {
+                // Disable narrator
             }
 
             override fun close() {

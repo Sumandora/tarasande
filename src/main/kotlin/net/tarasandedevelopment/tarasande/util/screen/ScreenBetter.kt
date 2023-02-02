@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.screen.base
+package net.tarasandedevelopment.tarasande.util.screen
 
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack

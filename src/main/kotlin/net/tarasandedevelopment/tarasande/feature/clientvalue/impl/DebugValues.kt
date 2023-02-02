@@ -17,7 +17,7 @@ object DebugValues {
 
     init {
         ValueButtonOwnerValues(this, "Minecraft debugger", MinecraftDebugger)
-        ValueButtonOwnerValues(this, "Player movement prediction", PlayerMovementPrediction())
+        ValueButtonOwnerValues(this, "Player movement prediction", PlayerMovementPrediction)
     }
 
     val openGLErrorDebugger = ValueBoolean(this, "OpenGL error debugger", true)

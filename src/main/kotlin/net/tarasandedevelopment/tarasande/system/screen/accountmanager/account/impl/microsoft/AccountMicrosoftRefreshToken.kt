@@ -2,17 +2,12 @@ package net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.
 
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.TextFieldInfo
-import java.net.ServerSocket
 
 @AccountInfo("Refresh-Token")
 class AccountMicrosoftRefreshToken : AccountMicrosoft() {
 
     @TextFieldInfo("Refresh-Token", true)
     private var token = ""
-
-    override fun setupHttpServer(): ServerSocket {
-        error("Account is invalid")
-    }
 
     override fun logIn() {
         redirectUri = azureApp.redirectUri + randomPort()

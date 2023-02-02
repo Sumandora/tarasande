@@ -17,9 +17,6 @@ import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.injection.accessor.IRealmsPeriodicCheckers
 import net.tarasandedevelopment.tarasande.mc
-import net.tarasandedevelopment.tarasande.screen.base.AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget
-import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListEntry
-import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.ManagerAccount
@@ -31,13 +28,16 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.im
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterProxy
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
+import net.tarasandedevelopment.tarasande.util.screen.EntryScreenBetterSlotList
+import net.tarasandedevelopment.tarasande.util.screen.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.util.threading.ThreadRunnableExposed
 import org.apache.commons.lang3.RandomStringUtils
 import su.mandora.event.EventDispatcher
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.max
 
-class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager", null /*set else where*/, 46, 10, 240, FontWrapper.fontHeight() * 5) {
+class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager", null /*set else where*/, 46, 10) {
 
     val accounts = ArrayList<Account>()
     var currentAccount: Account? = null
@@ -46,11 +46,11 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
 
     private var loginThread: ThreadRunnableExposed? = null
 
-    private var loginButton: ButtonWidget? = null
-    private var removeButton: ButtonWidget? = null
-    private var toggleMainButton: ButtonWidget? = null
-    private var addButton: ButtonWidget? = null
-    private var randomButton: ButtonWidget? = null
+    private lateinit var loginButton: ButtonWidget
+    private lateinit var removeButton: ButtonWidget
+    private lateinit var toggleMainButton: ButtonWidget
+    private lateinit var addButton: ButtonWidget
+    private lateinit var randomButton: ButtonWidget
 
     var status = ""
 
@@ -77,18 +77,14 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
         }
     }
 
-    fun selected(): Account? {
-        if (this.slotList!!.selectedOrNull == null) return null
-
-        return (this.slotList!!.selectedOrNull as EntryScreenBetterSlotListEntryAccount).account
+    private fun selected(): Account? {
+        return (this.slotList?.selectedOrNull as? EntryScreenBetterSlotListAccount)?.account
     }
 
     override fun init() {
-        this.provideElements(object : AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget.ListProvider {
-            override fun get(): List<EntryScreenBetterSlotListEntry> {
-                return accounts.map { a -> EntryScreenBetterSlotListEntryAccount(a) }
-            }
-        })
+        this.provideElements {
+            accounts.map { EntryScreenBetterSlotListAccount(it) }
+        }
         super.init()
 
         addDrawableChild(ButtonWidget(width / 2 - 152, height - 46 - 3, 100, 20, Text.of("Login")) { logIn(this.selected()) }.also { loginButton = it })
@@ -97,8 +93,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
 
             if (accounts.indexOf(this.selected()!!) == mainAccount) mainAccount = null
             accounts.remove(this.selected())
-            slotList?.reload()
-            slotList?.setSelected(null)
+            reload()
         }.also { removeButton = it })
         addDrawableChild(ButtonWidget(width / 2 + 52, height - 46 - 3, 100, 20, Text.of("Toggle main")) {
             val account = this.selected() ?: return@ButtonWidget
@@ -122,7 +117,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
         addDrawableChild(ButtonWidget(width / 2 + 52, height - 46 + 2 + 20 - 3, 100, 20, Text.of("Add")) {
             client?.setScreen(ScreenBetterAccount("Add Account", this) { account ->
                 accounts.add(account)
-                this.slotList?.reload()
+                reload()
             })
         }.also { addButton = it })
 
@@ -141,11 +136,14 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
     }
 
     override fun tick() {
-        loginButton?.active = slotList?.selectedOrNull != null
-        removeButton?.active = slotList?.selectedOrNull != null
-        toggleMainButton?.active = slotList?.selectedOrNull != null
-        if (slotList?.selectedOrNull != null) toggleMainButton?.active = true
-        randomButton?.active = accounts.isNotEmpty()
+        val slotList = slotList // Allow smart cast
+        if(slotList != null) {
+            loginButton.active = slotList.selectedOrNull != null
+            removeButton.active = slotList.selectedOrNull != null
+            toggleMainButton.active = slotList.selectedOrNull != null
+            if (slotList.selectedOrNull != null) toggleMainButton.active = true
+        }
+        randomButton.active = accounts.isNotEmpty()
         super.tick()
     }
 
@@ -158,19 +156,21 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
         }
     }
 
-    inner class EntryScreenBetterSlotListEntryAccount(var account: Account) : EntryScreenBetterSlotListEntry() {
+    inner class EntryScreenBetterSlotListAccount(var account: Account) : EntryScreenBetterSlotList(max(240, FontWrapper.getWidth(account.getDisplayName()) * 2 + 5), FontWrapper.fontHeight() * 5) {
 
         override fun onDoubleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
             logIn(account)
-            super.onDoubleClickEntry(mouseX, mouseY, mouseButton)
         }
 
+        override fun getNarration(): Text = Text.of(account.getDisplayName())
+
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            FontWrapper.textShadow(matrices, Text.of(when {
-                client?.session?.equals(account.session) == true -> Formatting.GREEN.toString()
-                mainAccount == accounts.indexOf(account) -> Formatting.YELLOW.toString()
-                else -> ""
-            } + account.getDisplayName()).string, entryWidth / 2F, entryHeight / 4F + FontWrapper.fontHeight() / 4F, centered = true, scale = 2.0F)
+            val formatting = when {
+                client?.session?.equals(account.session) == true -> Formatting.GREEN
+                mainAccount == accounts.indexOf(account) -> Formatting.YELLOW
+                else -> Formatting.RESET
+            }
+            FontWrapper.textShadow(matrices, formatting.toString() + account.getDisplayName(), entryWidth / 2F, entryHeight / 2F - FontWrapper.fontHeight(), centered = true, scale = 2.0F)
         }
     }
 

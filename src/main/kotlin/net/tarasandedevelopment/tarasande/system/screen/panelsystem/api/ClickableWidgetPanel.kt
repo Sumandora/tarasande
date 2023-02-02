@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.system.screen.panelsystem.api
 
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
+import net.minecraft.client.gui.screen.narration.NarrationPart
 import net.minecraft.client.gui.widget.ClickableWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
@@ -11,6 +12,7 @@ import kotlin.math.floor
 open class ClickableWidgetPanel(val panel: Panel, private val update: Boolean = false) : ClickableWidget(panel.x.toInt(), panel.y.toInt(), panel.panelWidth.toInt(), panel.panelHeight.toInt(), Text.of(panel.title)), Element {
 
     override fun appendClickableNarrations(builder: NarrationMessageBuilder?) {
+        builder?.put(NarrationPart.TITLE, panel.title)
     }
 
     init {

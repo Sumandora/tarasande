@@ -3,7 +3,7 @@ package de.florianmichael.rmath.mathtable.impl;
 import de.florianmichael.rmath.mathtable.MathTable;
 
 public class LibGDXMathTable implements MathTable {
-    public static final float BF_PI = 3.1415927f;
+    public static final float BF_PI = 3.1415927F;
 
     private static final int BF_SIN_BITS = 14; // 16KB. Adjust for accuracy.
     private static final int BF_SIN_MASK = ~(-1 << BF_SIN_BITS);
@@ -20,7 +20,7 @@ public class LibGDXMathTable implements MathTable {
 
     static {
         for(int i = 0; i < BF_SIN_COUNT; i++) {
-            BF_table[i] = (float) Math.sin((i + 0.5f) / BF_SIN_COUNT * BF_radFull);
+            BF_table[i] = (float) Math.sin((i + 0.5F) / BF_SIN_COUNT * BF_radFull);
         }
         for (int i = 0; i < 360; i += 90) {
             BF_table[(int)(i * BF_degToIndex) & BF_SIN_MASK] = (float) Math.sin(i * BF_degreesToRadians);

@@ -170,7 +170,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
                 if (position != null && rotation != null)
                     if (blockInteraction.value) {
                         mc.targetedEntity = null
-                        mc.crosshairTarget = PlayerUtil.rayCast(position!!, position!!.add(rotation?.forwardVector((mc.gameRenderer as IGameRenderer).tarasande_getReach())))
+                        mc.crosshairTarget = PlayerUtil.rayCast(position!!, position!! + rotation?.forwardVector((mc.gameRenderer as IGameRenderer).tarasande_getReach())!!)
                     }
         }
 

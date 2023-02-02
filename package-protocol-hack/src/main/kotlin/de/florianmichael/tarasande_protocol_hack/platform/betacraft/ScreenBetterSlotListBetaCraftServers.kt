@@ -6,41 +6,49 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.network.ServerAddress
 import net.minecraft.client.network.ServerInfo
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.mc
-import net.tarasandedevelopment.tarasande.screen.base.AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget
-import net.tarasandedevelopment.tarasande.screen.base.EntryScreenBetterSlotListEntry
-import net.tarasandedevelopment.tarasande.screen.base.ScreenBetterSlotList
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
+import net.tarasandedevelopment.tarasande.util.screen.EntryScreenBetterSlotList
+import net.tarasandedevelopment.tarasande.util.screen.ScreenBetterSlotList
+import kotlin.math.max
 
-class ScreenBetterSlotListBetaCraftServers(title: String, parent: Screen, servers: ArrayList<BetaCraftServ>) : ScreenBetterSlotList(title, parent, 46, -10, 320, 20) {
+class ScreenBetterSlotListBetaCraftServers(title: String, parent: Screen) : ScreenBetterSlotList(title, parent, 46, -10) {
     private val reloadTimer = TimeUtil()
     private var reloadButton: ButtonWidget? = null
 
-    init {
-        updateElements(servers)
-    }
-
-    private fun updateElements(servers: ArrayList<BetaCraftServ>) {
-        this.provideElements(object : AlwaysSelectedEntryListWidgetScreenBetterSlotListWidget.ListProvider {
-            override fun get() = servers.map { EntryScreenBetterSlotListEntryBetaCraft(it) }
-        })
+    fun updateElements(servers: ArrayList<BetaCraftServ>) {
+        this.provideElements {
+            servers.map { EntryScreenBetterSlotListBetaCraft(it) }
+        }
+        mc.executeSync {
+            reload()
+        }
     }
 
     override fun tick() {
-        super.tick()
         if (reloadButton != null) reloadButton!!.active = reloadTimer.hasReached(5000L)
     }
 
-    class EntryScreenBetterSlotListEntryBetaCraft(val server: BetaCraftServ) : EntryScreenBetterSlotListEntry() {
+    class EntryScreenBetterSlotListBetaCraft(val server: BetaCraftServ) : EntryScreenBetterSlotList(max(320, FontWrapper.getWidth(format(server))), 20) {
+        companion object {
+            private fun format(server: BetaCraftServ) = server.displayName + (if (server.onlineMode) Formatting.GREEN.toString() + " [Online-Mode]" else "")
+        }
+
+        val title by lazy { format(server) }
+
+        override fun getNarration(): Text {
+            return Text.of(title)
+        }
 
         override fun onDoubleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
             ConnectScreen.connect(mc.currentScreen, mc, ServerAddress.parse(server.address), ServerInfo(server.displayName, server.address, false))
         }
 
         override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            FontWrapper.text(matrices, server.displayName + (if (server.onlineMode) Formatting.GREEN.toString() + " [Online-Mode]" else ""), entryWidth.toFloat() / 2F, entryHeight / 4F, centered = true)
+            FontWrapper.text(matrices, title, entryWidth / 2F, entryHeight / 2F - FontWrapper.fontHeight() / 2F, centered = true)
         }
     }
 }

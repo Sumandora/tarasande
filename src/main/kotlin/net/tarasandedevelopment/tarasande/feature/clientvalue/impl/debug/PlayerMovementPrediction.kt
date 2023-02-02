@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.util.player.prediction.PredictionEngin
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import su.mandora.event.EventDispatcher
 
-class PlayerMovementPrediction {
+object PlayerMovementPrediction {
 
     private val enabled = ValueBoolean(this, "Enabled", false)
     private val ticks = ValueNumber(this, "Ticks", 0.0, 20.0, 100.0, 1.0)

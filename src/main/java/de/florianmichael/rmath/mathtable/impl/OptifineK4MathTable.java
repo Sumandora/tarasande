@@ -5,19 +5,19 @@ import de.florianmichael.rmath.mathtable.MathTable;
 public class OptifineK4MathTable implements MathTable {
 
 
-    private static final float radToIndex = roundToFloat(651.8986469044033D);
+    private static final float radToIndex = roundToFloat(651.8986469044033);
     private static final float[] SIN_TABLE_FAST = new float[4096];
 
     static {
         for (int j = 0; j < SIN_TABLE_FAST.length; ++j)
         {
-            SIN_TABLE_FAST[j] = roundToFloat(Math.sin((double)j * Math.PI * 2.0D / 4096.0D));
+            SIN_TABLE_FAST[j] = roundToFloat(Math.sin((double)j * Math.PI * 2.0 / 4096.0));
         }
     }
 
     public static float roundToFloat(double d)
     {
-        return (float)((double) Math.round(d * 1.0E8D) / 1.0E8D);
+        return (float)((double) Math.round(d * 1.0E8D) / 1.0E8);
     }
 
     @Override

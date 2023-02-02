@@ -8,7 +8,7 @@ public class MinecraftMathTable implements MathTable {
 
     static {
         for (int i = 0; i < 65536; ++i) {
-            SIN_TABLE[i] = (float) Math.sin((double) i * Math.PI * 2.0D / 65536.0D);
+            SIN_TABLE[i] = (float) Math.sin((double) i * Math.PI * 2.0 / 65536.0);
         }
     }
 
