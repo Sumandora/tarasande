@@ -397,6 +397,7 @@ public class BlockModelDefinition {
                 Blocks.ACACIA_SLAB,
                 Blocks.DARK_OAK_SLAB,
                 Blocks.RED_SANDSTONE_SLAB,
+                Blocks.PETRIFIED_OAK_SLAB,
 
                 // This was originally a metadata
                 Blocks.SMOOTH_STONE_SLAB

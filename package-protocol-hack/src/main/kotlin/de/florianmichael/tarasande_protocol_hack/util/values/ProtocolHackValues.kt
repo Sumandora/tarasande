@@ -50,6 +50,7 @@ object ProtocolHackValues {
     val emulateMouseInputs = ValueBooleanProtocol("Emulate mouse inputs", ProtocolVersion.v1_12_2.andOlder())
     val sneakInstant = ValueBooleanProtocol("Sneak instant", ProtocolVersion.v1_8 .. ProtocolVersion.v1_12_2)
     val replaceRayTrace = ValueBooleanProtocol("Replace ray trace", ProtocolVersion.v1_12_2.andOlder())
+    val replacePetrifiedOakSlab = ValueBooleanProtocol("Replace petrified oak slab", BetaProtocols.r1_3_1tor1_3_2 .. ProtocolVersion.v1_12_2)
 
     // 1.9 -> 1.8.x
     val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", ProtocolVersion.v1_8.andOlder())

@@ -138,7 +138,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient_Protocol 
     private void onInventoryKeyPressed(CallbackInfo ci) throws Exception {
         final UserConnection viaConnection = TarasandeProtocolHack.Companion.getViaConnection();
 
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_11_1) && viaConnection != null) {
+        if (viaConnection != null && ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_11_1)) {
             if (ManagerModule.INSTANCE.get(ModuleInventoryMove.class).getEnabled().getValue() && ModuleInventoryMoveSettingsKt.cancelOpenPacket.getValue()) {
                 return;
             }

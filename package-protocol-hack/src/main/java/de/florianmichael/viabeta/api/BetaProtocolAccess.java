@@ -11,6 +11,7 @@ import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.storage.EntityTr
 public class BetaProtocolAccess {
 
     public static String getTrackedEntities1_7_6_10(final UserConnection connection) {
+        if (connection == null) return null;
         final EntityTracker_1_7_6_10 entityTracker = connection.get(EntityTracker_1_7_6_10.class);
         if (entityTracker != null) {
             if (entityTracker.getTrackedEntities().isEmpty()) return null;
@@ -21,6 +22,7 @@ public class BetaProtocolAccess {
     }
 
     public static String getVirtualHolograms1_7_6_10(final UserConnection connection) {
+        if (connection == null) return null;
         final EntityTracker_1_7_6_10 entityTracker = connection.get(EntityTracker_1_7_6_10.class);
         if (entityTracker != null) {
             if (entityTracker.getVirtualHolograms().isEmpty()) return null;
@@ -31,6 +33,7 @@ public class BetaProtocolAccess {
     }
 
     public static String getTrackedEntities1_5_2(final UserConnection connection) {
+        if (connection == null) return null;
         final EntityTracker_1_5_2 entityTracker = connection.get(EntityTracker_1_5_2.class);
         if (entityTracker != null) {
             if (entityTracker.getTrackedEntities().isEmpty()) return null;
@@ -41,6 +44,7 @@ public class BetaProtocolAccess {
     }
 
     public static String getTrackedEntities1_2_4_5(final UserConnection connection) {
+        if (connection == null) return null;
         final EntityTracker_1_2_4_5 entityTracker = connection.get(EntityTracker_1_2_4_5.class);
         if (entityTracker != null) {
             if (entityTracker.getTrackedEntities().isEmpty()) return null;
@@ -51,6 +55,7 @@ public class BetaProtocolAccess {
     }
 
     public static String getWorldSeed1_1(final UserConnection connection) {
+        if (connection == null) return null;
         final SeedStorage seedStorage = connection.get(SeedStorage.class);
         if (seedStorage != null) {
             if (seedStorage.seed == 0L) return null;
@@ -61,6 +66,7 @@ public class BetaProtocolAccess {
     }
 
     public static String getWorldLoading_C_0_30(final UserConnection connection) {
+        if (connection == null) return null;
         final ClassicProgressStorage classicProgressStorage = connection.get(ClassicProgressStorage.class);
         if (classicProgressStorage == null) return null;
 

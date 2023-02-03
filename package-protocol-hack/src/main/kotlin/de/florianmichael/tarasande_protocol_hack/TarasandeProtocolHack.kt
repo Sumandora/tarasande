@@ -53,6 +53,7 @@ import net.minecraft.client.gui.screen.DownloadingTerrainScreen
 import net.minecraft.item.Item
 import net.minecraft.registry.Registries
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
+import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.mc
@@ -217,6 +218,12 @@ class TarasandeProtocolHack {
             // Via Connection tracker
             add(EventConnectServer::class.java) {
                 viaConnection = (it.connection as IClientConnection_Protocol).protocolhack_getViaConnection()
+            }
+
+            add(EventDisconnect::class.java) {
+                if (it.connection == mc.networkHandler?.connection) {
+                    viaConnection = null
+                }
             }
 
             // Custom progress bars implemented by ViaBeta
