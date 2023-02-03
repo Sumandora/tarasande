@@ -68,13 +68,8 @@ abstract class ExploitCreative(val parent: Any, val name: String, val icon: Item
     private val placed = "The item was placed in your hotbar"
 
     open fun give(stack: ItemStack) {
-        if (!MinecraftClient.getInstance().player?.abilities!!.creativeMode) {
-            return
-        }
-
-        if (!MinecraftClient.getInstance().player?.inventory!!.insertStack(stack)) {
-            return
-        }
+        if (!MinecraftClient.getInstance().player?.abilities!!.creativeMode) return
+        if (!MinecraftClient.getInstance().player?.inventory!!.insertStack(stack)) return
 
         mc.setScreen(null)
         CustomChat.printChatMessage(placed)

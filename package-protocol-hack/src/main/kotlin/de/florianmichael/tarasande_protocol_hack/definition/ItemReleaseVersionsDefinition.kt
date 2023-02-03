@@ -464,7 +464,7 @@ object ItemReleaseVersionsDefinition {
         splitter[Items.MUSHROOM_STEM] = arrayOf(ProtocolVersion.v1_13.andNewer())
         splitter[Items.NAUTILUS_SHELL] = arrayOf(ProtocolVersion.v1_13.andNewer())
         splitter[Items.ORANGE_BED] = arrayOf(ProtocolVersion.v1_13.andNewer())
-        splitter[Items.PETRIFIED_OAK_SLAB] = arrayOf(ProtocolVersion.v1_13.andNewer())
+        //splitter[Items.PETRIFIED_OAK_SLAB] = arrayOf(ProtocolVersion.v1_13.andNewer()) it's right, but the item exists in another form before, so it's actually wrong
         splitter[Items.PHANTOM_MEMBRANE] = arrayOf(ProtocolVersion.v1_13.andNewer())
         splitter[Items.PHANTOM_SPAWN_EGG] = arrayOf(ProtocolVersion.v1_13.andNewer())
         splitter[Items.PINK_BED] = arrayOf(ProtocolVersion.v1_13.andNewer())

@@ -32,5 +32,4 @@ public class MixinCommonBoss {
     @Redirect(method = "setHealth", at = @At(value = "INVOKE", target = "Lcom/google/common/base/Preconditions;checkArgument(ZLjava/lang/Object;)V"))
     public void ignoreHealthCheck(boolean expression, Object errorMessage) {
     }
-
 }

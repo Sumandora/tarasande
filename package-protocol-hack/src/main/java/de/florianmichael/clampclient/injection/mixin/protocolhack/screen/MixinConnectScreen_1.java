@@ -57,29 +57,28 @@ public class MixinConnectScreen_1 {
 
     @Redirect(method = "run", at = @At(value = "INVOKE", target = "Ljava/net/InetSocketAddress;getHostName()Ljava/lang/String;", ordinal = 1))
     public String replaceAddress(InetSocketAddress instance) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_17)) {
-            return field_33737.getAddress();
-        }
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_17)) return field_33737.getAddress();
+
         return instance.getHostString();
     }
 
     @Redirect(method = "run", at = @At(value = "INVOKE", target = "Ljava/net/InetSocketAddress;getPort()I"))
     public int replacePort(InetSocketAddress instance) {
-        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_17)) {
-            return field_33737.getPort();
-        }
+        if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_17)) return field_33737.getPort();
+
         return instance.getPort();
     }
 
     @Inject(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/Packet;)V", ordinal = 1, shift = At.Shift.BEFORE))
-    public void setupChatSessions(CallbackInfo ci) {
+    public void setupConnectionSessions(CallbackInfo ci) {
+        final UserConnection userConnection = TarasandeProtocolHack.Companion.getViaConnection();
+        if (userConnection == null) {
+            ViaLoadingBase.LOGGER.log(Level.WARNING, "ViaVersion userConnection is null");
+            return;
+        }
         if (ViaLoadingBase.getTargetVersion().getVersion() == BedrockProtocols.VIA_PROTOCOL_VERSION.getVersion()) {
-            if (MinecraftClient.getInstance().session instanceof XboxLiveSession) {
-                final UserConnection userConnection = TarasandeProtocolHack.Companion.getViaConnection();
-                if (userConnection != null) {
-                    final XboxLiveSession xboxLiveSession = (XboxLiveSession) MinecraftClient.getInstance().session;
-                    userConnection.put(new AuthDataProvider(userConnection, xboxLiveSession.getUsername(), xboxLiveSession.getChainData(), xboxLiveSession.getBedrockXuid(), xboxLiveSession.getKeyPair(), xboxLiveSession::signBytes));
-                }
+            if (MinecraftClient.getInstance().session instanceof final XboxLiveSession xboxLiveSession) {
+                userConnection.put(new AuthDataProvider(userConnection, xboxLiveSession.getUsername(), xboxLiveSession.getChainData(), xboxLiveSession.getBedrockXuid(), xboxLiveSession.getKeyPair(), xboxLiveSession::signBytes));
             }
         }
 
@@ -91,22 +90,18 @@ public class MixinConnectScreen_1 {
             try {
                 final PlayerKeyPair playerKeyPair = MinecraftClient.getInstance().getProfileKeys().fetchKeyPair().get().orElse(null);
                 if (playerKeyPair != null) {
-                    final UserConnection userConnection = TarasandeProtocolHack.Companion.getViaConnection();
-                    if (userConnection != null) {
-                        final PlayerPublicKey.PublicKeyData publicKeyData = playerKeyPair.publicKey().data();
-                        final ProfileKey profileKey = new ProfileKey(publicKeyData.expiresAt().toEpochMilli(), publicKeyData.key().getEncoded(), publicKeyData.keySignature());
+                    final PlayerPublicKey.PublicKeyData publicKeyData = playerKeyPair.publicKey().data();
+                    final ProfileKey profileKey = new ProfileKey(publicKeyData.expiresAt().toEpochMilli(), publicKeyData.key().getEncoded(), publicKeyData.keySignature());
 
-                        userConnection.put(new ChatSession1_19_2(userConnection, profileKey, playerKeyPair.privateKey()));
-                        if (ViaLoadingBase.getTargetVersion() == ProtocolVersion.v1_19) {
-                            final byte[] legacyKey = ((IPublicKeyData_Protocol) (Object) publicKeyData).protocolhack_get1_19_0Key().array();
-                            if (legacyKey != null) {
-                                userConnection.put(new ChatSession1_19_0(userConnection, profileKey, playerKeyPair.privateKey(), legacyKey));
-                            } else {
-                                ViaLoadingBase.LOGGER.log(Level.WARNING, "Mojang removed the legacy key");
-                            }
+                    userConnection.put(new ChatSession1_19_2(userConnection, profileKey, playerKeyPair.privateKey()));
+
+                    if (ViaLoadingBase.getTargetVersion() == ProtocolVersion.v1_19) {
+                        final byte[] legacyKey = ((IPublicKeyData_Protocol) (Object) publicKeyData).protocolhack_get1_19_0Key().array();
+                        if (legacyKey != null) {
+                            userConnection.put(new ChatSession1_19_0(userConnection, profileKey, playerKeyPair.privateKey(), legacyKey));
+                        } else {
+                            ViaLoadingBase.LOGGER.log(Level.WARNING, "Mojang removed the legacy key");
                         }
-                    } else {
-                        ViaLoadingBase.LOGGER.log(Level.WARNING, "ViaVersion userConnection is null");
                     }
                 } else {
                     ViaLoadingBase.LOGGER.log(Level.WARNING, "Failed to fetch the key pair");

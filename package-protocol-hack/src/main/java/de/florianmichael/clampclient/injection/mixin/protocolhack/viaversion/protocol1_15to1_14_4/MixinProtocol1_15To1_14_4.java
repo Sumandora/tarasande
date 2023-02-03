@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = Protocol1_15To1_14_4.class, remap = false)
 public class MixinProtocol1_15To1_14_4 {
 
-    @Inject(method = "init", at = @At("RETURN"))
+    @Inject(method = "init", at = @At("HEAD"))
     public void addMeta18Storage(UserConnection connection, CallbackInfo ci) {
         connection.put(new Meta18Storage(connection));
     }
