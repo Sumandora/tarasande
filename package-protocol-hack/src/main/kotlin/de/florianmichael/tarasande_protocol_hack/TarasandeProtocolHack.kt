@@ -12,7 +12,6 @@ import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_
 import de.florianmichael.tarasande_protocol_hack.definition.ItemReleaseVersionsDefinition
 import de.florianmichael.tarasande_protocol_hack.definition.PackFormatsDefinition
 import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.EntityDimensionsDefinition
-import de.florianmichael.tarasande_protocol_hack.platform.ViaBedrockPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.platform.ViaBetaPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.platform.ViaSnapshotPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.platform.betacraft.SidebarEntryBetaCraftServers
@@ -21,7 +20,6 @@ import de.florianmichael.tarasande_protocol_hack.provider.viabeta.*
 import de.florianmichael.tarasande_protocol_hack.provider.viasnapshot.FabricPlayerAbilitiesProvider
 import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
 import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
-import de.florianmichael.tarasande_protocol_hack.tarasande.account.AccountBedrock
 import de.florianmichael.tarasande_protocol_hack.tarasande.information.*
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleEveryItemOnArmor
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleInventoryMove
@@ -32,8 +30,6 @@ import de.florianmichael.tarasande_protocol_hack.tarasande.sidebar.SidebarEntryS
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues
 import de.florianmichael.tarasande_protocol_hack.util.values.ValueBooleanProtocol
 import de.florianmichael.tarasande_protocol_hack.util.values.command.ViaCommandHandlerTarasandeCommandHandler
-import de.florianmichael.viabedrock.api.BedrockProtocolAccess
-import de.florianmichael.viabedrock.api.BedrockProtocols
 import de.florianmichael.viabeta.api.BetaProtocolAccess
 import de.florianmichael.viabeta.api.BetaProtocols
 import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.provider.ScreenStateProvider
@@ -63,7 +59,6 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
-import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.ManagerAccount
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
@@ -113,10 +108,6 @@ class TarasandeProtocolHack {
 
     private val subPlatformViaSnapshot = SubPlatform("ViaSnapshot", { SubPlatform.isClass("de.florianmichael.viasnapshot.base.ViaSnapshotPlatform") }, { ViaSnapshotPlatformImpl() }) {
         SnapshotProtocols.addProtocols(it)
-    }
-
-    private val subPlatformViaBedrock = SubPlatform("ViaBedrock", { SubPlatform.isClass("de.florianmichael.viabedrock.base.ViaBedrockPlatform") }, { ViaBedrockPlatformImpl() }) {
-        it.add(BedrockProtocols.VIA_PROTOCOL_VERSION)
     }
 
     fun initialize() {
@@ -171,7 +162,7 @@ class TarasandeProtocolHack {
                 it.use(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
                 it.use(HandItemProvider::class.java, FabricHandItemProvider())
             }.viaManagerBuilderCreator { it.commandHandler(ViaCommandHandlerTarasandeCommandHandler()) }
-            .subPlatform(subPlatformViaBedrock, 0).subPlatform(subPlatformViaSnapshot).subPlatform(subPlatformViaBeta)
+            .subPlatform(subPlatformViaSnapshot).subPlatform(subPlatformViaBeta)
             .build()
 
         // Definition setup
@@ -205,9 +196,6 @@ class TarasandeProtocolHack {
                 // Protocol based modules
                 ManagerModule.add(ModuleEveryItemOnArmor())
 
-                // Bedrock account type
-                ManagerAccount.add(AccountBedrock::class.java)
-
                 // Sidebar modifications
                 ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.apply {
                     insert(SidebarEntrySelectionProtocolHack(), 0)
@@ -239,8 +227,6 @@ class TarasandeProtocolHack {
                     if (ViaLoadingBase.getTargetVersion()
                             .isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30)
                     ) levelProgress = BetaProtocolAccess.getWorldLoading_C_0_30(viaConnection)
-                    if (ViaLoadingBase.getTargetVersion().version == BedrockProtocols.VIA_PROTOCOL_VERSION.version) levelProgress =
-                        BedrockProtocolAccess.getConnectionState_Bedrock_1_19_51(connectedAddress)
 
                     if (levelProgress != null) {
                         FontWrapper.text(

@@ -23,18 +23,11 @@ package de.florianmichael.tarasande_protocol_hack.injection.mixin;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol;
-import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack;
-import de.florianmichael.viabedrock.api.BedrockProtocols;
-import de.florianmichael.viabedrock.protocol.Protocol1_19_3toBedrock1_19_51;
 import de.florianmichael.viabeta.api.BetaProtocols;
 import de.florianmichael.viabeta.pre_netty.PreNettyConstants;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import de.florianmichael.vialoadingbase.event.PipelineReorderEvent;
-import io.netty.bootstrap.AbstractBootstrap;
-import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.local.LocalChannel;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.encryption.PacketDecryptor;
 import net.minecraft.network.encryption.PacketEncryptor;
@@ -43,12 +36,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.crypto.Cipher;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 
 @Mixin(ClientConnection.class)
 public class MixinClientConnection implements IClientConnection_Protocol {
@@ -78,23 +68,6 @@ public class MixinClientConnection implements IClientConnection_Protocol {
             this.vialegacy_decryptionCipher = decryptionCipher;
             this.vialegacy_encryptionCipher = encryptionCipher;
         }
-    }
-
-    @Redirect(method = "connect", at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/Bootstrap;connect(Ljava/net/InetAddress;I)Lio/netty/channel/ChannelFuture;", remap = false))
-    private static ChannelFuture startLocalServer(Bootstrap instance, InetAddress inetHost, int inetPort) {
-        if (ViaLoadingBase.getTargetVersion().getVersion() == BedrockProtocols.VIA_PROTOCOL_VERSION.getVersion()) {
-            TarasandeProtocolHack.Companion.setConnectedAddress(new InetSocketAddress(inetHost, inetPort));
-            return instance.connect(Protocol1_19_3toBedrock1_19_51.createLimboServer(TarasandeProtocolHack.Companion.getConnectedAddress()));
-        }
-        return instance.connect(inetHost, inetPort);
-    }
-
-    @Redirect(method = "connect", at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/Bootstrap;channel(Ljava/lang/Class;)Lio/netty/bootstrap/AbstractBootstrap;", remap = false))
-    private static AbstractBootstrap useLocalChannel(Bootstrap instance, Class aClass) {
-        if (ViaLoadingBase.getTargetVersion().getVersion() == BedrockProtocols.VIA_PROTOCOL_VERSION.getVersion()) {
-            return instance.channel(LocalChannel.class);
-        }
-        return instance.channel(aClass);
     }
 
     @Unique
