@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_protocol_hack.injection.mixin.module;
+package de.florianmichael.tarasande_protocol_hack.injection.mixin.tarasande.module;
 
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleEveryItemOnArmor;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;

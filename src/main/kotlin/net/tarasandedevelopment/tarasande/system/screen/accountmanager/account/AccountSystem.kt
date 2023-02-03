@@ -36,7 +36,7 @@ abstract class Account {
     abstract fun getDisplayName(): String
     abstract fun getSessionService(): MinecraftSessionService?
 
-    abstract fun save(): JsonArray
+    abstract fun save(): JsonArray?
     abstract fun load(jsonArray: JsonArray): Account
 
     abstract fun create(credentials: List<String>)

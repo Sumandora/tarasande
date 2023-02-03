@@ -5,11 +5,8 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
-import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.gui.screen.NoticeScreen
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.Session
-import net.minecraft.text.Text
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.gson
 import net.tarasandedevelopment.tarasande.mc
@@ -54,15 +51,14 @@ open class AccountMicrosoft : Account() {
     private var service: MinecraftSessionService? = null
 
     protected var msAuthProfile: MSAuthProfile? = null
-    protected var redirectUri: String? = null
+    private var redirectUri: String? = null
 
     private var code: String? = null
 
     var azureApp: AzureAppPreset = ManagerAzureApp.list.first()
 
-    protected fun randomPort(): Int = ThreadLocalRandom.current().nextInt(Short.MAX_VALUE.toInt() * 2 /* unsigned */)
-
-    protected open fun setupHttpServer(code: (String?) -> Unit): ServerSocket {
+    private fun setupHttpServer(code: (String?) -> Unit): ServerSocket {
+        fun randomPort() = ThreadLocalRandom.current().nextInt(Short.MAX_VALUE.toInt() * 2 /* unsigned */)
         return try {
             val serverSocket = ServerSocket(randomPort())
             if (!serverSocket.isBound)
@@ -124,11 +120,12 @@ $errorDescription""".toByteArray())
                 this.msAuthProfile = msAuthProfile.renew() // use refresh token to update the account
             }
         } else {
-            if (email.isNotEmpty() && password.isNotEmpty()) { // We are not going to safe these
-                msAuthProfile = buildFromCredentials(email, password)
-            } else if(code != null) {
-                msAuthProfile = buildFromCode(code!!)
-            }
+            msAuthProfile = if(code != null) {
+                buildFromCode(code!!)
+            } else if (email.isNotEmpty() && password.isNotEmpty()) { // We are not going to safe these
+                buildFromCredentials(email, password)
+            } else
+                error("No data was supplied")
         }
 
         service = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment).createMinecraftSessionService()
@@ -301,23 +298,9 @@ $errorDescription""".toByteArray())
     @Suppress("unused")
     @ExtraInfo("Web Login", alternativeLogin = true)
     val webLogin: (Screen) -> Unit = {
-        var finished = false
-
         val serverSocket = setupHttpServer(code = {
             code = it
-            finished = true
         })
-
-        val prevScreen = mc.currentScreen
-        RenderSystem.recordRenderCall {
-            mc.setScreen(object : NoticeScreen({ finished = true }, Text.of("Microsoft Login"), Text.of("Your webbrowser should've opened.\nPlease authorize yourself!\nClosing this screen will cancel the process!"), Text.of("Cancel"), false) {
-                override fun close() {
-                    // Escape can bypass this screen, I hate mojang
-                    finished = true
-                    super.close()
-                }
-            })
-        }
         redirectUri = azureApp.redirectUri + serverSocket.localPort
         Util.getOperatingSystem().open(URI(OAUTH_AUTHORIZE_URL + "?" +
                 "redirect_uri=" + redirectUri + "&" +
@@ -325,25 +308,17 @@ $errorDescription""".toByteArray())
                 "response_type=code&" +
                 "client_id=" + this.azureApp.clientId
         ))
-        Thread("Waiting for login thread") {
-            while (!finished) {
-                Thread.sleep(100L)
-            }
-            RenderSystem.recordRenderCall {
-                mc.setScreen(prevScreen)
-            }
-        }.start()
     }
 
     override fun getDisplayName() = if (session != null) session?.username!! else if(email.isNotEmpty()) email else "Unnamed Microsoft-account"
 
     override fun getSessionService(): MinecraftSessionService? = service
 
-    override fun save(): JsonArray {
-        val jsonArray = JsonArray()
-        if (msAuthProfile != null)
-            jsonArray.add(gson.toJsonTree(msAuthProfile))
-        return jsonArray
+    override fun save(): JsonArray? {
+        if(msAuthProfile == null)
+            return null
+
+        return JsonArray().apply { add(gson.toJsonTree(msAuthProfile)) }
     }
 
     override fun load(jsonArray: JsonArray): Account {
@@ -368,7 +343,6 @@ $errorDescription""".toByteArray())
 
         fun renew(): MSAuthProfile { // I have no clue why I have to do this, but it crashes because "this" is null otherwise ._.
             val microsoft = AccountMicrosoft()
-            microsoft.redirectUri = azureApp.redirectUri + microsoft.randomPort()
             microsoft.azureApp = azureApp
             return microsoft.buildFromRefreshToken(oAuthToken.refreshToken)
         }

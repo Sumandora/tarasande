@@ -45,9 +45,11 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
         val jsonObject = JsonObject()
         val jsonArray = JsonArray()
         for (account in accountManager.accounts) {
+            val saveData = account.save() ?: continue
+
             val accountObject = JsonObject()
             accountObject.addProperty("Type", account.javaClass.getAnnotation(AccountInfo::class.java).name)
-            accountObject.add("Account", account.save())
+            accountObject.add("Account", saveData)
             if (account.session != null) {
                 val sessionObject = JsonObject()
                 sessionObject.addProperty("Username", account.session?.username)

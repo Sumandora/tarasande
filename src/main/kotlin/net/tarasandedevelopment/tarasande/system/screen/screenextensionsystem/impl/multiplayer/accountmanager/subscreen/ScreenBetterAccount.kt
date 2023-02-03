@@ -34,7 +34,7 @@ class ScreenBetterAccount(
     override fun init() {
         textFields.clear()
 
-        addDrawableChild(ButtonWidget(5, 5, 100, 20, Text.of((implementationClass.annotations[0] as AccountInfo).name)) { button ->
+        addDrawableChild(ButtonWidget(5, 5, 100, 20, Text.of((implementationClass.getAnnotation(AccountInfo::class.java)).name)) { button ->
             implementationClass = ManagerAccount.let { it.list[(it.list.indexOf(implementationClass) + 1) % it.list.size] }
             accountImplementation = implementationClass.getDeclaredConstructor().newInstance()
             clearAndInit()
@@ -44,10 +44,12 @@ class ScreenBetterAccount(
         val fields = implementationClass.declaredFields.toMutableList()
 
         var myClass = implementationClass
-        while (myClass.superclass != null) {
-            fields.addAll(myClass.superclass.declaredFields)
-            @Suppress("UNCHECKED_CAST")
-            myClass = myClass.superclass as Class<out Account>
+        if(implementationClass.getAnnotation(AccountInfo::class.java).inherit) {
+            while (myClass.superclass != null) {
+                fields.addAll(myClass.superclass.declaredFields)
+                @Suppress("UNCHECKED_CAST")
+                myClass = myClass.superclass as Class<out Account>
+            }
         }
 
         var buttonIndex = 0
@@ -60,12 +62,14 @@ class ScreenBetterAccount(
                 val annotation = field.getAnnotation(ExtraInfo::class.java)
                 addDrawableChild(ButtonWidget(width - 105, 5 + buttonIndex * 23, 100, 20, Text.of(annotation.name)) {
                     anyField(this)
-                    if(annotation.alternativeLogin)
+                    if(annotation.alternativeLogin) {
                         accountConsumer.accept(accountImplementation)
+                        close()
+                    }
                 })
                 buttonIndex++
             } else if (field.isAnnotationPresent(TextFieldInfo::class.java)) {
-                val textFieldInfo: TextFieldInfo = field.getAnnotation(TextFieldInfo::class.java)
+                val textFieldInfo = field.getAnnotation(TextFieldInfo::class.java)
                 if (textFieldInfo.hidden) {
                     textFields.add(
                         addDrawableChild(

@@ -7,11 +7,12 @@
   "mixins": [
     "MixinClientConnection",
     "MixinClientConnection_1",
-    "module.MixinPlayerScreenHandler",
     "tarasande.MixinEventCollisionShape",
     "tarasande.MixinEventDispatcher",
     "tarasande.MixinEventScreenInput",
     "tarasande.MixinRotationCompanion",
+    "tarasande.account.MixinAccountMicrosoft",
+    "tarasande.module.MixinPlayerScreenHandler",
     "vialoadingbase.MixinCustomViaConfig"
   ],
   "injectors": {
