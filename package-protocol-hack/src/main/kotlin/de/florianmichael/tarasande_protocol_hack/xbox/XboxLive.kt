@@ -4,9 +4,9 @@ import com.google.common.primitives.Longs
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import de.florianmichael.viabedrock.api.BedrockProtocols
 import de.florianmichael.viabedrock.api.auth.JoseStuff
+import net.tarasandedevelopment.tarasande.gson
 import org.apache.commons.io.IOUtils
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
@@ -31,8 +31,6 @@ class XboxLive( //go here, log in, and in the redirected url you will have your 
     //then add -DXboxAccessToken=YOURS to your jvm arguments
     private val accessToken: String
 ) {
-    private val jsonParser = JsonParser()
-    @Throws(Exception::class)
     fun getUserToken(publicKey: ECPublicKey, privateKey: ECPrivateKey): String {
         val jsonObject = JsonObject()
         jsonObject.addProperty("RelyingParty", "http://auth.xboxlive.com")
@@ -41,7 +39,7 @@ class XboxLive( //go here, log in, and in the redirected url you will have your 
         jsonObject.add("Properties", properties)
         properties.addProperty("AuthMethod", "RPS")
         properties.addProperty("SiteName", "user.auth.xboxlive.com")
-        properties.addProperty("RpsTicket", "t=" + accessToken)
+        properties.addProperty("RpsTicket", "t=$accessToken")
         val proofKey = JsonObject()
         properties.add("ProofKey", proofKey)
         proofKey.addProperty("crv", "P-256")
@@ -58,11 +56,10 @@ class XboxLive( //go here, log in, and in the redirected url you will have your 
         addSignatureHeader(connection, jsonObject, privateKey)
         writeJsonObjectToPost(connection, jsonObject)
         val responce = String(IOUtils.toByteArray(connection.inputStream))
-        val responceJsonObject = jsonParser.parse(responce).asJsonObject
+        val responceJsonObject = gson.fromJson(responce, JsonObject::class.java)
         return responceJsonObject["Token"].asString
     }
 
-    @Throws(Exception::class)
     fun getDeviceToken(publicKey: ECPublicKey, privateKey: ECPrivateKey): String {
         val jsonObject = JsonObject()
         jsonObject.addProperty("RelyingParty", "http://auth.xboxlive.com")
@@ -90,11 +87,10 @@ class XboxLive( //go here, log in, and in the redirected url you will have your 
         addSignatureHeader(connection, jsonObject, privateKey)
         writeJsonObjectToPost(connection, jsonObject)
         val responce = String(IOUtils.toByteArray(connection.inputStream))
-        val responceJsonObject = jsonParser.parse(responce).asJsonObject
+        val responceJsonObject = gson.fromJson(responce, JsonObject::class.java)
         return responceJsonObject["Token"].asString
     }
 
-    @Throws(Exception::class)
     fun getTitleToken(publicKey: ECPublicKey, privateKey: ECPrivateKey, deviceToken: String?): String {
         val jsonObject = JsonObject()
         jsonObject.addProperty("RelyingParty", "http://auth.xboxlive.com")
@@ -104,7 +100,7 @@ class XboxLive( //go here, log in, and in the redirected url you will have your 
         properties.addProperty("AuthMethod", "RPS")
         properties.addProperty("DeviceToken", deviceToken)
         properties.addProperty("SiteName", "user.auth.xboxlive.com")
-        properties.addProperty("RpsTicket", "t=" + accessToken)
+        properties.addProperty("RpsTicket", "t=$accessToken")
         val proofKey = JsonObject()
         properties.add("ProofKey", proofKey)
         proofKey.addProperty("crv", "P-256")
@@ -121,11 +117,10 @@ class XboxLive( //go here, log in, and in the redirected url you will have your 
         addSignatureHeader(connection, jsonObject, privateKey)
         writeJsonObjectToPost(connection, jsonObject)
         val responce = String(IOUtils.toByteArray(connection.inputStream))
-        val responceJsonObject = jsonParser.parse(responce).asJsonObject
+        val responceJsonObject = gson.fromJson(responce, JsonObject::class.java)
         return responceJsonObject["Token"].asString
     }
 
-    @Throws(Exception::class)
     fun getXstsToken(
         userToken: String?,
         deviceToken: String?,
@@ -162,9 +157,8 @@ class XboxLive( //go here, log in, and in the redirected url you will have your 
         return String(IOUtils.toByteArray(connection.inputStream))
     }
 
-    @Throws(Exception::class)
     fun requestMinecraftChain(xsts: String?, publicKey: ECPublicKey): String {
-        val xstsObject = jsonParser.parse(xsts).asJsonObject
+        val xstsObject = gson.fromJson(xsts, JsonObject::class.java)
         val pubKeyData = Base64.getEncoder().encodeToString(publicKey.encoded)
         val jsonObject = JsonObject()
         jsonObject.addProperty("identityPublicKey", pubKeyData)
@@ -182,7 +176,6 @@ class XboxLive( //go here, log in, and in the redirected url you will have your 
         return String(IOUtils.toByteArray(connection.inputStream))
     }
 
-    @Throws(Exception::class)
     private fun writeJsonObjectToPost(connection: HttpsURLConnection, jsonObject: JsonObject) {
         connection.doOutput = true
         val dataOutputStream = DataOutputStream(connection.outputStream)
@@ -198,7 +191,6 @@ class XboxLive( //go here, log in, and in the redirected url you will have your 
         return Base64.getUrlEncoder().withoutPadding().encodeToString(bigIntegerToByteArray(ecPublicKey.w.affineY))
     }
 
-    @Throws(Exception::class)
     private fun addSignatureHeader(
         httpsURLConnection: HttpsURLConnection,
         postData: JsonObject,

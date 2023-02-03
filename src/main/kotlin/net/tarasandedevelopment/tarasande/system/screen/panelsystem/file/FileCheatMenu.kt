@@ -29,7 +29,7 @@ class FileCheatMenu(private val panelSystem: ManagerPanel) : File("CheatMenu") {
         val jsonObject = jsonElement.asJsonObject
         for (panel in panelSystem.list) {
             if (jsonObject.has(panel.title)) {
-                val jsonArray2 = jsonObject.get(panel.title).asJsonArray
+                val jsonArray2 = jsonObject[panel.title].asJsonArray
                 panel.x = jsonArray2.get(0).asDouble
                 panel.y = jsonArray2.get(1).asDouble
 

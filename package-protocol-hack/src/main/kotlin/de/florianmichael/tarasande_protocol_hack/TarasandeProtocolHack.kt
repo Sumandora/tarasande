@@ -6,7 +6,6 @@ import com.viaversion.viaversion.libs.gson.JsonArray
 import com.viaversion.viaversion.libs.gson.JsonObject
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider
-import de.florianmichael.clampclient.injection.instrumentation_1_12_2.Raytrace_1_8to1_12_2
 import de.florianmichael.clampclient.injection.instrumentation_1_19_0.provider.CommandArgumentsProvider
 import de.florianmichael.clampclient.injection.instrumentation_c_0_30.ClassicItemSelectionScreen
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
@@ -22,6 +21,7 @@ import de.florianmichael.tarasande_protocol_hack.provider.viabeta.*
 import de.florianmichael.tarasande_protocol_hack.provider.viasnapshot.FabricPlayerAbilitiesProvider
 import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
 import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
+import de.florianmichael.tarasande_protocol_hack.tarasande.account.AccountBedrock
 import de.florianmichael.tarasande_protocol_hack.tarasande.information.*
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleEveryItemOnArmor
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleInventoryMove
@@ -32,7 +32,6 @@ import de.florianmichael.tarasande_protocol_hack.tarasande.sidebar.SidebarEntryS
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues
 import de.florianmichael.tarasande_protocol_hack.util.values.ValueBooleanProtocol
 import de.florianmichael.tarasande_protocol_hack.util.values.command.ViaCommandHandlerTarasandeCommandHandler
-import de.florianmichael.tarasande_protocol_hack.xbox.XboxLiveSession
 import de.florianmichael.viabedrock.api.BedrockProtocolAccess
 import de.florianmichael.viabedrock.api.BedrockProtocols
 import de.florianmichael.viabeta.api.BetaProtocolAccess
@@ -64,6 +63,7 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
+import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.ManagerAccount
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
@@ -205,6 +205,9 @@ class TarasandeProtocolHack {
                 // Protocol based modules
                 ManagerModule.add(ModuleEveryItemOnArmor())
 
+                // Bedrock account type
+                ManagerAccount.add(AccountBedrock::class.java)
+
                 // Sidebar modifications
                 ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.apply {
                     insert(SidebarEntrySelectionProtocolHack(), 0)
@@ -215,11 +218,6 @@ class TarasandeProtocolHack {
                 ProtocolHackValues /* Force-Load */
 
                 ClassicItemSelectionScreen.create(InternalProtocolList.fromProtocolVersion(BetaProtocols.c0_28toc0_30))
-                val accessToken = System.getProperty("BedrockKey")
-                if (accessToken != null) {
-                    println("Loaded Bedrock Key, started Xbox Session: $accessToken")
-                    MinecraftClient.getInstance().session = XboxLiveSession.create(accessToken)
-                }
             }
 
             // First-time load

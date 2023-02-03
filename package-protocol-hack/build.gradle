@@ -58,6 +58,9 @@ this.shadowJar {
         include(dependency("com.nukkitx.protocol:.*"))
         include(dependency("com.nukkitx.network:.*"))
         include(dependency("com.nukkitx.fastutil:.*"))
+        include(dependency("com.nukkitx.natives:.*"))
+        include(dependency("com.nukkitx.nbt:.*"))
+        include(dependency("com.nukkitx.math:.*"))
     }
 }
 

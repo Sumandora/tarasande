@@ -14,7 +14,7 @@ class CheckBytecodeAccessWidenerUsage : CheckBytecode("Access Widener Usage") {
     override fun run() {
         val fabricModJson = getFile("resources", "fabric.mod.json")
         val jsonObject = gson.fromJson(fabricModJson.readBytes().decodeToString(), JsonObject::class.java)
-        val accessWidener = getFile("resources", jsonObject.get("accessWidener").asString)
+        val accessWidener = getFile("resources", jsonObject["accessWidener"].asString)
         val content = accessWidener.readBytes().decodeToString()
 
         for (line in content.split("\n")) {

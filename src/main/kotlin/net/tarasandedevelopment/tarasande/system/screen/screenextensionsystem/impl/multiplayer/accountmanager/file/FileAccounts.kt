@@ -5,6 +5,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.mojang.authlib.Environment
 import net.minecraft.client.util.Session
+import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.system.base.filesystem.File
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.ManagerAccount
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.AccountInfo
@@ -83,35 +84,35 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
         for (jsonElement2 in jsonObject.getAsJsonArray("Accounts")) {
             for (accountClass in ManagerAccount.list) {
                 val jsonObject2 = jsonElement2 as JsonObject
-                if (accountClass.getAnnotation(AccountInfo::class.java).name == jsonObject2.get("Type").asString) {
-                    val account = accountClass.getDeclaredConstructor().newInstance().load(jsonObject2.get("Account").asJsonArray)
+                if (accountClass.getAnnotation(AccountInfo::class.java).name == jsonObject2["Type"].asString) {
+                    val account = accountClass.getDeclaredConstructor().newInstance().load(jsonObject2["Account"].asJsonArray)
 
                     if (jsonObject2.has("Session")) {
-                        val sessionObject = jsonObject2.get("Session").asJsonObject
+                        val sessionObject = jsonObject2["Session"].asJsonObject
                         account.session = Session(
-                            sessionObject.get("Username").asString,
-                            sessionObject.get("UUID").asString,
-                            sessionObject.get("Access-Token").asString,
-                            if (sessionObject.has("X-Uid")) Optional.of(sessionObject.get("X-Uid").asString) else Optional.empty(),
-                            if (sessionObject.has("Client-Uid")) Optional.of(sessionObject.get("Client-Uid").asString) else Optional.empty(),
-                            Session.AccountType.valueOf(sessionObject.get("Account-Type").asString)
+                            sessionObject["Username"].asString,
+                            sessionObject["UUID"].asString,
+                            sessionObject["Access-Token"].asString,
+                            if (sessionObject.has("X-Uid")) Optional.of(sessionObject["X-Uid"].asString) else Optional.empty(),
+                            if (sessionObject.has("Client-Uid")) Optional.of(sessionObject["Client-Uid"].asString) else Optional.empty(),
+                            Session.AccountType.valueOf(value = sessionObject["Account-Type"].asString)
                         )
                     }
 
                     val environment = jsonObject2.getAsJsonObject("Environment")
                     account.environment = Environment.create(
-                        environment.get("Auth-Host").asString,
-                        environment.get("Accounts-Host").asString,
-                        environment.get("Session-Host").asString,
-                        environment.get("Services-Host").asString,
-                        "Custom"
+                        environment["Auth-Host"].asString,
+                        environment["Accounts-Host"].asString,
+                        environment["Session-Host"].asString,
+                        environment["Services-Host"].asString,
+                        TARASANDE_NAME
                     )
                     accountManager.accounts.add(account)
                 }
             }
         }
         if (jsonObject.has("Main-Account"))
-            accountManager.mainAccount = jsonObject.get("Main-Account").asInt
+            accountManager.mainAccount = jsonObject["Main-Account"].asInt
     }
 
     override fun encrypt(input: String): String {

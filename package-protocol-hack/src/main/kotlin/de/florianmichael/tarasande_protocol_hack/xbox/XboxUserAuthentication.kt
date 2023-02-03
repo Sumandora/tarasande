@@ -1,6 +1,5 @@
 package de.florianmichael.tarasande_protocol_hack.xbox
 
-import de.florianmichael.tarasande_protocol_hack.xbox.XboxException
 import org.apache.http.NameValuePair
 import org.apache.http.client.CookieStore
 import org.apache.http.client.HttpClient
@@ -14,7 +13,6 @@ import org.apache.http.impl.client.HttpClientBuilder
 import org.apache.http.impl.client.LaxRedirectStrategy
 import org.apache.http.message.BasicNameValuePair
 import org.apache.http.util.EntityUtils
-import java.io.IOException
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -23,7 +21,6 @@ object XboxUserAuthentication {
         "MCPE/Android" //"Mozilla/5.0 (XboxReplay; XboxLiveAuth/3.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36";
     private const val XBOX_APP = "00000000441cc96b"
     private const val URI_AUTHORIZE = "https://login.live.com/oauth20_authorize.srf"
-    @Throws(XboxException::class, IOException::class)
     fun authenticate(email: String, password: String): String {
         val cookieStore: CookieStore = BasicCookieStore()
         val client: HttpClient = HttpClientBuilder.create()
@@ -33,15 +30,14 @@ object XboxUserAuthentication {
         return authenticate(client, ctx, email, password)
     }
 
-    @Throws(IOException::class)
     private fun preAuth(client: HttpClient, ctx: HttpClientContext): PreAuthResponse {
         val queries = "client_id=" + XBOX_APP +
-                "&redirect_uri=" + URLEncoder.encode("https://login.live.com/oauth20_desktop.srf") +
-                "&scope=" + URLEncoder.encode("service::user.auth.xboxlive.com::MBI_SSL") +
+                "&redirect_uri=" + URLEncoder.encode("https://login.live.com/oauth20_desktop.srf", StandardCharsets.UTF_8) +
+                "&scope=" + URLEncoder.encode("service::user.auth.xboxlive.com::MBI_SSL", StandardCharsets.UTF_8) +
                 "&display=touch" +
                 "&response_type=token" +
                 "&locale=en"
-        val requestUrl = URI_AUTHORIZE + "?" + queries
+        val requestUrl = "$URI_AUTHORIZE?$queries"
         val httpUriRequest: HttpUriRequest = HttpGet(requestUrl)
         httpUriRequest.setHeader("User-Agent", USER_AGENT)
         httpUriRequest.setHeader("Accept-encoding", "gzip")
@@ -49,18 +45,18 @@ object XboxUserAuthentication {
         val response = client.execute(httpUriRequest, ctx)
         val body = EntityUtils.toString(response.entity, StandardCharsets.UTF_8)
         if (response.statusLine.statusCode != 200) {
-            throw XboxException("Failed to authenticate: Server responded with code: " + response.statusLine.statusCode)
+            error("Failed to authenticate: Server responded with code: " + response.statusLine.statusCode)
         }
         var idx = body.indexOf("sFTTag:")
         if (idx < 0) {
-            throw XboxException("Failed to authenticate: sFTTag not found.")
+            error("Failed to authenticate: sFTTag not found.")
         }
         idx = body.indexOf("value=\"", idx)
         if (idx < 0) {
-            throw XboxException("Failed to authenticate: sFTTag value not found.")
+            error("Failed to authenticate: sFTTag value not found.")
         }
         var sFTTag = body.substring(idx + "value=\"".length)
-        for (i in 0 until sFTTag.length) {
+        for (i in sFTTag.indices) {
             val c = sFTTag[i]
             if (c == '"') {
                 sFTTag = sFTTag.substring(0, i)
@@ -69,10 +65,10 @@ object XboxUserAuthentication {
         }
         idx = body.indexOf("urlPost:'")
         if (idx < 0) {
-            throw XboxException("Failed to authenticate: UrlPost not found.")
+            error("Failed to authenticate: UrlPost not found.")
         }
         var urlPost = body.substring(idx + "urlPost:'".length)
-        for (i in 0 until urlPost.length) {
+        for (i in urlPost.indices) {
             val c = urlPost[i]
             if (c == '\'') {
                 urlPost = urlPost.substring(0, i)
@@ -82,7 +78,6 @@ object XboxUserAuthentication {
         return PreAuthResponse(sFTTag, urlPost)
     }
 
-    @Throws(IOException::class)
     private fun authenticate(client: HttpClient, ctx: HttpClientContext, email: String, password: String): String {
         val preAuthResponse = preAuth(client, ctx)
         val httpPost = HttpPost(preAuthResponse.postUrl)
@@ -98,7 +93,7 @@ object XboxUserAuthentication {
         httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded")
         val response = client.execute(httpPost, ctx)
         if (response.statusLine.statusCode != 200) {
-            throw XboxException("Failed to authenticate: Server responded with code: " + response.statusLine.statusCode)
+            error("Failed to authenticate: Server responded with code: " + response.statusLine.statusCode)
         }
         var location = httpPost.uri.toString()
         val locations = ctx.redirectLocations
@@ -107,10 +102,10 @@ object XboxUserAuthentication {
         }
         val idx = location.indexOf("#access_token=")
         if (idx < 0) {
-            throw XboxException("Failed to authenticate: Invalid credentials.")
+            error("Failed to authenticate: Invalid credentials.")
         }
         var accessToken = location.substring(idx + "#access_token=".length)
-        for (i in 0 until accessToken.length) {
+        for (i in accessToken.indices) {
             val c = accessToken[i]
             if (c == '&') {
                 accessToken = accessToken.substring(0, i)

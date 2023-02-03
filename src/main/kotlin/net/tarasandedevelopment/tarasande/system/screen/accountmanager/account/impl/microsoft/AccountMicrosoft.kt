@@ -335,9 +335,7 @@ $errorDescription""".toByteArray())
         }.start()
     }
 
-    override fun getDisplayName(): String {
-        return if (session != null) session?.username!! else "Unnamed Microsoft-account"
-    }
+    override fun getDisplayName() = if (session != null) session?.username!! else if(email.isNotEmpty()) email else "Unnamed Microsoft-account"
 
     override fun getSessionService(): MinecraftSessionService? = service
 

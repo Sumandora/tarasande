@@ -45,7 +45,7 @@ class AccountToken : Account() {
 
         val authenticationService = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment)
 
-        session = Session(json.get("mcName").asString, json.get("uuid").asString, json.get("session").asString, Optional.empty(), Optional.empty(), Session.AccountType.MOJANG)
+        session = Session(json["mcName"].asString, json["uuid"].asString, json["session"].asString, Optional.empty(), Optional.empty(), Session.AccountType.MOJANG)
         service = authenticationService.createMinecraftSessionService()
     }
 

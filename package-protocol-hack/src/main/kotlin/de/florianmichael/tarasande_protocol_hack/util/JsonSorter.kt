@@ -18,7 +18,6 @@ object JsonSorter {
         return stringWriter.toString()
     }
 
-    @Throws(IOException::class)
     fun writeSorted(writer: JsonWriter, json: JsonElement?, comparator: Comparator<String>?) {
         if (json != null && !json.isJsonNull) {
             if (json.isJsonPrimitive) {

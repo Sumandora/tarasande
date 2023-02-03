@@ -3,7 +3,6 @@ package de.florianmichael.tarasande_protocol_hack.xbox
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import com.mojang.authlib.GameProfile
 import com.nukkitx.protocol.bedrock.util.EncryptionUtils
 import de.florianmichael.viabedrock.api.auth.AuthUtils
@@ -20,23 +19,19 @@ import java.util.concurrent.TimeUnit
 // TODO: Implement https://github.com/wagyourtail/WagYourLauncher/tree/main/src/main/java/xyz/wagyourtail/launcher/auth
 class XboxLiveSession : Session {
     private val accessToken: String
-    val isCracked: Boolean
-    var publicKey: ECPublicKey? = null
-        private set
-    var privateKey: ECPrivateKey? = null
-        private set
+    private val isCracked: Boolean
+    private var publicKey: ECPublicKey? = null
+    private var privateKey: ECPrivateKey? = null
     var keyPair: KeyPair? = null
         private set
     var bedrockXuid: String? = null
         private set
-    var identity: UUID? = null
-        private set
-    var displayName: String? = null
-        private set
+    private var identity: UUID? = null
+    private var displayName: String? = null
     var chainData: String? = null
         private set
 
-    constructor(username: String, xuid: String?, identity: UUID) : super(
+    constructor(username: String, identity: UUID) : super(
         username,
         identity.toString(),
         "0",
@@ -44,12 +39,10 @@ class XboxLiveSession : Session {
         Optional.empty<String>(),
         AccountType.MOJANG
     ) {
-        var xuid = xuid
         this.accessToken = "0"
         displayName = username
         this.identity = UUID.nameUUIDFromBytes("OfflinePlayer:$username".toByteArray(StandardCharsets.UTF_8))
-        xuid = java.lang.Long.toString(identity.leastSignificantBits)
-        bedrockXuid = xuid
+        bedrockXuid = identity.leastSignificantBits.toString()
         isCracked = true
         val ecdsa256KeyPair = EncryptionUtils.createKeyPair()
         publicKey = ecdsa256KeyPair.public as ECPublicKey
@@ -75,9 +68,8 @@ class XboxLiveSession : Session {
         this.accessToken = accessToken
     }
 
-    @get:Throws(Exception::class)
     private val onlineChainData: String?
-        private get() {
+        get() {
             if (chainData != null) {
                 return chainData
             }
@@ -102,13 +94,13 @@ class XboxLiveSession : Session {
 		 * which we send to the server to check
 		 */
             val chainData = xboxLive.requestMinecraftChain(xsts, publicKey!!)
-            val chainDataObject = JsonParser().parse(chainData).asJsonObject
+            val chainDataObject = gson.fromJson(chainData, JsonObject::class.java)
             val minecraftNetChain = chainDataObject["chain"].asJsonArray
             var firstChainHeader = minecraftNetChain[0].asString
             firstChainHeader = firstChainHeader.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }
                 .toTypedArray()[0] //get the jwt header(base64)
             firstChainHeader = String(Base64.getDecoder().decode(firstChainHeader.toByteArray())) //decode the jwt base64 header
-            val firstKeyx5u = JsonParser().parse(firstChainHeader).asJsonObject["x5u"].asString
+            val firstKeyx5u = gson.fromJson(firstChainHeader, JsonObject::class.java).asJsonObject["x5u"].asString
             val newFirstChain = JsonObject()
             newFirstChain.addProperty("certificateAuthority", true)
             newFirstChain.addProperty("exp", Instant.now().epochSecond + TimeUnit.HOURS.toSeconds(6))
@@ -138,7 +130,7 @@ class XboxLiveSession : Session {
                 var lastChainPayload = lastChain.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }
                     .toTypedArray()[1] //get the middle(payload) jwt thing
                 lastChainPayload = String(Base64.getDecoder().decode(lastChainPayload.toByteArray())) //decode the base64
-                val payloadObject = JsonParser().parse(lastChainPayload).asJsonObject
+                val payloadObject = gson.fromJson(lastChainPayload, JsonObject::class.java)
                 val extraData = payloadObject["extraData"].asJsonObject
                 this.bedrockXuid = extraData["XUID"].asString
                 this.identity = UUID.fromString(extraData["identity"].asString)
@@ -148,7 +140,6 @@ class XboxLiveSession : Session {
             return this.chainData
         }
 
-    @Throws(Exception::class)
     fun signBytes(dataToSign: ByteArray?): String {
         return AuthUtils.signBytes(privateKey, dataToSign)
     }
@@ -184,7 +175,6 @@ class XboxLiveSession : Session {
     }
 
     companion object {
-        @Throws(Exception::class)
         fun create(accessToken: String): XboxLiveSession {
             val session = XboxLiveSession(accessToken)
             session.onlineChainData

@@ -11,7 +11,7 @@ class CheckSourceUnregisteredMixin : CheckSource("Unregistered Mixin") {
     override fun run() {
         allSources().filter { it.name.endsWith(".mixins.json") }.forEach {
             val jsonObject = gson.fromJson(read(it), JsonObject::class.java)
-            val pkg = jsonObject.get("package").asString
+            val pkg = jsonObject["package"].asString
 
             val allMixins = ArrayList<String>()
             jsonObject.getAsJsonArray("mixins")?.forEach {

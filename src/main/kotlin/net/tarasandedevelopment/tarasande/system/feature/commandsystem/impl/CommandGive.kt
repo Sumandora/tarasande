@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.system.feature.commandsystem.impl
 
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import com.mojang.brigadier.exceptions.CommandSyntaxException
 import net.minecraft.command.CommandSource
 import net.minecraft.command.argument.ItemStackArgument
 import net.minecraft.command.argument.ItemStackArgumentType
@@ -12,7 +11,6 @@ import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 
 class CommandGive : Command("give") {
 
-    @Throws(CommandSyntaxException::class)
     private fun executeGive(item: ItemStackArgument, count: Int = 1): Int {
         if (!mc.player?.abilities?.creativeMode!!) {
             throw notInCreative.create()

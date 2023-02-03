@@ -40,7 +40,6 @@ import java.util.logging.Logger
  *  - Entity Dimensions are missing
  *  - Entity offset "fix" is a bit cursed
  *  - WindowClick is not fully remapped in <= 1.16.5
- *  - Bedrock account type
  *
  * TODO | Crasher:
  *  - Basic crasher module
