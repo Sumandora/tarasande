@@ -50,7 +50,6 @@ accessible field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket onGro
 accessible field net/minecraft/client/render/RenderTickCounter tickTime F
 accessible field net/minecraft/network/packet/s2c/play/ResourcePackSendS2CPacket hash Ljava/lang/String;
 accessible field net/minecraft/client/sound/SoundManager soundSystem Lnet/minecraft/client/sound/SoundSystem;
-accessible field net/minecraft/client/gui/widget/TextFieldWidget selecting Z
 accessible field net/minecraft/client/gui/widget/TextFieldWidget text Ljava/lang/String;
 accessible field net/minecraft/entity/TntEntity DEFAULT_FUSE I
 accessible field net/minecraft/client/render/WorldRenderer frustum Lnet/minecraft/client/render/Frustum;
@@ -83,8 +82,6 @@ accessible method net/minecraft/client/gui/hud/InGameHud renderHotbarItem (IIFLn
 accessible method net/minecraft/client/MinecraftClient doItemUse ()V
 accessible method net/minecraft/client/MinecraftClient doAttack ()Z
 accessible method net/minecraft/client/MinecraftClient handleBlockBreaking (Z)V
-accessible method net/minecraft/client/gui/widget/TextFieldWidget isEditable ()Z
-accessible method net/minecraft/client/gui/widget/TextFieldWidget erase (I)V
 accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget$ServerEntry <init> (Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget;Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;Lnet/minecraft/client/network/ServerInfo;)V
 accessible method net/minecraft/entity/Entity adjustMovementForSneaking (Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/entity/MovementType;)Lnet/minecraft/util/math/Vec3d;
 accessible method net/minecraft/entity/player/PlayerEntity adjustMovementForSneaking (Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/entity/MovementType;)Lnet/minecraft/util/math/Vec3d;
