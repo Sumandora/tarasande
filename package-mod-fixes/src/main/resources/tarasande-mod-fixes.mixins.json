@@ -1,17 +1,15 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.tarasandedevelopment.tarasande_mod_fixes.injection.mixin",
+  "package": "su.mandora.tarasande_mod_fixes.injection.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
     "baritone.MixinLookBehavior",
-    "modmenu.MixinModMenuEventHandler"
+    "modmenu.MixinModMenuEventHandler",
+    "sodium.MixinChunkTracker",
+    "sodium.MixinWorldSlice"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "mixins": [
-    "sodium.MixinChunkTracker",
-    "sodium.MixinWorldSlice"
-  ]
+  }
 }

@@ -19,7 +19,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "net.tarasandedevelopment.tarasande_custom_minecraft.TarasandeCustomMinecraft"
+      "de.florianmichael.tarasande_custom_minecraft.TarasandeCustomMinecraft"
     ]
   },
   "mixins": [

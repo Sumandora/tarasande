@@ -19,7 +19,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "net.tarasandedevelopment.tarasande_crasher.TarasandeCrasher"
+      "de.florianmichael.tarasande_crasher.TarasandeCrasher"
     ]
   },
   "accessWidener": "tarasande-crasher.accesswidener",

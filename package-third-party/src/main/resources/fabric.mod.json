@@ -19,7 +19,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "net.tarasandedevelopment.tarasande_third_party.TarasandeThirdParty"
+      "su.mandora.tarasande_third_party.TarasandeThirdParty"
     ]
   },
 

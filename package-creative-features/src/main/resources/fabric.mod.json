@@ -19,7 +19,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "net.tarasandedevelopment.tarasande_creative_features.TarasandeCreativeFeatures"
+      "de.florianmichael.tarasande_creative_features.TarasandeCreativeFeatures"
     ]
   },
   "depends": {

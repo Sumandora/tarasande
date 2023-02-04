@@ -19,7 +19,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "net.tarasandedevelopment.tarasande_linux_platform.TarasandeLinuxPlatform"
+      "su.mandora.tarasande_linux_platform.TarasandeLinuxPlatform"
     ]
   },
   "depends": {

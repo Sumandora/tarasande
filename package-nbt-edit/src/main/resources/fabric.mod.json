@@ -19,7 +19,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "net.tarasandedevelopment.tarasande_nbt_edit.TarasandeNBTEdit"
+      "de.florianmichael.tarasande_nbt_edit.TarasandeNBTEdit"
     ]
   },
   "depends": {

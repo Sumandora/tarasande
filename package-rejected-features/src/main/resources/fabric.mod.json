@@ -17,7 +17,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "net.tarasandedevelopment.tarasande_rejected_features.TarasandeRejectedFeatures"
+      "de.florianmichael.tarasande_rejected_features.TarasandeRejectedFeatures"
     ]
   },
   "accessWidener": "tarasande-rejected-features.accesswidener",

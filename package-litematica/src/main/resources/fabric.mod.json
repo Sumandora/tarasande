@@ -19,7 +19,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "net.tarasandedevelopment.tarasande_litematica.TarasandeLitematica"
+      "de.florianmichael.tarasande_litematica.TarasandeLitematica"
     ]
   },
 

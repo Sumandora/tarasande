@@ -19,7 +19,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "net.tarasandedevelopment.tarasande_mod_fixes.TarasandeModFixes"
+      "su.mandora.tarasande_mod_fixes.TarasandeModFixes"
     ]
   },
   "mixins": [
