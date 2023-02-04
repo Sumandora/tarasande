@@ -74,7 +74,7 @@
     "feature.module.MixinRenderSystem",
     "feature.module.MixinWorld",
     "feature.module.MixinWorldRenderer",
-    "feature.module.block.MixinCommandBlock",
+    "feature.clientvalue.MixinCommandBlock",
     "feature.module.entity.MixinClientPlayerEntity",
     "feature.module.entity.MixinEntity",
     "feature.module.entity.MixinEntityPredicates",

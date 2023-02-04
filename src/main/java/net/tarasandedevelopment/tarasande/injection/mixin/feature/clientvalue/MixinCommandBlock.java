@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.injection.mixin.feature.module.block;
+package net.tarasandedevelopment.tarasande.injection.mixin.feature.clientvalue;
 
 import net.minecraft.block.CommandBlock;
 import net.minecraft.entity.player.PlayerEntity;
