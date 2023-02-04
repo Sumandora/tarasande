@@ -107,7 +107,6 @@ object ManagerModule : Manager<Module>() {
             ModuleRain(),
             ModuleBlockESP(),
             ModuleNameProtect(),
-            ModuleCommandBlockBypass(),
             ModuleTrueSight(),
             ModuleNoRender(),
             ModuleCameraNoClip(),
