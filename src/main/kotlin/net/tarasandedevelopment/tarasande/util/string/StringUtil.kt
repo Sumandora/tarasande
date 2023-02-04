@@ -76,8 +76,25 @@ object StringUtil {
 
     private val colorCodePattern = Pattern.compile("(?i)\u00a7[0-9A-F]")
 
-    fun strip(string: String): String {
+    fun stripColors(string: String): String {
         return colorCodePattern.matcher(string).replaceAll("")
+    }
+
+    fun camelCaseToTitleCase(string: String): String {
+        var newString = ""
+        var newWord = true
+        for ((index, c) in string.withIndex()) {
+            if(c.isUpperCase())
+                newWord = true
+            newString +=
+                when {
+                    index == 0 -> c.uppercase()
+                    newWord -> " " + c.uppercase()
+                    else -> c.lowercase()
+                }
+            newWord = false
+        }
+        return newString
     }
 
 }

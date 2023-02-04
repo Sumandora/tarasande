@@ -48,14 +48,14 @@ object ProtocolHackValues {
     val removeNewTabCompletion = ValueBooleanProtocol("Remove new tab completion", ProtocolVersion.v1_12_2.andOlder())
     val executeInputsInSync = ValueBooleanProtocol("Execute inputs in sync", ProtocolVersion.v1_12_2.andOlder())
     val emulateMouseInputs = ValueBooleanProtocol("Emulate mouse inputs", ProtocolVersion.v1_12_2.andOlder())
-    val sneakInstant = ValueBooleanProtocol("Sneak instant", ProtocolVersion.v1_8 .. ProtocolVersion.v1_12_2)
+    val sneakInstant = ValueBooleanProtocol("Sneak instant", ProtocolVersion.v1_8..ProtocolVersion.v1_12_2)
     val replaceRayTrace = ValueBooleanProtocol("Replace ray trace", ProtocolVersion.v1_12_2.andOlder())
-    val replacePetrifiedOakSlab = ValueBooleanProtocol("Replace petrified oak slab", BetaProtocols.r1_3_1tor1_3_2 .. ProtocolVersion.v1_12_2)
+    val replacePetrifiedOakSlab = ValueBooleanProtocol("Replace petrified oak slab", ProtocolVersion.v1_12_2..BetaProtocols.r1_3_1tor1_3_2)
 
     // 1.9 -> 1.8.x
     val removeCooldowns = ValueBooleanProtocol("Remove cooldowns", ProtocolVersion.v1_8.andOlder())
     val emulateSignGUIModification = ValueBooleanProtocol("Emulate sign gui modification", ProtocolVersion.v1_8.andOlder())
-    val sendIdlePacket = ValueBooleanProtocol("Send idle packet", ProtocolVersion.v1_8 .. BetaProtocols.r1_3_1tor1_3_2)
+    val sendIdlePacket = ValueBooleanProtocol("Send idle packet", ProtocolVersion.v1_8..BetaProtocols.r1_3_1tor1_3_2)
     val emulatePlayerMovement = ValueBooleanProtocol("Emulate player movement", ProtocolVersion.v1_8.andOlder())
     init {
         object : ValueMode(this, "Fast math tables", false, *MathTableRegistry.values().map { it.toString() }.toTypedArray()) {

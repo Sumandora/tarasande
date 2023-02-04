@@ -36,8 +36,9 @@ class ModuleNoRotate : Module("No rotate", "Prevents the server from rotating yo
 
         registerEvent(EventRotationSet::class.java) {
             if (prevRotation != null) {
-                mc.player?.yaw = prevRotation?.yaw!!
-                mc.player?.pitch = prevRotation?.pitch!!
+                mc.player?.yaw = prevRotation!!.yaw
+                mc.player?.pitch = prevRotation!!.pitch
+                prevRotation = null
             }
         }
     }

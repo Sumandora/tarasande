@@ -25,14 +25,12 @@ import net.tarasandedevelopment.tarasande.util.string.StringUtil
 class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera", ModuleCategory.RENDER) {
 
     private val speed = ValueNumber(this, "Speed", 0.1, 1.0, 5.0, 0.1)
-    private val lockRotation = ValueBoolean(this, "Lock rotation", true)
     private val keepMovement = ValueBoolean(this, "Keep movement", false)
     private val blockInteraction = ValueBoolean(this, "Block interaction", false)
 
     private var position: Vec3d? = null
     private var beginRotation: Rotation? = null
     private var rotation: Rotation? = null
-    private var prevRotation: Rotation? = null
 
     private var prevCameraPos: Vec3d? = null
 
@@ -67,9 +65,8 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
     override fun onEnable() {
         if (mc.player != null) {
             position = mc.gameRenderer.camera.pos
-            rotation = Rotation(mc.gameRenderer.camera.yaw, mc.gameRenderer.camera.pitch)
+            rotation = mc.gameRenderer.camera.let { Rotation(it.yaw, it.pitch) }
             beginRotation = Rotation(mc.player!!)
-            prevRotation = beginRotation
             perspective = mc.options.perspective
             firstRealInput = PlayerUtil.input.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
             firstInput = mc.player?.input?.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
@@ -98,25 +95,21 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
         }
 
         registerEvent(EventPollEvents::class.java, 1) { event ->
-            if (beginRotation == null || prevRotation == null || rotation == null)
+            if (beginRotation == null)
                 onEnable()
 
-            if (prevRotation != null) {
-                rotation = rotation?.plus(event.rotation - prevRotation!!)
-            }
-
-            mc.player?.yaw = beginRotation?.yaw!!
-            mc.player?.pitch = beginRotation?.pitch!!
-            if (lockRotation.value && !event.dirty) {
+            if (!event.dirty) {
                 event.rotation = beginRotation!!
             }
         }
 
-//        registerEvent(EventMouseDelta::class.java, 1) { event ->
-//            rotation = rotation?.plus(Rotation.calculateRotationChange(-event.deltaX, -event.deltaY))?.correctSensitivity() // clamp
-//            event.deltaX = 0.0
-//            event.deltaY = 0.0
-//        }
+        registerEvent(EventMouseDelta::class.java, 1) { event ->
+            if(rotation == null)
+                onEnable()
+            rotation = Rotation.calculateNewRotation(rotation!!, Pair(event.deltaX, event.deltaY)).correctSensitivity() // clamp
+            event.deltaX = 0.0
+            event.deltaY = 0.0
+        }
 
         registerEvent(EventUpdate::class.java, 1) { event ->
             if (event.state == EventUpdate.State.PRE) {
@@ -180,8 +173,9 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
         }
 
         registerEvent(EventPacket::class.java) { event ->
-            if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerPositionLookS2CPacket)
+            if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerPositionLookS2CPacket) {
                 beginRotation = RotationUtil.evaluateNewRotation(event.packet)
+            }
         }
     }
 }

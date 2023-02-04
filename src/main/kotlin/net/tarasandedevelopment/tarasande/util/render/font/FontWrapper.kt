@@ -31,7 +31,7 @@ object FontWrapper {
     }
 
     fun textShadow(matrices: MatrixStack, text: String, x: Float, y: Float, color: Int = -1, scale: Float = 1F, offset: Float = 1.0F, centered: Boolean = false) {
-        text(matrices, StringUtil.strip(text), x + offset, y + offset, Color(color, true).darker().darker().darker().darker().rgb, scale, centered)
+        text(matrices, StringUtil.stripColors(text), x + offset, y + offset, Color(color, true).darker().darker().darker().darker().rgb, scale, centered)
         text(matrices, text, x, y, color, scale, centered)
     }
 

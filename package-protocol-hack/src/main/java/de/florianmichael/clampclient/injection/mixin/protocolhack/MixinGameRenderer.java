@@ -6,6 +6,7 @@ import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
+import net.tarasandedevelopment.tarasande.event.EventUpdateTargetedEntity;
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 import org.spongepowered.asm.mixin.Final;
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.event.EventDispatcher;
 
 @SuppressWarnings("ShadowModifiers")
 @Mixin(GameRenderer.class)
@@ -25,6 +27,7 @@ public class MixinGameRenderer {
     public void replaceRayTrace(float tickDelta, CallbackInfo ci) {
         if (!ProtocolHackValues.INSTANCE.getReplaceRayTrace().getValue()) return;
 
+        EventDispatcher.INSTANCE.call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.PRE));
         ci.cancel();
         client.getProfiler().push("pick");
         final Entity entity2 = this.client.getCameraEntity();
@@ -55,5 +58,6 @@ public class MixinGameRenderer {
         client.targetedEntity = raytrace.pointed();
 
         client.getProfiler().pop();
+        EventDispatcher.INSTANCE.call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.POST));
     }
 }
