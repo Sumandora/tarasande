@@ -90,7 +90,7 @@ public abstract class MixinItemStack {
         }
         modifiers = HashMultimap.create(modifiers);
         modifiers.removeAll(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        OptionalDouble defaultAttackDamage = getDefaultAttackDamage(getItem());
+        OptionalDouble defaultAttackDamage = protocolhack_getDefaultAttackDamage(getItem());
         if (defaultAttackDamage.isPresent()) {
             modifiers.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(Item.ATTACK_DAMAGE_MODIFIER_ID, "Weapon Modifier", defaultAttackDamage.getAsDouble(), EntityAttributeModifier.Operation.ADDITION));
         }
@@ -101,7 +101,7 @@ public abstract class MixinItemStack {
     }
 
     @Unique
-    private OptionalDouble getDefaultAttackDamage(Item item) {
+    private OptionalDouble protocolhack_getDefaultAttackDamage(Item item) {
         if (item instanceof ToolItem) {
             ToolMaterial material = ((ToolItem) item).getMaterial();
             int materialBonus;
