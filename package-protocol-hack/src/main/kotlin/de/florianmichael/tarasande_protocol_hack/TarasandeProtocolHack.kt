@@ -231,18 +231,11 @@ class TarasandeProtocolHack {
                 if (viaConnection != null && (it.screen is DownloadingTerrainScreen || it.screen is ConnectScreen)) {
                     var levelProgress: String? = null
 
-                    if (ViaLoadingBase.getTargetVersion()
-                            .isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30)
-                    ) levelProgress = BetaProtocolAccess.getWorldLoading_C_0_30(viaConnection)
+                    if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30))
+                        levelProgress = BetaProtocolAccess.getWorldLoading_C_0_30(viaConnection)
 
                     if (levelProgress != null) {
-                        FontWrapper.text(
-                            it.matrices,
-                            levelProgress,
-                            (it.screen.width / 2).toFloat(),
-                            (it.screen.height / 2 - 30).toFloat(),
-                            centered = true
-                        )
+                        FontWrapper.text(it.matrices, levelProgress, (it.screen.width / 2).toFloat(), (it.screen.height / 2 - 30).toFloat(), centered = true)
                     }
                 }
             }

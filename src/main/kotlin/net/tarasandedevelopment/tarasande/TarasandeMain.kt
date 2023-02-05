@@ -49,6 +49,7 @@ import java.util.logging.Logger
  * TODO | Litematica:
  *  - Implement PixelArt generator
  *  - Implement head and skin generator
+ *  - Recode GUI via ScreenExtension (GuiMainMenu)
  *
  * TODO | IDEAS:
  *  - CheckHost

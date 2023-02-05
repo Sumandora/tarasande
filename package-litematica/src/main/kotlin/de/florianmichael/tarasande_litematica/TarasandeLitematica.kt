@@ -3,9 +3,8 @@ package de.florianmichael.tarasande_litematica
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
-import de.florianmichael.tarasande_litematica.generator.ManagerGenerator
-import de.florianmichael.tarasande_litematica.panel.PanelLitematicaGenerators
+import de.florianmichael.tarasande_litematica.screenextension.ScreenExtensionButtonListGuiMainMenu
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import su.mandora.event.EventDispatcher
 import java.util.logging.Logger
 
@@ -18,7 +17,7 @@ class TarasandeLitematica : ClientModInitializer {
             return
         }
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
-            ManagerPanel.add(PanelLitematicaGenerators(ManagerGenerator()))
+            ManagerScreenExtension.add(ScreenExtensionButtonListGuiMainMenu())
         }
     }
 }

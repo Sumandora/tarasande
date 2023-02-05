@@ -46,7 +46,7 @@ private val colorPalette = HashMap<Block, Int>().apply {
     this[Blocks.DARK_OAK_PLANKS]    = 0x462d15
 }
 
-class GeneratorPixelArt(parent: Any) : Generator(parent, "Pixel art") {
+class GeneratorPixelArt : Generator("Pixel art") {
 
     override fun perform() {
     }
