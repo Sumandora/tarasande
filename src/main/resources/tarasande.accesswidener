@@ -68,6 +68,7 @@ accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket positionC
 accessible field net/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Serialized profileId Ljava/util/UUID;
 accessible field net/minecraft/client/network/MultiplayerServerListPinger clientConnections Ljava/util/List;
 accessible field net/minecraft/entity/player/PlayerEntity reducedDebugInfo Z
+accessible field net/minecraft/client/gui/screen/GameMenuScreen exitButton Lnet/minecraft/client/gui/widget/ButtonWidget;
 
 accessible class net/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Serialized
 

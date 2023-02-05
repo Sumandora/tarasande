@@ -14,7 +14,7 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import su.mandora.event.EventDispatcher
 
 object TargetingValues {
-    val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registries.ENTITY_TYPE, EntityType.PLAYER) {
+    val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registries.ENTITY_TYPE, true, EntityType.PLAYER) {
         init {
             EventDispatcher.add(EventIsEntityAttackable::class.java) {
                 it.attackable = it.attackable && isSelected(it.entity.type)

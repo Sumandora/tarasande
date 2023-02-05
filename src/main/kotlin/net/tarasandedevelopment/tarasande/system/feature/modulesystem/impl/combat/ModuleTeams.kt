@@ -15,7 +15,6 @@ class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCatego
     }
 
     fun isTeammate(entity: PlayerEntity): Boolean {
-
         if (mode.isSelected(0)) {
             if (entity.isTeammate(mc.player)) {
                 return true

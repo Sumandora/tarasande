@@ -12,7 +12,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 
 class ModuleTerrainSpeed : Module("Terrain speed", "Makes you move faster on certain terrain", ModuleCategory.MOVEMENT) {
 
-    private val blocks = object : ValueRegistry<Block>(this, "Blocks", Registries.BLOCK) {
+    private val blocks = object : ValueRegistry<Block>(this, "Blocks", Registries.BLOCK, true) {
         override fun filter(key: Block) = !key.defaultState.getCollisionShape(mc.world, BlockPos.ORIGIN).isEmpty
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey
     }

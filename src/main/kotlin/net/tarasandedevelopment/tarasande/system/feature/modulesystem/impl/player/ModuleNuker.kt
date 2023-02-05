@@ -27,12 +27,12 @@ import kotlin.math.pow
 class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius", ModuleCategory.PLAYER) {
 
     private val selectionMode = ValueMode(this, "Selection mode", false, "Include", "Exclude")
-    private val includedBlocks = object : ValueRegistry<Block>(this, "Included blocks", Registries.BLOCK) {
+    private val includedBlocks = object : ValueRegistry<Block>(this, "Included blocks", Registries.BLOCK, true) {
         override fun isEnabled() = selectionMode.isSelected(0)
         override fun filter(key: Block) = !key.defaultState.getCollisionShape(mc.world, BlockPos.ORIGIN).isEmpty && key.defaultState.calcBlockBreakingDelta(mc.player, mc.world, BlockPos.ORIGIN) > 0.0
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey
     }
-    private val excludedBlocks = object : ValueRegistry<Block>(this, "Excluded blocks", Registries.BLOCK) {
+    private val excludedBlocks = object : ValueRegistry<Block>(this, "Excluded blocks", Registries.BLOCK, true) {
         override fun isEnabled() = selectionMode.isSelected(1)
         override fun filter(key: Block) = !key.defaultState.getCollisionShape(mc.world, BlockPos.ORIGIN).isEmpty && key.defaultState.calcBlockBreakingDelta(mc.player, mc.world, BlockPos.ORIGIN) > 0.0
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey

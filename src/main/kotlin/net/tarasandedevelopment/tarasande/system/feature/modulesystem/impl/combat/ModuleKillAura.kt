@@ -19,7 +19,6 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.*
-import net.tarasandedevelopment.tarasande.feature.friend.Friends
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
@@ -53,12 +52,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val clickSpeedUtil = ClickSpeedUtil(this, { true }) // for setting order
     private val waitForDamageValue = ValueBoolean(this, "Wait for damage", false)
     private val rayTrace = ValueBoolean(this, "Ray trace", false)
-    private val dontAttackBefriendedRaytraceEntities = object : ValueBoolean(this, "Don't attack befriended raytrace entities", false) {
-        override fun isEnabled() = rayTrace.value
-    }
-    private val dontAttackTeamingRaytraceEntities = object : ValueBoolean(this, "Don't attack teaming raytrace entities", false) {
-        override fun isEnabled() = rayTrace.value
-    }
     private val simulateMouseDelay = object : ValueBoolean(this, "Simulate mouse delay", false) {
         override fun isEnabled() = rayTrace.value && !mode.isSelected(1)
     }
@@ -116,7 +109,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         val enemyHurtTime = ValueNumber(this, "Enemy hurt time", 0.1, 1.0, 1.0, 0.1)
         val selfHurtTime = ValueNumber(this, "Self hurt time", 0.1, 0.6,1.0, 0.1)
     }
-    private val smartClickingBehaviour = ValueButtonOwnerValues(this, "Smart clicking behaviour", SmartClickingBehaviour)
+    init {
+        ValueButtonOwnerValues(this, "Smart clicking behaviour", SmartClickingBehaviour)
+    }
     private val aimTargetColor = ValueColor(this, "Aim target color", 0.0, 1.0, 1.0, 1.0)
 
     var targets = CopyOnWriteArrayList<Pair<Entity, Vec3d>>()
@@ -300,10 +295,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                             return@forEach
                         } else {
                             target = hitResult.entity
-                            if (dontAttackBefriendedRaytraceEntities.value && target is PlayerEntity && Friends.isFriend(target.gameProfile))
-                                return@forEach
-                            if (dontAttackTeamingRaytraceEntities.value && target is PlayerEntity && ManagerModule.get(ModuleTeams::class.java).isTeammate(target))
-                                return@forEach
                         }
                     }
                 } else if (distance > reach.minValue * reach.minValue) {

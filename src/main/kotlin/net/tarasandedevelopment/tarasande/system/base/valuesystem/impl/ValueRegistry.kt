@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import java.util.concurrent.CopyOnWriteArrayList
 
-abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: Registry<T>, vararg keys: T, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentFocusableRegistry::class.java, manage) {
+abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: Registry<T>, private val multiSelection: Boolean, vararg keys: T, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentFocusableRegistry::class.java, manage) {
 
     private val list = CopyOnWriteArrayList<T>()
 
@@ -23,6 +23,9 @@ abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: 
         add(wrappedKey.key as T)
     }
     fun add(key: T) {
+        if(!multiSelection) {
+            list.forEach(::remove)
+        }
         list.add(key)
         onAdd(key)
 
@@ -44,6 +47,12 @@ abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: 
 
     fun anySelected() = list.isNotEmpty()
     fun randomOrNull() = list.randomOrNull()
+
+    fun getSelected(): T =
+        if (!multiSelection)
+            list.first()
+        else
+            throw UnsupportedOperationException()
 
     abstract fun getTranslationKey(key: Any?): String
 

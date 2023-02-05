@@ -29,7 +29,7 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
     private val foodCheck = object : ValueBoolean(this, "Food check", false) {
         override fun isEnabled() = items.isSelected(0)
     }
-    private val health = object : ValueNumber(this, "Health", 0.0, 4.0, 10.0, 0.1) {
+    private val health = object : ValueNumber(this, "Health", 0.0, 0.4, 1.0, 0.01) {
         override fun isEnabled() = items.anySelected()
     }
     private val delay = ValueNumber(this, "Delay", 0.0, 300.0, 500.0, 50.0)
@@ -96,7 +96,7 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
             var bestItem: Int? = null
 
             if (items.isSelected(0)) {
-                if (mc.player?.health?.div(2.0)!! <= health.value)
+                if (mc.player?.let { it.health / it.maxHealth }!! <= health.value)
                     if (!foodCheck.value || mc.player?.hungerManager?.isNotFull == true)
                         bestItem = findItem {
                             if (stews.isSelected(0) && it.item == Items.MUSHROOM_STEW)
@@ -116,7 +116,7 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
                     val effects = PotionUtil.getPotionEffects(it)
                     if (effects.all { effect -> effect.effectType.isBeneficial && !(mc.player as ILivingEntity).tarasande_forceHasStatusEffect(effect.effectType) }) {
                         if (effects.any { type -> type.effectType == StatusEffects.REGENERATION || type.effectType == StatusEffects.INSTANT_HEALTH })
-                            return@findItem mc.player?.health?.div(2.0)!! <= health.value
+                            return@findItem mc.player?.let { player -> player.health / player.maxHealth }!! <= health.value
                         return@findItem true
                     }
                     return@findItem false

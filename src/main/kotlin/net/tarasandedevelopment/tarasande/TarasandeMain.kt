@@ -28,8 +28,6 @@ import java.util.logging.Logger
  *  - Change Name/Skin/Cape in Account Manager
  *  - Anti vanish: Tab completion
  *  - Render Profiler
- *  - Auto Totem
- *  - AutoLog
  *  - Dump Items/Blocks/Player
  *  - Re-add Wiki
  *  - Add Rotation RL

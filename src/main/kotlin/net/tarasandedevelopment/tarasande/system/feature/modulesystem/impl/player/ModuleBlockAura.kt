@@ -33,7 +33,7 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
 
     private val delay = ValueNumber(this, "Delay", 0.0, 200.0, 1000.0, 50.0)
     private val reach = ValueNumber(this, "Reach", 0.1, 4.5, 6.0, 0.1)
-    private val block = object : ValueRegistry<Block>(this, "Blocks", Registries.BLOCK, Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST) {
+    private val block = object : ValueRegistry<Block>(this, "Blocks", Registries.BLOCK, true, Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST) {
         override fun filter(key: Block) = !key.defaultState.getCollisionShape(mc.world, BlockPos.ORIGIN).isEmpty
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey
     }
