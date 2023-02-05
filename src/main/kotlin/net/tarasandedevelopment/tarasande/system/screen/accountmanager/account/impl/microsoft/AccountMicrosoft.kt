@@ -5,8 +5,11 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
+import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.gui.screen.NoticeScreen
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.Session
+import net.minecraft.text.Text
 import net.minecraft.util.Util
 import net.tarasandedevelopment.tarasande.gson
 import net.tarasandedevelopment.tarasande.mc
@@ -289,18 +292,35 @@ $errorDescription""".toByteArray())
 
     @Suppress("unused")
     @ExtraInfo("Azure Apps")
-    val azureAppsExtra: (Screen) -> Unit = {
-        mc.setScreen(ScreenBetterAzureApps(it, azureApp) { newAzureApp ->
+    val azureAppsExtra: (Screen, Runnable) -> Unit = { screen, _ ->
+        mc.setScreen(ScreenBetterAzureApps(screen, azureApp) { newAzureApp ->
             azureApp = newAzureApp
         })
     }
 
     @Suppress("unused")
-    @ExtraInfo("Web Login", alternativeLogin = true)
-    val webLogin: (Screen) -> Unit = {
+    @ExtraInfo("Web Login")
+    val webLogin: (Screen, Runnable) -> Unit = login@{ screen, close ->
+        fun abort() = mc.setScreen(screen)
+
         val serverSocket = setupHttpServer(code = {
             code = it
+            if(code != null) {
+                close.run()
+            } else {
+                abort()
+            }
         })
+
+        RenderSystem.recordRenderCall {
+            mc.setScreen(NoticeScreen(
+                ::abort,
+                Text.of("Microsoft Login"),
+                Text.of("Your webbrowser should've opened.\nPlease authorize yourself!\nClosing this screen will cancel the process!"),
+                Text.of("Cancel"),
+                false
+            ))
+        }
         redirectUri = azureApp.redirectUri + serverSocket.localPort
         Util.getOperatingSystem().open(URI(OAUTH_AUTHORIZE_URL + "?" +
                 "redirect_uri=" + redirectUri + "&" +

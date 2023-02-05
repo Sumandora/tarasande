@@ -1,5 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen
 
+import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
@@ -58,13 +59,14 @@ class ScreenBetterAccount(
             field.isAccessible = true
             if (field.isAnnotationPresent(ExtraInfo::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                val anyField = field.get(accountImplementation) as Function1<Screen, Unit>
+                val anyField = field.get(accountImplementation) as Function2<Screen, Runnable, Unit>
                 val annotation = field.getAnnotation(ExtraInfo::class.java)
                 addDrawableChild(ButtonWidget(width - 105, 5 + buttonIndex * 23, 100, 20, Text.of(annotation.name)) {
-                    anyField(this)
-                    if(annotation.alternativeLogin) {
+                    anyField(this) {
                         accountConsumer.accept(accountImplementation)
-                        close()
+                        RenderSystem.recordRenderCall {
+                            close()
+                        }
                     }
                 })
                 buttonIndex++

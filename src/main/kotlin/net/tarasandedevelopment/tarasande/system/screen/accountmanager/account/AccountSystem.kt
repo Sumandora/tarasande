@@ -42,8 +42,8 @@ abstract class Account {
     abstract fun create(credentials: List<String>)
 
     @ExtraInfo("Environment")
-    open val environmentExtra: (Screen) -> Unit = {
-        mc.setScreen(ScreenBetterEnvironment(it, environment) { newEnvironment ->
+    open val environmentExtra: (Screen, Runnable) -> Unit = { screen, _ ->
+        mc.setScreen(ScreenBetterEnvironment(screen, environment) { newEnvironment ->
             environment = newEnvironment
         })
     }

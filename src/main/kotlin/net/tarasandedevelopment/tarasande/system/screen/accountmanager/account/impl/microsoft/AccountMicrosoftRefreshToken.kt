@@ -29,8 +29,8 @@ class AccountMicrosoftRefreshToken : AccountMicrosoft() {
 
     @Suppress("unused")
     @ExtraInfo("Azure Apps")
-    val readdAzureApps: (Screen) -> Unit = {
-        mc.setScreen(ScreenBetterAzureApps(it, azureApp) { newAzureApp ->
+    val azureApps: (Screen, Runnable) -> Unit = { screen, _ ->
+        mc.setScreen(ScreenBetterAzureApps(screen, azureApp) { newAzureApp ->
             azureApp = newAzureApp
         })
     }

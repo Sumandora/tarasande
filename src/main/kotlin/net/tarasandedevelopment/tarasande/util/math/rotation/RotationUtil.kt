@@ -61,7 +61,7 @@ object RotationUtil {
                                 val deltaX = newMoveX - moveX
                                 val deltaZ = newMoveZ - moveZ
 
-                                val dist = deltaX * deltaX + deltaZ * deltaZ
+                                val dist = sqrt(deltaX * deltaX + deltaZ * deltaZ)
 
                                 if (bestMovement == null || bestMovement[0] > dist) {
                                     bestMovement = doubleArrayOf(dist, forward.toDouble(), strafe.toDouble())
