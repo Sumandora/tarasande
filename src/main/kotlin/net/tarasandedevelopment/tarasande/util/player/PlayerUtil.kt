@@ -1,10 +1,8 @@
 package net.tarasandedevelopment.tarasande.util.player
 
 import net.minecraft.client.gui.screen.ChatScreen
-import net.minecraft.client.gui.screen.TitleScreen
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
+import net.minecraft.client.gui.screen.GameMenuScreen
 import net.minecraft.client.input.KeyboardInput
-import net.minecraft.client.realms.gui.screen.RealmsMainScreen
 import net.minecraft.entity.Entity
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.util.Hand
@@ -19,6 +17,7 @@ import net.minecraft.world.RaycastContext.FluidHandling
 import net.minecraft.world.RaycastContext.ShapeType
 import net.tarasandedevelopment.tarasande.event.EventInput
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
+import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.injection.accessor.IChatScreen
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.mc
@@ -209,19 +208,24 @@ object PlayerUtil {
         return (y - 1).coerceAtLeast(0)
     }
 
-    fun disconnect() {
-        mc.world?.disconnect()
-        mc.disconnect()
-
-        val title = TitleScreen()
-
-        if (mc.isInSingleplayer) {
-            mc.setScreen(title)
-        } else if (mc.isConnectedToRealms) {
-            mc.setScreen(RealmsMainScreen(title))
-        } else {
-            mc.setScreen(MultiplayerScreen(title))
+    private var queuedDisconnect = false
+    init {
+        EventDispatcher.add(EventTick::class.java, Int.MAX_VALUE) {
+            if(mc.world == null)
+                queuedDisconnect = false // race condition?
+            else if(queuedDisconnect) {
+                GameMenuScreen(true).also {
+                    it.init(mc, mc.window.scaledWidth, mc.window.scaledHeight)
+                    it.exitButton!!.onPress()
+                }
+                queuedDisconnect = false
+            }
         }
+    }
+
+    fun disconnect() {
+        if(mc.world != null)
+            queuedDisconnect = true
     }
 
     fun attack(entity: Entity?, position: Vec3d? = null) {

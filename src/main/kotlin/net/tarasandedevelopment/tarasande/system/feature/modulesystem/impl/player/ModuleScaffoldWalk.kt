@@ -60,7 +60,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val lockView = ValueBoolean(this, "Lock view", false)
     private val headRoll = ValueBoolean(this, "Head roll", false)
     private val autoJump = ValueBoolean(this, "Auto jump", false)
-    private val forbiddenItems = object : ValueRegistry<Item>(this, "Forbidden items", Registries.ITEM) {
+    private val forbiddenItems = object : ValueRegistry<Item>(this, "Forbidden items", Registries.ITEM, true) {
         override fun filter(key: Item) = key is BlockItem
         override fun getTranslationKey(key: Any?) = (key as Item).translationKey
     }
@@ -347,43 +347,47 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             if (airBelow || alwaysClick.value) {
                 val newEdgeDist = getNewEdgeDist()
                 val clicks = clickSpeedUtil.getClicks()
-                val prevSlot = mc.player?.inventory?.selectedSlot
-                var hasBlock = false
-                for (hand in Hand.values()) {
-                    val stack = mc.player?.getStackInHand(hand)
-                    if (stack != null) {
-                        if (stack.item is BlockItem && isBlockItemValid(stack.item as BlockItem)) {
-                            hasBlock = true
-                        } else if (stack.item.getUseAction(stack) != UseAction.NONE) {
-                            break
-                        }
-                    }
-                }
-                if (!hasBlock) {
-                    if (!silent.isSelected(0)) {
-                        val blockSlot = ContainerUtil.findSlot { it.value.item is BlockItem && isBlockItemValid(it.value.item as BlockItem) }
-                        if (blockSlot != null) {
-                            mc.player?.inventory?.selectedSlot = blockSlot
-                        } else return@registerEvent
-                    } else return@registerEvent
-                }
                 val rotationVector = RotationUtil.fakeRotation?.forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)!!
                 val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector)
                 if (hitResult.isSame(target?.second!!, target?.first!!)) {
                     if (airBelow && (((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= newEdgeDist * newEdgeDist || target?.first?.y!! < (mc.player?.blockPos?.y!! - 1))) {
                         if (timeUtil.hasReached(delay.value.toLong())) {
-                            aimTarget = hitResult.pos
-                            rerotated = false
-                            PlayerUtil.placeBlock(hitResult)
-                            event.dirty = true
-
-                            if (target?.second?.offsetY == 0) {
-                                if (edgeIncrement.value && preventImpossibleEdge.value && prevEdgeDistance > newEdgeDist && mc.player?.isOnGround!!)
-                                    mc.player?.jump()
-                                prevEdgeDistance = newEdgeDist
+                            val prevSlot = mc.player?.inventory?.selectedSlot
+                            var hasBlock = false
+                            for (hand in Hand.values()) {
+                                val stack = mc.player?.getStackInHand(hand)
+                                if (stack != null) {
+                                    if (stack.item is BlockItem && isBlockItemValid(stack.item as BlockItem)) {
+                                        hasBlock = true
+                                    } else if (stack.item.getUseAction(stack) != UseAction.NONE) {
+                                        break
+                                    }
+                                }
+                            }
+                            if (!hasBlock && !silent.isSelected(0)) {
+                                val blockSlot = ContainerUtil.findSlot { it.value.item is BlockItem && isBlockItemValid(it.value.item as BlockItem) }
+                                if (blockSlot != null) {
+                                    mc.player?.inventory?.selectedSlot = blockSlot
+                                    hasBlock = true
+                                }
                             }
 
-                            timeUtil.reset()
+                            if(hasBlock) {
+                                PlayerUtil.placeBlock(hitResult)
+                                event.dirty = true
+
+                                if (target?.second?.offsetY == 0) {
+                                    if (edgeIncrement.value && preventImpossibleEdge.value && prevEdgeDistance > newEdgeDist && mc.player?.isOnGround!!)
+                                        mc.player?.jump()
+                                    prevEdgeDistance = newEdgeDist
+                                }
+
+                                timeUtil.reset()
+                            }
+
+                            if (silent.isSelected(1)) {
+                                mc.player?.inventory?.selectedSlot = prevSlot
+                            }
                         }
                     }
                 } else if (alwaysClick.value) {
@@ -391,9 +395,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                         PlayerUtil.placeBlock(hitResult)
                     }
                     event.dirty = true
-                }
-                if (silent.isSelected(1)) {
-                    mc.player?.inventory?.selectedSlot = prevSlot
                 }
             }
         }

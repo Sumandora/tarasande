@@ -11,6 +11,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.kotlinruntime.nullOr
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 import java.util.concurrent.ThreadLocalRandom
@@ -50,7 +51,7 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
 
             val screenHandler = mc.player?.playerScreenHandler!!
 
-            if (screenHandler.cursorStack?.isEmpty == false)
+            if (!screenHandler.cursorStack.nullOr { it.isEmpty })
                 return@registerEvent
 
             if (mousePos == null) {

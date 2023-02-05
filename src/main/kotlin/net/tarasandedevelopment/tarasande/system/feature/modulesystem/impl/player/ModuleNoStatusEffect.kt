@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 
 class ModuleNoStatusEffect : Module("No status effect", "Cancels certain status effects.", ModuleCategory.PLAYER) {
 
-    val effects = object : ValueRegistry<StatusEffect>(this, "Effects", Registries.STATUS_EFFECT) {
+    val effects = object : ValueRegistry<StatusEffect>(this, "Effects", Registries.STATUS_EFFECT, true) {
         override fun getTranslationKey(key: Any?) = (key as StatusEffect).translationKey
     }
 }

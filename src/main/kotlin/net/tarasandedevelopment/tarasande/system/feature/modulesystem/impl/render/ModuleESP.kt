@@ -25,7 +25,7 @@ import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCategory.RENDER) {
 
     val mode = ValueMode(this, "Mode", true, "Shader", "2D")
-    val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registries.ENTITY_TYPE, EntityType.PLAYER) {
+    val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registries.ENTITY_TYPE, true, EntityType.PLAYER) {
         override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
     }
 

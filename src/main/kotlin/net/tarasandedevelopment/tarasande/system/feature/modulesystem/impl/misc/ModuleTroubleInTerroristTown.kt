@@ -20,7 +20,7 @@ class ModuleTroubleInTerroristTown : Module("Trouble in terrorist town", "Uses a
 
     private val distance = ValueNumber(this, "Distance", 0.0, 6.0, 10.0, 0.5)
     private val rotationThreshold = ValueNumber(this, "Rotation threshold", 0.0, 0.5, 1.0, 0.01)
-    private val items = object : ValueRegistry<Item>(this, "Items", Registries.ITEM, Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.GOLDEN_SWORD, Items.DIAMOND_SWORD, Items.NETHERITE_SWORD) {
+    private val items = object : ValueRegistry<Item>(this, "Items", Registries.ITEM, true, Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.GOLDEN_SWORD, Items.DIAMOND_SWORD, Items.NETHERITE_SWORD) {
         override fun filter(key: Item) = key != Items.AIR
         override fun getTranslationKey(key: Any?) = (key as Item).translationKey
     }

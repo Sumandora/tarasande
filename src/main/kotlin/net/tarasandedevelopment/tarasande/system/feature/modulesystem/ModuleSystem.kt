@@ -38,6 +38,7 @@ object ManagerModule : Manager<Module>() {
             ModuleTNTBlock(),
             ModuleHealingBot(),
             ModuleAntiFireball(),
+            ModuleAutoLog(),
 
             // Movement
             ModuleSprint(),
@@ -110,6 +111,7 @@ object ManagerModule : Manager<Module>() {
             ModuleTrueSight(),
             ModuleNoRender(),
             ModuleCameraNoClip(),
+            ModulePreferredOffHandItem(),
 
             // Misc
             ModuleBlink(),

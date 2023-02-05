@@ -14,7 +14,7 @@ import kotlin.math.min
 
 class ModuleAntiFall : Module("Anti fall", "Tries to force a setback when you are falling", ModuleCategory.PLAYER) {
 
-    private val fallDistance = ValueNumber(this, "Fall distance", 0.0, 6.0, 20.0, 0.1)
+    private val fallDistance = ValueNumber(this, "Fall distance", 0.0, 3.0, 10.0, 0.1)
     private val void = ValueBoolean(this, "Void", false)
     private val mode = ValueMode(this, "Mode", false, "Setback", "Jump")
     private val jumpMultiplier = object : ValueNumber(this, "Jump multiplier", 0.0, 1.0, 10.0, 0.1) {

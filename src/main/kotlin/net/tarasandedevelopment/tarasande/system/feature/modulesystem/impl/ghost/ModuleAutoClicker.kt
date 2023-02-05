@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.ghos
 
 import net.minecraft.client.option.KeyBinding
 import net.tarasandedevelopment.tarasande.event.EventAttack
-import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.ClickSpeedUtil
@@ -40,9 +39,14 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
                 if (buttons.isSelected(keyMap[entry.key]!!) && entry.key.pressed) {
                     val clicks = entry.value.getClicks()
                     if (clicks > 0) {
-                        if (entry.key == mc.options.useKey)
-                            if (mc.player?.isUsingItem == true || PlayerUtil.getUsedHand() != null)
-                                return@registerEvent
+                        when (entry.key) {
+                            mc.options.attackKey ->
+                                if(mc.crosshairTarget?.isBlockHitResult() == true)
+                                    return@registerEvent
+                            mc.options.useKey ->
+                                if (mc.player?.isUsingItem == true || PlayerUtil.getUsedHand() != null)
+                                    return@registerEvent
+                        }
                         event.dirty = true
                         if (entry.key.timesPressed == 0)
                             entry.key.timesPressed = clicks
@@ -50,12 +54,6 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
                 } else {
                     entry.value.reset()
                 }
-            }
-        }
-
-        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (buttons.isSelected(0) && event.keyBinding == mc.options.attackKey && mc.crosshairTarget?.isBlockHitResult() == true) {
-                event.pressed = false
             }
         }
     }

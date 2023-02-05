@@ -10,9 +10,14 @@ import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
 import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.mc
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.ManagerGrabber
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberOffHandSlot
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.safeCount
 
 object ContainerUtil {
+
+    @Suppress("UNCHECKED_CAST")
+    val offHandIndex = ManagerGrabber.getConstant(GrabberOffHandSlot::class.java) as Pair<Int /* Client ID */, Int /* Networked ID */>
 
     fun getDisplayPosition(original: HandledScreen<*>, slot: Slot): Vec2f {
         return Vec2f(original.x + slot.x.toFloat() + 8, original.y + slot.y.toFloat() + 8)
@@ -97,6 +102,10 @@ object ContainerUtil {
     }
 
     fun getHotbarSlots() = mc.player?.inventory?.main?.subList(0, PlayerInventory.getHotbarSize())!!
+
+    fun isInHotbar(index: Int): Boolean {
+        return index in (offHandIndex.second - 1).let { it - PlayerInventory.getHotbarSize() .. it }
+    }
 
     fun findSlot(filter: (IndexedValue<ItemStack>) -> Boolean): Int? {
         return getHotbarSlots().withIndex().filter { filter(it) }.minByOrNull { it.value.safeCount() }?.index

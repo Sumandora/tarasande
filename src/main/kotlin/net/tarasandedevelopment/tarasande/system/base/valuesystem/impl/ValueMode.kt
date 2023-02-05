@@ -28,7 +28,7 @@ open class ValueMode(owner: Any, name: String, private val multiSelection: Boole
         onChange(index, prevSelected, isSelected(index))
     }
 
-    fun getSelected(): String =
+    fun getSelected() =
         if (!multiSelection)
             selected.first()
         else

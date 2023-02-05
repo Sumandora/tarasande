@@ -60,7 +60,7 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
         val mapMarkers = ValueBooleanNoRender(this, "Map markers", false)
         val banners = ValueMode(this, "Banners", false, "All", "Pillar", "None")
         val fireworkExplosions = ValueBooleanNoRender(this, "Firework explosions", false)
-        val particles = object : ValueRegistry<ParticleType<*>>(this, "Particles", Registries.PARTICLE_TYPE) {
+        val particles = object : ValueRegistry<ParticleType<*>>(this, "Particles", Registries.PARTICLE_TYPE, true) {
             override fun getTranslationKey(key: Any?) = Registries.PARTICLE_TYPE.getId(key as ParticleType<*>?)!!.path
         }
         val barrierInvisibility = ValueBooleanNoRender(this, "Barrier invisibility", true)
@@ -70,13 +70,13 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
 
     inner class NoRenderTypeEntity : NoRenderType("Entity") {
 
-        val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registries.ENTITY_TYPE) {
+        val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registries.ENTITY_TYPE, true) {
             override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
         }
         val armor = ValueBooleanNoRender(this, "Armor", false)
         val mobInSpawner = ValueBooleanNoRender(this, "Mob in spawner", false)
         val deadEntities = ValueBooleanNoRender(this, "Dead entities", false)
-        val entityNameTags = object : ValueRegistry<EntityType<*>>(this, "Entity Name tags", Registries.ENTITY_TYPE) {
+        val entityNameTags = object : ValueRegistry<EntityType<*>>(this, "Entity Name tags", Registries.ENTITY_TYPE, true) {
             override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
         }
     }
