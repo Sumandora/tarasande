@@ -69,6 +69,7 @@ accessible field net/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Seria
 accessible field net/minecraft/client/network/MultiplayerServerListPinger clientConnections Ljava/util/List;
 accessible field net/minecraft/entity/player/PlayerEntity reducedDebugInfo Z
 accessible field net/minecraft/client/gui/screen/GameMenuScreen exitButton Lnet/minecraft/client/gui/widget/ButtonWidget;
+accessible field net/minecraft/client/gui/widget/EntryListWidget itemHeight I
 
 accessible class net/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Serialized
 
@@ -114,3 +115,4 @@ mutable field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket pitch F
 mutable field net/minecraft/client/realms/RealmsClient sessionId Ljava/lang/String;
 mutable field net/minecraft/client/realms/RealmsClient username Ljava/lang/String;
 mutable field net/minecraft/world/World random Lnet/minecraft/util/math/random/Random;
+mutable field net/minecraft/client/gui/widget/EntryListWidget itemHeight I

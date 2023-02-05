@@ -1,7 +1,5 @@
 package net.tarasandedevelopment.tarasande.util.screen
 
-import net.minecraft.client.gui.Drawable
-import net.minecraft.client.gui.Selectable
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
 import net.minecraft.client.gui.screen.narration.NarrationPart
@@ -9,7 +7,6 @@ import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.AccessibilityValues
-import net.tarasandedevelopment.tarasande.injection.accessor.IScreen
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.ManagerGrabber
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberScrollbarWidth
@@ -40,6 +37,17 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
             })
         }
 
+
+        val entries = ArrayList<SlotListEntry>()
+        for (entry in listProvider!!()) {
+            entries.add(entry)
+        }
+        val entryWidth = entries.maxOf { it.width }
+        val entryHeight = entries.maxOf { it.height }
+        this.addDrawableChild(SlotListWidget(this, width, height, top, height - bottom - top, entryWidth, entryHeight).also {
+            slotList = it
+        })
+
         reload()
     }
 
@@ -49,13 +57,11 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
     }
 
     fun reload() {
-        if(slotList != null) {
-            slotList!!.clearEntries() // Force garbage collection
-            this.remove(slotList)
-        }
-
-        if(listProvider == null)
+        if(slotList == null || listProvider == null)
             return
+        val slotList = slotList!!
+
+        slotList.clearEntries() // Force garbage collection
 
         val entries = ArrayList<SlotListEntry>()
         for (entry in listProvider!!()) {
@@ -63,28 +69,20 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
         }
         val entryWidth = entries.maxOf { it.width }
         val entryHeight = entries.maxOf { it.height }
-        val allDrawables = ArrayList(children())
-        this.addDrawableChild(SlotListWidget(this, width, height, top, height - bottom - top, entryWidth, entryHeight).also {
-            slotList = it
-            entries.forEach { entry ->
-                entry.parentList = it
-                it.addEntry(entry)
-            }
-        })
-        allDrawables.forEach {
-            remove(it)
 
-            if (it is Drawable) {
-                (this as IScreen).tarasande_addDrawableChild(it)
-            }
-            if (it is Selectable) {
-                addSelectableChild(it)
-            }
+        entries.forEach { entry ->
+            entry.parentList = slotList
+            slotList.addEntry(entry)
         }
+
+        slotList.entryWidth = entryWidth
+        slotList.itemHeight = entryHeight
+        if(slotList.scrollAmount > slotList.maxScroll)
+            slotList.scrollAmount = slotList.maxScroll.toDouble()
     }
 }
 
-class AlwaysSelectedEntryListWidgetScreenBetterSlotList(val parent: ScreenBetterSlotList, width: Int, height: Int, top: Int, bottom: Int, private val entryWidth: Int, entryHeight: Int)
+class AlwaysSelectedEntryListWidgetScreenBetterSlotList(val parent: ScreenBetterSlotList, width: Int, height: Int, top: Int, bottom: Int, var entryWidth: Int, entryHeight: Int)
     : AlwaysSelectedEntryListWidget<SlotListEntry>(mc, width, height, top, bottom, entryHeight) {
 
     override fun getRowWidth() = entryWidth
