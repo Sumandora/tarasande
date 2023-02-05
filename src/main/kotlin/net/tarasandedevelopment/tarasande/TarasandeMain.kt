@@ -30,7 +30,6 @@ import java.util.logging.Logger
  *  - Render Profiler
  *  - Auto Totem
  *  - AutoLog
- *  - Obfuscator
  *  - Dump Items/Blocks/Player
  *  - Re-add Wiki
  *  - Add Rotation RL

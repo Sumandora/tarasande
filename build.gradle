@@ -1,5 +1,4 @@
 import su.mandora.codechecker.CodeChecker
-import su.mandora.obfuscator.ObfuscatorMain
 
 plugins {
 	id "fabric-loom"
@@ -103,18 +102,6 @@ tasks.register('checkCode') {
 	doLast {
 		CodeChecker codeChecker = new CodeChecker(sourceSets.main)
 		codeChecker.check()
-	}
-}
-
-tasks.register('obfuscate') {
-	group archivesBaseName
-//	dependsOn "build"
-	doLast {
-		File input = new File("build" + File.separator + "libs" + File.separator + archivesBaseName + "-" + version + ".jar")
-		File output = new File("build" + File.separator + "libs" + File.separator + archivesBaseName + "-" + version + "-obfuscated.jar")
-
-		ObfuscatorMain obfuscatorMain = new ObfuscatorMain(input, output)
-		obfuscatorMain.obfuscate()
 	}
 }
 
