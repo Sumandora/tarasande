@@ -1,5 +1,6 @@
 package de.florianmichael.tarasande_creative_features.creativesystem
 
+import de.florianmichael.tarasande_creative_features.clientvalue.CreativeValues
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
@@ -61,7 +62,7 @@ abstract class ExploitCreative(val parent: Any, val name: String, val icon: Item
         object : ValueButtonItem(parent, name, icon) {
             override fun onClick() { action() }
 
-            override fun isEnabled() = mc.interactionManager!!.currentGameMode == GameMode.CREATIVE
+            override fun isEnabled() = mc.interactionManager!!.currentGameMode == GameMode.CREATIVE || CreativeValues.unlockInAllGameModes.value
         }
     }
 

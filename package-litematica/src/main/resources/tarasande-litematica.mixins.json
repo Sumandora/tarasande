@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.florianmichael.tarasande_litematica.injection.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "MixinGuiBase"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

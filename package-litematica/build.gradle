@@ -44,6 +44,7 @@ dependencies {
     implementation(project(path: ":", configuration: "shadow"))
 
     modImplementation "curse.maven:litematica-308892:4162847"
+    modImplementation "curse.maven:malilib-303119:4147598"
     implementation "com.google.zxing:core:3.3.1"
 }
 

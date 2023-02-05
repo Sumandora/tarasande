@@ -15,17 +15,17 @@ import java.util.*
 
 val random = Random()
 
-class GeneratorMazes(parent: Any) : Generator(parent, "Mazes") {
+class GeneratorMazes : Generator("Mazes") {
 
-    private val algorithm = ValueMode(parent, "Algorithm", false, *MazeGeneratorType.values().map { it.getName() }.toTypedArray())
-    private val width = ValueNumber(parent, "Width", 3.0, 20.0, 100.0, 10.0)
-    private val length = ValueNumber(parent, "Length", 3.0, 20.0, 100.0, 10.0)
-    private val height = ValueNumber(parent, "Height", 1.0, 20.0, 50.0, 1.0)
-    private val scale = ValueNumber(parent, "Scale", 1.0, 1.0, 10.0, 1.0)
-    private val groundBlocks = object : ValueRegistry<Block>(parent, "Ground blocks", Registries.BLOCK) {
+    private val algorithm = ValueMode(this, "Algorithm", false, *MazeGeneratorType.values().map { it.getName() }.toTypedArray())
+    private val width = ValueNumber(this, "Width", 3.0, 20.0, 100.0, 10.0)
+    private val length = ValueNumber(this, "Length", 3.0, 20.0, 100.0, 10.0)
+    private val height = ValueNumber(this, "Height", 1.0, 20.0, 50.0, 1.0)
+    private val scale = ValueNumber(this, "Scale", 1.0, 1.0, 10.0, 1.0)
+    private val groundBlocks = object : ValueRegistry<Block>(this, "Ground blocks", Registries.BLOCK) {
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey
     }
-    private val wallBlocks = object : ValueRegistry<Block>(parent, "Wall blocks", Registries.BLOCK) {
+    private val wallBlocks = object : ValueRegistry<Block>(this, "Wall blocks", Registries.BLOCK) {
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey
     }
 

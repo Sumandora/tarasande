@@ -14,7 +14,7 @@ import de.florianmichael.tarasande_litematica.util.LitematicaGenerator
 
 val writer = MultiFormatWriter()
 
-class GeneratorQRCode(parent: Any) : Generator(parent, "QR Code") {
+class GeneratorQRCode : Generator("QR Code") {
 
     private val types = HashMap<String, BarcodeFormat>()
 
@@ -23,11 +23,11 @@ class GeneratorQRCode(parent: Any) : Generator(parent, "QR Code") {
             types[StringUtil.formatEnumTypes(value.name)] = value
     }
 
-    private val type = ValueMode(parent, "Type", false, *types.keys.toTypedArray())
-    private val input = ValueText(parent, "Input", "https://youtu.be/dQw4w9WgXcQ")
-    private val dimensionScaleX = ValueNumber(parent, "Dimension Scale X", 0.0, 0.0, 100.0, 10.0)
-    private val dimensionScaleYorZ = ValueNumber(parent, "Dimension Scale Y/Z", 0.0, 0.0, 100.0, 10.0)
-    private val side = ValueMode(parent, "Side", false, "Vertical", "Horizontal")
+    private val type = ValueMode(this, "Type", false, *types.keys.toTypedArray())
+    private val input = ValueText(this, "Input", "https://youtu.be/dQw4w9WgXcQ")
+    private val dimensionScaleX = ValueNumber(this, "Dimension Scale X", 0.0, 0.0, 100.0, 10.0)
+    private val dimensionScaleYorZ = ValueNumber(this, "Dimension Scale Y/Z", 0.0, 0.0, 100.0, 10.0)
+    private val side = ValueMode(this, "Side", false, "Vertical", "Horizontal")
 
     override fun perform() {
         try {

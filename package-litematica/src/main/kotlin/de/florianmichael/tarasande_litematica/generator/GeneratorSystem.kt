@@ -8,20 +8,20 @@ import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import de.florianmichael.tarasande_litematica.generator.impl.GeneratorMazes
 import de.florianmichael.tarasande_litematica.generator.impl.GeneratorQRCode
 
-class ManagerGenerator : Manager<Generator>() {
+object ManagerGenerator : Manager<Generator>() {
 
     init {
         add(
-            GeneratorMazes(this),
-            GeneratorQRCode(this)
+            GeneratorMazes(),
+            GeneratorQRCode()
         )
     }
 }
 
-abstract class Generator(val parent: Any, val name: String) {
+abstract class Generator(val name: String) {
 
     init {
-        object : ValueButton(parent, "Perform $name") {
+        object : ValueButton(this, "Perform $name") {
             override fun onClick() {
                 perform()
             }
