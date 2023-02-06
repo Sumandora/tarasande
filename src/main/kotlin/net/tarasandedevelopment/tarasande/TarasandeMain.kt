@@ -32,6 +32,9 @@ import java.util.logging.Logger
  *  - Re-add Wiki
  *  - Add Rotation RL
  *  - AccountMicrosoft: Change Name on login & Remove Get&Post Methods
+ *  - Refactor AccessWidener
+ *  - Try out layered maps
+ *  - Add Reverse Step (And remove nofall option)
  *
  * TODO | Protocol Hack:
  *  - Entity Dimensions are missing
