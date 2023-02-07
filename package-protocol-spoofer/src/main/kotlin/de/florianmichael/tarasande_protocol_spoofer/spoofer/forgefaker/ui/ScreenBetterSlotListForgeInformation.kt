@@ -28,7 +28,7 @@ class ScreenBetterSlotListForgeInformation(title: String, parent: Screen, privat
     }
 
 
-    open class EntryScreenBetterSlotListString(private val text: String) : EntryScreenBetterSlotList(FontWrapper.getWidth(text) * 2 + 5, FontWrapper.fontHeight() * 2) {
+    open class EntryScreenBetterSlotListString(private val text: String) : EntryScreenBetterSlotList((FontWrapper.getWidth(text) + 5) * 2, FontWrapper.fontHeight() * 2) {
         override fun getNarration(): Text {
             return Text.of(text)
         }

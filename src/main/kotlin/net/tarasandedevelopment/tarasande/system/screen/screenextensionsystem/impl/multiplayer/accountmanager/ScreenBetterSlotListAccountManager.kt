@@ -156,7 +156,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
         }
     }
 
-    inner class EntryScreenBetterSlotListAccount(var account: Account) : EntryScreenBetterSlotList(max(240, FontWrapper.getWidth(account.getDisplayName()) * 2 + 5), FontWrapper.fontHeight() * 5) {
+    inner class EntryScreenBetterSlotListAccount(var account: Account) : EntryScreenBetterSlotList(max(240, (FontWrapper.getWidth(account.getDisplayName()) + 5) * 2), FontWrapper.fontHeight() * 5) {
 
         override fun onDoubleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
             logIn(account)

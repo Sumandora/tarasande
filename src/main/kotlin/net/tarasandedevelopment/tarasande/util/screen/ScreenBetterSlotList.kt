@@ -37,7 +37,6 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
             })
         }
 
-
         val entries = ArrayList<SlotListEntry>()
         for (entry in listProvider!!()) {
             entries.add(entry)
