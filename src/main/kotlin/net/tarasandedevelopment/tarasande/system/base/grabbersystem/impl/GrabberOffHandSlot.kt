@@ -60,7 +60,7 @@ class GrabberOffHandSlot : Grabber("net.minecraft.screen.PlayerScreenHandler", P
 
     override fun transform(classNode: ClassNode) {
         constant = Pair(
-            findMethod(classNode, "quickMove", baseClass = "net.minecraft.screen.ScreenHandler")
+            findMethod(classNode, "quickMove", reverseClassMapping("net.minecraft.screen.ScreenHandler"))
                 .instructions
                 .matchSignature(offhandSlotQuickMoveCode)
                 .next(5)
