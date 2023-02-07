@@ -14,7 +14,6 @@ import de.florianmichael.tarasande_protocol_hack.definition.PackFormatsDefinitio
 import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.EntityDimensionsDefinition
 import de.florianmichael.tarasande_protocol_hack.platform.ViaBetaPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.platform.ViaSnapshotPlatformImpl
-import de.florianmichael.tarasande_protocol_hack.platform.betacraft.SidebarEntryBetaCraftServers
 import de.florianmichael.tarasande_protocol_hack.provider.clamp.FabricCommandArgumentsProvider
 import de.florianmichael.tarasande_protocol_hack.provider.viabeta.*
 import de.florianmichael.tarasande_protocol_hack.provider.viasnapshot.FabricPlayerAbilitiesProvider
@@ -201,7 +200,6 @@ class TarasandeProtocolHack {
                 ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.apply {
                     insert(SidebarEntrySelectionProtocolHack(), 0)
                     insert(SidebarEntryProtocolHackValues(), 1)
-                    insert(SidebarEntryBetaCraftServers(), 2)
                 }
 
                 ProtocolHackValues /* Force-Load */

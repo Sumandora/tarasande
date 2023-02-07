@@ -23,8 +23,7 @@ var viaLibs = [
 
         "com.github.FlorianMichael:ViaLoadingBase:${project.vialoadingbase_version}",
 
-        "net.lenni0451.mcstructs:text:2.1.0",
-        "org.jsoup:jsoup:1.15.3"
+        "net.lenni0451.mcstructs:text:2.1.0"
 ]
 
 this.remapJar {
