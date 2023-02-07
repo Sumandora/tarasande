@@ -33,19 +33,11 @@ object ClientValues {
         ValueButtonOwnerValues(this, "Privacy values", PrivacyValues)
         ValueButtonOwnerValues(this, "Cheat menu values", ManagerPanel.screenCheatMenu)
         ValueButtonOwnerValues(this, "Accessibility values", AccessibilityValues)
-    }
-
-    val allowAddressParsingForBlacklistedServers = ValueBoolean(this, "Allow address parsing for blacklisted servers", true)
-    val removeNettyExceptionHandling = ValueMode(this, "Remove Netty exception handling", true, "Timeout", "Wrong packets")
-
-    init {
-        // Combat
+        ValueButtonOwnerValues(this, "Network values", NetworkValues)
         ValueButtonOwnerValues(this, "Targeting values", TargetingValues)
-        // Rendering
+        ValueButtonOwnerValues(this, "Debug values", DebugValues)
         ValueButtonOwnerValues(this, "Blur values", ManagerBlur)
-        // Rotations
         ValueButtonOwnerValues(this, "Rotation values", RotationValues)
-        // Commands
         ValueButtonOwnerValues(this, "Command values", ManagerCommand)
     }
 
@@ -65,7 +57,6 @@ object ClientValues {
                 }
             }
         }
-        ValueButtonOwnerValues(this, "Debug values", DebugValues)
     }
 
     const val autoSaveDaemonName = "$TARASANDE_NAME config auto save daemon"

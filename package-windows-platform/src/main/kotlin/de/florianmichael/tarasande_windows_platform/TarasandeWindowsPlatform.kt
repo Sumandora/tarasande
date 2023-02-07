@@ -7,13 +7,13 @@ import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntry
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import net.tarasandedevelopment.tarasande.util.connection.ProxyType
 import de.florianmichael.tarasande_windows_platform.information.InformationWindowsSpotify
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.sidebar.SidebarEntryProxy
 import org.spongepowered.include.com.google.common.io.Files
 import su.mandora.event.EventDispatcher
 import java.io.File
@@ -64,7 +64,7 @@ class TarasandeWindowsPlatform : ClientModInitializer {
                         }
 
                         override fun onClick(enabled: Boolean) {
-                            val screenBetterProxy = ManagerScreenExtension.get(ScreenExtensionButtonListMultiplayerScreen::class.java).screenBetterSlotListAccountManager.screenBetterProxy
+                            val screenBetterProxy = ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(SidebarEntryProxy::class.java).screenBetterProxy
 
                             if (enabled) {
                                 torProcess = ProcessBuilder(torFile.absolutePath).start()

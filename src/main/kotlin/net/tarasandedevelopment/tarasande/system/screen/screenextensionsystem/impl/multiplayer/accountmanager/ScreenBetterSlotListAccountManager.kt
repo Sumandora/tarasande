@@ -60,8 +60,6 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
         ManagerAccount
     }
 
-    val screenBetterProxy = ScreenBetterProxy()
-
     init {
         EventDispatcher.add(EventSuccessfulLoad::class.java, 9999) {
             ManagerFile.add(FileAccounts(this))
@@ -121,11 +119,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
             })
         }.also { addButton = it })
 
-        addDrawableChild(ButtonWidget(3, 3, 100, 20, Text.of("Proxy")) {
-            mc.setScreen(screenBetterProxy.apply { prevScreen = mc.currentScreen })
-        })
-
-        addDrawableChild(ButtonWidget(width - 103, 3, 100, 20, Text.of("Random session")) {
+        addDrawableChild(ButtonWidget(3, 3, 100, 20, Text.of("Random session")) {
             logIn(AccountSession().also {
                 it.username = RandomStringUtils.randomAlphanumeric(16)
                 it.uuid = UUID.randomUUID().toString()
@@ -150,10 +144,6 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         FontWrapper.textShadow(matrices, status, width / 2.0F, 2 * FontWrapper.fontHeight() * 2.0F, -1, centered = true)
-
-        screenBetterProxy.proxy?.apply {
-            FontWrapper.textShadow(matrices, socketAddress.address.hostAddress + ":" + socketAddress.port + if (ping != null) " (" + ping + "ms)" else "", 6F, 27F)
-        }
     }
 
     inner class EntryScreenBetterSlotListAccount(var account: Account) : EntryScreenBetterSlotList(max(240, (FontWrapper.getWidth(account.getDisplayName()) + 5) * 2), FontWrapper.fontHeight() * 5) {

@@ -146,6 +146,10 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
         super.render(matrices, mouseX, mouseY, delta)
         FontWrapper.textShadow(matrices, "Proxy", width / 2.0F, 8 - FontWrapper.fontHeight() / 2.0F, -1, centered = true)
         FontWrapper.textShadow(matrices, status ?: return, width / 2.0F, height / 2F - 50 - 15 - FontWrapper.fontHeight() - 2, -1, centered = true)
+
+        proxy?.socketAddress?.apply {
+            FontWrapper.textShadow(matrices, address.hostAddress + ":" + port + if (proxy?.ping != null) " (" + proxy?.ping + "ms)" else "", 6F, 27F)
+        }
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {

@@ -24,7 +24,6 @@ import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleEveryIte
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleInventoryMove
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleNoWeb
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleTickBaseManipulation
-import de.florianmichael.tarasande_protocol_hack.tarasande.sidebar.SidebarEntryProtocolHackValues
 import de.florianmichael.tarasande_protocol_hack.tarasande.sidebar.SidebarEntrySelectionProtocolHack
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues
 import de.florianmichael.tarasande_protocol_hack.util.values.ValueBooleanProtocol
@@ -55,9 +54,11 @@ import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
@@ -197,12 +198,9 @@ class TarasandeProtocolHack {
                 ManagerModule.add(ModuleEveryItemOnArmor())
 
                 // Sidebar modifications
-                ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.apply {
-                    insert(SidebarEntrySelectionProtocolHack(), 0)
-                    insert(SidebarEntryProtocolHackValues(), 1)
-                }
+                ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.insert(SidebarEntrySelectionProtocolHack(), 2)
 
-                ProtocolHackValues /* Force-Load */
+                ValueButtonOwnerValues(ClientValues, "Protocol hack values", ProtocolHackValues)
 
                 ClassicItemSelectionScreen.create(InternalProtocolList.fromProtocolVersion(BetaProtocols.c0_28toc0_30))
             }

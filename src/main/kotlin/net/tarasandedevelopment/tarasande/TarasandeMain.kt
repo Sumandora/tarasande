@@ -57,6 +57,7 @@ import java.util.logging.Logger
  * TODO | IDEAS:
  *  - CheckHost
  *  - Multi-ServerList-System
+ *  - https://github.com/HCU-Reborn/LoseBypass/blob/main/com/wallhacks/losebypass/systems/module/modules/render/SuperheroFX.java
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv

@@ -25,7 +25,6 @@ object ManagerScreenExtension : Manager<ScreenExtension<*>>() {
             ScreenExtensionButtonListSleepingChatScreen(),
             ScreenExtensionDirectConnectScreen(),
             ScreenExtensionGameMenuScreen(),
-            ScreenExtensionButtonListTitleScreen(),
             ScreenExtensionButtonListDirectConnect()
         )
 
