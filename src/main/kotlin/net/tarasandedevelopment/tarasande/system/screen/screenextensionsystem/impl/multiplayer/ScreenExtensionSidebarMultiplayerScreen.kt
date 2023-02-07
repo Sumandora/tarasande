@@ -15,7 +15,7 @@ class ScreenExtensionSidebarMultiplayerScreen : ScreenExtensionSidebar<Multiplay
 
         sidebar.add(
             SidebarEntryToggleableClientBrandSpoofer(),
-            SidebarEntryToggleableResourcePackSpoofer(),
+            SidebarEntryToggleableResourcePackSpoofer()
         )
     }
 }
