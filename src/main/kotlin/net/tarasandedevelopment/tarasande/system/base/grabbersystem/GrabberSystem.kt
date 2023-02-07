@@ -26,7 +26,8 @@ object ManagerGrabber : Manager<Grabber>() {
             GrabberMaxPlayerMove(),
             GrabberScrollbarWidth(),
             GrabberOffHandSlot(),
-            GrabberSlotRenderSize()
+            GrabberSlotRenderSize(),
+            GrabberDefaultListWidgetWidth()
         )
 
         val minecraftJar = System.getProperty("java.class.path")
