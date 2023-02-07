@@ -12,6 +12,7 @@ import net.minecraft.util.math.Vec2f
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.ManagerGrabber
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberOffHandSlot
+import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberSlotRenderSize
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.safeCount
 
 object ContainerUtil {
@@ -19,8 +20,11 @@ object ContainerUtil {
     @Suppress("UNCHECKED_CAST")
     val offHandIndex = ManagerGrabber.getConstant(GrabberOffHandSlot::class.java) as Pair<Int /* Client ID */, Int /* Networked ID */>
 
+    private val slotWidthAndHeight = ManagerGrabber.getConstant(GrabberSlotRenderSize::class.java) as Int
+
     fun getDisplayPosition(original: HandledScreen<*>, slot: Slot): Vec2f {
-        return Vec2f(original.x + slot.x.toFloat() + 8, original.y + slot.y.toFloat() + 8)
+        val halfSize = slotWidthAndHeight / 2
+        return Vec2f(original.x + slot.x.toFloat() + halfSize, original.y + slot.y.toFloat() + halfSize)
     }
 
     fun getValidSlots(screenHandler: ScreenHandler): List<Slot> {
