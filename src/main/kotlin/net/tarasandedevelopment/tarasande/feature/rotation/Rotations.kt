@@ -39,7 +39,10 @@ object Rotations {
                     // There was no frame in between the last tick and the current one
                     if (updateRotationsWhenTickSkipping.value)
                         if (updateRotationsAccurately.value) {
-                            repeat((1000.0 / RenderUtil.deltaTime).roundToInt()) {
+                            val imaginaryFPS = (1000.0 / RenderUtil.deltaTime).roundToInt()
+
+                            if(imaginaryFPS !in 1..mc.options.maxFps.value)
+                            repeat(imaginaryFPS) {
                                 createRotationEvent()
                             }
                         } else {

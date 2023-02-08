@@ -10,6 +10,8 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.prevPos
 
 class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCategory.COMBAT) {
 
@@ -33,7 +35,6 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
                 return@registerEvent
             if (event.entity !is LivingEntity || event.entity.hurtTime >= maximalHurtTime.value)
                 return@registerEvent
-            changeBinds = true
             if (mode.isSelected(2)) {
                 if (mc.player?.isSprinting!!) mc.networkHandler?.sendPacket(ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SPRINTING))
 
@@ -43,12 +44,19 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
                 }
 
                 if (mc.player?.isSprinting!!) mc.networkHandler?.sendPacket(ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING))
+            } else {
+                val prevPosition = mc.player?.prevPos()!!
+                val currentPosition = mc.player?.pos!!
+
+                val entityPosition = event.entity.pos
+
+                if((entityPosition - prevPosition).horizontalLength() > (entityPosition - currentPosition).horizontalLength()) // We are walking towards the entity
+                    changeBinds = true
             }
         }
 
         registerEvent(EventInput::class.java, 10000) { event ->
             if (event.input == mc.player?.input) {
-                // TODO only when walking towards the enemies
                 if (changeBinds) {
                     when {
                         mode.isSelected(0) -> {
