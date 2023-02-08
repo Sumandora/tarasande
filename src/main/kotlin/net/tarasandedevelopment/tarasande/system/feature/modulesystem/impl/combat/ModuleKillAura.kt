@@ -198,7 +198,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(fovRotation()) > fov.value) continue
                 var aimPoint =
                     if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() != 0.0F) {
-                        mc.player?.eyePos!! + currentRot.forwardVector(0.01)
+                        mc.player?.eyePos!! + currentRot.forwardVector() * 0.01
                     } else {
                         // aim point calculation maybe slower, only run it if the range check is actually able to succeed under best conditions
                         getAimPoint(boundingBox, entity)

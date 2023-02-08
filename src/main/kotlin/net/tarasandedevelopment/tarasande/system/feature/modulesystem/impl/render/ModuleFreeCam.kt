@@ -17,6 +17,7 @@ import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Inform
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.evaluateNewRotation
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
@@ -163,7 +164,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
                 if (position != null && rotation != null)
                     if (blockInteraction.value) {
                         mc.targetedEntity = null
-                        mc.crosshairTarget = PlayerUtil.rayCast(position!!, position!! + rotation?.forwardVector((mc.gameRenderer as IGameRenderer).tarasande_getReach())!!)
+                        mc.crosshairTarget = PlayerUtil.rayCast(position!!, position!! + rotation?.forwardVector()!! * (mc.gameRenderer as IGameRenderer).tarasande_getReach())
                     }
         }
 

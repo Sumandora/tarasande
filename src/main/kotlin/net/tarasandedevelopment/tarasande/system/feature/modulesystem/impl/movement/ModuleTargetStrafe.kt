@@ -15,6 +15,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat.ModuleKillAura
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.isEntityHitResult
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import kotlin.math.cos
@@ -88,7 +89,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
             }
 
             val rotation = RotationUtil.getRotations(curPos, newPos).withPitch(0.0F)
-            var forward = rotation.forwardVector(selfSpeed)
+            var forward = rotation.forwardVector() * selfSpeed
 
             forward = forward.withAxis(Direction.Axis.Y,
                 if (freeFlying)

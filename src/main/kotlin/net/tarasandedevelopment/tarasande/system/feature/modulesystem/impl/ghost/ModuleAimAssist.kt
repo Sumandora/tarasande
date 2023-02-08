@@ -33,7 +33,7 @@ class ModuleAimAssist : Module("Aim assist", "Helps you aim at enemies", ModuleC
             if (rotation.fov(selfRotation) > fov.value)
                 return@registerEvent
 
-            val smoothedRot = Rotation(selfRotation).smoothedTurn(rotation, aimSpeed).correctSensitivity() // correct wrap
+            val smoothedRot = selfRotation.smoothedTurn(rotation, aimSpeed).correctSensitivity() // correct wrap
 
             val deltaRotation = smoothedRot.closestDelta(selfRotation)
             val cursorDeltas = Rotation.approximateCursorDeltas(deltaRotation).prefer { PlayerUtil.getTargetedEntity(3.0 /* TODO*/, Rotation.calculateNewRotation(selfRotation, it), false)?.isEntityHitResult() == true }

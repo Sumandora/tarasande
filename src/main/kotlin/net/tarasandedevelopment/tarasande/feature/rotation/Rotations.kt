@@ -41,10 +41,10 @@ object Rotations {
                         if (updateRotationsAccurately.value) {
                             val imaginaryFPS = (1000.0 / RenderUtil.deltaTime).roundToInt()
 
-                            if(imaginaryFPS !in 1..mc.options.maxFps.value)
-                            repeat(imaginaryFPS) {
-                                createRotationEvent()
-                            }
+                            if(imaginaryFPS in 1..mc.options.maxFps.value)
+                                repeat(imaginaryFPS) {
+                                    createRotationEvent()
+                                }
                         } else {
                             createRotationEvent()
                         }
@@ -62,17 +62,17 @@ object Rotations {
 
     private fun createRotationEvent() {
         if (mc.player != null && mc.interactionManager != null) {
-            val eventRotation = EventRotation(Rotation(mc.player!!))
+            val realRotation = Rotation(mc.player!!)
+            val eventRotation = EventRotation(realRotation)
             EventDispatcher.call(eventRotation)
             if (eventRotation.dirty) {
                 fakeRotation = eventRotation.rotation
             } else if (fakeRotation != null) {
-                val realRotation = Rotation(mc.player!!)
-                val rotation = Rotation(fakeRotation!!)
+                val rotation = fakeRotation!!
                     .smoothedTurn(realRotation, rotateToOriginSpeed)
                     .correctSensitivity()
                 if (fakeRotation == rotation) {
-                    val actualRotation = Rotation(mc.player!!).correctSensitivity()
+                    val actualRotation = realRotation.correctSensitivity()
                     fakeRotation = null
                     mc.player?.yaw = actualRotation.yaw.also {
                         // Fix render errors

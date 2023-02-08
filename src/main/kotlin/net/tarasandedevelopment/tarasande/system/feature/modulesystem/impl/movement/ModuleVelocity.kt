@@ -12,6 +12,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import java.util.concurrent.ThreadLocalRandom
@@ -68,7 +69,12 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
                     if (delay.value > 0.0) {
                         delays.add(Triple(velocityVector.multiply(horizontal.value, vertical.value, horizontal.value), mc.player?.age!! + delay.value.toInt(), event.packet))
                     } else {
-                        val newVelocity = if (changeDirection.value) Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0F).forwardVector(velocityVector.horizontalLength()).withAxis(Direction.Axis.Y, velocityVector.y) else velocityVector
+                        val newVelocity =
+                            if (changeDirection.value)
+                                    (Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0F).forwardVector() * velocityVector.horizontalLength())
+                                        .withAxis(Direction.Axis.Y, velocityVector.y)
+                            else
+                                velocityVector
                         event.velocityX = newVelocity.x * horizontal.value
                         event.velocityY = newVelocity.y * vertical.value
                         event.velocityZ = newVelocity.z * horizontal.value
@@ -88,8 +94,16 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
                 while (iterator.hasNext()) {
                     val triple = iterator.next()
                     if (triple.second <= mc.player?.age!!) {
-                        val newVelocity = if (changeDirection.value && PlayerUtil.isPlayerMoving()) Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0F).forwardVector(triple.first.horizontalLength()) else triple.first
-                        mc.player?.velocity = if (addition.isSelected(2) || (addition.isSelected(1) && triple.third == EventVelocity.Packet.EXPLOSION)) mc.player?.velocity!! + newVelocity else newVelocity
+                        val newVelocity =
+                            if (changeDirection.value && PlayerUtil.isPlayerMoving())
+                                Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0F).forwardVector() * triple.first.horizontalLength()
+                            else
+                                triple.first
+                        mc.player?.velocity =
+                            if (addition.isSelected(2) || (addition.isSelected(1) && triple.third == EventVelocity.Packet.EXPLOSION))
+                                mc.player?.velocity!! + newVelocity
+                            else
+                                newVelocity
                         iterator.remove()
                     }
                 }

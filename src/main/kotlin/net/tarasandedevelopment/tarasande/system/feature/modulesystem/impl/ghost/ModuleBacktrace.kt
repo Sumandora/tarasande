@@ -17,6 +17,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc.ModuleBlink
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
@@ -35,7 +36,7 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
     private fun computeSelectedBox(entity: Entity): Box? {
         val playerRotation = Rotations.fakeRotation ?: Rotation(mc.player!!)
         val playerEye = mc.player?.eyePos!!
-        val rotationVec = playerEye + playerRotation.forwardVector((mc.gameRenderer as IGameRenderer).tarasande_getReach())
+        val rotationVec = playerEye + playerRotation.forwardVector() * (mc.gameRenderer as IGameRenderer).tarasande_getReach()
         return boundingBoxes[entity]?.filter { it.raycast(playerEye, rotationVec).isPresent }?.minByOrNull { playerEye.distanceTo(MathUtil.closestPointToBox(playerEye, it)) }
     }
 

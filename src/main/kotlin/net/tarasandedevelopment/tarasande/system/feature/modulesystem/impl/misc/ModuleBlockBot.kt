@@ -7,6 +7,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
@@ -22,7 +23,7 @@ class ModuleBlockBot : Module("Block bot", "Walks into the line of sight of othe
         registerEvent(EventRotation::class.java) { event ->
             val target = mc.world?.players?.filter { PlayerUtil.isAttackable(it) }?.minByOrNull { mc.player?.squaredDistanceTo(it)!! } ?: return@registerEvent
 
-            val targetEye = target.eyePos + Rotation(target).forwardVector(extension.value)
+            val targetEye = target.eyePos + Rotation(target).forwardVector() * extension.value
             move = mc.player?.eyePos?.squaredDistanceTo(targetEye)!! > minDistance.value * minDistance.value
 
             val rotation = if (!move) // if he's not moving, just look at him... make him mad ^^

@@ -9,12 +9,9 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoPitchLimit
 import net.tarasandedevelopment.tarasande.util.extension.kotlinruntime.prefer
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import java.util.concurrent.ThreadLocalRandom
-import kotlin.math.ceil
-import kotlin.math.floor
-import kotlin.math.sqrt
+import kotlin.math.*
 
 class Rotation {
 
@@ -26,7 +23,6 @@ class Rotation {
         this.pitch = pitch
     }
 
-    constructor(other: Rotation) : this(other.yaw, other.pitch)
     constructor(entity: Entity) : this(entity.yaw, entity.pitch)
 
     companion object {
@@ -113,14 +109,14 @@ class Rotation {
         return sqrt(deltaRotation.yaw * deltaRotation.yaw + deltaRotation.pitch * deltaRotation.pitch)
     }
 
-    fun forwardVector(dist: Double): Vec3d {
-        val f = Math.toRadians(pitch.toDouble()).toFloat()
-        val g = Math.toRadians(-yaw.toDouble()).toFloat()
-        val h = MathHelper.cos(g)
-        val i = MathHelper.sin(g)
-        val j = MathHelper.cos(f)
-        val k = MathHelper.sin(f)
-        return Vec3d((i * j).toDouble(), -k.toDouble(), (h * j).toDouble()) * dist
+    fun forwardVector(): Vec3d {
+        val yawRad = Math.toRadians(yaw.toDouble())
+        val pitchRad = Math.toRadians(pitch.toDouble())
+        return Vec3d(
+            sin(-yawRad) * cos(pitchRad),
+            -sin(pitchRad),
+            cos(-yawRad) * cos(pitchRad)
+        )
     }
 
     fun withYaw(yaw: Float): Rotation {
@@ -146,5 +142,11 @@ class Rotation {
         if (pitch != other.pitch) return false
 
         return true
+    }
+
+    override fun hashCode(): Int {
+        var result = yaw.hashCode()
+        result = 31 * result + pitch.hashCode()
+        return result
     }
 }
